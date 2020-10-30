@@ -16,7 +16,6 @@
 package org.matrix.android.sdk.internal.crypto.tasks
 
 import org.greenrobot.eventbus.EventBus
-import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -29,8 +28,7 @@ import javax.inject.Inject
 internal interface SendEventTask : Task<SendEventTask.Params, String> {
     data class Params(
             val event: Event,
-            val encrypt: Boolean,
-            val cryptoService: CryptoService?
+            val encrypt: Boolean
     )
 }
 
@@ -68,8 +66,7 @@ internal class DefaultSendEventTask @Inject constructor(
             return encryptEventTask.execute(EncryptEventTask.Params(
                     params.event.roomId ?: "",
                     params.event,
-                    listOf("m.relates_to"),
-                    params.cryptoService!!
+                    listOf("m.relates_to")
             ))
         }
         return params.event

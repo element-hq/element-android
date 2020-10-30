@@ -192,6 +192,7 @@
 
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
+    <string name="send_bug_report_include_key_share_history">Send key share requests history</string>
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Report bug</string>
     <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
@@ -2305,6 +2306,7 @@
     <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Key Requests</string>
+    <string name="settings_export_trail">Export Audit</string>
 
     <string name="e2e_use_keybackup">Unlock encrypted messages history</string>
 
