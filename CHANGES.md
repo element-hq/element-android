@@ -14,6 +14,7 @@ Improvements 🙌:
  - Room profile: BigImageViewerActivity now only display the image. Use the room setting to change or delete the room Avatar
  - Better visibility of text reactions in dark theme (#1118)
  - Room member profile: Add action to create (or open) a DM (#2310)
+ - Prepare changelog for F-Droid (#2296)
 
 Bugfix 🐛:
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
