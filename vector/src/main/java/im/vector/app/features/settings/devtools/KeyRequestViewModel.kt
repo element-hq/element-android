@@ -33,20 +33,9 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
-import im.vector.app.core.resources.DateProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
-import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
-import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
-import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyShareRequest
-import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
-import org.threeten.bp.format.DateTimeFormatter
 
 sealed class KeyRequestAction : VectorViewModelAction {
     data class ExportAudit(val uri: Uri) : KeyRequestAction()
