@@ -1188,7 +1188,7 @@
     <string name="fab_menu_create_chat">Mesazhe të Drejtpërdrejtë</string>
     <string name="create_room_title">Dhomë e Re</string>
     <string name="create_room_action_create">KRIJOJE</string>
-    <string name="create_room_name_hint">Emër dhome</string>
+    <string name="create_room_name_hint">Emër</string>
     <string name="create_room_public_title">Publike</string>
     <string name="create_room_public_description">Kushdo do të jetë në gjendje të marrë pjesë në këtë dhomë</string>
     <string name="create_room_directory_title">Drejtori Dhomash</string>
@@ -2166,4 +2166,15 @@
     <string name="search_banned_user_hint">Filtro përdorues të dëbuar</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">S’keni leje të nisni një thirrje</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">S’keni leje të nisni një thirrje konferencë</string>
+    <string name="warning_unsaved_change_discard">Hidhi tej ndryshimet</string>
+    <string name="warning_unsaved_change">Ka ndryshime të paruajtura. Të hidhen tej ndryshimet\?</string>
+    <string name="warning_room_not_created_yet">Dhoma s’është krijuar ende. Të anulohet krijimi i dhomës\?</string>
+    <string name="room_list_quick_actions_low_priority_remove">Hiqe prej përparësie të ulët</string>
+    <string name="room_list_quick_actions_low_priority_add">Shtoje te përparësi e ulët</string>
+    <string name="rotate_and_crop_screen_title">Rrotullojeni dhe qetheni</string>
+    <string name="attachment_type_dialog_title">Shtoni figurë prej</string>
+    <string name="create_room_settings_section">Rregullime dhome</string>
+    <string name="create_room_topic_hint">Subjekt</string>
+    <string name="create_room_topic_section">Subjekt dhome (në daçi)</string>
+    <string name="create_room_name_section">Emër dhome</string>
 </resources>
