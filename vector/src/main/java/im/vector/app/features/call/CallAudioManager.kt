@@ -95,7 +95,7 @@ class CallAudioManager(
         Timber.v("## VOIP: AudioManager startForCall ${mxCall.callId}")
     }
 
-    fun setupAudioManager(mxCall: MxCall) {
+    private fun setupAudioManager(mxCall: MxCall) {
         Timber.v("## VOIP: AudioManager setupAudioManager ${mxCall.callId}")
         val audioManager = audioManager ?: return
         savedIsSpeakerPhoneOn = audioManager.isSpeakerphoneOn
@@ -155,7 +155,6 @@ class CallAudioManager(
     fun onCallConnected(mxCall: MxCall) {
         Timber.v("##VOIP: AudioManager call answered, adjusting current sound device")
         setupAudioManager(mxCall)
-        adjustCurrentSoundDevice(mxCall)
     }
 
     fun getAvailableSoundDevices(): List<SoundDevice> {
