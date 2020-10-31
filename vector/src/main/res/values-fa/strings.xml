@@ -1479,4 +1479,138 @@
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">اجازهٔ آغاز یک تماس را ندارید</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">اجازهٔ آغاز یک تماس کنفرانسی را ندارید</string>
     <string name="reset">بازنشانی</string>
+    <string name="startup_notification_privacy_button_other">انتخاب گزینه‌ی دیگر</string>
+    <string name="startup_notification_privacy_button_grant">مجوز دادن</string>
+    <string name="startup_notification_privacy_message">المنت می تواند در پس‌زمینه اجرا شود تا اعلان های شما را به صورت ایمن و اختصاصی مدیریت کند. این ممکن است بر میزان مصرف باتری شما تأثیر منفی بگذارد.</string>
+    <string name="reset_secure_backup_warning">این کار کلید امنیتی قبلی شما را حذف می‌کند.</string>
+    <string name="reset_secure_backup_title">یک کلید امنیتی جدید به صورت تصادفی ایجاد کنید یا یک عبارت امنیتی جدید برای فایل‌های پشتیبان موجود خود تنظیم کنید.</string>
+    <string name="settings_send_message_with_enter_summary">فشردن اینتر به جای رفتن به خط بعد، پیام را ارسال خواهد کرد</string>
+    <string name="settings_send_message_with_enter">ارسال با فشردن اینتر</string>
+    <string name="settings_preview_media_before_sending">پیش‌نمایش محتوای چندرسانه‌ای قبل از ارسال</string>
+    <string name="settings_vibrate_on_mention">لرزیدن گوشی در هنگام ذکر یک کاربر</string>
+    <string name="settings_show_avatar_display_name_changes_messages_summary">شامل مواردی مانند تغییر نام و تصویر پروفایل می‌شود.</string>
+    <string name="settings_show_avatar_display_name_changes_messages">نمایش پیام‌های مربوط به حساب کاربری</string>
+    <string name="settings_show_join_leave_messages_summary">دعوت‌ها و حذف توسط مدیر به هر صورت نمایش داده می‌شوند.</string>
+    <string name="settings_show_join_leave_messages">نمایش پیام‌های پیوستن و ترک اتاق</string>
+    <string name="settings_inline_url_preview_summary">پیش‌نمایشی از آدرس‌های URL در پیام‌ها نمایش داده شود.</string>
+    <string name="settings_set_workmanager_delay_summary">%s
+\nبسته به شارژ دستگاه یا وضعیت دستگاه(خاموش بودن صفحه) ممکن است همگام‌سازی به تعویق بیوفتد.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">المنت بصورت دوره‌ای و در بازه‌های قابل تنظیم در پس زمینه همگام‌سازی می شود.
+\nاین بر مصرف باتری شما تأثیر می‌گذارد، یک اعلان دائمی نمایش داده می‌شود که المنت برای رویدادها گوش می‌دهد.</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">المنت در پس زمینه همگام‌سازی می‌کند به گونه ای که منابع محدود دستگاه (باتری) حفظ می‌شود.
+\nبسته به شارژ گوشی شما، ممکن است همگام‌سازی توسط سیستم‌عامل به تعویق بیوفتد.</string>
+    <string name="settings_turn_screen_on">روشن کردن صفحه برای ۳ ثانیه</string>
+    <string name="settings_notification_privacy_message_content_not_shown">• محتوای پیام در اعلان‌ها <b>نمایش داده نمی‌شوند</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• اعلان ها حاوی <b>فرا داده و محتوای پیام هستند</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• محتوای پیام اعلان <b> به طور ایمن و مستقیم از سرور هیوا دریافت می‌شود</b></string>
+    <string name="settings_notification_privacy_metadata">• اعلان ها فقط حاوی فرا داده هستند</string>
+    <string name="settings_notification_privacy_fcm">• اعلان ها از طریق سرور Firebase ارسال می شوند</string>
+    <string name="settings_troubleshoot_test_battery_failed">اگر دستگاه برای مدتی از شارژر جدا باشد و از دستگاه نیز استفاده نشود، گوشی وارد حالت غیر هوشیار می‌شود. در این حالت از دسترسی برنامه‌ها به اینترنت جلوگیری می‌شود و همگام سازی و هشدارهای استاندارد آن‌ها به تعویق می‌افتد.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">این سرویس با ری‌استارت دستگاه شروع نمی‌شود. تا وقتی المنت را یک بار باز نکنید اعلانی دریافت نخواهید کرد.</string>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">بر روی اعلان کلیک شد!</string>
+    <string name="settings_troubleshoot_test_notification_notice">لطفا بر روی اعلان کلیک کنید. اگر اعلان را نمی‌بینید، تنظیمات دستگاه را بررسی نمائید.</string>
+    <string name="settings_troubleshoot_test_notification_title">نمایش اعلان</string>
+    <string name="settings_troubleshoot_test_push_notification_content">شما اعلان را مشاهده می‌کنید! کلیک کنید!</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">دریافت Push با خطا مواجه شد. نصب مجدد برنامه می‌تواند یکی از راه‌حل‌های احتمالی باشد.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">برنامه Push دریافت کرد</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">برنامه منتظر دریافت Push است</string>
+    <string name="settings_troubleshoot_test_push_loop_title">تست ‌Push</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">ثبت توکن FCM در سرور موفقیت آمیز نبود:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_success">توکن FCM با موفقیت در سرور ثبت شد.</string>
+    <string name="settings_troubleshoot_test_token_registration_title">ثبت توکن</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">افزودن حساب کاربری</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nاین خطا از کنترل المنت خارج است. هیچ حساب Google‌ای روی تلفن وجود ندارد. لطفاً مدیریت حساب را در تنظیمات گوشی باز کرده و یک حساب Google اضافه کنید.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nاین خطا از کنترل المنت خارج است و به چند دلیل ممکن است رخ داده باشد. امکان دارد در صورت تلاش مجدد مشکل رفع شود، همچنین می‌توانید بررسی کنید که سرویس Google Play در استفاده از اینترنت در تنظیمات گوشی محدودیتی نداشته باشد یا ساعت دستگاه شما درست باشد. همچنین ممکن است به علت استفاده از ROM سفارشی‌شده این خطا رخ داده باشد.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nاین خطا از کنترل هیوا خارج است و طبق گفته گوگل ، این خطا نشان می دهد که دستگاه بیش از حد مجاز، برنامه های ثبت شده در FCM دارد. این خطا فقط در مواردی رخ می دهد که تعداد زیادی برنامه وجود دارد، بنابراین نباید بر کاربر عادی رخ دهد.</string>
+    <string name="settings_troubleshoot_test_fcm_failed">بازیابی توکن FCM با مشکل مواجه شد:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_success">توکن FCM با موفقیت بازیابی شد:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_title">توکن Firebase</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">مشکل Google Play Services را برطرف کنید</string>
+    <string name="settings_troubleshoot_test_play_services_failed">المنت از Google Play Services برای ارسال اعلان‌ها استفاده می‌کند اما به نظر می‌رسد به درستی پیکربندی نشده است:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play Services در دسترس و بروز است.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">تنظیمات سفارشی بارگذاری نشد، لطفاً دوباره امتحان کنید.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">عیب‌یابی اولیه مشکلی را نشان نمی‌دهد. اگر همچنان در دریافت اعلان‌ها مشکل دارید لطفا خطا را گزارش کرده تا آن را بررسی کنیم.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">یک یا چند تست ناموفق بودند، لطفا خطا را گزارش کرده تا آن را بررسی کنیم.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">یک یا چند تست ناموفق بودند، راه حل(های) پیشنهادی را امتحان کنید.</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">در حال اجرا (%1$d از %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">تست‌ها را اجرا کن</string>
+    <string name="settings_troubleshoot_diagnostic">در حال تشخیص مشکل</string>
+    <string name="error_threepid_auth_failed">مطمئن شوید لینک فعال‌سازی‌ای را که به ایمیل شما ارسال شده، باز کرده‌اید.</string>
+    <string name="settings_remove_three_pid_confirmation_content">%s حذف شود؟</string>
+    <string name="settings_phone_numbers">شماره تلفن‌های شما</string>
+    <string name="settings_emails_empty">هیچ آدرس ایمیلی تا کنون به حساب کاربری شما افزوده نشده است</string>
+    <string name="settings_emails">آدرس ایمیل‌های شما</string>
+    <string name="settings_phone_number_empty">هیچ شماره تلفنی تا کنون به اکانت شما افزوده نشده است</string>
+    <string name="search_is_not_supported_in_e2e_room">قابلیت جستجو در اتاق‌های رمزشده هنوز پیاده‌سازی نشده است.</string>
+    <string name="search_no_results">نتیجه‌ای در پی نداشت</string>
+    <string name="search_banned_user_hint">فیلترکردن کاربران مسدود شده</string>
+    <string name="room_event_action_cancel_download">لغو دانلود</string>
+    <string name="room_event_action_cancel_upload">لغو آپلود</string>
+    <string name="room_event_action_report_prompt_ignore_user">آیا مطمئن هستید که تمام پیام‌های ارسالی از طرف این کاربر پنهان شود؟
+\n
+\nاین کار برنامه را مجدداً باز می‌کند و ممکن است کمی به طول انجامد.</string>
+    <string name="room_event_action_report_prompt_reason">دلیل گزارش این محتوا</string>
+    <string name="room_details_people_present_group_name">عضو شد</string>
+    <string name="room_details_people_invited_group_name">دعوت‌شدگان</string>
+    <string name="malformed_id">شناسه نامعتبر است. باید یک آدرس ایمیل یا شناسه‌ای در قالب \\\'@localpart:domain\\\' وارد نمایید</string>
+    <plurals name="room_details_selected">
+        <item quantity="one">%d مورد</item>
+        <item quantity="other">%d مورد</item>
+    </plurals>
+    <string name="room_details_files">پرونده‌ها</string>
+    <string name="room_details_people">اعضا</string>
+    <string name="room_details_title">اطلاعات اتاق</string>
+    <string name="ssl_only_accept">گواهی را تنها در صورتی تایید کنید که اثر انگشت آن با اثر انگشتی که ادمین سرور ارائه کرده‌است برابر باشد.</string>
+    <string name="ssl_expected_existing_expl">گواهی سرور تغییر کرده‌است. ممکن است این اتفاق به دلیل تمدید گواهی سرور رخ داده باشد. توصیه می‌شود از ادمین سرور سوال کنید.</string>
+    <string name="ssl_unexpected_existing_expl">گواهی سرور تغییر کرده است. این مورد بسیار نادر است. توصیه می شود گواهی جدید را قبول نکنید.</string>
+    <string name="ssl_cert_new_account_expl">اگر مدیر سرور گفته است که این مسئله اشکالی ندارد، اطمینان حاصل کنید که اثر انگشت زیر با اثر انگشت ارائه شده توسط آنها مطابقت دارد.</string>
+    <string name="ssl_cert_not_trust">این می‌تواند به این معنی باشد که حمله‌ی مرد میانی رخ داده است و یا اینکه گوشی شما، گواهی سرور را معتبر نمی‌داند.</string>
+    <string name="room_unknown_devices_messages_notification">پیام به دلیل حضور یک دستگاه ناشناس ارسال نشد. %1$s یا %2$s؟</string>
+    <string name="room_unsent_messages_notification">پیام ارسال نشد. %1$s یا %2$s؟</string>
+    <string name="room_participants_unban_prompt_msg">با لغو مسدودیت، کاربر می‌تواند مجددا به اتاق اضافه شود.</string>
+    <string name="room_participants_action_unignore_prompt_msg">حذف کاربر از لیست سیاه سبب می‌شود مجددا تمام پیام‌های او نمایش داده شود.</string>
+    <string name="room_participants_action_ignore_prompt_msg">افزودن کاربر به لیست سیاه سبب می‌شود پیام های او از اتاق‌هایی که به اشتراک می گذارید حذف شود.
+\n
+\nهر زمان که خواستید، می‌توانید در تنظیمات کاربر را از لیست سیاه حذف کنید.</string>
+    <string name="room_participants_power_level_demote">تنزل بده</string>
+    <string name="room_participants_power_level_demote_warning_prompt">شما نمی‌توانید این تغییر را بازگردانید زیرا در حال تنزل نقش خود در اتاق هستید، اگر آخرین کاربر ممتاز در اتاق باشید، امکان دستیابی مجدد به دسترسی‌های سطح بالای اتاق غیرممکن است.</string>
+    <string name="room_participants_power_level_demote_warning_title">تنزل نقش شما در اتاق؟</string>
+    <string name="room_participants_power_level_prompt">شما نمی‌توانید این تغییر را بازگردانید. زیرا در حال ارتقای سطح کاربر دیگر به سطح خودتان هستید.
+\nآیا مطمئن هستید؟</string>
+    <string name="room_preview_try_join_an_unknown_room">شما در حال دسترسی به %s هستید. آیا می خواهید به این اتاق بپیوندید؟</string>
+    <string name="room_preview_unlinked_email_warning">این دعوت به %s ارسال شده است، که هیچ ارتباطی با اکانت شما ندارد.
+\nممکن است بخواهید با اکانت دیگری وارد شوید یا این ایمیل را به اکانت خود اضافه کنید.</string>
+    <string name="permissions_action_not_performed_missing_permissions">متاسفانه به دلیل عدم دسترسی، درخواست شما امکان پذیر نمی باشد</string>
+    <string name="permissions_msg_contacts_warning_other_androids">هیوا می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر هیوا را بر اساس ایمبل و شماره تلفنشان پیدا کند. 
+\n
+\nآیا موافق با اشتراک‌گذاری دفترچه تلفنتان به این منظور هستید؟</string>
+    <string name="permissions_rationale_msg_contacts">هیوا می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر هیوا را بر اساس ایمبل و شماره تلفنشان پیدا کند. اگر مایل به اشتراک گذاری دفترچه تلفنتان به این منظور هستید لطفا در پنجره‌ی بعد اجازه‌ی این کار را بدهید.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">هیوا برای برقراری تماس تصویری نیازمند دسترسی به میکروفون و دوربین است.
+\n
+\nلطفا در پنجره های بعدی دسترسی های لازم را بدهید.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nلطفا برای برقراری تماس در پنجره بعدی دسترسی لازم را بدهید."</string>
+    <string name="permissions_rationale_msg_record_audio">هیوا برای برقراری تماس صوتی نیازمند دسترسی به میکروفون است.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nلطفا برای برقراری تماس در پنجره بعدی دسترسی لازم را بدهید."</string>
+    <string name="permissions_rationale_msg_storage">هیوا برای ارسال و ذخیره‌ی فایل‌ها نیاز به دسترسی به گالری شما را دارد.
+\n
+\nلطفا در پنجره‌ای که باز می‌شود این دسترسی را بدهید.</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">هنگامی که سرور شما قابلیت تماس ندارد، از سرور %s استفاده کن</string>
+    <string name="settings_call_ringtone_use_default_stun">اجازه استفاده از سرور تماس پشتیبان</string>
+    <string name="login_error_ssl_peer_unverified">خطای SSL: هویت طرف مقابل تأیید نشد.</string>
+    <string name="call_failed_no_connection_description">اتصال برقرار نشد.
+\nلطفا از ادمین سرور بخواهید جهت برقراری مطمئن تماس‌ها، سرور turn را پیکربندی کند.</string>
+    <string name="call_failed_no_ice_description">لطفا از ادمین سرور (%1$s) بخواهید جهت برقراری مطمئن تماس‌ها، turn server را پیکربندی کند.
+\n
+\nبه عنوان جایگزین می‌توانید از سرور عمومی %2$s استفاده کنید، اما این راه مطمئنی نیست چرا که آدرس IP شما در اختیار آن سرور قرار خواهد گرفت. برای مدیریت این بخش می‌توانید به تنظیمات مراجعه نمائید.</string>
 </resources>
