@@ -1,11 +1,39 @@
-Changes in Element 1.0.10 (xxxx-xx-xx)
+Changes in Element 1.0.10 (2020-XX-XX)
 ===================================================
 
 Features ✨:
  -
+
+Improvements 🙌:
+ - Rework sending Event management (#154)
+ - New room creation screen: set topic and avatar in the room creation form (#2078)
+ - Toggle Low priority tag (#1490)
+ - Add option to send with enter (#1195)
+ - Use Hardware keyboard enter to send message (use shift-enter for new line) (#1881, #1440)
+ - Edit and remove icons are now visible on image attachment preview screen (#2294)
+ - Room profile: BigImageViewerActivity now only display the image. Use the room setting to change or delete the room Avatar
+ - Better visibility of text reactions in dark theme (#1118)
+ - Room member profile: Add action to create (or open) a DM (#2310)
+ - Prepare changelog for F-Droid (#2296)
+ - Add graphic resources for F-Droid (#812, #2220)
+ - Highlight text in the body of the displayed result (#2200)
  
 Bugfix 🐛:
  - Fixed ringtone handling (#2100 & #2246)
+ - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
+ - Search Result | scroll jumps after pagination (#2238)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ -
+
+Other changes:
+ -
 
 Changes in Element 1.0.9 (2020-10-16)
 ===================================================
