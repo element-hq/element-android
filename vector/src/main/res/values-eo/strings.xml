@@ -2171,4 +2171,5 @@
     <string name="create_room_name_section">Nomo de ĉambro</string>
     <string name="autodiscover_well_known_autofill_dialog_message">Element trovis propran servilan agordaron per la retnomo «%1$s» el via identigilo de uzanto:
 \n%2$s</string>
+    <string name="autodiscover_invalid_response">Nevalidas hejmservil-serĉanta respondo</string>
 </resources>
