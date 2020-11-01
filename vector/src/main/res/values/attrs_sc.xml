@@ -12,6 +12,9 @@
 
         <attr name="riotx_unread_unimportant_room_badge" format="color" />
 
+        <attr name="timestamp_overlay_fg" format="color" />
+        <attr name="timestamp_overlay_bg" format="color" />
+
     </declare-styleable>
 
 </resources>

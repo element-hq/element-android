@@ -112,6 +112,11 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         (holder.imageView.layoutParams as ConstraintLayout.LayoutParams).horizontalBias = if (reverseBubble) 1f else 0f
     }
 
+    override fun allowFooterOverlay(holder: Holder): Boolean {
+        return true
+    }
+
+
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)

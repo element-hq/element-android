@@ -385,6 +385,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                         (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).addRule(RelativeLayout.ALIGN_BOTTOM, R.id.viewStubContainer)
                         (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).removeRule(RelativeLayout.BELOW)
                         if (needsFooterReservation(holder)) {
+                            // Remove style used when not having reserved space
+                            removeFooterOverlayStyle(holder, density)
+
                             // Calculate required footer space
                             val timeWidth: Int
                             val timeHeight: Int
@@ -416,10 +419,14 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                                 footerHeight += holder.bubbleFootView.paddingTop + holder.bubbleFootView.paddingBottom
                             }
                             reserveFooterSpace(holder, footerWidth, footerHeight)
+                        } else {
+                            // We have no reserved space -> style it to ensure readability on arbitrary backgrounds
+                            styleFooterOverlay(holder, density)
                         }
                     } else {
                         (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).addRule(RelativeLayout.BELOW, R.id.viewStubContainer)
                         (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).removeRule(RelativeLayout.ALIGN_BOTTOM)
+                        removeFooterOverlayStyle(holder, density)
                     }
                 }
             }
@@ -436,5 +443,34 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         //holder.informationBottom.layoutDirection = if (shouldRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
         setFlatRtl(holder.reactionsContainer, if (reverseBubble) reverseDirection else defaultDirection,
                 holder.eventBaseView.resources.configuration.layoutDirection)
+    }
+
+    private fun tintFooter(holder: H, color: Int) {
+        val tintList = ColorStateList(arrayOf(intArrayOf(0)), intArrayOf(color))
+        holder.bubbleFooterReadReceipt.imageTintList = tintList
+        holder.bubbleFooterTimeView.setTextColor(tintList)
+    }
+
+    private fun styleFooterOverlay(holder: H, density: Float) {
+        holder.bubbleFootView.setBackgroundResource(R.drawable.timestamp_overlay)
+        tintFooter(holder, ThemeUtils.getColor(holder.bubbleFootView.context, R.attr.timestamp_overlay_fg))
+        val padding = round(2*density).toInt()
+        holder.bubbleFootView.setPaddingRelative(
+                padding,
+                padding,
+                padding + round(4*density).toInt(), // compensate from inner view padding on the other side
+                padding
+        )
+    }
+
+    private fun removeFooterOverlayStyle(holder: H, density: Float) {
+        holder.bubbleFootView.background = null
+        tintFooter(holder, ThemeUtils.getColor(holder.bubbleFootView.context, R.attr.riotx_text_secondary))
+        holder.bubbleFootView.setPaddingRelative(
+                0,
+                round(4*density).toInt(),
+                0,
+                0
+        )
     }
 }

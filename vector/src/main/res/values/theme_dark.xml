@@ -189,6 +189,8 @@
         <item name="riotx_positive_accent_alpha12">@color/riotx_positive_accent_alpha12</item>
         <item name="riotx_toolbar_bg">?riotx_background</item>
         <item name="riotx_unread_unimportant_room_badge">@color/riotx_unread_room_badge_dark</item>
+        <item name="timestamp_overlay_fg">@color/timestamp_overlay_fg</item>
+        <item name="timestamp_overlay_bg">@color/timestamp_overlay_bg</item>
 
         <item name="android:statusBarColor">@color/riotx_header_panel_background_dark</item>
         <item name="android:navigationBarColor">@color/riotx_header_panel_background_dark</item>

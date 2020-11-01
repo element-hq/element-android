@@ -21,4 +21,7 @@
     <color name="background_floating_sc">#ff424242</color>
 
     <color name="list_divider_color_sc">#80ffffff</color>
+
+    <color name="timestamp_overlay_fg">#ffffff</color>
+    <color name="timestamp_overlay_bg">#80000000</color>
 </resources>
