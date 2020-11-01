@@ -27,6 +27,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.preference.VectorListPreference
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.themes.BubbleThemeUtils
 import im.vector.app.features.themes.ThemeUtils
@@ -39,6 +40,9 @@ class VectorSettingsPreferencesFragment @Inject constructor(
 
     override var titleRes = R.string.settings_preferences
     override val preferenceXmlRes = R.xml.vector_settings_preferences
+
+    private var bubbleTimeLocationPref: VectorListPreference? = null
+    private var alwaysShowTimestampsPref: VectorSwitchPreference? = null
 
     private val selectedLanguagePreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY)!!
@@ -85,11 +89,30 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             darkThemePref.parent?.removePreference(darkThemePref)
         }
 
-        findPreference<VectorListPreference>(BubbleThemeUtils.BUBBLE_STYLE_KEY)!!
-                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+        val bubbleStylePreference = findPreference<VectorListPreference>(BubbleThemeUtils.BUBBLE_STYLE_KEY)
+        bubbleStylePreference!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             BubbleThemeUtils.invalidateBubbleStyle()
+            updateBubbleDependencies(
+                    bubbleStyle = newValue as String,
+                    bubbleTimeLocation = bubbleTimeLocationPref!!.value
+            )
             true
         }
+
+        bubbleTimeLocationPref = findPreference<VectorListPreference>(BubbleThemeUtils.BUBBLE_TIME_LOCATION_KEY)
+        alwaysShowTimestampsPref = findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY)
+        bubbleTimeLocationPref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            BubbleThemeUtils.invalidateBubbleStyle()
+            updateBubbleDependencies(
+                    bubbleStyle = bubbleStylePreference.value,
+                    bubbleTimeLocation = newValue as String
+            )
+            true
+        }
+        updateBubbleDependencies(
+                bubbleStyle = bubbleStylePreference.value,
+                bubbleTimeLocation = bubbleTimeLocationPref!!.value
+        )
 
         // Url preview
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SHOW_URL_PREVIEW_KEY)!!.let {
@@ -201,5 +224,10 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun updateBubbleDependencies(bubbleStyle: String, bubbleTimeLocation: String) {
+        bubbleTimeLocationPref?.setEnabled(BubbleThemeUtils.isBubbleTimeLocationSettingAllowed(bubbleStyle))
+        alwaysShowTimestampsPref?.setEnabled(!BubbleThemeUtils.forceAlwaysShowTimestamps(bubbleStyle, bubbleTimeLocation))
     }
 }

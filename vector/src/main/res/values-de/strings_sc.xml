@@ -27,6 +27,9 @@
     <string name="bubble_style_none">Keine</string>
     <string name="bubble_style_start">Selbe Seite</string>
     <string name="bubble_style_both">Beide Seiten</string>
+    <string name="bubble_time_location">Zeitstempel-Platzierung</string>
+    <string name="bubble_time_location_top">Oben</string>
+    <string name="bubble_time_location_bottom">Unten</string>
 
     <string name="settings_unimportant_counter_badge">Zähle unwichtige Chat-Ereignisse</string>
     <string name="settings_unimportant_counter_badge_summary">Betrachte auch Chats ohne Benachrichtigung beim Zählen der ungelesenen Nachrichten pro Kategorie</string>

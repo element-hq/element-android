@@ -27,11 +27,12 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import kotlin.math.max
-import kotlin.math.round
 import im.vector.app.R
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
+import im.vector.app.features.themes.BubbleThemeUtils
 import org.matrix.android.sdk.api.session.room.send.SendState
+import kotlin.math.ceil
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
@@ -115,12 +116,10 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         val superVal = super.getViewStubMinimumWidth(holder, contentInBubble, showInformation)
 
         // Guess text width for name and time
-        val paint = Paint()
-        paint.textSize = holder.filenameView.textSize
         val density = holder.filenameView.resources.displayMetrics.density
         // On first call, holder.fileImageView.width is not initialized yet
         val imageWidth = holder.fileImageView.resources.getDimensionPixelSize(R.dimen.chat_avatar_size)
-        val minimumWidthWithText = round(paint.measureText(filename.toString())).toInt() + imageWidth + 32*density.toInt()
+        val minimumWidthWithText = ceil(BubbleThemeUtils.guessTextWidth(holder.filenameView, filename)).toInt() + imageWidth + 32*density.toInt()
         val absoluteMinimumWidth = imageWidth*3
         return max(max(absoluteMinimumWidth, minimumWidthWithText), superVal)
     }

@@ -18,18 +18,16 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import kotlin.math.max
 import kotlin.math.round
@@ -40,6 +38,7 @@ import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.themes.BubbleThemeUtils
 import im.vector.app.features.themes.ThemeUtils
+import kotlin.math.ceil
 
 /**
  * Base timeline item that adds an optional information bar with the sender avatar, name and time
@@ -66,7 +65,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
         val avatarImageView: ImageView?
         val memberNameView: TextView?
-        val timeView: TextView?
+        var timeView: TextView?
         val hiddenViews = ArrayList<View>()
         val invisibleViews = ArrayList<View>()
 
@@ -108,6 +107,24 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             hiddenViews.add(holder.timeView)
             hiddenViews.add(holder.bubbleTimeView)
         }
+
+        if (timeView === holder.bubbleTimeView) {
+            // We have two possible bubble time view locations
+            // For code readability, we don't inline this setting in the above cases
+            if (BubbleThemeUtils.getBubbleTimeLocation(holder.bubbleTimeView.context) == BubbleThemeUtils.BUBBLE_TIME_BOTTOM) {
+                timeView = holder.bubbleFooterTimeView
+                if (attributes.informationData.showInformation) {
+                    // Don't hide, so our relative layout rules still work
+                    invisibleViews.add(holder.bubbleTimeView)
+                } else {
+                    // Do hide, or we accidentally reserve space
+                    hiddenViews.add(holder.bubbleTimeView)
+                }
+            } else {
+                hiddenViews.add(holder.bubbleFooterTimeView)
+            }
+        }
+
         // Dual-side bubbles: hide own avatar, and all in direct chats
         if ((!attributes.informationData.showInformation) ||
                 (contentInBubble && (attributes.informationData.sentByMe || attributes.informationData.isDirect))) {
@@ -115,15 +132,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             hiddenViews.add(holder.avatarImageView)
         } else {
             avatarImageView = holder.avatarImageView
-        }
-
-        hiddenViews.forEach {
-            // Same as it.isVisible = false
-            it.visibility = View.GONE
-        }
-        invisibleViews.forEach {
-            // Same as it.isInvisible = true
-            it.visibility = View.INVISIBLE
         }
 
         // Views available in upstream Element
@@ -143,8 +151,23 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         avatarImageView?.setOnLongClickListener(attributes.itemLongClickListener)
         memberNameView?.setOnLongClickListener(attributes.itemLongClickListener)
 
-        // Views added by Schildi
+        // More extra views added by Schildi
         holder.viewStubContainer.minimumWidth = getViewStubMinimumWidth(holder, contentInBubble, attributes.informationData.showInformation)
+        if (contentInBubble) {
+            holder.bubbleFootView.visibility = View.VISIBLE
+        } else {
+            hiddenViews.add(holder.bubbleFootView)
+        }
+
+        // Actually hide all unnecessary views
+        hiddenViews.forEach {
+            // Same as it.isVisible = false
+            it.visibility = View.GONE
+        }
+        invisibleViews.forEach {
+            // Same as it.isInvisible = true
+            it.visibility = View.INVISIBLE
+        }
     }
 
     override fun unbind(holder: H) {
@@ -166,6 +189,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val bubbleView by bind<View>(R.id.bubbleView)
         val bubbleMemberNameView by bind<TextView>(R.id.bubbleMessageMemberNameView)
         val bubbleTimeView by bind<TextView>(R.id.bubbleMessageTimeView)
+        val bubbleFootView by bind<LinearLayout>(R.id.bubbleFootView)
+        val bubbleFooterTimeView by bind<TextView>(R.id.bubbleFooterMessageTimeView)
+        val bubbleFooterReadReceipt by bind<ImageView>(R.id.bubbleFooterReadReceipt)
         val viewStubContainer by bind<FrameLayout>(R.id.viewStubContainer)
     }
 
@@ -211,20 +237,33 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     }
 
     open fun getViewStubMinimumWidth(holder: H, contentInBubble: Boolean, showInformation: Boolean): Int {
-        return if (contentInBubble && (attributes.informationData.showInformation || attributes.informationData.forceShowTimestamp)) {
-            // Guess text width for name and time
-            val text = if (attributes.informationData.showInformation) {
-                holder.bubbleMemberNameView.text.toString() + " " + holder.bubbleTimeView.text.toString()
+        return if (contentInBubble) {
+            if (BubbleThemeUtils.getBubbleTimeLocation(holder.bubbleTimeView.context) == BubbleThemeUtils.BUBBLE_TIME_BOTTOM) {
+                if (attributes.informationData.showInformation) {
+                    // Since timeView automatically gets enough space, either within or outside the viewStub, we just need to ensure the member name view has enough space
+                    // Somehow not enough without extra space...
+                    ceil(BubbleThemeUtils.guessTextWidth(holder.bubbleMemberNameView, holder.bubbleMemberNameView.text.toString() + " ")).toInt()
+                } else {
+                    // wrap_content works!
+                    0
+                }
+            } else if (attributes.informationData.showInformation || attributes.informationData.forceShowTimestamp) {
+                // Guess text width for name and time next to each other
+                val text = if (attributes.informationData.showInformation) {
+                    holder.bubbleMemberNameView.text.toString() + " " + holder.bubbleTimeView.text.toString()
+                } else {
+                    holder.bubbleTimeView.text.toString()
+                }
+                val textSize = if (attributes.informationData.showInformation) {
+                    max(holder.bubbleMemberNameView.textSize, holder.bubbleTimeView.textSize)
+                } else {
+                    holder.bubbleTimeView.textSize
+                }
+                ceil(BubbleThemeUtils.guessTextWidth(textSize, text)).toInt()
             } else {
-                holder.bubbleTimeView.text.toString()
+                // Not showing any header, use wrap_content of content only
+                0
             }
-            val paint = Paint()
-            paint.textSize = if (attributes.informationData.showInformation) {
-                max(holder.bubbleMemberNameView.textSize, holder.bubbleTimeView.textSize)
-            } else {
-                holder.bubbleTimeView.textSize
-            }
-            round(paint.measureText(text)).toInt()
         } else {
             0
         }
@@ -243,11 +282,23 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         return round(96*density).toInt()
     }
 
+    open fun allowFooterOverlay(holder: H): Boolean {
+        return false
+    }
+
+    open fun needsFooterReservation(holder: H): Boolean {
+        return false
+    }
+
+    open fun reserveFooterSpace(holder: H, width: Int, height: Int) {
+    }
+
     override fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
         super.setBubbleLayout(holder, bubbleStyle, bubbleStyleSetting, reverseBubble)
 
         //val bubbleView = holder.eventBaseView
         val bubbleView = holder.bubbleView
+        val contentInBubble = infoInBubbles(holder.memberNameView.context)
 
         when (bubbleStyle) {
             BubbleThemeUtils.BUBBLE_STYLE_NONE                                      -> {
@@ -272,7 +323,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                     } else {
                         bubbleView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble2_outgoing else R.drawable.msg_bubble2_incoming)
                     }
-                    var tintColor = ColorStateList(
+                    val tintColor = ColorStateList(
                             arrayOf(intArrayOf(0)),
                             intArrayOf(ThemeUtils.getColor(bubbleView.context,
                                     if (attributes.informationData.sentByMe) R.attr.sc_message_bg_outgoing else R.attr.sc_message_bg_incoming)
@@ -314,6 +365,62 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                             round(shortPadding * density).toInt(),
                             round(shortPadding * density).toInt()
                     )
+                }
+
+                if (contentInBubble) {
+                    val anonymousReadReceipt = BubbleThemeUtils.getVisibleAnonymousReadReceipts(holder.bubbleFootView.context,
+                            attributes.informationData.readReceiptAnonymous, attributes.informationData.sentByMe)
+
+                    when (anonymousReadReceipt) {
+                        AnonymousReadReceipt.PROCESSING -> {
+                            holder.bubbleFooterReadReceipt.visibility = View.VISIBLE
+                            holder.bubbleFooterReadReceipt.setImageResource(R.drawable.ic_processing_msg)
+                        }
+                        else                            -> {
+                            holder.bubbleFooterReadReceipt.visibility = View.GONE
+                        }
+                    }
+
+                    if (allowFooterOverlay(holder)) {
+                        (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).addRule(RelativeLayout.ALIGN_BOTTOM, R.id.viewStubContainer)
+                        (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).removeRule(RelativeLayout.BELOW)
+                        if (needsFooterReservation(holder)) {
+                            // Calculate required footer space
+                            val timeWidth: Int
+                            val timeHeight: Int
+                            if (BubbleThemeUtils.getBubbleTimeLocation(holder.bubbleTimeView.context) == BubbleThemeUtils.BUBBLE_TIME_BOTTOM) {
+                                // Guess text width for name and time
+                                timeWidth = ceil(BubbleThemeUtils.guessTextWidth(holder.bubbleFooterTimeView, attributes.informationData.time.toString())).toInt() + holder.bubbleFooterTimeView.paddingLeft + holder.bubbleFooterTimeView.paddingRight
+                                timeHeight = ceil(holder.bubbleFooterTimeView.textSize).toInt() + holder.bubbleFooterTimeView.paddingTop + holder.bubbleFooterTimeView.paddingBottom
+                            } else {
+                                timeWidth = 0
+                                timeHeight = 0
+                            }
+                            val readReceiptWidth: Int
+                            val readReceiptHeight: Int
+                            if (anonymousReadReceipt == AnonymousReadReceipt.NONE) {
+                                readReceiptWidth = 0
+                                readReceiptHeight = 0
+                            } else {
+                                readReceiptWidth = holder.bubbleFooterReadReceipt.maxWidth + holder.bubbleFooterReadReceipt.paddingLeft + holder.bubbleFooterReadReceipt.paddingRight
+                                readReceiptHeight = holder.bubbleFooterReadReceipt.maxHeight + holder.bubbleFooterReadReceipt.paddingTop + holder.bubbleFooterReadReceipt.paddingBottom
+                            }
+
+                            var footerWidth = timeWidth + readReceiptWidth
+                            var footerHeight = max(timeHeight, readReceiptHeight)
+                            // Reserve extra padding, if we do have actual content
+                            if (footerWidth > 0) {
+                                footerWidth += holder.bubbleFootView.paddingLeft + holder.bubbleFootView.paddingRight
+                            }
+                            if (footerHeight > 0) {
+                                footerHeight += holder.bubbleFootView.paddingTop + holder.bubbleFootView.paddingBottom
+                            }
+                            reserveFooterSpace(holder, footerWidth, footerHeight)
+                        }
+                    } else {
+                        (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).addRule(RelativeLayout.BELOW, R.id.viewStubContainer)
+                        (holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams).removeRule(RelativeLayout.ALIGN_BOTTOM)
+                    }
                 }
             }
         }

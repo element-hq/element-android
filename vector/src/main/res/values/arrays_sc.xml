@@ -12,6 +12,15 @@
         <item>both</item>
     </string-array>
 
+    <string-array name="bubble_time_location_entries" translatable="false">
+        <item>@string/bubble_time_location_top</item>
+        <item>@string/bubble_time_location_bottom</item>
+    </string-array>
+    <string-array name="bubble_time_location_values" translatable="false">
+        <item>top</item>
+        <item>bottom</item>
+    </string-array>
+
     <string-array name="room_unread_kind_entries" translatable="false">
         <item>@string/settings_room_unread_kind_default</item>
         <item>@string/settings_room_unread_kind_content</item>

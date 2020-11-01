@@ -84,8 +84,7 @@
         android:layout_below="@id/messageMemberNameView"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="0dp"
-        >
+        android:layout_marginEnd="0dp">
 
         <RelativeLayout
             android:id="@+id/bubbleView"
@@ -198,6 +197,41 @@
                 android:textSize="12sp"
                 tools:text="@tools:sample/date/hhmm" />
                 -->
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_marginStart="4dp"
+                android:layout_alignEnd="@id/viewStubContainer"
+                tools:layout_alignBottom="@id/viewStubContainer"
+                android:paddingTop="4dp"
+                android:id="@+id/bubbleFootView">
+                <TextView
+                    android:id="@+id/bubbleFooterMessageTimeView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="0dp"
+                    android:maxLines="1"
+                    android:textColor="?riotx_text_secondary"
+                    android:textSize="12sp"
+                    android:layout_gravity="bottom"
+                    tools:text="@tools:sample/date/hhmm" />
+                <!-- We read maxWidth and maxHeight from code to guess footer size -->
+                <ImageView
+                    android:id="@+id/bubbleFooterReadReceipt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="16dp"
+                    android:maxHeight="16dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="0dp"
+                    android:layout_gravity="bottom"
+                    app:tint="?riotx_text_secondary"
+                    tools:src="@drawable/ic_processing_msg" />
+            </LinearLayout>
 
         </RelativeLayout>
     </FrameLayout>

@@ -42,6 +42,7 @@ data class MessageInformationData(
         val readReceipts: List<ReadReceiptData> = emptyList(),
         val referencesInfoData: ReferencesInfoData? = null,
         val sentByMe : Boolean,
+        val readReceiptAnonymous: AnonymousReadReceipt,
         val isDirect: Boolean,
         val e2eDecoration: E2EDecoration = E2EDecoration.NONE
 ) : Parcelable {
@@ -83,6 +84,14 @@ enum class E2EDecoration {
     WARN_IN_CLEAR,
     WARN_SENT_BY_UNVERIFIED,
     WARN_SENT_BY_UNKNOWN
+}
+
+enum class AnonymousReadReceipt {
+    NONE,
+    PROCESSING,
+    // For future use?
+    //SENT,
+    //READ
 }
 
 fun ReadReceiptData.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)

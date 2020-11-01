@@ -19,12 +19,12 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.content.Context
 import android.text.TextUtils
 import android.text.method.MovementMethod
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.ui.views.FooteredTextView
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
@@ -76,7 +76,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     override fun getViewType() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val messageView by bind<AppCompatTextView>(R.id.messageTextView)
+        val messageView by bind<FooteredTextView>(R.id.messageTextView)
     }
 
     companion object {
@@ -85,5 +85,18 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     override fun messageBubbleAllowed(context: Context): Boolean {
         return true
+    }
+
+    override fun allowFooterOverlay(holder: Holder): Boolean {
+        return true
+    }
+
+    override fun needsFooterReservation(holder: Holder): Boolean {
+        return true
+    }
+
+    override fun reserveFooterSpace(holder: Holder, width: Int, height: Int) {
+        holder.messageView.footerWidth = width
+        holder.messageView.footerHeight = height
     }
 }

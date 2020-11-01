@@ -27,6 +27,9 @@
     <string name="bubble_style_none">None</string>
     <string name="bubble_style_start">Same side</string>
     <string name="bubble_style_both">Both sides</string>
+    <string name="bubble_time_location">Timestamp location</string>
+    <string name="bubble_time_location_top">Top</string>
+    <string name="bubble_time_location_bottom">Bottom</string>
 
     <string name="settings_unimportant_counter_badge">Count unimportant chat events</string>
     <string name="settings_unimportant_counter_badge_summary">Include chats without notifications in the category unread counter</string>

@@ -18,9 +18,11 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
+import android.content.Context;
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.localDateTime
+import im.vector.app.features.home.room.detail.timeline.item.AnonymousReadReceipt
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
@@ -28,6 +30,7 @@ import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.themes.BubbleThemeUtils
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -49,7 +52,8 @@ import javax.inject.Inject
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
                                                         private val roomSummaryHolder: RoomSummaryHolder,
                                                         private val dateFormatter: VectorDateFormatter,
-                                                        private val vectorPreferences: VectorPreferences) {
+                                                        private val vectorPreferences: VectorPreferences,
+                                                        private val context: Context) {
 
     fun create(event: TimelineEvent, nextEvent: TimelineEvent?): MessageInformationData {
         // Non nullability has been tested before
@@ -81,7 +85,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 avatarUrl = event.senderInfo.avatarUrl,
                 memberName = event.senderInfo.disambiguatedDisplayName,
                 showInformation = showInformation,
-                forceShowTimestamp = vectorPreferences.alwaysShowTimeStamps(),
+                forceShowTimestamp = vectorPreferences.alwaysShowTimeStamps() || BubbleThemeUtils.forceAlwaysShowTimestamps(context),
                 orderedReactionList = event.annotations?.reactionsSummary
                         // ?.filter { isSingleEmoji(it.key) }
                         ?.map {
@@ -113,6 +117,16 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                     ReferencesInfoData(verificationState)
                 },
                 sentByMe = event.root.senderId == session.myUserId,
+                readReceiptAnonymous = if (event.root.sendState == SendState.SYNCED) {
+                    /*if (event.readByOther) {
+                        AnonymousReadReceipt.READ
+                    } else {
+                        AnonymousReadReceipt.SENT
+                    }*/
+                    AnonymousReadReceipt.NONE
+                } else {
+                    AnonymousReadReceipt.PROCESSING
+                },
                 isDirect = roomSummaryHolder.roomSummary?.isDirect ?: false,
                 e2eDecoration = e2eDecoration
         )
