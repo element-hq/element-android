@@ -17,10 +17,6 @@
 package org.matrix.android.sdk.internal.database
 
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.session.crypto.CryptoService
-import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertEntity
@@ -31,12 +27,13 @@ import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
                                                            private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>,
-                                                           private val cryptoService: CryptoService)
+                                                           private val eventDecryptor: EventDecryptor)
     : RealmLiveEntityObserver<EventInsertEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventInsertEntity> {
@@ -74,7 +71,7 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
                         return@forEach
                     }
                     val domainEvent = event.asDomain()
-                    decryptIfNeeded(domainEvent)
+//                    decryptIfNeeded(domainEvent)
                     processors.filter {
                         it.shouldProcess(eventId, domainEvent.getClearType(), eventInsert.insertType)
                     }.forEach {
@@ -89,22 +86,22 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
         }
     }
 
-    private fun decryptIfNeeded(event: Event) {
-        if (event.isEncrypted() && event.mxDecryptionResult == null) {
-            try {
-                val result = cryptoService.decryptEvent(event, event.roomId ?: "")
-                event.mxDecryptionResult = OlmDecryptionResult(
-                        payload = result.clearEvent,
-                        senderKey = result.senderCurve25519Key,
-                        keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                )
-            } catch (e: MXCryptoError) {
-                Timber.v("Failed to decrypt event")
-                // TODO -> we should keep track of this and retry, or some processing will never be handled
-            }
-        }
-    }
+//    private fun decryptIfNeeded(event: Event) {
+//        if (event.isEncrypted() && event.mxDecryptionResult == null) {
+//            try {
+//                val result = eventDecryptor.decryptEvent(event, event.roomId ?: "")
+//                event.mxDecryptionResult = OlmDecryptionResult(
+//                        payload = result.clearEvent,
+//                        senderKey = result.senderCurve25519Key,
+//                        keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+//                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+//                )
+//            } catch (e: MXCryptoError) {
+//                Timber.v("Failed to decrypt event")
+//                // TODO -> we should keep track of this and retry, or some processing will never be handled
+//            }
+//        }
+//    }
 
     private fun shouldProcess(eventInsertEntity: EventInsertEntity): Boolean {
         return processors.any {

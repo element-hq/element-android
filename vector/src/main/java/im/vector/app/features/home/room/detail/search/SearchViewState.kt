@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.search.EventAndSender
 data class SearchViewState(
         // Accumulated search result
         val searchResult: List<EventAndSender> = emptyList(),
+        val highlights: List<String> = emptyList(),
         val hasMoreResult: Boolean = false,
         // Last batch size, will help RecyclerView to position itself
         val lastBatchSize: Int = 0,

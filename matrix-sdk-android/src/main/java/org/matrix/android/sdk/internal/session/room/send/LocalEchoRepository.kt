@@ -88,8 +88,9 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         }
     }
 
-    fun updateSendState(eventId: String, sendState: SendState) {
+    fun updateSendState(eventId: String, roomId: String?, sendState: SendState) {
         Timber.v("## SendEvent: [${System.currentTimeMillis()}] Update local state of $eventId to ${sendState.name}")
+        eventBus.post(DefaultTimeline.OnLocalEchoUpdated(roomId ?: "", eventId, sendState))
         updateEchoAsync(eventId) { realm, sendingEventEntity ->
             if (sendState == SendState.SENT && sendingEventEntity.sendState == SendState.SYNCED) {
                 // If already synced, do not put as sent
@@ -131,6 +132,14 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
 
     suspend fun deleteFailedEcho(roomId: String, eventId: String?) {
         monarchy.awaitTransaction { realm ->
+            TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
+            EventEntity.where(realm, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
+            roomSummaryUpdater.updateSendingInformation(realm, roomId)
+        }
+    }
+
+     fun deleteFailedEchoAsync(roomId: String, eventId: String?) {
+        monarchy.runTransactionSync { realm ->
             TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
             EventEntity.where(realm, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
             roomSummaryUpdater.updateSendingInformation(realm, roomId)

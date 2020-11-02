@@ -225,4 +225,6 @@
     <string name="notice_direct_room_join">%1$s вошел(ла)</string>
     <string name="notice_direct_room_created_by_you">Вы создали обсуждение</string>
     <string name="notice_direct_room_created">%1$s создал(а) обсуждение</string>
+    <string name="notice_direct_room_update_by_you">Вы обновили.</string>
+    <string name="notice_direct_room_update">%s обновлена.</string>
 </resources>

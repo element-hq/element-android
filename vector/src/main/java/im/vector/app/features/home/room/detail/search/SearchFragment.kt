@@ -52,8 +52,6 @@ class SearchFragment @Inject constructor(
     private val fragmentArgs: SearchArgs by args()
     private val searchViewModel: SearchViewModel by fragmentViewModel()
 
-    private var pendingScrollToPosition: Int? = null
-
     override fun getLayoutResId() = R.layout.fragment_search
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,12 +68,6 @@ class SearchFragment @Inject constructor(
         searchResultRecycler.configureWith(controller, showDivider = false)
         (searchResultRecycler.layoutManager as? LinearLayoutManager)?.stackFromEnd = true
         controller.listener = this
-
-        controller.addModelBuildListener {
-            pendingScrollToPosition?.let {
-                searchResultRecycler.smoothScrollToPosition(it)
-            }
-        }
     }
 
     override fun onDestroy() {
@@ -100,10 +92,8 @@ class SearchFragment @Inject constructor(
                 }
             }
         } else {
-            pendingScrollToPosition = (state.lastBatchSize - 1).coerceAtLeast(0)
-
-            stateView.state = StateView.State.Content
             controller.setData(state)
+            stateView.state = StateView.State.Content
         }
     }
 

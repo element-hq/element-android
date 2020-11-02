@@ -174,7 +174,7 @@
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Du tog bort %1$s som en adress för det här rummet.</item>
-        <item quantity="other">Du tog bort %2$s som adresser för det här rummet.</item>
+        <item quantity="other">Du tog bort %1$s som adresser för det här rummet.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s lade till %2$s och tog bort %3$s som adresser för det här rummet.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Du lade till %1$s och tog bort %2$s som adresser för det här rummet.</string>

@@ -17,7 +17,8 @@ Improvements 🙌:
  - Prepare changelog for F-Droid (#2296)
  - Add graphic resources for F-Droid (#812, #2220)
  - Highlight text in the body of the displayed result (#2200)
- 
+ - Considerably faster QR-code bitmap generation (#2331)
+
 Bugfix 🐛:
  - Fixed ringtone handling (#2100 & #2246)
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)

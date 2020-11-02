@@ -68,7 +68,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     data class IgnoreUser(val userId: String?) : RoomDetailAction()
 
-    object ClearSendQueue : RoomDetailAction()
     object ResendAll : RoomDetailAction()
     data class StartCall(val isVideo: Boolean) : RoomDetailAction()
     object EndCall : RoomDetailAction()
@@ -89,5 +88,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
 
+    data class OpenOrCreateDm(val userId: String) : RoomDetailAction()
     data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
 }

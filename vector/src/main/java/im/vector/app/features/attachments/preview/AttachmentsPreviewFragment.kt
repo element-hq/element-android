@@ -19,7 +19,6 @@ package im.vector.app.features.attachments.preview
 
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
@@ -39,6 +38,7 @@ import com.airbnb.mvrx.withState
 import com.yalantis.ucrop.UCrop
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.OnSnapPositionChangeListener
@@ -49,7 +49,6 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_attachments_preview.*
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -80,19 +79,14 @@ class AttachmentsPreviewFragment @Inject constructor(
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        // TODO handle this one (Ucrop lib)
-        @Suppress("DEPRECATION")
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == UCrop.REQUEST_CROP && data != null) {
-                Timber.v("Crop success")
-                handleCropResult(data)
+    private val uCropActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == RESULT_OK) {
+            val resultUri = activityResult.data?.let { UCrop.getOutput(it) }
+            if (resultUri != null) {
+                viewModel.handle(AttachmentsPreviewAction.UpdatePathOfCurrentAttachment(resultUri))
+            } else {
+                Toast.makeText(requireContext(), "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
             }
-        }
-        if (resultCode == UCrop.RESULT_ERROR) {
-            Timber.v("Crop error")
         }
     }
 
@@ -170,15 +164,6 @@ class AttachmentsPreviewFragment @Inject constructor(
         }
     }
 
-    private fun handleCropResult(result: Intent) {
-        val resultUri = UCrop.getOutput(result)
-        if (resultUri != null) {
-            viewModel.handle(AttachmentsPreviewAction.UpdatePathOfCurrentAttachment(resultUri))
-        } else {
-            Toast.makeText(requireContext(), "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun handleRemoveAction() {
         viewModel.handle(AttachmentsPreviewAction.RemoveCurrentAttachment)
     }
@@ -187,8 +172,9 @@ class AttachmentsPreviewFragment @Inject constructor(
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
         val destinationFile = File(requireContext().cacheDir, "${currentAttachment.name}_edited_image_${System.currentTimeMillis()}")
         val uri = currentAttachment.queryUri
-        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), currentAttachment.name)
-                .start(requireContext(), this)
+        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), currentAttachment.name)
+                .getIntent(requireContext())
+                .let { intent -> uCropActivityResultLauncher.launch(intent) }
     }
 
     private fun setupRecyclerViews() {

@@ -1743,7 +1743,7 @@
     <string name="room_member_profile_sessions_section_title">Istunnot</string>
     <string name="trusted">Luotettu</string>
     <string name="not_trusted">Ei luotettu</string>
-    <string name="verification_profile_device_verified_because">"Tähän istuntoon luotetetaan salatussa viestinnässä, koska  %1$s (%2$s) varmisti sen:"</string>
+    <string name="verification_profile_device_verified_because">Tähän istuntoon luotetetaan salatussa viestinnässä, koska %1$s (%2$s) varmensi sen:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) kirjautui sisään uuteen istuntoon:</string>
     <string name="verification_profile_device_untrust_info">Tämän käyttäjän kanssa käyty viestintä merkitään virheiksi kunnes käyttäjä luottaa tähän istuntoon. Voit vaihtoehtoisesti käsin varmentaa sen.</string>
     <string name="reset_cross_signing">Nollaa avaimet</string>
@@ -1821,4 +1821,16 @@
     <string name="room_member_power_level_custom_in">Mukautettu (%1$d) %2$s:ssä</string>
     <string name="delete_event_dialog_reason_hint">Syy poistoon</string>
     <string name="message_key">Viestin avain</string>
+    <string name="audio_video_meeting_description">Tapaamiset käyttävät Jitsin turvallisuus- ja käyttöoikeuskäytäntöjä. Kaikki huoneessa olevat henkilöt näkevät kutsun tapaamiseen liittymiseksi niin kauan kuin tapaaminen on käynnissä.</string>
+    <string name="audio_meeting">Aloita äänitapaaminen</string>
+    <string name="video_meeting">Aloita videotapaaminen</string>
+    <string name="conference_call_in_progress">Ryhmäpuhelu on jo menossa!</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Sinulla ei ole oikeuksia puhelun aloittamiseen</string>
+    <string name="no_permissions_to_start_webrtc_call">Sinulla ei ole oikeuksia puhelun aloittamiseen tässä huoneessa</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Sinulla ei ole oikeuksia ryhmäpuhelun aloittamiseen</string>
+    <string name="no_permissions_to_start_conf_call">Sinulla ei ole oikeuksia ryhmäpuhelun aloittamiseen tässä huoneessa</string>
+    <string name="reset">Nollaa</string>
+    <string name="dismiss">Jätä huomiotta</string>
+    <string name="pause_video">Tauko</string>
+    <string name="play_video">Toista</string>
 </resources>

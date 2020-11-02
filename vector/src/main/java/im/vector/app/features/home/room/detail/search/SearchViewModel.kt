@@ -145,6 +145,7 @@ class SearchViewModel @AssistedInject constructor(
         setState {
             copy(
                     searchResult = accumulatedResult,
+                    highlights = searchResult.highlights.orEmpty(),
                     hasMoreResult = !nextBatch.isNullOrEmpty(),
                     lastBatchSize = searchResult.results.orEmpty().size,
                     asyncSearchRequest = Success(Unit)

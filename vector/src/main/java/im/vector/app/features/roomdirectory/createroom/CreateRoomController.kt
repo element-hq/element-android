@@ -26,7 +26,10 @@ import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formEditTextItem
+import im.vector.app.features.form.formEditableAvatarItem
+import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.form.formSwitchItem
 import javax.inject.Inject
 
@@ -67,6 +70,17 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
     }
 
     private fun buildForm(viewState: CreateRoomViewState, enableFormElement: Boolean) {
+        formEditableAvatarItem {
+            id("avatar")
+            enabled(enableFormElement)
+            imageUri(viewState.avatarUri)
+            clickListener { listener?.onAvatarChange() }
+            deleteListener { listener?.onAvatarDelete() }
+        }
+        settingsSectionTitleItem {
+            id("nameSection")
+            titleResId(R.string.create_room_name_section)
+        }
         formEditTextItem {
             id("name")
             enabled(enableFormElement)
@@ -76,6 +90,24 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
             onTextChange { text ->
                 listener?.onNameChange(text)
             }
+        }
+        settingsSectionTitleItem {
+            id("topicSection")
+            titleResId(R.string.create_room_topic_section)
+        }
+        formEditTextItem {
+            id("topic")
+            enabled(enableFormElement)
+            value(viewState.roomTopic)
+            hint(stringProvider.getString(R.string.create_room_topic_hint))
+
+            onTextChange { text ->
+                listener?.onTopicChange(text)
+            }
+        }
+        settingsSectionTitleItem {
+            id("settingsSection")
+            titleResId(R.string.create_room_settings_section)
         }
         formSwitchItem {
             id("public")
@@ -116,13 +148,23 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                 listener?.setIsEncrypted(value)
             }
         }
+        formSubmitButtonItem {
+            id("submit")
+            enabled(enableFormElement)
+            buttonTitleId(R.string.create_room_action_create)
+            buttonClickListener { listener?.submit() }
+        }
     }
 
     interface Listener {
+        fun onAvatarDelete()
+        fun onAvatarChange()
         fun onNameChange(newName: String)
+        fun onTopicChange(newTopic: String)
         fun setIsPublic(isPublic: Boolean)
         fun setIsInRoomDirectory(isInRoomDirectory: Boolean)
         fun setIsEncrypted(isEncrypted: Boolean)
         fun retry()
+        fun submit()
     }
 }

@@ -183,8 +183,8 @@
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Odstránili ste adresu %1$s pre túto miestnosť.</item>
-        <item quantity="few">Odstránili ste adresy %2$s pre túto miestnosť.</item>
-        <item quantity="other">Odstránili ste adresy %2$s pre túto miestnosť.</item>
+        <item quantity="few">Odstránili ste adresy %1$s pre túto miestnosť.</item>
+        <item quantity="other">Odstránili ste adresy %1$s pre túto miestnosť.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed_by_you">Pridali ste %1$s a odstránili adresy %2$s pre túto miestnosť.</string>
     <string name="notice_room_canonical_alias_set_by_you">Nastavili ste hlavnú adresu tejto miestnosti %1$s.</string>

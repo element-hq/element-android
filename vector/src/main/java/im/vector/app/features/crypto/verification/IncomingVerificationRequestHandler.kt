@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.util.toMatrixItem
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -116,6 +117,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
     }
 
     override fun verificationRequestCreated(pr: PendingVerificationRequest) {
+        Timber.v("## SAS verificationRequestCreated ${pr.transactionId}")
         // For incoming request we should prompt (if not in activity where this request apply)
         if (pr.isIncoming) {
             val name = session?.getUser(pr.otherUserId)?.displayName

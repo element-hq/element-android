@@ -16,16 +16,17 @@
 
 package im.vector.app.features.media
 
-import android.content.Context
 import android.graphics.Color
 import android.net.Uri
-import androidx.core.content.ContextCompat
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropActivity
 import im.vector.app.R
-import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.core.resources.ColorProvider
 
-fun createUCropWithDefaultSettings(context: Context, source: Uri, destination: Uri, toolbarTitle: String?): UCrop {
+fun createUCropWithDefaultSettings(colorProvider: ColorProvider,
+                                   source: Uri,
+                                   destination: Uri,
+                                   toolbarTitle: String?): UCrop {
     return UCrop.of(source, destination)
             .withOptions(
                     UCrop.Options()
@@ -39,15 +40,15 @@ fun createUCropWithDefaultSettings(context: Context, source: Uri, destination: U
                                 // Disable freestyle crop, usability was not easy
                                 // setFreeStyleCropEnabled(true)
                                 // Color used for toolbar icon and text
-                                setToolbarColor(ThemeUtils.getColor(context, R.attr.riotx_background))
-                                setToolbarWidgetColor(ThemeUtils.getColor(context, R.attr.vctr_toolbar_primary_text_color))
+                                setToolbarColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
+                                setToolbarWidgetColor(colorProvider.getColorFromAttribute(R.attr.vctr_toolbar_primary_text_color))
                                 // Background
-                                setRootViewBackgroundColor(ThemeUtils.getColor(context, R.attr.riotx_background))
+                                setRootViewBackgroundColor(colorProvider.getColorFromAttribute(R.attr.riotx_background))
                                 // Status bar color (pb in dark mode, icon of the status bar are dark)
-                                setStatusBarColor(ThemeUtils.getColor(context, R.attr.riotx_header_panel_background))
+                                setStatusBarColor(colorProvider.getColorFromAttribute(R.attr.riotx_header_panel_background))
                                 // Known issue: there is still orange color used by the lib
                                 // https://github.com/Yalantis/uCrop/issues/602
-                                setActiveControlsWidgetColor(ContextCompat.getColor(context, R.color.riotx_accent))
+                                setActiveControlsWidgetColor(colorProvider.getColor(R.color.riotx_accent))
                                 // Hide the logo (does not work)
                                 setLogoColor(Color.TRANSPARENT)
                             }

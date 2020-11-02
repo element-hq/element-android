@@ -251,7 +251,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.HandleTombstoneEvent             -> handleTombstoneEvent(action)
             is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
             is RoomDetailAction.RemoveFailedEcho                 -> handleRemove(action)
-            is RoomDetailAction.ClearSendQueue                   -> handleClearSendQueue()
             is RoomDetailAction.ResendAll                        -> handleResendAll()
             is RoomDetailAction.MarkAllAsRead                    -> handleMarkAllAsRead()
             is RoomDetailAction.ReportContent                    -> handleReportContent(action)
@@ -274,8 +273,26 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
             is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
             is RoomDetailAction.CancelSend                       -> handleCancel(action)
+            is RoomDetailAction.OpenOrCreateDm                   -> handleOpenOrCreateDm(action)
             is RoomDetailAction.JumpToReadReceipt                -> handleJumpToReadReceipt(action)
         }.exhaustive
+    }
+
+    private fun handleOpenOrCreateDm(action: RoomDetailAction.OpenOrCreateDm) {
+        val existingDmRoomId = session.getExistingDirectRoomWithUser(action.userId)
+        if (existingDmRoomId == null) {
+            // First create a direct room
+            viewModelScope.launch(Dispatchers.IO) {
+                val roomId = awaitCallback<String> {
+                    session.createDirectRoom(action.userId, it)
+                }
+                _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId))
+            }
+        } else {
+            if (existingDmRoomId != initialState.roomId) {
+                _viewEvents.post(RoomDetailViewEvents.OpenRoom(existingDmRoomId))
+            }
+        }
     }
 
     private fun handleJumpToReadReceipt(action: RoomDetailAction.JumpToReadReceipt) {
@@ -542,9 +559,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             return@withState false
         }
         when (itemId) {
-            R.id.clear_message_queue ->
-                // For now always disable when not in developer mode, worker cancellation is not working properly
-                timeline.pendingEventCount() > 0 && vectorPreferences.developerMode()
             R.id.resend_all          -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.timeline_setting    -> true
             R.id.invite              -> state.canInvite
@@ -1063,10 +1077,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
             room.cancelSend(targetEventId)
         }
-    }
-
-    private fun handleClearSendQueue() {
-        room.clearSendingQueue()
     }
 
     private fun handleResendAll() {

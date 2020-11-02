@@ -177,7 +177,7 @@
         <item quantity="other">您新增了 %1$s 为此聊天室的地址。</item>
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
-        <item quantity="other">您移除了此聊天室的 %2$s 地址。</item>
+        <item quantity="other">您移除了此聊天室的 %1$s 地址。</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed_by_you">您为此聊天室新增了 %1$s 并移除了 %2$s 地址。</string>
     <string name="notice_room_canonical_alias_set_by_you">您将此聊天室的主地址设为了 %1$s。</string>
@@ -196,7 +196,7 @@
     <string name="notice_direct_room_third_party_invite">%1$s 邀请了 %2$s</string>
     <string name="notice_direct_room_update_by_you">您在此处升级。</string>
     <string name="notice_direct_room_update">%s 在此处升级。</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">您使未来的消息对 %2$s 可见</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">您使未来的消息对 %1$s 可见</string>
     <string name="notice_made_future_direct_room_visibility">%1$s 使未来的消息对 %2$s 可见</string>
     <string name="notice_direct_room_leave_by_you">您离开了聊天室</string>
     <string name="notice_direct_room_leave">%1$s 离开了聊天室</string>
@@ -204,4 +204,8 @@
     <string name="notice_direct_room_join">%1$s 已加入</string>
     <string name="notice_direct_room_created_by_you">您创建了讨论</string>
     <string name="notice_direct_room_created">%1$s 创建了讨论</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">你已阻止客人加入房间。</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s已阻止客人加入房间。</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">你已允许客人加入这里。</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s 已允许客人加入这里。</string>
 </resources>

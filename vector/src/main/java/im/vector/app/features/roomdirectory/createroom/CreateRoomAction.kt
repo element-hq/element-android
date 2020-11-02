@@ -16,12 +16,17 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import android.net.Uri
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class CreateRoomAction : VectorViewModelAction {
+    data class SetAvatar(val imageUri: Uri?) : CreateRoomAction()
     data class SetName(val name: String) : CreateRoomAction()
+    data class SetTopic(val topic: String) : CreateRoomAction()
     data class SetIsPublic(val isPublic: Boolean) : CreateRoomAction()
     data class SetIsInRoomDirectory(val isInRoomDirectory: Boolean) : CreateRoomAction()
     data class SetIsEncrypted(val isEncrypted: Boolean) : CreateRoomAction()
+
     object Create : CreateRoomAction()
+    object Reset : CreateRoomAction()
 }

@@ -21,7 +21,7 @@ Element sätter dig i kontroll genom att låta dig välja att vara värd för di
 
 <b>ÄG DIN DATA</b>: Du väljer var du vill ha din data och dina meddelanden. Du äger den och kontrollerar den, inte nåt stort företag som samlar in din data och ger den till tredje parter.
 
-<b>ÖPPEN KOMMUNIKATION OCH ÖPPET SAMARBETE</b>: Du kan chatta med med vem som helst på Matrix-nätverket, oavsett om de använder Element eller en annan Matrix-app, och till och med om de använder ett annat meddelandesystem som Slack, IRC eller XMPP.
+<b>ÖPPEN KOMMUNIKATION OCH ÖPPET SAMARBETE</b>: Du kan chatta med vem som helst på Matrix-nätverket, oavsett om de använder Element eller en annan Matrix-app, och till och med om de använder ett annat meddelandesystem som Slack, IRC eller XMPP.
 
 <b>SUPERSÄKER</b>: Riktig totalsträckskryptering (bara de in konversationen kan avkryptera meddelandena), och korssingering för att verifiera konversationsmedlemmars enheter.
 

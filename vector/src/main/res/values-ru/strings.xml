@@ -509,8 +509,8 @@
     <string name="room_settings_copy_room_address">Копировать адрес комнаты</string>
     <string name="room_settings_addresses_e2e_enabled">В этой комнате включено шифрование.</string>
     <string name="room_settings_addresses_e2e_disabled">В этой комнате выключено шифрование.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Включить шифрование 
-(внимание: не может быть снова отключено!)</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Включить шифрование
+\n(внимание: не может быть снова отключено!)</string>
     <!-- Directory -->
     <string name="directory_title">Каталог</string>
     <!-- matrix error -->
@@ -1857,7 +1857,7 @@
 \n
 \nДля максимальной безопасности сделайте это лично.</string>
     <string name="room_profile_not_encrypted_subtitle">Сообщения в этой комнате не шифруются сквозным шифрованием.</string>
-    <string name="room_profile_encrypted_subtitle">Сообщения в этой комнате не шифруются сквозным шифрованием.
+    <string name="room_profile_encrypted_subtitle">Сообщения в этой комнате шифруются сквозным шифрованием.
 \n
 \nВаши сообщения защищены замками, и только у вас и получателя есть уникальные ключи, чтобы разблокировать их.</string>
     <string name="room_profile_section_admin">Действия Администратора</string>
@@ -2274,4 +2274,18 @@
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">У вас нет разрешения на запуск звонка</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">У вас нет разрешения на запуск конференции</string>
     <string name="reset">Сброс</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">Показать устройство, которое вы можете проверить сейчас</item>
+        <item quantity="few">Показать %d устройства, которые вы можете проверить сейчас</item>
+        <item quantity="many">Показать %d устройств, которые вы можете проверить сейчас</item>
+        <item quantity="other">Показать %d устройств, которые вы можете проверить сейчас</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">Уведомление нажато!</string>
+    <string name="settings_troubleshoot_test_notification_notice">Пожалуйста, нажмите на уведомление. Если вы не видите уведомления, проверьте настройки системы.</string>
+    <string name="settings_troubleshoot_test_notification_title">Визуализировать уведомления</string>
+    <string name="settings_troubleshoot_test_push_notification_content">Вы видите уведомление! Нажмите сюда!</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Не удалось получить push-уведомление. Переустановка приложения может быть возможным решением.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">Приложение получило push-уведомление</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Приложение ожидает push-уведомление</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Тестирование push-уведомлений</string>
 </resources>
