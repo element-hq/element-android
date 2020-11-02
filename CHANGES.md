@@ -22,6 +22,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Fixed ringtone handling (#2100 & #2246)
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
+ - Incoming call continues to ring if call is answered on another device (#1921)
  - Search Result | scroll jumps after pagination (#2238)
 
 Translations 🗣:
