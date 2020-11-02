@@ -17,6 +17,8 @@
 package im.vector.app.core.services
 
 import android.content.Context
+import android.media.Ringtone
+import android.media.RingtoneManager
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
@@ -25,7 +27,26 @@ import androidx.core.content.getSystemService
 import im.vector.app.R
 import timber.log.Timber
 
-class CallRingPlayer(
+class CallRingPlayerIncoming(
+        context: Context
+) {
+
+    private val applicationContext = context.applicationContext
+    private var r: Ringtone? = null
+
+    fun start() {
+        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        r = RingtoneManager.getRingtone(applicationContext, notification)
+        Timber.v("## VOIP Starting ringing incomming")
+        r?.play()
+    }
+
+    fun stop() {
+        r?.stop()
+    }
+}
+
+class CallRingPlayerOutgoing(
         context: Context
 ) {
 
@@ -44,12 +65,12 @@ class CallRingPlayer(
             try {
                 if (player?.isPlaying == false) {
                     player?.start()
-                    Timber.v("## VOIP Starting ringing")
+                    Timber.v("## VOIP Starting ringing outgoing")
                 } else {
                     Timber.v("## VOIP already playing")
                 }
             } catch (failure: Throwable) {
-                Timber.e(failure, "## VOIP Failed to start ringing")
+                Timber.e(failure, "## VOIP Failed to start ringing outgoing")
                 player = null
             }
         } else {
@@ -74,7 +95,7 @@ class CallRingPlayer(
             } else {
                 mediaPlayer.setAudioAttributes(AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                        .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION_SIGNALLING)
+                        .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
                         .build())
             }
             return mediaPlayer

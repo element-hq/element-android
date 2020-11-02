@@ -1,4 +1,4 @@
-A full developer contributors list can be found [here](https://github.com/vector-im/element-android/graphs/contributors). 
+A full developer contributors list can be found [here](https://github.com/vector-im/element-android/graphs/contributors).
 
 # Core team:
 
@@ -33,3 +33,8 @@ First of all, we thank all contributors who use Element and report problems on t
 We do not forget all translators, for their work of translating Element into many languages. They are also the authors of Element.
 
 Feel free to add your name below, when you contribute to the project!
+
+Name    | Matrix ID           | GitHub
+--------|---------------------|--------------------------------------
+gjpower | @gjpower:matrix.org | [gjpower](https://github.com/gjpower)
+
