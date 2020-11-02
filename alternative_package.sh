@@ -43,22 +43,31 @@ logo_alternative() {
 
 case "$package_add" in
 "a")
-    # cyan
-    logo_alternative "#00ACC1" "#006064" "#B2EBF2"
+    # blue
+    logo_alternative "#2196F3" "#0D47A1" "#BBDEFB"
     ;;
 "b")
     # orange: 900 color recuded in value
     logo_alternative "#FB8C00" "#7f2c00" "#FFE0B2"
     ;;
 "c")
-    # purple
-    logo_alternative "#5E35B1" "#311B92" "#D1C4E9"
-    ;;
-"d")
     # red: 900 color reduced in value
     logo_alternative "#E53935" "#4c0b0b" "#FFCDD2"
     ;;
+"d")
+    # purple
+    logo_alternative "#5E35B1" "#311B92" "#D1C4E9"
+    ;;
+"e")
+    # pink
+    logo_alternative "#D81B60" "#880E4F" "#F8BBD0"
+    ;;
 "x")
+    # cyan
+    logo_alternative "#00ACC1" "#006064" "#B2EBF2"
+    ;;
+"z")
+    # white
     logo_alternative "#ffffff" "#000000" "#eeeeee"
     ;;
 esac
