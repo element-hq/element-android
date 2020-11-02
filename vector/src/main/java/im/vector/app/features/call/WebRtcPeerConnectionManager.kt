@@ -18,7 +18,6 @@ package im.vector.app.features.call
 
 import android.content.Context
 import android.hardware.camera2.CameraManager
-import android.os.SystemClock
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -76,7 +75,7 @@ import javax.inject.Singleton
 @Singleton
 class WebRtcPeerConnectionManager @Inject constructor(
         private val context: Context,
-        private val activeSessionDataSource: ActiveSessionDataSource,
+        private val activeSessionDataSource: ActiveSessionDataSource
 ) : CallsListener, LifecycleObserver {
 
     private val currentSession: Session?
@@ -217,7 +216,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
     fun entersBackground() {
         isInBackground = true
     }
-
 
     var currentCall: CallContext? = null
         set(value) {
