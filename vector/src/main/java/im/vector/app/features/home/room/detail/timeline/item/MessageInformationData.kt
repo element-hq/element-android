@@ -44,6 +44,7 @@ data class MessageInformationData(
         val sentByMe : Boolean,
         val readReceiptAnonymous: AnonymousReadReceipt,
         val isDirect: Boolean,
+        val dmChatPartnerId: String?,
         val e2eDecoration: E2EDecoration = E2EDecoration.NONE
 ) : Parcelable {
 

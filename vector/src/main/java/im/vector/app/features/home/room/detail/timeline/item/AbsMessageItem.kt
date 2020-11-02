@@ -242,7 +242,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     }
 
     override fun ignoreMessageGuideline(context: Context): Boolean {
-        return infoInBubbles(context) && (attributes.informationData.sentByMe || attributes.informationData.isDirect)
+        return infoInBubbles(context) && canHideAvatars()
     }
 
     open fun getViewStubMinimumWidth(holder: H, contentInBubble: Boolean, showInformation: Boolean): Int {
@@ -303,7 +303,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     }
 
     open fun canHideAvatars(): Boolean {
-        return attributes.informationData.sentByMe || attributes.informationData.isDirect
+        return attributes.informationData.sentByMe ||
+                (attributes.informationData.isDirect && attributes.informationData.senderId == attributes.informationData.dmChatPartnerId)
     }
 
     override fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {

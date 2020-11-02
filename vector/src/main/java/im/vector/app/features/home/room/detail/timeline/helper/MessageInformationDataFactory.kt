@@ -35,6 +35,8 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -75,6 +77,27 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val e2eDecoration = getE2EDecoration(event)
+
+        var isEffectivelyDirect = false
+        var dmOtherMemberId: String? = null
+        if ((roomSummaryHolder.roomSummary?.isDirect == true) && event.root.roomId != null) {
+            val members = session.getRoom(event.root.roomId!!)
+                    ?.getRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.JOIN) })
+                    ?.map { it.userId }
+                    .orEmpty()
+                    .toSet()
+            if (members.size == 2) {
+                var foundSelf = false
+                for (member in members) {
+                    if (member == session.myUserId) {
+                        foundSelf = true
+                    } else {
+                        dmOtherMemberId = member
+                    }
+                }
+                isEffectivelyDirect = foundSelf && (dmOtherMemberId != null)
+            }
+        }
 
         return MessageInformationData(
                 eventId = eventId,
@@ -127,7 +150,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 } else {
                     AnonymousReadReceipt.PROCESSING
                 },
-                isDirect = roomSummaryHolder.roomSummary?.isDirect ?: false,
+                isDirect = isEffectivelyDirect,
+                dmChatPartnerId = dmOtherMemberId,
                 e2eDecoration = e2eDecoration
         )
     }
