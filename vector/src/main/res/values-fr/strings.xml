@@ -1201,7 +1201,7 @@
     <string name="fab_menu_create_chat">Messages directs</string>
     <string name="create_room_title">Nouveau salon</string>
     <string name="create_room_action_create">CRÉER</string>
-    <string name="create_room_name_hint">Nom du salon</string>
+    <string name="create_room_name_hint">Nom</string>
     <string name="create_room_public_title">Public</string>
     <string name="create_room_public_description">Tout le monde pourra rejoindre ce salon</string>
     <string name="create_room_directory_title">Annuaire des salons</string>
@@ -2189,7 +2189,7 @@
     <string name="warning_room_not_created_yet">Le salon n\'est pas encore créé. Annuler la création du salon \?</string>
     <string name="room_list_quick_actions_low_priority_remove">Retirer de la priorité faible</string>
     <string name="room_list_quick_actions_low_priority_add">Ajouter à la priorité faible</string>
-    <string name="rotate_and_crop_screen_title">Tourner et couper</string>
+    <string name="rotate_and_crop_screen_title">Pivoter et rogner</string>
     <string name="attachment_type_dialog_title">Ajouter une image à partir de</string>
     <string name="create_room_settings_section">Paramètres du salon</string>
     <string name="create_room_topic_hint">Sujet</string>
