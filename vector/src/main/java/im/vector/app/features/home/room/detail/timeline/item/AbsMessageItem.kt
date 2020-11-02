@@ -64,10 +64,12 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val contentInBubble = infoInBubbles(holder.memberNameView.context)
 
         val avatarImageView: ImageView?
-        val memberNameView: TextView?
+        var memberNameView: TextView?
         var timeView: TextView?
         val hiddenViews = ArrayList<View>()
         val invisibleViews = ArrayList<View>()
+
+        val avatarUnnecessary = canHideAvatars()
 
         // Select which views are visible, based on bubble style and other criteria
         if (attributes.informationData.showInformation) {
@@ -114,8 +116,15 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             if (BubbleThemeUtils.getBubbleTimeLocation(holder.bubbleTimeView.context) == BubbleThemeUtils.BUBBLE_TIME_BOTTOM) {
                 timeView = holder.bubbleFooterTimeView
                 if (attributes.informationData.showInformation) {
-                    // Don't hide, so our relative layout rules still work
-                    invisibleViews.add(holder.bubbleTimeView)
+                    if (avatarUnnecessary) {
+                        // In the case of footer time, we can also hide the names without making it look awkward
+                        hiddenViews.add(holder.bubbleMemberNameView)
+                        memberNameView = null
+                        hiddenViews.add(holder.bubbleTimeView)
+                    } else {
+                        // Don't completely remove, just hide, so our relative layout rules still work
+                        invisibleViews.add(holder.bubbleTimeView)
+                    }
                 } else {
                     // Do hide, or we accidentally reserve space
                     hiddenViews.add(holder.bubbleTimeView)
@@ -127,7 +136,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
         // Dual-side bubbles: hide own avatar, and all in direct chats
         if ((!attributes.informationData.showInformation) ||
-                (contentInBubble && (attributes.informationData.sentByMe || attributes.informationData.isDirect))) {
+                (contentInBubble && avatarUnnecessary)) {
             avatarImageView = null
             hiddenViews.add(holder.avatarImageView)
         } else {
@@ -291,6 +300,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     }
 
     open fun reserveFooterSpace(holder: H, width: Int, height: Int) {
+    }
+
+    open fun canHideAvatars(): Boolean {
+        return attributes.informationData.sentByMe || attributes.informationData.isDirect
     }
 
     override fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
