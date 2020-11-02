@@ -20,6 +20,7 @@ Improvements 🙌:
  - Considerably faster QR-code bitmap generation (#2331)
 
 Bugfix 🐛:
+ - Fixed ringtone handling (#2100 & #2246)
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
  - Search Result | scroll jumps after pagination (#2238)
 
