@@ -1,8 +1,19 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
-    <string name="summary_user_sent_image">%1$s išsiuntė atvaizdą.</string>
+    <string name="summary_user_sent_image">%1$s išsiuntė vaizdą.</string>
     <string name="summary_user_sent_sticker">%1$s išsiuntė lipduką.</string>
-
     <string name="notice_room_invite_no_invitee">%s pakvietimas</string>
+    <string name="notice_room_join_by_you">Jūs prisijungėte prie kambario</string>
+    <string name="notice_room_join">%1$s prisijungė prie kambario</string>
+    <string name="notice_room_invite_you">%1$s pakvietė jus</string>
+    <string name="notice_room_invite_by_you">Jūs pakvietėte %1$s</string>
+    <string name="notice_room_invite">%1$s pakvietė %2$s</string>
+    <string name="notice_direct_room_created_by_you">Jūs sukūrėte diskusiją</string>
+    <string name="notice_direct_room_created">%1$s sukūrė diskusiją</string>
+    <string name="notice_room_created_by_you">Jūs sukūrėte kambarį</string>
+    <string name="notice_room_created">%1$s sukūrė kambarį</string>
+    <string name="notice_room_invite_no_invitee_by_you">Jūsų pakvietimas</string>
+    <string name="summary_you_sent_sticker">Jūs išsiuntėte lipduką.</string>
+    <string name="summary_you_sent_image">Jūs išsiuntėte vaizdą.</string>
 </resources>

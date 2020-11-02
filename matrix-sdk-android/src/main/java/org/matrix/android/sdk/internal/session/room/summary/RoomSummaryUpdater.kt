@@ -16,10 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.summary
 
-import dagger.Lazy
 import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -28,9 +26,11 @@ import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomNameContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import org.matrix.android.sdk.internal.crypto.crosssigning.SessionToCryptoRoomMembersUpdate
+import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
+import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
@@ -46,7 +46,6 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomAvatarResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
-import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDecryptor
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncUnreadNotifications
 import timber.log.Timber
@@ -56,8 +55,8 @@ internal class RoomSummaryUpdater @Inject constructor(
         @UserId private val userId: String,
         private val roomDisplayNameResolver: RoomDisplayNameResolver,
         private val roomAvatarResolver: RoomAvatarResolver,
-        private val timelineEventDecryptor: Lazy<TimelineEventDecryptor>,
-        private val eventBus: EventBus) {
+        private val eventDecryptor: EventDecryptor,
+        private val crossSigningService: DefaultCrossSigningService) {
 
     fun update(realm: Realm,
                roomId: String,
@@ -126,9 +125,14 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
         roomSummaryEntity.updateHasFailedSending()
 
-        if (latestPreviewableEvent?.root?.type == EventType.ENCRYPTED && latestPreviewableEvent.root?.decryptionResultJson == null) {
+        val root = latestPreviewableEvent?.root
+        if (root?.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
             Timber.v("Should decrypt ${latestPreviewableEvent.eventId}")
-            timelineEventDecryptor.get().requestDecryption(TimelineEventDecryptor.DecryptionRequest(latestPreviewableEvent.eventId, ""))
+            // mmm i want to decrypt now or is it ok to do it async?
+            tryOrNull {
+                eventDecryptor.decryptEvent(root.asDomain(), "")
+                // eventDecryptor.decryptEventAsync(root.asDomain(), "", NoOpMatrixCallback())
+            }
         }
 
         if (updateMembers) {
@@ -142,7 +146,8 @@ internal class RoomSummaryUpdater @Inject constructor(
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
             if (roomSummaryEntity.isEncrypted) {
-                eventBus.post(SessionToCryptoRoomMembersUpdate(roomId, roomSummaryEntity.isDirect, roomSummaryEntity.otherMemberIds.toList() + userId))
+                // mmm maybe we could only refresh shield instead of checking trust also?
+                crossSigningService.onUsersDeviceUpdate(roomSummaryEntity.otherMemberIds.toList())
             }
         }
     }
@@ -155,14 +160,5 @@ internal class RoomSummaryUpdater @Inject constructor(
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         roomSummaryEntity.updateHasFailedSending()
         roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
-    }
-
-    fun updateShieldTrust(realm: Realm,
-                          roomId: String,
-                          trust: RoomEncryptionTrustLevel?) {
-        val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
-        if (roomSummaryEntity.isEncrypted) {
-            roomSummaryEntity.roomEncryptionTrustLevel = trust
-        }
     }
 }

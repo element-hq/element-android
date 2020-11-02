@@ -16,6 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import io.realm.Realm
+import io.realm.kotlin.createObject
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -54,16 +57,12 @@ import org.matrix.android.sdk.internal.session.room.read.FullyReadContent
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultTimeline
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
-import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDecryptor
 import org.matrix.android.sdk.internal.session.room.typing.TypingEventContent
 import org.matrix.android.sdk.internal.session.sync.model.InvitedRoomSync
 import org.matrix.android.sdk.internal.session.sync.model.RoomSync
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncAccountData
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncEphemeral
 import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
-import io.realm.Realm
-import io.realm.kotlin.createObject
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -76,8 +75,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val roomTypingUsersHandler: RoomTypingUsersHandler,
                                                    private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
                                                    @UserId private val userId: String,
-                                                   private val eventBus: EventBus,
-                                                   private val timelineEventDecryptor: TimelineEventDecryptor) {
+                                                   private val eventBus: EventBus) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()

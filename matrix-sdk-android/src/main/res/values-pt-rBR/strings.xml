@@ -182,7 +182,7 @@
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Você removeu %1$s como um endereço desta sala.</item>
-        <item quantity="other">Você removeu %2$s como endereços desta sala.</item>
+        <item quantity="other">Você removeu %1$s como endereços desta sala.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s adicionou %2$s e removeu %3$s como endereços desta sala.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Você adicionou %1$s e removeu %2$s como endereços desta sala.</string>

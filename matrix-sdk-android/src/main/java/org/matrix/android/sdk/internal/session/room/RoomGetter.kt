@@ -25,13 +25,12 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import javax.inject.Inject
 
 internal interface RoomGetter {
     fun getRoom(roomId: String): Room?
 
-    fun getDirectRoomWith(otherUserId: String): Room?
+    fun getDirectRoomWith(otherUserId: String): String?
 }
 
 @SessionScope
@@ -46,16 +45,14 @@ internal class DefaultRoomGetter @Inject constructor(
         }
     }
 
-    override fun getDirectRoomWith(otherUserId: String): Room? {
+    override fun getDirectRoomWith(otherUserId: String): String? {
         return realmSessionProvider.withRealm { realm ->
             RoomSummaryEntity.where(realm)
                     .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
                     .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
                     .findAll()
-                    .filter { dm -> dm.otherMemberIds.contains(otherUserId) }
-                    .map { it.roomId }
-                    .firstOrNull { roomId -> otherUserId in RoomMemberHelper(realm, roomId).getActiveRoomMemberIds() }
-                    ?.let { roomId -> createRoom(realm, roomId) }
+                    .firstOrNull { dm -> dm.otherMemberIds.size == 1 && dm.otherMemberIds.first() == otherUserId }
+                    ?.roomId
         }
     }
 

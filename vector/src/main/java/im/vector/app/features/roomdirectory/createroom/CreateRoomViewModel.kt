@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import androidx.core.net.toFile
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
@@ -26,7 +27,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.app.core.platform.EmptyViewEvents
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
@@ -44,7 +45,7 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
                                                       private val session: Session,
                                                       private val rawService: RawService
-) : VectorViewModel<CreateRoomViewState, CreateRoomAction, EmptyViewEvents>(initialState) {
+) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -90,15 +91,36 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
     override fun handle(action: CreateRoomAction) {
         when (action) {
+            is CreateRoomAction.SetAvatar            -> setAvatar(action)
             is CreateRoomAction.SetName              -> setName(action)
+            is CreateRoomAction.SetTopic             -> setTopic(action)
             is CreateRoomAction.SetIsPublic          -> setIsPublic(action)
             is CreateRoomAction.SetIsInRoomDirectory -> setIsInRoomDirectory(action)
             is CreateRoomAction.SetIsEncrypted       -> setIsEncrypted(action)
             is CreateRoomAction.Create               -> doCreateRoom()
-        }
+            CreateRoomAction.Reset                   -> doReset()
+        }.exhaustive
     }
 
+    private fun doReset() {
+        setState {
+            // Delete temporary file with the avatar
+            avatarUri?.let { tryOrNull { it.toFile().delete() } }
+
+            CreateRoomViewState(
+                    isEncrypted = adminE2EByDefault,
+                    hsAdminHasDisabledE2E = !adminE2EByDefault
+            )
+        }
+
+        _viewEvents.post(CreateRoomViewEvents.Quit)
+    }
+
+    private fun setAvatar(action: CreateRoomAction.SetAvatar) = setState { copy(avatarUri = action.imageUri) }
+
     private fun setName(action: CreateRoomAction.SetName) = setState { copy(roomName = action.name) }
+
+    private fun setTopic(action: CreateRoomAction.SetTopic) = setState { copy(roomTopic = action.topic) }
 
     private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState {
         copy(
@@ -123,6 +145,8 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
         val createRoomParams = CreateRoomParams()
                 .apply {
                     name = state.roomName.takeIf { it.isNotBlank() }
+                    topic = state.roomTopic.takeIf { it.isNotBlank() }
+                    avatarUri = state.avatarUri
                     // Directory visibility
                     visibility = if (state.isInRoomDirectory) RoomDirectoryVisibility.PUBLIC else RoomDirectoryVisibility.PRIVATE
                     // Public room

@@ -1,29 +1,23 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- use to retrieve the supported languages list -->
     <!-- should the same value as the file name -->
     <string name="resources_language">el</string>
     <string name="resources_country_code">GR</string>
-
-
     <string name="cancel">Ακύρωση</string>
     <string name="action_close">Κλείσιμο</string>
     <string name="room_settings_direct_chat">Απευθείας συνομιλία</string>
     <string name="directory_title">Ευρετήριο</string>
-
     <string name="settings_enable_all_notif">Ενεργοποίηση ειδοποιήσεων για τον λογαριασμό</string>
     <string name="room_details_files">Αρχεία</string>
     <string name="room_settings_forget">Παράλειψη</string>
-
     <string name="send_bug_report_logs_description">Προκειμένου να διαγνωστούν προβλήματα, τα αρχεία καταγραφής από αυτόν τον πελάτη θα σταλούν με αυτήν την αναφορά σφάλματος. Αν προτιμάτε να στείλετε μόνο το παραπάνω κείμενο, απενεργοποιήστε:</string>
     <string name="leave">Αποχώρηση</string>
     <string name="settings_messages_sent_by_bot">Μηνύματα από bots</string>
-
     <string name="permalink">Μόνιμος σύνδεσμος</string>
     <string name="send_bug_report_description">Παρακαλούμε περιγράψτε το σφάλμα. Τι κάνατε; Τι περιμένατε να συμβεί; Τι έγινε τελικά;</string>
     <string name="quote">Παράθεση</string>
     <string name="reject">Απόρριψη</string>
-
     <string name="remove">Αφαίρεση</string>
     <string name="resend">Αποστολή ξανά</string>
     <string name="rooms_directory_header">Ευρετήριο</string>
@@ -34,17 +28,13 @@
     <string name="view_decrypted_source">Προβολή αποκρυπτογραφημένου κώδικα</string>
     <string name="view_source">Προβολή κώδικα</string>
     <string name="today">Σήμερα</string>
-
     <string name="yesterday">Χθές</string>
     <string name="ok">Εντάξει</string>
     <string name="dialog_title_warning">Προειδοποίηση</string>
-
     <string name="_continue">Συνέχεια</string>
-
     <string name="notification_sync_in_progress">Γίνεται συγχρονισμός</string>
     <string name="notification_noisy_notifications">Ηχητικές ειδοποιήσεις</string>
     <string name="notification_silent_notifications">Αθόρυβες ειδοποιήσεις</string>
-
     <string name="title_activity_home">Μηνύματα</string>
     <string name="title_activity_room">Δωμάτιο</string>
     <string name="title_activity_settings">Ρυθμίσεις</string>
@@ -52,21 +42,15 @@
     <string name="title_activity_historical">Ιστορικό</string>
     <string name="title_activity_bug_report">Αναφορά σφάλματος</string>
     <string name="title_activity_group_details">Πληροφορίες κοινότητας</string>
-
     <string name="loading">Φόρτωση…</string>
-
     <string name="save">Αποθήκευση</string>
     <string name="encrypted_message">Κρυπτογραφημένο μήνυμα</string>
-
     <string name="light_theme">Ανοιχτόχρωμο θέμα</string>
     <string name="dark_theme">Σκουρόχρωμο θέμα</string>
     <string name="black_them">Μαύρο θέμα</string>
     <string name="status_theme">Θέμα Status.im</string>
-
     <string name="title_activity_choose_sticker">Αποστολή αυτοκόλλητου</string>
-
     <string name="dialog_title_third_party_licences">Άδειες τρίτων</string>
-
     <string name="later">Αργότερα</string>
     <string name="forward">Μπροστά</string>
     <string name="delete">Διαγραφή</string>
@@ -81,7 +65,6 @@
     <string name="invite">Πρόσκληση</string>
     <string name="offline">Εκτός σύνδεσης</string>
     <string name="accept">Αποδοχή</string>
-
     <string name="action_exit">Έξοδος</string>
     <string name="actions">Ενέργειες</string>
     <string name="action_sign_out">Αποσύνδεση</string>
@@ -92,29 +75,23 @@
     <string name="action_quick_reply">Γρήγορη απάντηση</string>
     <string name="action_open">Άνοιγμα</string>
     <string name="disable">Απενεργοποίηση</string>
-
     <string name="dialog_title_confirmation">Επιβεβαίωση</string>
     <string name="dialog_title_error">Σφάλμα</string>
-
     <string name="bottom_action_favourites">Αγαπημένα</string>
     <string name="bottom_action_rooms">Δωμάτια</string>
     <string name="bottom_action_groups">Κοινότητες</string>
-
     <string name="home_filter_placeholder_home">Αναζήτηση στα δωμάτια</string>
     <string name="home_filter_placeholder_favorites">Αναζήτηση στα αγαπημένα</string>
     <string name="home_filter_placeholder_rooms">Αναζήτηση για δωμάτια</string>
     <string name="home_filter_placeholder_groups">Αναζήτηση στις κοινότητες</string>
-
     <string name="invitations_header">Προσκλήσεις</string>
     <string name="low_priority_header">Χαμηλής προτεραιότητας</string>
     <string name="system_alerts_header">Ειδοποιήσεις συστήματος</string>
-
     <string name="direct_chats_header">Συζητήσεις</string>
     <string name="user_directory_header">Ευρετήριο χρηστών</string>
     <string name="matrix_only_filter">Μόνο οι επαφές Matrix</string>
     <string name="no_conversation_placeholder">Δεν υπάρχουν συζητήσεις</string>
     <string name="no_result_placeholder">Δεν βρέθηκαν αποτελέσματα</string>
-
     <string name="rooms_header">Δωμάτια</string>
     <string name="no_room_placeholder">Δεν υπάρχουν δωμάτια</string>
     <string name="no_public_room_placeholder">Δεν υπάρχουν δημόσια δωμάτια</string>
@@ -122,30 +99,24 @@
         <item quantity="one">1 χρήστης</item>
         <item quantity="other">%d χρήστες</item>
     </plurals>
-
     <string name="groups_invite_header">Πρόσκληση</string>
     <string name="groups_header">Κοινότητες</string>
     <string name="no_group_placeholder">Δεν υπάρχουν ομάδες</string>
-
     <string name="send_bug_report_include_crash_logs">Αποστολή καταγραφών σφαλμάτων</string>
     <string name="send_bug_report">Αναφορά σφάλματος</string>
     <string name="send_bug_report_description_in_english">Εφόσον είναι δυνατό, παρακαλώ γράψτε την περιγραφή στα αγγλικά.</string>
     <string name="send_bug_report_placeholder">Περιγράψτε το πρόβλημά σας εδώ</string>
     <string name="send_bug_report_alert_message">Φαίνεται να κουνάτε το τηλέφωνο από εκνευρισμό. Θέλετε να ανοίξετε την οθόνη αναφοράς σφάλματος;</string>
     <string name="send_bug_report_rage_shake">Κουνήστε το τηλέφωνο για αναφορά σφάλματος</string>
-
     <string name="send_bug_report_sent">Η αναφορά σφάλματος εστάλη επιτυχώς</string>
     <string name="send_bug_report_failed">Η αποστολή της αναφοράς σφάλματος απέτυχε (%s)</string>
     <string name="send_bug_report_progress">Πρόοδος (%s%%)</string>
-
     <string name="read_receipt">Αναγνωσμένο</string>
-
     <string name="username">Όνομα χρήστη</string>
     <string name="create_account">Εγγραφή</string>
     <string name="login">Σύνδεση</string>
     <string name="logout">Αποσύνδεση</string>
     <string name="search">Αναζήτηση</string>
-
     <string name="option_send_files">Αποστολή αρχείων</string>
     <string name="x_plus">%d+</string>
     <string name="generic_label">%1$s :</string>
@@ -157,37 +128,29 @@
     <string name="show_info_area_always">Πάντα</string>
     <string name="show_info_area_messages_and_errors">Για μηνύματα και σφάλματα</string>
     <string name="show_info_area_only_errors">Μόνο για σφάλματα</string>
-
     <string name="room_tombstone_predecessor_link">Πατήστε εδώ για να δείτε παλαιότερα μηνύματα</string>
-
     <string name="room_tombstone_continuation_link">Η συζήτηση συνεχίζεται εδώ</string>
     <string name="room_tombstone_continuation_description">Αυτό το δωμάτιο είναι συνέχεια μιας άλλης συζήτησης</string>
     <string name="groups_list">Λίστα Ομάδων</string>
-
-    <string name="compression_options">"Αποστολή ως "</string>
+    <string name="compression_options">Αποστολή ως</string>
     <string name="compression_opt_list_original">Πρωτότυπο</string>
     <string name="compression_opt_list_large">Μεγάλο</string>
     <string name="compression_opt_list_medium">Μεσαίο</string>
     <string name="compression_opt_list_small">Μικρό</string>
-
     <string name="attachment_remaining_time_seconds">%d δ</string>
     <string name="attachment_remaining_time_minutes">%1$dλ %2$dδ</string>
-
     <string name="room_info_room_name">Όνομα δωματίου</string>
     <string name="room_info_room_topic">Θέμα δωματίου</string>
-
     <string name="settings_call_category">Κλήσεις</string>
     <string name="settings_call_ringtone_use_app_ringtone">Χρήση του προεπιλεγμένου ήχου κλήσης του Element για τις εισερχόμενες κλήσεις</string>
     <string name="settings_call_ringtone_title">Ήχος εισερχομένων κλήσεων</string>
     <string name="settings_call_ringtone_dialog_title">Επιλέξτε ήχο κλήσης:</string>
-
     <string name="call">Κλήση</string>
     <string name="incoming_call">Εισερχόμενη κλήση</string>
     <string name="incoming_video_call">Εισερχόμενη κλήση βίντεο</string>
     <string name="incoming_voice_call">Εισερχόμενη κλήση ήχου</string>
     <string name="call_in_progress">Κλήση σε εξέλιξη…</string>
     <string name="video_call_in_progress">Κλήση βίντεο σε εξέλιξη…</string>
-
     <string name="media_slider_saved">Αποθηκεύτηκε</string>
     <string name="yes">ΝΑΙ</string>
     <string name="no">ΟΧΙ</string>
@@ -198,32 +161,26 @@
     <string name="settings_troubleshoot_diagnostic_running_status">Εκτελείται… (%1$d από %2$d)</string>
     <string name="settings_troubleshoot_test_system_settings_title">Ρυθμίσεις συστήματος.</string>
     <string name="open_settings">Άνοιγμα ρυθμίσεων</string>
-
     <string name="settings_troubleshoot_test_account_settings_title">Ρυθμίσεις λογαριασμού.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Οι ειδοποιήσεις είναι ενεργοποιημένες για τον λογαριασμό σας.</string>
-    <string name="settings_troubleshoot_test_account_settings_failed">Οι ειδοποιήσεις είναι απενεργοποιημένες για τον λογαριασμό σας.
-Παρακαλώ ελέγξτε τις ρυθμίσεις λογαριασμού.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Οι ειδοποιήσεις είναι απενεργοποιημένες για τον λογαριασμό σας. 
+\nΠαρακαλώ ελέγξτε τις ρυθμίσεις λογαριασμού.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Ενεργοποίηση</string>
-
     <string name="settings_troubleshoot_test_device_settings_title">Ρυθμίσεις συσκευής.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Οι ειδοποιήσεις είναι ενεργοποιημένες για αυτή την συσκευή.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Οι ειδοποιήσεις δεν επιτρέπονται για αυτή την συσκευή.
-Παρακαλώ ελέγξτε τις ρυθμίσεις του Element.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Οι ειδοποιήσεις δεν επιτρέπονται για αυτή την συσκευή. 
+\nΠαρακαλώ ελέγξτε τις ρυθμίσεις του Element.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Ενεργοποίηση</string>
-
     <string name="settings_devices_list">Συσκευές</string>
     <string name="settings_inline_url_preview">Προεπισκόπιση συνδέσμων</string>
     <string name="settings_send_markdown">Μορφοποίηση Markdown</string>
     <string name="settings_deactivate_account_section">Απενεργοποίηση λογαριασμού</string>
     <string name="settings_deactivate_my_account">Απενεργοποίηση του λογαριασμού μου</string>
-
     <string name="startup_notification_privacy_button_grant">Παραχώρηση άδειας</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Παραχώρηση άδειας</string>
-
     <string name="settings_analytics">Στατιστικά χρήσης</string>
     <string name="settings_opt_in_of_analytics">Αποστολή στατιστικών χρήσης</string>
     <string name="settings_opt_in_of_analytics_ok">Ναι, θέλω να βοηθήσω!</string>
-
     <string name="devices_details_dialog_title">Λεπτομέρειες συσκευής</string>
     <string name="devices_details_id_title">Αναγνωριστικό</string>
     <string name="devices_details_name_title">Όνομα</string>
@@ -231,11 +188,9 @@
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_pswd">Κωδικός:</string>
     <string name="devices_delete_submit_button_label">Υποβολή</string>
-
     <string name="settings_logged_in">Συνδεδεμένος/η ως</string>
     <string name="settings_interface_language">Γλώσσα</string>
     <string name="settings_select_language">Επιλέξτε γλώσσα</string>
-
     <string name="account_phone_number_already_used_error">Αυτός ο αριθμός τηλεφώνου χρησιμοποιείται ήδη.</string>
     <string name="settings_password">Κωδικός</string>
     <string name="settings_change_password">Αλλαγή κωδικού</string>
@@ -245,18 +200,15 @@
     <string name="settings_fail_to_update_password">Η ανανέωση κωδικού απέτυχε</string>
     <string name="settings_password_updated">Ο κωδικός σας ανανεώθηκε</string>
     <string name="settings_select_country">Επιλέξτε μία χώρα</string>
-
     <string name="settings_phone_number_country_label">Χώρα</string>
     <string name="settings_phone_number_country_error">Παρακαλώ επιλέξτε μία χώρα</string>
     <string name="settings_phone_number_label">Αριθμός τηλεφώνου</string>
     <string name="settings_phone_number_code">Κωδικός</string>
     <string name="account_additional_info">Επιπλέον πληροφορίες: %s</string>
-
     <string name="media_saving_period_3_days">3 μέρες</string>
     <string name="media_saving_period_1_week">1 βδομάδα</string>
     <string name="media_saving_period_1_month">1 μήνας</string>
     <string name="media_saving_period_forever">Για πάντα</string>
-
     <string name="room_settings_room_photo">Φωτογραφία δωματίου</string>
     <string name="room_settings_room_name">Όνομα δωματίου</string>
     <string name="room_settings_topic">Θέμα</string>
@@ -264,17 +216,14 @@
     <string name="room_settings_tag_pref_entry_favourite">Αγαπημένο</string>
     <string name="room_settings_tag_pref_entry_low_priority">Χαμηλής προτεραιότητας</string>
     <string name="room_settings_tag_pref_entry_none">Καμία</string>
-
     <string name="room_settings_room_notifications_title">Ειδοποιήσεις</string>
     <string name="room_settings_room_access_rules_pref_title">Πρόσβαση στο δωμάτιο</string>
     <string name="room_settings_read_history_entry_anyone">Οποιοσδήποτε</string>
     <string name="room_settings_category_advanced_title">Προχωρημένες</string>
     <string name="room_settings_addresses_pref_title">Διευθύνσεις</string>
     <string name="settings_theme">Θέμα</string>
-
     <string name="encryption_information_algorithm">Αλγόριθμος</string>
     <string name="encryption_information_decryption_error">Σφάλμα αποκρυπτογράφησης</string>
-
     <string name="encryption_information_sender_device_information">Πληροφορίες συσκευής αποστολέα</string>
     <string name="encryption_information_device_name">Όνομα συσκευής</string>
     <string name="encryption_information_name">Όνομα</string>
@@ -290,19 +239,16 @@
         <item quantity="other">%d δωμάτια</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s στο %2$s</string>
-
     <string name="font_size">Μέγεθος γραμματοσειράς</string>
     <string name="tiny">Πολύ μικρό</string>
     <string name="small">Μικρό</string>
     <string name="normal">Κανονικό</string>
     <string name="large">Μεγάλο</string>
     <string name="huge">Τεράστιο</string>
-
     <plurals name="active_widgets">
         <item quantity="one">1 ενεργό widget</item>
         <item quantity="other">%d ενεργά widget</item>
     </plurals>
-
     <string name="widget_integration_room_not_visible">Το δωμάτιο %s δεν είναι ορατό.</string>
     <string name="conference_call_warning_title">Προσοχή!</string>
     <string name="command_error">Σφάλμα εντολής</string>
@@ -312,14 +258,12 @@
     <string name="community_name_hint">Παράδειγμα</string>
     <string name="community_id">Αναγνωριστικό κοινότητας</string>
     <string name="community_id_hint">παράδειγμα</string>
-
     <string name="group_details_rooms">Δωμάτια</string>
     <string name="rooms">Δωμάτια</string>
     <plurals name="group_members">
         <item quantity="one">1 μέλος</item>
         <item quantity="other">%d μέλη</item>
     </plurals>
-
     <plurals name="group_rooms">
         <item quantity="one">1 δωμάτιο</item>
         <item quantity="other">%d δωμάτια</item>
@@ -328,24 +272,20 @@
     <string name="deactivate_account_title">Απενεργοποίηση λογαριασμού</string>
     <string name="deactivate_account_prompt_password">Για να συνεχίσετε παρακαλώ εισάγετε τον κωδικό σας:</string>
     <string name="deactivate_account_submit">Απενεργοποίηση λογαριασμού</string>
-
     <string name="error_empty_field_your_password">Παρακαλώ εισάγετε τον κωδικό σας.</string>
     <string name="resource_limit_contact_action">Επικοινωνήστε με τον διαχειριστή</string>
-
     <string name="bottom_action_home">Αρχική</string>
     <string name="settings_home_display">Αρχική σελίδα</string>
     <string name="group_details_home">Αρχική</string>
     <string name="bottom_action_people">Άτομα</string>
     <string name="home_filter_placeholder_people">Αναζήτηση ατόμων</string>
     <string name="tab_title_search_people">ΑΤΟΜΑ</string>
-    <string name="resources_script">Λτνκ</string>
-
+    <string name="resources_script">Grek</string>
     <string name="notification_sync_init">Αρχικοποίηση υπηρεσίας</string>
     <string name="notification_listening_for_events">Αναμονή για συμβάντα</string>
     <string name="title_activity_keys_backup_setup">Δημιουργία αντιγράφων ασφαλείας κλειδιών</string>
     <string name="title_activity_keys_backup_restore">Χρησιμοποιήστε το αντίγραφο ασφαλείας κλειδιών</string>
     <string name="title_activity_verify_device">Επαλήθευση συνεδρίας</string>
-
     <string name="keys_backup_is_not_finished_please_wait">Το αντίγραφο ασφαλείας κλειδιών δεν έχει ολοκληρωθεί, παρακαλώ περιμένετε…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Θα χάσετε τα κρυπτογραφημένα μηνύματά σας εάν αποσυνδεθείτε τώρα</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Δημιουργία αντίγραφου κλειδιού ασφαλείας σε εξέλιξη. Εάν αποσυνδεθείτε τώρα, θα χάσετε την πρόσβαση στα κρυπτογραφημένα μηνύματά σας.</string>
@@ -363,4 +303,34 @@
     <string name="disconnect">Αποσύνδεση</string>
     <string name="pause_video">Παύση</string>
     <string name="room_participants_header_direct_chats">Прямі повідомлення</string>
+    <string name="decline">Απόρριψη</string>
+    <string name="call_notification_reject">Απόρριψη</string>
+    <string name="call_notification_answer">Αποδοχή</string>
+    <string name="review">Ανασκόπηση</string>
+    <string name="ignore">Αγνοείστε</string>
+    <string name="abort">Διακόψτε</string>
+    <string name="done">Ολοκληρώθηκε</string>
+    <string name="skip">Παραλείψτε</string>
+    <string name="send_anyway">Στείλτε ούτως ή άλλως</string>
+    <string name="call_anyway">Καλέστε ούτως ή άλλως</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">Οι κλήσεις συνδιάσκεψης δεν υποστηρίζονται σε κρυπτογραφημένες αίθουσες</string>
+    <string name="failed_to_remove_widget">Αποτυχία αφαίρεσης widget</string>
+    <string name="failed_to_add_widget">Αποτυχία προσθήκης widget</string>
+    <string name="cannot_call_yourself_with_invite">Δεν μπορείτε να πραγματοποιήσετε μια κλήση με τον εαυτό σας, περιμένετε τους συμμετέχοντες να αποδεχθούν πρόσκληση</string>
+    <string name="cannot_call_yourself">Δεν μπορείτε να πραγματοποιήσετε μια κλήση με τον εαυτό σας</string>
+    <string name="audio_video_meeting_description">Οι συσκέψεις χρησιμοποιούν πολιτικές ασφάλειας και αδειών του Jitsi. Όλα τα άτομα που βρίσκονται στην αίθουσα θα δουν μια πρόσκληση για συμμετοχή ενώ πραγματοποιείται η συνάντησή σας.</string>
+    <string name="video_meeting">Ξεκινήστε τη συνάντηση με βίντεο</string>
+    <string name="audio_meeting">Ξεκινήστε τη συνάντηση με ήχο</string>
+    <string name="conference_call_in_progress">Μία συνεδρία βρίσκεται ήδη σε εξέλιξη!</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Δεν έχετε άδεια να ξεκινήσετε μια κλήση</string>
+    <string name="no_permissions_to_start_webrtc_call">Δεν έχετε άδεια να ξεκινήσετε μια κλήση σε αυτό το δωμάτιο</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Δεν έχετε άδεια να ξεκινήσετε μια κλήση συνδιάσκεψης</string>
+    <string name="no_permissions_to_start_conf_call">Δεν έχετε άδεια να ξεκινήσετε μια κλήση συνδιάσκεψης σε αυτήν την αίθουσα</string>
+    <string name="missing_permissions_to_start_conf_call">Χρειάζεστε άδεια για να προσκαλέσετε να ξεκινήσει μια διάσκεψη σε αυτήν την αίθουσα</string>
+    <string name="reset">Επαναφορά</string>
+    <string name="dismiss">Απόρριψη</string>
+    <string name="play_video">Παίξε</string>
+    <string name="none">Κανένα</string>
+    <string name="stay">Παραμείνατε</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">H δημιουργία αντιγράφων κλειδιού ασφαλείας θα πρέπει να είναι ενεργή σε όλες τις συνεδρίες σας για να αποφύγετε την απώλεια πρόσβασης στα κρυπτογραφημένα μηνύματά σας.</string>
 </resources>

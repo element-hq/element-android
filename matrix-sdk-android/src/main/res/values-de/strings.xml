@@ -73,14 +73,22 @@
     <string name="notice_room_update">%s hat diesen Raum aufgewertet.</string>
     <string name="event_status_sending_message">Sende eine Nachricht…</string>
     <string name="clear_timeline_send_queue">Sendewarteschlange leeren</string>
-    <string name="initial_sync_start_importing_account">Erste Synchronisation: Importiere Benutzerkonto…</string>
-    <string name="initial_sync_start_importing_account_crypto">Erste Synchronisation: Importiere Cryptoschlüssel</string>
-    <string name="initial_sync_start_importing_account_rooms">Erste Synchronisation: Importiere Räume</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Erste Synchronisation: Importiere betretene Räume</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Erste Synchronisation: Importiere eingeladene Räume</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Erste Synchronisation: Importiere verlassene Räume</string>
-    <string name="initial_sync_start_importing_account_groups">Erste Synchronisation: Importiere Gemeinschaften</string>
-    <string name="initial_sync_start_importing_account_data">Erste Synchronisation: Importiere Benutzerdaten</string>
+    <string name="initial_sync_start_importing_account">Erste Synchronisation: 
+\nImportiere Benutzerkonto…</string>
+    <string name="initial_sync_start_importing_account_crypto">Erste Synchronisation: 
+\nImportiere Cryptoschlüssel</string>
+    <string name="initial_sync_start_importing_account_rooms">Erste Synchronisation: 
+\nImportiere Räume</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Erste Synchronisation: 
+\nImportiere betretene Räume</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Erste Synchronisation: 
+\nImportiere eingeladene Räume</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Erste Synchronisation: 
+\nImportiere verlassene Räume</string>
+    <string name="initial_sync_start_importing_account_groups">Erste Synchronisation: 
+\nImportiere Communities</string>
+    <string name="initial_sync_start_importing_account_data">Erste Synchronisation: 
+\nImportiere Benutzerdaten</string>
     <string name="notice_room_third_party_revoked_invite">%1$s hat die Einladung an %2$s, den Raum zu betreten, zurückgezogen</string>
     <string name="notice_room_invite_no_invitee_with_reason">%1$s\'s Einladung. Grund: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s hat %2$s eingeladen. Grund: %3$s</string>
@@ -107,7 +115,7 @@
     <string name="notice_room_canonical_alias_set">%1$s legt die Hauptadresse fest für diesen Raum als %2$s fest.</string>
     <string name="notice_room_canonical_alias_unset">%1$s entfernt die Hauptadresse für diesen Raum.</string>
     <string name="notice_room_guest_access_can_join">%1$s hat Gästen erlaubt den Raum zu betreten.</string>
-    <string name="notice_room_guest_access_forbidden">%1$s hat Gäste unterbunden den Raum zu betreten.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s hat Gästen untersagt den Raum zu betreten.</string>
     <string name="notice_end_to_end_ok">%1$s aktivierte Ende-zu-Ende-Verschlüsselung.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s aktivierte Ende-zu-Ende-Verschlüsselung (unbekannter Algorithmus %2$s).</string>
     <string name="key_verification_request_fallback_message">%s fordert zur Überprüfung deines Schlüssels auf, jedoch unterstützt dein Client nicht die Schlüsselüberprüfung im Chat. Du musst die herkömmliche Schlüsselüberprüfung verwenden, um die Schlüssel zu überprüfen.</string>
@@ -199,7 +207,7 @@
     <string name="notice_direct_room_third_party_revoked_invite">%1$s hat die Einladung für %2$s zurückgezogen</string>
     <string name="notice_direct_room_third_party_invite_by_you">Du hast %1$s eingeladen</string>
     <string name="notice_direct_room_third_party_invite">%1$s hat %2$s eingeladen</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">Du hast zukünftige Nachrichten für %2$s sichtbar gemacht</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Du hast zukünftige Nachrichten für %1$s sichtbar gemacht</string>
     <string name="notice_made_future_direct_room_visibility">%1$s hat zukünftige Nachrichten für %2$s sichtbar gemacht</string>
     <string name="notice_direct_room_leave_by_you">Du hast den Raum verlassen</string>
     <string name="notice_direct_room_leave">%1$s hat den Raum verlassen</string>
@@ -207,4 +215,10 @@
     <string name="notice_direct_room_join">%1$s ist beigetreten</string>
     <string name="notice_direct_room_created_by_you">Du hast eine Diskussion erstellt</string>
     <string name="notice_direct_room_created">%1$s hat eine Diskussion erstellt</string>
+    <string name="notice_direct_room_update">%s hat hier ein Upgrade durchgeführt.</string>
+    <string name="notice_direct_room_update_by_you">Du hast hier ein Upgrade durchgeführt.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Du hast Gästen untersagt den Raum zu betreten.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s hat Gästen untersagt den Raum zu betreten.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Du bist gegangen. Grund: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s ist gegangen. Grund: %2$s</string>
 </resources>

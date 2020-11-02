@@ -38,7 +38,7 @@ internal class SendEventQueuedTask(
     override fun toString() = "[SendEventRunnableTask ${event.eventId}]"
 
     override suspend fun execute() {
-        sendEventTask.execute(SendEventTask.Params(event, encrypt, cryptoService))
+        sendEventTask.execute(SendEventTask.Params(event, encrypt))
     }
 
     override fun onTaskFailed() {

@@ -16,30 +16,41 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class CreateRoomFragment @Inject constructor(private val createRoomController: CreateRoomController) : VectorBaseFragment(), CreateRoomController.Listener {
+class CreateRoomFragment @Inject constructor(
+        private val createRoomController: CreateRoomController,
+        colorProvider: ColorProvider
+) : VectorBaseFragment(),
+        CreateRoomController.Listener,
+        GalleryOrCameraDialogHelper.Listener,
+        OnBackPressed {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val viewModel: CreateRoomViewModel by activityViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_create_room
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
-    override fun getMenuRes() = R.menu.vector_room_creation
+    override fun getLayoutResId() = R.layout.fragment_create_room
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,6 +60,11 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
         createRoomClose.debouncedClicks {
             sharedActionViewModel.post(RoomDirectorySharedAction.Back)
         }
+        viewModel.observeViewEvents {
+            when (it) {
+                CreateRoomViewEvents.Quit -> vectorBaseActivity.onBackPressed()
+            }.exhaustive
+        }
     }
 
     override fun onDestroyView() {
@@ -57,24 +73,29 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
         super.onDestroyView()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_create_room -> {
-                viewModel.handle(CreateRoomAction.Create)
-                true
-            }
-            else                    ->
-                super.onOptionsItemSelected(item)
-        }
-    }
-
     private fun setupRecyclerView() {
         createRoomForm.configureWith(createRoomController)
         createRoomController.listener = this
     }
 
+    override fun onAvatarDelete() {
+        viewModel.handle(CreateRoomAction.SetAvatar(null))
+    }
+
+    override fun onAvatarChange() {
+        galleryOrCameraDialogHelper.show()
+    }
+
+    override fun onImageReady(uri: Uri?) {
+        viewModel.handle(CreateRoomAction.SetAvatar(uri))
+    }
+
     override fun onNameChange(newName: String) {
         viewModel.handle(CreateRoomAction.SetName(newName))
+    }
+
+    override fun onTopicChange(newTopic: String) {
+        viewModel.handle(CreateRoomAction.SetTopic(newTopic))
     }
 
     override fun setIsPublic(isPublic: Boolean) {
@@ -89,9 +110,31 @@ class CreateRoomFragment @Inject constructor(private val createRoomController: C
         viewModel.handle(CreateRoomAction.SetIsEncrypted(isEncrypted))
     }
 
+    override fun submit() {
+        viewModel.handle(CreateRoomAction.Create)
+    }
+
     override fun retry() {
         Timber.v("Retry")
         viewModel.handle(CreateRoomAction.Create)
+    }
+
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        return withState(viewModel) {
+            return@withState if (!it.isEmpty()) {
+                AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.dialog_title_warning)
+                        .setMessage(R.string.warning_room_not_created_yet)
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            viewModel.handle(CreateRoomAction.Reset)
+                        }
+                        .setNegativeButton(R.string.no, null)
+                        .show()
+                true
+            } else {
+                false
+            }
+        }
     }
 
     override fun invalidate() = withState(viewModel) { state ->

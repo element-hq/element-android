@@ -17,11 +17,11 @@
 package im.vector.app.features.settings.devtools
 
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
@@ -33,10 +33,11 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
+import org.matrix.android.sdk.rx.asObservable
 
 data class KeyRequestListViewState(
-        val incomingRequests: Async<List<IncomingRoomKeyRequest>> = Uninitialized,
-        val outgoingRoomKeyRequests: Async<List<OutgoingRoomKeyRequest>> = Uninitialized
+        val incomingRequests: Async<PagedList<IncomingRoomKeyRequest>> = Uninitialized,
+        val outgoingRoomKeyRequests: Async<PagedList<OutgoingRoomKeyRequest>> = Uninitialized
 ) : MvRxState
 
 class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState: KeyRequestListViewState,
@@ -49,20 +50,16 @@ class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState
 
     fun refresh() {
         viewModelScope.launch {
-            session.cryptoService().getOutgoingRoomKeyRequests().let {
-                setState {
-                    copy(
-                            outgoingRoomKeyRequests = Success(it)
-                    )
-                }
-            }
-            session.cryptoService().getIncomingRoomKeyRequests().let {
-                setState {
-                    copy(
-                            incomingRequests = Success(it)
-                    )
-                }
-            }
+            session.cryptoService().getOutgoingRoomKeyRequestsPaged().asObservable()
+                    .execute {
+                        copy(outgoingRoomKeyRequests = it)
+                    }
+
+            session.cryptoService().getIncomingRoomKeyRequestsPaged()
+                    .asObservable()
+                    .execute {
+                        copy(incomingRequests = it)
+                    }
         }
     }
 

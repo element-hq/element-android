@@ -19,6 +19,7 @@ package im.vector.app.features.home
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.observeK
 import im.vector.app.core.extensions.replaceChildFragment
@@ -75,7 +76,7 @@ class HomeDrawerFragment @Inject constructor(
         }
 
         // Debug menu
-        homeDrawerHeaderDebugView.isVisible = vectorPreferences.developerMode()
+        homeDrawerHeaderDebugView.isVisible = BuildConfig.DEBUG && vectorPreferences.developerMode()
         homeDrawerHeaderDebugView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())

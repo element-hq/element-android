@@ -142,6 +142,10 @@ class RxRoom(private val room: Room) {
     fun updateAvatar(avatarUri: Uri, fileName: String): Completable = completableBuilder<Unit> {
         room.updateAvatar(avatarUri, fileName, it)
     }
+
+    fun deleteAvatar(): Completable = completableBuilder<Unit> {
+        room.deleteAvatar(it)
+    }
 }
 
 fun Room.rx(): RxRoom {

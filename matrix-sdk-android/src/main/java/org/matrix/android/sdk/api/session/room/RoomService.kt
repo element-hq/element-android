@@ -36,6 +36,22 @@ interface RoomService {
                    callback: MatrixCallback<String>): Cancelable
 
     /**
+     * Create a direct room asynchronously. This is a facility method to create a direct room with the necessary parameters
+     */
+    fun createDirectRoom(otherUserId: String,
+                         callback: MatrixCallback<String>): Cancelable {
+        return createRoom(
+                CreateRoomParams()
+                        .apply {
+                            invitedUserIds.add(otherUserId)
+                            setDirectMessage()
+                            enableEncryptionIfInvitedUsersSupportIt = true
+                        },
+                callback
+        )
+    }
+
+    /**
      * Join a room by id
      * @param roomIdOrAlias the roomId or the room alias of the room to join
      * @param reason optional reason for joining the room
@@ -113,5 +129,16 @@ interface RoomService {
      */
     fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>>
 
-    fun getExistingDirectRoomWithUser(otherUserId: String): Room?
+    /**
+     * Return the roomId of an existing DM with the other user, or null if such room does not exist
+     * A room is a DM if:
+     *  - it is listed in the `m.direct` account data
+     *  - the current user has joined the room
+     *  - the other user is invited or has joined the room
+     *  - it has exactly 2 members
+     * Note:
+     *  - the returning room can be encrypted or not
+     *  - the power level of the users are not taken into account. Normally in a DM, the 2 members are admins of the room
+     */
+    fun getExistingDirectRoomWithUser(otherUserId: String): String?
 }
