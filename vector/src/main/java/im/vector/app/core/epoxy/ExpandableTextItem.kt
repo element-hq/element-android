@@ -45,7 +45,9 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
         holder.content.copyOnLongClick()
 
         holder.content.doOnPreDraw {
-            if (holder.content.lineCount > maxLines) {
+            // Allow for displaying maxLines + 1 lines: in this case, the expand button
+            // would reserve just as much space as the expaned text
+            if (holder.content.lineCount > maxLines + 1) {
                 expandedLines = holder.content.lineCount
                 holder.content.maxLines = maxLines
 
@@ -59,6 +61,7 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
                 holder.arrow.isVisible = true
             } else {
                 holder.arrow.isVisible = false
+                holder.content.maxLines = maxLines + 1
             }
         }
     }
