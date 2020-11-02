@@ -446,6 +446,8 @@ class BugReporter @Inject constructor(
      */
     fun openBugReportScreen(activity: FragmentActivity, forSuggestion: Boolean = false) {
         screenshot = takeScreenshot(activity)
+        activeSessionHolder.getSafeActiveSession()?.dbgTraceDbInfo()
+        activeSessionHolder.getSafeActiveSession()?.cryptoService()?.logDbUsageInfo()
 
         val intent = Intent(activity, BugReportActivity::class.java)
         intent.putExtra("FOR_SUGGESTION", forSuggestion)

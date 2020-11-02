@@ -95,6 +95,7 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import timber.log.Timber
+import java.lang.StringBuilder
 import javax.inject.Inject
 import kotlin.collections.set
 
@@ -1664,6 +1665,63 @@ internal class RealmCryptoStore @Inject constructor(
                     }
 
             result
+        }
+    }
+
+    /**
+     * Some entries in the DB can get a bit out of control with time
+     * So we need to tidy up a bit
+     */
+    override fun tidyUpDataBase() {
+        val prevWeekTs = System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1_000
+        doRealmTransaction(realmConfiguration) { realm ->
+
+            // Only keep one week history
+            realm.where<IncomingGossipingRequestEntity>()
+                    .lessThan(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, prevWeekTs)
+                    .findAll().let {
+                        Timber.i("## Crypto Clean up ${it.size} IncomingGossipingRequestEntity")
+                        it.deleteAllFromRealm()
+                    }
+
+            // Clean the cancelled ones?
+            realm.where<OutgoingGossipingRequestEntity>()
+                    .equalTo(OutgoingGossipingRequestEntityFields.REQUEST_STATE_STR, OutgoingGossipingRequestState.CANCELLED.name)
+                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
+                    .findAll().let {
+                        Timber.i("## Crypto Clean up ${it.size} OutgoingGossipingRequestEntity")
+                        it.deleteAllFromRealm()
+                    }
+
+            // Only keep one week history
+            realm.where<GossipingEventEntity>()
+                    .lessThan(GossipingEventEntityFields.AGE_LOCAL_TS, prevWeekTs)
+                    .findAll().let {
+                        Timber.i("## Crypto Clean up ${it.size} GossipingEventEntityFields")
+                        it.deleteAllFromRealm()
+                    }
+
+            // Can we do something for WithHeldSessionEntity?
+        }
+    }
+
+    /**
+     * Prints out database info
+     */
+    override fun logDbUsageInfo() {
+        Realm.getInstance(realmConfiguration).use { realm ->
+            val info = StringBuilder()
+            // Check if we have data
+            info.append("\n==============================================")
+            info.append("\n==============================================")
+            info.append("\nCrypto Realm is empty: ${realm.isEmpty}")
+            realmConfiguration.realmObjectClasses.forEach { modelClazz ->
+                val count = realm.where(modelClazz).count()
+                info.append("\nCrypto Realm - count ${modelClazz.simpleName}: $count")
+            }
+            info.append("\n==============================================")
+            info.append("\n==============================================")
+            Timber.i(info.toString())
         }
     }
 }

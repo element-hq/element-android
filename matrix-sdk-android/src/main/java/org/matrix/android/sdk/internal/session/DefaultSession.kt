@@ -18,7 +18,9 @@ package org.matrix.android.sdk.internal.session
 
 import androidx.annotation.MainThread
 import dagger.Lazy
+import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.kotlin.where
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
@@ -197,7 +199,7 @@ internal class DefaultSession @Inject constructor(
     override fun close() {
         assert(isOpen)
         stopSync()
-       // timelineEventDecryptor.destroy()
+        // timelineEventDecryptor.destroy()
         uiHandler.post {
             lifecycleObservers.forEach { it.onStop() }
         }
@@ -283,5 +285,23 @@ internal class DefaultSession @Inject constructor(
     // For easy debugging
     override fun toString(): String {
         return "$myUserId - ${sessionParams.deviceId}"
+    }
+
+    override fun dbgTraceDbInfo() {
+        Realm.getInstance(realmConfiguration).use { realm ->
+            val info = StringBuilder()
+
+            // Check if we have data
+            info.append("\n==============================================")
+            info.append("\n==============================================")
+            info.append("\nSession Realm is empty: ${realm.isEmpty}")
+            realmConfiguration.realmObjectClasses.forEach { modelClazz ->
+                val count = realm.where(modelClazz).count()
+                info.append("\nSession Realm - count ${modelClazz.simpleName}: $count")
+            }
+            info.append("\n==============================================")
+            info.append("\n==============================================")
+            Timber.i(info.toString())
+        }
     }
 }
