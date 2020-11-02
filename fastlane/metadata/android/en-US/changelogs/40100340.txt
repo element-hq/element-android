@@ -1,0 +1,9 @@
+- Allow for timestamps at the bubble bottom
+- Add a few scenarios to hide sender names
+- Only use direct chat layout for direct chats with exactly 2 members
+- Account for past membership changes when hiding sender names in direct chats
+- Add an icon indicator for unsent messages
+- Fix send button color for attachments
+- Hide deleted messages by default
+- Don't collapse room summaries if we just need one more line
+- Allow for one more collapsed room summary line
