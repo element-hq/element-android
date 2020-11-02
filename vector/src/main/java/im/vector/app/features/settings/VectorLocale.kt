@@ -174,7 +174,8 @@ object VectorLocale {
                         .build()
             } catch (exception: IllformedLocaleException) {
                 if (BuildConfig.DEBUG) {
-                    throw exception
+                    //throw exception
+                    exception.printStackTrace()
                 }
                 // Ignore this locale in production
                 null
