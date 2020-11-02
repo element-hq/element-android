@@ -690,7 +690,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true if the redacted should be shown
      */
     fun showRedactedMessages(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_SHOW_REDACTED_KEY, true)
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_REDACTED_KEY, false)
     }
 
     /**
