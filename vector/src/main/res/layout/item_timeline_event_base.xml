@@ -84,7 +84,9 @@
         android:layout_below="@id/messageMemberNameView"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="0dp">
+        android:layout_marginEnd="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <RelativeLayout
             android:id="@+id/bubbleView"
@@ -93,6 +95,8 @@
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
             android:layout_marginVertical="4dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             tools:background="@drawable/msg_bubble_incoming">
 
             <!--

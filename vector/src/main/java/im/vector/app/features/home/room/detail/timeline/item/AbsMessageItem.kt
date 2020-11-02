@@ -484,7 +484,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 0,
                 round(4*density).toInt(),
                 0,
-                0
+                -round(1.5*density).toInt()
         )
     }
 }
