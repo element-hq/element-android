@@ -42,10 +42,11 @@ internal class RealmDebugTools(
                 separator()
                 append("\n$baseName Realm is empty: ${realm.isEmpty}")
                 var total = 0L
+                val maxNameLength = realmConfiguration.realmObjectClasses.maxOf { it.simpleName.length }
                 realmConfiguration.realmObjectClasses.forEach { modelClazz ->
                     val count = realm.where(modelClazz).count()
                     total += count
-                    append("\n$baseName Realm - count ${modelClazz.simpleName}: $count")
+                    append("\n$baseName Realm - count ${modelClazz.simpleName.padEnd(maxNameLength)} : $count")
                 }
                 separator()
                 append("\n$baseName Realm - total count: $total")
@@ -56,5 +57,5 @@ internal class RealmDebugTools(
                 .let { Timber.i(it) }
     }
 
-    internal fun StringBuilder.separator() = append("\n==============================================")
+    private fun StringBuilder.separator() = append("\n==============================================")
 }
