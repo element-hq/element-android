@@ -21,6 +21,8 @@ import com.squareup.moshi.Moshi
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
+import org.matrix.android.sdk.internal.session.sync.model.RoomSyncTimeLineLazyJsonAdapter
+import org.matrix.android.sdk.internal.session.sync.model.RoomSyncTimeline
 
 internal object WorkerParamsFactory {
 

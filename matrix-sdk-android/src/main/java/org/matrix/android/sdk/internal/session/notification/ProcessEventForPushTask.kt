@@ -48,11 +48,11 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         params.syncResponse.join.keys.forEach {
             defaultPushRuleService.dispatchRoomJoined(it)
         }
-        val newJoinEvents = params.syncResponse.join
+        val newJoinEvents = params.syncResponse.join.asSequence()
                 .mapNotNull { (key, value) ->
                     value.timeline?.events?.map { it.copy(roomId = key) }
-                }
-                .flatten()
+                }.flatten()
+
         val inviteEvents = params.syncResponse.invite
                 .mapNotNull { (key, value) ->
                     value.inviteState?.events?.map { it.copy(roomId = key) }
@@ -69,7 +69,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         }.filter {
             it.senderId != userId
         }
-        Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
+        Timber.v("[PushRules] Found out of}" +
                 " to check for push rules with ${params.rules.size} rules")
         allEvents.forEach { event ->
             fulfilledBingRule(event, params.rules)?.let {

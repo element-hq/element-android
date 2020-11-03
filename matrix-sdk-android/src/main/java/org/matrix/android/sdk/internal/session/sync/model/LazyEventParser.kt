@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,18 +16,21 @@
 
 package org.matrix.android.sdk.internal.session.sync.model
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.Moshi
 import org.matrix.android.sdk.api.session.events.model.Event
 
-// RoomSyncEphemeral represents the ephemeral events in the room that aren't recorded in the timeline or state of the room (e.g. typing).
-// @JsonClass(generateAdapter = true)
-internal interface RoomSyncEphemeral {
-        /**
-         * List of ephemeral events (array of Event).
-         */
-        @Json(name = "events") val events: Sequence<Event>
+class LazyEventParser(moshi: Moshi) {
+    private val personAdapter: JsonAdapter<Event> = moshi.adapter(Event::class.java)
 
-
-        fun release()
+    fun parse(reader: JsonReader): Sequence<Event> {
+        return if (reader.peek() == JsonReader.Token.BEGIN_ARRAY) {
+            sequence {
+                reader.readArray {
+                    yield(personAdapter.fromJson(reader)!!)
+                }
+            }
+        } else emptySequence()
+    }
 }

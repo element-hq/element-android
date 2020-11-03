@@ -36,6 +36,9 @@ import org.matrix.android.sdk.internal.network.parsing.ForceToBooleanJsonAdapter
 import org.matrix.android.sdk.internal.network.parsing.RuntimeJsonAdapterFactory
 import org.matrix.android.sdk.internal.network.parsing.TlsVersionMoshiAdapter
 import org.matrix.android.sdk.internal.network.parsing.UriMoshiAdapter
+import org.matrix.android.sdk.internal.session.sync.model.RoomSyncEphemeralLazyJsonAdapter
+import org.matrix.android.sdk.internal.session.sync.model.RoomSyncTimeLineLazyJsonAdapter
+import org.matrix.android.sdk.internal.session.sync.model.RoomSyncTimeline
 
 object MoshiProvider {
 
@@ -44,6 +47,8 @@ object MoshiProvider {
             .add(ForceToBooleanJsonAdapter())
             .add(CipherSuiteMoshiAdapter())
             .add(TlsVersionMoshiAdapter())
+            .add(RoomSyncTimeLineLazyJsonAdapter(Moshi.Builder().build()))
+            .add(RoomSyncEphemeralLazyJsonAdapter(Moshi.Builder().build()))
             .add(RuntimeJsonAdapterFactory.of(MessageContent::class.java, "msgtype", MessageDefaultContent::class.java)
                     .registerSubtype(MessageTextContent::class.java, MessageType.MSGTYPE_TEXT)
                     .registerSubtype(MessageNoticeContent::class.java, MessageType.MSGTYPE_NOTICE)

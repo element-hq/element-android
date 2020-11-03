@@ -130,7 +130,7 @@ internal class UpdateTrustWorker(context: Context,
                         myUserId -> myTrustResult
                         else     -> {
                             crossSigningService.checkOtherMSKTrusted(myCrossSigningInfo, infoEntry.value).also {
-                                Timber.d("## CrossSigning - user:${infoEntry.key} result:$it")
+                                Timber.d("## CrossSigning - user:${infoEntry.key} result:${it.isVerified()}")
                             }
                         }
                     }

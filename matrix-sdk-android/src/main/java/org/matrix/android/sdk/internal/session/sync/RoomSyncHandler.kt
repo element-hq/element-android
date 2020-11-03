@@ -61,7 +61,6 @@ import org.matrix.android.sdk.internal.session.room.typing.TypingEventContent
 import org.matrix.android.sdk.internal.session.sync.model.InvitedRoomSync
 import org.matrix.android.sdk.internal.session.sync.model.RoomSync
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncAccountData
-import org.matrix.android.sdk.internal.session.sync.model.RoomSyncEphemeral
 import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
 import timber.log.Timber
 import javax.inject.Inject
@@ -105,7 +104,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
         val syncLocalTimeStampMillis = System.currentTimeMillis()
         val rooms = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  ->
+            is HandlingStrategy.JOINED ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
                     handleJoinedRoom(realm, it.key, it.value, isInitialSync, insertType, syncLocalTimeStampMillis)
                 }
@@ -114,7 +113,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     handleInvitedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
                 }
 
-            is HandlingStrategy.LEFT    -> {
+            is HandlingStrategy.LEFT -> {
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_left_rooms, 0.3f) {
                     handleLeftRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
                 }
@@ -132,8 +131,9 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         Timber.v("Handle join sync for room $roomId")
 
         var ephemeralResult: EphemeralResult? = null
-        if (roomSync.ephemeral?.events?.isNotEmpty() == true) {
-            ephemeralResult = handleEphemeral(realm, roomId, roomSync.ephemeral, isInitialSync)
+        roomSync.ephemeral?.events?.let {
+            ephemeralResult = handleEphemeral(realm, roomId, it, isInitialSync)
+            roomSync.ephemeral.release()
         }
 
         if (roomSync.accountData?.events?.isNotEmpty() == true) {
@@ -164,12 +164,12 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 roomMemberEventHandler.handle(realm, roomId, event)
             }
         }
-        if (roomSync.timeline?.events?.isNotEmpty() == true) {
+        roomSync.timeline?.events?.let {
             val chunkEntity = handleTimelineEvents(
                     realm,
                     roomId,
                     roomEntity,
-                    roomSync.timeline.events,
+                    it,
                     roomSync.timeline.prevToken,
                     roomSync.timeline.limited,
                     insertType,
@@ -183,6 +183,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         } != null || roomSync.timeline?.events?.firstOrNull {
             it.type == EventType.STATE_ROOM_MEMBER
         } != null
+
+        roomSync.timeline?.release()
 
         roomTypingUsersHandler.handle(realm, roomId, ephemeralResult)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.JOIN)
@@ -274,7 +276,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
     private fun handleTimelineEvents(realm: Realm,
                                      roomId: String,
                                      roomEntity: RoomEntity,
-                                     eventList: List<Event>,
+                                     eventList: Sequence<Event>,
                                      prevToken: String? = null,
                                      isLimited: Boolean = true,
                                      insertType: EventInsertType,
@@ -290,7 +292,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         lastChunk?.isLastForward = false
         chunkEntity.isLastForward = true
 
-        val eventIds = ArrayList<String>(eventList.size)
+        val eventIds = ArrayList<String>()
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
         for (event in eventList) {
@@ -375,10 +377,10 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
     private fun handleEphemeral(realm: Realm,
                                 roomId: String,
-                                ephemeral: RoomSyncEphemeral,
+                                ephemeral: Sequence<Event>,
                                 isInitialSync: Boolean): EphemeralResult {
         var result = EphemeralResult()
-        for (event in ephemeral.events) {
+        for (event in ephemeral) {
             when (event.type) {
                 EventType.RECEIPT -> {
                     @Suppress("UNCHECKED_CAST")
@@ -386,7 +388,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                         readReceiptHandler.handle(realm, roomId, readReceiptContent, isInitialSync)
                     }
                 }
-                EventType.TYPING  -> {
+                EventType.TYPING -> {
                     event.content.toModel<TypingEventContent>()?.let { typingEventContent ->
                         result = result.copy(typingUserIds = typingEventContent.typingUserIds)
                     }
