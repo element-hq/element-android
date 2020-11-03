@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.database
+package org.matrix.android.sdk.internal.database.tools
 
 import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
@@ -35,17 +35,19 @@ import io.realm.RealmConfiguration
 import io.realm.kotlin.where
 import timber.log.Timber
 
-object RealmDebugTools {
+internal class RealmDebugTools(
+        private val realmConfiguration: RealmConfiguration
+) {
     /**
-     * Log info about the crypto DB
+     * Log info about the DB
      */
-    fun dumpCryptoDb(realmConfiguration: RealmConfiguration) {
+    fun logInfo() {
+        Timber.d("Realm located at : ${realmConfiguration.realmDirectory}/${realmConfiguration.realmFileName}")
+
+        val key = realmConfiguration.encryptionKey.joinToString("") { byte -> "%02x".format(byte) }
+        Timber.d("Realm encryption key : $key")
+
         Realm.getInstance(realmConfiguration).use {
-            Timber.d("Realm located at : ${realmConfiguration.realmDirectory}/${realmConfiguration.realmFileName}")
-
-            val key = realmConfiguration.encryptionKey.joinToString("") { byte -> "%02x".format(byte) }
-            Timber.d("Realm encryption key : $key")
-
             // Check if we have data
             Timber.e("Realm is empty: ${it.isEmpty}")
 
