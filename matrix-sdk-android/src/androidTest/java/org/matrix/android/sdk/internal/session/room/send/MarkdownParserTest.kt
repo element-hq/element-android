@@ -25,6 +25,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.internal.session.room.send.pills.MentionLinkSpecComparator
+import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
 
 /**
  * It will not be possible to test all combinations. For the moment I add a few tests, then, depending on the problem discovered in the wild,
@@ -45,7 +47,8 @@ class MarkdownParserTest : InstrumentedTest {
      */
     private val markdownParser = MarkdownParser(
             Parser.builder().build(),
-            HtmlRenderer.builder().build()
+            HtmlRenderer.builder().build(),
+            TextPillsUtils(MentionLinkSpecComparator())
     )
 
     @Test
