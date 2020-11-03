@@ -35,7 +35,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
- * Ref: https://github.com/uhoreg/matrix-doc/blob/e2e_backup/proposals/1219-storing-megolm-keys-serverside.md
+ * Ref: https://matrix.org/docs/spec/client_server/unstable#server-side-key-backups
  */
 internal interface RoomKeysApi {
 
