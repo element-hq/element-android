@@ -18,9 +18,7 @@ package org.matrix.android.sdk.internal.session
 
 import androidx.annotation.MainThread
 import dagger.Lazy
-import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.kotlin.where
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
@@ -61,6 +59,7 @@ import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
@@ -288,20 +287,6 @@ internal class DefaultSession @Inject constructor(
     }
 
     override fun logDbUsageInfo() {
-        Realm.getInstance(realmConfiguration).use { realm ->
-            val info = StringBuilder()
-
-            // Check if we have data
-            info.append("\n==============================================")
-            info.append("\n==============================================")
-            info.append("\nSession Realm is empty: ${realm.isEmpty}")
-            realmConfiguration.realmObjectClasses.forEach { modelClazz ->
-                val count = realm.where(modelClazz).count()
-                info.append("\nSession Realm - count ${modelClazz.simpleName}: $count")
-            }
-            info.append("\n==============================================")
-            info.append("\n==============================================")
-            Timber.i(info.toString())
-        }
+        RealmDebugTools(realmConfiguration).logInfo("Session")
     }
 }

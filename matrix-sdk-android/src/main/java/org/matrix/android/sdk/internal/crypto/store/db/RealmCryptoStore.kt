@@ -87,6 +87,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.query.get
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
+import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -95,7 +96,6 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import timber.log.Timber
-import java.lang.StringBuilder
 import javax.inject.Inject
 import kotlin.collections.set
 
@@ -1709,19 +1709,6 @@ internal class RealmCryptoStore @Inject constructor(
      * Prints out database info
      */
     override fun logDbUsageInfo() {
-        Realm.getInstance(realmConfiguration).use { realm ->
-            val info = StringBuilder()
-            // Check if we have data
-            info.append("\n==============================================")
-            info.append("\n==============================================")
-            info.append("\nCrypto Realm is empty: ${realm.isEmpty}")
-            realmConfiguration.realmObjectClasses.forEach { modelClazz ->
-                val count = realm.where(modelClazz).count()
-                info.append("\nCrypto Realm - count ${modelClazz.simpleName}: $count")
-            }
-            info.append("\n==============================================")
-            info.append("\n==============================================")
-            Timber.i(info.toString())
-        }
+        RealmDebugTools(realmConfiguration).logInfo("Crypto")
     }
 }

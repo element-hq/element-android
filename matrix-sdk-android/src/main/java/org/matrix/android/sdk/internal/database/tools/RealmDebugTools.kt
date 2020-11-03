@@ -16,23 +16,9 @@
 
 package org.matrix.android.sdk.internal.database.tools
 
-import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.GossipingEventEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.IncomingGossipingRequestEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.KeyInfoEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingGossipingRequestEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.TrustLevelEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.kotlin.where
+import org.matrix.android.sdk.BuildConfig
 import timber.log.Timber
 
 internal class RealmDebugTools(
@@ -41,30 +27,34 @@ internal class RealmDebugTools(
     /**
      * Log info about the DB
      */
-    fun logInfo() {
-        Timber.d("Realm located at : ${realmConfiguration.realmDirectory}/${realmConfiguration.realmFileName}")
+    fun logInfo(baseName: String) {
+        buildString {
+            append("\n$baseName Realm located at : ${realmConfiguration.realmDirectory}/${realmConfiguration.realmFileName}")
 
-        val key = realmConfiguration.encryptionKey.joinToString("") { byte -> "%02x".format(byte) }
-        Timber.d("Realm encryption key : $key")
+            if (BuildConfig.LOG_PRIVATE_DATA) {
+                val key = realmConfiguration.encryptionKey.joinToString("") { byte -> "%02x".format(byte) }
+                append("\n$baseName Realm encryption key : $key")
+            }
 
-        Realm.getInstance(realmConfiguration).use {
-            // Check if we have data
-            Timber.e("Realm is empty: ${it.isEmpty}")
-
-            Timber.d("Realm has CryptoMetadataEntity: ${it.where<CryptoMetadataEntity>().count()}")
-            Timber.d("Realm has CryptoRoomEntity: ${it.where<CryptoRoomEntity>().count()}")
-            Timber.d("Realm has DeviceInfoEntity: ${it.where<DeviceInfoEntity>().count()}")
-            Timber.d("Realm has KeysBackupDataEntity: ${it.where<KeysBackupDataEntity>().count()}")
-            Timber.d("Realm has OlmInboundGroupSessionEntity: ${it.where<OlmInboundGroupSessionEntity>().count()}")
-            Timber.d("Realm has OlmSessionEntity: ${it.where<OlmSessionEntity>().count()}")
-            Timber.d("Realm has UserEntity: ${it.where<UserEntity>().count()}")
-            Timber.d("Realm has KeyInfoEntity: ${it.where<KeyInfoEntity>().count()}")
-            Timber.d("Realm has CrossSigningInfoEntity: ${it.where<CrossSigningInfoEntity>().count()}")
-            Timber.d("Realm has TrustLevelEntity: ${it.where<TrustLevelEntity>().count()}")
-            Timber.d("Realm has GossipingEventEntity: ${it.where<GossipingEventEntity>().count()}")
-            Timber.d("Realm has IncomingGossipingRequestEntity: ${it.where<IncomingGossipingRequestEntity>().count()}")
-            Timber.d("Realm has OutgoingGossipingRequestEntity: ${it.where<OutgoingGossipingRequestEntity>().count()}")
-            Timber.d("Realm has MyDeviceLastSeenInfoEntity: ${it.where<MyDeviceLastSeenInfoEntity>().count()}")
+            Realm.getInstance(realmConfiguration).use { realm ->
+                // Check if we have data
+                separator()
+                separator()
+                append("\n$baseName Realm is empty: ${realm.isEmpty}")
+                var total = 0L
+                realmConfiguration.realmObjectClasses.forEach { modelClazz ->
+                    val count = realm.where(modelClazz).count()
+                    total += count
+                    append("\n$baseName Realm - count ${modelClazz.simpleName}: $count")
+                }
+                separator()
+                append("\n$baseName Realm - total count: $total")
+                separator()
+                separator()
+            }
         }
+                .let { Timber.i(it) }
     }
+
+    internal fun StringBuilder.separator() = append("\n==============================================")
 }
