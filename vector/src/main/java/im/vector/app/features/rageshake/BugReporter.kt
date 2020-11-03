@@ -212,20 +212,20 @@ class BugReporter @Inject constructor(
                 }
 
                 activeSessionHolder.getSafeActiveSession()
-                            ?.takeIf { !mIsCancelled && withKeyRequestHistory }
-                            ?.cryptoService()
-                            ?.getGossipingEvents()
-                            ?.let { GossipingEventsSerializer().serialize(it) }
-                            ?.toByteArray()
-                            ?.let { rawByteArray ->
-                                File(context.cacheDir.absolutePath, KEY_REQUESTS_FILENAME)
-                                        .also {
-                                            it.outputStream()
+                        ?.takeIf { !mIsCancelled && withKeyRequestHistory }
+                        ?.cryptoService()
+                        ?.getGossipingEvents()
+                        ?.let { GossipingEventsSerializer().serialize(it) }
+                        ?.toByteArray()
+                        ?.let { rawByteArray ->
+                            File(context.cacheDir.absolutePath, KEY_REQUESTS_FILENAME)
+                                    .also {
+                                        it.outputStream()
                                                 .use { os -> os.write(rawByteArray) }
-                                        }
-                            }
-                            ?.let { compressFile(it) }
-                            ?.let { gzippedFiles.add(it) }
+                                    }
+                        }
+                        ?.let { compressFile(it) }
+                        ?.let { gzippedFiles.add(it) }
 
                 var deviceId = "undefined"
                 var userId = "undefined"
@@ -446,6 +446,10 @@ class BugReporter @Inject constructor(
      */
     fun openBugReportScreen(activity: FragmentActivity, forSuggestion: Boolean = false) {
         screenshot = takeScreenshot(activity)
+        activeSessionHolder.getSafeActiveSession()?.let {
+            it.logDbUsageInfo()
+            it.cryptoService().logDbUsageInfo()
+        }
 
         val intent = Intent(activity, BugReportActivity::class.java)
         intent.putExtra("FOR_SUGGESTION", forSuggestion)
