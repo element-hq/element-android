@@ -1679,27 +1679,24 @@ internal class RealmCryptoStore @Inject constructor(
             // Only keep one week history
             realm.where<IncomingGossipingRequestEntity>()
                     .lessThan(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, prevWeekTs)
-                    .findAll().let {
-                        Timber.i("## Crypto Clean up ${it.size} IncomingGossipingRequestEntity")
-                        it.deleteAllFromRealm()
-                    }
+                    .findAll()
+                    .also { Timber.i("## Crypto Clean up ${it.size} IncomingGossipingRequestEntity") }
+                    .deleteAllFromRealm()
 
             // Clean the cancelled ones?
             realm.where<OutgoingGossipingRequestEntity>()
                     .equalTo(OutgoingGossipingRequestEntityFields.REQUEST_STATE_STR, OutgoingGossipingRequestState.CANCELLED.name)
                     .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
-                    .findAll().let {
-                        Timber.i("## Crypto Clean up ${it.size} OutgoingGossipingRequestEntity")
-                        it.deleteAllFromRealm()
-                    }
+                    .findAll()
+                    .also { Timber.i("## Crypto Clean up ${it.size} OutgoingGossipingRequestEntity") }
+                    .deleteAllFromRealm()
 
             // Only keep one week history
             realm.where<GossipingEventEntity>()
                     .lessThan(GossipingEventEntityFields.AGE_LOCAL_TS, prevWeekTs)
-                    .findAll().let {
-                        Timber.i("## Crypto Clean up ${it.size} GossipingEventEntityFields")
-                        it.deleteAllFromRealm()
-                    }
+                    .findAll()
+                    .also { Timber.i("## Crypto Clean up ${it.size} GossipingEventEntityFields") }
+                    .deleteAllFromRealm()
 
             // Can we do something for WithHeldSessionEntity?
         }
