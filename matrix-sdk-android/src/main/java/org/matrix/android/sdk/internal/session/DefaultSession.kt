@@ -287,7 +287,7 @@ internal class DefaultSession @Inject constructor(
         return "$myUserId - ${sessionParams.deviceId}"
     }
 
-    override fun dbgTraceDbInfo() {
+    override fun logDbUsageInfo() {
         Realm.getInstance(realmConfiguration).use { realm ->
             val info = StringBuilder()
 
