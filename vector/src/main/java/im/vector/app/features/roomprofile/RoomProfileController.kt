@@ -68,7 +68,8 @@ class RoomProfileController @Inject constructor(
                     expandableTextItem {
                         id("topic")
                         content(it)
-                        maxLines(3)
+                        maxLines(5)
+                        minCollapsedLines(3)
                     }
                 }
 

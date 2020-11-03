@@ -36,6 +36,10 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
     @EpoxyAttribute
     var maxLines: Int = 3
 
+    // Number of hidden lines that justify collapsing
+    @EpoxyAttribute
+    var minCollapsedLines: Int = 2
+
     private var isExpanded = false
     private var expandedLines = 0
 
@@ -47,7 +51,7 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
         holder.content.doOnPreDraw {
             // Allow for displaying maxLines + 1 lines: in this case, the expand button
             // would reserve just as much space as the expaned text
-            if (holder.content.lineCount > maxLines + 1) {
+            if (holder.content.lineCount > maxLines + minCollapsedLines) {
                 expandedLines = holder.content.lineCount
                 holder.content.maxLines = maxLines
 
@@ -61,7 +65,7 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
                 holder.arrow.isVisible = true
             } else {
                 holder.arrow.isVisible = false
-                holder.content.maxLines = maxLines + 1
+                holder.content.maxLines = maxLines + minCollapsedLines
             }
         }
     }
