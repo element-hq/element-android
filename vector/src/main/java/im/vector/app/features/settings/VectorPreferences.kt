@@ -24,6 +24,7 @@ import com.squareup.seismic.ShakeDetector
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -247,6 +248,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         // theme
         keysToKeep.add(ThemeUtils.APPLICATION_THEME_KEY)
+
+        // Disclaimer dialog
+        keysToKeep.add(SHARED_PREF_KEY)
 
         // get all the existing keys
         val keys = defaultPrefs.all.keys
