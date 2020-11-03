@@ -421,8 +421,8 @@
         <item quantity="other">%d اتاق</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
-        <item quantity="one">۱ آگاهی</item>
-        <item quantity="other">%d آگاهی</item>
+        <item quantity="one">%d اعلان</item>
+        <item quantity="other">%d اعلان‌ها</item>
     </plurals>
     <string name="room_widget_permission_theme">زمینه‌تان</string>
     <string name="room_add_matrix_apps">افزودن کاره‌های ماتریکس</string>
@@ -481,7 +481,7 @@
     <string name="fab_menu_create_chat">پیام‌های مستقیم</string>
     <string name="create_room_title">اتاق جدید</string>
     <string name="create_room_action_create">ایجاد</string>
-    <string name="create_room_name_hint">نام اتاق</string>
+    <string name="create_room_name_hint">نام</string>
     <string name="create_room_public_title">عمومی</string>
     <string name="create_room_public_description">هرکسی می‌تواند به این اتاق بپیوندد</string>
     <string name="create_room_directory_title">نمایهٔ اتاق‌ها</string>
@@ -850,7 +850,7 @@
     <string name="room_settings_read_history_entry_members_only_joined">فقط اعضا (از زمان پیوستنشان)</string>
     <plurals name="room_settings_banned_users_count">
         <item quantity="one">%d کاربر مسدود</item>
-        <item quantity="other">%d کاربر مسدود</item>
+        <item quantity="other">%d کاربران مسدود</item>
     </plurals>
     <string name="room_settings_labs_warning_message">این‌ها ویژگی‌های آزمایشی‌ای هستند که ممکن است به روش‌های نامنتظره‌ای حراب شوندا. با احتیاط استفاده کنید.</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">هرگز پیام‌های رمزشده از این نشست به نشست‌های تأییدنشده در این اتاق فرستاده نشود.</string>
@@ -894,12 +894,12 @@
     <string name="directory_server_fail_to_retrieve_server">ممکن است کارساز در دسترس نبوده یا شلوغ باشد</string>
     <string name="lock_screen_hint">این‌جا بنویسید…</string>
     <plurals name="notification_unread_notified_messages">
-        <item quantity="one">%d پیام آگاهی نخوانده</item>
-        <item quantity="other">%d پیام آگاهی نخوانده</item>
+        <item quantity="one">%d اعلان خوانده‌نشده</item>
+        <item quantity="other">%d اعلان‌های خوانده‌نشده</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="one">%d پیام آگاهی نخوانده</item>
-        <item quantity="other">%d پیام آگاهی نخوانده</item>
+        <item quantity="one">%d اعلان خوانده‌نشده</item>
+        <item quantity="other">%d اعلان‌های خوانده‌نشده</item>
     </plurals>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: %2$d پیام</item>
@@ -1334,8 +1334,8 @@
     <string name="encryption_information_device_info">اطّلاعات رویداد</string>
     <string name="encryption_information_title">اطّلاعات رمزنگاری سرتاسری</string>
     <string name="directory_title">شاخه</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">به کار انداختن رمزنگاری.
-\n(هشدار: نمی‌تواند دوباره از کار بیفتد!)</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">فعال‌کردن رمزنگاری
+\n(هشدار: نمی‌تواند دوباره غیر فعال شود!)</string>
     <string name="room_settings_addresses_e2e_disabled">رمزنگاری در این اتاق از کار افتاده است.</string>
     <string name="room_settings_copy_room_address">رونوشت از نشانی اتاق</string>
     <string name="room_settings_copy_room_id">رونوشت از شناسهٔ اتاق</string>
@@ -1613,4 +1613,545 @@
     <string name="call_failed_no_ice_description">لطفا از ادمین سرور (%1$s) بخواهید جهت برقراری مطمئن تماس‌ها، turn server را پیکربندی کند.
 \n
 \nبه عنوان جایگزین می‌توانید از سرور عمومی %2$s استفاده کنید، اما این راه مطمئنی نیست چرا که آدرس IP شما در اختیار آن سرور قرار خواهد گرفت. برای مدیریت این بخش می‌توانید به تنظیمات مراجعه نمائید.</string>
+    <string name="secure_backup_reset_no_history">بعد از راه‌اندازی مجدد، هیچ تاریخچه، پیام، دستگاه تائید شده یا کاربر تائید شده‌ای در حساب شما وجود نخواهد داشت</string>
+    <string name="secure_backup_reset_if_you_reset_all">اگر همه چیز را بازنشانی کنید</string>
+    <string name="secure_backup_reset_all_no_other_devices">تنها در صورتی این کار را انجام دهید که از هیچ دستگاه دیگری نمی‌توانید این دستگاه را تائید نمائید.</string>
+    <string name="secure_backup_reset_all">بازنشانی همه چیز</string>
+    <string name="bad_passphrase_key_reset_all_action">همه‌ی گزینه‌های بازیابی را فراموش و یا گم کرده‌اید؟ همه چیز را بازنشانی کنید</string>
+    <string name="failed_to_access_secure_storage">دسترسی به حافظه امن انجام نشد</string>
+    <string name="keys_backup_recovery_key_error_decrypt">نسخه پشتیبان با این کلید بازیابی رمزگشایی نمی‌شود: لطفاً تأیید کنید که کلید بازیابی درست را وارد کرده‌اید.</string>
+    <string name="enter_secret_storage_input_key">کلید پشتیبان خود را انتخاب کنید، یا با تایپ کردن و یا کپی‌کردن، آن را وارد کنید</string>
+    <string name="command_description_discard_session">نشست‌های خارجی را مجبور به ترک گروه می‌کند</string>
+    <string name="use_other_session_content_description">از آخرین نسخه‌ی المنت روی دستگاه‌های دیگرتان استفاده کنید: نسخه وب المنت، نسخه دسکتاپ المنت، نسخه IOS المنت و نسخه اندروید المنت</string>
+    <string name="change_password_summary">تنظیم گذرواژه جدید…</string>
+    <string name="error_saving_media_file">فایل رسانه ذخیره نشد</string>
+    <string name="error_adding_media_file_to_gallery">فایل به گالری افزوده نشد</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">کلید امنیتی خود را نمی‌دانید، شما می‌توانید %s.</string>
+    <string name="bootstrap_progress_storing_in_sss">ذخیره رمز پشتیبان‌گیری کلید در SSSS</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">تولید کلید SSSS از روی کلید بازیابی</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">تولید کلید SSSS از روی کلید امنیتی (%s)</string>
+    <string name="bootstrap_progress_generating_ssss">تولید کلید SSSS از روی کلید امنیتی</string>
+    <string name="bootstrap_progress_compute_curve_key">محاسبه‌ی کلید curve</string>
+    <string name="auth_invalid_login_param_space_in_password">نام‌کاربری یا گذواژه‌ی اشتباه. ابتدا یا انتهای گذرواژه‌ی وارد شده کاراکتر space قرار دارد، لطفا بررسی کنید.</string>
+    <string name="command_description_plain">پیام‌ها را بدون در نظرگرفتن markdown ارسال کن</string>
+    <string name="bootstrap_cancel_text">اگر اکنون لغو کنید و از حساب خود خارج شوید، دسترسی به پیام‌های رمزشده را از دست می‌دهید.
+\n
+\nالبته شما همچنان قادر هستید که پشتیبان امن و کلید‌های ‌آن را در تنظیمات، مدیریت کنید.</string>
+    <string name="bootstrap_skip_text_no_gen_key">تنظیم کلید امنیتی به شما اماکن امن‌کردن پیام‌ها و دسترسی به پیام‌های رمزشده را می‌دهد.</string>
+    <string name="bootstrap_skip_text">تنظیم کلید امنیتی به شما اجازه دسترسی به پیام‌های رمز شده را می‌دهد.
+\n
+\nاگر مایل به تنظیم کلید امنیتی نیستید، می‌توانید آن را به صورت تصادفی تولید کنید.</string>
+    <string name="auth_flow_not_supported">از طریق نلفن‌همراه نمی توانید این کار را انجام دهید</string>
+    <string name="bootstrap_crosssigning_save_cloud">آن را در فضای ابری خود کپی کنید</string>
+    <string name="bootstrap_crosssigning_save_usb">آن را روی فلش یا حافظه‌ای دیگر ذخیره کنید</string>
+    <string name="bootstrap_crosssigning_print_it">آن را چاپ کرده و در محلی امن و مطمئن نگهداری کنید</string>
+    <string name="bootstrap_cross_signing_success">%2$s و %1$s شما تنظیم شد.
+\n
+\nآن‌ها را در جای مطمئن و امن نگهداری کنید! درصورتی که همه‌ی نشست‌های خود را از دست بدهید، به این دو جهت رمزگشایی پیام‌های رمزشده‌ی قبلی و اطلاعات امن نیاز دارید.</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">تنظیم پشتیبان‌گیری از کلید</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">همگام‌سازی کلید Self Signing</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">همگام‌سازی کلید کاربر</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">همگام‌سازی کلید اصلی</string>
+    <string name="bootstrap_crosssigning_progress_default_key">تعریف کلید پیش‌فرض SSSS</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">ایجاد کلید امن از روی کلید امنیتی</string>
+    <string name="bootstrap_crosssigning_progress_initializing">انتشار کلید‌های هویتی ایجاد شده</string>
+    <string name="bootstrap_save_key_description">در صورتی که %2$s را فراموش کردید از %1$s به عنوان safety net استفاده کنید.</string>
+    <string name="bootstrap_loading_text">این ممکن است چند ثانیه طول بکشد، لطفاً صبور باشید.</string>
+    <string name="bootstrap_info_text_2">یک کلید امنیتی وارد کنید. از این عبارت جهت ذخیره امن کلید‌ها در سمت سرور استفاده می‌شود.</string>
+    <string name="bootstrap_dont_reuse_pwd">ترجیحا از گذرواژه حساب خود استفاده نکنید.</string>
+    <string name="bootstrap_info_confirm_text">برای تایید، %s خود را دوباره وارد کنید.</string>
+    <string name="bootstrap_info_text">افزایش امنیت و رمزگشایی پیام‌های رمزشده و اعتماد به %s.</string>
+    <string name="verify_not_me_self_verification">ممکن است یکی از موارد زیر به خطر افتاده‌باشد:
+\n
+\n- گذرواژه شما
+\n- سرور شما
+\n- این دستگاه یا دستگاه دیگر
+\n- اتصال اینترنت دستگاه
+\n
+\nما توصیه می‌کنیم گذرواژه و کلید بازیابی خود را بلافاصله در تنظیمات تغییر دهید.</string>
+    <string name="verify_cancel_other">اگر اکنون انصراف دهید، %1$s (%2$s) را تأیید نخواهید کرد. البته می‌توانید از طریق پروفایل کاربری آنها نیز این کار را انجام دهید.</string>
+    <string name="verify_cancel_self_verification_from_trusted">اگر لغو کنید، نمی توانید پیام های رمزگذاری شده را در دستگاه جدید خود بخوانید و سایر کاربران به آن اعتماد نخواهند کرد</string>
+    <string name="verify_cancel_self_verification_from_untrusted">در صورت لغو ، نمی توانید پیام های رمزشده را در این دستگاه بخوانید و سایر کاربران به آن اعتماد نخواهند کرد</string>
+    <string name="verify_new_session_compromized">ممکن است اکانت شما هک شده باشد</string>
+    <string name="verify_new_session_notice">با استفاده از این نشست، نشست جدید خود را تأیید کرده و به آن دسترسی مشاهده‌ی پیام‌های رمزشده را بدهید.</string>
+    <string name="keys_backup_restore_success_title_already_up_to_date">کلیدها به روز هستند!</string>
+    <string name="event_redacted_by_admin_reason_with_reason">رویداد توسط ادمین به این دلیل تغییر داده شد: %1$s</string>
+    <string name="event_redacted_by_user_reason_with_reason">رویداد توسط کاربر به این دلیل حذف شد: %1$s</string>
+    <string name="delete_event_dialog_reason_hint">علت حذف</string>
+    <string name="delete_event_dialog_content">آیا مطمئن هستید که می‌خواهید این رویداد را حذف کنید؟ توجه داشته باشید که اگر نام اتاق یا توضیح آن را حذف کنید، این تغییر می تواند لغو شده و رویداد حذف نشود.</string>
+    <string name="enter_secret_storage_passphrase">کلید امنیتی حافظه‌ی ذخیره‌سازی امن را وارد کنید</string>
+    <string name="enter_secret_storage_invalid">رمزی در حافظه پیدا نشد</string>
+    <string name="delete_account_data_warning">داده‌های حساب از نوع %1$s حذف شوند؟
+\n
+\nبا احتیاط استفاده کنید، چرا که ممکن است منجر به یک رفتار غیرمنتظره شود.</string>
+    <string name="initialize_cross_signing">شروع فرآیند تائید متقابل</string>
+    <string name="verification_profile_device_untrust_info">تا زمانی که این کاربر این نشست را تایید کند، پیام های ارسالی و دریافتی در آن با برچسب هشدار نشانه‌گذاری می شوند. البته شما می‌توانید این نشست را به صورت دستی تأیید کنید.</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) با یک نشست جدید وارد شد:</string>
+    <string name="verification_profile_device_verified_because">این نشست برای ارسال امن پیام‌ها مورد اعتماد است، چرا که %1$s (%2$s) آن را تأیید کرده است:</string>
+    <string name="settings_active_sessions_unverified_device_desc">این نشست را تأیید کنید تا به عنوان معتمد علامت‌گذاری شود و به آن اجازه دسترسی به پیام‌های رمزگذاری شده داده شود. اگر این نشست مربوط به شما نیست، ممکن است حساب شما هک شده باشد:</string>
+    <string name="settings_active_sessions_verified_device_desc">این نشست برای ارسال امن پیام‌ها مورد اعتماد است، چرا که شما آن را تأیید کرده اید:</string>
+    <string name="settings_failed_to_get_crypto_device_info">اطلاعات رمزنگاری در دسترس نیست</string>
+    <string name="verification_conclusion_ok_self_notice">نشست جدید شما اکنون تأیید شده‌است. این نشست به پیام‌های رمزگذاری شده‌ی شما دسترسی داشته و سایر کاربران نیز این نشست را قابل اعتماد می دانند.</string>
+    <string name="verification_conclusion_ok_notice">پیام‌های این کاربر به صورت سرتاسر رمزگذاری شده و توسط افراد دیگر قابل خواندن نیستند.</string>
+    <string name="verification_code_notice">کد را با کدی که در صفحه کاربر دیگر نمایش داده شده مقایسه کنید.</string>
+    <string name="verification_emoji_notice">شکلک‌ها را مقایسه کنید، از ترتیب نمایش آنان نیز مطمئن شوید.</string>
+    <string name="verification_request_start_notice">بهتر است اینکار را به صورت حضوری و یا با استفاده از یک روش ارتباطی مطمئن انجام دهید.</string>
+    <string name="verification_request_notice">برای امنیت بیشتر، %s را با بررسی یک کد یکبارمصرف تایید کنید.</string>
+    <string name="room_settings_enable_encryption_dialog_content">پس از فعال‌شدن ، نمی‌توان رمزگذاری برای یک اتاق را غیرفعال کرد. پیام های ارسالی در یک اتاق رمزگذاری شده توسط سرور قابل مشاهده نیست و فقط توسط اعضای اتاق قابل مشاهده است. فعال کردن رمزنگاری ممکن است از کارکرد بسیاری از ربات ها و پل ها جلوگیری کند.</string>
+    <string name="room_settings_enable_encryption_dialog_title">رمزگذاری فعال شود؟</string>
+    <string name="room_settings_enable_encryption">فعال‌سازی رمزنگاری سرتاسر</string>
+    <string name="command_description_rainbow_emote">شکلک را با رنگ‌بندی رنگین گمان ارسال می کند</string>
+    <string name="command_description_rainbow">پیام را با رنگ‌بندی رنگین کمان ارسال می کند</string>
+    <string name="verify_cannot_cross_sign">این نشست نمی‌تواند تائید را با نشست‌های دیگر شما به اشتراک بگذارد.
+\nتائید به صورت محلی ذخیره می‌شود و در نسخه‌ی بعدی برنامه به اشتراک گذاشته می‌شود.</string>
+    <string name="rendering_event_error_exception">المنت هنگام ارائه محتوای رویدادی با شناسه \'%1$s\' با مشکل روبرو شد</string>
+    <string name="rendering_event_error_type_of_message_not_handled">المنت پیام‌های \'%1$s\' را پشتیبانی نمی‌کند</string>
+    <string name="rendering_event_error_type_of_event_not_handled">المنت رویداد \'%1$s\' را پشتیبانی نمی‌کند</string>
+    <string name="verification_conclusion_compromised">ممکن است یکی از موارد زیر به خطر افتاده باشد:
+\n
+\n- سرور میزبان شما
+\n- سرور کاربری که او را تائید می‌کنید
+\n- اتصال اینترنت شما یا کاربران دیگر
+\n- دستگاه شما یا دستگاه سایر کاربران</string>
+    <string name="verification_green_shield">برای اطمینان از صحت هویت کاربران، به رنگ آیکون سپر آنان توجه کنید. رنگ سبز به معنای هویت تائید شده‌ی است. برای اطمینان از امنیت اتاق، همه کاربران آن اتاق را تائید کنید.</string>
+    <string name="verify_user_sas_emoji_security_tip">برای امنیت بالا ، از یک روش ارتباطی امن دیگر استفاده کنید یا این کار را حضوری انجام دهید.</string>
+    <string name="verify_user_sas_emoji_help_text">با تأیید شکلک‌های منحصر به فرد زیر در صفحه نمایش طرف مقابل به همان ترتیب، این کاربر را تأئید کنید.</string>
+    <string name="login_error_threepid_denied">دامنه ایمیل شما مجاز به ثبت نام در این سرور نیست</string>
+    <string name="command_description_shrug">¯\\\\_(ツ)_/¯ را به یک پیام متنی ساده تغییر می دهد</string>
+    <string name="permalink_malformed">لینک مشکل دارد</string>
+    <string name="soft_logout_sso_not_same_user_error">نشست فعلی مربوط به کاربر %1$s است و شما اطلاعات حساب کاربر %2$s را ارائه داده‌اید. این مورد توسط المنت پشتیبانی نمی‌شود .
+\nلطفا ابتدا داده ها را پاک کنید، سپس با یک حساب دیگر وارد برنامه شوید.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">دسترسی به پیام‌های رمزشده را از دست خواهید داد مگر اینکه برای بازیابی کلیدهای رمزگذاری خود، به حساب خود وارد شوید.</string>
+    <string name="soft_logout_clear_data_dialog_content">آیا تمامی اطلاعات ذخیره‌شده در این دستگاه پاک شود؟
+\nبرای دسترسی به اطلاعات و پیام‌های حساب خود، دوباره وارد شوید.</string>
+    <string name="soft_logout_clear_data_notice">هشدار: اطلاعات شخصی شما (شامل کلید‌های رمزنگاری) همچنان روی این دستگاه ذخیره شده‌اند.
+\n
+\nاگر نمی‌خواهید از این دستگاه استفاده کنید، یا می‌خواهید با اکانت دیگری وارد شوید، این اطلاعات را حذف کنید.</string>
+    <string name="soft_logout_signin_e2e_warning_notice">برای بازیابی کلیدهای رمزگذاری ذخیره شده در این دستگاه، وارد حساب خود شوید. شما برای خواندن همه پیام‌های رمزشده‌ی خود در هر دستگاهی به این کلید‌ها نیاز دارید.</string>
+    <string name="soft_logout_signin_notice">ادمین سرور (%1$s) شما را از حسابتان خارج کرده‌است %2$s (%3$s).</string>
+    <string name="signed_out_notice">این می تواند به دلایل مختلف باشد:
+\n
+\n• شما گذرواژه خود را در نشست دیگری تغییر داده‌اید.
+\n
+\n• این نشست را در یکی از نشست دیگر خود حذف کرده‌اید.
+\n
+\n• ادمین سرور حساب شما را غیرفعال کرده‌است.</string>
+    <string name="autodiscover_well_known_error">سرور معتبر نیست. لطفا شناسه‌کاربری خود را بررسی کنید</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">این یک شناسه کاربری معتبر نیست. قالب صحیح: \\\'@user:homeserver.org\\\'</string>
+    <string name="login_signin_matrix_id_password_notice">اگر گذرواژه خود را نمی‌دانید، برای تنظیم مجدد آن بازگردید.</string>
+    <string name="login_signin_matrix_id_notice">اگر یک حساب کاربری بر روی یک سرور دارید، از شناسه ماتریکس (به عنوان مثال @user:domain.com) و گذرواژه برای ورود استفاده کنید.</string>
+    <string name="login_connect_using_matrix_id_notice">همچنین اگر قبلاً حساب کاربری داشته و از نام‌کاربری و گذرواژه خود اطلاع دارید، می توانید از این روش استفاده کنید:</string>
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">درخواست های زیادی ارسال شده است. می توانید در %1$d ثانیه دوباره امتحان کنید…</item>
+        <item quantity="other">درخواست های زیادی ارسال شده است. می توانید در %1$d ثانیه دوباره امتحان کنید…</item>
+    </plurals>
+    <string name="login_error_outdated_homeserver_warning_content">این نسخه سرور بسیار قدیمی است. از ادمین خود بخواهید که آن را ارتقا دهد. البته شما می‌توانید ادامه دهید ، اما برخی از ویژگی ها ممکن است به درستی کار نکنند.</string>
+    <string name="login_error_outdated_homeserver_content">این نسخه سرور بسیار قدیمی است. از ادمین خود بخواهید که آن را ارتقا دهد.</string>
+    <string name="login_error_outdated_homeserver_title">سرور به روز نشده</string>
+    <string name="login_validation_code_is_not_correct">کد وارد شده صحیح نیست. لطفا بررسی فرمائید.</string>
+    <string name="login_wait_for_email_notice">ما ایمیلی به %1$s ارسال کردیم.
+\nلطفاً برای ادامه فرآیند ایجاد حساب‌کاربری بر روی لینک موجود در آن کلیک کنید.</string>
+    <string name="login_wait_for_email_title">لطفا ایمیل خود را بررسی کنید</string>
+    <string name="login_terms_title">برای ادامه، شرایط را قبول کنید</string>
+    <string name="login_a11y_captcha_container">لطفا کپچا را حل کنید</string>
+    <string name="login_a11y_choose_other">انتخاب سرور دلخواه</string>
+    <string name="login_a11y_choose_modular">انتخاب سرورهای المنت</string>
+    <string name="login_a11y_choose_matrix_org">انتخاب matrix.org</string>
+    <string name="login_signup_cancel_confirmation_content">حساب شما هنوز ایجاد نشده‌است.
+\n
+\nفرآیند ثبت‌نام متوقف شود؟</string>
+    <string name="login_signin_username_hint">نام‌کاربری یا ایمیل</string>
+    <string name="login_signup_to">ثبت نام در %1$s</string>
+    <string name="login_msisdn_error_other">شماره تلفن نامعتبر است. لطفا آن را بررسی کنید</string>
+    <string name="login_msisdn_confirm_notice">ما یک کد فعال‌سازی به %1$s ارسال کردیم. لطفا آن را وارد کنید.</string>
+    <string name="login_set_email_notice">برای بازیابی حساب خود یک ایمیل تنظیم کنید. بعداً، در صورتی که تمایل داشتید می‌توانید به افراد اجازه دهید با ایمیل، شما را پیدا کنند.</string>
+    <string name="login_set_msisdn_notice">یک شماره تلفن تنظیم کنید تا در صورتی که تمایل دارید، به افراد اجازه پیدا کردن شما را با استفاده از آن بدهد.</string>
+    <string name="login_reset_password_cancel_confirmation_content">گذرواژه شما هنوز تغییر نکرده‌است.
+\n
+\nفرآیند تغییر گذرواژه را متوقف می‌کنید؟</string>
+    <string name="login_reset_password_success_notice_2">شما از همه نشست‌ها خارج شده‌اید و دیگر اعلان‌ها را دریافت نخواهید کرد. برای فعال کردن مجدد اعلان‌ها، در دستگاه‌های خود وارد حسابتان شوید.</string>
+    <string name="login_reset_password_mail_confirmation_submit">ایمیل را تایید کردم</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">برای تایید گذرواژه جدید لینک ارسالی را باز کرده، سپس روی متن زیر کلیک کنید.</string>
+    <string name="login_reset_password_mail_confirmation_notice">یک ایمیل تائید به %1$s ارسال شد.</string>
+    <string name="login_reset_password_mail_confirmation_title">صندوق ایمیل خود را بررسی کنید</string>
+    <string name="login_reset_password_error_not_found">این ایمیل به هیچ حسابی متصل نشده‌است</string>
+    <string name="login_reset_password_warning_content">با تغییر گذرواژه ، کلیدهای رمزگذاری سرتاسر در تمام نشست‌های شما تغییر کرده و تاریخچه گفتگوی رمزشده‌ی شما غیرقابل خواندن می‌شود. قبل از تغییر گذرواژه، کلید امنیتی یا کلید پشتیبان را وارد کرده و یا کلیدهای اتاق خود را از نشست دیگری استخراج کنید.</string>
+    <string name="login_reset_password_submit">بعدی</string>
+    <string name="login_reset_password_notice">برای تأیید تنظیم گذرواژه‌ی جدید ، یک ایمیل تأیید به آدرس ایمیل شما ارسال خواهد شد.</string>
+    <string name="login_reset_password_on">بازنشانی گذرواژه در %1$s</string>
+    <string name="login_login_with_email_error">این ایمیل به هیچ حسابی مرتبط نیست.</string>
+    <string name="login_registration_not_supported">برنامه قادر به ایجاد حساب در این سرور نیست.
+\n
+\nآیا می خواهید با استفاده از مرورگر حساب کاربری بسازید؟</string>
+    <string name="login_registration_disabled">متأسفیم، این سرور حساب‌های جدید را نمی پذیرد.</string>
+    <string name="login_mode_not_supported">برنامه نمی‌تواند به این سرور متصل شود. سرور از این مکانیزم‌(ها) برای ورود پشتیبانی می کند: %1$s.
+\n
+\nآیا می خواهید با استفاده از مرورگر وارد شوید؟</string>
+    <string name="login_sso_error_message">هنگام بارگیری صفحه، خطایی روی داد: %1$s (%2$d)</string>
+    <string name="login_server_url_form_common_notice">آدرس سرور مورد نظر خود را وارد کنید</string>
+    <string name="login_server_url_form_other_notice">آدرس سروری را که می‌‌خواهید به آن متصل شوید، وارد کنید</string>
+    <string name="login_server_url_form_modular_notice">آدرس سروری را که می‌‌خواهید از آن استفاده کنید، وارد کنید</string>
+    <string name="login_server_matrix_org_text">به میلیون ها نفر در بزرگترین سرور عمومی بپیوندید</string>
+    <string name="login_server_text">درست مانند ایمیل، حساب‌های کاربری یک خانه دارند؛ اگرچه می توانید با هر کسی که دوست دارید، صحبت کنید</string>
+    <string name="login_server_title">یک سرور انتخاب کنید</string>
+    <string name="login_splash_submit">شروع کنید</string>
+    <string name="login_splash_text3">تجارب خود را گسترش داده و شخصی‌سازی کنید</string>
+    <string name="login_splash_text2">گفتگوهای خصوصی خود را با رمزگذاری محافظت کنید</string>
+    <string name="login_splash_text1">با افراد به صورت مستقیم و یا در قالب گروه گپ بزنید</string>
+    <string name="login_splash_title">صاحب گفتگوهای خود باشید.</string>
+    <string name="timeline_unread_messages">پیام‌های خوانده نشده</string>
+    <string name="direct_room_join_rules_invite_by_you">شما اتاق را به گونه‌ای تنظیم کردید که تنها افراد با دعوت بتوانند به اتاق بپیوندند.</string>
+    <string name="direct_room_join_rules_invite">%1$s اتاق را به گونه‌ای تنظیم کرده که تنها افراد با دعوت بتوانند به اتاق بپیوندند.</string>
+    <string name="room_join_rules_invite_by_you">شما اتاق را به گونه‌ای تنظیم کرده‌اید که تنها افراد با دعوت بتوانند به اتاق بپیوندند.</string>
+    <string name="room_join_rules_invite">%1$s اتاق را به گونه‌ای تنظیم کرده‌است که تنها اعضا با دعوت بتوانند به اتاق بپیوندند.</string>
+    <string name="room_join_rules_public_by_you">شما اتاق را برای هر فردی که لینک آن را دارد عمومی کردید.</string>
+    <string name="room_join_rules_public">%1$s اتاق را برای هر کس که لینک آن را دارد، عمومی کن.</string>
+    <string name="help_long_click_on_room_for_more_options">برای دیدن گزینه‌های بیشتر، روی یک اتاق کلیک طولانی کنید</string>
+    <string name="spoiler">تباه‌کننده</string>
+    <string name="command_description_spoiler">ارسال به عنوان پیام تباه‌کننده</string>
+    <string name="room_list_quick_actions_low_priority_remove">حذف‌کردن از اولویت پایین</string>
+    <string name="room_list_quick_actions_low_priority_add">اضافه‌کردن به اولویت پایین</string>
+    <string name="no_network_indicator">در حال حاضر اتصال شبکه‌ای وجود ندارد</string>
+    <string name="permissions_rationale_msg_keys_backup_export">المنت برای ذخیره کلیدهای رمزنگاری سرتاسر شما بر روی حافظه نیاز به مجوز دارد.
+\n
+\nلطفاً در پنجره بعدی اجازه دسترسی دهید تا بتوانید کلیدهای خود را به صورت دستی ذخیره کنید.</string>
+    <string name="content_reported_as_inappropriate_content">این محتوا به عنوان محتوای نامناسب گزارش شده‌است.
+\n
+\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید ، می توانید او را در لیست سیاه قرار دهید تا پیام‌های او را مشاهده نکنید.</string>
+    <string name="content_reported_as_spam_content">این محتوا به عنوان هرز‌نامه گزارش شده‌است.
+\n
+\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید ، می توانید او را در لیست سیاه قرار دهید تا پیام‌های او را مشاهده نکنید.</string>
+    <string name="content_reported_content">این محتوا گزارش شده‌است.
+\n
+\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید، می توانید او را در لیست سیاه قرار دهید تا پیام‌های او را مشاهده نکنید.</string>
+    <string name="error_handling_incoming_share">امکان به اشتراک‌گذاری این محتوا وجود ندارد</string>
+    <string name="rotate_and_crop_screen_title">چرخش و برش</string>
+    <string name="attachment_type_dialog_title">اضافه کردن تصویر از</string>
+    <string name="error_attachment">هنگام دریافت پیوست خطایی رخ داد.</string>
+    <string name="error_file_too_big">پرونده \'%1$s\' (%2$s) برای آپلود بسیار بزرگ است. محدودیت آپلود %3$s است.</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">%d کاربر خواند</item>
+        <item quantity="other">%d کاربر خواندند</item>
+    </plurals>
+    <string name="one_user_read">%s خواند</string>
+    <string name="two_users_read">%1$s و %2$s خواندند</string>
+    <string name="three_users_read">%1$s ، %2$s و %3$s خواندند</string>
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s ، %2$s و %3$d نفر دیگر خواندند</item>
+        <item quantity="other">%1$s ، %2$s و %3$d نفر دیگر خواندند</item>
+    </plurals>
+    <string name="a11y_jump_to_bottom">به پایین بروید</string>
+    <string name="a11y_close_keys_backup_banner">بستن بنر پشتیبان کلیدها</string>
+    <string name="a11y_create_menu_close">باز کردن منوی ایجاد اتاق…</string>
+    <string name="a11y_create_menu_open">باز کردن منوی ایجاد اتاق</string>
+    <string name="a11y_open_drawer">کشوی پیمایش را باز کنید</string>
+    <string name="send_attachment">ارسال ضمیمه</string>
+    <string name="error_network_timeout">به نظر می رسد پاسخگویی سرور بسیار طولانی شده‌است، این امر می‌تواند به دلیل اتصال ضعیف یا خطای موجود در سرور باشد. لطفا پس از مدتی دوباره امتحان کنید.</string>
+    <string name="error_terms_not_accepted">لطفاً هنگامی که شرایط و ضوابط سرور خود را پذیرفتید، دوباره امتحان کنید.</string>
+    <string name="settings_agree_to_terms">با شرایط خدمات سرور هویت‌سنجی (%s) موافقت کنید تا بتوانید از طریق آدرس ایمیل یا شماره تلفن قابل پیدا شدن باشید.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">شما در حال حاضر آدرس‌های ایمیل یا شماره تلفن‌ها را در سرور هویت‌سنجی %1$s به اشتراک می گذارید. برای توقف اشتراک آنها باید دوباره به %2$s متصل شوید.</string>
+    <string name="settings_text_message_sent_wrong_code">کد تائید صحیح نیست.</string>
+    <string name="settings_text_message_sent_hint">کد</string>
+    <string name="settings_text_message_sent">پیامکی به %s ارسال شده است. لطفاً کد تأیید موجود در آن را وارد کنید.</string>
+    <string name="settings_discovery_no_terms">سرور هویت‌سنجی‌ای که انتخاب کرده‌اید هیچگونه شرایط و ضوابطی ندارد. فقط اگر به صاحب سرویس اعتماد دارید ادامه دهید</string>
+    <string name="settings_discovery_no_terms_title">سرور هویت‌سنجی شرایط و ضوابط استفاده ندارد</string>
+    <string name="settings_discovery_please_enter_server">آدرس سرور هویت‌سنجی را وارد کنید</string>
+    <string name="settings_discovery_bad_identity_server">اتصال به سرور هویت‌سنجی امکان پذیر نیست</string>
+    <string name="settings_discovery_enter_identity_server">آدرس سرور هویت‌سنجی را وارد کنید</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">ما یک ایمیل تأیید به %s ارسال کردیم، ابتدا ایمیل خود را بررسی کرده و روی لینک تأیید کلیک کنید</string>
+    <string name="settings_discovery_confirm_mail">ما یک ایمیل تأیید به %s ارسال کردیم، ایمیل خود را بررسی کرده و روی لینک تأیید کلیک کنید</string>
+    <string name="settings_discovery_disconnect_identity_server_info">قطع ارتباط با سرور هویت‌سنجی به این معنی است که توسط کاربران دیگر قابل شناسایی نخواهید بود و نمی توانید دیگران را از طریق ایمیل یا تلفن دعوت کنید.</string>
+    <string name="settings_discovery_identity_server_info_none">شما در حال حاضر از سرور هویت‌سنجی استفاده نمی‌کنید. برای اینکه مخاطبین فعلی‌ای را که می‌شناسید پیدا کرده و آنها نیز شما را پیدا کنند، این سرور را در زیر پیکربندی کنید.</string>
+    <string name="settings_discovery_identity_server_info">شما در حال حاضر از %1$s استفاده می کنید تا مخاطبین فعلی را که می‌شناسید پیدا کرده و آنها نیز شما را پیدا کنند.</string>
+    <string name="read_at">بخوانید در</string>
+    <string name="settings_troubleshoot_test_token_registration_quick_fix">ثبت توکن</string>
+    <string name="push_gateway_item_format">فرمت:</string>
+    <string name="push_gateway_item_url">آدرس:</string>
+    <string name="push_gateway_item_device_name">نام نشست:</string>
+    <string name="push_gateway_item_app_display_name">نام برنامه:</string>
+    <string name="push_gateway_item_push_key">کلید push:</string>
+    <string name="push_gateway_item_app_id">شناسه برنامه:</string>
+    <string name="settings_push_gateway_no_pushers">هیچ push gateway‌ای ثبت نشده است</string>
+    <string name="settings_push_rules_no_rules">هیچ قانونی برای push تعریف نشده است</string>
+    <string name="settings_expert">ماهر</string>
+    <string name="quick_reactions">واکنش‌های سریع</string>
+    <string name="navigate_to_room_when_already_in_the_room">شما در حال مشاهده این اتاق هستید!</string>
+    <string name="settings_other_third_party_notices">سایر اعلامیه‌های شخص ثالث</string>
+    <string name="import_e2e_keys_from_file">در حال بارگیری کلید‌های رمزنگاری سرتاسر از فایل \"%1$s\".</string>
+    <string name="keys_backup_unable_to_get_keys_backup_data">هنگام دریافت داده‌های پشتیبان کلیدها، خطایی روی داد</string>
+    <string name="keys_backup_unable_to_get_trust_info">هنگام دریافت اطلاعات مورد اعتماد خطایی رخ داد</string>
+    <string name="create_room_federation_error">اتاق ایجاد شده است ، اما برخی از دعوت‌ها به این دلیل ارسال نشده است:
+\n
+\n%s</string>
+    <string name="create_room_settings_section">تنظیمات اتاق</string>
+    <string name="create_room_topic_hint">توضیحات</string>
+    <string name="create_room_topic_section">توضیح در مورد اتاق (اختیاری)</string>
+    <string name="create_room_name_section">نام اتاق</string>
+    <string name="event_redacted">پیام پاک شد</string>
+    <string name="error_user_already_logged_in">به نظر می‌رسد که شما در حال تلاش برای اتصال به یک سرور دیگر هستید. آیا می خواهید از اکانت خود خارج شوید؟</string>
+    <string name="identity_server_not_defined_for_password_reset">برای بازنشانی گذرواژه‌ی خود نیاز به پیکربندی سرور هویت‌سنجی دارید.</string>
+    <string name="identity_server_not_defined">شما از سرور هویت‌سنجی استفاده نمی‌کنید</string>
+    <string name="sas_error_unknown">خطای نامشخص</string>
+    <string name="sas_error_m_user_error">عدم تطابق کاربر</string>
+    <string name="sas_error_m_key_mismatch">عدم تطابق کلید</string>
+    <string name="sas_error_m_invalid_message">یک پیام نامتعبر دریافت شد</string>
+    <string name="sas_error_m_unexpected_message">نشست یک پیام غیرمنتظره دریافت کرد</string>
+    <string name="sas_error_m_mismatched_sas">SAS تطابق نداشت</string>
+    <string name="sas_error_m_mismatched_commitment">Hash تطابق نداشت</string>
+    <string name="sas_error_m_unknown_method">نشست نمی تواند در مورد روش‌های فرآیند تائید: hash ، MAC یا روش SAS به توافق برسد</string>
+    <string name="sas_error_m_unknown_transaction">نشست از آن تعامل اطلاعی ندارد</string>
+    <string name="sas_error_m_timeout">زمان فرآیند تائید به پایان رسید</string>
+    <string name="sas_error_m_user">کاربر فرآیند تائید را لغو کرد</string>
+    <string name="sas_incoming_request_notif_content">%s می‌خواهد نشست شما را تائید کند</string>
+    <string name="sas_incoming_request_notif_title">درخواست فرآیند تائید</string>
+    <string name="sas_verification_request_notification_channel">تائید تعاملی نشست</string>
+    <string name="sas_cancelled_by_me">فرآیند تائید لغو شد.
+\nدلیل: %s</string>
+    <string name="sas_cancelled_by_other">طرف مقابل فرآیند تائید را لغو کرد.
+\n%s</string>
+    <string name="sas_legacy_verification_button_title">از روش قدیمی برای فرآیند تائید استفاده کنید.</string>
+    <string name="sas_verifying_keys">چیزی نمایش داده نشده‌است؟ هنوز تمام کلاینت‌ها از امکان تائید به روش تعاملی پشتیبانی نمی‌کنند. از تائید به روش قدیمی استفاده کنید.</string>
+    <string name="sas_verified_successful">شما با موفقیت این نشست را تائید کردید.</string>
+    <string name="sas_waiting_for_partner">منتظر تائید طرف مقابل…</string>
+    <string name="sas_incoming_verification_request_dialog">شما یک درخواست فرآیند تأئید داخلی دریافت کرده اید.</string>
+    <string name="sas_decimal_description">این نشست را با تصدیق اعداد زیر که روی صفحه‌ی طرف مقابل نیز ظاهر شده‌است، تائید کنید</string>
+    <string name="sas_emoji_description">با تأئید یکسان بودن شکلک‌های زیر در صفحه طرف مقابل، این نشست را تأئید کنید</string>
+    <string name="sas_incoming_request_description_2">با تأئید این نشست، آن را به عنوان معتمد علامت‌گذاری می‌کنیم و همچنین نشست خود را به عنوان معتمد برای طرف مقابل علامت‌گذاری می کنیم.</string>
+    <string name="sas_verification_request_notification_channel_title">فرآیند تائید کلید</string>
+    <string name="sas_view_request_action">نمایش درخواست</string>
+    <string name="sas_cancelled_dialog_title">درخواست لغو شد</string>
+    <string name="sas_got_it">فهمیدم</string>
+    <string name="sas_verified_successful_description">محتوای گفتگوی امن شما با این کاربر رمزنگاری سرتاسر شده و امکان دسترسی به آن‌ها توسط فرد سومی مقدور نیست.</string>
+    <string name="sas_verified">نشست تائید شد!</string>
+    <string name="sas_incoming_request_description">این نشست را تأیید کنید تا به عنوان معتمد علامت‌گذاری شود. اعتماد به نشست‌ها هنگام استفاده از پیام های رمزشده به صورت سرتاسر ، به شما اطمینان بیشتری از امنیت گفتگو‌ها می‌دهد.</string>
+    <string name="sas_incoming_request_title">درخواست فرآیند تأیید داخلی</string>
+    <string name="sas_verify_start_button_title">شروع فرآیند تایید کردن</string>
+    <string name="sas_security_advise">برای امنیت بیشتر پیشنهاد می‌کنیم که این بخش را یا به صورت حضوری یا با استفاده از یک راهکار ارتباطی امن دیگر تکمیل کنید.</string>
+    <string name="sas_verify_title">با مقایسه‌کردن یک رشته‌ی متنی کوتاه تایید کنید.</string>
+    <string name="invalid_or_expired_credentials">شما به دلیل اطلاعات نادرست حساب کاربری یا انقضای نشست از حساب خارج شدید.</string>
+    <string name="autodiscover_well_known_autofill_confirm">از پیکربندی استفاده کنید</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">المنت یک پیکربندی اختصاصی سرور برای دامنه‌ی شناسه‌ی کاربری شما \"%1$s\" تشخیص داده است:
+\n%2$s</string>
+    <string name="autodiscover_well_known_autofill_dialog_title">تکمیل خودکار گزینه‌های مربوط به سرور</string>
+    <string name="keys_backup_info_title_signature">امضاء</string>
+    <string name="keys_backup_info_title_algorithm">الگوریتم</string>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">در حال پشتیبان‌گیری از %d کلید…</item>
+        <item quantity="other">در حال پشتیبان‌گیری از %d کلید…</item>
+    </plurals>
+    <string name="keys_backup_info_keys_all_backup_up">از تمام کلیدها نسخه‌ی پشتیبان ایجاد شد</string>
+    <string name="keys_backup_banner_in_progress">پشتیبان‌گیری از کلیدهای شما. این ممکن است چند دقیقه طول بکشد…</string>
+    <string name="keys_backup_banner_update_line2">مدیریت در بخش پشتیبان‌گیری از کلید</string>
+    <string name="keys_backup_banner_update_line1">کلیدهای رمزگذاری جدید</string>
+    <string name="new_recovery_method_popup_description">کلید پشتیبان گیر جدیدی شناسایی شده‌است.
+\n
+\nاگر شما این کلید را تنظیم نکرده‌اید ، ممکن است هکری در تلاش برای دسترسی به حساب شما باشد. رمز ورود حساب خود را تغییر دهید و بلافاصله در تنظیمات یک روش بازیابی جدید تنظیم کنید.</string>
+    <string name="new_recovery_method_popup_title">پشتیبان گیری از کلید جدید</string>
+    <string name="keys_backup_settings_delete_confirm_message">کلیدهای رمزگذاری پشتیبان شما از سرور حذف شوند؟ در اینن صورت دیگر نخواهید توانست از کلید بازیابی خود برای خواندن پیام رمزشده‌ی قبلی خود استفاده کنید.</string>
+    <string name="keys_backup_settings_delete_confirm_title">حذف نسخه‌ی پشتیبان</string>
+    <string name="keys_backup_settings_checking_backup_state">در حال بررسی وضعیت نسخه‌ی پشتیبان</string>
+    <string name="keys_backup_settings_delete_backup_error">حذف پشتیبان (%s) با خطا مواجه شد</string>
+    <string name="keys_backup_settings_deleting_backup">در حال حذف نسخه‌ی پشتیبان…</string>
+    <string name="keys_backup_settings_untrusted_backup">برای استفاده از کلید پشتیبان در این نشست، از کلید امنیتی یا کلید بازیابی خود استفاده کنید.</string>
+    <string name="keys_backup_get_trust_error">دریافت اطلاعات اعتمادسنجی برای نسخه‌ی پشتیبان (%s) انجام نشد.</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">پشتیبان از نشست تأیید نشده %s امضا غیر‌معتبری دارد</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">پشتیبان از نشست تأیید شده %s امضا غیر‌معتبری دارد</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">پشتیبان از نشست تأیید نشده %s امضا معتبری دارد</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">پشتیبان از نشست تأیید شده %s امضا معتبری دارد.</string>
+    <string name="keys_backup_settings_valid_signature_from_this_device">پشتیبان از این نشست امضای معتبری دارد.</string>
+    <string name="keys_backup_settings_signature_from_unknown_device">پشتیبان از نشست ناشناخته با شناسه %s امضا دارد.</string>
+    <string name="keys_backup_settings_status_not_setup">برای کلید‌های مربوط به این نشست، نسخه‌ی پشتیبانی وجود ندارد.</string>
+    <string name="keys_backup_settings_status_ko">پشتیبان‌گیری از کلیدها برای این نشست فعال نیست.</string>
+    <string name="keys_backup_settings_status_ok">پشتیبان‌گیری از کلیدها به درستی برای این نشست تنظیم شده است.</string>
+    <string name="keys_backup_settings_delete_backup_button">حذف نسخه پشتیبان</string>
+    <string name="keys_backup_settings_restore_backup_button">بازیابی از نسخه‌ی پشتیبان</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">رمزنگاری نشست فعال نیست</string>
+    <plurals name="keys_backup_restore_success_description_part2">
+        <item quantity="one">%d کلید جدید به این نشست اضافه شد.</item>
+        <item quantity="other">%d کلید جدید به این نشست اضافه شد.</item>
+    </plurals>
+    <string name="keys_backup_restore_success_title">پشتیبان بازیابی شد %s !</string>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="one">پشتیبان با %d کلید بازیابی شد.</item>
+        <item quantity="other">پشتیبان با %d کلید بازیابی شد.</item>
+    </plurals>
+    <string name="keys_backup_recovery_code_error_decrypt">رمزگشایی با این کلید بازیابی امکان‌پذیر نیست: لطفاً بررسی کنید که کلید بازیابی را به درستی وارد کرده‌اید.</string>
+    <string name="keys_backup_unlock_button">رمزگشایی پیام‌های قبلی</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">بارگذاری کلید‌ها…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">در حال دریافت کلید‌های بازیابی…</string>
+    <string name="keys_backup_restoring_waiting_message">بازیابی نسخه پشتیبان:</string>
+    <string name="network_error_please_check_and_retry">خطای شبکه: لطفاً اتصال خود را بررسی کنید و دوباره امتحان کنید.</string>
+    <string name="keys_backup_passphrase_error_decrypt">رمزگشایی با این کلید امنیتی امکان‌پذیر نیست: لطفاً بررسی کنید که کلید امنیتی را به درستی وارد کرده‌اید.</string>
+    <string name="keys_backup_restore_with_key_helper">کلید بازیابی خود را گم کرده‌اید؟ می‌توانید کلید جدیدی را در تنظیمات تنظیم کنید.</string>
+    <string name="keys_backup_restore_with_recovery_key">از کلید بازیابی برای رمزگشایی پیام‌های رمزشده‌ی قبلی خود استفاده کنید</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">کلید امنیتی خود را نمی‌دانید؟ شما می‌توانید %s.</string>
+    <string name="keys_backup_restore_with_passphrase">از کلید امنیتی برای رمزگشایی پیام‌های رمزشده‌ی قبلی خود استفاده کنید</string>
+    <string name="keys_backup_setup_skip_msg">اگر از دستگاه خارج شوید یا دستگاه خود را از دست دهید، ممکن است امکان دسترسی به پیام های خود را نداشته باشید.</string>
+    <string name="keys_backup_setup_backup_started_message">کلیدهای رمزگذاری شما اکنون در پس زمینه در حال پشتیبان‌گیری بر روی سرور است. تهیه نسخه‌ی پشتیبان اولیه ممکن است چند دقیقه طول بکشد.</string>
+    <string name="keys_backup_setup_step3_generating_key_status">در حال تولید کلید پشتیبان با استفاده از کلید امنیتی، این ممکن است چند ثانیه زمان ببرد.</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">به نظر می‌رسد شما در یک نشست دیگر کلید پشتیبان تهیه کرده‌اید. آیا می‌خواهید آن را با موردی که ایجاد می‌کنید جایگزین کنید؟</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">یک نسخه‌ی پشتیبان از قبل در سرور وجود دارد</string>
+    <string name="recovery_key_export_saved">کلید بازیابی ذخیره شد.</string>
+    <string name="recovery_key_export_saved_as_warning">کلید بازیابی در \\\'%s\\\' ذخیره شده است.
+\n
+\nهشدار: ممکن است در صورت حذف اپلیکیشن، این فایل نیز حذف شود.</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">کلید بازیابی خود را در جایی بسیار امن نظیر برنامه‌های شناخته‌شده‌ی مدیریت گذرواژه نگه دارید</string>
+    <string name="keys_backup_setup_step3_text_line2">کلید بازیابی شما برای روز مبادا است - اگر کلید امنیتی خود را فراموش کنید می توانید از آن برای بازیابی دسترسی به پیام‌های رمزگذاری شده استفاده کنید.
+\nکلید بازیابی خود را در جایی بسیار امن نظیر برنامه‌های شناخته‌شده‌ی مدیریت گذرواژه نگه دارید</string>
+    <string name="keys_backup_setup_step3_text_line1">درحال پشتیبان‌گیری از کلید‌های شما.</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">یا، نسخه‌ی پشتیبان خود را با یک کلید بازیابی ایمن کنید، و آن را در جایی امن ذخیره کنید.</string>
+    <string name="keys_backup_setup_step2_text_description">ما یک نسخه رمزگذاری شده از کلیدهای شما را در سرور ذخیره خواهیم کرد. با استفاده از کلید امنیتی قوی، از نسخه‌ی پشتیبان خود محافظت کنید.
+\n
+\nبرای حداکثر امنیت، کلید امنیتی باید با رمز ورود حساب شما متفاوت باشد.</string>
+    <string name="keys_backup_setup_step1_description">پیام‌های موجود در اتاق های رمزگذاری شده به صورت سرتاسری رمز و ایمن می‌شوند. کلیدهای این پیام‌ها فقط در دسترس شما و گیرنده‌(ها) می‌باشد.
+\n
+\nبرای جلوگیری از از دست دادن کلیدهای خود به طور ایمن از آنها پشتیبان تهیه کنید.</string>
+    <string name="keys_backup_no_session_error">هیچ نشست ماتریکسی موجود نیست</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">اگر می خواهید المنت یک کلید بازیابی ایجاد کند، لطفاً کلید امنیتی را حذف کنید.</string>
+    <string name="passphrase_passphrase_too_weak">کلید امنیتی بسیار ضعیف است</string>
+    <string name="passphrase_empty_error_message">لطفا کلید امنیتی را وارد کنید</string>
+    <string name="passphrase_passphrase_does_not_match">کلید امنیتی یکسان نبود</string>
+    <string name="passphrase_enter_passphrase">ورود کلید امنیتی</string>
+    <string name="passphrase_confirm_passphrase">تائید کلید امنیتی</string>
+    <string name="passphrase_create_passphrase">ایجاد کلید امنیتی</string>
+    <string name="no_valid_google_play_services_apk">APK معتبر Google Play Services پیدا نشد. اعلان‌ها ممکن است به درستی کار نکنند.</string>
+    <string name="x_plus">%d+</string>
+    <string name="plus_x">+%d</string>
+    <string name="generic_label_and_value">%1$s: %2$s</string>
+    <string name="generic_label">%1$s:</string>
+    <string name="show_info_area_only_errors">فقط برای خطاها</string>
+    <string name="show_info_area_messages_and_errors">برای پیام‌ها و خطاها</string>
+    <string name="show_info_area_always">همواره</string>
+    <string name="settings_info_area_show">نمایش جزيیات</string>
+    <string name="merged_events_collapse">جمع کردن</string>
+    <string name="merged_events_expand">باز کردن</string>
+    <string name="unknown_error">متأسفیم ، خطایی رخ داد</string>
+    <string name="resource_limit_hard_contact">لطفا %s تا استفاده از این سرویس را ادامه دهید.</string>
+    <string name="resource_limit_soft_contact">لطفا %s تا این محدودیت را برطرف نمائید.</string>
+    <string name="resource_limit_hard_mau">این سرور به محدودیت کاربر فعال ماهانه خود رسیده است.</string>
+    <string name="resource_limit_soft_mau"> این سرور به محدودیت کاربر فعال ماهانه خود رسیده است <b>بنابراین برخی از کاربران نمی توانند وارد سیستم شوند</b>.</string>
+    <string name="resource_limit_hard_default">سرور از یکی از محدودیت های منابع خود فراتر رفته است.</string>
+    <string name="resource_limit_soft_default">سرور از یکی از محدودیت های منابع خود فراتر رفته است <b>بنابراین برخی از کاربران نمی توانند وارد سیستم شوند</b>.</string>
+    <string name="room_tombstone_continuation_description">این اتاق ادامه‌ی گفتگوی دیگر است</string>
+    <string name="room_tombstone_continuation_link">گفتگو در اینجا ادامه دارد</string>
+    <string name="room_tombstone_versioned_description">این اتاق جایگزین شده و دیگر فعال نیست</string>
+    <string name="deactivate_account_delete_checkbox">لطفاً تمام پیام‌های ارسال شده‌ی من را حدف کن (هشدار: این امر باعث می شود کاربران آینده مکالمات را به صورت ناقص ببینند)</string>
+    <string name="deactivate_account_content">این کار باعث می شود حساب شما برای همیشه غیرقابل استفاده شود. شما قادر به ورود به سیستم نخواهید بود و هیچ کس نمی تواند شناسه کاربری مشابه را دوباره ثبت کند. این باعث می شود که حساب شما از همه اتاق هایی که در آن شرکت می کند خارج شود و جزئیات حساب شما از سرور هویت حذف می شود. <b>این اقدام برگشت ناپذیر است </b>.
+\n
+\nغیرفعال کردن حساب شما <b> به طور پیش فرض باعث نمی شود پیام های ارسالی شما را حذف کنیم </b>. اگر می خواهید پیام های شما را فراموش کنیم ، لطفاً کادر زیر را علامت بزنید.
+\n
+\nقابلیت مشاهده پیام در المنت مانند ایمیل است. حذف کردن پیام‌های شما به این معنی است که پیام‌هایی که ارسال کرده‌اید به هیچ کاربر جدید یا ثبت نشده‌ای نمایش داده نمی شود، اما کاربران ثبت‌نام شده که از قبل به این پیام ها دسترسی داشتند همچنان به نسخه خود دسترسی خواهند داشت.</string>
+    <string name="dialog_user_consent_content">برای ادامه استفاده از سرور %1$s باید شرایط و ضوابط را خوانده و موافقت کنید.</string>
+    <string name="markdown_has_been_disabled">Markdown غیرفعال شده است.</string>
+    <string name="markdown_has_been_enabled">Markdown فعال شده است.</string>
+    <string name="command_description_clear_scalar_token">جهت رفع مشکلات مدیریت برنامه‌های هیوا</string>
+    <string name="command_description_markdown">فعال و غیرفعال کردن markdown</string>
+    <string name="command_description_nick">نام مستعار شما را تغییر می‌دهد</string>
+    <string name="command_description_kick_user">اخراج کاربر با شناسه داده شده</string>
+    <string name="command_description_topic">بیشتر درباره‌ی اتاق توضیح دهید</string>
+    <string name="command_description_part_room">ترک اتاق</string>
+    <string name="command_description_join_room">با نام مستعار داده‌شده به اتاق بپیوندید</string>
+    <string name="command_description_invite_user">کاربر با شناسه داده شده را به این اتاق دعوت می کند</string>
+    <string name="command_description_deop_user">کاربر با شناسه داده شده را غیر‌فعال می‌کند</string>
+    <string name="command_description_op_user">سطح اختیارات و دسترسی کاربر را مشخص می‌کند</string>
+    <string name="command_description_unban_user">کاربر با شناسه داده شده را رفع مسدودیت می کند</string>
+    <string name="command_description_ban_user">کاربر با شناسه داده شده را مسدود می کند</string>
+    <string name="command_description_emote">نمایش اقدام</string>
+    <string name="command_problem_with_parameters">دستور \\\"%s\\\" پارامتر‌های بیشتری نیاز دارد، یا اینکه برخی پارامتر‌ها به درستی وارد نشده‌اند.</string>
+    <string name="unrecognized_command">دستور ناشناخته: %s</string>
+    <string name="command_error">خطا در اجرای دستور</string>
+    <string name="conference_call_warning_message">قابلیت همایش تصویری در حال توسعه بوده و ممکن است به درستی کار نکند.</string>
+    <string name="your_unverified_device_requesting_with_info">یک نشست تایید نشده، درخواست کلید‌های رمزنگاری را دارد.
+\nنام نشست: %1$s
+\nآخرین بازدید: %2$s
+\nاگر در دستگاه دیگری وارد اکانت خود نشده‌اید این درخواست را نادیده بگیرید.</string>
+    <string name="your_unverified_device_requesting">نشست تایید نشده‌ی شما \\\'%s\\\' درخواست کلید‌های رمزنگاری را دارد.</string>
+    <string name="you_added_a_new_device_with_info">نشست جدید درخواست دریافت کلید‌های رمزنگاری را دارد.
+\nنام نشست: %1$s
+\nآخرین بازدید: %2$s
+\nاگر در دستگاه دیگری وارد حساب خود نشده‌اید، این درخواست را نادیده بگیرید.</string>
+    <string name="you_added_a_new_device">شما یک نشست جدید \\\'%s\\\' اضافه کرده‌اید که درخواست کلید‌های رمزنگاری را دارد.</string>
+    <string name="widget_integration_invalid_parameter">پارامتر مورد نیاز معتبر نمی‌باشد.</string>
+    <string name="widget_integration_missing_parameter">پارامتر مورد نیاز وجود ندارد.</string>
+    <string name="historical_placeholder">جستجوی تاریخچه</string>
+    <string name="notification_unread_notified_messages_and_invitation">%1$s و %2$s</string>
+    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s در %2$s و %3$s</string>
+    <plurals name="notification_invitations">
+        <item quantity="one">%d دعوت</item>
+        <item quantity="other">%d دعوت</item>
+    </plurals>
+    <string name="directory_server_placeholder">آدرس سرور</string>
+    <string name="unknown_devices_alert_message">این اتاق شامل نشست‌های تایید نشده هستند.
+\nهیچ تضمینی وجود ندارد این نشست‌های تائیدنشده متعلق به کاربرانی باشد که فکر می‌کنید.
+\nتوضیه می‌شود افراد نشست‌های خود را تائید کنند. هر چند در صورتی که تمایلی به این کار ندارید، همچنان می‌توانید پیام ارسال کنید.
+\n
+\nنشست‌های تایید نشده عبارتند از:</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">%1$d از %2$d کلید با موفقیت بارگذاری شد.</item>
+        <item quantity="other">%1$d از %2$d کلید با موفقیت بارگذاری شدند.</item>
+    </plurals>
+    <string name="encryption_exported_successfully">کلیدها با موفقیت بر روی دستگاه استخراج شدند</string>
+    <string name="encryption_export_saved_as">کلیدهای رمزنگاری در \\\'%s\\\' ذخیره شد.
+\n
+\nهشدار: با حذف برنامه ممکن است این فایل نیز پاک شود.</string>
+    <string name="encryption_export_notice">لطفاً یک رمز برای رمزنگاری کلیدها وارد کنید. ورود این رمز برای بارگذاری کلیدها ضروری خواهد بود.</string>
+    <string name="device_name_warning">نام عمومی یک نشست برای افرادی که با آنها در ارتباط هستید، قابل مشاهده است</string>
+    <string name="encryption_information_device_name_with_warning">نام دستگاه (برای افرادی که با آنها ارتباط برقرار می کنید قابل مشاهده است)</string>
+    <string name="encryption_information_claimed_ed25519_fingerprint_key">اثرانگشت ادعایی Ed25519</string>
+    <string name="encryption_information_curve25519_identity_key">شناسه کلید Curve25519</string>
+    <string name="failed_to_load_timeline_position">%s سعی داشت پیام‌های خاصی را مشاهده کند که این پیام‌ها پیدا نشدند.</string>
+    <string name="room_settings_addresses_disable_main_address_prompt_msg">برای این اتاق آدرس اصلی‌ای مشخص نکرده‌اید.</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\\\'%s\\\' یک قالب نامعتبر برای اسم مستعار است</string>
+    <string name="room_settings_no_flair">این اتاق در هیچ اجتماع خاصی قرار نگرفته‌است</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">هر کسی که لینک اتاق را دارد ( حتی اگر کاربر مهمان باشد)</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">هر کسی که لینک اتاق را دارد (به جز کاربران مهمان‌)</string>
+    <string name="room_settings_room_access_entry_only_invited">تنها افرادی که دعوت شده‌اند</string>
+    <string name="room_settings_room_access_warning">برای لینک دادن به یک اتاق، آن اتاق باید آدرس داشته باشد.</string>
+    <string name="settings_flair">اجتماع</string>
+    <string name="settings_play_shutter_sound">پخش صدای شاتر دوربین</string>
+    <string name="media_source_choose">انتخاب کنید</string>
+    <string name="settings_default_media_source">منبع پیش‌فرض رسانه</string>
+    <string name="compression_opt_list_choose">انتخاب کنید</string>
+    <string name="settings_default_compression">فشرده سازی پیش‌فرض</string>
+    <string name="settings_media">رسانه</string>
+    <string name="account_additional_info">اطلاعات اضافه: %s</string>
+    <string name="account_phone_number_error">خطایی هنگام تایید شماره تلفن رخ داده است.</string>
+    <string name="settings_phone_number_code">کد</string>
+    <string name="settings_phone_number_verification_error">خطایی هنگام تایید شماره تلفن رخ داده است</string>
+    <string name="settings_phone_number_verification_error_empty_code">کد فعال‌سازی را وارد کنید</string>
+    <string name="settings_phone_number_verification_instruction">ما یک پیام کوتاه با کد فعال‌سازی ارسال کرده‌ایم. لطفاً این کد را در زیر وارد کنید.</string>
+    <string name="settings_phone_number_verification">تایید شماره تلفن</string>
+    <string name="settings_phone_number_error">شماره تلفن نامعتبر برای کشور مورد نظر</string>
+    <string name="settings_phone_number_label">شماره تلفن</string>
+    <string name="settings_phone_number_country_error">لطفا یک کشور را انتخاب نمائید</string>
+    <string name="settings_phone_number_country_label">کشور</string>
+    <string name="settings_select_country">انتخاب کشور</string>
+    <string name="settings_delete_threepid_confirmation">آیا از حذف %1$s %2$s مطمئن هستید؟</string>
+    <string name="account_email_error">خطایی در هنگام تایید ایمیل شما رخ داده است.</string>
+    <string name="account_phone_number_already_used_error">این شماره تلفن قبلا استفاده شده‌است.</string>
+    <string name="account_email_not_found_error">این آدرس ایمیل یافت نشد.</string>
+    <string name="account_email_already_used_error">این آدرس ایمیل قبلا استفاده شده‌است.</string>
+    <string name="account_email_validation_error">آدرس ایمیل تایید نشده‌است. لطفاً ایمیل خود را بررسی کنید و روی لینک ارسال شده، کلیک کنید. پس از انجام این کار، روی ادامه کلیک کنید.</string>
+    <string name="account_email_validation_message">لطفاً ایمیل خود را بررسی کنید و روی لینک ارسال شده، کلیک کنید. پس از انجام این کار، روی ادامه کلیک کنید.</string>
+    <string name="account_email_validation_title">در انتظار تایید</string>
+    <string name="disabled_integration_dialog_content">برای انجام این کار اجازه‌ی یکپارچه‌سازی را در تنظیمات فعال کنید.</string>
+    <string name="disabled_integration_dialog_title">یکپارچه‌سازی‌ها غیر فعال هستند</string>
+    <string name="devices_delete_dialog_text">این اقدام نیاز به احراز هویت دارد.
+\nلطفا گذرواژه خود را وارد نمایید.</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="devices_details_last_seen_title">آخرین اتصال</string>
+    <string name="devices_details_name_title">نام عمومی</string>
+    <string name="devices_details_device_name">به‌روزرسانی نام عمومی</string>
+    <string name="devices_details_id_title">شناسه</string>
+    <string name="devices_details_dialog_title">اطلاعات دستگاه</string>
+    <string name="settings_data_save_mode_summary">حالت صرفه‌جویی داده یک فیلتر خاص را اعمال می کند، که در نتیجه‌ی آن به‌روزرسانی‌های وضعیت آنلاین بودن و اعلان‌های تایپ فیلتر می شوند.</string>
+    <string name="settings_data_save_mode">حالت صرفه‌جویی در مصرف دیتا</string>
+    <string name="settings_opt_in_of_analytics_ok">بله ، من می خواهم کمک کنم!</string>
+    <string name="settings_opt_in_of_analytics_prompt">لطفاً برای کمک به ما در بهبود المنت، ارسال ناشناس تجزیه و تحلیل را فعال کنید.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">المنت برای داشتن اعلان‌های قابل اعتماد نیاز به فعالیت در پس زمینه دارد.
+\nدر صفحه بعدی از شما خواسته می شود که المنت همیشه در پس زمینه اجرا شود ، لطفاً آن را بپذیرید.</string>
+    <string name="settings_opt_in_of_analytics_summary">المنت اطلاعاتی را جمع آوری می کند و با ارسال آنان به صورت ناشناس به ما امکان بهبود برنامه را می‌دهد.</string>
+    <string name="settings_opt_in_of_analytics">ارسال داده های تجزیه و تحلیل</string>
+    <string name="settings_analytics">تجزیه و تحلیل</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">مجوز دادن</string>
 </resources>
