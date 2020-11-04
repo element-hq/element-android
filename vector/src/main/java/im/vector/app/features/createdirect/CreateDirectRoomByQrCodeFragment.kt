@@ -82,6 +82,7 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
             Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
             requireActivity().finish()
         } else {
+            // This and the related conditional can be removed when PR #2342 is merged
             val existingDm = session.getExistingDirectRoomWithUser(mxid)
 
             if (existingDm === null) {
@@ -98,7 +99,7 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
                     )
                 }
             } else {
-                navigator.openRoom(requireContext(), existingDm.roomId, null, false)
+                navigator.openRoom(requireContext(), existingDm, null, false)
                 requireActivity().finish()
             }
         }
