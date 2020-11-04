@@ -91,6 +91,9 @@ class KnownUsersFragment @Inject constructor(
             val showMenuItem = it.pendingInvitees.isNotEmpty()
             menu.forEach { menuItem ->
                 menuItem.isVisible = showMenuItem
+                if (args.isCreatingRoom) {
+                    menuItem.setTitle(if (it.isThereAnExistingRoom) R.string.action_open else R.string.create_room_action_create)
+                }
             }
         }
         super.onPrepareOptionsMenu(menu)

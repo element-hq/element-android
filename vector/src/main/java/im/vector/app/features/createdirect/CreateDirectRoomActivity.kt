@@ -91,7 +91,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     KnownUsersFragment::class.java,
                     KnownUsersFragmentArgs(
                             title = getString(R.string.fab_menu_create_chat),
-                            menuResId = R.menu.vector_create_direct_room
+                            menuResId = R.menu.vector_create_direct_room,
+                            isCreatingRoom = true
                     )
             )
         }

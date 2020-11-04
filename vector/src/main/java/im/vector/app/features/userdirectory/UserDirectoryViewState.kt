@@ -30,7 +30,8 @@ data class UserDirectoryViewState(
         val pendingInvitees: Set<PendingInvitee> = emptySet(),
         val createAndInviteState: Async<String> = Uninitialized,
         val directorySearchTerm: String = "",
-        val filterKnownUsersValue: Option<String> = Option.empty()
+        val filterKnownUsersValue: Option<String> = Option.empty(),
+        val isThereAnExistingRoom: Boolean = false
 ) : MvRxState {
 
     constructor(args: KnownUsersFragmentArgs) : this(excludedUserIds = args.excludedUserIds)

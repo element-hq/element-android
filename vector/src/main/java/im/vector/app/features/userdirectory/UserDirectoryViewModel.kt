@@ -87,14 +87,37 @@ class UserDirectoryViewModel @AssistedInject constructor(@Assisted
 
     private fun handleRemoveSelectedUser(action: UserDirectoryAction.RemovePendingInvitee) = withState { state ->
         val selectedUsers = state.pendingInvitees.minus(action.pendingInvitee)
-        setState { copy(pendingInvitees = selectedUsers) }
+        setState {
+            copy(
+                    pendingInvitees = selectedUsers,
+                    isThereAnExistingRoom = isThereAnExistingRoom(selectedUsers)
+            )
+        }
     }
 
     private fun handleSelectUser(action: UserDirectoryAction.SelectPendingInvitee) = withState { state ->
         // Reset the filter asap
         directoryUsersSearch.accept("")
         val selectedUsers = state.pendingInvitees.toggle(action.pendingInvitee)
-        setState { copy(pendingInvitees = selectedUsers) }
+        setState {
+            copy(
+                    pendingInvitees = selectedUsers,
+                    isThereAnExistingRoom = isThereAnExistingRoom(selectedUsers)
+            )
+        }
+    }
+
+    private fun isThereAnExistingRoom(selectedUsers: Set<PendingInvitee>): Boolean {
+        return selectedUsers
+                .takeIf { it.size == 1 }
+                ?.firstOrNull()
+                ?.let { invitee ->
+                    return when (invitee) {
+                        is PendingInvitee.UserPendingInvitee     -> session.getExistingDirectRoomWithUser(invitee.user.userId) != null
+                        is PendingInvitee.ThreePidPendingInvitee -> false
+                    }.exhaustive
+                }
+                ?: false
     }
 
     private fun observeDirectoryUsers() = withState { state ->
