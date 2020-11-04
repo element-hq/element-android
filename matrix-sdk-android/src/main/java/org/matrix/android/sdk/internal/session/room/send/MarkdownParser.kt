@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
 import javax.inject.Inject
 
 /**
@@ -27,18 +28,21 @@ import javax.inject.Inject
  */
 internal class MarkdownParser @Inject constructor(
         private val parser: Parser,
-        private val htmlRenderer: HtmlRenderer
+        private val htmlRenderer: HtmlRenderer,
+        private val textPillsUtils: TextPillsUtils
 ) {
 
     private val mdSpecialChars = "[`_\\-*>.\\[\\]#~]".toRegex()
 
-    fun parse(text: String): TextContent {
+    fun parse(text: CharSequence): TextContent {
+        val source = textPillsUtils.processSpecialSpansToMarkdown(text) ?: text.toString()
+
         // If no special char are detected, just return plain text
-        if (text.contains(mdSpecialChars).not()) {
-            return TextContent(text)
+        if (source.contains(mdSpecialChars).not()) {
+            return TextContent(source)
         }
 
-        val document = parser.parse(text)
+        val document = parser.parse(source)
         val htmlText = htmlRenderer.render(document)
 
         // Cleanup extra paragraph
@@ -48,13 +52,14 @@ internal class MarkdownParser @Inject constructor(
             htmlText
         }
 
-        return if (isFormattedTextPertinent(text, cleanHtmlText)) {
+        return if (isFormattedTextPertinent(source, cleanHtmlText)) {
             // According to https://matrix.org/docs/spec/client_server/latest#m-room-message-msgtypes:
             // The plain text version of the HTML should be provided in the body.
             // But it caused too many problems so it has been removed in #2002
-            TextContent(text, cleanHtmlText.postTreatment())
+            // See #739
+            TextContent(text.toString(), cleanHtmlText.postTreatment())
         } else {
-            TextContent(text)
+            TextContent(source)
         }
     }
 
