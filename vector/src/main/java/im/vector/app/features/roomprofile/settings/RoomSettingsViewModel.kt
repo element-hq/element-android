@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.settings
 
+import androidx.core.net.toFile
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -27,9 +28,14 @@ import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Completable
 import io.reactivex.Observable
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.rx.mapOptional
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
@@ -55,16 +61,19 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     init {
         observeRoomSummary()
+        observeRoomAvatar()
         observeState()
     }
 
     private fun observeState() {
         selectSubscribe(
+                RoomSettingsViewState::avatarAction,
                 RoomSettingsViewState::newName,
                 RoomSettingsViewState::newCanonicalAlias,
                 RoomSettingsViewState::newTopic,
                 RoomSettingsViewState::newHistoryVisibility,
-                RoomSettingsViewState::roomSummary) { newName,
+                RoomSettingsViewState::roomSummary) { avatarAction,
+                                                      newName,
                                                       newCanonicalAlias,
                                                       newTopic,
                                                       newHistoryVisibility,
@@ -72,7 +81,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             val summary = asyncSummary()
             setState {
                 copy(
-                        showSaveAction = summary?.name != newName
+                        showSaveAction = avatarAction !is RoomSettingsViewState.AvatarAction.None
+                                || summary?.name != newName
                                 || summary?.topic != newTopic
                                 || summary?.canonicalAlias != newCanonicalAlias?.takeIf { it.isNotEmpty() }
                                 || newHistoryVisibility != null
@@ -101,6 +111,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .subscribe {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val permissions = RoomSettingsViewState.ActionPermissions(
+                            canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR),
                             canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME),
                             canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC),
                             canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
@@ -114,15 +125,50 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .disposeOnClear()
     }
 
+    /**
+     * We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
+     */
+    private fun observeRoomAvatar() {
+        room.rx()
+                .liveStateEvent(EventType.STATE_ROOM_AVATAR, QueryStringValue.NoCondition)
+                .mapOptional { it.content.toModel<RoomAvatarContent>() }
+                .unwrap()
+                .subscribe {
+                    setState { copy(currentRoomAvatarUrl = it.avatarUrl) }
+                }
+                .disposeOnClear()
+    }
+
     override fun handle(action: RoomSettingsAction) {
         when (action) {
             is RoomSettingsAction.EnableEncryption         -> handleEnableEncryption()
+            is RoomSettingsAction.SetAvatarAction          -> handleSetAvatarAction(action)
             is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
             is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
             is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
             is RoomSettingsAction.SetRoomCanonicalAlias    -> setState { copy(newCanonicalAlias = action.newCanonicalAlias) }
             is RoomSettingsAction.Save                     -> saveSettings()
+            is RoomSettingsAction.Cancel                   -> cancel()
         }.exhaustive
+    }
+
+    private fun handleSetAvatarAction(action: RoomSettingsAction.SetAvatarAction) {
+        deletePendingAvatar()
+        setState { copy(avatarAction = action.avatarAction) }
+    }
+
+    private fun deletePendingAvatar() {
+        // Maybe delete the pending avatar
+        withState {
+            (it.avatarAction as? RoomSettingsViewState.AvatarAction.UpdateAvatar)
+                    ?.let { tryOrNull { it.newAvatarUri.toFile().delete() } }
+        }
+    }
+
+    private fun cancel() {
+        deletePendingAvatar()
+
+        _viewEvents.post(RoomSettingsViewEvents.GoBack)
     }
 
     private fun saveSettings() = withState { state ->
@@ -132,6 +178,15 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
         val summary = state.roomSummary.invoke()
 
+        when (val avatarAction = state.avatarAction) {
+            RoomSettingsViewState.AvatarAction.None            -> Unit
+            RoomSettingsViewState.AvatarAction.DeleteAvatar -> {
+                operationList.add(room.rx().deleteAvatar())
+            }
+            is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {
+                operationList.add(room.rx().updateAvatar(avatarAction.newAvatarUri, avatarAction.newAvatarFileName))
+            }
+        }
         if (summary?.name != state.newName) {
             operationList.add(room.rx().updateName(state.newName ?: ""))
         }
@@ -155,6 +210,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                         {
                             postLoading(false)
                             setState { copy(newHistoryVisibility = null) }
+                            deletePendingAvatar()
                             _viewEvents.post(RoomSettingsViewEvents.Success)
                         },
                         {

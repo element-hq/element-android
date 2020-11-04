@@ -174,7 +174,7 @@
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">আপনি এই ঘরের ঠিকানা হিসাবে %1$s সরিয়েছেন।</item>
-        <item quantity="other">আপনি এই ঘরের ঠিকানা হিসাবে %2$s গুলি সরিয়েছেন।</item>
+        <item quantity="other">আপনি এই ঘরের ঠিকানা হিসাবে %1$s গুলি সরিয়েছেন।</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s %2$s যোগ করেছে এবং %3$s গুলি এই ঘরের ঠিকানা হিসাবে সরানো হয়েছে।</string>
     <string name="notice_room_aliases_added_and_removed_by_you">আপনি %1$s যোগ করেছেন এবং %2$s কে এই ঘরের ঠিকানা হিসাবে সরিয়ে দিয়েছেন।</string>

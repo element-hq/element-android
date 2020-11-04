@@ -541,9 +541,9 @@
     <string name="encryption_export_export">Exportar</string>
     <string name="passphrase_enter_passphrase">Digite a frase secreta</string>
     <string name="passphrase_confirm_passphrase">Confirme a frase secreta</string>
-    <string name="encryption_export_saved_as">As chaves de sala E2E foram salvas em \'%s\'
-
-Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</string>
+    <string name="encryption_export_saved_as">As chaves E2E da sala foram salvas em \'%s\'.
+\n
+\nAtenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</string>
     <string name="encryption_import_e2e_room_keys">Importar chaves de sala E2E</string>
     <string name="encryption_import_room_keys">Importar chaves de sala</string>
     <string name="encryption_import_room_keys_summary">Importar as chaves de um arquivo local</string>
@@ -887,7 +887,8 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Um ou mais testes falharam, por favor relate um erro para nos ajudar a investigar.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Configurações do sistema</string>
     <string name="settings_troubleshoot_test_system_settings_success">Notificações estão ativadas nas configurações do sistema.</string>
-    <string name="settings_troubleshoot_test_system_settings_failed">Notificações estão desativadas nas configurações do sistema. Por favor, revise as configurações do sistema.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Notificações estão desativadas nas configurações do sistema.
+\nPor favor, revise as configurações do sistema.</string>
     <string name="open_settings">Abra as Configurações</string>
     <string name="settings_troubleshoot_test_account_settings_title">Configurações da conta</string>
     <string name="settings_troubleshoot_test_account_settings_success">Notificações estão ativadas para sua conta.</string>
@@ -902,23 +903,23 @@ Atenção: este arquivo poderá ser apagado se o aplicativo for desinstalado.</s
     <string name="settings_troubleshoot_test_device_settings_quickfix">Ativar</string>
     <string name="settings_troubleshoot_test_play_services_title">Versão do Google Play Services</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK está disponível e atualizado.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element usa Google Play Services para entregar mensagens push, mas isto não parece está configurado corretamente:
-%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Element usa Google Play Services para entregar mensagens push, mas isto não parece estar configurado corretamente:
+\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Consertar Play Services</string>
     <string name="settings_troubleshoot_test_fcm_title">Token do Firebase</string>
     <string name="settings_troubleshoot_test_fcm_success">Token FCM recuperado com sucesso:
-%1$s</string>
+\n%1$s</string>
     <string name="call_anyway">Ligar mesmo assim</string>
     <string name="settings_troubleshoot_test_fcm_failed">Falha ao recuperar o token do FCM:
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registro do token do Firebase</string>
     <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrado com sucesso no HomeServer.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Falha ao registrar o token FCM no HomeServer:
-%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Falha ao registrar o token FCM no servidor local:
+\n%1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Serviço de Notificações</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Serviço de Notificações está em execução.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Serviço de Notificações não está em execução.
-Tente reiniciar a aplicação.</string>
+\nTente reiniciar o aplicativo.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Iniciar Serviço</string>
     <string name="settings_troubleshoot_test_service_restart_success">O serviço foi encerrado e reiniciado automaticamente.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Falha ao reiniciar Serviço</string>
@@ -943,7 +944,7 @@ Tente reiniciar a aplicação.</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Mostrar alterações de foto de perfil e de nome e sobrenome.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Conexão em segundo plano</string>
     <string name="startup_notification_fdroid_battery_optim_message">Element precisa manter um baixo impacto na conexão em segundo plano para ter notificações confiáveis.
-Na próxima tela, você será solicitado a permitir que o Element funcione sempre em segundo plano, por favor aceite.</string>
+\nNa próxima tela, você será solicitado a permitir que o Element funcione sempre em segundo plano. Por favor, aceite.</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Restrições de segundo plano estão desativadas para o Element. Este teste deve ser realizado usando dados móveis (sem Wi-Fi).
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_failed">Restrições em segundo plano estão ativadas para o Element.
@@ -1189,7 +1190,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="room_widget_webview_read_protected_media">Ler as mídias protegidos por DRM</string>
     <string name="integration_manager_not_configured">O gerenciador de integrações não está configurado.</string>
     <string name="widget_integration_review_terms">Para continuar, você precisa aceitar os termos de serviço.</string>
-    <string name="you_added_a_new_device_with_info">Uma nova sessão está solicitando chaves de criptografia. Nome da sessão: %1$s
+    <string name="you_added_a_new_device_with_info">Uma nova sessão está solicitando chaves de criptografia.
+\nNome da sessão: %1$s
 \nVisto por último às: %2$s
 \nSe você não fez login em outra sessão, ignore essa solicitação.</string>
     <string name="your_unverified_device_requesting_with_info">Uma nova sessão está solicitando chaves de criptografia.
@@ -1401,7 +1403,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="fab_menu_create_chat">Conversas</string>
     <string name="create_room_title">Nova Sala</string>
     <string name="create_room_action_create">CRIAR</string>
-    <string name="create_room_name_hint">Nome da sala</string>
+    <string name="create_room_name_hint">Nome</string>
     <string name="create_room_public_title">Público</string>
     <string name="create_room_public_description">Qualquer pessoa poderá entrar nesta sala</string>
     <string name="create_room_directory_title">Lista de Salas</string>
@@ -1652,8 +1654,7 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
     <string name="login_signup_cancel_confirmation_title">Atenção</string>
     <string name="login_signup_cancel_confirmation_content">Sua conta ainda não foi criada.
 \n
-\n
-\nParar o processo de registro\?</string>
+\nCancelar o processo de registro\?</string>
     <string name="login_a11y_choose_matrix_org">Selecione matrix.org</string>
     <string name="login_a11y_choose_modular">Selecione Element nos Serviços de Matrix</string>
     <string name="login_a11y_choose_other">Selecione um servidor personalizado</string>
@@ -1703,9 +1704,8 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
 \nEntre novamente para acessar os dados e mensagens da sua conta.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Você perderá o acesso as mensagens seguras a menos que você faça login para recuperar suas chaves de criptografia.</string>
     <string name="soft_logout_clear_data_dialog_submit">Limpar dados</string>
-    <string name="soft_logout_sso_not_same_user_error">A sessão atual é para o usuário %1$s e você fornece credenciais para o usuário %2$s. Isto não é suportado por Element.
-\n
-\nPor favor, primeiro limpe os dados, depois faça o login novamente em outra conta.</string>
+    <string name="soft_logout_sso_not_same_user_error">A sessão atual é para o usuário %1$s e você fornece credenciais para o usuário %2$s. Isto não é suportado no Element.
+\nPor favor, limpe os dados do aplicativo, depois faça o login novamente em outra conta.</string>
     <string name="permalink_malformed">Seu link do matrix.to foi malformado</string>
     <string name="bug_report_error_too_short">A descrição é curta demais</string>
     <string name="notification_initial_sync">Sincronia Inicial…</string>
@@ -2239,4 +2239,15 @@ Na próxima tela, você será solicitado a permitir que o Element funcione sempr
         <item quantity="one">%d convite</item>
         <item quantity="other">%d convites</item>
     </plurals>
+    <string name="room_list_quick_actions_low_priority_remove">Remover baixa prioridade</string>
+    <string name="room_list_quick_actions_low_priority_add">Definir como baixa prioridade</string>
+    <string name="attachment_type_dialog_title">Adicionar imagem</string>
+    <string name="warning_unsaved_change_discard">Descartar alterações</string>
+    <string name="warning_unsaved_change">Existem alterações não salvas. Descartar as alterações\?</string>
+    <string name="warning_room_not_created_yet">A sala ainda não foi criada. Cancelar a criação da sala\?</string>
+    <string name="rotate_and_crop_screen_title">Girar e recortar</string>
+    <string name="create_room_settings_section">Configurações da sala</string>
+    <string name="create_room_topic_hint">Descrição</string>
+    <string name="create_room_topic_section">Descrição da sala (opcional)</string>
+    <string name="create_room_name_section">Nome da sala</string>
 </resources>

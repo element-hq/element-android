@@ -172,7 +172,7 @@
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Tekkseḍ %1$s am tansa i texxamt-a.</item>
-        <item quantity="other">Tekkseḍ %2$s am tansiwin i texxamt-a.</item>
+        <item quantity="other">Tekkseḍ %1$s am tansiwin i texxamt-a.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s yerna %2$s terniḍ tekkseḍ %3$s am tansiwin i texxamt-a.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Terniḍ %1$s terniḍ tekkseḍ %2$s am tansiwin i texxamt-a.</string>

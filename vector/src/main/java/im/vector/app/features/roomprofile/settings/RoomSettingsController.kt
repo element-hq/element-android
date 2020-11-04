@@ -23,20 +23,27 @@ import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.form.formEditTextItem
+import im.vector.app.features.form.formEditableAvatarItem
+import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomSettingsController @Inject constructor(
         private val stringProvider: StringProvider,
+        private val avatarRenderer: AvatarRenderer,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
     interface Callback {
+        // Delete the avatar, or cancel an avatar change
+        fun onAvatarDelete()
+        fun onAvatarChange()
         fun onEnableEncryptionClicked()
         fun onNameChanged(name: String)
         fun onTopicChanged(topic: String)
@@ -57,6 +64,25 @@ class RoomSettingsController @Inject constructor(
 
         val historyVisibility = data.historyVisibilityEvent?.let { formatRoomHistoryVisibilityEvent(it) } ?: ""
         val newHistoryVisibility = data.newHistoryVisibility?.let { roomHistoryVisibilityFormatter.format(it) }
+
+        formEditableAvatarItem {
+            id("avatar")
+            enabled(data.actionPermissions.canChangeAvatar)
+            when (val avatarAction = data.avatarAction) {
+                RoomSettingsViewState.AvatarAction.None -> {
+                    // Use the current value
+                    avatarRenderer(avatarRenderer)
+                    // We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
+                    matrixItem(roomSummary.toMatrixItem().copy(avatarUrl = data.currentRoomAvatarUrl))
+                }
+                RoomSettingsViewState.AvatarAction.DeleteAvatar ->
+                    imageUri(null)
+                is RoomSettingsViewState.AvatarAction.UpdateAvatar ->
+                    imageUri(avatarAction.newAvatarUri)
+            }
+            clickListener { callback?.onAvatarChange() }
+            deleteListener { callback?.onAvatarDelete() }
+        }
 
         buildProfileSection(
                 stringProvider.getString(R.string.settings)

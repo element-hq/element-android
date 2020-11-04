@@ -550,7 +550,7 @@
     <string name="fab_menu_create_chat">Isiklikud sõnumid</string>
     <string name="create_room_title">Uus jututuba</string>
     <string name="create_room_action_create">LOO</string>
-    <string name="create_room_name_hint">Jututoa nimi</string>
+    <string name="create_room_name_hint">Nimi</string>
     <string name="create_room_public_title">Avalik</string>
     <string name="create_room_public_description">Kõik võivad selle jututoaga liituda</string>
     <string name="create_room_directory_title">Jututubade loend</string>
@@ -570,7 +570,7 @@
     <string name="login_reset_password_success_notice_2">Sa oled kõikidest sessioonidest välja logitud ning enam ei saa tõuketeavitusi. Nende taaskuvamiseks logi sisse kõikides oma seadmetes.</string>
     <string name="login_reset_password_success_submit">Tagasi sisselogimise lehele</string>
     <string name="login_reset_password_cancel_confirmation_title">Hoiatus</string>
-    <string name="verification_request_start_notice">"Turvalisuse mõttes on oluline, et teed seda nii, et kas olete  üheskoos või kasutate suhtluskanalit, mida mõlemad usaldate."</string>
+    <string name="verification_request_start_notice">Turvalisuse mõttes on oluline, et teete seda nii, et olete kas isiklikult koos või kasutate mõnda suhtluskanalit, mida mõlemad usaldate.</string>
     <string name="verification_emoji_notice">Võrdle unikaalset emoji\'de kombinatsiooni ja vaata, et nad oleksid samas järjekorras.</string>
     <string name="verification_code_notice">Võrdle koodi sellega, mida kuvatakse teise kasutaja ekraanil.</string>
     <string name="verification_conclusion_ok_notice">Sõnumid selle kasutajaga on läbivalt krüptitud ning kolmandad osapooled ei saa neid lugeda.</string>
@@ -762,7 +762,7 @@
 \nKas sa soovid registreerida kasutades veebibrauseri põhist klienti\?</string>
     <string name="login_login_with_email_error">See e-posti aadress ei ole seotud ühegi kasutajakontoga.</string>
     <string name="login_reset_password_on">Loo uus salasõna koduserveris %1$s</string>
-    <string name="login_reset_password_notice">Kontrollimaks, et just sina sina ise sisestasid uue salasõna, siis saadame sulle kinnituskirja.</string>
+    <string name="login_reset_password_notice">Kontrollimaks, et just sina ise sisestasid uue salasõna, saadame kinnituskirja.</string>
     <string name="login_reset_password_submit">Järgmine</string>
     <string name="login_reset_password_email_hint">E-posti aadress</string>
     <string name="login_reset_password_password_hint">Uus salasõna</string>
@@ -864,7 +864,7 @@
     <string name="settings_category_timeline">Ajajoon</string>
     <string name="settings_category_composer">Sõnumite kirjutamine</string>
     <string name="room_settings_enable_encryption">Võta läbiv krüptimine kasutusele</string>
-    <string name="room_settings_enable_encryption_warning">"Kui krüptimine on  juba kasutusele võetud, siis ei saa seda enam eemaldada."</string>
+    <string name="room_settings_enable_encryption_warning">Kui krüptimine on juba kasutusele võetud, siis ei saa seda enam eemaldada.</string>
     <string name="room_settings_enable_encryption_dialog_title">Kas võtame krüptimise kasutusele\?</string>
     <string name="room_settings_enable_encryption_dialog_content">Kui kord juba kasutusele võetud, siis krüptimist enam hiljem ära lõpetada ei saa. Krüptitud sõnumeid ei saa lugeda ei vaheapealses veebiliikluses ega serveris ja vaid jututoa liikmed saavad neid lugeda. Krüptimise kasutusele võtmine võib takistada nii robotite kui sõnumisildade tööd.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Võta jututoas krüptimine kasutusele</string>
@@ -1273,7 +1273,7 @@
     <string name="widget_integration_review_terms">Jätkamaks pead nõustuma kasutustingimustega.</string>
     <string name="you_added_a_new_device">Sa oled lisanud uue sessiooni \'%s\', mis soovib saada krüptimisvõtmeid.</string>
     <string name="you_added_a_new_device_with_info">Uus sessioon soovib krüptovõtmeid.
-\nSessiooni nimi: %1$s 
+\nSessiooni nimi: %1$s
 \nViimati nähtud: %2$s
 \nKui sa pole mõnes muus seadmes sisse loginud, siis ära pane seda teadet tähele.</string>
     <string name="your_unverified_device_requesting">Sinu verifitseerimata sessioon \'%s\' soovib saada krüptimisvõtmeid.</string>
@@ -1385,7 +1385,7 @@
     <string name="passphrase_passphrase_does_not_match">Paroolifraasid ei klappi mitte</string>
     <string name="passphrase_empty_error_message">Palun sisesta paroolifraas</string>
     <string name="passphrase_passphrase_too_weak">Paroolifraas on liiga nõrk</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">"Kui sa soovid, et Element looks taastevõtme, siis  palun kustuta paroolifraas."</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Kui sa soovid, et Element looks taastevõtme, siis palun kustuta paroolifraas.</string>
     <string name="keys_backup_no_session_error">Matrix\'i sessioone ei leidu</string>
     <string name="keys_backup_setup_step1_title">Ära kunagi kaota krüptitud sõnumeid</string>
     <string name="keys_backup_setup_step1_description">Sõnumid krüptitud jututubades kasutavad läbivat krüptimist. Ainult sinul ja saaja(te)l on võtmed selliste sõnumite lugemiseks.
@@ -1475,7 +1475,7 @@
     <string name="autodiscover_well_known_autofill_confirm">Kasuta seadistusi</string>
     <string name="invalid_or_expired_credentials">Oled kehtetu või aegunud kasutajanime või salasõna tõttu välja logitud.</string>
     <string name="sas_verify_title">Verifitseeri lühikese sõne võrdlemise teel.</string>
-    <string name="sas_security_advise">"Parima turvalisuse mõttes on oluline, et teed seda nii, et kas olete  üheskoos või kasutate muud suhtluskanalit, mida mõlemad usaldate."</string>
+    <string name="sas_security_advise">Parima turvalisuse mõttes on oluline, et teete seda nii, et olete kas isiklikult koos või kasutate mõnda muud suhtluskanalit, mida mõlemad usaldate.</string>
     <string name="sas_verify_start_button_title">Alusta verifitseerimist</string>
     <string name="sas_incoming_request_title">Saabuv verifitseerimispalve</string>
     <string name="sas_incoming_request_description">Selle sessiooni usaldamiseks peaksid ta verifitseerima. Kui sa pruugid läbivalt krüptitud sõnumeid, siis partnerite sessioonide verifitseerimine tagab sulle täiendava meelerahu.</string>
@@ -1626,7 +1626,7 @@
     <string name="login_signin_matrix_id_error_invalid_matrix_id">See ei ole õige kasutajatunnus. Õige vorming on: \'@torekasutaja:koduserver.ee\'</string>
     <string name="autodiscover_well_known_error">Ei leia toimivat koduserverit. Palun vaata, et kasutajatunnus oleks õige</string>
     <string name="soft_logout_signin_title">Logi sisse</string>
-    <string name="soft_logout_signin_notice">"Sinu koduserveri (%1$s) haldur on sind sinu kontolt  %2$s (%3$s) välja loginud."</string>
+    <string name="soft_logout_signin_notice">Sinu koduserveri (%1$s) haldur on sind sinu kontolt %2$s (%3$s) välja loginud.</string>
     <string name="soft_logout_signin_e2e_warning_notice">Selleks, et laadida vaid siin seadmes kasutatud krüptovõtmeid, palun logi sisse. Sa vajad neid võtmeid selleks, et lugeda kõiki oma krüptitud sõnumeid kõikides oma seadmetes.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Kui sa oma krüptovõtmete taastamiseks ei logi sisse, siis sa kaotad ligipääsu oma krüptitud sõnumitele.</string>
     <string name="soft_logout_clear_data_dialog_submit">Eemalda andmed</string>
@@ -1645,7 +1645,7 @@
     <string name="settings_developer_mode_fail_fast_summary">Teadmata vigade puhul võib Element sagedamini kokku joosta</string>
     <string name="command_description_shrug">Lisa ¯\\_(ツ)_/¯ smaili vormindamata teksti algusesse</string>
     <string name="create_room_encryption_title">Võta jututoas krüptimine kasutusele</string>
-    <string name="create_room_encryption_description">"Kui krüptimine on  juba kasutusele võetud, siis ei saa seda enam eemaldada."</string>
+    <string name="create_room_encryption_description">Kui krüptimine on juba kasutusele võetud, siis ei saa seda enam eemaldada.</string>
     <string name="login_error_threepid_denied">Sinu e-posti domeeni ei saa kasutada selles serveris registreerimisel</string>
     <string name="verification_conclusion_warning">Sisselogimine ei ole usaldusväärne</string>
     <string name="verification_sas_match">Nad klapivad</string>
@@ -1688,7 +1688,7 @@
     <string name="review_logins">Vaata üle, kust sa oled Matrix\'i võrku loginud</string>
     <string name="verify_other_sessions">Selleks et sinu konto ja sõnumid oleks turvatud, verifitseeri kõik oma sessioonid</string>
     <string name="verify_this_session">Verifitseeri uus kasutajasessioon, mis pruugib sinu kontot: %1$s</string>
-    <string name="cross_signing_verify_by_text">"Verifitseeri  käsitsi etteantud teksti abil"</string>
+    <string name="cross_signing_verify_by_text">Verifitseeri käsitsi etteantud teksti abil</string>
     <string name="crosssigning_verify_session">Verifitseeri sisselogimissessioon</string>
     <string name="cross_signing_verify_by_emoji">Verifitseeri interaktiivselt Emoji abil</string>
     <string name="confirm_your_identity">Kinnita oma isikusamasust verifitseerides seda sisselogimissessiooni mõnest oma muust sessioonist. Sellega tagad ka ligipääsu krüptitud sõnumitele.</string>
@@ -2153,7 +2153,7 @@
 \n 
 \nSinu sõnumid on turvatud ning ainult sinul ja saaja(te)l on unikaalsed võtmed selliste sõnumite lugemiseks.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">See jututuba ei ole läbivalt krüptitud.</string>
-    <string name="login_error_outdated_homeserver_warning_content">"Selle koduserveri versioon on üsna vana. Palu oma koduserveri haldajat, et ta teeks vajalikud uuendused. Kui sa jätkad, siis mõni funktsionaalsus ei  pruugi toimida nii, nagu vaja."</string>
+    <string name="login_error_outdated_homeserver_warning_content">Selle koduserveri versioon on üsna vana. Palu oma koduserveri haldajat, et ta teeks vajalikud uuendused. Kui jätkad, siis mõni funktsioon ei pruugi nii nagu vaja toimida.</string>
     <string name="direct_room_join_rules_invite_by_you">Sina määrasid, et siia jututuppa pääseb vaid kutsega.</string>
     <string name="direct_room_join_rules_invite">%1$s määras, et siia jututuppa pääseb vaid kutsega.</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">Näita krüptitud jututubades tervet ajalugu</string>
@@ -2164,7 +2164,7 @@
         <item quantity="other">%d kutset</item>
     </plurals>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Sa oled klõpsinud teavitust!</string>
-    <string name="settings_troubleshoot_test_notification_notice">"Palun klõpsi teavitust. Kui sa teavitust ei näe, palun  kontrolli oma seadme seadistusi."</string>
+    <string name="settings_troubleshoot_test_notification_notice">Palun klõpsa teavitusel. Kui sa teavitust ei näe, palun kontrolli oma seadme seadistusi.</string>
     <string name="settings_troubleshoot_test_notification_title">Teavituse kuvamine</string>
     <string name="settings_troubleshoot_test_push_notification_content">Sa praegu vaatad teavitust! Klõpsi mind!</string>
     <string name="settings_troubleshoot_test_push_loop_failed">Tõuketeavituse vastuvõtmine ei õnnestunud. Üks lahendus oleks kui paigaldad rakenduse uuesti.</string>
@@ -2176,4 +2176,15 @@
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Sul ei ole õigusi siin jututoas helistamiseks</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Sul ei ole piisavalt õigusi, et selles jututoas alustada konverentsikõnet</string>
     <string name="reset">Taasta algolek</string>
+    <string name="warning_unsaved_change_discard">Loobu muudatustest</string>
+    <string name="warning_unsaved_change">Sa oled teinud muudatusi, mis on veel salvestamata. Kas soovid muudatustest loobuda\?</string>
+    <string name="warning_room_not_created_yet">See jututuba on veel loomata. Kas katkestame selle tegevuse\?</string>
+    <string name="room_list_quick_actions_low_priority_remove">Eemalda vähetähtsate jututubade seast</string>
+    <string name="room_list_quick_actions_low_priority_add">Märgi vähetähtsaks</string>
+    <string name="rotate_and_crop_screen_title">Pööra ja kadreeri</string>
+    <string name="attachment_type_dialog_title">Lisa pildid valitud asukohast</string>
+    <string name="create_room_name_section">Jututoa nimi</string>
+    <string name="create_room_settings_section">Jututoa seadistused</string>
+    <string name="create_room_topic_hint">Teema</string>
+    <string name="create_room_topic_section">Jututoa teema (kui soovid)</string>
 </resources>

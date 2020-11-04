@@ -33,16 +33,19 @@ import javax.inject.Inject
 
 class GossipingEventsPaperTrailFragment @Inject constructor(
         val viewModelFactory: GossipingEventsPaperTrailViewModel.Factory,
-        private val epoxyController: GossipingEventsEpoxyController,
+        private val epoxyController: GossipingTrailPagedEpoxyController,
         private val colorProvider: ColorProvider
-) : VectorBaseFragment(), GossipingEventsEpoxyController.InteractionListener {
+) : VectorBaseFragment(), GossipingTrailPagedEpoxyController.InteractionListener {
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
     private val viewModel: GossipingEventsPaperTrailViewModel by fragmentViewModel(GossipingEventsPaperTrailViewModel::class)
 
     override fun invalidate() = withState(viewModel) { state ->
-        epoxyController.setData(state)
+        state.events.invoke()?.let {
+            epoxyController.submitList(it)
+        }
+        Unit
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

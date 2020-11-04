@@ -21,7 +21,6 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
@@ -31,13 +30,13 @@ import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.task.TaskExecutor
@@ -47,11 +46,9 @@ import timber.log.Timber
 
 internal class DefaultRelationService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        @SessionId private val sessionId: String,
-//        private val timeLineSendEventWorkCommon: TimelineSendEventWorkCommon,
         private val eventSenderProcessor: EventSenderProcessor,
         private val eventFactory: LocalEchoEventFactory,
-        private val cryptoService: CryptoService,
+        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
         private val fetchEditHistoryTask: FetchEditHistoryTask,
         private val timelineEventMapper: TimelineEventMapper,
@@ -122,7 +119,7 @@ internal class DefaultRelationService @AssistedInject constructor(
         val event = eventFactory
                 .createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
                 .also { saveLocalEcho(it) }
-        return eventSenderProcessor.postEvent(event, cryptoService.isRoomEncrypted(roomId))
+        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 
     override fun editReply(replyToEdit: TimelineEvent,
@@ -139,11 +136,11 @@ internal class DefaultRelationService @AssistedInject constructor(
                 compatibilityBodyText
         )
                 .also { saveLocalEcho(it) }
-        return eventSenderProcessor.postEvent(event, cryptoService.isRoomEncrypted(roomId))
+        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 
     override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
-        val params = FetchEditHistoryTask.Params(roomId, cryptoService.isRoomEncrypted(roomId), eventId)
+        val params = FetchEditHistoryTask.Params(roomId, cryptoSessionInfoProvider.isRoomEncrypted(roomId), eventId)
         fetchEditHistoryTask
                 .configureWith(params) {
                     this.callback = callback
@@ -156,7 +153,7 @@ internal class DefaultRelationService @AssistedInject constructor(
                 ?.also { saveLocalEcho(it) }
                 ?: return null
 
-        return eventSenderProcessor.postEvent(event, cryptoService.isRoomEncrypted(roomId))
+        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 
     override fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary? {

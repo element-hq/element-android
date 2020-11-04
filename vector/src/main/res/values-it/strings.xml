@@ -528,7 +528,8 @@
     <string name="room_settings_copy_room_address">Copia indirizzo stanza</string>
     <string name="room_settings_addresses_e2e_enabled">Crittografia abilitata in questa stanza.</string>
     <string name="room_settings_addresses_e2e_disabled">Crittografia disabilitata in questa stanza.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Abilita crittografia\n(attenzione: non può più essere disabilitata!)</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Attiva crittografia
+\n(attenzione: non potrà più essere disattivata!)</string>
     <!-- Directory -->
     <string name="directory_title">Elenco</string>
     <string name="settings_theme">Tema</string>
@@ -1167,8 +1168,9 @@
     <string name="error_jitsi_not_supported_on_old_device">Purtroppo i vecchi dispositivi (quelli con Android precedenti al 5.0) non supportano le conferenze con Jitsi</string>
     <string name="title_activity_verify_device">Verifica sessione</string>
     <string name="encryption_information_unknown_ip">IP sconosciuto</string>
-    <string name="you_added_a_new_device_with_info">Una nuova sessione sta chiedendo le chiavi crittografiche. Nome sessione: %1$s 
-\nUltimo accesso: %2$s 
+    <string name="you_added_a_new_device_with_info">Una nuova sessione sta chiedendo le chiavi crittografiche.
+\nNome sessione: %1$s
+\nUltimo accesso: %2$s
 \nSe non hai effettuato l\'accesso da un\'altra sessione, ignora questa richiesta.</string>
     <string name="your_unverified_device_requesting_with_info">Una sessione non verificata sta chiedendo le chiavi crittografiche. 
 \nNome sessione: %1$s 
@@ -1256,7 +1258,7 @@
     <string name="fab_menu_create_chat">Messaggi diretti</string>
     <string name="create_room_title">Nuova stanza</string>
     <string name="create_room_action_create">CREA</string>
-    <string name="create_room_name_hint">Nome stanza</string>
+    <string name="create_room_name_hint">Nome</string>
     <string name="create_room_public_title">Pubblica</string>
     <string name="create_room_public_description">Tutti potranno entrare in questa stanza</string>
     <string name="create_room_directory_title">Elenco stanze</string>
@@ -2237,4 +2239,15 @@
     <string name="settings_security_pin_code_grace_period_title">Richiedi il PIN dopo 2 minuti</string>
     <string name="direct_room_created_summary_item">%s è entrato.</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">L\'applicazione è in attesa del PUSH</string>
+    <string name="warning_unsaved_change_discard">Scarta modifiche</string>
+    <string name="warning_unsaved_change">Ci sono modifiche non salvate. Scartare le modifiche\?</string>
+    <string name="warning_room_not_created_yet">La stanza non è ancora stata creata. Annullare la creazione della stanza\?</string>
+    <string name="room_list_quick_actions_low_priority_remove">Rimuovi da priorità bassa</string>
+    <string name="room_list_quick_actions_low_priority_add">Aggiungi in priorità bassa</string>
+    <string name="rotate_and_crop_screen_title">Ruota e ritaglia</string>
+    <string name="attachment_type_dialog_title">Aggiungi immagine da</string>
+    <string name="create_room_settings_section">Impostazioni stanza</string>
+    <string name="create_room_topic_hint">Argomento</string>
+    <string name="create_room_topic_section">Argomento stanza (facoltativo)</string>
+    <string name="create_room_name_section">Nome stanza</string>
 </resources>

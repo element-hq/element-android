@@ -52,6 +52,7 @@ import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import javax.inject.Inject
 
@@ -233,7 +234,10 @@ class RoomListFragment @Inject constructor(
                 navigator.openRoomProfile(requireActivity(), quickAction.roomId)
             }
             is RoomListQuickActionsSharedAction.Favorite                  -> {
-                roomListViewModel.handle(RoomListAction.ToggleFavorite(quickAction.roomId))
+                roomListViewModel.handle(RoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_FAVOURITE))
+            }
+            is RoomListQuickActionsSharedAction.LowPriority               -> {
+                roomListViewModel.handle(RoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_LOW_PRIORITY))
             }
             is RoomListQuickActionsSharedAction.Leave                     -> {
                 AlertDialog.Builder(requireContext())

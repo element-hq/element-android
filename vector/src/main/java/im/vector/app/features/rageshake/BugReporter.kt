@@ -33,6 +33,7 @@ import im.vector.app.core.extensions.getAllChildFragments
 import im.vector.app.core.extensions.toOnOff
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.devtools.GossipingEventsSerializer
 import im.vector.app.features.settings.locale.SystemLocaleProvider
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
@@ -74,6 +75,7 @@ class BugReporter @Inject constructor(
         private const val LOG_CAT_FILENAME = "logcat.log"
         private const val LOG_CAT_SCREENSHOT_FILENAME = "screenshot.png"
         private const val CRASH_FILENAME = "crash.log"
+        private const val KEY_REQUESTS_FILENAME = "keyRequests.log"
 
         private const val BUFFER_SIZE = 1024 * 1024 * 50
     }
@@ -143,6 +145,7 @@ class BugReporter @Inject constructor(
      * @param forSuggestion     true to send a suggestion
      * @param withDevicesLogs   true to include the device log
      * @param withCrashLogs     true to include the crash logs
+     * @param withKeyRequestHistory true to include the crash logs
      * @param withScreenshot    true to include the screenshot
      * @param theBugDescription the bug description
      * @param listener          the listener
@@ -152,6 +155,7 @@ class BugReporter @Inject constructor(
                       forSuggestion: Boolean,
                       withDevicesLogs: Boolean,
                       withCrashLogs: Boolean,
+                      withKeyRequestHistory: Boolean,
                       withScreenshot: Boolean,
                       theBugDescription: String,
                       listener: IMXBugReportListener?) {
@@ -206,6 +210,22 @@ class BugReporter @Inject constructor(
                         }
                     }
                 }
+
+                activeSessionHolder.getSafeActiveSession()
+                        ?.takeIf { !mIsCancelled && withKeyRequestHistory }
+                        ?.cryptoService()
+                        ?.getGossipingEvents()
+                        ?.let { GossipingEventsSerializer().serialize(it) }
+                        ?.toByteArray()
+                        ?.let { rawByteArray ->
+                            File(context.cacheDir.absolutePath, KEY_REQUESTS_FILENAME)
+                                    .also {
+                                        it.outputStream()
+                                                .use { os -> os.write(rawByteArray) }
+                                    }
+                        }
+                        ?.let { compressFile(it) }
+                        ?.let { gzippedFiles.add(it) }
 
                 var deviceId = "undefined"
                 var userId = "undefined"
@@ -426,6 +446,10 @@ class BugReporter @Inject constructor(
      */
     fun openBugReportScreen(activity: FragmentActivity, forSuggestion: Boolean = false) {
         screenshot = takeScreenshot(activity)
+        activeSessionHolder.getSafeActiveSession()?.let {
+            it.logDbUsageInfo()
+            it.cryptoService().logDbUsageInfo()
+        }
 
         val intent = Intent(activity, BugReportActivity::class.java)
         intent.putExtra("FOR_SUGGESTION", forSuggestion)

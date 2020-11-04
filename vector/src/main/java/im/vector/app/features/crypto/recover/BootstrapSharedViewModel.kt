@@ -103,7 +103,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     } else {
                         // we need to get existing backup passphrase/key and convert to SSSS
                         val keyVersion = awaitCallback<KeysVersionResult?> {
-                            session.cryptoService().keysBackupService().getVersion(version.version ?: "", it)
+                            session.cryptoService().keysBackupService().getVersion(version.version, it)
                         }
                         if (keyVersion == null) {
                             // strange case... just finish?

@@ -38,10 +38,23 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRoomPreviewAvatar"
-        app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewFavorite"
+        app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewLowPriority"
         app:layout_constraintStart_toEndOf="@id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
         tools:text="@tools:sample/full_names" />
+
+    <ImageView
+        android:id="@+id/bottomSheetRoomPreviewLowPriority"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_low_priority_24"
+        app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRoomPreviewAvatar"
+        app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewFavorite"
+        app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
+        tools:contentDescription="@string/room_list_quick_actions_low_priority_add"
+        tools:tint="?riotx_text_secondary" />
 
     <ImageView
         android:id="@+id/bottomSheetRoomPreviewFavorite"
