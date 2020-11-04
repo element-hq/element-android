@@ -44,7 +44,9 @@ internal class MXOlmDevice @Inject constructor(
         /**
          * The store where crypto data is saved.
          */
-        private val store: IMXCryptoStore) {
+        private val store: IMXCryptoStore,
+        private val inboundGroupSessionStore: InboundGroupSessionStore
+        ) {
 
     /**
      * @return the Curve25519 key for the account.
@@ -657,7 +659,7 @@ internal class MXOlmDevice @Inject constructor(
                 timelineSet.add(messageIndexKey)
             }
 
-            store.storeInboundGroupSessions(listOf(session))
+            inboundGroupSessionStore.storeInBoundGroupSession(session)
             val payload = try {
                 val adapter = MoshiProvider.providesMoshi().adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
                 val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)
@@ -745,7 +747,7 @@ internal class MXOlmDevice @Inject constructor(
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_SENDER_KEY, MXCryptoError.ERROR_MISSING_PROPERTY_REASON)
         }
 
-        val session = store.getInboundGroupSession(sessionId, senderKey)
+        val session =  inboundGroupSessionStore.getInboundGroupSession(sessionId, senderKey)
 
         if (session != null) {
             // Check that the room id matches the original one for the session. This stops

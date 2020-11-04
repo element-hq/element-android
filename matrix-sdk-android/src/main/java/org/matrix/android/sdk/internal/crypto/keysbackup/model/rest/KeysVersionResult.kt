@@ -26,24 +26,24 @@ data class KeysVersionResult(
          * The algorithm used for storing backups. Currently, only "m.megolm_backup.v1.curve25519-aes-sha2" is defined
          */
         @Json(name = "algorithm")
-        override val algorithm: String? = null,
+        override val algorithm: String,
 
         /**
          * algorithm-dependent data, for "m.megolm_backup.v1.curve25519-aes-sha2"
          * see [org.matrix.android.sdk.internal.crypto.keysbackup.MegolmBackupAuthData]
          */
         @Json(name = "auth_data")
-        override val authData: JsonDict? = null,
+        override val authData: JsonDict,
 
         // the backup version
         @Json(name = "version")
-        val version: String? = null,
+        val version: String,
 
         // The hash value which is an opaque string representing stored keys in the backup
-        @Json(name = "hash")
-        val hash: String? = null,
+        @Json(name = "etag")
+        val hash: String,
 
         // The number of keys stored in the backup.
         @Json(name = "count")
-        val count: Int? = null
+        val count: Int
 ) : KeysAlgorithmAndData

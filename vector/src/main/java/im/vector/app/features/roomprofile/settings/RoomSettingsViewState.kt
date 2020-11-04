@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.settings
 
+import android.net.Uri
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
@@ -29,6 +30,8 @@ data class RoomSettingsViewState(
         val historyVisibilityEvent: Event? = null,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
+        val currentRoomAvatarUrl: String? = null,
+        val avatarAction: AvatarAction = AvatarAction.None,
         val newName: String? = null,
         val newTopic: String? = null,
         val newHistoryVisibility: RoomHistoryVisibility? = null,
@@ -40,10 +43,18 @@ data class RoomSettingsViewState(
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 
     data class ActionPermissions(
+            val canChangeAvatar: Boolean = false,
             val canChangeName: Boolean = false,
             val canChangeTopic: Boolean = false,
             val canChangeCanonicalAlias: Boolean = false,
             val canChangeHistoryReadability: Boolean = false,
             val canEnableEncryption: Boolean = false
     )
+
+    sealed class AvatarAction {
+        object None : AvatarAction()
+        object DeleteAvatar : AvatarAction()
+        data class UpdateAvatar(val newAvatarUri: Uri,
+                                val newAvatarFileName: String) : AvatarAction()
+    }
 }

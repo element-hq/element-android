@@ -87,6 +87,7 @@ import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
 import im.vector.app.features.settings.VectorSettingsAdvancedNotificationPreferenceFragment
+import im.vector.app.features.settings.VectorSettingsGeneralFragment
 import im.vector.app.features.settings.VectorSettingsHelpAboutFragment
 import im.vector.app.features.settings.VectorSettingsLabsFragment
 import im.vector.app.features.settings.VectorSettingsNotificationPreferenceFragment
@@ -291,6 +292,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VectorSettingsPinFragment::class)
     fun bindVectorSettingsPinFragment(fragment: VectorSettingsPinFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VectorSettingsGeneralFragment::class)
+    fun bindVectorSettingsGeneralFragment(fragment: VectorSettingsGeneralFragment): Fragment
 
     @Binds
     @IntoMap

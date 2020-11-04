@@ -238,4 +238,9 @@ interface Session :
     }
 
     val sharedSecretStorageService: SharedSecretStorageService
+
+    /**
+     * Maintenance API, allows to print outs info on DB size to logcat
+     */
+    fun logDbUsageInfo()
 }

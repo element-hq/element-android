@@ -68,11 +68,4 @@
         app:showAsAction="never"
         tools:visible="true" />
 
-    <item
-        android:id="@+id/clear_message_queue"
-        android:title="@string/clear_timeline_send_queue"
-        android:visible="@bool/debug_mode"
-        app:showAsAction="never"
-        tools:visible="true" />
-
 </menu>

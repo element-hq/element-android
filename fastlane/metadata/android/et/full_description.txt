@@ -1,0 +1,30 @@
+Element on uut tüüpi suhtlus- ja koostöörakendus, mis:
+
+1. Võimaldab täielikku kontrolli privaatsuse üle
+2. Võimaldab suhelda kõigiga Matrixi võrgus ja isegi väljaspool seda, olles integreeritud selliste rakendustega nagu Slack
+3. Kaitseb sind reklaamide ja andmekogumise eest
+4. Tagab turvalisuse läbiva krüptimise abil, kasutades risttunnustamist vestlejate tuvastamiseks
+
+Element erineb täielikult teistest sõnumside- ja koostöörakendustest, kuna see on detsentraliseeritud ja avatud lähtekoodiga.
+
+Element võimaldab ise hostida - või valida hosti -, et oleks tagatud privaatsus ja kontroll oma andmete ja vestluste üle. Element annab ka juurdepääsu avatud võrgule, nii et te ei pea vaid Elemendi kasutajatega rääkima. Ning kogu süsteem on väga turvaline.
+
+Element töötab Matrixil - avatud, detsentraliseeritud suhtlus-standardil.
+
+Võimaldades valida, kes vestlusi korraldab, annab Element annab kontrolli sinule. Rakendust Element saad kasutada mitmel viisil.
+
+1. Tasuta konto Matrixi arendajate hostitud avalikus serveris matrix.org või vali tuhandete avalike serverite hulgast, mida haldavad vabatahtlikud
+2. Hosti oma kontot ise, paigaldades serveri oma riistvarale
+3. Registreeruge serveris olevale kontole, tellides Element Matrix Services teenuseplatvormi
+
+<b> Miks valida element? </b>
+
+<b> KONTROLL ANDMETE ÜLE</b>: otsustad ise, kus oma andmeid ja sõnumeid hoida. Need kuuluvad sulle ja sinu käes on kontroll, mitte mõne MEGAFIRMA käes, mis andmeid oma kasuks kaevandab või kolmandatele isikutele juurdepääsu annab.
+
+<b> AVATUD SUHTLUS JA KOOSTÖÖ </b>: saad vestelda kõigi teistega Matrixi võrgus, olenemata sellest, kas nad kasutavad Elementi või mõnda muud Matrixi rakendust, ja isegi kui nad kasutavad teistsugust suhtlussüsteemi nagu Slack, IRC või XMPP.
+
+<b> ÜLITURVALINE </b>: tõeline läbiv krüptimine (ainult vestluses osalejad saavad sõnumeid lugeda) ja risttunnustamine vestluses osalejate tuvastamiseks.
+
+<b> KÕIK SUHTLUSVÕIMALUSED</b>: sõnumid, hääl- ja videokõned, failide jagamine, ekraani jagamine ja terve hulk lõiminguid, roboteid ja vidinaid. Loo tubasid, kogukondi, hoia ühendust ja saa asjad aetud.
+
+<b> KÕIKJAL, KUS VIIBITE</b>: saad suhelda kõigis oma seadmetes ja ka veebis aadressil https://app.element.io ning sealjuures täielikult sünkroonitud sõnumite ajalooga.

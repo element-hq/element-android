@@ -40,7 +40,8 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
     private lateinit var notificationUtils: NotificationUtils
     private lateinit var webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 
-    private var callRingPlayer: CallRingPlayer? = null
+    private var callRingPlayerIncoming: CallRingPlayerIncoming? = null
+    private var callRingPlayerOutgoing: CallRingPlayerOutgoing? = null
 
     private var wiredHeadsetStateReceiver: WiredHeadsetStateReceiver? = null
     private var bluetoothHeadsetStateReceiver: BluetoothHeadsetReceiver? = null
@@ -63,14 +64,16 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         super.onCreate()
         notificationUtils = vectorComponent().notificationUtils()
         webRtcPeerConnectionManager = vectorComponent().webRtcPeerConnectionManager()
-        callRingPlayer = CallRingPlayer(applicationContext)
+        callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext)
+        callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext)
         wiredHeadsetStateReceiver = WiredHeadsetStateReceiver.createAndRegister(this, this)
         bluetoothHeadsetStateReceiver = BluetoothHeadsetReceiver.createAndRegister(this, this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        callRingPlayer?.stop()
+        callRingPlayerIncoming?.stop()
+        callRingPlayerOutgoing?.stop()
         wiredHeadsetStateReceiver?.let { WiredHeadsetStateReceiver.unRegister(this, it) }
         wiredHeadsetStateReceiver = null
         bluetoothHeadsetStateReceiver?.let { BluetoothHeadsetReceiver.unRegister(this, it) }
@@ -100,16 +103,17 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         when (intent.action) {
             ACTION_INCOMING_RINGING_CALL -> {
                 mediaSession?.isActive = true
-                callRingPlayer?.start()
+                callRingPlayerIncoming?.start()
                 displayIncomingCallNotification(intent)
             }
             ACTION_OUTGOING_RINGING_CALL -> {
                 mediaSession?.isActive = true
-                callRingPlayer?.start()
+                callRingPlayerOutgoing?.start()
                 displayOutgoingRingingCallNotification(intent)
             }
             ACTION_ONGOING_CALL          -> {
-                callRingPlayer?.stop()
+                callRingPlayerIncoming?.stop()
+                callRingPlayerOutgoing?.stop()
                 displayCallInProgressNotification(intent)
             }
             ACTION_NO_ACTIVE_CALL        -> hideCallNotifications()
@@ -117,7 +121,8 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
                 // lower notification priority
                 displayCallInProgressNotification(intent)
                 // stop ringing
-                callRingPlayer?.stop()
+                callRingPlayerIncoming?.stop()
+                callRingPlayerOutgoing?.stop()
             }
             ACTION_ONGOING_CALL_BG       -> {
                 // there is an ongoing call but call activity is in background
@@ -125,7 +130,8 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
             }
             else                         -> {
                 // Should not happen
-                callRingPlayer?.stop()
+                callRingPlayerIncoming?.stop()
+                callRingPlayerOutgoing?.stop()
                 myStopSelf()
             }
         }

@@ -17,14 +17,12 @@
 
 package im.vector.app.features.roomprofile
 
-import android.net.Uri
 import im.vector.app.core.platform.VectorViewModelAction
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 
 sealed class RoomProfileAction : VectorViewModelAction {
     object LeaveRoom : RoomProfileAction()
     data class ChangeRoomNotificationState(val notificationState: RoomNotificationState) : RoomProfileAction()
-    data class ChangeRoomAvatar(val uri: Uri, val fileName: String?) : RoomProfileAction()
     object ShareRoomProfile : RoomProfileAction()
     object CreateShortcut : RoomProfileAction()
 }

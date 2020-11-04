@@ -88,7 +88,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
      * @param requestBody requestBody
      */
     fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.computation) {
             cancelRoomKeyRequest(requestBody, false)
         }
     }
@@ -99,7 +99,7 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
      * @param requestBody requestBody
      */
     fun resendRoomKeyRequest(requestBody: RoomKeyRequestBody) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.computation) {
             cancelRoomKeyRequest(requestBody, true)
         }
     }

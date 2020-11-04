@@ -1,9 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s изпрати снимка.</string>
-
     <string name="notice_room_invite_no_invitee">Поканата на %s</string>
     <string name="notice_room_invite">%1$s покани %2$s</string>
     <string name="notice_room_invite_you">%1$s Ви покани</string>
@@ -22,7 +20,7 @@
     <string name="notice_room_name_changed">%1$s смени името на стаята на: %2$s</string>
     <string name="notice_placed_video_call">%s започна видео разговор.</string>
     <string name="notice_placed_voice_call">%s започна гласов разговор.</string>
-    <string name="notice_answered_call">%s отговори на повикването.</string>
+    <string name="notice_answered_call">%s отговори на обаждането.</string>
     <string name="notice_ended_call">%s прекрати разговора.</string>
     <string name="notice_made_future_room_visibility">%1$s направи бъдещата история на стаята видима за %2$s</string>
     <string name="notice_room_visibility_invited">всички членове, от момента на поканването им в нея.</string>
@@ -31,54 +29,39 @@
     <string name="notice_room_visibility_world_readable">всеки.</string>
     <string name="notice_room_visibility_unknown">непозната (%s).</string>
     <string name="notice_end_to_end">%1$s включи шифроване от край до край (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s заяви VoIP групов разговор</string>
     <string name="notice_voip_started">Започна VoIP групов разговор</string>
     <string name="notice_voip_finished">Груповият разговор приключи</string>
-
     <string name="notice_avatar_changed_too">(профилната снимка също беше сменена)</string>
     <string name="notice_room_name_removed">%1$s премахна името на стаята</string>
     <string name="notice_room_topic_removed">%1$s премахна темата на стаята</string>
     <string name="notice_profile_change_redacted">%1$s обнови своя профил %2$s</string>
     <string name="notice_room_third_party_invite">%1$s изпрати покана на %2$s да се присъедини към стаята</string>
     <string name="notice_room_third_party_registered_invite">%1$s прие поканата за %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Неуспешно разшифроване: %s **</string>
     <string name="could_not_redact">Неуспешно премахване</string>
     <string name="unable_to_send_message">Неуспешно изпращане на съобщението</string>
-
     <string name="message_failed_to_upload">Неуспешно качване на снимката</string>
-
     <string name="network_error">Грешка в мрежата</string>
     <string name="matrix_error">Matrix грешка</string>
-
     <string name="room_error_join_failed_empty_room">В момента не е възможно да се присъедините отново към празна стая.</string>
-
     <string name="encrypted_message">Шифровано съобщение</string>
-
     <string name="medium_email">Имейл адрес</string>
     <string name="medium_phone_number">Телефонен номер</string>
-
     <string name="notice_crypto_error_unkwown_inbound_session_id">Устройството на подателя не изпрати ключовете за това съобщение.</string>
-
     <string name="summary_user_sent_sticker">%1$s изпрати стикер.</string>
-
     <string name="room_displayname_invite_from">Покана от %s</string>
     <string name="room_displayname_room_invite">Покана за стая</string>
     <string name="room_displayname_two_members">%1$s и %2$s</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s и 1 друг</item>
         <item quantity="other">%1$s и %2$d други</item>
     </plurals>
-
     <string name="room_displayname_empty_room">Празна стая</string>
-
     <string name="notice_event_redacted">Премахнато съобщение</string>
     <string name="notice_event_redacted_by">Съобщение премахнато от %1$s</string>
     <string name="notice_event_redacted_with_reason">Премахнато съобщение [причина: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Съобщение премахнато от %1$s [причина: %2$s]</string>
-
     <string name="initial_sync_start_importing_account">Начална синхронизация:
 \nИмпортиране на профил…</string>
     <string name="initial_sync_start_importing_account_crypto">Начална синхронизация:
@@ -95,12 +78,9 @@
 \nИмпортиране на общности</string>
     <string name="initial_sync_start_importing_account_data">Начална синхронизация:
 \nИмпортиране на данни за профила</string>
-
     <string name="notice_room_update">%s обнови тази стая.</string>
-
     <string name="event_status_sending_message">Изпращане на съобщение…</string>
     <string name="clear_timeline_send_queue">Изчисти опашката за изпращане</string>
-
     <string name="notice_room_third_party_revoked_invite">%1$s оттегли поканата за присъединяване на %2$s към стаята</string>
     <string name="notice_room_invite_no_invitee_with_reason">поканата на %1$s. Причина: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s покани %2$s. Причина: %3$s</string>
@@ -115,34 +95,25 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s премахна поканата за присъединяване на %2$s в стаята. Причина: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s прие поканата за %2$s. Причина: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s оттегли поканата на %2$s. Причина: %3$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s добави %2$s като адрес за тази стая.</item>
         <item quantity="other">%1$s добави %2$s като адреси за тази стая.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s премахна %2$s като адрес за тази стая.</item>
         <item quantity="other">%1$s премахна %2$s като адреси за тази стая.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s добави %2$s и премахна %3$s като адреси за тази стая.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s настрой %2$s като основен адрес за тази стая.</string>
     <string name="notice_room_canonical_alias_unset">%1$s премахна основния адрес за тази стая.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s разреши на гости да се присъединяват в стаята.</string>
     <string name="notice_room_guest_access_forbidden">%1$s предотврати присъединяването на гости в стаята.</string>
-
     <string name="notice_end_to_end_ok">%1$s включи шифроване от-край-до-край.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s включи шифроване от-край-до-край (неразпознат алгоритъм %2$s).</string>
-
     <string name="key_verification_request_fallback_message">%s изпрати запитване за потвърждение на ключа ви, но клиентът ви не поддържа верифициране посредством чат. Ще трябва да използвате стария метод за верифициране на ключове.</string>
-
     <string name="notice_room_created">%1$s създаде стаята</string>
     <string name="summary_you_sent_image">Изпратихте снимка.</string>
     <string name="summary_you_sent_sticker">Изпратихте стикер.</string>
-
     <string name="notice_room_invite_no_invitee_by_you">Ваша покана</string>
     <string name="notice_room_created_by_you">Създадохте стаята</string>
     <string name="notice_room_invite_by_you">Поканихте %1$s</string>
@@ -152,4 +123,94 @@
     <string name="notice_room_kick_by_you">Изгонихте %1$s</string>
     <string name="notice_room_unban_by_you">Отблокирахте %1$s</string>
     <string name="notice_room_ban_by_you">Блокирахте %1$s</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Включихте шифроване от-край-до-край (непознат алгоритъм: %1$s).</string>
+    <string name="notice_end_to_end_ok_by_you">Включихте шифроване от-край-до-край.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Спряхте възможността гости да се присъединяват в стаята.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s спря възможността гости да се присъединяват в стаята.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Спряхте възможността гости да се присъединяват в стаята.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Позволихте на гости да се присъединяват тук.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s позволи на гости да се присъединяват тук.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Позволихте на гости да се присъединяват към стаята.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Премахнахте основния адрес на стаята.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Зададохте %1$s като основен адрес на стаята.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Добавихте %1$s и премахнахте %2$s от адресите за стаята.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Премахнахте %1$s от адресите на стаята.</item>
+        <item quantity="other">Премахнахте %1$s от адресите на стаята.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Добавихте %1$s като адрес за тази стая.</item>
+        <item quantity="other">Добавихте %1$s като адреси за тази стая.</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">Оттеглихте поканата на %1$s. Причина: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Приехте поканата за %1$s. Причина: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Оттеглихте поканата за присъединяване в стаята от %1$s. Причина: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Изпратихте покана към %1$s за присъединяване в стаята. Причина: %2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Блокирахте %1$s. Причина: %2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Отблокирахте %1$s. Причина: %2$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Изгонихте %1$s. Причина: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Отхвърлихте поканата. Причина: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Напуснахте. Причина: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s напусна. Причина: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Напуснахте стаята. Причина: %1$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Присъединихте се. Причина: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s се присъедини. Причина: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Присъединихте се в стаята. Причина: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Поканихте %1$s. Причина: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Ваша покана. Причина: %1$s</string>
+    <string name="notice_power_level_diff">%1$s от %2$s на %3$s</string>
+    <string name="notice_power_level_changed">%1$s промени нивото на достъп на %2$s.</string>
+    <string name="notice_power_level_changed_by_you">Променихте нивото на достъп на %1$s.</string>
+    <string name="power_level_custom_no_value">Собствено ниво</string>
+    <string name="power_level_custom">Собствено ниво (%1$d)</string>
+    <string name="power_level_default">По подразбиране</string>
+    <string name="power_level_moderator">Модератор</string>
+    <string name="power_level_admin">Администратор</string>
+    <string name="notice_widget_modified_by_you">Променихте %1$s приспособлението</string>
+    <string name="notice_widget_modified">%1$s промени %2$s приспособлението</string>
+    <string name="notice_widget_removed_by_you">Премахнахте %1$s приспособлението</string>
+    <string name="notice_widget_removed">%1$s премахна %2$s приспособлението</string>
+    <string name="notice_widget_added_by_you">Добавихте %1$s приспособление</string>
+    <string name="notice_widget_added">%1$s добави %2$s приспособление</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Приехте поканата за %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Оттеглихте поканата от %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s оттегли поканата от %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Оттеглихте поканата за присъединяване в стаята от %1$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Поканихте %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s покани %2$s</string>
+    <string name="notice_room_third_party_invite_by_you">Изпратихте покана към %1$s за присъединяване в стаята</string>
+    <string name="notice_profile_change_redacted_by_you">Обновихте профила си %1$s</string>
+    <string name="notice_room_avatar_removed_by_you">Премахнахте снимката на стаята</string>
+    <string name="notice_room_avatar_removed">%1$s премахна снимката на стаята</string>
+    <string name="notice_room_topic_removed_by_you">Премахнахте темата на стаята</string>
+    <string name="notice_room_name_removed_by_you">Премахнахте името на стаята</string>
+    <string name="notice_requested_voip_conference_by_you">Заявихте VoIP конференция</string>
+    <string name="notice_direct_room_update_by_you">Обновихте чата.</string>
+    <string name="notice_direct_room_update">%s обнови чата.</string>
+    <string name="notice_room_update_by_you">Обновихте стаята.</string>
+    <string name="notice_end_to_end_by_you">Включихте шифроване от-край-до-край (%1$s)</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Направихте бъдещите съобщения видими за %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s направи бъдещите съобщения видими за %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Направихте бъдещата история на стаята видима за %1$s</string>
+    <string name="notice_ended_call_by_you">Прекратихте разговора.</string>
+    <string name="notice_placed_video_call_by_you">Започнахте видео разговор.</string>
+    <string name="notice_answered_call_by_you">Отговорихте на обаждането.</string>
+    <string name="notice_call_candidates_by_you">Изпратихте данни за настройка на разговора.</string>
+    <string name="notice_call_candidates">%s изпрати данни за настройка на разговора.</string>
+    <string name="notice_placed_voice_call_by_you">Започнахте гласов разговор.</string>
+    <string name="notice_room_name_changed_by_you">Променихте името на стаята на: %1$s</string>
+    <string name="notice_room_avatar_changed_by_you">Променихте снимката на стаята</string>
+    <string name="notice_room_avatar_changed">%1$s промени снимката на стаята</string>
+    <string name="notice_room_topic_changed_by_you">Променихте темата на: %1$s</string>
+    <string name="notice_display_name_removed_by_you">Премахнахте името си (%1$s)</string>
+    <string name="notice_display_name_changed_from_by_you">Променихте името си от %1$s на %2$s</string>
+    <string name="notice_display_name_set_by_you">Променихте името си на %1$s</string>
+    <string name="notice_avatar_url_changed_by_you">Променихте снимката си</string>
+    <string name="notice_room_withdraw_by_you">Оттеглихте поканата от %1$s</string>
+    <string name="notice_direct_room_leave_by_you">Напуснахте стаята</string>
+    <string name="notice_direct_room_leave">%1$s напусна стаята</string>
+    <string name="notice_direct_room_join_by_you">Присъединихте се</string>
+    <string name="notice_direct_room_join">%1$s се присъедини</string>
+    <string name="notice_direct_room_created_by_you">Създадохте дискусията</string>
+    <string name="notice_direct_room_created">%1$s създаде дискусията</string>
 </resources>

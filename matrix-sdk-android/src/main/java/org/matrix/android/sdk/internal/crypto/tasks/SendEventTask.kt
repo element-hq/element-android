@@ -15,7 +15,7 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
-import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -23,13 +23,12 @@ import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface SendEventTask : Task<SendEventTask.Params, String> {
     data class Params(
             val event: Event,
-            val cryptoService: CryptoService?
+            val encrypt: Boolean
     )
 }
 
@@ -40,11 +39,11 @@ internal class DefaultSendEventTask @Inject constructor(
         private val eventBus: EventBus) : SendEventTask {
 
     override suspend fun execute(params: SendEventTask.Params): String {
-        val event = handleEncryption(params)
-        val localId = event.eventId!!
-
         try {
-            localEchoRepository.updateSendState(localId, SendState.SENDING)
+            val event = handleEncryption(params)
+            val localId = event.eventId!!
+
+            localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENDING)
             val executeRequest = executeRequest<SendResponse>(eventBus) {
                 apiCall = roomAPI.send(
                         localId,
@@ -53,26 +52,22 @@ internal class DefaultSendEventTask @Inject constructor(
                         eventType = event.type
                 )
             }
-            localEchoRepository.updateSendState(localId, SendState.SENT)
+            localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENT)
             return executeRequest.eventId
         } catch (e: Throwable) {
-            localEchoRepository.updateSendState(localId, SendState.UNDELIVERED)
+//            localEchoRepository.updateSendState(params.event.eventId!!, SendState.UNDELIVERED)
             throw e
         }
     }
 
+    @Throws
     private suspend fun handleEncryption(params: SendEventTask.Params): Event {
-        if (params.cryptoService?.isRoomEncrypted(params.event.roomId ?: "") == true) {
-            try {
-                return encryptEventTask.execute(EncryptEventTask.Params(
-                        params.event.roomId ?: "",
-                        params.event,
-                        listOf("m.relates_to"),
-                        params.cryptoService
-                ))
-            } catch (throwable: Throwable) {
-                // We said it's ok to send verification request in clear
-            }
+        if (params.encrypt && !params.event.isEncrypted()) {
+            return encryptEventTask.execute(EncryptEventTask.Params(
+                    params.event.roomId ?: "",
+                    params.event,
+                    listOf("m.relates_to")
+            ))
         }
         return params.event
     }

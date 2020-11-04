@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.airbnb.mvrx.viewModel
+import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -58,19 +59,19 @@ class RoomDirectoryActivity : VectorBaseActivity() {
                 .subscribe { sharedAction ->
                     when (sharedAction) {
                         is RoomDirectorySharedAction.Back           -> onBackPressed()
-                        is RoomDirectorySharedAction.CreateRoom     ->
+                        is RoomDirectorySharedAction.CreateRoom     -> {
                             addFragmentToBackstack(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
+                            // Transmit the filter to the createRoomViewModel
+                            withState(roomDirectoryViewModel) {
+                                createRoomViewModel.handle(CreateRoomAction.SetName(it.currentFilter))
+                            }
+                        }
                         is RoomDirectorySharedAction.ChangeProtocol ->
                             addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
                         is RoomDirectorySharedAction.Close          -> finish()
                     }
                 }
                 .disposeOnDestroy()
-
-        roomDirectoryViewModel.selectSubscribe(this, PublicRoomsViewState::currentFilter) { currentFilter ->
-            // Transmit the filter to the createRoomViewModel
-            createRoomViewModel.handle(CreateRoomAction.SetName(currentFilter))
-        }
     }
 
     override fun initUiAndData() {

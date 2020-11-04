@@ -183,7 +183,7 @@
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Hai rimosso %1$s come indirizzo per questa stanza.</item>
-        <item quantity="other">Hai rimosso %2$s come indirizzi per questa stanza.</item>
+        <item quantity="other">Hai rimosso %1$s come indirizzi per questa stanza.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed_by_you">Hai aggiunto %1$s e rimosso %2$s come indirizzi per questa stanza.</string>
     <string name="notice_room_canonical_alias_set_by_you">Hai impostato l\'indirizzo principale per questa stanza a %1$s.</string>

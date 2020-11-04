@@ -21,23 +21,20 @@ import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
-import im.vector.app.core.date.DateFormatKind
-import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass(layout = R.layout.item_search_result)
 abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute var dateFormatter: VectorDateFormatter? = null
-    @EpoxyAttribute lateinit var event: Event
+    @EpoxyAttribute var formattedDate: String? = null
+    @EpoxyAttribute lateinit var spannable: CharSequence
     @EpoxyAttribute var sender: MatrixItem? = null
     @EpoxyAttribute var listener: ClickListener? = null
 
@@ -47,9 +44,8 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
         holder.view.onClick(listener)
         sender?.let { avatarRenderer.render(it, holder.avatarImageView) }
         holder.memberNameView.setTextOrHide(sender?.getBestName())
-        holder.timeView.text = dateFormatter?.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
-        // TODO Improve that (use formattedBody, etc.)
-        holder.contentView.text = event.content?.get("body") as? String
+        holder.timeView.text = formattedDate
+        holder.contentView.text = spannable
     }
 
     class Holder : VectorEpoxyHolder() {

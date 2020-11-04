@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.room.create
 
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.toMedium
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -27,11 +27,13 @@ import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
+import org.matrix.android.sdk.internal.session.content.FileUploader
 import org.matrix.android.sdk.internal.session.identity.EnsureIdentityTokenTask
 import org.matrix.android.sdk.internal.session.identity.data.IdentityStore
 import org.matrix.android.sdk.internal.session.identity.data.getIdentityServerUrlWithoutProtocol
 import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePidInviteBody
 import java.security.InvalidParameterException
+import java.util.UUID
 import javax.inject.Inject
 
 internal class CreateRoomBodyBuilder @Inject constructor(
@@ -39,6 +41,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
         private val crossSigningService: CrossSigningService,
         private val deviceListManager: DeviceListManager,
         private val identityStore: IdentityStore,
+        private val fileUploader: FileUploader,
         @AuthenticatedIdentity
         private val accessTokenProvider: AccessTokenProvider
 ) {
@@ -66,7 +69,8 @@ internal class CreateRoomBodyBuilder @Inject constructor(
 
         val initialStates = listOfNotNull(
                 buildEncryptionWithAlgorithmEvent(params),
-                buildHistoryVisibilityEvent(params)
+                buildHistoryVisibilityEvent(params),
+                buildAvatarEvent(params)
         )
                 .takeIf { it.isNotEmpty() }
 
@@ -85,15 +89,33 @@ internal class CreateRoomBodyBuilder @Inject constructor(
         )
     }
 
+    private suspend fun buildAvatarEvent(params: CreateRoomParams): Event? {
+        return params.avatarUri?.let { avatarUri ->
+            // First upload the image, ignoring any error
+            tryOrNull {
+                fileUploader.uploadFromUri(
+                        uri = avatarUri,
+                        filename = UUID.randomUUID().toString(),
+                        mimeType = "image/jpeg")
+            }
+                    ?.let { response ->
+                        Event(
+                                type = EventType.STATE_ROOM_AVATAR,
+                                stateKey = "",
+                                content = mapOf("url" to response.contentUri)
+                        )
+                    }
+        }
+    }
+
     private fun buildHistoryVisibilityEvent(params: CreateRoomParams): Event? {
         return params.historyVisibility
                 ?.let {
-                    val contentMap = mapOf("history_visibility" to it)
-
                     Event(
                             type = EventType.STATE_ROOM_HISTORY_VISIBILITY,
                             stateKey = "",
-                            content = contentMap.toContent())
+                            content = mapOf("history_visibility" to it)
+                    )
                 }
     }
 
@@ -111,12 +133,10 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                     if (it != MXCRYPTO_ALGORITHM_MEGOLM) {
                         throw InvalidParameterException("Unsupported algorithm: $it")
                     }
-                    val contentMap = mapOf("algorithm" to it)
-
                     Event(
                             type = EventType.STATE_ROOM_ENCRYPTION,
                             stateKey = "",
-                            content = contentMap.toContent()
+                            content = mapOf("algorithm" to it)
                     )
                 }
     }

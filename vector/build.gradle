@@ -17,7 +17,7 @@ androidExtensions {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 9
+ext.versionPatch = 10
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -39,9 +39,9 @@ def generateVersionCodeFromVersionName() {
 
 def getVersionCode() {
     if (gitBranchName() == "develop") {
-        return generateVersionCodeFromTimestamp() * 10
+        return generateVersionCodeFromTimestamp()
     } else {
-        return generateVersionCodeFromVersionName() * 10
+        return generateVersionCodeFromVersionName()
     }
 }
 
@@ -166,13 +166,14 @@ android {
         }
 
         applicationVariants.all { variant ->
+            // assign different version code for each output
+            def baseVariantVersion = variant.versionCode * 10
             variant.outputs.each { output ->
                 def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
                 // Known limitation: it does not modify the value in the BuildConfig.java generated file
-                print "ABI " + output.getFilter(OutputFile.ABI) + " \tvariant.versionCode " + variant.versionCode
                 // See https://issuetracker.google.com/issues/171133218
-                output.versionCodeOverride = variant.versionCode + baseAbiVersionCode
-                print " \t-> VersionCode = " + output.versionCodeOverride + "\n"
+                output.versionCodeOverride = baseVariantVersion + baseAbiVersionCode
+                print "ABI " + output.getFilter(OutputFile.ABI) + " \t-> VersionCode = " + output.versionCodeOverride + "\n"
             }
         }
 

@@ -20,6 +20,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
@@ -27,11 +28,13 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
 import android.view.HapticFeedbackConstants
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -360,12 +363,17 @@ class RoomDetailFragment @Inject constructor(
                 RoomDetailViewEvents.ShowWaitingView                     -> vectorBaseActivity.showWaitingView()
                 RoomDetailViewEvents.HideWaitingView                     -> vectorBaseActivity.hideWaitingView()
                 is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
+                is RoomDetailViewEvents.OpenRoom                         -> handleOpenRoom(it)
             }.exhaustive
         }
 
         if (savedInstanceState == null) {
             handleShareData()
         }
+    }
+
+    private fun handleOpenRoom(openRoom: RoomDetailViewEvents.OpenRoom) {
+        navigator.openRoom(requireContext(), openRoom.roomId, null)
     }
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
@@ -645,13 +653,6 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.clear_message_queue -> {
-                // This a temporary option during dev as it is not super stable
-                // Cancel all pending actions in room queue and post a dummy
-                // Then mark all sending events as undelivered
-                roomDetailViewModel.handle(RoomDetailAction.ClearSendQueue)
-                true
-            }
             R.id.invite              -> {
                 navigator.openInviteUsersToRoom(requireActivity(), roomDetailArgs.roomId)
                 true
@@ -890,6 +891,8 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.JumpToReadReceipt(roomDetailPendingAction.userId))
             is RoomDetailPendingAction.MentionUser       ->
                 insertUserDisplayNameInTextEditor(roomDetailPendingAction.userId)
+            is RoomDetailPendingAction.OpenOrCreateDm    ->
+                roomDetailViewModel.handle(RoomDetailAction.OpenOrCreateDm(roomDetailPendingAction.userId))
         }.exhaustive
     }
 
@@ -1065,9 +1068,32 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupComposer() {
-        autoCompleter.setup(composerLayout.composerEditText)
+        val composerEditText = composerLayout.composerEditText
+        autoCompleter.setup(composerEditText)
 
         observerUserTyping()
+
+        if (vectorPreferences.sendMessageWithEnter()) {
+            // imeOptions="actionSend" only works with single line, so we remove multiline inputType
+            composerEditText.inputType = composerEditText.inputType and EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE.inv()
+            composerEditText.imeOptions = EditorInfo.IME_ACTION_SEND
+        }
+
+        composerEditText.setOnEditorActionListener { v, actionId, keyEvent ->
+            val imeActionId = actionId and EditorInfo.IME_MASK_ACTION
+            if (EditorInfo.IME_ACTION_DONE == imeActionId || EditorInfo.IME_ACTION_SEND == imeActionId) {
+                sendTextMessage(v.text)
+                true
+            }
+            // Add external keyboard functionality (to send messages)
+            else if (null != keyEvent
+                    && !keyEvent.isShiftPressed
+                    && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER
+                    && resources.configuration.keyboard != Configuration.KEYBOARD_NOKEYS) {
+                sendTextMessage(v.text)
+                true
+            } else false
+        }
 
         composerLayout.callback = object : TextComposerView.Callback {
             override fun onAddAttachment() {
@@ -1078,16 +1104,7 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onSendMessage(text: CharSequence) {
-                if (lockSendButton) {
-                    Timber.w("Send button is locked")
-                    return
-                }
-                if (text.isNotBlank()) {
-                    // We collapse ASAP, if not there will be a slight anoying delay
-                    composerLayout.collapse(true)
-                    lockSendButton = true
-                    roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
-                }
+                sendTextMessage(text)
             }
 
             override fun onCloseRelatedMessage() {
@@ -1104,6 +1121,19 @@ class RoomDetailFragment @Inject constructor(
                     true
                 }
             }
+        }
+    }
+
+    private fun sendTextMessage(text: CharSequence) {
+        if (lockSendButton) {
+            Timber.w("Send button is locked")
+            return
+        }
+        if (text.isNotBlank()) {
+            // We collapse ASAP, if not there will be a slight anoying delay
+            composerLayout.collapse(true)
+            lockSendButton = true
+            roomDetailViewModel.handle(RoomDetailAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
         }
     }
 
