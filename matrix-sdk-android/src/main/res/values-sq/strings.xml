@@ -191,4 +191,26 @@
     <string name="notice_room_guest_access_forbidden_by_you">U keni penguar mysafirëve të vijnë në dhomë.</string>
     <string name="notice_end_to_end_ok_by_you">Aktivizuat fshehtëzimin skaj-më-skaj.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Aktivizuat fshehtëzimin skaj-më-skaj (algoritëm %1$s i panjohur).</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Keni penguar të vijnë në dhomë mysafirë.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s ka penguar të vijnë në dhomë mysafirë.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Keni lejuar të vijnë mysafirë këtu.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s ka lejuar të vijnë këtu mysafirë.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Dolët. Arsye: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s doli. Arsye: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Erdhët. Arsye: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s erdhi. Arsye: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Shfuqizuat ftesën për %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s shfuqizoi ftesën për %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Ftuat %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s ftoi %2$s</string>
+    <string name="notice_direct_room_update_by_you">U përmirësuat këtu.</string>
+    <string name="notice_direct_room_update">%s këtu u përmirësua.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">I bëtë mesazhet e ardhshëm të dukshëm për %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s i bëri mesazhet e ardhshëm të dukshëm për %2$s</string>
+    <string name="notice_direct_room_leave_by_you">Dolët nga dhoma</string>
+    <string name="notice_direct_room_leave">%1$s doli nga dhoma</string>
+    <string name="notice_direct_room_join_by_you">Erdhët</string>
+    <string name="notice_direct_room_join">%1$s erdhi</string>
+    <string name="notice_direct_room_created_by_you">Krijuat diskutimin</string>
+    <string name="notice_direct_room_created">%1$s krijoi diskutimin</string>
 </resources>

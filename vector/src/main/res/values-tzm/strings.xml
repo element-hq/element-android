@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_settings">Tisɣal</string>
+    <string name="title_activity_home">Tuzinin</string>
+    <string name="status_theme">Asgum Status.im</string>
+    <string name="resources_script">Latn</string>
+    <string name="resources_country_code">MA</string>
+    <string name="resources_language">tzm</string>
+</resources>

@@ -550,7 +550,7 @@
     <string name="fab_menu_create_chat">Isiklikud sõnumid</string>
     <string name="create_room_title">Uus jututuba</string>
     <string name="create_room_action_create">LOO</string>
-    <string name="create_room_name_hint">Jututoa nimi</string>
+    <string name="create_room_name_hint">Nimi</string>
     <string name="create_room_public_title">Avalik</string>
     <string name="create_room_public_description">Kõik võivad selle jututoaga liituda</string>
     <string name="create_room_directory_title">Jututubade loend</string>
@@ -1272,8 +1272,9 @@
     <string name="settings_labs_enable_send_voice_summary">Selle valiku kasutamine eeldab kolmanda osapoole rakendust sõnumite salvestamiseks.</string>
     <string name="widget_integration_review_terms">Jätkamaks pead nõustuma kasutustingimustega.</string>
     <string name="you_added_a_new_device">Sa oled lisanud uue sessiooni \'%s\', mis soovib saada krüptimisvõtmeid.</string>
-    <string name="you_added_a_new_device_with_info">Uus sessioon soovib krüptovõtmeid. Sessiooni nimi: %1$s 
-\nViimati nähtud: %2$s 
+    <string name="you_added_a_new_device_with_info">Uus sessioon soovib krüptovõtmeid.
+\nSessiooni nimi: %1$s
+\nViimati nähtud: %2$s
 \nKui sa pole mõnes muus seadmes sisse loginud, siis ära pane seda teadet tähele.</string>
     <string name="your_unverified_device_requesting">Sinu verifitseerimata sessioon \'%s\' soovib saada krüptimisvõtmeid.</string>
     <string name="your_unverified_device_requesting_with_info">Verifitseerimata sessioon soovib krüptovõtmeid.
@@ -2175,4 +2176,15 @@
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Sul ei ole õigusi siin jututoas helistamiseks</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Sul ei ole piisavalt õigusi, et selles jututoas alustada konverentsikõnet</string>
     <string name="reset">Taasta algolek</string>
+    <string name="warning_unsaved_change_discard">Loobu muudatustest</string>
+    <string name="warning_unsaved_change">Sa oled teinud muudatusi, mis on veel salvestamata. Kas soovid muudatustest loobuda\?</string>
+    <string name="warning_room_not_created_yet">See jututuba on veel loomata. Kas katkestame selle tegevuse\?</string>
+    <string name="room_list_quick_actions_low_priority_remove">Eemalda vähetähtsate jututubade seast</string>
+    <string name="room_list_quick_actions_low_priority_add">Märgi vähetähtsaks</string>
+    <string name="rotate_and_crop_screen_title">Pööra ja kadreeri</string>
+    <string name="attachment_type_dialog_title">Lisa pildid valitud asukohast</string>
+    <string name="create_room_name_section">Jututoa nimi</string>
+    <string name="create_room_settings_section">Jututoa seadistused</string>
+    <string name="create_room_topic_hint">Teema</string>
+    <string name="create_room_topic_section">Jututoa teema (kui soovid)</string>
 </resources>
