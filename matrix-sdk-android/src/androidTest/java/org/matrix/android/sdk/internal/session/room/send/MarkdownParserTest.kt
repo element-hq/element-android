@@ -47,7 +47,7 @@ class MarkdownParserTest : InstrumentedTest {
      */
     private val markdownParser = MarkdownParser(
             Parser.builder().build(),
-            HtmlRenderer.builder().build(),
+            HtmlRenderer.builder().softbreak("<br />").build(),
             TextPillsUtils(MentionLinkSpecComparator())
     )
 
@@ -147,12 +147,14 @@ class MarkdownParserTest : InstrumentedTest {
         )
     }
 
+    // TODO. Improve testTypeNewLines function to cover <pre><code class="language-code">test</code></pre>
     @Test
-    fun parseCodeNewLines() {
+    fun parseCodeNewLines_not_passing() {
         testTypeNewLines(
                 name = "code",
-                markdownPattern = "`",
-                htmlExpectedTag = "code"
+                markdownPattern = "```",
+                htmlExpectedTag = "code",
+                softBreak = "\n"
         )
     }
 
@@ -166,7 +168,7 @@ class MarkdownParserTest : InstrumentedTest {
     }
 
     @Test
-    fun parseCode2NewLines() {
+    fun parseCode2NewLines_not_passing() {
         testTypeNewLines(
                 name = "code",
                 markdownPattern = "``",
@@ -184,7 +186,7 @@ class MarkdownParserTest : InstrumentedTest {
     }
 
     @Test
-    fun parseCode3NewLines() {
+    fun parseCode3NewLines_not_passing() {
         testTypeNewLines(
                 name = "code",
                 markdownPattern = "```",
@@ -246,7 +248,7 @@ class MarkdownParserTest : InstrumentedTest {
     }
 
     @Test
-    fun parseBoldNewLines_not_passing() {
+    fun parseBoldNewLines2() {
         "**bold**\nline2".let { markdownParser.parse(it).expect(it, "<strong>bold</strong><br />line2") }
     }
 
@@ -337,13 +339,14 @@ class MarkdownParserTest : InstrumentedTest {
 
     private fun testTypeNewLines(name: String,
                                  markdownPattern: String,
-                                 htmlExpectedTag: String) {
+                                 htmlExpectedTag: String,
+                                 softBreak: String = "<br />") {
         // With new line inside the block
         "$markdownPattern$name\n$name$markdownPattern"
                 .let {
                     markdownParser.parse(it)
                             .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name<br />$name</$htmlExpectedTag>")
+                                    expectedFormattedText = "<$htmlExpectedTag>$name$softBreak$name</$htmlExpectedTag>")
                 }
 
         // With new line between two blocks
@@ -351,7 +354,7 @@ class MarkdownParserTest : InstrumentedTest {
                 .let {
                     markdownParser.parse(it)
                             .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag><$htmlExpectedTag>$name</$htmlExpectedTag>")
+                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag><br /><$htmlExpectedTag>$name</$htmlExpectedTag>")
                 }
     }
 
