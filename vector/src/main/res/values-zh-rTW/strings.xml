@@ -1082,8 +1082,9 @@
     <string name="error_jitsi_not_supported_on_old_device">抱歉，使用 Jitsi 建立會議通話在舊裝置上並不支援（Android 系統版本小於 5.0 的裝置）</string>
     <string name="title_activity_verify_device">驗證工作階段</string>
     <string name="encryption_information_unknown_ip">未知的 IP</string>
-    <string name="you_added_a_new_device_with_info">有新工作階段正在要求加密金鑰。 工作階段名稱：%1$s 
-\n上次檢視：%2$s 
+    <string name="you_added_a_new_device_with_info">有新工作階段正在要求加密金鑰。
+\n工作階段名稱：%1$s
+\n上次檢視：%2$s
 \n如果您沒有登入其他工作階段，請忽略本請求。</string>
     <string name="your_unverified_device_requesting_with_info">有未驗證的工作階段正在要求加密金鑰。 
 \n工作階段名稱：%1$s 
@@ -1172,7 +1173,7 @@
     <string name="fab_menu_create_chat">直接訊息</string>
     <string name="create_room_title">新聊天室</string>
     <string name="create_room_action_create">建立</string>
-    <string name="create_room_name_hint">聊天室名稱</string>
+    <string name="create_room_name_hint">名稱</string>
     <string name="create_room_public_title">公開</string>
     <string name="create_room_public_description">任何人都可以加入此聊天室</string>
     <string name="create_room_directory_title">聊天室目錄</string>
@@ -2137,4 +2138,15 @@
     <string name="no_permissions_to_start_conf_call_in_direct_room">您沒有開始會議通話的權限</string>
     <string name="reset">重設</string>
     <string name="settings_security_pin_code_use_biometrics_title">啟用生物識別技術</string>
+    <string name="warning_unsaved_change_discard">放棄變更</string>
+    <string name="warning_unsaved_change">有未儲存的變更。要放棄變更嗎？</string>
+    <string name="warning_room_not_created_yet">聊天室尚未建立。取消建立聊天室？</string>
+    <string name="room_list_quick_actions_low_priority_remove">從低優先度移除</string>
+    <string name="room_list_quick_actions_low_priority_add">新增到低優先度</string>
+    <string name="rotate_and_crop_screen_title">旋轉並裁切</string>
+    <string name="attachment_type_dialog_title">新增圖片從</string>
+    <string name="create_room_settings_section">聊天室設定</string>
+    <string name="create_room_topic_hint">主題</string>
+    <string name="create_room_topic_section">聊天室主題（選擇性）</string>
+    <string name="create_room_name_section">聊天是名稱</string>
 </resources>

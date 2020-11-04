@@ -851,14 +851,16 @@
         <item quantity="other">%d мин.</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%d час</item>
-        <item quantity="few">%d часа</item>
-        <item quantity="many">%d часов</item>
+        <item quantity="one">%dh</item>
+        <item quantity="few">%dh</item>
+        <item quantity="many">%dh</item>
+        <item quantity="other">%dh</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">%d день</item>
-        <item quantity="few">%d дни</item>
-        <item quantity="many">%d дней</item>
+        <item quantity="one">%dd</item>
+        <item quantity="few">%dd</item>
+        <item quantity="many">%dd</item>
+        <item quantity="other">%dd</item>
     </plurals>
     <string name="room_participants_now">Сейчас %1$s</string>
     <string name="room_participants_ago">%1$s %2$s назад</string>
@@ -1292,7 +1294,7 @@
     <string name="fab_menu_create_chat">Диалоги</string>
     <string name="create_room_title">Новая комната</string>
     <string name="create_room_action_create">СОЗДАТЬ</string>
-    <string name="create_room_name_hint">Имя комнаты</string>
+    <string name="create_room_name_hint">Имя</string>
     <string name="create_room_public_title">Публичные</string>
     <string name="create_room_public_description">Любой сможет присоединиться к этой комнате</string>
     <string name="create_room_directory_title">Каталог номеров</string>
@@ -2282,10 +2284,21 @@
     </plurals>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Уведомление нажато!</string>
     <string name="settings_troubleshoot_test_notification_notice">Пожалуйста, нажмите на уведомление. Если вы не видите уведомления, проверьте настройки системы.</string>
-    <string name="settings_troubleshoot_test_notification_title">Визуализировать уведомления</string>
+    <string name="settings_troubleshoot_test_notification_title">Отображение уведомления</string>
     <string name="settings_troubleshoot_test_push_notification_content">Вы видите уведомление! Нажмите сюда!</string>
     <string name="settings_troubleshoot_test_push_loop_failed">Не удалось получить push-уведомление. Переустановка приложения может быть возможным решением.</string>
     <string name="settings_troubleshoot_test_push_loop_success">Приложение получило push-уведомление</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Приложение ожидает push-уведомление</string>
     <string name="settings_troubleshoot_test_push_loop_title">Тестирование push-уведомлений</string>
+    <string name="warning_unsaved_change">Есть несохраненные изменения. Отменить изменения\?</string>
+    <string name="room_list_quick_actions_low_priority_remove">Удалить из низкого приоритета</string>
+    <string name="rotate_and_crop_screen_title">Повернуть и обрезать</string>
+    <string name="create_room_settings_section">Настройки комнаты</string>
+    <string name="create_room_topic_section">Тема комнаты (опционально)</string>
+    <string name="warning_unsaved_change_discard">Отменить изменения</string>
+    <string name="warning_room_not_created_yet">Комната ещё не создана. Отменить создание комнаты\?</string>
+    <string name="room_list_quick_actions_low_priority_add">Добавить к низкому приоритету</string>
+    <string name="attachment_type_dialog_title">Добавить изображение из</string>
+    <string name="create_room_topic_hint">Тема</string>
+    <string name="create_room_name_section">Название Комнаты</string>
 </resources>

@@ -910,7 +910,7 @@
 \n%s</string>
     <string name="create_room_public_description">Ĉiu ajn povos aliĝi al la ĉambro</string>
     <string name="create_room_public_title">Publika</string>
-    <string name="create_room_name_hint">Nomo de ĉambro</string>
+    <string name="create_room_name_hint">Nomo</string>
     <string name="create_room_action_create">KREI</string>
     <string name="create_room_title">Nova ĉambro</string>
     <string name="fab_menu_create_chat">Rektaj interparoloj</string>
@@ -2160,4 +2160,16 @@
     <string name="room_recents_directory">KATALOGO</string>
     <string name="people_search_user_directory">KATALOGO DE UZANTOJ (%s)</string>
     <string name="user_directory_header">Katalogo de uzantoj</string>
+    <string name="warning_room_not_created_yet">La ĉambro ankoraŭ ne kreiĝis. Ĉu nuligi kreadon de la ĉambro\?</string>
+    <string name="room_list_quick_actions_low_priority_remove">Forigi de malalte prioritataj</string>
+    <string name="room_list_quick_actions_low_priority_add">Aldoni al malalte prioritataj</string>
+    <string name="rotate_and_crop_screen_title">Turni kaj tondi</string>
+    <string name="attachment_type_dialog_title">Aldoni bildon el</string>
+    <string name="create_room_settings_section">Agordoj de ĉambro</string>
+    <string name="create_room_topic_hint">Temo</string>
+    <string name="create_room_topic_section">Temo de ĉambro (malnepra)</string>
+    <string name="create_room_name_section">Nomo de ĉambro</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">Element trovis propran servilan agordaron per la retnomo «%1$s» el via identigilo de uzanto:
+\n%2$s</string>
+    <string name="autodiscover_invalid_response">Nevalidas hejmservil-serĉanta respondo</string>
 </resources>

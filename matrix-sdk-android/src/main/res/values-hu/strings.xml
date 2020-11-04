@@ -1,8 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s küldött egy képet.</string>
-
     <string name="notice_room_invite_no_invitee">%s meghívója</string>
     <string name="notice_room_invite">%1$s meghívta: %2$s</string>
     <string name="notice_room_invite_you">%1$s meghívott</string>
@@ -20,7 +19,7 @@
     <string name="notice_room_topic_changed">%1$s megváltoztatta a témát erre: %2$s</string>
     <string name="notice_room_name_changed">%1$s megváltoztatta a szoba nevét erre: %2$s</string>
     <string name="notice_placed_video_call">%s videóhívást kezdeményezett.</string>
-    <string name="notice_placed_voice_call">%s hanghívást kezdeményezett.</string>
+    <string name="notice_placed_voice_call">%s hanghívást indított.</string>
     <string name="notice_answered_call">%s fogadta a hívást.</string>
     <string name="notice_ended_call">%s befejezte a hívást.</string>
     <string name="notice_made_future_room_visibility">%1$s láthatóvá tette a jövőbeli előzményeket %2$s számára</string>
@@ -30,54 +29,39 @@
     <string name="notice_room_visibility_world_readable">bárki.</string>
     <string name="notice_room_visibility_unknown">ismeretlen (%s).</string>
     <string name="notice_end_to_end">%1$s bekapcsolta a végpontok közötti titkosítást (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s hanghívás konferenciát kérelmezett</string>
     <string name="notice_voip_started">Hanghívás konferencia elindult</string>
     <string name="notice_voip_finished">Hanghívás konferencia befejeződött</string>
-
     <string name="notice_avatar_changed_too">(a profilkép is megváltozott)</string>
     <string name="notice_room_name_removed">%1$s eltávolította a szoba nevét</string>
     <string name="notice_room_topic_removed">%1$s eltávolította a szoba témáját</string>
     <string name="notice_profile_change_redacted">%1$s megváltoztatta a(z) %2$s profilját</string>
     <string name="notice_room_third_party_invite">%1$s meghívót küldött %2$s számára, hogy csatlakozzon a szobához</string>
     <string name="notice_room_third_party_registered_invite">%1$s elfogadta a meghívót ebbe: %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Visszafejtés sikertelen: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">A küldő eszköze nem küldte el a kulcsokat ehhez az üzenethez.</string>
-
     <string name="could_not_redact">Kitakarás sikertelen</string>
     <string name="unable_to_send_message">Üzenet küldése sikertelen</string>
-
     <string name="message_failed_to_upload">Kép feltöltése sikertelen</string>
-
     <string name="network_error">Hálózati hiba</string>
     <string name="matrix_error">Matrix hiba</string>
-
     <string name="room_error_join_failed_empty_room">Jelenleg nem lehetséges újracsatlakozni egy üres szobához.</string>
-
     <string name="encrypted_message">Titkosított üzenet</string>
-
     <string name="medium_email">E-mail cím</string>
     <string name="medium_phone_number">Telefonszám</string>
-
     <string name="summary_user_sent_sticker">%1$s küldött egy matricát.</string>
-
     <string name="room_displayname_invite_from">Meghívó tőle: %s</string>
     <string name="room_displayname_room_invite">Meghívó egy szobába</string>
     <string name="room_displayname_two_members">%1$s és %2$s</string>
     <string name="room_displayname_empty_room">Üres szoba</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s és 1 másik</item>
         <item quantity="other">%1$s és %2$d másik</item>
     </plurals>
-
-
     <string name="notice_event_redacted">Üzenet eltávolítva</string>
     <string name="notice_event_redacted_by">Üzenetet eltávolította: %1$s</string>
     <string name="notice_event_redacted_with_reason">Üzenet eltávolítva [ok: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Üzenetet eltávolította: %1$s [ok: %2$s]</string>
-
     <string name="initial_sync_start_importing_account">Induló szinkronizáció:
 \nFiók betöltése…</string>
     <string name="initial_sync_start_importing_account_crypto">Induló szinkronizáció:
@@ -94,12 +78,9 @@
 \nKözösségek betöltése</string>
     <string name="initial_sync_start_importing_account_data">Induló szinkronizáció:
 \nFiók adatok betöltése</string>
-
     <string name="notice_room_update">%s frissítette ezt a szobát.</string>
-
     <string name="event_status_sending_message">Üzenet küldése…</string>
     <string name="clear_timeline_send_queue">Küldő sor ürítése</string>
-
     <string name="notice_room_third_party_revoked_invite">%1$s visszavonta %2$s meghívását, hogy csatlakozzon a szobához</string>
     <string name="notice_room_invite_no_invitee_with_reason">%1$s meghívója. Ok: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s meghívta őt: %2$s. Ok: %3$s</string>
@@ -114,29 +95,48 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s visszavonta %2$s meghívóját a szobába való belépéshez. Ok: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s elfogadta a meghívót ide: %2$s. Ok: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s visszavonta %2$s meghívóját. Ok: %3$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s ezt a címet adta a szobához: %2$s.</item>
         <item quantity="other">%1$s ezeket a címeket adta a szobához: %2$s.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s ezt a címet törölte a szobából: %3$s.</item>
         <item quantity="other">%1$s ezeket a címeket törölte a szobából: %3$s.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s a szobához adta ezeket:%2$s és törölte ezeket: %3$s.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s a szoba elsődleges címét erre állította be: %2$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s eltávolította a szoba elsődleges címét.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s megengedte a vendégeknek, hogy belépjenek ebbe a szobába.</string>
     <string name="notice_room_guest_access_forbidden">%1$s megtiltotta a vendégeknek, hogy belépjenek ebbe a szobába.</string>
-
     <string name="notice_end_to_end_ok">%1$s bekapcsolta a végpontok közötti titkosítást.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s bekapcsolta a végpontok közötti titkosítást (ismeretlen algoritmus %2$s).</string>
-
     <string name="key_verification_request_fallback_message">%s kéri a kulcsok ellenőrzését de a kliens nem támogatja a szobán belüli kulcs ellenőrzést. A hagyományos módon kell ellenőrizned a kulcsokat.</string>
-
     <string name="notice_room_created">%1$s szobát készített</string>
+    <string name="notice_answered_call_by_you">Fogadtad a hívást.</string>
+    <string name="notice_ended_call_by_you">Befejezted a hívást.</string>
+    <string name="notice_call_candidates_by_you">Hívási adatokat küldtél.</string>
+    <string name="notice_call_candidates">%s hívási adatokat küldött.</string>
+    <string name="notice_placed_voice_call_by_you">Hanghívást indítottál.</string>
+    <string name="notice_placed_video_call_by_you">Videóhívást indítottál.</string>
+    <string name="notice_room_avatar_changed_by_you">Megváltoztattad a szoba képét</string>
+    <string name="notice_room_avatar_changed">%1$s megváltoztatta a szoba képét</string>
+    <string name="notice_room_topic_changed_by_you">Megváltoztattad a témát erre: %1$s</string>
+    <string name="notice_avatar_url_changed_by_you">Megváltoztattad a profilképed</string>
+    <string name="notice_room_withdraw_by_you">Visszavontad %1$s meghívóját</string>
+    <string name="notice_room_ban_by_you">Kitiltottad %1$s felhasználót</string>
+    <string name="notice_room_unban_by_you">Visszaengedted %1$s felhasználót</string>
+    <string name="notice_room_kick_by_you">Kirúgtad %1$s felhasználót</string>
+    <string name="notice_room_reject_by_you">Visszautasítottad a meghívót</string>
+    <string name="notice_direct_room_leave_by_you">Elhagytad a szobát</string>
+    <string name="notice_direct_room_leave">%1$s elhagyta a szobát</string>
+    <string name="notice_room_leave_by_you">Elhagytad a szobát</string>
+    <string name="notice_direct_room_join_by_you">Csatlakoztál</string>
+    <string name="notice_direct_room_join">%1$s csatlakozott</string>
+    <string name="notice_room_join_by_you">Beléptél a szobába</string>
+    <string name="notice_room_invite_by_you">Meghívtad: %1$s</string>
+    <string name="notice_direct_room_created_by_you">Létrehoztad a beszélgetést</string>
+    <string name="notice_direct_room_created">%1$s létrehozta a beszélgetést</string>
+    <string name="notice_room_created_by_you">Létrehoztad a szobát</string>
+    <string name="summary_you_sent_sticker">Matricát küldtél.</string>
+    <string name="summary_you_sent_image">Képet küldtél.</string>
 </resources>
