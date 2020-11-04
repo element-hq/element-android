@@ -1,8 +1,5 @@
-Changes in Element 1.0.10 (2020-XX-XX)
+Changes in Element 1.0.10 (2020-11-04)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Rework sending Event management (#154)
@@ -27,18 +24,6 @@ Bugfix 🐛:
  - Badly formatted mentions in body (#1506)
  - KeysBackup: Avoid using `!!` (#2262)
  - Two elements in the task switcher (#2299)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
-
-Build 🧱:
- -
-
-Other changes:
- -
 
 Changes in Element 1.0.9 (2020-10-16)
 ===================================================
