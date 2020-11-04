@@ -26,6 +26,7 @@ Bugfix 🐛:
  - Search Result | scroll jumps after pagination (#2238)
  - Badly formatted mentions in body (#1506)
  - KeysBackup: Avoid using `!!` (#2262)
+ - Two elements in the task switcher (#2299)
 
 Translations 🗣:
  -
