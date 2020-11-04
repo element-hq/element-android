@@ -19,6 +19,7 @@ package im.vector.app.features.createdirect
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -56,8 +57,31 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> createRoomAndInviteSelectedUsers(action.invitees)
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.invitees)
         }
+    }
+
+    /**
+     * If users already have a DM room then navigate to it instead of creating a new room.
+     */
+    private fun onSubmitInvitees(invitees: Set<PendingInvitee>) {
+        invitees
+                .takeIf { it.size == 1 }
+                ?.first()
+                ?.let { invitee ->
+                    when (invitee) {
+                        is PendingInvitee.UserPendingInvitee     -> session.getExistingDirectRoomWithUser(invitee.user.userId)
+                        is PendingInvitee.ThreePidPendingInvitee -> null
+                    }.exhaustive
+                }
+                ?.let { roomId ->
+                    setState {
+                        copy(createAndInviteState = Success(roomId))
+                    }
+                }
+                ?: run {
+                    createRoomAndInviteSelectedUsers(invitees)
+                }
     }
 
     private fun createRoomAndInviteSelectedUsers(invitees: Set<PendingInvitee>) {
