@@ -12,9 +12,21 @@ Improvements 🙌:
  - Use Hardware keyboard enter to send message (use shift-enter for new line) (#1881, #1440)
  - Edit and remove icons are now visible on image attachment preview screen (#2294)
  - Room profile: BigImageViewerActivity now only display the image. Use the room setting to change or delete the room Avatar
+ - Better visibility of text reactions in dark theme (#1118)
+ - Room member profile: Add action to create (or open) a DM (#2310)
+ - Prepare changelog for F-Droid (#2296)
+ - Add graphic resources for F-Droid (#812, #2220)
+ - Highlight text in the body of the displayed result (#2200)
+ - Considerably faster QR-code bitmap generation (#2331)
 
 Bugfix 🐛:
+ - Fixed ringtone handling (#2100 & #2246)
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
+ - Incoming call continues to ring if call is answered on another device (#1921)
+ - Search Result | scroll jumps after pagination (#2238)
+ - Badly formatted mentions in body (#1506)
+ - KeysBackup: Avoid using `!!` (#2262)
+ - Two elements in the task switcher (#2299)
 
 Translations 🗣:
  -

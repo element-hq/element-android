@@ -61,7 +61,7 @@ internal class DefaultRoomService @Inject constructor(
         return roomGetter.getRoom(roomId)
     }
 
-    override fun getExistingDirectRoomWithUser(otherUserId: String): Room? {
+    override fun getExistingDirectRoomWithUser(otherUserId: String): String? {
         return roomGetter.getDirectRoomWith(otherUserId)
     }
 

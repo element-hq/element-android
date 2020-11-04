@@ -229,6 +229,16 @@
     <color name="riotx_list_bottom_sheet_divider_color_dark">#7F61708B</color>
     <color name="riotx_list_bottom_sheet_divider_color_black">#FF22262E</color>
 
+    <attr name="riotx_reaction_background_off" format="color" />
+    <color name="riotx_reaction_background_off_light">#FFF3F8FD</color>
+    <color name="riotx_reaction_background_off_dark">#22252B</color>
+    <color name="riotx_reaction_background_off_black">#22252B</color>
+
+    <attr name="riotx_reaction_background_on" format="color" />
+    <color name="riotx_reaction_background_on_light">#2011BC8A</color>
+    <color name="riotx_reaction_background_on_dark">#4011BC8A</color>
+    <color name="riotx_reaction_background_on_black">#4011BC8A</color>
+
     <!-- (color from RiotWeb) -->
     <attr name="riotx_keys_backup_banner_accent_color" format="color" />
     <color name="riotx_keys_backup_banner_accent_color_light">#FFF8E3</color>

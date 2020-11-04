@@ -69,6 +69,9 @@ class BugReportActivity : VectorBaseActivity() {
             bug_report_button_include_crash_logs.isChecked = false
             bug_report_button_include_crash_logs.isVisible = false
 
+            bug_report_button_include_key_share_history.isChecked = false
+            bug_report_button_include_key_share_history.isVisible = false
+
             // Keep the screenshot
         } else {
             supportActionBar?.setTitle(R.string.title_activity_bug_report)
@@ -121,6 +124,7 @@ class BugReportActivity : VectorBaseActivity() {
                 forSuggestion,
                 bug_report_button_include_logs.isChecked,
                 bug_report_button_include_crash_logs.isChecked,
+                bug_report_button_include_key_share_history.isChecked,
                 bug_report_button_include_screenshot.isChecked,
                 bug_report_edit_text.text.toString(),
                 object : BugReporter.IMXBugReportListener {

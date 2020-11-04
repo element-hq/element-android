@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.crypto.store.db
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -62,6 +64,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFie
 import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.GossipingEventEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.GossipingEventEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.IncomingGossipingRequestEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.IncomingGossipingRequestEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
@@ -84,6 +87,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.query.get
 import org.matrix.android.sdk.internal.crypto.store.db.query.getById
 import org.matrix.android.sdk.internal.crypto.store.db.query.getOrCreate
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
+import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -998,7 +1002,50 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getGossipingEventsTrail(): List<Event> {
+    override fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>> {
+        val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
+            realm.where<IncomingGossipingRequestEntity>()
+                    .equalTo(IncomingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
+                    .sort(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, Sort.DESCENDING)
+        }
+        val dataSourceFactory = realmDataSourceFactory.map {
+            it.toIncomingGossipingRequest() as? IncomingRoomKeyRequest
+                    ?: IncomingRoomKeyRequest(
+                            requestBody = null,
+                            deviceId = "",
+                            userId = "",
+                            requestId = "",
+                            state = GossipingRequestState.NONE,
+                            localCreationTimestamp = 0
+                    )
+        }
+        return monarchy.findAllPagedWithChanges(realmDataSourceFactory,
+                LivePagedListBuilder(dataSourceFactory,
+                        PagedList.Config.Builder()
+                                .setPageSize(20)
+                                .setEnablePlaceholders(false)
+                                .setPrefetchDistance(1)
+                                .build())
+        )
+    }
+
+    override fun getGossipingEventsTrail(): LiveData<PagedList<Event>> {
+        val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
+            realm.where<GossipingEventEntity>().sort(GossipingEventEntityFields.AGE_LOCAL_TS, Sort.DESCENDING)
+        }
+        val dataSourceFactory = realmDataSourceFactory.map { it.toModel() }
+        val trail = monarchy.findAllPagedWithChanges(realmDataSourceFactory,
+                LivePagedListBuilder(dataSourceFactory,
+                        PagedList.Config.Builder()
+                                .setPageSize(20)
+                                .setEnablePlaceholders(false)
+                                .setPrefetchDistance(1)
+                                .build())
+        )
+        return trail
+    }
+
+    override fun getGossipingEvents(): List<Event> {
         return monarchy.fetchAllCopiedSync { realm ->
             realm.where<GossipingEventEntity>()
         }.map {
@@ -1066,24 +1113,43 @@ internal class RealmCryptoStore @Inject constructor(
         return request
     }
 
-    override fun saveGossipingEvent(event: Event) {
+    override fun saveGossipingEvents(events: List<Event>) {
         val now = System.currentTimeMillis()
-        val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
-        val entity = GossipingEventEntity(
-                type = event.type,
-                sender = event.senderId,
-                ageLocalTs = ageLocalTs,
-                content = ContentMapper.map(event.content)
-        ).apply {
-            sendState = SendState.SYNCED
-            decryptionResultJson = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
-            decryptionErrorCode = event.mCryptoError?.name
-        }
-        doRealmTransaction(realmConfiguration) { realm ->
-            realm.insertOrUpdate(entity)
+        monarchy.writeAsync { realm ->
+            events.forEach { event ->
+                val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
+                val entity = GossipingEventEntity(
+                        type = event.type,
+                        sender = event.senderId,
+                        ageLocalTs = ageLocalTs,
+                        content = ContentMapper.map(event.content)
+                ).apply {
+                    sendState = SendState.SYNCED
+                    decryptionResultJson = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
+                    decryptionErrorCode = event.mCryptoError?.name
+                }
+                realm.insertOrUpdate(entity)
+            }
         }
     }
 
+    override fun saveGossipingEvent(event: Event) {
+        monarchy.writeAsync { realm ->
+            val now = System.currentTimeMillis()
+            val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
+            val entity = GossipingEventEntity(
+                    type = event.type,
+                    sender = event.senderId,
+                    ageLocalTs = ageLocalTs,
+                    content = ContentMapper.map(event.content)
+            ).apply {
+                sendState = SendState.SYNCED
+                decryptionResultJson = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java).toJson(event.mxDecryptionResult)
+                decryptionErrorCode = event.mCryptoError?.name
+            }
+            realm.insertOrUpdate(entity)
+        }
+    }
 //    override fun getOutgoingRoomKeyRequestByState(states: Set<ShareRequestState>): OutgoingRoomKeyRequest? {
 //        val statesIndex = states.map { it.ordinal }.toTypedArray()
 //        return doRealmQueryAndCopy(realmConfiguration) { realm ->
@@ -1284,6 +1350,28 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun storeIncomingGossipingRequests(requests: List<IncomingShareRequestCommon>) {
+        doRealmTransactionAsync(realmConfiguration) { realm ->
+            requests.forEach { request ->
+                // After a clear cache, we might have a
+                realm.createObject(IncomingGossipingRequestEntity::class.java).let {
+                    it.otherDeviceId = request.deviceId
+                    it.otherUserId = request.userId
+                    it.requestId = request.requestId ?: ""
+                    it.requestState = GossipingRequestState.PENDING
+                    it.localCreationTimestamp = request.localCreationTimestamp ?: System.currentTimeMillis()
+                    if (request is IncomingSecretShareRequest) {
+                        it.type = GossipRequestType.SECRET
+                        it.requestedInfoStr = request.secretName
+                    } else if (request is IncomingRoomKeyRequest) {
+                        it.type = GossipRequestType.KEY
+                        it.requestedInfoStr = request.requestBody?.toJson()
+                    }
+                }
+            }
+        }
+    }
+
 //    override fun getPendingIncomingSecretShareRequests(): List<IncomingSecretShareRequest> {
 //        return doRealmQueryAndCopyList(realmConfiguration) {
 //            it.where<GossipingEventEntity>()
@@ -1415,6 +1503,27 @@ internal class RealmCryptoStore @Inject constructor(
             entity.toOutgoingGossipingRequest() as? OutgoingSecretRequest
         })
                 .filterNotNull()
+    }
+
+    override fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingRoomKeyRequest>> {
+        val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
+            realm
+                    .where(OutgoingGossipingRequestEntity::class.java)
+                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
+        }
+        val dataSourceFactory = realmDataSourceFactory.map {
+            it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
+                    ?: OutgoingRoomKeyRequest(requestBody = null, requestId = "?", recipients = emptyMap(), state = OutgoingGossipingRequestState.CANCELLED)
+        }
+        val trail = monarchy.findAllPagedWithChanges(realmDataSourceFactory,
+                LivePagedListBuilder(dataSourceFactory,
+                        PagedList.Config.Builder()
+                                .setPageSize(20)
+                                .setEnablePlaceholders(false)
+                                .setPrefetchDistance(1)
+                                .build())
+        )
+        return trail
     }
 
     override fun getCrossSigningInfo(userId: String): MXCrossSigningInfo? {
@@ -1557,5 +1666,49 @@ internal class RealmCryptoStore @Inject constructor(
 
             result
         }
+    }
+
+    /**
+     * Some entries in the DB can get a bit out of control with time
+     * So we need to tidy up a bit
+     */
+    override fun tidyUpDataBase() {
+        val prevWeekTs = System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1_000
+        doRealmTransaction(realmConfiguration) { realm ->
+
+            // Only keep one week history
+            realm.where<IncomingGossipingRequestEntity>()
+                    .lessThan(IncomingGossipingRequestEntityFields.LOCAL_CREATION_TIMESTAMP, prevWeekTs)
+                    .findAll().let {
+                        Timber.i("## Crypto Clean up ${it.size} IncomingGossipingRequestEntity")
+                        it.deleteAllFromRealm()
+                    }
+
+            // Clean the cancelled ones?
+            realm.where<OutgoingGossipingRequestEntity>()
+                    .equalTo(OutgoingGossipingRequestEntityFields.REQUEST_STATE_STR, OutgoingGossipingRequestState.CANCELLED.name)
+                    .equalTo(OutgoingGossipingRequestEntityFields.TYPE_STR, GossipRequestType.KEY.name)
+                    .findAll().let {
+                        Timber.i("## Crypto Clean up ${it.size} OutgoingGossipingRequestEntity")
+                        it.deleteAllFromRealm()
+                    }
+
+            // Only keep one week history
+            realm.where<GossipingEventEntity>()
+                    .lessThan(GossipingEventEntityFields.AGE_LOCAL_TS, prevWeekTs)
+                    .findAll().let {
+                        Timber.i("## Crypto Clean up ${it.size} GossipingEventEntityFields")
+                        it.deleteAllFromRealm()
+                    }
+
+            // Can we do something for WithHeldSessionEntity?
+        }
+    }
+
+    /**
+     * Prints out database info
+     */
+    override fun logDbUsageInfo() {
+        RealmDebugTools(realmConfiguration).logInfo("Crypto")
     }
 }

@@ -278,6 +278,11 @@ class RoomMemberProfileFragment @Inject constructor(
         DeviceListBottomSheet.newInstance(it.userId).show(parentFragmentManager, "DEV_LIST")
     }
 
+    override fun onOpenDmClicked() {
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.OpenOrCreateDm(fragmentArgs.userId)
+        vectorBaseActivity.finish()
+    }
+
     override fun onJumpToReadReceiptClicked() {
         roomDetailPendingActionStore.data = RoomDetailPendingAction.JumpToReadReceipt(fragmentArgs.userId)
         vectorBaseActivity.finish()

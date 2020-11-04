@@ -91,7 +91,6 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_resources.txt
     ./vector/src/main/res/color \
     ./vector/src/main/res/layout \
     ./vector/src/main/res/values \
-    ./vector/src/main/res/values-v21 \
     ./vector/src/main/res/xml
 
 resultForbiddenStringInResource=$?

@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.store
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Optional
@@ -126,7 +127,10 @@ internal interface IMXCryptoStore {
     fun getPendingIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
 
     fun getPendingIncomingGossipingRequests(): List<IncomingShareRequestCommon>
+
     fun storeIncomingGossipingRequest(request: IncomingShareRequestCommon, ageLocalTS: Long?)
+
+    fun storeIncomingGossipingRequests(requests: List<IncomingShareRequestCommon>)
 //    fun getPendingIncomingSecretShareRequests(): List<IncomingSecretShareRequest>
 
     /**
@@ -364,6 +368,7 @@ internal interface IMXCryptoStore {
     fun getOrAddOutgoingSecretShareRequest(secretName: String, recipients: Map<String, List<String>>): OutgoingSecretRequest?
 
     fun saveGossipingEvent(event: Event)
+    fun saveGossipingEvents(events: List<Event>)
 
     fun updateGossipingRequestState(request: IncomingShareRequestCommon, state: GossipingRequestState) {
         updateGossipingRequestState(
@@ -441,11 +446,16 @@ internal interface IMXCryptoStore {
     // Dev tools
 
     fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest>
+    fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingRoomKeyRequest>>
     fun getOutgoingSecretKeyRequests(): List<OutgoingSecretRequest>
     fun getOutgoingSecretRequest(secretName: String): OutgoingSecretRequest?
     fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
-    fun getGossipingEventsTrail(): List<Event>
+    fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>>
+    fun getGossipingEventsTrail(): LiveData<PagedList<Event>>
+    fun getGossipingEvents(): List<Event>
 
     fun setDeviceKeysUploaded(uploaded: Boolean)
     fun getDeviceKeysUploaded(): Boolean
+    fun tidyUpDataBase()
+    fun logDbUsageInfo()
 }

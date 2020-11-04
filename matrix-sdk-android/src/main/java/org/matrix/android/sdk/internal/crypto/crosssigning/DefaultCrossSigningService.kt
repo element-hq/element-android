@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.internal.crypto.crosssigning
 
 import androidx.lifecycle.LiveData
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
@@ -39,15 +41,20 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.withoutPrefix
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.internal.di.SessionId
+import org.matrix.android.sdk.internal.di.WorkManagerProvider
+import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @SessionScope
 internal class DefaultCrossSigningService @Inject constructor(
         @UserId private val userId: String,
+        @SessionId private val sessionId: String,
         private val cryptoStore: IMXCryptoStore,
         private val deviceListManager: DeviceListManager,
         private val initializeCrossSigningTask: InitializeCrossSigningTask,
@@ -55,7 +62,7 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val eventBus: EventBus) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
+        private val workManagerProvider: WorkManagerProvider) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
 
@@ -360,6 +367,12 @@ internal class DefaultCrossSigningService @Inject constructor(
         // First let's get my user key
         val myCrossSigningInfo = cryptoStore.getCrossSigningInfo(userId)
 
+        checkOtherMSKTrusted(myCrossSigningInfo, cryptoStore.getCrossSigningInfo(otherUserId))
+
+        return UserTrustResult.Success
+    }
+
+    fun checkOtherMSKTrusted(myCrossSigningInfo: MXCrossSigningInfo?, otherInfo: MXCrossSigningInfo?): UserTrustResult {
         val myUserKey = myCrossSigningInfo?.userKey()
                 ?: return UserTrustResult.CrossSigningNotConfigured(userId)
 
@@ -368,15 +381,15 @@ internal class DefaultCrossSigningService @Inject constructor(
         }
 
         // Let's get the other user  master key
-        val otherMasterKey = cryptoStore.getCrossSigningInfo(otherUserId)?.masterKey()
-                ?: return UserTrustResult.UnknownCrossSignatureInfo(otherUserId)
+        val otherMasterKey = otherInfo?.masterKey()
+                ?: return UserTrustResult.UnknownCrossSignatureInfo(otherInfo?.userId ?: "")
 
         val masterKeySignaturesMadeByMyUserKey = otherMasterKey.signatures
                 ?.get(userId) // Signatures made by me
                 ?.get("ed25519:${myUserKey.unpaddedBase64PublicKey}")
 
         if (masterKeySignaturesMadeByMyUserKey.isNullOrBlank()) {
-            Timber.d("## CrossSigning  checkUserTrust false for $otherUserId, not signed by my UserSigningKey")
+            Timber.d("## CrossSigning  checkUserTrust false for ${otherInfo.userId}, not signed by my UserSigningKey")
             return UserTrustResult.KeyNotSigned(otherMasterKey)
         }
 
@@ -395,6 +408,15 @@ internal class DefaultCrossSigningService @Inject constructor(
         // I have to check that MSK -> USK -> SSK
         // and that MSK is trusted (i know the private key, or is signed by a trusted device)
         val myCrossSigningInfo = cryptoStore.getCrossSigningInfo(userId)
+
+        return checkSelfTrust(myCrossSigningInfo, cryptoStore.getUserDeviceList(userId))
+    }
+
+    fun checkSelfTrust(myCrossSigningInfo: MXCrossSigningInfo?, myDevices: List<CryptoDeviceInfo>?): UserTrustResult {
+        // Special case when it's me,
+        // I have to check that MSK -> USK -> SSK
+        // and that MSK is trusted (i know the private key, or is signed by a trusted device)
+//        val myCrossSigningInfo = cryptoStore.getCrossSigningInfo(userId)
 
         val myMasterKey = myCrossSigningInfo?.masterKey()
                 ?: return UserTrustResult.CrossSigningNotConfigured(userId)
@@ -423,7 +445,7 @@ internal class DefaultCrossSigningService @Inject constructor(
             // Maybe it's signed by a locally trusted device?
             myMasterKey.signatures?.get(userId)?.forEach { (key, value) ->
                 val potentialDeviceId = key.withoutPrefix("ed25519:")
-                val potentialDevice = cryptoStore.getUserDevice(userId, potentialDeviceId)
+                val potentialDevice = myDevices?.firstOrNull { it.deviceId == potentialDeviceId } // cryptoStore.getUserDevice(userId, potentialDeviceId)
                 if (potentialDevice != null && potentialDevice.isVerified) {
                     // Check signature validity?
                     try {
@@ -561,6 +583,8 @@ internal class DefaultCrossSigningService @Inject constructor(
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             cryptoStore.markMyMasterKeyAsLocallyTrusted(true)
             checkSelfTrust()
+            // re-verify all trusts
+            onUsersDeviceUpdate(listOf(userId))
         }
     }
 
@@ -666,6 +690,55 @@ internal class DefaultCrossSigningService @Inject constructor(
         return DeviceTrustResult.Success(DeviceTrustLevel(crossSigningVerified = true, locallyVerified = locallyTrusted))
     }
 
+    fun checkDeviceTrust(myKeys: MXCrossSigningInfo?, otherKeys: MXCrossSigningInfo?, otherDevice: CryptoDeviceInfo) : DeviceTrustResult {
+        val locallyTrusted = otherDevice.trustLevel?.isLocallyVerified()
+        myKeys ?: return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.CrossSigningNotConfigured(userId))
+
+        if (!myKeys.isTrusted()) return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.KeysNotTrusted(myKeys))
+
+        otherKeys ?: return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.CrossSigningNotConfigured(otherDevice.userId))
+
+        // TODO should we force verification ?
+        if (!otherKeys.isTrusted()) return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.KeysNotTrusted(otherKeys))
+
+        // Check if the trust chain is valid
+        /*
+         *  ┏━━━━━━━━┓                             ┏━━━━━━━━┓
+         *  ┃ ALICE  ┃                             ┃  BOB   ┃
+         *  ┗━━━━━━━━┛                             ┗━━━━━━━━┛
+         *   MSK                      ┌────────────▶MSK
+         *                            │
+         *     │                      │               │
+         *     │    SSK               │               └──▶ SSK  ──────────────────┐
+         *     │                      │                                           │
+         *     │                      │                    USK                    │
+         *     └──▶ USK   ────────────┘              (not visible by              │
+         *                                                Alice)                  │
+         *                                                                        ▼
+         *                                                                ┌──────────────┐
+         *                                                                │ BOB's Device │
+         *                                                                └──────────────┘
+         */
+
+        val otherSSKSignature = otherDevice.signatures?.get(otherKeys.userId)?.get("ed25519:${otherKeys.selfSigningKey()?.unpaddedBase64PublicKey}")
+                ?: return legacyFallbackTrust(
+                        locallyTrusted,
+                        DeviceTrustResult.MissingDeviceSignature(otherDevice.deviceId, otherKeys.selfSigningKey()
+                                ?.unpaddedBase64PublicKey
+                                ?: ""
+                        )
+                )
+
+        // Check  bob's device is signed by bob's SSK
+        try {
+            olmUtility!!.verifyEd25519Signature(otherSSKSignature, otherKeys.selfSigningKey()?.unpaddedBase64PublicKey, otherDevice.canonicalSignable())
+        } catch (e: Throwable) {
+            return legacyFallbackTrust(locallyTrusted, DeviceTrustResult.InvalidDeviceSignature(otherDevice.deviceId, otherSSKSignature, e))
+        }
+
+        return DeviceTrustResult.Success(DeviceTrustLevel(crossSigningVerified = true, locallyVerified = locallyTrusted))
+    }
+
     private fun legacyFallbackTrust(locallyTrusted: Boolean?, crossSignTrustFail: DeviceTrustResult): DeviceTrustResult {
         return if (locallyTrusted == true) {
             DeviceTrustResult.Success(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true))
@@ -675,36 +748,18 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun onUsersDeviceUpdate(userIds: List<String>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            Timber.d("## CrossSigning - onUsersDeviceUpdate for ${userIds.size} users")
-            userIds.forEach { otherUserId ->
-                checkUserTrust(otherUserId).let {
-                    Timber.v("## CrossSigning - update trust for $otherUserId , verified=${it.isVerified()}")
-                    setUserKeysAsTrusted(otherUserId, it.isVerified())
-                }
-            }
-        }
+        Timber.d("## CrossSigning - onUsersDeviceUpdate for $userIds")
+        val workerParams = UpdateTrustWorker.Params(sessionId = sessionId, updatedUserIds = userIds)
+        val workerData = WorkerParamsFactory.toData(workerParams)
 
-        // now check device trust
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            userIds.forEach { otherUserId ->
-                // TODO if my keys have changes, i should recheck all devices of all users?
-                val devices = cryptoStore.getUserDeviceList(otherUserId)
-                devices?.forEach { device ->
-                    val updatedTrust = checkDeviceTrust(otherUserId, device.deviceId, device.trustLevel?.isLocallyVerified() ?: false)
-                    Timber.v("## CrossSigning - update trust for device ${device.deviceId} of user $otherUserId , verified=$updatedTrust")
-                    cryptoStore.setDeviceTrust(otherUserId, device.deviceId, updatedTrust.isCrossSignedVerified(), updatedTrust.isLocallyVerified())
-                }
+        val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<UpdateTrustWorker>()
+                .setInputData(workerData)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, 2_000L, TimeUnit.MILLISECONDS)
+                .build()
 
-                if (otherUserId == userId) {
-                    // It's me, i should check if a newly trusted device is signing my master key
-                    // In this case it will change my MSK trust, and should then re-trigger a check of all other user trust
-                    setUserKeysAsTrusted(otherUserId, checkSelfTrust().isVerified())
-                }
-            }
-
-            eventBus.post(CryptoToSessionUserTrustChange(userIds))
-        }
+        workManagerProvider.workManager
+                .beginUniqueWork("TRUST_UPDATE_QUEUE", ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
+                .enqueue()
     }
 
     private fun setUserKeysAsTrusted(otherUserId: String, trusted: Boolean) {

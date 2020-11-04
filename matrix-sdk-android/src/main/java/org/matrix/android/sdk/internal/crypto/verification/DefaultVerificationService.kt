@@ -20,7 +20,6 @@ import android.os.Handler
 import android.os.Looper
 import dagger.Lazy
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -111,9 +110,6 @@ internal class DefaultVerificationService @Inject constructor(
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
-    // Cannot be injected in constructor as it creates a dependency cycle
-    lateinit var cryptoService: CryptoService
-
     // map [sender : [transaction]]
     private val txMap = HashMap<String, HashMap<String, DefaultVerificationTransaction>>()
 
@@ -129,7 +125,8 @@ internal class DefaultVerificationService @Inject constructor(
 
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        Timber.d("## SAS onToDeviceEvent ${event.getClearType()}")
+        cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START         -> {
                     onStartRequestReceived(event)
@@ -163,7 +160,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     fun onRoomEvent(event: Event) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START  -> {
                     onRoomStartRequestReceived(event)
@@ -240,6 +237,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     private fun dispatchRequestAdded(tx: PendingVerificationRequest) {
+        Timber.v("## SAS dispatchRequestAdded txId:${tx.transactionId}")
         uiHandler.post {
             listeners.forEach {
                 try {
@@ -303,11 +301,14 @@ internal class DefaultVerificationService @Inject constructor(
         // We don't want to block here
         val otherDeviceId = validRequestInfo.fromDevice
 
+        Timber.v("## SAS onRequestReceived from $senderId and device $otherDeviceId, txId:${validRequestInfo.transactionId}")
+
         cryptoCoroutineScope.launch {
             if (checkKeysAreDownloaded(senderId, otherDeviceId) == null) {
                 Timber.e("## Verification device $otherDeviceId is not known")
             }
         }
+        Timber.v("## SAS onRequestReceived .. checkKeysAreDownloaded launched")
 
         // Remember this request
         val requestsForUser = pendingRequests.getOrPut(senderId) { mutableListOf() }
@@ -1203,7 +1204,9 @@ internal class DefaultVerificationService @Inject constructor(
         // TODO refactor this with the DM one
         Timber.i("## Requesting verification to user: $otherUserId with device list $otherDevices")
 
-        val targetDevices = otherDevices ?: cryptoService.getUserDevices(otherUserId).map { it.deviceId }
+        val targetDevices = otherDevices ?: cryptoStore.getUserDevices(otherUserId)
+                ?.values?.map { it.deviceId } ?: emptyList()
+
         val requestsForUser = pendingRequests.getOrPut(otherUserId) { mutableListOf() }
 
         val transport = verificationTransportToDeviceFactory.createTransport(null)

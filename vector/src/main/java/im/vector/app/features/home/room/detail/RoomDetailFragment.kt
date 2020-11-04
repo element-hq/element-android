@@ -363,12 +363,17 @@ class RoomDetailFragment @Inject constructor(
                 RoomDetailViewEvents.ShowWaitingView                     -> vectorBaseActivity.showWaitingView()
                 RoomDetailViewEvents.HideWaitingView                     -> vectorBaseActivity.hideWaitingView()
                 is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
+                is RoomDetailViewEvents.OpenRoom                         -> handleOpenRoom(it)
             }.exhaustive
         }
 
         if (savedInstanceState == null) {
             handleShareData()
         }
+    }
+
+    private fun handleOpenRoom(openRoom: RoomDetailViewEvents.OpenRoom) {
+        navigator.openRoom(requireContext(), openRoom.roomId, null)
     }
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
@@ -886,6 +891,8 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.JumpToReadReceipt(roomDetailPendingAction.userId))
             is RoomDetailPendingAction.MentionUser       ->
                 insertUserDisplayNameInTextEditor(roomDetailPendingAction.userId)
+            is RoomDetailPendingAction.OpenOrCreateDm    ->
+                roomDetailViewModel.handle(RoomDetailAction.OpenOrCreateDm(roomDetailPendingAction.userId))
         }.exhaustive
     }
 

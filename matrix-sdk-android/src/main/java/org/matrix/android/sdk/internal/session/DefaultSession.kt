@@ -59,13 +59,13 @@ import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
-import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDecryptor
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
@@ -115,7 +115,6 @@ internal class DefaultSession @Inject constructor(
         private val accountDataService: Lazy<AccountDataService>,
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
-        private val timelineEventDecryptor: TimelineEventDecryptor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val defaultIdentityService: DefaultIdentityService,
         private val integrationManagerService: IntegrationManagerService,
@@ -162,7 +161,6 @@ internal class DefaultSession @Inject constructor(
             lifecycleObservers.forEach { it.onStart() }
         }
         eventBus.register(this)
-        timelineEventDecryptor.start()
         eventSenderProcessor.start()
     }
 
@@ -200,7 +198,7 @@ internal class DefaultSession @Inject constructor(
     override fun close() {
         assert(isOpen)
         stopSync()
-        timelineEventDecryptor.destroy()
+        // timelineEventDecryptor.destroy()
         uiHandler.post {
             lifecycleObservers.forEach { it.onStop() }
         }
@@ -286,5 +284,9 @@ internal class DefaultSession @Inject constructor(
     // For easy debugging
     override fun toString(): String {
         return "$myUserId - ${sessionParams.deviceId}"
+    }
+
+    override fun logDbUsageInfo() {
+        RealmDebugTools(realmConfiguration).logInfo("Session")
     }
 }

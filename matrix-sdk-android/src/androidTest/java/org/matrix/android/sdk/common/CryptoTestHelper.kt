@@ -32,9 +32,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.api.session.room.timeline.Timeline
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
@@ -197,47 +194,16 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
-        val lock = CountDownLatch(1)
-
-        val bobEventsListener = object : Timeline.Listener {
-            override fun onTimelineFailure(throwable: Throwable) {
-                // noop
-            }
-
-            override fun onNewTimelineEvents(eventIds: List<String>) {
-                // noop
-            }
-
-            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                val messages = snapshot.filter { it.root.getClearType() == EventType.MESSAGE }
-                        .groupBy { it.root.senderId!! }
-
-                // Alice has sent 2 messages and Bob has sent 3 messages
-                if (messages[aliceSession.myUserId]?.size == 2 && messages[bobSession.myUserId]?.size == 3) {
-                    lock.countDown()
-                }
-            }
-        }
-
-        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(20))
-        bobTimeline.start()
-        bobTimeline.addListener(bobEventsListener)
-
         // Alice sends a message
-        roomFromAlicePOV.sendTextMessage(messagesFromAlice[0])
+        mTestHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[0], 1)
+//        roomFromAlicePOV.sendTextMessage(messagesFromAlice[0])
 
         // Bob send 3 messages
-        roomFromBobPOV.sendTextMessage(messagesFromBob[0])
-        roomFromBobPOV.sendTextMessage(messagesFromBob[1])
-        roomFromBobPOV.sendTextMessage(messagesFromBob[2])
-
+        mTestHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[0], 1)
+        mTestHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[1], 1)
+        mTestHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[2], 1)
         // Alice sends a message
-        roomFromAlicePOV.sendTextMessage(messagesFromAlice[1])
-
-        mTestHelper.await(lock)
-
-        bobTimeline.removeListener(bobEventsListener)
-        bobTimeline.dispose()
+        mTestHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[1], 1)
 
         return cryptoTestData
     }
@@ -279,20 +245,14 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     fun createFakeMegolmBackupCreationInfo(): MegolmBackupCreationInfo {
         return MegolmBackupCreationInfo(
                 algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
-                authData = createFakeMegolmBackupAuthData()
+                authData = createFakeMegolmBackupAuthData(),
+                recoveryKey = "fake"
         )
     }
 
     fun createDM(alice: Session, bob: Session): String {
         val roomId = mTestHelper.doSync<String> {
-            alice.createRoom(
-                    CreateRoomParams().apply {
-                        invitedUserIds.add(bob.myUserId)
-                        setDirectMessage()
-                        enableEncryptionIfInvitedUsersSupportIt = true
-                    },
-                    it
-            )
+            alice.createDirectRoom(bob.myUserId, it)
         }
 
         mTestHelper.waitWithLatch { latch ->

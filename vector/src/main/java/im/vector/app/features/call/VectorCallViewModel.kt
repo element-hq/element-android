@@ -88,6 +88,11 @@ class VectorCallViewModel @AssistedInject constructor(
 
     private val currentCallListener = object : WebRtcPeerConnectionManager.CurrentCallListener {
         override fun onCurrentCallChange(call: MxCall?) {
+            // we need to check the state
+            if (call == null) {
+                // we should dismiss, e.g handled by other session?
+                _viewEvents.post(VectorCallViewEvents.DismissNoCall)
+            }
         }
 
         override fun onCaptureStateChanged() {

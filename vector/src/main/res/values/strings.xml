@@ -173,6 +173,7 @@
     <string name="no_conversation_placeholder">No conversations</string>
     <string name="no_contact_access_placeholder">You didn’t allow Element to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
+    <string name="no_more_results">No more results</string>
     <string name="people_no_identity_server">No identity server configured.</string>
 
     <!-- Rooms fragment -->
@@ -192,6 +193,7 @@
 
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
+    <string name="send_bug_report_include_key_share_history">Send key share requests history</string>
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Report bug</string>
     <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
@@ -2170,6 +2172,7 @@
     <string name="room_member_power_level_default_in">Default in %1$s</string>
     <string name="room_member_power_level_custom_in">Custom (%1$d) in %2$s</string>
 
+    <string name="room_member_open_or_create_dm">Direct message</string>
     <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
 
     <string name="rendering_event_error_type_of_event_not_handled">"Element does not handle events of type '%1$s'"</string>
@@ -2307,6 +2310,7 @@
     <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Key Requests</string>
+    <string name="settings_export_trail">Export Audit</string>
 
     <string name="e2e_use_keybackup">Unlock encrypted messages history</string>
 

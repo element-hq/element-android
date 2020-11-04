@@ -377,7 +377,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
 
         // Update devices trust for these users
-        dispatchDeviceChange(downloadUsers)
+        // dispatchDeviceChange(downloadUsers)
 
         return onKeysDownloadSucceed(filteredUsers, response.failures)
     }

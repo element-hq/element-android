@@ -154,7 +154,7 @@
     <string name="notice_room_ban_with_reason">%1$s vykázali %2$s. Důvod: %3$s</string>
     <string name="notice_room_ban_with_reason_by_you">Vykázali jste %1$s. Důvod: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s poslali %2$s pozvání, aby vstoupili do místnosti. Důvod: %3$s</string>
-    <string name="notice_room_third_party_invite_with_reason_by_you">"Poslali jste %1$s pozvání, aby  vstoupili do místnosti. Důvod: %2$s"</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Poslali jste %1$s pozvání, aby vstoupili do místnosti. Důvod: %2$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s zrušili pozvání do místnosti pro %2$s. Důvod: %3$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Zrušili jste pozvání do místnosti pro %1$s. Důvod: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s přijali pozvání pro %2$s. Důvod: %3$s</string>
@@ -177,9 +177,9 @@
         <item quantity="other">%1$s odstranili %2$s jako adresy pro tuto místnost.</item>
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
-        <item quantity="one">Odstranili jste %2$s jako adresu pro tuto místnost.</item>
-        <item quantity="few">Odstranili jste %2$s jako adresuy pro tuto místnost.</item>
-        <item quantity="other">Odstranili jste %2$s jako adresy pro tuto místnost.</item>
+        <item quantity="one">Odstranili jste %1$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">Odstranili jste %1$s jako adresuy pro tuto místnost.</item>
+        <item quantity="other">Odstranili jste %1$s jako adresy pro tuto místnost.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s přidali %2$s a odstranili %3$s jako adresy pro tuto místnost.</string>
     <string name="notice_room_aliases_added_and_removed_by_you">Přidali jste %1$s a odstranili %2$s jako adresy pro tuto místnost.</string>
@@ -187,7 +187,7 @@
     <string name="notice_room_canonical_alias_set_by_you">Nastavili jste %1$s na hlavní adresu této místnosti.</string>
     <string name="notice_room_canonical_alias_unset">%1$s odstranili hlavní adresu této místnosti.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Odstranili jste hlavní adresu této místnosti.</string>
-    <string name="notice_room_guest_access_can_join">"%1$s  povolili hostům vstoupit do místnosti."</string>
+    <string name="notice_room_guest_access_can_join">%1$s povolili hostům vstoupit do místnosti.</string>
     <string name="notice_room_guest_access_can_join_by_you">Povolili jste hostům vstoupit do místnosti.</string>
     <string name="notice_room_guest_access_forbidden">%1$s zamezili hostům vstoupit do místnosti.</string>
     <string name="notice_room_guest_access_forbidden_by_you">Zamezili jste hostům vstoupit do místnosti.</string>
@@ -196,4 +196,26 @@
     <string name="notice_end_to_end_unknown_algorithm">%1$s zapnuli end-to-end šifrování (neznámý algoritmus %2$s).</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Zapnuli jste end-to-end šifrování (neznámý algoritmus %1$s).</string>
     <string name="key_verification_request_fallback_message">%s žádá ověření Vašeho klíče, ale Váš klient nepodporuje ověření klíče v chatu. Budete muset k ověření klíčů použít zastaralý způsob ověření.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Zamezili jste hostům vstoupit do této místnosti.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s zamezil hostům vstoupit do této místnosti.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Povolili jste hostům vstoupit.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s povolil hostům vstoupit.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Odešli jste. Důvod: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s odešli. Důvod: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Vstoupili jste. Důvod: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s vstoupili. Důvod: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Vy jste zrušili pozvání pro %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s zrušili pozvání pro %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Vy jste pozvali %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s pozvali %2$s</string>
+    <string name="notice_direct_room_update_by_you">Vy jste tady provedli upgrade.</string>
+    <string name="notice_direct_room_update">%s tady provedli upgrade.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Učinili jste budoucí zprávy viditelné pro %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s učinili budoucí zprávy viditelné pro %2$s</string>
+    <string name="notice_direct_room_leave_by_you">Odešli jste z místnosti</string>
+    <string name="notice_direct_room_leave">%1$s odešli z místnosti</string>
+    <string name="notice_direct_room_join_by_you">Vstoupili jste</string>
+    <string name="notice_direct_room_join">%1$s vstoupili</string>
+    <string name="notice_direct_room_created_by_you">Založili jste diskusi</string>
+    <string name="notice_direct_room_created">%1$s založil diskusi</string>
 </resources>

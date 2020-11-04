@@ -88,7 +88,10 @@ class CommonTestHelper(context: Context) {
     fun syncSession(session: Session) {
         val lock = CountDownLatch(1)
 
-        GlobalScope.launch(Dispatchers.Main) { session.open() }
+        val job = GlobalScope.launch(Dispatchers.Main) {
+            session.open()
+        }
+        runBlocking { job.join() }
 
         session.startSync(true)
 
@@ -341,7 +344,7 @@ class CommonTestHelper(context: Context) {
     }
 
     // Transform a method with a MatrixCallback to a synchronous method
-    inline fun <reified T> doSync(block: (MatrixCallback<T>) -> Unit): T {
+    inline fun <reified T> doSync(timeout: Long? = TestConstants.timeOutMillis, block: (MatrixCallback<T>) -> Unit): T {
         val lock = CountDownLatch(1)
         var result: T? = null
 
@@ -354,7 +357,7 @@ class CommonTestHelper(context: Context) {
 
         block.invoke(callback)
 
-        await(lock)
+        await(lock, timeout)
 
         assertNotNull(result)
         return result!!
@@ -366,8 +369,9 @@ class CommonTestHelper(context: Context) {
     fun Iterable<Session>.signOutAndClose() = forEach { signOutAndClose(it) }
 
     fun signOutAndClose(session: Session) {
-        doSync<Unit> { session.signOut(true, it) }
-        session.close()
+        doSync<Unit>(60_000) { session.signOut(true, it) }
+        // no need signout will close
+        // session.close()
     }
 }
 
