@@ -508,7 +508,7 @@ class RoomDetailFragment @Inject constructor(
         modelBuildListener = null
         autoCompleter.clear()
         debouncer.cancelAll()
-        recyclerView.cleanup()
+        timelineRecyclerView.cleanup()
 
         super.onDestroyView()
     }
@@ -535,7 +535,7 @@ class RoomDetailFragment @Inject constructor(
         jumpToBottomViewVisibilityManager = JumpToBottomViewVisibilityManager(
                 jumpToBottomView,
                 debouncer,
-                recyclerView,
+                timelineRecyclerView,
                 layoutManager
         )
     }
@@ -558,7 +558,7 @@ class RoomDetailFragment @Inject constructor(
         if (scrollPosition == null) {
             scrollOnHighlightedEventCallback.scheduleScrollTo(action.eventId)
         } else {
-            recyclerView.stopScroll()
+            timelineRecyclerView.stopScroll()
             layoutManager.scrollToPosition(scrollPosition)
         }
     }
@@ -969,14 +969,14 @@ class RoomDetailFragment @Inject constructor(
         timelineEventController.callback = this
         timelineEventController.timeline = roomDetailViewModel.timeline
 
-        recyclerView.trackItemsVisibilityChange()
+        timelineRecyclerView.trackItemsVisibilityChange()
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)
-        scrollOnHighlightedEventCallback = ScrollOnHighlightedEventCallback(recyclerView, layoutManager, timelineEventController)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.itemAnimator = null
-        recyclerView.setHasFixedSize(true)
+        scrollOnHighlightedEventCallback = ScrollOnHighlightedEventCallback(timelineRecyclerView, layoutManager, timelineEventController)
+        timelineRecyclerView.layoutManager = layoutManager
+        timelineRecyclerView.itemAnimator = null
+        timelineRecyclerView.setHasFixedSize(true)
         modelBuildListener = OnModelBuildFinishedListener {
             it.dispatchTo(stateRestorer)
             it.dispatchTo(scrollOnNewMessageCallback)
@@ -985,7 +985,7 @@ class RoomDetailFragment @Inject constructor(
             jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
         }
         timelineEventController.addModelBuildListener(modelBuildListener)
-        recyclerView.adapter = timelineEventController.adapter
+        timelineRecyclerView.adapter = timelineEventController.adapter
 
         if (vectorPreferences.swipeToReplyIsEnabled()) {
             val quickReplyHandler = object : RoomMessageTouchHelperCallback.QuickReplayHandler {
@@ -1015,9 +1015,9 @@ class RoomDetailFragment @Inject constructor(
             }
             val swipeCallback = RoomMessageTouchHelperCallback(requireContext(), R.drawable.ic_reply, quickReplyHandler)
             val touchHelper = ItemTouchHelper(swipeCallback)
-            touchHelper.attachToRecyclerView(recyclerView)
+            touchHelper.attachToRecyclerView(timelineRecyclerView)
         }
-        recyclerView.addGlidePreloader(
+        timelineRecyclerView.addGlidePreloader(
                 epoxyController = timelineEventController,
                 requestManager = GlideApp.with(this),
                 preloader = glidePreloader { requestManager, epoxyModel: MessageImageVideoItem, _ ->

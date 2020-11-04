@@ -61,7 +61,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
         waiting_view_status_text.setText(R.string.please_wait)
         waiting_view_status_text.isVisible = true
         devicesController.callback = this
-        recyclerView.configureWith(devicesController, showDivider = true)
+        genericRecyclerView.configureWith(devicesController, showDivider = true)
         viewModel.observeViewEvents {
             when (it) {
                 is DevicesViewEvents.Loading            -> showLoading(it.message)
@@ -97,7 +97,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
 
     override fun onDestroyView() {
         devicesController.callback = null
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         super.onDestroyView()
     }
 

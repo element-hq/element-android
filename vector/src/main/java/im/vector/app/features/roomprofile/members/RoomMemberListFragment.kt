@@ -57,7 +57,7 @@ class RoomMemberListFragment @Inject constructor(
         setupToolbar(roomSettingsToolbar)
         setupSearchView()
         setupInviteUsersButton()
-        recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
+        roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
     }
 
     private fun setupInviteUsersButton() {
@@ -65,7 +65,7 @@ class RoomMemberListFragment @Inject constructor(
             navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
         }
         // Hide FAB when list is scrolling
-        recyclerView.addOnScrollListener(
+        roomSettingsRecyclerView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         when (newState) {
@@ -99,7 +99,7 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        roomSettingsRecyclerView.cleanup()
         super.onDestroyView()
     }
 

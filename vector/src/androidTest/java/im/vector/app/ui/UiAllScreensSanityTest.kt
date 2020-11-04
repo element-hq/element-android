@@ -178,7 +178,7 @@ class UiAllScreensSanityTest {
         navigateToRoomSettings()
 
         // Long click on the message
-        onView(withId(R.id.recyclerView))
+        onView(withId(R.id.timelineRecyclerView))
                 .perform(
                         actionOnItem<RecyclerView.ViewHolder>(
                                 hasDescendant(withText("Hello world!")),

@@ -49,7 +49,7 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
         waiting_view_status_text.setText(R.string.please_wait)
         waiting_view_status_text.isVisible = true
         ignoredUsersController.callback = this
-        recyclerView.configureWith(ignoredUsersController)
+        genericRecyclerView.configureWith(ignoredUsersController)
         viewModel.observeViewEvents {
             when (it) {
                 is IgnoredUsersViewEvents.Loading -> showLoading(it.message)
@@ -60,7 +60,7 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
 
     override fun onDestroyView() {
         ignoredUsersController.callback = null
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         super.onDestroyView()
     }
 
