@@ -23,15 +23,15 @@ data class MegolmBackupCreationInfo(
         /**
          * The algorithm used for storing backups [org.matrix.androidsdk.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP].
          */
-        val algorithm: String = "",
+        val algorithm: String,
 
         /**
          * Authentication data.
          */
-        val authData: MegolmBackupAuthData? = null,
+        val authData: MegolmBackupAuthData,
 
         /**
          * The Base58 recovery key.
          */
-        val recoveryKey: String = ""
+        val recoveryKey: String
 )

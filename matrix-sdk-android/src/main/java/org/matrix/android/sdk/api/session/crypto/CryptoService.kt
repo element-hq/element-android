@@ -155,4 +155,6 @@ interface CryptoService {
     // For testing shared session
     fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int>
     fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
+
+    fun logDbUsageInfo()
 }

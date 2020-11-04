@@ -102,8 +102,8 @@ class VectorFileLogger @Inject constructor(val context: Context, private val vec
         return if (vectorPreferences.labAllowedExtendedLogging()) {
             false
         } else {
-            // Exclude debug and verbose logs
-            priority <= Log.DEBUG
+            // Exclude verbose logs
+            priority < Log.DEBUG
         }
     }
 

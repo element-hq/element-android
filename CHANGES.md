@@ -20,9 +20,12 @@ Improvements 🙌:
  - Considerably faster QR-code bitmap generation (#2331)
 
 Bugfix 🐛:
+ - Fixed ringtone handling (#2100 & #2246)
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
+ - Incoming call continues to ring if call is answered on another device (#1921)
  - Search Result | scroll jumps after pagination (#2238)
  - Badly formatted mentions in body (#1506)
+ - KeysBackup: Avoid using `!!` (#2262)
 
 Translations 🗣:
  -

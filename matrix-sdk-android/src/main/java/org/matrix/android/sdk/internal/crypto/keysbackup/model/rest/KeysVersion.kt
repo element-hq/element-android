@@ -23,5 +23,5 @@ import com.squareup.moshi.JsonClass
 data class KeysVersion(
         // the keys backup version
         @Json(name = "version")
-        val version: String? = null
+        val version: String
 )

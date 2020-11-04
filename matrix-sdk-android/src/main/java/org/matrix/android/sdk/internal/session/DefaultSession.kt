@@ -59,6 +59,7 @@ import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
@@ -197,7 +198,7 @@ internal class DefaultSession @Inject constructor(
     override fun close() {
         assert(isOpen)
         stopSync()
-       // timelineEventDecryptor.destroy()
+        // timelineEventDecryptor.destroy()
         uiHandler.post {
             lifecycleObservers.forEach { it.onStop() }
         }
@@ -283,5 +284,9 @@ internal class DefaultSession @Inject constructor(
     // For easy debugging
     override fun toString(): String {
         return "$myUserId - ${sessionParams.deviceId}"
+    }
+
+    override fun logDbUsageInfo() {
+        RealmDebugTools(realmConfiguration).logInfo("Session")
     }
 }

@@ -314,6 +314,10 @@ internal class DefaultCryptoService @Inject constructor(
         }
         // Just update
         fetchDevicesList(NoOpMatrixCallback())
+
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            cryptoStore.tidyUpDataBase()
+        }
     }
 
     fun ensureDevice() {
@@ -1291,6 +1295,11 @@ internal class DefaultCryptoService @Inject constructor(
     override fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent? {
         return cryptoStore.getWithHeldMegolmSession(roomId, sessionId)
     }
+
+    override fun logDbUsageInfo() {
+        cryptoStore.logDbUsageInfo()
+    }
+
     /* ==========================================================================================
      * For test only
      * ========================================================================================== */
