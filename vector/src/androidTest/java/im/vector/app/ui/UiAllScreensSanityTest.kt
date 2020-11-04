@@ -22,7 +22,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.longClick
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
@@ -54,6 +53,7 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.initialSyncIdlingResource
+import im.vector.app.waitForView
 import im.vector.app.withIdlingResource
 import org.junit.Rule
 import org.junit.Test
@@ -251,7 +251,7 @@ class UiAllScreensSanityTest {
 
     private fun navigateToRoomPeople() {
         // Open first user
-        clickListItem(R.id.recyclerView, 1)
+        clickListItem(R.id.roomSettingsRecyclerView, 1)
         assertDisplayed(R.id.memberProfilePowerLevelView)
 
         // Verification
@@ -282,41 +282,140 @@ class UiAllScreensSanityTest {
         clickOn(R.id.homeDrawerHeaderSettingsView)
 
         clickOn(R.string.settings_general_title)
-        // TODO
+        navigateToSettingsGeneral()
         pressBack()
 
         clickOn(R.string.settings_notifications)
-        // TODO
+        navigateToSettingsNotifications()
         pressBack()
 
         clickOn(R.string.settings_preferences)
-        // TODO
+        navigateToSettingsPreferences()
         pressBack()
 
         clickOn(R.string.preference_voice_and_video)
-        // TODO
         pressBack()
 
         clickOn(R.string.settings_ignored_users)
-        // TODO
         pressBack()
 
         clickOn(R.string.settings_security_and_privacy)
-        // TODO
+        navigateToSettingsSecurity()
         pressBack()
 
         clickOn(R.string.room_settings_labs_pref_title)
-        // TODO
         pressBack()
 
         clickOn(R.string.settings_advanced_settings)
-        // TODO
+        navigateToSettingsAdvanced()
         pressBack()
 
         clickOn(R.string.preference_root_help_about)
-        // TODO
+        navigateToSettingsHelp()
         pressBack()
 
         pressBack()
+    }
+
+    private fun navigateToSettingsHelp() {
+        /*
+        clickOn(R.string.settings_app_info_link_title)
+        Cannot go back...
+        pressBack()
+        clickOn(R.string.settings_copyright)
+        pressBack()
+        clickOn(R.string.settings_app_term_conditions)
+        pressBack()
+        clickOn(R.string.settings_privacy_policy)
+        pressBack()
+        clickOn(R.string.settings_third_party_notices)
+        pressBack()
+         */
+    }
+
+    private fun navigateToSettingsAdvanced() {
+        /*
+        TODO Find a way to scroll
+        clickOn(R.string.settings_notifications_targets)
+        pressBack()
+        clickOn(R.string.settings_push_rules)
+        pressBack()
+
+        // Enable developer mode
+        clickOn(R.string.settings_developer_mode)
+
+        clickOn(R.string.settings_account_data)
+        clickOn("m.push_rules")
+        pressBack()
+        pressBack()
+        clickOn(R.string.settings_key_requests)
+        pressBack()
+
+        // Disable developer mode
+        clickOn(R.string.settings_developer_mode)
+         */
+    }
+
+    private fun navigateToSettingsSecurity() {
+        clickOn(R.string.settings_active_sessions_show_all)
+        pressBack()
+        /*
+        TODO Find a way to scroll
+        clickOn(R.string.encryption_message_recovery)
+        // TODO go deeper here
+        pressBack()
+        clickOn(R.string.encryption_export_e2e_room_keys)
+        pressBack()
+         */
+    }
+
+    private fun navigateToSettingsPreferences() {
+        clickOn(R.string.settings_interface_language)
+        onView(ViewMatchers.isRoot())
+                .perform(waitForView(withText("Dansk (Danmark)")))
+        pressBack()
+        clickOn(R.string.settings_theme)
+        clickDialogNegativeButton()
+        clickOn(R.string.font_size)
+        clickDialogNegativeButton()
+    }
+
+    private fun navigateToSettingsNotifications() {
+        clickOn(R.string.settings_notification_advanced)
+        pressBack()
+        /*
+        clickOn(R.string.settings_noisy_notifications_preferences)
+        TODO Cannot go back
+        pressBack()
+        clickOn(R.string.settings_silent_notifications_preferences)
+        pressBack()
+        clickOn(R.string.settings_call_notifications_preferences)
+        pressBack()
+         */
+        clickOn(R.string.settings_notification_troubleshoot)
+        pressBack()
+    }
+
+    private fun navigateToSettingsGeneral() {
+        clickOn(R.string.settings_profile_picture)
+        clickDialogPositiveButton()
+        clickOn(R.string.settings_display_name)
+        clickDialogNegativeButton()
+        clickOn(R.string.settings_password)
+        clickDialogNegativeButton()
+        clickOn(R.string.settings_emails_and_phone_numbers_title)
+        pressBack()
+        clickOn(R.string.settings_discovery_manage)
+        clickOn(R.string.add_identity_server)
+        pressBack()
+        pressBack()
+        /* TODO Find a way to scroll
+        // Identity server
+        clickListItem(android.preference.R.id.recycler_view, 30)
+        pressBack()
+        // Deactivate account
+        clickListItem(R.id.recycler_view, 32)
+        pressBack()
+         */
     }
 }
