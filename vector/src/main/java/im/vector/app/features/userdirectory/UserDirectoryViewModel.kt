@@ -90,7 +90,7 @@ class UserDirectoryViewModel @AssistedInject constructor(@Assisted
         setState {
             copy(
                     pendingInvitees = selectedUsers,
-                    isThereAnExistingRoom = isThereAnExistingRoom(selectedUsers)
+                    existingDmRoomId = getExistingDmRoomId(selectedUsers)
             )
         }
     }
@@ -102,22 +102,17 @@ class UserDirectoryViewModel @AssistedInject constructor(@Assisted
         setState {
             copy(
                     pendingInvitees = selectedUsers,
-                    isThereAnExistingRoom = isThereAnExistingRoom(selectedUsers)
+                    existingDmRoomId = getExistingDmRoomId(selectedUsers)
             )
         }
     }
 
-    private fun isThereAnExistingRoom(selectedUsers: Set<PendingInvitee>): Boolean {
+    private fun getExistingDmRoomId(selectedUsers: Set<PendingInvitee>): String? {
         return selectedUsers
                 .takeIf { it.size == 1 }
+                ?.filterIsInstance(PendingInvitee.UserPendingInvitee::class.java)
                 ?.firstOrNull()
-                ?.let { invitee ->
-                    return when (invitee) {
-                        is PendingInvitee.UserPendingInvitee     -> session.getExistingDirectRoomWithUser(invitee.user.userId) != null
-                        is PendingInvitee.ThreePidPendingInvitee -> false
-                    }.exhaustive
-                }
-                ?: false
+                ?.let { invitee -> session.getExistingDirectRoomWithUser(invitee.user.userId) }
     }
 
     private fun observeDirectoryUsers() = withState { state ->

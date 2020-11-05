@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Open an existing DM instead of creating a new one (#2319)
 
 Bugfix 🐛:
  - Fix issue when updating the avatar of a room
@@ -39,7 +39,6 @@ Improvements 🙌:
  - Add graphic resources for F-Droid (#812, #2220)
  - Highlight text in the body of the displayed result (#2200)
  - Considerably faster QR-code bitmap generation (#2331)
- - Open an existing DM instead of creating a new one (#2319)
 
 Bugfix 🐛:
  - Fixed ringtone handling (#2100 & #2246)

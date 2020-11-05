@@ -57,31 +57,23 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.invitees)
-        }
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action)
+        }.exhaustive
     }
 
     /**
      * If users already have a DM room then navigate to it instead of creating a new room.
      */
-    private fun onSubmitInvitees(invitees: Set<PendingInvitee>) {
-        invitees
-                .takeIf { it.size == 1 }
-                ?.first()
-                ?.let { invitee ->
-                    when (invitee) {
-                        is PendingInvitee.UserPendingInvitee     -> session.getExistingDirectRoomWithUser(invitee.user.userId)
-                        is PendingInvitee.ThreePidPendingInvitee -> null
-                    }.exhaustive
-                }
-                ?.let { roomId ->
-                    setState {
-                        copy(createAndInviteState = Success(roomId))
-                    }
-                }
-                ?: run {
-                    createRoomAndInviteSelectedUsers(invitees)
-                }
+    private fun onSubmitInvitees(action: CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers) {
+        if (action.existingDmRoomId != null) {
+            // Do not create a new DM, just tell that the creation is successful by passing the existing roomId
+            setState {
+                copy(createAndInviteState = Success(action.existingDmRoomId))
+            }
+        } else {
+            // Create the DM
+            createRoomAndInviteSelectedUsers(action.invitees)
+        }
     }
 
     private fun createRoomAndInviteSelectedUsers(invitees: Set<PendingInvitee>) {

@@ -122,7 +122,10 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private fun onMenuItemSelected(action: UserDirectorySharedAction.OnMenuItemSelected) {
         if (action.itemId == R.id.action_create_direct_room) {
-            viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(action.invitees))
+            viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(
+                    action.invitees,
+                    action.existingDmRoomId
+            ))
         }
     }
 
