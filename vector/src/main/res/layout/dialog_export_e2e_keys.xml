@@ -81,7 +81,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/exportDialogSubmit"
-        style="@style/VectorButtonStyle"
+        style="?materialButtonStyle"
         android:layout_width="wrap_content"
         android:layout_gravity="end"
         android:enabled="false"

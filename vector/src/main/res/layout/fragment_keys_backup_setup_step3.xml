@@ -88,7 +88,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/keys_backup_setup_step3_button"
-            style="@style/VectorButtonStyle"
+            style="?materialButtonStyle"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/layout_vertical_margin"
             android:layout_marginBottom="@dimen/layout_vertical_margin"

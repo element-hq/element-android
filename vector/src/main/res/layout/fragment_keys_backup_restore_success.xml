@@ -47,7 +47,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/keys_backup_setup_done_button"
-        style="@style/VectorButtonStyle"
+        style="?materialButtonStyle"
         android:layout_margin="20dp"
         android:minWidth="200dp"
         android:text="@string/done"

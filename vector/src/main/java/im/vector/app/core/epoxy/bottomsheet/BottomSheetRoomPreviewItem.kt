@@ -85,7 +85,7 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
         val tintColor: Int
         if (isLowPriority) {
             holder.roomLowPriority.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_low_priority_remove)
-            tintColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
+            tintColor = ColorProvider(holder.view.context).getColor(R.color.riotx_accent)
         } else {
             holder.roomLowPriority.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_low_priority_add)
             tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)

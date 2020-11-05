@@ -94,7 +94,7 @@
     <!-- Set a max width because the text can be long -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/item_generic_action_button"
-        style="@style/VectorButtonStyle"
+        style="?materialButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

@@ -50,7 +50,7 @@
     <!-- Centered button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/keys_backup_setup_step1_button"
-        style="@style/VectorButtonStyle"
+        style="?materialButtonStyle"
         android:layout_width="wrap_content"
         android:layout_margin="16dp"
         android:maxWidth="@dimen/button_max_width"

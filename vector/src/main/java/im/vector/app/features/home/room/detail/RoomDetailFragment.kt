@@ -638,7 +638,7 @@ class RoomDetailFragment @Inject constructor(
                 val actionView = matrixAppsMenuItem.actionView
                 actionView
                         .findViewById<ImageView>(R.id.action_view_icon_image)
-                        .setColorFilter(ContextCompat.getColor(requireContext(), R.color.riotx_accent))
+                        .setColorFilter(ColorProvider(requireContext()).getColor(R.color.riotx_accent))
                 actionView.findViewById<TextView>(R.id.cart_badge).setTextOrHide("$widgetsCount")
                 matrixAppsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             } else {
