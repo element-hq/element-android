@@ -48,6 +48,11 @@ data class RoomListViewState(
 
     companion object {
         const val ROOM_LIST_ROOM_EXPANDED_LOW_PRIORITY_PREFIX = "ROOM_LIST_ROOM_EXPANDED_LOW_PRIORITY_"
+        const val ROOM_LIST_ROOM_EXPANDED_NORMAL_PRIORITY_PREFIX = "ROOM_LIST_ROOM_EXPANDED_NORMAL_PRIORITY_"
+        const val ROOM_LIST_ROOM_EXPANDED_FAVORITE_PREFIX = "ROOM_LIST_ROOM_EXPANDED_FAVORITE_"
+        const val ROOM_LIST_ROOM_EXPANDED_DIRECT_PREFIX = "ROOM_LIST_ROOM_EXPANDED_DIRECT_"
+        const val ROOM_LIST_ROOM_EXPANDED_GROUP_PREFIX = "ROOM_LIST_ROOM_EXPANDED_GROUP_"
+        const val ROOM_LIST_ROOM_EXPANDED_SERVER_NOTICE_PREFIX = "ROOM_LIST_ROOM_EXPANDED_SERVER_NOTICE_"
     }
 
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)
@@ -55,23 +60,46 @@ data class RoomListViewState(
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context)
     }
-    private fun getRoomListExpandedLowPriorityPref(displayMode: RoomListDisplayMode): String {
-        return ROOM_LIST_ROOM_EXPANDED_LOW_PRIORITY_PREFIX + displayMode.toString()
+    private fun getRoomListExpandedPref(prefix: String, displayMode: RoomListDisplayMode): String {
+        return prefix + displayMode.toString()
     }
 
     // SC addition
     fun initWithContext(context: Context, displayMode: RoomListDisplayMode): RoomListViewState {
         val sp = getSharedPreferences(context)
-        val pref = getRoomListExpandedLowPriorityPref(displayMode)
+        val prefLowPrio = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_LOW_PRIORITY_PREFIX, displayMode)
+        val prefNormalPrio = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_NORMAL_PRIORITY_PREFIX, displayMode)
+        val prefFavourite = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_FAVORITE_PREFIX, displayMode)
+        val prefDirect = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_DIRECT_PREFIX, displayMode)
+        val prefGroup = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_GROUP_PREFIX, displayMode)
+        val prefServerNotice = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_SERVER_NOTICE_PREFIX, displayMode)
         val scSdkPreferences = ScSdkPreferences(context)
-        return copy(isLowPriorityRoomsExpanded = sp.getBoolean(pref, isLowPriorityRoomsExpanded), scSdkPreferences = scSdkPreferences)
+        return copy(isLowPriorityRoomsExpanded = sp.getBoolean(prefLowPrio, isLowPriorityRoomsExpanded),
+                isCombinedRoomsExpanded = sp.getBoolean(prefNormalPrio, isCombinedRoomsExpanded),
+                isFavouriteRoomsExpanded = sp.getBoolean(prefFavourite, isFavouriteRoomsExpanded),
+                isDirectRoomsExpanded = sp.getBoolean(prefDirect, isDirectRoomsExpanded),
+                isGroupRoomsExpanded = sp.getBoolean(prefGroup, isGroupRoomsExpanded),
+                isServerNoticeRoomsExpanded = sp.getBoolean(prefServerNotice, isServerNoticeRoomsExpanded),
+                scSdkPreferences = scSdkPreferences)
     }
 
     // SC addition
     fun persistWithContext(context: Context, displayMode: RoomListDisplayMode) {
         val sp = getSharedPreferences(context)
-        val pref = getRoomListExpandedLowPriorityPref(displayMode)
-        sp.edit().putBoolean(pref, isLowPriorityRoomsExpanded).apply()
+        val prefLowPrio = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_LOW_PRIORITY_PREFIX, displayMode)
+        val prefNormalPrio = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_NORMAL_PRIORITY_PREFIX, displayMode)
+        val prefFavourite = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_FAVORITE_PREFIX, displayMode)
+        val prefDirect = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_DIRECT_PREFIX, displayMode)
+        val prefGroup = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_GROUP_PREFIX, displayMode)
+        val prefServerNotice = getRoomListExpandedPref(ROOM_LIST_ROOM_EXPANDED_SERVER_NOTICE_PREFIX, displayMode)
+        sp.edit()
+                .putBoolean(prefLowPrio, isLowPriorityRoomsExpanded)
+                .putBoolean(prefNormalPrio, isCombinedRoomsExpanded)
+                .putBoolean(prefFavourite, isFavouriteRoomsExpanded)
+                .putBoolean(prefDirect, isDirectRoomsExpanded)
+                .putBoolean(prefGroup, isGroupRoomsExpanded)
+                .putBoolean(prefServerNotice, isServerNoticeRoomsExpanded)
+                .apply()
     }
 
     fun isCategoryExpanded(roomCategory: RoomCategory): Boolean {
