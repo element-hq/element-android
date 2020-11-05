@@ -53,7 +53,7 @@
     <string name="room_participants_action_set_moderator">Направи модератор</string>
     <string name="room_participants_action_set_admin">Направи администратор</string>
     <string name="room_participants_power_level_prompt">Няма да можете да възвърнете тази промяна, тъй като повишавате този потребител до същото ниво на достъп като Вашето.
-Сигурни ли сте?</string>
+\nСигурни ли сте\?</string>
     <string name="people_search_local_contacts">ЛОКАЛНИ КОНТАКТИ (%d)</string>
     <string name="people_search_user_directory">ДИРЕКТОРИЯ С ПОТРЕБИТЕЛИ (%s)</string>
     <string name="room_one_user_is_typing">%s пише…</string>
@@ -212,8 +212,8 @@
     <string name="auth_reset_password_email_validation_message">Беше изпратен имейл на %s. След като проследите съдържащата се в него връзка, натиснете по-долу.</string>
     <string name="auth_reset_password_error_unauthorized">Неуспешно потвърждаване на имейл адреса: уверете се, че сте кликнали върху връзката в имейла</string>
     <string name="auth_reset_password_success_message">Вашата парола беше възстановена.
-
-Бяхте изхвърлени от профила Ви на всички устройства и вече няма да получавате известия на тях. За да ги включите отново, влезте в профила си от всяко едно устройство.</string>
+\n
+\nБяхте изхвърлени от профила Ви на всички устройства и вече няма да получавате известия на тях. За да ги включите отново, влезте в профила си от всяко едно устройство.</string>
     <string name="login_error_must_start_http">URL адресът трябва да започва с http[s]://</string>
     <string name="login_error_network_error">Неуспешно влизане в профила: Грешка в мрежата</string>
     <string name="login_error_unable_login">Неуспешно влизане в профила</string>
@@ -223,8 +223,8 @@
     <string name="auth_send_reset_email">Изпрати имейл за възстановяване</string>
     <string name="auth_return_to_login">Връщане към страницата за влизане в профила</string>
     <string name="auth_threepid_warning_message">Регистрация с имейл и телефонен номер наведнъж не се поддържа в момента. Само телефонен номер се взима под внимание.
-
-Можете да добавите имейл към профила си в настройките.</string>
+\n
+\nМожете да добавите имейл към профила си в настройките.</string>
     <string name="login_error_registration_network_error">Неуспешна регистрация: Грешка в мрежата</string>
     <string name="login_error_unable_register">Неуспешна регистрация</string>
     <string name="login_error_unable_register_mail_ownership">Неуспешна регистрация: неуспешно потвърждаване на собствеността на имейла</string>
@@ -260,7 +260,7 @@
     <string name="room_participants_action_mention">Спомени</string>
     <string name="room_participants_action_devices_list">Покажи списъка с устройства</string>
     <string name="room_participants_invite_prompt_msg">Сигурни ли сте, че искате да поканите %s в този чат?</string>
-    <string name="room_participants_ban_prompt_msg">Сигурни ли сте, че искате да блокирате този потребител в този чат?</string>
+    <string name="room_participants_ban_prompt_msg">Блокирането на потребител ще го изгони от стаята и няма да му позволи да влезе отново.</string>
     <string name="people_search_filter_text">Само потребители на Matrix</string>
     <string name="room_many_users_are_typing">%1$s, %2$s и други пишат…</string>
     <string name="room_message_placeholder_encrypted">Изпрати шифровано съобщение…</string>
@@ -296,9 +296,9 @@
     <string name="malformed_id">Грешно формиранo ID. Трябва да бъде имейл адрес или Matrix ID, например \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">ПОКАНЕНИ</string>
     <string name="room_event_action_report_prompt_reason">Причина за докладване на това съдържание</string>
-    <string name="room_event_action_report_prompt_ignore_user">Искате ли да скриете всички съобщения от този потребител?
-
-Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
+    <string name="room_event_action_report_prompt_ignore_user">Искате ли да скриете всички съобщения от този потребител\?
+\n
+\nИмайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
     <string name="room_event_action_cancel_download">Откажи изтеглянето</string>
     <string name="room_event_action_cancel_upload">Откажи качването</string>
     <string name="search_hint">Търси</string>
@@ -390,8 +390,8 @@
     <string name="devices_details_device_name">Обнови публичното име</string>
     <string name="devices_details_last_seen_title">Последно видян</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_delete_dialog_text">Тази операция изискра допълнителна автентикация.
-За да продължите, моля, въведете Вашата парола.</string>
+    <string name="devices_delete_dialog_text">Тази операция изисква допълнително удостоверяване.
+\nЗа да продължите, моля, въведете Вашата парола.</string>
     <string name="devices_delete_dialog_title">Автентикация</string>
     <string name="devices_delete_pswd">Парола:</string>
     <string name="devices_delete_submit_button_label">Изпрати</string>
@@ -413,9 +413,9 @@
     <string name="settings_confirm_password">Потвърди новата парола</string>
     <string name="settings_fail_to_update_password">Неуспешно обновяване на паролата</string>
     <string name="settings_password_updated">Вашата парола беше обновена</string>
-    <string name="settings_unignore_user">Показване на всички съобщения от %s?
-
-Имайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
+    <string name="settings_unignore_user">Показване на всички съобщения от %s\?
+\n
+\nИмайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.</string>
     <string name="settings_delete_threepid_confirmation">Сигурни ли сте, че искате да премахнете %1$s %2$s?</string>
     <string name="settings_select_country">Избор на държава</string>
     <string name="settings_phone_number_country_label">Държава</string>
@@ -478,8 +478,8 @@
     <string name="room_settings_copy_room_address">Копирай адреса на стаята</string>
     <string name="room_settings_addresses_e2e_enabled">Шифроването е включено в тази стая.</string>
     <string name="room_settings_addresses_e2e_disabled">Шифроването е изключено в тази стая.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Включване на шифроване 
-(не може да се изключи в последствие!)</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Включване на шифроване
+\n(не може да се изключи в последствие!)</string>
     <string name="directory_title">Директория</string>
     <string name="settings_theme">Тема</string>
     <string name="failed_to_load_timeline_position">%s се опита да зареди конкретна позиция от хронологията на тази стая, но не я намери.</string>
@@ -504,9 +504,9 @@
     <string name="encryption_export_export">Експортирай</string>
     <string name="passphrase_enter_passphrase">Въведи парола</string>
     <string name="passphrase_confirm_passphrase">Потвърди парола</string>
-    <string name="encryption_export_saved_as">E2E ключовете бяха запазени в \'%s\'
-
-Внимание: ако приложението бъде деинсталирано, този файл може да бъде изтрит.</string>
+    <string name="encryption_export_saved_as">E2E ключовете бяха запазени в \'%s\'.
+\n
+\nВнимание: ако приложението бъде деинсталирано, този файл може да бъде изтрит.</string>
     <string name="encryption_import_e2e_room_keys">Импортирай E2E ключове за стая</string>
     <string name="encryption_import_room_keys">Импортиране на ключове за стая</string>
     <string name="encryption_import_room_keys_summary">Импортирай ключовете в локален файл</string>
@@ -528,10 +528,10 @@
     <string name="encryption_information_verify_key_match">Потвърждавам, че ключовете съвпадат</string>
     <string name="unknown_devices_alert_title">Стаята съдържа непознати устройства</string>
     <string name="unknown_devices_alert_message">Тази стая съдържа непознати устройства, който не са били потвърдени.
-Това означава, че няма гаранция, че устройствата принадлежат на потребителите, на който се твърди, че принадлежат.
-Препоръчваме Ви да минете през процеса за потвърждение за всяко устройство, за да потвърдите, че принадлежат на легитимен собственик. Ако предпочитате, можете да изпратите съобщението без потвърждение.
-
-Непознати устройства:</string>
+\nТова означава, че няма гаранция, че устройствата принадлежат на потребителите, на който се твърди, че принадлежат.
+\nПрепоръчваме Ви да минете през процеса за потвърждение за всяко устройство, за да потвърдите, че принадлежат на легитимен собственик. Ако предпочитате, можете да изпратите съобщението без потвърждение.
+\n
+\nНепознати устройства:</string>
     <string name="directory_server_fail_to_retrieve_server">Сървърът може би е недостъпен или претоварен</string>
     <string name="directory_server_type_homeserver">Въведете Home сървър, от който да се покажат публични стаи</string>
     <string name="directory_server_placeholder">Адрес на Home сървър</string>
@@ -561,22 +561,20 @@
     <string name="widget_integration_room_not_visible">Стая %s не е видима.</string>
     <string name="room_add_matrix_apps">Добави Matrix приложения</string>
     <string name="permissions_rationale_msg_storage">Element иска разрешение за достъп до Вашата галерия със снимки и видеа, за да изпраща и запазва прикачени файлове.
-
-Моля, разрешете достъпа от следващия прозорец, който се покаже, за да можете да изпращате файлове от телефона си.</string>
-    <string name="permissions_rationale_msg_camera">Element иска разшерение за достъп до Вашата камера, за да прави снимки или да осъществи видео разговори.</string>
-    <string name="permissions_rationale_msg_camera_explanation">
-
-Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
-    <string name="permissions_rationale_msg_record_audio">Element иска разшерение за достъп до Вашия микрофон, за да се извърши звуков разговор.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">
-
-Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element иска разшерение за достъп до микрофона и камерата Ви, за да извърши видео разговор.
-
-Моля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
-    <string name="permissions_rationale_msg_contacts">Element може да провери контактите ви, за да намери други Matrix потребители по имейл или телефонен номер.
 \n
-\nАко сте съгласни да споделите списъка с контактите си за тази цел, моля разрешете достъп при предстоящото запитване.</string>
+\nМоля, разрешете достъпа от следващия прозорец, който се покаже, за да можете да изпращате файлове от телефона си.</string>
+    <string name="permissions_rationale_msg_camera">Element иска разшерение за достъп до Вашата камера, за да прави снимки или да осъществи видео разговори.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nМоля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите."</string>
+    <string name="permissions_rationale_msg_record_audio">Element иска разшерение за достъп до Вашия микрофон, за да се извърши звуков разговор.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nМоля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите."</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Element иска разширение за достъп до микрофона и камерата Ви, за да извърши видео разговор.
+\n
+\nМоля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.</string>
+    <string name="permissions_rationale_msg_contacts">Element може да провери контактите ви, за да намери други Matrix потребители по имейл или телефонен номер. Ако сте съгласни да споделите списъка с контактите си за тази цел, моля разрешете достъп при предстоящото запитване.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Element може да провери контактите ви, за да намери други Matrix потребители по имейл и телефонен номер.
 \n
 \nРазрешавате ли да се сподели списъка с контакти за тази цел\?</string>
@@ -708,8 +706,8 @@
     <string name="title_activity_choose_sticker">Изпрати стикер</string>
     <string name="option_send_sticker">Изпрати стикер</string>
     <string name="no_sticker_application_dialog_content">В момента нямате активирани пакети със стикери.
-
-Добавете сега?</string>
+\n
+\nДобавете сега\?</string>
     <string name="settings_deactivate_account_section">Деактивиране на акаунт</string>
     <string name="settings_deactivate_my_account">Деактивирай акаунта ми</string>
     <string name="settings_opt_in_of_analytics">Изпращане на статистически данни</string>
@@ -722,10 +720,10 @@
     <string name="dialog_user_consent_submit">Прегледай сега</string>
     <string name="deactivate_account_title">Деактивиране на акаунт</string>
     <string name="deactivate_account_content">Това ще направи акаунта Ви неизползваем завинаги. Няма да можете да влезете пак, а регистрирането повторно на същия потребителски идентификатор няма да е възможно. Акаунтът Ви да напусне всички стаи, в които участва. Ще бъдат премахнати и данните за акаунта Ви от сървъра за самоличност. <b>Действието е необратимо.</b>
-
-Деактивирането на акаунта Ви <b>по подразбиране не прави така, че изпратените съобщения да бъдат забравени.</b> Ако искате да забравим съобщенията Ви, моля отбележете с отметка по-долу.
-
-Видимостта на съобщенията в Matrix е подобно на имейл системата. Нашето забравяне означава, че: изпратените от Вас съобщения няма да бъдат споделяни с нови или нерегистрирани потребители, но регистрираните потребители имащи достъп до тях ще продължат да имат достъп до своето копие.</string>
+\n
+\nДеактивирането на акаунта Ви <b>по подразбиране не прави така, че изпратените съобщения да бъдат забравени.</b> Ако искате да забравим съобщенията Ви, моля отбележете с отметка по-долу.
+\n
+\nВидимостта на съобщенията в Matrix е подобно на имейл системата. Нашето забравяне означава, че: изпратените от Вас съобщения няма да бъдат споделяни с нови или нерегистрирани потребители, но регистрираните потребители имащи достъп до тях ще продължат да имат достъп до своето копие.</string>
     <string name="deactivate_account_delete_checkbox">Моля, забравете всички изпратени от мен съобщения, когато акаунта ми се деактивира (Внимание: това ще направи бъдещите потребители да имат само частичен поглед върху кореспонденцията)</string>
     <string name="deactivate_account_prompt_password">За да продължите, моля въведете паролата си:</string>
     <string name="deactivate_account_submit">Деактивирай акаунта</string>
@@ -866,36 +864,36 @@
     <string name="settings_notification_troubleshoot">Диагностика на проблеми с известията</string>
     <string name="settings_troubleshoot_test_system_settings_success">Уведомленията са разрешени в системните настройки.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Уведомленията са забранени в системните настройки.
-Моля, проверете системните настройки.</string>
+\nМоля, проверете системните настройки.</string>
     <string name="open_settings">Отвори настройки</string>
     <string name="settings_troubleshoot_test_account_settings_title">Настройки на профила.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Уведомленията са разрешени за този профил.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Уведомленията са забранени за този профил.
-Моля, проверете настройките на профила.</string>
+\nМоля, проверете настройките на профила.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Разреши</string>
     <string name="settings_troubleshoot_test_device_settings_title">Настройки на устройството.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Уведомленията са разрешени за това устройство.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Уведомленията са забранени за това устройство.
-Моля, проверете настройките на Element.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Уведомленията са забранени за тази сесия.
+\nМоля, проверете настройките на Element.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Разреши</string>
     <string name="settings_troubleshoot_test_play_services_title">Проверка на Google Play услугите</string>
     <string name="settings_troubleshoot_test_play_services_success">APK пакет за Google Play услугите е наличен и с актуална версия.</string>
     <string name="settings_troubleshoot_test_play_services_failed">Element използва Google Play услугите за да доставя известия за съобщения, но изглежда те не са конфигурирани правилно:
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Поправи Google Play услугите</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase токен</string>
     <string name="settings_troubleshoot_test_fcm_success">Успешно получаване на FCM токен:
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Неуспешно получаване на FCM токен:
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Токен регистрация</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM токенът беше успешно регистриран със сървъра.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Неуспешна регистрация на FCM токена със сървъра:
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Услуга за известия</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Услугата за известия работи.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Услугата за известия не работи.
-Опитайте да рестартирате приложението.</string>
+\nОпитайте да рестартирате приложението.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Стартирай услугата</string>
     <string name="settings_troubleshoot_test_service_restart_title">Автоматично рестартиране на услугата за известия</string>
     <string name="settings_troubleshoot_test_service_restart_success">Услугата беше спряна и рестартирана автоматично.</string>
@@ -906,10 +904,10 @@
     <string name="settings_troubleshoot_test_service_boot_quickfix">Стартирай при старт на системата</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Проверка на фоновите ограничения</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Ограниченията във фонов режим са изключени за Element. Тази проверка трябва да се изпълни използвайки мобилни данни (не на Wi-Fi).
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_failed">Активирани са ограничения във фонов режим за Element.
-Работата, която приложението се опитва да извършва във фонов режим бива агресивно ограничена. Това може да повлияе на известяването.
-%1$s</string>
+\nРаботата, която приложението се опитва да извършва във фонов режим бива агресивно ограничена. Това може да повлияе на известяването.
+\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Премахни ограниченията</string>
     <string name="settings_troubleshoot_test_battery_title">Оптимизация на батерията</string>
     <string name="settings_troubleshoot_test_battery_success">Element не се влияе от Оптимизация на батерията.</string>
@@ -917,7 +915,7 @@
     <string name="settings_troubleshoot_test_battery_quickfix">Игнорирай оптимизацията</string>
     <string name="startup_notification_fdroid_battery_optim_title">Връзка във фонов режим</string>
     <string name="startup_notification_fdroid_battery_optim_message">Element трябва да поддържа ниско-натоварваща връзка във фонов режим, за да може известията да пристигат надеждно.
-На следващия екран, ще бъдете попитани дали да позволите на Element винаги да работи във фонов режим. Моля, приемете.</string>
+\nНа следващия екран, ще бъдете попитани дали да позволите на Element винаги да работи във фонов режим. Моля, приемете.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Разреши</string>
     <string name="account_email_error">Възникна грешка при проверката на имейл адреса Ви.</string>
     <string name="account_phone_number_error">Възникна грешка при проверката на телефонния Ви номер.</string>
@@ -937,11 +935,11 @@
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Неуспешно зареждане на собствените правила. Опитайте пак.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Провери настройките</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-Тази грешка е извън контрола на Element. Според Google, грешката показва, че устройството има прекалено много приложения регистрирани към системата за известия FCM. Проблема се случва само в случай на огромен брой приложения, така че не би трябвало да повлияе средно-статистическия потребител.</string>
+\nТази грешка е извън контрола на Element. Според Google, грешката показва, че устройството има прекалено много приложения регистрирани към системата за известия FCM. Проблема се случва само в случай на огромен брой приложения, така че не би трябвало да повлияе средно-статистическия потребител.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-Тази грешка е извън контрола на Element. Може да се случи поради няколко причини. Възможно е проблема да изчезне, ако опитате по-късно. Също така, може да проверите дали Google Play услугите не са ограничени откъм мобилни данни (вижте системните настройки), или че часовникът на устройството е правилен. Възможно е грешката да възникне и ако използвате модифицирана операционна система (custom ROM).</string>
+\nТази грешка е извън контрола на Element. Може да се случи поради няколко причини. Възможно е проблема да изчезне, ако опитате по-късно. Също така, може да проверите дали Google Play услугите не са ограничени откъм мобилни данни (вижте системните настройки), или че часовникът на устройството е правилен. Възможно е грешката да възникне и ако използвате модифицирана операционна система (custom ROM).</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-Тази грешка е извън контрола на Element. Няма Google акаунт на телефонът. Отворете системата за управления на акаунти и добавете Google акаунт.</string>
+\nТази грешка е извън контрола на Element. Няма Google акаунт на телефонът. Отворете системата за управления на акаунти и добавете Google акаунт.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Добави акаунт</string>
     <string name="settings_noisy_notifications_preferences">Настройка на шумни известия</string>
     <string name="settings_call_notifications_preferences">Настройка на известия за разговори</string>
@@ -956,15 +954,15 @@
     <string name="keys_backup_no_session_error">Не беше открита Matrix сесия</string>
     <string name="keys_backup_setup_step1_title">Никога не губете шифровани съобщения</string>
     <string name="keys_backup_setup_step1_description">Съобщения в шифровани стаи са защитени с шифроване от край до край. Само Вие и получателят (получателите) имате ключовете за прочитането им.
-
-Правете резервно копие на ключовете, за да не ги загубите.</string>
+\n
+\nПравете резервно копие на ключовете, за да не ги загубите.</string>
     <string name="keys_backup_setup_step2_button_title">Настройка на парола</string>
     <string name="keys_backup_setup_step3_button_title">Готово</string>
     <string name="keys_backup_setup_step3_copy_button_title">Запази ключа за възстановяване</string>
     <string name="keys_backup_setup_step3_save_button_title">Запази като файл</string>
     <string name="recovery_key_export_saved_as_warning">Ключът за възстановяване беше запазен в \'%s\'.
-
-Внимание: този файл може да изчезне, ако деинсталирате приложението.</string>
+\n
+\nВнимание: този файл може да изчезне, ако деинсталирате приложението.</string>
     <string name="keys_backup_setup_step3_please_make_copy">Моля, направете копие</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Сподели ключа за възстановяване с…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Генериране на ключ за възстановяване използвайки парола. Процесът може да отнеме няколко секунди.</string>
@@ -1035,16 +1033,15 @@
     <string name="keys_backup_setup_step1_manual_export">Ръчно експортиране на ключовете</string>
     <string name="keys_backup_setup_step2_text_title">Защитете резервното копие с парола.</string>
     <string name="keys_backup_setup_step2_text_description">Ще съхраним резервно копие на ключовете Ви на Вашия сървър. Защитете резервното копие с парола.
-
-За максимална защита, паролата е добре да е различна от тази за акаунта Ви.</string>
+\n
+\nЗа максимална защита, паролата е добре да е различна от тази за акаунта Ви.</string>
     <string name="keys_backup_setup_creating_backup">Създаване на резервно копие</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Или защитете резервното копие с ключ за възстановяване, който ще трябва да пазите на безопасно място.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(За напреднали) Настройка с ключ за възстановяване</string>
     <string name="keys_backup_setup_step3_success_title">Успешно!</string>
     <string name="keys_backup_setup_step3_text_line1">Прави се резервно копие на ключовете Ви.</string>
     <string name="keys_backup_setup_step3_text_line2">Ключът за възстановяване е допълнителна застраховка - ако забравите паролата, може да използвате ключа за да възстановите достъпа до шифрованите съобщения.
-
-Пазете ключа за възстановяване на много безопасно място, например в password manager програма (или сейф)</string>
+\nПазете ключа за възстановяване на много безопасно място, например в password manager програма (или сейф)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Пазете ключа за възстановяване на много безопасно място, например в password manager програма (или сейф)</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">Направих копие</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Сподели</string>
@@ -1066,8 +1063,8 @@
     <string name="keys_backup_settings_untrusted_backup">За да използвате резервно копие на ключовете, възстановете с паролата или ключа за възстановяване.</string>
     <string name="new_recovery_method_popup_title">Ново резервно копие на ключовете</string>
     <string name="new_recovery_method_popup_description">Беше открито ново резервно копие на ключовете.
-
-Ако не сте конфигурирали нов метод за възстановяване, е възможно някой да се опитва да достъпи акаунта Ви. Веднага сменете паролата на акаунта и настройте нов метод за възстановяване в Настройки.</string>
+\n
+\nАко не сте конфигурирали нов метод за възстановяване, е възможно някой да се опитва да достъпи акаунта Ви. Веднага сменете паролата на акаунта и настройте нов метод за възстановяване в Настройки.</string>
     <string name="new_recovery_method_popup_was_me">Бях аз</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Изчисляване на ключ за възстановяване…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Изтегляне на ключове…</string>
@@ -1203,7 +1200,7 @@
     <string name="fab_menu_create_chat">Директни съобщения</string>
     <string name="create_room_title">Нова стая</string>
     <string name="create_room_action_create">СЪЗДАЙ</string>
-    <string name="create_room_name_hint">Име на стая</string>
+    <string name="create_room_name_hint">Име</string>
     <string name="create_room_public_title">Публична</string>
     <string name="create_room_public_description">Всеки ще може да се присъедини към стаята</string>
     <string name="create_room_directory_title">Директория със стаи</string>
@@ -1432,7 +1429,7 @@
     <string name="room_join_rules_public">%1$s направи стаята публична за всеки знаещ връзката.</string>
     <string name="room_join_rules_invite">%1$s направи стаята само за поканени.</string>
     <string name="timeline_unread_messages">Непрочетени съобщения</string>
-    <string name="login_splash_title">Освободете комуникацията си</string>
+    <string name="login_splash_title">Освободете комуникацията си.</string>
     <string name="login_splash_text1">Чатете с хора директно или в групи</string>
     <string name="login_splash_text2">Дръжте кореспонденцията защитена с шифроване</string>
     <string name="login_splash_text3">Разширете и настройте изживяването си</string>
@@ -1915,7 +1912,7 @@
 \nКлючовете не са доверени</string>
     <string name="encryption_information_dg_xsigning_trusted">Кръстосаното-подписване е включено
 \nКлючовете са доверени.
-\nЧастните ключове са неизвестни.</string>
+\nЧастните ключове са неизвестни</string>
     <string name="encryption_information_dg_xsigning_complete">Кръстосаното-подписване е включено.
 \nЧастните ключове са на устройството.</string>
     <string name="identity_server_error_outdated_home_server">Операцията е невъзможна. Сървърът е стар.</string>
@@ -2186,4 +2183,15 @@
     <string name="identity_server_error_bulk_sha256_not_supported">За вашата поверителност, Element поддържа изпращането на адреси и телефонни номера на потребители само в хеширан вид.</string>
     <string name="identity_server_error_terms_not_signed">Първо приемете условията за сървъра за идентичност от Настройки.</string>
     <string name="identity_server_error_no_identity_server_configured">Конфигурирайте сървъра си за идентичност.</string>
+    <string name="warning_unsaved_change_discard">Отхвърляне на промените</string>
+    <string name="warning_unsaved_change">Има незапазени промени. Да се отхвърлят ли промените\?</string>
+    <string name="warning_room_not_created_yet">Стаята все още не е създадена. Отказване създаването на стаята\?</string>
+    <string name="room_list_quick_actions_low_priority_remove">Премахни от нисък приоритет</string>
+    <string name="room_list_quick_actions_low_priority_add">Добави към нисък приоритет</string>
+    <string name="rotate_and_crop_screen_title">Завъртане и изрязване</string>
+    <string name="attachment_type_dialog_title">Добави изображение от</string>
+    <string name="create_room_settings_section">Настройки на стаята</string>
+    <string name="create_room_topic_hint">Тема</string>
+    <string name="create_room_topic_section">Тема на стаята (опция)</string>
+    <string name="create_room_name_section">Име на стая</string>
 </resources>

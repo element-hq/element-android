@@ -1,8 +1,29 @@
-Changes in Element 1.0.10 (2020-XX-XX)
+Changes in Element 1.0.11 (2020-XX-XX)
 ===================================================
 
 Features ✨:
  -
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ -
+
+Other changes:
+ - Upgrade Realm dependency to 10.0.0
+
+Changes in Element 1.0.10 (2020-11-04)
+===================================================
 
 Improvements 🙌:
  - Rework sending Event management (#154)
@@ -24,18 +45,9 @@ Bugfix 🐛:
  - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
  - Incoming call continues to ring if call is answered on another device (#1921)
  - Search Result | scroll jumps after pagination (#2238)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
-
-Build 🧱:
- -
-
-Other changes:
- - Upgrade Realm dependency to 10.0.0
+ - Badly formatted mentions in body (#1506)
+ - KeysBackup: Avoid using `!!` (#2262)
+ - Two elements in the task switcher (#2299)
 
 Changes in Element 1.0.9 (2020-10-16)
 ===================================================

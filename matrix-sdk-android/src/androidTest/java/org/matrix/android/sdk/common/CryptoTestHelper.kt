@@ -245,7 +245,8 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
     fun createFakeMegolmBackupCreationInfo(): MegolmBackupCreationInfo {
         return MegolmBackupCreationInfo(
                 algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
-                authData = createFakeMegolmBackupAuthData()
+                authData = createFakeMegolmBackupAuthData(),
+                recoveryKey = "fake"
         )
     }
 

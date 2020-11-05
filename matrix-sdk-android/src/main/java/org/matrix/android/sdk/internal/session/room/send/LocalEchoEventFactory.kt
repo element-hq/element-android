@@ -90,8 +90,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     private fun createTextContent(text: CharSequence, autoMarkdown: Boolean): TextContent {
         if (autoMarkdown) {
-            val source = textPillsUtils.processSpecialSpansToMarkdown(text) ?: text.toString()
-            return markdownParser.parse(source)
+            return markdownParser.parse(text)
         } else {
             // Try to detect pills
             textPillsUtils.processSpecialSpansToHtml(text)?.let {
