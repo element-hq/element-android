@@ -8,6 +8,13 @@ source "$mydir/merge_helpers.sh"
 
 require_clean_git
 
+if [ "$1" = "test" ]; then
+    release_type="test"
+    previousTestVersionCode="$2"
+else
+    release_type="normal"
+fi
+
 
 pushd "$mydir" > /dev/null
 
@@ -49,7 +56,12 @@ scVersion=`get_prop ext.scVersion`
 
 previousVersionCode=`grep '^        versionCode ' "$build_gradle" | sed 's|^        versionCode ||'`
 versionCode=`calculate_version_code`
-if [ "$versionCode" = "$previousVersionCode" ]; then
+if [ "$release_type" = "test" ]; then
+    if [ ! -z "$previousTestVersionCode" ]; then
+        previousVersionCode=$((previousVersionCode > previousTestVersionCode ? previousVersionCode : previousTestVersionCode))
+    fi
+    versionCode=$((previousVersionCode + 1))
+elif [ "$versionCode" = "$previousVersionCode" ]; then
     ((scVersion++))
     echo "Increase downstream version to $scVersion"
     versionCode=`calculate_version_code`
@@ -74,11 +86,17 @@ changelog_dir=fastlane/metadata/android/en-US/changelogs
 changelog_file="$changelog_dir/$versionCode.txt"
 mkdir -p "$changelog_dir"
 git log --reverse --pretty=format:"- %s" "$last_tag".. --committer="$(git config user.name)" > "$changelog_file"
-$EDITOR "$changelog_file" || true
-read -p "Press enter when changelog is done"
+if [ "$release_type" != "test" ]; then
+    $EDITOR "$changelog_file" || true
+    read -p "Press enter when changelog is done"
+fi
 
 git add -A
-git commit -m "Increment version"
-git tag "$new_tag"
+if [ "$release_type" = "test" ]; then
+    git commit -m "Test version $versionCode"
+else
+    git commit -m "Increment version"
+    git tag "$new_tag"
+fi
 
 popd > /dev/null
