@@ -115,7 +115,9 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_other">
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:key="SETTINGS_SECURITY_OTHER_CATEGORY"
+        android:title="@string/settings_other">
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_SECURITY_PIN"
