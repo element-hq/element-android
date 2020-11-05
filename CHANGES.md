@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix issue when updating the avatar of a room
 
 Translations 🗣:
  -
