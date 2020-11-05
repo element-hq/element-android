@@ -117,7 +117,7 @@ class GalleryOrCameraDialogHelper(
         when (type) {
             Type.Camera ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, takePhotoPermissionActivityResultLauncher)) {
-                    avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(activity, takePhotoActivityResultLauncher)
+                    doOpenCamera()
                 }
             Type.Gallery ->
                 MultiPicker.get(MultiPicker.IMAGE).single().startWith(pickImageActivityResultLauncher)
