@@ -99,8 +99,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         val pr = if (selfVerificationMode) {
             // See if active tx for this user and take it
 
-            session.cryptoService().verificationService().getExistingVerificationRequest(args.otherUserId)
-                    ?.lastOrNull { !it.isFinished }
+            session.cryptoService().verificationService().getExistingVerificationRequests(args.otherUserId)
+                    .lastOrNull { !it.isFinished }
                     ?.also { verificationRequest ->
                         if (verificationRequest.isIncoming && !verificationRequest.isReady) {
                             // auto ready in this case, as we are waiting
