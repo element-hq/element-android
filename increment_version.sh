@@ -6,7 +6,14 @@ mydir="$(dirname "$(realpath "$0")")"
 
 source "$mydir/merge_helpers.sh"
 
-require_clean_git
+if [ "$1" = "preview" ]; then
+    preview=1
+    shift
+else
+    preview=0
+    require_clean_git
+fi
+
 
 if [ "$1" = "test" ]; then
     release_type="test"
@@ -70,7 +77,18 @@ else
 fi
 
 version="$versionMajor.$versionMinor.$versionPatch.sc.$scVersion"
+
+if [ "$release_type" = "test" ]; then
+    version="$version-test"
+fi
+
 new_tag="sc_v$version"
+
+if ((preview)); then
+    echo "versionCode $versionCode"
+    echo "versionName $version"
+    exit 0
+fi
 
 set_prop "ext.scVersion" "$scVersion"
 set_prop "versionCode" "$versionCode"
