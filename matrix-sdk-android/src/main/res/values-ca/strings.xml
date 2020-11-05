@@ -1,79 +1,217 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s ha enviat una imatge.</string>
-
-    <string name="notice_room_leave">%1s ha sortit</string>
-    <string name="notice_room_join">%1s ha entrat</string>
+    <string name="notice_room_leave">%1$s ha marxat de la sala</string>
+    <string name="notice_room_join">%1$s s\'ha unit a la sala</string>
     <string name="medium_phone_number">Número de telèfon</string>
-
     <string name="medium_email">Correu electrònic</string>
-    <string name="encrypted_message">Missatge encriptat</string>
-
-    <string name="notice_room_invite_no_invitee">la invitació de %s</string>
+    <string name="encrypted_message">Missatge xifrat</string>
+    <string name="notice_room_invite_no_invitee">invitació de %s</string>
     <string name="notice_room_invite">%1$s ha convidat a %2$s</string>
-    <string name="notice_room_invite_you">%1$s us ha convidat</string>
+    <string name="notice_room_invite_you">%1$s t\'ha convidat</string>
     <string name="notice_room_reject">%1$s ha rebutjat la invitació</string>
-    <string name="notice_room_kick">%1$s ha fet fora a %2$s</string>
-
-
-    <string name="notice_display_name_changed_from">%1$s ha canviat el seu nom visible de %2$s a %3$s</string>
-    <string name="notice_display_name_removed">%1$s ha eliminat el seu nom visible (%2$s)</string>
+    <string name="notice_room_kick">%1$s ha expulsat %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s ha canviat el seu nom de visualització de %2$s a %3$s</string>
+    <string name="notice_display_name_removed">%1$s ha eliminat el seu nom de visualització (era %2$s)</string>
     <string name="notice_room_topic_changed">%1$s ha canviat el tema a: %2$s</string>
     <string name="notice_room_name_changed">%1$s ha canviat el nom de la sala a: %2$s</string>
-    <string name="notice_answered_call">%s ha contestat la trucada.</string>
+    <string name="notice_answered_call">%s ha respost a la trucada.</string>
     <string name="notice_ended_call">%s ha finalitzat la trucada.</string>
-    <string name="notice_room_visibility_invited">tots el membres de la sala, des del punt en què són convidats.</string>
-    <string name="notice_room_visibility_shared">tots els membres de la sala.</string>
+    <string name="notice_room_visibility_invited">tots el participants de la sala, des de que són convidats.</string>
+    <string name="notice_room_visibility_shared">tots els participants de la sala.</string>
     <string name="notice_room_visibility_unknown">desconegut (%s).</string>
-    <string name="notice_end_to_end">%1$s ha activat l\'encriptació d\'extrem a extrem (%2$s)</string>
-
+    <string name="notice_end_to_end">%1$s ha activat el xifrat d\'extrem a extrem (%2$s)</string>
     <string name="notice_requested_voip_conference">%1$s ha sol·licitat una conferència VoIP</string>
-    <string name="notice_room_unban">%1$s ha readmès a %2$s</string>
-    <string name="notice_room_ban">%1$s ha vetat a %2$s</string>
+    <string name="notice_room_unban">%1$s ha tret el veto a %2$s</string>
+    <string name="notice_room_ban">%1$s ha vetat %2$s</string>
     <string name="notice_room_withdraw">%1$s ha retirat la invitació de %2$s</string>
     <string name="notice_avatar_url_changed">%1$s ha canviat el seu avatar</string>
-    <string name="notice_made_future_room_visibility">%1$s ha permès a %2$s veure l\'historial que es generi a partir d\'ara</string>
-    <string name="notice_room_visibility_joined">tots els membres de la sala, des del punt en què hi entrin.</string>
+    <string name="notice_made_future_room_visibility">%1$s ha establert la visibilitat de l\'historial futur de la sala a %2$s</string>
+    <string name="notice_room_visibility_joined">tots els participants de la sala, des de que s\'hi uneixen.</string>
     <string name="notice_room_visibility_world_readable">qualsevol.</string>
     <string name="notice_voip_started">S\'ha iniciat la conferència VoIP</string>
-    <string name="notice_voip_finished">S\'ha finalitzat la conferència de veu IP</string>
-
-    <string name="notice_avatar_changed_too">(s\'ha canviat també l\'avatar)</string>
+    <string name="notice_voip_finished">Ha finalitzat la conferència VoIP</string>
+    <string name="notice_avatar_changed_too">(també ha canviat l\'avatar)</string>
     <string name="notice_room_name_removed">%1$s ha eliminat el nom de la sala</string>
     <string name="notice_room_topic_removed">%1$s ha eliminat el tema de la sala</string>
     <string name="notice_profile_change_redacted">%1$s ha actualitzat el seu perfil %2$s</string>
-    <string name="notice_room_third_party_invite">%1$s ha enviat una invitació a %2$s per a entrar a la sala</string>
-    <string name="notice_room_third_party_registered_invite">%1$s ha acceptat la invitació per a %2$s</string>
-
-    <string name="notice_crypto_unable_to_decrypt">** No s\'ha pogut desencriptar: %s **</string>
+    <string name="notice_room_third_party_invite">%1$s ha enviat una invitació a %2$s perquè s\'uneixi a la sala</string>
+    <string name="notice_room_third_party_registered_invite">%1$s ha acceptat la invitació de %2$s</string>
+    <string name="notice_crypto_unable_to_decrypt">** No s\'ha pogut desxifrar: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">El dispositiu del remitent no ens ha enviat les claus per aquest missatge.</string>
-
     <string name="could_not_redact">No s\'ha pogut redactar</string>
     <string name="unable_to_send_message">No s\'ha pogut enviar el missatge</string>
-
     <string name="message_failed_to_upload">No s\'ha pogut pujar la imatge</string>
-
-    <string name="network_error">S\'ha produït un error de xarxa</string>
-    <string name="matrix_error">S\'ha produït un error de Matrix</string>
-
-    <string name="room_error_join_failed_empty_room">Actualment no es pot tornar a entrar a una sala buida.</string>
-
-    <string name="notice_display_name_set">%1$s a canviat el seu nom visible a %2$s</string>
-    <string name="notice_placed_video_call">%s ha iniciat una trucada de vídeo.</string>
-    <string name="notice_placed_voice_call">%s ha iniciat una trucada de veu.</string>
-
+    <string name="network_error">Error de xarxa</string>
+    <string name="matrix_error">Error de Matrix</string>
+    <string name="room_error_join_failed_empty_room">Ara per ara no és possible tornar a unir-se a una sala buida.</string>
+    <string name="notice_display_name_set">%1$s a canviat el seu nom de visualització a %2$s</string>
+    <string name="notice_placed_video_call">%s ha realitzat una videotrucada.</string>
+    <string name="notice_placed_voice_call">%s ha realitzat una trucada de veu.</string>
     <!-- Room display name -->
-    <string name="room_displayname_invite_from">Convidat per %s</string>
-    <string name="room_displayname_room_invite">Convideu a la sala</string>
+    <string name="room_displayname_invite_from">Invitació de %s</string>
+    <string name="room_displayname_room_invite">Convida a la sala</string>
     <string name="room_displayname_two_members">%1$s i %2$s</string>
     <string name="room_displayname_empty_room">Sala buida</string>
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s i 1 altre</item>
         <item quantity="other">%1$s i %2$d altres</item>
     </plurals>
-
-
     <string name="summary_user_sent_sticker">%1$s ha enviat un adhesiu.</string>
-
+    <string name="notice_direct_room_update">%s s\'ha actualitzat aquí.</string>
+    <string name="notice_direct_room_update_by_you">Ho has actualitzat aquí.</string>
+    <string name="key_verification_request_fallback_message">%s està sol·licitant la verificació de la teva clau, però el teu client no admet la verificació de clau des del xat. Hauràs d\'utilitzar la verificació de claus heretada per fer la verificació.</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Has activat el xifrat d\'extrem a extrem (algorisme %1$s no reconegut).</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s ha activat el xifrat d\'extrem a extrem (algorisme %2$s no reconegut).</string>
+    <string name="notice_end_to_end_ok_by_you">Has activat el xifrat d\'extrem a extrem.</string>
+    <string name="notice_end_to_end_ok">%1$s ha activat el xifrat d\'extrem a extrem.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Has impedit que els convidats es puguin unir a la sala.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s ha impedit que els convidats es puguin unir a la sala.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Has impedit que els convidats es puguin unir a la sala.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s ha impedit que els convidats es puguin unir a la sala.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Has permès que els convidats s\'uneixin aquí.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s ha permès que els convidats s\'uneixin aquí.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Has permès que els convidats s\'uneixin a la sala.</string>
+    <string name="notice_room_guest_access_can_join">%1$s ha permès que els convidats s\'uneixin a la sala.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Has eliminat l\'adreça principal d\'aquesta sala.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s ha eliminat l\'adreça principal d\'aquesta sala.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Has establert l\'adreça principal d\'aquesta sala a %1$s.</string>
+    <string name="notice_room_canonical_alias_set">%1$s ha establert l\'adreça principal d\'aquesta sala a %2$s.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Has afegit %1$s i has eliminat %2$s d\'aquesta sala (adreces).</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s ha afegit %2$s i ha eliminat %3$s d\'aquesta sala (adreces).</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Has eliminat l\'adreça %1$s d\'aquesta sala.</item>
+        <item quantity="other">Has eliminat les adreces %1$s d\'aquesta sala.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s ha eliminat l\'adreça %2$s d\'aquesta sala.</item>
+        <item quantity="other">%1$s ha eliminat les adreces %3$s d\'aquesta sala.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Has afegit l\'adreça %1$s a aquesta sala.</item>
+        <item quantity="other">Has afegit les adreces %1$s a aquesta sala.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s ha afegit l\'adreça %2$s a aquesta sala.</item>
+        <item quantity="other">%1$s ha afegit les adreces %2$s a aquesta sala.</item>
+    </plurals>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Has revocat la invitació de %1$s perquè s\'uneixi a la sala. Motiu: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s ha revocat la invitació de %2$s perquè s\'uneixi a la sala. Motiu: %3$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Has revocat la invitació de %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s ha revocat la invitació de %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Has revocat la invitació de %1$s perquè s\'uneixi a la sala</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s ha revocat la invitació de %2$s perquè s\'uneixi a la sala</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Has retirat la invitació de %1$s. Motiu: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s ha retirat la invitació de %2$s. Motiu: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Has acceptat la invitació de %1$s. Motiu: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s ha acceptat la invitació de %2$s. Motiu: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Has enviat una invitació a %1$s perquè s\'uneixi a la sala. Motiu: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s ha enviat una invitació a %2$s perquè s\'uneixi a la sala. Motiu: %3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Has vetat %1$s. Motiu: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s ha vetat %2$s. Motiu: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Has tret el veto a %1$s. Motiu: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s ha tret el veto a %2$s. Motiu: %3$s</string>
+    <string name="notice_room_ban_by_you">Has vetat %1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Has marxat de la sala. Motiu: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s ha marxat de la sala. Motiu: %2$s</string>
+    <string name="notice_direct_room_leave_by_you">Has marxat de la sala</string>
+    <string name="notice_direct_room_leave">%1$s ha marxat de la sala</string>
+    <string name="notice_room_leave_by_you">Has marxat de la sala</string>
+    <string name="notice_room_kick_by_you">Has expulsat %1$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Has expulsat %1$s. Motiu: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s ha expulsat %2$s. Motiu: %3$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Has rebutjat la invitació. Motiu: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s ha rebutjat la invitació. Motiu: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Has marxat. Motiu: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s ha marxat. Motiu: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">T\'has unit. Motiu: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s s\'ha unit. Motiu: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">T\'has unit a la sala. Motiu: %1$s</string>
+    <string name="notice_room_join_with_reason">%1$s s\'ha unit a la sala. Motiu: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s t\'ha convidat. Motiu: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Has convidat %1$s. Motiu: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s ha convidat %2$s. Motiu: %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">La teva invitació. Motiu: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">la invitació de %1$s. Motiu: %2$s</string>
+    <string name="clear_timeline_send_queue">Esborra la cua d\'enviament</string>
+    <string name="event_status_sending_message">Enviant missatge…</string>
+    <string name="initial_sync_start_importing_account_data">Sincronització inicial:
+\nImportant dades del compte</string>
+    <string name="initial_sync_start_importing_account_groups">Sincronització inicial:
+\nImportant comunitats</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Sincronització inicial:
+\nImportant sales que deixat</string>
+    <string name="initial_sync_start_importing_account">Sincronització inicial:
+\nImportant compte…</string>
+    <string name="initial_sync_start_importing_account_crypto">Sincronització inicial:
+\nImportant xifrat</string>
+    <string name="initial_sync_start_importing_account_rooms">Sincronització inicial:
+\nImportant sales</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Sincronització inicial:
+\nImportant sales on hi estàs convidat</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Sincronització inicial:
+\nImportant sales on hi estàs unit</string>
+    <string name="notice_power_level_diff">%1$s de %2$s a %3$s</string>
+    <string name="notice_power_level_changed">%1$s ha canviat el nivell d\'autoritat de %2$s.</string>
+    <string name="notice_power_level_changed_by_you">Has canviat el nivell d\'autoritat de %1$s.</string>
+    <string name="power_level_custom_no_value">Personalitzat</string>
+    <string name="power_level_custom">Personalitzat (%1$d)</string>
+    <string name="power_level_default">Predeterminat</string>
+    <string name="power_level_moderator">Moderador</string>
+    <string name="power_level_admin">Administrador</string>
+    <string name="notice_widget_modified_by_you">Has modificat el giny %1$s</string>
+    <string name="notice_widget_modified">%1$s ha modificat el giny %2$s</string>
+    <string name="notice_widget_removed_by_you">Has eliminat el giny %1$s</string>
+    <string name="notice_widget_removed">%1$s ha eliminat el giny %2$s</string>
+    <string name="notice_widget_added_by_you">Has afegit el giny %1$s</string>
+    <string name="notice_widget_added">%1$s ha afegit el giny %2$s</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Has acceptat la invitació de %1$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Has convidat a %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s ha convidat a %2$s</string>
+    <string name="notice_room_third_party_invite_by_you">Has enviat una invitació a %1$s perquè s\'uneixi a la sala</string>
+    <string name="notice_profile_change_redacted_by_you">Has actualitzat el teu perfil %1$s</string>
+    <string name="notice_event_redacted_by_with_reason">Missatge eliminat per %1$s [motiu: %2$s]</string>
+    <string name="notice_event_redacted_with_reason">Missatge eliminat [motiu: %1$s]</string>
+    <string name="notice_event_redacted_by">Missatge eliminat per %1$s</string>
+    <string name="notice_event_redacted">Missatge eliminat</string>
+    <string name="notice_room_avatar_removed_by_you">Has eliminat l\'avatar de la sala</string>
+    <string name="notice_room_avatar_removed">%1$s ha eliminat l\'avatar de la sala</string>
+    <string name="notice_room_topic_removed_by_you">Has eliminat el tema de la sala</string>
+    <string name="notice_room_name_removed_by_you">Has eliminat el nom de la sala</string>
+    <string name="notice_requested_voip_conference_by_you">Has sol·licitat una conferència VoIP</string>
+    <string name="notice_room_update_by_you">Has actualitzat aquesta sala.</string>
+    <string name="notice_room_update">%s ha actualitzat aquesta sala.</string>
+    <string name="notice_end_to_end_by_you">Has activat el xifrat d\'extrem a extrem (%1$s)</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Has establert la visibilitat dels missatges futurs a %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s ha establert la visibilitat dels missatges futurs a %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Has establert la visibilitat de l\'historial futur de la sala a %1$s</string>
+    <string name="notice_ended_call_by_you">Has finalitzat la trucada.</string>
+    <string name="notice_answered_call_by_you">Has respost a la trucada.</string>
+    <string name="notice_call_candidates_by_you">Has enviat dades per configurar la trucada.</string>
+    <string name="notice_call_candidates">%s ha enviat dades per configurar la trucada.</string>
+    <string name="notice_placed_voice_call_by_you">Has realitzat una trucada de veu.</string>
+    <string name="notice_placed_video_call_by_you">Has realitzat una videotrucada.</string>
+    <string name="notice_room_name_changed_by_you">Has canviat el nom de la sala a: %1$s</string>
+    <string name="notice_room_avatar_changed_by_you">Has canviat l\'avatar de la sala</string>
+    <string name="notice_room_avatar_changed">%1$s ha canviat l\'avatar de la sala</string>
+    <string name="notice_room_topic_changed_by_you">Has canviat el tema a: %1$s</string>
+    <string name="notice_display_name_removed_by_you">Has eliminat el teu nom de visualització (era %1$s)</string>
+    <string name="notice_display_name_changed_from_by_you">Has canviat el teu nom de visualització de %1$s a %2$s</string>
+    <string name="notice_display_name_set_by_you">Has canviat el teu nom de visualització a %1$s</string>
+    <string name="notice_avatar_url_changed_by_you">Has canviat el teu avatar</string>
+    <string name="notice_room_withdraw_by_you">Has retirat la invitació de %1$s</string>
+    <string name="notice_room_unban_by_you">Has tret el veto a %1$s</string>
+    <string name="notice_room_reject_by_you">Has rebutjat la invitació</string>
+    <string name="notice_direct_room_created_by_you">Has creat la discussió</string>
+    <string name="notice_direct_room_created">%1$s ha creat la discussió</string>
+    <string name="notice_direct_room_join_by_you">T\'has unit</string>
+    <string name="notice_direct_room_join">%1$s s\'ha unit</string>
+    <string name="notice_room_join_by_you">T\'has unit a la sala</string>
+    <string name="notice_room_invite_by_you">Has convidat a %1$s</string>
+    <string name="notice_room_created_by_you">Has creat la sala</string>
+    <string name="notice_room_created">%1$s ha creat la sala</string>
+    <string name="notice_room_invite_no_invitee_by_you">La teva invitació</string>
+    <string name="summary_you_sent_sticker">Has enviat un adhesiu.</string>
+    <string name="summary_you_sent_image">Has enviat una imatge.</string>
 </resources>
