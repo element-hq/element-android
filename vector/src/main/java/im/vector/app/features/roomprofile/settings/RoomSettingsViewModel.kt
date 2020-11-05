@@ -153,20 +153,20 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun handleSetAvatarAction(action: RoomSettingsAction.SetAvatarAction) {
-        deletePendingAvatar()
-        setState { copy(avatarAction = action.avatarAction) }
-    }
-
-    private fun deletePendingAvatar() {
-        // Maybe delete the pending avatar
-        withState {
-            (it.avatarAction as? RoomSettingsViewState.AvatarAction.UpdateAvatar)
-                    ?.let { tryOrNull { it.newAvatarUri.toFile().delete() } }
+        setState {
+            deletePendingAvatar(this)
+            copy(avatarAction = action.avatarAction)
         }
     }
 
+    private fun deletePendingAvatar(state: RoomSettingsViewState) {
+        // Maybe delete the pending avatar
+        (state.avatarAction as? RoomSettingsViewState.AvatarAction.UpdateAvatar)
+                ?.let { tryOrNull { it.newAvatarUri.toFile().delete() } }
+    }
+
     private fun cancel() {
-        deletePendingAvatar()
+        withState { deletePendingAvatar(it) }
 
         _viewEvents.post(RoomSettingsViewEvents.GoBack)
     }
@@ -180,7 +180,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
         when (val avatarAction = state.avatarAction) {
             RoomSettingsViewState.AvatarAction.None            -> Unit
-            RoomSettingsViewState.AvatarAction.DeleteAvatar -> {
+            RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
                 operationList.add(room.rx().deleteAvatar())
             }
             is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {
@@ -209,8 +209,10 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .subscribe(
                         {
                             postLoading(false)
-                            setState { copy(newHistoryVisibility = null) }
-                            deletePendingAvatar()
+                            setState {
+                                deletePendingAvatar(this)
+                                copy(newHistoryVisibility = null)
+                            }
                             _viewEvents.post(RoomSettingsViewEvents.Success)
                         },
                         {
