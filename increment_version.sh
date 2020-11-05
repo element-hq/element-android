@@ -33,6 +33,10 @@ set_prop() {
     sed -i "$not_equals""s|\($prop $equals\).*|\1$value|g" "$build_gradle"
 }
 
+calculate_version_code() {
+    echo "(($versionMajor * 10000 + $versionMinor * 100 + $versionPatch + $scVersion) + 4000000) * 10" | bc
+}
+
 
 #
 # Increase version
@@ -43,10 +47,17 @@ versionMinor=`get_prop ext.versionMinor`
 versionPatch=`get_prop ext.versionPatch`
 scVersion=`get_prop ext.scVersion`
 
-((scVersion++))
+previousVersionCode=`grep '^        versionCode ' "$build_gradle" | sed 's|^        versionCode ||'`
+versionCode=`calculate_version_code`
+if [ "$versionCode" = "$previousVersionCode" ]; then
+    ((scVersion++))
+    echo "Increase downstream version to $scVersion"
+    versionCode=`calculate_version_code`
+else
+    echo "Upstream version upgrade, no need to change downstream version"
+fi
 
 version="$versionMajor.$versionMinor.$versionPatch.sc.$scVersion"
-versionCode=`echo "(($versionMajor * 10000 + $versionMinor * 100 + $versionPatch + $scVersion) + 4000000) * 10" | bc`
 new_tag="sc_v$version"
 
 set_prop "ext.scVersion" "$scVersion"
