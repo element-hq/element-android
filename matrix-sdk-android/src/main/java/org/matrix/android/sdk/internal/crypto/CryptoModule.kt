@@ -123,6 +123,7 @@ internal abstract class CryptoModule {
                     }
                     .name("crypto_store.realm")
                     .modules(RealmCryptoStoreModule())
+                    .allowWritesOnUiThread(true)
                     .schemaVersion(RealmCryptoStoreMigration.CRYPTO_STORE_SCHEMA_VERSION)
                     .migration(realmCryptoStoreMigration)
                     .build()

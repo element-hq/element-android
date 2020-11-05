@@ -20,7 +20,7 @@ Build 🧱:
  -
 
 Other changes:
- -
+ - Upgrade Realm dependency to 10.0.0
 
 Changes in Element 1.0.10 (2020-11-04)
 ===================================================
