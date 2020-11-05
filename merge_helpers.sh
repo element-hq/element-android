@@ -11,6 +11,9 @@ revert_last() {
 }
 
 require_clean_git() {
+    if [ "$NO_REQUIRE_CLEAN_GIT" = "y" ]; then
+        return
+    fi
     uncommitted=`git status --porcelain`
     if [ ! -z "$uncommitted" ]; then
         echo "Uncommitted changes are present, please commit first!"
