@@ -62,7 +62,6 @@
 
         <activity
             android:name=".features.MainActivity"
-            android:launchMode="singleTask"
             android:taskAffinity=""
             android:theme="@style/AppTheme.Launcher.SC" />
 

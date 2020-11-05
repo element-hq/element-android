@@ -16,13 +16,12 @@
 
 package im.vector.app.features.settings.devtools
 
-import androidx.lifecycle.viewModelScope
+import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
@@ -30,12 +29,12 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.rx.asObservable
 
 data class GossipingEventsPaperTrailState(
-        val events: Async<List<Event>> = Uninitialized
+        val events: Async<PagedList<Event>> = Uninitialized
 ) : MvRxState
 
 class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted initialState: GossipingEventsPaperTrailState,
@@ -50,14 +49,10 @@ class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted i
         setState {
             copy(events = Loading())
         }
-        viewModelScope.launch {
-            session.cryptoService().getGossipingEventsTrail().let {
-                val sorted = it.sortedByDescending { it.ageLocalTs }
-                setState {
-                    copy(events = Success(sorted))
+        session.cryptoService().getGossipingEventsTrail().asObservable()
+                .execute {
+                    copy(events = it)
                 }
-            }
-        }
     }
 
     override fun handle(action: EmptyAction) {}

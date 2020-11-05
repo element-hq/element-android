@@ -34,12 +34,15 @@ fun String.toBitMatrix(size: Int): BitMatrix {
 
 fun BitMatrix.toBitmap(@ColorInt backgroundColor: Int = Color.WHITE,
                        @ColorInt foregroundColor: Int = Color.BLACK): Bitmap {
-    val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-    for (x in 0 until width) {
-        for (y in 0 until height) {
-            bmp.setPixel(x, y, if (get(x, y)) foregroundColor else backgroundColor)
+    val colorBuffer = IntArray(width * height)
+    var rowOffset = 0
+    for (y in 0 until height) {
+        for (x in 0 until width) {
+            val arrayIndex = x + rowOffset
+            colorBuffer[arrayIndex] = if (get(x, y)) foregroundColor else backgroundColor
         }
+        rowOffset += width
     }
 
-    return bmp
+    return Bitmap.createBitmap(colorBuffer, width, height, Bitmap.Config.ARGB_8888)
 }

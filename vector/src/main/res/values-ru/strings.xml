@@ -509,8 +509,8 @@
     <string name="room_settings_copy_room_address">Копировать адрес комнаты</string>
     <string name="room_settings_addresses_e2e_enabled">В этой комнате включено шифрование.</string>
     <string name="room_settings_addresses_e2e_disabled">В этой комнате выключено шифрование.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Включить шифрование 
-(внимание: не может быть снова отключено!)</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">Включить шифрование
+\n(внимание: не может быть снова отключено!)</string>
     <!-- Directory -->
     <string name="directory_title">Каталог</string>
     <!-- matrix error -->
@@ -851,14 +851,16 @@
         <item quantity="other">%d мин.</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%d час</item>
-        <item quantity="few">%d часа</item>
-        <item quantity="many">%d часов</item>
+        <item quantity="one">%dh</item>
+        <item quantity="few">%dh</item>
+        <item quantity="many">%dh</item>
+        <item quantity="other">%dh</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">%d день</item>
-        <item quantity="few">%d дни</item>
-        <item quantity="many">%d дней</item>
+        <item quantity="one">%dd</item>
+        <item quantity="few">%dd</item>
+        <item quantity="many">%dd</item>
+        <item quantity="other">%dd</item>
     </plurals>
     <string name="room_participants_now">Сейчас %1$s</string>
     <string name="room_participants_ago">%1$s %2$s назад</string>
@@ -1292,7 +1294,7 @@
     <string name="fab_menu_create_chat">Диалоги</string>
     <string name="create_room_title">Новая комната</string>
     <string name="create_room_action_create">СОЗДАТЬ</string>
-    <string name="create_room_name_hint">Имя комнаты</string>
+    <string name="create_room_name_hint">Имя</string>
     <string name="create_room_public_title">Публичные</string>
     <string name="create_room_public_description">Любой сможет присоединиться к этой комнате</string>
     <string name="create_room_directory_title">Каталог номеров</string>
@@ -1857,7 +1859,7 @@
 \n
 \nДля максимальной безопасности сделайте это лично.</string>
     <string name="room_profile_not_encrypted_subtitle">Сообщения в этой комнате не шифруются сквозным шифрованием.</string>
-    <string name="room_profile_encrypted_subtitle">Сообщения в этой комнате не шифруются сквозным шифрованием.
+    <string name="room_profile_encrypted_subtitle">Сообщения в этой комнате шифруются сквозным шифрованием.
 \n
 \nВаши сообщения защищены замками, и только у вас и получателя есть уникальные ключи, чтобы разблокировать их.</string>
     <string name="room_profile_section_admin">Действия Администратора</string>
@@ -2274,4 +2276,29 @@
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">У вас нет разрешения на запуск звонка</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">У вас нет разрешения на запуск конференции</string>
     <string name="reset">Сброс</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">Показать устройство, которое вы можете проверить сейчас</item>
+        <item quantity="few">Показать %d устройства, которые вы можете проверить сейчас</item>
+        <item quantity="many">Показать %d устройств, которые вы можете проверить сейчас</item>
+        <item quantity="other">Показать %d устройств, которые вы можете проверить сейчас</item>
+    </plurals>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">Уведомление нажато!</string>
+    <string name="settings_troubleshoot_test_notification_notice">Пожалуйста, нажмите на уведомление. Если вы не видите уведомления, проверьте настройки системы.</string>
+    <string name="settings_troubleshoot_test_notification_title">Отображение уведомления</string>
+    <string name="settings_troubleshoot_test_push_notification_content">Вы видите уведомление! Нажмите сюда!</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Не удалось получить push-уведомление. Переустановка приложения может быть возможным решением.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">Приложение получило push-уведомление</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Приложение ожидает push-уведомление</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Тестирование push-уведомлений</string>
+    <string name="warning_unsaved_change">Есть несохраненные изменения. Отменить изменения\?</string>
+    <string name="room_list_quick_actions_low_priority_remove">Удалить из низкого приоритета</string>
+    <string name="rotate_and_crop_screen_title">Повернуть и обрезать</string>
+    <string name="create_room_settings_section">Настройки комнаты</string>
+    <string name="create_room_topic_section">Тема комнаты (опционально)</string>
+    <string name="warning_unsaved_change_discard">Отменить изменения</string>
+    <string name="warning_room_not_created_yet">Комната ещё не создана. Отменить создание комнаты\?</string>
+    <string name="room_list_quick_actions_low_priority_add">Добавить к низкому приоритету</string>
+    <string name="attachment_type_dialog_title">Добавить изображение из</string>
+    <string name="create_room_topic_hint">Тема</string>
+    <string name="create_room_name_section">Название Комнаты</string>
 </resources>

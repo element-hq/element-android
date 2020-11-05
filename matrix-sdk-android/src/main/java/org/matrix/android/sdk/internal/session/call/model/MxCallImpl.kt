@@ -29,8 +29,8 @@ import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.internal.session.call.DefaultCallSignalingService
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
-import org.matrix.android.sdk.internal.session.room.send.RoomEventSender
 import org.webrtc.IceCandidate
 import org.webrtc.SessionDescription
 import timber.log.Timber
@@ -43,7 +43,7 @@ internal class MxCallImpl(
         override val otherUserId: String,
         override val isVideoCall: Boolean,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val roomEventSender: RoomEventSender
+        private val eventSenderProcessor: EventSenderProcessor
 ) : MxCall {
 
     override var state: CallState = CallState.Idle
@@ -91,7 +91,7 @@ internal class MxCallImpl(
                 offer = CallInviteContent.Offer(sdp = sdp.description)
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = it.toContent()) }
-                .also { roomEventSender.sendEvent(it) }
+                .also { eventSenderProcessor.postEvent(it) }
     }
 
     override fun sendLocalIceCandidates(candidates: List<IceCandidate>) {
@@ -106,7 +106,7 @@ internal class MxCallImpl(
                 }
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_CANDIDATES, roomId = roomId, content = it.toContent()) }
-                .also { roomEventSender.sendEvent(it) }
+                .also { eventSenderProcessor.postEvent(it) }
     }
 
     override fun sendLocalIceCandidateRemovals(candidates: List<IceCandidate>) {
@@ -119,7 +119,7 @@ internal class MxCallImpl(
                 callId = callId
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = it.toContent()) }
-                .also { roomEventSender.sendEvent(it) }
+                .also { eventSenderProcessor.postEvent(it) }
         state = CallState.Terminated
     }
 
@@ -132,7 +132,7 @@ internal class MxCallImpl(
                 answer = CallAnswerContent.Answer(sdp = sdp.description)
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_ANSWER, roomId = roomId, content = it.toContent()) }
-                .also { roomEventSender.sendEvent(it) }
+                .also { eventSenderProcessor.postEvent(it) }
     }
 
     private fun createEventAndLocalEcho(localId: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {

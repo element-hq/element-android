@@ -17,7 +17,7 @@ androidExtensions {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 9
+ext.versionPatch = 10
 
 ext.scVersion = 25
 
@@ -169,10 +169,14 @@ android {
 
         /*
         applicationVariants.all { variant ->
+            // assign different version code for each output
+            def baseVariantVersion = variant.versionCode * 10
             variant.outputs.each { output ->
                 def baseAbiVersionCode = project.ext.abiVersionCodes.get(output.getFilter(OutputFile.ABI))
                 // Known limitation: it does not modify the value in the BuildConfig.java generated file
-                output.versionCodeOverride = variant.versionCode * 10 + baseAbiVersionCode
+                // See https://issuetracker.google.com/issues/171133218
+                output.versionCodeOverride = baseVariantVersion + baseAbiVersionCode
+                print "ABI " + output.getFilter(OutputFile.ABI) + " \t-> VersionCode = " + output.versionCodeOverride + "\n"
             }
         }
         */

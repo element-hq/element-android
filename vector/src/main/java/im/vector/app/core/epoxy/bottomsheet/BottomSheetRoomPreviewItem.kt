@@ -44,8 +44,10 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute lateinit var stringProvider: StringProvider
+    @EpoxyAttribute var izLowPriority: Boolean = false
     @EpoxyAttribute var izFavorite: Boolean = false
     @EpoxyAttribute var settingsClickListener: ClickListener? = null
+    @EpoxyAttribute var lowPriorityClickListener: ClickListener? = null
     @EpoxyAttribute var favoriteClickListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
@@ -53,15 +55,42 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
         avatarRenderer.render(matrixItem, holder.avatar)
         holder.avatar.onClick(settingsClickListener)
         holder.roomName.setTextOrHide(matrixItem.displayName)
+        setLowPriorityState(holder, izLowPriority)
         setFavoriteState(holder, izFavorite)
 
+        holder.roomLowPriority.setOnClickListener {
+            // Immediate echo
+            setLowPriorityState(holder, !izLowPriority)
+            if (!izLowPriority) {
+                // If we put the room in low priority, it will also remove the favorite tag
+                setFavoriteState(holder, false)
+            }
+            // And do the action
+            lowPriorityClickListener?.invoke()
+        }
         holder.roomFavorite.setOnClickListener {
             // Immediate echo
             setFavoriteState(holder, !izFavorite)
+            if (!izFavorite) {
+                // If we put the room in favorite, it will also remove the low priority tag
+                setLowPriorityState(holder, false)
+            }
             // And do the action
             favoriteClickListener?.invoke()
         }
         holder.roomSettings.onClick(settingsClickListener)
+    }
+
+    private fun setLowPriorityState(holder: Holder, isLowPriority: Boolean) {
+        val tintColor: Int
+        if (isLowPriority) {
+            holder.roomLowPriority.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_low_priority_remove)
+            tintColor = ContextCompat.getColor(holder.view.context, R.color.riotx_accent)
+        } else {
+            holder.roomLowPriority.contentDescription = stringProvider.getString(R.string.room_list_quick_actions_low_priority_add)
+            tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
+        }
+        ImageViewCompat.setImageTintList(holder.roomLowPriority, ColorStateList.valueOf(tintColor))
     }
 
     private fun setFavoriteState(holder: Holder, isFavorite: Boolean) {
@@ -81,6 +110,7 @@ abstract class BottomSheetRoomPreviewItem : VectorEpoxyModel<BottomSheetRoomPrev
     class Holder : VectorEpoxyHolder() {
         val avatar by bind<ImageView>(R.id.bottomSheetRoomPreviewAvatar)
         val roomName by bind<TextView>(R.id.bottomSheetRoomPreviewName)
+        val roomLowPriority by bind<ImageView>(R.id.bottomSheetRoomPreviewLowPriority)
         val roomFavorite by bind<ImageView>(R.id.bottomSheetRoomPreviewFavorite)
         val roomSettings by bind<View>(R.id.bottomSheetRoomPreviewSettings)
     }

@@ -101,6 +101,7 @@ internal abstract class RoomModule {
         fun providesHtmlRenderer(): HtmlRenderer {
             return HtmlRenderer
                     .builder()
+                    .softbreak("<br />")
                     .build()
         }
     }

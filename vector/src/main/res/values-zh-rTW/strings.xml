@@ -160,9 +160,9 @@
     <string name="auth_forgot_password">忘記密碼？</string>
     <string name="auth_use_server_options">使用自訂的伺服器選項（進階）</string>
     <string name="auth_email_validation_message">請檢查您的電子郵件信箱以繼續註冊流程</string>
-    <string name="auth_threepid_warning_message">直到 API 存在之前，尚不支援同時使用電子郵件地址和電話號碼註冊，因此只有電話號碼會被採用。
-
-但您可以在基本資料中新增電子郵件地址。</string>
+    <string name="auth_threepid_warning_message">直到 API 存在之前，尚不支援同時使用電子郵件地址和電話號碼註冊，因此只有電話號碼會被採用。 
+\n
+\n但您可以在基本資料中新增電子郵件地址。</string>
     <string name="auth_recaptcha_message">這個家伺服器想要確定您不是機器人</string>
     <string name="auth_username_in_use">使用者名稱已被使用</string>
     <string name="auth_home_server">家伺服器：</string>
@@ -173,7 +173,9 @@
     <string name="auth_reset_password_missing_password">一個新的密碼必須被輸入。</string>
     <string name="auth_reset_password_email_validation_message">電子郵件已傳送至 %s，點擊下方的連結來前往。</string>
     <string name="auth_reset_password_error_unauthorized">電子郵件地址驗證失敗： 請確保您已點擊郵件中的連結</string>
-    <string name="auth_reset_password_success_message">您的密碼已重設。 您已登出所有工作階段，並且不會再收到推送通知。要重新啟用通知，再次於每個裝置上登入。</string>
+    <string name="auth_reset_password_success_message">您的密碼已重設。
+\n
+\n 您已登出所有工作階段，並且不會再收到推送通知。要重新啟用通知，請再次於每個裝置上登入。</string>
     <string name="login_error_must_start_http">網址必須是 http[s]:// 開頭</string>
     <string name="login_error_network_error">無法登入：網路錯誤</string>
     <string name="login_error_unable_login">無法登入</string>
@@ -219,9 +221,9 @@
     <string name="media_picker_both_capture_title">拍照或錄影</string>
     <string name="media_picker_cannot_record_video">無法錄影</string>
     <string name="permissions_rationale_popup_title">資訊</string>
-    <string name="permissions_rationale_msg_storage">Element 需要權限來存取你的照片與影片庫，以傳送及儲存附件。
-
-請在下個彈跳視窗允許存取，來從手機傳送檔案。</string>
+    <string name="permissions_rationale_msg_storage">Element 需要權限來存取你的照片與影片庫，以傳送及儲存附件。 
+\n
+\n請在下個彈跳視窗允許存取，來從手機傳送檔案。</string>
     <string name="permissions_rationale_msg_camera">Element 需要權限存取您的相機，來拍照與視訊通話。</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
@@ -230,9 +232,9 @@
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \n為了要通話，請在下個彈跳視窗中允許存取。"</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element 需要權限來存取相機及麥克風來撥打視訊通話。
-
-為了要通話，請在下個彈跳視窗中允許存取。</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Element 需要權限來存取相機及麥克風來撥打視訊通話。 
+\n
+\n為了可以正常使用通話功能，請在下個彈跳視窗中允許存取。</string>
     <string name="permissions_rationale_msg_contacts">Element 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。如果您同意為此用途分享您的電話簿，請在下一個彈出式視窗中允許存取權限。</string>
     <string name="permissions_msg_contacts_warning_other_androids">Element 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。
 \n
@@ -252,7 +254,8 @@
     <string name="room_sync_in_progress">正在同步……</string>
     <string name="room_jump_to_first_unread">跳到第一個未讀的訊息。</string>
     <string name="room_preview_invitation_format">你已經被 %s 邀請加入此聊天室</string>
-    <string name="room_preview_unlinked_email_warning">邀請已經被傳送給 %s，但與此帳號沒有進行關連。 你也許希望以不同帳號登入，或將電子郵件加入到您的帳號。</string>
+    <string name="room_preview_unlinked_email_warning">邀請已經被傳送給 %s，但與此帳號沒有進行關連。 
+\n你也許希望以不同帳號登入，或將電子郵件加入到您的帳號。</string>
     <string name="room_preview_try_join_an_unknown_room">您正在嘗試存取 %s，您想要加入討論嗎？</string>
     <string name="room_preview_try_join_an_unknown_room_default">聊天室</string>
     <string name="room_preview_room_interactions_disabled">這是聊天室的預覽，聊天室互動已停用。</string>
@@ -302,7 +305,7 @@
     <string name="room_one_user_is_typing">%s 正在打字…</string>
     <string name="room_two_users_are_typing">%1$s 和 %2$s 正在打字…</string>
     <string name="room_participants_power_level_prompt">由於您提升此使用者擁有的權限等級與你自己相同，因此您將無法還原此變更。
-你確定？</string>
+\n你確定？</string>
     <string name="room_many_users_are_typing">%1$s 及 %2$s 和其他人正在打字…</string>
     <string name="room_message_placeholder_encrypted">傳送加密的訊息…</string>
     <string name="room_message_placeholder_not_encrypted">傳送訊息（未加密）…</string>
@@ -337,15 +340,15 @@
     <string name="clear">清除</string>
     <string name="option_send_voice">發送語音訊息</string>
     <string name="option_send_sticker">發送貼圖</string>
-    <string name="no_sticker_application_dialog_content">您目前沒有任何貼圖。
-
-要新增一些貼圖嗎？</string>
+    <string name="no_sticker_application_dialog_content">您目前沒有任何貼圖。 
+\n
+\n要現在新增一些貼圖嗎？</string>
     <string name="go_on_with">開啟以……</string>
     <string name="error_no_external_application_found">對不起，沒有應用程式可以完成此操作。</string>
     <string name="e2e_re_request_encryption_key">從其他工作階段重新請求金鑰。<u>重新請求金鑰</u>。</string>
     <string name="e2e_re_request_encryption_key_sent">已發送金鑰分享請求。</string>
     <string name="e2e_re_request_encryption_key_dialog_title">已發送請求</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">"請在另一個可以解密訊息的裝置上啟動  Element, 以便它將金鑰發送到此工作階段。"</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">請在另一個可以解密訊息的裝置上啟動 Element，以便它將金鑰發送到此工作階段。</string>
     <string name="ssl_expected_existing_expl">憑證已從以前受信任的更改為不受信任的憑證。伺服器可能已續訂其憑證。請與伺服器管理員聯繫以尋找所需的指紋。</string>
     <string name="ssl_only_accept">僅當伺服器管理員發佈的指紋與上面的指紋匹配時才接受此憑證。</string>
     <string name="room_details_title">聊天室詳情</string>
@@ -357,8 +360,8 @@
     <string name="room_details_people_present_group_name">已加入</string>
     <string name="room_event_action_report_prompt_reason">報告此內容的原因</string>
     <string name="room_event_action_report_prompt_ignore_user">您想要隱藏此使用者的所有訊息嗎？
-
-注意此動作將會重新啟動應用程式，而其可能需要一點時間。</string>
+\n
+\n注意：此動作將會重新啟動應用程式，而其可能需要一點時間。</string>
     <string name="room_event_action_cancel_upload">取消上載</string>
     <string name="room_event_action_cancel_download">取消下載</string>
     <string name="search_hint">搜尋</string>
@@ -483,7 +486,7 @@
     <string name="devices_details_last_seen_title">上次上線</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_delete_dialog_text">此操作需要額外的身份驗證。
-要繼續, 請輸入您的密碼。</string>
+\n要繼續，請輸入您的密碼。</string>
     <string name="devices_delete_dialog_title">授權</string>
     <string name="devices_delete_pswd">密碼：</string>
     <string name="devices_delete_submit_button_label">傳送</string>
@@ -505,9 +508,9 @@
     <string name="settings_confirm_password">確認新密碼</string>
     <string name="settings_fail_to_update_password">更新密碼失敗</string>
     <string name="settings_password_updated">您的密碼已經更新</string>
-    <string name="settings_unignore_user">顯示所有來自 %s 的訊息？
-
-注意此動作將會重新啟動應用程式，而其可能需要一點時間。</string>
+    <string name="settings_unignore_user">顯示所有來自 %s 的訊息？ 
+\n
+\n注意此動作將會重新啟動應用程式，而其可能需要一點時間。</string>
     <string name="settings_delete_notification_targets_confirmation">確實要刪除此通知目標嗎？</string>
     <string name="settings_delete_threepid_confirmation">您確認要移除 %1$s %2$s 嗎?</string>
     <string name="settings_select_country">選擇國家</string>
@@ -575,8 +578,8 @@
     <string name="room_settings_copy_room_address">複製聊天室地址</string>
     <string name="room_settings_addresses_e2e_enabled">此聊天室已啟用加密。</string>
     <string name="room_settings_addresses_e2e_disabled">此聊天室未啟用加密。</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">啟用加密
- (警告: 啟用後無法停用)</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">啟用加密 
+\n(警告: 啟用後無法停用)</string>
     <string name="directory_title">目錄</string>
     <string name="settings_theme">主題</string>
     <string name="failed_to_load_timeline_position">%s 試圖載入此聊天室的一個特定的時間點, 但無法找到它。</string>
@@ -602,8 +605,8 @@
     <string name="passphrase_enter_passphrase">輸入通關密語</string>
     <string name="passphrase_confirm_passphrase">確認通關密語</string>
     <string name="encryption_export_saved_as">聊天室的端到端加密金鑰已儲存爲「%s」。
-
-警告：如果應用程式被解除安裝，這個檔案可能會被刪除。</string>
+\n
+\n警告：如果應用程式被解除安裝，這個檔案可能會被刪除。</string>
     <string name="encryption_import_e2e_room_keys">匯入聊天室端到端加密密鑰</string>
     <string name="encryption_import_room_keys">匯入聊天室金鑰</string>
     <string name="encryption_import_room_keys_summary">從本機檔案匯入金鑰</string>
@@ -714,11 +717,11 @@
     <string name="dialog_user_consent_content">如要繼續使用此 %1$s 主伺服器，您必須同意該合約條款。</string>
     <string name="dialog_user_consent_submit">現在檢視</string>
     <string name="deactivate_account_title">停用帳號</string>
-    <string name="deactivate_account_content">這將使您的帳戶永久不可用。您將無法登錄, 並且沒有人能夠重新註冊相同的使用者 ID。這將導致您的帳戶離開它所參與的所有房間, 它將從您的身份伺服器上刪除您的帳戶詳細資訊。<b>此操作是不可逆轉</b>的。
-
-停用您的帳戶<b>不會預設導致我們刪除您發送的訊息</b>。如果您想讓我們忘記您的訊息, 請在下面的方框中打勾。
-
-Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意味著您發送的訊息將不會與任何新的或未註冊的使用者共用, 但是已註冊的已訪問這些郵件的使用者仍然可以訪問他們的副本。</string>
+    <string name="deactivate_account_content">這將使您的帳戶永久不可用。您將無法登錄, 並且沒有人能夠重新註冊相同的使用者 ID。這將導致您的帳戶離開已參與的所有房間，它將從您的身份伺服器上刪除您的帳戶詳細資訊。<b>此操作是不可逆轉</b>的。 
+\n
+\n停用您的帳戶<b>不會預設導致我們刪除您發送的訊息</b>。如果您想讓我們忘記您的訊息, 請在下面的方框中打勾。 
+\n
+\nMatrix 中的訊息可見度類似于電子郵件。我們忘記您的訊息意味著您發送的訊息將不會與任何新的或未註冊的使用者分享，但是已註冊並已取得這些訊息的用戶仍然可以訪問他們的副本。</string>
     <string name="deactivate_account_delete_checkbox">請在我的帳號停用時忘記我傳送過的所有訊息（<b>警告：</b>這將會造成未來的使用者無法看見完整的對話紀錄）</string>
     <string name="deactivate_account_prompt_password">若要繼續進行，請輸入您的密碼：</string>
     <string name="deactivate_account_submit">停用帳號</string>
@@ -838,8 +841,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">一個或更多的測試失敗，請遞交錯誤回報以協助我們調查原因。</string>
     <string name="settings_troubleshoot_test_system_settings_title">系統設定。</string>
     <string name="settings_troubleshoot_test_system_settings_success">通知已在系統設定中啟用。</string>
-    <string name="settings_troubleshoot_test_system_settings_failed">通知已在系統設定中停用。
-請檢查系統設定。</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">通知已在系統設定中停用。 
+\n請檢查系統設定。</string>
     <string name="open_settings">開啟設定</string>
     <string name="settings_troubleshoot_test_account_settings_title">帳號設定。</string>
     <string name="settings_troubleshoot_test_account_settings_success">通知已為您的帳號啟用。</string>
@@ -854,21 +857,21 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_troubleshoot_test_play_services_title">Play 服務檢查</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play 服務 APK 可用且已為最新。</string>
     <string name="settings_troubleshoot_test_play_services_failed">Element 使用 Google Play 服務來傳遞推送訊息，但它似乎並未正確設定：
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">修復 Play 服務</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase 權杖</string>
     <string name="settings_troubleshoot_test_fcm_success">成功擷取 FCM token：
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">擷取 FCM token 失敗：
-%1$s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">註冊 token</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM token 成功註冊至家伺服器。</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">FCM token 註冊至家伺服器失敗：
-%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM token 註冊至家伺服器失敗： 
+\n%1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">通知服務</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">通知服務正在執行。</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">通知服務並未執行。
-嘗試重新啟動應用程式。</string>
+\n嘗試重新啟動應用程式。</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">啟動服務</string>
     <string name="settings_troubleshoot_test_service_restart_title">通知服務自動重新啟動</string>
     <string name="settings_troubleshoot_test_service_restart_success">服務被自動砍除並重新啟動。</string>
@@ -879,18 +882,18 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_troubleshoot_test_service_boot_quickfix">啟用開機時啟動</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">檢查背景限制</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">背景限制已為 Element 停用。本測試應該使用行動數據執行（不是 WiFi）。
-%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">背景限制已為 Element 啟用。
-應用程式要在背景執行的工作將被顏格限制，這可能會影響通知。
-%1$s</string>
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">背景限制已為 Element 啟用。 
+\n應用程式要在背景執行的工作將被嚴格限制，這可能會影響通知功能。
+\n %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">停用限制</string>
     <string name="settings_troubleshoot_test_battery_title">電池最佳化</string>
     <string name="settings_troubleshoot_test_battery_success">Element 不會被電池最佳化影響。</string>
     <string name="settings_troubleshoot_test_battery_failed">如果使用者不為裝置充電，並讓其靜置一段時間，且將螢幕關閉，裝置將會進入 Doze 模式。這可能會導致應用程式無法存取網路，並延遲它們的工作、同步與標準警報。</string>
     <string name="settings_troubleshoot_test_battery_quickfix">忽略最佳化</string>
     <string name="startup_notification_fdroid_battery_optim_title">背景連線</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element 需要保持最低影響的背景連線以接收可靠的通知。
-在下一個畫面，您必須允許 Element 總是在背景執行，請接受。</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Element 需要保持最低影響的背景連線以接收可靠的通知。 
+\n在下一個畫面，您必須允許 Element 總是在背景執行，請接受。</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">授予權限</string>
     <string name="account_email_error">當驗證您的電子郵件地址時遇到錯誤。</string>
     <string name="account_phone_number_error">當驗證您的手機號碼時遇到錯誤。</string>
@@ -909,12 +912,12 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="settings_troubleshoot_test_bing_settings_failed">有一些通知在您的自訂設定中被停用了。</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">載入自訂規則失敗，請重試。</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">檢查設定</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-這個錯誤並非 Element 所能控制，而是與 Google 有關，這個錯誤代表裝置註冊了太多使用 FCM 的應用程式。這個錯誤只會發生在有超大量的應用程式的裝置上，所以不應該影響一般的使用者。</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s] 
+\n這個錯誤並非 Element 所能控制，而是與 Google 有關，這個錯誤代表裝置註冊了太多使用 FCM 的應用程式。這個錯誤只會發生在有超大量的應用程式的裝置上，所以不應該影響一般的使用者。</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-這個錯誤並非 Element 所能控制。可能由多種原因所導致。也可能會在稍後重試時就可以運作，您也可以檢查 Google Play 服務在系統設定中有沒有被限制使用資料，或是您裝置的時鐘是否正確，或是也可能會在自訂的 ROM 上發生。</string>
+\n這個錯誤並非 Element 所能控制。可能由多種原因所導致。也可能會在稍後重試時就可以運作，您也可以檢查 Google Play 服務在系統設定中有沒有被限制使用資料，或是您裝置的時鐘是否正確，或是也可能會在自訂的 ROM 上發生。</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-這個錯誤並非 Element 所能控制。手機上沒有 Google 帳號。請開啟帳號管理員並新增一個 Google 帳號。</string>
+\n這個錯誤並非 Element 所能控制。手機上沒有 Google 帳號。請開啟帳號管理員並新增一個 Google 帳號。</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">新增帳號</string>
     <string name="settings_noisy_notifications_preferences">設定吵鬧的通知</string>
     <string name="settings_call_notifications_preferences">設定通話通知</string>
@@ -929,15 +932,15 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_no_session_error">沒有可用的 Matrix 工作階段</string>
     <string name="keys_backup_setup_step1_title">永不遺失已加密的訊息</string>
     <string name="keys_backup_setup_step1_description">在加密聊天室裡的訊息是使用端到端加密。只有您和接收者有金鑰可以閱讀這些訊息。
-
-安全備份您的金鑰以避免失去它們。</string>
+\n
+\n安全地備份您的金鑰以避免失去它們。</string>
     <string name="keys_backup_setup_step2_button_title">設定通關密語</string>
     <string name="keys_backup_setup_step3_button_title">完成</string>
     <string name="keys_backup_setup_step3_copy_button_title">儲存復原金鑰</string>
     <string name="keys_backup_setup_step3_save_button_title">儲存為檔案</string>
-    <string name="recovery_key_export_saved_as_warning">復原金鑰已被儲存為「%s」。
-
-警告：如果應用程式被解除安裝的話，此檔案可能會被刪除。</string>
+    <string name="recovery_key_export_saved_as_warning">復原金鑰已被儲存為「%s」。 
+\n
+\n警告：如果應用程式被解除安裝的話，此檔案可能會被刪除。</string>
     <string name="keys_backup_setup_step3_please_make_copy">請複製</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">分享復原金鑰與……</string>
     <string name="keys_backup_setup_step3_generating_key_status">正在使用通關密語生成復原金鑰，這個過程可能需要數秒鐘。</string>
@@ -1013,8 +1016,8 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="keys_backup_setup_step2_skip_button_title">（進階）使用復原金鑰設定</string>
     <string name="keys_backup_setup_step3_success_title">成功！</string>
     <string name="keys_backup_setup_step3_text_line1">您的金鑰正在備份。</string>
-    <string name="keys_backup_setup_step3_text_line2">您的復原金鑰是安全網，如果您忘記您的通關密語，您可以使用它來復原您對您的加密訊息的存取權。
-確保您的復原金鑰放在非常安全的地方，如密碼管理員（或保險箱）</string>
+    <string name="keys_backup_setup_step3_text_line2">您的復原金鑰是安全網，如果您忘記您的通關密語，您可以使用它來復原您對您的加密訊息的存取權。 
+\n把你的復原金鑰放在非常安全的地方，如密碼管理員（或保險箱）</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">確保您的復原金鑰放在非常安全的地方，如密碼管理員（或保險箱）</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">我已經複製完了</string>
     <string name="keys_backup_setup_step3_share_recovery_file">分享</string>
@@ -1079,9 +1082,9 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="error_jitsi_not_supported_on_old_device">抱歉，使用 Jitsi 建立會議通話在舊裝置上並不支援（Android 系統版本小於 5.0 的裝置）</string>
     <string name="title_activity_verify_device">驗證工作階段</string>
     <string name="encryption_information_unknown_ip">未知的 IP</string>
-    <string name="you_added_a_new_device_with_info">有新工作階段正在要求加密金鑰。 
-\n工作階段名稱：%1$s 
-\n上次檢視：%2$s 
+    <string name="you_added_a_new_device_with_info">有新工作階段正在要求加密金鑰。
+\n工作階段名稱：%1$s
+\n上次檢視：%2$s
 \n如果您沒有登入其他工作階段，請忽略本請求。</string>
     <string name="your_unverified_device_requesting_with_info">有未驗證的工作階段正在要求加密金鑰。 
 \n工作階段名稱：%1$s 
@@ -1170,7 +1173,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="fab_menu_create_chat">直接訊息</string>
     <string name="create_room_title">新聊天室</string>
     <string name="create_room_action_create">建立</string>
-    <string name="create_room_name_hint">聊天室名稱</string>
+    <string name="create_room_name_hint">名稱</string>
     <string name="create_room_public_title">公開</string>
     <string name="create_room_public_description">任何人都可以加入此聊天室</string>
     <string name="create_room_directory_title">聊天室目錄</string>
@@ -1539,7 +1542,7 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="autocomplete_limited_results">僅顯示第一個結果，輸入更多字母……</string>
     <string name="settings_developer_mode_fail_fast_title">快速失敗</string>
     <string name="settings_developer_mode_fail_fast_summary">在發生非預期的錯誤時，Element 可能更常當機</string>
-    <string name="command_description_shrug">"將  ¯\\_(ツ)_/¯ 附加到純文字訊息中"</string>
+    <string name="command_description_shrug">將 ¯\\_(ツ)_/¯ 附加到純文字訊息中</string>
     <string name="create_room_encryption_title">啟用加密</string>
     <string name="create_room_encryption_description">加密一旦啟用就無法停用。</string>
     <string name="login_error_threepid_denied">您的電子郵件網域無法在此伺服器上註冊</string>
@@ -2135,4 +2138,15 @@ Matrix 中的消息可見度類似于電子郵件。我們忘記您的郵件意�
     <string name="no_permissions_to_start_conf_call_in_direct_room">您沒有開始會議通話的權限</string>
     <string name="reset">重設</string>
     <string name="settings_security_pin_code_use_biometrics_title">啟用生物識別技術</string>
+    <string name="warning_unsaved_change_discard">放棄變更</string>
+    <string name="warning_unsaved_change">有未儲存的變更。要放棄變更嗎？</string>
+    <string name="warning_room_not_created_yet">聊天室尚未建立。取消建立聊天室？</string>
+    <string name="room_list_quick_actions_low_priority_remove">從低優先度移除</string>
+    <string name="room_list_quick_actions_low_priority_add">新增到低優先度</string>
+    <string name="rotate_and_crop_screen_title">旋轉並裁切</string>
+    <string name="attachment_type_dialog_title">新增圖片從</string>
+    <string name="create_room_settings_section">聊天室設定</string>
+    <string name="create_room_topic_hint">主題</string>
+    <string name="create_room_topic_section">聊天室主題（選擇性）</string>
+    <string name="create_room_name_section">聊天是名稱</string>
 </resources>

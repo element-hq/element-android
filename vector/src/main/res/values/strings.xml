@@ -173,6 +173,7 @@
     <string name="no_conversation_placeholder">No conversations</string>
     <string name="no_contact_access_placeholder">You didn’t allow Element to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
+    <string name="no_more_results">No more results</string>
     <string name="people_no_identity_server">No identity server configured.</string>
 
     <!-- Rooms fragment -->
@@ -192,6 +193,7 @@
 
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
+    <string name="send_bug_report_include_key_share_history">Send key share requests history</string>
     <string name="send_bug_report_include_screenshot">Send screenshot</string>
     <string name="send_bug_report">Report bug</string>
     <string name="send_bug_report_description">Please describe the bug. What did you do? What did you expect to happen? What actually happened?</string>
@@ -1271,7 +1273,7 @@
 
     <!-- share keys -->
     <string name="you_added_a_new_device">You added a new session \'%s\', which is requesting encryption keys.</string>
-    <string name="you_added_a_new_device_with_info">A new session is requesting encryption keys.\Session name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another session, ignore this request.</string>
+    <string name="you_added_a_new_device_with_info">A new session is requesting encryption keys.\nSession name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another session, ignore this request.</string>
     <string name="your_unverified_device_requesting">Your unverified session  \'%s\' is requesting encryption keys.</string>
     <string name="your_unverified_device_requesting_with_info">An unverified session is requesting encryption keys.\nSession name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another session, ignore this request.</string>
 
@@ -1675,7 +1677,11 @@
     <!-- Create room screen -->
     <string name="create_room_title">"New Room"</string>
     <string name="create_room_action_create">"CREATE"</string>
-    <string name="create_room_name_hint">"Room name"</string>
+    <string name="create_room_name_section">"Room name"</string>
+    <string name="create_room_name_hint">"Name"</string>
+    <string name="create_room_topic_section">"Room topic (optional)"</string>
+    <string name="create_room_topic_hint">"Topic"</string>
+    <string name="create_room_settings_section">"Room settings"</string>
     <string name="create_room_public_title">"Public"</string>
     <string name="create_room_public_description">"Anyone will be able to join this room"</string>
     <string name="create_room_directory_title">"Room Directory"</string>
@@ -1836,12 +1842,14 @@
     <string name="error_file_too_big">"The file '%1$s' (%2$s) is too large to upload. The limit is %3$s."</string>
 
     <string name="error_attachment">"An error occurred while retrieving the attachment."</string>
+    <string name="attachment_type_dialog_title">"Add image from"</string>
     <string name="attachment_type_file">"File"</string>
     <string name="attachment_type_contact">"Contact"</string>
     <string name="attachment_type_camera">"Camera"</string>
     <string name="attachment_type_audio">"Audio"</string>
     <string name="attachment_type_gallery">"Gallery"</string>
     <string name="attachment_type_sticker">"Sticker"</string>
+    <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 
     <string name="uploads_media_title">MEDIA</string>
@@ -1879,6 +1887,8 @@
     <string name="room_list_quick_actions_settings">"Settings"</string>
     <string name="room_list_quick_actions_favorite_add">"Add to favorites"</string>
     <string name="room_list_quick_actions_favorite_remove">"Remove from favorites"</string>
+    <string name="room_list_quick_actions_low_priority_add">"Add to low priority"</string>
+    <string name="room_list_quick_actions_low_priority_remove">"Remove from low priority"</string>
     <string name="room_list_quick_actions_leave">"Leave the room"</string>
     <string name="notice_member_no_changes">"%1$s made no changes"</string>
     <string name="notice_member_no_changes_by_you">"You made no changes"</string>
@@ -2159,6 +2169,7 @@
     <string name="room_member_power_level_default_in">Default in %1$s</string>
     <string name="room_member_power_level_custom_in">Custom (%1$d) in %2$s</string>
 
+    <string name="room_member_open_or_create_dm">Direct message</string>
     <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
 
     <string name="rendering_event_error_type_of_event_not_handled">"Element does not handle events of type '%1$s'"</string>
@@ -2296,6 +2307,7 @@
     <string name="login_default_session_public_name">Element Android</string>
 
     <string name="settings_key_requests">Key Requests</string>
+    <string name="settings_export_trail">Export Audit</string>
 
     <string name="e2e_use_keybackup">Unlock encrypted messages history</string>
 
@@ -2624,4 +2636,7 @@
 
     <!-- Universal link -->
     <string name="universal_link_malformed">The link was malformed</string>
+    <string name="warning_room_not_created_yet">The room is not yet created. Cancel the room creation?</string>
+    <string name="warning_unsaved_change">There are unsaved changes. Discard the changes?</string>
+    <string name="warning_unsaved_change_discard">Discard changes</string>
 </resources>

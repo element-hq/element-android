@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.settings
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -26,10 +27,14 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.intent.getFilenameFromUri
+import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.toast
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
@@ -40,17 +45,24 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.util.toMatrixItem
+import java.util.UUID
 import javax.inject.Inject
 
 class RoomSettingsFragment @Inject constructor(
         val viewModelFactory: RoomSettingsViewModel.Factory,
         private val controller: RoomSettingsController,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
+        colorProvider: ColorProvider,
         private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment(), RoomSettingsController.Callback {
+) :
+        VectorBaseFragment(),
+        RoomSettingsController.Callback,
+        OnBackPressed,
+        GalleryOrCameraDialogHelper.Listener {
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
     override fun getLayoutResId() = R.layout.fragment_room_setting_generic
 
@@ -67,7 +79,11 @@ class RoomSettingsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
-                is RoomSettingsViewEvents.Success -> showSuccess()
+                RoomSettingsViewEvents.Success    -> showSuccess()
+                RoomSettingsViewEvents.GoBack     -> {
+                    ignoreChanges = true
+                    vectorBaseActivity.onBackPressed()
+                }
             }.exhaustive
         }
     }
@@ -160,5 +176,60 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun onAliasChanged(alias: String) {
         viewModel.handle(RoomSettingsAction.SetRoomCanonicalAlias(alias))
+    }
+
+    override fun onImageReady(uri: Uri?) {
+        uri ?: return
+        viewModel.handle(
+                RoomSettingsAction.SetAvatarAction(
+                        RoomSettingsViewState.AvatarAction.UpdateAvatar(
+                                newAvatarUri = uri,
+                                newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString())
+                )
+        )
+    }
+
+    override fun onAvatarDelete() {
+        withState(viewModel) {
+            when (it.avatarAction) {
+                RoomSettingsViewState.AvatarAction.None -> {
+                    viewModel.handle(RoomSettingsAction.SetAvatarAction(RoomSettingsViewState.AvatarAction.DeleteAvatar))
+                }
+                RoomSettingsViewState.AvatarAction.DeleteAvatar -> {
+                    /* Should not happen */
+                    Unit
+                }
+                is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {
+                    // Cancel the update of the avatar
+                    viewModel.handle(RoomSettingsAction.SetAvatarAction(RoomSettingsViewState.AvatarAction.None))
+                }
+            }
+        }
+    }
+
+    override fun onAvatarChange() {
+        galleryOrCameraDialogHelper.show()
+    }
+
+    private var ignoreChanges = false
+
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        if (ignoreChanges) return false
+
+        return withState(viewModel) {
+            return@withState if (it.showSaveAction) {
+                AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.dialog_title_warning)
+                        .setMessage(R.string.warning_unsaved_change)
+                        .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
+                            viewModel.handle(RoomSettingsAction.Cancel)
+                        }
+                        .setNegativeButton(R.string.cancel, null)
+                        .show()
+                true
+            } else {
+                false
+            }
+        }
     }
 }

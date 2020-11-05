@@ -41,8 +41,9 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
-import org.matrix.android.sdk.internal.crypto.crosssigning.ShieldTrustUpdater
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
+import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
+import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
 import org.matrix.android.sdk.internal.crypto.verification.VerificationMessageProcessor
 import org.matrix.android.sdk.internal.database.DatabaseCleaner
 import org.matrix.android.sdk.internal.database.EventInsertLiveObserver
@@ -333,10 +334,6 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindShieldTrustUpdated(updater: ShieldTrustUpdater): SessionLifecycleObserver
-
-    @Binds
-    @IntoSet
     abstract fun bindIdentityService(service: DefaultIdentityService): SessionLifecycleObserver
 
     @Binds
@@ -367,4 +364,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindTypingUsersTracker(tracker: DefaultTypingUsersTracker): TypingUsersTracker
+
+    @Binds
+    abstract fun bindRedactEventTask(task: DefaultRedactEventTask): RedactEventTask
 }

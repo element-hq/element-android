@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s dërgoi një figurë.</string>
@@ -25,39 +25,26 @@
     <string name="notice_requested_voip_conference">%1$s kërkoi një konferencë VoIP</string>
     <string name="notice_voip_started">Konferenca VoIP filloi</string>
     <string name="notice_voip_finished">Konferenca VoIP përfundoi</string>
-
     <string name="notice_avatar_changed_too">(u ndryshua edhe avatari)</string>
     <string name="notice_room_name_removed">%1$s hoqi emrin e dhomës</string>
     <string name="notice_profile_change_redacted">%1$s përditësoi profilin e tij %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s pranoi ftesën tuaj për %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** S’arrihet të shfshehtëzohet: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Pajisja e dërguesit nuk na ka dërguar kyçet për këtë mesazh.</string>
-
     <string name="could_not_redact">S’u redaktua dot</string>
     <string name="unable_to_send_message">S’arrihet të dërgohet mesazh</string>
-
     <string name="message_failed_to_upload">Ngarkimi i figurës dështoi</string>
-
     <string name="network_error">Gabim rrjeti</string>
     <string name="matrix_error">Gabim Matrix</string>
-
     <string name="room_error_join_failed_empty_room">Hëpërhë s’është e mundur të rihyhet në një dhomë të zbrazët.</string>
-
-    <string name="encrypted_message">U fshehtëzua mesazhi</string>
-
+    <string name="encrypted_message">Mesazh i fshehtëzuar</string>
     <string name="medium_email">Adresë email</string>
     <string name="medium_phone_number">Numër telefoni</string>
-
     <string name="room_displayname_invite_from">Ftesë nga %s</string>
     <string name="room_displayname_room_invite">Ftesë Dhome</string>
-
     <string name="room_displayname_two_members">%1$s dhe %2$s</string>
-
     <string name="room_displayname_empty_room">Dhomë e zbrazët</string>
-
     <string name="summary_user_sent_sticker">%1$s dërgoi një ngjitës.</string>
-
     <string name="notice_room_invite_no_invitee">Ftesë e %s</string>
     <string name="notice_room_unban">%1$s hoqi dëbimin për %2$s</string>
     <string name="notice_room_withdraw">%1$s tërhoqi mbrapsht ftesën për %2$s</string>
@@ -65,20 +52,17 @@
     <string name="notice_display_name_changed_from">%1$s ndryshoi emrin e tyre në ekran nga %2$s në %3$s</string>
     <string name="notice_display_name_removed">%1$s hoqi emrin e tij në ekran (%2$s)</string>
     <string name="notice_end_to_end">%1$s aktivizoi fshehtëzim skaj-më-skaj (%2$s)</string>
-
     <string name="notice_room_topic_removed">%1$s hoqi temën e dhomës</string>
     <string name="notice_room_third_party_invite">%1$s dërgoi një ftesë për %2$s që të marrë pjesë në dhomë</string>
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s dhe 1 tjetër</item>
         <item quantity="other">%1$s dhe %2$d të tjerë</item>
     </plurals>
-
     <string name="notice_event_redacted">Mesazhi u hoq</string>
     <string name="notice_event_redacted_by">Mesazhi u hoq nga %1$s</string>
     <string name="notice_event_redacted_with_reason">Mesazh i hequr [arsye: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Mesazh i hequr nga %1$s [arsye: %2$s]</string>
     <string name="notice_room_update">%s e përmirësoi këtë dhomë.</string>
-
     <string name="initial_sync_start_importing_account">Njëkohësimi Fillestar:
 \nPo importohet llogaria…</string>
     <string name="initial_sync_start_importing_account_crypto">Njëkohësimi Fillestar:
@@ -95,10 +79,8 @@
 \nPo importohen Bashkësi</string>
     <string name="initial_sync_start_importing_account_data">Njëkohësimi Fillestar:
 \nPo importohet të Dhëna Llogarie</string>
-
     <string name="event_status_sending_message">Po dërgohet mesazh…</string>
     <string name="clear_timeline_send_queue">Spastro radhë pritjeje</string>
-
     <string name="notice_room_third_party_revoked_invite">%1$s shfuqizoi ftesën për %2$s për pjesëmarrje te dhoma</string>
     <string name="notice_room_invite_no_invitee_with_reason">Ftesë e %1$s. Arsye: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s ftoi %2$s. Arsye: %3$s</string>
@@ -113,34 +95,25 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s shfuqizoi ftesën për %2$s për të ardhur në dhomë. Arsye: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s pranoi ftesën për %2$s. Arsye: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s tërhoqi mbrapsht ftesën për %2$s. Arsye: %3$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s shtoi %2$s si një adresë për këtë dhomë.</item>
         <item quantity="other">%1$s shtoi %2$s si adresa për këtë dhomë.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s hoqi %2$s si adresë për këtë dhomë.</item>
         <item quantity="other">%1$s hoqi %3$s si adresa për këtë dhomë.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s shtoi %2$s dhe hoqi %3$s si adresa për këtë dhomë.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s caktoi %2$s si adresë kryesore për këtë dhomë.</string>
     <string name="notice_room_canonical_alias_unset">%1$s hoqi adresën kryesore për këtë dhomë.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s ka lejuar vizitorë të marrin pjesë në dhomë.</string>
     <string name="notice_room_guest_access_forbidden">%1$s ka penguar vizitorë të marrin pjesë në dhomë.</string>
-
     <string name="notice_end_to_end_ok">%1$s aktivizoi fshehtëzim skaj-më-skaj.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s aktivizoi fshehtëzim skaj-më-skaj (algoritëm i papranuar %2$s).</string>
-
     <string name="key_verification_request_fallback_message">%s po kërkon të verifikojë kyçin tuaj, por klienti juaj nuk mbulon verifikim kyçesh brenda fjalosjeje. Që të verifikoni kyça, do t’ju duhet të përdorni verifikim të dikurshëm kyçesh.</string>
-
     <string name="notice_room_created">%1$s krijo dhomën</string>
     <string name="summary_you_sent_image">Dërguat një figurë.</string>
     <string name="summary_you_sent_sticker">Dërguat një ngjitës.</string>
-
     <string name="notice_room_invite_no_invitee_by_you">Ftesa juaj</string>
     <string name="notice_room_created_by_you">Krijuat dhomën</string>
     <string name="notice_room_invite_by_you">Ftuat %1$s</string>
@@ -168,7 +141,6 @@
     <string name="notice_made_future_room_visibility_by_you">E bëtë historikun e ardhshëm të dhomë të dukshëm për %1$s</string>
     <string name="notice_end_to_end_by_you">Aktivizuat fshehtëzim skaj-më-skaj (%1$s)</string>
     <string name="notice_room_update_by_you">Përmirësuat këtë dhomë.</string>
-
     <string name="notice_requested_voip_conference_by_you">Kërkuat një konferencë VoIP</string>
     <string name="notice_room_name_removed_by_you">Hoqët emrin e dhomës</string>
     <string name="notice_room_topic_removed_by_you">Hoqët temën e dhomës</string>
@@ -178,24 +150,20 @@
     <string name="notice_room_third_party_invite_by_you">Dërguat një ftesë te %1$s për të ardhur te dhoma</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Shfuqizuat ftesën për ardhjen në dhomë të %1$s</string>
     <string name="notice_room_third_party_registered_invite_by_you">Pranuat ftesën për %1$s</string>
-
     <string name="notice_widget_added">%1$s shtoi widget-in %2$s</string>
     <string name="notice_widget_added_by_you">Shtuat widget-in %1$s</string>
     <string name="notice_widget_removed">%1$s hoqi widget-in %2$s</string>
     <string name="notice_widget_removed_by_you">Hoqët widget-in %1$s</string>
     <string name="notice_widget_modified">%1$s ndryshoi widget-in %2$s</string>
     <string name="notice_widget_modified_by_you">Ndryshuat widget-in %1$s</string>
-
     <string name="power_level_admin">Përgjegjës</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_default">Parazgjedhje</string>
     <string name="power_level_custom">Vetjake (%1$d)</string>
     <string name="power_level_custom_no_value">Vetjake</string>
-
     <string name="notice_power_level_changed_by_you">Ndryshuat shkallën e pushtetit për %1$s.</string>
     <string name="notice_power_level_changed">%1$s ndryshoi shkallën e pushtetit për %2$s.</string>
     <string name="notice_power_level_diff">%1$s nga %2$s në %3$s</string>
-
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Ftesa juaj. Arsye: %1$s</string>
     <string name="notice_room_invite_with_reason_by_you">Ftuat %1$s. Arsye: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">Erdhët në dhomë, Arsye: %1$s</string>
@@ -208,26 +176,41 @@
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Shfuqizuat ftesën për ardhjen në dhomë të %1$s. Arsye: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Pranuat ftesën për %1$s. Arsye: %2$s</string>
     <string name="notice_room_withdraw_with_reason_by_you">Tërhoqët mbrapsht ftesën për %1$s. Arsye: %2$s</string>
-
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">Shtuat %1$s si një adresë për këtë dhomë.</item>
         <item quantity="other">Shtuat %1$s si adresa për këtë dhomë.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Hoqët %1$s si një adresë për këtë dhomë.</item>
         <item quantity="other">Hoqët %1$s si adresa për këtë dhomë.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed_by_you">Shtuat %1$s dhe hoqët %2$s si adresa për këtë dhomë.</string>
-
     <string name="notice_room_canonical_alias_set_by_you">Caktuat si adresë kryesore për këtë dhomë %1$s.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Hoqët adresën kryesore për këtë dhomë.</string>
-
     <string name="notice_room_guest_access_can_join_by_you">Keni lejuar të vijnë mysafirë në dhomë.</string>
     <string name="notice_room_guest_access_forbidden_by_you">U keni penguar mysafirëve të vijnë në dhomë.</string>
-
     <string name="notice_end_to_end_ok_by_you">Aktivizuat fshehtëzimin skaj-më-skaj.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Aktivizuat fshehtëzimin skaj-më-skaj (algoritëm %1$s i panjohur).</string>
-
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Keni penguar të vijnë në dhomë mysafirë.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s ka penguar të vijnë në dhomë mysafirë.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Keni lejuar të vijnë mysafirë këtu.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s ka lejuar të vijnë këtu mysafirë.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Dolët. Arsye: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s doli. Arsye: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Erdhët. Arsye: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s erdhi. Arsye: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Shfuqizuat ftesën për %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s shfuqizoi ftesën për %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Ftuat %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s ftoi %2$s</string>
+    <string name="notice_direct_room_update_by_you">U përmirësuat këtu.</string>
+    <string name="notice_direct_room_update">%s këtu u përmirësua.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">I bëtë mesazhet e ardhshëm të dukshëm për %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s i bëri mesazhet e ardhshëm të dukshëm për %2$s</string>
+    <string name="notice_direct_room_leave_by_you">Dolët nga dhoma</string>
+    <string name="notice_direct_room_leave">%1$s doli nga dhoma</string>
+    <string name="notice_direct_room_join_by_you">Erdhët</string>
+    <string name="notice_direct_room_join">%1$s erdhi</string>
+    <string name="notice_direct_room_created_by_you">Krijuat diskutimin</string>
+    <string name="notice_direct_room_created">%1$s krijoi diskutimin</string>
 </resources>

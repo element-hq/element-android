@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.crypto.crosssigning
 
-data class SessionToCryptoRoomMembersUpdate(
-        val roomId: String,
-        val isDirect: Boolean,
-        val userIds: List<String>
-)
+package im.vector.app.features.roomdirectory.createroom
 
-data class CryptoToSessionUserTrustChange(
-        val userIds: List<String>
-)
+import im.vector.app.core.platform.VectorViewEvents
+
+/**
+ * Transient events for room creation screen
+ */
+sealed class CreateRoomViewEvents : VectorViewEvents {
+    object Quit : CreateRoomViewEvents()
+}

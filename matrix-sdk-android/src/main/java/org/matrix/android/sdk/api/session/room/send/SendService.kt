@@ -124,11 +124,6 @@ interface SendService {
     fun deleteFailedEcho(localEcho: TimelineEvent)
 
     /**
-     * Delete all the events in one of the sending states
-     */
-    fun clearSendingQueue()
-
-    /**
      * Cancel sending a specific event. It has to be in one of the sending states
      */
     fun cancelSend(eventId: String)

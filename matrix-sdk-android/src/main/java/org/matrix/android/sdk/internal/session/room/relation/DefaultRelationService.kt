@@ -17,12 +17,10 @@ package org.matrix.android.sdk.internal.session.room.relation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import androidx.work.OneTimeWorkRequest
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
@@ -32,30 +30,25 @@ import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.di.SessionId
-import org.matrix.android.sdk.internal.session.room.send.EncryptEventWorker
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
-import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
-import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
-import org.matrix.android.sdk.internal.session.room.timeline.TimelineSendEventWorkCommon
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.fetchCopyMap
-import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 
 internal class DefaultRelationService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        @SessionId private val sessionId: String,
-        private val timeLineSendEventWorkCommon: TimelineSendEventWorkCommon,
+        private val eventSenderProcessor: EventSenderProcessor,
         private val eventFactory: LocalEchoEventFactory,
-        private val cryptoService: CryptoService,
+        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
         private val fetchEditHistoryTask: FetchEditHistoryTask,
         private val timelineEventMapper: TimelineEventMapper,
@@ -83,8 +76,7 @@ internal class DefaultRelationService @AssistedInject constructor(
                         .none { it.addedByMe && it.key == reaction }) {
             val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
                     .also { saveLocalEcho(it) }
-            val sendRelationWork = createSendEventWork(event, true)
-            timeLineSendEventWorkCommon.postWork(roomId, sendRelationWork)
+            return eventSenderProcessor.postEvent(event, false /* reaction are not encrypted*/)
         } else {
             Timber.w("Reaction already added")
             NoOpCancellable
@@ -107,9 +99,7 @@ internal class DefaultRelationService @AssistedInject constructor(
                 data.redactEventId?.let { toRedact ->
                     val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null)
                             .also { saveLocalEcho(it) }
-                    val redactWork = createRedactEventWork(redactEvent, toRedact, null)
-
-                    timeLineSendEventWorkCommon.postWork(roomId, redactWork)
+                    eventSenderProcessor.postRedaction(redactEvent, null)
                 }
             }
         }
@@ -121,18 +111,6 @@ internal class DefaultRelationService @AssistedInject constructor(
                 .executeBy(taskExecutor)
     }
 
-    // TODO duplicate with send service?
-    private fun createRedactEventWork(localEvent: Event, eventId: String, reason: String?): OneTimeWorkRequest {
-        val sendContentWorkerParams = RedactEventWorker.Params(
-                sessionId,
-                localEvent.eventId!!,
-                roomId,
-                eventId,
-                reason)
-        val redactWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-        return timeLineSendEventWorkCommon.createWork<RedactEventWorker>(redactWorkData, true)
-    }
-
     override fun editTextMessage(targetEventId: String,
                                  msgType: String,
                                  newBodyText: CharSequence,
@@ -141,14 +119,7 @@ internal class DefaultRelationService @AssistedInject constructor(
         val event = eventFactory
                 .createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
                 .also { saveLocalEcho(it) }
-        return if (cryptoService.isRoomEncrypted(roomId)) {
-            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
-            val workRequest = createSendEventWork(event, false)
-            timeLineSendEventWorkCommon.postSequentialWorks(roomId, encryptWork, workRequest)
-        } else {
-            val workRequest = createSendEventWork(event, true)
-            timeLineSendEventWorkCommon.postWork(roomId, workRequest)
-        }
+        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 
     override fun editReply(replyToEdit: TimelineEvent,
@@ -165,18 +136,11 @@ internal class DefaultRelationService @AssistedInject constructor(
                 compatibilityBodyText
         )
                 .also { saveLocalEcho(it) }
-        return if (cryptoService.isRoomEncrypted(roomId)) {
-            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
-            val workRequest = createSendEventWork(event, false)
-            timeLineSendEventWorkCommon.postSequentialWorks(roomId, encryptWork, workRequest)
-        } else {
-            val workRequest = createSendEventWork(event, true)
-            timeLineSendEventWorkCommon.postWork(roomId, workRequest)
-        }
+        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 
     override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
-        val params = FetchEditHistoryTask.Params(roomId, cryptoService.isRoomEncrypted(roomId), eventId)
+        val params = FetchEditHistoryTask.Params(roomId, cryptoSessionInfoProvider.isRoomEncrypted(roomId), eventId)
         fetchEditHistoryTask
                 .configureWith(params) {
                     this.callback = callback
@@ -189,27 +153,7 @@ internal class DefaultRelationService @AssistedInject constructor(
                 ?.also { saveLocalEcho(it) }
                 ?: return null
 
-        return if (cryptoService.isRoomEncrypted(roomId)) {
-            val encryptWork = createEncryptEventWork(event, listOf("m.relates_to"))
-            val workRequest = createSendEventWork(event, false)
-            timeLineSendEventWorkCommon.postSequentialWorks(roomId, encryptWork, workRequest)
-        } else {
-            val workRequest = createSendEventWork(event, true)
-            timeLineSendEventWorkCommon.postWork(roomId, workRequest)
-        }
-    }
-
-    private fun createEncryptEventWork(event: Event, keepKeys: List<String>?): OneTimeWorkRequest {
-        // Same parameter
-        val params = EncryptEventWorker.Params(sessionId, event.eventId!!, keepKeys)
-        val sendWorkData = WorkerParamsFactory.toData(params)
-        return timeLineSendEventWorkCommon.createWork<EncryptEventWorker>(sendWorkData, true)
-    }
-
-    private fun createSendEventWork(event: Event, startChain: Boolean): OneTimeWorkRequest {
-        val sendContentWorkerParams = SendEventWorker.Params(sessionId = sessionId, eventId = event.eventId!!)
-        val sendWorkData = WorkerParamsFactory.toData(sendContentWorkerParams)
-        return timeLineSendEventWorkCommon.createWork<SendEventWorker>(sendWorkData, startChain)
+        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 
     override fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary? {
