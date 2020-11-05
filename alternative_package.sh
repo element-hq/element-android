@@ -6,10 +6,14 @@ package_add="$1"
 name_add="$2"
 mydir="$(dirname "$(realpath "$0")")"
 
+source "$mydir/merge_helpers.sh"
+
 if [ -z "$package_add" ] || [ -z "$name_add" ]; then
     echo "Usage: $0 <package_add> <name_add>"
     exit 1
 fi
+
+require_clean_git
 
 build_gradle="$mydir/vector/build.gradle"
 src_dir="$mydir/vector/src"
@@ -75,3 +79,6 @@ esac
 sed -i "s|SchildiChat|SchildiChat.$name_add|g" "$build_gradle"
 sed -i "s|de.spiritcroc.riotx|de.spiritcroc.riotx.$package_add|g" "$build_gradle" `find "$src_dir" -name google-services.json`
 sed -i "s|SchildiChat|SchildiChat.$name_add|g" `find "$fastlane_dir/metadata/android" -name "title.txt"`
+
+git add -A
+git commit -m "Switch to alternative $name_add ($package_add)"
