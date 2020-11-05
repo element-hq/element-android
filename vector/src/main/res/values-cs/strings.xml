@@ -82,7 +82,7 @@
     <string name="user_directory_header">Uživatelský adresář</string>
     <string name="matrix_only_filter">Pouze kontakty Matrix</string>
     <string name="no_conversation_placeholder">Žádné konverzace</string>
-    <string name="no_contact_access_placeholder">Nepovolil jste aplikaci Element přístup k místním kontaktům</string>
+    <string name="no_contact_access_placeholder">Nepovolil jste aplikaci SchildiChat přístup k místním kontaktům</string>
     <string name="no_result_placeholder">Žádné výsledky</string>
     <string name="rooms_header">Místnosti</string>
     <string name="rooms_directory_header">Adresář místností</string>
@@ -232,7 +232,7 @@
     <string name="room_info_room_name">Název místnosti</string>
     <string name="room_info_room_topic">Téma místnosti</string>
     <string name="settings_call_category">Hovory</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Použít původní vyzvánění Elementu pro příchozí hovory</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Použít původní vyzvánění SchildiChatu pro příchozí hovory</string>
     <string name="settings_call_ringtone_title">Vyzvánění příchozího hovoru</string>
     <string name="settings_call_ringtone_dialog_title">Vybrat vyzvánění pro hovory:</string>
     <string name="call">Hovor</string>
@@ -251,14 +251,14 @@
     <string name="media_picker_both_capture_title">Pořídit fotografii nebo video</string>
     <string name="media_picker_cannot_record_video">Nemohu natáčet video</string>
     <string name="permissions_rationale_popup_title">Informace</string>
-    <string name="permissions_rationale_msg_storage">Element potřebuje oprávnění pro přístup do Vaší knihovny fotografií a videí, aby mohl odesílat a ukládat přílohy.
+    <string name="permissions_rationale_msg_storage">SchildiChat potřebuje oprávnění pro přístup do Vaší knihovny fotografií a videí, aby mohl odesílat a ukládat přílohy.
 \n
 \nProsím, povolte přístup na následující hlášce pro možnost odesílání souborů z Vašeho telefonu.</string>
-    <string name="permissions_rationale_msg_camera">Element potřebuje oprávnění pro přístup k Vašemu fotoaparátu pro pořizování fotografií a uskutečňování video hovorů.</string>
+    <string name="permissions_rationale_msg_camera">SchildiChat potřebuje oprávnění pro přístup k Vašemu fotoaparátu pro pořizování fotografií a uskutečňování video hovorů.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nProsím, povolte přístup na následující hlášce, abyste mohli uskutečnit hovor."</string>
-    <string name="permissions_rationale_msg_record_audio">Element potřebuje oprávnění pro přístup k Vašemu mikrofonu pro uskutečnění hlasových hovorů.</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChat potřebuje oprávnění pro přístup k Vašemu mikrofonu pro uskutečnění hlasových hovorů.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nProsím, povolte přístup na následující hlášce, abyste mohli uskutečnit hovor."</string>
@@ -272,7 +272,7 @@
     <string name="preview">Náhled</string>
     <string name="room_preview_invitation_format">Byli jste pozváni od %s ke vstupu do místnosti</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Žádost odeslána</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Prosím, spusťte Element na jiném zařízení, které může dešifrovat zprávu, aby poslalo klíče této relaci.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Prosím, spusťte SchildiChat na jiném zařízení, které může dešifrovat zprávu, aby poslalo klíče této relaci.</string>
     <string name="read_receipts_list">Seznam doručenek</string>
     <string name="groups_list">Seznam skupin</string>
     <string name="permissions_action_not_performed_missing_permissions">Omlouváme se, ale akce nebyla provedena z důvodu chybějících oprávnění</string>
@@ -409,11 +409,11 @@
     <string name="abort">Zrušit</string>
     <string name="action_sign_out_confirmation_simple">Opravdu se chcete odhlásit\?</string>
     <string name="video_call_in_progress">Video hovor probíhá…</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element potřebuje oprávnění pro přístup k Vaší kameře a mikrofonu pro uskutečnění video hovoru.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat potřebuje oprávnění pro přístup k Vaší kameře a mikrofonu pro uskutečnění video hovoru.
 \n
 \nProsím, povolte přístup na následující hlášce abyste mohli uskutečnit hovor.</string>
-    <string name="permissions_rationale_msg_contacts">Element může nahlédnout do vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich e-mailu a telefonního čísla. Pokud souhlasíte se sdílením svého adresáře za tímto účelem, prosím, povolte přístup v příští hlášce.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element může nahlédnout do vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich e-mailu a telefonního čísla.
+    <string name="permissions_rationale_msg_contacts">SchildiChat může nahlédnout do vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich e-mailu a telefonního čísla. Pokud souhlasíte se sdílením svého adresáře za tímto účelem, prosím, povolte přístup v příští hlášce.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat může nahlédnout do vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich e-mailu a telefonního čísla.
 \n 
 \nSouhlasíte se sdílením svého adresáře za tímto účelem\?</string>
     <string name="room_preview_unlinked_email_warning">Pozvánka byla odeslána na %s, což není spárováno s tímto účtem. 
@@ -525,7 +525,7 @@
     <string name="settings_call_ringtone_use_default_stun_sum">Použiiji %s jako nápomoc, pokud Váš homeserver žádnou nenabízí (Vaše IP adresa bude sdělena během hovoru)</string>
     <string name="invite_no_identity_server_error">Pro provedení této akce přidat server identit v nastavení.</string>
     <string name="settings_add_3pid_confirm_password_title">Potvrďte své heslo</string>
-    <string name="settings_add_3pid_flow_not_supported">Nelze provést z Element mobile</string>
+    <string name="settings_add_3pid_flow_not_supported">Nelze provést z SchildiChat mobile</string>
     <string name="settings_add_3pid_authentication_needed">Ověření je nutné</string>
     <string name="settings_notification_privacy">Soukromí oznámení</string>
     <string name="settings_notification_troubleshoot">Řešit oznámení</string>
@@ -548,7 +548,7 @@
     <string name="settings_troubleshoot_test_device_settings_title">Nastavení relací.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Pro tuto relaci jsou oznámení zapnuta.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Oznámení nejsou zapnuta pro tuto relaci. 
-\nProsím, prověřte nastavení Elementu.</string>
+\nProsím, prověřte nastavení SchildiChatu.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Zapnout</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Vlastní nastavení.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Všimněte si, že některé typy zpráv jsou ztišeny (vyvolají oznámeni bez zvuku).</string>
@@ -557,7 +557,7 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Kontrola nastavení</string>
     <string name="settings_troubleshoot_test_play_services_title">Kontrola služeb Play</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK je k dispozici a aktuální.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element používá Google Play Services pro doručení zpráv push, ale patrně nejsou správně nastaveny:
+    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat používá Google Play Services pro doručení zpráv push, ale patrně nejsou správně nastaveny:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Opravit Play Services</string>
     <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
@@ -566,11 +566,11 @@
     <string name="settings_troubleshoot_test_fcm_failed">Načtení FCM tokenu selhalo:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nTato chyba je mimo kontrolu Elementu a podle Googlu indikuje, že zařízení má příliš mnoho aplikací registrovaných s FCM. Tato chyba se ukáže jen v případech extrémního množství aplikací, a proto by neměla mít vliv na normálního uživatele.</string>
+\nTato chyba je mimo kontrolu SchildiChatu a podle Googlu indikuje, že zařízení má příliš mnoho aplikací registrovaných s FCM. Tato chyba se ukáže jen v případech extrémního množství aplikací, a proto by neměla mít vliv na normálního uživatele.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nTato chyba je mimo kontrolu Elementu. Múže k ní dojít z několika důvodů. Snad bude fungovat, když zkusíte znovu později, můžete též zkontrolovat, zda Google Play Service nejsou omezeny v množství dat v systémových nastavení nebo zda hodiny zařízení jdou správné nebo k chybě může dojít na zvláštní ROM.</string>
+\nTato chyba je mimo kontrolu SchildiChatu. Múže k ní dojít z několika důvodů. Snad bude fungovat, když zkusíte znovu později, můžete též zkontrolovat, zda Google Play Service nejsou omezeny v množství dat v systémových nastavení nebo zda hodiny zařízení jdou správné nebo k chybě může dojít na zvláštní ROM.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nTato chyba je mimo kontrolu Elementu. V telefonu není žádný účet Google. Prosím, spusťte správce účtů a doplňte účet Google.</string>
+\nTato chyba je mimo kontrolu SchildiChatu. V telefonu není žádný účet Google. Prosím, spusťte správce účtů a doplňte účet Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Přidat účet</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registrace tokenu</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM token se podařilo úspěšné registrovat na homeserveru.</string>
@@ -586,17 +586,17 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Restart služby se nezdařil</string>
     <string name="settings_troubleshoot_test_service_boot_title">Spustit při zavádění</string>
     <string name="settings_troubleshoot_test_service_boot_success">Služba se spustí při restartu zařízení.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Služba se nespustí při startu zařízení, neobdržíte oznámení, dokud jednou neotevřete Element.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Služba se nespustí při startu zařízení, neobdržíte oznámení, dokud jednou neotevřete SchildiChat.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Zapnout Spustit při zavádění</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Zkontrolovat omezení na pozadí</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Omezení na pozadí jsou pro Element vypnuta. Tento test by měl běžet s mobilními daty (ne WIFI).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Omezení na pozadí jsou pro SchildiChat vypnuta. Tento test by měl běžet s mobilními daty (ne WIFI).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Omezení na pozadí jsou pro Element zapnuta.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Omezení na pozadí jsou pro SchildiChat zapnuta.
 \nČinnosti prováděné aplikací budou agresivně omezeny, bude-li v pozadí, a to může mít vliv na oznámení.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Vypnout omezení</string>
     <string name="settings_troubleshoot_test_battery_title">Optimalizace baterie</string>
-    <string name="settings_troubleshoot_test_battery_success">Optimalizace baterie nemá na Element vliv.</string>
+    <string name="settings_troubleshoot_test_battery_success">Optimalizace baterie nemá na SchildiChat vliv.</string>
     <string name="settings_troubleshoot_test_battery_failed">Nechá-li uživatel zařízení vytažený ze zásuvky a v klidu po nějakou dobu a s obrazovkou vypnutou, zařízení vstoupí do stavu spánku. Ten zamezí aplikacím přístup k síti a odloží jejich úlohy, synchronizaci a běžná upozornění.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorovat optimalizaci</string>
     <string name="settings_notification_privacy_normal">Normální</string>
@@ -626,11 +626,11 @@
     <string name="settings_background_sync">Synchronizace na pozadí</string>
     <string name="settings_background_fdroid_sync_mode">Režim synchronizace na pozadí</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimalizován pro baterii</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element bude synchronizovat na pozadí způsobem, který šetří omezené zdroje zařízení (baterii).
+    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat bude synchronizovat na pozadí způsobem, který šetří omezené zdroje zařízení (baterii).
 \nV závislosti na stavu zdrojů zařízení může být sync operačním systémem odložen.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimalizováno pro reálný čas</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element bude synchronizovat na pozadí periodicky v přesný čas (nastavitelné).
-\nTo bude mít vliv na využití rádia a baterie, stálé oznámení o tom, že Element čeká na události, bude zobrazeno.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat bude synchronizovat na pozadí periodicky v přesný čas (nastavitelné).
+\nTo bude mít vliv na využití rádia a baterie, stálé oznámení o tom, že SchildiChat čeká na události, bude zobrazeno.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Žádný sync na pozadí</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Neobdržíte oznámení o příchozích zprávách, je-li aplikace na pozadí.</string>
     <string name="settings_background_sync_update_error">Aktualizace nastavení se nezdařila.</string>
@@ -691,17 +691,17 @@
     <string name="settings_discovery_category">Odhalení</string>
     <string name="settings_discovery_manage">Správa Vašich nastaveni pro odhalení.</string>
     <string name="startup_notification_privacy_title">Soukromí ohledně oznámení</string>
-    <string name="startup_notification_privacy_message">Element může běžet na pozadí, aby spravoval Vaše oznámení bezpečně a v soukromí. To může mít vliv na baterii.</string>
+    <string name="startup_notification_privacy_message">SchildiChat může běžet na pozadí, aby spravoval Vaše oznámení bezpečně a v soukromí. To může mít vliv na baterii.</string>
     <string name="startup_notification_privacy_button_grant">Udělit oprávnění</string>
     <string name="startup_notification_privacy_button_other">Vybrat jinou volbu</string>
     <string name="startup_notification_fdroid_battery_optim_title">Spojení na pozadí</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element potřebuje udržovat spojení na pozadí se slabým vlivem, abyste obdrželi spolehlivá oznámení.
-\nNa příští obrazovce budete dotázáni o svolení nechat Element vždy v chodu na pozadí, prosím, souhlaste.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">SchildiChat potřebuje udržovat spojení na pozadí se slabým vlivem, abyste obdrželi spolehlivá oznámení.
+\nNa příští obrazovce budete dotázáni o svolení nechat SchildiChat vždy v chodu na pozadí, prosím, souhlaste.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Udělit oprávění</string>
     <string name="settings_analytics">Analýza</string>
     <string name="settings_opt_in_of_analytics">Odeslat analytická data</string>
-    <string name="settings_opt_in_of_analytics_summary">Element sbírá anonymní analytická data pro vylepšení aplikace.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Prosím, zapněte analýzu pro vylepšení Elementu.</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChat sbírá anonymní analytická data pro vylepšení aplikace.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Prosím, zapněte analýzu pro vylepšení SchildiChatu.</string>
     <string name="settings_opt_in_of_analytics_ok">Ano, chci pomoci!</string>
     <string name="settings_data_save_mode">Režim úsporných dat</string>
     <string name="settings_data_save_mode_summary">Režim úsporných data zavádí specifický filtr, takže aktualizace přítomnosti a oznámení o psaní jsou fitrovány.</string>
@@ -1122,7 +1122,7 @@
     <string name="passphrase_passphrase_does_not_match">Heslo se neshoduje</string>
     <string name="passphrase_empty_error_message">Prosím, zadejte heslo</string>
     <string name="passphrase_passphrase_too_weak">Heslo je příliš slabé</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Prosím, smažte heslo, přejete-lis si, aby Element generoval klíč pro obnovu.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Prosím, smažte heslo, přejete-lis si, aby SchildiChat generoval klíč pro obnovu.</string>
     <string name="keys_backup_no_session_error">Žádná relace Matrix není dostupná</string>
     <string name="keys_backup_setup_step1_title">Nikdy neztraťte šifrované zprávy</string>
     <string name="keys_backup_setup_step1_description">Zprávy v šifrovaných místnostech jsou zabezpečeny pomocí end-to-end šifrováním. Pouze Vy a adresát(i) máte klíče ke čtení těchto zpráv.
@@ -1214,7 +1214,7 @@
     <string name="keys_backup_info_title_signature">Podpis</string>
     <string name="autodiscover_invalid_response">Neplatná odpověď z hledání homeserverů</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Volby serveru automaticky</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element nalezl vlastní konfiguraci serveru pro doménu Vašeho uživatelského Id \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">SchildiChat nalezl vlastní konfiguraci serveru pro doménu Vašeho uživatelského Id \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Použít konfiguraci</string>
     <string name="invalid_or_expired_credentials">Byli jste odhlášení kvůli chybným či neplatným ověřovacím údajům.</string>
@@ -1289,7 +1289,7 @@
     <string name="please_wait">Prosím, čekejte…</string>
     <string name="group_all_communities">Všechny komunity</string>
     <string name="room_preview_no_preview">Nelze provést náhled této místnosti</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Náhled místnosti čitelné pro všechny zatím Element nepodporuje</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Náhled místnosti čitelné pro všechny zatím SchildiChat nepodporuje</string>
     <string name="fab_menu_create_room">Místnosti</string>
     <string name="fab_menu_create_chat">Přímé zprávy</string>
     <string name="create_room_title">Nová místnost</string>
@@ -1429,7 +1429,7 @@
     <string name="content_reported_as_inappropriate_content">Obsah byl nahlášen jako nepatřičný.
 \n
 \nPokud si dále nepřejete vidět obsah tohoto uživatele, můžete jej ignorovat a tím skrýt jejich zprávy.</string>
-    <string name="permissions_rationale_msg_keys_backup_export">Element potřebuje práva k uložení Vašich E2E klíčů na disk.
+    <string name="permissions_rationale_msg_keys_backup_export">SchildiChat potřebuje práva k uložení Vašich E2E klíčů na disk.
 \n
 \nProsím, povolte přístup v příštím dialogu, abyste mohli exportovat své klíče manuálně.</string>
     <string name="no_network_indicator">Právě nyní není k dispozici žádné síťové spojení</string>
@@ -1472,8 +1472,8 @@
     <string name="login_server_url_form_modular_hint">Adresa Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Adresa</string>
     <string name="login_server_url_form_modular_text">Prémiový hosting pro organizace</string>
-    <string name="login_server_url_form_modular_notice">Zadejte adresu Modular Element nebo serveru, který chcete použít</string>
-    <string name="login_server_url_form_other_notice">Zadejte adresu serveru nebo Elementu, k němuž se chcete připojit</string>
+    <string name="login_server_url_form_modular_notice">Zadejte adresu Modular SchildiChat nebo serveru, který chcete použít</string>
+    <string name="login_server_url_form_other_notice">Zadejte adresu serveru nebo SchildiChatu, k němuž se chcete připojit</string>
     <string name="login_sso_error_message">Při načítání stránky došlo k chybě: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Aplikace se nemůže přihlásit k tomuto homeserveru. Homeserver podporuje následující typy přihlášení: %1$s.
 \n
@@ -1571,7 +1571,7 @@
 \nPro přístup k účtu a zprávám se znovu se přihlaste.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Ztratíte přístup k šifrovaným zprávám, pokud se nepřihlásíte za účelem obnovy šifrovacích klíčů.</string>
     <string name="soft_logout_clear_data_dialog_submit">Vyčistit data</string>
-    <string name="soft_logout_sso_not_same_user_error">Tato relace je pro uživatele %1$s a Vy jste zadali údaje pro uživatele %2$s. Element toto nepodporuje.
+    <string name="soft_logout_sso_not_same_user_error">Tato relace je pro uživatele %1$s a Vy jste zadali údaje pro uživatele %2$s. SchildiChat toto nepodporuje.
 \nProsím, nejdříve vyčistěte data a pak se přihlaste k jinému účtu.</string>
     <string name="permalink_malformed">Váš odkaz matrix.to byl chybný</string>
     <string name="bug_report_error_too_short">Popis je příliš krátký</string>
@@ -1589,7 +1589,7 @@
     <string name="devices_other_devices">Jiné relace</string>
     <string name="autocomplete_limited_results">Ukazuji jen první výsledky, zadejte více znaků…</string>
     <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element se může zbořit častěji, když se objeví neočekávané chyby</string>
+    <string name="settings_developer_mode_fail_fast_summary">SchildiChat se může zbořit častěji, když se objeví neočekávané chyby</string>
     <string name="command_description_shrug">Předsune ¯\\_(ツ)_/¯ do textové zprávy</string>
     <string name="create_room_encryption_title">Zapnout šifrování</string>
     <string name="create_room_encryption_description">Jakmile zapnuto, šifrování nelze vypnout.</string>
@@ -1661,9 +1661,9 @@
     <string name="room_member_power_level_moderator_in">Moderátor v %1$s</string>
     <string name="room_member_power_level_custom_in">Vlastní (%1$d) in %2$s</string>
     <string name="room_member_jump_to_read_receipt">Přeskočit k potvrzení přečtení</string>
-    <string name="rendering_event_error_type_of_event_not_handled">Element neobstarává události typu \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element neobstarává zprávy typu \'%1$s\'</string>
-    <string name="rendering_event_error_exception">Element narazil na chybu při převádění obsahu události s id \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">SchildiChat neobstarává události typu \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">SchildiChat neobstarává zprávy typu \'%1$s\'</string>
+    <string name="rendering_event_error_exception">SchildiChat narazil na chybu při převádění obsahu události s id \'%1$s\'</string>
     <string name="unignore">Odignorovat</string>
     <string name="verify_cannot_cross_sign">Tato relace nemůže sdílet toto ověření s jinými z Vašich relací.
 \nToto ověření bude uloženo místně a sdíleno v budoucí verzi aplikace.</string>
@@ -1761,7 +1761,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Událost smazána uživatelem, důvod: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Událost moderována správcem místnosti, důvod: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Klíče jsou již aktuální!</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">SchildiChat Android</string>
     <string name="settings_key_requests">Požadavky na klíče</string>
     <string name="e2e_use_keybackup">Odemknout zašifrovanou historii zpráv</string>
     <string name="refresh">Obnovit</string>
@@ -1882,13 +1882,13 @@
     <string name="login_signin_matrix_id_error_invalid_matrix_id">To není platný identifikátor uživatele. Platný formát: \'@uživatel:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Nemohu najít platný domovský server. Prosím, zkontrolujte svůj identifikátor</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Režim letadlo je zapnut</string>
-    <string name="use_other_session_content_description">Použijte na svých zařízeních nejnovější Element, Element Web, Element Desktop, Element iOS, Element pro Android nebo jiný Matrix klient schopný křížového přihlášení</string>
+    <string name="use_other_session_content_description">Použijte na svých zařízeních nejnovější SchildiChat/Element, Element Web, Element Desktop, Element iOS, SchildiChat pro Android nebo jiný Matrix klient schopný křížového přihlášení</string>
     <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
     <string name="app_ios_android">Element iOS
-\nElement Android</string>
+\nSchildiChat Android</string>
     <string name="or_other_mx_capabale_client">nebo jiný Matrix klient schopný křížového přihlášení</string>
-    <string name="use_latest_app">Použijte na svých zařízeních nejnovější Element:</string>
+    <string name="use_latest_app">Použijte na svých zařízeních nejnovější SchildiChat:</string>
     <string name="command_description_discard_session">Vynutí zahození probíhající skupinové relace v šifrované místnosti</string>
     <string name="command_description_discard_session_not_handled">Podporováno jen v šifrovaných místnostech</string>
     <string name="enter_secret_storage_passphrase_or_key">Použijte své %1$s nebo použijte svůj %2$s a pokračujte.</string>
@@ -1930,11 +1930,11 @@
     <string name="choose_locale_loading_locales">Načítám dostupné jayzky…</string>
     <string name="open_terms_of">Otevřít všeobecné podmínky %s</string>
     <string name="disconnect_identity_server_dialog_content">Odpojit se od serveru identit %s\?</string>
-    <string name="identity_server_error_outdated_identity_server">Tento server identit je zastaralý. Element podporuje jen API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Tento server identit je zastaralý. SchildiChat podporuje jen API V2.</string>
     <string name="identity_server_error_outdated_home_server">Tato operace není možná. Domovský server je zastaralý.</string>
     <string name="identity_server_error_no_identity_server_configured">Prosím, nejdříve nastavit server identit.</string>
     <string name="identity_server_error_terms_not_signed">Prosím, přijměte nejdříve všeobecné podmínky serveru identit v nastavení.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Pro Vaše soukromí, Element podporuje jen odesílání hašovaných emailových adress a telefonních čísel.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Pro Vaše soukromí, SchildiChat podporuje jen odesílání hašovaných emailových adress a telefonních čísel.</string>
     <string name="identity_server_error_binding_error">Propojení selhalo.</string>
     <string name="identity_server_error_no_current_binding_error">S tímto identifikátorem neexistuje žádné propojení.</string>
     <string name="identity_server_set_default_notice">Váš domovský server (%1$s) navrhuje použít %2$s za Váš domovský server</string>
@@ -1960,7 +1960,7 @@
     <string name="action_copy">Kopírovat</string>
     <string name="dialog_title_success">Podařilo se</string>
     <string name="bottom_action_notification">Oznámení</string>
-    <string name="call_failed_no_connection">Volání Elementu se nezdařilo</string>
+    <string name="call_failed_no_connection">Volání SchildiChatu se nezdařilo</string>
     <string name="call_failed_no_connection_description">Založit spojení v reálném čase se nezdařilo.
 \nProsím, požádejte správce svého homeserveru o konfiguraci TURN serveru, aby volání fungovala spolehlivě.</string>
     <string name="call_select_sound_device">Vybrat zvukové zařízení</string>
@@ -2104,7 +2104,7 @@
     <string name="crypto_error_withheld_unverified">Nemůžete číst tuto zprávu, protože Vaše relace není pro odesílatele důvěryhodná</string>
     <string name="crypto_error_withheld_generic">Nemůžete číst tuto zprávu, protože odesílatel účelově neposlal klíče</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Čekám na historii šifrování</string>
-    <string name="element_disclaimer_title">Riot je nyní Element!</string>
+    <string name="element_disclaimer_title">Riot je nyní SchildiChat!</string>
     <string name="element_disclaimer_content">Jsme nadšení, že smíme oznámit změnu jména! Vaše app je aktuální a jste přihlášeni do svého účtu.</string>
     <string name="element_disclaimer_negative_button">ROZUMÍM</string>
     <string name="element_disclaimer_positive_button">DOZVĚDĚT SE VÍC</string>
@@ -2162,13 +2162,13 @@
     <string name="warning_unsaved_change_discard">Změny zavrhnout</string>
     <string name="warning_unsaved_change">Zůstávají neuložené změny. Zavrhnout změny\?</string>
     <string name="warning_room_not_created_yet">Místnost nebyla ještě založena. Zrušit založení místnosti\?</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">Kód PIN se vyžaduje při každém otevření Elementu.</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">Kód PIN se vyžaduje, pokud se Element nepoužil 2 minuty.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Kód PIN se vyžaduje při každém otevření SchildiChatu.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">Kód PIN se vyžaduje, pokud se SchildiChat nepoužil 2 minuty.</string>
     <string name="settings_security_pin_code_grace_period_title">Žádat PIN po 2 minutách</string>
     <string name="settings_security_pin_code_notifications_summary_off">Zobrazit pouze počet nepřečtených zpráv v jednoduchém oznámení.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Zobrazit podrobnosti např. názvy místností a obsah zpráv.</string>
     <string name="settings_security_pin_code_notifications_title">Zobrazit obsah v oznámení</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">Kód PIN je jediný způsob, jak odemknout Element.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">Kód PIN je jediný způsob, jak odemknout SchildiChat.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Zapnout biometriku specifickou pro zařízení, např. otisk prstu nebo rozpoznání obličeje.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Zapnout biometriku</string>
     <string name="settings_security_application_protection_screen_title">Nastavit ochranu</string>

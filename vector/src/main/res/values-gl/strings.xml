@@ -91,7 +91,7 @@
     <string name="user_directory_header">Directorio de usuario</string>
     <string name="matrix_only_filter">Só contactos Matrix</string>
     <string name="no_conversation_placeholder">Sen conversas</string>
-    <string name="no_contact_access_placeholder">"Non lle permitiu acceder aos contactos locais a Element "</string>
+    <string name="no_contact_access_placeholder">"Non lle permitiu acceder aos contactos locais a SchildiChat "</string>
     <string name="no_result_placeholder">Sen resultados</string>
 
     <string name="rooms_header">Salas</string>
@@ -301,7 +301,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
 
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_in_of_analytics">Enviar datos de análises</string>
-    <string name="settings_opt_in_of_analytics_summary">Element recolle información analítica anónima para permitirnos mellorar o aplicativo.</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChat recolle información analítica anónima para permitirnos mellorar o aplicativo.</string>
     <string name="settings_opt_in_of_analytics_ok">Si, quero axuda</string>
 
     <string name="devices_details_id_title">ID</string>
@@ -545,7 +545,7 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="e2e_re_request_encryption_key"><u>Volver a pedir as chaves de cifrado</u> do outro dispositivo seu.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Petición enviada</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Inicie Element noutro dispositivo que poida descifrar esta mensaxe e que despois desde alí lle poida enviar as chaves a este dispositivo.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Inicie SchildiChat noutro dispositivo que poida descifrar esta mensaxe e que despois desde alí lle poida enviar as chaves a este dispositivo.</string>
 
     <plurals name="membership_changes">
         <item quantity="one">1 cambio de membros</item>
@@ -648,7 +648,7 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     <string name="settings_notifications_targets">Obxectivos das notificacións</string>
     <string name="settings_deactivate_account_section">Desactivar conta</string>
     <string name="startup_notification_privacy_title">Segredo das notificacións</string>
-    <string name="startup_notification_privacy_message">Element pode estar agochado e seguir traballando na xestión das notificacións dun xeito seguro e privado (inda que iso podería afectar ao uso da batería).</string>
+    <string name="startup_notification_privacy_message">SchildiChat pode estar agochado e seguir traballando na xestión das notificacións dun xeito seguro e privado (inda que iso podería afectar ao uso da batería).</string>
     <string name="startup_notification_privacy_button_grant">Outorgar permisos</string>
     <string name="startup_notification_privacy_button_other">Escolla outra opción</string>
 

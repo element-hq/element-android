@@ -78,7 +78,7 @@
     <string name="local_address_book_header">Lokales Adressbuch</string>
     <string name="matrix_only_filter">Nur Matrix-Kontakte</string>
     <string name="no_conversation_placeholder">Keine Konversationen</string>
-    <string name="no_contact_access_placeholder">Element wurde nicht erlaubt, auf lokale Kontakte zuzugreifen</string>
+    <string name="no_contact_access_placeholder">SchildiChat wurde nicht erlaubt, auf lokale Kontakte zuzugreifen</string>
     <string name="no_result_placeholder">Keine Ergebnisse</string>
     <!-- Rooms fragment -->
     <string name="rooms_header">Räume</string>
@@ -216,20 +216,20 @@
     <string name="media_picker_cannot_record_video">Video kann nicht aufgenommen werden</string>
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Information</string>
-    <string name="permissions_rationale_msg_storage">Element benötigt die Berechtigung, auf deine Fotos und Videos zugreifen zu können, um Anhänge zu senden und zu speichern.\n\nBitte erlaube den Zugriff im nächsten Dialog, um Dateien von deinem Gerät zu versenden.</string>
-    <string name="permissions_rationale_msg_camera">Element benötigt die Berechtigung, auf deine Kamera zugreifen zu können, um Bilder aufzunehmen und Video-Anrufe durchzuführen.</string>
+    <string name="permissions_rationale_msg_storage">SchildiChat benötigt die Berechtigung, auf deine Fotos und Videos zugreifen zu können, um Anhänge zu senden und zu speichern.\n\nBitte erlaube den Zugriff im nächsten Dialog, um Dateien von deinem Gerät zu versenden.</string>
+    <string name="permissions_rationale_msg_camera">SchildiChat benötigt die Berechtigung, auf deine Kamera zugreifen zu können, um Bilder aufzunehmen und Video-Anrufe durchzuführen.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen."</string>
-    <string name="permissions_rationale_msg_record_audio">Element benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChat benötigt die Berechtigung, auf dein Mikrofon zugreifen zu können, um (Sprach-)Anrufe tätigen zu können.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element benötigt die Berechtigung, auf Kamera und Mikrofon zu zugreifen, um Video-Anrufe durchzuführen.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat benötigt die Berechtigung, auf Kamera und Mikrofon zu zugreifen, um Video-Anrufe durchzuführen.
 \n
 \nBitte erlaube den Zugriff im nächsten Dialog, um den Anruf durchzuführen.</string>
-    <string name="permissions_rationale_msg_contacts">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden. Wenn du der Nutzung deines Adressbuchs zu diesem Zweck zustimmst, erlaube den Zugriff im nächsten Popup-Fenster.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer E-Mail-Adresse und Telefonnummer zu finden. 
+    <string name="permissions_rationale_msg_contacts">SchildiChat kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer Email-Adresse und Telefonnummer zu finden. Wenn du der Nutzung deines Adressbuchs zu diesem Zweck zustimmst, erlaube den Zugriff im nächsten Popup-Fenster.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat kann dein Adressbuch durchsuchen, um andere Matrix-Nutzer anhand ihrer E-Mail-Adresse und Telefonnummer zu finden. 
 \n
 \nStimmst du der Nutzung deines Adressbuchs zu diesem Zweck zu\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Entschuldige. Die Aktion wurde aufgrund fehlender Berechtigungen nicht ausgeführt</string>
@@ -282,7 +282,7 @@
     <string name="room_participants_invite_search_another_user">Nutzer-ID, Name oder E-Mail-Adresse</string>
     <string name="room_participants_action_mention">Erwähnen</string>
     <string name="room_participants_action_devices_list">Sitzungsliste anzeigen</string>
-    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der/die Benutzer!n dasselbe Berechtigungslevel wie du erhalten wirst.
+    <string name="room_participants_power_level_prompt">Du wirst diese Änderung nicht rückgängig machen können, da der/die Benutzerschlumpfwesen dasselbe Berechtigungslevel wie du erhalten wirst.
 \nBist du sicher\?</string>
     <string name="room_participants_invite_prompt_msg">"Bist du sicher, dass du %s in diesen Chat einladen willst?"</string>
     <!-- invitation -->
@@ -556,7 +556,7 @@
     <string name="encryption_information_block">Sperren</string>
     <string name="encryption_information_unblock">Zulassen</string>
     <string name="encryption_information_verify_device">Sitzung verifizieren</string>
-    <string name="encryption_information_verify_device_warning">Vergleiche die folgenden Zeichen mit den Einstellungen in der Sitzung des/der anderen Nutzer!n und bestätige:</string>
+    <string name="encryption_information_verify_device_warning">Vergleiche die folgenden Zeichen mit den Einstellungen in der Sitzung des/der anderen Nutzerschlumpfwesen und bestätige:</string>
     <string name="encryption_information_verify_device_warning2">Falls sie nicht übereinstimmen, wurde die Kommunikation vielleicht kompromittiert.</string>
     <string name="encryption_information_verify_key_match">Ich bestätige, dass die Schlüssel übereinstimmen</string>
     <!-- unknown devices management -->
@@ -753,7 +753,7 @@
     <string name="settings_notification_privacy_nosecure_message_content">• Benachrichtigungen enthalten <b>Metadaten und Nachrichteninhalte</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Benachrichtigungen werden <b>den Nachrichteninhalt nicht anzeigen</b></string>
     <string name="startup_notification_privacy_title">Benachrichtungs-Datenschutz</string>
-    <string name="startup_notification_privacy_message">Element kann im Hintergrund laufen um deine Benachrichtigungen sicher und privat zu verwalten. Dies kann den Energieverbrauch beeinflussen.</string>
+    <string name="startup_notification_privacy_message">SchildiChat kann im Hintergrund laufen um deine Benachrichtigungen sicher und privat zu verwalten. Dies kann den Energieverbrauch beeinflussen.</string>
     <string name="startup_notification_privacy_button_grant">Berechtigung gewähren</string>
     <string name="startup_notification_privacy_button_other">Wähle eine andere Option</string>
     <string name="title_activity_choose_sticker">Sende einen Sticker</string>
@@ -764,8 +764,8 @@
     <string name="settings_deactivate_account_section">Account deaktivieren</string>
     <string name="settings_deactivate_my_account">Deaktiviere meinen Account</string>
     <string name="settings_opt_in_of_analytics">Sende Analysedaten</string>
-    <string name="settings_opt_in_of_analytics_summary">Element sammelt anonyme Analysedaten um uns zu helfen, die App zu verbessern.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Bitte aktive Analysedaten um uns zu helfen Element zu verbessern.</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChat sammelt anonyme Analysedaten um uns zu helfen, die App zu verbessern.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Bitte aktive Analysedaten um uns zu helfen SchildiChat zu verbessern.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, ich möchte helfen!</string>
     <string name="widget_integration_missing_parameter">Ein benötigter Parameter fehlt.</string>
     <string name="widget_integration_invalid_parameter">Ein Parameter ist nicht valide.</string>
@@ -787,7 +787,7 @@
     <string name="e2e_re_request_encryption_key">Verschlüsselungsschlüssel von deinen anderen Sitzungen erneut anfragen.</string>
     <string name="e2e_re_request_encryption_key_sent">Schlüsselanfrage gesendet.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Anfrage gesendet</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Bitte öffne Element auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es die Schlüssel an diese Sitzung senden kann.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Bitte öffne SchildiChat auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es die Schlüssel an diese Sitzung senden kann.</string>
     <string name="lock_screen_hint">Hier tippen…</string>
     <string name="option_send_voice">Sprachnachricht senden</string>
     <string name="go_on_with">fortfahren mit…</string>
@@ -902,7 +902,7 @@
     <string name="settings_show_avatar_display_name_changes_messages">Zeige Konto-Ereignisse</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Enthält Änderungen des Profilbilds und des Anzeigenamens.</string>
     <string name="settings_call_category">Anrufe</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Nutze den Standard-Klingelton von Element für eingehende Anrufe</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Nutze den Standard-Klingelton von SchildiChat für eingehende Anrufe</string>
     <string name="settings_call_ringtone_title">Klingelton für eingehende Anrufe</string>
     <string name="settings_call_ringtone_dialog_title">Wähle Klingelton für Anrufe:</string>
     <string name="accept">Akzeptieren</string>
@@ -924,9 +924,9 @@
     <string name="settings_troubleshoot_test_device_settings_title">Sitzungseinstellungen.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Benachrichtigungen sind für diese Sitzung aktiviert.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Benachrichtigungen sind für diese Sitzung nicht aktiviert. 
-\nBitte überprüfe die Einstellungen für Element.</string>
+\nBitte überprüfe die Einstellungen für SchildiChat.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Aktiviere</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element benutzt Google Play Dienste um Push-Nachrichten zu übermitteln, doch scheinen sie nicht korrekt konfiguriert zu sein:
+    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat benutzt Google Play Dienste um Push-Nachrichten zu übermitteln, doch scheinen sie nicht korrekt konfiguriert zu sein:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Repariere Play-Dienste</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase-Token</string>
@@ -947,17 +947,17 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Dienst konnte nicht neugestartet werden</string>
     <string name="settings_troubleshoot_test_service_boot_title">Starte beim Hochfahren</string>
     <string name="settings_troubleshoot_test_service_boot_success">Dienst wird starten, wenn das Gerät neu gestartet wird.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Dieser Dienst wird nicht starten, wenn das Gerät neu gestartet wird. Du wirst keine Benachrichtigungen bekommen bis Element einmal geöffnet wurde.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Dieser Dienst wird nicht starten, wenn das Gerät neu gestartet wird. Du wirst keine Benachrichtigungen bekommen bis SchildiChat einmal geöffnet wurde.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Aktiviere das Starten beim Hochfahren</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Überprüfe Hintergrund-Einschränkungen</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Hintergrund-Einschränkungen sind für Element deaktiviert. Dieser Test sollte über mobile Daten ausgeführt werden (kein WLAN).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Hintergrund-Einschränkungen sind für SchildiChat deaktiviert. Dieser Test sollte über mobile Daten ausgeführt werden (kein WLAN).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Hintergrund-Einschränkungen sind für Element aktiviert.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Hintergrund-Einschränkungen sind für SchildiChat aktiviert.
 \nDie App wird aggressiv eingeschränkt, während sie im Hintergrund arbeiten möchte. Dies könnte Benachrichtigungen beeinflussen.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Einschränkungen deaktivieren</string>
     <string name="settings_troubleshoot_test_battery_title">Batterieoptimierung</string>
-    <string name="settings_troubleshoot_test_battery_success">Element wird nicht von Batterieoptimierungen beeinflusst.</string>
+    <string name="settings_troubleshoot_test_battery_success">SchildiChat wird nicht von Batterieoptimierungen beeinflusst.</string>
     <string name="settings_notification_troubleshoot">Fehler bei Benachrichtigungen finden</string>
     <string name="settings_troubleshoot_diagnostic">Diagnose von Fehlern</string>
     <string name="settings_troubleshoot_diagnostic_success_status">Basisdiagnose ist OK. Wenn du immer noch keine Benachrichtigungen bekommst, sende bitte einen Fehlerbericht, um uns beim nachforschen zu helfen.</string>
@@ -967,8 +967,8 @@
     <string name="settings_troubleshoot_test_battery_failed">Wenn ein Benutzer ein abgestecktes Gerät mit ausgeschaltetem Bildschirm eine Weile nicht bewegt, wechselt es in den Doze-Modus. Dies hindert Apps daran, auf das Netzwerk zuzugreifen und verzögert die Ausführung von Aufgaben, Synchronisierungen und Standard-Alarmen.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignoriere Optimierungen</string>
     <string name="startup_notification_fdroid_battery_optim_title">Hintergrundverbindung</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element muss eine Hintergrundverbindung (nur geringe Belastung) aufrechterhalten, um verlässliche Benachrichtigungen zu erhalten.
-\nAuf dem nächsten Bildschirm wirst du gefragt, ob du Element erlauben möchtest im Hintergrund zu laufen. Bitte akzeptieren.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">SchildiChat muss eine Hintergrundverbindung (nur geringe Belastung) aufrechterhalten, um verlässliche Benachrichtigungen zu erhalten.
+\nAuf dem nächsten Bildschirm wirst du gefragt, ob du SchildiChat erlauben möchtest im Hintergrund zu laufen. Bitte akzeptieren.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Berechtigung gewähren</string>
     <string name="account_email_error">Beim Verifizieren deiner E-Mail-Adresse trat ein Fehler auf.</string>
     <string name="account_phone_number_error">Beim Verifizieren deiner Telefonnummer trat ein Fehler auf.</string>
@@ -994,7 +994,7 @@
     <string name="notification_silent">Stumm</string>
     <string name="passphrase_empty_error_message">Bitte eine Passphrase eingeben</string>
     <string name="passphrase_passphrase_too_weak">Passphrase ist zu schwach</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Bitte lösche die Passphrase, wenn Element einen Wiederherstellungs-Schlüssel erzeugen soll.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Bitte lösche die Passphrase, wenn SchildiChat einen Wiederherstellungs-Schlüssel erzeugen soll.</string>
     <string name="keys_backup_no_session_error">Keine Matrix-Sitzung verfügbar</string>
     <string name="keys_backup_setup_step1_title">Verliere nie wieder verschlüsselte Nachrichten</string>
     <string name="keys_backup_setup_step2_button_title">Setze Passphrase</string>
@@ -1018,14 +1018,14 @@
     <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
     <string name="settings_notification_by_event">Präferenz der Benachrichtigungen nach Ereignis</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nDieser Fehler ist außerhalb von Element passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
+\nDieser Fehler ist außerhalb von SchildiChat passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nDieser Fehler liegt nicht unter der Kontrolle von Element. Er kann aus verschiedenen Gründen auftreten. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Außerdem kannst Du prüfen, ob die Datennutzung der Google Play-Dienste unbeschränkt ist und die Geräteuhr richtig eingestellt ist. Der Fehler kann aber auch unter Custom-ROMs auftreten.</string>
+\nDieser Fehler liegt nicht unter der Kontrolle von SchildiChat. Er kann aus verschiedenen Gründen auftreten. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Außerdem kannst Du prüfen, ob die Datennutzung der Google Play-Dienste unbeschränkt ist und die Geräteuhr richtig eingestellt ist. Der Fehler kann aber auch unter Custom-ROMs auftreten.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nDieser Fehler ist außerhalb von Element passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
+\nDieser Fehler ist außerhalb von SchildiChat passiert. Es gibt kein Google-Konto auf dem Gerät. Bitte füge ein Google-Konto hinzu.</string>
     <string name="settings_cryptography_manage_keys">Verwaltung der Krypto-Schlüssel</string>
     <string name="encryption_settings_manage_message_recovery_summary">Schlüssel-Sicherung verwalten</string>
-    <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger!nnen haben die Schlüssel um diese Nachrichten zu lesen. 
+    <string name="keys_backup_setup_step1_description">Nachrichten in verschlüsselten Räumen sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfängerwolpertinger haben die Schlüssel um diese Nachrichten zu lesen. 
 \n
 \nSichere deine Schlüssel, um sie nicht zu verlieren.</string>
     <string name="recovery_key_export_saved_as_warning">Der Wiederherstellungsschlüssel wurde nach \'%s\' gespeichert. 
@@ -1102,7 +1102,7 @@
     <string name="new_recovery_method_popup_title">Neue Schlüsselsicherung</string>
     <string name="new_recovery_method_popup_description">Eine neue Schlüsselsicherung wurde entdeckt.
 \n
-\nWenn du die neue Wiederherstellungsmethode nicht festgelegt hast, kann ein/e Angreifer!n versuchen auf dein Konto zuzugreifen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein.</string>
+\nWenn du die neue Wiederherstellungsmethode nicht festgelegt hast, kann ein/e Angreiferschlumpfwesen versuchen auf dein Konto zuzugreifen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein.</string>
     <string name="new_recovery_method_popup_was_me">Ich war es</string>
     <string name="keys_backup_banner_setup_line1">Verliere nie mehr verschlüsselte Nachrichten</string>
     <string name="keys_backup_banner_setup_line2">Richte die Schlüsselsicherung ein</string>
@@ -1133,7 +1133,7 @@
     <string name="passwords_do_not_match">Passwörter stimmen nicht überein</string>
     <string name="autodiscover_invalid_response">Ungültige Antwort beim Entdecken des Home-Servers</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveroptionen vervollständigen</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">SchildiChat hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Nutze Konfiguration</string>
     <string name="notification_sync_init">Initialisiere Dienst</string>
@@ -1228,7 +1228,7 @@
     <string name="please_wait">Bitte warten…</string>
     <string name="group_all_communities">Alle Communities</string>
     <string name="room_preview_no_preview">Für diesen Raum kann keine Vorschau angezeigt werden</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Die Vorschau von öffentlichen Räumen wird von Element noch nicht unterstützt</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Die Vorschau von öffentlichen Räumen wird von SchildiChat noch nicht unterstützt</string>
     <string name="fab_menu_create_room">Räume</string>
     <string name="fab_menu_create_chat">Direktnachrichten</string>
     <string name="create_room_title">Neuer Raum</string>
@@ -1362,13 +1362,13 @@
     <string name="settings_call_ringtone_use_default_stun_sum">Wir nutzen %s als Assistenten wenn dein Home-Server keinen anbietet (Deine IP-Adresse wird während des Anrufs geteilt)</string>
     <string name="invite_no_identity_server_error">Führe einen Identitätsserver in deinen Einstellungen hinzu um diese Aktion auszuführen.</string>
     <string name="settings_add_3pid_confirm_password_title">Passwort bestätigen</string>
-    <string name="settings_add_3pid_flow_not_supported">Du kannst dies nicht auf einem mobilen Element tun</string>
+    <string name="settings_add_3pid_flow_not_supported">Du kannst dies nicht auf einem mobilen SchildiChat tun</string>
     <string name="settings_add_3pid_authentication_needed">Authentifizierung benötigt</string>
     <string name="settings_background_fdroid_sync_mode">Hintergrund-Synchronisierungsmodus</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element wird sich im Hintergrund auf eine Art synchronisieren die Ressourcen des Geräts (Akku) schont. 
+    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat wird sich im Hintergrund auf eine Art synchronisieren die Ressourcen des Geräts (Akku) schont. 
 \nAbhängig vom Ressourcen-Status deines Geräts kann dein System die Synchronisierung verschieben.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element wird sich im Hintergrund periodisch zu einem bestimmten Zeitpunkt synchronisieren (konfigurierbar).
-\nDies wird Funk- und Akkunutzung beeinflussen. Es wird eine permanente Benachrichtigung geben, die sagt, dass Element auf Ereignisse lauscht.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat wird sich im Hintergrund periodisch zu einem bestimmten Zeitpunkt synchronisieren (konfigurierbar).
+\nDies wird Funk- und Akkunutzung beeinflussen. Es wird eine permanente Benachrichtigung geben, die sagt, dass SchildiChat auf Ereignisse lauscht.</string>
     <string name="settings_set_workmanager_delay_summary">%s
 \nDie Synchronisierung kann aufgrund deiner Ressourcen (Akku) oder Gerätezustands (schlafend) verschoben werden.</string>
     <string name="settings_integrations">Integrationen</string>
@@ -1404,7 +1404,7 @@
     <string name="settings_discovery_msisdn_title">Auffindbare Telefonnummern</string>
     <string name="settings_discovery_please_enter_server">Bitte gib die Adresse des Identitätsservers ein</string>
     <string name="settings_discovery_no_terms_title">Identitätsserver hat keine Nutzungsbedingungen</string>
-    <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem/r Besitzer!n des Dienstes vertraust</string>
+    <string name="settings_discovery_no_terms">Der Identitätsserver den du ausgewählt hast, hat keine Nutzungsbedingungen. Fahre nur fort, wenn du dem/r Besitzerschlumpfwesen des Dienstes vertraust</string>
     <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gib den Verifizierungscode ein, den sie enthält.</string>
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
     <string name="labs_allow_extended_logging_summary">Ausführliche Logs werden der Entwicklung der App dadurch helfen, dass mehr Informationen übertragen werden, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
@@ -1458,7 +1458,7 @@
     <string name="content_reported_as_inappropriate_content">Dieser Inhalt wurde als unangebracht gemeldet.
 \n 
 \nWenn du keine weiteren Inhalte dieses/r Nutzers/in sehen möchtest, kannst sie/ihn ignorieren, um jene Nachrichten auszublenden.</string>
-    <string name="permissions_rationale_msg_keys_backup_export">Element benötigt Berechtigungen, um deine E2E Schlüssel zu speichern.
+    <string name="permissions_rationale_msg_keys_backup_export">SchildiChat benötigt Berechtigungen, um deine E2E Schlüssel zu speichern.
 \n
 \nBitte erlaube den Zugriff im nächsten Pop-Up sodass du deine Schlüssel manuell exportieren kannst.</string>
     <string name="no_network_indicator">Aktuell besteht keine Netzwerkverbindung</string>
@@ -1550,8 +1550,8 @@
     <string name="room_join_rules_invite">%1$s hat den Raum auf \"nur-einladen\" gestellt.</string>
     <string name="login_splash_title">Es ist deine Konversation. Mache sie dir zu eigen.</string>
     <string name="login_server_url_form_modular_text">Premium-Hosting für Organisationen</string>
-    <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular Element oder Servers ein, den du verwenden möchtest</string>
-    <string name="login_server_url_form_other_notice">Gibt die Adresse eines Servers oder eines Element ein, zu dem du dich verbinden möchtest</string>
+    <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular SchildiChat oder Servers ein, den du verwenden möchtest</string>
+    <string name="login_server_url_form_other_notice">Gibt die Adresse eines Servers oder eines SchildiChat ein, zu dem du dich verbinden möchtest</string>
     <string name="login_mode_not_supported">Die Anwendung kann sich nicht bei diesem Home-Server anmelden. Der Home-Server unterstützt die folgenden Anmeldetypen: %1$s. 
 \n 
 \nMöchtest du dich mit einem Webclient anmelden\?</string>
@@ -1605,7 +1605,7 @@
 \nMelde dich erneut an, um auf deine Kontodaten und Nachrichten zuzugreifen.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Du verlierst den Zugriff auf verschlüsselte Nachrichten, außer, du meldest dich an, um den Verschlüsselungsschlüssel wiederherzustellen.</string>
     <string name="soft_logout_clear_data_dialog_submit">Daten löschen</string>
-    <string name="soft_logout_sso_not_same_user_error">Die aktuelle Sitzung gehört dem/der Benutzer!n%1$s. Die angegebenen Anmeldeinformationen sind von Benutzer!n %2$s. Dies wird nicht von Element unterstützt.
+    <string name="soft_logout_sso_not_same_user_error">Die aktuelle Sitzung gehört dem/der Benutzerschlumpfwesen%1$s. Die angegebenen Anmeldeinformationen sind von Benutzerschlumpfwesen %2$s. Dies wird nicht von SchildiChat unterstützt.
 \nBitte zuerst die Daten löschen und dann erneut anmelden.</string>
     <string name="permalink_malformed">matrix.to-Link fehlerhaft</string>
     <string name="bug_report_error_too_short">Die Beschreibung ist zu kurz</string>
@@ -1613,7 +1613,7 @@
     <string name="settings_show_devices_list">Alle meine Sitzungen anzeigen</string>
     <string name="settings_advanced_settings">Erweiterte Einstellungen</string>
     <string name="settings_developer_mode">Entwicklungsmodus</string>
-    <string name="settings_developer_mode_summary">Der Entwicklungsmodus aktiviert versteckte Funktionen und kann die Anwendung weniger stabil machen. Nur für Entwickler!nnen!</string>
+    <string name="settings_developer_mode_summary">Der Entwicklungsmodus aktiviert versteckte Funktionen und kann die Anwendung weniger stabil machen. Nur für Entwicklerwolpertinger!</string>
     <string name="settings_rageshake">Wutschütteln</string>
     <string name="settings_rageshake_detection_threshold">Erkennungsschwelle</string>
     <string name="settings_rageshake_detection_threshold_summary">Schüttel dein Telefon, um die Erkennungsschwelle zu testen</string>
@@ -1623,7 +1623,7 @@
     <string name="devices_other_devices">Andere Sitzungen</string>
     <string name="autocomplete_limited_results">Zeigt nur die ersten Ergebnisse, gib mehr Buchstaben ein…</string>
     <string name="settings_developer_mode_fail_fast_title">Ausfallsicher</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element kann häufiger abstürzen, wenn ein unerwarteter Fehler auftritt</string>
+    <string name="settings_developer_mode_fail_fast_summary">SchildiChat kann häufiger abstürzen, wenn ein unerwarteter Fehler auftritt</string>
     <string name="command_description_shrug">Stellt einer Klartextnachricht ¯\\_(ツ)_/¯ voran</string>
     <string name="create_room_encryption_title">Aktiviere Verschlüsselung</string>
     <string name="create_room_encryption_description">Nach der Aktivierung kann die Verschlüsselung nicht deaktiviert werden.</string>
@@ -1631,9 +1631,9 @@
     <string name="verification_conclusion_warning">Nicht vertrauenswürdige Anmeldung</string>
     <string name="verification_sas_match">Sie stimmen überein</string>
     <string name="verification_sas_do_not_match">Sie stimmen nicht überein</string>
-    <string name="verify_user_sas_emoji_help_text">Verifiziere diese/n Benutzer!n, indem du bestätigst, dass diese einzigartigen Emoji in derselben Reihenfolge auf dem Bildschirm deines Gegenübers angezeigt werden.</string>
+    <string name="verify_user_sas_emoji_help_text">Verifiziere diese/n Benutzerschlumpfwesen, indem du bestätigst, dass diese einzigartigen Emoji in derselben Reihenfolge auf dem Bildschirm deines Gegenübers angezeigt werden.</string>
     <string name="verify_user_sas_emoji_security_tip">Für ultimative Sicherheit verwende ein anderes vertrauenswürdiges Kommunikationsmittel oder mache es persönlich.</string>
-    <string name="verification_green_shield">Suche nach dem grünen Schild, um sicherzustellen, dass ein/e Benutzer!n vertrauenswürdig ist. Vertraue allen Benutzer!nnen in einem Raum, um sicherzustellen, dass der Raum sicher ist.</string>
+    <string name="verification_green_shield">Suche nach dem grünen Schild, um sicherzustellen, dass ein/e Benutzerschlumpfwesen vertrauenswürdig ist. Vertraue allen Benutzerwolpertinger in einem Raum, um sicherzustellen, dass der Raum sicher ist.</string>
     <string name="verification_conclusion_not_secure">Nicht sicher</string>
     <string name="verification_conclusion_compromised">Eine der folgenden Möglichkeiten kann beeinträchtigt sein: 
 \n 
@@ -1689,13 +1689,13 @@
     <string name="room_member_power_level_moderators">Moderierende</string>
     <string name="room_member_power_level_custom">benutzerdefiniert</string>
     <string name="room_member_power_level_invites">Eingeladen</string>
-    <string name="room_member_power_level_users">Nutzer!n</string>
+    <string name="room_member_power_level_users">Nutzerschlumpfwesen</string>
     <string name="room_member_power_level_admin_in">Admin in %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderation in %1$s</string>
     <string name="room_member_jump_to_read_receipt">Springen &amp; als gelesen markieren</string>
-    <string name="rendering_event_error_type_of_event_not_handled">Element kann keine Ereignisse vom Typ \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element beherrscht keine Nachrichten vom Typ \'%1$s\'</string>
-    <string name="rendering_event_error_exception">Element ist beim verarbeiten des Ereignisinhalts mit der ID \'%1$s\' auf ein Problem gestoßen</string>
+    <string name="rendering_event_error_type_of_event_not_handled">SchildiChat kann keine Ereignisse vom Typ \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">SchildiChat beherrscht keine Nachrichten vom Typ \'%1$s\'</string>
+    <string name="rendering_event_error_exception">SchildiChat ist beim verarbeiten des Ereignisinhalts mit der ID \'%1$s\' auf ein Problem gestoßen</string>
     <string name="unignore">Nicht ignorieren</string>
     <string name="verify_cannot_cross_sign">Diese Sitzung kann diese Verifizierung nicht mit deinen anderen Sitzungen teilen.
 \nDie Überprüfung wird lokal gespeichert und in einer zukünftigen Version der App freigegeben.</string>
@@ -1715,7 +1715,7 @@
     <string name="verification_emoji_notice">Vergleiche die einzigartigen Emoji und stell sicher, dass sie in derselben Reihenfolge angezeigt werden.</string>
     <string name="verification_code_notice">Vergleiche den Code mit dem Code auf dem Bildschirm deines Gegenübers.</string>
     <string name="verification_conclusion_ok_notice">Nachrichten mit diesem Gegenüber sind Ende-zu-Ende verschlüsselt und können nicht von Dritten gelesen werden.</string>
-    <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzer!nnen sehen sie als vertrauenswürdig an.</string>
+    <string name="verification_conclusion_ok_self_notice">Deine neue Sitzung ist jetzt verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten, und andere Benutzerwolpertinger sehen sie als vertrauenswürdig an.</string>
     <string name="encryption_information_cross_signing_state">Cross-Signing</string>
     <string name="encryption_information_dg_xsigning_complete">Cross-Signing ist aktiviert
 \nPrivate Schlüssel auf dem Gerät.</string>
@@ -1737,7 +1737,7 @@
         <item quantity="other">%d aktive Sitzungen</item>
     </plurals>
     <string name="crosssigning_verify_this_session">Verifiziere diese Sitzung</string>
-    <string name="crosssigning_other_user_not_trust">Andere Benutzer!nnen vertrauen ihr möglicherweise nicht</string>
+    <string name="crosssigning_other_user_not_trust">Andere Benutzerwolpertinger vertrauen ihr möglicherweise nicht</string>
     <string name="complete_security">Vollständige Sicherheit</string>
     <string name="verification_open_other_to_verify">Nutze eine vorhandene Sitzung um diese Sitzung zu verifizieren und ihr Zugriff auf verschlüsselte Nachrichten zu gewähren.</string>
     <string name="verification_profile_verify">Verifizieren</string>
@@ -1749,7 +1749,7 @@
     <string name="not_trusted">Nicht vertraut</string>
     <string name="verification_profile_device_verified_because">Diese Sitzung ist für sichere Nachrichtenübertragung vertrauenswürdig, weil %1$s (%2$s) sie verifiziert hat:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) hat sich in einer neuen Sitzung angemeldet:</string>
-    <string name="verification_profile_device_untrust_info">Bis diese/r Benutzer!n dieser Sitzung vertraut, werden an und von ihr/ihm gesendete Nachrichten mit Warnungen gekennzeichnet. Alternativ kannst du dies manuell überprüfen.</string>
+    <string name="verification_profile_device_untrust_info">Bis diese/r Benutzerschlumpfwesen dieser Sitzung vertraut, werden an und von ihr/ihm gesendete Nachrichten mit Warnungen gekennzeichnet. Alternativ kannst du dies manuell überprüfen.</string>
     <string name="initialize_cross_signing">Initialisiere Cross-Signing</string>
     <string name="reset_cross_signing">Schlüssel zurücksetzen</string>
     <string name="a11y_qr_code_for_verification">QR-Code</string>
@@ -1786,12 +1786,12 @@
     <string name="delete_event_dialog_content">Möchtest du dieses Ereignis wirklich entfernen (löschen)\? Beachte, dass beim Löschen eines Raumnamens oder einer Themenänderung die Änderung rückgängig gemacht werden kann.</string>
     <string name="delete_event_dialog_reason_checkbox">Grund hinzufügen</string>
     <string name="delete_event_dialog_reason_hint">Grund für das Editieren</string>
-    <string name="event_redacted_by_user_reason_with_reason">Ereignis gelöscht von Benutzer!n, Grund: %1$s</string>
+    <string name="event_redacted_by_user_reason_with_reason">Ereignis gelöscht von Benutzerschlumpfwesen, Grund: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Ereignis vom Raumadministration moderiert, Grund: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Schlüssel sind bereits aktuell!</string>
     <string name="spoiler">Spoiler</string>
     <string name="room_member_power_level_custom_in">Benutzerdefiniert (%1$d) in %2$s</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">SchildiChat Android</string>
     <string name="settings_key_requests">Schlüsselanforderungen</string>
     <string name="e2e_use_keybackup">Schalte den verschlüsselten Nachrichtenverlauf frei</string>
     <string name="refresh">Neu laden</string>
@@ -1892,13 +1892,13 @@
     <string name="media_file_added_to_gallery">Datei wurde der Galerie hinzugefügt</string>
     <string name="error_adding_media_file_to_gallery">Datei konnte nicht zur Galerie hinzugefügt werden</string>
     <string name="change_password_summary">Neues Benutzerpasswort festlegen…</string>
-    <string name="use_other_session_content_description">Nutze die neueste Version von Element auf deinen anderen Geräten, Element Web, Element Desktop, Element iOS, Element für Android oder einen anderen cross-signing fähigen Matrix client</string>
+    <string name="use_other_session_content_description">Nutze die neueste Version von SchildiChat/Element auf deinen anderen Geräten, Element Web, Element Desktop, Element iOS, SchildiChat für Android oder einen anderen cross-signing fähigen Matrix client</string>
     <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
     <string name="app_ios_android">Element iOS
-\nElement Android</string>
+\nSchildiChat Android</string>
     <string name="or_other_mx_capabale_client">oder einen anderen cross-signing fähigen Matrix Client</string>
-    <string name="use_latest_app">Nutze die neueste Version von Element auf deinen anderen Geräten:</string>
+    <string name="use_latest_app">Nutze die neueste Version von SchildiChat auf deinen anderen Geräten:</string>
     <string name="command_description_discard_session">Erzwingt das Verferfen der aktuell ausgehende Gruppensitzung in einem verschlüsseltem Raum</string>
     <string name="command_description_discard_session_not_handled">Wird nur in verschlüsselten Räumen unterstützt</string>
     <string name="enter_secret_storage_passphrase_or_key">Benutze deine %1$s oder deinen %2$s um fortzufahren.</string>
@@ -1925,7 +1925,7 @@
     <string name="create_room_dm_failure">Konnte Direktnachricht nicht erzeugen. Prüfe die Nutzer, die du einladen willst und versuche es erneut.</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
-    <string name="add_members_to_room">Nutzer!n hinzufügen</string>
+    <string name="add_members_to_room">Nutzerschlumpfwesen hinzufügen</string>
     <string name="invite_users_to_room_action_invite">EINLADEN</string>
     <string name="inviting_users_to_room">Benutzer werden eingeladen…</string>
     <string name="invite_users_to_room_title">Benutzer einladen</string>
@@ -1939,7 +1939,7 @@
     <string name="pause_video">Pause</string>
     <string name="action_copy">Kopieren</string>
     <string name="bottom_action_notification">Benachrichtigungen</string>
-    <string name="call_failed_no_connection">Element-Anruf fehlgeschlagen</string>
+    <string name="call_failed_no_connection">SchildiChat-Anruf fehlgeschlagen</string>
     <string name="play_video">Abspielen</string>
     <string name="dismiss">Ablehnen</string>
     <string name="dialog_title_success">Erfolg</string>
@@ -1973,7 +1973,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Bist du dir sicher, dass du die Einladung für diesen Benutzer zurückziehen möchtest\?</string>
     <string name="room_participants_kick_title">Benutzer entfernen</string>
     <string name="room_participants_kick_reason">Grund für das Entfernen</string>
-    <string name="room_participants_kick_prompt_msg">Das Entfernen wird den/die Benutzer!n von diesem Raum ausschließen.
+    <string name="room_participants_kick_prompt_msg">Das Entfernen wird den/die Benutzerschlumpfwesen von diesem Raum ausschließen.
 \n
 \nUm einen erneuten Beitritt zu verhindern, solltest du ihn/sie stattdessen bannen.</string>
     <string name="room_participants_ban_title">Benutzer bannen</string>
@@ -2044,11 +2044,11 @@
     <string name="choose_locale_loading_locales">Lade verfügbare Sprachen…</string>
     <string name="open_terms_of">Öffne AGBs von %s</string>
     <string name="disconnect_identity_server_dialog_content">Trenne Verbingung zu Identitätsserver %s\?</string>
-    <string name="identity_server_error_outdated_identity_server">Dieser Identitätsserver ist veraltet. Element unterstützt nur API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Dieser Identitätsserver ist veraltet. SchildiChat unterstützt nur API V2.</string>
     <string name="identity_server_error_outdated_home_server">Diese Operation is nicht möglich. Der Homeserver ist veraltet.</string>
     <string name="identity_server_error_no_identity_server_configured">Bitte konfiguriere zuerst einen Identitätsserver.</string>
     <string name="identity_server_error_terms_not_signed">Bitte akzeptiere zuerst die AGB des Identitätsservers in den Einstellungen.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Deiner Privatssphäre wegen unterstützt Element nur das Senden gehashter Emailaddressen und Telefonnummern.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Deiner Privatssphäre wegen unterstützt SchildiChat nur das Senden gehashter Emailaddressen und Telefonnummern.</string>
     <string name="identity_server_error_binding_error">Die Assoziierung ist fehlgeschlagen.</string>
     <string name="identity_server_error_no_current_binding_error">Für diese Kennung gibt es aktuell keine Assoziierung.</string>
     <string name="identity_server_set_default_notice">Dein Homeserver (%1$s) schlägt %2$s als Identitätsserver vor</string>
@@ -2089,7 +2089,7 @@
     <string name="crypto_error_withheld_unverified">Du kannst auf diese Nachricht nicht zugreifen, weil der Sender deiner Sitzung nicht vertraut</string>
     <string name="crypto_error_withheld_generic">Du kannst auf diese Nachricht nicht zugreifen, weil der Sender absichtlich die Schlüssel nicht gesendet hat</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Warte auf Verschlüsselungshistorie</string>
-    <string name="element_disclaimer_title">Riot heißt nun Element!</string>
+    <string name="element_disclaimer_title">Riot heißt nun SchildiChat!</string>
     <string name="element_disclaimer_content">Wir sind begeistert unsere Namensänderung mitteilen zu können! Deine App ist auf dem neusten Stand und du bist mit deinem Account angemeldet.</string>
     <string name="element_disclaimer_negative_button">VERSTANDEN</string>
     <string name="element_disclaimer_positive_button">MEHR ERFAHREN</string>
@@ -2191,7 +2191,7 @@
     <string name="no_permissions_to_start_conf_call_in_direct_room">Du hast keine Berechtigung ein Konferenzgespräch zu starten</string>
     <string name="settings_security_pin_code_notifications_summary_on">Zeige Details wie Raumnamen und Nachrichteninhalt.</string>
     <string name="settings_security_pin_code_notifications_title">Zeige Inhalt in Benachrichtigungen</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-Code ist die einzige Möglichkeit Element zu entsperren.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-Code ist die einzige Möglichkeit SchildiChat zu entsperren.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Aktiviere Gerät-spezifische Biometrie wie Fingerabdrücke und Gesichtserkennung.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Biometrie aktivieren</string>
     <string name="settings_security_application_protection_screen_title">Schutz konfigurieren</string>
@@ -2201,7 +2201,7 @@
         <item quantity="one">Zeigen das Gerät, mit dem du jetzt überprüfen kannst</item>
         <item quantity="other">Zeigen %d Geräte, mit denen du jetzt überprüfen kannst</item>
     </plurals>
-    <string name="secure_backup_reset_no_history">Du wirst ohne Nachrichtenverlauf, Nachrichten, vertraute Geräten und vertraute Nutzer!nnen neu starten</string>
+    <string name="secure_backup_reset_no_history">Du wirst ohne Nachrichtenverlauf, Nachrichten, vertraute Geräten und vertraute Nutzerwolpertinger neu starten</string>
     <string name="secure_backup_reset_if_you_reset_all">Wenn du alles zurücksetzt</string>
     <string name="secure_backup_reset_all_no_other_devices">Mache dies nur, wenn du kein anderes Gerät hast, mit dem du dieses verifizieren kannst.</string>
     <string name="secure_backup_reset_all">Alles zurücksetzen</string>
@@ -2213,7 +2213,7 @@
     <string name="direct_room_profile_section_more_settings">Einstellungen</string>
     <string name="direct_room_profile_encrypted_subtitle">Nachrichten hier sind Ende-zu-Ende verschlüsselt.
 \n
-\nDeine Nachrichten sind mit digitalen Schlüsseln gesichert. Nur du und der/die Empfänger!n haben die einzigen Schlüssel, um jene zu entsperren.</string>
+\nDeine Nachrichten sind mit digitalen Schlüsseln gesichert. Nur du und der/die Empfängerschlumpfwesen haben die einzigen Schlüssel, um jene zu entsperren.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Nachrichten hier sind nicht Ende-zu-Ende verschlüsselt.</string>
     <string name="login_error_outdated_homeserver_warning_content">Dieser Homeserver läuft mit einer alten Version. Bitte deine Homeserver-Administration um ein Upgrade. Du kannst fortfahren, aber einige Funktionen funktionieren möglicherweise nicht richtig.</string>
     <string name="direct_room_join_rules_invite_by_you">Du hast dies auf Einladungen beschränkt.</string>
@@ -2229,8 +2229,8 @@
     <string name="settings_troubleshoot_test_notification_notice">Bitte klicke auf die Benachrichtigung. Wenn die Benachrichtigung nicht angezeigt wird, überprüfe die Systemeinstellungen.</string>
     <string name="settings_troubleshoot_test_push_notification_content">Du siehst die Benachrichtigung! Klick mich!</string>
     <string name="settings_troubleshoot_test_notification_title">Benachrichtigungsanzeige</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">Bei jedem Öffnen von Element ist der PIN-Code erforderlich.</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">PIN-Code ist erforderlich, nachdem Element 2 Minuten lang nicht verwendet wurde.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Bei jedem Öffnen von SchildiChat ist der PIN-Code erforderlich.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-Code ist erforderlich, nachdem SchildiChat 2 Minuten lang nicht verwendet wurde.</string>
     <string name="settings_security_pin_code_grace_period_title">Fordere PIN nach 2 Minuten an</string>
     <string name="settings_security_pin_code_notifications_summary_off">Zeige nur die Anzahl von ungelesenen Nachrichten in einer einfachen Benachrichtigung.</string>
     <string name="attachment_type_dialog_title">Bild hinzufügen von</string>

@@ -62,7 +62,7 @@
     <string name="local_address_book_header">Carnet d’adresses local</string>
     <string name="matrix_only_filter">Contacts Matrix uniquement</string>
     <string name="no_conversation_placeholder">Aucune discussion</string>
-    <string name="no_contact_access_placeholder">Vous n’avez pas autorisé Element à accéder à vos contacts locaux</string>
+    <string name="no_contact_access_placeholder">Vous n’avez pas autorisé SchildiChat à accéder à vos contacts locaux</string>
     <string name="no_result_placeholder">Aucun résultat</string>
     <string name="rooms_header">Salons</string>
     <string name="rooms_directory_header">Répertoire de salons</string>
@@ -409,22 +409,22 @@
     <string name="call_error_user_not_responding">Le correspondant n’a pas décroché.</string>
     <string name="media_picker_both_capture_title">Prendre une photo ou une vidéo</string>
     <string name="permissions_rationale_popup_title">Information</string>
-    <string name="permissions_rationale_msg_storage">Element a besoin d’accéder à vos photos et vidéos pour envoyer et enregistrer des pièces jointes
+    <string name="permissions_rationale_msg_storage">SchildiChat a besoin d’accéder à vos photos et vidéos pour envoyer et enregistrer des pièces jointes
 \n
 \nVeuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour pouvoir envoyer des fichiers depuis votre téléphone.</string>
-    <string name="permissions_rationale_msg_camera">Element a besoin d’accéder à votre appareil photo pour prendre des photos et passer des appels vidéo.</string>
+    <string name="permissions_rationale_msg_camera">SchildiChat a besoin d’accéder à votre appareil photo pour prendre des photos et passer des appels vidéo.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nVeuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour pouvoir effectuer l’appel."</string>
-    <string name="permissions_rationale_msg_record_audio">Element a besoin d’accéder à votre microphone pour passer des appels audio.</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChat a besoin d’accéder à votre microphone pour passer des appels audio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nVeuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour pouvoir effectuer l’appel."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element a besoin d’accéder à votre appareil photo et à votre microphone pour passer des appels vidéo.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat a besoin d’accéder à votre appareil photo et à votre microphone pour passer des appels vidéo.
 \n
 \nVeuillez autoriser l’accès dans les prochaines fenêtres contextuelles pour pouvoir effectuer l’appel.</string>
-    <string name="permissions_rationale_msg_contacts">Element peut accéder à votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur numéro de téléphone et leur adresse e-mail. Veuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour découvrir les utilisateurs du carnet d’adresses joignables via Element.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element peut accéder à votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur adresse e-mail et leur numéro de téléphone. 
+    <string name="permissions_rationale_msg_contacts">SchildiChat peut accéder à votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur numéro de téléphone et leur adresse e-mail. Veuillez autoriser l’accès dans la prochaine fenêtre contextuelle pour découvrir les utilisateurs du carnet d’adresses joignables via SchildiChat.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat peut accéder à votre carnet d’adresses pour trouver d’autres utilisateurs de Matrix avec leur adresse e-mail et leur numéro de téléphone. 
 \n 
 \nAutorisez-vous l\'accès à vos contacts à cette fin \?</string>
     <string name="permissions_action_not_performed_missing_permissions">Désolé. L’action n’a pas été réalisée, faute d’autorisations</string>
@@ -700,7 +700,7 @@
     <string name="settings_notification_privacy_nosecure_message_content">• Les notifications contiennent <b>des métadonnées et des messages</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Les notifications <b>n’afficheront pas le contenu des messages</b></string>
     <string name="startup_notification_privacy_title">Confidentialité des notifications</string>
-    <string name="startup_notification_privacy_message">Element peut fonctionner en arrière-plan pour gérer vos notifications de façon sécurisée et confidentielle. Cela peut affecter l’utilisation de la batterie.</string>
+    <string name="startup_notification_privacy_message">SchildiChat peut fonctionner en arrière-plan pour gérer vos notifications de façon sécurisée et confidentielle. Cela peut affecter l’utilisation de la batterie.</string>
     <string name="startup_notification_privacy_button_grant">Donner la permission</string>
     <string name="startup_notification_privacy_button_other">Choisir une autre option</string>
     <string name="notice_avatar">Avatar d’avertissement</string>
@@ -712,8 +712,8 @@
     <string name="settings_deactivate_account_section">Désactiver le compte</string>
     <string name="settings_deactivate_my_account">Désactiver mon compte</string>
     <string name="settings_opt_in_of_analytics">Envoyer des données analytiques</string>
-    <string name="settings_opt_in_of_analytics_summary">Element collecte des données analytiques anonymes pour nous permettre d’améliorer l’application.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Veuillez autoriser la collecte des données pour nous aider à améliorer Element.</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChat collecte des données analytiques anonymes pour nous permettre d’améliorer l’application.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Veuillez autoriser la collecte des données pour nous aider à améliorer SchildiChat.</string>
     <string name="settings_opt_in_of_analytics_ok">Oui, je veux aider !</string>
     <string name="widget_integration_missing_parameter">Un paramètre requis est manquant.</string>
     <string name="widget_integration_invalid_parameter">Un paramètre n’est pas valide.</string>
@@ -735,7 +735,7 @@
     <string name="e2e_re_request_encryption_key">Redemander les clés de chiffrement à vos autres sessions.</string>
     <string name="e2e_re_request_encryption_key_sent">Demande de clé envoyée.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Demande envoyée</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Veuillez lancer Element sur un autre appareil qui peut déchiffrer le message pour qu’il puisse envoyer les clés à cette session.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Veuillez lancer SchildiChat sur un autre appareil qui peut déchiffrer le message pour qu’il puisse envoyer les clés à cette session.</string>
     <string name="lock_screen_hint">Tapez ici…</string>
     <string name="option_send_voice">Envoyer votre voix</string>
     <string name="go_on_with">continuer avec…</string>
@@ -850,7 +850,7 @@
     <string name="markdown_has_been_enabled">Le Markdown a été activé.</string>
     <string name="markdown_has_been_disabled">Le Markdown a été désactivé.</string>
     <string name="settings_call_category">Appels</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Utiliser la sonnerie par défaut de Element pour les appels entrants</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Utiliser la sonnerie par défaut de SchildiChat pour les appels entrants</string>
     <string name="settings_call_ringtone_title">Sonnerie d’appel entrant</string>
     <string name="settings_call_ringtone_dialog_title">Sélectionner la sonnerie pour les appels :</string>
     <string name="accept">Accepter</string>
@@ -875,11 +875,11 @@
     <string name="settings_troubleshoot_test_device_settings_title">Paramètres de la session.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Les notifications sont activées pour cette session.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Les notifications ne sont pas activées pour cette session.
-\nVeuillez vérifier les paramètres de Element.</string>
+\nVeuillez vérifier les paramètres de SchildiChat.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Activer</string>
     <string name="settings_troubleshoot_test_play_services_title">Vérification des services Google Play</string>
     <string name="settings_troubleshoot_test_play_services_success">L’APK des services Google Play est disponible et à jour.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element utilise les services Google Play pour envoyer les notifications mais ils n’ont pas l’air d’être configurés correctement :
+    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat utilise les services Google Play pour envoyer les notifications mais ils n’ont pas l’air d’être configurés correctement :
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Réparer les services Google Play</string>
     <string name="settings_troubleshoot_test_fcm_title">Jeton Firebase</string>
@@ -901,22 +901,22 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Le redémarrage du service a échoué</string>
     <string name="settings_troubleshoot_test_service_boot_title">Lancer au démarrage</string>
     <string name="settings_troubleshoot_test_service_boot_success">Le service démarrera quand l’appareil sera redémarré.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Le service ne démarrera pas quand l’appareil sera redémarré, vous ne recevrez pas de notifications tant que Element n’aura pas été lancé au moins une fois.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Le service ne démarrera pas quand l’appareil sera redémarré, vous ne recevrez pas de notifications tant que SchildiChat n’aura pas été lancé au moins une fois.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Activer le démarrage au démarrage de l’appareil</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Vérifier les restrictions en arrière-plan</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Les restrictions en arrière-plan sont désactivées pour Element. Ce test devrait être lancé en utilisant les données mobiles (pas le Wi-Fi).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Les restrictions en arrière-plan sont désactivées pour SchildiChat. Ce test devrait être lancé en utilisant les données mobiles (pas le Wi-Fi).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Les restrictions en arrière-plan sont activées pour Element.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Les restrictions en arrière-plan sont activées pour SchildiChat.
 \nLe travail qu’essayera de faire l’application sera restreint agressivement tant qu’elle sera en arrière-plan et cela pourra affecter les notifications.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Désactiver les restrictions</string>
     <string name="settings_troubleshoot_test_battery_title">Optimisation de la batterie</string>
-    <string name="settings_troubleshoot_test_battery_success">Element n’est pas affecté par l’optimisation de la batterie.</string>
+    <string name="settings_troubleshoot_test_battery_success">SchildiChat n’est pas affecté par l’optimisation de la batterie.</string>
     <string name="settings_troubleshoot_test_battery_failed">Si un utilisateur laisse un appareil débranché et immobile pour une longue durée, avec l’écran éteint, l’appareil entre dans le mode Doze. Cela empêche les applications d’accéder au réseau et reporte leurs travaux, synchronisations et alarmes standard.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorer l’optimisation</string>
     <string name="startup_notification_fdroid_battery_optim_title">Connexion en arrière-plan</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element doit garder une connexion à faible impact en arrière-plan afin d’avoir des notifications fiables.
-\nSur l’écran suivant on vous demandera d’autoriser Element à toujours fonctionner en arrière-plan, veuillez accepter.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">SchildiChat doit garder une connexion à faible impact en arrière-plan afin d’avoir des notifications fiables.
+\nSur l’écran suivant on vous demandera d’autoriser SchildiChat à toujours fonctionner en arrière-plan, veuillez accepter.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Donner la permission</string>
     <string name="account_email_error">Une erreur est survenue lors de la vérification de votre adresse e-mail.</string>
     <string name="account_phone_number_error">Une erreur est survenue lors de la vérification de votre numéro de téléphone.</string>
@@ -936,11 +936,11 @@
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Échec du chargement de vos règles personnalisées, veuillez réessayer.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Vérifier les paramètres</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nCette erreur est indépendante de Element et, selon Google, cette erreur indique que l’appareil a enregistré trop d’applications avec FCM. Cette erreur ne survient que s’il y a un nombre d’applications extrême, et ne devrait donc pas affecter un utilisateur normal.</string>
+\nCette erreur est indépendante de SchildiChat et, selon Google, cette erreur indique que l’appareil a enregistré trop d’applications avec FCM. Cette erreur ne survient que s’il y a un nombre d’applications extrême, et ne devrait donc pas affecter un utilisateur normal.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nCette erreur est indépendante de Element. Elle peut survenir pour plusieurs raisons. Cela peut fonctionner si vous réessayez plus tard. Vous pouvez aussi vérifier que le Service Google Play n’a pas un usage limité de données dans les paramètres système. Cela peut aussi arriver sur une ROM personnalisée.</string>
+\nCette erreur est indépendante de SchildiChat. Elle peut survenir pour plusieurs raisons. Cela peut fonctionner si vous réessayez plus tard. Vous pouvez aussi vérifier que le Service Google Play n’a pas un usage limité de données dans les paramètres système. Cela peut aussi arriver sur une ROM personnalisée.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nCette erreur est indépendante de Element. Il n’y pas de compte Google sur l’appareil. Veuillez ouvrir le gestionnaire de comptes et ajouter un compte Google.</string>
+\nCette erreur est indépendante de SchildiChat. Il n’y pas de compte Google sur l’appareil. Veuillez ouvrir le gestionnaire de comptes et ajouter un compte Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Ajouter un compte</string>
     <string name="settings_noisy_notifications_preferences">Configurer les notifications sonores</string>
     <string name="settings_call_notifications_preferences">Configurer les notifications d’appel</string>
@@ -951,7 +951,7 @@
     <string name="notification_silent">Silencieuse</string>
     <string name="passphrase_empty_error_message">Veuillez saisir une phrase secrète</string>
     <string name="passphrase_passphrase_too_weak">La phrase secrète est trop faible</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Veuillez supprimer la phrase secrète si vous voulez que Element génère une clé de récupération.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Veuillez supprimer la phrase secrète si vous voulez que SchildiChat génère une clé de récupération.</string>
     <string name="keys_backup_no_session_error">Aucune session Matrix n’est disponible</string>
     <string name="keys_backup_setup_step1_title">Ne perdez jamais vos messages chiffrés</string>
     <string name="keys_backup_setup_step1_description">Les messages dans les salons chiffrés sont sécurisés avec un chiffrement de bout en bout. Seuls vous et le(s) destinataire(s) avez les clés pour lire ces messages. 
@@ -1081,7 +1081,7 @@
     <string name="passwords_do_not_match">Les mots de passe ne correspondent pas</string>
     <string name="autodiscover_invalid_response">Réponse de découverte du serveur d’accueil non valide</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Auto-compléter les options du serveur</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element a détecté une configuration de serveur personnalisée pour le domaine de votre identifiant « %1$s » :
+    <string name="autodiscover_well_known_autofill_dialog_message">SchildiChat a détecté une configuration de serveur personnalisée pour le domaine de votre identifiant « %1$s » :
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Utiliser la configuration</string>
     <string name="notification_sync_init">Initialisation du service</string>
@@ -1196,7 +1196,7 @@
     <string name="action_change">Changer</string>
     <string name="group_all_communities">Toutes les communautés</string>
     <string name="room_preview_no_preview">Impossible d’avoir un aperçu de ce salon</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">L’aperçu des salons visibles par tout le monde n’est pas encore pris en charge par Element</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">L’aperçu des salons visibles par tout le monde n’est pas encore pris en charge par SchildiChat</string>
     <string name="fab_menu_create_room">Salons</string>
     <string name="fab_menu_create_chat">Messages directs</string>
     <string name="create_room_title">Nouveau salon</string>
@@ -1291,11 +1291,11 @@
     <string name="invite_no_identity_server_error">Ajoutez un serveur d’identité dans vos paramètres pour réaliser cette action.</string>
     <string name="settings_background_fdroid_sync_mode">Mode de synchronisation en arrière-plan</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimisé pour la batterie</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element se synchronisera en arrière-plan de façon à préserver les ressources limitées de l’appareil (batterie).
+    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat se synchronisera en arrière-plan de façon à préserver les ressources limitées de l’appareil (batterie).
 \nSelon l’état des ressources de votre appareil, la synchronisation peut être retardée par le système d’exploitation.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimisé pour le temps réel</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element se synchronisera en arrière-plan de façon périodique à un moment précis (configurable).
-\nCela aura un impact sur l’utilisation de la radio et de la batterie, une notification permanente sera affichée indiquant que Element est à l’écoute des évènements.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat se synchronisera en arrière-plan de façon périodique à un moment précis (configurable).
+\nCela aura un impact sur l’utilisation de la radio et de la batterie, une notification permanente sera affichée indiquant que SchildiChat est à l’écoute des évènements.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Aucune synchronisation en arrière-plan</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Vous ne serez pas notifié(e) des messages entrants quand l’application est en arrière-plan.</string>
     <string name="settings_background_sync_update_error">Échec de la mise à jour des paramètres.</string>
@@ -1380,12 +1380,12 @@
     <string name="content_reported_as_inappropriate_content">Ce contenu a été signalé comme inapproprié. 
 \n 
 \nSi vous ne voulez plus voir de contenu de cet utilisateur, vous pouvez l\'ignorer pour masquer ses messages.</string>
-    <string name="permissions_rationale_msg_keys_backup_export">Element a besoin de votre permission pour sauvegarder vos clés de chiffrement sur le disque.
+    <string name="permissions_rationale_msg_keys_backup_export">SchildiChat a besoin de votre permission pour sauvegarder vos clés de chiffrement sur le disque.
 \n
 \nAutorisez l’accès dans le prochaine fenêtre pour pouvoir exporter vos clés manuellement.</string>
     <string name="no_network_indicator">Il n’y a aucune connexion au réseau pour le moment</string>
     <string name="settings_add_3pid_confirm_password_title">Confirmez votre mot de passe</string>
-    <string name="settings_add_3pid_flow_not_supported">Vous ne pouvez pas faire cela depuis Element mobile</string>
+    <string name="settings_add_3pid_flow_not_supported">Vous ne pouvez pas faire cela depuis SchildiChat mobile</string>
     <string name="settings_add_3pid_authentication_needed">Une authentification est nécessaire</string>
     <string name="settings_integrations">Intégrations</string>
     <string name="settings_integrations_summary">Utilisez un gestionnaire d’intégrations pour gérer les bots, les passerelles, les widgets et les packs de stickers.
@@ -1453,8 +1453,8 @@
     <string name="login_server_url_form_modular_hint">Adresse Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Adresse</string>
     <string name="login_server_url_form_modular_text">Hébergement privé pour les organisations</string>
-    <string name="login_server_url_form_modular_notice">Saisir l’adresse de Element ou du serveur de Modular que vous voulez utiliser</string>
-    <string name="login_server_url_form_other_notice">Saisir l’adresse d’un serveur ou d’un Element auquel vous voulez vous connecter</string>
+    <string name="login_server_url_form_modular_notice">Saisir l’adresse de SchildiChat ou du serveur de Modular que vous voulez utiliser</string>
+    <string name="login_server_url_form_other_notice">Saisir l’adresse d’un serveur ou d’un SchildiChat auquel vous voulez vous connecter</string>
     <string name="login_sso_error_message">Une erreur est survenue pendant le chargement de la page : %1$s (%2$d)</string>
     <string name="login_mode_not_supported">L’application ne peut pas s’authentifier sur ce serveur d’accueil. Le serveur d’accueil prend en charge le(s) type(s) d’authentification suivant(s) : %1$s.
 \n
@@ -1553,7 +1553,7 @@
 \nReconnectez-vous pour accéder aux données et aux messages de votre compte.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Vous perdrez l’accès à vos messages sécurisés sauf si vous vous connectez pour récupérer vos clés de chiffrement.</string>
     <string name="soft_logout_clear_data_dialog_submit">Effacer les données</string>
-    <string name="soft_logout_sso_not_same_user_error">La session en cours est celle de l’utilisateur %1$s et vous fournissez des identifiants pour l’utilisateur %2$s. Ce n’est pas pris en charge par Element.
+    <string name="soft_logout_sso_not_same_user_error">La session en cours est celle de l’utilisateur %1$s et vous fournissez des identifiants pour l’utilisateur %2$s. Ce n’est pas pris en charge par SchildiChat.
 \nEffacez d’abord les données, puis reconnectez-vous avec un autre compte.</string>
     <string name="permalink_malformed">Votre lien matrix.to était malformé</string>
     <string name="bug_report_error_too_short">La description est trop courte</string>
@@ -1571,7 +1571,7 @@
     <string name="devices_other_devices">Autres sessions</string>
     <string name="autocomplete_limited_results">Seuls les premiers résultats sont affichés, saisissez plus de lettres…</string>
     <string name="settings_developer_mode_fail_fast_title">Défaillance rapide</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element peut planter plus souvent quand une erreur inattendue survient</string>
+    <string name="settings_developer_mode_fail_fast_summary">SchildiChat peut planter plus souvent quand une erreur inattendue survient</string>
     <string name="command_description_shrug">Préfixe ¯\\_(ツ)_/¯ à un message en texte brut</string>
     <string name="create_room_encryption_title">Activer le chiffrement</string>
     <string name="create_room_encryption_description">Une fois qu’il est activé, le chiffrement ne peut pas être désactivé.</string>
@@ -1642,9 +1642,9 @@
     <string name="room_member_power_level_moderator_in">Modérateur dans %1$s</string>
     <string name="room_member_power_level_custom_in">Personnalisé (%1$d) dans %2$s</string>
     <string name="room_member_jump_to_read_receipt">Aller à l’accusé de lecture</string>
-    <string name="rendering_event_error_type_of_event_not_handled">Element ne gère pas les évènements de type « %1$s »</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element ne gère pas les messages de type « %1$s »</string>
-    <string name="rendering_event_error_exception">Element a rencontré un problème lors de l’affichage du contenu de l’évènement ayant pour identifiant « %1$s »</string>
+    <string name="rendering_event_error_type_of_event_not_handled">SchildiChat ne gère pas les évènements de type « %1$s »</string>
+    <string name="rendering_event_error_type_of_message_not_handled">SchildiChat ne gère pas les messages de type « %1$s »</string>
+    <string name="rendering_event_error_exception">SchildiChat a rencontré un problème lors de l’affichage du contenu de l’évènement ayant pour identifiant « %1$s »</string>
     <string name="unignore">Ne plus ignorer</string>
     <string name="verify_cannot_cross_sign">Cette session est incapable de partager cette vérification avec vos autres sessions.
 \nLa vérification sera sauvegardée localement et partagée dans une version future de l’application.</string>
@@ -1739,7 +1739,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Évènement supprimé par l’utilisateur, motif : %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Évènement modéré par l’administrateur du salon, motif : %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Les clés sont déjà à jour !</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">SchildiChat Android</string>
     <string name="settings_key_requests">Demandes de clé</string>
     <string name="e2e_use_keybackup">Déverrouiller l’historique des messages chiffrés</string>
     <string name="refresh">Actualiser</string>
@@ -1840,13 +1840,13 @@
     <string name="media_file_added_to_gallery">Fichier multimédia ajouté à la galerie</string>
     <string name="error_adding_media_file_to_gallery">Impossible d’ajouter le fichier multimédia à la galerie</string>
     <string name="change_password_summary">Définir un nouveau mot de passe de compte…</string>
-    <string name="use_other_session_content_description">Utilisez la dernière version de Element sur vos autres appareils : Element Web, Element pour Bureau, Element iOS, Element pour Android, ou un autre client Matrix qui prend en charge la signature croisée</string>
+    <string name="use_other_session_content_description">Utilisez la dernière version de SchildiChat sur vos autres appareils : Element Web, SchildiChat/Element pour Bureau, Element iOS, SchildiChat pour Android, ou un autre client Matrix qui prend en charge la signature croisée</string>
     <string name="app_desktop_web">Element Web
-\nElement pour Bureau</string>
+\nSchildiChat pour Bureau</string>
     <string name="app_ios_android">Element iOS
-\nElement Android</string>
+\nSchildiChat Android</string>
     <string name="or_other_mx_capabale_client">ou un autre client Matrix qui prend en charge la signature croisée</string>
-    <string name="use_latest_app">Utilisez la dernière version de Element sur vos autres appareils :</string>
+    <string name="use_latest_app">Utilisez la dernière version de SchildiChat sur vos autres appareils :</string>
     <string name="command_description_discard_session">Force la session de groupe sortante actuelle dans un salon chiffré à être abandonnée</string>
     <string name="command_description_discard_session_not_handled">Seulement pris en charge dans les salons chiffrés</string>
     <string name="enter_secret_storage_passphrase_or_key">Utilisez votre %1$s ou votre %2$s pour continuer.</string>
@@ -1907,11 +1907,11 @@
     <string name="choose_locale_loading_locales">Chargement des langues disponibles…</string>
     <string name="open_terms_of">Ouvrir les termes de %s</string>
     <string name="disconnect_identity_server_dialog_content">Se déconnecter du serveur d’identité %s \?</string>
-    <string name="identity_server_error_outdated_identity_server">Ce serveur d’identité est obsolète. Element ne supporte que l’API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Ce serveur d’identité est obsolète. SchildiChat ne supporte que l’API V2.</string>
     <string name="identity_server_error_outdated_home_server">Cette opération n’est pas possible. Le serveur d’accueil est obsolète.</string>
     <string name="identity_server_error_no_identity_server_configured">Veuillez d’abord configurer un serveur d’identité.</string>
     <string name="identity_server_error_terms_not_signed">Veuillez d’abord accepter les termes du serveur d’identité dans les paramètres.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Pour votre vie privée, Element prend uniquement en charge l’envoi des adresses e-mail et des numéros de téléphone hachés.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Pour votre vie privée, SchildiChat prend uniquement en charge l’envoi des adresses e-mail et des numéros de téléphone hachés.</string>
     <string name="identity_server_error_binding_error">L’association a échoué.</string>
     <string name="identity_server_error_no_current_binding_error">Il n’y a actuellement aucune association avec cet identifiant.</string>
     <string name="identity_server_set_default_notice">Votre serveur d’accueil (%1$s) propose d’utiliser %2$s comme serveur d’identité</string>
@@ -1988,7 +1988,7 @@
     <string name="element_disclaimer_positive_button">EN SAVOIR PLUS</string>
     <string name="element_disclaimer_negative_button">COMPRIS</string>
     <string name="element_disclaimer_content">Nous sommes heureux de vous annoncer que nous avons un nouveau nom ! Votre application est à jour et vous êtes connectés à votre compte.</string>
-    <string name="element_disclaimer_title">Riot est maintenant Element !</string>
+    <string name="element_disclaimer_title">Riot est maintenant SchildiChat !</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Attente de l\'historique du chiffrement</string>
     <string name="crypto_error_withheld_generic">Impossible d\'accéder à ce message car l\'envoyeur n\'a intentionnellement pas envoyé les clés</string>
     <string name="crypto_error_withheld_unverified">Vous ne pouvez pas accéder à ce message car l\'envoyeur n\'a pas confiance en votre session</string>
@@ -2037,17 +2037,17 @@
     <string name="settings_troubleshoot_test_notification_title">Affichage de la notification</string>
     <string name="settings_troubleshoot_test_push_notification_content">Vous voyez la notification ! Cliquez-moi dessus !</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">La notification a été cliquée !</string>
-    <string name="call_failed_no_connection">Échec de l\'appel Element</string>
+    <string name="call_failed_no_connection">Échec de l\'appel SchildiChat</string>
     <string name="direct_room_encryption_enabled_tile_description">Les messages de ce salon sont chiffrés de bout en bout.</string>
     <string name="room_created_summary_item_by_you">Vous avez créé et configuré ce salon.</string>
     <string name="auth_pin_confirm_to_disable_title">Confirmer le code pour le désactiver</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">Le code est requis à l\'ouverture d\'Element.</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">Le code est demandé après 2 minutes d\'inutilisation d\'Element.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Le code est requis à l\'ouverture d\'SchildiChat.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">Le code est demandé après 2 minutes d\'inutilisation d\'SchildiChat.</string>
     <string name="settings_security_pin_code_grace_period_title">Demander le code après 2 minutes</string>
     <string name="settings_security_pin_code_notifications_summary_off">Afficher uniquement le numéro de messages non-lus dans une simple notification.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Afficher les détails comme les noms des salons et le contenu du message.</string>
     <string name="settings_security_pin_code_notifications_title">Afficher le contenu dans les notifications</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">Le code est la seule façon de déverrouiller Element.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">Le code est la seule façon de déverrouiller SchildiChat.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Activer les données biométriques comme les empreintes digitales ou la reconnaissance faciale.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Activer les données biométriques</string>
     <string name="settings_security_pin_code_summary">Si vous voulez réinitialiser votre code, appuyez sur Code oublié pour vous déconnecter et le réinitialiser.</string>
