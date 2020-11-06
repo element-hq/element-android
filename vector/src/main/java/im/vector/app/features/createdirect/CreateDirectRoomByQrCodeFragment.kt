@@ -17,17 +17,14 @@
 package im.vector.app.features.createdirect
 
 import android.widget.Toast
-import androidx.annotation.CallSuper
 import com.airbnb.mvrx.activityViewModel
 import com.google.zxing.Result
 import com.google.zxing.ResultMetadataType
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.userdirectory.PendingInvitee
 import kotlinx.android.synthetic.main.fragment_qr_code_scanner.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.user.model.User
@@ -35,21 +32,14 @@ import javax.inject.Inject
 
 class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragment(), ZXingScannerView.ResultHandler {
 
-    @Inject lateinit var session: Session
+    private val viewModel: CreateDirectRoomViewModel by activityViewModel()
 
     override fun getLayoutResId() = R.layout.fragment_qr_code_scanner
-
-    private val createDirectRoomViewModel: CreateDirectRoomViewModel by activityViewModel()
-
-    @CallSuper
-    override fun injectWith(injector: ScreenComponent) {
-        session = injector.activeSessionHolder().getActiveSession()
-    }
 
     override fun onResume() {
         super.onResume()
         // Register ourselves as a handler for scan results.
-        scannerView.setResultHandler(this)
+        scannerView.setResultHandler(null)
         // Start camera on resume
         scannerView.startCamera()
     }
@@ -83,18 +73,18 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
             requireActivity().finish()
         } else {
             // This and the related conditional can be removed when PR #2342 is merged
-            val existingDm = session.getExistingDirectRoomWithUser(mxid)
+            val existingDm = viewModel.session.getExistingDirectRoomWithUser(mxid)
 
             if (existingDm === null) {
                 // The following assumes MXIDs are case insensitive
-                if (mxid.equals(other = session.myUserId, ignoreCase = true)) {
+                if (mxid.equals(other = viewModel.session.myUserId, ignoreCase = true)) {
                     Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                     requireActivity().finish()
                 } else {
                     // Try to get user from known users and fall back to creating a User object from MXID
-                    val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
+                    val qrInvitee = if (viewModel.session.getUser(mxid) != null) viewModel.session.getUser(mxid)!! else User(mxid, null, null)
 
-                    createDirectRoomViewModel.handle(
+                    viewModel.handle(
                             CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)))
                     )
                 }
