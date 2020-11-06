@@ -60,7 +60,7 @@ data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
         val myRoomMember: Async<RoomMemberSummary> = Uninitialized,
-        val asyncInviter: Async<User> = Uninitialized,
+        val asyncInviter: Async<RoomMemberSummary> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
         val activeRoomWidgets: Async<List<Widget>> = Uninitialized,
         val typingMessage: String? = null,

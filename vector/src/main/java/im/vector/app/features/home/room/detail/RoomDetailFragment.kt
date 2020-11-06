@@ -141,6 +141,7 @@ import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsB
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
+import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.invite.VectorInviteView
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
@@ -221,7 +222,8 @@ class RoomDetailFragment @Inject constructor(
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
         private val matrixItemColorProvider: MatrixItemColorProvider,
         private val imageContentRenderer: ImageContentRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore
+        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
+        private val pillsPostProcessorFactory: PillsPostProcessor.Factory
 ) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
@@ -253,6 +255,9 @@ class RoomDetailFragment @Inject constructor(
     private val roomDetailArgs: RoomDetailArgs by args()
     private val glideRequests by lazy {
         GlideApp.with(this)
+    }
+    private val pillsPostProcessor by lazy {
+        pillsPostProcessorFactory.create(roomDetailArgs.roomId)
     }
 
     private val autoCompleter: AutoCompleter by lazy {
@@ -848,7 +853,7 @@ class RoomDetailFragment @Inject constructor(
         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
-            formattedBody = eventHtmlRenderer.render(document)
+            formattedBody = eventHtmlRenderer.render(document, pillsPostProcessor)
         }
         composerLayout.composerRelatedMessageContent.text = (formattedBody ?: nonFormattedBody)
 
