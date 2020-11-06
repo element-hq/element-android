@@ -40,6 +40,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -341,6 +342,15 @@ class CommonTestHelper(context: Context) {
         val latch = CountDownLatch(1)
         block(latch)
         await(latch, timeout)
+    }
+
+    // Transform a method with a MatrixCallback to a synchronous method
+    fun <T> runBlockingTest(timeout: Long = TestConstants.timeOutMillis, block: suspend () -> T): T {
+        return runBlocking {
+            withTimeout(timeout) {
+                block()
+            }
+        }
     }
 
     // Transform a method with a MatrixCallback to a synchronous method

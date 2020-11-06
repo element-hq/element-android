@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.account
 
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.common.CommonTestHelper
@@ -43,8 +45,8 @@ class ChangePasswordTest : InstrumentedTest {
         val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
 
         // Change password
-        commonTestHelper.doSync<Unit> {
-            session.changePassword(TestConstants.PASSWORD, NEW_PASSWORD, it)
+        commonTestHelper.runBlockingTest {
+            session.changePassword(TestConstants.PASSWORD, NEW_PASSWORD)
         }
 
         // Try to login with the previous password, it will fail
