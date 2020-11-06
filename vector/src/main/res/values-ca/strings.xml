@@ -17,27 +17,27 @@
     <string name="title_activity_home">Missatges</string>
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configuració</string>
-    <string name="title_activity_member_details">Detalls dels participants</string>
+    <string name="title_activity_member_details">Detalls del participant</string>
     <string name="title_activity_historical">Historial</string>
-    <string name="title_activity_bug_report">Informe d\'error</string>
+    <string name="title_activity_bug_report">Informe d\'errors</string>
     <string name="title_activity_group_details">Detalls de la comunitat</string>
     <!-- button names -->
     <string name="ok">D\'acord</string>
     <string name="cancel">Cancel·la</string>
     <string name="save">Desa</string>
-    <string name="leave">Surt</string>
+    <string name="leave">Marxa</string>
     <string name="send">Envia</string>
     <string name="resend">Reenvia</string>
-    <string name="redact">Suprimeix</string>
+    <string name="redact">Elimina</string>
     <string name="quote">Cita</string>
     <string name="share">Comparteix</string>
     <string name="later">Més tard</string>
     <string name="forward">Reenvia</string>
     <string name="permalink">Enllaç permanent</string>
-    <string name="view_source">Mostra el codi</string>
+    <string name="view_source">Visualitza el codi font</string>
     <string name="view_decrypted_source">Visualitza el codi font desencriptat</string>
     <string name="delete">Elimina</string>
-    <string name="rename">Reanomena</string>
+    <string name="rename">Canvia el nom</string>
     <string name="report_content">Informa del contingut</string>
     <string name="active_call">Trucada activa</string>
     <string name="ongoing_conference_call">Videoconferència en curs.
@@ -46,17 +46,17 @@
     <string name="ongoing_conference_call_video">Vídeo</string>
     <string name="cannot_start_call">No es pot iniciar la trucada, prova-ho més tard</string>
     <string name="missing_permissions_warning">Pot ser que algunes funcions no apareguin per falta de permisos…</string>
-    <string name="missing_permissions_to_start_conf_call">Necessites permís per convidar a l\'inici d\'una videoconferència en aquesta sala</string>
+    <string name="missing_permissions_to_start_conf_call">Necessites permisos d\'invitació per poder iniciar una conferència en aquesta sala</string>
     <string name="missing_permissions_title_to_start_conf_call">No es pot iniciar la trucada</string>
     <string name="device_information">Informació de la sessió</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">No s\'admeten videoconferències en sales xifrades</string>
+    <string name="room_no_conference_call_in_encrypted_rooms">No s\'admeten conferències en sales xifrades</string>
     <string name="send_anyway">Envia igualment</string>
     <string name="or">o</string>
     <string name="invite">Convida</string>
     <string name="offline">Fora de línia</string>
     <!-- actions -->
     <string name="action_sign_out">Tanca la sessió</string>
-    <string name="action_voice_call">Trucada de veu</string>
+    <string name="action_voice_call">Trucada</string>
     <string name="action_video_call">Videotrucada</string>
     <string name="action_global_search">Cerca global</string>
     <string name="action_mark_all_as_read">Marca-ho tot com a llegit</string>
@@ -103,35 +103,35 @@
     <!-- Groups fragment -->
     <string name="groups_invite_header">Convida</string>
     <string name="groups_header">Comunitats</string>
-    <string name="no_group_placeholder">No hi ha cap grup</string>
+    <string name="no_group_placeholder">No hi ha grups</string>
     <string name="send_bug_report_include_logs">Envia els registres</string>
     <string name="send_bug_report_include_crash_logs">Envia els registres de fallada</string>
     <string name="send_bug_report_include_screenshot">Envia una captura de pantalla</string>
     <string name="send_bug_report">Informa d\'un error</string>
-    <string name="send_bug_report_description">Descriviu l\'error. Què heu fet? Què esperàveu que passés? Què ha passat realment?</string>
-    <string name="send_bug_report_placeholder">Descriviu el problema aquí</string>
-    <string name="send_bug_report_logs_description">Els registres d\'aquest client s\'enviaran amb aquest informe d\'error per tal de diagnosticar problemes. Aquest informe d\'errors, així com també els registres i la captura de pantalla, no seran visibles de forma pública. Desmarqueu si preferiu enviar només el text:</string>
-    <string name="send_bug_report_alert_message">Sembla que esteu prou frustrat per a estar sacsejant el telèfon. Voleu enviar un informe d\'error?</string>
-    <string name="send_bug_report_app_crashed">En l\'última execució l\'aplicació va fallar. Voleu enviar un informe d\'error?</string>
-    <string name="send_bug_report_sent">L\'informe d\'error s\'ha enviat correctament</string>
-    <string name="send_bug_report_failed">No s\'ha pogut enviar l\'informe d\'error (%s)</string>
+    <string name="send_bug_report_description">Descriu l\'error. Què has fet\? Què esperaves que passés\? Què ha passat realment\?</string>
+    <string name="send_bug_report_placeholder">Descriu el problema aquí</string>
+    <string name="send_bug_report_logs_description">Per tal de diagnosticar problemes, els registres d\'aquest client s\'enviaran juntament amb l\'informe d\'errors. Aquest informe d\'errors, així com també els registres i la captura de pantalla, no seran visibles públicament. Si prefereixes enviar només el text de dalt, desmarca:</string>
+    <string name="send_bug_report_alert_message">Sembla que estàs sacsejant el telèfon amb frustració. Vols enviar un informe d\'errors\?</string>
+    <string name="send_bug_report_app_crashed">En l\'última execució l\'aplicació ha fallat. Vols obrir la pantalla d\'informe de fallada\?</string>
+    <string name="send_bug_report_sent">L\'informe d\'errors s\'ha enviat correctament</string>
+    <string name="send_bug_report_failed">No s\'ha pogut enviar l\'informe d\'errors (%s)</string>
     <string name="send_bug_report_progress">En curs (%s%%)</string>
     <string name="send_files_in">Envia a</string>
     <string name="read_receipt">Llegit</string>
     <string name="join_room">Uneix-te a la sala</string>
     <string name="username">Nom d\'usuari</string>
     <string name="create_account">Crear un compte</string>
-    <string name="login">Entra</string>
-    <string name="logout">Desconnecta</string>
+    <string name="login">Inicia sessió</string>
+    <string name="logout">Tanca la sessió</string>
     <string name="hs_url">URL del servidor</string>
     <string name="identity_url">URL del servidor d\'identitat</string>
     <string name="search">Cerca</string>
-    <string name="start_new_chat">Inicia un xat nou</string>
-    <string name="start_voice_call">Inicia una trucada de veu</string>
-    <string name="start_video_call">Inicia una vídeotrucada</string>
-    <string name="start_new_chat_prompt_msg">Esteu segur que voleu començar una conversa amb %s?</string>
-    <string name="start_voice_call_prompt_msg">Esteu segur que voleu començar una trucada de veu?</string>
-    <string name="start_video_call_prompt_msg">Esteu segur que voleu començar una trucada de vídeo?</string>
+    <string name="start_new_chat">Inicia un nou xat</string>
+    <string name="start_voice_call">Inicia una trucada</string>
+    <string name="start_video_call">Inicia una videotrucada</string>
+    <string name="start_new_chat_prompt_msg">Estàs segur que vols iniciar un nou xat amb %s\?</string>
+    <string name="start_voice_call_prompt_msg">Estàs segur que vols iniciar una trucada\?</string>
+    <string name="start_video_call_prompt_msg">Estàs segur que vols iniciar una videotrucada\?</string>
     <string name="option_send_files">Envia fitxers</string>
     <string name="option_take_photo_video">Fes una foto o un vídeo</string>
     <string name="option_take_photo">Fes una foto</string>
@@ -226,7 +226,7 @@
     <string name="call_ring">Trucant…</string>
     <string name="incoming_call">Trucada d\'entrada</string>
     <string name="incoming_video_call">Vídeotrucada d\'entrada</string>
-    <string name="incoming_voice_call">Trucada de veu d\'entrada</string>
+    <string name="incoming_voice_call">Trucada entrant</string>
     <string name="call_in_progress">Trucada en curs…</string>
     <string name="call_error_user_not_responding">No s\'està responent a la trucada.</string>
     <string name="call_error_ice_failed">Ha fallat la connexió de mitjans</string>
@@ -300,7 +300,7 @@
     <string name="room_participants_power_level_prompt">No podràs desfer aquest canvi ja que estàs donant a l\'usuari el mateix nivell d\'autoritat que el teu.
 \nN\'estàs segur\?</string>
     <string name="room_participants_invite_prompt_msg">"Esteu segur que voleu convidar a %s a aquest xat?"</string>
-    <string name="room_participants_ban_prompt_msg">Esteu segur que voleu vetar aquest usuari en aquesta conversa?</string>
+    <string name="room_participants_ban_prompt_msg">Si vetes un usuari, se l\'expulsarà d\'aquesta sala i no podrà tornar a unir-s\'hi.</string>
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Convida per ID</u></string>
     <string name="people_search_local_contacts">CONTACTES LOCALS (%d)</string>
@@ -651,7 +651,7 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <string name="ignore_request">Ignora la sol·licitut</string>
     <!-- conference call -->
     <string name="conference_call_warning_title">Avís!</string>
-    <string name="conference_call_warning_message">Les trucades per a conferències estan en desenvolupament i poden no ser fiables.</string>
+    <string name="conference_call_warning_message">Les conferències estan en desenvolupament i pot ser que no funcionin bé.</string>
     <!-- slash commands -->
     <string name="command_error">Error de comandament</string>
     <string name="unrecognized_command">Ordre no reconegut: %s</string>
@@ -691,7 +691,7 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <string name="room_settings_mention_only">Només mencions</string>
     <string name="room_settings_mute">Silencia</string>
     <string name="room_settings_room_notifications_title">Notificacions</string>
-    <string name="send_bug_report_rage_shake">Sacseja el dispositiu amb ràbia per a informar d\'un error</string>
+    <string name="send_bug_report_rage_shake">Sacseja el dispositiu amb ràbia per informar d\'un error</string>
     <string name="actions">Accions</string>
     <string name="list_members">Llista de membres</string>
     <string name="room_sync_in_progress">Sincronitzant…</string>
@@ -725,7 +725,7 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
         <item quantity="other">%d missatges notificats no llegits</item>
     </plurals>
     <plurals name="membership_changes">
-        <item quantity="one">1 canvi de membres</item>
+        <item quantity="one">%d canvi de membres</item>
         <item quantity="other">%d canvis de membres</item>
     </plurals>
     <plurals name="notification_unread_notified_messages">
@@ -741,10 +741,10 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <string name="title_activity_choose_sticker">Envia un adhesiu</string>
     <string name="option_send_sticker">Envia un adhesiu</string>
     <string name="dialog_title_third_party_licences">Llicències de tercers</string>
-    <string name="download">Descarrega</string>
+    <string name="download">Baixa</string>
     <string name="speak">Parla</string>
-    <string name="clear">Neteja</string>
-    <string name="option_send_voice">Enviar veu</string>
+    <string name="clear">Esborra</string>
+    <string name="option_send_voice">Envia veu</string>
     <string name="go_on_with">seguir amb…</string>
     <string name="error_no_external_application_found">Ho sento, no s\'ha trobat cap aplicació externa per completar l\'acció.</string>
     <string name="e2e_re_request_encryption_key"><u>Tornar a demanar les claus d\'encriptació</u> als teus altres dispositius.</string>
@@ -756,10 +756,10 @@ Atenció: es podria eliminar aquest fitxer si es desinstal·la l\'aplicació.</s
     <string name="missing_permissions_error">No es pot dur a terme aquesta acció per falta de permisos.</string>
     <string name="dialog_title_error">Error</string>
     <string name="system_alerts_header">Alertes de sistema</string>
-    <string name="send_bug_report_description_in_english">Si és possible, escriviu si us plau la descripció en anglès.</string>
-    <string name="no_sticker_application_dialog_content">Actualment no teniu cap conjunt d\'adhesius activat.
-
-En voleu afegir algun?</string>
+    <string name="send_bug_report_description_in_english">Si és possible, escriu la descripció en anglès.</string>
+    <string name="no_sticker_application_dialog_content">Encara no tens cap paquet d\'adhesius activat.
+\n
+\nEn vols afegir algun\?</string>
     <plurals name="format_time_s">
         <item quantity="one">%ds</item>
         <item quantity="other">%ds</item>
@@ -862,7 +862,7 @@ En voleu afegir algun?</string>
     <string name="resource_limit_soft_mau"> Aquest servidor base ha assolit el seu límit màxim mensual d\'activitat d\'usuaris i <b>alguns usuaris no podran identificar-s\'hi</b>.</string>
     <string name="resource_limit_hard_mau">Aquest servidor base ha assolit el seu límit mensual d\'activitat d\'usuaris.</string>
     <string name="resource_limit_soft_contact">Si us plau %s per tal d\'incrementar aquest límit.</string>
-    <string name="resource_limit_hard_contact">"Si us plau %s  per continuar usant aquest servei."</string>
+    <string name="resource_limit_hard_contact">Si us plau %s per continuar utilitzant aquest servei.</string>
     <string name="settings_lazy_loading_title">Carrega en diferit els participants de la sala</string>
     <string name="settings_lazy_loading_description">Millora el rendiment carregant només els participants de la sala a primera vista.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">El teu servidor encara no és compatible amb la càrrega en diferit dels participants d\'una sala. Prova-ho més tard.</string>
@@ -871,9 +871,9 @@ En voleu afegir algun?</string>
     <string name="merged_events_collapse">plega</string>
     <string name="accept">Accepta</string>
     <string name="settings_call_category">Trucada</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Useu el to de Element per defecte per les trucades entrants</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Utilitza el to de trucada d\'Element predeterminat per trucades entrants</string>
     <string name="settings_call_ringtone_title">To de trucada entrant</string>
-    <string name="settings_call_ringtone_dialog_title">Escolliu el to per les trucades:</string>
+    <string name="settings_call_ringtone_dialog_title">Tria el to per les trucades:</string>
     <string name="room_participants_action_kick">Expulsa</string>
     <string name="reason_hint">Motiu</string>
     <string name="settings_inline_url_preview_summary">Mostra la vista prèvia dels enllaços dins del xat en cas que el vostre servidor base suporti aquesta funcionalitat.</string>
@@ -885,10 +885,10 @@ En voleu afegir algun?</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostra els esdeveniments del compte</string>
     <string name="call_anyway">Truca igualment</string>
     <string name="auth_accept_policies">Reviseu i accepteu les polítiques d\'aquest servidor base:</string>
-    <string name="video_call_in_progress">Trucada de vídeo en procés…</string>
+    <string name="video_call_in_progress">Videotrucada en procés…</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Executa les proves</string>
     <string name="settings_troubleshoot_diagnostic_running_status">S\'està executant… (%1$d de %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">El diagnòstic bàsic és correcte. Si encara no rebeu notificacions, envieu un informe d\'error per ajudar-nos a investigar.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">El diagnòstic bàsic és correcte. Si encara no reps notificacions, envia un informe d\'errors per ajudar-nos a investigar-ho.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Ha fallat una o més proves, proveu les solucions proposades.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Paràmetres del sistema.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Les notificacions són habilitades als paràmetres del sistema.</string>
@@ -941,7 +941,7 @@ A la pantalla següent se us demanarà que permeteu al Element executar-se sempr
     <string name="settings_notification_by_event">Importància de les notificacions per esdeveniment</string>
     <string name="settings_notification_troubleshoot">Diagnostica les notificacions</string>
     <string name="settings_troubleshoot_diagnostic">Diagnòstic de la resolució de problemes</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Ha fallat una o més proves, envieu un informe d\'error per ajudar-nos a investigar-ho.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Ha fallat una o més proves, envia un informe d\'errors per ajudar-nos a investigar-ho.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Les notificacions no són permeses per a aquest dispositiu.
 Comproveu els paràmetres del Element.</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Paràmetres personalitzats.</string>
@@ -974,7 +974,7 @@ Aquest error és fora del control del Element i segons Google aquest error indic
     <string name="settings_troubleshoot_test_bg_restricted_title">Comprova les restriccions del rerefons</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignora l\'optimització</string>
     <string name="settings_noisy_notifications_preferences">Configura les notificacions amb so</string>
-    <string name="settings_call_notifications_preferences">Configura les notificacions de les trucades</string>
+    <string name="settings_call_notifications_preferences">Configura les notificacions de trucada</string>
     <string name="settings_silent_notifications_preferences">Configura les notificacions silencioses</string>
     <string name="settings_system_preferences_summary">Seleccioneu el color de LED, la vibració, so…</string>
     <string name="settings_cryptography_manage_keys">Gestió de claus criptogràfiques</string>
@@ -1018,8 +1018,8 @@ Avís: és possible que calgui suprimir el fitxer si es desinstal·la l\'aplicac
     <string name="keys_backup_restore_key_enter_hint">Introduïu la clau de recuperació</string>
     <string name="keys_backup_restore_setup_recovery_key">Recuperació de missatges</string>
     <string name="keys_backup_restore_with_key_helper">Heu perdut la vostra clau de recuperació? Podeu establir una nova a les preferències.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">"[%1$s]
-Aquest error és fora del control del Element. Pot ocórrer per diferents raons. És possible que funcioni si ho torneu a provar més endavant. També podeu comprovar que el servei de Google Play no està restringit a l\'ús  de dades a les preferències del sistema, o que el rellotge del dispositiu marca l\'hora correcta. També pot passar amb ROM personalitzades."</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nAquest error està fora del control d\'Element. Pot ser causat diferents motius. És possible que torni a funcionar més endavant. També pots comprovar, a la configuració del sistema, que els Serveis de Google Play no tinguin cap restricció de dades o que l\'hora del dispositiu sigui la correcta. També pot passar amb ROMs personalitzades.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 Aquest error és fora del control del Element. No hi ha cap compte de Google al telèfon. Obrir el gestor de comptes i afegiu un compte de Google.</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Les restriccions de rerefons són inhabilitades per al Element. Aquesta prova s\'hauria d\'executar emprant dades mòbils (sense wifi).
@@ -1066,7 +1066,7 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
     <string name="keys_backup_is_not_finished_please_wait">La còpia de seguretat de les claus no ha finalitzat, espera…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Si tanques sessió ara, perdràs els teus missatges xifrats</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">S\'està fent la còpia de seguretat de les claus. Si tanques sessió ara, perdràs els teus missatges xifrats.</string>
-    <string name="sign_out_bottom_sheet_dont_want_secure_messages">No vull els meus missatges encriptats</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">No vull els meus missatges xifrats</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Fent còpia de seguretat de les claus…</string>
     <string name="keys_backup_activate">Utilitza la còpia de seguretat de les claus</string>
     <string name="are_you_sure">N\'estàs segur\?</string>
@@ -1104,8 +1104,8 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
     <string name="keys_backup_info_title_signature">Signatura</string>
     <string name="new_recovery_method_popup_was_me">He sigut jo</string>
     <string name="new_recovery_method_popup_title">Còpia de seguretat nova de la clau</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Per evitar la pèrdua d\'accés als teus missatges encriptats, hauries d\'activar la còpia de seguretat segura a totes les teves sessions.</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perdràs l\'accés als teus missatges encriptats si no fas una còpia de seguretat de les teves claus abans de tancar la sessió.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Per evitar la pèrdua d\'accés als teus missatges xifrats, hauries d\'activar la còpia de seguretat segura a totes les teves sessions.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perdràs l\'accés als teus missatges xifrats si no fas una còpia de seguretat de les teves claus abans de tancar la sessió.</string>
     <string name="keys_backup_setup_step2_text_description">Es desarà una còpia encriptada de les vostres claus al vostre servidor base. Protegiu la vostra còpia de seguretat amb una contrasenya per tal de mantenir-la segura.
 \n
 \nPer màxima seguretat, aquesta contrasenya hauria de ser diferent de la contrasenya del vostre compte.</string>
@@ -1333,10 +1333,10 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
     <string name="audio_video_meeting_description">Les reunions utilitzen les polítiques de seguretat i permisos de Jitsi. Tots els participants que es trobin dins sala veuran una invitació per unir-se mentre la teva reunió estigui en curs.</string>
     <string name="audio_meeting">Inicia una reunió d\'àudio</string>
     <string name="video_meeting">Inicia una reunió de vídeo</string>
-    <string name="conference_call_in_progress">Ja hi ha una videoconferència en curs!</string>
+    <string name="conference_call_in_progress">Ja hi ha una conferència en curs!</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">No tens permís per iniciar una trucada</string>
     <string name="no_permissions_to_start_webrtc_call">No tens permís per iniciar una trucada en aquesta sala</string>
-    <string name="no_permissions_to_start_conf_call_in_direct_room">No tens permís per iniciar una videoconferència</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">No tens permís per iniciar una conferència</string>
     <string name="no_permissions_to_start_conf_call">No tens permís per iniciar una videoconferència en aquesta sala</string>
     <string name="reset">Reinicia</string>
     <string name="dismiss">Omet</string>
@@ -1345,4 +1345,11 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
     <string name="revoke">Revoca</string>
     <string name="none">Cap</string>
     <string name="resources_script">Latn</string>
+    <string name="active_call_with_duration">Trucada activa (%s)</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Demana confirmació abans d\'iniciar una trucada</string>
+    <string name="settings_call_show_confirmation_dialog_title">Evita trucada accidental</string>
+    <string name="bug_report_error_too_short">La descripció és massa curta</string>
+    <string name="send_bug_report_include_key_share_history">Envia l\'historial de sol·licituds de compartició de claus</string>
+    <string name="review">Revisa</string>
+    <string name="play_video">Reprodueix</string>
 </resources>
