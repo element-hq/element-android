@@ -344,7 +344,6 @@ class CommonTestHelper(context: Context) {
         await(latch, timeout)
     }
 
-    // Transform a method with a MatrixCallback to a synchronous method
     fun <T> runBlockingTest(timeout: Long = TestConstants.timeOutMillis, block: suspend () -> T): T {
         return runBlocking {
             withTimeout(timeout) {
