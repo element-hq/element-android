@@ -74,7 +74,6 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
             Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
             requireActivity().finish()
         } else {
-            // This and the related conditional can be removed when PR #2342 is merged
             val existingDm = viewModel.session.getExistingDirectRoomWithUser(mxid)
             // The following assumes MXIDs are case insensitive
             if (mxid.equals(other = viewModel.session.myUserId, ignoreCase = true)) {
