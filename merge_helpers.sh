@@ -28,7 +28,7 @@ upstream_previous_tag() {
     git describe --abbrev=0 `upstream_latest_tag`~1 --tags
 }
 downstream_latest_tag() {
-    local commit="sc"
+    local commit="HEAD"
     while true; do
         local tag=`git describe --abbrev=0 "$commit" --tags`
         if [[ "$tag" =~ "sc_" ]]; then
