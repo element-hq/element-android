@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -37,6 +38,8 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
+import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
 import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
@@ -72,32 +75,42 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         super.onCreate(savedInstanceState)
         toolbar.visibility = View.GONE
         sharedActionViewModel = viewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
-        sharedActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
-                    when (sharedAction) {
-                        UserDirectorySharedAction.OpenUsersDirectory    ->
-                            addFragmentToBackstack(R.id.container, UserDirectoryFragment::class.java)
-                        UserDirectorySharedAction.Close                 -> finish()
-                        UserDirectorySharedAction.GoBack                -> onBackPressed()
-                        is UserDirectorySharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
-                        UserDirectorySharedAction.OpenPhoneBook         -> openPhoneBook()
-                    }.exhaustive
-                }
-                .disposeOnDestroy()
-        if (isFirstCreation()) {
-            addFragment(
-                    R.id.container,
-                    KnownUsersFragment::class.java,
-                    KnownUsersFragmentArgs(
-                            title = getString(R.string.fab_menu_create_chat),
-                            menuResId = R.menu.vector_create_direct_room,
-                            isCreatingRoom = true
-                    )
-            )
+        if (intent?.getBooleanExtra(BY_QR_CODE, false)!!) {
+            if (isFirstCreation()) { openAddByQrCode() }
+        } else {
+            sharedActionViewModel
+                    .observe()
+                    .subscribe { sharedAction ->
+                        when (sharedAction) {
+                            UserDirectorySharedAction.OpenUsersDirectory    ->
+                                addFragmentToBackstack(R.id.container, UserDirectoryFragment::class.java)
+                            UserDirectorySharedAction.Close                 -> finish()
+                            UserDirectorySharedAction.GoBack                -> onBackPressed()
+                            is UserDirectorySharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
+                            UserDirectorySharedAction.OpenPhoneBook         -> openPhoneBook()
+                        }.exhaustive
+                    }
+                    .disposeOnDestroy()
+            if (isFirstCreation()) {
+                addFragment(
+                        R.id.container,
+                        KnownUsersFragment::class.java,
+                        KnownUsersFragmentArgs(
+                                title = getString(R.string.fab_menu_create_chat),
+                                menuResId = R.menu.vector_create_direct_room,
+                                isCreatingRoom = true
+                        )
+                )
+            }
         }
         viewModel.selectSubscribe(this, CreateDirectRoomViewState::createAndInviteState) {
             renderCreateAndInviteState(it)
+        }
+    }
+
+    private fun openAddByQrCode() {
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA, 0)) {
+            addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
         }
     }
 
@@ -116,6 +129,13 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
                 doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
+            } else if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA && intent?.getBooleanExtra(BY_QR_CODE, false)!!) {
+                addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
+            }
+        } else {
+            Toast.makeText(baseContext, R.string.missing_permissions_error, Toast.LENGTH_SHORT).show()
+            if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA && intent?.getBooleanExtra(BY_QR_CODE, false)!!) {
+                finish()
             }
         }
     }
@@ -178,8 +198,12 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     }
 
     companion object {
-        fun getIntent(context: Context): Intent {
-            return Intent(context, CreateDirectRoomActivity::class.java)
+        private const val BY_QR_CODE = "BY_QR_CODE"
+
+        fun getIntent(context: Context, byQrCode: Boolean = false): Intent {
+            return Intent(context, CreateDirectRoomActivity::class.java).apply {
+                putExtra(BY_QR_CODE, byQrCode)
+            }
         }
     }
 }

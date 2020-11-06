@@ -2,7 +2,7 @@ Changes in Element 1.0.11 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Create DMs with users by scanning their QR code (#2025)
 
 Improvements 🙌:
  - New room creation tile with quick action (#2346)

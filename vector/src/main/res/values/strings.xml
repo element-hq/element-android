@@ -1761,6 +1761,7 @@
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
     <string name="add_by_matrix_id">Add by matrix ID</string>
+    <string name="add_by_qr_code">Add by QR code</string>
     <string name="creating_direct_room">"Creating room…"</string>
     <string name="direct_room_no_known_users">"No result found, use Add by matrix ID to search on server."</string>
     <string name="direct_room_start_search">"Start typing to get results"</string>
@@ -1828,6 +1829,8 @@
     <string name="a11y_create_menu_open">Open the create room menu</string>
     <string name="a11y_create_menu_close">Close the create room menu…</string>
     <string name="a11y_create_direct_message">Create a new direct conversation</string>
+    <string name="a11y_create_direct_message_by_mxid">Create a new direct conversation by Matrix ID</string>
+    <string name="a11y_create_direct_message_by_qr_code">Create a new direct conversation by scanning a QR code</string>
     <string name="a11y_create_room">Create a new room</string>
     <string name="a11y_close_keys_backup_banner">Close keys backup banner</string>
     <string name="a11y_show_password">Show password</string>
@@ -2674,4 +2677,10 @@
     <string name="warning_room_not_created_yet">The room is not yet created. Cancel the room creation?</string>
     <string name="warning_unsaved_change">There are unsaved changes. Discard the changes?</string>
     <string name="warning_unsaved_change_discard">Discard changes</string>
+
+    <!-- Add by QR code -->
+    <string name="share_by_text">Share by text</string>
+    <string name="cannot_dm_self">Cannot DM yourself!</string>
+    <string name="invalid_qr_code_uri">Invalid QR code (Invalid URI)!</string>
+    <string name="qr_code_not_scanned">QR code not scanned!</string>
 </resources>

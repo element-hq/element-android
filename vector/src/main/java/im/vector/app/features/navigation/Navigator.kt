@@ -56,7 +56,7 @@ interface Navigator {
 
     fun openCreateRoom(context: Context, initialName: String = "")
 
-    fun openCreateDirectRoom(context: Context)
+    fun openCreateDirectRoom(context: Context, byQrCode: Boolean = false)
 
     fun openInviteUsersToRoom(context: Context, roomId: String)
 
