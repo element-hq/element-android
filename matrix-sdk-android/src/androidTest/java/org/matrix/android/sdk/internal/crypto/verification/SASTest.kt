@@ -555,7 +555,7 @@ class SASTest : InstrumentedTest {
 
         mTestHelper.waitWithLatch {
             mTestHelper.retryPeriodicallyWithLatch(it) {
-                val prAlicePOV = aliceVerificationService.getExistingVerificationRequest(bobSession.myUserId)?.firstOrNull()
+                val prAlicePOV = aliceVerificationService.getExistingVerificationRequests(bobSession.myUserId).firstOrNull()
                 requestID = prAlicePOV?.transactionId
                 Log.v("TEST", "== alicePOV is $prAlicePOV")
                 prAlicePOV?.transactionId != null && prAlicePOV.localId == req.localId
@@ -566,7 +566,7 @@ class SASTest : InstrumentedTest {
 
         mTestHelper.waitWithLatch {
             mTestHelper.retryPeriodicallyWithLatch(it) {
-                val prBobPOV = bobVerificationService.getExistingVerificationRequest(aliceSession.myUserId)?.firstOrNull()
+                val prBobPOV = bobVerificationService.getExistingVerificationRequests(aliceSession.myUserId).firstOrNull()
                 Log.v("TEST", "== prBobPOV is $prBobPOV")
                 prBobPOV?.transactionId == requestID
             }
@@ -581,7 +581,7 @@ class SASTest : InstrumentedTest {
         // wait for alice to get the ready
         mTestHelper.waitWithLatch {
             mTestHelper.retryPeriodicallyWithLatch(it) {
-                val prAlicePOV = aliceVerificationService.getExistingVerificationRequest(bobSession.myUserId)?.firstOrNull()
+                val prAlicePOV = aliceVerificationService.getExistingVerificationRequests(bobSession.myUserId).firstOrNull()
                 Log.v("TEST", "== prAlicePOV is $prAlicePOV")
                 prAlicePOV?.transactionId == requestID && prAlicePOV?.isReady != null
             }

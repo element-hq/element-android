@@ -20,5 +20,8 @@ import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.userdirectory.PendingInvitee
 
 sealed class CreateDirectRoomAction : VectorViewModelAction {
-    data class CreateRoomAndInviteSelectedUsers(val invitees: Set<PendingInvitee>) : CreateDirectRoomAction()
+    data class CreateRoomAndInviteSelectedUsers(
+            val invitees: Set<PendingInvitee>,
+            val existingDmRoomId: String?
+    ) : CreateDirectRoomAction()
 }

@@ -91,13 +91,20 @@ class KnownUsersFragment @Inject constructor(
             val showMenuItem = it.pendingInvitees.isNotEmpty()
             menu.forEach { menuItem ->
                 menuItem.isVisible = showMenuItem
+                if (args.isCreatingRoom) {
+                    menuItem.setTitle(if (it.existingDmRoomId != null) R.string.action_open else R.string.create_room_action_create)
+                }
             }
         }
         super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) {
-        sharedActionViewModel.post(UserDirectorySharedAction.OnMenuItemSelected(item.itemId, it.pendingInvitees))
+        sharedActionViewModel.post(UserDirectorySharedAction.OnMenuItemSelected(
+                item.itemId,
+                it.pendingInvitees,
+                it.existingDmRoomId
+        ))
         return@withState true
     }
 

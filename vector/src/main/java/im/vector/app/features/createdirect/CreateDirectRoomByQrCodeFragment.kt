@@ -39,13 +39,15 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
     override fun onResume() {
         super.onResume()
         // Register ourselves as a handler for scan results.
-        scannerView.setResultHandler(null)
+        scannerView.setResultHandler(this)
         // Start camera on resume
         scannerView.startCamera()
     }
 
     override fun onPause() {
         super.onPause()
+        // Unregister ourselves as a handler for scan results.
+        scannerView.setResultHandler(null)
         // Stop camera on pause
         scannerView.stopCamera()
     }
@@ -74,23 +76,17 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
         } else {
             // This and the related conditional can be removed when PR #2342 is merged
             val existingDm = viewModel.session.getExistingDirectRoomWithUser(mxid)
-
-            if (existingDm === null) {
-                // The following assumes MXIDs are case insensitive
-                if (mxid.equals(other = viewModel.session.myUserId, ignoreCase = true)) {
-                    Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
-                    requireActivity().finish()
-                } else {
-                    // Try to get user from known users and fall back to creating a User object from MXID
-                    val qrInvitee = if (viewModel.session.getUser(mxid) != null) viewModel.session.getUser(mxid)!! else User(mxid, null, null)
-
-                    viewModel.handle(
-                            CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)))
-                    )
-                }
-            } else {
-                navigator.openRoom(requireContext(), existingDm, null, false)
+            // The following assumes MXIDs are case insensitive
+            if (mxid.equals(other = viewModel.session.myUserId, ignoreCase = true)) {
+                Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                 requireActivity().finish()
+            } else {
+                // Try to get user from known users and fall back to creating a User object from MXID
+                val qrInvitee = if (viewModel.session.getUser(mxid) != null) viewModel.session.getUser(mxid)!! else User(mxid, null, null)
+
+                viewModel.handle(
+                        CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)), existingDm)
+                )
             }
         }
     }

@@ -69,6 +69,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
                 .apply {
                     realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
                 }
+                .allowWritesOnUiThread(true)
                 .modules(SessionRealmModule())
                 .schemaVersion(RealmSessionStoreMigration.SESSION_STORE_SCHEMA_VERSION)
                 .migration(migration)

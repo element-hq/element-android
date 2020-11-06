@@ -1,8 +1,29 @@
-Changes in Element 1.0.10 (2020-XX-XX)
+Changes in Element 1.0.11 (2020-XX-XX)
 ===================================================
 
 Features ✨:
  - Create DMs with users by scanning their QR code (#2025)
+
+Improvements 🙌:
+ - Open an existing DM instead of creating a new one (#2319)
+
+Bugfix 🐛:
+ - Fix issue when updating the avatar of a room
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ -
+
+Other changes:
+ - Upgrade Realm dependency to 10.0.0
+
+Changes in Element 1.0.10 (2020-11-04)
+===================================================
 
 Improvements 🙌:
  - Rework sending Event management (#154)
@@ -27,18 +48,6 @@ Bugfix 🐛:
  - Badly formatted mentions in body (#1506)
  - KeysBackup: Avoid using `!!` (#2262)
  - Two elements in the task switcher (#2299)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
-
-Build 🧱:
- -
-
-Other changes:
- -
 
 Changes in Element 1.0.9 (2020-10-16)
 ===================================================
