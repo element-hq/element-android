@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Open an existing DM instead of creating a new one (#2319)
 
 Bugfix 🐛:
  - Fix issue when updating the avatar of a room
