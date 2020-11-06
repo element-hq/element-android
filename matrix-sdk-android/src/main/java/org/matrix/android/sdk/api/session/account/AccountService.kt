@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.account
 
-
 /**
  * This interface defines methods to manage the account. It's implemented at the session level.
  */

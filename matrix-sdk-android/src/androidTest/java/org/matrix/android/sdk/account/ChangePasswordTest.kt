@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.account
 
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.common.CommonTestHelper
