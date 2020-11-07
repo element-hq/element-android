@@ -1,0 +1,5 @@
+- Move footer time slighlty down in the bubble
+- Tweak room topic collapse behaviour
+- Update codebase to Element 1.0.10
+- Fix some colors
+- Remember expand status for all categories except invite
