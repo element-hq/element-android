@@ -496,7 +496,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun loadDraftIfAny() {
-        val currentDraft = room.getDraft() ?: return
+        val currentDraft = room.getDraft()
         setState {
             copy(
                     // Create a sendMode from a draft and retrieve the TimelineEvent
@@ -517,6 +517,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                                 SendMode.EDIT(timelineEvent, currentDraft.text)
                             }
                         }
+                        else -> null
                     } ?: SendMode.REGULAR("", fromSharing = false)
             )
         }
