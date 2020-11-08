@@ -1275,15 +1275,15 @@ class RoomDetailViewModel @AssistedInject constructor(
             return
         }
 
-        session.ignoreUserIds(listOf(action.userId), object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
+        viewModelScope.launch {
+            val event = try {
+                session.ignoreUserIds(listOf(action.userId))
+                RoomDetailViewEvents.ActionSuccess(action)
+            } catch (failure: Throwable) {
+                RoomDetailViewEvents.ActionFailure(action, failure)
             }
-
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
-            }
-        })
+            _viewEvents.post(event)
+        }
     }
 
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
