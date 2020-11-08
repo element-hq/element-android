@@ -102,11 +102,13 @@ class RoomProfileViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeNotificationMode(action: RoomProfileAction.ChangeRoomNotificationState) {
-        room.setRoomNotificationState(action.notificationState, object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
+        viewModelScope.launch {
+            try {
+                room.setRoomNotificationState(action.notificationState)
+            } catch (failure: Throwable) {
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))
             }
-        })
+        }
     }
 
     private fun handleLeaveRoom() {
