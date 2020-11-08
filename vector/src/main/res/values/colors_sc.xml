@@ -5,6 +5,9 @@
     <color name="accent_sc_alpha25">#3F8BC34A</color>
     <color name="accent_sc_alpha12">#1E8BC34A</color>
     <color name="accent_sc_dark">#689F38</color>
+    <color name="accent_sc_50">#F1F8E9</color>
+    <color name="accent_sc_100">#DCEDC8</color>
+    <color name="accent_sc_900">#33691E</color>
     <color name="direct_chat_ring_color_sc">@color/accent_sc_dark</color>
 
     <color name="avatar_fill_sc_1">@color/accent_sc</color>
@@ -24,4 +27,7 @@
 
     <color name="timestamp_overlay_fg">#ffffff</color>
     <color name="timestamp_overlay_bg">#80000000</color>
+
+    <color name="sc_reaction_background_on_light">@color/accent_sc_50</color>
+    <color name="sc_reaction_background_on_dark">@color/accent_sc_900</color>
 </resources>
