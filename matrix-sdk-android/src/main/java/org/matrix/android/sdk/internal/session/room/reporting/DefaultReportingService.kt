@@ -18,14 +18,9 @@ package org.matrix.android.sdk.internal.session.room.reporting
 
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.reporting.ReportingService
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 
 internal class DefaultReportingService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                   private val taskExecutor: TaskExecutor,
                                                                    private val reportContentTask: ReportContentTask
 ) : ReportingService {
 
@@ -34,13 +29,8 @@ internal class DefaultReportingService @AssistedInject constructor(@Assisted pri
         fun create(roomId: String): ReportingService
     }
 
-    override fun reportContent(eventId: String, score: Int, reason: String, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun reportContent(eventId: String, score: Int, reason: String) {
         val params = ReportContentTask.Params(roomId, eventId, score, reason)
-
-        return reportContentTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        reportContentTask.execute(params)
     }
 }
