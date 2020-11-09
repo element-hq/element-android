@@ -25,7 +25,7 @@
     <string name="active_call">Appel en cours</string>
     <string name="ongoing_conference_call">Téléconférence en cours.
 \nLa rejoindre en %1$s ou en %2$s</string>
-    <string name="ongoing_conference_call_voice">vocal</string>
+    <string name="ongoing_conference_call_voice">Audio</string>
     <string name="ongoing_conference_call_video">vidéo</string>
     <string name="cannot_start_call">Impossible d’initier l’appel, réessayez plus tard</string>
     <string name="missing_permissions_warning">En raison de permissions manquantes, certaines fonctionnalités peuvent être absentes…</string>
