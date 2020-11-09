@@ -19,6 +19,9 @@ SDK API changes ⚠️:
 Build 🧱:
  -
 
+Test:
+ - Add `allScreensTest` to cover all screens of the app
+
 Other changes:
  - Upgrade Realm dependency to 10.0.0
 
@@ -1030,6 +1033,9 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
+ -
+
+Test:
  -
 
 Other changes:

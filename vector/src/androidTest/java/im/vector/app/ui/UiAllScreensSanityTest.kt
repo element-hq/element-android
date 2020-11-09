@@ -25,6 +25,7 @@ import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -34,6 +35,7 @@ import com.schibsted.spain.barista.assertion.BaristaListAssertions.assertListIte
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickBack
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
+import com.schibsted.spain.barista.interaction.BaristaClickInteractions.longClickOn
 import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
 import com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
@@ -45,6 +47,7 @@ import im.vector.app.EspressoHelper
 import im.vector.app.R
 import im.vector.app.SleepViewAction
 import im.vector.app.activityIdlingResource
+import im.vector.app.espresso.tools.clickOnPreference
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.features.MainActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
@@ -58,6 +61,7 @@ import im.vector.app.withIdlingResource
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.lang.Thread.sleep
 import java.util.UUID
 
 /**
@@ -72,6 +76,7 @@ class UiAllScreensSanityTest {
 
     private val uiTestBase = UiTestBase()
 
+    // Last passing: 2020-11-09
     @Test
     fun allScreensTest() {
         // Create an account
@@ -133,6 +138,8 @@ class UiAllScreensSanityTest {
 
         uiTestBase.signout()
         clickDialogPositiveButton()
+
+        // TODO Deactivate account instead of logout?
     }
 
     private fun ignoreVerification() {
@@ -178,14 +185,7 @@ class UiAllScreensSanityTest {
         navigateToRoomSettings()
 
         // Long click on the message
-        onView(withId(R.id.timelineRecyclerView))
-                .perform(
-                        actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText("Hello world!")),
-                                longClick()
-                        )
-                )
-        pressBack()
+        longClickOnMessageTest()
 
         // Menu
         openMenu()
@@ -196,6 +196,47 @@ class UiAllScreensSanityTest {
         pressBack()
 
         pressBack()
+    }
+
+    private fun longClickOnMessageTest() {
+        // Test quick reaction
+        longClickOnMessage()
+        // Add quick reaction
+        clickOn("👍")
+
+        sleep(1000)
+
+        // Open reactions
+        longClickOn("👍")
+        pressBack()
+
+        // Test add reaction
+        longClickOnMessage()
+        clickOn(R.string.message_add_reaction)
+        // Filter
+        // TODO clickMenu(R.id.search)
+        clickListItem(R.id.emojiRecyclerView, 4)
+
+        // Test Edit mode
+        longClickOnMessage()
+        clickOn(R.string.edit)
+        // TODO Cancel action
+        writeTo(R.id.composerEditText, "Hello universe!")
+        clickOn(R.id.sendButton)
+        // Open edit history
+        longClickOnMessage("Hello universe! (edited)")
+        clickOn(R.string.message_view_edit_history)
+        pressBack()
+    }
+
+    private fun longClickOnMessage(text: String = "Hello world!") {
+        onView(withId(R.id.timelineRecyclerView))
+                .perform(
+                        actionOnItem<RecyclerView.ViewHolder>(
+                                hasDescendant(withText(text)),
+                                longClick()
+                        )
+                )
     }
 
     private fun navigateToRoomSettings() {
@@ -328,50 +369,50 @@ class UiAllScreensSanityTest {
         pressBack()
         clickOn(R.string.settings_privacy_policy)
         pressBack()
-        clickOn(R.string.settings_third_party_notices)
-        pressBack()
          */
+        clickOn(R.string.settings_third_party_notices)
+        clickDialogPositiveButton()
     }
 
     private fun navigateToSettingsAdvanced() {
-        /*
-        TODO Find a way to scroll
-        clickOn(R.string.settings_notifications_targets)
-        pressBack()
-        clickOn(R.string.settings_push_rules)
+        clickOnPreference(R.string.settings_notifications_targets)
         pressBack()
 
+        clickOnPreference(R.string.settings_push_rules)
+        pressBack()
+
+        /* TODO P2 test developer screens
         // Enable developer mode
-        clickOn(R.string.settings_developer_mode)
+        clickOnSwitchPreference("SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY")
 
-        clickOn(R.string.settings_account_data)
+        clickOnPreference(R.string.settings_account_data)
         clickOn("m.push_rules")
         pressBack()
         pressBack()
-        clickOn(R.string.settings_key_requests)
+        clickOnPreference(R.string.settings_key_requests)
         pressBack()
 
         // Disable developer mode
-        clickOn(R.string.settings_developer_mode)
+        clickOnSwitchPreference("SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY")
          */
     }
 
     private fun navigateToSettingsSecurity() {
-        clickOn(R.string.settings_active_sessions_show_all)
+        clickOnPreference(R.string.settings_active_sessions_show_all)
         pressBack()
-        /*
-        TODO Find a way to scroll
-        clickOn(R.string.encryption_message_recovery)
+
+        clickOnPreference(R.string.encryption_message_recovery)
         // TODO go deeper here
         pressBack()
-        clickOn(R.string.encryption_export_e2e_room_keys)
+        /* Cannot exit
+        clickOnPreference(R.string.encryption_export_e2e_room_keys)
         pressBack()
          */
     }
 
     private fun navigateToSettingsPreferences() {
         clickOn(R.string.settings_interface_language)
-        onView(ViewMatchers.isRoot())
+        onView(isRoot())
                 .perform(waitForView(withText("Dansk (Danmark)")))
         pressBack()
         clickOn(R.string.settings_theme)
@@ -392,7 +433,7 @@ class UiAllScreensSanityTest {
         clickOn(R.string.settings_call_notifications_preferences)
         pressBack()
          */
-        clickOn(R.string.settings_notification_troubleshoot)
+        clickOnPreference(R.string.settings_notification_troubleshoot)
         pressBack()
     }
 
@@ -409,13 +450,11 @@ class UiAllScreensSanityTest {
         clickOn(R.string.add_identity_server)
         pressBack()
         pressBack()
-        /* TODO Find a way to scroll
         // Identity server
-        clickListItem(android.preference.R.id.recycler_view, 30)
+        clickOnPreference(R.string.settings_identity_server)
         pressBack()
         // Deactivate account
-        clickListItem(R.id.recycler_view, 32)
+        clickOnPreference(R.string.settings_deactivate_my_account)
         pressBack()
-         */
     }
 }
