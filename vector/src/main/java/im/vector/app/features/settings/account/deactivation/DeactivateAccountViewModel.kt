@@ -25,7 +25,6 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.Session
@@ -75,8 +74,6 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
                 session.deactivateAccount(action.password, action.eraseAllData)
                 DeactivateAccountViewEvents.Done
             } catch (failure: Exception) {
-                if (failure is CancellationException) throw failure
-
                 if (failure.isInvalidPassword()) {
                     DeactivateAccountViewEvents.InvalidPassword
                 } else {
