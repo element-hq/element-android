@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Fix issue when updating the avatar of a room
+ - Fix issue when restoring draft after sharing (#2287)
 
 Translations 🗣:
  -
