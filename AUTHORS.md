@@ -26,6 +26,11 @@ Even if we try to be able to work on all the functionalities, we have more knowl
 - Product manager, Android developer
 - Specialist on the crypto implementation.
 
+## Onuray: Android developer
+
+[@onurays:matrix.org](https://matrix.to/#/@onurays:matrix.org)
+- Android developer
+
 # Other contributors
 
 First of all, we thank all contributors who use Element and report problems on this GitHub project or via the integrated rageshake function.
