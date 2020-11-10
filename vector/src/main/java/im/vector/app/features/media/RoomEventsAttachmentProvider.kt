@@ -20,10 +20,8 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
@@ -32,7 +30,6 @@ import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import java.io.File
-import javax.inject.Inject
 
 class RoomEventsAttachmentProvider(
         private val attachments: List<TimelineEvent>,
@@ -152,31 +149,3 @@ class RoomEventsAttachmentProvider(
     }
 }
 
-class AttachmentProviderFactory @Inject constructor(
-        private val imageContentRenderer: ImageContentRenderer,
-        private val vectorDateFormatter: VectorDateFormatter,
-        private val stringProvider: StringProvider,
-        private val session: Session
-) {
-
-    fun createProvider(attachments: List<TimelineEvent>): RoomEventsAttachmentProvider {
-        return RoomEventsAttachmentProvider(
-                attachments,
-                imageContentRenderer,
-                vectorDateFormatter,
-                session.fileService(),
-                stringProvider
-        )
-    }
-
-    fun createProvider(attachments: List<AttachmentData>, room: Room?): DataAttachmentRoomProvider {
-        return DataAttachmentRoomProvider(
-                attachments,
-                room,
-                imageContentRenderer,
-                vectorDateFormatter,
-                session.fileService(),
-                stringProvider
-        )
-    }
-}
