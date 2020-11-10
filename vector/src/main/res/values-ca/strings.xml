@@ -1352,4 +1352,17 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
     <string name="send_bug_report_include_key_share_history">Envia l\'historial de sol·licituds de compartició de claus</string>
     <string name="review">Revisa</string>
     <string name="play_video">Reprodueix</string>
+    <string name="call_format_turn_hd_on">Activa l\'HD</string>
+    <string name="call_format_turn_hd_off">Desactiva l\'HD</string>
+    <string name="call_camera_back">Posterior</string>
+    <string name="call_camera_front">Frontal</string>
+    <string name="call_switch_camera">Commuta la càmera</string>
+    <string name="sound_device_wireless_headset">Auriculars sense fils</string>
+    <string name="sound_device_headset">Auriculars</string>
+    <string name="sound_device_speaker">Altaveu</string>
+    <string name="sound_device_phone">Mòbil</string>
+    <string name="call_select_sound_device">Selecciona el dispositiu d\'àudio</string>
+    <string name="call_failed_dont_ask_again">No m\'ho tornis a preguntar</string>
+    <string name="call_failed_no_ice_use_alt">Prova fent servir %s</string>
+    <string name="call_failed_no_ice_title">La crida ha fallat per culpa d\'una mala configuració del servidor</string>
 </resources>
