@@ -35,6 +35,7 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.awaitCallback
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val stateEventDataSource: StateEventDataSource,
@@ -132,23 +133,23 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
     override fun updateAvatar(avatarUri: Uri, fileName: String, callback: MatrixCallback<Unit>): Cancelable {
         return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
             val response = fileUploader.uploadFromUri(avatarUri, fileName, "image/jpeg")
-            sendStateEvent(
-                    eventType = EventType.STATE_ROOM_AVATAR,
-                    body = mapOf("url" to response.contentUri),
-                    callback = callback,
-                    stateKey = null
-            )
+            awaitCallback<Unit> {
+                sendStateEvent(
+                        eventType = EventType.STATE_ROOM_AVATAR,
+                        body = mapOf("url" to response.contentUri),
+                        callback = it,
+                        stateKey = null
+                )
+            }
         }
     }
 
     override fun deleteAvatar(callback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            sendStateEvent(
-                    eventType = EventType.STATE_ROOM_AVATAR,
-                    body = emptyMap(),
-                    callback = callback,
-                    stateKey = null
-            )
-        }
+        return sendStateEvent(
+                eventType = EventType.STATE_ROOM_AVATAR,
+                body = emptyMap(),
+                callback = callback,
+                stateKey = null
+        )
     }
 }
