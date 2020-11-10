@@ -10,12 +10,14 @@ Improvements 🙌:
 Bugfix 🐛:
  - Fix issue when updating the avatar of a room
  - Exclude yourself when decorating rooms which are direct or don't have more than 2 users (#2370)
+ - Fix issue when updating the avatar of a room (new avatar vanishing)
+ - Discard change dialog displayed by mistake when avatar has been updated
 
 Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - AccountService now exposes suspendable function instead of using MatrixCallback (#2354). Note: We will incrementally migrate all the SDK API in a near future.
 
 Build 🧱:
  -
