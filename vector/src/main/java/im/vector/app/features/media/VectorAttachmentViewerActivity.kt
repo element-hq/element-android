@@ -70,7 +70,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
     private var initialIndex = 0
     private var isAnimatingOut = false
 
-    private var currentSourceProvider: BaseAttachmentProvider? = null
+    private var currentSourceProvider: BaseAttachmentProvider<*>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
