@@ -28,7 +28,6 @@ import im.vector.app.features.home.AvatarRenderer
 import kotlinx.android.synthetic.main.vector_invite_view.view.*
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 

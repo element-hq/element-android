@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Open an existing DM instead of creating a new one (#2319)
+ - Use RoomMember instead of User in the context of a Room.
 
 Bugfix 🐛:
  - Fix issue when updating the avatar of a room (new avatar vanishing)
