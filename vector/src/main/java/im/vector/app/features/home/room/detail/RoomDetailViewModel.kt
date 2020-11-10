@@ -277,7 +277,37 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.CancelSend                       -> handleCancel(action)
             is RoomDetailAction.OpenOrCreateDm                   -> handleOpenOrCreateDm(action)
             is RoomDetailAction.JumpToReadReceipt                -> handleJumpToReadReceipt(action)
+            RoomDetailAction.QuickActionInvitePeople             -> handleInvitePeople()
+            RoomDetailAction.QuickActionSetAvatar                -> handleQuickSetAvatar()
+            is RoomDetailAction.SetAvatarAction                  -> handleSetNewAvatar(action)
+            RoomDetailAction.QuickActionSetTopic                 -> _viewEvents.post(RoomDetailViewEvents.OpenRoomSettings)
+            is RoomDetailAction.ShowRoomAvatarFullScreen         -> {
+                _viewEvents.post(
+                        RoomDetailViewEvents.ShowRoomAvatarFullScreen(action.matrixItem, action.transitionView)
+                )
+            }
         }.exhaustive
+    }
+
+    private fun handleSetNewAvatar(action: RoomDetailAction.SetAvatarAction) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                awaitCallback<Unit> {
+                    room.updateAvatar(action.newAvatarUri, action.newAvatarFileName, it)
+                }
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
+            }
+        }
+    }
+
+    private fun handleInvitePeople() {
+        _viewEvents.post(RoomDetailViewEvents.OpenInvitePeople)
+    }
+
+    private fun handleQuickSetAvatar() {
+        _viewEvents.post(RoomDetailViewEvents.OpenSetRoomAvatarDialog)
     }
 
     private fun handleOpenOrCreateDm(action: RoomDetailAction.OpenOrCreateDm) {

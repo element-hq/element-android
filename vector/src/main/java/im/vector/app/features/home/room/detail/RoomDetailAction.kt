@@ -16,6 +16,8 @@
 
 package im.vector.app.features.home.room.detail
 
+import android.net.Uri
+import android.view.View
 import im.vector.app.core.platform.VectorViewModelAction
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -24,6 +26,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachme
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.util.MatrixItem
 
 sealed class RoomDetailAction : VectorViewModelAction {
     data class UserIsTyping(val isTyping: Boolean) : RoomDetailAction()
@@ -90,4 +93,9 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     data class OpenOrCreateDm(val userId: String) : RoomDetailAction()
     data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
+    object QuickActionInvitePeople : RoomDetailAction()
+    object QuickActionSetAvatar : RoomDetailAction()
+    data class SetAvatarAction(val newAvatarUri: Uri, val newAvatarFileName: String) : RoomDetailAction()
+    object QuickActionSetTopic : RoomDetailAction()
+    data class ShowRoomAvatarFullScreen(val matrixItem: MatrixItem?, val transitionView: View?) : RoomDetailAction()
 }

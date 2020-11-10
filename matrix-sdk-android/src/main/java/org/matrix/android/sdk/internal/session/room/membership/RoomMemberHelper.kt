@@ -98,6 +98,10 @@ internal class RoomMemberHelper(private val realm: Realm,
         return getNumberOfJoinedMembers() + getNumberOfInvitedMembers()
     }
 
+    fun isDirectRoom() : Boolean {
+        return roomSummary?.isDirect ?: false
+    }
+
     /**
      * Return all the roomMembers ids which are joined or invited to the room
      *

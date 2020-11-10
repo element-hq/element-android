@@ -26,6 +26,7 @@ import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
 import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 import javax.inject.Inject
 
 internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Optional<String>> {
@@ -50,9 +51,14 @@ internal class DefaultGetRoomIdByAliasTask @Inject constructor(
         } else if (!params.searchOnServer) {
             Optional.from<String>(null)
         } else {
-            roomId = executeRequest<RoomAliasDescription>(eventBus) {
-                apiCall = roomAPI.getRoomIdByAlias(params.roomAlias)
-            }.roomId
+            roomId =  try {
+                executeRequest<RoomAliasDescription>(eventBus) {
+                    apiCall = roomAPI.getRoomIdByAlias(params.roomAlias)
+                }.roomId
+            } catch (throwable: Throwable) {
+                Timber.d(throwable, "## Failed to get roomId from alias")
+                null
+            }
             Optional.from(roomId)
         }
     }
