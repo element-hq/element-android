@@ -19,8 +19,10 @@ package im.vector.app.features.media
 import android.content.Context
 import android.view.View
 import androidx.core.view.isVisible
+import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
@@ -33,7 +35,9 @@ class DataAttachmentRoomProvider(
         private val room: Room?,
         imageContentRenderer: ImageContentRenderer,
         private val dateFormatter: VectorDateFormatter,
-        fileService: FileService) : BaseAttachmentProvider(imageContentRenderer, fileService) {
+        fileService: FileService,
+        stringProvider: StringProvider
+) : BaseAttachmentProvider(imageContentRenderer, fileService, stringProvider) {
 
     override fun getItemCount(): Int = attachments.size
 
@@ -78,7 +82,10 @@ class DataAttachmentRoomProvider(
         val timeLineEvent = room?.getTimeLineEvent(item.eventId)
         if (timeLineEvent != null) {
             val dateString = dateFormatter.format(timeLineEvent.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
-            overlayView?.updateWith("${position + 1} of ${attachments.size}", "${timeLineEvent.senderInfo.displayName} $dateString")
+            overlayView?.updateWith(
+                    counter = stringProvider.getString(R.string.attachment_viewer_item_x_of_y, position + 1, attachments.size),
+                    senderInfo = "${timeLineEvent.senderInfo.displayName} $dateString"
+            )
             overlayView?.videoControlsGroup?.isVisible = timeLineEvent.root.isVideoMessage()
         } else {
             overlayView?.updateWith("", "")

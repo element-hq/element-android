@@ -22,6 +22,7 @@ import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
+import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
 import im.vector.lib.attachmentviewer.AttachmentSourceProvider
 import im.vector.lib.attachmentviewer.ImageLoaderTarget
@@ -32,7 +33,8 @@ import java.io.File
 
 abstract class BaseAttachmentProvider(
         private val imageContentRenderer: ImageContentRenderer,
-        protected val fileService: FileService
+        protected val fileService: FileService,
+        protected val stringProvider: StringProvider
 ) : AttachmentSourceProvider {
 
     interface InteractionListener {

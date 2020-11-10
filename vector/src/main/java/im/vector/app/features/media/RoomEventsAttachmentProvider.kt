@@ -19,8 +19,10 @@ package im.vector.app.features.media
 import android.content.Context
 import android.view.View
 import androidx.core.view.isVisible
+import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
@@ -42,8 +44,9 @@ class RoomEventsAttachmentProvider(
         private val attachments: List<TimelineEvent>,
         imageContentRenderer: ImageContentRenderer,
         private val dateFormatter: VectorDateFormatter,
-        fileService: FileService
-) : BaseAttachmentProvider(imageContentRenderer, fileService) {
+        fileService: FileService,
+        stringProvider: StringProvider
+) : BaseAttachmentProvider(imageContentRenderer, fileService, stringProvider) {
 
     override fun getItemCount(): Int {
         return attachments.size
@@ -128,7 +131,10 @@ class RoomEventsAttachmentProvider(
         super.overlayViewAtPosition(context, position)
         val item = attachments[position]
         val dateString = dateFormatter.format(item.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
-        overlayView?.updateWith("${position + 1} of ${attachments.size}", "${item.senderInfo.displayName} $dateString")
+        overlayView?.updateWith(
+                counter = stringProvider.getString(R.string.attachment_viewer_item_x_of_y, position + 1, attachments.size),
+                senderInfo = "${item.senderInfo.displayName} $dateString"
+        )
         overlayView?.videoControlsGroup?.isVisible = item.root.isVideoMessage()
         return overlayView
     }
@@ -163,14 +169,28 @@ class RoomEventsAttachmentProvider(
 class AttachmentProviderFactory @Inject constructor(
         private val imageContentRenderer: ImageContentRenderer,
         private val vectorDateFormatter: VectorDateFormatter,
+        private val stringProvider: StringProvider,
         private val session: Session
 ) {
 
     fun createProvider(attachments: List<TimelineEvent>): RoomEventsAttachmentProvider {
-        return RoomEventsAttachmentProvider(attachments, imageContentRenderer, vectorDateFormatter, session.fileService())
+        return RoomEventsAttachmentProvider(
+                attachments,
+                imageContentRenderer,
+                vectorDateFormatter,
+                session.fileService(),
+                stringProvider
+        )
     }
 
     fun createProvider(attachments: List<AttachmentData>, room: Room?): DataAttachmentRoomProvider {
-        return DataAttachmentRoomProvider(attachments, room, imageContentRenderer, vectorDateFormatter, session.fileService())
+        return DataAttachmentRoomProvider(
+                attachments,
+                room,
+                imageContentRenderer,
+                vectorDateFormatter,
+                session.fileService(),
+                stringProvider
+        )
     }
 }

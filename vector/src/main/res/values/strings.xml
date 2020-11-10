@@ -1852,6 +1852,8 @@
     <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 
+    <string name="attachment_viewer_item_x_of_y">%1$d of %2$d</string>
+
     <string name="uploads_media_title">MEDIA</string>
     <string name="uploads_media_no_result">There are no media in this room</string>
     <string name="uploads_files_title">FILES</string>
