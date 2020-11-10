@@ -1,8 +1,30 @@
-Changes in Element 1.0.10 (2020-XX-XX)
+Changes in Element 1.0.11 (2020-XX-XX)
 ===================================================
 
 Features ✨:
  -
+
+Improvements 🙌:
+ - Open an existing DM instead of creating a new one (#2319)
+
+Bugfix 🐛:
+ - Fix issue when updating the avatar of a room (new avatar vanishing)
+ - Discard change dialog displayed by mistake when avatar has been updated
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - AccountService now exposes suspendable function instead of using MatrixCallback (#2354). Note: We will incrementally migrate all the SDK API in a near future.
+
+Build 🧱:
+ -
+
+Other changes:
+ - Upgrade Realm dependency to 10.0.0
+
+Changes in Element 1.0.10 (2020-11-04)
+===================================================
 
 Improvements 🙌:
  - Rework sending Event management (#154)
@@ -27,18 +49,6 @@ Bugfix 🐛:
  - Badly formatted mentions in body (#1506)
  - KeysBackup: Avoid using `!!` (#2262)
  - Two elements in the task switcher (#2299)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
-
-Build 🧱:
- -
-
-Other changes:
- -
 
 Changes in Element 1.0.9 (2020-10-16)
 ===================================================

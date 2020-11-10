@@ -23,5 +23,6 @@ import kotlinx.android.parcel.Parcelize
 data class KnownUsersFragmentArgs(
         val title: String,
         val menuResId: Int,
-        val excludedUserIds: Set<String>? = null
+        val excludedUserIds: Set<String>? = null,
+        val isCreatingRoom: Boolean = false
 ) : Parcelable

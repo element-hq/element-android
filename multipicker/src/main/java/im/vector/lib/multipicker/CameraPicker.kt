@@ -94,19 +94,21 @@ class CameraPicker {
         return Intent(MediaStore.ACTION_IMAGE_CAPTURE)
     }
 
-    private fun createPhotoUri(context: Context): Uri {
-        val file = createImageFile(context)
-        val authority = context.packageName + ".multipicker.fileprovider"
-        return FileProvider.getUriForFile(context, authority, file)
-    }
+    companion object {
+        fun createPhotoUri(context: Context): Uri {
+            val file = createImageFile(context)
+            val authority = context.packageName + ".multipicker.fileprovider"
+            return FileProvider.getUriForFile(context, authority, file)
+        }
 
-    private fun createImageFile(context: Context): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val storageDir: File = context.filesDir
-        return File.createTempFile(
-                "${timeStamp}_", /* prefix */
-                ".jpg", /* suffix */
-                storageDir /* directory */
-        )
+        private fun createImageFile(context: Context): File {
+            val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+            val storageDir: File = context.filesDir
+            return File.createTempFile(
+                    "${timeStamp}_", /* prefix */
+                    ".jpg", /* suffix */
+                    storageDir /* directory */
+            )
+        }
     }
 }
