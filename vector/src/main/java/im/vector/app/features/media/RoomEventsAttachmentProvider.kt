@@ -16,17 +16,11 @@
 
 package im.vector.app.features.media
 
-import android.content.Context
-import android.view.View
-import androidx.core.view.isVisible
-import im.vector.app.R
-import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.Room
@@ -43,10 +37,10 @@ import javax.inject.Inject
 class RoomEventsAttachmentProvider(
         private val attachments: List<TimelineEvent>,
         imageContentRenderer: ImageContentRenderer,
-        private val dateFormatter: VectorDateFormatter,
+        dateFormatter: VectorDateFormatter,
         fileService: FileService,
         stringProvider: StringProvider
-) : BaseAttachmentProvider(imageContentRenderer, fileService, stringProvider) {
+) : BaseAttachmentProvider(imageContentRenderer, fileService, dateFormatter, stringProvider) {
 
     override fun getItemCount(): Int {
         return attachments.size
@@ -127,16 +121,8 @@ class RoomEventsAttachmentProvider(
         }
     }
 
-    override fun overlayViewAtPosition(context: Context, position: Int): View? {
-        super.overlayViewAtPosition(context, position)
-        val item = attachments[position]
-        val dateString = dateFormatter.format(item.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
-        overlayView?.updateWith(
-                counter = stringProvider.getString(R.string.attachment_viewer_item_x_of_y, position + 1, attachments.size),
-                senderInfo = "${item.senderInfo.displayName} $dateString"
-        )
-        overlayView?.videoControlsGroup?.isVisible = item.root.isVideoMessage()
-        return overlayView
+    override fun getTimelineEventAtPosition(position: Int): TimelineEvent? {
+        return attachments[position]
     }
 
     override fun getFileForSharing(position: Int, callback: (File?) -> Unit) {

@@ -16,28 +16,23 @@
 
 package im.vector.app.features.media
 
-import android.content.Context
-import android.view.View
-import androidx.core.view.isVisible
-import im.vector.app.R
-import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import java.io.File
 
 class DataAttachmentRoomProvider(
         private val attachments: List<AttachmentData>,
         private val room: Room?,
         imageContentRenderer: ImageContentRenderer,
-        private val dateFormatter: VectorDateFormatter,
+        dateFormatter: VectorDateFormatter,
         fileService: FileService,
         stringProvider: StringProvider
-) : BaseAttachmentProvider(imageContentRenderer, fileService, stringProvider) {
+) : BaseAttachmentProvider(imageContentRenderer, fileService, dateFormatter, stringProvider) {
 
     override fun getItemCount(): Int = attachments.size
 
@@ -76,21 +71,9 @@ class DataAttachmentRoomProvider(
         }
     }
 
-    override fun overlayViewAtPosition(context: Context, position: Int): View? {
-        super.overlayViewAtPosition(context, position)
+    override fun getTimelineEventAtPosition(position: Int): TimelineEvent? {
         val item = attachments[position]
-        val timeLineEvent = room?.getTimeLineEvent(item.eventId)
-        if (timeLineEvent != null) {
-            val dateString = dateFormatter.format(timeLineEvent.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
-            overlayView?.updateWith(
-                    counter = stringProvider.getString(R.string.attachment_viewer_item_x_of_y, position + 1, attachments.size),
-                    senderInfo = "${timeLineEvent.senderInfo.displayName} $dateString"
-            )
-            overlayView?.videoControlsGroup?.isVisible = timeLineEvent.root.isVideoMessage()
-        } else {
-            overlayView?.updateWith("", "")
-        }
-        return overlayView
+        return room?.getTimeLineEvent(item.eventId)
     }
 
     override fun getFileForSharing(position: Int, callback: (File?) -> Unit) {
