@@ -40,7 +40,7 @@ class RoomEventsAttachmentProvider(
 ) : BaseAttachmentProvider<TimelineEvent>(attachments, imageContentRenderer, fileService, dateFormatter, stringProvider) {
 
     override fun getAttachmentInfoAt(position: Int): AttachmentInfo {
-        return attachments[position].let {
+        return getItem(position).let {
             val content = it.root.getClearContent().toModel<MessageContent>() as? MessageWithAttachmentContent
             if (content is MessageImageContent) {
                 val data = ImageContentRenderer.Data(
@@ -115,11 +115,11 @@ class RoomEventsAttachmentProvider(
     }
 
     override fun getTimelineEventAtPosition(position: Int): TimelineEvent? {
-        return attachments[position]
+        return getItem(position)
     }
 
     override fun getFileForSharing(position: Int, callback: (File?) -> Unit) {
-        attachments[position].let { timelineEvent ->
+        getItem(position).let { timelineEvent ->
 
             val messageContent = timelineEvent.root.getClearContent().toModel<MessageContent>()
                     as? MessageWithAttachmentContent
@@ -144,4 +144,3 @@ class RoomEventsAttachmentProvider(
         }
     }
 }
-

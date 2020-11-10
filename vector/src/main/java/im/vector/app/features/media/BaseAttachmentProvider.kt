@@ -38,7 +38,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import java.io.File
 
 abstract class BaseAttachmentProvider<Type>(
-        protected val attachments: List<Type>,
+        private val attachments: List<Type>,
         private val imageContentRenderer: ImageContentRenderer,
         protected val fileService: FileService,
         private val dateFormatter: VectorDateFormatter,
@@ -57,6 +57,8 @@ abstract class BaseAttachmentProvider<Type>(
     private var overlayView: AttachmentOverlayView? = null
 
     final override fun getItemCount() = attachments.size
+
+    protected fun getItem(position: Int) = attachments[position]
 
     final override fun overlayViewAtPosition(context: Context, position: Int): View? {
         if (position == -1) return null

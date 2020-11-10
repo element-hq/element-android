@@ -35,7 +35,7 @@ class DataAttachmentRoomProvider(
 ) : BaseAttachmentProvider<AttachmentData>(attachments, imageContentRenderer, fileService, dateFormatter, stringProvider) {
 
     override fun getAttachmentInfoAt(position: Int): AttachmentInfo {
-        return attachments[position].let {
+        return getItem(position).let {
             when (it) {
                 is ImageContentRenderer.Data -> {
                     if (it.mimeType == "image/gif") {
@@ -70,12 +70,12 @@ class DataAttachmentRoomProvider(
     }
 
     override fun getTimelineEventAtPosition(position: Int): TimelineEvent? {
-        val item = attachments[position]
+        val item = getItem(position)
         return room?.getTimeLineEvent(item.eventId)
     }
 
     override fun getFileForSharing(position: Int, callback: (File?) -> Unit) {
-        val item = attachments[position]
+        val item = getItem(position)
         fileService.downloadFile(
                 downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
                 id = item.eventId,
