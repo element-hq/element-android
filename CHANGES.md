@@ -15,7 +15,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - AccountService now exposes suspendable function instead of using MatrixCallback (#2354). Note: We will incrementally migrate all the SDK API in a near future.
 
 Build 🧱:
  -
