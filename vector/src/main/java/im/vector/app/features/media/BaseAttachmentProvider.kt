@@ -30,7 +30,10 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.file.FileService
 import java.io.File
 
-abstract class BaseAttachmentProvider(val imageContentRenderer: ImageContentRenderer, val fileService: FileService) : AttachmentSourceProvider {
+abstract class BaseAttachmentProvider(
+        private val imageContentRenderer: ImageContentRenderer,
+        protected val fileService: FileService
+) : AttachmentSourceProvider {
 
     interface InteractionListener {
         fun onDismissTapped()

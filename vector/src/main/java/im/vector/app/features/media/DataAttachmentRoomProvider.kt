@@ -31,7 +31,6 @@ import java.io.File
 class DataAttachmentRoomProvider(
         private val attachments: List<AttachmentData>,
         private val room: Room?,
-        private val initialIndex: Int,
         imageContentRenderer: ImageContentRenderer,
         private val dateFormatter: VectorDateFormatter,
         fileService: FileService) : BaseAttachmentProvider(imageContentRenderer, fileService) {

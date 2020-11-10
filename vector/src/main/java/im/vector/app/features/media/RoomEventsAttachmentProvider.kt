@@ -40,7 +40,6 @@ import javax.inject.Inject
 
 class RoomEventsAttachmentProvider(
         private val attachments: List<TimelineEvent>,
-        private val initialIndex: Int,
         imageContentRenderer: ImageContentRenderer,
         private val dateFormatter: VectorDateFormatter,
         fileService: FileService
@@ -167,11 +166,11 @@ class AttachmentProviderFactory @Inject constructor(
         private val session: Session
 ) {
 
-    fun createProvider(attachments: List<TimelineEvent>, initialIndex: Int): RoomEventsAttachmentProvider {
-        return RoomEventsAttachmentProvider(attachments, initialIndex, imageContentRenderer, vectorDateFormatter, session.fileService())
+    fun createProvider(attachments: List<TimelineEvent>): RoomEventsAttachmentProvider {
+        return RoomEventsAttachmentProvider(attachments, imageContentRenderer, vectorDateFormatter, session.fileService())
     }
 
-    fun createProvider(attachments: List<AttachmentData>, room: Room?, initialIndex: Int): DataAttachmentRoomProvider {
-        return DataAttachmentRoomProvider(attachments, room, initialIndex, imageContentRenderer, vectorDateFormatter, session.fileService())
+    fun createProvider(attachments: List<AttachmentData>, room: Room?): DataAttachmentRoomProvider {
+        return DataAttachmentRoomProvider(attachments, room, imageContentRenderer, vectorDateFormatter, session.fileService())
     }
 }

@@ -118,7 +118,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
 
         val inMemoryData = intent.getParcelableArrayListExtra<AttachmentData>(EXTRA_IN_MEMORY_DATA)
         if (inMemoryData != null) {
-            val sourceProvider = dataSourceFactory.createProvider(inMemoryData, room, initialIndex)
+            val sourceProvider = dataSourceFactory.createProvider(inMemoryData, room)
             val index = inMemoryData.indexOfFirst { it.eventId == args.eventId }
             initialIndex = index
             sourceProvider.interactionListener = this
@@ -137,7 +137,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
             val index = events.indexOfFirst { it.eventId == args.eventId }
             initialIndex = index
 
-            val sourceProvider = dataSourceFactory.createProvider(events, index)
+            val sourceProvider = dataSourceFactory.createProvider(events)
             sourceProvider.interactionListener = this
             setSourceProvider(sourceProvider)
             this.currentSourceProvider = sourceProvider
