@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * This event is sent by the callee when they wish to answer the call.
  */
 @JsonClass(generateAdapter = true)
-data class CallAnswerContent(
+data class CallSelectAnswerContent(
         /**
          * Required. The ID of the call this event relates to.
          */
@@ -33,24 +33,7 @@ data class CallAnswerContent(
          */
         @Json(name = "party_id") val partyId: String? = null,
         /**
-         * Required. The session description object
+         * Required. Indicates the answer user has chosen.
          */
-        @Json(name = "answer") val answer: Answer,
-        /**
-         * Required. The version of the VoIP specification this messages adheres to. This specification is version 0.
-         */
-        @Json(name = "version") val version: String? = "0"
-) {
-
-    @JsonClass(generateAdapter = true)
-    data class Answer(
-            /**
-             * Required. The type of session description. Must be 'answer'.
-             */
-            @Json(name = "type") val type: SdpType = SdpType.ANSWER,
-            /**
-             * Required. The SDP text of the session description.
-             */
-            @Json(name = "sdp") val sdp: String
-    )
-}
+        @Json(name = "selected_party_id") val selectedPartyId: String? = null,
+)

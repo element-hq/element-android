@@ -61,6 +61,9 @@ object EventType {
     const val CALL_INVITE = "m.call.invite"
     const val CALL_CANDIDATES = "m.call.candidates"
     const val CALL_ANSWER = "m.call.answer"
+    const val CALL_SELECT_ANSWER = "m.call.select_answer"
+    const val CALL_NEGOTIATE = "m.call.negotiate"
+    const val CALL_REJECT = "m.call.reject"
     const val CALL_HANGUP = "m.call.hangup"
 
     // Key share events
@@ -91,5 +94,8 @@ object EventType {
                 || type == CALL_CANDIDATES
                 || type == CALL_ANSWER
                 || type == CALL_HANGUP
+                || type == CALL_SELECT_ANSWER
+                || type == CALL_NEGOTIATE
+                || type == CALL_REJECT
     }
 }

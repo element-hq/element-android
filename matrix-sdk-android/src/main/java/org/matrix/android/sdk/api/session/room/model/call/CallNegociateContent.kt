@@ -20,48 +20,39 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * This event is sent by the caller when they wish to establish a call.
+ * This introduces SDP negotiation semantics for media pause, hold/resume, ICE restarts and voice/video call up/downgrading.
  */
 @JsonClass(generateAdapter = true)
-data class CallInviteContent(
+data class CallNegociateContent(
         /**
-         * Required. A unique identifier for the call.
+         * Required. The ID of the call this event relates to.
          */
-        @Json(name = "call_id") val callId: String?,
+        @Json(name = "call_id") val callId: String,
         /**
          * Required. ID to let user identify remote echo of their own events
          */
         @Json(name = "party_id") val partyId: String? = null,
         /**
+         * Required. The time in milliseconds that the negotiation is valid for. Once exceeded the sender
+         * of the negotiate event should consider the negotiation failed (timed out) and the recipient should ignore it.
+        **/
+        @Json(name = "lifetime") val lifetime: Int?,
+        /**
          * Required. The session description object
          */
-        @Json(name = "offer") val offer: Offer?,
-        /**
-         * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
-         */
-        @Json(name = "version") val version: String? = "0",
-        /**
-         * Required. The time in milliseconds that the invite is valid for.
-         * Once the invite age exceeds this value, clients should discard it.
-         * They should also no longer show the call as awaiting an answer in the UI.
-         */
-        @Json(name = "lifetime") val lifetime: Int?
+        @Json(name = "description") val description: Description? = null,
 ) {
     @JsonClass(generateAdapter = true)
-    data class Offer(
+    data class Description(
             /**
-             * Required. The type of session description. Must be 'offer'.
+             * Required. The type of session description.
              */
-            @Json(name = "type") val type: SdpType? = SdpType.OFFER,
+            @Json(name = "type") val type: SdpType?,
             /**
              * Required. The SDP text of the session description.
              */
             @Json(name = "sdp") val sdp: String?
-    ) {
-        companion object {
-            const val SDP_VIDEO = "m=video"
-        }
-    }
+    )
 
-    fun isVideo() = offer?.sdp?.contains(Offer.SDP_VIDEO) == true
 }
+

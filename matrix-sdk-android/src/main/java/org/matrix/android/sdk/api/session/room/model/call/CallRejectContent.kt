@@ -24,7 +24,7 @@ import com.squareup.moshi.JsonClass
  * the call has been established or before to abort the call.
  */
 @JsonClass(generateAdapter = true)
-data class CallHangupContent(
+data class CallRejectContent(
         /**
          * Required. The ID of the call this event relates to.
          */
@@ -37,31 +37,4 @@ data class CallHangupContent(
          * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
          */
         @Json(name = "version") val version: String? = "0",
-        /**
-         * Optional error reason for the hangup. This should not be provided when the user naturally ends or rejects the call.
-         * When there was an error in the call negotiation, this should be `ice_failed` for when ICE negotiation fails
-         * or `invite_timeout` for when the other party did not answer in time. One of: ["ice_failed", "invite_timeout"]
-         */
-        @Json(name = "reason") val reason: Reason? = null
-) {
-    @JsonClass(generateAdapter = false)
-    enum class Reason {
-        @Json(name = "ice_failed")
-        ICE_FAILED,
-
-        @Json(name = "ice_timeout")
-        ICE_TIMEOUT,
-
-        @Json(name = "user_hangup")
-        USER_HANGUP,
-
-        @Json(name = "user_media_failed")
-        USER_MEDIA_FAILED,
-
-        @Json(name = "invite_timeout")
-        INVITE_TIMEOUT,
-
-        @Json(name = "unknown_error")
-        UNKWOWN_ERROR
-    }
-}
+)
