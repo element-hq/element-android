@@ -8,14 +8,15 @@ Improvements 🙌:
  - Open an existing DM instead of creating a new one (#2319)
 
 Bugfix 🐛:
- - Fix issue when updating the avatar of a room
  - Fix issue when restoring draft after sharing (#2287)
+ - Fix issue when updating the avatar of a room (new avatar vanishing)
+ - Discard change dialog displayed by mistake when avatar has been updated
 
 Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - AccountService now exposes suspendable function instead of using MatrixCallback (#2354). Note: We will incrementally migrate all the SDK API in a near future.
 
 Build 🧱:
  -
