@@ -32,16 +32,12 @@ import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import java.io.File
 
 class RoomEventsAttachmentProvider(
-        private val attachments: List<TimelineEvent>,
+        attachments: List<TimelineEvent>,
         imageContentRenderer: ImageContentRenderer,
         dateFormatter: VectorDateFormatter,
         fileService: FileService,
         stringProvider: StringProvider
-) : BaseAttachmentProvider(imageContentRenderer, fileService, dateFormatter, stringProvider) {
-
-    override fun getItemCount(): Int {
-        return attachments.size
-    }
+) : BaseAttachmentProvider<TimelineEvent>(attachments, imageContentRenderer, fileService, dateFormatter, stringProvider) {
 
     override fun getAttachmentInfoAt(position: Int): AttachmentInfo {
         return attachments[position].let {

@@ -26,15 +26,13 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import java.io.File
 
 class DataAttachmentRoomProvider(
-        private val attachments: List<AttachmentData>,
+        attachments: List<AttachmentData>,
         private val room: Room?,
         imageContentRenderer: ImageContentRenderer,
         dateFormatter: VectorDateFormatter,
         fileService: FileService,
         stringProvider: StringProvider
-) : BaseAttachmentProvider(imageContentRenderer, fileService, dateFormatter, stringProvider) {
-
-    override fun getItemCount(): Int = attachments.size
+) : BaseAttachmentProvider<AttachmentData>(attachments, imageContentRenderer, fileService, dateFormatter, stringProvider) {
 
     override fun getAttachmentInfoAt(position: Int): AttachmentInfo {
         return attachments[position].let {
