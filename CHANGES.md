@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Fix issue when updating the avatar of a room
+ - Exclude yourself when decorating rooms which are direct or don't have more than 2 users (#2370)
 
 Translations 🗣:
  -
