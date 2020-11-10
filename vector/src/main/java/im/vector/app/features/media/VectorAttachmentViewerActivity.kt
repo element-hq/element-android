@@ -119,7 +119,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         val inMemoryData = intent.getParcelableArrayListExtra<AttachmentData>(EXTRA_IN_MEMORY_DATA)
         if (inMemoryData != null) {
             val sourceProvider = dataSourceFactory.createProvider(inMemoryData, room)
-            initialIndex = inMemoryData.indexOfFirst { it.eventId == args.eventId }
+            initialIndex = inMemoryData.indexOfFirst { it.eventId == args.eventId }.coerceAtLeast(0)
             sourceProvider.interactionListener = this
             setSourceProvider(sourceProvider)
             this.currentSourceProvider = sourceProvider
@@ -132,7 +132,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
             }
         } else {
             val events = room?.getAttachmentMessages().orEmpty()
-            initialIndex = events.indexOfFirst { it.eventId == args.eventId }
+            initialIndex = events.indexOfFirst { it.eventId == args.eventId }.coerceAtLeast(0)
             val sourceProvider = dataSourceFactory.createProvider(events)
             sourceProvider.interactionListener = this
             setSourceProvider(sourceProvider)

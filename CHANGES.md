@@ -8,6 +8,7 @@ Improvements 🙌:
  - Open an existing DM instead of creating a new one (#2319)
 
 Bugfix 🐛:
+ - Fix crash on AttachmentViewer (#2365)
  - Fix issue when updating the avatar of a room (new avatar vanishing)
  - Discard change dialog displayed by mistake when avatar has been updated
 
