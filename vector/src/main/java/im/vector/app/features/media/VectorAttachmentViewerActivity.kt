@@ -119,33 +119,29 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         val inMemoryData = intent.getParcelableArrayListExtra<AttachmentData>(EXTRA_IN_MEMORY_DATA)
         if (inMemoryData != null) {
             val sourceProvider = dataSourceFactory.createProvider(inMemoryData, room)
-            val index = inMemoryData.indexOfFirst { it.eventId == args.eventId }
-            initialIndex = index
+            initialIndex = inMemoryData.indexOfFirst { it.eventId == args.eventId }
             sourceProvider.interactionListener = this
             setSourceProvider(sourceProvider)
             this.currentSourceProvider = sourceProvider
             if (savedInstanceState == null) {
-                pager2.setCurrentItem(index, false)
+                pager2.setCurrentItem(initialIndex, false)
                 // The page change listener is not notified of the change...
                 pager2.post {
-                    onSelectedPositionChanged(index)
+                    onSelectedPositionChanged(initialIndex)
                 }
             }
         } else {
-            val events = room?.getAttachmentMessages()
-                    ?: emptyList()
-            val index = events.indexOfFirst { it.eventId == args.eventId }
-            initialIndex = index
-
+            val events = room?.getAttachmentMessages().orEmpty()
+            initialIndex = events.indexOfFirst { it.eventId == args.eventId }
             val sourceProvider = dataSourceFactory.createProvider(events)
             sourceProvider.interactionListener = this
             setSourceProvider(sourceProvider)
             this.currentSourceProvider = sourceProvider
             if (savedInstanceState == null) {
-                pager2.setCurrentItem(index, false)
+                pager2.setCurrentItem(initialIndex, false)
                 // The page change listener is not notified of the change...
                 pager2.post {
-                    onSelectedPositionChanged(index)
+                    onSelectedPositionChanged(initialIndex)
                 }
             }
         }
