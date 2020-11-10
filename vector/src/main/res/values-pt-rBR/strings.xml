@@ -2250,4 +2250,8 @@
     <string name="create_room_topic_hint">Descrição</string>
     <string name="create_room_topic_section">Descrição da sala (opcional)</string>
     <string name="create_room_name_section">Nome da sala</string>
+    <string name="send_bug_report_include_key_share_history">Enviar histórico de solicitações do compartilhamento de chaves</string>
+    <string name="no_more_results">Não há mais resultados</string>
+    <string name="settings_export_trail">Exportar auditoria</string>
+    <string name="room_member_open_or_create_dm">Enviar mensagem</string>
 </resources>
