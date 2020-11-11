@@ -806,7 +806,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="merged_events_collapse">畳む</string>
     <string name="show_info_area_messages_and_errors">メッセージとエラーの場合</string>
     <string name="call_anyway">とにかく通話する</string>
-    <string name="accept">受け取る</string>
+    <string name="accept">了承</string>
     <string name="auth_accept_policies">このホームサーバーの方針を閲覧し承認してください:</string>
     <string name="settings_call_category">通話設定画面</string>
     <string name="settings_call_ringtone_use_app_ringtone">着信にElementの既定の着信音を使う</string>
@@ -1045,4 +1045,19 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="choose_locale_other_locales_title">他の利用可能な言語</string>
     <string name="settings_category_composer">メッセージエディタ</string>
     <string name="settings_preferences">環境設定</string>
+    <string name="settings_secure_backup_enter_to_setup">このデバイスを設定</string>
+    <string name="settings_secure_backup_reset">セキュアバックアップをリセット</string>
+    <string name="settings_secure_backup_setup">セキュアバックアップを設定</string>
+    <string name="settings_secure_backup_manage">管理</string>
+    <string name="settings_secure_backup_section_title">セキュアバックアップ</string>
+    <string name="creating_direct_room">部屋を作成中…</string>
+    <string name="send_you_invite">招待されています</string>
+    <string name="invited_by">%s からの招待</string>
+    <string name="sas_verified_successful">このセッションは正常に検証されました。</string>
+    <string name="qr_code_scanned_by_other_notice">概ね完了しました。%s の画面にも同じシールドアイコンが表示されていますか？</string>
+    <string name="verification_scan_notice">相手のユーザーのデバイスのコードをスキャンし、相互に安全性を検証します。</string>
+    <string name="verification_scan_their_code">相手のコードをスキャン</string>
+    <string name="verification_scan_emoji_title">スキャンできません</string>
+    <string name="decline">断る</string>
+    <string name="sas_incoming_request_notif_title">検証リクエスト</string>
 </resources>
