@@ -1100,7 +1100,7 @@
     <string name="login_reset_password_success_title">موفق!</string>
     <string name="login_reset_password_success_submit">بازگشت به ورود</string>
     <string name="login_reset_password_cancel_confirmation_title">هشدار</string>
-    <string name="login_set_email_title">تنظیم نشانی رایانامه</string>
+    <string name="login_set_email_title">ایمیل خود را وارد کنید</string>
     <string name="login_set_email_mandatory_hint">رایانامه</string>
     <string name="login_set_email_optional_hint">رایانامه (اختیاری)</string>
     <string name="login_set_email_submit">بعدی</string>
