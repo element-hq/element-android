@@ -52,6 +52,13 @@ internal fun IdentityDataEntity.Companion.setToken(realm: Realm,
     }
 }
 
+internal fun IdentityDataEntity.Companion.setUserConsent(realm: Realm,
+                                                         newConsent: Boolean) {
+    get(realm)?.apply {
+        userConsent = newConsent
+    }
+}
+
 internal fun IdentityDataEntity.Companion.setHashDetails(realm: Realm,
                                                          pepper: String,
                                                          algorithms: List<String>) {

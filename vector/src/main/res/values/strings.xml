@@ -1793,6 +1793,14 @@
     <string name="settings_discovery_confirm_mail">We sent you a confirm email to %s, check your email and click on the confirmation link</string>
     <string name="settings_discovery_confirm_mail_not_clicked">We sent you a confirm email to %s, please first check your email and click on the confirmation link</string>
     <string name="settings_discovery_mail_pending">Pending</string>
+    <string name="settings_discovery_consent_title">Send emails and phone numbers</string>
+    <string name="settings_discovery_consent_notice_on">You have given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
+    <string name="settings_discovery_consent_notice_off">You have not given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
+    <string name="settings_discovery_consent_action_revoke">Revoke my consent</string>
+    <string name="settings_discovery_consent_action_give_consent">Give consent</string>
+
+    <string name="identity_server_consent_dialog_title">Send emails and phone numbers</string>
+    <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured Identity Server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
@@ -2527,6 +2535,7 @@
     <string name="identity_server_error_bulk_sha256_not_supported">For your privacy, Element only supports sending hashed user emails and phone number.</string>
     <string name="identity_server_error_binding_error">The association has failed.</string>
     <string name="identity_server_error_no_current_binding_error">The is no current association with this identifier.</string>
+    <string name="identity_server_user_consent_not_provided">The user consent has not been provided.</string>
 
     <string name="identity_server_set_default_notice">Your homeserver (%1$s) proposes to use %2$s for your identity server</string>
     <string name="identity_server_set_default_submit">Use %1$s</string>
