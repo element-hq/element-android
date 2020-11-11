@@ -55,6 +55,14 @@ internal class RealmIdentityStore @Inject constructor(
         }
     }
 
+    override fun setUserConsent(consent: Boolean) {
+        Realm.getInstance(realmConfiguration).use {
+            it.executeTransaction { realm ->
+                IdentityDataEntity.setUserConsent(realm, consent)
+            }
+        }
+    }
+
     override fun setHashDetails(hashDetailResponse: IdentityHashDetailResponse) {
         Realm.getInstance(realmConfiguration).use {
             it.executeTransaction { realm ->
