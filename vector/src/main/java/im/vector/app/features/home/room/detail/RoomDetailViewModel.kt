@@ -164,7 +164,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         getUnreadState()
         observeSyncState()
         observeEventDisplayedActions()
-        getDraftIfAny()
+        loadDraftIfAny()
         observeUnreadState()
         observeMyRoomMember()
         observeActiveRoomWidgets()
@@ -495,8 +495,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun getDraftIfAny() {
-        val currentDraft = room.getDraft() ?: return
+    private fun loadDraftIfAny() {
+        val currentDraft = room.getDraft()
         setState {
             copy(
                     // Create a sendMode from a draft and retrieve the TimelineEvent
@@ -517,6 +517,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                                 SendMode.EDIT(timelineEvent, currentDraft.text)
                             }
                         }
+                        else -> null
                     } ?: SendMode.REGULAR("", fromSharing = false)
             )
         }
@@ -772,7 +773,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun popDraft() = withState {
         if (it.sendMode is SendMode.REGULAR && it.sendMode.fromSharing) {
             // If we were sharing, we want to get back our last value from draft
-            getDraftIfAny()
+            loadDraftIfAny()
         } else {
             // Otherwise we clear the composer and remove the draft from db
             setState { copy(sendMode = SendMode.REGULAR("", false)) }
