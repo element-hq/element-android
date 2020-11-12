@@ -269,8 +269,8 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun getShareStatus(threePids: List<ThreePid>, callback: MatrixCallback<Map<ThreePid, SharedState>>): Cancelable {
-        // Note: we do not require user consent here, because it is used for email and phone numbers that the user has already sent
-        // to the home server. Identity server is another service though...
+        // Note: we do not require user consent here, because it is used for emails and phone numbers that the user has already sent
+        // to the home server, and not emails and phone numbers from the contact book of the user
 
         if (threePids.isEmpty()) {
             callback.onSuccess(emptyMap())
