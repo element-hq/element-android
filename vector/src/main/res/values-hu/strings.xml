@@ -424,7 +424,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_settings_tag_pref_entry_low_priority">Alacsony prioritású</string>
     <string name="room_settings_tag_pref_entry_none">Semmi</string>
     <string name="room_settings_category_access_visibility_title">Hozzáférés és láthatóság</string>
-    <string name="room_settings_directory_visibility">Listázza ezt a szobát a szobák könyvtárba</string>
+    <string name="room_settings_directory_visibility">Listázza ezt a szobát a szoba listában</string>
     <string name="room_settings_room_access_rules_pref_title">Szoba hozzáfárés</string>
     <string name="room_settings_room_read_history_rules_pref_title">Szoba előzmény olvashatósága</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Ki tud előzményt olvasni?</string>
