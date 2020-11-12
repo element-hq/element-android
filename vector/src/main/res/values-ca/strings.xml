@@ -1365,4 +1365,12 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
     <string name="call_failed_dont_ask_again">No m\'ho tornis a preguntar</string>
     <string name="call_failed_no_ice_use_alt">Prova fent servir %s</string>
     <string name="call_failed_no_ice_title">La crida ha fallat per culpa d\'una mala configuració del servidor</string>
+    <string name="settings_emails">Correu electrònic</string>
+    <string name="settings_add_3pid_confirm_password_title">Confirma la teva contrasenya</string>
+    <string name="room_participants_ban_reason">Motiu del veto</string>
+    <string name="room_participants_ban_title">Veta usuari</string>
+    <string name="room_participants_action_cancel_invite_title">Cancel·la invitació</string>
+    <string name="room_participants_action_cancel_invite">Cancel·la invitació</string>
+    <string name="return_to_call">Torna a la trucada</string>
+    <string name="login_error_ssl_other">Error SSL.</string>
 </resources>
