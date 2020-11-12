@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Open an existing DM instead of creating a new one (#2319)
+ - Handle events of type "m.room.server_acl" (#890)
 
 Bugfix 🐛:
  - Fix issue when restoring draft after sharing (#2287)
