@@ -28,6 +28,8 @@ import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
+import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.call.DefaultCallSignalingService
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
@@ -40,11 +42,15 @@ internal class MxCallImpl(
         override val isOutgoing: Boolean,
         override val roomId: String,
         private val userId: String,
-        override val otherUserId: String,
+        override val opponentUserId: String,
         override val isVideoCall: Boolean,
+        override val ourPartyId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val eventSenderProcessor: EventSenderProcessor
 ) : MxCall {
+
+    override var opponentPartyId: Optional<String>? = null
+    override var opponentVersion: Int = MxCall.VOIP_PROTO_VERSION
 
     override var state: CallState = CallState.Idle
         set(value) {
@@ -87,6 +93,7 @@ internal class MxCallImpl(
         state = CallState.Dialing
         CallInviteContent(
                 callId = callId,
+                partyId = ourPartyId,
                 lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
                 offer = CallInviteContent.Offer(sdp = sdp.description)
         )
@@ -97,6 +104,7 @@ internal class MxCallImpl(
     override fun sendLocalIceCandidates(candidates: List<IceCandidate>) {
         CallCandidatesContent(
                 callId = callId,
+                partyId = ourPartyId,
                 candidates = candidates.map {
                     CallCandidatesContent.Candidate(
                             sdpMid = it.sdpMid,
@@ -113,10 +121,28 @@ internal class MxCallImpl(
         // For now we don't support this flow
     }
 
+    override fun reject() {
+        if(opponentVersion < 1){
+            Timber.v("Opponent version is less than 1 (${opponentVersion}): sending hangup instead of reject")
+            hangUp()
+            return
+        }
+        Timber.v("## VOIP reject $callId")
+        CallRejectContent(
+                callId = callId,
+                partyId = ourPartyId,
+                version = MxCall.VOIP_PROTO_VERSION.toString()
+        )
+                .let { createEventAndLocalEcho(type = EventType.CALL_REJECT, roomId = roomId, content = it.toContent()) }
+                .also { eventSenderProcessor.postEvent(it) }
+        state = CallState.Terminated
+    }
+
     override fun hangUp() {
         Timber.v("## VOIP hangup $callId")
         CallHangupContent(
-                callId = callId
+                callId = callId,
+                partyId = ourPartyId,
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
@@ -129,6 +155,7 @@ internal class MxCallImpl(
         state = CallState.Answering
         CallAnswerContent(
                 callId = callId,
+                partyId = ourPartyId,
                 answer = CallAnswerContent.Answer(sdp = sdp.description)
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_ANSWER, roomId = roomId, content = it.toContent()) }
@@ -147,4 +174,5 @@ internal class MxCallImpl(
         )
                 .also { localEchoEventFactory.createLocalEcho(it) }
     }
+
 }

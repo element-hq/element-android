@@ -20,8 +20,9 @@ import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
+import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 
-interface CallsListener {
+interface CallListener {
     /**
      * Called when there is an incoming call within the room.
      */
@@ -38,6 +39,11 @@ interface CallsListener {
      * Called when a called has been hung up
      */
     fun onCallHangupReceived(callHangupContent: CallHangupContent)
+
+    /**
+     * Called when a called has been rejected
+     */
+    fun onCallRejectReceived(callRejectContent: CallRejectContent)
 
     fun onCallManagedByOtherSession(callId: String)
 }

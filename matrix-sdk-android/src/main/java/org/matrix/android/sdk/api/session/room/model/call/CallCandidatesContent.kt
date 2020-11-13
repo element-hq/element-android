@@ -28,11 +28,11 @@ data class CallCandidatesContent(
         /**
          * Required. The ID of the call this event relates to.
          */
-        @Json(name = "call_id") val callId: String,
+        @Json(name = "call_id") override val callId: String,
         /**
          * Required. ID to let user identify remote echo of their own events
          */
-        @Json(name = "party_id") val partyId: String? = null,
+        @Json(name = "party_id") override val partyId: String? = null,
         /**
          * Required. Array of objects describing the candidates.
          */
@@ -40,8 +40,8 @@ data class CallCandidatesContent(
         /**
          * Required. The version of the VoIP specification this messages adheres to. This specification is version 0.
          */
-        @Json(name = "version") val version: String? = "0"
-) {
+        @Json(name = "version") override val version: String? = "0"
+): CallSignallingContent  {
 
     @JsonClass(generateAdapter = true)
     data class Candidate(

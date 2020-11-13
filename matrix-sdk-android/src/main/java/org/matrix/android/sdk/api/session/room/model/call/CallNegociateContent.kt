@@ -27,11 +27,11 @@ data class CallNegociateContent(
         /**
          * Required. The ID of the call this event relates to.
          */
-        @Json(name = "call_id") val callId: String,
+        @Json(name = "call_id") override val callId: String,
         /**
          * Required. ID to let user identify remote echo of their own events
          */
-        @Json(name = "party_id") val partyId: String? = null,
+        @Json(name = "party_id") override val partyId: String? = null,
         /**
          * Required. The time in milliseconds that the negotiation is valid for. Once exceeded the sender
          * of the negotiate event should consider the negotiation failed (timed out) and the recipient should ignore it.
@@ -41,7 +41,13 @@ data class CallNegociateContent(
          * Required. The session description object
          */
         @Json(name = "description") val description: Description? = null,
-) {
+
+        /**
+         * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
+         */
+        @Json(name = "version") override val version: String? = "0",
+
+): CallSignallingContent  {
     @JsonClass(generateAdapter = true)
     data class Description(
             /**

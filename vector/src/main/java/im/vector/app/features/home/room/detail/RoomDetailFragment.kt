@@ -1962,7 +1962,7 @@ class RoomDetailFragment @Inject constructor(
                     context = requireContext(),
                     callId = call.callId,
                     roomId = call.roomId,
-                    otherUserId = call.otherUserId,
+                    otherUserId = call.opponentUserId,
                     isIncomingCall = !call.isOutgoing,
                     isVideoCall = call.isVideoCall,
                     mode = null

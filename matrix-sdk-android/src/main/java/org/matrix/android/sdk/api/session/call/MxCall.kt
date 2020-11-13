@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.api.session.call
 
+import org.matrix.android.sdk.api.util.Optional
 import org.webrtc.IceCandidate
 import org.webrtc.SessionDescription
 
@@ -23,14 +24,24 @@ interface MxCallDetail {
     val callId: String
     val isOutgoing: Boolean
     val roomId: String
-    val otherUserId: String
+    val opponentUserId: String
+    val ourPartyId: String
     val isVideoCall: Boolean
+
+    var opponentPartyId: Optional<String>?
+    var opponentVersion: Int
 }
 
 /**
  * Define both an incoming call and on outgoing call
  */
 interface MxCall : MxCallDetail {
+
+    companion object {
+        const val VOIP_PROTO_VERSION = 0
+    }
+
+
 
     var state: CallState
 
@@ -42,9 +53,8 @@ interface MxCall : MxCallDetail {
 
     /**
      * Reject an incoming call
-     * It's an alias to hangUp
      */
-    fun reject() = hangUp()
+    fun reject()
 
     /**
      * End the call

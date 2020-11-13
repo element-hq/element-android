@@ -18,10 +18,9 @@ package org.matrix.android.sdk.internal.session.call
 
 import android.os.SystemClock
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.call.CallListener
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.call.CallState
-import org.matrix.android.sdk.api.session.call.CallsListener
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -31,16 +30,21 @@ import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
+import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
+import org.matrix.android.sdk.api.session.room.model.call.CallSignallingContent
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.NoOpCancellable
+import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.call.model.MxCallImpl
-import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import timber.log.Timber
+import java.math.BigDecimal
 import java.util.UUID
 import javax.inject.Inject
 
@@ -48,6 +52,8 @@ import javax.inject.Inject
 internal class DefaultCallSignalingService @Inject constructor(
         @UserId
         private val userId: String,
+        @DeviceId
+        private val deviceId: String?,
         private val activeCallHandler: ActiveCallHandler,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val eventSenderProcessor: EventSenderProcessor,
@@ -55,7 +61,8 @@ internal class DefaultCallSignalingService @Inject constructor(
         private val turnServerTask: GetTurnServerTask
 ) : CallSignalingService {
 
-    private val callListeners = mutableSetOf<CallsListener>()
+    private val callListeners = mutableSetOf<CallListener>()
+    private val callListenersDispatcher = CallListenersDispatcher(callListeners)
 
     private val cachedTurnServerResponse = object {
         // Keep one minute safe to avoid considering the data is valid and then actually it is not when effectively using it.
@@ -100,7 +107,8 @@ internal class DefaultCallSignalingService @Inject constructor(
                 isOutgoing = true,
                 roomId = roomId,
                 userId = userId,
-                otherUserId = otherUserId,
+                ourPartyId = deviceId ?: "",
+                opponentUserId = otherUserId,
                 isVideoCall = isVideoCall,
                 localEchoEventFactory = localEchoEventFactory,
                 eventSenderProcessor = eventSenderProcessor
@@ -110,11 +118,11 @@ internal class DefaultCallSignalingService @Inject constructor(
         }
     }
 
-    override fun addCallListener(listener: CallsListener) {
+    override fun addCallListener(listener: CallListener) {
         callListeners.add(listener)
     }
 
-    override fun removeCallListener(listener: CallsListener) {
+    override fun removeCallListener(listener: CallListener) {
         callListeners.remove(listener)
     }
 
@@ -129,125 +137,115 @@ internal class DefaultCallSignalingService @Inject constructor(
 
     internal fun onCallEvent(event: Event) {
         when (event.getClearType()) {
-            EventType.CALL_ANSWER     -> {
-                event.getClearContent().toModel<CallAnswerContent>()?.let {
-                    if (event.senderId == userId) {
-                        // ok it's an answer from me.. is it remote echo or other session
-                        val knownCall = getCallWithId(it.callId)
-                        if (knownCall == null) {
-                            Timber.d("## VOIP onCallEvent ${event.getClearType()} id ${it.callId} send by me")
-                        } else if (!knownCall.isOutgoing) {
-                            // incoming call
-                            // if it was anwsered by this session, the call state would be in Answering(or connected) state
-                            if (knownCall.state == CallState.LocalRinging) {
-                                // discard current call, it's answered by another of my session
-                                onCallManageByOtherSession(it.callId)
-                            }
-                        }
-                        return
-                    }
-
-                    onCallAnswer(it)
-                }
+            EventType.CALL_ANSWER -> {
+                handleCallAnswerEvent(event)
             }
-            EventType.CALL_INVITE     -> {
-                if (event.senderId == userId) {
-                    // Always ignore local echos of invite
-                    return
-                }
-
-                event.getClearContent().toModel<CallInviteContent>()?.let { content ->
-                    val incomingCall = MxCallImpl(
-                            callId = content.callId ?: return@let,
-                            isOutgoing = false,
-                            roomId = event.roomId ?: return@let,
-                            userId = userId,
-                            otherUserId = event.senderId ?: return@let,
-                            isVideoCall = content.isVideo(),
-                            localEchoEventFactory = localEchoEventFactory,
-                            eventSenderProcessor = eventSenderProcessor
-                    )
-                    activeCallHandler.addCall(incomingCall)
-                    onCallInvite(incomingCall, content)
-                }
+            EventType.CALL_INVITE -> {
+                handleCallInviteEvent(event)
             }
-            EventType.CALL_HANGUP     -> {
-                event.getClearContent().toModel<CallHangupContent>()?.let { content ->
-
-                    if (event.senderId == userId) {
-                        // ok it's an answer from me.. is it remote echo or other session
-                        val knownCall = getCallWithId(content.callId)
-                        if (knownCall == null) {
-                            Timber.d("## VOIP onCallEvent ${event.getClearType()} id ${content.callId} send by me")
-                        } else if (!knownCall.isOutgoing) {
-                            // incoming call
-                            if (knownCall.state == CallState.LocalRinging) {
-                                // discard current call, it's answered by another of my session
-                                onCallManageByOtherSession(content.callId)
-                            }
-                        }
-                        return
-                    }
-
-                    activeCallHandler.removeCall(content.callId)
-                    onCallHangup(content)
-                }
+            EventType.CALL_HANGUP -> {
+                handleCallHangupEvent(event)
+            }
+            EventType.CALL_REJECT -> {
+                handleCallRejectEvent(event)
             }
             EventType.CALL_CANDIDATES -> {
-                if (event.senderId == userId) {
-                    // Always ignore local echos of invite
-                    return
-                }
-                event.getClearContent().toModel<CallCandidatesContent>()?.let { content ->
-                    activeCallHandler.getCallWithId(content.callId)?.let {
-                        onCallIceCandidate(it, content)
-                    }
-                }
+                handleCallCandidatesEvent(event)
             }
         }
     }
 
-    private fun onCallHangup(hangup: CallHangupContent) {
-        callListeners.toList().forEach {
-            tryOrNull {
-                it.onCallHangupReceived(hangup)
-            }
+    private fun handleCallCandidatesEvent(event: Event) {
+        val content = event.getClearContent().toModel<CallCandidatesContent>() ?: return
+        val call = content.getCall() ?: return
+        if (call.ourPartyId == content.partyId) {
+            // Ignore remote echo
+            return
+        }
+        if (call.opponentPartyId != Optional.from(content.partyId)) {
+            Timber.v("Ignoring candidates from party ID ${content.partyId} we have chosen party ID ${call.opponentPartyId}")
+            return
+        }
+        callListenersDispatcher.onCallIceCandidateReceived(call, content)
+    }
+
+    private fun handleCallRejectEvent(event: Event) {
+        val content = event.getClearContent().toModel<CallRejectContent>() ?: return
+        val call = content.getCall() ?: return
+        activeCallHandler.removeCall(content.callId)
+        // No need to check party_id for reject because if we'd received either
+        // an answer or reject, we wouldn't be in state InviteSent
+        if (call.state != CallState.Dialing) {
+            return
+        }
+        callListenersDispatcher.onCallRejectReceived(content)
+    }
+
+    private fun handleCallHangupEvent(event: Event) {
+        val content = event.getClearContent().toModel<CallHangupContent>() ?: return
+        val call = content.getCall() ?: return
+        if (call.state != CallState.Terminated) {
+            // Need to check for party_id? 
+            activeCallHandler.removeCall(content.callId)
+            callListenersDispatcher.onCallHangupReceived(content)
         }
     }
 
-    private fun onCallAnswer(answer: CallAnswerContent) {
-        callListeners.toList().forEach {
-            tryOrNull {
-                it.onCallAnswerReceived(answer)
+    private fun handleCallInviteEvent(event: Event) {
+        val content = event.getClearContent().toModel<CallInviteContent>() ?: return
+        if (content.partyId == deviceId) {
+            // Ignore remote echo
+            return
+        }
+        val incomingCall = MxCallImpl(
+                callId = content.callId ?: return,
+                isOutgoing = false,
+                roomId = event.roomId ?: return,
+                userId = userId,
+                ourPartyId = deviceId ?: "",
+                opponentUserId = event.senderId ?: return,
+                isVideoCall = content.isVideo(),
+                localEchoEventFactory = localEchoEventFactory,
+                eventSenderProcessor = eventSenderProcessor
+        ).apply {
+            opponentPartyId = Optional.from(content.partyId)
+            opponentVersion = content.version?.let { BigDecimal(it).intValueExact() } ?: MxCall.VOIP_PROTO_VERSION
+        }
+        activeCallHandler.addCall(incomingCall)
+        callListenersDispatcher.onCallInviteReceived(incomingCall, content)
+    }
+
+    private fun handleCallAnswerEvent(event: Event) {
+        val content = event.getClearContent().toModel<CallAnswerContent>() ?: return
+        val call = content.getCall() ?: return
+        if (call.ourPartyId == content.partyId) {
+            // Ignore remote echo
+            return
+        }
+        if (event.senderId == userId) {
+            // discard current call, it's answered by another of my session
+            callListenersDispatcher.onCallManagedByOtherSession(content.callId)
+        } else {
+            if (call.opponentPartyId != null) {
+                Timber.v("Ignoring answer from party ID ${content.partyId} we already have an answer from ${call.opponentPartyId}")
+                return
             }
+            call.apply {
+                opponentPartyId = Optional.from(content.partyId)
+                opponentVersion = content.version?.let { BigDecimal(it).intValueExact() } ?: MxCall.VOIP_PROTO_VERSION
+            }
+            callListenersDispatcher.onCallAnswerReceived(content)
         }
     }
 
-    private fun onCallManageByOtherSession(callId: String) {
-        callListeners.toList().forEach {
-            tryOrNull {
-                it.onCallManagedByOtherSession(callId)
-            }
+    private fun CallSignallingContent.getCall(): MxCall? {
+        val currentCall = callId?.let {
+            activeCallHandler.getCallWithId(it)
         }
-    }
-
-    private fun onCallInvite(incomingCall: MxCall, invite: CallInviteContent) {
-        // Ignore the invitation from current user
-        if (incomingCall.otherUserId == userId) return
-
-        callListeners.toList().forEach {
-            tryOrNull {
-                it.onCallInviteReceived(incomingCall, invite)
-            }
+        if (currentCall == null) {
+            Timber.v("Call for content: $this is null")
         }
-    }
-
-    private fun onCallIceCandidate(incomingCall: MxCall, candidates: CallCandidatesContent) {
-        callListeners.toList().forEach {
-            tryOrNull {
-                it.onCallIceCandidateReceived(incomingCall, candidates)
-            }
-        }
+        return currentCall
     }
 
     companion object {
