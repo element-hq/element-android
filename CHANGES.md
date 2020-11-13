@@ -9,6 +9,7 @@ Improvements 🙌:
  - Handle events of type "m.room.server_acl" (#890)
 
 Bugfix 🐛:
+ - F-Droid version: ensure timeout of sync request can be more than 60 seconds (#2169)
  - Fix issue when restoring draft after sharing (#2287)
  - Fix issue when updating the avatar of a room (new avatar vanishing)
  - Discard change dialog displayed by mistake when avatar has been updated
