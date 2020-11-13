@@ -448,7 +448,6 @@ class NoticeEventFormatter @Inject constructor(
                     .also { hasChanged = hasChanged || it.isNotEmpty() }
                     .forEach { appendNl(sp.getString(R.string.notice_room_server_acl_updated_was_banned, it)) }
 
-
             if (prevEventContent.allowIpLiterals != eventContent.allowIpLiterals) {
                 hasChanged = true
                 if (eventContent.allowIpLiterals) {
