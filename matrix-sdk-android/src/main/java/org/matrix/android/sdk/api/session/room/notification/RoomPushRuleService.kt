@@ -17,12 +17,10 @@
 package org.matrix.android.sdk.api.session.room.notification
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
 
 interface RoomPushRuleService {
 
     fun getLiveRoomNotificationState(): LiveData<RoomNotificationState>
 
-    fun setRoomNotificationState(roomNotificationState: RoomNotificationState, matrixCallback: MatrixCallback<Unit>): Cancelable
+    suspend fun setRoomNotificationState(roomNotificationState: RoomNotificationState)
 }

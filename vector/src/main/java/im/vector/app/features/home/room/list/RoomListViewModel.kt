@@ -36,6 +36,7 @@ import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
+import java.lang.Exception
 import javax.inject.Inject
 
 class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
@@ -169,11 +170,16 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun handleChangeNotificationMode(action: RoomListAction.ChangeRoomNotificationState) {
-        session.getRoom(action.roomId)?.setRoomNotificationState(action.notificationState, object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomListViewEvents.Failure(failure))
+        val room = session.getRoom(action.roomId)
+        if (room != null) {
+            viewModelScope.launch {
+                try {
+                    room.setRoomNotificationState(action.notificationState)
+                } catch (failure: Exception) {
+                    _viewEvents.post(RoomListViewEvents.Failure(failure))
+                }
             }
-        })
+        }
     }
 
     private fun handleToggleTag(action: RoomListAction.ToggleTag) {
