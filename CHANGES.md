@@ -12,6 +12,7 @@ Bugfix 🐛:
  - Fix issue when restoring draft after sharing (#2287)
  - Fix issue when updating the avatar of a room (new avatar vanishing)
  - Discard change dialog displayed by mistake when avatar has been updated
+ - Try to fix cropped image in timeline (#2126)
 
 Translations 🗣:
  -
