@@ -33,7 +33,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
-import org.matrix.android.sdk.api.session.room.uploads.GetUploadsResult
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
@@ -90,9 +89,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                val result = awaitCallback<GetUploadsResult> {
-                    room.getUploads(20, token, it)
-                }
+                val result = room.getUploads(20, token)
 
                 token = result.nextToken
 

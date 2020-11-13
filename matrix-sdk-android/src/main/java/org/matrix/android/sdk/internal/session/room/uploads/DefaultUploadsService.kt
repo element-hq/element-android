@@ -18,17 +18,12 @@ package org.matrix.android.sdk.internal.session.room.uploads
 
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.uploads.GetUploadsResult
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 
 internal class DefaultUploadsService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        private val taskExecutor: TaskExecutor,
         private val getUploadsTask: GetUploadsTask,
         private val cryptoService: CryptoService
 ) : UploadsService {
@@ -38,11 +33,7 @@ internal class DefaultUploadsService @AssistedInject constructor(
         fun create(roomId: String): UploadsService
     }
 
-    override fun getUploads(numberOfEvents: Int, since: String?, callback: MatrixCallback<GetUploadsResult>): Cancelable {
-        return getUploadsTask
-                .configureWith(GetUploadsTask.Params(roomId, cryptoService.isRoomEncrypted(roomId), numberOfEvents, since)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun getUploads(numberOfEvents: Int, since: String?): GetUploadsResult {
+        return getUploadsTask.execute(GetUploadsTask.Params(roomId, cryptoService.isRoomEncrypted(roomId), numberOfEvents, since))
     }
 }
