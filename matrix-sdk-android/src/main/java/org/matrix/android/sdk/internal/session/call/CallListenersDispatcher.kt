@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
+import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
 
 /**
  * Dispatch each method safely to all listeners.
@@ -52,6 +53,10 @@ class CallListenersDispatcher(private val listeners: Set<CallListener>) : CallLi
 
     override fun onCallManagedByOtherSession(callId: String) = dispatch {
         it.onCallManagedByOtherSession(callId)
+    }
+
+    override fun onCallSelectAnswerReceived(callSelectAnswerContent: CallSelectAnswerContent) = dispatch {
+        it.onCallSelectAnswerReceived(callSelectAnswerContent)
     }
 
     private fun dispatch(lambda: (CallListener) -> Unit) {

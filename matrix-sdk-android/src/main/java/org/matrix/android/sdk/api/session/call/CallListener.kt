@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
+import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
 
 interface CallListener {
     /**
@@ -44,6 +45,11 @@ interface CallListener {
      * Called when a called has been rejected
      */
     fun onCallRejectReceived(callRejectContent: CallRejectContent)
+
+    /**
+     * Called when an answer has been selected
+     */
+    fun onCallSelectAnswerReceived(callSelectAnswerContent: CallSelectAnswerContent)
 
     fun onCallManagedByOtherSession(callId: String)
 }

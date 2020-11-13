@@ -40,7 +40,8 @@ data class CallHangupContent(
         /**
          * Optional error reason for the hangup. This should not be provided when the user naturally ends or rejects the call.
          * When there was an error in the call negotiation, this should be `ice_failed` for when ICE negotiation fails
-         * or `invite_timeout` for when the other party did not answer in time. One of: ["ice_failed", "invite_timeout"]
+         * or `invite_timeout` for when the other party did not answer in time.
+         * One of: ["ice_failed", "invite_timeout"]
          */
         @Json(name = "reason") val reason: Reason? = null
 ) : CallSignallingContent {

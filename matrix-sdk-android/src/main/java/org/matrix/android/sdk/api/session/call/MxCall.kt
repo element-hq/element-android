@@ -52,6 +52,11 @@ interface MxCall : MxCallDetail {
     fun accept(sdp: SessionDescription)
 
     /**
+     * This has to be sent by the caller's client once it has chosen an answer.
+     */
+    fun selectAnswer()
+
+    /**
      * Reject an incoming call
      */
     fun reject()

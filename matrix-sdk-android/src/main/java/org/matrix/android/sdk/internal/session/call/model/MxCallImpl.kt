@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
+import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.call.DefaultCallSignalingService
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
@@ -143,6 +144,7 @@ internal class MxCallImpl(
         CallHangupContent(
                 callId = callId,
                 partyId = ourPartyId,
+                reason = CallHangupContent.Reason.USER_HANGUP
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
@@ -159,6 +161,19 @@ internal class MxCallImpl(
                 answer = CallAnswerContent.Answer(sdp = sdp.description)
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_ANSWER, roomId = roomId, content = it.toContent()) }
+                .also { eventSenderProcessor.postEvent(it) }
+    }
+
+    override fun selectAnswer() {
+        Timber.v("## VOIP select answer $callId")
+        if (isOutgoing) return
+        state = CallState.Answering
+        CallSelectAnswerContent(
+                callId = callId,
+                partyId = ourPartyId,
+                selectedPartyId = opponentPartyId?.getOrNull()
+        )
+                .let { createEventAndLocalEcho(type = EventType.CALL_SELECT_ANSWER, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
     }
 

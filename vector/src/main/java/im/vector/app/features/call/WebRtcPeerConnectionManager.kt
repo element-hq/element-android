@@ -31,6 +31,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.ReplaySubject
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
@@ -43,6 +44,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
+import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
 import org.webrtc.Camera1Enumerator
@@ -303,6 +305,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 callContext.peerConnection?.setLocalDescription(object : SdpObserverAdapter() {}, p0)
                 // send offer to peer
                 currentCall?.mxCall?.offerSdp(p0)
+
+                if(currentCall?.mxCall?.opponentPartyId?.hasValue().orFalse()){
+                    currentCall?.mxCall?.selectAnswer()
+                }
             }
         }, constraints)
     }
@@ -882,6 +888,21 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
         call.mxCall.state = CallState.Terminated
         endCall(false)
+    }
+
+    override fun onCallSelectAnswerReceived(callSelectAnswerContent: CallSelectAnswerContent) {
+        val call = currentCall ?: return
+        if (call.mxCall.callId != callSelectAnswerContent.callId) return Unit.also {
+            Timber.w("onCallSelectAnswerReceived for non active call? ${callSelectAnswerContent.callId}")
+        }
+        val selectedPartyId = callSelectAnswerContent.selectedPartyId
+        if (selectedPartyId != call.mxCall.ourPartyId) {
+            Timber.i("Got select_answer for party ID ${selectedPartyId}: we are party ID ${call.mxCall.ourPartyId}.");
+            // The other party has picked somebody else's answer
+            call.mxCall.state = CallState.Terminated
+            endCall(false)
+        }
+
     }
 
     override fun onCallManagedByOtherSession(callId: String) {

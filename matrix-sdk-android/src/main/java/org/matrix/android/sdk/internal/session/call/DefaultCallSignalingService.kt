@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
+import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSignallingContent
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.NoOpCancellable
@@ -152,7 +153,29 @@ internal class DefaultCallSignalingService @Inject constructor(
             EventType.CALL_CANDIDATES -> {
                 handleCallCandidatesEvent(event)
             }
+            EventType.CALL_SELECT_ANSWER -> {
+                handleCallSelectAnswerEvent(event)
+            }
         }
+    }
+
+    private fun handleCallSelectAnswerEvent(event: Event) {
+        val content = event.getClearContent().toModel<CallSelectAnswerContent>() ?: return
+        val call = content.getCall() ?: return
+        if (call.ourPartyId == content.partyId) {
+            // Ignore remote echo
+            return
+        }
+        if (call.isOutgoing) {
+            Timber.v("Got selectAnswer for an outbound call: ignoring")
+            return
+        }
+        val selectedPartyId = content.selectedPartyId
+        if (selectedPartyId == null) {
+            Timber.w("Got nonsensical select_answer with null selected_party_id: ignoring")
+            return
+        }
+        callListenersDispatcher.onCallSelectAnswerReceived(content)
     }
 
     private fun handleCallCandidatesEvent(event: Event) {
@@ -185,7 +208,7 @@ internal class DefaultCallSignalingService @Inject constructor(
         val content = event.getClearContent().toModel<CallHangupContent>() ?: return
         val call = content.getCall() ?: return
         if (call.state != CallState.Terminated) {
-            // Need to check for party_id? 
+            // Need to check for party_id?
             activeCallHandler.removeCall(content.callId)
             callListenersDispatcher.onCallHangupReceived(content)
         }
