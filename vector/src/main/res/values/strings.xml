@@ -2407,7 +2407,7 @@
     <string name="this_is_the_beginning_of_room_no_name">This is the beginning of this conversation.</string>
     <string name="this_is_the_beginning_of_dm">This is the beginning of your direct message history with %s.</string>
     <!-- First param will be replaced by the value of add_a_topic_link_text, that will be clickable-->
-    <string name="room_created_summary_no_topic_creation_text">%s to let people know what this room is about. </string>
+    <string name="room_created_summary_no_topic_creation_text">%s to let people know what this room is about.</string>
     <string name="add_a_topic_link_text">Add a topic</string>
     <string name="topic_prefix">"Topic: "</string>
 

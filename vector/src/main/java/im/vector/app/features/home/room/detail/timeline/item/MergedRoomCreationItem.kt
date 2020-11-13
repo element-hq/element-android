@@ -155,12 +155,13 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
                 }))
             }
         } else {
-            holder.roomTopicText.setTextOrHide(span {
-                span(holder.view.resources.getString(R.string.topic_prefix)) {
-                    textStyle = "bold"
-                }
-                +topic.linkify(attributes.callback)
-            }
+            holder.roomTopicText.setTextOrHide(
+                    span {
+                        span(holder.view.resources.getString(R.string.topic_prefix)) {
+                            textStyle = "bold"
+                        }
+                        +topic.linkify(attributes.callback)
+                    }
             )
         }
         holder.roomTopicText.movementMethod = movementMethod
