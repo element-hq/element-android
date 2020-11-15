@@ -1373,4 +1373,5 @@ Les tasques que l\'aplicació intenta fer estaran restringides agressivament men
     <string name="room_participants_action_cancel_invite">Cancel·la invitació</string>
     <string name="return_to_call">Torna a la trucada</string>
     <string name="login_error_ssl_other">Error SSL.</string>
+    <string name="call_failed_no_connection">La trucada d\'Element ha fallat</string>
 </resources>
