@@ -1481,7 +1481,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_join_rules_public">%1$s ha hecho la sala pública para cualquier persona con el link.</string>
     <string name="room_join_rules_invite">%1$s: Ahora la sala solo es accesible por invitación.</string>
     <string name="timeline_unread_messages">Mensajes no leídos</string>
-    <string name="login_splash_title">Es tu conversación. Hazla tuya.</string>
+    <string name="login_splash_title">Es tu conversación. Sé su dueño.</string>
     <string name="login_splash_text1">Envía mensajes a personas o grupos</string>
     <string name="login_splash_text2">Mantén las conversaciones privadas con encriptación</string>
     <string name="login_splash_text3">Extiende y personaliza tu experiencia</string>
@@ -1821,7 +1821,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="login_server_url_form_modular_hint">Dirección de servicios de Element Matrix</string>
     <string name="login_server_url_form_common_notice">Ingrese la dirección del servidor que desea utilizar</string>
     <string name="login_reset_password_notice">Se enviará un correo electrónico de verificación a su bandeja de entrada para confirmar la configuración de su nueva contraseña.</string>
-    <string name="login_reset_password_submit">Próximo</string>
+    <string name="login_reset_password_submit">Siguiente</string>
     <string name="login_reset_password_email_hint">Email</string>
     <string name="login_reset_password_password_hint">Nueva contraseña</string>
     <string name="login_reset_password_warning_title">¡Advertencia!</string>
@@ -1844,7 +1844,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="login_set_email_notice">Configure un correo electrónico para recuperar su cuenta. Más tarde, opcionalmente, puede permitir que las personas que conoce lo descubran mediante su correo electrónico.</string>
     <string name="login_set_email_mandatory_hint">Correo electrónico</string>
     <string name="login_set_email_optional_hint">Email (opcional)</string>
-    <string name="login_set_email_submit">Próximo</string>
+    <string name="login_set_email_submit">Siguiente</string>
     <string name="login_set_msisdn_title">Establecer número de teléfono</string>
     <string name="login_set_msisdn_notice">Configure un número de teléfono para permitir que las personas que conoce lo descubran opcionalmente.</string>
     <string name="login_set_msisdn_notice2">Utilice el formato internacional.</string>
@@ -2183,8 +2183,8 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_list_quick_actions_low_priority_add">Añadir a Baja prioridad</string>
     <string name="rotate_and_crop_screen_title">Rotar y recortar</string>
     <plurals name="seconds">
-        <item quantity="one">$d segundo</item>
-        <item quantity="other">$d segundos</item>
+        <item quantity="one">% segundo</item>
+        <item quantity="other">%d segundos</item>
     </plurals>
     <string name="settings_troubleshoot_test_notification_notice">Por favor, haz click en la notificación. Si no la ves, por favor revisa las preferencias del sistema.</string>
     <string name="settings_troubleshoot_test_notification_title">Mostrar notificación</string>
