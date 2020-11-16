@@ -45,7 +45,12 @@ data class CallInviteContent(
          * Once the invite age exceeds this value, clients should discard it.
          * They should also no longer show the call as awaiting an answer in the UI.
          */
-        @Json(name = "lifetime") val lifetime: Int?
+        @Json(name = "lifetime") val lifetime: Int?,
+        /**
+         * The field should be added for all invites where the target is a specific user
+         */
+        @Json(name = "invitee") val invitee: String? = null
+
 ): CallSignallingContent  {
     @JsonClass(generateAdapter = true)
     data class Offer(
