@@ -13,6 +13,16 @@
     <string name="settings_room_unread_kind_content">Hide member changes</string>
     <string name="settings_room_unread_kind_original_content">Hide member changes and reactions</string>
 
+    <string name="settings_simplified_mode">Easy mode</string>
+    <string name="settings_simplified_mode_summary">Hide advanced functionality, including public room directories and chat encryption settings</string>
+    <string name="prompt_simplified_mode_title">Select user interface</string>
+    <string name="prompt_simplified_mode_text">You can change this later in the settings.</string>
+    <!-- simplified mode prompt: start and end with newline to make dialog look better -->
+    <string name="prompt_simplified_mode_on">Easy</string>
+    <string name="prompt_simplified_mode_on_text">I only plan to chat with people I know, and consider extra options confusing.</string>
+    <string name="prompt_simplified_mode_off">Complete</string>
+    <string name="prompt_simplified_mode_off_text">I\'m looking for full functionality, including discovery of public rooms and fine-grained room and encryption settings.</string>
+
     <string name="settings_light_theme">Light theme</string>
     <string name="settings_dark_theme">Dark theme</string>
     <string name="settings_system_dark_theme_pre_ten">Follow system dark theme</string>

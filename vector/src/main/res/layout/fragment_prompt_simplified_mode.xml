@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?riotx_background">
+
+    <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
+
+        <androidx.constraintlayout.widget.ConstraintLayout style="@style/LoginFormContainer">
+
+            <ImageView
+                style="@style/LoginLogo"
+                android:id="@+id/loginLogo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/promptSimplifiedModeTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:text="@string/prompt_simplified_mode_title"
+                android:textAppearance="@style/TextAppearance.Vector.Login.Title"
+                android:transitionName="loginTitleTransition"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/loginLogo" />
+
+            <TextView
+                android:id="@+id/promptSimplifiedModeText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
+                android:gravity="start"
+                android:text="@string/prompt_simplified_mode_text"
+                android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/promptSimplifiedModeTitle" />
+
+            <!-- Use a CheckableConstraintLayout to keep the pressed state when retrieving login flow -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/promptSimplifiedModeOn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_login_server_selector"
+                android:contentDescription="@string/prompt_simplified_mode_on"
+                android:paddingTop="@dimen/layout_vertical_margin"
+                android:paddingBottom="@dimen/layout_vertical_margin"
+                android:paddingStart="@dimen/layout_horizontal_margin"
+                android:paddingEnd="@dimen/layout_horizontal_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/promptSimplifiedModeText">
+
+                <TextView
+                    android:id="@+id/promptSimplifiedModeOnTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/prompt_simplified_mode_on"
+                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                    android:textColor="?riotx_text_primary"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/promptSimplifiedModeOnText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/promptSimplifiedModeOnText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="start"
+                    android:text="@string/prompt_simplified_mode_on_text"
+                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/promptSimplifiedModeOnTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/promptSimplifiedModeOff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
+                android:background="@drawable/bg_login_server_selector"
+                android:contentDescription="@string/prompt_simplified_mode_off"
+                android:paddingTop="@dimen/layout_vertical_margin"
+                android:paddingBottom="@dimen/layout_vertical_margin"
+                android:paddingStart="@dimen/layout_horizontal_margin"
+                android:paddingEnd="@dimen/layout_horizontal_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/promptSimplifiedModeOn">
+
+                <TextView
+                    android:id="@+id/promptSimplifiedModeOffTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/prompt_simplified_mode_off"
+                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                    android:textColor="?riotx_text_primary"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/promptSimplifiedModeOffText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/promptSimplifiedModeOffText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="start"
+                    android:text="@string/prompt_simplified_mode_off_text"
+                    android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/promptSimplifiedModeOffTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>
+

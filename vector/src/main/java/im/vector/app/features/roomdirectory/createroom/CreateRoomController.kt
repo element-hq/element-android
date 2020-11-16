@@ -31,10 +31,12 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.form.formSwitchItem
+import im.vector.app.features.settings.VectorPreferences
 import javax.inject.Inject
 
 class CreateRoomController @Inject constructor(private val stringProvider: StringProvider,
-                                               private val errorFormatter: ErrorFormatter
+                                               private val errorFormatter: ErrorFormatter,
+                                               private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<CreateRoomViewState>() {
 
     var listener: Listener? = null
@@ -70,6 +72,8 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
     }
 
     private fun buildForm(viewState: CreateRoomViewState, enableFormElement: Boolean) {
+        val enableNonSimplifiedMode = !vectorPreferences.simplifiedMode()
+
         formEditableAvatarItem {
             id("avatar")
             enabled(enableFormElement)
@@ -105,47 +109,50 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                 listener?.onTopicChange(text)
             }
         }
-        settingsSectionTitleItem {
-            id("settingsSection")
-            titleResId(R.string.create_room_settings_section)
-        }
-        formSwitchItem {
-            id("public")
-            enabled(enableFormElement)
-            title(stringProvider.getString(R.string.create_room_public_title))
-            summary(stringProvider.getString(R.string.create_room_public_description))
-            switchChecked(viewState.isPublic)
-
-            listener { value ->
-                listener?.setIsPublic(value)
+        // Following settings are for advanced users only
+        if (enableNonSimplifiedMode) {
+            settingsSectionTitleItem {
+                id("settingsSection")
+                titleResId(R.string.create_room_settings_section)
             }
-        }
-        formSwitchItem {
-            id("directory")
-            enabled(enableFormElement)
-            title(stringProvider.getString(R.string.create_room_directory_title))
-            summary(stringProvider.getString(R.string.create_room_directory_description))
-            switchChecked(viewState.isInRoomDirectory)
+            formSwitchItem {
+                id("public")
+                enabled(enableFormElement)
+                title(stringProvider.getString(R.string.create_room_public_title))
+                summary(stringProvider.getString(R.string.create_room_public_description))
+                switchChecked(viewState.isPublic)
 
-            listener { value ->
-                listener?.setIsInRoomDirectory(value)
+                listener { value ->
+                    listener?.setIsPublic(value)
+                }
             }
-        }
-        formSwitchItem {
-            id("encryption")
-            enabled(enableFormElement)
-            title(stringProvider.getString(R.string.create_room_encryption_title))
-            summary(
-                    if (viewState.hsAdminHasDisabledE2E) {
-                        stringProvider.getString(R.string.settings_hs_admin_e2e_disabled)
-                    } else {
-                        stringProvider.getString(R.string.create_room_encryption_description)
-                    }
-            )
-            switchChecked(viewState.isEncrypted)
+            formSwitchItem {
+                id("directory")
+                enabled(enableFormElement)
+                title(stringProvider.getString(R.string.create_room_directory_title))
+                summary(stringProvider.getString(R.string.create_room_directory_description))
+                switchChecked(viewState.isInRoomDirectory)
 
-            listener { value ->
-                listener?.setIsEncrypted(value)
+                listener { value ->
+                    listener?.setIsInRoomDirectory(value)
+                }
+            }
+            formSwitchItem {
+                id("encryption")
+                enabled(enableFormElement)
+                title(stringProvider.getString(R.string.create_room_encryption_title))
+                summary(
+                        if (viewState.hsAdminHasDisabledE2E) {
+                            stringProvider.getString(R.string.settings_hs_admin_e2e_disabled)
+                        } else {
+                            stringProvider.getString(R.string.create_room_encryption_description)
+                        }
+                )
+                switchChecked(viewState.isEncrypted)
+
+                listener { value ->
+                    listener?.setIsEncrypted(value)
+                }
             }
         }
         formSubmitButtonItem {

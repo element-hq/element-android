@@ -47,6 +47,7 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.FabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
 import org.matrix.android.sdk.api.failure.Failure
@@ -65,8 +66,8 @@ class RoomListFragment @Inject constructor(
         private val roomController: RoomSummaryController,
         val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
-        private val sharedViewPool: RecyclerView.RecycledViewPool
-
+        private val sharedViewPool: RecyclerView.RecycledViewPool,
+        private val vectorPreferences: VectorPreferences
 ) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
@@ -200,7 +201,12 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun openRoomDirectory(initialFilter: String) {
-        navigator.openRoomDirectory(requireActivity(), initialFilter)
+        if (vectorPreferences.simplifiedMode()) {
+            // Simplified mode: don't browse room directories, just create a room
+            navigator.openCreateRoom(requireActivity())
+        } else {
+            navigator.openRoomDirectory(requireActivity(), initialFilter)
+        }
     }
 
     override fun createDirectChat() {

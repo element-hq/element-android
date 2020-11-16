@@ -97,6 +97,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".features.login.PromptSimplifiedModeActivity" />
+
         <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
         <activity
             android:name=".features.media.VectorAttachmentViewerActivity"

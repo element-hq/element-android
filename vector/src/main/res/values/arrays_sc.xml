@@ -32,4 +32,9 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="prompt_simplified_mode_entries" translatable="false">
+        <item>@string/prompt_simplified_mode_on</item>
+        <item>@string/prompt_simplified_mode_off</item>
+    </string-array>
+
 </resources>

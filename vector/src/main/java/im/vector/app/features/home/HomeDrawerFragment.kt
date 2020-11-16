@@ -25,6 +25,7 @@ import im.vector.app.core.extensions.observeK
 import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.grouplist.GroupListFragment
+import im.vector.app.features.login.PromptSimplifiedModeActivity
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.workers.signout.SignOutUiWorker
@@ -81,5 +82,11 @@ class HomeDrawerFragment @Inject constructor(
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        PromptSimplifiedModeActivity.showIfRequired(requireContext(), vectorPreferences)
     }
 }

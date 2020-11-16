@@ -181,6 +181,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_SINGLE_OVERVIEW = "SETTINGS_SINGLE_OVERVIEW"
         private const val SETTINGS_ROOM_UNREAD_KIND = "SETTINGS_ROOM_UNREAD_KIND"
         private const val SETTINGS_UNIMPORTANT_COUNTER_BADGE = "SETTINGS_UNIMPORTANT_COUNTER_BADGE"
+        private const val SETTINGS_SIMPLIFIED_MODE = "SETTINGS_SIMPLIFIED_MODE"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
@@ -863,6 +864,20 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     // SC addition
     fun shouldShowUnimportantCounterBadge(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_UNIMPORTANT_COUNTER_BADGE, true)
+    }
+
+    // SC addition
+    fun simplifiedMode(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SIMPLIFIED_MODE, false)
+    }
+    fun needsSimplifiedModePrompt(): Boolean {
+        return !defaultPrefs.contains(SETTINGS_SIMPLIFIED_MODE)
+    }
+    fun setSimplifiedMode(simplified: Boolean) {
+        defaultPrefs
+                .edit()
+                .putBoolean(SETTINGS_SIMPLIFIED_MODE, simplified)
+                .apply()
     }
 
     /**

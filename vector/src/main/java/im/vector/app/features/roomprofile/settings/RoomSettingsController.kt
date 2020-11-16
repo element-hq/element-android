@@ -26,6 +26,7 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
@@ -37,6 +38,7 @@ class RoomSettingsController @Inject constructor(
         private val stringProvider: StringProvider,
         private val avatarRenderer: AvatarRenderer,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
+        private val vectorPreferences: VectorPreferences,
         colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
@@ -64,6 +66,7 @@ class RoomSettingsController @Inject constructor(
 
         val historyVisibility = data.historyVisibilityEvent?.let { formatRoomHistoryVisibilityEvent(it) } ?: ""
         val newHistoryVisibility = data.newHistoryVisibility?.let { roomHistoryVisibilityFormatter.format(it) }
+        val enableNonSimplifiedMode = !vectorPreferences.simplifiedMode()
 
         formEditableAvatarItem {
             id("avatar")
@@ -110,14 +113,16 @@ class RoomSettingsController @Inject constructor(
             }
         }
 
-        formEditTextItem {
-            id("alias")
-            enabled(data.actionPermissions.canChangeCanonicalAlias)
-            value(data.newCanonicalAlias ?: roomSummary.canonicalAlias)
-            hint(stringProvider.getString(R.string.room_settings_addresses_add_new_address))
+        if (enableNonSimplifiedMode) {
+            formEditTextItem {
+                id("alias")
+                enabled(data.actionPermissions.canChangeCanonicalAlias)
+                value(data.newCanonicalAlias ?: roomSummary.canonicalAlias)
+                hint(stringProvider.getString(R.string.room_settings_addresses_add_new_address))
 
-            onTextChange { text ->
-                callback?.onAliasChanged(text)
+                onTextChange { text ->
+                    callback?.onAliasChanged(text)
+                }
             }
         }
 

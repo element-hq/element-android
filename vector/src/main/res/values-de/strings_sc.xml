@@ -13,6 +13,16 @@
     <string name="settings_room_unread_kind_content">Verstecke Teilnehmerveränderungen</string>
     <string name="settings_room_unread_kind_original_content">Verstecke Teilnehmerveränderungen und Reaktionen</string>
 
+    <string name="settings_simplified_mode">Einfacher Modus</string>
+    <string name="settings_simplified_mode_summary">Verstecke erweiterte Funktionalität, einschließlich öffentlichen Raumverzeichnissen und Chat-Verschlüsselungseinstellungen</string>
+    <string name="prompt_simplified_mode_title">Benutzeroberfläche festlegen</string>
+    <string name="prompt_simplified_mode_text">Dies kann später in den Einstellungen geändert werden.</string>
+    <!-- simplified mode prompt: start and end with newline to make dialog look better -->
+    <string name="prompt_simplified_mode_on">Einfach</string>
+    <string name="prompt_simplified_mode_on_text">Ich möchte nur mit mir bekannten Leuten kommunizieren, und finde zusätzliche Optionen verwirrend.</string>
+    <string name="prompt_simplified_mode_off">Vollständig</string>
+    <string name="prompt_simplified_mode_off_text">Ich bevorzuge einen vollen Funktionsumfang, einschließlich den Zugriff auf öffentliche Raumverzeichnisse und erweiterte Raum- und Verschlüsselungseinstellungen.</string>
+
     <string name="settings_light_theme">Helles Design</string>
     <string name="settings_dark_theme">Dunkles Design</string>
     <string name="settings_system_dark_theme_pre_ten">Folge dem Systemdesign</string>
