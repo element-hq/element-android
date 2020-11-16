@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * This introduces SDP negotiation semantics for media pause, hold/resume, ICE restarts and voice/video call up/downgrading.
  */
 @JsonClass(generateAdapter = true)
-data class CallNegociateContent(
+data class CallNegotiateContent(
         /**
          * Required. The ID of the call this event relates to.
          */
