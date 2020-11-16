@@ -69,6 +69,11 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
     }
 
     override fun showFailure(throwable: Throwable) {
+        // Only the resumed Fragment can eventually show the error, to avoid multiple dialog display
+        if (!isResumed) {
+            return
+        }
+
         when (throwable) {
             is Failure.Cancelled                      ->
                 /* Ignore this error, user has cancelled the action */
