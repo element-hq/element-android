@@ -47,8 +47,7 @@ data class RoomSettingsViewState(
             val canChangeName: Boolean = false,
             val canChangeTopic: Boolean = false,
             val canChangeCanonicalAlias: Boolean = false,
-            val canChangeHistoryReadability: Boolean = false,
-            val canEnableEncryption: Boolean = false
+            val canChangeHistoryReadability: Boolean = false
     )
 
     sealed class AvatarAction {
