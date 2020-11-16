@@ -23,7 +23,8 @@ internal open class IdentityDataEntity(
         var identityServerUrl: String? = null,
         var token: String? = null,
         var hashLookupPepper: String? = null,
-        var hashLookupAlgorithm: RealmList<String> = RealmList()
+        var hashLookupAlgorithm: RealmList<String> = RealmList(),
+        var userConsent: Boolean = false
 ) : RealmObject() {
 
     companion object

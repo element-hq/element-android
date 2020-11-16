@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Open an existing DM instead of creating a new one (#2319)
+ - Ask for explicit user consent to send their contact details to the identity server (#2375)
  - Handle events of type "m.room.server_acl" (#890)
 
 Bugfix 🐛:
@@ -13,6 +14,7 @@ Bugfix 🐛:
  - Fix issue when updating the avatar of a room (new avatar vanishing)
  - Discard change dialog displayed by mistake when avatar has been updated
  - myroomnick changes the global name (#1715)
+ - Registration: annoying error message scares every new user when they add an email (#2391)
 
 Translations 🗣:
  -

@@ -16,9 +16,6 @@
 
 package org.matrix.android.sdk.api.raw
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
-
 /**
  * Useful methods to fetch raw data from the server. The access token will not be used to fetched the data
  */
@@ -26,17 +23,15 @@ interface RawService {
     /**
      * Get a URL, either from cache or from the remote server, depending on the cache strategy
      */
-    fun getUrl(url: String,
-               rawCacheStrategy: RawCacheStrategy,
-               matrixCallback: MatrixCallback<String>): Cancelable
+    suspend fun getUrl(url: String, rawCacheStrategy: RawCacheStrategy): String
 
     /**
      * Specific case for the well-known file. Cache validity is 8 hours
      */
-    fun getWellknown(userId: String, matrixCallback: MatrixCallback<String>): Cancelable
+    suspend fun getWellknown(userId: String): String
 
     /**
      * Clear all the cache data
      */
-    fun clearCache(matrixCallback: MatrixCallback<Unit>): Cancelable
+    suspend fun clearCache()
 }

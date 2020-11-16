@@ -52,11 +52,10 @@ class ContactsBookController @Inject constructor(
 
     override fun buildModels() {
         val currentState = state ?: return
-        val hasSearch = currentState.searchTerm.isNotEmpty()
         when (val asyncMappedContacts = currentState.mappedContacts) {
             is Uninitialized -> renderEmptyState(false)
             is Loading       -> renderLoading()
-            is Success       -> renderSuccess(currentState.filteredMappedContacts, hasSearch, currentState.onlyBoundContacts)
+            is Success       -> renderSuccess(currentState)
             is Fail          -> renderFailure(asyncMappedContacts.error)
         }
     }
@@ -75,13 +74,13 @@ class ContactsBookController @Inject constructor(
         }
     }
 
-    private fun renderSuccess(mappedContacts: List<MappedContact>,
-                              hasSearch: Boolean,
-                              onlyBoundContacts: Boolean) {
+    private fun renderSuccess(state: ContactsBookViewState) {
+        val mappedContacts = state.filteredMappedContacts
+
         if (mappedContacts.isEmpty()) {
-            renderEmptyState(hasSearch)
+            renderEmptyState(state.searchTerm.isNotEmpty())
         } else {
-            renderContacts(mappedContacts, onlyBoundContacts)
+            renderContacts(mappedContacts, state.onlyBoundContacts)
         }
     }
 

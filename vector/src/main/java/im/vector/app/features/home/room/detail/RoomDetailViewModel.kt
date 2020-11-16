@@ -99,6 +99,7 @@ import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
 import java.io.File
+import java.lang.Exception
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -1112,15 +1113,15 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleReportContent(action: RoomDetailAction.ReportContent) {
-        room.reportContent(action.eventId, -100, action.reason, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
+        viewModelScope.launch {
+            val event = try {
+                room.reportContent(action.eventId, -100, action.reason)
+                RoomDetailViewEvents.ActionSuccess(action)
+            } catch (failure: Exception) {
+                RoomDetailViewEvents.ActionFailure(action, failure)
             }
-
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
-            }
-        })
+            _viewEvents.post(event)
+        }
     }
 
     private fun handleIgnoreUser(action: RoomDetailAction.IgnoreUser) {

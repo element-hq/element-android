@@ -33,7 +33,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.lang.Exception
@@ -191,17 +190,13 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                         action.tag.otherTag()
                                 ?.takeIf { room.roomSummary()?.hasTag(it).orFalse() }
                                 ?.let { tagToRemove ->
-                                    awaitCallback<Unit> { room.deleteTag(tagToRemove, it) }
+                                    room.deleteTag(tagToRemove)
                                 }
 
                         // Set the tag. We do not handle the order for the moment
-                        awaitCallback<Unit> {
-                            room.addTag(action.tag, 0.5, it)
-                        }
+                        room.addTag(action.tag, 0.5)
                     } else {
-                        awaitCallback<Unit> {
-                            room.deleteTag(action.tag, it)
-                        }
+                        room.deleteTag(action.tag)
                     }
                 } catch (failure: Throwable) {
                     _viewEvents.post(RoomListViewEvents.Failure(failure))

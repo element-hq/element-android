@@ -92,8 +92,28 @@ interface IdentityService {
 
     /**
      * Search MatrixId of users providing email and phone numbers
+     * Note the the user consent has to be set to true, or it will throw a UserConsentNotProvided failure
+     * Application has to explicitly ask for the user consent, and the answer can be stored using [setUserConsent]
+     * Please see https://support.google.com/googleplay/android-developer/answer/9888076?hl=en for more details.
      */
     fun lookUp(threePids: List<ThreePid>, callback: MatrixCallback<List<FoundThreePid>>): Cancelable
+
+    /**
+     * Return the current user consent for the current identity server, which has been stored using [setUserConsent].
+     * If [setUserConsent] has not been called, the returned value will be false.
+     * Note that if the identity server is changed, the user consent is reset to false.
+     * @return the value stored using [setUserConsent] or false if [setUserConsent] has never been called, or if the identity server
+     *         has been changed
+     */
+    fun getUserConsent(): Boolean
+
+    /**
+     * Set the user consent to the provided value. Application MUST explicitly ask for the user consent to send their private data
+     * (email and phone numbers) to the identity server.
+     * Please see https://support.google.com/googleplay/android-developer/answer/9888076?hl=en for more details.
+     * @param newValue true if the user explicitly give their consent, false if the user wants to revoke their consent.
+     */
+    fun setUserConsent(newValue: Boolean)
 
     /**
      * Get the status of the current user's threePid
