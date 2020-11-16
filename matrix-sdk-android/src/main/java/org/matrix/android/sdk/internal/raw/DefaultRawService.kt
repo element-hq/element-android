@@ -38,6 +38,6 @@ internal class DefaultRawService @Inject constructor(
     }
 
     override suspend fun clearCache() {
-        return cleanRawCacheTask.execute(Unit)
+        cleanRawCacheTask.execute(Unit)
     }
 }
