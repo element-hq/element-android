@@ -27,6 +27,7 @@ import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsSectionTitleItem
+import im.vector.app.features.form.formAdvancedToggleItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.form.formSubmitButtonItem
@@ -148,6 +149,22 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                 listener?.setIsEncrypted(value)
             }
         }
+        formAdvancedToggleItem {
+            id("showAdvanced")
+            title(stringProvider.getString(if (viewState.showAdvanced) R.string.hide_advanced else R.string.show_advanced))
+            expanded(!viewState.showAdvanced)
+            listener { listener?.toggleShowAdvanced() }
+        }
+        if (viewState.showAdvanced) {
+            formSwitchItem {
+                id("federation")
+                enabled(enableFormElement)
+                title(stringProvider.getString(R.string.create_room_disable_federation_title, viewState.homeServerName))
+                summary(stringProvider.getString(R.string.create_room_disable_federation_description))
+                switchChecked(viewState.disableFederation)
+                listener { value -> listener?.setDisableFederation(value) }
+            }
+        }
         formSubmitButtonItem {
             id("submit")
             enabled(enableFormElement)
@@ -165,6 +182,8 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
         fun setIsInRoomDirectory(isInRoomDirectory: Boolean)
         fun setIsEncrypted(isEncrypted: Boolean)
         fun retry()
+        fun toggleShowAdvanced()
+        fun setDisableFederation(disableFederation: Boolean)
         fun submit()
     }
 }

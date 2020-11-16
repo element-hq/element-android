@@ -53,7 +53,16 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
     }
 
     init {
+        initHomeServerName()
         initAdminE2eByDefault()
+    }
+
+    private fun initHomeServerName() {
+        setState {
+            copy(
+                    homeServerName = session.myUserId.substringAfter(":")
+            )
+        }
     }
 
     private var adminE2EByDefault = true
@@ -99,7 +108,25 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             is CreateRoomAction.SetIsEncrypted       -> setIsEncrypted(action)
             is CreateRoomAction.Create               -> doCreateRoom()
             CreateRoomAction.Reset                   -> doReset()
+            CreateRoomAction.ToggleShowAdvanced      -> toggleShowAdvanced()
+            is CreateRoomAction.DisableFederation    -> disableFederation(action)
         }.exhaustive
+    }
+
+    private fun disableFederation(action: CreateRoomAction.DisableFederation) {
+        setState {
+            copy(disableFederation = action.disableFederation)
+        }
+    }
+
+    private fun toggleShowAdvanced() {
+        setState {
+            copy(
+                    showAdvanced = !showAdvanced,
+                    // Reset to false if advanced is hidden
+                    disableFederation = disableFederation && !showAdvanced
+            )
+        }
     }
 
     private fun doReset() {
@@ -151,6 +178,8 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
                     visibility = if (state.isInRoomDirectory) RoomDirectoryVisibility.PUBLIC else RoomDirectoryVisibility.PRIVATE
                     // Public room
                     preset = if (state.isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
+                    // Disabling federation
+                    disableFederation = state.disableFederation
 
                     // Encryption
                     if (state.isEncrypted) {

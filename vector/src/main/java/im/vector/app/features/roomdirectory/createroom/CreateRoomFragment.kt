@@ -110,6 +110,14 @@ class CreateRoomFragment @Inject constructor(
         viewModel.handle(CreateRoomAction.SetIsEncrypted(isEncrypted))
     }
 
+    override fun toggleShowAdvanced() {
+        viewModel.handle(CreateRoomAction.ToggleShowAdvanced)
+    }
+
+    override fun setDisableFederation(disableFederation: Boolean) {
+        viewModel.handle(CreateRoomAction.DisableFederation(disableFederation))
+    }
+
     override fun submit() {
         viewModel.handle(CreateRoomAction.Create)
     }

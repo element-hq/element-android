@@ -2094,6 +2094,12 @@
     <string name="create_room_encryption_title">"Enable encryption"</string>
     <string name="create_room_encryption_description">"Once enabled, encryption cannot be disabled."</string>
 
+    <string name="show_advanced">Show advanced</string>
+    <string name="hide_advanced">Hide advanced</string>
+
+    <string name="create_room_disable_federation_title">Block anyone not part of %s from ever joining this room</string>
+    <string name="create_room_disable_federation_description">You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.</string>
+
     <string name="login_error_threepid_denied">Your email domain is not authorized to register on this server</string>
 
     <string name="verification_conclusion_warning">Untrusted sign in</string>
