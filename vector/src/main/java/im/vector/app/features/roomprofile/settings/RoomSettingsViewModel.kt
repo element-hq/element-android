@@ -17,6 +17,7 @@
 package im.vector.app.features.roomprofile.settings
 
 import androidx.core.net.toFile
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -27,7 +28,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Completable
 import io.reactivex.Observable
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -228,16 +229,13 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     private fun handleEnableEncryption() {
         postLoading(true)
 
-        room.enableEncryption(callback = object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                postLoading(false)
+        viewModelScope.launch {
+            val result = runCatching { room.enableEncryption() }
+            postLoading(false)
+            result.onFailure { failure ->
                 _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
             }
-
-            override fun onSuccess(data: Unit) {
-                postLoading(false)
-            }
-        })
+        }
     }
 
     private fun postLoading(isLoading: Boolean) {

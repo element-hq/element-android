@@ -19,6 +19,8 @@ package im.vector.app.features.home.room.detail.timeline.format
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -35,6 +37,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomNameContent
+import org.matrix.android.sdk.api.session.room.model.RoomServerAclContent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
@@ -48,9 +51,12 @@ import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
 import timber.log.Timber
 import javax.inject.Inject
 
-class NoticeEventFormatter @Inject constructor(private val activeSessionDataSource: ActiveSessionDataSource,
-                                               private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
-                                               private val sp: StringProvider) {
+class NoticeEventFormatter @Inject constructor(
+        private val activeSessionDataSource: ActiveSessionDataSource,
+        private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
+        private val vectorPreferences: VectorPreferences,
+        private val sp: StringProvider
+) {
 
     private val currentUserId: String?
         get() = activeSessionDataSource.currentValue?.orNull()?.myUserId
@@ -72,6 +78,7 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
             EventType.STATE_ROOM_CANONICAL_ALIAS    -> formatRoomCanonicalAliasEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_HISTORY_VISIBILITY ->
                 formatRoomHistoryVisibilityEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, rs)
+            EventType.STATE_ROOM_SERVER_ACL         -> formatRoomServerAclEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_GUEST_ACCESS       -> formatRoomGuestAccessEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, rs)
             EventType.STATE_ROOM_ENCRYPTION         -> formatRoomEncryptionEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.STATE_ROOM_WIDGET,
@@ -379,6 +386,79 @@ class NoticeEventFormatter @Inject constructor(private val activeSessionDataSour
             else                                                     -> {
                 Timber.w("Alias event without any change...")
                 null
+            }
+        }
+    }
+
+    private fun formatRoomServerAclEvent(event: Event, senderName: String?): String? {
+        val eventContent = event.getClearContent().toModel<RoomServerAclContent>() ?: return null
+        val prevEventContent = event.resolvedPrevContent()?.toModel<RoomServerAclContent>()
+
+        return buildString {
+            // Title
+            append(if (prevEventContent == null) {
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_room_server_acl_set_title_by_you)
+                } else {
+                    sp.getString(R.string.notice_room_server_acl_set_title, senderName)
+                }
+            } else {
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_room_server_acl_updated_title_by_you)
+                } else {
+                    sp.getString(R.string.notice_room_server_acl_updated_title, senderName)
+                }
+            })
+            if (eventContent.allowList.isEmpty()) {
+                // Special case for stuck room
+                appendNl(sp.getString(R.string.notice_room_server_acl_allow_is_empty))
+            } else if (vectorPreferences.developerMode()) {
+                // Details, only in developer mode
+                appendAclDetails(eventContent, prevEventContent)
+            }
+        }
+    }
+
+    private fun StringBuilder.appendAclDetails(eventContent: RoomServerAclContent, prevEventContent: RoomServerAclContent?) {
+        if (prevEventContent == null) {
+            eventContent.allowList.forEach { appendNl(sp.getString(R.string.notice_room_server_acl_set_allowed, it)) }
+            eventContent.denyList.forEach { appendNl(sp.getString(R.string.notice_room_server_acl_set_banned, it)) }
+            if (eventContent.allowIpLiterals) {
+                appendNl(sp.getString(R.string.notice_room_server_acl_set_ip_literals_allowed))
+            } else {
+                appendNl(sp.getString(R.string.notice_room_server_acl_set_ip_literals_not_allowed))
+            }
+        } else {
+            // Display only diff
+            var hasChanged = false
+            // New allowed servers
+            (eventContent.allowList - prevEventContent.allowList)
+                    .also { hasChanged = hasChanged || it.isNotEmpty() }
+                    .forEach { appendNl(sp.getString(R.string.notice_room_server_acl_updated_allowed, it)) }
+            // Removed allowed servers
+            (prevEventContent.allowList - eventContent.allowList)
+                    .also { hasChanged = hasChanged || it.isNotEmpty() }
+                    .forEach { appendNl(sp.getString(R.string.notice_room_server_acl_updated_was_allowed, it)) }
+            // New denied servers
+            (eventContent.denyList - prevEventContent.denyList)
+                    .also { hasChanged = hasChanged || it.isNotEmpty() }
+                    .forEach { appendNl(sp.getString(R.string.notice_room_server_acl_updated_banned, it)) }
+            // Removed denied servers
+            (prevEventContent.denyList - eventContent.denyList)
+                    .also { hasChanged = hasChanged || it.isNotEmpty() }
+                    .forEach { appendNl(sp.getString(R.string.notice_room_server_acl_updated_was_banned, it)) }
+
+            if (prevEventContent.allowIpLiterals != eventContent.allowIpLiterals) {
+                hasChanged = true
+                if (eventContent.allowIpLiterals) {
+                    appendNl(sp.getString(R.string.notice_room_server_acl_updated_ip_literals_allowed))
+                } else {
+                    appendNl(sp.getString(R.string.notice_room_server_acl_updated_ip_literals_not_allowed))
+                }
+            }
+
+            if (!hasChanged) {
+                appendNl(sp.getString(R.string.notice_room_server_acl_updated_no_change))
             }
         }
     }

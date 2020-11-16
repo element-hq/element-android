@@ -56,6 +56,7 @@ object EventType {
     const val STATE_ROOM_RELATED_GROUPS = "m.room.related_groups"
     const val STATE_ROOM_PINNED_EVENT = "m.room.pinned_events"
     const val STATE_ROOM_ENCRYPTION = "m.room.encryption"
+    const val STATE_ROOM_SERVER_ACL = "m.room.server_acl"
 
     // Call Events
     const val CALL_INVITE = "m.call.invite"
