@@ -207,7 +207,6 @@ class LoginViewModel @AssistedInject constructor(
     private fun handleCheckIfEmailHasBeenValidated(action: LoginAction.CheckIfEmailHasBeenValidated) {
         // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
         currentTask?.cancel()
-        currentTask = null
         currentTask = registrationWizard?.checkIfEmailHasBeenValidated(action.delayMillis, registrationCallback)
     }
 
