@@ -116,17 +116,35 @@ internal class RoomDisplayNameResolver @Inject constructor(
                     // TODO (was xx and yyy) ...
                 }
                 1 -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
+                2 -> {
+                    stringProvider.getString(R.string.room_displayname_two_members,
+                            resolveRoomMemberName(otherMembersSubset[0], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[1], roomMembers)
+                    )
+                }
+                3 -> {
+                    stringProvider.getString(R.string.room_displayname_3_members,
+                            resolveRoomMemberName(otherMembersSubset[0], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[1], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[2], roomMembers)
+                    )
+                }
+                4 -> {
+                    stringProvider.getString(R.string.room_displayname_4_members,
+                            resolveRoomMemberName(otherMembersSubset[0], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[1], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[2], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[3], roomMembers)
+                    )
+                }
                 else -> {
-                    val names = otherMembersSubset.map {
-                        resolveRoomMemberName(it, roomMembers) ?: ""
-                    }
-                    if (otherMembersCount <= othersTotalCount) {
-                        val remainingCount = invitedCount + joinedCount - names.size
-                        (names.joinToString("${stringProvider.getString(R.string.room_displayname_separator)} ")
-                        + " " + stringProvider.getQuantityString(R.plurals.and_n_others, remainingCount, remainingCount))
-                    } else {
-                        names.dropLast(1).joinToString(", ") + " & ${names.last()}"
-                    }
+                    val remainingCount = invitedCount + joinedCount - otherMembersCount + 1
+                    stringProvider.getString(R.string.room_displayname_four_and_more_members,
+                            resolveRoomMemberName(otherMembersSubset[0], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[1], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[2], roomMembers),
+                            remainingCount
+                    )
                 }
             }
         }

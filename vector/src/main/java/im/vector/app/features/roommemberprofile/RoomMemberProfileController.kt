@@ -161,7 +161,7 @@ class RoomMemberProfileController @Inject constructor(
         } else {
             genericFooterItem {
                 id("verify_footer_not_encrypted")
-                text(RRstringProvider.getString(R.string.room_profile_not_encrypted_subtitle))
+                text(stringProvider.getString(R.string.room_profile_not_encrypted_subtitle))
                 centered(false)
             }
         }
