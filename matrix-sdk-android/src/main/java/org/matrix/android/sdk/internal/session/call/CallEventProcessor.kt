@@ -32,6 +32,9 @@ internal class CallEventProcessor @Inject constructor(
 
     private val allowedTypes = listOf(
             EventType.CALL_ANSWER,
+            EventType.CALL_SELECT_ANSWER,
+            EventType.CALL_REJECT,
+            EventType.CALL_NEGOTIATE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
