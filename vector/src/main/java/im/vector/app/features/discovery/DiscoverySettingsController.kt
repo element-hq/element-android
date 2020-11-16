@@ -65,9 +65,42 @@ class DiscoverySettingsController @Inject constructor(
                 buildIdentityServerSection(data)
                 val hasIdentityServer = data.identityServer().isNullOrBlank().not()
                 if (hasIdentityServer && !data.termsNotSigned) {
+                    buildConsentSection(data)
                     buildEmailsSection(data.emailList)
                     buildMsisdnSection(data.phoneNumbersList)
                 }
+            }
+        }
+    }
+
+    private fun buildConsentSection(data: DiscoverySettingsState) {
+        settingsSectionTitleItem {
+            id("idConsentTitle")
+            titleResId(R.string.settings_discovery_consent_title)
+        }
+
+        if (data.userConsent) {
+            settingsInfoItem {
+                id("idConsentInfo")
+                helperTextResId(R.string.settings_discovery_consent_notice_on)
+            }
+            settingsButtonItem {
+                id("idConsentButton")
+                colorProvider(colorProvider)
+                buttonTitleId(R.string.settings_discovery_consent_action_revoke)
+                buttonStyle(ButtonStyle.DESTRUCTIVE)
+                buttonClickListener { listener?.onTapUpdateUserConsent(false) }
+            }
+        } else {
+            settingsInfoItem {
+                id("idConsentInfo")
+                helperTextResId(R.string.settings_discovery_consent_notice_off)
+            }
+            settingsButtonItem {
+                id("idConsentButton")
+                colorProvider(colorProvider)
+                buttonTitleId(R.string.settings_discovery_consent_action_give_consent)
+                buttonClickListener { listener?.onTapUpdateUserConsent(true) }
             }
         }
     }
@@ -359,6 +392,7 @@ class DiscoverySettingsController @Inject constructor(
         fun sendMsisdnVerificationCode(threePid: ThreePid.Msisdn, code: String)
         fun onTapChangeIdentityServer()
         fun onTapDisconnectIdentityServer()
+        fun onTapUpdateUserConsent(newValue: Boolean)
         fun onTapRetryToRetrieveBindings()
     }
 }
