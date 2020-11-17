@@ -28,8 +28,10 @@ import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
+import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
+import org.matrix.android.sdk.api.session.room.model.call.toSdpType
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.call.DefaultCallSignalingService
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
@@ -161,6 +163,18 @@ internal class MxCallImpl(
                 answer = CallAnswerContent.Answer(sdp = sdp.description)
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_ANSWER, roomId = roomId, content = it.toContent()) }
+                .also { eventSenderProcessor.postEvent(it) }
+    }
+
+    override fun negotiate(sdp: SessionDescription) {
+        Timber.v("## VOIP negotiate $callId")
+        CallNegotiateContent(
+                callId = callId,
+                partyId = ourPartyId,
+                lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
+                description = CallNegotiateContent.Description(sdp = sdp.description, type = sdp.type.toSdpType())
+        )
+                .let { createEventAndLocalEcho(type = EventType.CALL_NEGOTIATE, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
     }
 

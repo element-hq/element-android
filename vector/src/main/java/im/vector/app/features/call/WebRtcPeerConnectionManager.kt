@@ -26,16 +26,26 @@ import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.services.BluetoothHeadsetReceiver
 import im.vector.app.core.services.CallService
 import im.vector.app.core.services.WiredHeadsetStateReceiver
+import im.vector.app.features.call.utils.awaitCreateAnswer
+import im.vector.app.features.call.utils.awaitCreateOffer
+import im.vector.app.features.call.utils.awaitSetLocalDescription
+import im.vector.app.features.call.utils.awaitSetRemoteDescription
 import im.vector.app.push.fcm.FcmHelper
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.ReplaySubject
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.CallListener
+import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.EglUtils
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
@@ -43,8 +53,12 @@ import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
+import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
+import org.matrix.android.sdk.api.session.room.model.call.SdpType
+import org.matrix.android.sdk.api.session.room.model.call.asWebRTC
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
 import org.webrtc.Camera1Enumerator
@@ -59,6 +73,7 @@ import org.webrtc.MediaStream
 import org.webrtc.PeerConnection
 import org.webrtc.PeerConnectionFactory
 import org.webrtc.RtpReceiver
+import org.webrtc.RtpTransceiver
 import org.webrtc.SessionDescription
 import org.webrtc.SurfaceTextureHelper
 import org.webrtc.SurfaceViewRenderer
@@ -120,7 +135,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
             var localVideoSource: VideoSource? = null,
             var localVideoTrack: VideoTrack? = null,
 
-            var remoteVideoTrack: VideoTrack? = null
+            var remoteVideoTrack: VideoTrack? = null,
+
+            // Perfect negotiation state: https://www.w3.org/TR/webrtc/#perfect-negotiation-example
+            var makingOffer: Boolean = false,
+            var ignoreOffer: Boolean = false
     ) {
 
         var offerSdp: CallInviteContent.Offer? = null
@@ -165,6 +184,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 //    var localMediaStream: MediaStream? = null
 
     private val executor = Executors.newSingleThreadExecutor()
+    private val dispatcher = executor.asCoroutineDispatcher()
 
     private val rootEglBase by lazy { EglUtils.rootEglBase }
 
@@ -291,39 +311,46 @@ class WebRtcPeerConnectionManager @Inject constructor(
         callContext.peerConnection = peerConnectionFactory?.createPeerConnection(iceServers, StreamObserver(callContext))
     }
 
-    private fun sendSdpOffer(callContext: CallContext) {
+    private fun CoroutineScope.sendSdpOffer(callContext: CallContext) = launch(dispatcher) {
         val constraints = MediaConstraints()
         // These are deprecated options
 //        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
 //        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", if (currentCall?.mxCall?.isVideoCall == true) "true" else "false"))
 
+        val call = callContext.mxCall
+        val peerConnection = callContext.peerConnection ?: return@launch
         Timber.v("## VOIP creating offer...")
-        callContext.peerConnection?.createOffer(object : SdpObserverAdapter() {
-            override fun onCreateSuccess(p0: SessionDescription?) {
-                if (p0 == null) return
-//                localSdp = p0
-                callContext.peerConnection?.setLocalDescription(object : SdpObserverAdapter() {}, p0)
-                // send offer to peer
-                currentCall?.mxCall?.offerSdp(p0)
-
-                if(currentCall?.mxCall?.opponentPartyId?.hasValue().orFalse()){
-                    currentCall?.mxCall?.selectAnswer()
-                }
+        callContext.makingOffer = true
+        try {
+            val sessionDescription = peerConnection.awaitCreateOffer(constraints) ?: return@launch
+            peerConnection.awaitSetLocalDescription(sessionDescription)
+            if (peerConnection.iceGatheringState() == PeerConnection.IceGatheringState.GATHERING) {
+                // Allow a short time for initial candidates to be gathered
+                delay(200)
             }
-        }, constraints)
+            if (call.state == CallState.Terminated) {
+                return@launch
+            }
+            if (call.state == CallState.CreateOffer) {
+                // send offer to peer
+                call.offerSdp(sessionDescription)
+            } else {
+                call.negotiate(sessionDescription)
+            }
+        } catch (failure: Throwable) {
+            // Need to handle error properly.
+            Timber.v("Failure while creating offer")
+        } finally {
+            callContext.makingOffer = false
+        }
     }
 
-    private fun getTurnServer(callback: ((TurnServerResponse?) -> Unit)) {
-        currentSession?.callSignalingService()
-                ?.getTurnServer(object : MatrixCallback<TurnServerResponse?> {
-                    override fun onSuccess(data: TurnServerResponse?) {
-                        callback(data)
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        callback(null)
-                    }
-                })
+    private suspend fun getTurnServer(): TurnServerResponse? {
+        return tryOrNull {
+            awaitCallback<TurnServerResponse?> {
+                currentSession?.callSignalingService()?.getTurnServer(it)
+            }
+        }
     }
 
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer?, remoteViewRenderer: SurfaceViewRenderer, mode: String?) {
@@ -349,10 +376,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
                             callId = mxCall.callId)
                 }
 
-        getTurnServer { turnServer ->
-            val call = currentCall ?: return@getTurnServer
+        GlobalScope.launch(dispatcher) {
+            val turnServer = getTurnServer()
+            val call = currentCall ?: return@launch
             when (mode) {
-                VectorCallActivity.INCOMING_ACCEPT  -> {
+                VectorCallActivity.INCOMING_ACCEPT -> {
                     internalAcceptIncomingCall(call, turnServer)
                 }
                 VectorCallActivity.INCOMING_RINGING -> {
@@ -360,28 +388,25 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     // TODO eventually we could already display local stream in PIP?
                 }
                 VectorCallActivity.OUTGOING_CREATED -> {
-                    executor.execute {
-                        // 1. Create RTCPeerConnection
-                        createPeerConnection(call, turnServer)
+                    call.mxCall.state = CallState.CreateOffer
+                    // 1. Create RTCPeerConnection
+                    createPeerConnection(call, turnServer)
 
-                        // 2. Access camera (if video call) + microphone, create local stream
-                        createLocalStream(call)
+                    // 2. Access camera (if video call) + microphone, create local stream
+                    createLocalStream(call)
 
-                        // 3. add local stream
-                        call.localMediaStream?.let { call.peerConnection?.addStream(it) }
-                        attachViewRenderersInternal()
+                    // 3. add local stream
+                    call.localMediaStream?.let { call.peerConnection?.addStream(it) }
+                    attachViewRenderersInternal()
 
-                        // create an offer, set local description and send via signaling
-                        sendSdpOffer(call)
-
-                        Timber.v("## VOIP remoteCandidateSource ${call.remoteCandidateSource}")
-                        call.remoteIceCandidateDisposable = call.remoteCandidateSource?.subscribe({
-                            Timber.v("## VOIP adding remote ice candidate $it")
-                            call.peerConnection?.addIceCandidate(it)
-                        }, {
-                            Timber.v("## VOIP failed to add remote ice candidate $it")
-                        })
-                    }
+                    Timber.v("## VOIP remoteCandidateSource ${call.remoteCandidateSource}")
+                    call.remoteIceCandidateDisposable = call.remoteCandidateSource?.subscribe({
+                        Timber.v("## VOIP adding remote ice candidate $it")
+                        call.peerConnection?.addIceCandidate(it)
+                    }, {
+                        Timber.v("## VOIP failed to add remote ice candidate $it")
+                    })
+                    // Now wait for negotiation callback
                 }
                 else                                -> {
                     // sink existing tracks (configuration change, e.g screen rotation)
@@ -391,49 +416,49 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    private fun internalAcceptIncomingCall(callContext: CallContext, turnServerResponse: TurnServerResponse?) {
+    private suspend fun internalAcceptIncomingCall(callContext: CallContext, turnServerResponse: TurnServerResponse?) {
         val mxCall = callContext.mxCall
         // Update service state
-
-        val name = currentSession?.getUser(mxCall.opponentUserId)?.getBestName()
-                ?: mxCall.roomId
-        CallService.onPendingCall(
-                context = context,
-                isVideo = mxCall.isVideoCall,
-                roomName = name,
-                roomId = mxCall.roomId,
-                matrixId = currentSession?.myUserId ?: "",
-                callId = mxCall.callId
-        )
-        executor.execute {
-            // 1) create peer connection
-            createPeerConnection(callContext, turnServerResponse)
-
-            // create sdp using offer, and set remote description
-            // the offer has beed stored when invite was received
-            callContext.offerSdp?.sdp?.let {
-                SessionDescription(SessionDescription.Type.OFFER, it)
-            }?.let {
-                callContext.peerConnection?.setRemoteDescription(SdpObserverAdapter(), it)
-            }
-            // 2) Access camera + microphone, create local stream
-            createLocalStream(callContext)
-
-            // 2) add local stream
-            currentCall?.localMediaStream?.let { callContext.peerConnection?.addStream(it) }
-            attachViewRenderersInternal()
-
-            // create a answer, set local description and send via signaling
-            createAnswer()
-
-            Timber.v("## VOIP remoteCandidateSource ${callContext.remoteCandidateSource}")
-            callContext.remoteIceCandidateDisposable = callContext.remoteCandidateSource?.subscribe({
-                Timber.v("## VOIP adding remote ice candidate $it")
-                callContext.peerConnection?.addIceCandidate(it)
-            }, {
-                Timber.v("## VOIP failed to add remote ice candidate $it")
-            })
+        withContext(Dispatchers.Main) {
+            val name = currentSession?.getUser(mxCall.opponentUserId)?.getBestName()
+                    ?: mxCall.roomId
+            CallService.onPendingCall(
+                    context = context,
+                    isVideo = mxCall.isVideoCall,
+                    roomName = name,
+                    roomId = mxCall.roomId,
+                    matrixId = currentSession?.myUserId ?: "",
+                    callId = mxCall.callId
+            )
         }
+        // 1) create peer connection
+        createPeerConnection(callContext, turnServerResponse)
+
+        // create sdp using offer, and set remote description
+        // the offer has beed stored when invite was received
+        callContext.offerSdp?.sdp?.let {
+            SessionDescription(SessionDescription.Type.OFFER, it)
+        }?.let {
+            callContext.peerConnection?.setRemoteDescription(SdpObserverAdapter(), it)
+        }
+        // 2) Access camera + microphone, create local stream
+        createLocalStream(callContext)
+
+        // 2) add local stream
+        currentCall?.localMediaStream?.let { callContext.peerConnection?.addStream(it) }
+        attachViewRenderersInternal()
+
+        // create a answer, set local description and send via signaling
+        createAnswer()?.also {
+            callContext.mxCall.accept(it)
+        }
+        Timber.v("## VOIP remoteCandidateSource ${callContext.remoteCandidateSource}")
+        callContext.remoteIceCandidateDisposable = callContext.remoteCandidateSource?.subscribe({
+            Timber.v("## VOIP adding remote ice candidate $it")
+            callContext.peerConnection?.addIceCandidate(it)
+        }, {
+            Timber.v("## VOIP failed to add remote ice candidate $it")
+        })
     }
 
     private fun createLocalStream(callContext: CallContext) {
@@ -544,10 +569,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun acceptIncomingCall() {
-        Timber.v("## VOIP acceptIncomingCall from state ${currentCall?.mxCall?.state}")
-        val mxCall = currentCall?.mxCall
-        if (mxCall?.state == CallState.LocalRinging) {
-            getTurnServer { turnServer ->
+        GlobalScope.launch(dispatcher) {
+            Timber.v("## VOIP acceptIncomingCall from state ${currentCall?.mxCall?.state}")
+            val mxCall = currentCall?.mxCall
+            if (mxCall?.state == CallState.LocalRinging) {
+                val turnServer = getTurnServer()
                 internalAcceptIncomingCall(currentCall!!, turnServer)
             }
         }
@@ -739,22 +765,21 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    private fun createAnswer() {
+    private suspend fun createAnswer(): SessionDescription? {
         Timber.w("## VOIP createAnswer")
-        val call = currentCall ?: return
+        val call = currentCall ?: return null
+        val peerConnection = call.peerConnection ?: return null
         val constraints = MediaConstraints().apply {
             mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
             mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", if (call.mxCall.isVideoCall) "true" else "false"))
         }
-        executor.execute {
-            call.peerConnection?.createAnswer(object : SdpObserverAdapter() {
-                override fun onCreateSuccess(p0: SessionDescription?) {
-                    if (p0 == null) return
-                    call.peerConnection?.setLocalDescription(object : SdpObserverAdapter() {}, p0)
-                    // Now need to send it
-                    call.mxCall.accept(p0)
-                }
-            }, constraints)
+        return try {
+            val localDescription = peerConnection.awaitCreateAnswer(constraints) ?: return null
+            peerConnection.awaitSetLocalDescription(localDescription)
+            localDescription
+        } catch (failure: Throwable) {
+            Timber.v("Fail to create answer")
+            null
         }
     }
 
@@ -862,11 +887,17 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 matrixId = currentSession?.myUserId ?: "",
                 callId = mxCall.callId
         )
-        executor.execute {
+        GlobalScope.launch(dispatcher) {
             Timber.v("## VOIP onCallAnswerReceived ${callAnswerContent.callId}")
             val sdp = SessionDescription(SessionDescription.Type.ANSWER, callAnswerContent.answer.sdp)
-            call.peerConnection?.setRemoteDescription(object : SdpObserverAdapter() {
-            }, sdp)
+            try {
+                call.peerConnection?.awaitSetRemoteDescription(sdp)
+            } catch (failure: Throwable) {
+                return@launch
+            }
+            if (call.mxCall.opponentPartyId?.hasValue().orFalse()) {
+                call.mxCall.selectAnswer()
+            }
         }
     }
 
@@ -902,7 +933,50 @@ class WebRtcPeerConnectionManager @Inject constructor(
             call.mxCall.state = CallState.Terminated
             endCall(false)
         }
+    }
 
+    override fun onCallNegotiateReceived(callNegotiateContent: CallNegotiateContent) {
+        val call = currentCall ?: return
+        if (call.mxCall.callId != callNegotiateContent.callId) return Unit.also {
+            Timber.w("onCallNegotiateReceived for non active call? ${callNegotiateContent.callId}")
+        }
+        val description = callNegotiateContent.description
+        val type = description?.type
+        val sdpText = description?.sdp
+        if (type == null || sdpText == null) {
+            Timber.i("Ignoring invalid m.call.negotiate event");
+            return;
+        }
+        val peerConnection = call.peerConnection ?: return
+        // Politeness always follows the direction of the call: in a glare situation,
+        // we pick either the inbound or outbound call, so one side will always be
+        // inbound and one outbound
+        val polite = !call.mxCall.isOutgoing
+        // Here we follow the perfect negotiation logic from
+        // https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Perfect_negotiation
+        val offerCollision = description.type == SdpType.OFFER
+                && (call.makingOffer || peerConnection.signalingState() != PeerConnection.SignalingState.STABLE)
+
+        call.ignoreOffer = !polite && offerCollision
+        if (call.ignoreOffer) {
+            Timber.i("Ignoring colliding negotiate event because we're impolite")
+            return
+        }
+
+        GlobalScope.launch(dispatcher) {
+            try {
+                val sdp = SessionDescription(type.asWebRTC(), sdpText)
+                peerConnection.awaitSetRemoteDescription(sdp)
+                if (type == SdpType.OFFER) {
+                    // create a answer, set local description and send via signaling
+                    createAnswer()?.also {
+                        call.mxCall.negotiate(it)
+                    }
+                }
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Failed to complete negotiation")
+            }
+        }
     }
 
     override fun onCallManagedByOtherSession(callId: String) {
@@ -921,6 +995,27 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
+    /**
+     * Indicates whether we are 'on hold' to the remote party (ie. if true,
+     * they cannot hear us). Note that this will return true when we put the
+     * remote on hold too due to the way hold is implemented (since we don't
+     * wish to play hold music when we put a call on hold, we use 'inactive'
+     * rather than 'sendonly')
+     * @returns true if the other party has put us on hold
+     */
+    private fun isLocalOnHold(callContext: CallContext): Boolean {
+        if (callContext.mxCall.state !is CallState.Connected) return false
+        var callOnHold = true
+        // We consider a call to be on hold only if *all* the tracks are on hold
+        // (is this the right thing to do?)
+        for (transceiver in callContext.peerConnection?.transceivers ?: emptyList()) {
+            val trackOnHold = transceiver.currentDirection == RtpTransceiver.RtpTransceiverDirection.INACTIVE
+                    || transceiver.currentDirection == RtpTransceiver.RtpTransceiverDirection.RECV_ONLY
+            if (!trackOnHold) callOnHold = false;
+        }
+        return callOnHold;
+    }
+
     private inner class StreamObserver(val callContext: CallContext) : PeerConnection.Observer {
 
         override fun onConnectionChange(newState: PeerConnection.PeerConnectionState?) {
@@ -930,14 +1025,14 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * Every ICE transport used by the connection is either in use (state "connected" or "completed")
                  * or is closed (state "closed"); in addition, at least one transport is either "connected" or "completed"
                  */
-                PeerConnection.PeerConnectionState.CONNECTED    -> {
+                PeerConnection.PeerConnectionState.CONNECTED -> {
                     callContext.mxCall.state = CallState.Connected(newState)
                     callAudioManager.onCallConnected(callContext.mxCall)
                 }
                 /**
                  * One or more of the ICE transports on the connection is in the "failed" state.
                  */
-                PeerConnection.PeerConnectionState.FAILED       -> {
+                PeerConnection.PeerConnectionState.FAILED -> {
                     // This can be temporary, e.g when other ice not yet received...
                     // callContext.mxCall.state = CallState.ERROR
                     callContext.mxCall.state = CallState.Connected(newState)
@@ -953,7 +1048,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                      * One or more of the ICE transports are currently in the process of establishing a connection;
                      * that is, their RTCIceConnectionState is either "checking" or "connected", and no transports are in the "failed" state
                      */
-                PeerConnection.PeerConnectionState.CONNECTING   -> {
+                PeerConnection.PeerConnectionState.CONNECTING -> {
                     callContext.mxCall.state = CallState.Connected(PeerConnection.PeerConnectionState.CONNECTING)
                 }
                 /**
@@ -969,7 +1064,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 PeerConnection.PeerConnectionState.DISCONNECTED -> {
                     callContext.mxCall.state = CallState.Connected(newState)
                 }
-                null                                            -> {
+                null -> {
                 }
             }
         }
@@ -994,14 +1089,14 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * the ICE agent is gathering addresses or is waiting to be given remote candidates through
                  * calls to RTCPeerConnection.addIceCandidate() (or both).
                  */
-                PeerConnection.IceConnectionState.NEW          -> {
+                PeerConnection.IceConnectionState.NEW -> {
                 }
                 /**
                  * The ICE agent has been given one or more remote candidates and is checking pairs of local and remote candidates
                  * against one another to try to find a compatible match, but has not yet found a pair which will allow
                  * the peer connection to be made. It's possible that gathering of candidates is also still underway.
                  */
-                PeerConnection.IceConnectionState.CHECKING     -> {
+                PeerConnection.IceConnectionState.CHECKING -> {
                 }
 
                 /**
@@ -1010,7 +1105,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * It's possible that gathering is still underway, and it's also possible that the ICE agent is still checking
                  * candidates against one another looking for a better connection to use.
                  */
-                PeerConnection.IceConnectionState.CONNECTED    -> {
+                PeerConnection.IceConnectionState.CONNECTED -> {
                 }
                 /**
                  * Checks to ensure that components are still connected failed for at least one component of the RTCPeerConnection.
@@ -1024,7 +1119,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * compatible matches for all components of the connection.
                  * It is, however, possible that the ICE agent did find compatible connections for some components.
                  */
-                PeerConnection.IceConnectionState.FAILED       -> {
+                PeerConnection.IceConnectionState.FAILED -> {
                     // I should not hangup here..
                     // because new candidates could arrive
                     // callContext.mxCall.hangUp()
@@ -1032,12 +1127,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 /**
                  *  The ICE agent has finished gathering candidates, has checked all pairs against one another, and has found a connection for all components.
                  */
-                PeerConnection.IceConnectionState.COMPLETED    -> {
+                PeerConnection.IceConnectionState.COMPLETED -> {
                 }
                 /**
                  * The ICE agent for this RTCPeerConnection has shut down and is no longer handling requests.
                  */
-                PeerConnection.IceConnectionState.CLOSED       -> {
+                PeerConnection.IceConnectionState.CLOSED -> {
                 }
             }
         }
@@ -1090,8 +1185,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         override fun onRenegotiationNeeded() {
             Timber.v("## VOIP StreamObserver onRenegotiationNeeded")
-            // Should not do anything, for now we follow a pre-agreed-upon
-            // signaling/negotiation protocol.
+            val call = currentCall ?: return
+            if (call.mxCall.state != CallState.CreateOffer && call.mxCall.opponentVersion == 0) {
+                Timber.v("Opponent does not support renegotiation: ignoring onRenegotiationNeeded event")
+                return
+            }
+            GlobalScope.sendSdpOffer(callContext)
         }
 
         /**

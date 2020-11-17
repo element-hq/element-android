@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
+import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
 
@@ -50,6 +51,11 @@ interface CallListener {
      * Called when an answer has been selected
      */
     fun onCallSelectAnswerReceived(callSelectAnswerContent: CallSelectAnswerContent)
+
+    /**
+     * Called when a negotiation is sent
+     */
+    fun onCallNegotiateReceived(callNegotiateContent: CallNegotiateContent)
 
     fun onCallManagedByOtherSession(callId: String)
 }

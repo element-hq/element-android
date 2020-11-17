@@ -25,11 +25,7 @@ interface MxCallDetail {
     val isOutgoing: Boolean
     val roomId: String
     val opponentUserId: String
-    val ourPartyId: String
     val isVideoCall: Boolean
-
-    var opponentPartyId: Optional<String>?
-    var opponentVersion: Int
 }
 
 /**
@@ -41,7 +37,9 @@ interface MxCall : MxCallDetail {
         const val VOIP_PROTO_VERSION = 0
     }
 
-
+    val ourPartyId: String
+    var opponentPartyId: Optional<String>?
+    var opponentVersion: Int
 
     var state: CallState
 
@@ -50,6 +48,11 @@ interface MxCall : MxCallDetail {
      * It has no effect on outgoing call
      */
     fun accept(sdp: SessionDescription)
+
+    /**
+     * SDP negotiation for media pause, hold/resume, ICE restarts and voice/video call up/downgrading
+     */
+    fun negotiate(sdp: SessionDescription)
 
     /**
      * This has to be sent by the caller's client once it has chosen an answer.

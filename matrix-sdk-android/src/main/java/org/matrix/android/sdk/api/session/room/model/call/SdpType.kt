@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.room.model.call
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.webrtc.SessionDescription
 
 @JsonClass(generateAdapter = false)
 enum class SdpType {
@@ -25,5 +26,21 @@ enum class SdpType {
     OFFER,
 
     @Json(name = "answer")
-    ANSWER
+    ANSWER;
+}
+
+fun SdpType.asWebRTC(): SessionDescription.Type {
+    return if (this == SdpType.OFFER) {
+        SessionDescription.Type.OFFER
+    } else {
+        SessionDescription.Type.ANSWER
+    }
+}
+
+fun SessionDescription.Type.toSdpType(): SdpType {
+    return if (this == SessionDescription.Type.OFFER) {
+        SdpType.OFFER
+    } else {
+        SdpType.ANSWER
+    }
 }

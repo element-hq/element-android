@@ -30,10 +30,10 @@ open class SdpObserverAdapter : SdpObserver {
     }
 
     override fun onCreateSuccess(p0: SessionDescription?) {
-        Timber.e("## SdpObserver: onSetFailure $p0")
+        Timber.v("## SdpObserver: onCreateSuccess $p0")
     }
 
     override fun onCreateFailure(p0: String?) {
-        Timber.e("## SdpObserver: onSetFailure $p0")
+        Timber.e("## SdpObserver: onCreateFailure $p0")
     }
 }

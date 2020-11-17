@@ -156,7 +156,20 @@ internal class DefaultCallSignalingService @Inject constructor(
             EventType.CALL_SELECT_ANSWER -> {
                 handleCallSelectAnswerEvent(event)
             }
+            EventType.CALL_NEGOTIATE -> {
+                handleCallNegotiateEvent(event)
+            }
         }
+    }
+
+    private fun handleCallNegotiateEvent(event: Event) {
+        val content = event.getClearContent().toModel<CallSelectAnswerContent>() ?: return
+        val call = content.getCall() ?: return
+        if (call.ourPartyId == content.partyId) {
+            // Ignore remote echo
+            return
+        }
+        callListenersDispatcher.onCallSelectAnswerReceived(content)
     }
 
     private fun handleCallSelectAnswerEvent(event: Event) {
