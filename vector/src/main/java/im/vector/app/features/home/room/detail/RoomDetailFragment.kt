@@ -934,6 +934,12 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    private val attachmentVideoActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            attachmentsHelper.onRecVideoResult()
+        }
+    }
+
     private val contentAttachmentActivityResultLauncher = registerStartForActivityResult { activityResult ->
         val data = activityResult.data ?: return@registerStartForActivityResult
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -1918,6 +1924,7 @@ class RoomDetailFragment @Inject constructor(
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
+            AttachmentTypeSelectorView.Type.VIDEO  -> attachmentsHelper.openCameraForVideo(requireContext(), attachmentVideoActivityResultLauncher)
         }.exhaustive
     }
 

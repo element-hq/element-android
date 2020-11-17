@@ -42,6 +42,7 @@ import im.vector.app.core.extensions.getMeasurements
 import im.vector.app.core.utils.PERMISSIONS_EMPTY
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_RECORDING
 import im.vector.app.features.attachments.AttachmentTypeSelectorView.Callback
 import kotlin.math.max
 
@@ -68,6 +69,7 @@ class AttachmentTypeSelectorView(context: Context,
     private var stickersButton: ImageButton
     private var audioButton: ImageButton
     private var contactButton: ImageButton
+    private var videoButton: ImageButton
 
     private var anchor: View? = null
 
@@ -80,6 +82,7 @@ class AttachmentTypeSelectorView(context: Context,
         stickersButton = layout.findViewById<ImageButton>(R.id.attachmentStickersButton).configure(Type.STICKER)
         audioButton = layout.findViewById<ImageButton>(R.id.attachmentAudioButton).configure(Type.AUDIO)
         contactButton = layout.findViewById<ImageButton>(R.id.attachmentContactButton).configure(Type.CONTACT)
+        videoButton = layout.findViewById<ImageButton>(R.id.attachmentRecButton).configure(Type.VIDEO)
         contentView = root
         width = LinearLayout.LayoutParams.MATCH_PARENT
         height = LinearLayout.LayoutParams.WRAP_CONTENT
@@ -108,6 +111,7 @@ class AttachmentTypeSelectorView(context: Context,
         contentView.doOnNextLayout {
             animateWindowInCircular(anchor, contentView)
         }
+        animateButtonIn(videoButton, ANIMATION_DURATION / 2)
         animateButtonIn(galleryButton, ANIMATION_DURATION / 2)
         animateButtonIn(cameraButton, ANIMATION_DURATION / 2)
         animateButtonIn(fileButton, ANIMATION_DURATION / 4)
@@ -214,6 +218,7 @@ class AttachmentTypeSelectorView(context: Context,
      */
     enum class Type(val permissionsBit: Int) {
         CAMERA(PERMISSIONS_FOR_TAKING_PHOTO),
+        VIDEO(PERMISSIONS_FOR_VIDEO_RECORDING),
         GALLERY(PERMISSIONS_EMPTY),
         FILE(PERMISSIONS_EMPTY),
         STICKER(PERMISSIONS_EMPTY),

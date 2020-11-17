@@ -2,7 +2,7 @@ Changes in Element 1.0.11 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Add "Record video" option to record a video using system camera and then send it 
 
 Improvements 🙌:
  - Open an existing DM instead of creating a new one (#2319)

@@ -98,6 +98,13 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     }
 
     /**
+     * Starts the process for handling capture video picking
+     */
+    fun openCameraForVideo(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
+        captureUri = MultiPicker.get(MultiPicker.RECVIDEO).startWithExpectingFile(context, activityResultLauncher)
+    }
+
+    /**
      * Starts the process for handling contact picking
      */
     fun selectContact(activityResultLauncher: ActivityResultLauncher<Intent>) {
@@ -145,6 +152,18 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
         captureUri?.let { captureUri ->
             MultiPicker.get(MultiPicker.CAMERA)
                     .getTakenPhoto(context, captureUri)
+                    ?.let {
+                        callback.onContentAttachmentsReady(
+                                listOf(it).map { it.toContentAttachmentData() }
+                        )
+                    }
+        }
+    }
+
+    fun onRecVideoResult() {
+        captureUri?.let { captureUri ->
+            MultiPicker.get(MultiPicker.RECVIDEO)
+                    .getTakenVideo(context, captureUri)
                     ?.let {
                         callback.onContentAttachmentsReady(
                                 listOf(it).map { it.toContentAttachmentData() }
