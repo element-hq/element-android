@@ -228,11 +228,11 @@ internal class DefaultCallSignalingService @Inject constructor(
     }
 
     private fun handleCallInviteEvent(event: Event) {
-        val content = event.getClearContent().toModel<CallInviteContent>() ?: return
-        if (content.partyId == deviceId) {
-            // Ignore remote echo
+        if (event.senderId == userId) {
+            // ignore invites you send
             return
         }
+        val content = event.getClearContent().toModel<CallInviteContent>() ?: return
         val incomingCall = MxCallImpl(
                 callId = content.callId ?: return,
                 isOutgoing = false,
