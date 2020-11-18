@@ -60,10 +60,10 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
                                 if (!isAdded) {
                                     return@launch
                                 }
+                                hideLoadingView()
                                 result.onSuccess {
                                     preference.setPushRule(ruleAndKind.copy(pushRule = newRule))
                                 }
-                                hideLoadingView()
                                 result.onFailure { failure ->
                                     // Restore the previous value
                                     refreshDisplay()
