@@ -116,22 +116,23 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                     listener?.setAliasLocalPart(value)
                 }
             }
-        }
-        formSwitchItem {
-            id("encryption")
-            enabled(enableFormElement)
-            title(stringProvider.getString(R.string.create_room_encryption_title))
-            summary(
-                    if (viewState.hsAdminHasDisabledE2E) {
-                        stringProvider.getString(R.string.settings_hs_admin_e2e_disabled)
-                    } else {
-                        stringProvider.getString(R.string.create_room_encryption_description)
-                    }
-            )
-            switchChecked(viewState.isEncrypted)
+        } else {
+            formSwitchItem {
+                id("encryption")
+                enabled(enableFormElement)
+                title(stringProvider.getString(R.string.create_room_encryption_title))
+                summary(
+                        if (viewState.hsAdminHasDisabledE2E) {
+                            stringProvider.getString(R.string.settings_hs_admin_e2e_disabled)
+                        } else {
+                            stringProvider.getString(R.string.create_room_encryption_description)
+                        }
+                )
+                switchChecked(viewState.isEncrypted)
 
-            listener { value ->
-                listener?.setIsEncrypted(value)
+                listener { value ->
+                    listener?.setIsEncrypted(value)
+                }
             }
         }
         formAdvancedToggleItem {
