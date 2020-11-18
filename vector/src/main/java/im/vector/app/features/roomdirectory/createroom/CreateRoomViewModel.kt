@@ -23,6 +23,7 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -147,6 +148,8 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
         if (action.isPublic) {
             copy(
                     roomType = CreateRoomViewState.RoomType.Public(""),
+                    // Reset any error in the form about alias
+                    asyncCreateRoomRequest = Uninitialized,
                     isEncrypted = false
             )
         } else {
@@ -162,7 +165,9 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
             if (state.roomType is CreateRoomViewState.RoomType.Public) {
                 setState {
                     copy(
-                            roomType = CreateRoomViewState.RoomType.Public(action.aliasLocalPart)
+                            roomType = CreateRoomViewState.RoomType.Public(action.aliasLocalPart),
+                            // Reset any error in the form about alias
+                            asyncCreateRoomRequest = Uninitialized
                     )
                 }
             }
