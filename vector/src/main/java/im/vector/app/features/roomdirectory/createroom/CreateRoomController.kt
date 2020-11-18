@@ -96,8 +96,8 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                 listener?.setIsPublic(value)
             }
         }
-        // Room alias
         if (viewState.roomType is CreateRoomViewState.RoomType.Public) {
+            // Room alias for public room
             roomAliasEditItem {
                 id("alias")
                 enabled(enableFormElement)
@@ -117,6 +117,7 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                 }
             }
         } else {
+            // Room encryption for private room
             formSwitchItem {
                 id("encryption")
                 enabled(enableFormElement)
