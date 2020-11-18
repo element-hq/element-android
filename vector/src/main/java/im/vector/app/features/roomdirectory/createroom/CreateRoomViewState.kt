@@ -20,6 +20,7 @@ import android.net.Uri
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import org.matrix.android.sdk.api.extensions.orTrue
 
 data class CreateRoomViewState(
         val avatarUri: Uri? = null,
@@ -41,7 +42,10 @@ data class CreateRoomViewState(
     /**
      * Return true if there is not important input from user
      */
-    fun isEmpty() = avatarUri == null && roomName.isEmpty() && roomTopic.isEmpty()
+    fun isEmpty() = avatarUri == null
+            && roomName.isEmpty()
+            && roomTopic.isEmpty()
+            && (roomType as? RoomType.Public)?.aliasLocalPart?.isEmpty().orTrue()
 
     sealed class RoomType {
         object Private : RoomType()
