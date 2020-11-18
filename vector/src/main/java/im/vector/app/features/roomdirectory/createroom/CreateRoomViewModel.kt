@@ -17,10 +17,9 @@
 package im.vector.app.features.roomdirectory.createroom
 
 import androidx.core.net.toFile
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -31,7 +30,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
-import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
@@ -88,13 +86,9 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: CreateRoomViewState): CreateRoomViewModel? {
-            val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()
+            val fragment: CreateRoomFragment = (viewModelContext as FragmentViewModelContext).fragment()
 
-            return when (activity) {
-                is CreateRoomActivity    -> activity.createRoomViewModelFactory.create(state)
-                is RoomDirectoryActivity -> activity.createRoomViewModelFactory.create(state)
-                else                     -> error("Wrong activity")
-            }
+            return fragment.createRoomViewModelFactory.create(state)
         }
     }
 

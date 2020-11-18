@@ -18,10 +18,12 @@ package im.vector.app.features.roomdirectory.createroom
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
@@ -33,12 +35,19 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_create_room.*
 import timber.log.Timber
 import javax.inject.Inject
 
+@Parcelize
+data class CreateRoomArgs(
+        val initialName: String
+) : Parcelable
+
 class CreateRoomFragment @Inject constructor(
         private val createRoomController: CreateRoomController,
+        val createRoomViewModelFactory: CreateRoomViewModel.Factory,
         colorProvider: ColorProvider
 ) : VectorBaseFragment(),
         CreateRoomController.Listener,
@@ -46,8 +55,8 @@ class CreateRoomFragment @Inject constructor(
         OnBackPressed {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
-    // TODO BMA: use fragmentViewMode(). Else back does not reset the form. Use Fragment Argument to pass room name
-    private val viewModel: CreateRoomViewModel by activityViewModel()
+    private val viewModel: CreateRoomViewModel by fragmentViewModel()
+    private val args: CreateRoomArgs by args()
 
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 

@@ -34,6 +34,10 @@ data class CreateRoomViewState(
         val asyncCreateRoomRequest: Async<String> = Uninitialized
 ) : MvRxState {
 
+    constructor(args: CreateRoomArgs) : this(
+            roomName = args.initialName
+    )
+
     /**
      * Return true if there is not important input from user
      */
