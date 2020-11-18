@@ -24,7 +24,6 @@ import android.media.MediaMetadataRetriever
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
-//import im.vector.lib.multipicker.utils.ImageUtils
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
