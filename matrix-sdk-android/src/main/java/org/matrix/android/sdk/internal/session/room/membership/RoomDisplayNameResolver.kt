@@ -110,25 +110,25 @@ internal class RoomDisplayNameResolver @Inject constructor(
             }
             val otherMembersCount = otherMembersSubset.count()
             name = when (otherMembersCount) {
-                0 -> {
+                0    -> {
                     stringProvider.getString(R.string.room_displayname_empty_room)
                     // TODO (was xx and yyy) ...
                 }
-                1 -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
-                2 -> {
+                1    -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
+                2    -> {
                     stringProvider.getString(R.string.room_displayname_two_members,
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[1], roomMembers)
                     )
                 }
-                3 -> {
+                3    -> {
                     stringProvider.getString(R.string.room_displayname_3_members,
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[1], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[2], roomMembers)
                     )
                 }
-                4 -> {
+                4    -> {
                     stringProvider.getString(R.string.room_displayname_4_members,
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[1], roomMembers),
@@ -138,7 +138,9 @@ internal class RoomDisplayNameResolver @Inject constructor(
                 }
                 else -> {
                     val remainingCount = invitedCount + joinedCount - otherMembersCount + 1
-                    stringProvider.getString(R.string.room_displayname_four_and_more_members,
+                    stringProvider.getQuantityString(
+                            R.plurals.room_displayname_four_and_more_members,
+                            remainingCount,
                             resolveRoomMemberName(otherMembersSubset[0], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[1], roomMembers),
                             resolveRoomMemberName(otherMembersSubset[2], roomMembers),
