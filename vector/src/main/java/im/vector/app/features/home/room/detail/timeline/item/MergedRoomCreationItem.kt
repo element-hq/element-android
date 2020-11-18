@@ -165,36 +165,37 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             )
         }
         holder.roomTopicText.movementMethod = movementMethod
+
         val roomItem = roomSummary?.toMatrixItem()
+        val shouldSetAvatar = attributes.canChangeAvatar
+                && (roomSummary?.isDirect == false || (isDirect && membersCount >= 2))
+                && roomItem?.avatarUrl.isNullOrBlank()
+
+        holder.roomAvatarImageView.isVisible = roomItem != null
         if (roomItem != null) {
-            holder.roomAvatarImageView.isVisible = true
             attributes.avatarRenderer.render(roomItem, holder.roomAvatarImageView)
             holder.roomAvatarImageView.setOnClickListener(DebouncedClickListener({ view ->
-                attributes.callback?.onTimelineItemAction(RoomDetailAction.ShowRoomAvatarFullScreen(roomItem, view))
-            }))
-        } else {
-            holder.roomAvatarImageView.isVisible = false
-        }
-
-        if (isDirect) {
-            holder.addPeopleButton.isVisible = false
-        } else {
-            holder.addPeopleButton.isVisible = true
-            holder.addPeopleButton.setOnClickListener(DebouncedClickListener({ _ ->
-                attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionInvitePeople)
+                if (shouldSetAvatar) {
+                    attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionSetAvatar)
+                } else {
+                    // Note: this is no op if there is no avatar on the room
+                    attributes.callback?.onTimelineItemAction(RoomDetailAction.ShowRoomAvatarFullScreen(roomItem, view))
+                }
             }))
         }
 
-        val shouldShowSetAvatar = attributes.canChangeAvatar
-                && (roomSummary?.isDirect == false || (isDirect && membersCount >= 2))
-
-        if (shouldShowSetAvatar && roomItem?.avatarUrl.isNullOrBlank()) {
-            holder.setAvatarButton.isVisible = true
+        holder.setAvatarButton.isVisible = shouldSetAvatar
+        if (shouldSetAvatar) {
             holder.setAvatarButton.setOnClickListener(DebouncedClickListener({ _ ->
                 attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionSetAvatar)
             }))
-        } else {
-            holder.setAvatarButton.isVisible = false
+        }
+
+        holder.addPeopleButton.isVisible = !isDirect
+        if (!isDirect) {
+            holder.addPeopleButton.setOnClickListener(DebouncedClickListener({ _ ->
+                attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionInvitePeople)
+            }))
         }
     }
 
@@ -209,7 +210,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         val roomNameText by bind<TextView>(R.id.roomNameTileText)
         val roomDescriptionText by bind<TextView>(R.id.roomNameDescriptionText)
         val roomTopicText by bind<TextView>(R.id.roomNameTopicText)
-        val roomAvatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
+        val roomAvatarImageView by bind<ImageView>(R.id.creationTileRoomAvatarImageView)
         val addPeopleButton by bind<View>(R.id.creationTileAddPeopleButton)
         val setAvatarButton by bind<View>(R.id.creationTileSetAvatarButton)
     }

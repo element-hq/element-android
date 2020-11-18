@@ -3,16 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/creationTile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp">
+        android:layout_height="wrap_content">
 
         <FrameLayout
             android:id="@+id/creationEncryptionTile"
@@ -28,10 +24,11 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <include layout="@layout/item_timeline_event_status_tile_stub" />
+
         </FrameLayout>
 
         <ImageView
-            android:id="@+id/roomAvatarImageView"
+            android:id="@+id/creationTileRoomAvatarImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginTop="20dp"
@@ -40,8 +37,8 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.Icon"
             android:id="@+id/creationTileSetAvatarButton"
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:backgroundTint="?riotx_bottom_nav_background_color"
@@ -58,7 +55,7 @@
             app:iconPadding="0dp"
             app:iconSize="20dp"
             app:iconTint="?riot_primary_text_color"
-            app:layout_constraintCircle="@+id/roomAvatarImageView"
+            app:layout_constraintCircle="@+id/creationTileRoomAvatarImageView"
             app:layout_constraintCircleAngle="135"
             app:layout_constraintCircleRadius="34dp"
             tools:ignore="MissingConstraints" />
@@ -74,8 +71,8 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/roomAvatarImageView"
-            tools:text="Room Name" />
+            app:layout_constraintTop_toBottomOf="@id/creationTileRoomAvatarImageView"
+            tools:text="@sample/matrix.json/data/roomName" />
 
         <TextView
             android:id="@+id/roomNameDescriptionText"
@@ -89,8 +86,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/roomNameTileText"
-            tools:text="This is the beginning of Room name.  " />
-
+            tools:text="@string/this_is_the_beginning_of_room_no_name" />
 
         <TextView
             android:id="@+id/roomNameTopicText"
@@ -105,7 +101,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/roomNameDescriptionText"
             tools:text="@string/room_created_summary_no_topic_creation_text" />
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/creationTileAddPeopleButton"
@@ -140,9 +135,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/addPeopleButtonBg"
                 app:layout_constraintEnd_toEndOf="@id/addPeopleButtonBg"
                 app:layout_constraintStart_toStartOf="@id/addPeopleButtonBg"
-                app:layout_constraintTop_toTopOf="@id/addPeopleButtonBg"
-
-                />
+                app:layout_constraintTop_toTopOf="@id/addPeopleButtonBg" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -153,6 +146,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/addPeopleButtonBg" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
