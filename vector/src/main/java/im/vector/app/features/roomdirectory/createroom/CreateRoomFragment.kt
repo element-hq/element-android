@@ -46,6 +46,7 @@ class CreateRoomFragment @Inject constructor(
         OnBackPressed {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
+    // TODO BMA: use fragmentViewMode(). Else back does not reset the form. Use Fragment Argument to pass room name
     private val viewModel: CreateRoomViewModel by activityViewModel()
 
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
@@ -102,8 +103,8 @@ class CreateRoomFragment @Inject constructor(
         viewModel.handle(CreateRoomAction.SetIsPublic(isPublic))
     }
 
-    override fun setIsInRoomDirectory(isInRoomDirectory: Boolean) {
-        viewModel.handle(CreateRoomAction.SetIsInRoomDirectory(isInRoomDirectory))
+    override fun setAliasLocalPart(aliasLocalPart: String) {
+        viewModel.handle(CreateRoomAction.SetRoomAliasLocalPart(aliasLocalPart))
     }
 
     override fun setIsEncrypted(isEncrypted: Boolean) {

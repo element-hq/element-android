@@ -77,7 +77,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
             setState {
                 copy(
-                        isEncrypted = !isPublic && adminE2EByDefault,
+                        isEncrypted = roomType is CreateRoomViewState.RoomType.Private && adminE2EByDefault,
                         hsAdminHasDisabledE2E = !adminE2EByDefault
                 )
             }
@@ -100,16 +100,16 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
     override fun handle(action: CreateRoomAction) {
         when (action) {
-            is CreateRoomAction.SetAvatar            -> setAvatar(action)
-            is CreateRoomAction.SetName              -> setName(action)
-            is CreateRoomAction.SetTopic             -> setTopic(action)
-            is CreateRoomAction.SetIsPublic          -> setIsPublic(action)
-            is CreateRoomAction.SetIsInRoomDirectory -> setIsInRoomDirectory(action)
-            is CreateRoomAction.SetIsEncrypted       -> setIsEncrypted(action)
-            is CreateRoomAction.Create               -> doCreateRoom()
-            CreateRoomAction.Reset                   -> doReset()
-            CreateRoomAction.ToggleShowAdvanced      -> toggleShowAdvanced()
-            is CreateRoomAction.DisableFederation    -> disableFederation(action)
+            is CreateRoomAction.SetAvatar             -> setAvatar(action)
+            is CreateRoomAction.SetName               -> setName(action)
+            is CreateRoomAction.SetTopic              -> setTopic(action)
+            is CreateRoomAction.SetIsPublic           -> setIsPublic(action)
+            is CreateRoomAction.SetRoomAliasLocalPart -> setRoomAliasLocalPart(action)
+            is CreateRoomAction.SetIsEncrypted        -> setIsEncrypted(action)
+            is CreateRoomAction.Create                -> doCreateRoom()
+            CreateRoomAction.Reset                    -> doReset()
+            CreateRoomAction.ToggleShowAdvanced       -> toggleShowAdvanced()
+            is CreateRoomAction.DisableFederation     -> disableFederation(action)
         }.exhaustive
     }
 
@@ -150,13 +150,31 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
     private fun setTopic(action: CreateRoomAction.SetTopic) = setState { copy(roomTopic = action.topic) }
 
     private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState {
-        copy(
-                isPublic = action.isPublic,
-                isEncrypted = !action.isPublic && adminE2EByDefault
-        )
+        if (action.isPublic) {
+            copy(
+                    roomType = CreateRoomViewState.RoomType.Public(""),
+                    isEncrypted = false
+            )
+        } else {
+            copy(
+                    roomType = CreateRoomViewState.RoomType.Private,
+                    isEncrypted = adminE2EByDefault
+            )
+        }
     }
 
-    private fun setIsInRoomDirectory(action: CreateRoomAction.SetIsInRoomDirectory) = setState { copy(isInRoomDirectory = action.isInRoomDirectory) }
+    private fun setRoomAliasLocalPart(action: CreateRoomAction.SetRoomAliasLocalPart) {
+        withState { state ->
+            if (state.roomType is CreateRoomViewState.RoomType.Public) {
+                setState {
+                    copy(
+                            roomType = CreateRoomViewState.RoomType.Public(action.aliasLocalPart)
+                    )
+                }
+            }
+        }
+        // Else ignore
+    }
 
     private fun setIsEncrypted(action: CreateRoomAction.SetIsEncrypted) = setState { copy(isEncrypted = action.isEncrypted) }
 
@@ -174,10 +192,21 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
                     name = state.roomName.takeIf { it.isNotBlank() }
                     topic = state.roomTopic.takeIf { it.isNotBlank() }
                     avatarUri = state.avatarUri
-                    // Directory visibility
-                    visibility = if (state.isInRoomDirectory) RoomDirectoryVisibility.PUBLIC else RoomDirectoryVisibility.PRIVATE
-                    // Public room
-                    preset = if (state.isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
+                    when (state.roomType) {
+                        is CreateRoomViewState.RoomType.Public  -> {
+                            // Directory visibility
+                            visibility = RoomDirectoryVisibility.PUBLIC
+                            // Preset
+                            preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+                            roomAliasName = state.roomType.aliasLocalPart
+                        }
+                        is CreateRoomViewState.RoomType.Private -> {
+                            // Directory visibility
+                            visibility = RoomDirectoryVisibility.PRIVATE
+                            // Preset
+                            preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
+                        }
+                    }.exhaustive
                     // Disabling federation
                     disableFederation = state.disableFederation
 

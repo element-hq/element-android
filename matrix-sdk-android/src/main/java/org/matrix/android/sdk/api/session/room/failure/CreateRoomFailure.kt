@@ -22,4 +22,7 @@ import org.matrix.android.sdk.api.failure.MatrixError
 sealed class CreateRoomFailure : Failure.FeatureFailure() {
     object CreatedWithTimeout : CreateRoomFailure()
     data class CreatedWithFederationFailure(val matrixError: MatrixError) : CreateRoomFailure()
+    object RoomAliasEmpty: CreateRoomFailure()
+    object RoomAliasNotAvailable: CreateRoomFailure()
+    object RoomAliasInvalid: CreateRoomFailure()
 }

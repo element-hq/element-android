@@ -32,6 +32,7 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.form.formSwitchItem
+import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import javax.inject.Inject
 
 class CreateRoomController @Inject constructor(private val stringProvider: StringProvider,
@@ -61,6 +62,7 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
             is Fail          -> {
                 // display the form
                 buildForm(viewState, true)
+                // TODO BMA DO NOT COMMIT Update this
                 errorWithRetryItem {
                     id("error")
                     text(errorFormatter.toHumanReadable(asyncCreateRoom.error))
@@ -115,21 +117,32 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
             enabled(enableFormElement)
             title(stringProvider.getString(R.string.create_room_public_title))
             summary(stringProvider.getString(R.string.create_room_public_description))
-            switchChecked(viewState.isPublic)
+            switchChecked(viewState.roomType is CreateRoomViewState.RoomType.Public)
+            showDivider(viewState.roomType !is CreateRoomViewState.RoomType.Public)
 
             listener { value ->
                 listener?.setIsPublic(value)
             }
         }
-        formSwitchItem {
-            id("directory")
-            enabled(enableFormElement)
-            title(stringProvider.getString(R.string.create_room_directory_title))
-            summary(stringProvider.getString(R.string.create_room_directory_description))
-            switchChecked(viewState.isInRoomDirectory)
-
-            listener { value ->
-                listener?.setIsInRoomDirectory(value)
+        // Room alias
+        if (viewState.roomType is CreateRoomViewState.RoomType.Public) {
+            roomAliasEditItem {
+                id("alias")
+                enabled(enableFormElement)
+                value(viewState.roomType.aliasLocalPart)
+                homeServer(":" + viewState.homeServerName)
+                errorMessage(
+                        when ((viewState.asyncCreateRoomRequest as? Fail)?.error) {
+                            is CreateRoomFailure.RoomAliasEmpty        -> R.string.create_room_alias_empty
+                            is CreateRoomFailure.RoomAliasNotAvailable -> R.string.create_room_alias_already_in_use
+                            is CreateRoomFailure.RoomAliasInvalid      -> R.string.create_room_alias_invalid
+                            else                                       -> null
+                        }
+                                ?.let { stringProvider.getString(it) }
+                )
+                onTextChange { value ->
+                    listener?.setAliasLocalPart(value)
+                }
             }
         }
         formSwitchItem {
@@ -162,6 +175,7 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                 title(stringProvider.getString(R.string.create_room_disable_federation_title, viewState.homeServerName))
                 summary(stringProvider.getString(R.string.create_room_disable_federation_description))
                 switchChecked(viewState.disableFederation)
+                showDivider(false)
                 listener { value -> listener?.setDisableFederation(value) }
             }
         }
@@ -179,7 +193,7 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
         fun onNameChange(newName: String)
         fun onTopicChange(newTopic: String)
         fun setIsPublic(isPublic: Boolean)
-        fun setIsInRoomDirectory(isInRoomDirectory: Boolean)
+        fun setAliasLocalPart(aliasLocalPart: String)
         fun setIsEncrypted(isEncrypted: Boolean)
         fun retry()
         fun toggleShowAdvanced()
