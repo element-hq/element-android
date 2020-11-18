@@ -45,7 +45,7 @@
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
                     android:importantForAccessibility="no"
-			android:text="@string/attachment_type_video" />
+		    android:text="@string/attachment_type_video" />
                 
             </LinearLayout>
                 
@@ -58,7 +58,7 @@
                     android:orientation="vertical">
                     
             </LinearLayout>
-                    
+
         </LinearLayout>
 
     <LinearLayout
