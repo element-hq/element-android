@@ -102,7 +102,7 @@
             app:layout_constraintTop_toBottomOf="@id/roomNameDescriptionText"
             tools:text="@string/room_created_summary_no_topic_creation_text" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/creationTileAddPeopleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -111,43 +111,30 @@
             android:clickable="true"
             android:contentDescription="@string/add_people"
             android:focusable="true"
-            android:maxWidth="90dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/roomNameTopicText">
 
-            <View
+            <ImageView
                 android:id="@+id/addPeopleButtonBg"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="@drawable/circle"
                 android:backgroundTint="@color/riotx_accent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/addPeopleButtonIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/circle"
-                android:backgroundTint="@color/riotx_accent"
-                android:src="@drawable/ic_add_people"
-                app:layout_constraintBottom_toBottomOf="@id/addPeopleButtonBg"
-                app:layout_constraintEnd_toEndOf="@id/addPeopleButtonBg"
-                app:layout_constraintStart_toStartOf="@id/addPeopleButtonBg"
-                app:layout_constraintTop_toTopOf="@id/addPeopleButtonBg" />
+                android:importantForAccessibility="no"
+                android:scaleType="center"
+                android:src="@drawable/ic_add_people" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:importantForAccessibility="no"
                 android:text="@string/add_people"
-                android:textColor="@color/riotx_accent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/addPeopleButtonBg" />
+                android:textColor="@color/riotx_accent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
