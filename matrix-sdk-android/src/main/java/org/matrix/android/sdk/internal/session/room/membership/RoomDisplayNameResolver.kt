@@ -95,7 +95,6 @@ internal class RoomDisplayNameResolver @Inject constructor(
             val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
             val invitedCount = roomSummary?.invitedMembersCount ?: 0
             val joinedCount = roomSummary?.joinedMembersCount ?: 0
-            val othersTotalCount = invitedCount + joinedCount - 1
             val otherMembersSubset: List<RoomMemberSummaryEntity> = if (roomSummary?.heroes?.isNotEmpty() == true) {
                 roomSummary.heroes.mapNotNull { userId ->
                     roomMembers.getLastRoomMember(userId)?.takeIf {
