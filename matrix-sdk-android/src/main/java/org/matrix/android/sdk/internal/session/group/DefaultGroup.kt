@@ -23,6 +23,6 @@ internal class DefaultGroup(override val groupId: String,
 
     override suspend fun fetchGroupData() {
         val params = GetGroupDataTask.Params.FetchWithIds(listOf(groupId))
-        return getGroupDataTask.execute(params)
+        getGroupDataTask.execute(params)
     }
 }
