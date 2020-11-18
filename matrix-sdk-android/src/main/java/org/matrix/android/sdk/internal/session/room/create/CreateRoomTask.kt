@@ -66,7 +66,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
 
         if (params.preset == CreateRoomPreset.PRESET_PUBLIC_CHAT) {
             if (params.roomAliasName.isNullOrEmpty()) {
-                throw CreateRoomFailure.RoomAliasEmpty
+                throw CreateRoomFailure.RoomAliasError.AliasEmpty
             }
             // Check alias availability
             val fullAlias = "#" + params.roomAliasName + ":" + userId.substringAfter(":")
@@ -85,7 +85,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
             }
                     ?.let {
                         // Alias already exists: error case
-                        throw CreateRoomFailure.RoomAliasNotAvailable
+                        throw CreateRoomFailure.RoomAliasError.AliasNotAvailable
                     }
         }
 
@@ -104,7 +104,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
                 } else if (throwable.httpCode == 400
                         && throwable.error.code == MatrixError.M_UNKNOWN
                         && throwable.error.message == "Invalid characters in room alias") {
-                    throw CreateRoomFailure.RoomAliasInvalid
+                    throw CreateRoomFailure.RoomAliasError.AliasInvalid
                 }
             }
             throw throwable

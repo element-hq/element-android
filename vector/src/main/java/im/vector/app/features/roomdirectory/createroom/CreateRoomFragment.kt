@@ -21,6 +21,8 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -37,7 +39,8 @@ import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_create_room.*
-import timber.log.Timber
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import javax.inject.Inject
 
 @Parcelize
@@ -66,15 +69,29 @@ class CreateRoomFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         vectorBaseActivity.setSupportActionBar(createRoomToolbar)
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
+        setupWaitingView()
         setupRecyclerView()
         createRoomClose.debouncedClicks {
             sharedActionViewModel.post(RoomDirectorySharedAction.Back)
         }
         viewModel.observeViewEvents {
             when (it) {
-                CreateRoomViewEvents.Quit -> vectorBaseActivity.onBackPressed()
+                CreateRoomViewEvents.Quit       -> vectorBaseActivity.onBackPressed()
+                is CreateRoomViewEvents.Failure -> showFailure(it.throwable)
             }.exhaustive
         }
+    }
+
+    override fun showFailure(throwable: Throwable) {
+        // Note: RoomAliasError are displayed directly in the form
+        if (throwable !is CreateRoomFailure.RoomAliasError) {
+            super.showFailure(throwable)
+        }
+    }
+
+    private fun setupWaitingView() {
+        waiting_view_status_text.isVisible = true
+        waiting_view_status_text.setText(R.string.create_room_in_progress)
     }
 
     override fun onDestroyView() {
@@ -132,11 +149,6 @@ class CreateRoomFragment @Inject constructor(
         viewModel.handle(CreateRoomAction.Create)
     }
 
-    override fun retry() {
-        Timber.v("Retry")
-        viewModel.handle(CreateRoomAction.Create)
-    }
-
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return withState(viewModel) {
             return@withState if (!it.isEmpty()) {
@@ -157,6 +169,7 @@ class CreateRoomFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) { state ->
         val async = state.asyncCreateRoomRequest
+        waiting_view.isVisible = async is Loading
         if (async is Success) {
             // Navigate to freshly created room
             navigator.openRoom(requireActivity(), async())

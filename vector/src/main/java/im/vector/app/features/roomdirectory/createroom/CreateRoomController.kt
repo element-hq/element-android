@@ -44,32 +44,8 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
     var index = 0
 
     override fun buildModels(viewState: CreateRoomViewState) {
-        when (val asyncCreateRoom = viewState.asyncCreateRoomRequest) {
-            is Success       -> {
-                // Nothing to display, the screen will be closed
-            }
-            is Loading       -> {
-                // display the form
-                buildForm(viewState, false)
-                loadingItem {
-                    id("loading")
-                }
-            }
-            is Uninitialized -> {
-                // display the form
-                buildForm(viewState, true)
-            }
-            is Fail          -> {
-                // display the form
-                buildForm(viewState, true)
-                // TODO BMA DO NOT COMMIT Update this
-                errorWithRetryItem {
-                    id("error")
-                    text(errorFormatter.toHumanReadable(asyncCreateRoom.error))
-                    listener { listener?.retry() }
-                }
-            }
-        }
+        // display the form
+        buildForm(viewState, viewState.asyncCreateRoomRequest !is Loading)
     }
 
     private fun buildForm(viewState: CreateRoomViewState, enableFormElement: Boolean) {
@@ -133,10 +109,10 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                 homeServer(":" + viewState.homeServerName)
                 errorMessage(
                         when ((viewState.asyncCreateRoomRequest as? Fail)?.error) {
-                            is CreateRoomFailure.RoomAliasEmpty        -> R.string.create_room_alias_empty
-                            is CreateRoomFailure.RoomAliasNotAvailable -> R.string.create_room_alias_already_in_use
-                            is CreateRoomFailure.RoomAliasInvalid      -> R.string.create_room_alias_invalid
-                            else                                       -> null
+                            is CreateRoomFailure.RoomAliasError.AliasEmpty        -> R.string.create_room_alias_empty
+                            is CreateRoomFailure.RoomAliasError.AliasNotAvailable -> R.string.create_room_alias_already_in_use
+                            is CreateRoomFailure.RoomAliasError.AliasInvalid      -> R.string.create_room_alias_invalid
+                            else                                                  -> null
                         }
                                 ?.let { stringProvider.getString(it) }
                 )
@@ -195,7 +171,6 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
         fun setIsPublic(isPublic: Boolean)
         fun setAliasLocalPart(aliasLocalPart: String)
         fun setIsEncrypted(isEncrypted: Boolean)
-        fun retry()
         fun toggleShowAdvanced()
         fun setDisableFederation(disableFederation: Boolean)
         fun submit()

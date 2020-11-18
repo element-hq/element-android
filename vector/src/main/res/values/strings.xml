@@ -2104,6 +2104,7 @@
     <string name="create_room_alias_already_in_use">This address is already in use</string>
     <string name="create_room_alias_empty">Please provide a room address</string>
     <string name="create_room_alias_invalid">Some characters are not allowed</string>
+    <string name="create_room_in_progress">Creating room…</string>
 
     <string name="login_error_threepid_denied">Your email domain is not authorized to register on this server</string>
 
