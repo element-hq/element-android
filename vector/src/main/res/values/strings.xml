@@ -1854,6 +1854,7 @@
     <string name="attachment_type_file">"File"</string>
     <string name="attachment_type_contact">"Contact"</string>
     <string name="attachment_type_camera">"Camera"</string>
+    <string name="attachment_type_video">"Video"</string>
     <string name="attachment_type_audio">"Audio"</string>
     <string name="attachment_type_gallery">"Gallery"</string>
     <string name="attachment_type_sticker">"Sticker"</string>
