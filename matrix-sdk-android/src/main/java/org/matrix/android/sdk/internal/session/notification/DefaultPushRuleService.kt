@@ -103,19 +103,19 @@ internal class DefaultPushRuleService @Inject constructor(
 
     override suspend fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean) {
         // The rules will be updated, and will come back from the next sync response
-        return updatePushRuleEnableStatusTask.execute(UpdatePushRuleEnableStatusTask.Params(kind, pushRule, enabled))
+        updatePushRuleEnableStatusTask.execute(UpdatePushRuleEnableStatusTask.Params(kind, pushRule, enabled))
     }
 
     override suspend fun addPushRule(kind: RuleKind, pushRule: PushRule) {
-        return addPushRuleTask.execute(AddPushRuleTask.Params(kind, pushRule))
+        addPushRuleTask.execute(AddPushRuleTask.Params(kind, pushRule))
     }
 
     override suspend fun updatePushRuleActions(kind: RuleKind, oldPushRule: PushRule, newPushRule: PushRule) {
-        return updatePushRuleActionsTask.execute(UpdatePushRuleActionsTask.Params(kind, oldPushRule, newPushRule))
+        updatePushRuleActionsTask.execute(UpdatePushRuleActionsTask.Params(kind, oldPushRule, newPushRule))
     }
 
     override suspend fun removePushRule(kind: RuleKind, pushRule: PushRule) {
-        return removePushRuleTask.execute(RemovePushRuleTask.Params(kind, pushRule))
+        removePushRuleTask.execute(RemovePushRuleTask.Params(kind, pushRule))
     }
 
     override fun removePushRuleListener(listener: PushRuleService.PushRuleListener) {
