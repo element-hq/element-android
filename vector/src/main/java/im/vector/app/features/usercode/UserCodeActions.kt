@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.userdirectory
+package im.vector.app.features.usercode
 
-import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.util.MatrixItem
 
-/**
- * Transient events for invite users to room screen
- */
-sealed class UserDirectoryViewEvents : VectorViewEvents
+sealed class UserCodeActions : VectorViewModelAction {
+    object DismissAction : UserCodeActions()
+    data class SwitchMode(val mode: UserCodeState.Mode) : UserCodeActions()
+    data class DecodedQRCode(val code: String) : UserCodeActions()
+    data class StartChattingWithUser(val matrixItem: MatrixItem) : UserCodeActions()
+}

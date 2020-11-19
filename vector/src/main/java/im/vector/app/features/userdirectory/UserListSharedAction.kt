@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package im.vector.app.features.userdirectory
 
-import im.vector.app.core.platform.VectorSharedActionViewModel
-import org.matrix.android.sdk.api.session.Session
-import javax.inject.Inject
+import im.vector.app.core.platform.VectorSharedAction
 
-class HomeSharedActionViewModel @Inject constructor(val session: Session) : VectorSharedActionViewModel<HomeActivitySharedAction>()
+sealed class UserListSharedAction : VectorSharedAction {
+    object Close : UserListSharedAction()
+    object GoBack : UserListSharedAction()
+    data class OnMenuItemSelected(val itemId: Int, val invitees: Set<PendingInvitee>) : UserListSharedAction()
+    object OpenPhoneBook : UserListSharedAction()
+    object AddByQrCode : UserListSharedAction()
+}

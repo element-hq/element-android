@@ -23,16 +23,20 @@
         tools:showPaths="true"
         tools:visibility="visible" />
 
-    <im.vector.app.features.home.room.list.widget.DmsFabMenuView
-        android:id="@+id/createDmFabMenu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createChatRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:accessibilityTraversalBefore="@+id/roomListView"
         android:contentDescription="@string/a11y_create_direct_message"
+        android:scaleType="center"
         android:src="@drawable/ic_fab_add_chat"
         android:visibility="gone"
         app:maxImageSize="34dp"
-        app:layoutDescription="@xml/motion_scene_dms_fab_menu"
-        tools:showPaths="true"
+        tools:layout_marginEnd="80dp"
         tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

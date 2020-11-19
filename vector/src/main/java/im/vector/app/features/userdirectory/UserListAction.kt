@@ -16,13 +16,12 @@
 
 package im.vector.app.features.userdirectory
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import im.vector.app.core.platform.VectorViewModelAction
 
-@Parcelize
-data class KnownUsersFragmentArgs(
-        val title: String,
-        val menuResId: Int,
-        val excludedUserIds: Set<String>? = null,
-        val isCreatingRoom: Boolean = false
-) : Parcelable
+sealed class UserListAction : VectorViewModelAction {
+    data class SearchUsers(val value: String) : UserListAction()
+    object ClearSearchUsers : UserListAction()
+    data class SelectPendingInvitee(val pendingInvitee: PendingInvitee) : UserListAction()
+    data class RemovePendingInvitee(val pendingInvitee: PendingInvitee) : UserListAction()
+    object ComputeMatrixToLinkForSharing : UserListAction()
+}

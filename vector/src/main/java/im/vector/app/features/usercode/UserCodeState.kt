@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package im.vector.app.features.usercode
 
-import im.vector.app.core.platform.VectorSharedActionViewModel
-import org.matrix.android.sdk.api.session.Session
-import javax.inject.Inject
+import com.airbnb.mvrx.MvRxState
+import org.matrix.android.sdk.api.util.MatrixItem
 
-class HomeSharedActionViewModel @Inject constructor(val session: Session) : VectorSharedActionViewModel<HomeActivitySharedAction>()
+data class UserCodeState(
+        val userId: String,
+        val matrixItem: MatrixItem? = null,
+        val shareLink: String? = null,
+        val mode: Mode = Mode.SHOW
+) : MvRxState {
+    sealed class Mode {
+        object SHOW : Mode()
+        object SCAN : Mode()
+        data class RESULT(val matrixItem: MatrixItem) : Mode()
+    }
+}

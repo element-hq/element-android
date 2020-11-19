@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.userdirectory
+package im.vector.app.features.usercode
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.platform.VectorViewEvents
 
-sealed class UserDirectoryAction : VectorViewModelAction {
-    data class FilterKnownUsers(val value: String) : UserDirectoryAction()
-    data class SearchDirectoryUsers(val value: String) : UserDirectoryAction()
-    object ClearFilterKnownUsers : UserDirectoryAction()
-    data class SelectPendingInvitee(val pendingInvitee: PendingInvitee) : UserDirectoryAction()
-    data class RemovePendingInvitee(val pendingInvitee: PendingInvitee) : UserDirectoryAction()
+sealed class UserCodeShareViewEvents : VectorViewEvents {
+    data class InviteFriend(val permalink: String) : UserCodeShareViewEvents()
+    object Dismiss : UserCodeShareViewEvents()
+    object ShowWaitingScreen : UserCodeShareViewEvents()
+    object HideWaitingScreen : UserCodeShareViewEvents()
+    data class ToastMessage(val message: String) : UserCodeShareViewEvents()
+    data class NavigateToRoom(val roomId: String) : UserCodeShareViewEvents()
 }

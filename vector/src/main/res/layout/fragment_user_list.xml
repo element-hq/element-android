@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/knownUsersToolbar"
+            android:id="@+id/userListToolbar"
             style="@style/VectorToolbarStyle"
             android:layout_width="0dp"
             android:layout_height="?actionBarSize"
@@ -24,7 +24,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/knownUsersClose"
+                    android:id="@+id/userListClose"
                     android:layout_width="@dimen/layout_touch_size"
                     android:layout_height="@dimen/layout_touch_size"
                     android:clickable="true"
@@ -37,7 +37,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/knownUsersTitle"
+                    android:id="@+id/userListTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -51,7 +51,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/knownUsersClose"
+                    app:layout_constraintStart_toEndOf="@+id/userListClose"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -67,7 +67,7 @@
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/knownUsersToolbar"
+            app:layout_constraintTop_toBottomOf="@+id/userListToolbar"
             app:maxHeight="64dp">
 
             <com.google.android.material.chip.ChipGroup
@@ -79,7 +79,7 @@
         </im.vector.app.core.platform.MaxHeightScrollView>
 
         <EditText
-            android:id="@+id/knownUsersFilter"
+            android:id="@+id/userListSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -87,7 +87,7 @@
             android:background="@null"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
-            android:hint="@string/direct_room_filter_hint"
+            android:hint="@string/user_directory_search_hint"
             android:importantForAutofill="no"
             android:inputType="text"
             android:maxHeight="80dp"
@@ -98,17 +98,17 @@
             app:layout_constraintTop_toBottomOf="@+id/chipGroupScrollView" />
 
         <View
-            android:id="@+id/knownUsersFilterDivider"
+            android:id="@+id/userListFilterDivider"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="?attr/vctr_list_divider_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/knownUsersFilter" />
+            app:layout_constraintTop_toBottomOf="@+id/userListSearch" />
 
 
         <TextView
-            android:id="@+id/knownUsersE2EbyDefaultDisabled"
+            android:id="@+id/userListE2EbyDefaultDisabled"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -117,43 +117,8 @@
             android:textColor="?riotx_text_secondary"
             android:textSize="14sp"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/knownUsersFilterDivider"
+            app:layout_constraintTop_toBottomOf="@id/userListFilterDivider"
             tools:visibility="visible" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/addByMatrixId"
-            style="@style/VectorButtonStyleText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:minHeight="@dimen/layout_touch_size"
-            android:text="@string/add_by_matrix_id"
-            android:visibility="visible"
-            app:icon="@drawable/ic_plus_circle"
-            app:iconPadding="13dp"
-            app:iconTint="@color/riotx_accent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/knownUsersE2EbyDefaultDisabled" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/addFromPhoneBook"
-            style="@style/VectorButtonStyleText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:minHeight="@dimen/layout_touch_size"
-            android:text="@string/search_in_my_contacts"
-            android:visibility="visible"
-            app:icon="@drawable/ic_plus_circle"
-            app:iconPadding="13dp"
-            app:iconTint="@color/riotx_accent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addByMatrixId" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/knownUsersRecyclerView"
@@ -166,10 +131,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addFromPhoneBook"
+            app:layout_constraintTop_toBottomOf="@+id/userListE2EbyDefaultDisabled"
             tools:listitem="@layout/item_known_user" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+</androidx.constraintlayout.widget.ConstraintLayout>

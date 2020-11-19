@@ -21,7 +21,11 @@ import com.airbnb.mvrx.activityViewModel
 import com.google.zxing.Result
 import com.google.zxing.ResultMetadataType
 import im.vector.app.R
+import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.userdirectory.PendingInvitee
 import kotlinx.android.synthetic.main.fragment_qr_code_scanner.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
@@ -36,16 +40,32 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
 
     override fun getLayoutResId() = R.layout.fragment_qr_code_scanner
 
-    override fun onResume() {
-        super.onResume()
-        // Register ourselves as a handler for scan results.
-        scannerView.setResultHandler(null)
+    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            startCamera()
+        }
+    }
+
+    private fun startCamera() {
         // Start camera on resume
         scannerView.startCamera()
     }
 
+    override fun onResume() {
+        super.onResume()
+        view?.hideKeyboard()
+        // Register ourselves as a handler for scan results.
+        scannerView.setResultHandler(this)
+        // Start camera on resume
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
+            startCamera()
+        }
+    }
+
     override fun onPause() {
         super.onPause()
+        // Unregister ourselves as a handler for scan results.
+        scannerView.setResultHandler(null)
         // Stop camera on pause
         scannerView.stopCamera()
     }
@@ -73,23 +93,17 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
             requireActivity().finish()
         } else {
             val existingDm = viewModel.session.getExistingDirectRoomWithUser(mxid)
-
-            if (existingDm === null) {
-                // The following assumes MXIDs are case insensitive
-                if (mxid.equals(other = viewModel.session.myUserId, ignoreCase = true)) {
-                    Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
-                    requireActivity().finish()
-                } else {
-                    // Try to get user from known users and fall back to creating a User object from MXID
-                    val qrInvitee = if (viewModel.session.getUser(mxid) != null) viewModel.session.getUser(mxid)!! else User(mxid, null, null)
-
-                    viewModel.handle(
-                            CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)))
-                    )
-                }
-            } else {
-                navigator.openRoom(requireContext(), existingDm, null, false)
+            // The following assumes MXIDs are case insensitive
+            if (mxid.equals(other = viewModel.session.myUserId, ignoreCase = true)) {
+                Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                 requireActivity().finish()
+            } else {
+                // Try to get user from known users and fall back to creating a User object from MXID
+                val qrInvitee = if (viewModel.session.getUser(mxid) != null) viewModel.session.getUser(mxid)!! else User(mxid, null, null)
+
+                viewModel.handle(
+                        CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)), existingDm)
+                )
             }
         }
     }

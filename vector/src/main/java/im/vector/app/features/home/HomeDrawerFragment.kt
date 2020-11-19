@@ -18,15 +18,19 @@ package im.vector.app.features.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.observeK
 import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.features.grouplist.GroupListFragment
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
+import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.workers.signout.SignOutUiWorker
 import kotlinx.android.synthetic.main.fragment_home_drawer.*
 import org.matrix.android.sdk.api.session.Session
@@ -73,6 +77,32 @@ class HomeDrawerFragment @Inject constructor(
         homeDrawerHeaderSignoutView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             SignOutUiWorker(requireActivity()).perform()
+        }
+
+        homeDrawerQRCodeButton.debouncedClicks {
+            UserCodeActivity.newIntent(requireContext(), sharedActionViewModel.session.myUserId).let {
+                val options =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                requireActivity(),
+                                homeDrawerHeaderAvatarView,
+                                ViewCompat.getTransitionName(homeDrawerHeaderAvatarView) ?: ""
+                        )
+                startActivity(it, options.toBundle())
+            }
+        }
+
+        homeDrawerInviteFriendButton.debouncedClicks {
+            session.permalinkService().createPermalink(sharedActionViewModel.session.myUserId)?.let { permalink ->
+                val text = getString(R.string.invite_friends_text, permalink)
+
+                startSharePlainTextIntent(
+                        fragment = this,
+                        activityResultLauncher = null,
+                        chooserTitle = getString(R.string.invite_friends),
+                        text = text,
+                        extraTitle = getString(R.string.invite_friends_rich_title)
+                )
+            }
         }
 
         // Debug menu

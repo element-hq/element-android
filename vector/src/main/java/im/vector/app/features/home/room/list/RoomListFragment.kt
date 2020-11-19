@@ -45,7 +45,6 @@ import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
-import im.vector.app.features.home.room.list.widget.DmsFabMenuView
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
 import kotlinx.android.parcel.Parcelize
@@ -67,7 +66,7 @@ class RoomListFragment @Inject constructor(
         val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
         private val sharedViewPool: RecyclerView.RecycledViewPool
-) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, DmsFabMenuView.Listener, NotifsFabMenuView.Listener {
+) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, NotifsFabMenuView.Listener {
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -111,7 +110,6 @@ class RoomListFragment @Inject constructor(
             }.exhaustive
         }
 
-        createDmFabMenu.listener = this
         createChatFabMenu.listener = this
 
         sharedActionViewModel
@@ -130,7 +128,6 @@ class RoomListFragment @Inject constructor(
         roomListView.cleanup()
         roomController.listener = null
         stateRestorer.clear()
-        createDmFabMenu.listener = null
         createChatFabMenu.listener = null
         super.onDestroyView()
     }
@@ -142,32 +139,33 @@ class RoomListFragment @Inject constructor(
     private fun setupCreateRoomButton() {
         when (roomListParams.displayMode) {
             RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.isVisible = true
-            RoomListDisplayMode.PEOPLE        -> createDmFabMenu.isVisible = true
+            RoomListDisplayMode.PEOPLE        -> createChatRoomButton.isVisible = true
             RoomListDisplayMode.ROOMS         -> createGroupRoomButton.isVisible = true
             else                              -> Unit // No button in this mode
         }
 
+        createChatRoomButton.debouncedClicks {
+            createDirectChat()
+        }
         createGroupRoomButton.debouncedClicks {
             openRoomDirectory()
         }
 
-        // Hide FABs when list is scrolling
+        // Hide FAB when list is scrolling
         roomListView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                        createDmFabMenu.removeCallbacks(showFabRunnable)
                         createChatFabMenu.removeCallbacks(showFabRunnable)
 
                         when (newState) {
                             RecyclerView.SCROLL_STATE_IDLE     -> {
-                                createDmFabMenu.postDelayed(showFabRunnable, 250)
                                 createChatFabMenu.postDelayed(showFabRunnable, 250)
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
                                     RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.hide()
-                                    RoomListDisplayMode.PEOPLE        -> createDmFabMenu.hide()
+                                    RoomListDisplayMode.PEOPLE        -> createChatRoomButton.hide()
                                     RoomListDisplayMode.ROOMS         -> createGroupRoomButton.hide()
                                     else                              -> Unit
                                 }
@@ -192,10 +190,6 @@ class RoomListFragment @Inject constructor(
         navigator.openCreateDirectRoom(requireActivity())
     }
 
-    override fun createDirectChatByQrCode() {
-        navigator.openCreateDirectRoom(requireContext(), true)
-    }
-
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
         stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
@@ -214,7 +208,7 @@ class RoomListFragment @Inject constructor(
         if (isAdded) {
             when (roomListParams.displayMode) {
                 RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.show()
-                RoomListDisplayMode.PEOPLE        -> createDmFabMenu.show()
+                RoomListDisplayMode.PEOPLE        -> createChatRoomButton.show()
                 RoomListDisplayMode.ROOMS         -> createGroupRoomButton.show()
                 else                              -> Unit
             }
@@ -343,9 +337,6 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        if (createDmFabMenu.onBackPressed()) {
-            return true
-        }
         if (createChatFabMenu.onBackPressed()) {
             return true
         }
