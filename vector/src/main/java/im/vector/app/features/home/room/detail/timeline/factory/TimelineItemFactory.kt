@@ -57,6 +57,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_CANONICAL_ALIAS,
                 EventType.STATE_ROOM_JOIN_RULES,
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
+                EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET,

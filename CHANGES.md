@@ -5,13 +5,19 @@ Features ✨:
  -
 
 Improvements 🙌:
+ - New room creation tile with quick action (#2346)
  - Open an existing DM instead of creating a new one (#2319)
+ - Ask for explicit user consent to send their contact details to the identity server (#2375)
+ - Handle events of type "m.room.server_acl" (#890)
+ - Move "Enable Encryption" from room setting screen to room profile screen (#2394)
 
 Bugfix 🐛:
  - Exclude yourself when decorating rooms which are direct or don't have more than 2 users (#2370)
+ - F-Droid version: ensure timeout of sync request can be more than 60 seconds (#2169)
  - Fix issue when restoring draft after sharing (#2287)
  - Fix issue when updating the avatar of a room (new avatar vanishing)
  - Discard change dialog displayed by mistake when avatar has been updated
+ - Registration: annoying error message scares every new user when they add an email (#2391)
 
 Translations 🗣:
  -

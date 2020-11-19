@@ -136,6 +136,7 @@ class DefaultErrorFormatter @Inject constructor(
             IdentityServiceError.BulkLookupSha256NotSupported -> R.string.identity_server_error_bulk_sha256_not_supported
             IdentityServiceError.BindingError                 -> R.string.identity_server_error_binding_error
             IdentityServiceError.NoCurrentBindingError        -> R.string.identity_server_error_no_current_binding_error
+            IdentityServiceError.UserConsentNotProvided       -> R.string.identity_server_user_consent_not_provided
         })
     }
 }

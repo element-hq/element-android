@@ -1793,6 +1793,14 @@
     <string name="settings_discovery_confirm_mail">We sent you a confirm email to %s, check your email and click on the confirmation link</string>
     <string name="settings_discovery_confirm_mail_not_clicked">We sent you a confirm email to %s, please first check your email and click on the confirmation link</string>
     <string name="settings_discovery_mail_pending">Pending</string>
+    <string name="settings_discovery_consent_title">Send emails and phone numbers</string>
+    <string name="settings_discovery_consent_notice_on">You have given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
+    <string name="settings_discovery_consent_notice_off">You have not given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
+    <string name="settings_discovery_consent_action_revoke">Revoke my consent</string>
+    <string name="settings_discovery_consent_action_give_consent">Give consent</string>
+
+    <string name="identity_server_consent_dialog_title">Send emails and phone numbers</string>
+    <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured Identity Server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
@@ -2192,7 +2200,8 @@
     <!-- Title for category in the settings which affect the behavior of the message editor (ex: enable Markdown, send typing notification, etc.) -->
     <string name="settings_category_composer">Message editor</string>
 
-    <string name="room_settings_enable_encryption">Enable end-to-end encryption</string>
+    <string name="room_settings_enable_encryption">Enable end-to-end encryption…</string>
+    <string name="room_settings_enable_encryption_no_permission">You don\'t have permission to enable encryption in this room.</string>
     <string name="room_settings_enable_encryption_warning">Once enabled, encryption cannot be disabled.</string>
 
     <string name="room_settings_enable_encryption_dialog_title">Enable encryption?</string>
@@ -2395,6 +2404,13 @@
     <string name="room_created_summary_item_by_you">You created and configured the room.</string>
     <string name="direct_room_created_summary_item">%s joined.</string>
     <string name="direct_room_created_summary_item_by_you">You joined.</string>
+    <string name="this_is_the_beginning_of_room">This is the beginning of %s.</string>
+    <string name="this_is_the_beginning_of_room_no_name">This is the beginning of this conversation.</string>
+    <string name="this_is_the_beginning_of_dm">This is the beginning of your direct message history with %s.</string>
+    <!-- First param will be replaced by the value of add_a_topic_link_text, that will be clickable-->
+    <string name="room_created_summary_no_topic_creation_text">%s to let people know what this room is about.</string>
+    <string name="add_a_topic_link_text">Add a topic</string>
+    <string name="topic_prefix">"Topic: "</string>
 
     <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing the same shield?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Almost there! Waiting for confirmation…</string>
@@ -2503,6 +2519,7 @@
     <string name="create_room_dm_failure">"We couldn't create your DM. Please check the users you want to invite and try again."</string>
 
     <string name="add_members_to_room">Add members</string>
+    <string name="add_people">Add people</string>
     <string name="invite_users_to_room_action_invite">INVITE</string>
     <string name="inviting_users_to_room">Inviting users…</string>
     <string name="invite_users_to_room_title">Invite Users</string>
@@ -2527,6 +2544,7 @@
     <string name="identity_server_error_bulk_sha256_not_supported">For your privacy, Element only supports sending hashed user emails and phone number.</string>
     <string name="identity_server_error_binding_error">The association has failed.</string>
     <string name="identity_server_error_no_current_binding_error">The is no current association with this identifier.</string>
+    <string name="identity_server_user_consent_not_provided">The user consent has not been provided.</string>
 
     <string name="identity_server_set_default_notice">Your homeserver (%1$s) proposes to use %2$s for your identity server</string>
     <string name="identity_server_set_default_submit">Use %1$s</string>
@@ -2566,6 +2584,8 @@
     <string name="room_settings_name_hint">Room Name</string>
     <string name="room_settings_topic_hint">Topic</string>
     <string name="room_settings_save_success">You changed room settings successfully</string>
+    <string name="room_settings_set_avatar">Set avatar</string>
+
 
     <string name="notice_crypto_unable_to_decrypt_final">You cannot access this message</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Waiting for this message, this may take a while</string>
@@ -2593,6 +2613,7 @@
     <string name="loading_contact_book">Retrieving your contacts…</string>
     <string name="empty_contact_book">Your contact book is empty</string>
     <string name="contacts_book_title">Contacts book</string>
+    <string name="phone_book_perform_lookup">Search for contacts on Matrix</string>
 
     <string name="three_pid_revoke_invite_dialog_title">Revoke invite</string>
     <string name="three_pid_revoke_invite_dialog_content">Revoke invite to %1$s?</string>
