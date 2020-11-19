@@ -13,6 +13,7 @@ Improvements 🙌:
  - Move "Enable Encryption" from room setting screen to room profile screen (#2394)
 
 Bugfix 🐛:
+ - Fix crash on AttachmentViewer (#2365)
  - Exclude yourself when decorating rooms which are direct or don't have more than 2 users (#2370)
  - F-Droid version: ensure timeout of sync request can be more than 60 seconds (#2169)
  - Fix issue when restoring draft after sharing (#2287)
