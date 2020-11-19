@@ -248,8 +248,8 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(KeysBackupManageActivity.intent(context))
     }
 
-    override fun openRoomProfile(context: Context, roomId: String) {
-        context.startActivity(RoomProfileActivity.newIntent(context, roomId))
+    override fun openRoomProfile(context: Context, roomId: String, directAccess: Int?) {
+        context.startActivity(RoomProfileActivity.newIntent(context, roomId, directAccess))
     }
 
     override fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem) {

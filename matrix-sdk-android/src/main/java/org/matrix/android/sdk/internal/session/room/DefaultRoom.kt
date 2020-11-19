@@ -101,13 +101,13 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         return cryptoService.shouldEncryptForInvitedMembers(roomId)
     }
 
-    override fun enableEncryption(algorithm: String, callback: MatrixCallback<Unit>) {
+    override suspend fun enableEncryption(algorithm: String) {
         when {
             isEncrypted()                          -> {
-                callback.onFailure(IllegalStateException("Encryption is already enabled for this room"))
+                throw IllegalStateException("Encryption is already enabled for this room")
             }
             algorithm != MXCRYPTO_ALGORITHM_MEGOLM -> {
-                callback.onFailure(InvalidParameterException("Only MXCRYPTO_ALGORITHM_MEGOLM algorithm is supported"))
+                throw InvalidParameterException("Only MXCRYPTO_ALGORITHM_MEGOLM algorithm is supported")
             }
             else                                   -> {
                 val params = SendStateTask.Params(
@@ -118,11 +118,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                 "algorithm" to algorithm
                         ))
 
-                sendStateTask
-                        .configureWith(params) {
-                            this.callback = callback
-                        }
-                        .executeBy(taskExecutor)
+                sendStateTask.execute(params)
             }
         }
     }

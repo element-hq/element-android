@@ -16,9 +16,6 @@
 
 package org.matrix.android.sdk.api.session.room.tags
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
-
 /**
  * This interface defines methods to handle tags of a room. It's implemented at the room level.
  */
@@ -26,10 +23,10 @@ interface TagsService {
     /**
      * Add a tag to a room
      */
-    fun addTag(tag: String, order: Double?, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun addTag(tag: String, order: Double?)
 
     /**
      * Remove tag from a room
      */
-    fun deleteTag(tag: String, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun deleteTag(tag: String)
 }

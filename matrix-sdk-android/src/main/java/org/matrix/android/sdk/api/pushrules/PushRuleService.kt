@@ -15,11 +15,9 @@
  */
 package org.matrix.android.sdk.api.pushrules
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.rest.RuleSet
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.util.Cancelable
 
 interface PushRuleService {
     /**
@@ -29,13 +27,13 @@ interface PushRuleService {
 
     fun getPushRules(scope: String = RuleScope.GLOBAL): RuleSet
 
-    fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean)
 
-    fun addPushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun addPushRule(kind: RuleKind, pushRule: PushRule)
 
-    fun updatePushRuleActions(kind: RuleKind, oldPushRule: PushRule, newPushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun updatePushRuleActions(kind: RuleKind, oldPushRule: PushRule, newPushRule: PushRule)
 
-    fun removePushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun removePushRule(kind: RuleKind, pushRule: PushRule)
 
     fun addPushRuleListener(listener: PushRuleListener)
 

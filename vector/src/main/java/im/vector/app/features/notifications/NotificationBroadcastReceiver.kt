@@ -120,7 +120,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 null,
                 false,
                 System.currentTimeMillis(),
-                session.getUser(session.myUserId)?.displayName
+                session.getRoomMember(session.myUserId, room.roomId)?.displayName
                         ?: context?.getString(R.string.notification_sender_me),
                 session.myUserId,
                 message,

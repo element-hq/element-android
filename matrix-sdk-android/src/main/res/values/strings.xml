@@ -72,6 +72,23 @@
     <string name="notice_room_update_by_you">You upgraded this room.</string>
     <string name="notice_direct_room_update">%s upgraded here.</string>
     <string name="notice_direct_room_update_by_you">You upgraded here.</string>
+    <string name="notice_room_server_acl_set_title">%s set the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_set_title_by_you">You set the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_set_banned">• Server matching %s are banned.</string>
+    <string name="notice_room_server_acl_set_allowed">• Server matching %s are allowed.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Server matching IP literals are allowed.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Server matching IP literals are banned.</string>
+
+    <string name="notice_room_server_acl_updated_title">%s changed the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">You changed the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_updated_banned">• Server matching %s are now banned.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Server matching %s were removed from the ban list.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Server matching %s are now allowed.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Server matching %s were removed from the allowed list.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Server matching IP literals are now allowed.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Server matching IP literals are now banned.</string>
+    <string name="notice_room_server_acl_updated_no_change">No change.</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 All servers are banned from participating! This room can no longer be used.</string>
 
     <string name="notice_requested_voip_conference">%1$s requested a VoIP conference</string>
     <string name="notice_requested_voip_conference_by_you">You requested a VoIP conference</string>
@@ -158,13 +175,22 @@
 
     <!-- The 2 parameters will be members' name -->
     <string name="room_displayname_two_members">%1$s and %2$s</string>
-
+    <!-- The 3 parameters will be members' name -->
+    <string name="room_displayname_3_members">%1$s, %2$s and %3$s</string>
+    <!-- The 4 parameters will be members' name -->
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s and %4$s</string>
+    <!-- The 3 first parameters will be members' name -->
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s and %4$d other</item>
+        <item quantity="other">%1$s, %2$s, %3$s and %4$d others</item>
+    </plurals>
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s and 1 other</item>
         <item quantity="other">%1$s and %2$d others</item>
     </plurals>
 
     <string name="room_displayname_empty_room">Empty room</string>
+    <string name="room_displayname_empty_room_was">Empty room (was %s)</string>
 
     <string name="initial_sync_start_importing_account">Initial Sync:\nImporting account…</string>
     <string name="initial_sync_start_importing_account_crypto">Initial Sync:\nImporting crypto</string>

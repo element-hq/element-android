@@ -27,6 +27,8 @@ internal interface IdentityStore {
 
     fun setToken(token: String?)
 
+    fun setUserConsent(consent: Boolean)
+
     fun setHashDetails(hashDetailResponse: IdentityHashDetailResponse)
 
     /**

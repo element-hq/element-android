@@ -16,40 +16,31 @@
 
 package org.matrix.android.sdk.internal.session.search
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.api.session.search.SearchService
-import org.matrix.android.sdk.api.util.Cancelable
 import javax.inject.Inject
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 
 internal class DefaultSearchService @Inject constructor(
-        private val taskExecutor: TaskExecutor,
         private val searchTask: SearchTask
 ) : SearchService {
 
-    override fun search(searchTerm: String,
-                        roomId: String,
-                        nextBatch: String?,
-                        orderByRecent: Boolean,
-                        limit: Int,
-                        beforeLimit: Int,
-                        afterLimit: Int,
-                        includeProfile: Boolean,
-                        callback: MatrixCallback<SearchResult>): Cancelable {
-        return searchTask
-                .configureWith(SearchTask.Params(
-                        searchTerm = searchTerm,
-                        roomId = roomId,
-                        nextBatch = nextBatch,
-                        orderByRecent = orderByRecent,
-                        limit = limit,
-                        beforeLimit = beforeLimit,
-                        afterLimit = afterLimit,
-                        includeProfile = includeProfile
-                )) {
-                    this.callback = callback
-                }.executeBy(taskExecutor)
+    override suspend fun search(searchTerm: String,
+                                roomId: String,
+                                nextBatch: String?,
+                                orderByRecent: Boolean,
+                                limit: Int,
+                                beforeLimit: Int,
+                                afterLimit: Int,
+                                includeProfile: Boolean): SearchResult {
+        return searchTask.execute(SearchTask.Params(
+                searchTerm = searchTerm,
+                roomId = roomId,
+                nextBatch = nextBatch,
+                orderByRecent = orderByRecent,
+                limit = limit,
+                beforeLimit = beforeLimit,
+                afterLimit = afterLimit,
+                includeProfile = includeProfile
+        ))
     }
 }

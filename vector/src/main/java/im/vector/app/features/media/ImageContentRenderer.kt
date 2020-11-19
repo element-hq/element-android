@@ -21,6 +21,7 @@ import android.net.Uri
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
+import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -96,15 +97,17 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     fun render(data: Data, mode: Mode, imageView: ImageView) {
         val size = processSize(data, mode)
-        imageView.layoutParams.width = size.width
-        imageView.layoutParams.height = size.height
+        imageView.updateLayoutParams {
+            width = size.width
+            height = size.height
+        }
         // a11y
         imageView.contentDescription = data.filename
 
         createGlideRequest(data, mode, imageView, size)
                 .dontAnimate()
                 .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
-                .thumbnail(0.3f)
+                // .thumbnail(0.3f)
                 .into(imageView)
     }
 
@@ -117,6 +120,9 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
         }
     }
 
+    /**
+     * Used by Attachment Viewer
+     */
     fun render(data: Data, contextView: View, target: CustomViewTarget<*, Drawable>) {
         val req = if (data.elementToDecrypt != null) {
             // Encrypted image
