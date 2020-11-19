@@ -127,17 +127,6 @@ class RoomSettingsFragment @Inject constructor(
         invalidateOptionsMenu()
     }
 
-    override fun onEnableEncryptionClicked() {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.room_settings_enable_encryption_dialog_title)
-                .setMessage(R.string.room_settings_enable_encryption_dialog_content)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.room_settings_enable_encryption_dialog_submit) { _, _ ->
-                    viewModel.handle(RoomSettingsAction.EnableEncryption)
-                }
-                .show()
-    }
-
     override fun onNameChanged(name: String) {
         viewModel.handle(RoomSettingsAction.SetRoomName(name))
     }

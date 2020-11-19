@@ -9,6 +9,7 @@ Improvements 🙌:
  - Open an existing DM instead of creating a new one (#2319)
  - Ask for explicit user consent to send their contact details to the identity server (#2375)
  - Handle events of type "m.room.server_acl" (#890)
+ - Move "Enable Encryption" from room setting screen to room profile screen (#2394)
 
 Bugfix 🐛:
  - Fix issue when restoring draft after sharing (#2287)
