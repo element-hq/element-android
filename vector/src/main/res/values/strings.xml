@@ -2403,6 +2403,13 @@
     <string name="room_created_summary_item_by_you">You created and configured the room.</string>
     <string name="direct_room_created_summary_item">%s joined.</string>
     <string name="direct_room_created_summary_item_by_you">You joined.</string>
+    <string name="this_is_the_beginning_of_room">This is the beginning of %s.</string>
+    <string name="this_is_the_beginning_of_room_no_name">This is the beginning of this conversation.</string>
+    <string name="this_is_the_beginning_of_dm">This is the beginning of your direct message history with %s.</string>
+    <!-- First param will be replaced by the value of add_a_topic_link_text, that will be clickable-->
+    <string name="room_created_summary_no_topic_creation_text">%s to let people know what this room is about.</string>
+    <string name="add_a_topic_link_text">Add a topic</string>
+    <string name="topic_prefix">"Topic: "</string>
 
     <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing the same shield?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Almost there! Waiting for confirmation…</string>
@@ -2511,6 +2518,7 @@
     <string name="create_room_dm_failure">"We couldn't create your DM. Please check the users you want to invite and try again."</string>
 
     <string name="add_members_to_room">Add members</string>
+    <string name="add_people">Add people</string>
     <string name="invite_users_to_room_action_invite">INVITE</string>
     <string name="inviting_users_to_room">Inviting users…</string>
     <string name="invite_users_to_room_title">Invite Users</string>
@@ -2575,6 +2583,8 @@
     <string name="room_settings_name_hint">Room Name</string>
     <string name="room_settings_topic_hint">Topic</string>
     <string name="room_settings_save_success">You changed room settings successfully</string>
+    <string name="room_settings_set_avatar">Set avatar</string>
+
 
     <string name="notice_crypto_unable_to_decrypt_final">You cannot access this message</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Waiting for this message, this may take a while</string>
