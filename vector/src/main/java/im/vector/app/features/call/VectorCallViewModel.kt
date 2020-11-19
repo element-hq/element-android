@@ -137,7 +137,7 @@ class VectorCallViewModel @AssistedInject constructor(
             session.callSignalingService().getCallWithId(it)?.let { mxCall ->
                 this.call = mxCall
                 mxCall.otherUserId
-                val item: MatrixItem? = session.getUser(mxCall.otherUserId)?.toMatrixItem()
+                val item: MatrixItem? = session.getRoomMember(mxCall.otherUserId, mxCall.roomId)?.toMatrixItem()
 
                 mxCall.addListener(callStateListener)
 

@@ -7,6 +7,7 @@ Features ✨:
 Improvements 🙌:
  - New room creation tile with quick action (#2346)
  - Open an existing DM instead of creating a new one (#2319)
+ - Use RoomMember instead of User in the context of a Room.
  - Ask for explicit user consent to send their contact details to the identity server (#2375)
  - Handle events of type "m.room.server_acl" (#890)
  - Move "Enable Encryption" from room setting screen to room profile screen (#2394)
