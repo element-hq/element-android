@@ -18,6 +18,7 @@ package im.vector.app.features.contactsbook
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
@@ -57,8 +58,24 @@ class ContactsBookFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
         setupFilterView()
+        setupConsentView()
         setupOnlyBoundContactsView()
         setupCloseView()
+    }
+
+    private fun setupConsentView() {
+        phoneBookSearchForMatrixContacts.setOnClickListener {
+            withState(contactsBookViewModel) { state ->
+                AlertDialog.Builder(requireActivity())
+                        .setTitle(R.string.identity_server_consent_dialog_title)
+                        .setMessage(getString(R.string.identity_server_consent_dialog_content, state.identityServerUrl ?: ""))
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted)
+                        }
+                        .setNegativeButton(R.string.no, null)
+                        .show()
+            }
+        }
     }
 
     private fun setupOnlyBoundContactsView() {
@@ -98,6 +115,7 @@ class ContactsBookFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(contactsBookViewModel) { state ->
+        phoneBookSearchForMatrixContacts.isVisible = state.filteredMappedContacts.isNotEmpty() && state.identityServerUrl != null && !state.userConsent
         phoneBookOnlyBoundContacts.isVisible = state.isBoundRetrieved
         contactsBookController.setData(state)
     }

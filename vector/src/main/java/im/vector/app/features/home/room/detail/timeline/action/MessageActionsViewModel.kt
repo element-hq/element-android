@@ -191,6 +191,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             EventType.STATE_ROOM_ALIASES,
             EventType.STATE_ROOM_CANONICAL_ALIAS,
             EventType.STATE_ROOM_HISTORY_VISIBILITY,
+            EventType.STATE_ROOM_SERVER_ACL,
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,

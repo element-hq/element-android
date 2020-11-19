@@ -71,38 +71,27 @@ class SearchMessagesTest : InstrumentedTest {
             commonTestHelper.await(lock)
 
             lock = CountDownLatch(1)
-            aliceSession
-                    .searchService()
-                    .search(
-                            searchTerm = "lore",
-                            limit = 10,
-                            includeProfile = true,
-                            afterLimit = 0,
-                            beforeLimit = 10,
-                            orderByRecent = true,
-                            nextBatch = null,
-                            roomId = aliceRoomId,
-                            callback = object : MatrixCallback<SearchResult> {
-                                override fun onSuccess(data: SearchResult) {
-                                    super.onSuccess(data)
-                                    assertTrue(data.results?.size == 2)
-                                    assertTrue(
-                                            data.results
-                                                    ?.all {
-                                                        (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
-                                                    }.orFalse()
-                                    )
-                                    lock.countDown()
-                                }
-
-                                override fun onFailure(failure: Throwable) {
-                                    super.onFailure(failure)
-                                    fail(failure.localizedMessage)
-                                    lock.countDown()
-                                }
-                            }
-                    )
-            lock.await(TestConstants.timeOutMillis, TimeUnit.MILLISECONDS)
+            val data = commonTestHelper.runBlockingTest {
+                aliceSession
+                        .searchService()
+                        .search(
+                                searchTerm = "lore",
+                                limit = 10,
+                                includeProfile = true,
+                                afterLimit = 0,
+                                beforeLimit = 10,
+                                orderByRecent = true,
+                                nextBatch = null,
+                                roomId = aliceRoomId
+                        )
+            }
+            assertTrue(data.results?.size == 2)
+            assertTrue(
+                    data.results
+                            ?.all {
+                                (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
+                            }.orFalse()
+            )
 
             aliceTimeline.removeAllListeners()
             cryptoTestData.cleanUp(commonTestHelper)

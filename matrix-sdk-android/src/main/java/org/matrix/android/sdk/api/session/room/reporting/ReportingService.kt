@@ -16,9 +16,6 @@
 
 package org.matrix.android.sdk.api.session.room.reporting
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
-
 /**
  * This interface defines methods to report content of an event.
  */
@@ -28,5 +25,5 @@ interface ReportingService {
      * Report content
      * Ref: https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-rooms-roomid-report-eventid
      */
-    fun reportContent(eventId: String, score: Int, reason: String, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun reportContent(eventId: String, score: Int, reason: String)
 }

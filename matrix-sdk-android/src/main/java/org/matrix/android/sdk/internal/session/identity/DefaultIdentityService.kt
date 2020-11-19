@@ -55,6 +55,7 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.ensureProtocol
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
@@ -243,7 +244,20 @@ internal class DefaultIdentityService @Inject constructor(
         ))
     }
 
+    override fun getUserConsent(): Boolean {
+        return identityStore.getIdentityData()?.userConsent.orFalse()
+    }
+
+    override fun setUserConsent(newValue: Boolean) {
+        identityStore.setUserConsent(newValue)
+    }
+
     override fun lookUp(threePids: List<ThreePid>, callback: MatrixCallback<List<FoundThreePid>>): Cancelable {
+        if (!getUserConsent()) {
+            callback.onFailure(IdentityServiceError.UserConsentNotProvided)
+            return NoOpCancellable
+        }
+
         if (threePids.isEmpty()) {
             callback.onSuccess(emptyList())
             return NoOpCancellable
@@ -255,6 +269,9 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun getShareStatus(threePids: List<ThreePid>, callback: MatrixCallback<Map<ThreePid, SharedState>>): Cancelable {
+        // Note: we do not require user consent here, because it is used for emails and phone numbers that the user has already sent
+        // to the home server, and not emails and phone numbers from the contact book of the user
+
         if (threePids.isEmpty()) {
             callback.onSuccess(emptyMap())
             return NoOpCancellable
