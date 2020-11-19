@@ -20,7 +20,8 @@ import androidx.activity.result.ActivityResultLauncher
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleKind
 import javax.inject.Inject
@@ -48,16 +49,12 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
                     override fun doFix() {
                         if (manager?.diagStatus == TestStatus.RUNNING) return // wait before all is finished
 
-                        session.updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled,
-                                object : MatrixCallback<Unit> {
-                                    override fun onSuccess(data: Unit) {
-                                        manager?.retry(activityResultLauncher)
-                                    }
-
-                                    override fun onFailure(failure: Throwable) {
-                                        manager?.retry(activityResultLauncher)
-                                    }
-                                })
+                        GlobalScope.launch {
+                            runCatching {
+                                session.updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled)
+                            }
+                            manager?.retry(activityResultLauncher)
+                        }
                     }
                 }
                 status = TestStatus.FAILED
