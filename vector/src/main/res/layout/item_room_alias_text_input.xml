@@ -12,11 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
-        android:text="#"
+        android:text="@string/matrix_room_alias_prefix"
         android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/itemRoomAliasTextInputLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/itemRoomAliasTextInputLayout"
