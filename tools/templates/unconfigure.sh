@@ -16,11 +16,9 @@
 # limitations under the License.
 #
 
-echo "Configure Element Template..."
+# Template prevent from upgrading Android Studio, so this script de configure the template
+echo "Un-configure Element Template..."
 if [ -z ${ANDROID_STUDIO+x} ]; then ANDROID_STUDIO="/Applications/Android Studio.app/Contents"; fi
-{
-mkdir -p "${ANDROID_STUDIO%/}/plugins/android/lib/templates/other"
-ln -s $(pwd)/ElementFeature "${ANDROID_STUDIO%/}/plugins/android/lib/templates/other"
-} && {
-  echo "Please restart Android Studio."
-}
+
+rm "${ANDROID_STUDIO%/}/plugins/android/lib/templates/other/ElementFeature"
+rm -r "${ANDROID_STUDIO%/}/plugins/android/lib/templates"
