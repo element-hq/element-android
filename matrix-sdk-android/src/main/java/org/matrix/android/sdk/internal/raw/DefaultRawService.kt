@@ -16,45 +16,28 @@
 
 package org.matrix.android.sdk.internal.raw
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.raw.RawCacheStrategy
 import org.matrix.android.sdk.api.raw.RawService
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal class DefaultRawService @Inject constructor(
-        private val taskExecutor: TaskExecutor,
         private val getUrlTask: GetUrlTask,
         private val cleanRawCacheTask: CleanRawCacheTask
 ) : RawService {
-    override fun getUrl(url: String,
-                        rawCacheStrategy: RawCacheStrategy,
-                        matrixCallback: MatrixCallback<String>): Cancelable {
-        return getUrlTask
-                .configureWith(GetUrlTask.Params(url, rawCacheStrategy)) {
-                    callback = matrixCallback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun getUrl(url: String, rawCacheStrategy: RawCacheStrategy): String {
+        return getUrlTask.execute(GetUrlTask.Params(url, rawCacheStrategy))
     }
 
-    override fun getWellknown(userId: String,
-                              matrixCallback: MatrixCallback<String>): Cancelable {
+    override suspend fun getWellknown(userId: String): String {
         val homeServerDomain = userId.substringAfter(":")
         return getUrl(
                 "https://$homeServerDomain/.well-known/matrix/client",
-                RawCacheStrategy.TtlCache(TimeUnit.HOURS.toMillis(8), false),
-                matrixCallback
+                RawCacheStrategy.TtlCache(TimeUnit.HOURS.toMillis(8), false)
         )
     }
 
-    override fun clearCache(matrixCallback: MatrixCallback<Unit>): Cancelable {
-        return cleanRawCacheTask
-                .configureWith(Unit) {
-                    callback = matrixCallback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun clearCache() {
+        cleanRawCacheTask.execute(Unit)
     }
 }

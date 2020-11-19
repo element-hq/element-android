@@ -46,7 +46,7 @@ class JitsiCallViewModel @AssistedInject constructor(
     }
 
     init {
-        val me = session.getUser(session.myUserId)?.toMatrixItem()
+        val me = session.getRoomMember(session.myUserId, args.roomId)?.toMatrixItem()
         val userInfo = JitsiMeetUserInfo().apply {
             displayName = me?.getBestName()
             avatar = me?.avatarUrl?.let { session.contentUrlResolver().resolveFullSize(it) }?.let { URL(it) }

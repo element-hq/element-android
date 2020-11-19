@@ -20,5 +20,6 @@ internal data class IdentityData(
         val identityServerUrl: String?,
         val token: String?,
         val hashLookupPepper: String?,
-        val hashLookupAlgorithm: List<String>
+        val hashLookupAlgorithm: List<String>,
+        val userConsent: Boolean
 )

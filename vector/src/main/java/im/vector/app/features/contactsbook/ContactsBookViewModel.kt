@@ -38,10 +38,9 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.FoundThreePid
+import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
-
-private typealias PhoneBookSearch = String
 
 class ContactsBookViewModel @AssistedInject constructor(@Assisted
                                                         initialState: ContactsBookViewState,
@@ -85,7 +84,9 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
     private fun loadContacts() {
         setState {
             copy(
-                    mappedContacts = Loading()
+                    mappedContacts = Loading(),
+                    identityServerUrl = session.identityService().getCurrentIdentityServerUrl(),
+                    userConsent = session.identityService().getUserConsent()
             )
         }
 
@@ -109,6 +110,9 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun performLookup(data: List<MappedContact>) {
+        if (!session.identityService().getUserConsent()) {
+            return
+        }
         viewModelScope.launch {
             val threePids = data.flatMap { contact ->
                 contact.emails.map { ThreePid.Email(it.email) } +
@@ -116,8 +120,14 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
             }
             session.identityService().lookUp(threePids, object : MatrixCallback<List<FoundThreePid>> {
                 override fun onFailure(failure: Throwable) {
-                    // Ignore
                     Timber.w(failure, "Unable to perform the lookup")
+
+                    // Should not happen, but just to be sure
+                    if (failure is IdentityServiceError.UserConsentNotProvided) {
+                        setState {
+                            copy(userConsent = false)
+                        }
+                    }
                 }
 
                 override fun onSuccess(data: List<FoundThreePid>) {
@@ -171,7 +181,19 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
         when (action) {
             is ContactsBookAction.FilterWith        -> handleFilterWith(action)
             is ContactsBookAction.OnlyBoundContacts -> handleOnlyBoundContacts(action)
+            ContactsBookAction.UserConsentGranted   -> handleUserConsentGranted()
         }.exhaustive
+    }
+
+    private fun handleUserConsentGranted() {
+        session.identityService().setUserConsent(true)
+
+        setState {
+            copy(userConsent = true)
+        }
+
+        // Perform the lookup
+        performLookup(allContacts)
     }
 
     private fun handleOnlyBoundContacts(action: ContactsBookAction.OnlyBoundContacts) {

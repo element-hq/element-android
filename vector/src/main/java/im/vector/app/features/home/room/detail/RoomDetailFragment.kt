@@ -71,6 +71,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
@@ -82,6 +83,7 @@ import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequests
+import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
@@ -141,6 +143,7 @@ import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsB
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
+import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.invite.VectorInviteView
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
@@ -149,6 +152,7 @@ import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.reactions.EmojiReactionPickerActivity
+import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
@@ -196,6 +200,7 @@ import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import timber.log.Timber
 import java.io.File
 import java.net.URL
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -221,7 +226,8 @@ class RoomDetailFragment @Inject constructor(
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
         private val matrixItemColorProvider: MatrixItemColorProvider,
         private val imageContentRenderer: ImageContentRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore
+        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
+        private val pillsPostProcessorFactory: PillsPostProcessor.Factory
 ) :
         VectorBaseFragment(),
         TimelineEventController.Callback,
@@ -229,7 +235,7 @@ class RoomDetailFragment @Inject constructor(
         JumpToReadMarkerView.Callback,
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
-//        RoomWidgetsBannerView.Callback,
+        GalleryOrCameraDialogHelper.Listener,
         ActiveCallView.Callback {
 
     companion object {
@@ -250,9 +256,14 @@ class RoomDetailFragment @Inject constructor(
         private const val ircPattern = " (IRC)"
     }
 
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
+
     private val roomDetailArgs: RoomDetailArgs by args()
     private val glideRequests by lazy {
         GlideApp.with(this)
+    }
+    private val pillsPostProcessor by lazy {
+        pillsPostProcessorFactory.create(roomDetailArgs.roomId)
     }
 
     private val autoCompleter: AutoCompleter by lazy {
@@ -364,12 +375,36 @@ class RoomDetailFragment @Inject constructor(
                 RoomDetailViewEvents.HideWaitingView                     -> vectorBaseActivity.hideWaitingView()
                 is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
                 is RoomDetailViewEvents.OpenRoom                         -> handleOpenRoom(it)
+                RoomDetailViewEvents.OpenInvitePeople                    -> navigator.openInviteUsersToRoom(requireContext(), roomDetailArgs.roomId)
+                RoomDetailViewEvents.OpenSetRoomAvatarDialog             -> galleryOrCameraDialogHelper.show()
+                RoomDetailViewEvents.OpenRoomSettings                    -> handleOpenRoomSettings()
+                is RoomDetailViewEvents.ShowRoomAvatarFullScreen         -> it.matrixItem?.let { item ->
+                    navigator.openBigImageViewer(requireActivity(), it.view, item)
+                }
             }.exhaustive
         }
 
         if (savedInstanceState == null) {
             handleShareData()
         }
+    }
+
+    override fun onImageReady(uri: Uri?) {
+        uri ?: return
+        roomDetailViewModel.handle(
+                RoomDetailAction.SetAvatarAction(
+                        newAvatarUri = uri,
+                        newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString()
+                )
+        )
+    }
+
+    private fun handleOpenRoomSettings() {
+        navigator.openRoomProfile(
+                requireContext(),
+                roomDetailArgs.roomId,
+                RoomProfileActivity.EXTRA_DIRECT_ACCESS_ROOM_SETTINGS
+        )
     }
 
     private fun handleOpenRoom(openRoom: RoomDetailViewEvents.OpenRoom) {
@@ -848,7 +883,7 @@ class RoomDetailFragment @Inject constructor(
         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
             val parser = Parser.builder().build()
             val document = parser.parse(messageContent.formattedBody ?: messageContent.body)
-            formattedBody = eventHtmlRenderer.render(document)
+            formattedBody = eventHtmlRenderer.render(document, pillsPostProcessor)
         }
         composerLayout.composerRelatedMessageContent.text = (formattedBody ?: nonFormattedBody)
 

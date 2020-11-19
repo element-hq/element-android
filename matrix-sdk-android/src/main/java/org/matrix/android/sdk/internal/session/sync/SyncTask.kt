@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.sync
 import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.TimeOutInterceptor
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
 import org.matrix.android.sdk.internal.session.filter.FilterRepository
@@ -78,13 +79,22 @@ internal class DefaultSyncTask @Inject constructor(
         // Maybe refresh the home server capabilities data we know
         getHomeServerCapabilitiesTask.execute(Unit)
 
+        val readTimeOut = (params.timeout + TIMEOUT_MARGIN).coerceAtLeast(TimeOutInterceptor.DEFAULT_LONG_TIMEOUT)
+
         val syncResponse = executeRequest<SyncResponse>(eventBus) {
-            apiCall = syncAPI.sync(requestParams)
+            apiCall = syncAPI.sync(
+                    params = requestParams,
+                    readTimeOut = readTimeOut
+            )
         }
         syncResponseHandler.handleResponse(syncResponse, token)
         if (isInitialSync) {
             initialSyncProgressService.endAll()
         }
         Timber.v("Sync task finished on Thread: ${Thread.currentThread().name}")
+    }
+
+    companion object {
+        private const val TIMEOUT_MARGIN: Long = 10_000
     }
 }

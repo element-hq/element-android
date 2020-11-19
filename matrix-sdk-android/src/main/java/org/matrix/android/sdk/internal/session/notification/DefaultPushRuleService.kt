@@ -16,7 +16,6 @@
 package org.matrix.android.sdk.internal.session.notification
 
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
@@ -24,7 +23,6 @@ import org.matrix.android.sdk.api.pushrules.getActions
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.rest.RuleSet
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
 import org.matrix.android.sdk.internal.database.model.PushRulesEntity
 import org.matrix.android.sdk.internal.database.query.where
@@ -103,37 +101,21 @@ internal class DefaultPushRuleService @Inject constructor(
         )
     }
 
-    override fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean, callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun updatePushRuleEnableStatus(kind: RuleKind, pushRule: PushRule, enabled: Boolean) {
         // The rules will be updated, and will come back from the next sync response
-        return updatePushRuleEnableStatusTask
-                .configureWith(UpdatePushRuleEnableStatusTask.Params(kind, pushRule, enabled)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        updatePushRuleEnableStatusTask.execute(UpdatePushRuleEnableStatusTask.Params(kind, pushRule, enabled))
     }
 
-    override fun addPushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable {
-        return addPushRuleTask
-                .configureWith(AddPushRuleTask.Params(kind, pushRule)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun addPushRule(kind: RuleKind, pushRule: PushRule) {
+        addPushRuleTask.execute(AddPushRuleTask.Params(kind, pushRule))
     }
 
-    override fun updatePushRuleActions(kind: RuleKind, oldPushRule: PushRule, newPushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable {
-        return updatePushRuleActionsTask
-                .configureWith(UpdatePushRuleActionsTask.Params(kind, oldPushRule, newPushRule)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun updatePushRuleActions(kind: RuleKind, oldPushRule: PushRule, newPushRule: PushRule) {
+        updatePushRuleActionsTask.execute(UpdatePushRuleActionsTask.Params(kind, oldPushRule, newPushRule))
     }
 
-    override fun removePushRule(kind: RuleKind, pushRule: PushRule, callback: MatrixCallback<Unit>): Cancelable {
-        return removePushRuleTask
-                .configureWith(RemovePushRuleTask.Params(kind, pushRule)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun removePushRule(kind: RuleKind, pushRule: PushRule) {
+        removePushRuleTask.execute(RemovePushRuleTask.Params(kind, pushRule))
     }
 
     override fun removePushRuleListener(listener: PushRuleService.PushRuleListener) {
