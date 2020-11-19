@@ -71,6 +71,7 @@ import org.webrtc.IceCandidate
 import org.webrtc.MediaConstraints
 import org.webrtc.MediaStream
 import org.webrtc.PeerConnection
+import org.webrtc.PeerConnection.RTCConfiguration
 import org.webrtc.PeerConnectionFactory
 import org.webrtc.RtpReceiver
 import org.webrtc.RtpTransceiver
@@ -121,26 +122,23 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    data class CallContext(
-            val mxCall: MxCall,
+    class CallContext(val mxCall: MxCall) {
 
-            var peerConnection: PeerConnection? = null,
+        var peerConnection: PeerConnection? = null
+        var localAudioSource: AudioSource? = null
+        var localAudioTrack: AudioTrack? = null
+        var localVideoSource: VideoSource? = null
+        var localVideoTrack: VideoTrack? = null
+        var remoteVideoTrack: VideoTrack? = null
 
-            var localMediaStream: MediaStream? = null,
-            var remoteMediaStream: MediaStream? = null,
+        // Perfect negotiation state: https://www.w3.org/TR/webrtc/#perfect-negotiation-example
+        var makingOffer: Boolean = false
+        var ignoreOffer: Boolean = false
 
-            var localAudioSource: AudioSource? = null,
-            var localAudioTrack: AudioTrack? = null,
-
-            var localVideoSource: VideoSource? = null,
-            var localVideoTrack: VideoTrack? = null,
-
-            var remoteVideoTrack: VideoTrack? = null,
-
-            // Perfect negotiation state: https://www.w3.org/TR/webrtc/#perfect-negotiation-example
-            var makingOffer: Boolean = false,
-            var ignoreOffer: Boolean = false
-    ) {
+        // Mute status
+        var micMuted = false
+        var videoMuted = false
+        var remoteOnHold = false
 
         var offerSdp: CallInviteContent.Offer? = null
 
@@ -176,8 +174,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
             localAudioTrack = null
             localVideoSource = null
             localVideoTrack = null
-            localMediaStream = null
-            remoteMediaStream = null
         }
     }
 
@@ -207,26 +203,23 @@ class WebRtcPeerConnectionManager @Inject constructor(
             }
         }
 
-    var localSurfaceRenderer: MutableList<WeakReference<SurfaceViewRenderer>> = ArrayList()
-    var remoteSurfaceRenderer: MutableList<WeakReference<SurfaceViewRenderer>> = ArrayList()
+    var localSurfaceRenderers: MutableList<WeakReference<SurfaceViewRenderer>> = ArrayList()
+    var remoteSurfaceRenderers: MutableList<WeakReference<SurfaceViewRenderer>> = ArrayList()
 
-    fun addIfNeeded(renderer: SurfaceViewRenderer?, list: MutableList<WeakReference<SurfaceViewRenderer>>) {
+    private fun MutableList<WeakReference<SurfaceViewRenderer>>.addIfNeeded(renderer: SurfaceViewRenderer?) {
         if (renderer == null) return
-        val exists = list.firstOrNull {
+        val exists = any {
             it.get() == renderer
-        } != null
+        }
         if (!exists) {
-            list.add(WeakReference(renderer))
+            add(WeakReference(renderer))
         }
     }
 
-    fun removeIfNeeded(renderer: SurfaceViewRenderer?, list: MutableList<WeakReference<SurfaceViewRenderer>>) {
+    private fun MutableList<WeakReference<SurfaceViewRenderer>>.removeIfNeeded(renderer: SurfaceViewRenderer?) {
         if (renderer == null) return
-        val exists = list.indexOfFirst {
+        removeAll {
             it.get() == renderer
-        }
-        if (exists != -1) {
-            list.add(WeakReference(renderer))
         }
     }
 
@@ -308,7 +301,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
             }
         }
         Timber.v("## VOIP creating peer connection...with iceServers $iceServers ")
-        callContext.peerConnection = peerConnectionFactory?.createPeerConnection(iceServers, StreamObserver(callContext))
+        val rtcConfig = RTCConfiguration(iceServers).apply {
+            sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
+        }
+        callContext.peerConnection = peerConnectionFactory?.createPeerConnection(rtcConfig, StreamObserver(callContext))
     }
 
     private fun CoroutineScope.sendSdpOffer(callContext: CallContext) = launch(dispatcher) {
@@ -357,8 +353,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
         Timber.v("## VOIP attachViewRenderers localRendeder $localViewRenderer / $remoteViewRenderer")
 //        this.localSurfaceRenderer =  WeakReference(localViewRenderer)
 //        this.remoteSurfaceRenderer = WeakReference(remoteViewRenderer)
-        addIfNeeded(localViewRenderer, this.localSurfaceRenderer)
-        addIfNeeded(remoteViewRenderer, this.remoteSurfaceRenderer)
+        localSurfaceRenderers.addIfNeeded(localViewRenderer)
+        remoteSurfaceRenderers.addIfNeeded(remoteViewRenderer)
 
         // The call is going to resume from background, we can reduce notif
         currentCall?.mxCall
@@ -388,32 +384,34 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     // TODO eventually we could already display local stream in PIP?
                 }
                 VectorCallActivity.OUTGOING_CREATED -> {
-                    call.mxCall.state = CallState.CreateOffer
-                    // 1. Create RTCPeerConnection
-                    createPeerConnection(call, turnServer)
-
-                    // 2. Access camera (if video call) + microphone, create local stream
-                    createLocalStream(call)
-
-                    // 3. add local stream
-                    call.localMediaStream?.let { call.peerConnection?.addStream(it) }
-                    attachViewRenderersInternal()
-
-                    Timber.v("## VOIP remoteCandidateSource ${call.remoteCandidateSource}")
-                    call.remoteIceCandidateDisposable = call.remoteCandidateSource?.subscribe({
-                        Timber.v("## VOIP adding remote ice candidate $it")
-                        call.peerConnection?.addIceCandidate(it)
-                    }, {
-                        Timber.v("## VOIP failed to add remote ice candidate $it")
-                    })
-                    // Now wait for negotiation callback
+                    internalSetupOutgoingCall(call, turnServer)
                 }
                 else                                -> {
                     // sink existing tracks (configuration change, e.g screen rotation)
-                    attachViewRenderersInternal()
+                    attachViewRenderersInternal(call)
                 }
             }
         }
+    }
+
+    private suspend fun internalSetupOutgoingCall(call: CallContext, turnServer: TurnServerResponse?) {
+        call.mxCall.state = CallState.CreateOffer
+        // 1. Create RTCPeerConnection
+        createPeerConnection(call, turnServer)
+
+        // 2. Access camera (if video call) + microphone, create local stream
+        createLocalStream(call)
+
+        attachViewRenderersInternal(call)
+
+        Timber.v("## VOIP remoteCandidateSource ${call.remoteCandidateSource}")
+        call.remoteIceCandidateDisposable = call.remoteCandidateSource?.subscribe({
+            Timber.v("## VOIP adding remote ice candidate $it")
+            call.peerConnection?.addIceCandidate(it)
+        }, {
+            Timber.v("## VOIP failed to add remote ice candidate $it")
+        })
+        // Now wait for negotiation callback
     }
 
     private suspend fun internalAcceptIncomingCall(callContext: CallContext, turnServerResponse: TurnServerResponse?) {
@@ -436,20 +434,27 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         // create sdp using offer, and set remote description
         // the offer has beed stored when invite was received
-        callContext.offerSdp?.sdp?.let {
+        val offerSdp = callContext.offerSdp?.sdp?.let {
             SessionDescription(SessionDescription.Type.OFFER, it)
-        }?.let {
-            callContext.peerConnection?.setRemoteDescription(SdpObserverAdapter(), it)
+        }
+        if (offerSdp == null) {
+            Timber.v("We don't have any offer to process")
+            return
+        }
+        Timber.v("Offer sdp for invite: ${offerSdp.description}")
+        try {
+            callContext.peerConnection?.awaitSetRemoteDescription(offerSdp)
+        } catch (failure: Throwable) {
+            Timber.v("Failure putting remote description")
+            return
         }
         // 2) Access camera + microphone, create local stream
         createLocalStream(callContext)
 
-        // 2) add local stream
-        currentCall?.localMediaStream?.let { callContext.peerConnection?.addStream(it) }
-        attachViewRenderersInternal()
+        attachViewRenderersInternal(callContext)
 
         // create a answer, set local description and send via signaling
-        createAnswer()?.also {
+        createAnswer(callContext)?.also {
             callContext.mxCall.accept(it)
         }
         Timber.v("## VOIP remoteCandidateSource ${callContext.remoteCandidateSource}")
@@ -462,28 +467,20 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     private fun createLocalStream(callContext: CallContext) {
-        if (callContext.localMediaStream != null) {
-            Timber.e("## VOIP localMediaStream already created")
-            return
-        }
         if (peerConnectionFactory == null) {
             Timber.e("## VOIP peerConnectionFactory is null")
             return
         }
+        Timber.v("Create local stream for call ${callContext.mxCall.callId}")
         val audioSource = peerConnectionFactory!!.createAudioSource(DEFAULT_AUDIO_CONSTRAINTS)
-        val localAudioTrack = peerConnectionFactory!!.createAudioTrack(AUDIO_TRACK_ID, audioSource)
-        localAudioTrack?.setEnabled(true)
-
-        callContext.localAudioSource = audioSource
-        callContext.localAudioTrack = localAudioTrack
-
-        val localMediaStream = peerConnectionFactory!!.createLocalMediaStream("ARDAMS") // magic value?
-
-        // Add audio track
-        localMediaStream?.addTrack(localAudioTrack)
-
-        callContext.localMediaStream = localMediaStream
-
+        val audioTrack = peerConnectionFactory!!.createAudioTrack(AUDIO_TRACK_ID, audioSource)
+        audioTrack.setEnabled(true)
+        Timber.v("Add audio track $AUDIO_TRACK_ID to call ${callContext.mxCall.callId}")
+        callContext.apply {
+            peerConnection?.addTrack(audioTrack, listOf(STREAM_ID))
+            localAudioSource = audioSource
+            localAudioTrack = audioTrack
+        }
         // add video track if needed
         if (callContext.mxCall.isVideoCall) {
             availableCamera.clear()
@@ -535,35 +532,33 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 videoCapturer.startCapture(currentCaptureMode.width, currentCaptureMode.height, currentCaptureMode.fps)
                 this.videoCapturer = videoCapturer
 
-                val localVideoTrack = peerConnectionFactory!!.createVideoTrack("ARDAMSv0", videoSource)
-                Timber.v("## VOIP Local video track created")
-                localVideoTrack?.setEnabled(true)
-
-                callContext.localVideoSource = videoSource
-                callContext.localVideoTrack = localVideoTrack
-
-                localMediaStream?.addTrack(localVideoTrack)
+                val videoTrack = peerConnectionFactory!!.createVideoTrack(VIDEO_TRACK_ID, videoSource)
+                Timber.v("Add video track $VIDEO_TRACK_ID to call ${callContext.mxCall.callId}")
+                videoTrack.setEnabled(true)
+                callContext.apply {
+                    peerConnection?.addTrack(videoTrack, listOf(STREAM_ID))
+                    localVideoSource = videoSource
+                    localVideoTrack = videoTrack
+                }
             }
         }
+        updateMuteStatus(callContext)
     }
 
-    private fun attachViewRenderersInternal() {
+    private fun attachViewRenderersInternal(call: CallContext) {
         // render local video in pip view
-        localSurfaceRenderer.forEach {
-            it.get()?.let { pipSurface ->
+        localSurfaceRenderers.forEach { renderer ->
+            renderer.get()?.let { pipSurface ->
                 pipSurface.setMirror(this.cameraInUse?.type == CameraType.FRONT)
                 // no need to check if already added, addSink is checking that
-                currentCall?.localVideoTrack?.addSink(pipSurface)
+                call.localVideoTrack?.addSink(pipSurface)
             }
         }
 
         // If remote track exists, then sink it to surface
-        remoteSurfaceRenderer.forEach {
-            it.get()?.let { participantSurface ->
-                currentCall?.remoteVideoTrack?.let {
-                    // no need to check if already added, addSink is checking that
-                    it.addSink(participantSurface)
-                }
+        remoteSurfaceRenderers.forEach { renderer ->
+            renderer.get()?.let { participantSurface ->
+                call.remoteVideoTrack?.addSink(participantSurface)
             }
         }
     }
@@ -579,30 +574,30 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    fun detachRenderers(renderes: List<SurfaceViewRenderer>?) {
+    fun detachRenderers(renderers: List<SurfaceViewRenderer>?) {
         Timber.v("## VOIP detachRenderers")
         // currentCall?.localMediaStream?.let { currentCall?.peerConnection?.removeStream(it) }
-        if (renderes.isNullOrEmpty()) {
+        if (renderers.isNullOrEmpty()) {
             // remove all sinks
-            localSurfaceRenderer.forEach {
+            localSurfaceRenderers.forEach {
                 if (it.get() != null) currentCall?.localVideoTrack?.removeSink(it.get())
             }
-            remoteSurfaceRenderer.forEach {
+            remoteSurfaceRenderers.forEach {
                 if (it.get() != null) currentCall?.remoteVideoTrack?.removeSink(it.get())
             }
-            localSurfaceRenderer.clear()
-            remoteSurfaceRenderer.clear()
+            localSurfaceRenderers.clear()
+            remoteSurfaceRenderers.clear()
         } else {
-            renderes.forEach {
-                removeIfNeeded(it, localSurfaceRenderer)
-                removeIfNeeded(it, remoteSurfaceRenderer)
+            renderers.forEach {
+                localSurfaceRenderers.removeIfNeeded(it)
+                remoteSurfaceRenderers.removeIfNeeded(it)
                 // no need to check if it's in the track, removeSink is doing it
                 currentCall?.localVideoTrack?.removeSink(it)
                 currentCall?.remoteVideoTrack?.removeSink(it)
             }
         }
 
-        if (remoteSurfaceRenderer.isEmpty()) {
+        if (remoteSurfaceRenderers.isEmpty()) {
             // The call is going to continue in background, so ensure notification is visible
             currentCall?.mxCall
                     ?.takeIf { it.state is CallState.Connected }
@@ -648,7 +643,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     companion object {
 
+        private const val STREAM_ID = "ARDAMS"
         private const val AUDIO_TRACK_ID = "ARDAMSa0"
+        private const val VIDEO_TRACK_ID = "ARDAMSv0"
 
         private val DEFAULT_AUDIO_CONSTRAINTS = MediaConstraints().apply {
             // add all existing audio filters to avoid having echos
@@ -765,9 +762,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    private suspend fun createAnswer(): SessionDescription? {
+    private suspend fun createAnswer(call: CallContext): SessionDescription? {
         Timber.w("## VOIP createAnswer")
-        val call = currentCall ?: return null
         val peerConnection = call.peerConnection ?: return null
         val constraints = MediaConstraints().apply {
             mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
@@ -784,11 +780,15 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun muteCall(muted: Boolean) {
-        currentCall?.localAudioTrack?.setEnabled(!muted)
+        val call = currentCall ?: return
+        call.micMuted = muted
+        updateMuteStatus(call)
     }
 
     fun enableVideo(enabled: Boolean) {
-        currentCall?.localVideoTrack?.setEnabled(enabled)
+        val call = currentCall ?: return
+        call.videoMuted = !enabled
+        updateMuteStatus(call)
     }
 
     fun switchCamera() {
@@ -800,7 +800,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 override fun onCameraSwitchDone(isFrontCamera: Boolean) {
                     Timber.v("## VOIP onCameraSwitchDone isFront $isFrontCamera")
                     cameraInUse = availableCamera.first { if (isFrontCamera) it.type == CameraType.FRONT else it.type == CameraType.BACK }
-                    localSurfaceRenderer.forEach {
+                    localSurfaceRenderers.forEach {
                         it.get()?.setMirror(isFrontCamera)
                     }
 
@@ -968,8 +968,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 val sdp = SessionDescription(type.asWebRTC(), sdpText)
                 peerConnection.awaitSetRemoteDescription(sdp)
                 if (type == SdpType.OFFER) {
-                    // create a answer, set local description and send via signaling
-                    createAnswer()?.also {
+                    createAnswer(call)?.also {
                         call.mxCall.negotiate(it)
                     }
                 }
@@ -1003,17 +1002,45 @@ class WebRtcPeerConnectionManager @Inject constructor(
      * rather than 'sendonly')
      * @returns true if the other party has put us on hold
      */
-    private fun isLocalOnHold(callContext: CallContext): Boolean {
-        if (callContext.mxCall.state !is CallState.Connected) return false
+    fun isLocalOnHold(): Boolean {
+        val call = currentCall ?: return false
+        if (call.mxCall.state !is CallState.Connected) return false
         var callOnHold = true
         // We consider a call to be on hold only if *all* the tracks are on hold
         // (is this the right thing to do?)
-        for (transceiver in callContext.peerConnection?.transceivers ?: emptyList()) {
+        for (transceiver in call.peerConnection?.transceivers ?: emptyList()) {
             val trackOnHold = transceiver.currentDirection == RtpTransceiver.RtpTransceiverDirection.INACTIVE
                     || transceiver.currentDirection == RtpTransceiver.RtpTransceiverDirection.RECV_ONLY
             if (!trackOnHold) callOnHold = false;
         }
         return callOnHold;
+    }
+
+    fun isRemoteOnHold(): Boolean {
+        val call = currentCall ?: return false
+        return call.remoteOnHold;
+    }
+
+    fun setRemoteOnHold(onHold: Boolean) {
+        val call = currentCall ?: return
+        if (call.remoteOnHold == onHold) return
+        call.remoteOnHold = onHold
+        val direction = if (onHold) {
+            RtpTransceiver.RtpTransceiverDirection.INACTIVE
+        } else {
+            RtpTransceiver.RtpTransceiverDirection.SEND_RECV
+        }
+        for (transceiver in call.peerConnection?.transceivers ?: emptyList()) {
+            transceiver.direction = direction
+        }
+        updateMuteStatus(call)
+    }
+
+    private fun updateMuteStatus(call: CallContext) {
+        val micShouldBeMuted = call.micMuted || call.remoteOnHold
+        call.localAudioTrack?.setEnabled(!micShouldBeMuted)
+        val vidShouldBeMuted = call.videoMuted || call.remoteOnHold
+        call.localVideoTrack?.setEnabled(!vidShouldBeMuted)
     }
 
     private inner class StreamObserver(val callContext: CallContext) : PeerConnection.Observer {
@@ -1153,7 +1180,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     remoteVideoTrack.setEnabled(true)
                     callContext.remoteVideoTrack = remoteVideoTrack
                     // sink to renderer if attached
-                    remoteSurfaceRenderer.forEach { it.get()?.let { remoteVideoTrack.addSink(it) } }
+                    remoteSurfaceRenderers.forEach { it.get()?.let { remoteVideoTrack.addSink(it) } }
                 }
             }
         }
@@ -1164,7 +1191,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 //                remoteSurfaceRenderer?.get()?.let {
 //                    callContext.remoteVideoTrack?.removeSink(it)
 //                }
-                remoteSurfaceRenderer
+                remoteSurfaceRenderers
                         .mapNotNull { it.get() }
                         .forEach { callContext.remoteVideoTrack?.removeSink(it) }
                 callContext.remoteVideoTrack = null
