@@ -48,4 +48,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@id/userCodeMyCodeButton"
         app:layout_constraintTop_toTopOf="@id/userCodeMyCodeButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

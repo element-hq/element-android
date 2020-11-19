@@ -21,7 +21,6 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.checkbox.MaterialCheckBox
 import im.vector.app.R
-import kotlinx.android.synthetic.main.vector_preference_push_rule.view.*
 
 @EpoxyModelClass(layout = R.layout.item_checkbox)
 abstract class CheckBoxItem : VectorEpoxyModel<CheckBoxItem.Holder>() {

@@ -84,9 +84,9 @@ class UserCodeSharedViewModel @AssistedInject constructor(
 
     override fun handle(action: UserCodeActions) {
         when (action) {
-            UserCodeActions.DismissAction -> _viewEvents.post(UserCodeShareViewEvents.Dismiss)
-            is UserCodeActions.SwitchMode -> setState { copy(mode = action.mode) }
-            is UserCodeActions.DecodedQRCode -> handleQrCodeDecoded(action)
+            UserCodeActions.DismissAction            -> _viewEvents.post(UserCodeShareViewEvents.Dismiss)
+            is UserCodeActions.SwitchMode            -> setState { copy(mode = action.mode) }
+            is UserCodeActions.DecodedQRCode         -> handleQrCodeDecoded(action)
             is UserCodeActions.StartChattingWithUser -> handleStartChatting(action)
         }
     }
@@ -138,9 +138,9 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         _viewEvents.post(UserCodeShareViewEvents.ShowWaitingScreen)
         viewModelScope.launch(Dispatchers.IO) {
             when (linkedId) {
-                is PermalinkData.RoomLink -> TODO()
-                is PermalinkData.UserLink -> {
-                    var user = session.getUser(linkedId.userId) ?: awaitCallback<List<User>> {
+                is PermalinkData.RoomLink     -> TODO()
+                is PermalinkData.UserLink     -> {
+                    val user = session.getUser(linkedId.userId) ?: awaitCallback<List<User>> {
                         session.searchUsersDirectory(linkedId.userId, 10, emptySet(), it)
                     }.firstOrNull { it.userId == linkedId.userId }
                     // Create raw Uxid in case the user is not searchable
@@ -152,7 +152,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
                         )
                     }
                 }
-                is PermalinkData.GroupLink -> TODO()
+                is PermalinkData.GroupLink    -> TODO()
                 is PermalinkData.FallbackLink -> TODO()
             }
             _viewEvents.post(UserCodeShareViewEvents.HideWaitingScreen)

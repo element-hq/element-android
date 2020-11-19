@@ -54,6 +54,5 @@ class ShowUserCodeFragment @Inject constructor(
         state.shareLink?.let { showUserCodeQRImage.setData(it) }
         showUserCodeCardNameText.setTextOrHide(state.matrixItem?.displayName)
         showUserCodeCardUserIdText.setTextOrHide(state.matrixItem?.id)
-        Unit
     }
 }

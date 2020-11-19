@@ -23,7 +23,7 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.home.AvatarRenderer
-import kotlinx.android.synthetic.main.fragment_matrix_to_card.*
+import kotlinx.android.synthetic.main.bottom_sheet_matrix_to_card.*
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
@@ -41,7 +41,7 @@ class MatrixToBottomSheet(private val matrixItem: MatrixItem) : VectorBaseBottom
 
     private var interactionListener: InteractionListener? = null
 
-    override fun getLayoutResId() = R.layout.fragment_matrix_to_card
+    override fun getLayoutResId() = R.layout.bottom_sheet_matrix_to_card
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,8 +56,6 @@ class MatrixToBottomSheet(private val matrixItem: MatrixItem) : VectorBaseBottom
     }
 
     companion object {
-        const val ARGS = "MatrixToFragment.Args"
-
         fun create(matrixItem: MatrixItem, listener: InteractionListener?): MatrixToBottomSheet {
             return MatrixToBottomSheet(matrixItem).apply {
                 interactionListener = listener

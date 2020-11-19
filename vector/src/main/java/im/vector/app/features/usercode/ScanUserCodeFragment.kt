@@ -102,6 +102,7 @@ class ScanUserCodeFragment @Inject constructor()
 
     override fun onPause() {
         super.onPause()
+        userCodeScannerView.setResultHandler(null)
         // Stop camera on pause
         userCodeScannerView.stopCamera()
     }

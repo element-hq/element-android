@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -59,11 +58,11 @@
 
         <ImageView
             android:id="@+id/showUserCodeAvatar"
-            android:transitionName="profile"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:elevation="4dp"
+            android:transitionName="profile"
             app:layout_constraintBottom_toBottomOf="@id/showUserCodeCardTopBarrier"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -150,7 +149,6 @@
 
         </androidx.cardview.widget.CardView>
 
-
         <TextView
             android:id="@+id/showUserCodeInfoText"
             android:layout_width="0dp"
@@ -180,4 +178,5 @@
             app:layout_constraintVertical_bias="0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

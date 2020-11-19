@@ -29,6 +29,7 @@ import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -66,8 +67,8 @@ class UserCodeActivity
 
         sharedViewModel.selectSubscribe(this, UserCodeState::mode) { mode ->
             when (mode) {
-                UserCodeState.Mode.SHOW -> showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
-                UserCodeState.Mode.SCAN -> showFragment(ScanUserCodeFragment::class, Bundle.EMPTY)
+                UserCodeState.Mode.SHOW      -> showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
+                UserCodeState.Mode.SCAN      -> showFragment(ScanUserCodeFragment::class, Bundle.EMPTY)
                 is UserCodeState.Mode.RESULT -> {
                     showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
                     MatrixToBottomSheet.create(mode.matrixItem, this).show(supportFragmentManager, "MatrixToBottomSheet")
@@ -77,11 +78,11 @@ class UserCodeActivity
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                is UserCodeShareViewEvents.InviteFriend -> TODO()
-                UserCodeShareViewEvents.Dismiss -> ActivityCompat.finishAfterTransition(this)
+                is UserCodeShareViewEvents.InviteFriend   -> TODO()
+                UserCodeShareViewEvents.Dismiss           -> ActivityCompat.finishAfterTransition(this)
                 UserCodeShareViewEvents.ShowWaitingScreen -> simpleActivityWaitingView.isVisible = true
                 UserCodeShareViewEvents.HideWaitingScreen -> simpleActivityWaitingView.isVisible = false
-                is UserCodeShareViewEvents.ToastMessage -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                is UserCodeShareViewEvents.ToastMessage   -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                 is UserCodeShareViewEvents.NavigateToRoom -> navigator.openRoom(this, it.roomId)
             }.exhaustive
         }
@@ -89,14 +90,13 @@ class UserCodeActivity
 
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
         if (supportFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
-            supportFragmentManager.beginTransaction().let {
-                it.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                it.replace(R.id.simpleFragmentContainer,
+            supportFragmentManager.commitTransaction {
+                setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+                replace(R.id.simpleFragmentContainer,
                         fragmentClass.java,
                         bundle,
                         fragmentClass.simpleName
                 )
-                it.commit()
             }
         }
     }
@@ -110,7 +110,7 @@ class UserCodeActivity
             UserCodeState.Mode.SHOW -> super.onBackPressed()
             is UserCodeState.Mode.RESULT,
             UserCodeState.Mode.SCAN -> sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
-        }
+        }.exhaustive
     }
 
     override fun create(initialState: UserCodeState, args: Args) =
