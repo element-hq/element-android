@@ -106,7 +106,7 @@ class UserListController @Inject constructor(private val session: Session,
                     currentState.getSelectedMatrixId(),
                     currentState.searchTerm,
                     // to avoid showing twice same user in known and suggestions
-                    currentState.knownUsers.invoke()?.map { it.userId } ?: emptyList()
+                    currentState.knownUsers.invoke()?.map { it.userId }.orEmpty()
             )
         }
     }

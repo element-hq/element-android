@@ -204,9 +204,9 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
         }
-        val viaServers = state.roomDirectoryData.homeServer?.let {
-            listOf(it)
-        } ?: emptyList()
+        val viaServers = state.roomDirectoryData.homeServer
+                ?.let { listOf(it) }
+                .orEmpty()
         session.joinRoom(action.roomId, viaServers = viaServers, callback = object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
