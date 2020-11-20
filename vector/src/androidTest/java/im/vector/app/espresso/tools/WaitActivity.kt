@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package im.vector.app.espresso.tools
 
-import im.vector.app.core.platform.VectorViewEvents
-import org.matrix.android.sdk.api.util.MatrixItem
+import android.app.Activity
+import im.vector.app.activityIdlingResource
+import im.vector.app.withIdlingResource
 
-sealed class HomeActivityViewEvents : VectorViewEvents {
-    data class AskPasswordToInitCrossSigning(val userItem: MatrixItem.UserItem?) : HomeActivityViewEvents()
-    data class OnNewSession(val userItem: MatrixItem.UserItem?, val waitForIncomingRequest: Boolean = true) : HomeActivityViewEvents()
-    data class OnCrossSignedInvalidated(val userItem: MatrixItem.UserItem) : HomeActivityViewEvents()
-    object PromptToEnableSessionPush : HomeActivityViewEvents()
+inline fun <reified T : Activity> waitUntilActivityVisible(noinline block: (() -> Unit)) {
+    withIdlingResource(activityIdlingResource(T::class.java), block)
 }

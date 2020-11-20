@@ -28,7 +28,6 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.extensions.showKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_create_direct_room_directory_users.recyclerView
 import kotlinx.android.synthetic.main.fragment_user_directory.*
 import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
@@ -51,14 +50,14 @@ class UserDirectoryFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        userDirectoryRecyclerView.cleanup()
         directRoomController.callback = null
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
         directRoomController.callback = this
-        recyclerView.configureWith(directRoomController)
+        userDirectoryRecyclerView.configureWith(directRoomController)
     }
 
     private fun setupSearchByMatrixIdView() {

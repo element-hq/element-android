@@ -78,7 +78,7 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
     fun checkVerifyPopup() {
         val userId: String = existingSession!!.myUserId
 
-        doLogin(homeServerUrl, userId, password)
+        uiTestBase.login(userId = userId, password = password, homeServerUrl = homeServerUrl)
 
         // Thread.sleep(6000)
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
@@ -215,10 +215,10 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
     }
 
     fun signout() {
-        onView((withId(R.id.groupToolbarAvatarImageView)))
+        onView(withId(R.id.groupToolbarAvatarImageView))
                 .perform(click())
 
-        onView((withId(R.id.homeDrawerHeaderSettingsView)))
+        onView(withId(R.id.homeDrawerHeaderSettingsView))
                 .perform(click())
 
         onView(withText("General"))
