@@ -426,7 +426,7 @@
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
     <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
-    <string name="permissions_denied_add_contact">To check your address book, you need to allow Contact permission.</string>
+    <string name="permissions_denied_add_contact">Allow permission to access your contacts.</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Saved</string>
@@ -1757,7 +1757,7 @@
     <string name="room_filtering_footer_open_room_directory">View the room directory</string>
 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
-    <string name="user_directory_search_hint">Name or ID (like %s)</string>
+    <string name="user_directory_search_hint">Search by name or ID</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
     <string name="labs_show_unread_notifications_as_tab">Add a dedicated tab for unread notifications on main screen.</string>

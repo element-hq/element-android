@@ -59,18 +59,18 @@ class UserListController @Inject constructor(private val session: Session,
                     // For now we remove this option if in invite to existing room flow (and not create DM)
                     && currentState.existingRoomId == null) {
                 actionItem {
-                    id(R.drawable.ic_invite_people)
+                    id(R.drawable.ic_share)
                     title(stringProvider.getString(R.string.invite_friends))
-                    actionIconRes(R.drawable.ic_invite_people)
+                    actionIconRes(R.drawable.ic_share)
                     clickAction(View.OnClickListener {
                         callback?.onInviteFriendClick()
                     })
                 }
             }
             actionItem {
-                id(R.drawable.ic_book)
+                id(R.drawable.ic_baseline_perm_contact_calendar_24)
                 title(stringProvider.getString(R.string.contacts_book_title))
-                actionIconRes(R.drawable.ic_book)
+                actionIconRes(R.drawable.ic_baseline_perm_contact_calendar_24)
                 clickAction(View.OnClickListener {
                     callback?.onContactBookClick()
                 })

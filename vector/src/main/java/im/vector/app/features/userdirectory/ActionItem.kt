@@ -26,6 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.utils.DebouncedClickListener
 
 @EpoxyModelClass(layout = R.layout.item_contact_action)
 abstract class ActionItem : VectorEpoxyModel<ActionItem.Holder>() {
@@ -36,7 +37,7 @@ abstract class ActionItem : VectorEpoxyModel<ActionItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener(clickAction)
+        holder.view.setOnClickListener(clickAction?.let { DebouncedClickListener(it) })
         // If name is empty, use userId as name and force it being centered
         holder.actionTitleText.setTextOrHide(title)
         if (actionIconRes != null) {

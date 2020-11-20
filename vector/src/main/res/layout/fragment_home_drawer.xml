@@ -110,7 +110,7 @@
             android:textAllCaps="false"
             android:textColor="?colorAccent"
             android:textSize="13sp"
-            app:icon="@drawable/ic_invite_people"
+            app:icon="@drawable/ic_share"
             app:iconGravity="textStart"
             app:iconSize="20dp"
             app:iconTint="?colorAccent"
