@@ -71,12 +71,6 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleInviteFriend() {
-        session.permalinkService().createPermalink(initialState.userId)?.let { permalink ->
-            _viewEvents.post(UserCodeShareViewEvents.InviteFriend(permalink))
-        }
-    }
-
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: UserCodeState, args: UserCodeActivity.Args): UserCodeSharedViewModel
@@ -84,10 +78,23 @@ class UserCodeSharedViewModel @AssistedInject constructor(
 
     override fun handle(action: UserCodeActions) {
         when (action) {
-            UserCodeActions.DismissAction            -> _viewEvents.post(UserCodeShareViewEvents.Dismiss)
-            is UserCodeActions.SwitchMode            -> setState { copy(mode = action.mode) }
-            is UserCodeActions.DecodedQRCode         -> handleQrCodeDecoded(action)
-            is UserCodeActions.StartChattingWithUser -> handleStartChatting(action)
+            UserCodeActions.DismissAction              -> _viewEvents.post(UserCodeShareViewEvents.Dismiss)
+            is UserCodeActions.SwitchMode              -> setState { copy(mode = action.mode) }
+            is UserCodeActions.DecodedQRCode           -> handleQrCodeDecoded(action)
+            is UserCodeActions.StartChattingWithUser   -> handleStartChatting(action)
+            UserCodeActions.CameraPermissionNotGranted -> _viewEvents.post(UserCodeShareViewEvents.CameraPermissionNotGranted)
+            UserCodeActions.ShareByText                -> handleShareByText()
+        }
+    }
+
+    private fun handleShareByText() {
+        session.permalinkService().createPermalink(session.myUserId)?.let { permalink ->
+            val text = stringProvider.getString(R.string.invite_friends_text, permalink)
+            _viewEvents.post(UserCodeShareViewEvents.SharePlainText(
+                    text,
+                    stringProvider.getString(R.string.invite_friends),
+                    stringProvider.getString(R.string.invite_friends_rich_title)
+            ))
         }
     }
 

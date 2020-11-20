@@ -16,10 +16,13 @@
 
 package im.vector.app.features.usercode
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.airbnb.mvrx.activityViewModel
 import com.google.zxing.Result
 import com.google.zxing.ResultMetadataType
@@ -60,6 +63,9 @@ class ScanUserCodeFragment @Inject constructor()
     private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
         if (allGranted) {
             startCamera()
+        } else {
+            // For now just go back
+            sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
         }
     }
 
@@ -90,12 +96,18 @@ class ScanUserCodeFragment @Inject constructor()
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
+            startCamera()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         // Register ourselves as a handler for scan results.
         userCodeScannerView.setResultHandler(this)
-        // Start camera on resume
-        if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
+        if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)) {
             startCamera()
         }
     }

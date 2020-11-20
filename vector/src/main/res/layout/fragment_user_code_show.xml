@@ -49,6 +49,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/showUserCodeClose"
+                    app:layout_constraintEnd_toStartOf="@id/shareByText"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/shareByText"
+                    android:layout_width="@dimen/layout_touch_size"
+                    android:layout_height="@dimen/layout_touch_size"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_share"
+                    app:tint="@color/riotx_accent"
+                    android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

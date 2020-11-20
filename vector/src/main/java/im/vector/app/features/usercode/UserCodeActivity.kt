@@ -32,6 +32,7 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_simple.*
@@ -78,13 +79,15 @@ class UserCodeActivity
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                is UserCodeShareViewEvents.InviteFriend   -> TODO()
-                UserCodeShareViewEvents.Dismiss           -> ActivityCompat.finishAfterTransition(this)
-                UserCodeShareViewEvents.ShowWaitingScreen -> simpleActivityWaitingView.isVisible = true
-                UserCodeShareViewEvents.HideWaitingScreen -> simpleActivityWaitingView.isVisible = false
-                is UserCodeShareViewEvents.ToastMessage   -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                is UserCodeShareViewEvents.NavigateToRoom -> navigator.openRoom(this, it.roomId)
-            }.exhaustive
+                UserCodeShareViewEvents.Dismiss                    -> ActivityCompat.finishAfterTransition(this)
+                UserCodeShareViewEvents.ShowWaitingScreen          -> simpleActivityWaitingView.isVisible = true
+                UserCodeShareViewEvents.HideWaitingScreen          -> simpleActivityWaitingView.isVisible = false
+                is UserCodeShareViewEvents.ToastMessage            -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                is UserCodeShareViewEvents.NavigateToRoom          -> navigator.openRoom(this, it.roomId)
+                UserCodeShareViewEvents.CameraPermissionNotGranted -> onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
+                else                                               -> {
+                }
+            }
         }
     }
 

@@ -19,10 +19,11 @@ package im.vector.app.features.usercode
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed class UserCodeShareViewEvents : VectorViewEvents {
-    data class InviteFriend(val permalink: String) : UserCodeShareViewEvents()
     object Dismiss : UserCodeShareViewEvents()
     object ShowWaitingScreen : UserCodeShareViewEvents()
     object HideWaitingScreen : UserCodeShareViewEvents()
     data class ToastMessage(val message: String) : UserCodeShareViewEvents()
     data class NavigateToRoom(val roomId: String) : UserCodeShareViewEvents()
+    object CameraPermissionNotGranted : UserCodeShareViewEvents()
+    data class SharePlainText(val text: String, val title: String, val richPlainText: String) : UserCodeShareViewEvents()
 }

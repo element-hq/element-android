@@ -23,6 +23,10 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.android.synthetic.main.fragment_user_code_show.*
 import javax.inject.Inject
@@ -35,13 +39,38 @@ class ShowUserCodeFragment @Inject constructor(
 
     val sharedViewModel: UserCodeSharedViewModel by activityViewModel()
 
+    private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            doOpenQRCodeScanner()
+        } else {
+            sharedViewModel.handle(UserCodeActions.CameraPermissionNotGranted)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         showUserCodeClose.debouncedClicks {
             sharedViewModel.handle(UserCodeActions.DismissAction)
         }
         showUserCodeScanButton.debouncedClicks {
-            doOpenQRCodeScanner()
+            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
+                doOpenQRCodeScanner()
+            }
+        }
+        shareByText.debouncedClicks {
+            sharedViewModel.handle(UserCodeActions.ShareByText)
+        }
+
+        sharedViewModel.observeViewEvents {
+            if (it is UserCodeShareViewEvents.SharePlainText) {
+                startSharePlainTextIntent(
+                        fragment = this,
+                        activityResultLauncher = null,
+                        chooserTitle = it.title,
+                        text = it.text,
+                        extraTitle = it.richPlainText
+                )
+            }
         }
     }
 

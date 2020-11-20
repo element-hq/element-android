@@ -22,7 +22,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -43,6 +42,7 @@ import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
 import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.userdirectory.UserListFragment
@@ -132,9 +132,10 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
                 addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
             }
         } else {
-            Toast.makeText(baseContext, R.string.missing_permissions_error, Toast.LENGTH_SHORT).show()
             if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                finish()
+                onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
+            } else if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
+                onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
             }
         }
     }
