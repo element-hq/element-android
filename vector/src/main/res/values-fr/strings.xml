@@ -2089,7 +2089,7 @@
     <string name="direct_room_profile_section_more_leave">Quitter</string>
     <string name="room_profile_section_admin">Actions d\'administrateur</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Les messages ici ne sont pas chiffrés de bout en bout.</string>
-    <string name="sent_a_reaction">Réagis avec : %s</string>
+    <string name="sent_a_reaction">A réagi avec : %s</string>
     <string name="sent_a_poll">Sondage</string>
     <string name="login_signin_matrix_id_password_notice">Si vous ne connaissez pas votre mot de passe, faites précédent et réinitialisez-le.</string>
     <string name="login_msisdn_notice">Veuillez utiliser le format international (le numéro de téléphone doit commencer avec « + »)</string>
