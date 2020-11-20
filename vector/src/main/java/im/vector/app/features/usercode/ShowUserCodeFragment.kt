@@ -57,7 +57,7 @@ class ShowUserCodeFragment @Inject constructor(
                 doOpenQRCodeScanner()
             }
         }
-        shareByText.debouncedClicks {
+        showUserCodeShareButton.debouncedClicks {
             sharedViewModel.handle(UserCodeActions.ShareByText)
         }
 

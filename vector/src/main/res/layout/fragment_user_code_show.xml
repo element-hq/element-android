@@ -49,19 +49,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/showUserCodeClose"
-                    app:layout_constraintEnd_toStartOf="@id/shareByText"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/shareByText"
-                    android:layout_width="@dimen/layout_touch_size"
-                    android:layout_height="@dimen/layout_touch_size"
-                    android:scaleType="center"
-                    android:src="@drawable/ic_share"
-                    app:tint="@color/riotx_accent"
-                    android:layout_marginEnd="@dimen/layout_horizontal_margin"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -178,16 +165,32 @@
             app:layout_constraintTop_toBottomOf="@id/showUserCodeCard" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/showUserCodeScanButton"
+            android:id="@+id/showUserCodeShareButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:minWidth="130dp"
+            android:text="@string/user_code_share"
+            app:icon="@drawable/ic_share"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/showUserCodeScanButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/showUserCodeInfoText"
+            app:layout_constraintVertical_bias="0" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/showUserCodeScanButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_vertical_margin"
             android:minWidth="130dp"
             android:text="@string/user_code_scan"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/showUserCodeInfoText"
+            app:layout_constraintTop_toBottomOf="@id/showUserCodeShareButton"
             app:layout_constraintVertical_bias="0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

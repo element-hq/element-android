@@ -2561,9 +2561,10 @@
     </plurals>
     <string name="invite_users_to_room_failure">We could not invite users. Please check the users you want to invite and try again.</string>
 
-    <string name="user_code_scan">SCAN A QR CODE</string>
+    <string name="user_code_scan">Scan a QR code</string>
+    <string name="user_code_share">Share my code</string>
     <string name="user_code_my_code">My code</string>
-    <string name="user_code_info_text">This is your QR code. Share it with people so they can scan it to add you and start chatting.</string>
+    <string name="user_code_info_text">Share this code with people so they can scan it to add you and start chatting.</string>
 
     <string name="choose_locale_current_locale_title">Current language</string>
     <string name="choose_locale_other_locales_title">Other available languages</string>
