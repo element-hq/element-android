@@ -287,8 +287,12 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         return attributes.informationData.sentByMe
     }
 
-    open fun getBubbleMargin(density: Float, reverseBubble: Boolean): Int {
-        return round(96*density).toInt()
+    open fun getBubbleMargin(density: Float, bubbleStyle: String, reverseBubble: Boolean): Int {
+        return when (bubbleStyle) {
+            BubbleThemeUtils.BUBBLE_STYLE_START,
+            BubbleThemeUtils.BUBBLE_STYLE_START_HIDDEN -> 0
+            else -> round(96*density).toInt()
+        }
     }
 
     open fun allowFooterOverlay(holder: H): Boolean {
@@ -353,11 +357,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 val density = bubbleView.resources.displayMetrics.density
                 // TODO 96 = 2 * avatar size?
                 if (reverseBubble) {
-                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = getBubbleMargin(density, reverseBubble)
+                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = getBubbleMargin(density, bubbleStyle, reverseBubble)
                     (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = 0
                 } else {
                     (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = 0
-                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = getBubbleMargin(density, reverseBubble)
+                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = getBubbleMargin(density, bubbleStyle, reverseBubble)
                 }
                 /*
                 (bubbleView.layoutParams as RelativeLayout.LayoutParams).marginStart = round(20*density).toInt()

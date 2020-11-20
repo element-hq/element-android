@@ -97,7 +97,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         return true
     }
 
-    override fun getBubbleMargin(density: Float, reverseBubble: Boolean): Int {
+    override fun getBubbleMargin(density: Float, bubbleStyle: String, reverseBubble: Boolean): Int {
         return 0
     }
 
