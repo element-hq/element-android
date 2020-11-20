@@ -33,7 +33,9 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
 
@@ -56,9 +58,6 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
     }
 
     companion object : MvRxViewModelFactory<UserListViewModel, UserListViewState> {
-
-        private val USER_NOT_FOUND_MAP = emptyMap<String, Any>()
-        private val USER_NOT_FOUND = User("")
 
         override fun create(viewModelContext: ViewModelContext, state: UserListViewState): UserListViewModel? {
             val factory = when (viewModelContext) {
@@ -124,65 +123,44 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                 }
 
         currentUserSearchDisposable?.dispose()
+
         directoryUsersSearch
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .switchMapSingle { search ->
                     val stream = if (search.isBlank()) {
-                        Single.just(emptyList())
-                    } else if (MatrixPatterns.isUserId(search)) {
-                        // If it's a valid user id try to use Profile API
-                        // because directory only returns users that are in public rooms or share a room with you, where as
-                        // profile will work other federations
-                        session.rx().searchUsersDirectory(search, 50, state.excludedUserIds ?: emptySet())
-                                .map { users ->
-                                    users.sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
-                                }
-                                .zipWith(
-                                        session.rx().getProfileInfo(search)
-                                                // ... not sure how to handle that properly (manage error case in map and return optional)
-                                                .onErrorReturn { USER_NOT_FOUND_MAP }
-                                                .map { json ->
-                                                    if (json === USER_NOT_FOUND_MAP) {
-                                                        USER_NOT_FOUND
-                                                    } else {
-                                                        User(
-                                                                userId = search,
-                                                                displayName = json[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                                                avatarUrl = json[ProfileService.AVATAR_URL_KEY] as? String
-                                                        )
-                                                    }
-                                                },
-                                        { t1, t2 ->
-                                            if (t2 == USER_NOT_FOUND) {
-                                                t1
-                                            }
-                                            // profile result might also be in search results, in this case keep search result
-                                            else if (t1.indexOfFirst { it.userId == t2.userId } != -1) {
-                                                t1
-                                            } else {
-                                                // put it first
-                                                listOf(t2) + t1
-                                            }
-                                        }
-                                )
-                                .doOnSubscribe {
-                                    currentUserSearchDisposable = it
-                                }
-                                .doOnDispose {
-                                    currentUserSearchDisposable = null
-                                }
+                        Single.just(emptyList<User>())
                     } else {
-                        session.rx()
+                        val searchObservable = session.rx()
                                 .searchUsersDirectory(search, 50, state.excludedUserIds ?: emptySet())
                                 .map { users ->
                                     users.sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                                 }
-                                .doOnSubscribe {
-                                    currentUserSearchDisposable = it
+                        // If it's a valid user id try to use Profile API
+                        // because directory only returns users that are in public rooms or share a room with you, where as
+                        // profile will work other federations
+                        if (!MatrixPatterns.isUserId(search)) {
+                            searchObservable
+                        } else {
+                            val profileObservable = session.rx().getProfileInfo(search)
+                                    .map { json ->
+                                        User(
+                                                userId = search,
+                                                displayName = json[ProfileService.DISPLAY_NAME_KEY] as? String,
+                                                avatarUrl = json[ProfileService.AVATAR_URL_KEY] as? String
+                                        ).toOptional()
+                                    }
+                                    .onErrorReturn { Optional.empty() }
+
+                            Single.zip(searchObservable, profileObservable, { searchResults, optionalProfile ->
+                                val profile = optionalProfile.getOrNull() ?: return@zip searchResults
+                                val searchContainsProfile = searchResults.indexOfFirst { it.userId == profile.userId } != -1
+                                if (searchContainsProfile) {
+                                    searchResults
+                                } else {
+                                    listOf(profile) + searchResults
                                 }
-                                .doOnDispose {
-                                    currentUserSearchDisposable = null
-                                }
+                            })
+                        }
                     }
                     stream.toAsync {
                         copy(directoryUsers = it)
