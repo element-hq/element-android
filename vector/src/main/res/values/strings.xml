@@ -425,8 +425,8 @@
     <string name="permissions_msg_contacts_warning_other_androids">Element can check your address book to find other Matrix users based on their email and phone numbers.\n\nDo you agree to share your address book for this purpose?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
-    <string name="permissions_denied_qr_code">To scan a QR code, allow Camera permission to take a picture</string>
-    <string name="permissions_denied_add_contact">To check your address book, allow Contact permission.</string>
+    <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
+    <string name="permissions_denied_add_contact">To check your address book, you need to allow Contact permission.</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Saved</string>
@@ -2561,9 +2561,9 @@
     </plurals>
     <string name="invite_users_to_room_failure">We could not invite users. Please check the users you want to invite and try again.</string>
 
-    <string name="user_code_scan">Scan</string>
+    <string name="user_code_scan">SCAN A QR CODE</string>
     <string name="user_code_my_code">My code</string>
-    <string name="user_code_info_text">This is your matrix.to code. If you share it with someone they can scan it with their element camera to add you as a contact</string>
+    <string name="user_code_info_text">This is your QR code. Share it with people so they can scan it to add you and start chatting.</string>
 
     <string name="choose_locale_current_locale_title">Current language</string>
     <string name="choose_locale_other_locales_title">Other available languages</string>
