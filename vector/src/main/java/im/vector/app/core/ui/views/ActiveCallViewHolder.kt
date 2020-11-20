@@ -22,7 +22,7 @@ import androidx.core.view.isVisible
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.call.WebRtcPeerConnectionManager
 import org.matrix.android.sdk.api.session.call.CallState
-import org.matrix.android.sdk.api.session.call.EglUtils
+import im.vector.app.features.call.utils.EglUtils
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer

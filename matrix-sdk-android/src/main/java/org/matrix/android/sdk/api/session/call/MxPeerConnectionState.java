@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.call
+package org.matrix.android.sdk.api.session.call;
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-
-@JsonClass(generateAdapter = false)
-enum class SdpType {
-    @Json(name = "offer")
-    OFFER,
-
-    @Json(name = "answer")
-    ANSWER;
+/**
+ * This is a copy of https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/connectionState
+ * to avoid having the dependency over WebRtc library on sdk.
+ */
+public enum MxPeerConnectionState {
+    NEW,
+    CONNECTING,
+    CONNECTED,
+    DISCONNECTED,
+    FAILED,
+    CLOSED;
 }

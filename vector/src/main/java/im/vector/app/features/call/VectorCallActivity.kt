@@ -52,8 +52,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call.*
 import org.matrix.android.sdk.api.session.call.CallState
-import org.matrix.android.sdk.api.session.call.EglUtils
+import im.vector.app.features.call.utils.EglUtils
 import org.matrix.android.sdk.api.session.call.MxCallDetail
+import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.webrtc.EglBase
 import org.webrtc.PeerConnection
@@ -255,7 +256,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                 configureCallInfo(state)
             }
             is CallState.Connected    -> {
-                if (callState.iceConnectionState == PeerConnection.PeerConnectionState.CONNECTED) {
+                if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (callArgs.isVideoCall) {
                         callVideoGroup.isVisible = true
                         callInfoGroup.isVisible = false

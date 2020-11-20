@@ -25,19 +25,18 @@ import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
+import org.matrix.android.sdk.api.session.room.model.call.CallCandidate
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
-import org.matrix.android.sdk.api.session.room.model.call.toSdpType
+import org.matrix.android.sdk.api.session.room.model.call.SdpType
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.call.DefaultCallSignalingService
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
-import org.webrtc.IceCandidate
-import org.webrtc.SessionDescription
 import timber.log.Timber
 
 internal class MxCallImpl(
@@ -90,7 +89,7 @@ internal class MxCallImpl(
         }
     }
 
-    override fun offerSdp(sdp: SessionDescription) {
+    override fun offerSdp(sdpString: String) {
         if (!isOutgoing) return
         Timber.v("## VOIP offerSdp $callId")
         state = CallState.Dialing
@@ -98,29 +97,23 @@ internal class MxCallImpl(
                 callId = callId,
                 partyId = ourPartyId,
                 lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
-                offer = CallInviteContent.Offer(sdp = sdp.description)
+                offer = CallInviteContent.Offer(sdp = sdpString)
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
     }
 
-    override fun sendLocalIceCandidates(candidates: List<IceCandidate>) {
+    override fun sendLocalIceCandidates(candidates: List<CallCandidate>) {
         CallCandidatesContent(
                 callId = callId,
                 partyId = ourPartyId,
-                candidates = candidates.map {
-                    CallCandidatesContent.Candidate(
-                            sdpMid = it.sdpMid,
-                            sdpMLineIndex = it.sdpMLineIndex,
-                            candidate = it.sdp
-                    )
-                }
+                candidates = candidates
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_CANDIDATES, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
     }
 
-    override fun sendLocalIceCandidateRemovals(candidates: List<IceCandidate>) {
+    override fun sendLocalIceCandidateRemovals(candidates: List<CallCandidate>) {
         // For now we don't support this flow
     }
 
@@ -153,26 +146,26 @@ internal class MxCallImpl(
         state = CallState.Terminated
     }
 
-    override fun accept(sdp: SessionDescription) {
+    override fun accept(sdpString: String) {
         Timber.v("## VOIP accept $callId")
         if (isOutgoing) return
         state = CallState.Answering
         CallAnswerContent(
                 callId = callId,
                 partyId = ourPartyId,
-                answer = CallAnswerContent.Answer(sdp = sdp.description)
+                answer = CallAnswerContent.Answer(sdp = sdpString)
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_ANSWER, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
     }
 
-    override fun negotiate(sdp: SessionDescription) {
+    override fun negotiate(sdpString: String) {
         Timber.v("## VOIP negotiate $callId")
         CallNegotiateContent(
                 callId = callId,
                 partyId = ourPartyId,
                 lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
-                description = CallNegotiateContent.Description(sdp = sdp.description, type = sdp.type.toSdpType())
+                description = CallNegotiateContent.Description(sdp = sdpString, type = SdpType.OFFER)
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_NEGOTIATE, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }

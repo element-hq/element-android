@@ -46,8 +46,11 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallListener
 import org.matrix.android.sdk.api.session.call.CallState
-import org.matrix.android.sdk.api.session.call.EglUtils
+import im.vector.app.features.call.utils.EglUtils
+import im.vector.app.features.call.utils.asWebRTC
+import im.vector.app.features.call.utils.mapToCallCandidate
 import org.matrix.android.sdk.api.session.call.MxCall
+import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
@@ -57,7 +60,6 @@ import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.SdpType
-import org.matrix.android.sdk.api.session.room.model.call.asWebRTC
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
@@ -150,7 +152,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     if (it.isNotEmpty()) {
                         Timber.v("## Sending local ice candidates to call")
                         // it.forEach { peerConnection?.addIceCandidate(it) }
-                        mxCall.sendLocalIceCandidates(it)
+                        mxCall.sendLocalIceCandidates(it.mapToCallCandidate())
                     }
                 }
 
@@ -329,9 +331,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
             }
             if (call.state == CallState.CreateOffer) {
                 // send offer to peer
-                call.offerSdp(sessionDescription)
+                call.offerSdp(sessionDescription.description)
             } else {
-                call.negotiate(sessionDescription)
+                call.negotiate(sessionDescription.description)
             }
         } catch (failure: Throwable) {
             // Need to handle error properly.
@@ -455,7 +457,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         // create a answer, set local description and send via signaling
         createAnswer(callContext)?.also {
-            callContext.mxCall.accept(it)
+            callContext.mxCall.accept(it.description)
         }
         Timber.v("## VOIP remoteCandidateSource ${callContext.remoteCandidateSource}")
         callContext.remoteIceCandidateDisposable = callContext.remoteCandidateSource?.subscribe({
@@ -969,7 +971,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 peerConnection.awaitSetRemoteDescription(sdp)
                 if (type == SdpType.OFFER) {
                     createAnswer(call)?.also {
-                        call.mxCall.negotiate(it)
+                        call.mxCall.negotiate(sdpText)
                     }
                 }
             } catch (failure: Throwable) {
@@ -1053,7 +1055,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * or is closed (state "closed"); in addition, at least one transport is either "connected" or "completed"
                  */
                 PeerConnection.PeerConnectionState.CONNECTED -> {
-                    callContext.mxCall.state = CallState.Connected(newState)
+                    callContext.mxCall.state = CallState.Connected(MxPeerConnectionState.CONNECTED)
                     callAudioManager.onCallConnected(callContext.mxCall)
                 }
                 /**
@@ -1062,7 +1064,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 PeerConnection.PeerConnectionState.FAILED -> {
                     // This can be temporary, e.g when other ice not yet received...
                     // callContext.mxCall.state = CallState.ERROR
-                    callContext.mxCall.state = CallState.Connected(newState)
+                    callContext.mxCall.state = CallState.Connected(MxPeerConnectionState.FAILED)
                 }
                 /**
                  * At least one of the connection's ICE transports (RTCIceTransports or RTCDtlsTransports) are in the "new" state,
@@ -1070,26 +1072,27 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  * or all of the connection's transports are in the "closed" state.
                  */
                 PeerConnection.PeerConnectionState.NEW,
-
                     /**
                      * One or more of the ICE transports are currently in the process of establishing a connection;
                      * that is, their RTCIceConnectionState is either "checking" or "connected", and no transports are in the "failed" state
                      */
                 PeerConnection.PeerConnectionState.CONNECTING -> {
-                    callContext.mxCall.state = CallState.Connected(PeerConnection.PeerConnectionState.CONNECTING)
+                    callContext.mxCall.state = CallState.Connected(MxPeerConnectionState.CONNECTING)
                 }
                 /**
                  * The RTCPeerConnection is closed.
                  * This value was in the RTCSignalingState enum (and therefore found by reading the value of the signalingState)
                  * property until the May 13, 2016 draft of the specification.
                  */
-                PeerConnection.PeerConnectionState.CLOSED,
-                    /**
-                     * At least one of the ICE transports for the connection is in the "disconnected" state and none of
-                     * the other transports are in the state "failed", "connecting", or "checking".
-                     */
+                PeerConnection.PeerConnectionState.CLOSED -> {
+                    callContext.mxCall.state = CallState.Connected(MxPeerConnectionState.CLOSED)
+                }
+                /**
+                 * At least one of the ICE transports for the connection is in the "disconnected" state and none of
+                 * the other transports are in the state "failed", "connecting", or "checking".
+                 */
                 PeerConnection.PeerConnectionState.DISCONNECTED -> {
-                    callContext.mxCall.state = CallState.Connected(newState)
+                    callContext.mxCall.state = CallState.Connected(MxPeerConnectionState.DISCONNECTED)
                 }
                 null -> {
                 }

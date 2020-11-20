@@ -17,6 +17,7 @@
 package im.vector.app.features.call.utils
 
 import im.vector.app.features.call.SdpObserverAdapter
+import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.webrtc.MediaConstraints
 import org.webrtc.PeerConnection
 import org.webrtc.SessionDescription
@@ -79,4 +80,3 @@ suspend fun PeerConnection.awaitSetRemoteDescription(sessionDescription: Session
         }
     }, sessionDescription)
 }
-

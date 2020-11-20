@@ -16,9 +16,8 @@
 
 package org.matrix.android.sdk.api.session.call
 
+import org.matrix.android.sdk.api.session.room.model.call.CallCandidate
 import org.matrix.android.sdk.api.util.Optional
-import org.webrtc.IceCandidate
-import org.webrtc.SessionDescription
 
 interface MxCallDetail {
     val callId: String
@@ -47,12 +46,12 @@ interface MxCall : MxCallDetail {
      * Pick Up the incoming call
      * It has no effect on outgoing call
      */
-    fun accept(sdp: SessionDescription)
+    fun accept(sdpString: String)
 
     /**
      * SDP negotiation for media pause, hold/resume, ICE restarts and voice/video call up/downgrading
      */
-    fun negotiate(sdp: SessionDescription)
+    fun negotiate(sdpString: String)
 
     /**
      * This has to be sent by the caller's client once it has chosen an answer.
@@ -73,17 +72,17 @@ interface MxCall : MxCallDetail {
      * Start a call
      * Send offer SDP to the other participant.
      */
-    fun offerSdp(sdp: SessionDescription)
+    fun offerSdp(sdpString: String)
 
     /**
      * Send Ice candidate to the other participant.
      */
-    fun sendLocalIceCandidates(candidates: List<IceCandidate>)
+    fun sendLocalIceCandidates(candidates: List<CallCandidate>)
 
     /**
      * Send removed ICE candidates to the other participant.
      */
-    fun sendLocalIceCandidateRemovals(candidates: List<IceCandidate>)
+    fun sendLocalIceCandidateRemovals(candidates: List<CallCandidate>)
 
     fun addListener(listener: StateListener)
     fun removeListener(listener: StateListener)

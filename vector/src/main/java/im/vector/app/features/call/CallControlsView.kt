@@ -29,6 +29,7 @@ import butterknife.OnClick
 import im.vector.app.R
 import kotlinx.android.synthetic.main.view_call_controls.view.*
 import org.matrix.android.sdk.api.session.call.CallState
+import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.webrtc.PeerConnection
 
 class CallControlsView @JvmOverloads constructor(
@@ -129,7 +130,7 @@ class CallControlsView @JvmOverloads constructor(
                 connectedControls.isVisible = false
             }
             is CallState.Connected    -> {
-                if (callState.iceConnectionState == PeerConnection.PeerConnectionState.CONNECTED) {
+                if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     ringingControls.isVisible = false
                     connectedControls.isVisible = true
                     iv_video_toggle.isVisible = state.isVideoCall

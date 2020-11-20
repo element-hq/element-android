@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
+import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -53,7 +54,7 @@ class VectorCallViewModel @AssistedInject constructor(
     private val callStateListener = object : MxCall.StateListener {
         override fun onStateUpdate(call: MxCall) {
             val callState = call.state
-            if (callState is CallState.Connected && callState.iceConnectionState == PeerConnection.PeerConnectionState.CONNECTED) {
+            if (callState is CallState.Connected && callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                 hasBeenConnectedOnce = true
                 connectionTimeoutTimer?.cancel()
                 connectionTimeoutTimer = null
