@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.content.Context
+import android.content.res.Resources
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -97,7 +98,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         return true
     }
 
-    override fun getBubbleMargin(density: Float, bubbleStyle: String, reverseBubble: Boolean): Int {
+    override fun getBubbleMargin(resources: Resources, bubbleStyle: String, reverseBubble: Boolean): Int {
         return 0
     }
 

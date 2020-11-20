@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Typeface
 import android.view.Gravity
 import android.view.View
@@ -287,11 +288,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         return attributes.informationData.sentByMe
     }
 
-    open fun getBubbleMargin(density: Float, bubbleStyle: String, reverseBubble: Boolean): Int {
+    open fun getBubbleMargin(resources: Resources, bubbleStyle: String, reverseBubble: Boolean): Int {
         return when (bubbleStyle) {
             BubbleThemeUtils.BUBBLE_STYLE_START,
             BubbleThemeUtils.BUBBLE_STYLE_START_HIDDEN -> 0
-            else -> round(96*density).toInt()
+            else -> resources.getDimensionPixelSize(R.dimen.dual_bubble_other_side_margin)
         }
     }
 
@@ -321,6 +322,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         when (bubbleStyle) {
             BubbleThemeUtils.BUBBLE_STYLE_NONE                                      -> {
                 bubbleView.background = null
+                (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = 0
                 (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = 0
                 /*
                 (bubbleView.layoutParams as RelativeLayout.LayoutParams).marginStart = 0
@@ -355,13 +357,12 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                     shortPadding = 0//if (attributes.informationData.showInformation && !hideSenderInformation()) { 8 } else { 0 }
                 }
                 val density = bubbleView.resources.displayMetrics.density
-                // TODO 96 = 2 * avatar size?
                 if (reverseBubble) {
-                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = getBubbleMargin(density, bubbleStyle, reverseBubble)
+                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = getBubbleMargin(bubbleView.resources, bubbleStyle, reverseBubble)
                     (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = 0
                 } else {
                     (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = 0
-                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = getBubbleMargin(density, bubbleStyle, reverseBubble)
+                    (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = getBubbleMargin(bubbleView.resources, bubbleStyle, reverseBubble)
                 }
                 /*
                 (bubbleView.layoutParams as RelativeLayout.LayoutParams).marginStart = round(20*density).toInt()
