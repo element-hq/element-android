@@ -246,7 +246,7 @@
 
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s removed %2$s as an address for this room.</item>
-        <item quantity="other">%1$s removed %3$s as addresses for this room.</item>
+        <item quantity="other">%1$s removed %2$s as addresses for this room.</item>
     </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
