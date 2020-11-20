@@ -17,8 +17,6 @@
 package org.matrix.android.sdk.api.session.room.send
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 
 interface DraftService {
@@ -26,12 +24,12 @@ interface DraftService {
     /**
      * Save or update a draft to the room
      */
-    fun saveDraft(draft: UserDraft, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun saveDraft(draft: UserDraft)
 
     /**
      * Delete the last draft, basically just after sending the message
      */
-    fun deleteDraft(callback: MatrixCallback<Unit>): Cancelable
+    suspend fun deleteDraft()
 
     /**
      * Return the current draft or null

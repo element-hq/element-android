@@ -23,6 +23,7 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Parcelable
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.app.R
@@ -37,6 +38,7 @@ import im.vector.app.core.utils.isIgnoringBatteryOptimizations
 import im.vector.app.core.utils.requestDisablingBatteryOptimization
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.push.fcm.FcmHelper
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
@@ -318,24 +320,22 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
                 ?.let {
                     // Trick, we must enable this room to disable notifications
-                    pushRuleService.updatePushRuleEnableStatus(RuleKind.OVERRIDE,
-                            it,
-                            !switchPref.isChecked,
-                            object : MatrixCallback<Unit> {
-                                override fun onSuccess(data: Unit) {
-                                    // Push rules will be updated from the sync
-                                }
+                    lifecycleScope.launch {
+                        try {
+                            pushRuleService.updatePushRuleEnableStatus(RuleKind.OVERRIDE,
+                                    it,
+                                    !switchPref.isChecked)
+                            // Push rules will be updated from the sync
+                        } catch (failure: Throwable) {
+                            if (!isAdded) {
+                                return@launch
+                            }
 
-                                override fun onFailure(failure: Throwable) {
-                                    if (!isAdded) {
-                                        return
-                                    }
-
-                                    // revert the check box
-                                    switchPref.isChecked = !switchPref.isChecked
-                                    Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
-                                }
-                            })
+                            // revert the check box
+                            switchPref.isChecked = !switchPref.isChecked
+                            Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
     }
 }

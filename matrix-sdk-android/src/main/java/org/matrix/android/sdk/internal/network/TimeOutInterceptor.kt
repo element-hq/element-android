@@ -52,5 +52,8 @@ internal class TimeOutInterceptor @Inject constructor() : Interceptor {
         const val CONNECT_TIMEOUT = "CONNECT_TIMEOUT"
         const val READ_TIMEOUT = "READ_TIMEOUT"
         const val WRITE_TIMEOUT = "WRITE_TIMEOUT"
+
+        // 1 minute
+        const val DEFAULT_LONG_TIMEOUT: Long = 60_000
     }
 }

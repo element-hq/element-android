@@ -70,12 +70,12 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        recyclerView.configureWith(softLogoutController)
+        genericRecyclerView.configureWith(softLogoutController)
         softLogoutController.listener = this
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         softLogoutController.listener = null
         super.onDestroyView()
     }
@@ -121,7 +121,7 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     private fun cleanupUi() {
-        recyclerView.hideKeyboard()
+        genericRecyclerView.hideKeyboard()
     }
 
     override fun forgetPasswordClicked() {

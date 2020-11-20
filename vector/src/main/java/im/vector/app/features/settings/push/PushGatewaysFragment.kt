@@ -59,11 +59,11 @@ class PushGatewaysFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(epoxyController, showDivider = true)
+        genericRecyclerView.configureWith(epoxyController, showDivider = true)
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         super.onDestroyView()
     }
 

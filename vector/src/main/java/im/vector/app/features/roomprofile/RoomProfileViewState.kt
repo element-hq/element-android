@@ -26,8 +26,14 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 data class RoomProfileViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
-        val bannedMembership: Async<List<RoomMemberSummary>> = Uninitialized
+        val bannedMembership: Async<List<RoomMemberSummary>> = Uninitialized,
+        val actionPermissions: ActionPermissions = ActionPermissions(),
+        val isLoading: Boolean = false
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
+
+    data class ActionPermissions(
+            val canEnableEncryption: Boolean = false
+    )
 }

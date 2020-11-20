@@ -175,13 +175,22 @@
 
     <!-- The 2 parameters will be members' name -->
     <string name="room_displayname_two_members">%1$s and %2$s</string>
-
+    <!-- The 3 parameters will be members' name -->
+    <string name="room_displayname_3_members">%1$s, %2$s and %3$s</string>
+    <!-- The 4 parameters will be members' name -->
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s and %4$s</string>
+    <!-- The 3 first parameters will be members' name -->
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s and %4$d other</item>
+        <item quantity="other">%1$s, %2$s, %3$s and %4$d others</item>
+    </plurals>
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s and 1 other</item>
         <item quantity="other">%1$s and %2$d others</item>
     </plurals>
 
     <string name="room_displayname_empty_room">Empty room</string>
+    <string name="room_displayname_empty_room_was">Empty room (was %s)</string>
 
     <string name="initial_sync_start_importing_account">Initial Sync:\nImporting account…</string>
     <string name="initial_sync_start_importing_account_crypto">Initial Sync:\nImporting crypto</string>

@@ -19,6 +19,7 @@ package org.matrix.android.sdk.api.session.room
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.util.Cancelable
@@ -141,4 +142,20 @@ interface RoomService {
      *  - the power level of the users are not taken into account. Normally in a DM, the 2 members are admins of the room
      */
     fun getExistingDirectRoomWithUser(otherUserId: String): String?
+
+    /**
+     * Get a room member for the tuple {userId,roomId}
+     * @param userId the userId to look for.
+     * @param roomId the roomId to look for.
+     * @return the room member or null
+     */
+    fun getRoomMember(userId: String, roomId: String): RoomMemberSummary?
+
+    /**
+     * Observe a live room member for the tuple {userId,roomId}
+     * @param userId the userId to look for.
+     * @param roomId the roomId to look for.
+     * @return a LiveData of the optional found room member
+     */
+    fun getRoomMemberLive(userId: String, roomId: String): LiveData<Optional<RoomMemberSummary>>
 }

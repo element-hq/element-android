@@ -105,7 +105,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:background="?riotx_background"
         app:itemIconSize="20dp"
         app:itemIconTint="@color/bottom_navigation_icon_tint_selector"

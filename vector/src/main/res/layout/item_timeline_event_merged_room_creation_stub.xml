@@ -1,31 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <FrameLayout
-        android:id="@+id/creationEncryptionTile"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/creationTile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginBottom="2dp"
-        android:background="@drawable/rounded_rect_shape_8"
-        android:padding="8dp">
+        android:layout_height="wrap_content">
 
-        <include layout="@layout/item_timeline_event_status_tile_stub" />
+        <FrameLayout
+            android:id="@+id/creationEncryptionTile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="52dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/rounded_rect_shape_8"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+            <include layout="@layout/item_timeline_event_status_tile_stub" />
+
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/creationTileRoomAvatarImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/creationEncryptionTile"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/creationTileSetAvatarButton"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:backgroundTint="?riotx_bottom_nav_background_color"
+            android:contentDescription="@string/room_settings_set_avatar"
+            android:elevation="2dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            app:cornerRadius="30dp"
+            app:icon="@drawable/ic_camera"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="20dp"
+            app:iconTint="?riot_primary_text_color"
+            app:layout_constraintCircle="@+id/creationTileRoomAvatarImageView"
+            app:layout_constraintCircleAngle="135"
+            app:layout_constraintCircleRadius="34dp"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/roomNameTileText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="?riotx_text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/creationTileRoomAvatarImageView"
+            tools:text="@sample/matrix.json/data/roomName" />
+
+        <TextView
+            android:id="@+id/roomNameDescriptionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="?riotx_text_secondary"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/roomNameTileText"
+            tools:text="@string/this_is_the_beginning_of_room_no_name" />
+
+        <TextView
+            android:id="@+id/roomNameTopicText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textColor="?riotx_text_secondary"
+            android:textColorLink="@color/riotx_accent"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/roomNameDescriptionText"
+            tools:text="@string/room_created_summary_no_topic_creation_text" />
+
+        <LinearLayout
+            android:id="@+id/creationTileAddPeopleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/add_people"
+            android:focusable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/roomNameTopicText">
+
+            <ImageView
+                android:id="@+id/addPeopleButtonBg"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/circle"
+                android:backgroundTint="@color/riotx_accent"
+                android:importantForAccessibility="no"
+                android:scaleType="center"
+                android:src="@drawable/ic_add_people" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:importantForAccessibility="no"
+                android:text="@string/add_people"
+                android:textColor="@color/riotx_accent" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
         android:id="@+id/mergedSumContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/creationEncryptionTile">
+        android:layout_below="@+id/creationTile"
+        android:layout_marginTop="8dp">
 
         <ImageView
             android:id="@+id/itemNoticeAvatarView"

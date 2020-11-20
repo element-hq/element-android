@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.permalinks
 
 import android.text.Spannable
+import org.matrix.android.sdk.api.MatrixPatterns
 
 /**
  *  MatrixLinkify take a piece of text and turns all of the
@@ -35,7 +36,7 @@ object MatrixLinkify {
          * I disable it because it mess up with pills, and even with pills, it does not work correctly:
          * The url is not correct. Ex: for @user:matrix.org, the url will be @user:matrix.org, instead of a matrix.to
          */
-        /*
+
         // sanity checks
         if (spannable.isEmpty()) {
             return false
@@ -48,14 +49,21 @@ object MatrixLinkify {
                 val startPos = match.range.first
                 if (startPos == 0 || text[startPos - 1] != '/') {
                     val endPos = match.range.last + 1
-                    val url = text.substring(match.range)
+                    var url = text.substring(match.range)
+                    if (MatrixPatterns.isUserId(url)
+                            || MatrixPatterns.isRoomAlias(url)
+                            || MatrixPatterns.isRoomId(url)
+                            || MatrixPatterns.isGroupId(url)
+                            || MatrixPatterns.isEventId(url)) {
+                        url = PermalinkService.MATRIX_TO_URL_BASE  + url
+                    }
                     val span = MatrixPermalinkSpan(url, callback)
                     spannable.setSpan(span, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
         }
         return hasMatch
-         */
-        return false
+
+//        return false
     }
 }

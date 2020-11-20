@@ -54,7 +54,7 @@ class ThreePidsSettingsFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(epoxyController)
+        genericRecyclerView.configureWith(epoxyController)
         epoxyController.interactionListener = this
 
         viewModel.observeViewEvents {
@@ -73,7 +73,7 @@ class ThreePidsSettingsFragment @Inject constructor(
 
     override fun onDestroyView() {
         super.onDestroyView()
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         epoxyController.interactionListener = null
     }
 

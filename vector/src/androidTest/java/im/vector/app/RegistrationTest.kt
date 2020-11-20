@@ -67,7 +67,7 @@ class RegistrationTest {
                 .perform(click())
 
         // Enter local synapse
-        onView((withId(R.id.loginServerUrlFormHomeServerUrl)))
+        onView(withId(R.id.loginServerUrlFormHomeServerUrl))
                 .perform(typeText(homeServerUrl))
 
         // Click on continue
@@ -87,7 +87,7 @@ class RegistrationTest {
                 .check(matches(isDisplayed()))
 
         // Ensure user id
-        onView((withId(R.id.loginField)))
+        onView(withId(R.id.loginField))
                 .perform(typeText(userId))
 
         // Ensure login button not yet enabled
@@ -95,7 +95,7 @@ class RegistrationTest {
                 .check(matches(not(isEnabled())))
 
         // Ensure password
-        onView((withId(R.id.passwordField)))
+        onView(withId(R.id.passwordField))
                 .perform(closeSoftKeyboard(), typeText(password))
 
         // Submit

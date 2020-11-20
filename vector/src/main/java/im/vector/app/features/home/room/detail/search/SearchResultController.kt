@@ -123,7 +123,7 @@ class SearchResultController @Inject constructor(
                     .formattedDate(dateFormatter.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE))
                     .spannable(spannable)
                     .sender(eventAndSender.sender
-                            ?: eventAndSender.event.senderId?.let { session.getUser(it) }?.toMatrixItem())
+                            ?: eventAndSender.event.senderId?.let { session.getRoomMember(it, data.roomId) }?.toMatrixItem())
                     .listener { listener?.onItemClicked(eventAndSender.event) }
                     .let { result.add(it) }
         }
