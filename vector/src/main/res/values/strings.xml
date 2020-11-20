@@ -2549,8 +2549,8 @@
     <string name="invite_users_to_room_action_invite">INVITE</string>
     <string name="inviting_users_to_room">Inviting users…</string>
     <string name="invite_users_to_room_title">Invite Users</string>
-    <string name="invite_friends">Invite Friends</string>
-    <string name="invite_friends_text">Hey, Talk to me on Element: %s</string>
+    <string name="invite_friends">Invite friends</string>
+    <string name="invite_friends_text">Hey, talk to me on Element: %s</string>
     <string name="invite_friends_rich_title">🔐️ Join me on element</string>
     <string name="invitation_sent_to_one_user">Invitation sent to %1$s</string>
     <string name="invitations_sent_to_two_users">Invitations sent to %1$s and %2$s</string>
