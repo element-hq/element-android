@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,12 +11,12 @@
 
     <ImageView
         android:id="@+id/actionIconImageView"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_width="44dp"
         android:layout_height="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:padding="10dp"
-        android:tint="?riotx_text_secondary"
+        app:tint="?riotx_text_secondary"
         tools:src="@drawable/ic_invite_people" />
 
     <TextView
