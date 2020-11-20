@@ -94,7 +94,22 @@ class CreateRoomParams {
      * The server will clobber the following keys: creator.
      * Future versions of the specification may allow the server to clobber other keys.
      */
-    var creationContent: Any? = null
+    val creationContent = mutableMapOf<String, Any>()
+
+    /**
+     * Set to true to disable federation of this room.
+     * Default: false
+     */
+    var disableFederation = false
+        set(value) {
+            field = value
+            if (value) {
+                creationContent[CREATION_CONTENT_KEY_M_FEDERATE] = false
+            } else {
+                // This is the default value, we remove the field
+                creationContent.remove(CREATION_CONTENT_KEY_M_FEDERATE)
+            }
+        }
 
     /**
      * The power level content to override in the default power level event
@@ -119,5 +134,9 @@ class CreateRoomParams {
 
     fun enableEncryption() {
         algorithm = MXCRYPTO_ALGORITHM_MEGOLM
+    }
+
+    companion object {
+        private const val CREATION_CONTENT_KEY_M_FEDERATE = "m.federate"
     }
 }
