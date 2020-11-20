@@ -122,7 +122,7 @@
             tools:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/knownUsersRecyclerView"
+            android:id="@+id/userListRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:fastScrollEnabled="true"

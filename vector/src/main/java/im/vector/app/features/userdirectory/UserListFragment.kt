@@ -93,7 +93,7 @@ class UserListFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        userListRecyclerView.cleanup()
         super.onDestroyView()
     }
 
@@ -115,7 +115,7 @@ class UserListFragment @Inject constructor(
     private fun setupRecyclerView() {
         userListController.callback = this
         // Don't activate animation as we might have way to much item animation when filtering
-        recyclerView.configureWith(userListController, disableItemAnimation = true)
+        userListRecyclerView.configureWith(userListController, disableItemAnimation = true)
     }
 
     private fun setupSearchView() {
