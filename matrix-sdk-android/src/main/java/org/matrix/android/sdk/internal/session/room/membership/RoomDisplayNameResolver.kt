@@ -71,12 +71,6 @@ internal class RoomDisplayNameResolver @Inject constructor(
             return name
         }
 
-        val aliases = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ALIASES, stateKey = "")?.root
-        name = ContentMapper.map(aliases?.content).toModel<RoomAliasesContent>()?.aliases?.firstOrNull()
-        if (!name.isNullOrEmpty()) {
-            return name
-        }
-
         val roomMembers = RoomMemberHelper(realm, roomId)
         val activeMembers = roomMembers.queryActiveRoomMembersEvent().findAll()
 
