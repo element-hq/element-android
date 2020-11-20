@@ -119,7 +119,7 @@ internal class EventDecryptor @Inject constructor(
                                             markOlmSessionForUnwedging(event.senderId ?: "", it)
                                         }
                                         ?: run {
-                                            Timber.v("## CRYPTO | markOlmSessionForUnwedging() : Failed to find sender crypto device")
+                                            Timber.i("## CRYPTO | internalDecryptEvent() : Failed to find sender crypto device for unwedging")
                                         }
                             }
                         }
@@ -137,16 +137,18 @@ internal class EventDecryptor @Inject constructor(
         val lastForcedDate = lastNewSessionForcedDates.getObject(senderId, deviceKey) ?: 0
         val now = System.currentTimeMillis()
         if (now - lastForcedDate < DefaultCryptoService.CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
-            Timber.d("## CRYPTO | markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
+            Timber.w("## CRYPTO | markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
             return
         }
 
-        Timber.d("## CRYPTO | markOlmSessionForUnwedging from $senderId:${deviceInfo.deviceId}")
+        Timber.i("## CRYPTO | markOlmSessionForUnwedging from $senderId:${deviceInfo.deviceId}")
         lastNewSessionForcedDates.setObject(senderId, deviceKey, now)
 
         // offload this from crypto thread (?)
         cryptoCoroutineScope.launch(coroutineDispatchers.computation) {
-            ensureOlmSessionsForDevicesAction.handle(mapOf(senderId to listOf(deviceInfo)), force = true)
+            val ensured = ensureOlmSessionsForDevicesAction.handle(mapOf(senderId to listOf(deviceInfo)), force = true)
+
+            Timber.i("## CRYPTO | markOlmSessionForUnwedging() : ensureOlmSessionsForDevicesAction isEmpty:${ensured.isEmpty}")
 
             // Now send a blank message on that session so the other side knows about it.
             // (The keyshare request is sent in the clear so that won't do)
@@ -159,10 +161,14 @@ internal class EventDecryptor @Inject constructor(
             val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
             val sendToDeviceMap = MXUsersDevicesMap<Any>()
             sendToDeviceMap.setObject(senderId, deviceInfo.deviceId, encodedPayload)
-            Timber.v("## CRYPTO | markOlmSessionForUnwedging() : sending to $senderId:${deviceInfo.deviceId}")
+            Timber.i("## CRYPTO | markOlmSessionForUnwedging() : sending dummy to $senderId:${deviceInfo.deviceId}")
             withContext(coroutineDispatchers.io) {
                 val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
-                sendToDeviceTask.execute(sendToDeviceParams)
+                try {
+                    sendToDeviceTask.execute(sendToDeviceParams)
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "## CRYPTO | markOlmSessionForUnwedging() : failed to send dummy to $senderId:${deviceInfo.deviceId}")
+                }
             }
         }
     }
