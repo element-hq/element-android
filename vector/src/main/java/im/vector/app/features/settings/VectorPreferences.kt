@@ -672,7 +672,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * Tells if a confirmation dialog should be displayed before staring a call
      */
     fun preventAccidentalCall(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_CALL_PREVENT_ACCIDENTAL_CALL_KEY, false)
+        return defaultPrefs.getBoolean(SETTINGS_CALL_PREVENT_ACCIDENTAL_CALL_KEY, true)
     }
 
     /**

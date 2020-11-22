@@ -5,7 +5,7 @@
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_call_category">
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="SETTINGS_CALL_PREVENT_ACCIDENTAL_CALL_KEY"
             android:summary="@string/settings_call_show_confirmation_dialog_summary"
             android:title="@string/settings_call_show_confirmation_dialog_title" />
