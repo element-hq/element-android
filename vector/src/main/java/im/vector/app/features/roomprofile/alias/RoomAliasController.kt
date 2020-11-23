@@ -27,6 +27,7 @@ import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsInfoItem
+import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.roomdirectory.createroom.RoomAliasErrorFormatter
 import im.vector.app.features.roomdirectory.createroom.roomAliasEditItem
@@ -41,9 +42,10 @@ class RoomAliasController @Inject constructor(
 ) : TypedEpoxyController<RoomAliasViewState>() {
 
     interface Callback {
+        fun setNewAlias(value: String)
+        fun addAlias()
         fun removeAlias(altAlias: String)
-        fun setCanonicalAlias(alias: String)
-        fun unsetCanonicalAlias()
+        fun setCanonicalAlias(alias: String?)
         fun removeLocalAlias(alias: String)
         fun setNewLocalAliasLocalPart(value: String)
         fun addLocalAlias()
@@ -67,16 +69,44 @@ class RoomAliasController @Inject constructor(
         }
 
         // TODO Canonical
-        if (data.alternativeAliases.isNotEmpty()) {
+        settingsInfoItem {
+            id("otherPublished")
+            helperTextResId(R.string.room_alias_published_other)
+        }
+        if (data.alternativeAliases.isEmpty()) {
             settingsInfoItem {
-                id("otherPublished")
-                helperTextResId(R.string.room_alias_published_other)
+                id("otherPublishedEmpty")
+                if (data.actionPermissions.canChangeCanonicalAlias) {
+                    helperTextResId(R.string.room_alias_address_empty_can_add)
+                } else {
+                    helperTextResId(R.string.room_alias_address_empty)
+                }
             }
-            data.alternativeAliases.forEachIndexed { idx, altAlias ->
-                // TODO Rename this item to a more generic name
-                threePidItem {
-                    id("alt_$idx")
-                    title(altAlias)
+        }
+
+        if (data.actionPermissions.canChangeCanonicalAlias) {
+            formEditTextItem {
+                id("addAlias")
+                value(data.newAlias)
+                showBottomSeparator(false)
+                hint(stringProvider.getString(R.string.room_alias_address_hint))
+                onTextChange { text ->
+                    callback?.setNewAlias(text)
+                }
+            }
+            formSubmitButtonItem {
+                id("submit")
+                buttonTitleId(R.string.action_add)
+                buttonClickListener { callback?.addAlias() }
+            }
+        }
+
+        data.alternativeAliases.forEachIndexed { idx, altAlias ->
+            // TODO Rename this item to a more generic name
+            threePidItem {
+                id("alt_$idx")
+                title(altAlias)
+                if (data.actionPermissions.canChangeCanonicalAlias) {
                     deleteClickListener { callback?.removeAlias(altAlias) }
                 }
             }
@@ -132,7 +162,7 @@ class RoomAliasController @Inject constructor(
         }
 
         formSubmitButtonItem {
-            id("submit")
+            id("submitLocal")
             buttonTitleId(R.string.action_add)
             buttonClickListener { callback?.addLocalAlias() }
         }

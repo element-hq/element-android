@@ -112,12 +112,16 @@ class RoomAliasFragment @Inject constructor(
                 .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 
-    override fun setCanonicalAlias(alias: String) {
+    override fun setCanonicalAlias(alias: String?) {
         viewModel.handle(RoomAliasAction.SetCanonicalAlias(alias))
     }
 
-    override fun unsetCanonicalAlias() {
-        viewModel.handle(RoomAliasAction.UnSetCanonicalAlias)
+    override fun setNewAlias(value: String) {
+        viewModel.handle(RoomAliasAction.SetNewAlias(value))
+    }
+
+    override fun addAlias() {
+        viewModel.handle(RoomAliasAction.AddAlias)
     }
 
     override fun setNewLocalAliasLocalPart(value: String) {

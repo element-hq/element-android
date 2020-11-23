@@ -142,14 +142,23 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
 
     override fun handle(action: RoomAliasAction) {
         when (action) {
+            is RoomAliasAction.SetNewAlias -> handleSetNewAlias(action)
             is RoomAliasAction.AddAlias -> handleAddAlias()
             is RoomAliasAction.RemoveAlias -> handleRemoveAlias(action)
             is RoomAliasAction.SetCanonicalAlias -> handleSetCanonicalAlias(action)
-            RoomAliasAction.UnSetCanonicalAlias -> handleUnsetCanonicalAlias()
             is RoomAliasAction.SetNewLocalAliasLocalPart -> handleSetNewLocalAliasLocalPart(action)
             RoomAliasAction.AddLocalAlias -> handleAddLocalAlias()
             is RoomAliasAction.RemoveLocalAlias -> handleRemoveLocalAlias(action)
         }.exhaustive
+    }
+
+    private fun handleSetNewAlias(action: RoomAliasAction.SetNewAlias) {
+        setState {
+            copy(
+                    newAlias = action.aliasLocalPart,
+                    asyncNewAliasRequest = Uninitialized
+            )
+        }
     }
 
     private fun handleSetNewLocalAliasLocalPart(action: RoomAliasAction.SetNewLocalAliasLocalPart) {
@@ -162,7 +171,10 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     }
 
     private fun handleAddAlias() = withState { state ->
-        TODO()
+        updateCanonicalAlias(
+                state.canonicalAlias,
+                state.alternativeAliases + state.newAlias
+        )
     }
 
     private fun handleRemoveAlias(action: RoomAliasAction.RemoveAlias) = withState { state ->
@@ -175,13 +187,6 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun handleSetCanonicalAlias(action: RoomAliasAction.SetCanonicalAlias) = withState { state ->
         updateCanonicalAlias(
                 action.canonicalAlias,
-                state.alternativeAliases
-        )
-    }
-
-    private fun handleUnsetCanonicalAlias() = withState { state ->
-        updateCanonicalAlias(
-                null,
                 state.alternativeAliases
         )
     }

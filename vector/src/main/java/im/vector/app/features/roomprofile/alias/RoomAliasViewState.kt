@@ -26,13 +26,15 @@ data class RoomAliasViewState(
         val roomId: String,
         val homeServerName: String = "",
         val roomSummary: Async<RoomSummary> = Uninitialized,
+        val actionPermissions: ActionPermissions = ActionPermissions(),
         val isLoading: Boolean = false,
         val canonicalAlias: String? = null,
         val alternativeAliases: List<String> = emptyList(),
+        val newAlias: String = "",
+        val asyncNewAliasRequest: Async<Unit> = Uninitialized,
         val localAliases: Async<List<String>> = Uninitialized,
         val newLocalAlias: String = "",
-        val asyncNewLocalAliasRequest: Async<Unit> = Uninitialized,
-        val actionPermissions: ActionPermissions = ActionPermissions()
+        val asyncNewLocalAliasRequest: Async<Unit> = Uninitialized
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
