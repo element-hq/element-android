@@ -30,6 +30,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -141,13 +142,13 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
 
     override fun handle(action: RoomAliasAction) {
         when (action) {
-            is RoomAliasAction.AddAlias                  -> handleAddAlias()
-            is RoomAliasAction.RemoveAlias               -> handleRemoveAlias(action)
-            is RoomAliasAction.SetCanonicalAlias         -> handleSetCanonicalAlias(action)
-            RoomAliasAction.UnSetCanonicalAlias          -> handleUnsetCanonicalAlias()
+            is RoomAliasAction.AddAlias -> handleAddAlias()
+            is RoomAliasAction.RemoveAlias -> handleRemoveAlias(action)
+            is RoomAliasAction.SetCanonicalAlias -> handleSetCanonicalAlias(action)
+            RoomAliasAction.UnSetCanonicalAlias -> handleUnsetCanonicalAlias()
             is RoomAliasAction.SetNewLocalAliasLocalPart -> handleSetNewLocalAliasLocalPart(action)
-            RoomAliasAction.AddLocalAlias                -> handleAddLocalAlias()
-            is RoomAliasAction.RemoveLocalAlias          -> handleRemoveLocalAlias(action)
+            RoomAliasAction.AddLocalAlias -> handleAddLocalAlias()
+            is RoomAliasAction.RemoveLocalAlias -> handleRemoveLocalAlias(action)
         }.exhaustive
     }
 
@@ -160,27 +161,44 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         }
     }
 
-    private fun handleAddAlias() {
+    private fun handleAddAlias() = withState { state ->
         TODO()
     }
 
-    private fun handleRemoveAlias(action: RoomAliasAction.RemoveAlias) {
+    private fun handleRemoveAlias(action: RoomAliasAction.RemoveAlias) = withState { state ->
+        updateCanonicalAlias(
+                state.canonicalAlias,
+                state.alternativeAliases - action.alias
+        )
+    }
+
+    private fun handleSetCanonicalAlias(action: RoomAliasAction.SetCanonicalAlias) = withState { state ->
+        updateCanonicalAlias(
+                action.canonicalAlias,
+                state.alternativeAliases
+        )
+    }
+
+    private fun handleUnsetCanonicalAlias() = withState { state ->
+        updateCanonicalAlias(
+                null,
+                state.alternativeAliases
+        )
+    }
+
+    private fun updateCanonicalAlias(canonicalAlias: String?, alternativeAliases: List<String>) {
         postLoading(true)
-        viewModelScope.launch {
-            runCatching { session.deleteRoomAlias(action.alias) }
-                    .onFailure { _viewEvents.post(RoomAliasViewEvents.Failure(it)) }
-            postLoading(false)
+        room.updateCanonicalAlias(canonicalAlias, alternativeAliases, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                postLoading(false)
+            }
+
+            override fun onFailure(failure: Throwable) {
+                postLoading(false)
+                _viewEvents.post(RoomAliasViewEvents.Failure(failure))
+            }
         }
-    }
-
-    private fun handleSetCanonicalAlias(action: RoomAliasAction.SetCanonicalAlias) {
-        //room.updateCanonicalAlias()
-        TODO("Not yet implemented")
-    }
-
-    private fun handleUnsetCanonicalAlias() {
-        // room.updateCanonicalAlias()
-        TODO("Not yet implemented")
+        )
     }
 
     private fun handleAddLocalAlias() = withState { state ->
