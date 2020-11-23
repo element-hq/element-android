@@ -27,7 +27,7 @@
         <item name="riotx_fab_secondary_color">@color/text_color_secondary_sc</item>
         <item name="riotx_fab_label_bg">@color/background_floating_sc</item>
         <item name="riotx_fab_label_stroke">@color/black</item>
-        <item name="riotx_fab_label_color">#ff808080</item><!-- TODO: this is used on light background for motion_fab_menu_merge / style:VectorLabel -->
+        <item name="riotx_fab_label_color">#ffffff</item>
         <item name="riotx_touch_guard_bg">@color/background_black_sc</item>
         <item name="riotx_attachment_selector_background">?riotx_background</item>
         <item name="riotx_attachment_selector_border">@color/background_dark_sc</item>
