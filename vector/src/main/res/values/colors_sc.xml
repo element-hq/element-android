@@ -22,6 +22,7 @@
     <color name="background_dark_sc">#ff212121</color>
     <color name="background_black_sc">#ff000000</color>
     <color name="background_floating_sc">#ff424242</color>
+    <color name="background_touch_guard_sc">#bf000000</color>
 
     <color name="list_divider_color_sc">#80ffffff</color>
 
