@@ -23,9 +23,7 @@ import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsRe
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasBody
 import org.matrix.android.sdk.internal.session.room.alias.GetAliasesResponse
-import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomBody
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomResponse
 import org.matrix.android.sdk.internal.session.room.create.JoinRoomResponse
@@ -320,23 +318,6 @@ internal interface RoomAPI {
     fun reportContent(@Path("roomId") roomId: String,
                       @Path("eventId") eventId: String,
                       @Body body: ReportContentBody): Call<Unit>
-
-    /**
-     * Get the room ID associated to the room alias.
-     *
-     * @param roomAlias the room alias.
-     */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
-    fun getRoomIdByAlias(@Path("roomAlias") roomAlias: String): Call<RoomAliasDescription>
-
-    /**
-     * Add alias to the room.
-     * @param roomAlias the room alias.
-     */
-    // TODO Remove (https://github.com/matrix-org/matrix-doc/blob/rav/proposal/alt_canonical_aliases/proposals/2432-revised-alias-publishing.md)
-    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
-    fun addRoomAlias(@Path("roomAlias") roomAlias: String,
-                     @Body body: AddRoomAliasBody): Call<Unit>
 
     /**
      * Get local aliases of this room

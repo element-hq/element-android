@@ -22,25 +22,21 @@ import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
-internal interface AddRoomAliasTask : Task<AddRoomAliasTask.Params, Unit> {
+internal interface DeleteRoomAliasTask : Task<DeleteRoomAliasTask.Params, Unit> {
     data class Params(
-            val roomId: String,
             val roomAlias: String
     )
 }
 
-internal class DefaultAddRoomAliasTask @Inject constructor(
+internal class DefaultDeleteRoomAliasTask @Inject constructor(
         private val directoryAPI: DirectoryAPI,
         private val eventBus: EventBus
-) : AddRoomAliasTask {
+) : DeleteRoomAliasTask {
 
-    override suspend fun execute(params: AddRoomAliasTask.Params) {
+    override suspend fun execute(params: DeleteRoomAliasTask.Params) {
         executeRequest<Unit>(eventBus) {
-            apiCall = directoryAPI.addRoomAlias(
-                    roomAlias = params.roomAlias,
-                    body = AddRoomAliasBody(
-                            roomId = params.roomId
-                    )
+            apiCall = directoryAPI.deleteRoomAlias(
+                    roomAlias = params.roomAlias
             )
         }
     }

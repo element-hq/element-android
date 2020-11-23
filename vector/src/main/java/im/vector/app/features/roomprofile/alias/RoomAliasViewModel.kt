@@ -140,12 +140,12 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
 
     override fun handle(action: RoomAliasAction) {
         when (action) {
-            is RoomAliasAction.AddAlias          -> handleAddAlias(action)
-            is RoomAliasAction.RemoveAlias       -> handleRemoveAlias(action)
+            is RoomAliasAction.AddAlias -> handleAddAlias(action)
+            is RoomAliasAction.RemoveAlias -> handleRemoveAlias(action)
             is RoomAliasAction.SetCanonicalAlias -> handleSetCanonicalAlias(action)
-            RoomAliasAction.UnSetCanonicalAlias  -> handleUnsetCanonicalAlias()
-            is RoomAliasAction.AddLocalAlias     -> handleAddLocalAlias(action)
-            is RoomAliasAction.RemoveLocalAlias  -> handleRemoveLocalAlias(action)
+            RoomAliasAction.UnSetCanonicalAlias -> handleUnsetCanonicalAlias()
+            is RoomAliasAction.AddLocalAlias -> handleAddLocalAlias(action)
+            is RoomAliasAction.RemoveLocalAlias -> handleRemoveLocalAlias(action)
         }.exhaustive
     }
 
@@ -154,7 +154,16 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     }
 
     private fun handleRemoveAlias(action: RoomAliasAction.RemoveAlias) {
-        TODO("Not yet implemented")
+        setState {
+            copy(isLoading = true)
+        }
+        viewModelScope.launch {
+            runCatching { session.deleteRoomAlias(action.alias) }
+                    .onFailure { _viewEvents.post(RoomAliasViewEvents.Failure(it)) }
+            setState {
+                copy(isLoading = false)
+            }
+        }
     }
 
     private fun handleSetCanonicalAlias(action: RoomAliasAction.SetCanonicalAlias) {

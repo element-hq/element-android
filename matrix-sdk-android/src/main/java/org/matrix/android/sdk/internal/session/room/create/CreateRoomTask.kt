@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.executeRequest
+import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.internal.session.room.read.SetReadMarkersTask
@@ -47,6 +48,7 @@ internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
 internal class DefaultCreateRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
+        private val directoryAPI: DirectoryAPI,
         @UserId private val userId: String,
         @SessionDatabase private val monarchy: Monarchy,
         private val directChatsHelper: DirectChatsHelper,
@@ -72,7 +74,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
             val fullAlias = "#" + params.roomAliasName + ":" + userId.substringAfter(":")
             try {
                 executeRequest<RoomAliasDescription>(eventBus) {
-                    apiCall = roomAPI.getRoomIdByAlias(fullAlias)
+                    apiCall = directoryAPI.getRoomIdByAlias(fullAlias)
                 }
             } catch (throwable: Throwable) {
                 if (throwable is Failure.ServerError && throwable.httpCode == 404) {

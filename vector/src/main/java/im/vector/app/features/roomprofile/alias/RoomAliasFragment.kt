@@ -16,13 +16,16 @@
 
 package im.vector.app.features.roomprofile.alias
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
@@ -59,7 +62,7 @@ class RoomAliasFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomAliasViewEvents.Failure -> showFailure(it.throwable)
-                RoomAliasViewEvents.Success    -> showSuccess()
+                RoomAliasViewEvents.Success -> showSuccess()
             }.exhaustive
         }
     }
@@ -91,7 +94,15 @@ class RoomAliasFragment @Inject constructor(
     }
 
     override fun removeAlias(altAlias: String) {
-        viewModel.handle(RoomAliasAction.RemoveAlias(altAlias))
+        AlertDialog.Builder(requireContext())
+                .setTitle(R.string.dialog_title_confirmation)
+                .setMessage(getString(R.string.room_alias_delete_confirmation, altAlias))
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.delete) { _, _ ->
+                    viewModel.handle(RoomAliasAction.RemoveAlias(altAlias))
+                }
+                .show()
+                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 
     override fun setCanonicalAlias(alias: String) {
@@ -107,6 +118,14 @@ class RoomAliasFragment @Inject constructor(
     }
 
     override fun removeLocalAlias(alias: String) {
-        viewModel.handle(RoomAliasAction.RemoveLocalAlias(alias))
+        AlertDialog.Builder(requireContext())
+                .setTitle(R.string.dialog_title_confirmation)
+                .setMessage(getString(R.string.room_alias_delete_confirmation, alias))
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.delete) { _, _ ->
+                    viewModel.handle(RoomAliasAction.RemoveLocalAlias(alias))
+                }
+                .show()
+                .withColoredButton(DialogInterface.BUTTON_POSITIVE)
     }
 }

@@ -26,10 +26,13 @@ import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.internal.session.DefaultFileService
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
 import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.DefaultAddRoomAliasTask
+import org.matrix.android.sdk.internal.session.room.alias.DefaultDeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.DefaultGetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.DefaultGetRoomLocalAliasesTask
+import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomLocalAliasesTask
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
@@ -90,6 +93,13 @@ internal abstract class RoomModule {
         @SessionScope
         fun providesRoomAPI(retrofit: Retrofit): RoomAPI {
             return retrofit.create(RoomAPI::class.java)
+        }
+
+        @Provides
+        @JvmStatic
+        @SessionScope
+        fun providesDirectoryAPI(retrofit: Retrofit): DirectoryAPI {
+            return retrofit.create(DirectoryAPI::class.java)
         }
 
         @Provides
@@ -188,6 +198,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindAddRoomAliasTask(task: DefaultAddRoomAliasTask): AddRoomAliasTask
+
+    @Binds
+    abstract fun bindDeleteRoomAliasTask(task: DefaultDeleteRoomAliasTask): DeleteRoomAliasTask
 
     @Binds
     abstract fun bindSendTypingTask(task: DefaultSendTypingTask): SendTypingTask
