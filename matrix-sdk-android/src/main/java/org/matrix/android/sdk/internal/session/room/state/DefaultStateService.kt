@@ -104,14 +104,6 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         )
     }
 
-    override fun addRoomAlias(roomAlias: String, callback: MatrixCallback<Unit>): Cancelable {
-        return addRoomAliasTask
-                .configureWith(AddRoomAliasTask.Params(roomId, roomAlias)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
-    }
-
     override fun updateCanonicalAlias(alias: String, callback: MatrixCallback<Unit>): Cancelable {
         return sendStateEvent(
                 eventType = EventType.STATE_ROOM_CANONICAL_ALIAS,

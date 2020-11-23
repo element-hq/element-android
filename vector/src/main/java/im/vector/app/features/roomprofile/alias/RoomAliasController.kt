@@ -25,27 +25,29 @@ import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsInfoItem
+import im.vector.app.features.form.formSubmitButtonItem
+import im.vector.app.features.roomdirectory.createroom.RoomAliasErrorFormatter
+import im.vector.app.features.roomdirectory.createroom.roomAliasEditItem
 import im.vector.app.features.settings.threepids.threePidItem
+import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import javax.inject.Inject
 
 class RoomAliasController @Inject constructor(
         private val stringProvider: StringProvider,
         private val errorFormatter: ErrorFormatter,
-        colorProvider: ColorProvider
+        private val roomAliasErrorFormatter: RoomAliasErrorFormatter
 ) : TypedEpoxyController<RoomAliasViewState>() {
 
     interface Callback {
         fun removeAlias(altAlias: String)
         fun setCanonicalAlias(alias: String)
         fun unsetCanonicalAlias()
-        fun addLocalAlias(alias: String)
         fun removeLocalAlias(alias: String)
+        fun setNewLocalAliasLocalPart(value: String)
+        fun addLocalAlias()
     }
-
-    private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     var callback: Callback? = null
 
@@ -81,6 +83,10 @@ class RoomAliasController @Inject constructor(
         }
 
         // Local
+        buildLocalInfo(data)
+    }
+
+    private fun buildLocalInfo(data: RoomAliasViewState) {
         buildProfileSection(
                 stringProvider.getString(R.string.room_alias_local_address_title)
         )
@@ -89,10 +95,6 @@ class RoomAliasController @Inject constructor(
             helperText(stringProvider.getString(R.string.room_alias_local_address_subtitle, data.homeServerName))
         }
 
-        buildLocalInfo(data)
-    }
-
-    private fun buildLocalInfo(data: RoomAliasViewState) {
         when (val localAliases = data.localAliases) {
             is Uninitialized -> {
                 loadingItem {
@@ -115,6 +117,24 @@ class RoomAliasController @Inject constructor(
                     text(errorFormatter.toHumanReadable(localAliases.error))
                 }
             }
+        }
+
+        // Add local
+        roomAliasEditItem {
+            id("newLocalAlias")
+            value(data.newLocalAlias)
+            homeServer(":" + data.homeServerName)
+            showBottomSeparator(false)
+            errorMessage(roomAliasErrorFormatter.format((data.asyncNewLocalAliasRequest as? Fail)?.error as? RoomAliasError))
+            onTextChange { value ->
+                callback?.setNewLocalAliasLocalPart(value)
+            }
+        }
+
+        formSubmitButtonItem {
+            id("submit")
+            buttonTitleId(R.string.action_add)
+            buttonClickListener { callback?.addLocalAlias() }
         }
     }
 }

@@ -35,6 +35,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -64,6 +65,12 @@ class RoomAliasFragment @Inject constructor(
                 is RoomAliasViewEvents.Failure -> showFailure(it.throwable)
                 RoomAliasViewEvents.Success -> showSuccess()
             }.exhaustive
+        }
+    }
+
+    override fun showFailure(throwable: Throwable) {
+        if (throwable !is RoomAliasError) {
+            super.showFailure(throwable)
         }
     }
 
@@ -113,8 +120,12 @@ class RoomAliasFragment @Inject constructor(
         viewModel.handle(RoomAliasAction.UnSetCanonicalAlias)
     }
 
-    override fun addLocalAlias(alias: String) {
-        viewModel.handle(RoomAliasAction.AddLocalAlias(alias))
+    override fun setNewLocalAliasLocalPart(value: String) {
+        viewModel.handle(RoomAliasAction.SetNewLocalAliasLocalPart(value))
+    }
+
+    override fun addLocalAlias() {
+        viewModel.handle(RoomAliasAction.AddLocalAlias)
     }
 
     override fun removeLocalAlias(alias: String) {

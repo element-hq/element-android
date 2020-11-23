@@ -39,11 +39,6 @@ interface StateService {
     fun updateName(name: String, callback: MatrixCallback<Unit>): Cancelable
 
     /**
-     * Add new alias to the room.
-     */
-    fun addRoomAlias(roomAlias: String, callback: MatrixCallback<Unit>): Cancelable
-
-    /**
      * Update the canonical alias of the room
      */
     fun updateCanonicalAlias(alias: String, callback: MatrixCallback<Unit>): Cancelable

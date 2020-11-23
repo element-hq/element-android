@@ -26,6 +26,7 @@ sealed class RoomAliasAction : VectorViewModelAction {
     object UnSetCanonicalAlias : RoomAliasAction()
 
     // Local
-    data class AddLocalAlias(val aliasLocalPart: String) : RoomAliasAction()
     data class RemoveLocalAlias(val alias: String) : RoomAliasAction()
+    data class SetNewLocalAliasLocalPart(val aliasLocalPart: String) : RoomAliasAction()
+    object AddLocalAlias : RoomAliasAction()
 }

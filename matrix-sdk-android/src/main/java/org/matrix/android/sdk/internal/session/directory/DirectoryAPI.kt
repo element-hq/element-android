@@ -39,7 +39,6 @@ internal interface DirectoryAPI {
      * Add alias to the room.
      * @param roomAlias the room alias.
      */
-    // TODO Remove (https://github.com/matrix-org/matrix-doc/blob/rav/proposal/alt_canonical_aliases/proposals/2432-revised-alias-publishing.md)
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
     fun addRoomAlias(@Path("roomAlias") roomAlias: String,
                      @Body body: AddRoomAliasBody): Call<Unit>

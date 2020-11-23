@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,8 @@
 
 package org.matrix.android.sdk.api.session.room.alias
 
-interface AliasService {
-    /**
-     * Get list of local alias of the room
-     */
-    suspend fun getRoomAliases(): List<String>
-
-    /**
-     * Add local alias to the room
-     */
-    suspend fun addAlias(aliasLocalPart: String)
+sealed class RoomAliasError : Throwable() {
+    object AliasEmpty : RoomAliasError()
+    object AliasNotAvailable : RoomAliasError()
+    object AliasInvalid : RoomAliasError()
 }

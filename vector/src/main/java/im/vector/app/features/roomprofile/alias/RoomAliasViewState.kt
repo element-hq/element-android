@@ -30,6 +30,8 @@ data class RoomAliasViewState(
         val canonicalAlias: String? = null,
         val alternativeAliases: List<String> = emptyList(),
         val localAliases: Async<List<String>> = Uninitialized,
+        val newLocalAlias: String = "",
+        val asyncNewLocalAliasRequest: Async<Unit> = Uninitialized,
         val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
 

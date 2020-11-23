@@ -22,7 +22,8 @@ import org.matrix.android.sdk.api.session.room.alias.AliasService
 
 internal class DefaultAliasService @AssistedInject constructor(
         @Assisted private val roomId: String,
-        private val getRoomLocalAliasesTask: GetRoomLocalAliasesTask
+        private val getRoomLocalAliasesTask: GetRoomLocalAliasesTask,
+        private val addRoomAliasTask: AddRoomAliasTask
 ) : AliasService {
 
     @AssistedInject.Factory
@@ -32,5 +33,9 @@ internal class DefaultAliasService @AssistedInject constructor(
 
     override suspend fun getRoomAliases(): List<String> {
         return getRoomLocalAliasesTask.execute(GetRoomLocalAliasesTask.Params(roomId))
+    }
+
+    override suspend fun addAlias(aliasLocalPart: String) {
+        addRoomAliasTask.execute(AddRoomAliasTask.Params(roomId, aliasLocalPart))
     }
 }

@@ -22,6 +22,7 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -62,9 +63,9 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     init {
         initHomeServerName()
         observeRoomSummary()
-        observeMowerLevel()
+        observePowerLevel()
         observeRoomCanonicalAlias()
-        getRoomAlias()
+        fetchRoomAlias()
     }
 
     private fun initHomeServerName() {
@@ -75,7 +76,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         }
     }
 
-    private fun getRoomAlias() {
+    private fun fetchRoomAlias() {
         setState {
             copy(
                     localAliases = Loading()
@@ -105,7 +106,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
                 }
     }
 
-    private fun observeMowerLevel() {
+    private fun observePowerLevel() {
         PowerLevelsObservableFactory(room)
                 .createObservable()
                 .subscribe {
@@ -140,29 +141,35 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
 
     override fun handle(action: RoomAliasAction) {
         when (action) {
-            is RoomAliasAction.AddAlias -> handleAddAlias(action)
-            is RoomAliasAction.RemoveAlias -> handleRemoveAlias(action)
-            is RoomAliasAction.SetCanonicalAlias -> handleSetCanonicalAlias(action)
-            RoomAliasAction.UnSetCanonicalAlias -> handleUnsetCanonicalAlias()
-            is RoomAliasAction.AddLocalAlias -> handleAddLocalAlias(action)
-            is RoomAliasAction.RemoveLocalAlias -> handleRemoveLocalAlias(action)
+            is RoomAliasAction.AddAlias                  -> handleAddAlias()
+            is RoomAliasAction.RemoveAlias               -> handleRemoveAlias(action)
+            is RoomAliasAction.SetCanonicalAlias         -> handleSetCanonicalAlias(action)
+            RoomAliasAction.UnSetCanonicalAlias          -> handleUnsetCanonicalAlias()
+            is RoomAliasAction.SetNewLocalAliasLocalPart -> handleSetNewLocalAliasLocalPart(action)
+            RoomAliasAction.AddLocalAlias                -> handleAddLocalAlias()
+            is RoomAliasAction.RemoveLocalAlias          -> handleRemoveLocalAlias(action)
         }.exhaustive
     }
 
-    private fun handleAddAlias(action: RoomAliasAction.AddAlias) {
-        TODO("Not yet implemented")
+    private fun handleSetNewLocalAliasLocalPart(action: RoomAliasAction.SetNewLocalAliasLocalPart) {
+        setState {
+            copy(
+                    newLocalAlias = action.aliasLocalPart,
+                    asyncNewLocalAliasRequest = Uninitialized
+            )
+        }
+    }
+
+    private fun handleAddAlias() {
+        TODO()
     }
 
     private fun handleRemoveAlias(action: RoomAliasAction.RemoveAlias) {
-        setState {
-            copy(isLoading = true)
-        }
+        postLoading(true)
         viewModelScope.launch {
             runCatching { session.deleteRoomAlias(action.alias) }
                     .onFailure { _viewEvents.post(RoomAliasViewEvents.Failure(it)) }
-            setState {
-                copy(isLoading = false)
-            }
+            postLoading(false)
         }
     }
 
@@ -172,15 +179,48 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     }
 
     private fun handleUnsetCanonicalAlias() {
+        // room.updateCanonicalAlias()
         TODO("Not yet implemented")
     }
 
-    private fun handleAddLocalAlias(action: RoomAliasAction.AddLocalAlias) {
-        TODO("Not yet implemented")
+    private fun handleAddLocalAlias() = withState { state ->
+        setState {
+            copy(
+                    isLoading = true,
+                    asyncNewLocalAliasRequest = Loading()
+            )
+        }
+        viewModelScope.launch {
+            runCatching { room.addAlias(state.newLocalAlias) }
+                    .onFailure {
+                        setState {
+                            copy(
+                                    isLoading = false,
+                                    asyncNewLocalAliasRequest = Fail(it)
+                            )
+                        }
+                        _viewEvents.post(RoomAliasViewEvents.Failure(it))
+                    }
+                    .onSuccess {
+                        setState {
+                            copy(
+                                    isLoading = false,
+                                    asyncNewLocalAliasRequest = Uninitialized
+                            )
+                        }
+                        fetchRoomAlias()
+                    }
+        }
     }
 
     private fun handleRemoveLocalAlias(action: RoomAliasAction.RemoveLocalAlias) {
-        TODO("Not yet implemented")
+        postLoading(true)
+        viewModelScope.launch {
+            runCatching { session.deleteRoomAlias(action.alias) }
+                    .onFailure { _viewEvents.post(RoomAliasViewEvents.Failure(it)) }
+                    .onSuccess { fetchRoomAlias() }
+            postLoading(false)
+        }
     }
 
     private fun postLoading(isLoading: Boolean) {

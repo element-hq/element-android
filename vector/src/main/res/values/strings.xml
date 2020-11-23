@@ -137,6 +137,7 @@
     <string name="action_open">Open</string>
     <string name="action_close">Close</string>
     <string name="action_copy">Copy</string>
+    <string name="action_add">Add</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
 
