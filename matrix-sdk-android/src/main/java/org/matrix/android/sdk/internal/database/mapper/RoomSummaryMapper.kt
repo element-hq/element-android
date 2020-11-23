@@ -60,6 +60,7 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                 hasUnreadMessages = roomSummaryEntity.hasUnreadMessages,
                 hasUnreadContentMessages = roomSummaryEntity.hasUnreadContentMessages,
                 hasUnreadOriginalContentMessages = roomSummaryEntity.hasUnreadOriginalContentMessages,
+                markedUnread = roomSummaryEntity.markedUnread,
                 tags = tags,
                 typingUsers = typingUsers,
                 membership = roomSummaryEntity.membership,

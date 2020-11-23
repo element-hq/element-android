@@ -25,11 +25,14 @@ internal interface MarkAllRoomsReadTask : Task<MarkAllRoomsReadTask.Params, Unit
     )
 }
 
-internal class DefaultMarkAllRoomsReadTask @Inject constructor(private val readMarkersTask: SetReadMarkersTask) : MarkAllRoomsReadTask {
+internal class DefaultMarkAllRoomsReadTask @Inject constructor(private val readMarkersTask: SetReadMarkersTask, private val markUnreadTask: SetMarkedUnreadTask) : MarkAllRoomsReadTask {
 
     override suspend fun execute(params: MarkAllRoomsReadTask.Params) {
         params.roomIds.forEach { roomId ->
             readMarkersTask.execute(SetReadMarkersTask.Params(roomId, forceReadMarker = true, forceReadReceipt = true))
+        }
+        params.roomIds.forEach { roomId ->
+            markUnreadTask.execute(SetMarkedUnreadTask.Params(roomId, markedUnread = false))
         }
     }
 }

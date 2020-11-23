@@ -35,6 +35,7 @@ object EventType {
     const val PLUMBING = "m.room.plumbing"
     const val BOT_OPTIONS = "m.room.bot.options"
     const val PREVIEW_URLS = "org.matrix.room.preview_urls"
+    const val MARKED_UNREAD = "com.famedly.marked_unread"
 
     // State Events
 

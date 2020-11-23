@@ -49,8 +49,10 @@ import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoom
 import org.matrix.android.sdk.internal.session.room.membership.threepid.DefaultInviteThreePidTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultMarkAllRoomsReadTask
+import org.matrix.android.sdk.internal.session.room.read.DefaultSetMarkedUnreadTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultSetReadMarkersTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
+import org.matrix.android.sdk.internal.session.room.read.SetMarkedUnreadTask
 import org.matrix.android.sdk.internal.session.room.read.SetReadMarkersTask
 import org.matrix.android.sdk.internal.session.room.relation.DefaultFetchEditHistoryTask
 import org.matrix.android.sdk.internal.session.room.relation.DefaultFindReactionEventForUndoTask
@@ -153,6 +155,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindMarkAllRoomsReadTask(task: DefaultMarkAllRoomsReadTask): MarkAllRoomsReadTask
+
+    @Binds
+    abstract fun bindSetMarkedUnreadTask(task: DefaultSetMarkedUnreadTask): SetMarkedUnreadTask
 
     @Binds
     abstract fun bindFindReactionEventForUndoTask(task: DefaultFindReactionEventForUndoTask): FindReactionEventForUndoTask

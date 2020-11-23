@@ -63,8 +63,9 @@ class BreadcrumbsController @Inject constructor(
                         avatarRenderer(avatarRenderer)
                         matrixItem(it.toMatrixItem())
                         unreadNotificationCount(it.notificationCount)
+                        markedUnread(it.markedUnread)
                         showHighlighted(it.highlightCount > 0)
-                        hasUnreadMessage(it.scHasUnreadMessages(scSdkPreferences))
+                        hasUnreadMessage(it.scIsUnread(scSdkPreferences))
                         hasDraft(it.userDrafts.isNotEmpty())
                         itemClickListener(
                                 DebouncedClickListener(View.OnClickListener { _ ->

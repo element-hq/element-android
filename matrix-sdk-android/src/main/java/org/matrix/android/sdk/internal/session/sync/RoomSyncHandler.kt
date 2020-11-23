@@ -54,6 +54,7 @@ import org.matrix.android.sdk.internal.session.mapWithProgress
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberEventHandler
 import org.matrix.android.sdk.internal.session.room.read.FullyReadContent
+import org.matrix.android.sdk.internal.session.room.read.MarkedUnreadContent
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultTimeline
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
@@ -70,6 +71,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val roomSummaryUpdater: RoomSummaryUpdater,
                                                    private val roomTagHandler: RoomTagHandler,
                                                    private val roomFullyReadHandler: RoomFullyReadHandler,
+                                                   private val roomMarkedUnreadHandler: RoomMarkedUnreadHandler,
                                                    private val cryptoService: DefaultCryptoService,
                                                    private val roomMemberEventHandler: RoomMemberEventHandler,
                                                    private val roomTypingUsersHandler: RoomTypingUsersHandler,
@@ -407,6 +409,9 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             } else if (eventType == EventType.FULLY_READ) {
                 val content = event.getClearContent().toModel<FullyReadContent>()
                 roomFullyReadHandler.handle(realm, roomId, content)
+            } else if (eventType == EventType.MARKED_UNREAD) {
+                val content = event.getClearContent().toModel<MarkedUnreadContent>()
+                roomMarkedUnreadHandler.handle(realm, roomId, content)
             }
         }
     }

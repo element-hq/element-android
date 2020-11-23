@@ -27,10 +27,20 @@ import javax.inject.Inject
 class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 5L
+        // SC-specific DB changes on top of Element
+        // 1: added markedUnread field
+        const val SESSION_STORE_SCHEMA_SC_VERSION = 1L
+        const val SESSION_STORE_SCHEMA_SC_VERSION_OFFSET = (1L shl 12)
+
+        const val SESSION_STORE_SCHEMA_VERSION = 5L +
+                SESSION_STORE_SCHEMA_SC_VERSION * SESSION_STORE_SCHEMA_SC_VERSION_OFFSET
+
     }
 
-    override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
+    override fun migrate(realm: DynamicRealm, combinedOldVersion: Long, newVersion: Long) {
+        val oldVersion = combinedOldVersion % SESSION_STORE_SCHEMA_SC_VERSION_OFFSET
+        val oldScVersion = combinedOldVersion / SESSION_STORE_SCHEMA_SC_VERSION_OFFSET
+
         Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
 
         if (oldVersion <= 0) migrateTo1(realm)
@@ -38,7 +48,18 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 2) migrateTo3(realm)
         if (oldVersion <= 3) migrateTo4(realm)
         if (oldVersion <= 4) migrateTo5(realm)
+
+        if (oldScVersion <= 0) migrateToSc1(realm)
     }
+
+    // SC Version 1L added markedUnread
+    private fun migrateToSc1(realm: DynamicRealm) {
+        Timber.d("Step SC 0 -> 1")
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.MARKED_UNREAD, Boolean::class.java)
+    }
+
+
 
     private fun migrateTo1(realm: DynamicRealm) {
         Timber.d("Step 0 -> 1")

@@ -22,6 +22,8 @@ import im.vector.app.core.epoxy.bottomsheet.bottomSheetRoomPreviewItem
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.ScSdkPreferences
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -31,7 +33,8 @@ import javax.inject.Inject
  */
 class RoomListQuickActionsEpoxyController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val scSdkPreferences: ScSdkPreferences
 ) : TypedEpoxyController<RoomListQuickActionsState>() {
 
     var listener: Listener? = null
@@ -52,6 +55,16 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
                 settingsClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Settings(roomSummary.roomId)) }
                 favoriteClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.Favorite(roomSummary.roomId)) }
                 lowPriorityClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.LowPriority(roomSummary.roomId)) }
+            }
+
+            // Mark read/unread
+            dividerItem {
+                id("mark_unread_separator")
+            }
+            if (roomSummary.scIsUnread(scSdkPreferences)) {
+                RoomListQuickActionsSharedAction.MarkRead(roomSummary.roomId).toBottomSheetItem(-1)
+            } else {
+                RoomListQuickActionsSharedAction.MarkUnread(roomSummary.roomId).toBottomSheetItem(-1)
             }
 
             // Notifications

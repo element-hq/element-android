@@ -27,6 +27,16 @@ sealed class RoomListQuickActionsSharedAction(
         val destructive: Boolean = false)
     : VectorSharedAction {
 
+    data class MarkUnread(val roomId: String) : RoomListQuickActionsSharedAction(
+            R.string.room_list_quick_actions_mark_room_unread,
+            R.drawable.ic_room_actions_mark_room_unread
+    )
+
+    data class MarkRead(val roomId: String) : RoomListQuickActionsSharedAction(
+            R.string.room_list_quick_actions_mark_room_read,
+            R.drawable.ic_room_actions_mark_room_read
+    )
+
     data class NotificationsAllNoisy(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_notifications_all_noisy,
             R.drawable.ic_room_actions_notifications_all_noisy

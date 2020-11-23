@@ -59,5 +59,7 @@
 
     <string name="show_room_info_sc">Rauminfo</string>
     <string name="show_participants_sc">Teilnehmer</string>
+    <string name="room_list_quick_actions_mark_room_unread">Als ungelesen markieren</string>
+    <string name="room_list_quick_actions_mark_room_read">Als gelesen markieren</string>
 
 </resources>

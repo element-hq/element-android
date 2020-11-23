@@ -35,4 +35,18 @@ interface AccountDataAPI {
     fun setAccountData(@Path("userId") userId: String,
                        @Path("type") type: String,
                        @Body params: Any): Call<Unit>
+
+    /**
+     * Set some room account_data for the client.
+     *
+     * @param userId the user id
+     * @param roomId the room id
+     * @param type   the type
+     * @param params the put params
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/rooms/{roomId}/account_data/{type}")
+    fun setRoomAccountData(@Path("userId") userId: String,
+                       @Path("roomId") roomId: String,
+                       @Path("type") type: String,
+                       @Body params: Any): Call<Unit>
 }

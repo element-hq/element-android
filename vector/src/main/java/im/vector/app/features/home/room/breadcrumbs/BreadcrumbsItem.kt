@@ -37,6 +37,7 @@ abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var unreadMessages: Int = 0 // SC addition
+    @EpoxyAttribute var markedUnread: Boolean = false
     @EpoxyAttribute var showHighlighted: Boolean = false
     @EpoxyAttribute var hasUnreadMessage: Boolean = false
     @EpoxyAttribute var hasDraft: Boolean = false
@@ -47,7 +48,7 @@ abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
         holder.rootView.setOnClickListener(itemClickListener)
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         avatarRenderer.render(matrixItem, holder.avatarImageView)
-        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted, unreadMessages))
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted, unreadMessages, markedUnread))
         holder.draftIndentIndicator.isVisible = hasDraft
         holder.typingIndicator.isVisible = hasTypingUsers
     }

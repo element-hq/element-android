@@ -84,6 +84,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
             is RoomListAction.ToggleTag                   -> handleToggleTag(action)
+            is RoomListAction.SetMarkedUnread             -> handleSetMarkedUnread(action)
         }.exhaustive
     }
 
@@ -220,6 +221,18 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             RoomTag.ROOM_TAG_LOW_PRIORITY -> RoomTag.ROOM_TAG_FAVOURITE
             else                          -> null
         }
+    }
+
+    private fun handleSetMarkedUnread(action: RoomListAction.SetMarkedUnread) {
+        session.getRoom(action.roomId)?.setMarkedUnread(action.markedUnread, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                _viewEvents.post(RoomListViewEvents.Done)
+            }
+
+            override fun onFailure(failure: Throwable) {
+                _viewEvents.post(RoomListViewEvents.Failure(failure))
+            }
+        })
     }
 
     private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {

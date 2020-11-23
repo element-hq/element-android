@@ -30,11 +30,11 @@ class UnreadCounterBadgeView : AppCompatTextView {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun render(state: State) {
-        if (state.count == 0 && state.unread == 0) {
+        if (state.count == 0 && state.unread == 0 && !state.markedUnread) {
             visibility = View.INVISIBLE
         } else {
             visibility = View.VISIBLE
-            val bgRes = if (state.count > 0) {
+            val bgRes = if (state.count > 0 || state.markedUnread) {
                 if (state.highlighted) {
                     R.drawable.bg_unread_highlight
                 } else {
@@ -44,7 +44,12 @@ class UnreadCounterBadgeView : AppCompatTextView {
                 R.drawable.bg_unread_unimportant
             }
             setBackgroundResource(bgRes)
-            text = RoomSummaryFormatter.formatUnreadMessagesCounter(if (state.count > 0) state.count else state.unread)
+            text = if (state.count == 0 && state.markedUnread)
+                // Centered star (instead of "*")
+                //"\u2217"
+                "!"
+            else
+                RoomSummaryFormatter.formatUnreadMessagesCounter(if (state.count > 0) state.count else state.unread)
         }
     }
 
@@ -52,6 +57,7 @@ class UnreadCounterBadgeView : AppCompatTextView {
             val count: Int,
             val highlighted: Boolean,
             // SC addition
-            val unread: Int
+            val unread: Int,
+            val markedUnread: Boolean
     )
 }

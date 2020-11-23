@@ -48,6 +48,11 @@ interface ReadService {
     fun setReadMarker(fullyReadEventId: String, callback: MatrixCallback<Unit>)
 
     /**
+     * Mark a room as unread, or remove an existing unread marker.
+     */
+    fun setMarkedUnread(markedUnread: Boolean, callback: MatrixCallback<Unit>)
+
+    /**
      * Check if an event is already read, ie. your read receipt is set on a more recent event.
      */
     fun isEventRead(eventId: String): Boolean

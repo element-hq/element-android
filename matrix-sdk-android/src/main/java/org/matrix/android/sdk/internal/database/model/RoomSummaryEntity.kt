@@ -45,6 +45,7 @@ internal open class RoomSummaryEntity(
         var hasUnreadMessages: Boolean = false,
         var hasUnreadContentMessages: Boolean = false,
         var hasUnreadOriginalContentMessages: Boolean = false,
+        var markedUnread: Boolean = false,
         var tags: RealmList<RoomTagEntity> = RealmList(),
         var userDrafts: UserDraftsEntity? = null,
         var breadcrumbsIndex: Int = RoomSummary.NOT_IN_BREADCRUMBS,

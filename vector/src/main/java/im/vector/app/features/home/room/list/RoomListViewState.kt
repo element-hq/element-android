@@ -130,7 +130,7 @@ data class RoomListViewState(
         get() = asyncFilteredRooms.invoke()
                 ?.flatMap { it.value }
                 ?.filter { it.membership == Membership.JOIN }
-                ?.any { it.scHasUnreadMessages(scSdkPreferences) }
+                ?.any { it.scIsUnread(scSdkPreferences) }
                 ?: false
 }
 

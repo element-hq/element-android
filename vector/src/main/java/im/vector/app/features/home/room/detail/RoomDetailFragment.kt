@@ -1217,7 +1217,7 @@ class RoomDetailFragment @Inject constructor(
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
             jumpToBottomView.count = summary.notificationCount
-            jumpToBottomView.drawBadge = summary.scHasUnreadMessages(ScSdkPreferences(context))
+            jumpToBottomView.drawBadge = summary.scIsUnread(ScSdkPreferences(context))
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             inviteView.visibility = View.GONE

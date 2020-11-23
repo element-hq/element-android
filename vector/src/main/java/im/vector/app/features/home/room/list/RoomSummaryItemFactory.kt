@@ -105,7 +105,8 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .showSelected(showSelected)
                 .hasFailedSending(roomSummary.hasFailedSending)
                 .unreadNotificationCount(unreadCount)
-                .hasUnreadMessage(roomSummary.scHasUnreadMessages(scSdkPreferences))
+                .hasUnreadMessage(roomSummary.scIsUnread(scSdkPreferences))
+                .markedUnread(roomSummary.markedUnread)
                 .hasDraft(roomSummary.userDrafts.isNotEmpty())
                 .itemLongClickListener { _ ->
                     onLongClick?.invoke(roomSummary) ?: false

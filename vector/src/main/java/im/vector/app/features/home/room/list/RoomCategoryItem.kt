@@ -35,6 +35,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var unreadMessages: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false
+    @EpoxyAttribute var markedUnread: Boolean = false
     @EpoxyAttribute var listener: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
@@ -44,7 +45,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
         val expandedArrowDrawable = ContextCompat.getDrawable(holder.rootView.context, expandedArrowDrawableRes)?.also {
             DrawableCompat.setTint(it, tintColor)
         }
-        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted, unreadMessages))
+        holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted, unreadMessages, markedUnread))
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
         holder.titleView.text = title
         holder.rootView.setOnClickListener { listener?.invoke() }

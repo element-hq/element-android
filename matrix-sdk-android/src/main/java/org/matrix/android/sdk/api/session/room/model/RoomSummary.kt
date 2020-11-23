@@ -47,6 +47,7 @@ data class RoomSummary constructor(
         val hasUnreadMessages: Boolean = false,
         val hasUnreadContentMessages: Boolean = false,
         val hasUnreadOriginalContentMessages: Boolean = false,
+        val markedUnread: Boolean = false,
         val tags: List<RoomTag> = emptyList(),
         val membership: Membership = Membership.NONE,
         val versioningState: VersioningState = VersioningState.NONE,
@@ -77,6 +78,10 @@ data class RoomSummary constructor(
 
     val canStartCall: Boolean
         get() = joinedMembersCount == 2
+
+    fun scIsUnread(preferenceProvider: RoomSummaryPreferenceProvider?): Boolean {
+        return markedUnread || scHasUnreadMessages(preferenceProvider)
+    }
 
     fun scHasUnreadMessages(preferenceProvider: RoomSummaryPreferenceProvider?): Boolean {
         if (preferenceProvider == null) {

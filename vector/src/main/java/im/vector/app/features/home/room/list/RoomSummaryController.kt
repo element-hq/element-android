@@ -134,14 +134,20 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         val unreadCount = if (summaries.isEmpty()) {
             0
         } else {
-            summaries.map { it.notificationCount }.sumBy { i -> i }
+            // Count notifications + number of chats with no notifications marked as unread
+            summaries.map { it }.sumBy { x -> if (x.notificationCount > 0) x.notificationCount else if (x.markedUnread) 1 else 0 }
+        }
+        val markedUnread = if (summaries.isEmpty()) {
+            false
+        } else {
+            summaries.map { it.markedUnread }.sumBy { b -> if (b) 1 else 0 } > 0
         }
         // SC addition
         val unreadMessages = if (summaries.isEmpty() || !userPreferencesProvider.shouldShowUnimportantCounterBadge()) {
             0
         } else {
             // TODO actual sum of events instead of sum of chats?
-            summaries.map { it.scHasUnreadMessages(scSdkPreferences) }.sumBy { b -> if (b) 1 else 0 }
+            summaries.map { it.scIsUnread(scSdkPreferences) }.sumBy { b -> if (b) 1 else 0 }
         }
         val showHighlighted = summaries.any { it.highlightCount > 0 }
         roomCategoryItem {
@@ -151,6 +157,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             unreadNotificationCount(unreadCount)
             unreadMessages(unreadMessages)
             showHighlighted(showHighlighted)
+            markedUnread(markedUnread)
             listener {
                 mutateExpandedState()
                 update(viewState)

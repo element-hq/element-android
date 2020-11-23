@@ -262,6 +262,12 @@ class RoomListFragment @Inject constructor(
             is RoomListQuickActionsSharedAction.LowPriority               -> {
                 roomListViewModel.handle(RoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_LOW_PRIORITY))
             }
+            is RoomListQuickActionsSharedAction.MarkUnread                -> {
+                roomListViewModel.handle(RoomListAction.SetMarkedUnread(quickAction.roomId, true))
+            }
+            is RoomListQuickActionsSharedAction.MarkRead                  -> {
+                roomListViewModel.handle(RoomListAction.SetMarkedUnread(quickAction.roomId, false))
+            }
             is RoomListQuickActionsSharedAction.Leave                     -> {
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.room_participants_leave_prompt_title)

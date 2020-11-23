@@ -22,6 +22,7 @@ import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 
 internal fun isEventRead(realmConfiguration: RealmConfiguration,
                          userId: String?,
@@ -73,5 +74,15 @@ internal fun isReadMarkerMoreRecent(realmConfiguration: RealmConfiguration,
         } else {
             eventToCheckChunk?.isLastForward == false
         }
+    }
+}
+internal fun isMarkedUnread(realmConfiguration: RealmConfiguration,
+                            roomId: String?): Boolean {
+    if (roomId.isNullOrBlank()) {
+        return false
+    }
+    return Realm.getInstance(realmConfiguration).use { realm ->
+        val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
+        roomSummary?.markedUnread ?: false
     }
 }
