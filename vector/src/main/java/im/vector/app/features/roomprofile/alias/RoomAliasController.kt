@@ -60,6 +60,13 @@ class RoomAliasController @Inject constructor(
     override fun buildModels(data: RoomAliasViewState?) {
         data ?: return
 
+        // Published
+        buildPublishInfo(data)
+        // Local
+        buildLocalInfo(data)
+    }
+
+    private fun buildPublishInfo(data: RoomAliasViewState) {
         buildProfileSection(
                 stringProvider.getString(R.string.room_alias_published_alias_title)
         )
@@ -68,11 +75,8 @@ class RoomAliasController @Inject constructor(
             helperTextResId(R.string.room_alias_published_alias_subtitle)
         }
 
-        // TODO Canonical
-        settingsInfoItem {
-            id("otherPublished")
-            helperTextResId(R.string.room_alias_published_other)
-        }
+        // TODO Set/Unset Canonical
+
         if (data.alternativeAliases.isEmpty()) {
             settingsInfoItem {
                 id("otherPublishedEmpty")
@@ -80,6 +84,21 @@ class RoomAliasController @Inject constructor(
                     helperTextResId(R.string.room_alias_address_empty_can_add)
                 } else {
                     helperTextResId(R.string.room_alias_address_empty)
+                }
+            }
+        } else {
+            settingsInfoItem {
+                id("otherPublished")
+                helperTextResId(R.string.room_alias_published_other)
+            }
+            data.alternativeAliases.forEachIndexed { idx, altAlias ->
+                // TODO Rename this item to a more generic name
+                threePidItem {
+                    id("alt_$idx")
+                    title(altAlias)
+                    if (data.actionPermissions.canChangeCanonicalAlias) {
+                        deleteClickListener { callback?.removeAlias(altAlias) }
+                    }
                 }
             }
         }
@@ -100,20 +119,6 @@ class RoomAliasController @Inject constructor(
                 buttonClickListener { callback?.addAlias() }
             }
         }
-
-        data.alternativeAliases.forEachIndexed { idx, altAlias ->
-            // TODO Rename this item to a more generic name
-            threePidItem {
-                id("alt_$idx")
-                title(altAlias)
-                if (data.actionPermissions.canChangeCanonicalAlias) {
-                    deleteClickListener { callback?.removeAlias(altAlias) }
-                }
-            }
-        }
-
-        // Local
-        buildLocalInfo(data)
     }
 
     private fun buildLocalInfo(data: RoomAliasViewState) {
