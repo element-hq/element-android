@@ -42,7 +42,7 @@ import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.di.VectorComponent
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.rx.RxConfig
-import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.disclaimer.doNotShowDisclaimerDialog
 import im.vector.app.features.lifecycle.VectorActivityLifecycleCallbacks

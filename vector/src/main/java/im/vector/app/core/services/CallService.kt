@@ -25,7 +25,7 @@ import android.view.KeyEvent
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
 import im.vector.app.core.extensions.vectorComponent
-import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
 import im.vector.app.features.call.telecom.CallConnection
 import im.vector.app.features.notifications.NotificationUtils
 import timber.log.Timber

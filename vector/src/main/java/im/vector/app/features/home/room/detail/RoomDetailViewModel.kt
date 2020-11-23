@@ -32,7 +32,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.subscribeLogError
-import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider

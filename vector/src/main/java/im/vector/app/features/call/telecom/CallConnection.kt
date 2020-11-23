@@ -22,7 +22,7 @@ import android.telecom.Connection
 import android.telecom.DisconnectCause
 import androidx.annotation.RequiresApi
 import im.vector.app.features.call.VectorCallViewModel
-import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
 import timber.log.Timber
 import javax.inject.Inject
 

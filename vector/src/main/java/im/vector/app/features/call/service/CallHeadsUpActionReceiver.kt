@@ -20,7 +20,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
 import timber.log.Timber
 
 class CallHeadsUpActionReceiver : BroadcastReceiver() {

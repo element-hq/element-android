@@ -20,7 +20,7 @@ import android.view.View
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import im.vector.app.core.utils.DebouncedClickListener
-import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
 import org.matrix.android.sdk.api.session.call.CallState
 import im.vector.app.features.call.utils.EglUtils
 import org.matrix.android.sdk.api.session.call.MxCall

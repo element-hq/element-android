@@ -53,11 +53,11 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call.*
 import org.matrix.android.sdk.api.session.call.CallState
 import im.vector.app.features.call.utils.EglUtils
+import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
 import org.matrix.android.sdk.api.session.call.MxCallDetail
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.webrtc.EglBase
-import org.webrtc.PeerConnection
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
 import timber.log.Timber
