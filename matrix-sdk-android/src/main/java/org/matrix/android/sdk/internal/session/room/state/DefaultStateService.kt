@@ -111,7 +111,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 eventType = EventType.STATE_ROOM_CANONICAL_ALIAS,
                 body = RoomCanonicalAliasContent(
                         canonicalAlias = alias,
-                        alternativeAliases = altAliases
+                        alternativeAliases = altAliases.distinct()
                 ).toContent(),
                 callback = callback,
                 stateKey = null

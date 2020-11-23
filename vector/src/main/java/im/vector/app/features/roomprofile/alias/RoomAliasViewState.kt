@@ -31,7 +31,6 @@ data class RoomAliasViewState(
         val canonicalAlias: String? = null,
         val alternativeAliases: List<String> = emptyList(),
         val newAlias: String = "",
-        val asyncNewAliasRequest: Async<Unit> = Uninitialized,
         val localAliases: Async<List<String>> = Uninitialized,
         val newLocalAlias: String = "",
         val asyncNewLocalAliasRequest: Async<Unit> = Uninitialized

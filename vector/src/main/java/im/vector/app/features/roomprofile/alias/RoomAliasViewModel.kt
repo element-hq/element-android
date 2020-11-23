@@ -142,21 +142,20 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
 
     override fun handle(action: RoomAliasAction) {
         when (action) {
-            is RoomAliasAction.SetNewAlias -> handleSetNewAlias(action)
-            is RoomAliasAction.AddAlias -> handleAddAlias()
-            is RoomAliasAction.RemoveAlias -> handleRemoveAlias(action)
-            is RoomAliasAction.SetCanonicalAlias -> handleSetCanonicalAlias(action)
+            is RoomAliasAction.SetNewAlias               -> handleSetNewAlias(action)
+            is RoomAliasAction.AddAlias                  -> handleAddAlias()
+            is RoomAliasAction.RemoveAlias               -> handleRemoveAlias(action)
+            is RoomAliasAction.SetCanonicalAlias         -> handleSetCanonicalAlias(action)
             is RoomAliasAction.SetNewLocalAliasLocalPart -> handleSetNewLocalAliasLocalPart(action)
-            RoomAliasAction.AddLocalAlias -> handleAddLocalAlias()
-            is RoomAliasAction.RemoveLocalAlias -> handleRemoveLocalAlias(action)
+            RoomAliasAction.AddLocalAlias                -> handleAddLocalAlias()
+            is RoomAliasAction.RemoveLocalAlias          -> handleRemoveLocalAlias(action)
         }.exhaustive
     }
 
     private fun handleSetNewAlias(action: RoomAliasAction.SetNewAlias) {
         setState {
             copy(
-                    newAlias = action.aliasLocalPart,
-                    asyncNewAliasRequest = Uninitialized
+                    newAlias = action.aliasLocalPart
             )
         }
     }
@@ -195,7 +194,12 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         postLoading(true)
         room.updateCanonicalAlias(canonicalAlias, alternativeAliases, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                postLoading(false)
+                setState {
+                    copy(
+                            isLoading = false,
+                            newAlias = ""
+                    )
+                }
             }
 
             override fun onFailure(failure: Throwable) {
@@ -228,6 +232,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
                         setState {
                             copy(
                                     isLoading = false,
+                                    newLocalAlias = "",
                                     asyncNewLocalAliasRequest = Uninitialized
                             )
                         }
