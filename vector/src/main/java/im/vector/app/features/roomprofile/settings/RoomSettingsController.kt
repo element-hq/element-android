@@ -136,7 +136,9 @@ class RoomSettingsController @Inject constructor(
                 action = { if (data.actionPermissions.canChangeHistoryReadability) callback?.onHistoryVisibilityClicked() }
         )
 
-        buildEncryptionAction(data.actionPermissions, roomSummary)
+        if (enableNonSimplifiedMode) {
+            buildEncryptionAction(data.actionPermissions, roomSummary)
+        }
     }
 
     private fun buildEncryptionAction(actionPermissions: RoomSettingsViewState.ActionPermissions, roomSummary: RoomSummary) {
