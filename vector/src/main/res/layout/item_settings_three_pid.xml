@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?riotx_background"
     android:minHeight="64dp"
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingEnd="@dimen/layout_horizontal_margin">
@@ -12,19 +13,20 @@
         android:id="@+id/item_settings_three_pid_icon"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:layout_marginEnd="8dp"
         android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_settings_three_pid_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_phone"
         app:tint="?riotx_text_secondary"
-        tools:ignore="MissingPrefix" />
+        tools:ignore="MissingPrefix"
+        tools:src="@drawable/ic_phone" />
 
     <TextView
         android:id="@+id/item_settings_three_pid_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginBottom="4dp"
         android:textColor="?riotx_text_primary"
         android:textSize="16sp"
