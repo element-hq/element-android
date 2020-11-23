@@ -36,6 +36,7 @@ import im.vector.app.features.room.RequireActiveMembershipViewState
 import im.vector.app.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.app.features.roomprofile.members.RoomMemberListFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
+import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import javax.inject.Inject
 
@@ -100,6 +101,7 @@ class RoomProfileActivity :
                     when (sharedAction) {
                         is RoomProfileSharedAction.OpenRoomMembers       -> openRoomMembers()
                         is RoomProfileSharedAction.OpenRoomSettings      -> openRoomSettings()
+                        is RoomProfileSharedAction.OpenRoomAlias         -> openRoomAlias()
                         is RoomProfileSharedAction.OpenRoomUploads       -> openRoomUploads()
                         is RoomProfileSharedAction.OpenBannedRoomMembers -> openBannedRoomMembers()
                     }
@@ -133,6 +135,10 @@ class RoomProfileActivity :
 
     private fun openRoomSettings() {
         addFragmentToBackstack(R.id.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
+    }
+
+    private fun openRoomAlias() {
+        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomAliasFragment::class.java, roomProfileArgs)
     }
 
     private fun openRoomMembers() {

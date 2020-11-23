@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile
+package org.matrix.android.sdk.internal.session.room.alias
 
-import im.vector.app.core.platform.VectorSharedAction
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-/**
- * Supported navigation actions for [RoomProfileActivity]
- */
-sealed class RoomProfileSharedAction : VectorSharedAction {
-    object OpenRoomSettings : RoomProfileSharedAction()
-    object OpenRoomAlias : RoomProfileSharedAction()
-    object OpenRoomUploads : RoomProfileSharedAction()
-    object OpenRoomMembers : RoomProfileSharedAction()
-    object OpenBannedRoomMembers : RoomProfileSharedAction()
-}
+@JsonClass(generateAdapter = true)
+internal data class GetAliasesResponse(
+        /**
+         * The list of aliases currently defined on the local server for the given room
+         */
+        @Json(name = "aliases") val aliases: List<String> = emptyList()
+)

@@ -1022,6 +1022,25 @@
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
 
+    <!-- room settings : alias -->
+    <string name="room_settings_alias_title">Room addresses</string>
+    <string name="room_settings_alias_subtitle">See and managed addresses of this room</string>
+
+    <string name="room_alias_title">Room Addresses</string>
+    <string name="room_alias_published_alias_title">Published Addresses</string>
+    <string name="room_alias_published_alias_subtitle">Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.</string>
+    <string name="room_alias_main_address_hint">Main address</string>
+    <string name="room_alias_published_other">Other published addresses:</string>
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_publish">Publish this room to the public in %1$s\'s room directory?</string>
+    <string name="room_alias_address_empty">No other published addresses yet, add one below</string>
+    <string name="room_alias_address_hint">New published address (e.g. #alias:server)</string>
+
+    <string name="room_alias_local_address_title">Local Addresses</string>
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_local_address_subtitle">Set addresses for this room so users can find this room through your homeserver (%1$s)</string>
+    <string name="room_alias_local_address_empty">This room has no local addresses</string>
+
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Anyone</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Members only (since the point in time of selecting this option)</string>

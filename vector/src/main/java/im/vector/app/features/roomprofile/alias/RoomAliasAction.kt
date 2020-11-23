@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.settings
+package im.vector.app.features.roomprofile.alias
 
 import im.vector.app.core.platform.VectorViewModelAction
-import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 
-sealed class RoomSettingsAction : VectorViewModelAction {
-    data class SetAvatarAction(val avatarAction: RoomSettingsViewState.AvatarAction) : RoomSettingsAction()
-    data class SetRoomName(val newName: String) : RoomSettingsAction()
-    data class SetRoomTopic(val newTopic: String) : RoomSettingsAction()
-    data class SetRoomHistoryVisibility(val visibility: RoomHistoryVisibility) : RoomSettingsAction()
-    object Save : RoomSettingsAction()
-    object Cancel : RoomSettingsAction()
+sealed class RoomAliasAction : VectorViewModelAction {
+    // Canonical
+    data class AddAlias(val alias: String) : RoomAliasAction()
+    data class RemoveAlias(val alias: String) : RoomAliasAction()
+    data class SetCanonicalAlias(val canonicalAlias: String) : RoomAliasAction()
+    object UnSetCanonicalAlias : RoomAliasAction()
+
+    // Local
+    data class AddLocalAlias(val aliasLocalPart: String) : RoomAliasAction()
+    data class RemoveLocalAlias(val alias: String) : RoomAliasAction()
 }

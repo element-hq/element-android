@@ -14,44 +14,28 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.settings
+package im.vector.app.features.roomprofile.alias
 
-import android.net.Uri
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomprofile.RoomProfileArgs
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
-data class RoomSettingsViewState(
+data class RoomAliasViewState(
         val roomId: String,
-        val historyVisibilityEvent: Event? = null,
+        val homeServerName: String = "",
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
-        val currentRoomAvatarUrl: String? = null,
-        val avatarAction: AvatarAction = AvatarAction.None,
-        val newName: String? = null,
-        val newTopic: String? = null,
-        val newHistoryVisibility: RoomHistoryVisibility? = null,
-        val showSaveAction: Boolean = false,
+        val canonicalAlias: String? = null,
+        val alternativeAliases: List<String> = emptyList(),
+        val localAliases: Async<List<String>> = Uninitialized,
         val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 
     data class ActionPermissions(
-            val canChangeAvatar: Boolean = false,
-            val canChangeName: Boolean = false,
-            val canChangeTopic: Boolean = false,
-            val canChangeHistoryReadability: Boolean = false
+            val canChangeCanonicalAlias: Boolean = false
     )
-
-    sealed class AvatarAction {
-        object None : AvatarAction()
-        object DeleteAvatar : AvatarAction()
-        data class UpdateAvatar(val newAvatarUri: Uri,
-                                val newAvatarFileName: String) : AvatarAction()
-    }
 }

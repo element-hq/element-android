@@ -68,12 +68,10 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         selectSubscribe(
                 RoomSettingsViewState::avatarAction,
                 RoomSettingsViewState::newName,
-                RoomSettingsViewState::newCanonicalAlias,
                 RoomSettingsViewState::newTopic,
                 RoomSettingsViewState::newHistoryVisibility,
                 RoomSettingsViewState::roomSummary) { avatarAction,
                                                       newName,
-                                                      newCanonicalAlias,
                                                       newTopic,
                                                       newHistoryVisibility,
                                                       asyncSummary ->
@@ -83,7 +81,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                         showSaveAction = avatarAction !is RoomSettingsViewState.AvatarAction.None
                                 || summary?.name != newName
                                 || summary?.topic != newTopic
-                                || summary?.canonicalAlias != newCanonicalAlias?.takeIf { it.isNotEmpty() }
                                 || newHistoryVisibility != null
                 )
             }
@@ -99,8 +96,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             historyVisibilityEvent = room.getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY),
                             roomSummary = async,
                             newName = roomSummary?.name,
-                            newTopic = roomSummary?.topic,
-                            newCanonicalAlias = roomSummary?.canonicalAlias
+                            newTopic = roomSummary?.topic
                     )
                 }
 
@@ -113,8 +109,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR),
                             canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME),
                             canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC),
-                            canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_CANONICAL_ALIAS),
                             canChangeHistoryReadability = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_ROOM_HISTORY_VISIBILITY)
                     )
@@ -143,7 +137,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
             is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
             is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
-            is RoomSettingsAction.SetRoomCanonicalAlias    -> setState { copy(newCanonicalAlias = action.newCanonicalAlias) }
             is RoomSettingsAction.Save                     -> saveSettings()
             is RoomSettingsAction.Cancel                   -> cancel()
         }.exhaustive
@@ -189,11 +182,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         }
         if (summary?.topic != state.newTopic) {
             operationList.add(room.rx().updateTopic(state.newTopic ?: ""))
-        }
-
-        if (state.newCanonicalAlias != null && summary?.canonicalAlias != state.newCanonicalAlias.takeIf { it.isNotEmpty() }) {
-            operationList.add(room.rx().addRoomAlias(state.newCanonicalAlias))
-            operationList.add(room.rx().updateCanonicalAlias(state.newCanonicalAlias))
         }
 
         if (state.newHistoryVisibility != null) {

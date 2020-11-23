@@ -39,6 +39,8 @@ import im.vector.app.core.utils.toast
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.app.features.roomprofile.RoomProfileSharedAction
+import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -61,6 +63,7 @@ class RoomSettingsFragment @Inject constructor(
         GalleryOrCameraDialogHelper.Listener {
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
+    private lateinit var roomProfileSharedActionViewModel: RoomProfileSharedActionViewModel
     private val roomProfileArgs: RoomProfileArgs by args()
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
@@ -70,6 +73,7 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
         controller.callback = this
         setupToolbar(roomSettingsToolbar)
         roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
@@ -164,8 +168,8 @@ class RoomSettingsFragment @Inject constructor(
         return@withState
     }
 
-    override fun onAliasChanged(alias: String) {
-        viewModel.handle(RoomSettingsAction.SetRoomCanonicalAlias(alias))
+    override fun onOpenAlias() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAlias)
     }
 
     override fun onImageReady(uri: Uri?) {

@@ -127,14 +127,6 @@ class RxRoom(private val room: Room) {
         room.updateName(name, it)
     }
 
-    fun addRoomAlias(alias: String): Completable = completableBuilder<Unit> {
-        room.addRoomAlias(alias, it)
-    }
-
-    fun updateCanonicalAlias(alias: String): Completable = completableBuilder<Unit> {
-        room.updateCanonicalAlias(alias, it)
-    }
-
     fun updateHistoryReadability(readability: RoomHistoryVisibility): Completable = completableBuilder<Unit> {
         room.updateHistoryReadability(readability, it)
     }

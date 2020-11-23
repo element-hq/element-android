@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,19 +12,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package im.vector.app.features.roomprofile
+package im.vector.app.features.roomprofile.alias
 
-import im.vector.app.core.platform.VectorSharedAction
+import im.vector.app.core.platform.VectorViewEvents
 
 /**
- * Supported navigation actions for [RoomProfileActivity]
+ * Transient events for room settings screen
  */
-sealed class RoomProfileSharedAction : VectorSharedAction {
-    object OpenRoomSettings : RoomProfileSharedAction()
-    object OpenRoomAlias : RoomProfileSharedAction()
-    object OpenRoomUploads : RoomProfileSharedAction()
-    object OpenRoomMembers : RoomProfileSharedAction()
-    object OpenBannedRoomMembers : RoomProfileSharedAction()
+sealed class RoomAliasViewEvents : VectorViewEvents {
+    data class Failure(val throwable: Throwable) : RoomAliasViewEvents()
+    object Success : RoomAliasViewEvents()
 }
