@@ -1,0 +1,4 @@
+- Fix some colors
+- Wider message bubbles in some scenarios
+- Enable "Prevent accidental call" by default
+- Easy-mode setting
