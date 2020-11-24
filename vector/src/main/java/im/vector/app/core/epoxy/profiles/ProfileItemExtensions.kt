@@ -59,9 +59,7 @@ fun EpoxyController.buildProfileAction(
         accessoryRes(accessory)
         accessoryMatrixItem(accessoryMatrixItem)
         avatarRenderer(avatarRenderer)
-        listener { _ ->
-            action?.invoke()
-        }
+        listener(action)
     }
 
     if (divider) {

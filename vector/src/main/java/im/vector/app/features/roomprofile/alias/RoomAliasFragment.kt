@@ -140,6 +140,10 @@ class RoomAliasFragment @Inject constructor(
         viewModel.handle(RoomAliasAction.AddLocalAlias)
     }
 
+    override fun openAlias(alias: String, isPublished: Boolean) {
+        TODO()
+    }
+
     override fun removeLocalAlias(alias: String) {
         AlertDialog.Builder(requireContext())
                 .setTitle(R.string.dialog_title_confirmation)

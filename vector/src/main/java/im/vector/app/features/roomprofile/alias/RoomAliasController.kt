@@ -24,6 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
+import im.vector.app.core.epoxy.profiles.profileActionItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -33,7 +34,6 @@ import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.roomdirectory.createroom.RoomAliasErrorFormatter
 import im.vector.app.features.roomdirectory.createroom.roomAliasEditItem
-import im.vector.app.features.settings.threepids.threePidItem
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import javax.inject.Inject
 
@@ -48,12 +48,14 @@ class RoomAliasController @Inject constructor(
         fun toggleManualPublishForm()
         fun setNewAlias(value: String)
         fun addAlias()
+        // TODO Delete some methods below
         fun removeAlias(altAlias: String)
         fun setCanonicalAlias(alias: String?)
         fun removeLocalAlias(alias: String)
         fun toggleLocalAliasForm()
         fun setNewLocalAliasLocalPart(value: String)
         fun addLocalAlias()
+        fun openAlias(alias: String, isPublished: Boolean)
     }
 
     var callback: Callback? = null
@@ -97,13 +99,10 @@ class RoomAliasController @Inject constructor(
                 helperTextResId(R.string.room_alias_published_other)
             }
             data.alternativeAliases.forEachIndexed { idx, altAlias ->
-                // TODO Rename this item to a more generic name
-                threePidItem {
+                profileActionItem {
                     id("alt_$idx")
                     title(altAlias)
-                    if (data.actionPermissions.canChangeCanonicalAlias) {
-                        deleteClickListener { callback?.removeAlias(altAlias) }
-                    }
+                    listener { callback?.openAlias(altAlias, true) }
                 }
             }
         }
@@ -161,11 +160,10 @@ class RoomAliasController @Inject constructor(
             }
             is Success -> {
                 localAliases().forEachIndexed { idx, localAlias ->
-                    // TODO Rename this item to a more generic name
-                    threePidItem {
+                    profileActionItem {
                         id("loc_$idx")
                         title(localAlias)
-                        deleteClickListener { callback?.removeLocalAlias(localAlias) }
+                        listener { callback?.openAlias(localAlias, false) }
                     }
                 }
             }
