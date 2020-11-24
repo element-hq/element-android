@@ -21,7 +21,7 @@ import im.vector.app.core.platform.VectorViewModelAction
 sealed class RoomAliasAction : VectorViewModelAction {
     // Canonical
     object ToggleManualPublishForm : RoomAliasAction()
-    data class SetNewAlias(val aliasLocalPart: String) : RoomAliasAction()
+    data class SetNewAlias(val alias: String) : RoomAliasAction()
     object AddAlias : RoomAliasAction()
     data class RemoveAlias(val alias: String) : RoomAliasAction()
     data class SetCanonicalAlias(val canonicalAlias: String?) : RoomAliasAction()

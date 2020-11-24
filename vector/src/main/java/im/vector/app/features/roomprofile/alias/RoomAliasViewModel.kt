@@ -181,7 +181,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun handleSetNewAlias(action: RoomAliasAction.SetNewAlias) {
         setState {
             copy(
-                    publishManuallyState = RoomAliasViewState.AddAliasState.Editing(action.aliasLocalPart, Uninitialized)
+                    publishManuallyState = RoomAliasViewState.AddAliasState.Editing(action.alias, Uninitialized)
             )
         }
     }
