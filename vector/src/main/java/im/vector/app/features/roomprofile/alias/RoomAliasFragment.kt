@@ -113,29 +113,26 @@ class RoomAliasFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    override fun invalidate() = withState(viewModel) { viewState ->
-        controller.setData(viewState)
-        renderRoomSummary(viewState)
+    override fun invalidate() = withState(viewModel) { state ->
+        waiting_view.isVisible = state.isLoading
+        controller.setData(state)
+        renderRoomSummary(state)
     }
 
     private fun renderRoomSummary(state: RoomAliasViewState) {
-        waiting_view.isVisible = state.isLoading
-
         state.roomSummary()?.let {
             roomSettingsToolbarTitleView.text = it.displayName
             avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
         }
-
-        invalidateOptionsMenu()
     }
 
-    private fun unpublishAlias(altAlias: String) {
+    private fun unpublishAlias(alias: String) {
         AlertDialog.Builder(requireContext())
                 .setTitle(R.string.dialog_title_confirmation)
-                .setMessage(getString(R.string.room_alias_delete_confirmation, altAlias))
+                .setMessage(getString(R.string.room_alias_unpublish_confirmation, alias))
                 .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.delete) { _, _ ->
-                    viewModel.handle(RoomAliasAction.UnpublishAlias(altAlias))
+                .setPositiveButton(R.string.action_unpublish) { _, _ ->
+                    viewModel.handle(RoomAliasAction.UnpublishAlias(alias))
                 }
                 .show()
                 .withColoredButton(DialogInterface.BUTTON_POSITIVE)
@@ -165,7 +162,7 @@ class RoomAliasFragment @Inject constructor(
         viewModel.handle(RoomAliasAction.AddLocalAlias)
     }
 
-    override fun openAlias(alias: String, isPublished: Boolean) = withState(viewModel) { state ->
+    override fun openAliasDetail(alias: String, isPublished: Boolean) = withState(viewModel) { state ->
         RoomAliasBottomSheet
                 .newInstance(
                         alias = alias,

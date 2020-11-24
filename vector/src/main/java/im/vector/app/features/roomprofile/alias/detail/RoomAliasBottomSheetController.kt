@@ -34,6 +34,7 @@ class RoomAliasBottomSheetController @Inject constructor() : TypedEpoxyControlle
             id("alias")
             title(state.alias)
             subtitle(state.matrixToLink)
+            editable(false)
         }
 
         // Notifications

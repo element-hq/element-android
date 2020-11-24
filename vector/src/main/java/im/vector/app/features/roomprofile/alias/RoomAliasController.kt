@@ -51,7 +51,7 @@ class RoomAliasController @Inject constructor(
         fun toggleLocalAliasForm()
         fun setNewLocalAliasLocalPart(value: String)
         fun addLocalAlias()
-        fun openAlias(alias: String, isPublished: Boolean)
+        fun openAliasDetail(alias: String, isPublished: Boolean)
     }
 
     var callback: Callback? = null
@@ -78,7 +78,17 @@ class RoomAliasController @Inject constructor(
             helperTextResId(R.string.room_alias_published_alias_subtitle)
         }
 
-        // TODO Set/Unset Canonical
+        data.canonicalAlias
+                ?.takeIf { it.isNotEmpty() }
+                ?.let { canonicalAlias ->
+
+                    profileActionItem {
+                        id("canonical")
+                        title(data.canonicalAlias)
+                        subtitle(stringProvider.getString(R.string.room_alias_published_alias_main))
+                        listener { callback?.openAliasDetail(canonicalAlias, true) }
+                    }
+                }
 
         if (data.alternativeAliases.isEmpty()) {
             settingsInfoItem {
@@ -98,7 +108,7 @@ class RoomAliasController @Inject constructor(
                 profileActionItem {
                     id("alt_$idx")
                     title(altAlias)
-                    listener { callback?.openAlias(altAlias, true) }
+                    listener { callback?.openAliasDetail(altAlias, true) }
                 }
             }
         }
@@ -110,8 +120,8 @@ class RoomAliasController @Inject constructor(
 
     private fun buildPublishManuallyForm(data: RoomAliasViewState) {
         when (data.publishManuallyState) {
-            RoomAliasViewState.AddAliasState.Hidden -> Unit
-            RoomAliasViewState.AddAliasState.Closed -> {
+            RoomAliasViewState.AddAliasState.Hidden     -> Unit
+            RoomAliasViewState.AddAliasState.Closed     -> {
                 settingsButtonItem {
                     id("publishManually")
                     colorProvider(colorProvider)
@@ -154,16 +164,16 @@ class RoomAliasController @Inject constructor(
                     id("loadingAliases")
                 }
             }
-            is Success -> {
+            is Success       -> {
                 localAliases().forEachIndexed { idx, localAlias ->
                     profileActionItem {
                         id("loc_$idx")
                         title(localAlias)
-                        listener { callback?.openAlias(localAlias, false) }
+                        listener { callback?.openAliasDetail(localAlias, false) }
                     }
                 }
             }
-            is Fail -> {
+            is Fail          -> {
                 errorWithRetryItem {
                     id("alt_error")
                     text(errorFormatter.toHumanReadable(localAliases.error))
@@ -177,8 +187,8 @@ class RoomAliasController @Inject constructor(
 
     private fun buildAddLocalAlias(data: RoomAliasViewState) {
         when (data.newLocalAliasState) {
-            RoomAliasViewState.AddAliasState.Hidden -> Unit
-            RoomAliasViewState.AddAliasState.Closed -> {
+            RoomAliasViewState.AddAliasState.Hidden     -> Unit
+            RoomAliasViewState.AddAliasState.Closed     -> {
                 settingsButtonItem {
                     id("newLocalAliasButton")
                     colorProvider(colorProvider)

@@ -138,6 +138,7 @@
     <string name="action_close">Close</string>
     <string name="action_copy">Copy</string>
     <string name="action_add">Add</string>
+    <string name="action_unpublish">Unpublish</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
 
@@ -1030,10 +1031,12 @@
     <string name="room_alias_title">Room Addresses</string>
     <string name="room_alias_published_alias_title">Published Addresses</string>
     <string name="room_alias_published_alias_subtitle">Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.</string>
+    <string name="room_alias_published_alias_main">This is the main address</string>
     <string name="room_alias_main_address_hint">Main address</string>
     <string name="room_alias_published_other">Other published addresses:</string>
     <string name="room_alias_published_alias_add_manually">Published a new address manually</string>
     <string name="room_alias_published_alias_add_manually_submit">Publish</string>
+    <string name="room_alias_unpublish_confirmation">Unpublish the address \"%1$s\"?</string>
     <string name="room_alias_delete_confirmation">Delete the address \"%1$s\"?</string>
     <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
     <string name="room_alias_publish">Publish this room to the public in %1$s\'s room directory?</string>
