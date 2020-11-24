@@ -1104,8 +1104,8 @@
     <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified for this room."</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Main address warnings</string>
 
-    <string name="room_settings_set_main_address">Set as Main Address</string>
-    <string name="room_settings_unset_main_address">Unset as Main Address</string>
+    <string name="room_settings_set_main_address">Set as main address</string>
+    <string name="room_settings_unset_main_address">Unset as main address</string>
     <string name="room_settings_copy_room_id">Copy Room ID</string>
     <string name="room_settings_copy_room_address">Copy Room Address</string>
 
