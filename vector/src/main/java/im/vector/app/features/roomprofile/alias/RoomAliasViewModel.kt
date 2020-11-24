@@ -208,7 +208,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     }
 
     private fun handleAddAlias() = withState { state ->
-        val newAlias = (state.newLocalAliasState as? RoomAliasViewState.AddAliasState.Editing)?.value ?: return@withState
+        val newAlias = (state.publishManuallyState as? RoomAliasViewState.AddAliasState.Editing)?.value ?: return@withState
         updateCanonicalAlias(
                 state.canonicalAlias,
                 state.alternativeAliases + newAlias
