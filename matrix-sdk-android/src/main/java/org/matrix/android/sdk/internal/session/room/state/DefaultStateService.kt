@@ -111,7 +111,13 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 eventType = EventType.STATE_ROOM_CANONICAL_ALIAS,
                 body = RoomCanonicalAliasContent(
                         canonicalAlias = alias,
-                        alternativeAliases = altAliases.distinct()
+                        alternativeAliases = altAliases
+                                // Ensure there is no duplicate
+                                .distinct()
+                                // Ensure the canonical alias is not also included in the alt alias
+                                .minus(listOfNotNull(alias))
+                                // Sort for the cleanup
+                                .sorted()
                 ).toContent(),
                 callback = callback,
                 stateKey = null
