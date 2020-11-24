@@ -32,7 +32,7 @@ data class RoomAliasViewState(
         val alternativeAliases: List<String> = emptyList(),
         val publishManuallyState: AddAliasState = AddAliasState.Hidden,
         val localAliases: Async<List<String>> = Uninitialized,
-        val newLocalAliasState: AddAliasState = AddAliasState.Hidden
+        val newLocalAliasState: AddAliasState = AddAliasState.Closed
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
