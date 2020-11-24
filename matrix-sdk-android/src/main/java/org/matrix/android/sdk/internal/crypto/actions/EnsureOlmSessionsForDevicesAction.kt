@@ -69,7 +69,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
         //
         // That should eventually resolve itself, but it's poor form.
 
-        Timber.v("## CRYPTO | claimOneTimeKeysForUsersDevices() : $usersDevicesToClaim")
+        Timber.i("## CRYPTO | claimOneTimeKeysForUsersDevices() : $usersDevicesToClaim")
 
         val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim)
         val oneTimeKeys = oneTimeKeysForUsersDeviceTask.execute(claimParams)
@@ -90,7 +90,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
                             oneTimeKey = key
                         }
                         if (oneTimeKey == null) {
-                            Timber.v("## CRYPTO | ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm
+                            Timber.w("## CRYPTO | ensureOlmSessionsForDevices() : No one-time keys " + oneTimeKeyAlgorithm
                                     + " for device " + userId + " : " + deviceId)
                             continue
                         }
