@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 internal data class GetAliasesResponse(
         /**
-         * The list of aliases currently defined on the local server for the given room
+         * Required. The server's local aliases on the room. Can be empty.
          */
         @Json(name = "aliases") val aliases: List<String> = emptyList()
 )

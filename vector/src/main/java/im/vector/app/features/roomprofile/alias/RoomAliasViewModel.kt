@@ -283,7 +283,8 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
 
     private fun handleUnpublishAlias(action: RoomAliasAction.UnpublishAlias) = withState { state ->
         updateCanonicalAlias(
-                canonicalAlias = state.canonicalAlias,
+                // We can also unpublish the canonical alias
+                canonicalAlias = state.canonicalAlias.takeIf { it != action.alias },
                 alternativeAliases = state.alternativeAliases - action.alias,
                 closeForm = false
         )

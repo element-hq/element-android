@@ -199,11 +199,18 @@ class RoomAliasController @Inject constructor(
                 }
             }
             is Success       -> {
-                localAliases().forEachIndexed { idx, localAlias ->
-                    profileActionItem {
-                        id("loc_$idx")
-                        title(localAlias)
-                        listener { callback?.openAliasDetail(localAlias) }
+                if (localAliases().isEmpty()) {
+                    settingsInfoItem {
+                        id("locEmpty")
+                        helperTextResId(R.string.room_alias_local_address_empty)
+                    }
+                } else {
+                    localAliases().forEachIndexed { idx, localAlias ->
+                        profileActionItem {
+                            id("loc_$idx")
+                            title(localAlias)
+                            listener { callback?.openAliasDetail(localAlias) }
+                        }
                     }
                 }
             }
