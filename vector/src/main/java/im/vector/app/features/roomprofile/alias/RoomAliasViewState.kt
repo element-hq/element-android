@@ -37,6 +37,9 @@ data class RoomAliasViewState(
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 
+    val allPublishedAliases: List<String>
+        get() = (alternativeAliases + listOfNotNull(canonicalAlias)).distinct()
+
     data class ActionPermissions(
             val canChangeCanonicalAlias: Boolean = false
     )

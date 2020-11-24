@@ -51,7 +51,7 @@ class RoomAliasController @Inject constructor(
         fun toggleLocalAliasForm()
         fun setNewLocalAliasLocalPart(value: String)
         fun addLocalAlias()
-        fun openAliasDetail(alias: String, isPublished: Boolean)
+        fun openAliasDetail(alias: String)
     }
 
     var callback: Callback? = null
@@ -86,7 +86,7 @@ class RoomAliasController @Inject constructor(
                         id("canonical")
                         title(data.canonicalAlias)
                         subtitle(stringProvider.getString(R.string.room_alias_published_alias_main))
-                        listener { callback?.openAliasDetail(canonicalAlias, true) }
+                        listener { callback?.openAliasDetail(canonicalAlias) }
                     }
                 }
 
@@ -108,7 +108,7 @@ class RoomAliasController @Inject constructor(
                 profileActionItem {
                     id("alt_$idx")
                     title(altAlias)
-                    listener { callback?.openAliasDetail(altAlias, true) }
+                    listener { callback?.openAliasDetail(altAlias) }
                 }
             }
         }
@@ -169,7 +169,7 @@ class RoomAliasController @Inject constructor(
                     profileActionItem {
                         id("loc_$idx")
                         title(localAlias)
-                        listener { callback?.openAliasDetail(localAlias, false) }
+                        listener { callback?.openAliasDetail(localAlias) }
                     }
                 }
             }

@@ -59,9 +59,11 @@ class RoomAliasBottomSheetController @Inject constructor() : TypedEpoxyControlle
                 }
                 RoomAliasBottomSheetSharedAction.UnPublishAlias(state.alias).toBottomSheetItem(++idx)
             }
-        } else {
+        }
+
+        if (state.isLocal) {
             // Local address
-            if (state.canEditCanonicalAlias) {
+            if (state.canEditCanonicalAlias && state.isPublished.not()) {
                 // Publish
                 RoomAliasBottomSheetSharedAction.PublishAlias(state.alias).toBottomSheetItem(++idx)
             }

@@ -23,6 +23,7 @@ data class RoomAliasBottomSheetState(
         val matrixToLink: String? = null,
         val isPublished: Boolean,
         val isMainAlias: Boolean,
+        val isLocal: Boolean,
         val canEditCanonicalAlias: Boolean
 ) : MvRxState {
 
@@ -30,6 +31,7 @@ data class RoomAliasBottomSheetState(
             alias = args.alias,
             isPublished = args.isPublished,
             isMainAlias = args.isMainAlias,
+            isLocal = args.isLocal,
             canEditCanonicalAlias = args.canEditCanonicalAlias
     )
 }

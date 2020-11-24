@@ -236,7 +236,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         updateCanonicalAlias(
                 canonicalAlias = action.canonicalAlias,
                 // Ensure the previous canonical alias is moved to the alt aliases
-                alternativeAliases = (state.alternativeAliases + listOfNotNull(state.canonicalAlias)).distinct(),
+                alternativeAliases = state.allPublishedAliases,
                 closeForm = false
         )
     }

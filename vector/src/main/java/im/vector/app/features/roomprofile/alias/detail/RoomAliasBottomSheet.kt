@@ -36,6 +36,7 @@ data class RoomAliasBottomSheetArgs(
         val alias: String,
         val isPublished: Boolean,
         val isMainAlias: Boolean,
+        val isLocal: Boolean,
         val canEditCanonicalAlias: Boolean
 ) : Parcelable
 
@@ -90,12 +91,14 @@ class RoomAliasBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomAliasBot
         fun newInstance(alias: String,
                         isPublished: Boolean,
                         isMainAlias: Boolean,
+                        isLocal: Boolean,
                         canEditCanonicalAlias: Boolean): RoomAliasBottomSheet {
             return RoomAliasBottomSheet().apply {
                 setArguments(RoomAliasBottomSheetArgs(
                         alias = alias,
                         isPublished = isPublished,
                         isMainAlias = isMainAlias,
+                        isLocal = isLocal,
                         canEditCanonicalAlias = canEditCanonicalAlias
                 ))
             }

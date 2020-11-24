@@ -1034,7 +1034,7 @@
     <string name="room_alias_published_alias_main">This is the main address</string>
     <string name="room_alias_main_address_hint">Main address</string>
     <string name="room_alias_published_other">Other published addresses:</string>
-    <string name="room_alias_published_alias_add_manually">Published a new address manually</string>
+    <string name="room_alias_published_alias_add_manually">Publish a new address manually</string>
     <string name="room_alias_published_alias_add_manually_submit">Publish</string>
     <string name="room_alias_unpublish_confirmation">Unpublish the address \"%1$s\"?</string>
     <string name="room_alias_delete_confirmation">Delete the address \"%1$s\"?</string>

@@ -162,12 +162,13 @@ class RoomAliasFragment @Inject constructor(
         viewModel.handle(RoomAliasAction.AddLocalAlias)
     }
 
-    override fun openAliasDetail(alias: String, isPublished: Boolean) = withState(viewModel) { state ->
+    override fun openAliasDetail(alias: String) = withState(viewModel) { state ->
         RoomAliasBottomSheet
                 .newInstance(
                         alias = alias,
-                        isPublished = isPublished,
+                        isPublished = alias in state.allPublishedAliases,
                         isMainAlias = alias == state.canonicalAlias,
+                        isLocal = alias in state.localAliases().orEmpty(),
                         canEditCanonicalAlias = state.actionPermissions.canChangeCanonicalAlias
                 )
                 .show(childFragmentManager, "ROOM_ALIAS_ACTIONS")
