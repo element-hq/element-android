@@ -164,7 +164,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
             is RoomAliasAction.SetNewLocalAliasLocalPart -> handleSetNewLocalAliasLocalPart(action)
             RoomAliasAction.AddLocalAlias                -> handleAddLocalAlias()
             is RoomAliasAction.RemoveLocalAlias          -> handleRemoveLocalAlias(action)
-            is RoomAliasAction.PublishAlias              -> handleAddAliasManually(action)
+            is RoomAliasAction.PublishAlias              -> handlePublishAlias(action)
         }.exhaustive
     }
 
@@ -212,39 +212,45 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         val newAlias = (state.publishManuallyState as? RoomAliasViewState.AddAliasState.Editing)?.value ?: return@withState
         updateCanonicalAlias(
                 canonicalAlias = state.canonicalAlias,
-                alternativeAliases = state.alternativeAliases + newAlias
+                alternativeAliases = state.alternativeAliases + newAlias,
+                closeForm = true
         )
     }
 
-    private fun handleAddAliasManually(action: RoomAliasAction.PublishAlias) = withState { state ->
+    private fun handlePublishAlias(action: RoomAliasAction.PublishAlias) = withState { state ->
         updateCanonicalAlias(
                 canonicalAlias = state.canonicalAlias,
-                alternativeAliases = state.alternativeAliases + action.alias
+                alternativeAliases = state.alternativeAliases + action.alias,
+                closeForm = false
         )
     }
 
     private fun handleRemoveAlias(action: RoomAliasAction.UnpublishAlias) = withState { state ->
         updateCanonicalAlias(
                 canonicalAlias = state.canonicalAlias,
-                alternativeAliases = state.alternativeAliases - action.alias
-        )
+                alternativeAliases = state.alternativeAliases - action.alias,
+                closeForm = false        )
     }
 
     private fun handleSetCanonicalAlias(action: RoomAliasAction.SetCanonicalAlias) = withState { state ->
         updateCanonicalAlias(
                 canonicalAlias = action.canonicalAlias,
-                alternativeAliases = state.alternativeAliases
+                alternativeAliases = state.alternativeAliases,
+                closeForm = false
         )
     }
 
-    private fun updateCanonicalAlias(canonicalAlias: String?, alternativeAliases: List<String>) {
+    private fun updateCanonicalAlias(canonicalAlias: String?, alternativeAliases: List<String>, closeForm: Boolean) {
         postLoading(true)
         room.updateCanonicalAlias(canonicalAlias, alternativeAliases, object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 setState {
                     copy(
                             isLoading = false,
-                            publishManuallyState = RoomAliasViewState.AddAliasState.Closed
+                            publishManuallyState = if (closeForm) RoomAliasViewState.AddAliasState.Closed else publishManuallyState,
+                            // Local echo
+                            canonicalAlias = canonicalAlias,
+                            alternativeAliases = alternativeAliases
                     )
                 }
             }
