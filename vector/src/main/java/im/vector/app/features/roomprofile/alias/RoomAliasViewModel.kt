@@ -67,6 +67,35 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         observePowerLevel()
         observeRoomCanonicalAlias()
         fetchRoomAlias()
+        fetchRoomDirectoryVisibility()
+    }
+
+    private fun fetchRoomDirectoryVisibility() {
+        setState {
+            copy(
+                    roomDirectoryVisibility = Loading()
+            )
+        }
+        viewModelScope.launch {
+            runCatching {
+                session.getRoomDirectoryVisibility(room.roomId)
+            }.fold(
+                    {
+                        setState {
+                            copy(
+                                    roomDirectoryVisibility = Success(it)
+                            )
+                        }
+                    },
+                    {
+                        setState {
+                            copy(
+                                    roomDirectoryVisibility = Fail(it)
+                            )
+                        }
+                    }
+            )
+        }
     }
 
     private fun initHomeServerName() {
@@ -155,17 +184,41 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
 
     override fun handle(action: RoomAliasAction) {
         when (action) {
-            RoomAliasAction.ToggleManualPublishForm      -> handleToggleManualPublishForm()
-            is RoomAliasAction.SetNewAlias               -> handleSetNewAlias(action)
-            is RoomAliasAction.ManualPublishAlias        -> handleManualPublishAlias()
-            is RoomAliasAction.UnpublishAlias            -> handleUnpublishAlias(action)
-            is RoomAliasAction.SetCanonicalAlias         -> handleSetCanonicalAlias(action)
-            RoomAliasAction.ToggleAddLocalAliasForm      -> handleToggleAddLocalAliasForm()
-            is RoomAliasAction.SetNewLocalAliasLocalPart -> handleSetNewLocalAliasLocalPart(action)
-            RoomAliasAction.AddLocalAlias                -> handleAddLocalAlias()
-            is RoomAliasAction.RemoveLocalAlias          -> handleRemoveLocalAlias(action)
-            is RoomAliasAction.PublishAlias              -> handlePublishAlias(action)
+            RoomAliasAction.ToggleManualPublishForm       -> handleToggleManualPublishForm()
+            is RoomAliasAction.SetNewAlias                -> handleSetNewAlias(action)
+            is RoomAliasAction.ManualPublishAlias         -> handleManualPublishAlias()
+            is RoomAliasAction.UnpublishAlias             -> handleUnpublishAlias(action)
+            is RoomAliasAction.SetCanonicalAlias          -> handleSetCanonicalAlias(action)
+            is RoomAliasAction.SetRoomDirectoryVisibility -> handleSetRoomDirectoryVisibility(action)
+            RoomAliasAction.ToggleAddLocalAliasForm       -> handleToggleAddLocalAliasForm()
+            is RoomAliasAction.SetNewLocalAliasLocalPart  -> handleSetNewLocalAliasLocalPart(action)
+            RoomAliasAction.AddLocalAlias                 -> handleAddLocalAlias()
+            is RoomAliasAction.RemoveLocalAlias           -> handleRemoveLocalAlias(action)
+            is RoomAliasAction.PublishAlias               -> handlePublishAlias(action)
         }.exhaustive
+    }
+
+    private fun handleSetRoomDirectoryVisibility(action: RoomAliasAction.SetRoomDirectoryVisibility) {
+        postLoading(true)
+        viewModelScope.launch {
+            runCatching {
+                session.setRoomDirectoryVisibility(room.roomId, action.roomDirectoryVisibility)
+            }.fold(
+                    {
+                        setState {
+                            copy(
+                                    isLoading = false,
+                                    // Local echo, no need to fetch the data from the server again
+                                    roomDirectoryVisibility = Success(action.roomDirectoryVisibility)
+                            )
+                        }
+                    },
+                    {
+                        postLoading(false)
+                        _viewEvents.post(RoomAliasViewEvents.Failure(it))
+                    }
+            )
+        }
     }
 
     private fun handleToggleAddLocalAliasForm() {
@@ -229,7 +282,8 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         updateCanonicalAlias(
                 canonicalAlias = state.canonicalAlias,
                 alternativeAliases = state.alternativeAliases - action.alias,
-                closeForm = false        )
+                closeForm = false
+        )
     }
 
     private fun handleSetCanonicalAlias(action: RoomAliasAction.SetCanonicalAlias) = withState { state ->

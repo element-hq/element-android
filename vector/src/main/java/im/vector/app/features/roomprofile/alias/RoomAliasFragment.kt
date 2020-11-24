@@ -40,6 +40,7 @@ import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetShare
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
+import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -148,6 +149,10 @@ class RoomAliasFragment @Inject constructor(
 
     override fun addAlias() {
         viewModel.handle(RoomAliasAction.ManualPublishAlias)
+    }
+
+    override fun setRoomDirectoryVisibility(roomDirectoryVisibility: RoomDirectoryVisibility) {
+        viewModel.handle(RoomAliasAction.SetRoomDirectoryVisibility(roomDirectoryVisibility))
     }
 
     override fun toggleLocalAliasForm() {

@@ -17,6 +17,7 @@
 package im.vector.app.features.roomprofile.alias
 
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 
 sealed class RoomAliasAction : VectorViewModelAction {
     // Canonical
@@ -26,6 +27,9 @@ sealed class RoomAliasAction : VectorViewModelAction {
     data class PublishAlias(val alias: String) : RoomAliasAction()
     data class UnpublishAlias(val alias: String) : RoomAliasAction()
     data class SetCanonicalAlias(val canonicalAlias: String?) : RoomAliasAction()
+
+    // Room directory
+    data class SetRoomDirectoryVisibility(val roomDirectoryVisibility: RoomDirectoryVisibility) : RoomAliasAction()
 
     // Local
     data class RemoveLocalAlias(val alias: String) : RoomAliasAction()

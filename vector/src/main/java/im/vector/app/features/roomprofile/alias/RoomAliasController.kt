@@ -18,6 +18,7 @@ package im.vector.app.features.roomprofile.alias
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
@@ -32,9 +33,11 @@ import im.vector.app.features.discovery.settingsButtonItem
 import im.vector.app.features.discovery.settingsContinueCancelItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formEditTextItem
+import im.vector.app.features.form.formSwitchItem
 import im.vector.app.features.roomdirectory.createroom.RoomAliasErrorFormatter
 import im.vector.app.features.roomdirectory.createroom.roomAliasEditItem
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
+import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import javax.inject.Inject
 
 class RoomAliasController @Inject constructor(
@@ -48,6 +51,7 @@ class RoomAliasController @Inject constructor(
         fun toggleManualPublishForm()
         fun setNewAlias(value: String)
         fun addAlias()
+        fun setRoomDirectoryVisibility(roomDirectoryVisibility: RoomDirectoryVisibility)
         fun toggleLocalAliasForm()
         fun setNewLocalAliasLocalPart(value: String)
         fun addLocalAlias()
@@ -63,10 +67,40 @@ class RoomAliasController @Inject constructor(
     override fun buildModels(data: RoomAliasViewState?) {
         data ?: return
 
-        // Published
+        // Published alias
         buildPublishInfo(data)
-        // Local
+        // Room directory visibility
+        buildRoomDirectoryVisibility(data)
+        // Local alias
         buildLocalInfo(data)
+    }
+
+    private fun buildRoomDirectoryVisibility(data: RoomAliasViewState) {
+        when (data.roomDirectoryVisibility) {
+            Uninitialized -> Unit
+            is Loading    -> Unit
+            is Success    -> {
+                formSwitchItem {
+                    id("roomVisibility")
+                    title(stringProvider.getString(R.string.room_alias_publish_to_directory, data.homeServerName))
+                    showDivider(false)
+                    switchChecked(data.roomDirectoryVisibility() == RoomDirectoryVisibility.PUBLIC)
+                    listener {
+                        if (it) {
+                            callback?.setRoomDirectoryVisibility(RoomDirectoryVisibility.PUBLIC)
+                        } else {
+                            callback?.setRoomDirectoryVisibility(RoomDirectoryVisibility.PRIVATE)
+                        }
+                    }
+                }
+            }
+            is Fail       -> {
+                errorWithRetryItem {
+                    text(stringProvider.getString(R.string.room_alias_publish_to_directory_error,
+                            errorFormatter.toHumanReadable(data.roomDirectoryVisibility.error)))
+                }
+            }
+        }
     }
 
     private fun buildPublishInfo(data: RoomAliasViewState) {

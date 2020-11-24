@@ -20,6 +20,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 data class RoomAliasViewState(
@@ -27,6 +28,7 @@ data class RoomAliasViewState(
         val homeServerName: String = "",
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val actionPermissions: ActionPermissions = ActionPermissions(),
+        val roomDirectoryVisibility: Async<RoomDirectoryVisibility> = Uninitialized,
         val isLoading: Boolean = false,
         val canonicalAlias: String? = null,
         val alternativeAliases: List<String> = emptyList(),

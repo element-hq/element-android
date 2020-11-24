@@ -1026,7 +1026,7 @@
 
     <!-- room settings : alias -->
     <string name="room_settings_alias_title">Room addresses</string>
-    <string name="room_settings_alias_subtitle">See and managed addresses of this room</string>
+    <string name="room_settings_alias_subtitle">See and managed addresses of this room, and its visibility in the room directory.</string>
 
     <string name="room_alias_title">Room Addresses</string>
     <string name="room_alias_published_alias_title">Published Addresses</string>
@@ -1052,6 +1052,11 @@
 
     <string name="room_alias_action_publish">Publish this address</string>
     <string name="room_alias_action_unpublish">Unpublish this address</string>
+
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_publish_to_directory">Publish this room to the public in %1$s\'s room directory?</string>
+    <!-- Parameter will be a technical error message -->
+    <string name="room_alias_publish_to_directory_error">Unable to retrieve the current room directory visibility (%1$s).</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Anyone</string>

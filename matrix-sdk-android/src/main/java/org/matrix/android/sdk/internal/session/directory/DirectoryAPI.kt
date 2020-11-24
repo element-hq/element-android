@@ -36,6 +36,24 @@ internal interface DirectoryAPI {
     fun getRoomIdByAlias(@Path("roomAlias") roomAlias: String): Call<RoomAliasDescription>
 
     /**
+     * Get the room directory visibility.
+     *
+     * @param roomId the room id.
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/list/room/{roomId}")
+    fun getRoomDirectoryVisibility(@Path("roomId") roomId: String): Call<RoomDirectoryVisibilityJson>
+
+    /**
+     * Set the room directory visibility.
+     *
+     * @param roomId the room id.
+     * @param body the body containing the new directory visibility
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/list/room/{roomId}")
+    fun setRoomDirectoryVisibility(@Path("roomId") roomId: String,
+                                   @Body body: RoomDirectoryVisibilityJson): Call<Unit>
+
+    /**
      * Add alias to the room.
      * @param roomAlias the room alias.
      */
