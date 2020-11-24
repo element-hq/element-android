@@ -109,6 +109,7 @@ class VectorJitsiActivity : VectorBaseActivity(), JitsiMeetActivityInterface, Ji
                 .setFeatureFlag("invite.enabled", false)
                 .setFeatureFlag("add-people.enabled", false)
                 .setFeatureFlag("video-share.enabled", false)
+                .setFeatureFlag("call-integration.enabled", false)
                 .setRoom(viewState.confId)
                 .setSubject(viewState.subject)
                 .build()

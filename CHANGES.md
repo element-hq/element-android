@@ -22,6 +22,7 @@ Bugfix 🐛:
  - Discard change dialog displayed by mistake when avatar has been updated
  - Try to fix cropped image in timeline (#2126)
  - Registration: annoying error message scares every new user when they add an email (#2391)
+ - Fix jitsi integration for those with non-vanilla dialler frameworks
 
 Translations 🗣:
  -
