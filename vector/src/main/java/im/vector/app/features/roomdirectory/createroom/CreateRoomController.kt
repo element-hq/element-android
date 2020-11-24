@@ -27,7 +27,6 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.form.formSwitchItem
-import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import javax.inject.Inject
 
@@ -104,7 +103,10 @@ class CreateRoomController @Inject constructor(
                 enabled(enableFormElement)
                 value(viewState.roomType.aliasLocalPart)
                 homeServer(":" + viewState.homeServerName)
-                errorMessage(roomAliasErrorFormatter.format((((viewState.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError))
+                errorMessage(
+                        roomAliasErrorFormatter.format(
+                                (((viewState.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError)
+                )
                 onTextChange { value ->
                     listener?.setAliasLocalPart(value)
                 }

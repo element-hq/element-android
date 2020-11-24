@@ -17,7 +17,6 @@
 package im.vector.app.core.epoxy.profiles
 
 import android.content.res.ColorStateList
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat

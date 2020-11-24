@@ -142,8 +142,11 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
                 .subscribe {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     val permissions = RoomAliasViewState.ActionPermissions(
-                            canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_CANONICAL_ALIAS),
+                            canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(
+                                    userId = session.myUserId,
+                                    isState = true,
+                                    eventType = EventType.STATE_ROOM_CANONICAL_ALIAS
+                            )
                     )
                     setState {
                         val newPublishManuallyState = if (permissions.canChangeCanonicalAlias) {
