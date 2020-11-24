@@ -20,6 +20,7 @@ import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class RoomAliasAction : VectorViewModelAction {
     // Canonical
+    object ToggleManualPublishForm : RoomAliasAction()
     data class SetNewAlias(val aliasLocalPart: String) : RoomAliasAction()
     object AddAlias : RoomAliasAction()
     data class RemoveAlias(val alias: String) : RoomAliasAction()
@@ -27,6 +28,7 @@ sealed class RoomAliasAction : VectorViewModelAction {
 
     // Local
     data class RemoveLocalAlias(val alias: String) : RoomAliasAction()
+    object ToggleAddLocalAliasForm : RoomAliasAction()
     data class SetNewLocalAliasLocalPart(val aliasLocalPart: String) : RoomAliasAction()
     object AddLocalAlias : RoomAliasAction()
 }

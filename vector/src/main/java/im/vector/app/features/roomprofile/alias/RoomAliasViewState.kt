@@ -30,10 +30,9 @@ data class RoomAliasViewState(
         val isLoading: Boolean = false,
         val canonicalAlias: String? = null,
         val alternativeAliases: List<String> = emptyList(),
-        val newAlias: String = "",
+        val publishManuallyState: AddAliasState = AddAliasState.Hidden,
         val localAliases: Async<List<String>> = Uninitialized,
-        val newLocalAlias: String = "",
-        val asyncNewLocalAliasRequest: Async<Unit> = Uninitialized
+        val newLocalAliasState: AddAliasState = AddAliasState.Hidden
 ) : MvRxState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
@@ -41,4 +40,10 @@ data class RoomAliasViewState(
     data class ActionPermissions(
             val canChangeCanonicalAlias: Boolean = false
     )
+
+    sealed class AddAliasState {
+        object Hidden : AddAliasState()
+        object Closed : AddAliasState()
+        data class Editing(val value: String, val asyncRequest: Async<Unit> = Uninitialized) : AddAliasState()
+    }
 }

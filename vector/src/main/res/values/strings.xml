@@ -1032,6 +1032,8 @@
     <string name="room_alias_published_alias_subtitle">Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.</string>
     <string name="room_alias_main_address_hint">Main address</string>
     <string name="room_alias_published_other">Other published addresses:</string>
+    <string name="room_alias_published_alias_add_manually">Published a new address manually</string>
+    <string name="room_alias_published_alias_add_manually_submit">Publish</string>
     <string name="room_alias_delete_confirmation">Delete the address \"%1$s\"?</string>
     <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
     <string name="room_alias_publish">Publish this room to the public in %1$s\'s room directory?</string>
@@ -1043,6 +1045,7 @@
     <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
     <string name="room_alias_local_address_subtitle">Set addresses for this room so users can find this room through your homeserver (%1$s)</string>
     <string name="room_alias_local_address_empty">This room has no local addresses</string>
+    <string name="room_alias_local_address_add">Add a local address</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Anyone</string>

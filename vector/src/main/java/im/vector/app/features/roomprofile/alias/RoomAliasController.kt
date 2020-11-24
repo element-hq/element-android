@@ -25,10 +25,12 @@ import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.discovery.settingsButtonItem
+import im.vector.app.features.discovery.settingsContinueCancelItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formEditTextItem
-import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.roomdirectory.createroom.RoomAliasErrorFormatter
 import im.vector.app.features.roomdirectory.createroom.roomAliasEditItem
 import im.vector.app.features.settings.threepids.threePidItem
@@ -38,15 +40,18 @@ import javax.inject.Inject
 class RoomAliasController @Inject constructor(
         private val stringProvider: StringProvider,
         private val errorFormatter: ErrorFormatter,
+        private val colorProvider: ColorProvider,
         private val roomAliasErrorFormatter: RoomAliasErrorFormatter
 ) : TypedEpoxyController<RoomAliasViewState>() {
 
     interface Callback {
+        fun toggleManualPublishForm()
         fun setNewAlias(value: String)
         fun addAlias()
         fun removeAlias(altAlias: String)
         fun setCanonicalAlias(alias: String?)
         fun removeLocalAlias(alias: String)
+        fun toggleLocalAliasForm()
         fun setNewLocalAliasLocalPart(value: String)
         fun addLocalAlias()
     }
@@ -104,19 +109,37 @@ class RoomAliasController @Inject constructor(
         }
 
         if (data.actionPermissions.canChangeCanonicalAlias) {
-            formEditTextItem {
-                id("addAlias")
-                value(data.newAlias)
-                showBottomSeparator(false)
-                hint(stringProvider.getString(R.string.room_alias_address_hint))
-                onTextChange { text ->
-                    callback?.setNewAlias(text)
+            buildPublishManuallyForm(data)
+        }
+    }
+
+    private fun buildPublishManuallyForm(data: RoomAliasViewState) {
+        when (data.publishManuallyState) {
+            RoomAliasViewState.AddAliasState.Hidden -> Unit
+            RoomAliasViewState.AddAliasState.Closed -> {
+                settingsButtonItem {
+                    id("publishManually")
+                    colorProvider(colorProvider)
+                    buttonTitleId(R.string.room_alias_published_alias_add_manually)
+                    buttonClickListener { callback?.toggleManualPublishForm() }
                 }
             }
-            formSubmitButtonItem {
-                id("submit")
-                buttonTitleId(R.string.action_add)
-                buttonClickListener { callback?.addAlias() }
+            is RoomAliasViewState.AddAliasState.Editing -> {
+                formEditTextItem {
+                    id("publishManuallyEdit")
+                    value(data.publishManuallyState.value)
+                    showBottomSeparator(false)
+                    hint(stringProvider.getString(R.string.room_alias_address_hint))
+                    onTextChange { text ->
+                        callback?.setNewAlias(text)
+                    }
+                }
+                settingsContinueCancelItem {
+                    id("publishManuallySubmit")
+                    continueText(stringProvider.getString(R.string.room_alias_published_alias_add_manually_submit))
+                    continueOnClick { callback?.addAlias() }
+                    cancelOnClick { callback?.toggleManualPublishForm() }
+                }
             }
         }
     }
@@ -155,21 +178,38 @@ class RoomAliasController @Inject constructor(
         }
 
         // Add local
-        roomAliasEditItem {
-            id("newLocalAlias")
-            value(data.newLocalAlias)
-            homeServer(":" + data.homeServerName)
-            showBottomSeparator(false)
-            errorMessage(roomAliasErrorFormatter.format((data.asyncNewLocalAliasRequest as? Fail)?.error as? RoomAliasError))
-            onTextChange { value ->
-                callback?.setNewLocalAliasLocalPart(value)
-            }
-        }
+        buildAddLocalAlias(data)
+    }
 
-        formSubmitButtonItem {
-            id("submitLocal")
-            buttonTitleId(R.string.action_add)
-            buttonClickListener { callback?.addLocalAlias() }
+    private fun buildAddLocalAlias(data: RoomAliasViewState) {
+        when (data.newLocalAliasState) {
+            RoomAliasViewState.AddAliasState.Hidden -> Unit
+            RoomAliasViewState.AddAliasState.Closed -> {
+                settingsButtonItem {
+                    id("newLocalAliasButton")
+                    colorProvider(colorProvider)
+                    buttonTitleId(R.string.room_alias_local_address_add)
+                    buttonClickListener { callback?.toggleLocalAliasForm() }
+                }
+            }
+            is RoomAliasViewState.AddAliasState.Editing -> {
+                roomAliasEditItem {
+                    id("newLocalAlias")
+                    value(data.newLocalAliasState.value)
+                    homeServer(":" + data.homeServerName)
+                    showBottomSeparator(false)
+                    errorMessage(roomAliasErrorFormatter.format((data.newLocalAliasState.asyncRequest as? Fail)?.error as? RoomAliasError))
+                    onTextChange { value ->
+                        callback?.setNewLocalAliasLocalPart(value)
+                    }
+                }
+                settingsContinueCancelItem {
+                    id("newLocalAliasSubmit")
+                    continueText(stringProvider.getString(R.string.action_add))
+                    continueOnClick { callback?.addLocalAlias() }
+                    cancelOnClick { callback?.toggleLocalAliasForm() }
+                }
+            }
         }
     }
 }
