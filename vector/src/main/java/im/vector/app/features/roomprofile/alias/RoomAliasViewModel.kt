@@ -88,7 +88,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
             runCatching { room.getRoomAliases() }
                     .fold(
                             {
-                                setState { copy(localAliases = Success(it)) }
+                                setState { copy(localAliases = Success(it.sorted())) }
                             },
                             {
                                 setState { copy(localAliases = Fail(it)) }
@@ -146,7 +146,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
                     setState {
                         copy(
                                 canonicalAlias = it.canonicalAlias,
-                                alternativeAliases = it.alternativeAliases.orEmpty()
+                                alternativeAliases = it.alternativeAliases.orEmpty().sorted()
                         )
                     }
                 }
@@ -274,7 +274,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
                                     isLoading = false,
                                     newLocalAliasState = RoomAliasViewState.AddAliasState.Closed,
                                     // Local echo
-                                    localAliases = Success(localAliases().orEmpty() + previousState.value)
+                                    localAliases = Success((localAliases().orEmpty() + previousState.value).sorted())
                             )
                         }
                         fetchRoomAlias()
