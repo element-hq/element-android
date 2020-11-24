@@ -590,7 +590,7 @@
     <string name="rooms_directory_header">Romkatalog</string>
     <string name="no_public_room_placeholder">Ingen offentlige rom tilgjengelig</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 bruker</item>
+        <item quantity="one">%d bruker</item>
         <item quantity="other">%d brukere</item>
     </plurals>
     <string name="send_bug_report_include_crash_logs">Send kjæsjlogg</string>
@@ -883,4 +883,29 @@
     <string name="no_permissions_to_start_webrtc_call">Du har ikke tillatelse til å starte en samtale i dette rommet</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Du har ikke tillatelse til å starte en konferansesamtale</string>
     <string name="reset">Tilbakestill</string>
+    <string name="login_error_forbidden">Ugyldig brukernavn/passord</string>
+    <string name="login_error_ssl_handshake">Denne enheten bruker en utdatert TLS sikkerhetsprotokoll som er sårbar for angrep, for din egen sikkerhet får du ikke kople til serveren</string>
+    <string name="login_error_unable_register">Klarte ikke registrere bruker</string>
+    <string name="login_error_registration_network_error">Klarte ikke registrere bruker: Nettverksfeil</string>
+    <string name="login_error_unable_login">Klarte ikke logge inn</string>
+    <string name="login_error_network_error">Klarte ikke logge inn: Nettverksfeil</string>
+    <string name="auth_accept_policies">Vennligst les og aksepter reglene for denne hjemmetjeneren:</string>
+    <string name="auth_reset_password_success_message">Passordet ditt har blitt tilbakestilt.
+\n
+\nAlle øktene dine har blitt logget ut og får ikke lenger push-notifikasjoner. For å skru på notifikasjoner igjen, logg inn på enhetene på nytt.</string>
+    <string name="auth_reset_password_error_unauthorized">Klarte ikke verifisere e-postadressen: Pass på at du har klikket på lenken i e-posten</string>
+    <string name="auth_reset_password_email_validation_message">En e-post har blitt sendt til %s. Etter du har fulgt lenken i den kan du klikke nedenfor.</string>
+    <string name="auth_reset_password_missing_password">Du må skrive et nytt passord.</string>
+    <string name="auth_reset_password_missing_email">Du må skrive inn e-postadressen som er knyttet til din konto.</string>
+    <string name="auth_reset_password_message">For å tilbakestille passordet, skriv inn e-postadressen som er knyttet til kontoen din:</string>
+    <string name="auth_recaptcha_message">Denne hjemmetjeneren vil vite om du er en robot</string>
+    <string name="auth_threepid_warning_message">Registrering med e-post og telefonummer samtidig fungerer ikke enda. Bare telefonummeret kommer til å bli registrert.
+\n
+\nDu kan legge e-postadressen din til i instillinger.</string>
+    <string name="auth_use_server_options">Bruk egendefinerte tjenerinstillinger (avansert)</string>
+    <string name="call_failed_no_connection_description">Klarte ikke å starte en sanntidskopling.
+\nVennligst be hjemmetjeneradministratoren din om å sette opp en TURN server så samtaler blir mer stabile.</string>
+    <string name="call_failed_no_ice_description">Vennligst be administratoren for hjemmetjeneren din (%1$s) til å sette opp en TURN tjener for at telefonsamtaler skal fungere ordentlig.
+\n
+\nAlternativt kan du prøve å bruke den offentlige tjeneren på %2$s, men dette vil ikke være like stabilt, og det vil dele IP-adressen din med den serveren. Du kan styre dette i instillinger.</string>
 </resources>
