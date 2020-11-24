@@ -1047,6 +1047,9 @@
     <string name="room_alias_local_address_empty">This room has no local addresses</string>
     <string name="room_alias_local_address_add">Add a local address</string>
 
+    <string name="room_alias_action_publish">Publish this address</string>
+    <string name="room_alias_action_unpublish">Unpublish this address</string>
+
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Anyone</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Members only (since the point in time of selecting this option)</string>

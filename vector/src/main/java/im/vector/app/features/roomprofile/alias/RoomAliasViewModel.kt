@@ -157,13 +157,14 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         when (action) {
             RoomAliasAction.ToggleManualPublishForm      -> handleToggleManualPublishForm()
             is RoomAliasAction.SetNewAlias               -> handleSetNewAlias(action)
-            is RoomAliasAction.AddAlias                  -> handleAddAlias()
-            is RoomAliasAction.RemoveAlias               -> handleRemoveAlias(action)
+            is RoomAliasAction.ManualPublishAlias        -> handleAddAlias()
+            is RoomAliasAction.UnpublishAlias            -> handleRemoveAlias(action)
             is RoomAliasAction.SetCanonicalAlias         -> handleSetCanonicalAlias(action)
             RoomAliasAction.ToggleAddLocalAliasForm      -> handleToggleAddLocalAliasForm()
             is RoomAliasAction.SetNewLocalAliasLocalPart -> handleSetNewLocalAliasLocalPart(action)
             RoomAliasAction.AddLocalAlias                -> handleAddLocalAlias()
             is RoomAliasAction.RemoveLocalAlias          -> handleRemoveLocalAlias(action)
+            is RoomAliasAction.PublishAlias              -> handleAddAliasManually(action)
         }.exhaustive
     }
 
@@ -210,22 +211,29 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun handleAddAlias() = withState { state ->
         val newAlias = (state.publishManuallyState as? RoomAliasViewState.AddAliasState.Editing)?.value ?: return@withState
         updateCanonicalAlias(
-                state.canonicalAlias,
-                state.alternativeAliases + newAlias
+                canonicalAlias = state.canonicalAlias,
+                alternativeAliases = state.alternativeAliases + newAlias
         )
     }
 
-    private fun handleRemoveAlias(action: RoomAliasAction.RemoveAlias) = withState { state ->
+    private fun handleAddAliasManually(action: RoomAliasAction.PublishAlias) = withState { state ->
         updateCanonicalAlias(
-                state.canonicalAlias,
-                state.alternativeAliases - action.alias
+                canonicalAlias = state.canonicalAlias,
+                alternativeAliases = state.alternativeAliases + action.alias
+        )
+    }
+
+    private fun handleRemoveAlias(action: RoomAliasAction.UnpublishAlias) = withState { state ->
+        updateCanonicalAlias(
+                canonicalAlias = state.canonicalAlias,
+                alternativeAliases = state.alternativeAliases - action.alias
         )
     }
 
     private fun handleSetCanonicalAlias(action: RoomAliasAction.SetCanonicalAlias) = withState { state ->
         updateCanonicalAlias(
-                action.canonicalAlias,
-                state.alternativeAliases
+                canonicalAlias = action.canonicalAlias,
+                alternativeAliases = state.alternativeAliases
         )
     }
 

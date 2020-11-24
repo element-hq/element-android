@@ -22,8 +22,9 @@ sealed class RoomAliasAction : VectorViewModelAction {
     // Canonical
     object ToggleManualPublishForm : RoomAliasAction()
     data class SetNewAlias(val alias: String) : RoomAliasAction()
-    object AddAlias : RoomAliasAction()
-    data class RemoveAlias(val alias: String) : RoomAliasAction()
+    object ManualPublishAlias : RoomAliasAction()
+    data class PublishAlias(val alias: String) : RoomAliasAction()
+    data class UnpublishAlias(val alias: String) : RoomAliasAction()
     data class SetCanonicalAlias(val canonicalAlias: String?) : RoomAliasAction()
 
     // Local

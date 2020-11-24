@@ -30,9 +30,13 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.shareText
 import im.vector.app.core.utils.toast
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheet
+import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetSharedAction
+import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetSharedActionViewModel
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
@@ -48,12 +52,16 @@ class RoomAliasFragment @Inject constructor(
         RoomAliasController.Callback {
 
     private val viewModel: RoomAliasViewModel by fragmentViewModel()
+    private lateinit var sharedActionViewModel: RoomAliasBottomSheetSharedActionViewModel
+
     private val roomProfileArgs: RoomProfileArgs by args()
 
     override fun getLayoutResId() = R.layout.fragment_room_setting_generic
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(RoomAliasBottomSheetSharedActionViewModel::class.java)
+
         controller.callback = this
         setupToolbar(roomSettingsToolbar)
         roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
@@ -63,9 +71,30 @@ class RoomAliasFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomAliasViewEvents.Failure -> showFailure(it.throwable)
-                RoomAliasViewEvents.Success -> showSuccess()
+                RoomAliasViewEvents.Success    -> showSuccess()
             }.exhaustive
         }
+
+        sharedActionViewModel
+                .observe()
+                .subscribe { handleAliasAction(it) }
+                .disposeOnDestroyView()
+    }
+
+    private fun handleAliasAction(action: RoomAliasBottomSheetSharedAction?) {
+        when (action) {
+            is RoomAliasBottomSheetSharedAction.ShareAlias     -> shareAlias(action.matrixTo)
+            is RoomAliasBottomSheetSharedAction.PublishAlias   -> viewModel.handle(RoomAliasAction.PublishAlias(action.alias))
+            is RoomAliasBottomSheetSharedAction.UnPublishAlias -> unpublishAlias(action.alias)
+            is RoomAliasBottomSheetSharedAction.DeleteAlias    -> removeLocalAlias(action.alias)
+            is RoomAliasBottomSheetSharedAction.SetMainAlias   -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(action.alias))
+            RoomAliasBottomSheetSharedAction.UnsetMainAlias    -> viewModel.handle(RoomAliasAction.SetCanonicalAlias(canonicalAlias = null))
+            null                                               -> Unit
+        }
+    }
+
+    private fun shareAlias(matrixTo: String) {
+        shareText(requireContext(), matrixTo)
     }
 
     override fun showFailure(throwable: Throwable) {
@@ -100,20 +129,16 @@ class RoomAliasFragment @Inject constructor(
         invalidateOptionsMenu()
     }
 
-    override fun removeAlias(altAlias: String) {
+    private fun unpublishAlias(altAlias: String) {
         AlertDialog.Builder(requireContext())
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(getString(R.string.room_alias_delete_confirmation, altAlias))
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.delete) { _, _ ->
-                    viewModel.handle(RoomAliasAction.RemoveAlias(altAlias))
+                    viewModel.handle(RoomAliasAction.UnpublishAlias(altAlias))
                 }
                 .show()
                 .withColoredButton(DialogInterface.BUTTON_POSITIVE)
-    }
-
-    override fun setCanonicalAlias(alias: String?) {
-        viewModel.handle(RoomAliasAction.SetCanonicalAlias(alias))
     }
 
     override fun toggleManualPublishForm() {
@@ -125,7 +150,7 @@ class RoomAliasFragment @Inject constructor(
     }
 
     override fun addAlias() {
-        viewModel.handle(RoomAliasAction.AddAlias)
+        viewModel.handle(RoomAliasAction.ManualPublishAlias)
     }
 
     override fun toggleLocalAliasForm() {
@@ -140,11 +165,18 @@ class RoomAliasFragment @Inject constructor(
         viewModel.handle(RoomAliasAction.AddLocalAlias)
     }
 
-    override fun openAlias(alias: String, isPublished: Boolean) {
-        TODO()
+    override fun openAlias(alias: String, isPublished: Boolean) = withState(viewModel) { state ->
+        RoomAliasBottomSheet
+                .newInstance(
+                        alias = alias,
+                        isPublished = isPublished,
+                        isMainAlias = alias == state.canonicalAlias,
+                        canEditCanonicalAlias = state.actionPermissions.canChangeCanonicalAlias
+                )
+                .show(childFragmentManager, "ROOM_ALIAS_ACTIONS")
     }
 
-    override fun removeLocalAlias(alias: String) {
+    private fun removeLocalAlias(alias: String) {
         AlertDialog.Builder(requireContext())
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(getString(R.string.room_alias_delete_confirmation, alias))

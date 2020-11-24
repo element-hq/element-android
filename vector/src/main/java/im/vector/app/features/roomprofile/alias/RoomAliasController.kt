@@ -48,10 +48,6 @@ class RoomAliasController @Inject constructor(
         fun toggleManualPublishForm()
         fun setNewAlias(value: String)
         fun addAlias()
-        // TODO Delete some methods below
-        fun removeAlias(altAlias: String)
-        fun setCanonicalAlias(alias: String?)
-        fun removeLocalAlias(alias: String)
         fun toggleLocalAliasForm()
         fun setNewLocalAliasLocalPart(value: String)
         fun addLocalAlias()
