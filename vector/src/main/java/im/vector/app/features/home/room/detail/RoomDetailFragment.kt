@@ -116,7 +116,7 @@ import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
 import im.vector.app.features.call.SharedActiveCallViewModel
 import im.vector.app.features.call.VectorCallActivity
-import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
@@ -218,7 +218,7 @@ class RoomDetailFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
         private val notificationUtils: NotificationUtils,
-        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        private val callManager: WebRtcCallManager,
         private val matrixItemColorProvider: MatrixItemColorProvider,
         private val imageContentRenderer: ImageContentRenderer,
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore
@@ -315,7 +315,7 @@ class RoomDetailFragment @Inject constructor(
         sharedCallActionViewModel
                 .activeCall
                 .observe(viewLifecycleOwner, Observer {
-                    activeCallViewHolder.updateCall(it, webRtcPeerConnectionManager)
+                    activeCallViewHolder.updateCall(it, callManager)
                     invalidateOptionsMenu()
                 })
 
@@ -514,7 +514,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroy() {
-        activeCallViewHolder.unBind(webRtcPeerConnectionManager)
+        activeCallViewHolder.unBind(callManager)
         roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
         super.onDestroy()
     }

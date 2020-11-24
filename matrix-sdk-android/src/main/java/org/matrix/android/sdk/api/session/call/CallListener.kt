@@ -57,5 +57,8 @@ interface CallListener {
      */
     fun onCallNegotiateReceived(callNegotiateContent: CallNegotiateContent)
 
+    /**
+     * Called when the call has been managed by an other session
+     */
     fun onCallManagedByOtherSession(callId: String)
 }

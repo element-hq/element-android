@@ -22,7 +22,7 @@ import android.telecom.Connection
 import android.telecom.DisconnectCause
 import androidx.annotation.RequiresApi
 import im.vector.app.features.call.VectorCallViewModel
-import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -32,7 +32,7 @@ import javax.inject.Inject
         val callId: String
 ) : Connection() {
 
-    @Inject lateinit var peerConnectionManager: WebRtcPeerConnectionManager
+    @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var callViewModel: VectorCallViewModel
 
     init {

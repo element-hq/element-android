@@ -23,8 +23,8 @@ import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.util.MatrixItem
 
 data class VectorCallViewState(
-        val callId: String? = null,
-        val roomId: String = "",
+        val callId: String,
+        val roomId: String,
         val isVideoCall: Boolean,
         val isAudioMuted: Boolean = false,
         val isVideoEnabled: Boolean = true,
@@ -36,4 +36,13 @@ data class VectorCallViewState(
         val availableSoundDevices: List<CallAudioManager.SoundDevice> = emptyList(),
         val otherUserMatrixItem: Async<MatrixItem> = Uninitialized,
         val callState: Async<CallState> = Uninitialized
-) : MvRxState
+) : MvRxState {
+
+    constructor(callArgs: CallArgs): this(
+            callId = callArgs.callId,
+            roomId = callArgs.roomId,
+            isVideoCall = callArgs.isVideoCall
+    )
+
+
+}

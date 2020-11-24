@@ -53,7 +53,7 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call.*
 import org.matrix.android.sdk.api.session.call.CallState
 import im.vector.app.features.call.utils.EglUtils
-import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import org.matrix.android.sdk.api.session.call.MxCallDetail
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
@@ -67,7 +67,7 @@ import javax.inject.Inject
 @Parcelize
 data class CallArgs(
         val roomId: String,
-        val callId: String?,
+        val callId: String,
         val participantUserId: String,
         val isIncomingCall: Boolean,
         val isVideoCall: Boolean
@@ -87,7 +87,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     private val callViewModel: VectorCallViewModel by viewModel()
     private lateinit var callArgs: CallArgs
 
-    @Inject lateinit var peerConnectionManager: WebRtcPeerConnectionManager
+    @Inject lateinit var callManager: WebRtcCallManager
 
     @Inject lateinit var viewModelFactory: VectorCallViewModel.Factory
 
@@ -211,7 +211,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     override fun onDestroy() {
-        peerConnectionManager.detachRenderers(listOf(pipRenderer, fullscreenRenderer))
+        callManager.detachRenderers(listOf(pipRenderer, fullscreenRenderer))
         if (surfaceRenderersAreInitialized) {
             pipRenderer.release()
             fullscreenRenderer.release()
@@ -276,7 +276,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                     callConnectingProgress.isVisible = true
                 }
                 // ensure all attached?
-                peerConnectionManager.attachViewRenderers(pipRenderer, fullscreenRenderer, null)
+                callManager.attachViewRenderers(pipRenderer, fullscreenRenderer, null)
             }
             is CallState.Terminated   -> {
                 finish()
@@ -326,7 +326,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         pipRenderer.setEnableHardwareScaler(true /* enabled */)
         fullscreenRenderer.setEnableHardwareScaler(true /* enabled */)
 
-        peerConnectionManager.attachViewRenderers(pipRenderer, fullscreenRenderer,
+        callManager.attachViewRenderers(pipRenderer, fullscreenRenderer,
                 intent.getStringExtra(EXTRA_MODE)?.takeIf { isFirstCreation() })
 
         pipRenderer.setOnClickListener {
@@ -382,7 +382,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         }
 
         fun newIntent(context: Context,
-                      callId: String?,
+                      callId: String,
                       roomId: String,
                       otherUserId: String,
                       isIncomingCall: Boolean,

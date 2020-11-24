@@ -29,8 +29,6 @@ import im.vector.app.features.call.CameraType
 import im.vector.app.features.call.CaptureFormat
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.utils.EglUtils
-import im.vector.app.features.call.utils.awaitCreateAnswer
-import im.vector.app.features.call.utils.awaitSetLocalDescription
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -39,7 +37,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallListener
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
-import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
@@ -47,18 +44,13 @@ import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.webrtc.DefaultVideoDecoderFactory
 import org.webrtc.DefaultVideoEncoderFactory
-import org.webrtc.MediaConstraints
 import org.webrtc.PeerConnectionFactory
-import org.webrtc.SessionDescription
 import org.webrtc.SurfaceViewRenderer
 import timber.log.Timber
-import java.lang.ref.WeakReference
 import java.util.concurrent.Executors
 import javax.inject.Inject
-import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -66,7 +58,7 @@ import javax.inject.Singleton
  * Use app context
  */
 @Singleton
-class WebRtcPeerConnectionManager @Inject constructor(
+class WebRtcCallManager @Inject constructor(
         private val context: Context,
         private val activeSessionDataSource: ActiveSessionDataSource
 ) : CallListener, LifecycleObserver {
@@ -81,6 +73,14 @@ class WebRtcPeerConnectionManager @Inject constructor(
         fun onCameraChange() {}
     }
 
+    var capturerIsInError = false
+        set(value) {
+            field = value
+            currentCallsListeners.forEach {
+                tryOrNull { it.onCaptureStateChanged() }
+            }
+        }
+
     private val currentCallsListeners = emptyList<CurrentCallListener>().toMutableList()
     fun addCurrentCallListener(listener: CurrentCallListener) {
         currentCallsListeners.add(listener)
@@ -90,7 +90,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCallsListeners.remove(listener)
     }
 
-    val callAudioManager = CallAudioManager(context.applicationContext) {
+    val callAudioManager = CallAudioManager(context) {
         currentCallsListeners.forEach {
             tryOrNull { it.onAudioDevicesChange() }
         }
@@ -103,34 +103,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
     private val rootEglBase by lazy { EglUtils.rootEglBase }
 
     private var isInBackground: Boolean = true
-
-    var capturerIsInError = false
-        set(value) {
-            field = value
-            currentCallsListeners.forEach {
-                tryOrNull { it.onCaptureStateChanged() }
-            }
-        }
-
-    var localSurfaceRenderers: MutableList<WeakReference<SurfaceViewRenderer>> = ArrayList()
-    var remoteSurfaceRenderers: MutableList<WeakReference<SurfaceViewRenderer>> = ArrayList()
-
-    private fun MutableList<WeakReference<SurfaceViewRenderer>>.addIfNeeded(renderer: SurfaceViewRenderer?) {
-        if (renderer == null) return
-        val exists = any {
-            it.get() == renderer
-        }
-        if (!exists) {
-            add(WeakReference(renderer))
-        }
-    }
-
-    private fun MutableList<WeakReference<SurfaceViewRenderer>>.removeIfNeeded(renderer: SurfaceViewRenderer?) {
-        if (renderer == null) return
-        removeAll {
-            it.get() == renderer
-        }
-    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
@@ -150,6 +122,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
             }
         }
 
+    private val callsByCallId = HashMap<String, WebRtcCall>()
+
+    fun getCallById(callId: String): WebRtcCall? {
+        return callsByCallId[callId]
+    }
+
     fun headSetButtonTapped() {
         Timber.v("## VOIP headSetButtonTapped")
         val call = currentCall?.mxCall ?: return
@@ -163,19 +141,11 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    private suspend fun getTurnServer(): TurnServerResponse? {
-        return tryOrNull {
-            awaitCallback {
-                currentSession?.callSignalingService()?.getTurnServer(it)
-            }
-        }
-    }
-
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer?, remoteViewRenderer: SurfaceViewRenderer, mode: String?) {
         currentCall?.attachViewRenderers(localViewRenderer, remoteViewRenderer, mode)
     }
 
-    private fun createPeerConnectionFactory() {
+    private fun createPeerConnectionFactoryIfNeeded() {
         if (peerConnectionFactory != null) return
         Timber.v("## VOIP createPeerConnectionFactory")
         val eglBaseContext = rootEglBase?.eglBaseContext ?: return Unit.also {
@@ -202,12 +172,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 .setVideoEncoderFactory(defaultVideoEncoderFactory)
                 .setVideoDecoderFactory(defaultVideoDecoderFactory)
                 .createPeerConnectionFactory()
-
-        // attachViewRenderersInternal()
     }
 
     fun acceptIncomingCall() {
-        Timber.v("## VOIP acceptIncomingCall from state ${currentCall?.mxCall?.state}")
         currentCall?.acceptIncomingCall()
     }
 
@@ -215,11 +182,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCall?.detachRenderers(renderers)
     }
 
-    fun close() {
-        Timber.v("## VOIP WebRtcPeerConnectionManager close() >")
+    private fun onCallEnded(call: WebRtcCall) {
+        Timber.v("## VOIP WebRtcPeerConnectionManager onCall ended: ${call.mxCall.callId}")
         CallService.onNoActiveCall(context)
         callAudioManager.stop()
         currentCall = null
+        callsByCallId.remove(call.mxCall.callId)
         // This must be done in this thread
         executor.execute {
             if (currentCall == null) {
@@ -231,68 +199,28 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    companion object {
-
-        private const val STREAM_ID = "ARDAMS"
-        private const val AUDIO_TRACK_ID = "ARDAMSa0"
-        private const val VIDEO_TRACK_ID = "ARDAMSv0"
-
-        private val DEFAULT_AUDIO_CONSTRAINTS = MediaConstraints().apply {
-            // add all existing audio filters to avoid having echos
-//            mandatory.add(MediaConstraints.KeyValuePair("googEchoCancellation", "true"))
-//            mandatory.add(MediaConstraints.KeyValuePair("googEchoCancellation2", "true"))
-//            mandatory.add(MediaConstraints.KeyValuePair("googDAEchoCancellation", "true"))
-//
-//            mandatory.add(MediaConstraints.KeyValuePair("googTypingNoiseDetection", "true"))
-//
-//            mandatory.add(MediaConstraints.KeyValuePair("googAutoGainControl", "true"))
-//            mandatory.add(MediaConstraints.KeyValuePair("googAutoGainControl2", "true"))
-//
-//            mandatory.add(MediaConstraints.KeyValuePair("googNoiseSuppression", "true"))
-//            mandatory.add(MediaConstraints.KeyValuePair("googNoiseSuppression2", "true"))
-//
-//            mandatory.add(MediaConstraints.KeyValuePair("googAudioMirroring", "false"))
-//            mandatory.add(MediaConstraints.KeyValuePair("googHighpassFilter", "true"))
-        }
-    }
-
     fun startOutgoingCall(signalingRoomId: String, otherUserId: String, isVideoCall: Boolean) {
         Timber.v("## VOIP startOutgoingCall in room $signalingRoomId to $otherUserId isVideo $isVideoCall")
         executor.execute {
-            if (peerConnectionFactory == null) {
-                createPeerConnectionFactory()
-            }
+            createPeerConnectionFactoryIfNeeded()
         }
 
-        val createdCall = currentSession?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
-        val webRtcCall = WebRtcCall(
-                mxCall = createdCall,
-                callAudioManager = callAudioManager,
-                rootEglBase = rootEglBase,
-                context = context,
-                executor = executor,
-                peerConnectionFactoryProvider = Provider {
-                    createPeerConnectionFactory()
-                    peerConnectionFactory
-                },
-                session = currentSession!!
-        )
+        val mxCall = currentSession?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
+        createWebRtcCall(mxCall)
+        callAudioManager.startForCall(mxCall)
 
-        callAudioManager.startForCall(createdCall)
-        currentCall = webRtcCall
-
-        val name = currentSession?.getUser(createdCall.opponentUserId)?.getBestName()
-                ?: createdCall.opponentUserId
+        val name = currentSession?.getUser(mxCall.opponentUserId)?.getBestName()
+                ?: mxCall.opponentUserId
         CallService.onOutgoingCallRinging(
                 context = context.applicationContext,
-                isVideo = createdCall.isVideoCall,
+                isVideo = mxCall.isVideoCall,
                 roomName = name,
-                roomId = createdCall.roomId,
+                roomId = mxCall.roomId,
                 matrixId = currentSession?.myUserId ?: "",
-                callId = createdCall.callId)
+                callId = mxCall.callId)
 
         // start the activity now
-        context.applicationContext.startActivity(VectorCallActivity.newIntent(context, createdCall))
+        context.startActivity(VectorCallActivity.newIntent(context, mxCall))
     }
 
     override fun onCallIceCandidateReceived(mxCall: MxCall, iceCandidatesContent: CallCandidatesContent) {
@@ -311,19 +239,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
             // Just ignore, maybe we could answer from other session?
             return
         }
-        val webRtcCall = WebRtcCall(
-                mxCall = mxCall,
-                callAudioManager = callAudioManager,
-                rootEglBase = rootEglBase,
-                context = context,
-                executor = executor,
-                peerConnectionFactoryProvider = {
-                    createPeerConnectionFactory()
-                    peerConnectionFactory
-                },
-                session = currentSession!!
-        )
-        currentCall = webRtcCall
+        createWebRtcCall(mxCall).apply {
+            offerSdp = callInviteContent.offer
+        }
         callAudioManager.startForCall(mxCall)
         // Start background service with notification
         val name = currentSession?.getUser(mxCall.opponentUserId)?.getBestName()
@@ -336,8 +254,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 matrixId = currentSession?.myUserId ?: "",
                 callId = mxCall.callId
         )
-        webRtcCall.offerSdp = callInviteContent.offer
-
         // If this is received while in background, the app will not sync,
         // and thus won't be able to received events. For example if the call is
         // accepted on an other session this device will continue ringing
@@ -351,21 +267,23 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    private suspend fun createAnswer(call: WebRtcCall): SessionDescription? {
-        Timber.w("## VOIP createAnswer")
-        val peerConnection = call.peerConnection ?: return null
-        val constraints = MediaConstraints().apply {
-            mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
-            mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", if (call.mxCall.isVideoCall) "true" else "false"))
-        }
-        return try {
-            val localDescription = peerConnection.awaitCreateAnswer(constraints) ?: return null
-            peerConnection.awaitSetLocalDescription(localDescription)
-            localDescription
-        } catch (failure: Throwable) {
-            Timber.v("Fail to create answer")
-            null
-        }
+    private fun createWebRtcCall(mxCall: MxCall): WebRtcCall {
+        val webRtcCall = WebRtcCall(
+                mxCall = mxCall,
+                callAudioManager = callAudioManager,
+                rootEglBase = rootEglBase,
+                context = context,
+                dispatcher = dispatcher,
+                peerConnectionFactoryProvider = {
+                    createPeerConnectionFactoryIfNeeded()
+                    peerConnectionFactory
+                },
+                sessionProvider = { currentSession },
+                onCallEnded = this::onCallEnded
+        )
+        currentCall = webRtcCall
+        callsByCallId[mxCall.callId] = webRtcCall
+        return webRtcCall
     }
 
     fun muteCall(muted: Boolean) {
@@ -397,11 +315,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     }
 
     fun endCall(originatedByMe: Boolean = true) {
-        // Update service state
-        CallService.onNoActiveCall(context)
-        // close tracks ASAP
         currentCall?.endCall(originatedByMe)
-        close()
     }
 
     fun onWiredDeviceEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
@@ -478,6 +392,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     override fun onCallManagedByOtherSession(callId: String) {
         Timber.v("## VOIP onCallManagedByOtherSession: $callId")
         currentCall = null
+        callsByCallId.remove(callId)
         CallService.onNoActiveCall(context)
 
         // did we start background sync? so we should stop it

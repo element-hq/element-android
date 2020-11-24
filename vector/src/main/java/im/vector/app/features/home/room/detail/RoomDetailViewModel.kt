@@ -32,7 +32,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.subscribeLogError
-import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
@@ -114,7 +114,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val stickerPickerActionHandler: StickerPickerActionHandler,
         private val roomSummaryHolder: RoomSummaryHolder,
         private val typingHelper: TypingHelper,
-        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        private val callManager: WebRtcCallManager,
         timelineSettingsFactory: TimelineSettingsFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
 
@@ -306,12 +306,12 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleStartCall(action: RoomDetailAction.StartCall) {
         room.roomSummary()?.otherMemberIds?.firstOrNull()?.let {
-            webRtcPeerConnectionManager.startOutgoingCall(room.roomId, it, action.isVideo)
+            callManager.startOutgoingCall(room.roomId, it, action.isVideo)
         }
     }
 
     private fun handleEndCall() {
-        webRtcPeerConnectionManager.endCall()
+        callManager.endCall()
     }
 
     private fun handleSelectStickerAttachment() {
@@ -566,7 +566,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.open_matrix_apps    -> true
             R.id.voice_call,
             R.id.video_call          -> true // always show for discoverability
-            R.id.hangup_call         -> webRtcPeerConnectionManager.currentCall != null
+            R.id.hangup_call         -> callManager.currentCall != null
             R.id.search              -> true
             else                     -> false
         }

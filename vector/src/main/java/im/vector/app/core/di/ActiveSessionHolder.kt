@@ -18,7 +18,7 @@ package im.vector.app.core.di
 
 import arrow.core.Option
 import im.vector.app.ActiveSessionDataSource
-import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.app.features.notifications.PushRuleTriggerListener
@@ -35,7 +35,7 @@ class ActiveSessionHolder @Inject constructor(private val authenticationService:
                                               private val sessionObservableStore: ActiveSessionDataSource,
                                               private val keyRequestHandler: KeyRequestHandler,
                                               private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler,
-                                              private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+                                              private val callManager: WebRtcCallManager,
                                               private val pushRuleTriggerListener: PushRuleTriggerListener,
                                               private val sessionListener: SessionListener,
                                               private val imageManager: ImageManager
@@ -52,7 +52,7 @@ class ActiveSessionHolder @Inject constructor(private val authenticationService:
         incomingVerificationRequestHandler.start(session)
         session.addListener(sessionListener)
         pushRuleTriggerListener.startWithSession(session)
-        session.callSignalingService().addCallListener(webRtcPeerConnectionManager)
+        session.callSignalingService().addCallListener(callManager)
         imageManager.onSessionStarted(session)
     }
 
@@ -60,7 +60,7 @@ class ActiveSessionHolder @Inject constructor(private val authenticationService:
         // Do some cleanup first
         getSafeActiveSession()?.let {
             Timber.w("clearActiveSession of ${it.myUserId}")
-            it.callSignalingService().removeCallListener(webRtcPeerConnectionManager)
+            it.callSignalingService().removeCallListener(callManager)
             it.removeListener(sessionListener)
         }
 

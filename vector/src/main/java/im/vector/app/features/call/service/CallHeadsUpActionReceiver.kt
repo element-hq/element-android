@@ -20,7 +20,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import timber.log.Timber
 
 class CallHeadsUpActionReceiver : BroadcastReceiver() {
@@ -48,9 +48,9 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
 //        context.stopService(Intent(context, CallHeadsUpService::class.java))
     }
 
-    private fun onCallRejectClicked(peerConnectionManager: WebRtcPeerConnectionManager) {
+    private fun onCallRejectClicked(callManager: WebRtcCallManager) {
         Timber.d("onCallRejectClicked")
-        peerConnectionManager.endCall()
+        callManager.endCall()
     }
 
 //    private fun onCallAnswerClicked(context: Context) {

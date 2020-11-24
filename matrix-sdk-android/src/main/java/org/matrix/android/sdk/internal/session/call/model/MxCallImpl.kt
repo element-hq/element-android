@@ -134,12 +134,12 @@ internal class MxCallImpl(
         state = CallState.Terminated
     }
 
-    override fun hangUp() {
+    override fun hangUp(reason: CallHangupContent.Reason?) {
         Timber.v("## VOIP hangup $callId")
         CallHangupContent(
                 callId = callId,
                 partyId = ourPartyId,
-                reason = CallHangupContent.Reason.USER_HANGUP
+                reason = reason ?: CallHangupContent.Reason.USER_HANGUP
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }

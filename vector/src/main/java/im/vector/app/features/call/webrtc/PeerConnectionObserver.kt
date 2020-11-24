@@ -17,7 +17,6 @@
 package im.vector.app.features.call.webrtc
 
 import im.vector.app.features.call.CallAudioManager
-import kotlinx.coroutines.GlobalScope
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.webrtc.DataChannel
@@ -84,7 +83,7 @@ class PeerConnectionObserver(private val webRtcCall: WebRtcCall,
 
     override fun onIceCandidate(iceCandidate: IceCandidate) {
         Timber.v("## VOIP StreamObserver onIceCandidate: $iceCandidate")
-        webRtcCall.iceCandidateSource.onNext(iceCandidate)
+        webRtcCall.onIceCandidate(iceCandidate)
     }
 
     override fun onDataChannel(dc: DataChannel) {
@@ -153,7 +152,6 @@ class PeerConnectionObserver(private val webRtcCall: WebRtcCall,
     override fun onAddStream(stream: MediaStream) {
         Timber.v("## VOIP StreamObserver onAddStream: $stream")
         webRtcCall.onAddStream(stream)
-
     }
 
     override fun onRemoveStream(stream: MediaStream) {
@@ -175,11 +173,7 @@ class PeerConnectionObserver(private val webRtcCall: WebRtcCall,
 
     override fun onRenegotiationNeeded() {
         Timber.v("## VOIP StreamObserver onRenegotiationNeeded")
-        if (webRtcCall.mxCall.state != CallState.CreateOffer && webRtcCall.mxCall.opponentVersion == 0) {
-            Timber.v("Opponent does not support renegotiation: ignoring onRenegotiationNeeded event")
-            return
-        }
-        webRtcCall.sendSpdOffer()
+        webRtcCall.onRenegationNeeded()
     }
 
     /**

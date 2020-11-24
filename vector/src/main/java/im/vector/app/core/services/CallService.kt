@@ -25,7 +25,7 @@ import android.view.KeyEvent
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
 import im.vector.app.core.extensions.vectorComponent
-import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.call.telecom.CallConnection
 import im.vector.app.features.notifications.NotificationUtils
 import timber.log.Timber
@@ -38,7 +38,7 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
     private val connections = mutableMapOf<String, CallConnection>()
 
     private lateinit var notificationUtils: NotificationUtils
-    private lateinit var webRtcPeerConnectionManager: WebRtcPeerConnectionManager
+    private lateinit var callManager: WebRtcCallManager
 
     private var callRingPlayerIncoming: CallRingPlayerIncoming? = null
     private var callRingPlayerOutgoing: CallRingPlayerOutgoing? = null
@@ -53,7 +53,7 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
             val keyEvent = mediaButtonEvent?.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT) ?: return false
             if (keyEvent.keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
-                webRtcPeerConnectionManager.headSetButtonTapped()
+                callManager.headSetButtonTapped()
                 return true
             }
             return false
@@ -63,7 +63,7 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
     override fun onCreate() {
         super.onCreate()
         notificationUtils = vectorComponent().notificationUtils()
-        webRtcPeerConnectionManager = vectorComponent().webRtcPeerConnectionManager()
+        callManager = vectorComponent().webRtcPeerConnectionManager()
         callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext)
         callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext)
         wiredHeadsetStateReceiver = WiredHeadsetStateReceiver.createAndRegister(this, this)
@@ -375,11 +375,11 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
 
     override fun onHeadsetEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
         Timber.v("## VOIP: onHeadsetEvent $event")
-        webRtcPeerConnectionManager.onWiredDeviceEvent(event)
+        callManager.onWiredDeviceEvent(event)
     }
 
     override fun onBTHeadsetEvent(event: BluetoothHeadsetReceiver.BTHeadsetPlugEvent) {
         Timber.v("## VOIP: onBTHeadsetEvent $event")
-        webRtcPeerConnectionManager.onWirelessDeviceEvent(event)
+        callManager.onWirelessDeviceEvent(event)
     }
 }

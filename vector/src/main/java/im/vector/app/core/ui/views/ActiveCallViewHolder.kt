@@ -20,7 +20,7 @@ import android.view.View
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import im.vector.app.core.utils.DebouncedClickListener
-import im.vector.app.features.call.webrtc.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import org.matrix.android.sdk.api.session.call.CallState
 import im.vector.app.features.call.utils.EglUtils
 import org.matrix.android.sdk.api.session.call.MxCall
@@ -35,7 +35,7 @@ class ActiveCallViewHolder {
 
     private var activeCallPipInitialized = false
 
-    fun updateCall(activeCall: MxCall?, webRtcPeerConnectionManager: WebRtcPeerConnectionManager) {
+    fun updateCall(activeCall: MxCall?, callManager: WebRtcCallManager) {
         val hasActiveCall = activeCall?.state is CallState.Connected
         if (hasActiveCall) {
             val isVideoCall = activeCall?.isVideoCall == true
@@ -44,14 +44,14 @@ class ActiveCallViewHolder {
             pipWrapper?.isVisible = isVideoCall
             activeCallPiP?.isVisible = isVideoCall
             activeCallPiP?.let {
-                webRtcPeerConnectionManager.attachViewRenderers(null, it, null)
+                callManager.attachViewRenderers(null, it, null)
             }
         } else {
             activeCallView?.isVisible = false
             activeCallPiP?.isVisible = false
             pipWrapper?.isVisible = false
             activeCallPiP?.let {
-                webRtcPeerConnectionManager.detachRenderers(listOf(it))
+                callManager.detachRenderers(listOf(it))
             }
         }
     }
@@ -82,9 +82,9 @@ class ActiveCallViewHolder {
         )
     }
 
-    fun unBind(webRtcPeerConnectionManager: WebRtcPeerConnectionManager) {
+    fun unBind(callManager: WebRtcCallManager) {
         activeCallPiP?.let {
-            webRtcPeerConnectionManager.detachRenderers(listOf(it))
+            callManager.detachRenderers(listOf(it))
         }
         if (activeCallPipInitialized) {
             activeCallPiP?.release()
