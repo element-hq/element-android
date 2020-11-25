@@ -47,7 +47,6 @@ class UserCodeSharedViewModel @AssistedInject constructor(
 
     companion object : MvRxViewModelFactory<UserCodeSharedViewModel, UserCodeState> {
         override fun create(viewModelContext: ViewModelContext, state: UserCodeState): UserCodeSharedViewModel? {
-            val args = viewModelContext.args<UserCodeActivity.Args>()
             val factory = when (viewModelContext) {
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory
                 is ActivityViewModelContext -> viewModelContext.activity as? Factory

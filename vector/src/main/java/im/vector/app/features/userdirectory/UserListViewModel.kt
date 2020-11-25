@@ -63,7 +63,6 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory
                 is ActivityViewModelContext -> viewModelContext.activity as? Factory
             }
-            val args = viewModelContext.args<UserListFragmentArgs>()
             return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
