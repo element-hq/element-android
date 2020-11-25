@@ -30,12 +30,15 @@ import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
+import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.util.awaitCallback
 
@@ -72,12 +75,12 @@ class UserCodeSharedViewModel @AssistedInject constructor(
 
     override fun handle(action: UserCodeActions) {
         when (action) {
-            UserCodeActions.DismissAction              -> _viewEvents.post(UserCodeShareViewEvents.Dismiss)
-            is UserCodeActions.SwitchMode              -> setState { copy(mode = action.mode) }
-            is UserCodeActions.DecodedQRCode           -> handleQrCodeDecoded(action)
-            is UserCodeActions.StartChattingWithUser   -> handleStartChatting(action)
+            UserCodeActions.DismissAction -> _viewEvents.post(UserCodeShareViewEvents.Dismiss)
+            is UserCodeActions.SwitchMode -> setState { copy(mode = action.mode) }
+            is UserCodeActions.DecodedQRCode -> handleQrCodeDecoded(action)
+            is UserCodeActions.StartChattingWithUser -> handleStartChatting(action)
             UserCodeActions.CameraPermissionNotGranted -> _viewEvents.post(UserCodeShareViewEvents.CameraPermissionNotGranted)
-            UserCodeActions.ShareByText                -> handleShareByText()
+            UserCodeActions.ShareByText -> handleShareByText()
         }
     }
 
@@ -139,13 +142,21 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         _viewEvents.post(UserCodeShareViewEvents.ShowWaitingScreen)
         viewModelScope.launch(Dispatchers.IO) {
             when (linkedId) {
-                is PermalinkData.RoomLink     -> TODO()
-                is PermalinkData.UserLink     -> {
-                    val user = session.getUser(linkedId.userId) ?: awaitCallback<List<User>> {
-                        session.searchUsersDirectory(linkedId.userId, 10, emptySet(), it)
-                    }.firstOrNull { it.userId == linkedId.userId }
-                    // Create raw Uxid in case the user is not searchable
-                    ?: User(linkedId.userId, null, null)
+                is PermalinkData.RoomLink -> {
+                    // not yet supported
+                    _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
+                }
+                is PermalinkData.UserLink -> {
+                    val user = session.getUser(linkedId.userId)
+                            ?: tryOrNull {
+                                awaitCallback<JsonDict> {
+                                    session.getProfile(linkedId.userId, it)
+                                }
+                            }?.let {
+                                User(linkedId.userId, it[ProfileService.DISPLAY_NAME_KEY] as? String, it[ProfileService.AVATAR_URL_KEY] as? String)
+                            }
+                            // Create raw Uxid in case the user is not searchable
+                            ?: User(linkedId.userId, null, null)
 
                     setState {
                         copy(
@@ -153,8 +164,14 @@ class UserCodeSharedViewModel @AssistedInject constructor(
                         )
                     }
                 }
-                is PermalinkData.GroupLink    -> TODO()
-                is PermalinkData.FallbackLink -> TODO()
+                is PermalinkData.GroupLink -> {
+                    // not yet supported
+                    _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
+                }
+                is PermalinkData.FallbackLink -> {
+                    // not yet supported
+                    _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.not_implemented)))
+                }
             }
             _viewEvents.post(UserCodeShareViewEvents.HideWaitingScreen)
         }

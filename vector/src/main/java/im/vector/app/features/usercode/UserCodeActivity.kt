@@ -36,7 +36,6 @@ import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_simple.*
-import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -72,7 +71,7 @@ class UserCodeActivity
                 UserCodeState.Mode.SCAN      -> showFragment(ScanUserCodeFragment::class, Bundle.EMPTY)
                 is UserCodeState.Mode.RESULT -> {
                     showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
-                    MatrixToBottomSheet.create(mode.matrixItem, this).show(supportFragmentManager, "MatrixToBottomSheet")
+                    MatrixToBottomSheet.withUserId(mode.matrixItem.id, this).show(supportFragmentManager, "MatrixToBottomSheet")
                 }
             }
         }
@@ -104,8 +103,8 @@ class UserCodeActivity
         }
     }
 
-    override fun didTapStartMessage(matrixItem: MatrixItem) {
-        sharedViewModel.handle(UserCodeActions.StartChattingWithUser(matrixItem))
+    override fun navigateToRoom(roomId: String) {
+        navigator.openRoom(this, roomId)
     }
 
     override fun onBackPressed() = withState(sharedViewModel) {
