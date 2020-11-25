@@ -35,6 +35,10 @@ data class UserListViewState(
         val existingRoomId: String? = null
 ) : MvRxState {
 
+    constructor(args: UserListFragmentArgs) : this(
+            existingRoomId = args.existingRoomId
+    )
+
     fun getSelectedMatrixId(): List<String> {
         return pendingInvitees
                 .mapNotNull {

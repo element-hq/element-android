@@ -43,7 +43,6 @@ private typealias KnownUsersSearch = String
 private typealias DirectoryUsersSearch = String
 
 class UserListViewModel @AssistedInject constructor(@Assisted initialState: UserListViewState,
-                                                    @Assisted args: UserListFragmentArgs,
                                                     private val session: Session)
     : VectorViewModel<UserListViewState, UserListAction, UserListViewEvents>(initialState) {
 
@@ -54,7 +53,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: UserListViewState, args: UserListFragmentArgs): UserListViewModel
+        fun create(initialState: UserListViewState): UserListViewModel
     }
 
     companion object : MvRxViewModelFactory<UserListViewModel, UserListViewState> {
@@ -65,7 +64,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
                 is ActivityViewModelContext -> viewModelContext.activity as? Factory
             }
             val args = viewModelContext.args<UserListFragmentArgs>()
-            return factory?.create(state, args) ?: error("You should let your activity/fragment implements Factory interface")
+            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 
@@ -73,7 +72,7 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
         setState {
             copy(
                     myUserId = session.myUserId,
-                    existingRoomId = args.existingRoomId
+                    existingRoomId = initialState.existingRoomId
             )
         }
         observeUsers()

@@ -116,8 +116,8 @@ class UserCodeActivity
         }.exhaustive
     }
 
-    override fun create(initialState: UserCodeState, args: Args) =
-            viewModelFactory.create(initialState, args)
+    override fun create(initialState: UserCodeState) =
+            viewModelFactory.create(initialState)
 
     companion object {
         fun newIntent(context: Context, userId: String): Intent {

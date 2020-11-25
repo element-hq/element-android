@@ -41,7 +41,6 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 
 class UserCodeSharedViewModel @AssistedInject constructor(
         @Assisted val initialState: UserCodeState,
-        @Assisted val args: UserCodeActivity.Args,
         private val session: Session,
         private val stringProvider: StringProvider,
         private val rawService: RawService) : VectorViewModel<UserCodeState, UserCodeActions, UserCodeShareViewEvents>(initialState) {
@@ -53,27 +52,23 @@ class UserCodeSharedViewModel @AssistedInject constructor(
                 is FragmentViewModelContext -> viewModelContext.fragment as? Factory
                 is ActivityViewModelContext -> viewModelContext.activity as? Factory
             }
-            return factory?.create(state, args) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-
-        override fun initialState(viewModelContext: ViewModelContext): UserCodeState? {
-            return UserCodeState(viewModelContext.args<UserCodeActivity.Args>().userId)
+            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 
     init {
-        val user = session.getUser(args.userId)
+        val user = session.getUser(initialState.userId)
         setState {
             copy(
                     matrixItem = user?.toMatrixItem(),
-                    shareLink = session.permalinkService().createPermalink(args.userId)
+                    shareLink = session.permalinkService().createPermalink(initialState.userId)
             )
         }
     }
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: UserCodeState, args: UserCodeActivity.Args): UserCodeSharedViewModel
+        fun create(initialState: UserCodeState): UserCodeSharedViewModel
     }
 
     override fun handle(action: UserCodeActions) {

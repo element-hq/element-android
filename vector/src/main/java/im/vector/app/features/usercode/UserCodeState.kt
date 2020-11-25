@@ -30,4 +30,8 @@ data class UserCodeState(
         object SCAN : Mode()
         data class RESULT(val matrixItem: MatrixItem) : Mode()
     }
+
+    constructor(args: UserCodeActivity.Args) : this(
+            userId = args.userId
+    )
 }

@@ -68,8 +68,8 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
         injector.inject(this)
     }
 
-    override fun create(initialState: UserListViewState, args: UserListFragmentArgs): UserListViewModel {
-        return userListViewModelFactory.create(initialState, args)
+    override fun create(initialState: UserListViewState): UserListViewModel {
+        return userListViewModelFactory.create(initialState)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
