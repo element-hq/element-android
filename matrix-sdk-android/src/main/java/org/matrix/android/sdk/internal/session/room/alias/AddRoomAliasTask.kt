@@ -20,13 +20,17 @@ import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
-import org.matrix.android.sdk.internal.session.room.alias.RoomAliasAvailabilityChecker.Companion.toFullAlias
+import org.matrix.android.sdk.internal.session.room.alias.RoomAliasAvailabilityChecker.Companion.toFullLocalAlias
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
 internal interface AddRoomAliasTask : Task<AddRoomAliasTask.Params, Unit> {
     data class Params(
             val roomId: String,
+            /**
+             * the local part of the alias.
+             * Ex: for the alias "#my_alias:example.org", the local part is "my_alias"
+             */
             val aliasLocalPart: String
     )
 }
@@ -43,7 +47,7 @@ internal class DefaultAddRoomAliasTask @Inject constructor(
 
         executeRequest<Unit>(eventBus) {
             apiCall = directoryAPI.addRoomAlias(
-                    roomAlias = params.aliasLocalPart.toFullAlias(userId),
+                    roomAlias = params.aliasLocalPart.toFullLocalAlias(userId),
                     body = AddRoomAliasBody(
                             roomId = params.roomId
                     )

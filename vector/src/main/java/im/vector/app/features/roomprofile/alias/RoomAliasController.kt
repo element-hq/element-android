@@ -49,11 +49,11 @@ class RoomAliasController @Inject constructor(
 
     interface Callback {
         fun toggleManualPublishForm()
-        fun setNewAlias(value: String)
+        fun setNewAlias(alias: String)
         fun addAlias()
         fun setRoomDirectoryVisibility(roomDirectoryVisibility: RoomDirectoryVisibility)
         fun toggleLocalAliasForm()
-        fun setNewLocalAliasLocalPart(value: String)
+        fun setNewLocalAliasLocalPart(aliasLocalPart: String)
         fun addLocalAlias()
         fun openAliasDetail(alias: String)
     }

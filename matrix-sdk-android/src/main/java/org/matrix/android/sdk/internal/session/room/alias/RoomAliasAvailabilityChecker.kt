@@ -29,13 +29,17 @@ internal class RoomAliasAvailabilityChecker @Inject constructor(
         private val directoryAPI: DirectoryAPI,
         private val eventBus: EventBus
 ) {
+    /**
+     * @param aliasLocalPart the local part of the alias.
+     * Ex: for the alias "#my_alias:example.org", the local part is "my_alias"
+     */
     @Throws(RoomAliasError::class)
     suspend fun check(aliasLocalPart: String?) {
         if (aliasLocalPart.isNullOrEmpty()) {
             throw RoomAliasError.AliasEmpty
         }
         // Check alias availability
-        val fullAlias = aliasLocalPart.toFullAlias(userId)
+        val fullAlias = aliasLocalPart.toFullLocalAlias(userId)
         try {
             executeRequest<RoomAliasDescription>(eventBus) {
                 apiCall = directoryAPI.getRoomIdByAlias(fullAlias)
@@ -56,6 +60,6 @@ internal class RoomAliasAvailabilityChecker @Inject constructor(
     }
 
     companion object {
-        internal fun String.toFullAlias(userId: String) = "#" + this + ":" + userId.substringAfter(":")
+        internal fun String.toFullLocalAlias(userId: String) = "#" + this + ":" + userId.substringAfter(":")
     }
 }

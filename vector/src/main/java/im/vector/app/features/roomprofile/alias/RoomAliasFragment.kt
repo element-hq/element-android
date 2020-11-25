@@ -143,8 +143,8 @@ class RoomAliasFragment @Inject constructor(
         viewModel.handle(RoomAliasAction.ToggleManualPublishForm)
     }
 
-    override fun setNewAlias(value: String) {
-        viewModel.handle(RoomAliasAction.SetNewAlias(value))
+    override fun setNewAlias(alias: String) {
+        viewModel.handle(RoomAliasAction.SetNewAlias(alias))
     }
 
     override fun addAlias() {
@@ -159,8 +159,8 @@ class RoomAliasFragment @Inject constructor(
         viewModel.handle(RoomAliasAction.ToggleAddLocalAliasForm)
     }
 
-    override fun setNewLocalAliasLocalPart(value: String) {
-        viewModel.handle(RoomAliasAction.SetNewLocalAliasLocalPart(value))
+    override fun setNewLocalAliasLocalPart(aliasLocalPart: String) {
+        viewModel.handle(RoomAliasAction.SetNewLocalAliasLocalPart(aliasLocalPart))
     }
 
     override fun addLocalAlias() {
