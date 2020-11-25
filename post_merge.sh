@@ -26,6 +26,7 @@ restore_sc() {
 # Keep in sync with pre_merge.sh!
 restore_sc README.md
 restore_sc fastlane
+restore_sc .github
 
 git add -A
 git commit -m "Automatic upstream merge postprocessing"

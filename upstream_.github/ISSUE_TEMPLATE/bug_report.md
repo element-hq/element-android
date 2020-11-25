@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve SchildiChat
+about: Create a report to help us improve Element
 title: ''
 labels: ''
 assignees: ''
@@ -30,8 +30,5 @@ If applicable, add screenshots to help explain your problem.
 **Additional context**
  - App version and store [e.g. 1.0.0 - F-Droid]
  - Homeserver: [e.g. matrix.org]
-
-**Upstream relevance**
- - Does this issue exist in Element Android?
 
 Add any other context about the problem here.

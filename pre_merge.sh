@@ -24,6 +24,7 @@ revert_last 'Resolve required manual intervention in german strings'
 revert_last 'Automatic SchildiChat string correction'
 
 # Keep in sync with post_merge.sh!
+restore_upstream .github
 restore_upstream fastlane
 restore_upstream README.md
 
