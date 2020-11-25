@@ -39,24 +39,20 @@ import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
-import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.util.awaitCallback
 
 class MatrixToBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: MatrixToBottomSheetState,
-        @Assisted val args: MatrixToBottomSheet.MatrixToArgs,
         private val session: Session,
         private val stringProvider: StringProvider,
         private val rawService: RawService) : VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: MatrixToBottomSheetState,
-                   args: MatrixToBottomSheet.MatrixToArgs): MatrixToBottomSheetViewModel
+        fun create(initialState: MatrixToBottomSheetState): MatrixToBottomSheetViewModel
     }
 
     init {
@@ -64,14 +60,14 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
             copy(matrixItem = Loading())
         }
         viewModelScope.launch(Dispatchers.IO) {
-            resolveLink()
+            resolveLink(initialState)
         }
     }
 
-    private suspend fun resolveLink() {
+    private suspend fun resolveLink(initialState: MatrixToBottomSheetState) {
         when {
-            args.matrixToLink != null -> {
-                val linkedId = PermalinkParser.parse(args.matrixToLink)
+            initialState.deepLink != null -> {
+                val linkedId = PermalinkParser.parse(initialState.deepLink)
                 if (linkedId is PermalinkData.FallbackLink) {
                     setState {
                         copy(
@@ -92,7 +88,9 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                             )
                         }
                     }
-                    is PermalinkData.RoomLink -> TODO()
+                    is PermalinkData.RoomLink -> {
+                        // not yet supported
+                    }
                     is PermalinkData.GroupLink -> {
                         // not yet supported
                     }
@@ -100,8 +98,8 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     }
                 }
             }
-            args.userId != null       -> {
-                val user = resolveUser(args.userId)
+            initialState.userId != null   -> {
+                val user = resolveUser(initialState.userId)
 
                 setState {
                     copy(
@@ -110,7 +108,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     )
                 }
             }
-            else                      -> {
+            else                          -> {
                 setState {
                     copy(
                             matrixItem = Fail(IllegalArgumentException(stringProvider.getString(R.string.unexpected_error))),
@@ -122,24 +120,20 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     }
 
     private suspend fun resolveUser(userId: String): User {
-        return (session.getUser(userId)
-                ?: tryOrNull {
-                    awaitCallback<JsonDict> {
-                        session.getProfile(userId, it)
+        return tryOrNull {
+                    awaitCallback<User> {
+                        session.resolveUser(userId, it)
                     }
-                }?.let {
-                    User(userId, it[ProfileService.DISPLAY_NAME_KEY] as? String, it[ProfileService.AVATAR_URL_KEY] as? String)
                 }
-                // Create raw Uxid in case the user is not searchable
-                ?: User(userId, null, null))
+                // Create raw user in case the user is not searchable
+                ?: User(userId, null, null)
     }
 
     companion object : MvRxViewModelFactory<MatrixToBottomSheetViewModel, MatrixToBottomSheetState> {
         override fun create(viewModelContext: ViewModelContext, state: MatrixToBottomSheetState): MatrixToBottomSheetViewModel? {
             val fragment: MatrixToBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            val args: MatrixToBottomSheet.MatrixToArgs = viewModelContext.args()
 
-            return fragment.matrixToBottomSheetViewModelFactory.create(state, args)
+            return fragment.matrixToBottomSheetViewModelFactory.create(state)
         }
     }
 
