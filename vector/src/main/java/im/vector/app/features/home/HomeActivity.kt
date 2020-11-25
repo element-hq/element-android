@@ -125,9 +125,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is HomeActivitySharedAction.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenDrawer  -> drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.CloseDrawer -> drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup -> {
+                        is HomeActivitySharedAction.OpenGroup   -> {
                             drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
                         }
@@ -144,9 +144,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
         homeActivityViewModel.observeViewEvents {
             when (it) {
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
-                is HomeActivityViewEvents.OnNewSession -> handleOnNewSession(it)
-                HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
-                is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
+                is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
+                HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
+                is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
             }.exhaustive
         }
         homeActivityViewModel.subscribe(this) { renderState(it) }
@@ -179,7 +179,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.initialSyncProgressServiceStatus) {
-            is InitialSyncProgressService.Status.Idle -> {
+            is InitialSyncProgressService.Status.Idle        -> {
                 waiting_view.isVisible = false
             }
             is InitialSyncProgressService.Status.Progressing -> {

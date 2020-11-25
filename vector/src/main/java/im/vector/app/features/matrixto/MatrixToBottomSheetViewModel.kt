@@ -121,11 +121,11 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
 
     private suspend fun resolveUser(userId: String): User {
         return tryOrNull {
-                    awaitCallback<User> {
-                        session.resolveUser(userId, it)
-                    }
-                }
-                // Create raw user in case the user is not searchable
+            awaitCallback<User> {
+                session.resolveUser(userId, it)
+            }
+        }
+        // Create raw user in case the user is not searchable
                 ?: User(userId, null, null)
     }
 
@@ -166,19 +166,18 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                             enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
                         }
 
-                val roomId =
-                        try {
-                            awaitCallback<String> { session.createRoom(roomParams, it) }.also {
-                                setState {
-                                    copy(startChattingState = Success(Unit))
-                                }
-                            }
-                        } catch (failure: Throwable) {
-                            setState {
-                                copy(startChattingState = Fail(Exception(stringProvider.getString(R.string.invite_users_to_room_failure))))
-                            }
-                            return@launch
-                        }
+                val roomId = try {
+                    awaitCallback<String> { session.createRoom(roomParams, it) }
+                } catch (failure: Throwable) {
+                    setState {
+                        copy(startChattingState = Fail(Exception(stringProvider.getString(R.string.invite_users_to_room_failure))))
+                    }
+                    return@launch
+                }
+                setState {
+                    // we can hide this button has we will navigate out
+                    copy(startChattingState = Uninitialized)
+                }
                 _viewEvents.post(MatrixToViewEvents.NavigateToRoom(roomId))
             }
         }
