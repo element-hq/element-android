@@ -908,4 +908,9 @@
     <string name="call_failed_no_ice_description">Vennligst be administratoren for hjemmetjeneren din (%1$s) til å sette opp en TURN tjener for at telefonsamtaler skal fungere ordentlig.
 \n
 \nAlternativt kan du prøve å bruke den offentlige tjeneren på %2$s, men dette vil ikke være like stabilt, og det vil dele IP-adressen din med den serveren. Du kan styre dette i instillinger.</string>
+    <string name="login_error_login_email_not_yet">e-postlenken har ikke blitt trykket på enda</string>
+    <string name="login_error_user_in_use">Dette brukernavnet er allerede brukt</string>
+    <string name="login_error_not_json">Inneholdt ikke gyldig JSON</string>
+    <string name="login_error_bad_json">Ugyldig JSON</string>
+    <string name="login_error_unknown_token">Biletten din ble ikke gjenkjent</string>
 </resources>
