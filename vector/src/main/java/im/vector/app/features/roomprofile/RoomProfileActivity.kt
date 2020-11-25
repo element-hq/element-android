@@ -99,11 +99,11 @@ class RoomProfileActivity :
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is RoomProfileSharedAction.OpenRoomMembers       -> openRoomMembers()
-                        is RoomProfileSharedAction.OpenRoomSettings      -> openRoomSettings()
-                        is RoomProfileSharedAction.OpenRoomAlias         -> openRoomAlias()
-                        is RoomProfileSharedAction.OpenRoomUploads       -> openRoomUploads()
-                        is RoomProfileSharedAction.OpenBannedRoomMembers -> openBannedRoomMembers()
+                        is RoomProfileSharedAction.OpenRoomMembers         -> openRoomMembers()
+                        is RoomProfileSharedAction.OpenRoomSettings        -> openRoomSettings()
+                        is RoomProfileSharedAction.OpenRoomAliasesSettings -> openRoomAlias()
+                        is RoomProfileSharedAction.OpenRoomUploads         -> openRoomUploads()
+                        is RoomProfileSharedAction.OpenBannedRoomMembers   -> openBannedRoomMembers()
                     }
                 }
                 .disposeOnDestroy()

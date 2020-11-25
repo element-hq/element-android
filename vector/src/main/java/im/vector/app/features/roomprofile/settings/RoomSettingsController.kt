@@ -46,7 +46,7 @@ class RoomSettingsController @Inject constructor(
         fun onNameChanged(name: String)
         fun onTopicChanged(topic: String)
         fun onHistoryVisibilityClicked()
-        fun onOpenAlias()
+        fun onRoomAliasesClicked()
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -115,7 +115,7 @@ class RoomSettingsController @Inject constructor(
                 dividerColor = dividerColor,
                 divider = true,
                 editable = true,
-                action = { callback?.onOpenAlias() }
+                action = { callback?.onRoomAliasesClicked() }
         )
 
         buildProfileAction(

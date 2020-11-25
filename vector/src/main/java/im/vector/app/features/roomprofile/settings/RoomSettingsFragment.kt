@@ -168,8 +168,8 @@ class RoomSettingsFragment @Inject constructor(
         return@withState
     }
 
-    override fun onOpenAlias() {
-        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAlias)
+    override fun onRoomAliasesClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
     }
 
     override fun onImageReady(uri: Uri?) {
