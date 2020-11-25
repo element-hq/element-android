@@ -473,66 +473,62 @@ class NoticeEventFormatter @Inject constructor(
         val added = altAliases - prevAltAliases
         val removed = prevAltAliases - altAliases
 
-        return if (added.isEmpty() && removed.isEmpty() && canonicalAlias == prevCanonicalAlias) {
-            // in case there is no difference between the two events say something as we can't simply hide the event from here
-            if (event.isSentByCurrentUser()) {
-                sp.getString(R.string.notice_room_canonical_alias_no_change_by_you)
-            } else {
-                sp.getString(R.string.notice_room_canonical_alias_no_change, senderName)
-            }
-        } else if (added.isEmpty() && removed.isEmpty()) {
-            // Canonical has changed
-            if (canonicalAlias != null) {
+        return when {
+            added.isEmpty() && removed.isEmpty() && canonicalAlias == prevCanonicalAlias -> {
+                // No difference between the two events say something as we can't simply hide the event from here
                 if (event.isSentByCurrentUser()) {
-                    sp.getString(R.string.notice_room_canonical_alias_set_by_you, canonicalAlias)
+                    sp.getString(R.string.notice_room_canonical_alias_no_change_by_you)
                 } else {
-                    sp.getString(R.string.notice_room_canonical_alias_set, senderName, canonicalAlias)
-                }
-            } else {
-                if (event.isSentByCurrentUser()) {
-                    sp.getString(R.string.notice_room_canonical_alias_unset_by_you)
-                } else {
-                    sp.getString(R.string.notice_room_canonical_alias_unset, senderName)
+                    sp.getString(R.string.notice_room_canonical_alias_no_change, senderName)
                 }
             }
-        } else if (added.isEmpty()) {
-            if (canonicalAlias == prevCanonicalAlias) {
+            added.isEmpty() && removed.isEmpty()                                         -> {
+                // Canonical has changed
+                if (canonicalAlias != null) {
+                    if (event.isSentByCurrentUser()) {
+                        sp.getString(R.string.notice_room_canonical_alias_set_by_you, canonicalAlias)
+                    } else {
+                        sp.getString(R.string.notice_room_canonical_alias_set, senderName, canonicalAlias)
+                    }
+                } else {
+                    if (event.isSentByCurrentUser()) {
+                        sp.getString(R.string.notice_room_canonical_alias_unset_by_you)
+                    } else {
+                        sp.getString(R.string.notice_room_canonical_alias_unset, senderName)
+                    }
+                }
+            }
+            added.isEmpty() && canonicalAlias == prevCanonicalAlias                      -> {
                 // Some alternative has been removed
                 if (event.isSentByCurrentUser()) {
                     sp.getQuantityString(R.plurals.notice_room_canonical_alias_alternative_removed_by_you, removed.size, removed.joinToString())
                 } else {
                     sp.getQuantityString(R.plurals.notice_room_canonical_alias_alternative_removed, removed.size, senderName, removed.joinToString())
                 }
-            } else {
-                // Main and removed
-                if (event.isSentByCurrentUser()) {
-                    sp.getString(R.string.notice_room_canonical_alias_main_and_alternative_changed_by_you)
-                } else {
-                    sp.getString(R.string.notice_room_canonical_alias_main_and_alternative_changed, senderName)
-                }
             }
-        } else if (removed.isEmpty()) {
-            if (canonicalAlias == prevCanonicalAlias) {
+            removed.isEmpty() && canonicalAlias == prevCanonicalAlias                    -> {
                 // Some alternative has been added
                 if (event.isSentByCurrentUser()) {
                     sp.getQuantityString(R.plurals.notice_room_canonical_alias_alternative_added_by_you, added.size, added.joinToString())
                 } else {
                     sp.getQuantityString(R.plurals.notice_room_canonical_alias_alternative_added, added.size, senderName, added.joinToString())
                 }
-            } else {
-                // Main and added
+            }
+            canonicalAlias == prevCanonicalAlias                                         -> {
+                // Alternative added and removed
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_room_canonical_alias_alternative_changed_by_you)
+                } else {
+                    sp.getString(R.string.notice_room_canonical_alias_alternative_changed, senderName)
+                }
+            }
+            else                                                                         -> {
+                // Main and removed, or main and added, or main and added and removed
                 if (event.isSentByCurrentUser()) {
                     sp.getString(R.string.notice_room_canonical_alias_main_and_alternative_changed_by_you)
                 } else {
                     sp.getString(R.string.notice_room_canonical_alias_main_and_alternative_changed, senderName)
                 }
-            }
-        } else {
-            // Alternative added and removed
-            if (event.isSentByCurrentUser()) {
-                sp.getString(R.string.notice_room_canonical_alias_alternative_changed_by_you)
-            } else {
-                sp.getString(R.string.notice_room_canonical_alias_alternative_changed, senderName)
             }
         }
     }
