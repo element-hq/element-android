@@ -18,6 +18,7 @@ package im.vector.app.features.home
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.MenuItem
@@ -365,14 +366,14 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
         }
     }
 
-    override fun navToMemberProfile(userId: String): Boolean {
+    override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
         val listener = object : MatrixToBottomSheet.InteractionListener {
             override fun navigateToRoom(roomId: String) {
                 navigator.openRoom(this@HomeActivity, roomId)
             }
         }
         // TODO check if there is already one??
-        MatrixToBottomSheet.withUserId(userId, listener)
+        MatrixToBottomSheet.withLink(deepLink.toString(), listener)
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
     }

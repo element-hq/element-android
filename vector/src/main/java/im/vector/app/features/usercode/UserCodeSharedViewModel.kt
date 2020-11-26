@@ -155,7 +155,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
 
                     setState {
                         copy(
-                                mode = UserCodeState.Mode.RESULT(user.toMatrixItem())
+                                mode = UserCodeState.Mode.RESULT(user.toMatrixItem(), action.code)
                         )
                     }
                 }

@@ -41,8 +41,7 @@ class MatrixToBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     @Parcelize
     data class MatrixToArgs(
-            val matrixToLink: String?,
-            val userId: String?
+            val matrixToLink: String
     ) : Parcelable
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
@@ -136,20 +135,7 @@ class MatrixToBottomSheet : VectorBaseBottomSheetDialogFragment() {
             return MatrixToBottomSheet().apply {
                 arguments = Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, MatrixToBottomSheet.MatrixToArgs(
-                            matrixToLink = matrixToLink,
-                            userId = null
-                    ))
-                }
-                interactionListener = listener
-            }
-        }
-
-        fun withUserId(userId: String, listener: InteractionListener?): MatrixToBottomSheet {
-            return MatrixToBottomSheet().apply {
-                arguments = Bundle().apply {
-                    putParcelable(MvRx.KEY_ARG, MatrixToBottomSheet.MatrixToArgs(
-                            matrixToLink = null,
-                            userId = userId
+                            matrixToLink = matrixToLink
                     ))
                 }
                 interactionListener = listener

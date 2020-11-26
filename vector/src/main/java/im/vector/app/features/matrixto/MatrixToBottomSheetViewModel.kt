@@ -65,42 +65,20 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     }
 
     private suspend fun resolveLink(initialState: MatrixToBottomSheetState) {
-        when {
-            initialState.deepLink != null -> {
-                val linkedId = PermalinkParser.parse(initialState.deepLink)
-                if (linkedId is PermalinkData.FallbackLink) {
-                    setState {
-                        copy(
-                                matrixItem = Fail(IllegalArgumentException(stringProvider.getString(R.string.permalink_malformed))),
-                                startChattingState = Uninitialized
-                        )
-                    }
-                    return
-                }
-
-                when (linkedId) {
-                    is PermalinkData.UserLink -> {
-                        val user = resolveUser(linkedId.userId)
-                        setState {
-                            copy(
-                                    matrixItem = Success(user.toMatrixItem()),
-                                    startChattingState = Success(Unit)
-                            )
-                        }
-                    }
-                    is PermalinkData.RoomLink -> {
-                        // not yet supported
-                    }
-                    is PermalinkData.GroupLink -> {
-                        // not yet supported
-                    }
-                    is PermalinkData.FallbackLink -> {
-                    }
-                }
+        val permalinkData = PermalinkParser.parse(initialState.deepLink)
+        if (permalinkData is PermalinkData.FallbackLink) {
+            setState {
+                copy(
+                        matrixItem = Fail(IllegalArgumentException(stringProvider.getString(R.string.permalink_malformed))),
+                        startChattingState = Uninitialized
+                )
             }
-            initialState.userId != null   -> {
-                val user = resolveUser(initialState.userId)
+            return
+        }
 
+        when (permalinkData) {
+            is PermalinkData.UserLink -> {
+                val user = resolveUser(permalinkData.userId)
                 setState {
                     copy(
                             matrixItem = Success(user.toMatrixItem()),
@@ -108,13 +86,16 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     )
                 }
             }
-            else                          -> {
-                setState {
-                    copy(
-                            matrixItem = Fail(IllegalArgumentException(stringProvider.getString(R.string.unexpected_error))),
-                            startChattingState = Uninitialized
-                    )
-                }
+            is PermalinkData.RoomLink -> {
+                // not yet supported
+                _viewEvents.post(MatrixToViewEvents.Dismiss)
+            }
+            is PermalinkData.GroupLink -> {
+                // not yet supported
+                _viewEvents.post(MatrixToViewEvents.Dismiss)
+            }
+            is PermalinkData.FallbackLink -> {
+                _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
         }
     }

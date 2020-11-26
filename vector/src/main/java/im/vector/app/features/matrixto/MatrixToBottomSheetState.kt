@@ -22,14 +22,12 @@ import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.util.MatrixItem
 
 data class MatrixToBottomSheetState(
-        val userId: String? = null,
-        val deepLink: String? = null,
+        val deepLink: String,
         val matrixItem: Async<MatrixItem> = Uninitialized,
         val startChattingState: Async<Unit> = Uninitialized
 ) : MvRxState {
 
     constructor(args: MatrixToBottomSheet.MatrixToArgs) : this(
-            userId = args.userId,
             deepLink = args.matrixToLink
     )
 }

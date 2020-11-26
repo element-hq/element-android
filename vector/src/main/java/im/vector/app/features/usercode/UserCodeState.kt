@@ -28,7 +28,7 @@ data class UserCodeState(
     sealed class Mode {
         object SHOW : Mode()
         object SCAN : Mode()
-        data class RESULT(val matrixItem: MatrixItem) : Mode()
+        data class RESULT(val matrixItem: MatrixItem, val rawLink: String) : Mode()
     }
 
     constructor(args: UserCodeActivity.Args) : this(
