@@ -124,8 +124,8 @@ class RoomSettingsController @Inject constructor(
                 subtitle = newHistoryVisibility ?: historyVisibility,
                 dividerColor = dividerColor,
                 divider = false,
-                editable = data.actionPermissions.canChangeHistoryReadability,
-                action = { if (data.actionPermissions.canChangeHistoryReadability) callback?.onHistoryVisibilityClicked() }
+                editable = data.actionPermissions.canChangeHistoryVisibility,
+                action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
         )
     }
 

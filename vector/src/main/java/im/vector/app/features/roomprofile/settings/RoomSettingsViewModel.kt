@@ -109,7 +109,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR),
                             canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME),
                             canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC),
-                            canChangeHistoryReadability = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
+                            canChangeHistoryVisibility = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_ROOM_HISTORY_VISIBILITY)
                     )
                     setState { copy(actionPermissions = permissions) }
