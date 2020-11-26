@@ -25,7 +25,6 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.database.model.UserEntity
 import org.matrix.android.sdk.internal.database.model.UserEntityFields
@@ -62,8 +61,7 @@ internal class RoomMemberEventHandler @Inject constructor(
         val roomMemberEntity = RoomMemberEntityFactory.create(roomId, userId, roomMember)
         realm.insertOrUpdate(roomMemberEntity)
 
-        if (roomMember.membership.isActive() && shouldUpdateUserEntity(realm, userId, roomMember)) {
-            updateUserEntity(realm, userId, roomMember)
+        if (roomMember.membership.isActive() && updateUserEntity(realm, userId, roomMember)) {
             if (userId == this.userId) {
                 fetchUserProfile(userId) // To fix #1715 (myroomnick changes the global name)
             }
@@ -71,21 +69,24 @@ internal class RoomMemberEventHandler @Inject constructor(
         return true
     }
 
-    private fun shouldUpdateUserEntity(realm: Realm, userId: String, roomMember: RoomMemberContent?): Boolean {
+    private fun updateUserEntity(realm: Realm, userId: String, roomMember: RoomMemberContent): Boolean {
         return realm
                 .where<UserEntity>()
                 .equalTo(UserEntityFields.USER_ID, userId)
                 .findFirst()
-                ?.let {
-                    it.displayName != roomMember?.displayName
-                            || it.avatarUrl != roomMember.avatarUrl
+                ?.let { userEntity ->
+                    if (userEntity.displayName != roomMember.displayName || userEntity.avatarUrl != roomMember.avatarUrl) {
+                        userEntity.displayName = roomMember.displayName ?: ""
+                        userEntity.avatarUrl = roomMember.avatarUrl ?: ""
+                        return true
+                    }
+                    return false
                 }
-                .orTrue()
-    }
-
-    private fun updateUserEntity(realm: Realm, userId: String, roomMember: RoomMemberContent) {
-        val userEntity = UserEntityFactory.create(userId, roomMember)
-        realm.insertOrUpdate(userEntity)
+                ?: run {
+                    val userEntity = UserEntityFactory.create(userId, roomMember)
+                    realm.insertOrUpdate(userEntity)
+                    return true
+        }
     }
 
     private fun fetchUserProfile(userId: String) {
