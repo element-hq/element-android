@@ -315,7 +315,7 @@ class RoomDetailFragment @Inject constructor(
         sharedCallActionViewModel
                 .activeCall
                 .observe(viewLifecycleOwner, Observer {
-                    activeCallViewHolder.updateCall(it, callManager)
+                    activeCallViewHolder.updateCall(it)
                     invalidateOptionsMenu()
                 })
 
@@ -514,7 +514,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroy() {
-        activeCallViewHolder.unBind(callManager)
+        activeCallViewHolder.unBind()
         roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
         super.onDestroy()
     }
@@ -712,7 +712,7 @@ class RoomDetailFragment @Inject constructor(
                 val activeCall = sharedCallActionViewModel.activeCall.value
                 if (activeCall != null) {
                     // resume existing if same room, if not prompt to kill and then restart new call?
-                    if (activeCall.roomId == roomDetailArgs.roomId) {
+                    if (activeCall.mxCall.roomId == roomDetailArgs.roomId) {
                         onTapToReturnToCall()
                     }
                     //                        else {
@@ -1961,10 +1961,10 @@ class RoomDetailFragment @Inject constructor(
             VectorCallActivity.newIntent(
                     context = requireContext(),
                     callId = call.callId,
-                    roomId = call.roomId,
-                    otherUserId = call.opponentUserId,
-                    isIncomingCall = !call.isOutgoing,
-                    isVideoCall = call.isVideoCall,
+                    roomId = call.mxCall.roomId,
+                    otherUserId = call.mxCall.opponentUserId,
+                    isIncomingCall = !call.mxCall.isOutgoing,
+                    isVideoCall = call.mxCall.isVideoCall,
                     mode = null
             ).let {
                 startActivity(it)

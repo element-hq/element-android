@@ -107,7 +107,7 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
-        override fun onCurrentCallChange(call: MxCall?) {
+        override fun onCurrentCallChange(call: WebRtcCall?) {
             // we need to check the state
             if (call == null) {
                 // we should dismiss, e.g handled by other session?
@@ -155,9 +155,9 @@ class VectorCallViewModel @AssistedInject constructor(
                         otherUserMatrixItem = item?.let { Success(it) } ?: Uninitialized,
                         soundDevice = currentSoundDevice,
                         availableSoundDevices = callManager.callAudioManager.getAvailableSoundDevices(),
-                        isFrontCamera = callManager.currentCameraType() == CameraType.FRONT,
-                        canSwitchCamera = callManager.canSwitchCamera(),
-                        isHD = webRtcCall.mxCall.isVideoCall && callManager.currentCaptureFormat() is CaptureFormat.HD
+                        isFrontCamera = call?.currentCameraType() == CameraType.FRONT,
+                        canSwitchCamera = call?.canSwitchCamera() ?: false,
+                        isHD = webRtcCall.mxCall.isVideoCall && webRtcCall.currentCaptureFormat() is CaptureFormat.HD
                 )
             }
         }

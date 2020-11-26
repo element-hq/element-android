@@ -63,7 +63,7 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
     override fun onCreate() {
         super.onCreate()
         notificationUtils = vectorComponent().notificationUtils()
-        callManager = vectorComponent().webRtcPeerConnectionManager()
+        callManager = vectorComponent().webRtcCallManager()
         callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext)
         callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext)
         wiredHeadsetStateReceiver = WiredHeadsetStateReceiver.createAndRegister(this, this)

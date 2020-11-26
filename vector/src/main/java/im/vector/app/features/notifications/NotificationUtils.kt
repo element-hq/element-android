@@ -296,7 +296,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
         builder.priority = NotificationCompat.PRIORITY_HIGH
 
         //
-        val requestId = Random.nextInt(1000)
 //        val pendingIntent = stackBuilder.getPendingIntent(requestId, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val contentIntent = VectorCallActivity.newIntent(
@@ -326,16 +325,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 )
                 .getPendingIntent(System.currentTimeMillis().toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val rejectCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
-            putExtra(CallHeadsUpActionReceiver.EXTRA_CALL_ACTION_KEY, CallHeadsUpActionReceiver.CALL_ACTION_REJECT)
-        }
-        // val answerCallPendingIntent = PendingIntent.getBroadcast(context, requestId, answerCallActionReceiver, PendingIntent.FLAG_UPDATE_CURRENT)
-        val rejectCallPendingIntent = PendingIntent.getBroadcast(
-                context,
-                requestId + 1,
-                rejectCallActionReceiver,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val rejectCallPendingIntent = buildRejectCallPendingIntent(callId)
 
         builder.addAction(
                 NotificationCompat.Action(
@@ -375,8 +365,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setLights(accentColor, 500, 500)
                 .setOngoing(true)
 
-        val requestId = Random.nextInt(1000)
-
         val contentIntent = VectorCallActivity.newIntent(
                 context = context,
                 callId = callId,
@@ -390,16 +378,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         }
         val contentPendingIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), contentIntent, 0)
 
-        val rejectCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
-            putExtra(CallHeadsUpActionReceiver.EXTRA_CALL_ACTION_KEY, CallHeadsUpActionReceiver.CALL_ACTION_REJECT)
-        }
-
-        val rejectCallPendingIntent = PendingIntent.getBroadcast(
-                context,
-                requestId + 1,
-                rejectCallActionReceiver,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val rejectCallPendingIntent = buildRejectCallPendingIntent(callId)
 
         builder.addAction(
                 NotificationCompat.Action(
@@ -446,17 +425,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
             builder.setOngoing(true)
         }
 
-        val rejectCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
-            data = Uri.parse("mxcall://end?$callId")
-            putExtra(CallHeadsUpActionReceiver.EXTRA_CALL_ACTION_KEY, CallHeadsUpActionReceiver.CALL_ACTION_REJECT)
-        }
-
-        val rejectCallPendingIntent = PendingIntent.getBroadcast(
-                context,
-                System.currentTimeMillis().toInt(),
-                rejectCallActionReceiver,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val rejectCallPendingIntent = buildRejectCallPendingIntent(callId)
 
         builder.addAction(
                 NotificationCompat.Action(
@@ -474,6 +443,19 @@ class NotificationUtils @Inject constructor(private val context: Context,
         builder.setContentIntent(contentPendingIntent)
 
         return builder.build()
+    }
+
+    private fun buildRejectCallPendingIntent(callId: String): PendingIntent {
+        val rejectCallActionReceiver = Intent(context, CallHeadsUpActionReceiver::class.java).apply {
+            putExtra(CallHeadsUpActionReceiver.EXTRA_CALL_ID, callId)
+            putExtra(CallHeadsUpActionReceiver.EXTRA_CALL_ACTION_KEY, CallHeadsUpActionReceiver.CALL_ACTION_REJECT)
+        }
+        return PendingIntent.getBroadcast(
+                context,
+                System.currentTimeMillis().toInt(),
+                rejectCallActionReceiver,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     /**

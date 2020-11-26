@@ -31,7 +31,6 @@ import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.asCoroutineDispatcher
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallListener
@@ -67,7 +66,7 @@ class WebRtcCallManager @Inject constructor(
         get() = activeSessionDataSource.currentValue?.orNull()
 
     interface CurrentCallListener {
-        fun onCurrentCallChange(call: MxCall?)
+        fun onCurrentCallChange(call: WebRtcCall?)
         fun onCaptureStateChanged() {}
         fun onAudioDevicesChange() {}
         fun onCameraChange() {}
@@ -118,31 +117,32 @@ class WebRtcCallManager @Inject constructor(
         set(value) {
             field = value
             currentCallsListeners.forEach {
-                tryOrNull { it.onCurrentCallChange(value?.mxCall) }
+                tryOrNull { it.onCurrentCallChange(value) }
             }
         }
 
     private val callsByCallId = HashMap<String, WebRtcCall>()
+    private val callsByRoomId = HashMap<String, ArrayList<WebRtcCall>>()
 
     fun getCallById(callId: String): WebRtcCall? {
         return callsByCallId[callId]
     }
 
-    fun headSetButtonTapped() {
-        Timber.v("## VOIP headSetButtonTapped")
-        val call = currentCall?.mxCall ?: return
-        if (call.state is CallState.LocalRinging) {
-            // accept call
-            acceptIncomingCall()
-        }
-        if (call.state is CallState.Connected) {
-            // end call?
-            endCall()
-        }
+    fun getCallsByRoomId(roomId: String): List<WebRtcCall> {
+        return callsByRoomId[roomId] ?: emptyList()
     }
 
-    fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer?, remoteViewRenderer: SurfaceViewRenderer, mode: String?) {
-        currentCall?.attachViewRenderers(localViewRenderer, remoteViewRenderer, mode)
+    fun headSetButtonTapped() {
+        Timber.v("## VOIP headSetButtonTapped")
+        val call = currentCall ?: return
+        if (call.mxCall.state is CallState.LocalRinging) {
+            // accept call
+            call.acceptIncomingCall()
+        }
+        if (call.mxCall.state is CallState.Connected) {
+            // end call?
+            call.endCall()
+        }
     }
 
     private fun createPeerConnectionFactoryIfNeeded() {
@@ -174,20 +174,13 @@ class WebRtcCallManager @Inject constructor(
                 .createPeerConnectionFactory()
     }
 
-    fun acceptIncomingCall() {
-        currentCall?.acceptIncomingCall()
-    }
-
-    fun detachRenderers(renderers: List<SurfaceViewRenderer>?) {
-        currentCall?.detachRenderers(renderers)
-    }
-
     private fun onCallEnded(call: WebRtcCall) {
         Timber.v("## VOIP WebRtcPeerConnectionManager onCall ended: ${call.mxCall.callId}")
         CallService.onNoActiveCall(context)
         callAudioManager.stop()
         currentCall = null
         callsByCallId.remove(call.mxCall.callId)
+        callsByRoomId[call.mxCall.roomId]?.remove(call)
         // This must be done in this thread
         executor.execute {
             if (currentCall == null) {
@@ -231,9 +224,48 @@ class WebRtcCallManager @Inject constructor(
         currentCall?.onCallIceCandidateReceived(iceCandidatesContent)
     }
 
+    private fun createWebRtcCall(mxCall: MxCall): WebRtcCall {
+        val webRtcCall = WebRtcCall(
+                mxCall = mxCall,
+                callAudioManager = callAudioManager,
+                rootEglBase = rootEglBase,
+                context = context,
+                dispatcher = dispatcher,
+                peerConnectionFactoryProvider = {
+                    createPeerConnectionFactoryIfNeeded()
+                    peerConnectionFactory
+                },
+                sessionProvider = { currentSession },
+                onCallEnded = this::onCallEnded
+        )
+        currentCall = webRtcCall
+        callsByCallId[mxCall.callId] = webRtcCall
+        callsByRoomId.getOrPut(mxCall.roomId, { ArrayList() }).add(webRtcCall)
+        return webRtcCall
+    }
+
+    fun acceptIncomingCall() {
+        currentCall?.acceptIncomingCall()
+    }
+
+    fun endCall(originatedByMe: Boolean = true) {
+        currentCall?.endCall(originatedByMe)
+    }
+
+    fun onWiredDeviceEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
+        Timber.v("## VOIP onWiredDeviceEvent $event")
+        currentCall ?: return
+        // sometimes we received un-wanted unplugged...
+        callAudioManager.wiredStateChange(event)
+    }
+
+    fun onWirelessDeviceEvent(event: BluetoothHeadsetReceiver.BTHeadsetPlugEvent) {
+        Timber.v("## VOIP onWirelessDeviceEvent $event")
+        callAudioManager.bluetoothStateChange(event.plugged)
+    }
+
     override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
         Timber.v("## VOIP onCallInviteReceived callId ${mxCall.callId}")
-        // to simplify we only treat one call at a time, and ignore others
         if (currentCall != null) {
             Timber.w("## VOIP receiving incoming call while already in call?")
             // Just ignore, maybe we could answer from other session?
@@ -267,74 +299,11 @@ class WebRtcCallManager @Inject constructor(
         }
     }
 
-    private fun createWebRtcCall(mxCall: MxCall): WebRtcCall {
-        val webRtcCall = WebRtcCall(
-                mxCall = mxCall,
-                callAudioManager = callAudioManager,
-                rootEglBase = rootEglBase,
-                context = context,
-                dispatcher = dispatcher,
-                peerConnectionFactoryProvider = {
-                    createPeerConnectionFactoryIfNeeded()
-                    peerConnectionFactory
-                },
-                sessionProvider = { currentSession },
-                onCallEnded = this::onCallEnded
-        )
-        currentCall = webRtcCall
-        callsByCallId[mxCall.callId] = webRtcCall
-        return webRtcCall
-    }
-
-    fun muteCall(muted: Boolean) {
-        currentCall?.muteCall(muted)
-    }
-
-    fun enableVideo(enabled: Boolean) {
-        currentCall?.enableVideo(enabled)
-    }
-
-    fun switchCamera() {
-        currentCall?.switchCamera()
-    }
-
-    fun canSwitchCamera(): Boolean {
-        return currentCall?.canSwitchCamera() ?: false
-    }
-
-    fun currentCameraType(): CameraType? {
-        return currentCall?.currentCameraType()
-    }
-
-    fun setCaptureFormat(format: CaptureFormat) {
-        currentCall?.setCaptureFormat(format)
-    }
-
-    fun currentCaptureFormat(): CaptureFormat {
-        return currentCall?.currentCaptureFormat() ?: CaptureFormat.HD
-    }
-
-    fun endCall(originatedByMe: Boolean = true) {
-        currentCall?.endCall(originatedByMe)
-    }
-
-    fun onWiredDeviceEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
-        Timber.v("## VOIP onWiredDeviceEvent $event")
-        currentCall ?: return
-        // sometimes we received un-wanted unplugged...
-        callAudioManager.wiredStateChange(event)
-    }
-
-    fun onWirelessDeviceEvent(event: BluetoothHeadsetReceiver.BTHeadsetPlugEvent) {
-        Timber.v("## VOIP onWirelessDeviceEvent $event")
-        callAudioManager.bluetoothStateChange(event.plugged)
-    }
-
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
-        val call = currentCall ?: return
-        if (call.mxCall.callId != callAnswerContent.callId) return Unit.also {
-            Timber.w("onCallAnswerReceived for non active call? ${callAnswerContent.callId}")
-        }
+        val call = callsByCallId[callAnswerContent.callId]
+                ?: return Unit.also {
+                    Timber.w("onCallAnswerReceived for non active call? ${callAnswerContent.callId}")
+                }
         val mxCall = call.mxCall
         // Update service state
         val name = currentSession?.getUser(mxCall.opponentUserId)?.getBestName()
@@ -351,48 +320,49 @@ class WebRtcCallManager @Inject constructor(
     }
 
     override fun onCallHangupReceived(callHangupContent: CallHangupContent) {
-        val call = currentCall ?: return
-        // Remote echos are filtered, so it's only remote hangups that i will get here
-        if (call.mxCall.callId != callHangupContent.callId) return Unit.also {
-            Timber.w("onCallHangupReceived for non active call? ${callHangupContent.callId}")
-        }
-        endCall(false)
+        val call = callsByCallId[callHangupContent.callId]
+                ?: return Unit.also {
+                    Timber.w("onCallHangupReceived for non active call? ${callHangupContent.callId}")
+                }
+        call.endCall(false)
     }
 
     override fun onCallRejectReceived(callRejectContent: CallRejectContent) {
-        val call = currentCall ?: return
-        // Remote echos are filtered, so it's only remote hangups that i will get here
-        if (call.mxCall.callId != callRejectContent.callId) return Unit.also {
-            Timber.w("onCallRejected for non active call? ${callRejectContent.callId}")
-        }
-        endCall(false)
+        val call = callsByCallId[callRejectContent.callId]
+                ?: return Unit.also {
+                    Timber.w("onCallRejectReceived for non active call? ${callRejectContent.callId}")
+                }
+        call.endCall(false)
     }
 
     override fun onCallSelectAnswerReceived(callSelectAnswerContent: CallSelectAnswerContent) {
-        val call = currentCall ?: return
-        if (call.mxCall.callId != callSelectAnswerContent.callId) return Unit.also {
-            Timber.w("onCallSelectAnswerReceived for non active call? ${callSelectAnswerContent.callId}")
-        }
+        val call = callsByCallId[callSelectAnswerContent.callId]
+                ?: return Unit.also {
+                    Timber.w("onCallSelectAnswerReceived for non active call? ${callSelectAnswerContent.callId}")
+                }
         val selectedPartyId = callSelectAnswerContent.selectedPartyId
         if (selectedPartyId != call.mxCall.ourPartyId) {
             Timber.i("Got select_answer for party ID ${selectedPartyId}: we are party ID ${call.mxCall.ourPartyId}.");
             // The other party has picked somebody else's answer
-            endCall(false)
+            call.endCall(false)
         }
     }
 
     override fun onCallNegotiateReceived(callNegotiateContent: CallNegotiateContent) {
-        val call = currentCall ?: return
-        if (call.mxCall.callId != callNegotiateContent.callId) return Unit.also {
-            Timber.w("onCallNegotiateReceived for non active call? ${callNegotiateContent.callId}")
-        }
+        val call = callsByCallId[callNegotiateContent.callId]
+                ?: return Unit.also {
+                    Timber.w("onCallNegotiateReceived for non active call? ${callNegotiateContent.callId}")
+                }
         call.onCallNegotiateReceived(callNegotiateContent)
     }
 
     override fun onCallManagedByOtherSession(callId: String) {
         Timber.v("## VOIP onCallManagedByOtherSession: $callId")
         currentCall = null
-        callsByCallId.remove(callId)
+        val webRtcCall = callsByCallId.remove(callId)
+        if (webRtcCall != null) {
+            callsByRoomId[webRtcCall.mxCall.roomId]?.remove(webRtcCall)
+        }
         CallService.onNoActiveCall(context)
 
         // did we start background sync? so we should stop it
@@ -404,25 +374,5 @@ class WebRtcCallManager @Inject constructor(
                 // maybe we should restore default timeout/delay though?
             }
         }
-    }
-
-    /**
-     * Indicates whether we are 'on hold' to the remote party (ie. if true,
-     * they cannot hear us). Note that this will return true when we put the
-     * remote on hold too due to the way hold is implemented (since we don't
-     * wish to play hold music when we put a call on hold, we use 'inactive'
-     * rather than 'sendonly')
-     * @returns true if the other party has put us on hold
-     */
-    fun isLocalOnHold(): Boolean {
-        return currentCall?.isLocalOnHold().orFalse()
-    }
-
-    fun isRemoteOnHold(): Boolean {
-        return currentCall?.remoteOnHold.orFalse()
-    }
-
-    fun setRemoteOnHold(onHold: Boolean) {
-        currentCall?.updateRemoteOnHold(onHold)
     }
 }

@@ -565,8 +565,8 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.clear_all           -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.open_matrix_apps    -> true
             R.id.voice_call,
-            R.id.video_call          -> true // always show for discoverability
-            R.id.hangup_call         -> callManager.currentCall != null
+            R.id.video_call          -> callManager.getCallsByRoomId(state.roomId).isEmpty()
+            R.id.hangup_call         -> callManager.getCallsByRoomId(state.roomId).isNotEmpty()
             R.id.search              -> true
             else                     -> false
         }

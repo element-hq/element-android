@@ -45,6 +45,8 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.features.call.utils.EglUtils
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
@@ -52,8 +54,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call.*
 import org.matrix.android.sdk.api.session.call.CallState
-import im.vector.app.features.call.utils.EglUtils
-import im.vector.app.features.call.webrtc.WebRtcCallManager
 import org.matrix.android.sdk.api.session.call.MxCallDetail
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
@@ -211,7 +211,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     override fun onDestroy() {
-        callManager.detachRenderers(listOf(pipRenderer, fullscreenRenderer))
+        callManager.getCallById(callArgs.callId)?.detachRenderers(listOf(pipRenderer, fullscreenRenderer))
         if (surfaceRenderersAreInitialized) {
             pipRenderer.release()
             fullscreenRenderer.release()
@@ -234,7 +234,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         callConnectingProgress.isVisible = false
         when (callState) {
             is CallState.Idle,
-            is CallState.Dialing      -> {
+            is CallState.Dialing -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_ring)
@@ -248,14 +248,14 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                 configureCallInfo(state)
             }
 
-            is CallState.Answering    -> {
+            is CallState.Answering -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_connecting)
                 callConnectingProgress.isVisible = true
                 configureCallInfo(state)
             }
-            is CallState.Connected    -> {
+            is CallState.Connected -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (callArgs.isVideoCall) {
                         callVideoGroup.isVisible = true
@@ -276,12 +276,12 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                     callConnectingProgress.isVisible = true
                 }
                 // ensure all attached?
-                callManager.attachViewRenderers(pipRenderer, fullscreenRenderer, null)
+                callManager.getCallById(callArgs.callId)?.attachViewRenderers(pipRenderer, fullscreenRenderer, null)
             }
-            is CallState.Terminated   -> {
+            is CallState.Terminated -> {
                 finish()
             }
-            null                      -> {
+            null -> {
             }
         }
     }
@@ -326,7 +326,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         pipRenderer.setEnableHardwareScaler(true /* enabled */)
         fullscreenRenderer.setEnableHardwareScaler(true /* enabled */)
 
-        callManager.attachViewRenderers(pipRenderer, fullscreenRenderer,
+        callManager.getCallById(callArgs.callId)?.attachViewRenderers(pipRenderer, fullscreenRenderer,
                 intent.getStringExtra(EXTRA_MODE)?.takeIf { isFirstCreation() })
 
         pipRenderer.setOnClickListener {
@@ -338,14 +338,14 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.v("## VOIP handleViewEvents $event")
         when (event) {
-            VectorCallViewEvents.DismissNoCall        -> {
+            VectorCallViewEvents.DismissNoCall -> {
                 CallService.onNoActiveCall(this)
                 finish()
             }
             is VectorCallViewEvents.ConnectionTimeout -> {
                 onErrorTimoutConnect(event.turn)
             }
-            null                                      -> {
+            null -> {
             }
         }
     }

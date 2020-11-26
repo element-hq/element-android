@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
@@ -88,9 +89,9 @@ class WebRtcCall(val mxCall: MxCall,
                  private val dispatcher: CoroutineContext,
                  private val sessionProvider: Provider<Session?>,
                  private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
-                 private val onCallEnded: (WebRtcCall) -> Unit): MxCall.StateListener {
+                 private val onCallEnded: (WebRtcCall) -> Unit) : MxCall.StateListener {
 
-    interface Listener: MxCall.StateListener {
+    interface Listener : MxCall.StateListener {
         fun onCaptureStateChanged() {}
         fun onCameraChange() {}
     }
@@ -245,7 +246,7 @@ class WebRtcCall(val mxCall: MxCall,
                             isVideo = mxCall.isVideoCall,
                             roomName = name,
                             roomId = mxCall.roomId,
-                            matrixId = session?.myUserId ?:"",
+                            matrixId = session?.myUserId ?: "",
                             callId = mxCall.callId)
                 }
 
@@ -461,8 +462,13 @@ class WebRtcCall(val mxCall: MxCall,
                 ?: backCamera?.also { cameraInUse = backCamera }
                 ?: null.also { cameraInUse = null }
 
+        listeners.forEach {
+            tryOrNull { it.onCameraChange() }
+        }
+
         if (camera != null) {
             val videoCapturer = cameraIterator.createCapturer(camera.name, object : CameraEventsHandlerAdapter() {
+
                 override fun onFirstFrameAvailable() {
                     super.onFirstFrameAvailable()
                     videoCapturerIsInError = false
@@ -470,12 +476,25 @@ class WebRtcCall(val mxCall: MxCall,
 
                 override fun onCameraClosed() {
                     super.onCameraClosed()
+                    Timber.v("onCameraClosed")
                     // This could happen if you open the camera app in chat
                     // We then register in order to restart capture as soon as the camera is available again
                     videoCapturerIsInError = true
                     val cameraManager = context.getSystemService<CameraManager>()
                     cameraAvailabilityCallback = object : CameraManager.AvailabilityCallback() {
+
+                        override fun onCameraUnavailable(cameraId: String) {
+                            super.onCameraUnavailable(cameraId)
+                            Timber.v("On camera unavailable: $cameraId")
+                        }
+
+                        override fun onCameraAccessPrioritiesChanged() {
+                            super.onCameraAccessPrioritiesChanged()
+                            Timber.v("onCameraAccessPrioritiesChanged")
+                        }
+
                         override fun onCameraAvailable(cameraId: String) {
+                            Timber.v("On camera available: $cameraId")
                             if (cameraId == camera.name) {
                                 videoCapturer?.startCapture(currentCaptureFormat.width, currentCaptureFormat.height, currentCaptureFormat.fps)
                                 cameraManager?.unregisterAvailabilityCallback(this)
@@ -505,11 +524,9 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     fun setCaptureFormat(format: CaptureFormat) {
-        GlobalScope.launch(dispatcher) {
-            Timber.v("## VOIP setCaptureFormat $format")
-            videoCapturer?.changeCaptureFormat(format.width, format.height, format.fps)
-            currentCaptureFormat = format
-        }
+        Timber.v("## VOIP setCaptureFormat $format")
+        videoCapturer?.changeCaptureFormat(format.width, format.height, format.fps)
+        currentCaptureFormat = format
     }
 
     private fun updateMuteStatus() {
@@ -565,31 +582,41 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     fun canSwitchCamera(): Boolean {
-        return availableCamera.size > 0
+        return availableCamera.size > 1
+    }
+
+    private fun getOppositeCameraIfAny(): CameraProxy? {
+        val currentCamera = cameraInUse ?: return null
+        return if (currentCamera.type == CameraType.FRONT) {
+            availableCamera.firstOrNull { it.type == CameraType.BACK }
+        } else {
+            availableCamera.firstOrNull { it.type == CameraType.FRONT }
+        }
     }
 
     fun switchCamera() {
         Timber.v("## VOIP switchCamera")
-        if (!canSwitchCamera()) return
         if (mxCall.state is CallState.Connected && mxCall.isVideoCall) {
-            videoCapturer?.switchCamera(object : CameraVideoCapturer.CameraSwitchHandler {
-                // Invoked on success. |isFrontCamera| is true if the new camera is front facing.
-                override fun onCameraSwitchDone(isFrontCamera: Boolean) {
-                    Timber.v("## VOIP onCameraSwitchDone isFront $isFrontCamera")
-                    cameraInUse = availableCamera.first { if (isFrontCamera) it.type == CameraType.FRONT else it.type == CameraType.BACK }
-                    localSurfaceRenderers.forEach {
-                        it.get()?.setMirror(isFrontCamera)
-                    }
-                    listeners.forEach {
-                        tryOrNull { it.onCameraChange() }
-                    }
+            val oppositeCamera = getOppositeCameraIfAny() ?: return
+            videoCapturer?.switchCamera(
+                    object : CameraVideoCapturer.CameraSwitchHandler {
+                        // Invoked on success. |isFrontCamera| is true if the new camera is front facing.
+                        override fun onCameraSwitchDone(isFrontCamera: Boolean) {
+                            Timber.v("## VOIP onCameraSwitchDone isFront $isFrontCamera")
+                            cameraInUse = oppositeCamera
+                            localSurfaceRenderers.forEach {
+                                it.get()?.setMirror(isFrontCamera)
+                            }
+                            listeners.forEach {
+                                tryOrNull { it.onCameraChange() }
+                            }
+                        }
 
-                }
-
-                override fun onCameraSwitchError(errorDescription: String?) {
-                    Timber.v("## VOIP onCameraSwitchError isFront $errorDescription")
-                }
-            })
+                        override fun onCameraSwitchError(errorDescription: String?) {
+                            Timber.v("## VOIP onCameraSwitchError isFront $errorDescription")
+                        }
+                    }, oppositeCamera.name
+            )
         }
     }
 
@@ -665,6 +692,9 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     fun endCall(originatedByMe: Boolean = true, reason: CallHangupContent.Reason? = null) {
+        if(mxCall.state == CallState.Terminated){
+            return
+        }
         mxCall.state = CallState.Terminated
         //Close tracks ASAP
         localVideoTrack?.setEnabled(false)
@@ -704,6 +734,7 @@ class WebRtcCall(val mxCall: MxCall,
             try {
                 peerConnection?.awaitSetRemoteDescription(sdp)
             } catch (failure: Throwable) {
+                endCall(true, CallHangupContent.Reason.UNKWOWN_ERROR)
                 return@launch
             }
             if (mxCall.opponentPartyId?.hasValue().orFalse()) {

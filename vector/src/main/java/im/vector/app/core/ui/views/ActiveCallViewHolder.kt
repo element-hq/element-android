@@ -23,7 +23,7 @@ import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import org.matrix.android.sdk.api.session.call.CallState
 import im.vector.app.features.call.utils.EglUtils
-import org.matrix.android.sdk.api.session.call.MxCall
+import im.vector.app.features.call.webrtc.WebRtcCall
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
 
@@ -32,26 +32,28 @@ class ActiveCallViewHolder {
     private var activeCallPiP: SurfaceViewRenderer? = null
     private var activeCallView: ActiveCallView? = null
     private var pipWrapper: CardView? = null
+    private var activeCall: WebRtcCall? = null
 
     private var activeCallPipInitialized = false
 
-    fun updateCall(activeCall: MxCall?, callManager: WebRtcCallManager) {
-        val hasActiveCall = activeCall?.state is CallState.Connected
+    fun updateCall(activeCall: WebRtcCall?) {
+        this.activeCall = activeCall
+        val hasActiveCall = activeCall?.mxCall?.state is CallState.Connected
         if (hasActiveCall) {
-            val isVideoCall = activeCall?.isVideoCall == true
+            val isVideoCall = activeCall?.mxCall?.isVideoCall == true
             if (isVideoCall) initIfNeeded()
             activeCallView?.isVisible = !isVideoCall
             pipWrapper?.isVisible = isVideoCall
             activeCallPiP?.isVisible = isVideoCall
             activeCallPiP?.let {
-                callManager.attachViewRenderers(null, it, null)
+                activeCall?.attachViewRenderers(null, it, null)
             }
         } else {
             activeCallView?.isVisible = false
             activeCallPiP?.isVisible = false
             pipWrapper?.isVisible = false
             activeCallPiP?.let {
-                callManager.detachRenderers(listOf(it))
+                activeCall?.detachRenderers(listOf(it))
             }
         }
     }
@@ -82,9 +84,9 @@ class ActiveCallViewHolder {
         )
     }
 
-    fun unBind(callManager: WebRtcCallManager) {
+    fun unBind() {
         activeCallPiP?.let {
-            callManager.detachRenderers(listOf(it))
+            activeCall?.detachRenderers(listOf(it))
         }
         if (activeCallPipInitialized) {
             activeCallPiP?.release()

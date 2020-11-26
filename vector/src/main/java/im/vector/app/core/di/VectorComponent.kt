@@ -153,7 +153,7 @@ interface VectorComponent {
 
     fun pinLocker(): PinLocker
 
-    fun webRtcPeerConnectionManager(): WebRtcCallManager
+    fun webRtcCallManager(): WebRtcCallManager
 
     @Component.Factory
     interface Factory {

@@ -18,6 +18,7 @@ package im.vector.app.features.call
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import org.matrix.android.sdk.api.session.call.MxCall
 import javax.inject.Inject
@@ -26,27 +27,27 @@ class SharedActiveCallViewModel @Inject constructor(
         private val callManager: WebRtcCallManager
 ) : ViewModel() {
 
-    val activeCall: MutableLiveData<MxCall?> = MutableLiveData()
+    val activeCall: MutableLiveData<WebRtcCall?> = MutableLiveData()
 
-    val callStateListener = object : MxCall.StateListener {
+    val callStateListener = object : WebRtcCall.Listener {
 
         override fun onStateUpdate(call: MxCall) {
             if (activeCall.value?.callId == call.callId) {
-                activeCall.postValue(call)
+                activeCall.postValue(callManager.getCallById(call.callId))
             }
         }
     }
 
     private val listener = object : WebRtcCallManager.CurrentCallListener {
-        override fun onCurrentCallChange(call: MxCall?) {
-            activeCall.value?.removeListener(callStateListener)
+        override fun onCurrentCallChange(call: WebRtcCall?) {
+            activeCall.value?.mxCall?.removeListener(callStateListener)
             activeCall.postValue(call)
             call?.addListener(callStateListener)
         }
     }
 
     init {
-        activeCall.postValue(callManager.currentCall?.mxCall)
+        activeCall.postValue(callManager.currentCall)
         callManager.addCurrentCallListener(listener)
     }
 

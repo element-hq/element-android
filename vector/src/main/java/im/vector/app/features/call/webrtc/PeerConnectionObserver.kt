@@ -19,6 +19,7 @@ package im.vector.app.features.call.webrtc
 import im.vector.app.features.call.CallAudioManager
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
+import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.webrtc.DataChannel
 import org.webrtc.IceCandidate
 import org.webrtc.MediaStream
@@ -132,9 +133,7 @@ class PeerConnectionObserver(private val webRtcCall: WebRtcCall,
              * It is, however, possible that the ICE agent did find compatible connections for some components.
              */
             PeerConnection.IceConnectionState.FAILED -> {
-                // I should not hangup here..
-                // because new candidates could arrive
-                // webRtcCall.mxCall.hangUp()
+                webRtcCall.endCall(true, CallHangupContent.Reason.ICE_FAILED)
             }
             /**
              *  The ICE agent has finished gathering candidates, has checked all pairs against one another, and has found a connection for all components.
