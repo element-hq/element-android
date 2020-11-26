@@ -31,6 +31,7 @@ import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.database.model.UserThreePidEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.content.FileUploader
+import org.matrix.android.sdk.internal.session.user.UserStore
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.task.launchToCallback
@@ -49,6 +50,7 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
                                                          private val finalizeAddingThreePidTask: FinalizeAddingThreePidTask,
                                                          private val deleteThreePidTask: DeleteThreePidTask,
                                                          private val pendingThreePidMapper: PendingThreePidMapper,
+                                                         private val userStore: UserStore,
                                                          private val fileUploader: FileUploader) : ProfileService {
 
     override fun getDisplayName(userId: String, matrixCallback: MatrixCallback<Optional<String>>): Cancelable {
@@ -70,17 +72,17 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
     }
 
     override fun setDisplayName(userId: String, newDisplayName: String, matrixCallback: MatrixCallback<Unit>): Cancelable {
-        return setDisplayNameTask
-                .configureWith(SetDisplayNameTask.Params(userId = userId, newDisplayName = newDisplayName)) {
-                    callback = matrixCallback
-                }
-                .executeBy(taskExecutor)
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.io, matrixCallback) {
+            setDisplayNameTask.execute(SetDisplayNameTask.Params(userId = userId, newDisplayName = newDisplayName))
+            userStore.updateDisplayName(userId, newDisplayName)
+        }
     }
 
     override fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String, matrixCallback: MatrixCallback<Unit>): Cancelable {
         return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, matrixCallback) {
             val response = fileUploader.uploadFromUri(newAvatarUri, fileName, "image/jpeg")
             setAvatarUrlTask.execute(SetAvatarUrlTask.Params(userId = userId, newAvatarUrl = response.contentUri))
+            userStore.updateAvatar(userId, response.contentUri)
         }
     }
 

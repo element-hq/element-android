@@ -26,6 +26,7 @@ Bugfix 🐛:
  - Try to fix cropped image in timeline (#2126)
  - Registration: annoying error message scares every new user when they add an email (#2391)
  - Fix jitsi integration for those with non-vanilla dialler frameworks
+ - Update profile has no effect if user is in zero rooms
 
 Translations 🗣:
  -
