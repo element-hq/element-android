@@ -309,13 +309,13 @@ class RoomListFragment @Inject constructor(
             RoomListDisplayMode.PEOPLE        ->
                 StateView.State.Empty(
                         getString(R.string.room_list_people_empty_title),
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_chat),
+                        ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_dm),
                         getString(R.string.room_list_people_empty_body)
                 )
             RoomListDisplayMode.ROOMS         ->
                 StateView.State.Empty(
                         getString(R.string.room_list_rooms_empty_title),
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),
+                        ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_room),
                         getString(R.string.room_list_rooms_empty_body)
                 )
             else                              ->
