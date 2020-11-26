@@ -32,6 +32,7 @@ Features ✨:
  - Create DMs with users by scanning their QR code (#2025)
  - Add Invite friends quick invite actions (#2348)
  - Add friend by scanning QR code, show your code to friends (#2025)
+ - Room setting: update join rules and guest access (#2442)
 
 Improvements 🙌:
  - New room creation tile with quick action (#2346)

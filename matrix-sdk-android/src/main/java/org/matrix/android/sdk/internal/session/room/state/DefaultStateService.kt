@@ -25,8 +25,12 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
+import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.JsonDict
@@ -131,6 +135,31 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 callback = callback,
                 stateKey = null
         )
+    }
+
+    override fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?, callback: MatrixCallback<Unit>): Cancelable {
+        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
+            if (joinRules != null) {
+                awaitCallback<Unit> {
+                    sendStateEvent(
+                            eventType = EventType.STATE_ROOM_JOIN_RULES,
+                            body = RoomJoinRulesContent(joinRules).toContent(),
+                            callback = it,
+                            stateKey = null
+                    )
+                }
+            }
+            if (guestAccess != null) {
+                awaitCallback<Unit> {
+                    sendStateEvent(
+                            eventType = EventType.STATE_ROOM_GUEST_ACCESS,
+                            body = RoomGuestAccessContent(guestAccess).toContent(),
+                            callback = it,
+                            stateKey = null
+                    )
+                }
+            }
+        }
     }
 
     override fun updateAvatar(avatarUri: Uri, fileName: String, callback: MatrixCallback<Unit>): Cancelable {

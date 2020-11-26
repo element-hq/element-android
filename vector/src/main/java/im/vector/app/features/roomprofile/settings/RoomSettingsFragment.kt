@@ -42,6 +42,8 @@ import im.vector.app.features.roomprofile.RoomProfileSharedAction
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilityBottomSheet
+import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleBottomSheet
+import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
 import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -62,6 +64,8 @@ class RoomSettingsFragment @Inject constructor(
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private lateinit var roomProfileSharedActionViewModel: RoomProfileSharedActionViewModel
     private lateinit var roomHistoryVisibilitySharedActionViewModel: RoomHistoryVisibilitySharedActionViewModel
+    private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
+
     private val roomProfileArgs: RoomProfileArgs by args()
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
@@ -73,6 +77,7 @@ class RoomSettingsFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
         setupRoomHistoryVisibilitySharedActionViewModel()
+        setupRoomJoinRuleSharedActionViewModel()
         controller.callback = this
         setupToolbar(roomSettingsToolbar)
         roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
@@ -89,6 +94,16 @@ class RoomSettingsFragment @Inject constructor(
                 }
             }.exhaustive
         }
+    }
+
+    private fun setupRoomJoinRuleSharedActionViewModel() {
+        roomJoinRuleSharedActionViewModel = activityViewModelProvider.get(RoomJoinRuleSharedActionViewModel::class.java)
+        roomJoinRuleSharedActionViewModel
+                .observe()
+                .subscribe { action ->
+                    viewModel.handle(RoomSettingsAction.SetRoomJoinRule(action.roomJoinRule, action.roomGuestAccess))
+                }
+                .disposeOnDestroyView()
     }
 
     private fun setupRoomHistoryVisibilitySharedActionViewModel() {
@@ -157,6 +172,13 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun onRoomAliasesClicked() {
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
+    }
+
+    override fun onJoinRuleClicked()  = withState(viewModel) { state ->
+        val currentJoinRule = state.newRoomJoinRules.newJoinRules ?: state.currentRoomJoinRules
+        val currentGuestAccess = state.newRoomJoinRules.newGuestAccess ?: state.currentGuestAccess
+        RoomJoinRuleBottomSheet.newInstance(currentJoinRule, currentGuestAccess)
+                .show(childFragmentManager, "RoomJoinRuleBottomSheet")
     }
 
     override fun onImageReady(uri: Uri?) {

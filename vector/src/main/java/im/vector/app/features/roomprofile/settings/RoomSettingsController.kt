@@ -26,6 +26,8 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -44,6 +46,7 @@ class RoomSettingsController @Inject constructor(
         fun onTopicChanged(topic: String)
         fun onHistoryVisibilityClicked()
         fun onRoomAliasesClicked()
+        fun onJoinRuleClicked()
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -117,9 +120,33 @@ class RoomSettingsController @Inject constructor(
                 title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
                 subtitle = roomHistoryVisibilityFormatter.getSetting(data.newHistoryVisibility ?: data.currentHistoryVisibility),
                 dividerColor = dividerColor,
-                divider = false,
+                divider = true,
                 editable = data.actionPermissions.canChangeHistoryVisibility,
                 action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
         )
+
+        buildProfileAction(
+                id = "joinRule",
+                title = stringProvider.getString(R.string.room_settings_room_access_title),
+                subtitle = data.getJoinRuleWording(),
+                dividerColor = dividerColor,
+                divider = false,
+                editable = data.actionPermissions.canChangeJoinRule,
+                action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+        )
+    }
+
+    private fun RoomSettingsViewState.getJoinRuleWording(): String {
+        val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules
+        val guestAccess = newRoomJoinRules.newGuestAccess ?: currentGuestAccess
+        return stringProvider.getString(if (joinRule == RoomJoinRules.INVITE) {
+            R.string.room_settings_room_access_entry_only_invited
+        } else {
+            if (guestAccess == GuestAccess.CanJoin) {
+                R.string.room_settings_room_access_entry_anyone_with_link_including_guest
+            } else {
+                R.string.room_settings_room_access_entry_anyone_with_link_apart_guest
+            }
+        })
     }
 }
