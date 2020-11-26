@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.format
 
+import androidx.annotation.StringRes
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
@@ -26,11 +27,16 @@ class RoomHistoryVisibilityFormatter @Inject constructor(
 ) {
 
     fun format(roomHistoryVisibility: RoomHistoryVisibility): String {
+        return stringProvider.getString(getStringResId(roomHistoryVisibility))
+    }
+
+    @StringRes
+    fun getStringResId(roomHistoryVisibility: RoomHistoryVisibility): Int {
         return when (roomHistoryVisibility) {
-            RoomHistoryVisibility.SHARED         -> stringProvider.getString(R.string.notice_room_visibility_shared)
-            RoomHistoryVisibility.INVITED        -> stringProvider.getString(R.string.notice_room_visibility_invited)
-            RoomHistoryVisibility.JOINED         -> stringProvider.getString(R.string.notice_room_visibility_joined)
-            RoomHistoryVisibility.WORLD_READABLE -> stringProvider.getString(R.string.notice_room_visibility_world_readable)
+            RoomHistoryVisibility.SHARED         -> R.string.notice_room_visibility_shared
+            RoomHistoryVisibility.INVITED        -> R.string.notice_room_visibility_invited
+            RoomHistoryVisibility.JOINED         -> R.string.notice_room_visibility_joined
+            RoomHistoryVisibility.WORLD_READABLE -> R.string.notice_room_visibility_world_readable
         }
     }
 }

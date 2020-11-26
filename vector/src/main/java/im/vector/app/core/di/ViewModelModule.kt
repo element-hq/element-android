@@ -36,6 +36,7 @@ import im.vector.app.features.reactions.EmojiChooserViewModel
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetSharedActionViewModel
+import im.vector.app.features.roomprofile.settings.historyvisibility.SetRoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 
 @Module
@@ -110,6 +111,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(RoomAliasBottomSheetSharedActionViewModel::class)
     fun bindRoomAliasBottomSheetSharedActionViewModel(viewModel: RoomAliasBottomSheetSharedActionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SetRoomHistoryVisibilitySharedActionViewModel::class)
+    fun bindSetRoomHistoryVisibilitySharedActionViewModel(viewModel: SetRoomHistoryVisibilitySharedActionViewModel): ViewModel
 
     @Binds
     @IntoMap
