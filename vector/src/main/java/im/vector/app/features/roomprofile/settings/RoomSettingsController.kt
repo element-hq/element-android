@@ -112,13 +112,10 @@ class RoomSettingsController @Inject constructor(
                 action = { callback?.onRoomAliasesClicked() }
         )
 
-        val historyVisibility = roomHistoryVisibilityFormatter.format(data.currentHistoryVisibility)
-        val newHistoryVisibility = data.newHistoryVisibility?.let { roomHistoryVisibilityFormatter.format(it) }
-
         buildProfileAction(
                 id = "historyReadability",
                 title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
-                subtitle = newHistoryVisibility ?: historyVisibility,
+                subtitle = roomHistoryVisibilityFormatter.getSetting(data.newHistoryVisibility ?: data.currentHistoryVisibility),
                 dividerColor = dividerColor,
                 divider = false,
                 editable = data.actionPermissions.canChangeHistoryVisibility,

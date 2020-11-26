@@ -35,7 +35,7 @@ class RoomHistoryVisibilityController @Inject constructor(
                 .map { roomHistoryVisibility ->
                     BottomSheetRoomHistoryVisibilityAction(
                             roomHistoryVisibility = roomHistoryVisibility,
-                            titleRes = historyVisibilityFormatter.getStringResId(roomHistoryVisibility),
+                            title = historyVisibilityFormatter.getSetting(roomHistoryVisibility),
                             iconResId = 0,
                             isSelected = roomHistoryVisibility == state.currentRoomHistoryVisibility,
                             destructive = false

@@ -260,13 +260,13 @@ class NoticeEventFormatter @Inject constructor(
     private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?, rs: RoomSummary?): CharSequence? {
         val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
 
-        val formattedVisibility = roomHistoryVisibilityFormatter.format(historyVisibility)
+        val historyVisibilitySuffix = roomHistoryVisibilityFormatter.getNoticeSuffix(historyVisibility)
         return if (event.isSentByCurrentUser()) {
             sp.getString(if (rs.isDm()) R.string.notice_made_future_direct_room_visibility_by_you else R.string.notice_made_future_room_visibility_by_you,
-                    formattedVisibility)
+                    historyVisibilitySuffix)
         } else {
             sp.getString(if (rs.isDm()) R.string.notice_made_future_direct_room_visibility else R.string.notice_made_future_room_visibility,
-                    senderName, formattedVisibility)
+                    senderName, historyVisibilitySuffix)
         }
     }
 

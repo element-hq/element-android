@@ -17,7 +17,6 @@
 package im.vector.app.core.ui.bottomsheet
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import im.vector.app.core.epoxy.bottomsheet.BottomSheetActionItem_
 import im.vector.app.core.platform.VectorSharedAction
 
@@ -25,7 +24,7 @@ import im.vector.app.core.platform.VectorSharedAction
  * Parent class for a bottom sheet action
  */
 open class BottomSheetGenericAction(
-        @StringRes open val titleRes: Int,
+        open val title: String,
         @DrawableRes open val iconResId: Int,
         open val isSelected: Boolean,
         open val destructive: Boolean
@@ -33,9 +32,9 @@ open class BottomSheetGenericAction(
 
     fun toBottomSheetItem(): BottomSheetActionItem_ {
         return BottomSheetActionItem_().apply {
-            id("action_$titleRes")
+            id("action_$title")
             iconRes(iconResId)
-            textRes(titleRes)
+            text(title)
             selected(isSelected)
             destructive(destructive)
         }

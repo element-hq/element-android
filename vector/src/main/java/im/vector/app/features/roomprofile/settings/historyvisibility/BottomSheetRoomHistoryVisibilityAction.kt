@@ -17,18 +17,17 @@
 package im.vector.app.features.roomprofile.settings.historyvisibility
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import im.vector.app.core.ui.bottomsheet.BottomSheetGenericAction
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 
 class BottomSheetRoomHistoryVisibilityAction(
         val roomHistoryVisibility: RoomHistoryVisibility,
-        @StringRes titleRes: Int,
+        title: String,
         @DrawableRes iconResId: Int,
         isSelected: Boolean,
         destructive: Boolean
 ) : BottomSheetGenericAction(
-        titleRes = titleRes,
+        title = title,
         iconResId = iconResId,
         isSelected = isSelected,
         destructive = destructive
