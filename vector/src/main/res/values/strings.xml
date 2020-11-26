@@ -79,6 +79,7 @@
     <string name="pause_video">Pause</string>
     <string name="dismiss">Dismiss</string>
     <string name="reset">Reset</string>
+    <string name="start_chatting">Start Chatting</string>
 
 
     <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
@@ -424,6 +425,8 @@
     <string name="permissions_msg_contacts_warning_other_androids">Element can check your address book to find other Matrix users based on their email and phone numbers.\n\nDo you agree to share your address book for this purpose?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
+    <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
+    <string name="permissions_denied_add_contact">Allow permission to access your contacts.</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Saved</string>
@@ -1754,6 +1757,7 @@
     <string name="room_filtering_footer_open_room_directory">View the room directory</string>
 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
+    <string name="user_directory_search_hint">Search by name or ID</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
     <string name="labs_show_unread_notifications_as_tab">Add a dedicated tab for unread notifications on main screen.</string>
@@ -1761,10 +1765,16 @@
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
     <string name="add_by_matrix_id">Add by matrix ID</string>
+    <string name="add_by_qr_code">Add by QR code</string>
+    <string name="qr_code">QR code</string>
     <string name="creating_direct_room">"Creating room…"</string>
     <string name="direct_room_no_known_users">"No result found, use Add by matrix ID to search on server."</string>
     <string name="direct_room_start_search">"Start typing to get results"</string>
     <string name="direct_room_filter_hint">"Filter by username or ID…"</string>
+    <string name="direct_room_user_list_recent_title">Recent</string>
+    <string name="direct_room_user_list_known_title">Known Users</string>
+    <string name="direct_room_user_list_contacts_title">Contacts</string>
+    <string name="direct_room_user_list_suggestions_title">Suggestions</string>
 
     <string name="joining_room">"Joining room…"</string>
 
@@ -1828,6 +1838,8 @@
     <string name="a11y_create_menu_open">Open the create room menu</string>
     <string name="a11y_create_menu_close">Close the create room menu…</string>
     <string name="a11y_create_direct_message">Create a new direct conversation</string>
+    <string name="a11y_create_direct_message_by_mxid">Create a new direct conversation by Matrix ID</string>
+    <string name="a11y_create_direct_message_by_qr_code">Create a new direct conversation by scanning a QR code</string>
     <string name="a11y_create_room">Create a new room</string>
     <string name="a11y_close_keys_backup_banner">Close keys backup banner</string>
     <string name="a11y_show_password">Show password</string>
@@ -2537,13 +2549,22 @@
     <string name="invite_users_to_room_action_invite">INVITE</string>
     <string name="inviting_users_to_room">Inviting users…</string>
     <string name="invite_users_to_room_title">Invite Users</string>
+    <string name="invite_friends">Invite friends</string>
+    <string name="invite_friends_text">Hey, talk to me on Element: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Join me on element</string>
     <string name="invitation_sent_to_one_user">Invitation sent to %1$s</string>
     <string name="invitations_sent_to_two_users">Invitations sent to %1$s and %2$s</string>
+    <string name="not_a_valid_qr_code">"It's not a valid matrix QR code"</string>
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="one">Invitations sent to %1$s and one more</item>
         <item quantity="other">Invitations sent to %1$s and %2$d more</item>
     </plurals>
     <string name="invite_users_to_room_failure">We could not invite users. Please check the users you want to invite and try again.</string>
+
+    <string name="user_code_scan">Scan a QR code</string>
+    <string name="user_code_share">Share my code</string>
+    <string name="user_code_my_code">My code</string>
+    <string name="user_code_info_text">Share this code with people so they can scan it to add you and start chatting.</string>
 
     <string name="choose_locale_current_locale_title">Current language</string>
     <string name="choose_locale_other_locales_title">Other available languages</string>
@@ -2669,9 +2690,17 @@
     <string name="error_opening_banned_room">Can\'t open a room where you are banned from.</string>
     <string name="room_error_not_found">Can\'t find this room. Make sure it exists.</string>
 
+    <!-- Add by QR code -->
+    <string name="share_by_text">Share by text</string>
+    <string name="cannot_dm_self">Cannot DM yourself!</string>
+    <string name="invalid_qr_code_uri">Invalid QR code (Invalid URI)!</string>
+    <string name="qr_code_not_scanned">QR code not scanned!</string>
+
     <!-- Universal link -->
     <string name="universal_link_malformed">The link was malformed</string>
     <string name="warning_room_not_created_yet">The room is not yet created. Cancel the room creation?</string>
     <string name="warning_unsaved_change">There are unsaved changes. Discard the changes?</string>
     <string name="warning_unsaved_change_discard">Discard changes</string>
+
+    <string name="matrix_to_card_title">Matrix Link</string>
 </resources>

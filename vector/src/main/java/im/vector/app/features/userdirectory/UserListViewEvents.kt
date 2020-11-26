@@ -16,12 +16,11 @@
 
 package im.vector.app.features.userdirectory
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.platform.VectorViewEvents
 
-sealed class UserDirectoryAction : VectorViewModelAction {
-    data class FilterKnownUsers(val value: String) : UserDirectoryAction()
-    data class SearchDirectoryUsers(val value: String) : UserDirectoryAction()
-    object ClearFilterKnownUsers : UserDirectoryAction()
-    data class SelectPendingInvitee(val pendingInvitee: PendingInvitee) : UserDirectoryAction()
-    data class RemovePendingInvitee(val pendingInvitee: PendingInvitee) : UserDirectoryAction()
+/**
+ * Transient events for invite users to room screen
+ */
+sealed class UserListViewEvents : VectorViewEvents {
+    data class OpenShareMatrixToLing(val link: String) : UserListViewEvents()
 }

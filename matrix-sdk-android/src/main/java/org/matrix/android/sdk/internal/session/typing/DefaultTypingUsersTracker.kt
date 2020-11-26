@@ -37,6 +37,6 @@ internal class DefaultTypingUsersTracker @Inject constructor() : TypingUsersTrac
     }
 
     override fun getTypingUsers(roomId: String): List<SenderInfo> {
-        return typingUsers[roomId] ?: emptyList()
+        return typingUsers[roomId].orEmpty()
     }
 }

@@ -35,7 +35,7 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.reactions.EmojiChooserViewModel
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
-import im.vector.app.features.userdirectory.UserDirectorySharedActionViewModel
+import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 
 @Module
 interface ViewModelModule {
@@ -87,8 +87,8 @@ interface ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(UserDirectorySharedActionViewModel::class)
-    fun bindUserDirectorySharedActionViewModel(viewModel: UserDirectorySharedActionViewModel): ViewModel
+    @ViewModelKey(UserListSharedActionViewModel::class)
+    fun bindUserListSharedActionViewModel(viewModel: UserListSharedActionViewModel): ViewModel
 
     @Binds
     @IntoMap

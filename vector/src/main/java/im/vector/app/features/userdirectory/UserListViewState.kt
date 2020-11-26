@@ -17,30 +17,33 @@
 package im.vector.app.features.userdirectory
 
 import androidx.paging.PagedList
-import arrow.core.Option
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.core.contacts.MappedContact
 import org.matrix.android.sdk.api.session.user.model.User
 
-data class UserDirectoryViewState(
+data class UserListViewState(
         val excludedUserIds: Set<String>? = null,
         val knownUsers: Async<PagedList<User>> = Uninitialized,
         val directoryUsers: Async<List<User>> = Uninitialized,
+        val filteredMappedContacts: List<MappedContact> = emptyList(),
         val pendingInvitees: Set<PendingInvitee> = emptySet(),
         val createAndInviteState: Async<String> = Uninitialized,
-        val directorySearchTerm: String = "",
-        val filterKnownUsersValue: Option<String> = Option.empty(),
-        val existingDmRoomId: String? = null
+        val searchTerm: String = "",
+        val myUserId: String = "",
+        val existingRoomId: String? = null
 ) : MvRxState {
 
-    constructor(args: KnownUsersFragmentArgs) : this(excludedUserIds = args.excludedUserIds)
+    constructor(args: UserListFragmentArgs) : this(
+            existingRoomId = args.existingRoomId
+    )
 
     fun getSelectedMatrixId(): List<String> {
         return pendingInvitees
                 .mapNotNull {
                     when (it) {
-                        is PendingInvitee.UserPendingInvitee     -> it.user.userId
+                        is PendingInvitee.UserPendingInvitee -> it.user.userId
                         is PendingInvitee.ThreePidPendingInvitee -> null
                     }
                 }

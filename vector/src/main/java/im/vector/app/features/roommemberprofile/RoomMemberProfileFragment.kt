@@ -294,12 +294,20 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     private fun handleShareRoomMemberProfile(permalink: String) {
-        startSharePlainTextIntent(
-                fragment = this,
-                activityResultLauncher = null,
-                chooserTitle = null,
-                text = permalink
-        )
+        val view = layoutInflater.inflate(R.layout.dialog_share_qr_code, null)
+        val qrCode = view.findViewById<im.vector.app.core.ui.views.QrCodeImageView>(R.id.itemShareQrCodeImage)
+        qrCode.setData(permalink)
+        AlertDialog.Builder(requireContext())
+            .setView(view)
+            .setNeutralButton(R.string.ok, null)
+            .setPositiveButton(R.string.share_by_text) { _, _ ->
+                startSharePlainTextIntent(
+                        fragment = this,
+                        activityResultLauncher = null,
+                        chooserTitle = null,
+                        text = permalink
+                )
+            }.show()
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {

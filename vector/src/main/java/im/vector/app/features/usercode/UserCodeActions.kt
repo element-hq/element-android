@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.userdirectory
+package im.vector.app.features.usercode
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.util.MatrixItem
 
-@Parcelize
-data class KnownUsersFragmentArgs(
-        val title: String,
-        val menuResId: Int,
-        val excludedUserIds: Set<String>? = null,
-        val isCreatingRoom: Boolean = false
-) : Parcelable
+sealed class UserCodeActions : VectorViewModelAction {
+    object DismissAction : UserCodeActions()
+    data class SwitchMode(val mode: UserCodeState.Mode) : UserCodeActions()
+    data class DecodedQRCode(val code: String) : UserCodeActions()
+    data class StartChattingWithUser(val matrixItem: MatrixItem) : UserCodeActions()
+    object CameraPermissionNotGranted : UserCodeActions()
+    object ShareByText : UserCodeActions()
+}
