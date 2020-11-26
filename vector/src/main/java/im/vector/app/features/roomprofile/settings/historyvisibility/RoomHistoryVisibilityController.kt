@@ -27,10 +27,10 @@ class RoomHistoryVisibilityController @Inject constructor(
 
     override fun getActions(state: RoomHistoryVisibilityState): List<BottomSheetRoomHistoryVisibilityAction> {
         return listOf(
+                RoomHistoryVisibility.WORLD_READABLE,
                 RoomHistoryVisibility.SHARED,
                 RoomHistoryVisibility.INVITED,
-                RoomHistoryVisibility.JOINED,
-                RoomHistoryVisibility.WORLD_READABLE
+                RoomHistoryVisibility.JOINED
         )
                 .map { roomHistoryVisibility ->
                     BottomSheetRoomHistoryVisibilityAction(
