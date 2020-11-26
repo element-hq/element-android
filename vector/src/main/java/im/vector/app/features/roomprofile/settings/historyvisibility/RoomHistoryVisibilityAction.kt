@@ -20,7 +20,7 @@ import androidx.annotation.DrawableRes
 import im.vector.app.core.ui.bottomsheet.BottomSheetGenericAction
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 
-class BottomSheetRoomHistoryVisibilityAction(
+class RoomHistoryVisibilityAction(
         val roomHistoryVisibility: RoomHistoryVisibility,
         title: String,
         @DrawableRes iconResId: Int,

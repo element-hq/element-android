@@ -23,9 +23,9 @@ import javax.inject.Inject
 
 class RoomHistoryVisibilityController @Inject constructor(
         private val historyVisibilityFormatter: RoomHistoryVisibilityFormatter
-) : BottomSheetGenericController<RoomHistoryVisibilityState, BottomSheetRoomHistoryVisibilityAction>() {
+) : BottomSheetGenericController<RoomHistoryVisibilityState, RoomHistoryVisibilityAction>() {
 
-    override fun getActions(state: RoomHistoryVisibilityState): List<BottomSheetRoomHistoryVisibilityAction> {
+    override fun getActions(state: RoomHistoryVisibilityState): List<RoomHistoryVisibilityAction> {
         return listOf(
                 RoomHistoryVisibility.WORLD_READABLE,
                 RoomHistoryVisibility.SHARED,
@@ -33,7 +33,7 @@ class RoomHistoryVisibilityController @Inject constructor(
                 RoomHistoryVisibility.JOINED
         )
                 .map { roomHistoryVisibility ->
-                    BottomSheetRoomHistoryVisibilityAction(
+                    RoomHistoryVisibilityAction(
                             roomHistoryVisibility = roomHistoryVisibility,
                             title = historyVisibilityFormatter.getSetting(roomHistoryVisibility),
                             iconResId = 0,

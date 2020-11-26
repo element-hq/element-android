@@ -19,5 +19,5 @@ package im.vector.app.features.roomprofile.settings.historyvisibility
 import im.vector.app.core.platform.VectorSharedActionViewModel
 import javax.inject.Inject
 
-class SetRoomHistoryVisibilitySharedActionViewModel @Inject constructor()
-    : VectorSharedActionViewModel<BottomSheetRoomHistoryVisibilityAction>()
+class RoomHistoryVisibilitySharedActionViewModel @Inject constructor()
+    : VectorSharedActionViewModel<RoomHistoryVisibilityAction>()
