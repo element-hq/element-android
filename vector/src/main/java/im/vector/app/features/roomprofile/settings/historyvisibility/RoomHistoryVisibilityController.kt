@@ -37,8 +37,7 @@ class RoomHistoryVisibilityController @Inject constructor(
                             roomHistoryVisibility = roomHistoryVisibility,
                             title = historyVisibilityFormatter.getSetting(roomHistoryVisibility),
                             iconResId = 0,
-                            isSelected = roomHistoryVisibility == state.currentRoomHistoryVisibility,
-                            destructive = false
+                            isSelected = roomHistoryVisibility == state.currentRoomHistoryVisibility
                     )
                 }
     }

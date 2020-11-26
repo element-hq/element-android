@@ -34,24 +34,21 @@ class RoomJoinRuleController @Inject constructor(
                         roomGuestAccess = null,
                         title = stringProvider.getString(R.string.room_settings_room_access_entry_only_invited),
                         iconResId = 0,
-                        isSelected = state.currentRoomJoinRule == RoomJoinRules.INVITE,
-                        destructive = false
+                        isSelected = state.currentRoomJoinRule == RoomJoinRules.INVITE
                 ),
                 RoomJoinRuleAction(
                         roomJoinRule = RoomJoinRules.PUBLIC,
                         roomGuestAccess = GuestAccess.Forbidden,
                         title = stringProvider.getString(R.string.room_settings_room_access_entry_anyone_with_link_apart_guest),
                         iconResId = 0,
-                        isSelected = state.currentRoomJoinRule == RoomJoinRules.PUBLIC && state.currentGuestAccess == GuestAccess.Forbidden,
-                        destructive = false
+                        isSelected = state.currentRoomJoinRule == RoomJoinRules.PUBLIC && state.currentGuestAccess == GuestAccess.Forbidden
                 ),
                 RoomJoinRuleAction(
                         roomJoinRule = RoomJoinRules.PUBLIC,
                         roomGuestAccess = GuestAccess.CanJoin,
                         title = stringProvider.getString(R.string.room_settings_room_access_entry_anyone_with_link_including_guest),
                         iconResId = 0,
-                        isSelected = state.currentRoomJoinRule == RoomJoinRules.PUBLIC && state.currentGuestAccess == GuestAccess.CanJoin,
-                        destructive = false
+                        isSelected = state.currentRoomJoinRule == RoomJoinRules.PUBLIC && state.currentGuestAccess == GuestAccess.CanJoin
                 )
         )
     }

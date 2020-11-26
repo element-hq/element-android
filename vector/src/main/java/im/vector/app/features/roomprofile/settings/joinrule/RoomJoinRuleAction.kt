@@ -26,11 +26,10 @@ class RoomJoinRuleAction(
         val roomGuestAccess: GuestAccess?,
         title: String,
         @DrawableRes iconResId: Int,
-        isSelected: Boolean,
-        destructive: Boolean
+        isSelected: Boolean
 ) : BottomSheetGenericAction(
         title = title,
         iconResId = iconResId,
         isSelected = isSelected,
-        destructive = destructive
+        destructive = false
 )
