@@ -12,6 +12,7 @@ Improvements 🙌:
  - Handle events of type "m.room.server_acl" (#890)
  - Room creation form: add advanced section to disable federation (#1314)
  - Move "Enable Encryption" from room setting screen to room profile screen (#2394)
+ - Home empty screens quick design update (#2347)
 
 Bugfix 🐛:
  - Fix crash on AttachmentViewer (#2365)
