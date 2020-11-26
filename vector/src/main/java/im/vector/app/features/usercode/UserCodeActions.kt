@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.userdirectory
+package im.vector.app.features.usercode
 
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.util.MatrixItem
 
-sealed class UserDirectoryAction : VectorViewModelAction {
-    data class FilterKnownUsers(val value: String) : UserDirectoryAction()
-    data class SearchDirectoryUsers(val value: String) : UserDirectoryAction()
-    object ClearFilterKnownUsers : UserDirectoryAction()
-    data class SelectPendingInvitee(val pendingInvitee: PendingInvitee) : UserDirectoryAction()
-    data class RemovePendingInvitee(val pendingInvitee: PendingInvitee) : UserDirectoryAction()
+sealed class UserCodeActions : VectorViewModelAction {
+    object DismissAction : UserCodeActions()
+    data class SwitchMode(val mode: UserCodeState.Mode) : UserCodeActions()
+    data class DecodedQRCode(val code: String) : UserCodeActions()
+    data class StartChattingWithUser(val matrixItem: MatrixItem) : UserCodeActions()
+    object CameraPermissionNotGranted : UserCodeActions()
+    object ShareByText : UserCodeActions()
 }

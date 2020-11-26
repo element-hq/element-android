@@ -60,6 +60,7 @@ import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovement
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.CodeVisitor
 import im.vector.app.features.html.EventHtmlRenderer
+import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
@@ -106,7 +107,12 @@ class MessageItemFactory @Inject constructor(
         private val defaultItemFactory: DefaultItemFactory,
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
+        private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val session: Session) {
+
+    private val pillsPostProcessor by lazy {
+        pillsPostProcessorFactory.create(roomSummaryHolder.roomSummary?.roomId)
+    }
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -114,7 +120,6 @@ class MessageItemFactory @Inject constructor(
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
-
         val informationData = messageInformationDataFactory.create(event, nextEvent)
 
         if (event.root.isRedacted()) {
@@ -139,16 +144,16 @@ class MessageItemFactory @Inject constructor(
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent               -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageTextContent                -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
-            is MessageImageInfoContent           -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageNoticeContent              -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageVideoContent               -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageFileContent                -> buildFileMessageItem(messageContent, highlight, attributes)
-            is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, attributes)
+            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageTextContent -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
+            is MessageImageInfoContent -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVideoContent -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageFileContent -> buildFileMessageItem(messageContent, highlight, attributes)
+            is MessageAudioContent -> buildAudioMessageItem(messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageOptionsContent             -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+            is MessageOptionsContent -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessagePollResponseContent -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }
@@ -159,7 +164,7 @@ class MessageItemFactory @Inject constructor(
                                         callback: TimelineEventController.Callback?,
                                         attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
         return when (messageContent.optionType) {
-            OPTION_TYPE_POLL    -> {
+            OPTION_TYPE_POLL -> {
                 MessagePollItem_()
                         .attributes(attributes)
                         .callback(callback)
@@ -217,13 +222,17 @@ class MessageItemFactory @Inject constructor(
                                                     attributes: AbsMessageItem.Attributes): VerificationRequestItem? {
         // If this request is not sent by me or sent to me, we should ignore it in timeline
         val myUserId = session.myUserId
+        val roomId = roomSummaryHolder.roomSummary?.roomId
         if (informationData.senderId != myUserId && messageContent.toUserId != myUserId) {
             return null
         }
 
         val otherUserId = if (informationData.sentByMe) messageContent.toUserId else informationData.senderId
-        val otherUserName = if (informationData.sentByMe) session.getUser(messageContent.toUserId)?.displayName
-        else informationData.memberName
+        val otherUserName = if (informationData.sentByMe) {
+            session.getRoomMember(messageContent.toUserId, roomId ?: "")?.displayName
+        } else {
+            informationData.memberName
+        }
         return VerificationRequestItem_()
                 .attributes(
                         VerificationRequestItem.Attributes(
@@ -362,7 +371,7 @@ class MessageItemFactory @Inject constructor(
             val codeVisitor = CodeVisitor()
             codeVisitor.visit(localFormattedBody)
             when (codeVisitor.codeKind) {
-                CodeVisitor.Kind.BLOCK  -> {
+                CodeVisitor.Kind.BLOCK -> {
                     val codeFormattedBlock = htmlRenderer.get().render(localFormattedBody)
                     if (codeFormattedBlock == null) {
                         buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
@@ -378,7 +387,7 @@ class MessageItemFactory @Inject constructor(
                         buildMessageTextItem(codeFormatted, false, informationData, highlight, callback, attributes)
                     }
                 }
-                CodeVisitor.Kind.NONE   -> {
+                CodeVisitor.Kind.NONE -> {
                     buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
                 }
             }
@@ -393,7 +402,7 @@ class MessageItemFactory @Inject constructor(
                                        callback: TimelineEventController.Callback?,
                                        attributes: AbsMessageItem.Attributes): MessageTextItem? {
         val compressed = htmlCompressor.compress(messageContent.formattedBody!!)
-        val formattedBody = htmlRenderer.get().render(compressed)
+        val formattedBody = htmlRenderer.get().render(compressed, pillsPostProcessor)
         return buildMessageTextItem(formattedBody, true, informationData, highlight, callback, attributes)
     }
 
@@ -528,7 +537,7 @@ class MessageItemFactory @Inject constructor(
     private fun MessageContentWithFormattedBody.getHtmlBody(): CharSequence {
         return matrixFormattedBody
                 ?.let { htmlCompressor.compress(it) }
-                ?.let { htmlRenderer.get().render(it) }
+                ?.let { htmlRenderer.get().render(it, pillsPostProcessor) }
                 ?: body
     }
 

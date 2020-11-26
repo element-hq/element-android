@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.userdirectory
+package im.vector.app.espresso.tools
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import android.app.Activity
+import im.vector.app.activityIdlingResource
+import im.vector.app.withIdlingResource
 
-@Parcelize
-data class KnownUsersFragmentArgs(
-        val title: String,
-        val menuResId: Int,
-        val excludedUserIds: Set<String>? = null,
-        val isCreatingRoom: Boolean = false
-) : Parcelable
+inline fun <reified T : Activity> waitUntilActivityVisible(noinline block: (() -> Unit)) {
+    withIdlingResource(activityIdlingResource(T::class.java), block)
+}

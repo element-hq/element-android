@@ -50,6 +50,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.commonmark.parser.Parser
@@ -276,7 +277,37 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.CancelSend                       -> handleCancel(action)
             is RoomDetailAction.OpenOrCreateDm                   -> handleOpenOrCreateDm(action)
             is RoomDetailAction.JumpToReadReceipt                -> handleJumpToReadReceipt(action)
+            RoomDetailAction.QuickActionInvitePeople             -> handleInvitePeople()
+            RoomDetailAction.QuickActionSetAvatar                -> handleQuickSetAvatar()
+            is RoomDetailAction.SetAvatarAction                  -> handleSetNewAvatar(action)
+            RoomDetailAction.QuickActionSetTopic                 -> _viewEvents.post(RoomDetailViewEvents.OpenRoomSettings)
+            is RoomDetailAction.ShowRoomAvatarFullScreen         -> {
+                _viewEvents.post(
+                        RoomDetailViewEvents.ShowRoomAvatarFullScreen(action.matrixItem, action.transitionView)
+                )
+            }
         }.exhaustive
+    }
+
+    private fun handleSetNewAvatar(action: RoomDetailAction.SetAvatarAction) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                awaitCallback<Unit> {
+                    room.updateAvatar(action.newAvatarUri, action.newAvatarFileName, it)
+                }
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
+            }
+        }
+    }
+
+    private fun handleInvitePeople() {
+        _viewEvents.post(RoomDetailViewEvents.OpenInvitePeople)
+    }
+
+    private fun handleQuickSetAvatar() {
+        _viewEvents.post(RoomDetailViewEvents.OpenSetRoomAvatarDialog)
     }
 
     private fun handleOpenOrCreateDm(action: RoomDetailAction.OpenOrCreateDm) {
@@ -476,22 +507,24 @@ class RoomDetailViewModel @AssistedInject constructor(
      * Convert a send mode to a draft and save the draft
      */
     private fun handleSaveDraft(action: RoomDetailAction.SaveDraft) = withState {
-        when {
-            it.sendMode is SendMode.REGULAR && !it.sendMode.fromSharing -> {
-                setState { copy(sendMode = it.sendMode.copy(action.draft)) }
-                room.saveDraft(UserDraft.REGULAR(action.draft), NoOpMatrixCallback())
-            }
-            it.sendMode is SendMode.REPLY                               -> {
-                setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
-            }
-            it.sendMode is SendMode.QUOTE                               -> {
-                setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
-            }
-            it.sendMode is SendMode.EDIT                                -> {
-                setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft), NoOpMatrixCallback())
+        viewModelScope.launch(NonCancellable) {
+            when {
+                it.sendMode is SendMode.REGULAR && !it.sendMode.fromSharing -> {
+                    setState { copy(sendMode = it.sendMode.copy(action.draft)) }
+                    room.saveDraft(UserDraft.REGULAR(action.draft))
+                }
+                it.sendMode is SendMode.REPLY                               -> {
+                    setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
+                    room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                }
+                it.sendMode is SendMode.QUOTE                               -> {
+                    setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
+                    room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                }
+                it.sendMode is SendMode.EDIT                                -> {
+                    setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
+                    room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                }
             }
         }
     }
@@ -778,7 +811,9 @@ class RoomDetailViewModel @AssistedInject constructor(
         } else {
             // Otherwise we clear the composer and remove the draft from db
             setState { copy(sendMode = SendMode.REGULAR("", false)) }
-            room.deleteDraft(NoOpMatrixCallback())
+            viewModelScope.launch {
+                room.deleteDraft()
+            }
         }
     }
 
@@ -1302,7 +1337,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
             if (summary.membership == Membership.INVITE) {
                 summary.inviterId?.let { inviterId ->
-                    session.getUser(inviterId)
+                    session.getRoomMember(inviterId, summary.roomId)
                 }?.also {
                     setState { copy(asyncInviter = Success(it)) }
                 }

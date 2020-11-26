@@ -18,10 +18,14 @@ package im.vector.app.features.roomdirectory.createroom
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
@@ -33,12 +37,20 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_create_room.*
-import timber.log.Timber
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import javax.inject.Inject
+
+@Parcelize
+data class CreateRoomArgs(
+        val initialName: String
+) : Parcelable
 
 class CreateRoomFragment @Inject constructor(
         private val createRoomController: CreateRoomController,
+        val createRoomViewModelFactory: CreateRoomViewModel.Factory,
         colorProvider: ColorProvider
 ) : VectorBaseFragment(),
         CreateRoomController.Listener,
@@ -46,7 +58,8 @@ class CreateRoomFragment @Inject constructor(
         OnBackPressed {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
-    private val viewModel: CreateRoomViewModel by activityViewModel()
+    private val viewModel: CreateRoomViewModel by fragmentViewModel()
+    private val args: CreateRoomArgs by args()
 
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
@@ -56,15 +69,29 @@ class CreateRoomFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         vectorBaseActivity.setSupportActionBar(createRoomToolbar)
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
+        setupWaitingView()
         setupRecyclerView()
         createRoomClose.debouncedClicks {
             sharedActionViewModel.post(RoomDirectorySharedAction.Back)
         }
         viewModel.observeViewEvents {
             when (it) {
-                CreateRoomViewEvents.Quit -> vectorBaseActivity.onBackPressed()
+                CreateRoomViewEvents.Quit       -> vectorBaseActivity.onBackPressed()
+                is CreateRoomViewEvents.Failure -> showFailure(it.throwable)
             }.exhaustive
         }
+    }
+
+    override fun showFailure(throwable: Throwable) {
+        // Note: RoomAliasError are displayed directly in the form
+        if (throwable !is CreateRoomFailure.RoomAliasError) {
+            super.showFailure(throwable)
+        }
+    }
+
+    private fun setupWaitingView() {
+        waiting_view_status_text.isVisible = true
+        waiting_view_status_text.setText(R.string.create_room_in_progress)
     }
 
     override fun onDestroyView() {
@@ -102,20 +129,23 @@ class CreateRoomFragment @Inject constructor(
         viewModel.handle(CreateRoomAction.SetIsPublic(isPublic))
     }
 
-    override fun setIsInRoomDirectory(isInRoomDirectory: Boolean) {
-        viewModel.handle(CreateRoomAction.SetIsInRoomDirectory(isInRoomDirectory))
+    override fun setAliasLocalPart(aliasLocalPart: String) {
+        viewModel.handle(CreateRoomAction.SetRoomAliasLocalPart(aliasLocalPart))
     }
 
     override fun setIsEncrypted(isEncrypted: Boolean) {
         viewModel.handle(CreateRoomAction.SetIsEncrypted(isEncrypted))
     }
 
-    override fun submit() {
-        viewModel.handle(CreateRoomAction.Create)
+    override fun toggleShowAdvanced() {
+        viewModel.handle(CreateRoomAction.ToggleShowAdvanced)
     }
 
-    override fun retry() {
-        Timber.v("Retry")
+    override fun setDisableFederation(disableFederation: Boolean) {
+        viewModel.handle(CreateRoomAction.DisableFederation(disableFederation))
+    }
+
+    override fun submit() {
         viewModel.handle(CreateRoomAction.Create)
     }
 
@@ -139,6 +169,7 @@ class CreateRoomFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) { state ->
         val async = state.asyncCreateRoomRequest
+        waiting_view.isVisible = async is Loading
         if (async is Success) {
             // Navigate to freshly created room
             navigator.openRoom(requireActivity(), async())

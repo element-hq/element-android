@@ -16,14 +16,13 @@
 
 package im.vector.app.features.userdirectory
 
-import im.vector.app.core.platform.VectorSharedAction
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-sealed class UserDirectorySharedAction : VectorSharedAction {
-    object OpenUsersDirectory : UserDirectorySharedAction()
-    object OpenPhoneBook : UserDirectorySharedAction()
-    object Close : UserDirectorySharedAction()
-    object GoBack : UserDirectorySharedAction()
-    data class OnMenuItemSelected(val itemId: Int,
-                                  val invitees: Set<PendingInvitee>,
-                                  val existingDmRoomId: String?) : UserDirectorySharedAction()
-}
+@Parcelize
+data class UserListFragmentArgs(
+        val title: String,
+        val menuResId: Int,
+        val excludedUserIds: Set<String>? = null,
+        val existingRoomId: String? = null
+) : Parcelable

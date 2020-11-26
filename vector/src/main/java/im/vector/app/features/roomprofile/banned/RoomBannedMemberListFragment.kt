@@ -56,7 +56,7 @@ class RoomBannedMemberListFragment @Inject constructor(
         roomMemberListController.callback = this
         setupToolbar(roomSettingsToolbar)
         setupSearchView()
-        recyclerView.configureWith(roomMemberListController, hasFixedSize = true)
+        roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
 
         viewModel.observeViewEvents {
             when (it) {
@@ -83,7 +83,7 @@ class RoomBannedMemberListFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        roomSettingsRecyclerView.cleanup()
         super.onDestroyView()
     }
 

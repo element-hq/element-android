@@ -30,10 +30,10 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.userdirectory.PendingInvitee
-import im.vector.app.features.userdirectory.UserDirectoryAction
-import im.vector.app.features.userdirectory.UserDirectorySharedAction
-import im.vector.app.features.userdirectory.UserDirectorySharedActionViewModel
-import im.vector.app.features.userdirectory.UserDirectoryViewModel
+import im.vector.app.features.userdirectory.UserListAction
+import im.vector.app.features.userdirectory.UserListSharedAction
+import im.vector.app.features.userdirectory.UserListSharedActionViewModel
+import im.vector.app.features.userdirectory.UserListViewModel
 import kotlinx.android.synthetic.main.fragment_contacts_book.*
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
@@ -46,16 +46,16 @@ class ContactsBookFragment @Inject constructor(
 ) : VectorBaseFragment(), ContactsBookController.Callback {
 
     override fun getLayoutResId() = R.layout.fragment_contacts_book
-    private val viewModel: UserDirectoryViewModel by activityViewModel()
+    private val viewModel: UserListViewModel by activityViewModel()
 
     // Use activityViewModel to avoid loading several times the data
     private val contactsBookViewModel: ContactsBookViewModel by activityViewModel()
 
-    private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
+    private lateinit var sharedActionViewModel: UserListSharedActionViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)
         setupRecyclerView()
         setupFilterView()
         setupConsentView()
@@ -110,7 +110,7 @@ class ContactsBookFragment @Inject constructor(
 
     private fun setupCloseView() {
         phoneBookClose.debouncedClicks {
-            sharedActionViewModel.post(UserDirectorySharedAction.GoBack)
+            sharedActionViewModel.post(UserListSharedAction.GoBack)
         }
     }
 
@@ -122,13 +122,13 @@ class ContactsBookFragment @Inject constructor(
 
     override fun onMatrixIdClick(matrixId: String) {
         view?.hideKeyboard()
-        viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(User(matrixId))))
-        sharedActionViewModel.post(UserDirectorySharedAction.GoBack)
+        viewModel.handle(UserListAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(User(matrixId))))
+        sharedActionViewModel.post(UserListSharedAction.GoBack)
     }
 
     override fun onThreePidClick(threePid: ThreePid) {
         view?.hideKeyboard()
-        viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.ThreePidPendingInvitee(threePid)))
-        sharedActionViewModel.post(UserDirectorySharedAction.GoBack)
+        viewModel.handle(UserListAction.SelectPendingInvitee(PendingInvitee.ThreePidPendingInvitee(threePid)))
+        sharedActionViewModel.post(UserListSharedAction.GoBack)
     }
 }

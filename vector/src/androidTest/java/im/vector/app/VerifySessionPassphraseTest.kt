@@ -88,7 +88,7 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
     fun checkVerifyWithPassphrase() {
         val userId: String = existingSession!!.myUserId
 
-        doLogin(homeServerUrl, userId, password)
+        uiTestBase.login(userId = userId, password = password, homeServerUrl = homeServerUrl)
 
         // Thread.sleep(6000)
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
@@ -137,10 +137,10 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
             onView(withId(R.id.ssss__root)).check(matches(isDisplayed()))
         }
 
-        onView((withId(R.id.ssss_passphrase_enter_edittext)))
+        onView(withId(R.id.ssss_passphrase_enter_edittext))
                 .perform(typeText(passphrase))
 
-        onView((withId(R.id.ssss_passphrase_submit)))
+        onView(withId(R.id.ssss_passphrase_submit))
                 .perform(click())
 
         System.out.println("*** passphrase 1")

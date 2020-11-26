@@ -17,7 +17,6 @@
 package im.vector.app.features.roomprofile.settings
 
 import androidx.core.net.toFile
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -28,7 +27,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Completable
 import io.reactivex.Observable
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -118,8 +116,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_ROOM_CANONICAL_ALIAS),
                             canChangeHistoryReadability = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_HISTORY_VISIBILITY),
-                            canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                                    EventType.STATE_ROOM_HISTORY_VISIBILITY)
                     )
                     setState { copy(actionPermissions = permissions) }
                 }
@@ -142,7 +139,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     override fun handle(action: RoomSettingsAction) {
         when (action) {
-            is RoomSettingsAction.EnableEncryption         -> handleEnableEncryption()
             is RoomSettingsAction.SetAvatarAction          -> handleSetAvatarAction(action)
             is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
             is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
@@ -224,18 +220,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             _viewEvents.post(RoomSettingsViewEvents.Failure(it))
                         }
                 )
-    }
-
-    private fun handleEnableEncryption() {
-        postLoading(true)
-
-        viewModelScope.launch {
-            val result = runCatching { room.enableEncryption() }
-            postLoading(false)
-            result.onFailure { failure ->
-                _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
-            }
-        }
     }
 
     private fun postLoading(isLoading: Boolean) {

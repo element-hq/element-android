@@ -16,9 +16,6 @@
 
 package org.matrix.android.sdk.api.session.group
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
-
 /**
  * This interface defines methods to interact within a group.
  */
@@ -28,8 +25,7 @@ interface Group {
     /**
      * This methods allows you to refresh data about this group. It will be reflected on the GroupSummary.
      * The SDK also takes care of refreshing group data every hour.
-     * @param callback : the matrix callback to be notified of success or failure
      * @return a Cancelable to be able to cancel requests.
      */
-    fun fetchGroupData(callback: MatrixCallback<Unit>): Cancelable
+    suspend fun fetchGroupData()
 }

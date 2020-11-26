@@ -16,9 +16,12 @@
 
 package im.vector.app.features.userdirectory
 
-import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.core.platform.VectorViewModelAction
 
-/**
- * Transient events for invite users to room screen
- */
-sealed class UserDirectoryViewEvents : VectorViewEvents
+sealed class UserListAction : VectorViewModelAction {
+    data class SearchUsers(val value: String) : UserListAction()
+    object ClearSearchUsers : UserListAction()
+    data class SelectPendingInvitee(val pendingInvitee: PendingInvitee) : UserListAction()
+    data class RemovePendingInvitee(val pendingInvitee: PendingInvitee) : UserListAction()
+    object ComputeMatrixToLinkForSharing : UserListAction()
+}

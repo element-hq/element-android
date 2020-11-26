@@ -163,7 +163,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
     private fun resolveStateRoomEvent(event: Event, session: Session): NotifiableEvent? {
         val content = event.content?.toModel<RoomMemberContent>() ?: return null
         val roomId = event.roomId ?: return null
-        val dName = event.senderId?.let { session.getUser(it)?.displayName }
+        val dName = event.senderId?.let { session.getRoomMember(it, roomId)?.displayName }
         if (Membership.INVITE == content.membership) {
             val body = noticeEventFormatter.format(event, dName, session.getRoomSummary(roomId))
                     ?: stringProvider.getString(R.string.notification_new_invitation)

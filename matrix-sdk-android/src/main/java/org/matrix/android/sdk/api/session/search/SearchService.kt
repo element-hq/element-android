@@ -16,9 +16,6 @@
 
 package org.matrix.android.sdk.api.session.search
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
-
 /**
  * This interface defines methods to search messages in rooms.
  */
@@ -35,15 +32,13 @@ interface SearchService {
      * @param beforeLimit how many events before the result are returned.
      * @param afterLimit how many events after the result are returned.
      * @param includeProfile requests that the server returns the historic profile information for the users that sent the events that were returned.
-     * @param callback Callback to get the search result
      */
-    fun search(searchTerm: String,
-               roomId: String,
-               nextBatch: String?,
-               orderByRecent: Boolean,
-               limit: Int,
-               beforeLimit: Int,
-               afterLimit: Int,
-               includeProfile: Boolean,
-               callback: MatrixCallback<SearchResult>): Cancelable
+    suspend fun search(searchTerm: String,
+                       roomId: String,
+                       nextBatch: String?,
+                       orderByRecent: Boolean,
+                       limit: Int,
+                       beforeLimit: Int,
+                       afterLimit: Int,
+                       includeProfile: Boolean): SearchResult
 }

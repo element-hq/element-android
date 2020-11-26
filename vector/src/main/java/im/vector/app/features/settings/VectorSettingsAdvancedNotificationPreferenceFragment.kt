@@ -15,12 +15,13 @@
  */
 package im.vector.app.features.settings
 
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import im.vector.app.R
 import im.vector.app.core.preference.PushRulePreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.toast
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
 import javax.inject.Inject
@@ -50,29 +51,25 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
                         if (newRule != null) {
                             displayLoadingView()
 
-                            session.updatePushRuleActions(
-                                    ruleAndKind.kind,
-                                    preference.ruleAndKind?.pushRule ?: ruleAndKind.pushRule,
-                                    newRule,
-                                    object : MatrixCallback<Unit> {
-                                        override fun onSuccess(data: Unit) {
-                                            if (!isAdded) {
-                                                return
-                                            }
-                                            preference.setPushRule(ruleAndKind.copy(pushRule = newRule))
-                                            hideLoadingView()
-                                        }
-
-                                        override fun onFailure(failure: Throwable) {
-                                            if (!isAdded) {
-                                                return
-                                            }
-                                            hideLoadingView()
-                                            // Restore the previous value
-                                            refreshDisplay()
-                                            activity?.toast(errorFormatter.toHumanReadable(failure))
-                                        }
-                                    })
+                            lifecycleScope.launch {
+                                val result = runCatching {
+                                    session.updatePushRuleActions(ruleAndKind.kind,
+                                            preference.ruleAndKind?.pushRule ?: ruleAndKind.pushRule,
+                                            newRule)
+                                }
+                                if (!isAdded) {
+                                    return@launch
+                                }
+                                hideLoadingView()
+                                result.onSuccess {
+                                    preference.setPushRule(ruleAndKind.copy(pushRule = newRule))
+                                }
+                                result.onFailure { failure ->
+                                    // Restore the previous value
+                                    refreshDisplay()
+                                    activity?.toast(errorFormatter.toHumanReadable(failure))
+                                }
+                            }
                         }
                         false
                     }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <im.vector.app.core.ui.views.QrCodeImageView
+        android:id="@+id/itemShareQrCodeImage"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/a11y_qr_code_for_verification"
+        tools:src="@drawable/ic_qr_code_add" />
+
+</FrameLayout>

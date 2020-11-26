@@ -587,6 +587,16 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         }
     }
 
+    fun showSnackbar(message: String, @StringRes withActionTitle: Int?, action: (() -> Unit)?) {
+        coordinatorLayout?.let {
+            Snackbar.make(it, message, Snackbar.LENGTH_LONG).apply {
+                withActionTitle?.let {
+                    setAction(withActionTitle, { action?.invoke() })
+                }
+            }.show()
+        }
+    }
+
     /* ==========================================================================================
      * User Consent
      * ========================================================================================== */

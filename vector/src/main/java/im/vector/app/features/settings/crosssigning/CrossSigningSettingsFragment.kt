@@ -68,12 +68,12 @@ class CrossSigningSettingsFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        recyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
+        genericRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
         controller.interactionListener = this
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         controller.interactionListener = null
         super.onDestroyView()
     }

@@ -55,7 +55,7 @@ class DiscoverySettingsFragment @Inject constructor(
         sharedViewModel = activityViewModelProvider.get(DiscoverySharedViewModel::class.java)
 
         controller.listener = this
-        recyclerView.configureWith(controller)
+        genericRecyclerView.configureWith(controller)
 
         sharedViewModel.navigateEvent.observeEvent(this) {
             when (it) {
@@ -74,7 +74,7 @@ class DiscoverySettingsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         controller.listener = null
         super.onDestroyView()
     }

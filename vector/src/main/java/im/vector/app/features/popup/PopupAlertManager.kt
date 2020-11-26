@@ -46,7 +46,7 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
     private var weakCurrentActivity: WeakReference<Activity>? = null
     private var currentAlerter: VectorAlert? = null
 
-    private val alertFiFo = ArrayList<VectorAlert>()
+    private val alertFiFo = mutableListOf<VectorAlert>()
 
     fun postVectorAlert(alert: VectorAlert) {
         synchronized(alertFiFo) {

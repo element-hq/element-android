@@ -36,53 +36,64 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
-import kotlinx.android.synthetic.main.fragment_known_users.*
+import kotlinx.android.synthetic.main.fragment_user_list.*
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
 
-class KnownUsersFragment @Inject constructor(
-        val userDirectoryViewModelFactory: UserDirectoryViewModel.Factory,
-        private val knownUsersController: KnownUsersController,
+class UserListFragment @Inject constructor(
+        private val userListController: UserListController,
         private val dimensionConverter: DimensionConverter,
         val homeServerCapabilitiesViewModelFactory: HomeServerCapabilitiesViewModel.Factory
-) : VectorBaseFragment(), KnownUsersController.Callback {
+) : VectorBaseFragment(), UserListController.Callback {
 
-    private val args: KnownUsersFragmentArgs by args()
+    private val args: UserListFragmentArgs by args()
+    private val viewModel: UserListViewModel by activityViewModel()
+    private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
+    private lateinit var sharedActionViewModel: UserListSharedActionViewModel
 
-    override fun getLayoutResId() = R.layout.fragment_known_users
+    override fun getLayoutResId() = R.layout.fragment_user_list
 
     override fun getMenuRes() = args.menuResId
 
-    private val viewModel: UserDirectoryViewModel by activityViewModel()
-    private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
-
-    private lateinit var sharedActionViewModel: UserDirectorySharedActionViewModel
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedActionViewModel = activityViewModelProvider.get(UserDirectorySharedActionViewModel::class.java)
+        sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)
+        userListTitle.text = args.title
+        vectorBaseActivity.setSupportActionBar(userListToolbar)
 
-        knownUsersTitle.text = args.title
-        vectorBaseActivity.setSupportActionBar(knownUsersToolbar)
         setupRecyclerView()
-        setupFilterView()
-        setupAddByMatrixIdView()
-        setupAddFromPhoneBookView()
+        setupSearchView()
         setupCloseView()
 
         homeServerCapabilitiesViewModel.subscribe {
-            knownUsersE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
+            userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 
-        viewModel.selectSubscribe(this, UserDirectoryViewState::pendingInvitees) {
+        viewModel.selectSubscribe(this, UserListViewState::pendingInvitees) {
             renderSelectedUsers(it)
+        }
+
+        viewModel.observeViewEvents {
+            when (it) {
+                is UserListViewEvents.OpenShareMatrixToLing -> {
+                    val text = getString(R.string.invite_friends_text, it.link)
+                    startSharePlainTextIntent(
+                            fragment = this,
+                            activityResultLauncher = null,
+                            chooserTitle = getString(R.string.invite_friends),
+                            text = text,
+                            extraTitle = getString(R.string.invite_friends_rich_title)
+                    )
+                }
+            }
         }
     }
 
     override fun onDestroyView() {
-        knownUsersController.callback = null
-        recyclerView.cleanup()
+        userListRecyclerView.cleanup()
         super.onDestroyView()
     }
 
@@ -91,69 +102,52 @@ class KnownUsersFragment @Inject constructor(
             val showMenuItem = it.pendingInvitees.isNotEmpty()
             menu.forEach { menuItem ->
                 menuItem.isVisible = showMenuItem
-                if (args.isCreatingRoom) {
-                    menuItem.setTitle(if (it.existingDmRoomId != null) R.string.action_open else R.string.create_room_action_create)
-                }
             }
         }
         super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) {
-        sharedActionViewModel.post(UserDirectorySharedAction.OnMenuItemSelected(
-                item.itemId,
-                it.pendingInvitees,
-                it.existingDmRoomId
-        ))
+        sharedActionViewModel.post(UserListSharedAction.OnMenuItemSelected(item.itemId, it.pendingInvitees))
         return@withState true
     }
 
-    private fun setupAddByMatrixIdView() {
-        addByMatrixId.debouncedClicks {
-            sharedActionViewModel.post(UserDirectorySharedAction.OpenUsersDirectory)
-        }
-    }
-
-    private fun setupAddFromPhoneBookView() {
-        addFromPhoneBook.debouncedClicks {
-            // TODO handle Permission first
-            sharedActionViewModel.post(UserDirectorySharedAction.OpenPhoneBook)
-        }
-    }
-
     private fun setupRecyclerView() {
-        knownUsersController.callback = this
+        userListController.callback = this
         // Don't activate animation as we might have way to much item animation when filtering
-        recyclerView.configureWith(knownUsersController, disableItemAnimation = true)
+        userListRecyclerView.configureWith(userListController, disableItemAnimation = true)
     }
 
-    private fun setupFilterView() {
-        knownUsersFilter
+    private fun setupSearchView() {
+        withState(viewModel) {
+            userListSearch.hint = getString(R.string.user_directory_search_hint)
+        }
+        userListSearch
                 .textChanges()
-                .startWith(knownUsersFilter.text)
+                .startWith(userListSearch.text)
                 .subscribe { text ->
-                    val filterValue = text.trim()
-                    val action = if (filterValue.isBlank()) {
-                        UserDirectoryAction.ClearFilterKnownUsers
+                    val searchValue = text.trim()
+                    val action = if (searchValue.isBlank()) {
+                        UserListAction.ClearSearchUsers
                     } else {
-                        UserDirectoryAction.FilterKnownUsers(filterValue.toString())
+                        UserListAction.SearchUsers(searchValue.toString())
                     }
                     viewModel.handle(action)
                 }
                 .disposeOnDestroyView()
 
-        knownUsersFilter.setupAsSearch()
-        knownUsersFilter.requestFocus()
+        userListSearch.setupAsSearch()
+        userListSearch.requestFocus()
     }
 
     private fun setupCloseView() {
-        knownUsersClose.debouncedClicks {
+        userListClose.debouncedClicks {
             requireActivity().finish()
         }
     }
 
     override fun invalidate() = withState(viewModel) {
-        knownUsersController.setData(it)
+        userListController.setData(it)
     }
 
     private fun renderSelectedUsers(invitees: Set<PendingInvitee>) {
@@ -183,12 +177,35 @@ class KnownUsersFragment @Inject constructor(
         chip.isCloseIconVisible = true
         chipGroup.addView(chip)
         chip.setOnCloseIconClickListener {
-            viewModel.handle(UserDirectoryAction.RemovePendingInvitee(pendingInvitee))
+            viewModel.handle(UserListAction.RemovePendingInvitee(pendingInvitee))
         }
+    }
+
+    override fun onInviteFriendClick() {
+        viewModel.handle(UserListAction.ComputeMatrixToLinkForSharing)
+    }
+
+    override fun onContactBookClick() {
+        sharedActionViewModel.post(UserListSharedAction.OpenPhoneBook)
     }
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(UserDirectoryAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(user)))
+        viewModel.handle(UserListAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(user)))
+    }
+
+    override fun onMatrixIdClick(matrixId: String) {
+        view?.hideKeyboard()
+        viewModel.handle(UserListAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(User(matrixId))))
+    }
+
+    override fun onThreePidClick(threePid: ThreePid) {
+        view?.hideKeyboard()
+        viewModel.handle(UserListAction.SelectPendingInvitee(PendingInvitee.ThreePidPendingInvitee(threePid)))
+    }
+
+    override fun onUseQRCode() {
+        view?.hideKeyboard()
+        sharedActionViewModel.post(UserListSharedAction.AddByQrCode)
     }
 }
