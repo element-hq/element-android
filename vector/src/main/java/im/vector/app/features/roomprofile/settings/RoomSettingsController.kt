@@ -26,9 +26,6 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -59,9 +56,6 @@ class RoomSettingsController @Inject constructor(
 
     override fun buildModels(data: RoomSettingsViewState?) {
         val roomSummary = data?.roomSummary?.invoke() ?: return
-
-        val historyVisibility = data.historyVisibilityEvent?.let { formatRoomHistoryVisibilityEvent(it) } ?: ""
-        val newHistoryVisibility = data.newHistoryVisibility?.let { roomHistoryVisibilityFormatter.format(it) }
 
         formEditableAvatarItem {
             id("avatar")
@@ -118,6 +112,9 @@ class RoomSettingsController @Inject constructor(
                 action = { callback?.onRoomAliasesClicked() }
         )
 
+        val historyVisibility = roomHistoryVisibilityFormatter.format(data.currentHistoryVisibility)
+        val newHistoryVisibility = data.newHistoryVisibility?.let { roomHistoryVisibilityFormatter.format(it) }
+
         buildProfileAction(
                 id = "historyReadability",
                 title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
@@ -127,10 +124,5 @@ class RoomSettingsController @Inject constructor(
                 editable = data.actionPermissions.canChangeHistoryVisibility,
                 action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
         )
-    }
-
-    private fun formatRoomHistoryVisibilityEvent(event: Event): String? {
-        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
-        return roomHistoryVisibilityFormatter.format(historyVisibility)
     }
 }

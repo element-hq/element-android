@@ -43,6 +43,7 @@ Improvements 🙌:
  - Move "Enable Encryption" from room setting screen to room profile screen (#2394)
  - Home empty screens quick design update (#2347)
  - Improve Invite user screen (seamless search for matrix ID)
+ - Improve room history visibility setting UX (#1579)
 
 Bugfix 🐛:
  - Fix crash on AttachmentViewer (#2365)

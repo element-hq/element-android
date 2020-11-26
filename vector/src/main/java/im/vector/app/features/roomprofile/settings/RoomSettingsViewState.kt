@@ -21,13 +21,13 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomprofile.RoomProfileArgs
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 data class RoomSettingsViewState(
         val roomId: String,
-        val historyVisibilityEvent: Event? = null,
+        // Default value: https://matrix.org/docs/spec/client_server/r0.6.1#id88
+        val currentHistoryVisibility: RoomHistoryVisibility = RoomHistoryVisibility.SHARED,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
         val currentRoomAvatarUrl: String? = null,

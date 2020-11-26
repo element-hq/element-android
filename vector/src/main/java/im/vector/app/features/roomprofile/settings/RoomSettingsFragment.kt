@@ -147,8 +147,7 @@ class RoomSettingsFragment @Inject constructor(
                 RoomHistoryVisibility.JOINED,
                 RoomHistoryVisibility.WORLD_READABLE
         )
-        val currentHistoryVisibility =
-                state.newHistoryVisibility ?: state.historyVisibilityEvent?.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility
+        val currentHistoryVisibility = state.newHistoryVisibility ?: state.currentHistoryVisibility
         val currentHistoryVisibilityIndex = historyVisibilities.indexOf(currentHistoryVisibility)
 
         AlertDialog.Builder(requireContext()).apply {
