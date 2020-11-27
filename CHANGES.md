@@ -27,6 +27,7 @@ Bugfix 🐛:
  - Registration: annoying error message scares every new user when they add an email (#2391)
  - Fix jitsi integration for those with non-vanilla dialler frameworks
  - Update profile has no effect if user is in zero rooms
+ - Fix issues with matrix.to deep linking (#2349)
 
 Translations 🗣:
  -
