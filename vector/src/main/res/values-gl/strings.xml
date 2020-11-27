@@ -1,16 +1,13 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="resources_language">gl</string>
     <string name="resources_country_code">ES</string>
-
     <string name="light_theme">Tema claro</string>
     <string name="dark_theme">Tema escuro</string>
     <string name="black_them">Tema negro</string>
-
-    <string name="notification_sync_in_progress">Sincronizando</string>
+    <string name="notification_sync_in_progress">Sincronizando…</string>
     <string name="notification_noisy_notifications">Notificacións con son</string>
     <string name="notification_silent_notifications">Notificacións silenciosas</string>
-
     <string name="title_activity_home">Mensaxes</string>
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configuración</string>
@@ -18,9 +15,7 @@
     <string name="title_activity_historical">Histórico</string>
     <string name="title_activity_bug_report">Informar de erros</string>
     <string name="title_activity_group_details">Detalles da comunidade</string>
-
     <string name="loading">Cargando…</string>
-
     <string name="ok">Aceptar</string>
     <string name="cancel">Cancelar</string>
     <string name="save">Gardar</string>
@@ -40,7 +35,8 @@
     <string name="notification_listening_for_events">A escoita de eventos</string>
     <string name="forward">Adiante</string>
     <string name="report_content">Informar sobre contido</string>
-    <string name="ongoing_conference_call">Conferencia en curso.\nÚnase con %1$s ou %2$s.</string>
+    <string name="ongoing_conference_call">Conferencia en curso.
+\nÚnete con %1$s ou %2$s</string>
     <string name="ongoing_conference_call_voice">voz</string>
     <string name="ongoing_conference_call_video">vídeo</string>
     <string name="cannot_start_call">Non se pode iniciar a chamada, inténteo máis tarde</string>
@@ -53,7 +49,6 @@
     <string name="or">ou</string>
     <string name="invite">Convidar</string>
     <string name="offline">Fóra de liña</string>
-
     <string name="action_exit">Saír</string>
     <string name="actions">Accións</string>
     <string name="action_sign_out">Saír</string>
@@ -67,53 +62,43 @@
     <string name="action_close">Pechar</string>
     <string name="copied_to_clipboard">Copiado ao portaretallos</string>
     <string name="disable">Desactivar</string>
-
     <string name="dialog_title_confirmation">Confirmación</string>
     <string name="dialog_title_warning">Aviso</string>
-
     <string name="bottom_action_home">Inicio</string>
     <string name="bottom_action_favourites">Favoritas</string>
     <string name="bottom_action_people">Xente</string>
     <string name="bottom_action_rooms">Salas</string>
     <string name="bottom_action_groups">Comunidades</string>
-
     <string name="home_filter_placeholder_home">Buscar salas</string>
     <string name="home_filter_placeholder_favorites">Buscar favoritas</string>
     <string name="home_filter_placeholder_people">Buscar a xente</string>
     <string name="home_filter_placeholder_rooms">Buscar salas</string>
     <string name="home_filter_placeholder_groups">Buscar comunidades</string>
-
     <string name="invitations_header">Convites</string>
     <string name="low_priority_header">Baixa prioridade</string>
-
     <string name="direct_chats_header">Conversas</string>
     <string name="local_address_book_header">Axenda de enderezos local</string>
     <string name="user_directory_header">Directorio de usuario</string>
     <string name="matrix_only_filter">Só contactos Matrix</string>
     <string name="no_conversation_placeholder">Sen conversas</string>
-    <string name="no_contact_access_placeholder">"Non lle permitiu acceder aos contactos locais a Element "</string>
+    <string name="no_contact_access_placeholder">Non lle permitiches a Element acceder ós contactos locais</string>
     <string name="no_result_placeholder">Sen resultados</string>
-
     <string name="rooms_header">Salas</string>
     <string name="rooms_directory_header">Directorio de salas</string>
     <string name="no_room_placeholder">Sen salas</string>
     <string name="no_public_room_placeholder">Sen salas públicas accesibles</string>
     <string name="title_activity_choose_sticker">Enviar unha icona</string>
-
     <string name="dialog_title_third_party_licences">Licenzas de terceiras partes</string>
-
     <string name="download">Descargar</string>
     <string name="speak">Falar</string>
     <string name="clear">Limpar</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 usuario</item>
-        <item quantity="other">%d usuarios</item>
+        <item quantity="one">1 usuaria</item>
+        <item quantity="other">%d usuarias</item>
     </plurals>
-
     <string name="groups_invite_header">Convidar</string>
     <string name="groups_header">Comunidades</string>
     <string name="no_group_placeholder">Sen grupos</string>
-
     <string name="send_bug_report_include_logs">Enviar informes</string>
     <string name="send_bug_report_include_crash_logs">Enviar informes de fallos</string>
     <string name="send_bug_report_include_screenshot">Enviar captura de pantalla</string>
@@ -126,10 +111,8 @@
     <string name="send_bug_report_sent">Enviouse o informe de erros correctamente</string>
     <string name="send_bug_report_failed">Houbo un problema enviando o informe de erros (%s)</string>
     <string name="send_bug_report_progress">Progreso (%s%%)</string>
-
     <string name="send_files_in">Enviar a</string>
     <string name="read_receipt">Ler</string>
-
     <string name="join_room">Unirse a sala</string>
     <string name="username">Nome de usuario</string>
     <string name="create_account">Rexistrar</string>
@@ -138,25 +121,20 @@
     <string name="hs_url">URL do servidor local</string>
     <string name="identity_url">URL do servidor de identidade</string>
     <string name="search">Buscar</string>
-
     <string name="start_new_chat">Iniciar conversa</string>
     <string name="start_voice_call">Iniciar chamada de voz</string>
     <string name="start_video_call">Iniciar videochamada</string>
-
     <string name="start_new_chat_prompt_msg">Seguro que quere comezar a conversar con %s?</string>
     <string name="start_voice_call_prompt_msg">Seguro que quere comezar unha chamada de audio?</string>
     <string name="start_video_call_prompt_msg">Seguro que quere comezar unha chamada de vídeo?</string>
-
     <string name="option_send_files">Enviar ficheiros</string>
     <string name="option_send_sticker">Enviar iconas</string>
     <string name="option_take_photo_video">Sacar unha foto ou vídeo</string>
     <string name="option_take_photo">Sacar foto</string>
     <string name="option_take_video">Sacar vídeo</string>
-
-    <string name="no_sticker_application_dialog_content">Non ten ningún paquete de iconas activado.
-
-Quere engadir algún?</string>
-
+    <string name="no_sticker_application_dialog_content">Non tes paquetes de pegatinas activados.
+\n
+\nQueres engadir algún\?</string>
     <string name="auth_login">Acceder</string>
     <string name="auth_register">Rexistrarse</string>
     <string name="auth_submit">Enviar</string>
@@ -187,9 +165,9 @@ Quere engadir algún?</string>
     <string name="auth_forgot_password">Esqueceu o contrasinal?</string>
     <string name="auth_use_server_options">Usar configuracións de servidor personalizadas (avanzado)</string>
     <string name="auth_email_validation_message">Comprobe o seu correo para continuar co rexistro</string>
-    <string name="auth_threepid_warning_message">O rexistro tanto co correo como co número non se acepta dentro desta api. Só se vai a ter en conta o número de teléfono.
-
-Pode engadir a dirección de correo na sección de configuración de perfil.</string>
+    <string name="auth_threepid_warning_message">O rexistro simultáneo co email e o número de teléfono non está soportado ata que o api exista. Só se terá en conta o número de teléfono.
+\n
+\nPoderás engadir o teu email ó perfil nos axustes.</string>
     <string name="auth_recaptcha_message">Este servidor local quere asegurarse de que non é un robot</string>
     <string name="auth_username_in_use">Nome de usuario empregado</string>
     <string name="auth_home_server">Servidor local:</string>
@@ -200,22 +178,16 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="auth_reset_password_missing_password">Debe introducir un novo contrasinal.</string>
     <string name="auth_reset_password_error_unauthorized">Fallo na verificación do enderezo de correo: asegúrese de ter picado na ligazón do correo</string>
     <string name="e2e_re_request_encryption_key_sent">Petición de chave enviada.</string>
-
     <string name="compression_options">Enviar como</string>
     <string name="yesterday">Onte</string>
     <string name="today">Hoxe</string>
-
     <string name="call">Chamar</string>
     <string name="_continue">Continuar</string>
-
     <string name="remove">Eliminar</string>
     <string name="reject">Rexeitar</string>
-
     <string name="room_jump_to_first_unread">Ir á primeira mensaxe non lida.</string>
-
     <string name="room_participants_leave_prompt_title">Deixar a sala</string>
     <string name="room_participants_create">Crear</string>
-
     <string name="room_participants_online">En liña</string>
     <string name="room_participants_offline">Fóra de liña</string>
     <string name="room_participants_idle">En pausa</string>
@@ -235,13 +207,11 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_do_not_have_permission_to_post">Non ten permiso para comentar nesta sala</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">1 mensaxe nova</item>
-        <item quantity="other">%d mensaxe nova</item>
+        <item quantity="other">%d mensaxes novas</item>
     </plurals>
-
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_logout_account">Desconectar</string>
     <string name="ssl_remain_offline">Ignorar</string>
-
     <string name="room_details_people">Xente</string>
     <string name="room_details_files">Ficheiros</string>
     <string name="room_details_settings">Configuracións</string>
@@ -252,14 +222,12 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="tab_title_search_messages">MENSAXES</string>
     <string name="tab_title_search_people">XENTE</string>
     <string name="tab_title_search_files">FICHEIROS</string>
-
     <string name="room_recents_invites">Convites</string>
     <string name="room_recents_start_chat">Iniciar conversa</string>
     <string name="room_recents_create_room">Crear sala</string>
     <string name="room_recents_join_room">Unirse á sala</string>
     <string name="room_recents_join_room_title">Unirse á sala</string>
     <string name="directory_searching_title">Buscando cartafol…</string>
-
     <string name="room_settings_all_messages_noisy">Todas as mensaxes (alto)</string>
     <string name="room_settings_all_messages">Todas as mensaxes</string>
     <string name="room_settings_mention_only">Só mencións</string>
@@ -274,20 +242,17 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_sliding_menu_version">Versión</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
     <string name="room_sliding_menu_privacy_policy">Política de privacidade</string>
-
     <string name="settings_email_address">Correo electrónico</string>
     <string name="settings_add_email_address">Engadir enderezo correo electrónico</string>
     <string name="settings_phone_number">Teléfono</string>
     <string name="settings_add_phone_number">Engada número de teléfono</string>
     <string name="settings_enable_all_notif">Activar notificacións para esta conta</string>
     <string name="settings_messages_sent_by_bot">Mensaxes enviadas por bot</string>
-
     <string name="settings_version">Versión</string>
     <string name="settings_olm_version">versións anteriores</string>
     <string name="settings_clear_cache">Limpar o caché</string>
     <string name="settings_clear_media_cache">Limpar o caché de imaxes</string>
     <string name="settings_keep_media">Manter as imaxes</string>
-
     <string name="settings_user_settings">Configuracións dos usuarios</string>
     <string name="settings_notifications">Notificacións</string>
     <string name="settings_other">Outro</string>
@@ -296,14 +261,12 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="settings_devices_list">Dispositivos</string>
     <string name="settings_inline_url_preview">Activar por defecto as vistas previas en liña de URL</string>
     <string name="settings_always_show_timestamps">Mostrar sempre marcas de tempo</string>
-    <string name="settings_12_24_timestamps">"Mostrar marcas  de tempo con formato 12 horas (ex. 2:30pm)"</string>
+    <string name="settings_12_24_timestamps">Mostrar marcas de tempo con formato 12-horas</string>
     <string name="settings_deactivate_my_account">Desactivar a miña conta</string>
-
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_in_of_analytics">Enviar datos de análises</string>
     <string name="settings_opt_in_of_analytics_summary">Element recolle información analítica anónima para permitirnos mellorar o aplicativo.</string>
-    <string name="settings_opt_in_of_analytics_ok">Si, quero axuda</string>
-
+    <string name="settings_opt_in_of_analytics_ok">Si, quero axudar!</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Nome</string>
     <string name="devices_details_device_name">Nome do dispositivo</string>
@@ -312,55 +275,42 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="devices_delete_dialog_title">Autenticación</string>
     <string name="devices_delete_pswd">Contrasinal:</string>
     <string name="devices_delete_submit_button_label">Enviar</string>
-
     <string name="settings_interface_language">Idioma da Interface</string>
     <string name="account_email_validation_title">Verificación pendente</string>
     <string name="account_email_validation_message">Comprobe o seu correo electrónico e pulse na ligazón que contén. Unha vez feito iso prema continuar.</string>
-    <string name="account_email_already_used_error">Xa se está a usar este correo</string>
-    <string name="account_phone_number_already_used_error">Xa se está a usar este teléfono</string>
-
+    <string name="account_email_already_used_error">Xa se está a usar este correo.</string>
+    <string name="account_phone_number_already_used_error">Xa se está a usar este teléfono.</string>
     <string name="settings_new_password">novo contrasinal</string>
     <string name="settings_confirm_password">confirmar o contrasinal</string>
     <string name="settings_select_country">Escolla un país</string>
-
     <string name="settings_phone_number_country_label">País</string>
     <string name="settings_phone_number_label">Número de teléfono</string>
     <string name="settings_phone_number_verification">Verificación do teléfono</string>
     <string name="settings_phone_number_code">Código</string>
-
-
     <string name="settings_flair">Aura</string>
-
     <string name="media_saving_period_3_days">3 días</string>
     <string name="media_saving_period_1_week">1 semana</string>
     <string name="media_saving_period_1_month">1 mes</string>
     <string name="media_saving_period_forever">Para sempre</string>
-
     <string name="room_settings_room_photo">Foto da sala</string>
     <string name="room_settings_room_name">Nome da sala</string>
     <string name="room_settings_topic">Asunto</string>
     <string name="room_settings_room_tag">Etiqueta de sala</string>
     <string name="room_settings_tag_pref_dialog_title">Marcado como:</string>
-
     <string name="room_settings_tag_pref_entry_favourite">Favorita</string>
     <string name="room_settings_tag_pref_entry_low_priority">Prioridade baixa</string>
     <string name="room_settings_tag_pref_entry_none">Ningún</string>
-
     <string name="room_settings_room_notifications_title">Notificacións</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Quen pode ler o histórico?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Quen pode acceder a esta sala?</string>
-
     <string name="room_settings_read_history_entry_anyone">Calquera</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Só membros (desde o momento en que se selecciona esta opción)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Só membros (desde que foron convidados)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Só membros (desde que se uniron)</string>
-
     <string name="room_settings_room_access_entry_only_invited">Só persoas que foron convidadas</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Calquera que coñeza o enderezo da sala, aparte das convidadas</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Calquera que coñeza a ligazón a sala, incluíndo as convidadas</string>
-
     <string name="room_settings_banned_users_title">Usuarios excluídos</string>
-
     <string name="room_settings_category_advanced_title">Avanzado</string>
     <string name="room_settings_addresses_pref_title">Enderezos</string>
     <string name="room_settings_labs_pref_title">Labs</string>
@@ -369,12 +319,9 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="room_settings_addresses_invalid_format_dialog_title">Formato de alias non válido</string>
     <string name="room_settings_copy_room_id">Copiar a ID da sala</string>
     <string name="room_settings_copy_room_address">Copiar a dirección da sala</string>
-
     <string name="directory_title">Directorio</string>
     <string name="settings_theme">Tema</string>
-
     <string name="encryption_information_title">Información do cifrado extremo-a-extremo</string>
-
     <string name="encryption_information_device_info">Información do evento</string>
     <string name="encryption_information_user_id">ID de usuario</string>
     <string name="encryption_information_curve25519_identity_key">Chave de identidade Curve25519</string>
@@ -382,15 +329,13 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="encryption_information_algorithm">Algoritmo</string>
     <string name="encryption_information_session_id">ID de sesión</string>
     <string name="encryption_information_decryption_error">Fallo ao descifrar</string>
-
     <string name="encryption_information_sender_device_information">Información do dispositivo do remitente</string>
     <string name="encryption_information_device_name">Nome do dispositivo</string>
     <string name="encryption_information_name">Nome</string>
-    <string name="encryption_information_device_id">ID de dispositivo</string>
+    <string name="encryption_information_device_id">ID de sesión</string>
     <string name="encryption_information_device_key">Chave do dispositivo</string>
     <string name="encryption_information_verification">Validación</string>
     <string name="encryption_information_ed25519_fingerprint">pegada Ed25519</string>
-
     <string name="encryption_export_e2e_room_keys">Exportar chaves E2E da sala</string>
     <string name="encryption_export_room_keys">Exportar chaves da sala</string>
     <string name="encryption_export_export">Exportar</string>
@@ -399,49 +344,40 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="encryption_import_e2e_room_keys">Importar chaves E2E da sala</string>
     <string name="encryption_import_room_keys">Importar chaves de sala</string>
     <string name="encryption_import_import">Importar</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Nunca enviar mensaxes cifradas aos dispositivos que non estean verificados neste dispositivo</string>
-
+    <string name="encryption_never_send_to_unverified_devices_summary">Non enviar mensaxes cifradas desde esta sesión a sesións non verificadas.</string>
     <string name="encryption_information_not_verified">SEN Verificar</string>
     <string name="encryption_information_verified">Verificados</string>
     <string name="encryption_information_blocked">Omitidos</string>
-
     <string name="encryption_information_unknown_device">dispositivo descoñecido</string>
     <string name="encryption_information_none">ningún</string>
-
     <string name="encryption_information_verify">Verificar</string>
     <string name="encryption_information_unverify">Retirar verificación</string>
     <string name="encryption_information_block">Por na lista negra</string>
     <string name="encryption_information_unblock">Quitar da lista negra</string>
-
     <string name="encryption_information_verify_device">Verificar dispositivo</string>
     <string name="encryption_information_verify_key_match">Certifico que coinciden as chaves</string>
-
     <string name="unknown_devices_alert_title">A sala contén dispositivos descoñecidos</string>
     <string name="select_room_directory">Escoller unha sala principal</string>
     <string name="directory_server_fail_to_retrieve_server">O servidor podería non estar dispoñible ou sobrecargado</string>
     <string name="directory_server_type_homeserver">Escriba un servidor local para saber cales son todas súas as salas públicas</string>
     <string name="directory_server_placeholder">URL do servidor local</string>
-    <string name="directory_server_all_rooms_on_server">"Todas as salas do servidor %s "</string>
+    <string name="directory_server_all_rooms_on_server">Todas as salas do servidor %s</string>
     <string name="directory_server_native_rooms">Todas as salas de %s nativas</string>
-
     <string name="lock_screen_hint">Escriba aquí…</string>
-
     <plurals name="notification_unread_notified_messages">
-        <item quantity="one">1 notificación sen ler</item>
+        <item quantity="one">%d notificación sen ler</item>
         <item quantity="other">%d notificacións sen ler</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="one">1 notificación sen ler</item>
+        <item quantity="one">%d notificación sen ler</item>
         <item quantity="other">%d notificacións sen ler</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="one">1 sala</item>
+        <item quantity="one">%d sala</item>
         <item quantity="other">%d salas</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s en %2$s</string>
-
     <string name="historical_placeholder">Buscar no histórico</string>
-
     <string name="font_size">Tamaño da letra</string>
     <string name="tiny">Anana</string>
     <string name="small">Pequena</string>
@@ -450,13 +386,11 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="larger">Máis grande</string>
     <string name="largest">Aínda máis grande</string>
     <string name="huge">Enorme</string>
-
     <string name="widget_creation_failure">Fallou a creación do trebello</string>
     <plurals name="active_widgets">
-        <item quantity="one">1 trebello activo</item>
-        <item quantity="other">%d trebellos activos</item>
+        <item quantity="one">%d widget activo</item>
+        <item quantity="other">%d widgets activos</item>
     </plurals>
-
     <string name="widget_integration_unable_to_create">Non se puido crear o trebello.</string>
     <string name="widget_integration_failed_to_send_request">Fallo ao enviar a petición.</string>
     <string name="widget_integration_positive_power_level">O nivel de poder ten que ser un enteiro positivo.</string>
@@ -469,63 +403,47 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="widget_integration_invalid_parameter">Hai un parámetro que non é válido.</string>
     <string name="room_add_matrix_apps">Engadir aplicacións de Matrix</string>
     <string name="settings_labs_native_camera">Usar a cámara nativa</string>
-
     <string name="start_verification">Iniciar verificación</string>
     <string name="share_without_verifying">Compartir sen verificar</string>
     <string name="ignore_request">Ignorar petición</string>
-
     <string name="conference_call_warning_title">Aviso!</string>
     <string name="conference_call_warning_message">As chamadas de reunión poderían non ser totalmente estables xa que están en desenvolvemento.</string>
-
     <string name="command_error">Erro na orde</string>
     <string name="unrecognized_command">Comandos que non se recoñecen: %s</string>
-
     <string name="notification_off">Off</string>
     <string name="notification_noisy">Ruidoso</string>
-
     <string name="encrypted_message">Mensaxe cifrada</string>
-
     <string name="create">Crear</string>
     <string name="create_community">Crear comunidade</string>
     <string name="community_name">Nome da comunidade</string>
     <string name="community_name_hint">Exemplo</string>
     <string name="community_id">ID da comunidade</string>
     <string name="community_id_hint">exemplo</string>
-
     <string name="group_details_home">Inicio</string>
     <string name="group_details_people">Xente</string>
     <string name="group_details_rooms">Salas</string>
     <string name="no_users_placeholder">Sen usuarios</string>
-
     <string name="rooms">Salas</string>
     <string name="joined">Uniuse</string>
     <string name="invited">Convidada</string>
     <string name="filter_group_members">Filtrar os membros do grupo</string>
     <string name="filter_group_rooms">Filtrar as salas dos grupos</string>
-
     <string name="group_no_long_description">O administrador da comunidade non fixo unha descrición longa desta comunidade.</string>
-
     <string name="has_been_kicked">Foi expulsado de %1$s por %2$s</string>
     <string name="has_been_banned">Foi bloqueado de %1$s por %2$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Volver a unirse</string>
     <string name="forget_room">Esquecer sala</string>
-
     <string name="receipt_avatar">Avatar de recepción</string>
     <string name="notice_avatar">Avatar de aviso</string>
     <string name="avatar">Avatar</string>
-
     <string name="dialog_user_consent_submit">Revisar agora</string>
-
     <string name="deactivate_account_title">Desactivar conta</string>
     <string name="deactivate_account_prompt_password">Para continuar introduza o seu contrasinal:</string>
     <string name="deactivate_account_submit">Desactivar conta</string>
-
     <string name="option_send_voice">Enviar voz</string>
-
     <string name="go_on_with">continuar con…</string>
     <string name="error_no_external_application_found">Non se atopou unha aplicación que poida completar iso.</string>
-
     <string name="auth_reset_password_email_validation_message">Enviouse un correo a %s. Unha vez abra a ligazón que contén prema abaixo.</string>
     <string name="login_error_must_start_http">A URL ten que comezar con http[s]://</string>
     <string name="login_error_network_error">Non se puido acceder: erro da rede</string>
@@ -534,51 +452,40 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="login_error_unable_register">Non se puido rexistrar</string>
     <string name="login_error_unable_register_mail_ownership">Non se puido rexistrar: erro coa propiedade do correo electrónico</string>
     <string name="login_error_invalid_home_server">Introduza unha URL válida</string>
-
     <string name="login_error_forbidden">Usuario/contrasinal incorrecto</string>
     <string name="login_error_bad_json">JSON con defectos</string>
     <string name="login_error_not_json">Non contiña unha JSON correcta</string>
     <string name="login_error_limit_exceeded">Enviáronse demasiadas peticións</string>
     <string name="login_error_user_in_use">Este nome de usuario xa se está a usar</string>
     <string name="login_error_login_email_not_yet">Unha ligazón de correo na que aínda non se premeu</string>
-
     <string name="e2e_re_request_encryption_key"><u>Volver a pedir as chaves de cifrado</u> do outro dispositivo seu.</string>
-
     <string name="e2e_re_request_encryption_key_dialog_title">Petición enviada</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Inicie Element noutro dispositivo que poida descifrar esta mensaxe e que despois desde alí lle poida enviar as chaves a este dispositivo.</string>
-
     <plurals name="membership_changes">
-        <item quantity="one">1 cambio de membros</item>
-        <item quantity="other">%d cambio de membros</item>
+        <item quantity="one">1 cambio de participantes</item>
+        <item quantity="other">%d cambios de participantes</item>
     </plurals>
-
     <string name="compression_opt_list_original">Autor Inicial</string>
     <string name="compression_opt_list_medium">Mediano</string>
     <string name="compression_opt_list_small">Pequeno</string>
-
     <string name="attachment_cancel_download">Cancelar a descarga?</string>
     <string name="attachment_cancel_upload">Cancelar a subida?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
-
     <string name="room_info_room_name">Nome da sala</string>
     <string name="room_info_room_topic">Tema da sala</string>
-
     <string name="call_connected">Chamada establecida</string>
     <string name="call_ended">Chamada finalizada</string>
     <string name="call_ring">Chamando…</string>
     <string name="incoming_call">Chamada entrante</string>
     <string name="incoming_video_call">Videochamada entrante</string>
     <string name="incoming_voice_call">Chamada de audio entrante</string>
-    <string name="call_in_progress">Chamada en activo</string>
-
+    <string name="call_in_progress">Chamada activa…</string>
     <string name="call_error_user_not_responding">Fallou a conexión desde o outro lado.</string>
     <string name="call_error_camera_init_failed">Non se deu iniciado a cámara</string>
     <string name="call_error_answered_elsewhere">chamara respondida noutro lugar</string>
-
     <string name="media_picker_both_capture_title">Saque unha foto ou video</string>
     <string name="media_picker_cannot_record_video">Non foi posible gravar vídeo</string>
-
     <string name="permissions_rationale_popup_title">Información</string>
     <string name="media_slider_saved">Gardado</string>
     <string name="media_slider_saved_message">Gardar nas descargas?</string>
@@ -586,11 +493,10 @@ Pode engadir a dirección de correo na sección de configuración de perfil.</st
     <string name="no">NON</string>
     <string name="join">Unirse</string>
     <string name="preview">Vista previa</string>
-    <string name="room_preview_unlinked_email_warning">O convite envióuselle a %s, mais non é alguén que estea asociado con esta conta.
-Seguramente queira conectarse cunha conta distinta, ou engadir este correo a súa conta.</string>
+    <string name="room_preview_unlinked_email_warning">Este convite enviouse a %s, que non está asociada a esta conta.
+\nPodes conectarte cunha conta diferente, ou engadir este email á túa conta.</string>
     <string name="room_preview_try_join_an_unknown_room_default">unha sala</string>
     <string name="room_preview_room_interactions_disabled">Esta é unha vista previa desta sala. Desactiváronse as interaccións coa sala.</string>
-
     <string name="room_creation_title">Nova conversa</string>
     <string name="room_creation_add_member">Engadir membro</string>
     <plurals name="room_header_active_members_count">
@@ -598,14 +504,12 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
         <item quantity="other">%d participantes activos</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">1 membro</item>
-        <item quantity="other">%d membros</item>
+        <item quantity="one">1 participante</item>
+        <item quantity="other">%d participantes</item>
     </plurals>
     <string name="room_title_one_member">1 membro</string>
-
     <string name="room_participants_header_call">Chamar</string>
     <string name="room_participants_header_devices">DISPOSITIVOS</string>
-
     <string name="room_participants_action_leave">Deixar a sala</string>
     <string name="room_participants_action_remove">Borrar desta sala</string>
     <string name="room_unsent_messages_notification">Mensaxes non enviadas. %1$s ou %2$s agora?</string>
@@ -613,10 +517,8 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     <string name="ssl_fingerprint_hash">Pegada (%s):</string>
     <string name="room_details_people_invited_group_name">CONVIDADO</string>
     <string name="room_details_people_present_group_name">UNIUSE</string>
-
     <string name="room_event_action_cancel_upload">Cancelar a subida</string>
     <string name="room_event_action_cancel_download">Cancelar a descarga</string>
-
     <string name="room_recents_join">UNIRSE</string>
     <string name="room_recents_directory">DIRECTORIO</string>
     <string name="room_recents_favourites">FAVORITOS</string>
@@ -636,7 +538,6 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     <string name="settings_notification_privacy_secure_message_content">• O contido da mensaxe das notificacións está <b>provén dun xeito seguro e directo do servidor local de Matrix</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• As notificacións conteñen <b>metadatos e os datos da mensaxe</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• As notificacións <b>non van a mostrar o contido da mensaxe</b></string>
-
     <string name="settings_notification_ringtone">Son das notificacións</string>
     <string name="settings_enable_this_device">Activar notificacións para este dispositivo</string>
     <string name="settings_set_sync_timeout">Petición de sincronización esgotada</string>
@@ -651,22 +552,17 @@ Seguramente queira conectarse cunha conta distinta, ou engadir este correo a sú
     <string name="startup_notification_privacy_message">Element pode estar agochado e seguir traballando na xestión das notificacións dun xeito seguro e privado (inda que iso podería afectar ao uso da batería).</string>
     <string name="startup_notification_privacy_button_grant">Outorgar permisos</string>
     <string name="startup_notification_privacy_button_other">Escolla outra opción</string>
-
     <string name="settings_logged_in">Accedeuse como</string>
     <string name="settings_identity_server">Servidor de identidade</string>
-
     <string name="settings_delete_notification_targets_confirmation">Seguro que quere eliminar este tipo de notificacións?</string>
-
     <string name="room_settings_room_internal_id">O ID interno desta sala é</string>
     <string name="room_settings_labs_end_to_end_warnings">Precisa saír da aplicación primeiro para poder activar o cifrado.</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Nunca enviar mensaxes cifradas aos dispositivos que non estean verificados nesta sala desde este dispositivo.</string>
-
     <string name="room_settings_addresses_e2e_enabled">O cifrado está activado nesta sala.</string>
-    <string name="encryption_information_verify_device_warning">" Para verificar que se pode confiar neste dispositivo, contacte co seu dono utilizando algún outro medio (ex. en persoa ou chamada de teléfono) e pregúntelle se a clave que ven nos axustes de usuario do se dispositivo coincide coa clave inferior:"</string>
+    <string name="encryption_information_verify_device_warning">Comfirma comparando o seguinte cos Axustes de Usuaria na túa outra sesión:</string>
     <string name="you_added_a_new_device">Engadiu un novo dispositivo «%s» que está a solicitar as chaves de cifrado.</string>
     <string name="your_unverified_device_requesting">O seu dispositivo sen verificar «%s» está solicitando as chaves de cifrado.</string>
     <string name="dialog_user_consent_content">Para continuar usando o servidor %1$s ten que revisar primeiro os seus termos e condicións.</string>
     <string name="deactivate_account_delete_checkbox">Esquezan todas as mensaxes que eu enviara no momento en que elimine a miña conta. (Aviso: iso suporá que os seguintes participantes só verán unha versión incompleta das conversas.)</string>
     <string name="error_empty_field_your_password">Introduza o seu contrasinal.</string>
-
 </resources>

@@ -188,7 +188,7 @@
     <string name="call_error_user_not_responding">A hívott fél nem vette fel.</string>
     <string name="call_error_ice_failed">Médiacsatlakozás sikertelen</string>
     <string name="call_error_camera_init_failed">A kamera nem készíthető elő</string>
-    <string name="call_error_answered_elsewhere">a hívást máshol vették fel</string>
+    <string name="call_error_answered_elsewhere">a hívás más eszközön lett felvéve</string>
     <string name="media_picker_both_capture_title">Kép vagy videó készítése</string>
     <string name="media_picker_cannot_record_video">Videorögzítés sikertelen</string>
     <string name="permissions_rationale_popup_title">Információ</string>
@@ -206,8 +206,8 @@
     <string name="permissions_rationale_msg_camera_and_audio">A Elementnek engedélyre van szüksége a mikrofonod és kamerád eléréséhez, hogy videohívást tudj indítani.
 \n
 \nEngedélyezd a hozzáférést a következő felugró ablakon, hogy hívást tudj indítani.</string>
-    <string name="permissions_rationale_msg_contacts">A Element a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókar. Ha egyetértesz a névjegyek ilyen célú megosztásával, kérlek engedélyezd a hozzáférést a következő felugró üzenetben.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">A Element a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókar.
+    <string name="permissions_rationale_msg_contacts">A Element a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókat. Ha egyetértesz a névjegyek ilyen célú megosztásával, kérlek engedélyezd a hozzáférést a következő felugró üzenetben.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">A Element a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókat.
 \n
 \nEgyetértesz a névjegyek ilyen célú megosztásával\?</string>
     <string name="permissions_action_not_performed_missing_permissions">"Elnézést.  A művelet nem lett végre hajtva hiányzó engedélyek miatt"</string>
@@ -424,7 +424,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_settings_tag_pref_entry_low_priority">Alacsony prioritású</string>
     <string name="room_settings_tag_pref_entry_none">Semmi</string>
     <string name="room_settings_category_access_visibility_title">Hozzáférés és láthatóság</string>
-    <string name="room_settings_directory_visibility">Listázza ezt a szobát a szobák könyvtárba</string>
+    <string name="room_settings_directory_visibility">Listázza ezt a szobát a szoba listában</string>
     <string name="room_settings_room_access_rules_pref_title">Szoba hozzáfárés</string>
     <string name="room_settings_room_read_history_rules_pref_title">Szoba előzmény olvashatósága</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Ki tud előzményt olvasni?</string>
@@ -505,7 +505,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="encryption_information_unblock">Eltávolítás feketelistáról</string>
     <string name="encryption_information_verify_device">Munkamenet hitelesítése</string>
     <string name="encryption_information_verify_device_warning">Hogy ellenőrizni lehessen, hogy ez a munkamenet megbízható, kérlek használj más kommunikáció módot a tulajdonossal (pl.: személyesen vagy telefonon keresztül) és kérdezd meg hogy a kulcs amit lát a Felhasználói Beállítások alatt megegyezik-e az alábbi kulccsal:</string>
-    <string name="encryption_information_verify_device_warning2">Ha egyezik, nyomja meg a hitelesítés gombot. Ha nem, akkor valaki más elfogta ezt a munkamenetet és érdemes lenne tiltólistára tenni. A jövőben ez a hitelesítési mód kényelmesebbé lesz téve.</string>
+    <string name="encryption_information_verify_device_warning2">Ha nem egyeznek, akkor a kommunikáció biztonsága kompromittálva lehet. A jövőben ez a hitelesítési mód kényelmesebbé lesz téve.</string>
     <string name="encryption_information_verify_key_match">Hitelesítem, hogy a kulcsok egyeznek</string>
     <string name="unknown_devices_alert_title">Szoba ismeretlen munkameneteket tartalmaz</string>
     <string name="unknown_devices_alert_message">Ez a szoba ismeretlen munkameneteket tartalmaz.
@@ -515,7 +515,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
 \nIsmeretlen munkamenetek:</string>
     <string name="select_room_directory">Válassz egy szoba könyvtárat</string>
     <string name="directory_server_fail_to_retrieve_server">A szerver lehet nem elérhető vagy túltöltött</string>
-    <string name="directory_server_type_homeserver">Írj be egy Matrix szervert hogy listázza belőle a nyilvános szobákat</string>
+    <string name="directory_server_type_homeserver">Írj be egy Matrix szervert, az ott található nyilvános szobák listázásához</string>
     <string name="directory_server_placeholder">Matrix szerver URL</string>
     <string name="directory_server_all_rooms_on_server">Összes szoba a %s szerveren</string>
     <string name="directory_server_native_rooms">Összes anyanyelvi %s szoba</string>
@@ -763,7 +763,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="command_description_clear_scalar_token">Matrix-kisalkalmazás-token törlése</string>
     <string name="room_tombstone_versioned_description">Ez a szoba le lett cserélve és már nem aktív</string>
     <string name="room_tombstone_continuation_link">A beszélgetés itt folytatódik</string>
-    <string name="room_tombstone_continuation_description">Ez a szoba a folytatása egy másik beszélgetésnek</string>
+    <string name="room_tombstone_continuation_description">Ez a szoba egy másik beszélgetés folytatása</string>
     <string name="room_tombstone_predecessor_link">Régebbi üzenetek megjelenítéséhez kattints ide</string>
     <string name="missing_permissions_error">A műveletet a hiányzó engedélyek miatt nem lehet végrehajtani.</string>
     <plurals name="format_time_s">
@@ -803,7 +803,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="resource_limit_exceeded_title">Erőforrás korlát túllépve</string>
     <string name="resource_limit_contact_action">Kapcsolatfelvétel az adminisztrátorral</string>
     <string name="resource_limit_contact_admin">vedd fel a kapcsolatot a szolgáltatás adminisztrátorával</string>
-    <string name="resource_limit_soft_default">Ez a Matrix szerver túllépte valamely erőforrás korlátot így <b>néhány felhasználó nem tud bejelentkezni</b>.</string>
+    <string name="resource_limit_soft_default">Ez a Matrix szerver túllépte valamely erőforrás korlátot így <b>néhány felhasználó nem tud majd bejelentkezni</b>.</string>
     <string name="resource_limit_hard_default">Ez a Matrix szerver túllépte egyik erőforrás korlátját.</string>
     <string name="resource_limit_soft_mau"> Ez a Matrix szerver elérte a havi aktív felhasználói korlátját így <b>néhány felhasználó nem tud bejelentkezni</b>.</string>
     <string name="resource_limit_hard_mau">Ez a Matrix szerver elérte a havi aktív felhasználói korlátját.</string>
@@ -963,9 +963,9 @@ Helyezd biztonságba a kulcsokat, hogy ne vesszenek el.</string>
     <string name="recovery_key_export_saved_as_warning">A Visszaállítási Kulcs ide lett mentve: \'%s\'.
 
 Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</string>
-    <string name="keys_backup_setup_step3_please_make_copy">Kérlek készíts egy másolatot</string>
+    <string name="keys_backup_setup_step3_please_make_copy">Kérlek, készíts egy másolatot!</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Visszaállítási Kulcs megosztása…</string>
-    <string name="keys_backup_setup_step3_generating_key_status">Visszaállítási Kulcs készítése jelmondatból, ez néhány másodpercet is igénybe vehet.</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Visszaállítási Kulcs készítése jelmondatból, ez néhány másodpercet igénybe vehet.</string>
     <string name="recovery_key">Visszaállítási Kulcs</string>
     <string name="unexpected_error">Váratlan hiba</string>
     <string name="keys_backup_setup_backup_started_title">Mentés elkezdődött</string>
@@ -1032,9 +1032,9 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="keys_backup_setup_step1_advanced">(Haladó)</string>
     <string name="keys_backup_setup_step1_manual_export">Kulcsok kimentése kézzel</string>
     <string name="keys_backup_setup_step2_text_title">Védd a mentésedet jelmondattal.</string>
-    <string name="keys_backup_setup_step2_text_description">"A kulcsaid másolatait titkosítva a Matrix szerverünkön fogjuk tárolni. Védd a mentést jelszóval  a biztonság érdekében.
-
-A maximális biztonság eléréséhez, használja más jelmondatot mint amit a felhasználói fiókhoz használtál."</string>
+    <string name="keys_backup_setup_step2_text_description">A kulcsaid másolatait titkosítva a Matrix szervereden fogjuk tárolni. Védd jelszóval a mentést, a biztonság érdekében.
+\n
+\nA maximális biztonság eléréséhez, használj más jelszót, mint amit a bejelentkezéshez használtál.</string>
     <string name="keys_backup_setup_creating_backup">Mentés készítése</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Vagy védd a mentésedet egy Visszaállítási Kulccsal amit tárolj biztonságos helyen.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Haladó) Beállítás Visszaállítási Kulccsal</string>
@@ -1043,7 +1043,7 @@ A maximális biztonság eléréséhez, használja más jelmondatot mint amit a f
     <string name="keys_backup_setup_step3_text_line2">A Visszaállítási Kulcs egy biztosíték amit használhatsz a titkosított üzenet hozzáférések visszaállítására, ha a jelmondatot elfelejtetted.
 A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókezelő (vagy széf)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókezelő (vagy széf)</string>
-    <string name="keys_backup_setup_step3_button_title_no_passphrase">Készítettem másolatot</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Készítettem egy másolatot</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Megosztás</string>
     <string name="keys_backup_banner_setup_line1">Soha ne veszíts el titkosított üzenetet</string>
     <string name="keys_backup_banner_setup_line2">Kulcs Mentés használatának megkezdése</string>
@@ -1127,7 +1127,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="sas_incoming_request_title">Ellenőrzési kérés érkezett</string>
     <string name="sas_incoming_request_description">Munkamenet ellenőrzése és beállítás megbízhatónak. A partnerek munkameneteiben való megbízás megnyugtató lehet, ha végponttól végpontig titkosítást használsz.</string>
     <string name="sas_incoming_request_description_2">A munkamenet ellenőrzése megbízhatónak fogja jelezni az eszközt és a partnernél a te munkamenetedet szintén megbízhatónak fogja jelezni.</string>
-    <string name="sas_emoji_description">Munkamenet ellenőrzése az alábbi emodzsik a partner képernyőjén való megjelenésének megerősítésével történik</string>
+    <string name="sas_emoji_description">Munkamenet ellenőrzése azáltal, hogy összehasonlítjátok, hogy a másik felhasználó képernyőjén is ugyan azok az emojik jelennek-e meg.</string>
     <string name="sas_decimal_description">Munkamenet ellenőrzése az alábbi számok a partner képernyőjén való megjelenésének megerősítésével történik</string>
     <string name="sas_incoming_verification_request_dialog">Bejövő ellenőrzési kérés érkezett.</string>
     <string name="sas_view_request_action">Kérés megjelenítése</string>
@@ -1307,7 +1307,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="device_name_warning">A munkamenet nyilvános neve látható azoknál akikkel beszélgetsz</string>
     <string name="identity_server_not_defined">Nem használsz Azonosítási Szervert</string>
     <string name="identity_server_not_defined_for_password_reset">Nincs beállítva azonosítási szerver amire a jelszó visszaállításához szükség van.</string>
-    <string name="error_user_already_logged_in">Úgy látszik másik matrix szerverhez szeretnél csatlakozni. Kijelentkezel\?</string>
+    <string name="error_user_already_logged_in">Úgy tűnik, másik Matrix szerverhez szeretnél csatlakozni. Ki szeretnél jelentkezni\?</string>
     <string name="identity_server">Azonosítási szerver</string>
     <string name="disconnect_identity_server">Azonosítási szerverről lecsatlakozás</string>
     <string name="add_identity_server">Azonosítási szerver beállítása</string>
@@ -1430,18 +1430,18 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_join_rules_public">%1$s hozzáférhetővé tette a szobát bárkinek, aki ismeri a linket.</string>
     <string name="room_join_rules_invite">%1$s beállította, hogy a szobába csak meghívóval lehessen belépni.</string>
     <string name="timeline_unread_messages">Olvasatlan üzenetek</string>
-    <string name="login_splash_title">Szabadítsd fel a kommunikációdat.</string>
+    <string name="login_splash_title">A te beszélgetésed. Vedd birtokba!</string>
     <string name="login_splash_text1">Beszélgess másokkal közvetlenül vagy csoportosan</string>
     <string name="login_splash_text2">Beszélgess bizalmasan, titkosítást használva</string>
     <string name="login_splash_text3">Bővítsd és szabd testre a élményt</string>
     <string name="login_splash_submit">Kezdj neki</string>
     <string name="login_server_title">Válassz szervert</string>
     <string name="login_server_text">Hasonlóan az e-mailhez, egy fiókod van, de bárkivel tudsz beszélgetni</string>
-    <string name="login_server_matrix_org_text">Milliók csatlakoznak ingyen a legnagyobb nyilvános szerveren</string>
-    <string name="login_server_modular_text">Prémium üzemeltetés szervezetek részére</string>
+    <string name="login_server_matrix_org_text">Csatlakozz a milliónyi felhasználóhoz a legnagyobb nyilvános szerveren</string>
+    <string name="login_server_modular_text">Prémium szerver üzemeltetés szervezetek részére</string>
     <string name="login_server_modular_learn_more">Tudj meg többet</string>
-    <string name="login_server_other_title">Más</string>
-    <string name="login_server_other_text">Személyre szabott szerver cím beállítása</string>
+    <string name="login_server_other_title">Egyéni</string>
+    <string name="login_server_other_text">Másik szerver cím megadása</string>
     <string name="login_continue">Folytatás</string>
     <string name="login_connect_to">Csatlakozás ide: %1$s</string>
     <string name="login_connect_to_modular">Csatlakozás Element Matrix Services hoz</string>
@@ -1452,7 +1452,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_signin_sso">SSO-val való folytatás</string>
     <string name="login_server_url_form_modular_hint">Element Matrix Services Cím</string>
     <string name="login_server_url_form_other_hint">Cím</string>
-    <string name="login_server_url_form_modular_text">Prémium üzemeltetés szervezetek részére</string>
+    <string name="login_server_url_form_modular_text">Prémium szerverüzemeltetés szervezetek részére</string>
     <string name="login_server_url_form_modular_notice">Add meg az általad használt Modular szerver, vagy a hozzá tartozó Element címét</string>
     <string name="login_server_url_form_other_notice">Add meg a szerver vagy Element címét amihez csatlakozni szeretnél</string>
     <string name="login_sso_error_message">Az oldal betöltésekor hiba történt: %1$s (%2$d)</string>
@@ -1529,13 +1529,13 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     </plurals>
     <string name="seen_by">Látták:</string>
     <string name="signed_out_title">Kijelentkeztél</string>
-    <string name="signed_out_notice">A következő okok miatt lehet: 
-\n 
-\n• Másik munkamenetedben megváltoztattad a jelszavadat. 
-\n 
-\n• Törölted ezt a munkamenetedet egy másik munkamenetből. 
-\n 
-\n• A matrix szerver adminisztrátora biztonsági okokból érvénytelenítette a hozzáférésed.</string>
+    <string name="signed_out_notice">A következő okok miatt lehet:
+\n
+\n• Másik munkamenetedben megváltoztattad a jelszavadat.
+\n
+\n• Törölted ezt a munkamenetedet egy másik munkamenetből.
+\n
+\n• Az általad használt Matrix szerver adminisztrátora biztonsági okokból érvénytelenítette a hozzáférésed.</string>
     <string name="signed_out_submit">Lépj be újra</string>
     <string name="soft_logout_title">Kijelentkeztél</string>
     <string name="soft_logout_signin_title">Bejelentkezés</string>
@@ -1546,7 +1546,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="soft_logout_clear_data_title">Személyes adatok törlése</string>
     <string name="soft_logout_clear_data_notice">Figyelmeztetés: A személyes adataid (beleértve a titkosító kulcsokat is) továbbra is az eszközön vannak tárolva.
 \n
-\nHa az eszközt nem használod tovább vagy másik fiókba szeretnél bejelentkezni, töröld őket.</string>
+\nHa az eszközt nem használod tovább, vagy másik fiókba szeretnél bejelentkezni, töröld őket.</string>
     <string name="soft_logout_clear_data_submit">Minden adat törlése</string>
     <string name="soft_logout_clear_data_dialog_title">Adat törlése</string>
     <string name="soft_logout_clear_data_dialog_content">Biztos vagy benne, hogy minden az eszközön tárolt adatot törölni szeretnél\?
@@ -1554,7 +1554,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Elveszted a hozzáférésedet a titkosított üzeneteidhez ha nem jelentkezel be a titkosítási kulcsok visszaállításához.</string>
     <string name="soft_logout_clear_data_dialog_submit">Adat törlése</string>
     <string name="soft_logout_sso_not_same_user_error">A jelenlegi munkamenet %1$s felhasználóhoz tartozik és %2$s azonosítási adatait adtad meg. Ez Element-ben nem támogatott.
-\nElőször töröld az adatokat, majd a másik felhasználói fiókba lépj be.</string>
+\nElőször töröld az adatokat, utána lépj be a másik fiókba!</string>
     <string name="permalink_malformed">A matrix.to linked hibás</string>
     <string name="bug_report_error_too_short">A leírás túl rövid</string>
     <string name="notification_initial_sync">Első szinkronizáció…</string>
@@ -1579,7 +1579,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="verification_conclusion_warning">Megbízhatatlan belépés</string>
     <string name="verification_sas_match">Egyeznek</string>
     <string name="verification_sas_do_not_match">Nem egyeznek</string>
-    <string name="verify_user_sas_emoji_help_text">Hitelesítheted a felhasználót, ha megerősíted, hogy az alábbi egyedi emodzsik azok amik ugyanabban a sorrendben megjelentek a képernyőjén.</string>
+    <string name="verify_user_sas_emoji_help_text">Hitelesítheted a felhasználót, ha megerősíted, hogy ugyan azok az emojik jelennek meg az ő képernyőjén is, ugyan abban a sorrendben.</string>
     <string name="verify_user_sas_emoji_security_tip">A legnagyobb biztonság érdekében használj megbízható kommunikációs csatornát vagy tedd meg személyesen.</string>
     <string name="verification_green_shield">Keresd a zöld pajzsot, hogy biztos lehess abban, hogy a felhasználó megbízható. Bízz meg a szoba minden felhasználójában, hogy a szoba biztonságos lehessen.</string>
     <string name="verification_conclusion_not_secure">Nem biztonságos</string>
@@ -1607,9 +1607,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="verification_scan_their_code">Kód beolvasása</string>
     <string name="verification_scan_emoji_title">Nem lehet beolvasni</string>
     <string name="verification_scan_emoji_subtitle">Ha nem vagy ott személyesen akkor inkább hasonlítsd össze az emodzsikat</string>
-    <string name="verification_no_scan_emoji_title">Ellenőrzés emodzsikkal</string>
+    <string name="verification_no_scan_emoji_title">Ellenőrzés emojik összehasonlításával</string>
     <string name="verify_by_emoji_title">Ellenőrzés emodzsival</string>
-    <string name="verify_by_emoji_description">Ha az alábbi kódot nem tudod beolvasni, ellenőrizd a rövid egyedi emodzsik összehasonlításával.</string>
+    <string name="verify_by_emoji_description">Ha az alábbi kódot nem tudod beolvasni, ellenőrizd a felhasználót néhány egyedi emoji összehasonlításával.</string>
     <string name="a13n_qr_code_description">QR kód kép</string>
     <string name="verification_verify_user">Ellenőrzés: %s</string>
     <string name="verification_verified_user">Ellenőrizve: %s</string>
@@ -1797,7 +1797,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \nHa nem akarsz Üzenet Jelszót beállítani, hozz létre inkább Üzenet Kulcsot.</string>
     <string name="bootstrap_skip_text_no_gen_key">Az Visszaállítási Jelmondat beállításával biztonságba helyezheted és hozzáférhetsz a titkosított üzeneteidhez valamint a bizalomhoz.</string>
     <string name="encryption_enabled">Titkosítás bekapcsolva</string>
-    <string name="encryption_enabled_tile_description">Ebben a szobában az üzenetek végpontok között titkosítottak. További információkért és ellenőrzéshez nyisd meg a felhasználók profilját.</string>
+    <string name="encryption_enabled_tile_description">Ebben a szobában az üzenetek végpontok között titkosítottak. További információkért és ellenőrzéshez nyisd meg a felhasználók profiljait!</string>
     <string name="encryption_not_enabled">Titkosítás nincs engedélyezve</string>
     <string name="encryption_unknown_algorithm_tile_description">A szobában használt titkosítás nem támogatott</string>
     <string name="room_created_summary_item">%s elkészítette és beállította a szobát.</string>
