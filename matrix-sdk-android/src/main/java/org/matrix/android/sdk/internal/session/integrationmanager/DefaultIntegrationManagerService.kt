@@ -43,11 +43,11 @@ internal class DefaultIntegrationManagerService @Inject constructor(private val 
     }
 
     override suspend fun setIntegrationEnabled(enable: Boolean) {
-        return integrationManager.setIntegrationEnabled(enable)
+        integrationManager.setIntegrationEnabled(enable)
     }
 
     override suspend fun setWidgetAllowed(stateEventId: String, allowed: Boolean) {
-        return integrationManager.setWidgetAllowed(stateEventId, allowed)
+        integrationManager.setWidgetAllowed(stateEventId, allowed)
     }
 
     override fun isWidgetAllowed(stateEventId: String): Boolean {
@@ -55,7 +55,7 @@ internal class DefaultIntegrationManagerService @Inject constructor(private val 
     }
 
     override suspend fun setNativeWidgetDomainAllowed(widgetType: String, domain: String, allowed: Boolean) {
-        return integrationManager.setNativeWidgetDomainAllowed(widgetType, domain, allowed)
+        integrationManager.setNativeWidgetDomainAllowed(widgetType, domain, allowed)
     }
 
     override fun isNativeWidgetDomainAllowed(widgetType: String, domain: String): Boolean {
