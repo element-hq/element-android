@@ -106,11 +106,7 @@ internal class EventSenderProcessor @Inject constructor(
         // non blocking add to queue
         sendingQueue.add(task)
         markAsManaged(task)
-        return object : Cancelable {
-            override fun cancel() {
-                task.cancel()
-            }
-        }
+        return task
     }
 
     companion object {
