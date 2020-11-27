@@ -21,7 +21,6 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.updateConstraintSet
