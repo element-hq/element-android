@@ -294,28 +294,30 @@ class RoomListFragment @Inject constructor(
             RoomListDisplayMode.NOTIFICATIONS -> {
                 if (hasNoRoom) {
                     StateView.State.Empty(
-                            getString(R.string.room_list_catchup_welcome_title),
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_catchup),
-                            getString(R.string.room_list_catchup_welcome_body)
+                            title = getString(R.string.room_list_catchup_welcome_title),
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_catchup),
+                            message = getString(R.string.room_list_catchup_welcome_body)
                     )
                 } else {
                     StateView.State.Empty(
-                            getString(R.string.room_list_catchup_empty_title),
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
-                            getString(R.string.room_list_catchup_empty_body))
+                            title = getString(R.string.room_list_catchup_empty_title),
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
+                            message = getString(R.string.room_list_catchup_empty_body))
                 }
             }
             RoomListDisplayMode.PEOPLE        ->
                 StateView.State.Empty(
-                        getString(R.string.room_list_people_empty_title),
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_chat),
-                        getString(R.string.room_list_people_empty_body)
+                        title = getString(R.string.room_list_people_empty_title),
+                        image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_dm),
+                        isBigImage = true,
+                        message = getString(R.string.room_list_people_empty_body)
                 )
             RoomListDisplayMode.ROOMS         ->
                 StateView.State.Empty(
-                        getString(R.string.room_list_rooms_empty_title),
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),
-                        getString(R.string.room_list_rooms_empty_body)
+                        title = getString(R.string.room_list_rooms_empty_title),
+                        image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_room),
+                        isBigImage = true,
+                        message = getString(R.string.room_list_rooms_empty_body)
                 )
             else                              ->
                 // Always display the content in this mode, because if the footer
