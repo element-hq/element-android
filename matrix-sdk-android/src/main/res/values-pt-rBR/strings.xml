@@ -221,4 +221,27 @@
     <string name="notice_direct_room_join">%1$s entrou</string>
     <string name="notice_direct_room_created_by_you">Você criou a sala</string>
     <string name="notice_direct_room_created">%1$s criou a sala</string>
+    <string name="room_displayname_empty_room_was">Sala vazia (era %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s e %4$d outro</item>
+        <item quantity="other">%1$s, %2$s, %3$s e %4$d outros</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s e %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s e %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Todos os servidores estão proibidos de participar! Esta sala não pode mais ser usada.</string>
+    <string name="notice_room_server_acl_updated_no_change">Nenhuma alteração.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servidores correspondentes aos IP literais agora estão banidos.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servidores correspondentes aos IP literais agora estão permitidos.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Servidores correspondentes à %s foram removidos da lista de permitidos.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Servidores correspondentes à %s agora são permitidos.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Servidores correspondente à %s foram removidos da lista de banidos.</string>
+    <string name="notice_room_server_acl_updated_banned">• Servidores correspondentes à %s foram banidos.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Você alterou a lista de controle de acesso (ACL) do servidor para esta sala.</string>
+    <string name="notice_room_server_acl_updated_title">%s alterou a lista de controle de acesso (ACL) do servidor para esta sala.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servidores correspondentes aos IP literais estão banidos.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servidores correspondentes aos IP literais estão permitidos.</string>
+    <string name="notice_room_server_acl_set_allowed">• Servidores correspondentes à %s estão permitidos.</string>
+    <string name="notice_room_server_acl_set_banned">• Servidores correspondentes à %s estão banidos.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Você definiu a lista de controle de acesso (ACL) do servidor para esta sala.</string>
+    <string name="notice_room_server_acl_set_title">%s definiu a lista de controle de acesso (ACL) do servidor para esta sala.</string>
 </resources>
