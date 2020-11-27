@@ -15,6 +15,7 @@ Improvements 🙌:
  - Room creation form: add advanced section to disable federation (#1314)
  - Move "Enable Encryption" from room setting screen to room profile screen (#2394)
  - Improve Invite user screen (seamless search for matrix ID)
+ - Add Setting Item to Change PIN (#2462)
 
 Bugfix 🐛:
  - Fix crash on AttachmentViewer (#2365)
