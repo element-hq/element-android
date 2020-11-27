@@ -48,8 +48,11 @@ abstract class BottomSheetGenericController<State : BottomSheetGenericState, Act
             }
         }
         // Actions
-        getActions(state).forEach { action ->
+        val actions = getActions(state)
+        val showIcons = actions.any { it.iconResId > 0 }
+        actions.forEach { action ->
             action.toBottomSheetItem()
+                    .showIcon(showIcons)
                     .listener(View.OnClickListener { listener?.didSelectAction(action) })
                     .addTo(this)
         }

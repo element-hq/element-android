@@ -45,6 +45,9 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
     var iconRes: Int = 0
 
     @EpoxyAttribute
+    var showIcon = true
+
+    @EpoxyAttribute
     var text: String? = null
 
     @StringRes
@@ -80,6 +83,7 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         } else {
             ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
         }
+        holder.icon.isVisible = showIcon
         holder.icon.setImageResource(iconRes)
         ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(tintColor))
         if (text != null) {
