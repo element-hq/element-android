@@ -78,8 +78,8 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
 
             intent.putExtra(EXTRA_ARGS, args)
             activity.startActivity(intent)
-            // Ensure the Activity is destroyed, it seems that the intent flags are not enough now.
-            activity.finish()
+            // Ensure all the Activities are destroyed, it seems that the intent flags are not enough now.
+            activity.finishAffinity()
         }
     }
 
