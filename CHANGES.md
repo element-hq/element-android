@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Double bottomsheet effect after verify with passphrase
 
 Translations 🗣:
  -
