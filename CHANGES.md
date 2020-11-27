@@ -1,4 +1,4 @@
-Changes in Element 1.0.11 (2020-XX-XX)
+Changes in Element 1.0.11 (2020-11-27)
 ===================================================
 
 Features ✨:
@@ -30,14 +30,9 @@ Bugfix 🐛:
  - Update profile has no effect if user is in zero rooms
  - Fix issues with matrix.to deep linking (#2349)
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
- - AccountService now exposes suspendable function instead of using MatrixCallback (#2354). Note: We will incrementally migrate all the SDK API in a near future.
-
-Build 🧱:
- -
+ - AccountService now exposes suspendable function instead of using MatrixCallback (#2354).
+   Note: We will incrementally migrate all the SDK API in a near future (#2449)
 
 Test:
  - Add `allScreensTest` to cover all screens of the app
