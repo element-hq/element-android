@@ -91,7 +91,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                     val isVerified = it.getOrNull()?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {
                         // cross signing keys have been reset
-                        // Tigger a popup to re-verify
+                        // Trigger a popup to re-verify
                         // Note: user can be null in case of logout
                         safeActiveSession.getUser(safeActiveSession.myUserId)
                                 ?.toMatrixItem()
