@@ -1460,7 +1460,7 @@ class RoomDetailFragment @Inject constructor(
                         return false
                     }
 
-                    override fun navToMemberProfile(userId: String): Boolean {
+                    override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
                         openRoomMemberProfile(userId)
                         return true
                     }
