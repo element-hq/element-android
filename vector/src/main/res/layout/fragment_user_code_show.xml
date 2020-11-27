@@ -92,14 +92,14 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minWidth="300dp">
+                android:minWidth="300dp"
+                android:paddingTop="40dp">
 
                 <TextView
                     android:id="@+id/showUserCodeCardNameText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="40dp"
                     android:layout_marginEnd="16dp"
                     android:maxLines="1"
                     android:singleLine="true"
