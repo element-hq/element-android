@@ -27,6 +27,8 @@ class RoomJoinRuleController @Inject constructor(
         private val stringProvider: StringProvider
 ) : BottomSheetGenericController<RoomJoinRuleState, RoomJoinRuleAction>() {
 
+    override fun getTitle() = stringProvider.getString(R.string.room_settings_room_access_rules_pref_dialog_title)
+
     override fun getActions(state: RoomJoinRuleState): List<RoomJoinRuleAction> {
         return listOf(
                 RoomJoinRuleAction(

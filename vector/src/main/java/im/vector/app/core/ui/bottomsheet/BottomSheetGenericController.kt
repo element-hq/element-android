@@ -17,19 +17,37 @@ package im.vector.app.core.ui.bottomsheet
 
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.core.epoxy.dividerItem
 
 /**
  * Epoxy controller for generic bottom sheet actions
  */
-abstract class BottomSheetGenericController<State : BottomSheetGenericState, Action: BottomSheetGenericAction>
+abstract class BottomSheetGenericController<State : BottomSheetGenericState, Action : BottomSheetGenericAction>
     : TypedEpoxyController<State>() {
 
     var listener: Listener<Action>? = null
+
+    abstract fun getTitle(): String?
+
+    open fun getSubTitle(): String? = null
 
     abstract fun getActions(state: State): List<Action>
 
     override fun buildModels(state: State?) {
         state ?: return
+        // Title
+        getTitle()?.let { title ->
+            bottomSheetTitleItem {
+                id("title")
+                title(title)
+                subTitle(getSubTitle())
+            }
+
+            dividerItem {
+                id("title_separator")
+            }
+        }
+        // Actions
         getActions(state).forEach { action ->
             action.toBottomSheetItem()
                     .listener(View.OnClickListener { listener?.didSelectAction(action) })
