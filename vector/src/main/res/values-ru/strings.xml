@@ -2301,4 +2301,9 @@
     <string name="attachment_type_dialog_title">Добавить изображение из</string>
     <string name="create_room_topic_hint">Тема</string>
     <string name="create_room_name_section">Название Комнаты</string>
+    <string name="settings_discovery_consent_notice_on">Вы дали свое согласие на отправку электронных писем и телефонных номеров на этот сервер идентификации для обнаружения других пользователей из ваших контактов.</string>
+    <string name="add_by_qr_code">Добавить по QR-коду</string>
+    <string name="user_directory_search_hint">Поиск по имени или идентификатору</string>
+    <string name="permissions_denied_add_contact">Разрешить доступ к вашим контактам.</string>
+    <string name="permissions_denied_qr_code">Чтобы отсканировать QR-код, вам нужно разрешить доступ к камере.</string>
 </resources>
