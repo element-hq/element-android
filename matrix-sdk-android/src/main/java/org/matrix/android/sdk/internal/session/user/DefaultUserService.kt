@@ -19,10 +19,13 @@ package org.matrix.android.sdk.internal.session.user
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.session.profile.GetProfileInfoTask
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateIgnoredUserIdsTask
 import org.matrix.android.sdk.internal.session.user.model.SearchUserTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
@@ -32,10 +35,38 @@ import javax.inject.Inject
 internal class DefaultUserService @Inject constructor(private val userDataSource: UserDataSource,
                                                       private val searchUserTask: SearchUserTask,
                                                       private val updateIgnoredUserIdsTask: UpdateIgnoredUserIdsTask,
+                                                      private val getProfileInfoTask: GetProfileInfoTask,
                                                       private val taskExecutor: TaskExecutor) : UserService {
 
     override fun getUser(userId: String): User? {
         return userDataSource.getUser(userId)
+    }
+
+    override fun resolveUser(userId: String, callback: MatrixCallback<User>) {
+        val known = getUser(userId)
+        if (known != null) {
+            callback.onSuccess(known)
+        } else {
+            val params = GetProfileInfoTask.Params(userId)
+            getProfileInfoTask
+                    .configureWith(params) {
+                        this.callback = object : MatrixCallback<JsonDict> {
+                            override fun onSuccess(data: JsonDict) {
+                                callback.onSuccess(
+                                        User(
+                                                userId,
+                                                data[ProfileService.DISPLAY_NAME_KEY] as? String,
+                                                data[ProfileService.AVATAR_URL_KEY] as? String)
+                                )
+                            }
+
+                            override fun onFailure(failure: Throwable) {
+                                callback.onFailure(failure)
+                            }
+                        }
+                    }
+                    .executeBy(taskExecutor)
+        }
     }
 
     override fun getUserLive(userId: String): LiveData<Optional<User>> {

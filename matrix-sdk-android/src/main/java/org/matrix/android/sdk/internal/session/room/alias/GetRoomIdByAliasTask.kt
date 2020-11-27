@@ -17,6 +17,9 @@
 package org.matrix.android.sdk.internal.session.room.alias
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
+import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.findByAlias
@@ -24,8 +27,6 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Optional<String>> {
@@ -50,9 +51,11 @@ internal class DefaultGetRoomIdByAliasTask @Inject constructor(
         } else if (!params.searchOnServer) {
             Optional.from<String>(null)
         } else {
-            roomId = executeRequest<RoomAliasDescription>(eventBus) {
-                apiCall = roomAPI.getRoomIdByAlias(params.roomAlias)
-            }.roomId
+            roomId = tryOrNull("## Failed to get roomId from alias") {
+                executeRequest<RoomAliasDescription>(eventBus) {
+                    apiCall = roomAPI.getRoomIdByAlias(params.roomAlias)
+                }
+            }?.roomId
             Optional.from(roomId)
         }
     }

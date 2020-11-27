@@ -138,7 +138,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
     ): LiveData<List<Widget>> {
         val widgetsAccountData = accountDataDataSource.getLiveAccountDataEvent(UserAccountDataTypes.TYPE_WIDGETS)
         return Transformations.map(widgetsAccountData) {
-            it.getOrNull()?.mapToWidgets(widgetTypes, excludedTypes) ?: emptyList()
+            it.getOrNull()?.mapToWidgets(widgetTypes, excludedTypes).orEmpty()
         }
     }
 

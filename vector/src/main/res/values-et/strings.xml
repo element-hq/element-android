@@ -2187,4 +2187,8 @@
     <string name="create_room_settings_section">Jututoa seadistused</string>
     <string name="create_room_topic_hint">Teema</string>
     <string name="create_room_topic_section">Jututoa teema (kui soovid)</string>
+    <string name="settings_export_trail">Ekspordi rakenduse taustakontrolli andmed</string>
+    <string name="room_member_open_or_create_dm">Otsevestlus</string>
+    <string name="send_bug_report_include_key_share_history">Lisa kaasa võtmevahetusega seotud päringute ajalugu</string>
+    <string name="no_more_results">Rohkem otsingutulemusi pole</string>
 </resources>

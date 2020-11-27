@@ -30,12 +30,12 @@ class DebugSasEmojiActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_generic_recycler)
         val controller = SasEmojiController()
-        recyclerView.configureWith(controller)
+        genericRecyclerView.configureWith(controller)
         controller.setData(SasState(getAllVerificationEmojis()))
     }
 
     override fun onDestroy() {
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         super.onDestroy()
     }
 }

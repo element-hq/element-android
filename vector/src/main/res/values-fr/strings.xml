@@ -25,7 +25,7 @@
     <string name="active_call">Appel en cours</string>
     <string name="ongoing_conference_call">Téléconférence en cours.
 \nLa rejoindre en %1$s ou en %2$s</string>
-    <string name="ongoing_conference_call_voice">vocal</string>
+    <string name="ongoing_conference_call_voice">Audio</string>
     <string name="ongoing_conference_call_video">vidéo</string>
     <string name="cannot_start_call">Impossible d’initier l’appel, réessayez plus tard</string>
     <string name="missing_permissions_warning">En raison de permissions manquantes, certaines fonctionnalités peuvent être absentes…</string>
@@ -2037,7 +2037,7 @@
     <string name="settings_troubleshoot_test_notification_title">Affichage de la notification</string>
     <string name="settings_troubleshoot_test_push_notification_content">Vous voyez la notification ! Cliquez-moi dessus !</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">La notification a été cliquée !</string>
-    <string name="call_failed_no_connection">Échec de l\'appel Element</string>
+    <string name="call_failed_no_connection">Appel échoué</string>
     <string name="direct_room_encryption_enabled_tile_description">Les messages de ce salon sont chiffrés de bout en bout.</string>
     <string name="room_created_summary_item_by_you">Vous avez créé et configuré ce salon.</string>
     <string name="auth_pin_confirm_to_disable_title">Confirmer le code pour le désactiver</string>
@@ -2089,7 +2089,7 @@
     <string name="direct_room_profile_section_more_leave">Quitter</string>
     <string name="room_profile_section_admin">Actions d\'administrateur</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Les messages ici ne sont pas chiffrés de bout en bout.</string>
-    <string name="sent_a_reaction">Réagis avec : %s</string>
+    <string name="sent_a_reaction">A réagi avec : %s</string>
     <string name="sent_a_poll">Sondage</string>
     <string name="login_signin_matrix_id_password_notice">Si vous ne connaissez pas votre mot de passe, faites précédent et réinitialisez-le.</string>
     <string name="login_msisdn_notice">Veuillez utiliser le format international (le numéro de téléphone doit commencer avec « + »)</string>
@@ -2195,4 +2195,8 @@
     <string name="create_room_topic_hint">Sujet</string>
     <string name="create_room_topic_section">Sujet du salon (facultatif)</string>
     <string name="create_room_name_section">Nom du salon</string>
+    <string name="room_member_open_or_create_dm">Message direct</string>
+    <string name="send_bug_report_include_key_share_history">Inclure l\'historique d\'échange de clés</string>
+    <string name="no_more_results">Plus aucun résultat</string>
+    <string name="settings_export_trail">Exporter le rapport d\'audit</string>
 </resources>

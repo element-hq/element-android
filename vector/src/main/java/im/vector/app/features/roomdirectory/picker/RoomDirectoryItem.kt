@@ -62,7 +62,7 @@ abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() 
         holder.avatarView.isInvisible = directoryAvatarUrl.isNullOrBlank() && includeAllNetworks
 
         holder.nameView.text = directoryName
-        holder.descritionView.setTextOrHide(directoryDescription)
+        holder.descriptionView.setTextOrHide(directoryDescription)
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -70,6 +70,6 @@ abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() 
 
         val avatarView by bind<ImageView>(R.id.itemRoomDirectoryAvatar)
         val nameView by bind<TextView>(R.id.itemRoomDirectoryName)
-        val descritionView by bind<TextView>(R.id.itemRoomDirectoryDescription)
+        val descriptionView by bind<TextView>(R.id.itemRoomDirectoryDescription)
     }
 }

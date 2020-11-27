@@ -72,7 +72,7 @@ class RoomSettingsFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         controller.callback = this
         setupToolbar(roomSettingsToolbar)
-        recyclerView.configureWith(controller, hasFixedSize = true)
+        roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
         waiting_view_status_text.setText(R.string.please_wait)
         waiting_view_status_text.isVisible = true
 
@@ -93,7 +93,8 @@ class RoomSettingsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        controller.callback = null
+        roomSettingsRecyclerView.cleanup()
         super.onDestroyView()
     }
 
@@ -125,17 +126,6 @@ class RoomSettingsFragment @Inject constructor(
         }
 
         invalidateOptionsMenu()
-    }
-
-    override fun onEnableEncryptionClicked() {
-        AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.room_settings_enable_encryption_dialog_title)
-                .setMessage(R.string.room_settings_enable_encryption_dialog_content)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.room_settings_enable_encryption_dialog_submit) { _, _ ->
-                    viewModel.handle(RoomSettingsAction.EnableEncryption)
-                }
-                .show()
     }
 
     override fun onNameChanged(name: String) {

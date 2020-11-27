@@ -186,14 +186,16 @@
     <string name="auth_recaptcha_message">此主服务器想确认您不是机器人</string>
     <string name="auth_reset_password_email_validation_message">一封电子邮件已发送至 %s。点击了其中的链接后，请点击下面。</string>
     <string name="auth_reset_password_error_unauthorized">电子邮箱地址验证失败：请确保您已点击邮件中的链接</string>
-    <string name="auth_reset_password_success_message">密码已重置。 您已从所有设备注销并且不再接受推送通知。要重新启用通知，请重新在相应设备上登录。</string>
+    <string name="auth_reset_password_success_message">密码已重置。 
+\n
+\n您已经退出所有会话，将不再收到推送通知。要重新启用通知，请在每台设备上重新登录。</string>
     <string name="compression_opt_list_original">原始</string>
     <string name="attachment_remaining_time_seconds">%d 秒</string>
     <string name="call_connected">通话已连接</string>
     <string name="call_connecting">通话正在连接…</string>
-    <string name="permissions_rationale_msg_storage">为了发送或保存附件，Element 需要访问您的图片和视频库。
-
-请在接下来弹出的窗口中授权允许访问。</string>
+    <string name="permissions_rationale_msg_storage">为了发送或保存附件，Element 需要访问您的图片和视频库。 
+\n
+\n请在接下来弹出的窗口中授权允许访问，以便应用能够从您的手机发送文件。</string>
     <string name="permissions_rationale_msg_camera">为了拍照或进行视频通话，Element 需要访问您的相机。</string>
     <string name="permissions_rationale_msg_record_audio">为了进行语音通话，Element 需要访问您的麦克风。</string>
     <string name="room_preview_try_join_an_unknown_room">您试图访问聊天室 %s。您是否愿意加入这个聊天室？</string>
@@ -238,9 +240,9 @@
     <string name="room_details_settings">设置</string>
     <string name="room_details_people_invited_group_name">已邀请</string>
     <string name="room_details_people_present_group_name">已加入</string>
-    <string name="room_event_action_report_prompt_ignore_user">您要隐藏所有来自这个用户的消息吗？
-
-注意，此操作会重启应用并将花费一些时间。</string>
+    <string name="room_event_action_report_prompt_ignore_user">您要隐藏所有来自这个用户的消息吗？ 
+\n
+\n注意，此操作会重启应用并将花费一些时间。</string>
     <string name="room_event_action_cancel_upload">取消上传</string>
     <string name="room_event_action_cancel_download">取消下载</string>
     <string name="room_recents_favourites">收藏夹</string>
@@ -268,13 +270,13 @@
     <string name="settings_notifications">通知</string>
     <string name="settings_ignored_users">已忽略的用户</string>
     <string name="settings_contacts_app_permission">通讯录权限</string>
-    <string name="devices_delete_dialog_text">这个操作需要额外的身份认证。
-请输入您的密码以继续。</string>
+    <string name="devices_delete_dialog_text">这个操作需要额外的身份认证。 
+\n请输入您的密码以继续。</string>
     <string name="devices_delete_dialog_title">身份认证</string>
     <string name="settings_old_password">当前密码</string>
-    <string name="settings_unignore_user">是否重新显示所有来自 %s 的消息？
-
-注意，此操作会重启应用并将花费一些时间。</string>
+    <string name="settings_unignore_user">是否重新显示所有来自 %s 的消息？ 
+\n
+\n注意，此操作会重启应用并将花费一些时间。</string>
     <string name="settings_select_country">选择国家</string>
     <string name="settings_phone_number_country_label">国家</string>
     <string name="settings_phone_number_country_error">请选择一个国家</string>
@@ -309,8 +311,8 @@
     <string name="room_settings_addresses_invalid_format_dialog_body">“%s” 不是有效的别名格式</string>
     <string name="room_settings_addresses_e2e_enabled">这个聊天室已启用加密。</string>
     <string name="room_settings_addresses_e2e_disabled">这个聊天室已禁用加密。</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">启用加密
-（警告：无法再禁用！）</string>
+    <string name="room_settings_addresses_e2e_encryption_warning">启用加密 
+\n（警告：无法再禁用！）</string>
     <string name="directory_title">目录</string>
     <string name="encryption_information_title">端对端加密信息</string>
     <string name="encryption_information_device_info">事件信息</string>
@@ -353,9 +355,9 @@
     <string name="send_bug_report_failed">问题反馈发送失败（%s）</string>
     <string name="read_receipt">阅读</string>
     <string name="auth_invalid_token">无效令牌</string>
-    <string name="auth_threepid_warning_message">在出现相应的 API 前，暂不支持同时使用电子邮箱地址与手机号码注册。只有手机号码会被添加到此帐户。
-
-您可在设置中将电子邮箱添加到你的账户。</string>
+    <string name="auth_threepid_warning_message">api存在之前，不支持同时通过电子邮件和电话号码进行注册。我们只考虑电话号码。
+\n
+\n您可以在设置中添加您的电子邮件到您的个人资料。</string>
     <string name="auth_username_in_use">用户名已被使用</string>
     <string name="login_error_unable_register_mail_ownership">无法注册：电子邮箱所有权验证失败</string>
     <string name="login_error_unknown_token">无法识别指定的访问令牌</string>
@@ -378,17 +380,18 @@
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \n请在接下来弹出的窗口中授权允许访问。"</string>
-    <string name="permissions_rationale_msg_camera_and_audio">为了进行视频通话，Element 需要访问您的相机和麦克风。
-
-请在接下来弹出的窗口中授权允许访问。</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Element需要许可才能访问您的摄像机和麦克风来执行视频通话。
+\n
+\n请在接下来弹出的窗口中授权允许访问。</string>
     <string name="permissions_action_not_performed_missing_permissions">对不起。因为权限不足，操作已取消</string>
     <string name="media_slider_saved_message">保存至下载？</string>
     <string name="remove">移除</string>
-    <string name="room_preview_unlinked_email_warning">此邀请已发送至未与此账户关联的 %s。 您可能希望用一个不同的账户登录，或者把这个电子邮箱加入到这个账户。</string>
+    <string name="room_preview_unlinked_email_warning">此邀请已发送至未与此账户关联的 %s。
+\n您可能希望用一个不同的账户登录，或者把这个电子邮箱加入到你的账户。</string>
     <string name="room_preview_room_interactions_disabled">这是此聊天室的预览。与聊天室的交互已禁用。</string>
     <string name="room_participants_header_call">通话</string>
-    <string name="room_participants_power_level_prompt">您将不能撤销这个修改，因为您正在让这个用户和您拥有相同的特权级别。
-您确定吗？</string>
+    <string name="room_participants_power_level_prompt">您将不能撤销这个修改，因为您正在让这个用户和您拥有相同的特权级别。 
+\n您确定吗？</string>
     <string name="ssl_cert_not_trust">这可能意味着有人在恶意劫持您的通讯，或者您的手机不信任远程服务器的数字证书。</string>
     <string name="ssl_cert_new_account_expl">如果服务器管理员说这是正常的，请确保以下的指纹与管理员提供的指纹相符。</string>
     <string name="room_event_action_report_prompt_reason">报告这个内容的原因</string>
@@ -442,9 +445,9 @@
     <string name="permissions_rationale_msg_contacts">Element 需要访问您的通讯录，才能根据电子邮箱地址和手机号码查找其他 Matrix 用户。
 
 请在接下来的弹出窗口中授权允许访问。</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element 需要访问您的通讯录，才能根据电子邮箱地址和手机号码查找其他 Matrix 用户。
-
-允许 Element 访问您的通讯录？</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Element可以检查您的通讯录，以根据电子邮件和电话号码找到其他Matrix用户。
+\n
+\n你同意为此目的分享你的通讯录吗\?</string>
     <string name="room_participants_idle">空闲</string>
     <string name="people_search_filter_text">仅 Matrix 用户</string>
     <string name="ssl_unexpected_existing_expl">您的手机信任的证书已被更改。这<b>非常反常</b>。建议您<b>不要接受</b>此新证书。</string>
@@ -472,9 +475,7 @@
     <string name="failed_to_load_timeline_position">%s 已尝试在这个聊天室的时间线上加载一个特定的时间点，但无法找到它。</string>
     <string name="encryption_information_name">公开名称</string>
     <string name="encryption_information_verify_device_warning">为验证此设备是否可信，请通过其他方式（例如面对面交换或拨打电话）与其拥有者联系，并询问他们该设备的用户设置中的密钥是否与以下密钥匹配：</string>
-    <string name="encryption_information_verify_device_warning2">如果匹配，请点击下面的验证按钮。 
-\n如果不匹配，那么这可能说明其他人正在盗用此设备，而您应当将其拉入黑名单。
-\n未来，这个验证过程将会变得更加精致、巧妙一些。</string>
+    <string name="encryption_information_verify_device_warning2">如果它们不匹配，您通信的安全性可能会受到影响。</string>
     <string name="unknown_devices_alert_message">这个聊天室包含未经验证的未知设备。
 \n这意味着无法保证该设备属于其声称的用户。
 \n我们建议您在继续操作之前，先验证每个设备，但如果您愿意也可以不验证而重新发送消息。
@@ -701,11 +702,7 @@
     <string name="settings_opt_in_of_analytics_prompt">请允许资料分析以帮助我们改进 Element。</string>
     <string name="settings_opt_in_of_analytics_ok">是的，我愿意帮助！</string>
     <string name="deactivate_account_title">停用账户</string>
-    <string name="deactivate_account_content">这将使您的账户永远不再可用。您将不能登录，或使用相同的用户 ID 重新注册。您的账户将退出所有已加入的聊天室，身份服务器上的账户信息也会被删除。<b>此操作是不可逆的。</b>
-
-停用您的账户<b>不会默认忘记您发送的消息</b>。如果您希望我们忘记您发送的消息，请勾选下面的选择框。
-
-Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意味着您发送的消息不会被发给新注册或未注册的用户，但是已收到您的消息的注册用户依旧可以看到他们的副本。</string>
+    <string name="deactivate_account_content"></string>
     <string name="deactivate_account_delete_checkbox">请在我停用账户的同时忘记我发送的所有消息（警告：这将导致未来的用户看到残缺的对话）</string>
     <string name="deactivate_account_prompt_password">请输入您的密码以继续：</string>
     <string name="deactivate_account_submit">停用账户</string>
@@ -821,17 +818,17 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="settings_troubleshoot_test_system_settings_title">系统设置。</string>
     <string name="settings_troubleshoot_test_system_settings_success">通知已在系统设置中启用。</string>
     <string name="settings_troubleshoot_test_system_settings_failed">通知已在系统设置中禁用。
-请检查系统设置。</string>
+\n请检查系统设置。</string>
     <string name="open_settings">打开设置</string>
     <string name="settings_troubleshoot_test_account_settings_title">帐号设置。</string>
     <string name="settings_troubleshoot_test_account_settings_success">您的帐号已启用通知。</string>
-    <string name="settings_troubleshoot_test_account_settings_failed">您的帐号已禁用通知。
-请检查帐号设置。</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">您的账户已禁用通知。 
+\n请检查账户设置。</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">启用</string>
     <string name="settings_troubleshoot_test_device_settings_title">设备设置。</string>
     <string name="settings_troubleshoot_test_device_settings_success">已为此设备启用通知。</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">已为此设备禁用通知。
-请检查 Element 设置。</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">此会话未启用通知。 
+\n请检查 Element 设置。</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">启用</string>
     <string name="settings_troubleshoot_test_play_services_title">Play 服务检查</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play 服务的 APK 文件可用且为最新版本。</string>
@@ -840,17 +837,17 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="settings_troubleshoot_test_play_services_quickfix">修复 Play 服务</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase 令牌</string>
     <string name="settings_troubleshoot_test_fcm_success">成功获取 FCM Token：
-%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed">FCM Token 获取失败：
-%1$s</string>
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">FCM Token 获取失败： 
+\n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">注册 Token</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM Token 已成功注册至主服务器。</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">将 FCM Token 注册至主服务器时失败：
-%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">未能将FCM Token 注册到主服务器：
+\n %1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">通知服务</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">通知服务正在运行。</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">通知服务尚未运行。
-请尝试重启本应用程序。</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">通知服务未在运行。
+\n请尝试重启本应用程序。</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">启动服务</string>
     <string name="settings_labs_native_camera_summary">调用系统相机应用而非使用 Element 内置的相机界面。</string>
     <string name="settings_labs_enable_send_voice_summary">此选项需要第三方应用录制消息。</string>
@@ -870,8 +867,8 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="settings_show_avatar_display_name_changes_messages">显示账户变动事件</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">包括头像与显示名称的变动。</string>
     <string name="startup_notification_fdroid_battery_optim_title">后台连接</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element需要保持一个低影响的后台连接才能保证可靠的通知。
-在下一个弹出窗口中，系统将提示您允许 Element 始终在后台运行，请点击“允许“。</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Element需要保持低影响的后台连接，以便获得可靠的通知。
+\n下一个屏幕中，系统将提示您允许 Element 始终在后台运行，请点击“允许“。</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">授予权限</string>
     <string name="account_email_error">在验证您的电子邮件地址时发生了一个错误。</string>
     <string name="settings_password">密码</string>
@@ -899,11 +896,11 @@ Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意�
     <string name="settings_troubleshoot_test_service_restart_failed">服务重启失败</string>
     <string name="settings_troubleshoot_test_service_boot_success">服务将在设备重启后启动。</string>
     <string name="settings_troubleshoot_test_service_boot_failed">服务不会在设备重启后启动，在您打开 Element 一次之前您将不会收到消息通知。</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">对 Element 的后台限制已被关闭。此测试应在移动数据（无Wi-Fi）环境下进行。
-%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">对 Element 的后台限制已开启。
-Element 在后台时的工作将被显著的限制，这可能会影响消息通知。
-%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">已禁用对 Element 的后台限制。此测试应使用移动数据（非Wi-Fi）进行。
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">已启用对 Element 的后台限制。
+\nElement 在后台时的工作将被显著地限制，这可能会影响消息通知。 
+\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">关闭后台限制</string>
     <string name="settings_troubleshoot_test_battery_success">Element 未被电池优化影响。</string>
     <string name="settings_troubleshoot_test_battery_failed">如果设备在未充电的情况下关屏静置一段时间，其将进入打盹模式（Doze）。这将阻止应用访问网络并延后其运行、同步、与响铃。</string>
@@ -1371,7 +1368,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="send_file_step_encrypting_file">正在加密文件…</string>
     <string name="send_file_step_sending_file">正在发送文件 (%1$s / %2$s)</string>
     <string name="downloading_file">正在下载文件 %1$s…</string>
-    <string name="downloaded_file">"文件 %1$s  已下载！"</string>
+    <string name="downloaded_file">文件%1$s 已被下载！</string>
     <string name="message_edits">消息编辑</string>
     <string name="no_message_edits_found">未找到编辑</string>
     <string name="room_filtering_filter_hint">过滤对话…</string>
@@ -1922,7 +1919,7 @@ Element 在后台时的工作将被显著的限制，这可能会影响消息通
     <string name="error_adding_media_file_to_gallery">无法添加媒体文件到相册</string>
     <string name="error_saving_media_file">无法保存媒体文件</string>
     <string name="change_password_summary">选择新的账户密码…</string>
-    <string name="use_other_session_content_description">在您的其他设备上使用最新的 Element，Element Web，Element Desktop，Element iOS，Element for Android，或其他能够交叉签名的 Matrix 客户端</string>
+    <string name="use_other_session_content_description">在您的其他设备上使用最新的 Element、Element Web、Element Desktop、Element iOS、Element for Android，或其他能够交叉签名的 Matrix 客户端</string>
     <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
     <string name="app_ios_android">Element iOS

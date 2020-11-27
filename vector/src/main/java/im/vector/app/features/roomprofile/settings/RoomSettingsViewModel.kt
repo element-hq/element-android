@@ -27,7 +27,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Completable
 import io.reactivex.Observable
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -117,8 +116,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
                                     EventType.STATE_ROOM_CANONICAL_ALIAS),
                             canChangeHistoryReadability = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_HISTORY_VISIBILITY),
-                            canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                                    EventType.STATE_ROOM_HISTORY_VISIBILITY)
                     )
                     setState { copy(actionPermissions = permissions) }
                 }
@@ -141,7 +139,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     override fun handle(action: RoomSettingsAction) {
         when (action) {
-            is RoomSettingsAction.EnableEncryption         -> handleEnableEncryption()
             is RoomSettingsAction.SetAvatarAction          -> handleSetAvatarAction(action)
             is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
             is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
@@ -153,20 +150,20 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     private fun handleSetAvatarAction(action: RoomSettingsAction.SetAvatarAction) {
-        deletePendingAvatar()
-        setState { copy(avatarAction = action.avatarAction) }
-    }
-
-    private fun deletePendingAvatar() {
-        // Maybe delete the pending avatar
-        withState {
-            (it.avatarAction as? RoomSettingsViewState.AvatarAction.UpdateAvatar)
-                    ?.let { tryOrNull { it.newAvatarUri.toFile().delete() } }
+        setState {
+            deletePendingAvatar(this)
+            copy(avatarAction = action.avatarAction)
         }
     }
 
+    private fun deletePendingAvatar(state: RoomSettingsViewState) {
+        // Maybe delete the pending avatar
+        (state.avatarAction as? RoomSettingsViewState.AvatarAction.UpdateAvatar)
+                ?.let { tryOrNull { it.newAvatarUri.toFile().delete() } }
+    }
+
     private fun cancel() {
-        deletePendingAvatar()
+        withState { deletePendingAvatar(it) }
 
         _viewEvents.post(RoomSettingsViewEvents.GoBack)
     }
@@ -180,7 +177,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
         when (val avatarAction = state.avatarAction) {
             RoomSettingsViewState.AvatarAction.None            -> Unit
-            RoomSettingsViewState.AvatarAction.DeleteAvatar -> {
+            RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
                 operationList.add(room.rx().deleteAvatar())
             }
             is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {
@@ -209,8 +206,13 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .subscribe(
                         {
                             postLoading(false)
-                            setState { copy(newHistoryVisibility = null) }
-                            deletePendingAvatar()
+                            setState {
+                                deletePendingAvatar(this)
+                                copy(
+                                        avatarAction = RoomSettingsViewState.AvatarAction.None,
+                                        newHistoryVisibility = null
+                                )
+                            }
                             _viewEvents.post(RoomSettingsViewEvents.Success)
                         },
                         {
@@ -218,21 +220,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             _viewEvents.post(RoomSettingsViewEvents.Failure(it))
                         }
                 )
-    }
-
-    private fun handleEnableEncryption() {
-        postLoading(true)
-
-        room.enableEncryption(callback = object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                postLoading(false)
-                _viewEvents.post(RoomSettingsViewEvents.Failure(failure))
-            }
-
-            override fun onSuccess(data: Unit) {
-                postLoading(false)
-            }
-        })
     }
 
     private fun postLoading(isLoading: Boolean) {

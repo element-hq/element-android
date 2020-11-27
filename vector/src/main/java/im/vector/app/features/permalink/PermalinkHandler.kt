@@ -63,13 +63,14 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap { permalinkData ->
-                    handlePermalink(permalinkData, context, navigationInterceptor, buildTask)
+                    handlePermalink(permalinkData, deepLink, context, navigationInterceptor, buildTask)
                 }
                 .onErrorReturnItem(false)
     }
 
     private fun handlePermalink(
             permalinkData: PermalinkData,
+            rawLink: Uri,
             context: Context,
             navigationInterceptor: NavigationInterceptor?,
             buildTask: Boolean
@@ -96,7 +97,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                 Single.just(true)
             }
             is PermalinkData.UserLink     -> {
-                if (navigationInterceptor?.navToMemberProfile(permalinkData.userId) != true) {
+                if (navigationInterceptor?.navToMemberProfile(permalinkData.userId, rawLink) != true) {
                     navigator.openRoomMemberProfile(userId = permalinkData.userId, roomId = null, context = context, buildTask = buildTask)
                 }
                 Single.just(true)
@@ -175,7 +176,7 @@ interface NavigationInterceptor {
     /**
      * Return true if the navigation has been intercepted
      */
-    fun navToMemberProfile(userId: String): Boolean {
+    fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
         return false
     }
 }

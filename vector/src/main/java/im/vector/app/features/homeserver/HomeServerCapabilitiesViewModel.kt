@@ -28,7 +28,7 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
-import im.vector.app.features.userdirectory.KnownUsersFragment
+import im.vector.app.features.userdirectory.UserListFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -50,7 +50,7 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
     companion object : MvRxViewModelFactory<HomeServerCapabilitiesViewModel, HomeServerCapabilitiesViewState> {
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: HomeServerCapabilitiesViewState): HomeServerCapabilitiesViewModel? {
-            val fragment: KnownUsersFragment = (viewModelContext as FragmentViewModelContext).fragment()
+            val fragment: UserListFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.homeServerCapabilitiesViewModelFactory.create(state)
         }
 

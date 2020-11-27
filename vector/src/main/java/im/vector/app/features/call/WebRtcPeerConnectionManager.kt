@@ -42,6 +42,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
 import org.webrtc.Camera1Enumerator
@@ -330,8 +331,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCall?.mxCall
                 ?.takeIf { it.state is CallState.Connected }
                 ?.let { mxCall ->
-                    val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
-                            ?: mxCall.roomId
+                    val name = currentSession?.getRoomMember(mxCall.otherUserId, mxCall.roomId)?.toMatrixItem()?.getBestName()
+                            ?: mxCall.otherUserId
                     // Start background service with notification
                     CallService.onPendingCall(
                             context = context,
@@ -388,7 +389,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         val mxCall = callContext.mxCall
         // Update service state
 
-        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
+        val name = currentSession?.getRoomMember(mxCall.otherUserId, mxCall.roomId)?.toMatrixItem()?.getBestName()
                 ?: mxCall.roomId
         CallService.onPendingCall(
                 context = context,
@@ -576,7 +577,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     ?.let { mxCall ->
                         // Start background service with notification
 
-                        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
+                        val name =  currentSession?.getRoomMember(mxCall.otherUserId, mxCall.roomId)?.toMatrixItem()?.getBestName()
                                 ?: mxCall.otherUserId
                         CallService.onOnGoingCallBackground(
                                 context = context,
@@ -650,7 +651,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         callAudioManager.startForCall(createdCall)
         currentCall = callContext
 
-        val name = currentSession?.getUser(createdCall.otherUserId)?.getBestName()
+        val name = currentSession?.getRoomMember(createdCall.otherUserId, createdCall.roomId)?.toMatrixItem()?.getBestName()
                 ?: createdCall.otherUserId
         CallService.onOutgoingCallRinging(
                 context = context.applicationContext,
@@ -706,7 +707,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
 
         // Start background service with notification
-        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
+        val name = currentSession?.getRoomMember(mxCall.otherUserId, mxCall.roomId)?.toMatrixItem()?.getBestName()
                 ?: mxCall.otherUserId
         CallService.onIncomingCallRinging(
                 context = context,
@@ -845,7 +846,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
         val mxCall = call.mxCall
         // Update service state
-        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
+        val name = currentSession?.getRoomMember(mxCall.otherUserId, mxCall.roomId)?.toMatrixItem()?.getBestName()
                 ?: mxCall.otherUserId
         CallService.onPendingCall(
                 context = context,

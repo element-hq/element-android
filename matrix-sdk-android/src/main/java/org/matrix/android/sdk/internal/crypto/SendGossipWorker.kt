@@ -100,7 +100,7 @@ internal class SendGossipWorker(context: Context,
                         requestId = params.requestId,
                         state = GossipingRequestState.FAILED_TO_ACCEPTED
                 )
-                Timber.e("no session with this device, probably because there were no one-time keys.")
+                Timber.e("no session with this device $requestingDeviceId, probably because there were no one-time keys.")
             }
         }
 

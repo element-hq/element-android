@@ -181,8 +181,8 @@
         <item quantity="other">نشانی‌های %1$s را به این اتاق افزودید.</item>
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
-        <item quantity="one">نشانی %1$s ار از این اتاق برداشتید.</item>
-        <item quantity="other">نشانی‌های %1$s ار از این اتاق برداشتید.</item>
+        <item quantity="one">نشانی %1$s را از این اتاق برداشتید.</item>
+        <item quantity="other">نشانی‌های %1$s را از این اتاق برداشتید.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed_by_you">نشانی %1$s ار افزوده و %2$s را از این اتاق برداشتید.</string>
     <string name="notice_room_canonical_alias_set_by_you">نشانی اصلی این اتاق را به %1$s تنظیم کردید.</string>

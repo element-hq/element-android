@@ -28,6 +28,7 @@ import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 class RoomProfileController @Inject constructor(
@@ -43,6 +44,7 @@ class RoomProfileController @Inject constructor(
 
     interface Callback {
         fun onLearnMoreClicked()
+        fun onEnableEncryptionClicked()
         fun onMemberListClicked()
         fun onBannedMemberListClicked()
         fun onNotificationsClicked()
@@ -84,6 +86,7 @@ class RoomProfileController @Inject constructor(
             centered(false)
             text(stringProvider.getString(learnMoreSubtitle))
         }
+        buildEncryptionAction(data.actionPermissions, roomSummary)
 
         // More
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
@@ -169,6 +172,31 @@ class RoomProfileController @Inject constructor(
                     editable = false,
                     action = { callback?.onRoomIdClicked() }
             )
+        }
+    }
+
+    private fun buildEncryptionAction(actionPermissions: RoomProfileViewState.ActionPermissions, roomSummary: RoomSummary) {
+        if (!roomSummary.isEncrypted) {
+            if (actionPermissions.canEnableEncryption) {
+                buildProfileAction(
+                        id = "enableEncryption",
+                        title = stringProvider.getString(R.string.room_settings_enable_encryption),
+                        dividerColor = dividerColor,
+                        icon = R.drawable.ic_shield_black,
+                        divider = false,
+                        editable = false,
+                        action = { callback?.onEnableEncryptionClicked() }
+                )
+            } else {
+                buildProfileAction(
+                        id = "enableEncryption",
+                        title = stringProvider.getString(R.string.room_settings_enable_encryption_no_permission),
+                        dividerColor = dividerColor,
+                        icon = R.drawable.ic_shield_black,
+                        divider = false,
+                        editable = false
+                )
+            }
         }
     }
 }

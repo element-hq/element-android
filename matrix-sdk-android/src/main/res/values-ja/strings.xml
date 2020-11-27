@@ -1,10 +1,8 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$sが画像を送信しました。</string>
     <string name="summary_user_sent_sticker">%1$sがスタンプを送信しました。</string>
-
     <string name="notice_room_invite_no_invitee">%sの招待</string>
     <string name="notice_room_invite">%1$sが%2$sを招待しました</string>
     <string name="notice_room_invite_you">%1$sがあなたを招待しました</string>
@@ -29,11 +27,9 @@
     <string name="room_displayname_room_invite">部屋への招待</string>
     <string name="room_displayname_two_members">%1$sと%2$s</string>
     <string name="room_displayname_empty_room">空の部屋</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="other">%1$sと他%2$d名</item>
     </plurals>
-
     <string name="notice_made_future_room_visibility">%1$sは、今後の部屋履歴を%2$sに表示させました</string>
     <string name="notice_room_visibility_invited">部屋のメンバー全員、招待された時点から。</string>
     <string name="notice_room_visibility_joined">部屋のメンバー全員、参加した時点から。</string>
@@ -41,34 +37,50 @@
     <string name="notice_room_visibility_world_readable">誰でも。</string>
     <string name="notice_room_visibility_unknown">不明 (%s)。</string>
     <string name="notice_end_to_end">%1$s がエンドツーエンド暗号化を有効にしました (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s がVoIP会議をリクエストしました</string>
     <string name="notice_voip_started">VoIP会議が開始されました</string>
     <string name="notice_voip_finished">VoIP会議が終了しました</string>
-
     <string name="notice_avatar_changed_too">(アバターも変更された)</string>
     <string name="notice_room_name_removed">%1$s が部屋名を削除しました</string>
     <string name="notice_room_topic_removed">%1$s がルームトピックを削除しました</string>
     <string name="notice_profile_change_redacted">%1$s がプロフィール %2$s を更新しました</string>
     <string name="notice_room_third_party_invite">%1$s は %2$s に部屋に参加するよう招待状を送りました</string>
     <string name="notice_room_third_party_registered_invite">%1$sは%2$sの招待を受け入れました</string>
-
     <string name="notice_crypto_unable_to_decrypt">** 解読できません: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">送信者の端末からこのメッセージのキーが送信されていません。</string>
-
     <string name="could_not_redact">修正できませんでした</string>
     <string name="unable_to_send_message">メッセージを送信できません</string>
-
     <string name="message_failed_to_upload">画像のアップロードに失敗しました</string>
-
     <string name="network_error">ネットワークエラー</string>
     <string name="matrix_error">Matrixエラー</string>
-
     <string name="room_error_join_failed_empty_room">現在空の部屋に再参加することはできません。</string>
-
     <string name="encrypted_message">暗号化されたメッセージ</string>
-
     <string name="medium_email">メールアドレス</string>
     <string name="medium_phone_number">電話番号</string>
-
+    <string name="notice_room_avatar_changed_by_you">ルームのアバターを変更しました</string>
+    <string name="notice_room_avatar_changed">%1$sがルームのアバターを変更しました</string>
+    <string name="notice_room_topic_changed_by_you">トピックを%1$sに変更しました</string>
+    <string name="notice_display_name_removed_by_you">表示名を削除しました(%1$sでした)</string>
+    <string name="notice_display_name_changed_from_by_you">表示名を%1$sから%2$sに変更しました</string>
+    <string name="notice_display_name_set_by_you">表示名を%1$sに設定しました</string>
+    <string name="notice_avatar_url_changed_by_you">アバターを変更しました</string>
+    <string name="notice_room_withdraw_by_you">%1$sの招待を取り下げました</string>
+    <string name="notice_room_ban_by_you">%1$sをBANしました</string>
+    <string name="notice_room_unban_by_you">%1$sのBANを解除しました</string>
+    <string name="notice_room_kick_by_you">%1$sを退出させました</string>
+    <string name="notice_room_reject_by_you">招待を拒否しました</string>
+    <string name="notice_direct_room_leave_by_you">ルームから退出しました</string>
+    <string name="notice_direct_room_leave">%1$sがルームから退出しました</string>
+    <string name="notice_room_leave_by_you">ルームから退出しました</string>
+    <string name="notice_direct_room_join_by_you">参加しました</string>
+    <string name="notice_direct_room_join">%1$sが参加しました</string>
+    <string name="notice_room_join_by_you">ルームに参加しました</string>
+    <string name="notice_room_invite_by_you">%1$sを招待しました</string>
+    <string name="notice_direct_room_created_by_you">ディスカッションを作成しました</string>
+    <string name="notice_direct_room_created">%1$sがディスカッションを作成しました</string>
+    <string name="notice_room_created_by_you">ルームを作成しました</string>
+    <string name="notice_room_created">%1$sがルームを作成しました</string>
+    <string name="notice_room_invite_no_invitee_by_you">招待</string>
+    <string name="summary_you_sent_sticker">ステッカーを送信しました。</string>
+    <string name="summary_you_sent_image">画像を送信しました。</string>
 </resources>

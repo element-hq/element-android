@@ -45,7 +45,7 @@ import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
-import im.vector.app.features.home.room.list.widget.FabMenuView
+import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_list.*
@@ -66,8 +66,7 @@ class RoomListFragment @Inject constructor(
         val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
         private val sharedViewPool: RecyclerView.RecycledViewPool
-
-) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, FabMenuView.Listener {
+) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, NotifsFabMenuView.Listener {
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -295,28 +294,30 @@ class RoomListFragment @Inject constructor(
             RoomListDisplayMode.NOTIFICATIONS -> {
                 if (hasNoRoom) {
                     StateView.State.Empty(
-                            getString(R.string.room_list_catchup_welcome_title),
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_catchup),
-                            getString(R.string.room_list_catchup_welcome_body)
+                            title = getString(R.string.room_list_catchup_welcome_title),
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_catchup),
+                            message = getString(R.string.room_list_catchup_welcome_body)
                     )
                 } else {
                     StateView.State.Empty(
-                            getString(R.string.room_list_catchup_empty_title),
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
-                            getString(R.string.room_list_catchup_empty_body))
+                            title = getString(R.string.room_list_catchup_empty_title),
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_noun_party_popper),
+                            message = getString(R.string.room_list_catchup_empty_body))
                 }
             }
             RoomListDisplayMode.PEOPLE        ->
                 StateView.State.Empty(
-                        getString(R.string.room_list_people_empty_title),
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_chat),
-                        getString(R.string.room_list_people_empty_body)
+                        title = getString(R.string.room_list_people_empty_title),
+                        image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_dm),
+                        isBigImage = true,
+                        message = getString(R.string.room_list_people_empty_body)
                 )
             RoomListDisplayMode.ROOMS         ->
                 StateView.State.Empty(
-                        getString(R.string.room_list_rooms_empty_title),
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),
-                        getString(R.string.room_list_rooms_empty_body)
+                        title = getString(R.string.room_list_rooms_empty_title),
+                        image = ContextCompat.getDrawable(requireContext(), R.drawable.empty_state_room),
+                        isBigImage = true,
+                        message = getString(R.string.room_list_rooms_empty_body)
                 )
             else                              ->
                 // Always display the content in this mode, because if the footer

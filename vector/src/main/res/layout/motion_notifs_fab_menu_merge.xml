@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/motion_scene_notifs_fab_menu"
+    tools:motionProgress="0.65"
+    tools:parentTag="androidx.constraintlayout.motion.widget.MotionLayout"
+    tools:showPaths="true">
+
+    <View
+        android:id="@+id/createRoomTouchGuard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?riotx_touch_guard_bg"
+        android:clickable="true"
+        android:contentDescription="@string/a11y_create_menu_close"
+        android:focusable="true" />
+
+    <!-- Sub menu item 2 -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRoomItemGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:accessibilityTraversalBefore="@+id/roomListView"
+        android:contentDescription="@string/a11y_create_room"
+        android:src="@drawable/ic_fab_add_room"
+        app:backgroundTint="#FFFFFF"
+        app:fabCustomSize="48dp"
+        app:maxImageSize="26dp"
+        app:tint="@color/black" />
+
+    <TextView
+        android:id="@+id/createRoomItemGroupLabel"
+        style="@style/VectorLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:importantForAccessibility="no"
+        android:text="@string/fab_menu_create_room" />
+
+    <!-- Sub menu item 1 -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRoomItemChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:accessibilityTraversalBefore="@+id/createRoomItemGroup"
+        android:contentDescription="@string/a11y_create_direct_message"
+        android:src="@drawable/ic_fab_add_chat"
+        app:backgroundTint="#FFFFFF"
+        app:fabCustomSize="48dp"
+        app:maxImageSize="29dp"
+        app:tint="@color/black" />
+
+    <TextView
+        android:id="@+id/createRoomItemChatLabel"
+        style="@style/VectorLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:importantForAccessibility="no"
+        android:text="@string/fab_menu_create_chat" />
+
+    <!-- Menu -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:accessibilityTraversalBefore="@+id/createRoomItemChat"
+        android:contentDescription="@string/a11y_create_menu_open"
+        android:src="@drawable/ic_fab_add"
+        app:maxImageSize="14dp" />
+
+</merge>

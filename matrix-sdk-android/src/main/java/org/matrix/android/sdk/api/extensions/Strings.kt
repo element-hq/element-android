@@ -22,3 +22,8 @@ fun CharSequence.ensurePrefix(prefix: CharSequence): CharSequence {
         else               -> "$prefix$this"
     }
 }
+
+/**
+ * Append a new line and then the provided string
+ */
+fun StringBuilder.appendNl(str: String) = append("\n").append(str)

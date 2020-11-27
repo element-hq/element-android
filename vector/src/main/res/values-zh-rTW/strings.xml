@@ -2149,4 +2149,8 @@
     <string name="create_room_topic_hint">主題</string>
     <string name="create_room_topic_section">聊天室主題（選擇性）</string>
     <string name="create_room_name_section">聊天是名稱</string>
+    <string name="settings_export_trail">匯出審核</string>
+    <string name="room_member_open_or_create_dm">直接訊息</string>
+    <string name="send_bug_report_include_key_share_history">傳送金鑰共享請求歷史</string>
+    <string name="no_more_results">沒有更多結果</string>
 </resources>

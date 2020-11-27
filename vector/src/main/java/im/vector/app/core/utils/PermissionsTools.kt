@@ -30,6 +30,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import im.vector.app.R
+import im.vector.app.core.platform.VectorBaseActivity
 import timber.log.Timber
 
 // Android M permission request code management
@@ -282,6 +283,12 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
     }
 
     return isPermissionGranted
+}
+
+fun VectorBaseActivity.onPermissionDeniedSnackbar(@StringRes rationaleMessage: Int) {
+    showSnackbar(getString(rationaleMessage), R.string.settings) {
+        openAppSettingsPage(this)
+    }
 }
 
 /**

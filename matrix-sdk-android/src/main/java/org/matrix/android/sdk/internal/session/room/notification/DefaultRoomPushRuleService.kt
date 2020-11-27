@@ -21,21 +21,16 @@ import androidx.lifecycle.Transformations
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.session.room.notification.RoomPushRuleService
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 
 internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                       private val setRoomNotificationStateTask: SetRoomNotificationStateTask,
-                                                                      @SessionDatabase private val monarchy: Monarchy,
-                                                                      private val taskExecutor: TaskExecutor)
+                                                                      @SessionDatabase private val monarchy: Monarchy)
     : RoomPushRuleService {
 
     @AssistedInject.Factory
@@ -49,12 +44,8 @@ internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted 
         }
     }
 
-    override fun setRoomNotificationState(roomNotificationState: RoomNotificationState, matrixCallback: MatrixCallback<Unit>): Cancelable {
-        return setRoomNotificationStateTask
-                .configureWith(SetRoomNotificationStateTask.Params(roomId, roomNotificationState)) {
-                    this.callback = matrixCallback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun setRoomNotificationState(roomNotificationState: RoomNotificationState) {
+        setRoomNotificationStateTask.execute(SetRoomNotificationStateTask.Params(roomId, roomNotificationState))
     }
 
     private fun getPushRuleForRoom(): LiveData<RoomPushRule?> {

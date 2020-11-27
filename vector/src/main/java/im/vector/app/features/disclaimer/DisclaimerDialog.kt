@@ -28,7 +28,7 @@ import im.vector.app.features.settings.VectorSettingsUrls
 // Increase this value to show again the disclaimer dialog after an upgrade of the application
 private const val CURRENT_DISCLAIMER_VALUE = 2
 
-private const val SHARED_PREF_KEY = "LAST_DISCLAIMER_VERSION_VALUE"
+const val SHARED_PREF_KEY = "LAST_DISCLAIMER_VERSION_VALUE"
 
 fun showDisclaimerDialog(activity: Activity) {
     val sharedPrefs = DefaultSharedPreferences.getInstance(activity)

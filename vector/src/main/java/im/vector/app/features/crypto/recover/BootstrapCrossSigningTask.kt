@@ -237,7 +237,7 @@ class BootstrapCrossSigningTask @Inject constructor(
             Timber.d("## BootstrapCrossSigningTask: Creating 4S - Checking megolm backup")
 
             // First ensure that in sync
-            val serverVersion = awaitCallback<KeysVersionResult?> {
+            var serverVersion = awaitCallback<KeysVersionResult?> {
                 session.cryptoService().keysBackupService().getCurrentVersion(it)
             }
 
@@ -247,6 +247,16 @@ class BootstrapCrossSigningTask @Inject constructor(
                     || (params.setupMode == SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET && !isMegolmBackupSecretKnown)
                     || (params.setupMode == SetupMode.HARD_RESET)
             if (shouldCreateKeyBackup) {
+                // clear all existing backups
+                while (serverVersion != null) {
+                    awaitCallback<Unit> {
+                        session.cryptoService().keysBackupService().deleteBackup(serverVersion!!.version, it)
+                    }
+                    serverVersion = awaitCallback {
+                        session.cryptoService().keysBackupService().getCurrentVersion(it)
+                    }
+                }
+
                 Timber.d("## BootstrapCrossSigningTask: Creating 4S - Create megolm backup")
                 val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
                     session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)

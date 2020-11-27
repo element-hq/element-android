@@ -41,12 +41,12 @@ class EmojiSearchResultFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         sharedViewModel = activityViewModelProvider.get(EmojiChooserViewModel::class.java)
         epoxyController.listener = this
-        recyclerView.configureWith(epoxyController, showDivider = true)
+        genericRecyclerView.configureWith(epoxyController, showDivider = true)
     }
 
     override fun onDestroyView() {
         epoxyController.listener = null
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         super.onDestroyView()
     }
 

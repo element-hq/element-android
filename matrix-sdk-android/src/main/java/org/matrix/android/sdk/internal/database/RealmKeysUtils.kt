@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.database
 import android.content.Context
 import android.util.Base64
 import androidx.core.content.edit
+import io.realm.Realm
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.internal.session.securestorage.SecretStoringUtils
 import io.realm.RealmConfiguration
@@ -46,7 +47,7 @@ internal class RealmKeysUtils @Inject constructor(context: Context,
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.keys", Context.MODE_PRIVATE)
 
     private fun generateKeyForRealm(): ByteArray {
-        val keyForRealm = ByteArray(RealmConfiguration.KEY_LENGTH)
+        val keyForRealm = ByteArray(Realm.ENCRYPTION_KEY_LENGTH)
         rng.nextBytes(keyForRealm)
         return keyForRealm
     }
