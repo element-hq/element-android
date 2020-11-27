@@ -72,7 +72,7 @@
                 android:id="@+id/debug_qr_code"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                tools:src="@tools:sample/avatars" />
+                tools:src="@drawable/ic_qr_code_add" />
 
         </LinearLayout>
 

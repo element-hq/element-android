@@ -28,7 +28,7 @@ internal class RoomTypingUsersHandler @Inject constructor(@UserId private val us
 
     fun handle(realm: Realm, roomId: String, ephemeralResult: RoomSyncHandler.EphemeralResult?) {
         val roomMemberHelper = RoomMemberHelper(realm, roomId)
-        val typingIds = ephemeralResult?.typingUserIds?.filter { it != userId } ?: emptyList()
+        val typingIds = ephemeralResult?.typingUserIds?.filter { it != userId }.orEmpty()
         val senderInfo = typingIds.map { userId ->
             val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(userId)
             SenderInfo(

@@ -2187,4 +2187,8 @@
     <string name="create_room_settings_section">Rumsinställningar</string>
     <string name="create_room_topic_section">Rumsämne (valfritt)</string>
     <string name="create_room_name_section">Rumsnamn</string>
+    <string name="settings_export_trail">Exportera granskning</string>
+    <string name="room_member_open_or_create_dm">Direktmeddelande</string>
+    <string name="send_bug_report_include_key_share_history">Skicka historik över nyckeldelningsförfrågningar</string>
+    <string name="no_more_results">Inga fler resultat</string>
 </resources>

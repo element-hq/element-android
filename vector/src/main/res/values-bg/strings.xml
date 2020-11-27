@@ -2194,4 +2194,8 @@
     <string name="create_room_topic_hint">Тема</string>
     <string name="create_room_topic_section">Тема на стаята (опция)</string>
     <string name="create_room_name_section">Име на стая</string>
+    <string name="settings_export_trail">Експортирай одит</string>
+    <string name="room_member_open_or_create_dm">Директно съобщение</string>
+    <string name="send_bug_report_include_key_share_history">Изпрати историята на заявките за споделяне на ключове</string>
+    <string name="no_more_results">Няма повече резултати</string>
 </resources>

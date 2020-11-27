@@ -310,7 +310,10 @@ class UiAllScreensSanityTest {
         clickOn(R.id.createChatRoomButton)
 
         withIdlingResource(activityIdlingResource(CreateDirectRoomActivity::class.java)) {
-            assertDisplayed(R.id.addByMatrixId)
+            onView(withId(R.id.userListRecyclerView))
+                    .perform(waitForView(withText(R.string.qr_code)))
+            onView(withId(R.id.userListRecyclerView))
+                    .perform(waitForView(withText(R.string.invite_friends)))
         }
 
         closeSoftKeyboard()

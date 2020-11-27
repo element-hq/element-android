@@ -39,7 +39,7 @@ We do not forget all translators, for their work of translating Element into man
 
 Feel free to add your name below, when you contribute to the project!
 
-Name    | Matrix ID           | GitHub
---------|---------------------|--------------------------------------
-gjpower | @gjpower:matrix.org | [gjpower](https://github.com/gjpower)
-
+Name      | Matrix ID                   | GitHub
+----------|-----------------------------|--------------------------------------
+gjpower   | @gjpower:matrix.org         | [gjpower](https://github.com/gjpower)
+TR_SLimey | @tr_slimey:an-atom-in.space | [TR-SLimey](https://github.com/TR-SLimey)
