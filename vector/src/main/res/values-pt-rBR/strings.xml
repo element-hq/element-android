@@ -361,7 +361,7 @@
     <string name="room_recents_join_room_prompt">Digite o ide ou o apelido de uma sala</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Pesquisar na lista pública</string>
-    <string name="directory_searching_title">Buscando no diretório…</string>
+    <string name="directory_searching_title">Buscando na lista…</string>
     <!-- home room settings -->
     <string name="room_settings_favourite">Favoritar</string>
     <string name="room_settings_de_prioritize">Despriorizar</string>
@@ -516,7 +516,7 @@
     <string name="room_settings_addresses_e2e_encryption_warning">Ativar criptografia·
 \n(atenção: não é possível desativar depois!)</string>
     <!-- Directory -->
-    <string name="directory_title">Diretório</string>
+    <string name="directory_title">Lista</string>
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s tentou carregar um trecho específico da conversa desta sala, mas não conseguiu.</string>
     <!-- encryption dialog -->
@@ -573,15 +573,15 @@
     <!-- directory activity  -->
     <string name="select_room_directory">Escolha uma lista pública de salas</string>
     <string name="directory_server_fail_to_retrieve_server">O servidor pode estar indisponível ou sobrecarregado</string>
-    <string name="directory_server_type_homeserver">Entre com um servidor principal (homeserver) a partir do qual serão listadas as salas públicas</string>
+    <string name="directory_server_type_homeserver">Digite um servidor local, a partir do qual serão listadas as salas públicas</string>
     <string name="directory_server_placeholder">Endereço do servidor principal</string>
     <string name="directory_server_all_rooms_on_server">Todas as salas com o servidor %s</string>
     <string name="directory_server_native_rooms">Todas as salas nativas em %s</string>
     <!-- historical -->
     <string name="historical_placeholder">Pesquisar no histórico</string>
-    <string name="offline">Desconectado</string>
+    <string name="offline">Offline</string>
     <string name="user_directory_header">Lista de usuários</string>
-    <string name="people_search_user_directory">LISTA DE USUÁRIAS(OS) (%s)</string>
+    <string name="people_search_user_directory">LISTA DE USUÁRIOS (%s)</string>
     <string name="settings_start_on_boot">Iniciar com o sistema</string>
     <string name="settings_clear_media_cache">Esvaziar o cache de mídia</string>
     <string name="settings_keep_media">Manter mídia</string>
@@ -1407,7 +1407,7 @@
     <string name="create_room_public_title">Público</string>
     <string name="create_room_public_description">Qualquer pessoa poderá entrar nesta sala</string>
     <string name="create_room_directory_title">Lista de Salas</string>
-    <string name="create_room_directory_description">Publicar esta sala na lista das salas</string>
+    <string name="create_room_directory_description">Publicar esta sala na lista de salas</string>
     <string name="keys_backup_unable_to_get_trust_info">Ocorreu um erro ao receber informações de confiança</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Ocorreu um erro ao obter dados de backup de chaves</string>
     <string name="import_e2e_keys_from_file">Importar as chaves de arquivo \"%1$s\".</string>
@@ -1452,7 +1452,7 @@
     <string name="room_filtering_footer_title">Não consegue encontrar o que você está procurando\?</string>
     <string name="room_filtering_footer_create_new_room">Criar uma sala nova</string>
     <string name="room_filtering_footer_create_new_direct_message">Enviar nova mensagem</string>
-    <string name="room_filtering_footer_open_room_directory">Veja lista das salas</string>
+    <string name="room_filtering_footer_open_room_directory">Veja lista de salas</string>
     <string name="room_directory_search_hint">Nome ou ID (#example:matrix.org)</string>
     <string name="labs_swipe_to_reply_in_timeline">Ativar o recurso de deslizar para responder nas conversas</string>
     <string name="labs_show_unread_notifications_as_tab">Adicione uma aba dedicada para notificações não lidas na tela principal.</string>
@@ -2250,4 +2250,8 @@
     <string name="create_room_topic_hint">Descrição</string>
     <string name="create_room_topic_section">Descrição da sala (opcional)</string>
     <string name="create_room_name_section">Nome da sala</string>
+    <string name="send_bug_report_include_key_share_history">Enviar histórico de solicitações do compartilhamento de chaves</string>
+    <string name="no_more_results">Não há mais resultados</string>
+    <string name="settings_export_trail">Exportar auditoria</string>
+    <string name="room_member_open_or_create_dm">Enviar mensagem</string>
 </resources>

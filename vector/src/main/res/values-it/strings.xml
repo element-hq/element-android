@@ -2250,4 +2250,8 @@
     <string name="create_room_topic_hint">Argomento</string>
     <string name="create_room_topic_section">Argomento stanza (facoltativo)</string>
     <string name="create_room_name_section">Nome stanza</string>
+    <string name="settings_export_trail">Esporta revisione</string>
+    <string name="room_member_open_or_create_dm">Messaggio diretto</string>
+    <string name="send_bug_report_include_key_share_history">Invia cronologia di richieste condivisione chiave</string>
+    <string name="no_more_results">Nessun altro risultato</string>
 </resources>
