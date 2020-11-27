@@ -1654,7 +1654,7 @@
     <string name="command_description_rainbow_emote">Envoie la réaction fournie colorée comme un arc-en-ciel</string>
     <string name="settings_category_timeline">Discussions</string>
     <string name="settings_category_composer">Éditeur de messages</string>
-    <string name="room_settings_enable_encryption">Activer le chiffrement de bout en bout</string>
+    <string name="room_settings_enable_encryption">Active le chiffrement de bout en bout…</string>
     <string name="room_settings_enable_encryption_warning">Une fois qu’il est activé, le chiffrement ne peut pas être désactivé.</string>
     <string name="room_settings_enable_encryption_dialog_title">Activer le chiffrement \?</string>
     <string name="room_settings_enable_encryption_dialog_content">Une fois qu’il est activé, le chiffrement ne peut pas être désactivé. Les messages envoyés dans les salons chiffrés ne peuvent pas être vus par le serveur, uniquement par les participants du salon. Activer le chiffrement empêchera peut-être les robots et les passerelles de fonctionner correctement.</string>
@@ -2199,4 +2199,36 @@
     <string name="send_bug_report_include_key_share_history">Inclure l\'historique d\'échange de clés</string>
     <string name="no_more_results">Plus aucun résultat</string>
     <string name="settings_export_trail">Exporter le rapport d\'audit</string>
+    <string name="room_created_summary_no_topic_creation_text">%s pour permettre aux gens de connaître le sujet de ce salon.</string>
+    <string name="this_is_the_beginning_of_dm">Ceci est le début de l\'historique de vos message direct avec %s.</string>
+    <string name="this_is_the_beginning_of_room_no_name">Ceci est le début de cette conversation.</string>
+    <string name="this_is_the_beginning_of_room">Ceci est le début de %s.</string>
+    <string name="room_settings_enable_encryption_no_permission">Vous n\'avez pas le droit d\'activer le chiffrement dans ce salon.</string>
+    <string name="create_room_in_progress">Création du salon…</string>
+    <string name="create_room_alias_invalid">Certains caractères sont interdits</string>
+    <string name="create_room_alias_empty">Veuillez fournir une adresse de salon</string>
+    <string name="create_room_alias_already_in_use">Cette adresse est déjà utilisée</string>
+    <string name="create_room_alias_hint">Adresse du salon</string>
+    <string name="a11y_create_direct_message_by_qr_code">Créer une nouvelle conversation directe en scannant un QR Code</string>
+    <string name="attachment_viewer_item_x_of_y">%1$d de %2$d</string>
+    <string name="a11y_create_direct_message_by_mxid">Créer une nouvelle conversation directe avec un identifiant Matrix</string>
+    <string name="identity_server_consent_dialog_content">Dans le but de découvrir des contacts que vous connaîtriez, acceptez-vous d\'envoyer vos données de contact (numéros de téléphone et/ou e-mails) au serveur d\'identité configuré (%1$s) \?
+\n
+\nPour une meilleure protection de la vie privée, les données seront condensées (hash) avant l\'envoi.</string>
+    <string name="identity_server_consent_dialog_title">Envoyer des e-mails et des numéros de téléphone</string>
+    <string name="settings_discovery_consent_action_give_consent">Autoriser</string>
+    <string name="settings_discovery_consent_action_revoke">Révoquer mon autorisation</string>
+    <string name="settings_discovery_consent_notice_off">Vous n\'avez pas donné votre autorisation pour envoyer des e-mails et des numéros de téléphone à ce serveur d\'identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
+    <string name="settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des e-mails et des numéros de téléphone à ce serveur d\'identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
+    <string name="settings_discovery_consent_title">Envoyer des e-mails et des numéros de téléphone</string>
+    <string name="direct_room_user_list_suggestions_title">Suggestions</string>
+    <string name="direct_room_user_list_contacts_title">Contacts</string>
+    <string name="direct_room_user_list_known_title">Utilisateurs connus</string>
+    <string name="direct_room_user_list_recent_title">Récent</string>
+    <string name="qr_code">QR code</string>
+    <string name="add_by_qr_code">Ajouter avec un QR Code</string>
+    <string name="user_directory_search_hint">Chercher par nom ou identifiant</string>
+    <string name="permissions_denied_add_contact">Autoriser l\'accès à vos contacts.</string>
+    <string name="permissions_denied_qr_code">Pour scanner un QR code, vous devez autoriser l\'accès à votre appareil photo.</string>
+    <string name="start_chatting">Débuter la discussion</string>
 </resources>
