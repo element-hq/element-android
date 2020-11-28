@@ -33,5 +33,6 @@ If applicable, add screenshots to help explain your problem.
 
 **Upstream relevance**
  - Does this issue exist in Element Android?
+ - If this issue exists in Element Android, please also link the corresponding bug report (create a new one if it doesn't exist yet)
 
 Add any other context about the problem here.
