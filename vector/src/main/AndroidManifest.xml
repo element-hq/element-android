@@ -63,7 +63,6 @@
 
         <activity
             android:name=".features.MainActivity"
-            android:taskAffinity=""
             android:theme="@style/AppTheme.Launcher" />
 
         <!-- Activity alias for the launcher Activity (must be declared after the Activity it targets) -->

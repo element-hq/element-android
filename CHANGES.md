@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix duplicate tasks created on app launch (#2560)
 
 Translations 🗣:
  -
