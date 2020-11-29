@@ -318,9 +318,9 @@ class RoomListFragment @Inject constructor(
         val emptyState = when (roomListParams.displayMode) {
             RoomListDisplayMode.ALL ->
                 StateView.State.Empty(
-                        getString(R.string.all_list_rooms_empty_title),
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),
-                        getString(R.string.all_list_rooms_empty_body)
+                        title = getString(R.string.all_list_rooms_empty_title),
+                        image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_bottom_group),
+                        message = getString(R.string.all_list_rooms_empty_body)
                 )
             RoomListDisplayMode.NOTIFICATIONS -> {
                 if (hasNoRoom) {

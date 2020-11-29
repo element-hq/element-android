@@ -98,9 +98,8 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                 switchChecked(viewState.roomType is CreateRoomViewState.RoomType.Public)
                 showDivider(viewState.roomType !is CreateRoomViewState.RoomType.Public)
 
-                    listener { value ->
-                        listener?.setIsPublic(value)
-                    }
+                listener { value ->
+                    listener?.setIsPublic(value)
                 }
             }
             if (viewState.roomType is CreateRoomViewState.RoomType.Public) {
