@@ -23,6 +23,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.yalantis.ucrop.UCrop
 import im.vector.app.R
+import im.vector.app.core.extensions.insertBeforeLast
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
@@ -86,7 +87,7 @@ class GalleryOrCameraDialogHelper(
     }
 
     private fun startUCrop(image: MultiPickerImageType) {
-        val destinationFile = File(activity.cacheDir, "${image.displayName}_e_${System.currentTimeMillis()}")
+        val destinationFile = File(activity.cacheDir, image.displayName.insertBeforeLast("_e_${System.currentTimeMillis()}"))
         val uri = image.contentUri
         createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), fragment.getString(R.string.rotate_and_crop_screen_title))
                 .withAspectRatio(1f, 1f)
@@ -116,7 +117,7 @@ class GalleryOrCameraDialogHelper(
         when (type) {
             Type.Camera ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, takePhotoPermissionActivityResultLauncher)) {
-                    avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(activity, takePhotoActivityResultLauncher)
+                    doOpenCamera()
                 }
             Type.Gallery ->
                 MultiPicker.get(MultiPicker.IMAGE).single().startWith(pickImageActivityResultLauncher)

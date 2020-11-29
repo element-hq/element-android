@@ -27,6 +27,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -451,28 +452,25 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     val newPwd = newPasswordText.text.toString()
 
                     showPasswordLoadingView(true)
-                    session.changePassword(oldPwd, newPwd, object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            if (!isAdded) {
-                                return
-                            }
-                            showPasswordLoadingView(false)
+                    lifecycleScope.launch {
+                        val result = runCatching {
+                            session.changePassword(oldPwd, newPwd)
+                        }
+                        if (!isAdded) {
+                            return@launch
+                        }
+                        showPasswordLoadingView(false)
+                        result.fold({
                             dialog.dismiss()
                             activity.toast(R.string.settings_password_updated)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            if (!isAdded) {
-                                return
-                            }
-                            showPasswordLoadingView(false)
+                        }, { failure ->
                             if (failure.isInvalidPassword()) {
                                 oldPasswordTil.error = getString(R.string.settings_fail_to_update_password_invalid_current_password)
                             } else {
                                 oldPasswordTil.error = getString(R.string.settings_fail_to_update_password)
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             }
             dialog.show()

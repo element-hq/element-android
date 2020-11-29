@@ -17,7 +17,7 @@ androidExtensions {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 10
+ext.versionPatch = 11
 
 ext.scVersion = 26
 
@@ -465,6 +465,10 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     // Plant Timber tree for test
     androidTestImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
+    // "The one who serves a great Espresso"
+    androidTestImplementation('com.schibsted.spain:barista:3.7.0') {
+        exclude group: 'org.jetbrains.kotlin'
+    }
 }
 
 if (getGradle().getStartParameter().getTaskRequests().toString().contains("Gplay")) {

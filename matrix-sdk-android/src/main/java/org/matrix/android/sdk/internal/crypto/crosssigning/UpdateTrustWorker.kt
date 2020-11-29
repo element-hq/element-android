@@ -241,9 +241,9 @@ internal class UpdateTrustWorker(context: Context,
     private fun computeRoomShield(activeMemberUserIds: List<String>, roomSummaryEntity: RoomSummaryEntity): RoomEncryptionTrustLevel {
         Timber.d("## CrossSigning - computeRoomShield ${roomSummaryEntity.roomId} -> $activeMemberUserIds")
         // The set of “all users” depends on the type of room:
-        // For regular / topic rooms, all users including yourself, are considered when decorating a room
+        // For regular / topic rooms which have more than 2 members (including yourself) are considered when decorating a room
         // For 1:1 and group DM rooms, all other users (i.e. excluding yourself) are considered when decorating a room
-        val listToCheck = if (roomSummaryEntity.isDirect) {
+        val listToCheck = if (roomSummaryEntity.isDirect || activeMemberUserIds.size <= 2) {
             activeMemberUserIds.filter { it != myUserId }
         } else {
             activeMemberUserIds

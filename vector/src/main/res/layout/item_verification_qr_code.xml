@@ -11,6 +11,6 @@
         android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/a11y_qr_code_for_verification"
-        tools:src="@color/riotx_header_panel_background_black" />
+        tools:src="@drawable/ic_qr_code_add" />
 
 </FrameLayout>

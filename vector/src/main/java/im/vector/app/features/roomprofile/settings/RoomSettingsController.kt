@@ -30,7 +30,6 @@ import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -46,7 +45,6 @@ class RoomSettingsController @Inject constructor(
         // Delete the avatar, or cancel an avatar change
         fun onAvatarDelete()
         fun onAvatarChange()
-        fun onEnableEncryptionClicked()
         fun onNameChanged(name: String)
         fun onTopicChanged(topic: String)
         fun onHistoryVisibilityClicked()
@@ -135,35 +133,6 @@ class RoomSettingsController @Inject constructor(
                 editable = data.actionPermissions.canChangeHistoryReadability,
                 action = { if (data.actionPermissions.canChangeHistoryReadability) callback?.onHistoryVisibilityClicked() }
         )
-
-        if (enableNonSimplifiedMode) {
-            buildEncryptionAction(data.actionPermissions, roomSummary)
-        }
-    }
-
-    private fun buildEncryptionAction(actionPermissions: RoomSettingsViewState.ActionPermissions, roomSummary: RoomSummary) {
-        if (!actionPermissions.canEnableEncryption) {
-            return
-        }
-        if (roomSummary.isEncrypted) {
-            buildProfileAction(
-                    id = "encryption",
-                    title = stringProvider.getString(R.string.room_settings_addresses_e2e_enabled),
-                    dividerColor = dividerColor,
-                    divider = false,
-                    editable = false
-            )
-        } else {
-            buildProfileAction(
-                    id = "encryption",
-                    title = stringProvider.getString(R.string.room_settings_enable_encryption),
-                    subtitle = stringProvider.getString(R.string.room_settings_enable_encryption_warning),
-                    dividerColor = dividerColor,
-                    divider = false,
-                    editable = true,
-                    action = { callback?.onEnableEncryptionClicked() }
-            )
-        }
     }
 
     private fun formatRoomHistoryVisibilityEvent(event: Event): String? {

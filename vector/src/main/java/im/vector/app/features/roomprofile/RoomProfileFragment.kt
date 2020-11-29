@@ -49,6 +49,7 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.media.BigImageViewerActivity
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import kotlinx.android.synthetic.main.view_stub_room_profile_header.*
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -87,6 +88,7 @@ class RoomProfileFragment @Inject constructor(
             it.layoutResource = R.layout.view_stub_room_profile_header
             it.inflate()
         }
+        setupWaitingView()
         setupToolbar(matrixProfileToolbar)
         setupRecyclerView()
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
@@ -109,6 +111,11 @@ class RoomProfileFragment @Inject constructor(
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
         setupLongClicks()
+    }
+
+    private fun setupWaitingView() {
+        waiting_view_status_text.setText(R.string.please_wait)
+        waiting_view_status_text.isVisible = true
     }
 
     private fun setupLongClicks() {
@@ -155,6 +162,8 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(roomProfileViewModel) { state ->
+        waiting_view.isVisible = state.isLoading
+
         state.roomSummary()?.also {
             if (it.membership.isLeft()) {
                 Timber.w("The room has been left")
@@ -185,6 +194,17 @@ class RoomProfileFragment @Inject constructor(
 
     override fun onLearnMoreClicked() {
         vectorBaseActivity.notImplemented()
+    }
+
+    override fun onEnableEncryptionClicked() {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.room_settings_enable_encryption_dialog_title)
+                .setMessage(R.string.room_settings_enable_encryption_dialog_content)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.room_settings_enable_encryption_dialog_submit) { _, _ ->
+                    roomProfileViewModel.handle(RoomProfileAction.EnableEncryption)
+                }
+                .show()
     }
 
     override fun onMemberListClicked() {

@@ -20,7 +20,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:padding="@dimen/layout_horizontal_margin">
+        android:padding="@dimen/layout_horizontal_margin"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/errorMessageView"
@@ -31,7 +33,6 @@
             android:textColor="?riotx_text_primary"
             android:textSize="16sp"
             tools:text="Une erreur est survenue" />
-
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/errorRetryView"
@@ -44,7 +45,6 @@
 
     </LinearLayout>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
@@ -53,47 +53,56 @@
         android:orientation="vertical"
         android:padding="@dimen/layout_horizontal_margin">
 
+        <ImageView
+            android:id="@+id/emptyImageView"
+            style="@style/VectorEmptyImageView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="30dp"
+            android:maxHeight="350dp"
+            app:layout_constraintBottom_toTopOf="@id/emptyTitleView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:ignore="MissingPrefix"
+            tools:layout_constraintHeight_percent="0.5"
+            tools:src="@drawable/ic_search_no_results" />
+
         <TextView
             android:id="@+id/emptyTitleView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="49dp"
             android:gravity="center"
             android:textColor="?riotx_text_primary"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/emptyImageView"
+            app:layout_constraintBottom_toTopOf="@id/emptyMessageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="@string/room_list_catchup_empty_title" />
-
-        <ImageView
-            android:id="@+id/emptyImageView"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center_horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_noun_party_popper"
-            app:tint="?riotx_text_primary"
-            tools:ignore="MissingPrefix" />
+            app:layout_constraintTop_toBottomOf="@id/emptyImageView"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="@string/room_list_people_empty_title" />
 
         <TextView
             android:id="@+id/emptyMessageView"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="49dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:textColor="?riotx_text_secondary"
             android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emptyImageView"
-            tools:text="@string/room_list_catchup_empty_body" />
+            app:layout_constraintTop_toBottomOf="@+id/emptyTitleView"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="@string/room_list_people_empty_body" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

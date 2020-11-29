@@ -97,11 +97,8 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         unrecognizedCertificateDialog = screenComponent.unrecognizedCertificateDialog()
         viewModelFactory = screenComponent.viewModelFactory()
         childFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
-        injectWith(injector())
         super.onAttach(context)
     }
-
-    protected open fun injectWith(injector: ScreenComponent) = Unit
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -2177,4 +2177,8 @@
     <string name="create_room_topic_hint">Subjekt</string>
     <string name="create_room_topic_section">Subjekt dhome (në daçi)</string>
     <string name="create_room_name_section">Emër dhome</string>
+    <string name="settings_export_trail">Eksporto Auditim</string>
+    <string name="room_member_open_or_create_dm">Mesazh i drejtpërdrejtë</string>
+    <string name="send_bug_report_include_key_share_history">Dërgo historik kërkesash për dhënie kyçesh</string>
+    <string name="no_more_results">S’ka më përfundime</string>
 </resources>

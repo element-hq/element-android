@@ -16,30 +16,17 @@
 
 package org.matrix.android.sdk.internal.session.account
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.account.AccountService
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import javax.inject.Inject
 
 internal class DefaultAccountService @Inject constructor(private val changePasswordTask: ChangePasswordTask,
-                                                         private val deactivateAccountTask: DeactivateAccountTask,
-                                                         private val taskExecutor: TaskExecutor) : AccountService {
+                                                         private val deactivateAccountTask: DeactivateAccountTask) : AccountService {
 
-    override fun changePassword(password: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable {
-        return changePasswordTask
-                .configureWith(ChangePasswordTask.Params(password, newPassword)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun changePassword(password: String, newPassword: String) {
+        changePasswordTask.execute(ChangePasswordTask.Params(password, newPassword))
     }
 
-    override fun deactivateAccount(password: String, eraseAllData: Boolean, callback: MatrixCallback<Unit>): Cancelable {
-        return deactivateAccountTask
-                .configureWith(DeactivateAccountTask.Params(password, eraseAllData)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun deactivateAccount(password: String, eraseAllData: Boolean) {
+        deactivateAccountTask.execute(DeactivateAccountTask.Params(password, eraseAllData))
     }
 }

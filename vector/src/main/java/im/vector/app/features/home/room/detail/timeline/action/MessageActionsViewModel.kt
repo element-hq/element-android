@@ -28,6 +28,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.app.features.html.EventHtmlRenderer
+import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.reactions.data.EmojiDataSource
@@ -57,18 +58,22 @@ import java.util.ArrayList
  * Information related to an event and used to display preview in contextual bottom sheet.
  */
 class MessageActionsViewModel @AssistedInject constructor(@Assisted
-                                                          initialState: MessageActionState,
+                                                          private val initialState: MessageActionState,
                                                           private val eventHtmlRenderer: Lazy<EventHtmlRenderer>,
                                                           private val htmlCompressor: VectorHtmlCompressor,
                                                           private val session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter,
                                                           private val stringProvider: StringProvider,
+                                                          private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
                                                           private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
     private val eventId = initialState.eventId
     private val informationData = initialState.informationData
     private val room = session.getRoom(initialState.roomId)
+    private val pillsPostProcessor by lazy {
+        pillsPostProcessorFactory.create(initialState.roomId)
+    }
 
     @AssistedInject.Factory
     interface Factory {
@@ -164,7 +169,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
         return when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE,
-            EventType.STICKER     -> {
+            EventType.STICKER -> {
                 val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
                 if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
                     val html = messageContent.formattedBody
@@ -172,7 +177,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                             ?.let { htmlCompressor.compress(it) }
                             ?: messageContent.body
 
-                    eventHtmlRenderer.get().render(html)
+                    eventHtmlRenderer.get().render(html, pillsPostProcessor)
                 } else if (messageContent is MessageVerificationRequestContent) {
                     stringProvider.getString(R.string.verification_request)
                 } else {
@@ -186,6 +191,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             EventType.STATE_ROOM_ALIASES,
             EventType.STATE_ROOM_CANONICAL_ALIAS,
             EventType.STATE_ROOM_HISTORY_VISIBILITY,
+            EventType.STATE_ROOM_SERVER_ACL,
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,

@@ -26,12 +26,12 @@ import javax.inject.Inject
 
 class DrawableProvider @Inject constructor(private val context: Context) {
 
-    fun getDrawable(@DrawableRes colorRes: Int): Drawable? {
-        return ContextCompat.getDrawable(context, colorRes)
+    fun getDrawable(@DrawableRes drawableRes: Int): Drawable? {
+        return ContextCompat.getDrawable(context, drawableRes)
     }
 
-    fun getDrawable(@DrawableRes colorRes: Int, @ColorInt color: Int): Drawable? {
-        return ContextCompat.getDrawable(context, colorRes)?.let {
+    fun getDrawable(@DrawableRes drawableRes: Int, @ColorInt color: Int): Drawable? {
+        return ContextCompat.getDrawable(context, drawableRes)?.let {
             ThemeUtils.tintDrawableWithColor(it, color)
         }
     }

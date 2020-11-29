@@ -24,6 +24,7 @@ sealed class IdentityServiceError : Failure.FeatureFailure() {
     object NoIdentityServerConfigured : IdentityServiceError()
     object TermsNotSignedException : IdentityServiceError()
     object BulkLookupSha256NotSupported : IdentityServiceError()
+    object UserConsentNotProvided : IdentityServiceError()
     object BindingError : IdentityServiceError()
     object NoCurrentBindingError : IdentityServiceError()
 }

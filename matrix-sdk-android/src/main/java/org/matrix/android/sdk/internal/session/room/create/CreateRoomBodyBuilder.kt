@@ -81,7 +81,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 topic = params.topic,
                 invitedUserIds = params.invitedUserIds,
                 invite3pids = invite3pids,
-                creationContent = params.creationContent,
+                creationContent = params.creationContent.takeIf { it.isNotEmpty() },
                 initialStates = initialStates,
                 preset = params.preset,
                 isDirect = params.isDirect,

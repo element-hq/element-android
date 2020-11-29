@@ -50,8 +50,6 @@ fun convertFromUTF8(s: String): String {
     }
 }
 
-fun String.withoutPrefix(prefix: String) = if (startsWith(prefix)) substringAfter(prefix) else this
-
 /**
  * Returns whether a string contains an occurrence of another, as a standalone word, regardless of case.
  *

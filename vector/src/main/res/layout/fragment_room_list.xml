@@ -11,14 +11,15 @@
         android:id="@+id/roomListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="always" />
+        android:overScrollMode="always"
+        tools:listitem="@layout/item_room" />
 
-    <im.vector.app.features.home.room.list.widget.FabMenuView
+    <im.vector.app.features.home.room.list.widget.NotifsFabMenuView
         android:id="@+id/createChatFabMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        app:layoutDescription="@xml/motion_scene_fab_menu"
+        app:layoutDescription="@xml/motion_scene_notifs_fab_menu"
         tools:showPaths="true"
         tools:visibility="visible" />
 

@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
-import com.airbnb.mvrx.viewModel
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -28,15 +27,11 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
-import javax.inject.Inject
 
 /**
  * Simple container for [CreateRoomFragment]
  */
 class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
-
-    @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
-    private val createRoomViewModel: CreateRoomViewModel by viewModel()
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
@@ -52,8 +47,11 @@ class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
-            createRoomViewModel.handle(CreateRoomAction.SetName(intent?.getStringExtra(INITIAL_NAME) ?: ""))
+            addFragment(
+                    R.id.simpleFragmentContainer,
+                    CreateRoomFragment::class.java,
+                    CreateRoomArgs(intent?.getStringExtra(INITIAL_NAME) ?: "")
+            )
         }
     }
 

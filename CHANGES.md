@@ -1,3 +1,45 @@
+Changes in Element 1.0.11 (2020-11-27)
+===================================================
+
+Features ✨:
+ - Create DMs with users by scanning their QR code (#2025)
+ - Add Invite friends quick invite actions (#2348)
+ - Add friend by scanning QR code, show your code to friends (#2025)
+
+Improvements 🙌:
+ - New room creation tile with quick action (#2346)
+ - Open an existing DM instead of creating a new one (#2319)
+ - Use RoomMember instead of User in the context of a Room.
+ - Ask for explicit user consent to send their contact details to the identity server (#2375)
+ - Handle events of type "m.room.server_acl" (#890)
+ - Room creation form: add advanced section to disable federation (#1314)
+ - Move "Enable Encryption" from room setting screen to room profile screen (#2394)
+ - Home empty screens quick design update (#2347)
+ - Improve Invite user screen (seamless search for matrix ID)
+
+Bugfix 🐛:
+ - Fix crash on AttachmentViewer (#2365)
+ - Exclude yourself when decorating rooms which are direct or don't have more than 2 users (#2370)
+ - F-Droid version: ensure timeout of sync request can be more than 60 seconds (#2169)
+ - Fix issue when restoring draft after sharing (#2287)
+ - Fix issue when updating the avatar of a room (new avatar vanishing)
+ - Discard change dialog displayed by mistake when avatar has been updated
+ - Try to fix cropped image in timeline (#2126)
+ - Registration: annoying error message scares every new user when they add an email (#2391)
+ - Fix jitsi integration for those with non-vanilla dialler frameworks
+ - Update profile has no effect if user is in zero rooms
+ - Fix issues with matrix.to deep linking (#2349)
+
+SDK API changes ⚠️:
+ - AccountService now exposes suspendable function instead of using MatrixCallback (#2354).
+   Note: We will incrementally migrate all the SDK API in a near future (#2449)
+
+Test:
+ - Add `allScreensTest` to cover all screens of the app
+
+Other changes:
+ - Upgrade Realm dependency to 10.0.0
+
 Changes in Element 1.0.10 (2020-11-04)
 ===================================================
 
@@ -1006,6 +1048,9 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
+ -
+
+Test:
  -
 
 Other changes:

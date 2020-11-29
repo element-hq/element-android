@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
+import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
 import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
@@ -39,6 +40,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
         toDevice.events?.forEachIndexed { index, event ->
             initialSyncProgressService?.reportProgress(((index / total.toFloat()) * 100).toInt())
             // Decrypt event if necessary
+            Timber.i("## CRYPTO | To device event from ${event.senderId} of type:${event.type}")
             decryptToDeviceEvent(event, null)
             if (event.getClearType() == EventType.MESSAGE
                     && event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
@@ -69,7 +71,12 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
                 result = cryptoService.decryptEvent(event, timelineId ?: "")
             } catch (exception: MXCryptoError) {
                 event.mCryptoError = (exception as? MXCryptoError.Base)?.errorType // setCryptoError(exception.cryptoError)
-                Timber.e("## CRYPTO | Failed to decrypt to device event: ${event.mCryptoError ?: exception}")
+                val senderKey = event.content.toModel<OlmEventContent>()?.senderKey ?: "<unknown sender key>"
+                // try to find device id to ease log reading
+                val deviceId = cryptoService.getCryptoDeviceInfo(event.senderId!!).firstOrNull {
+                    it.identityKey() == senderKey
+                 }?.deviceId ?: senderKey
+                Timber.e("## CRYPTO | Failed to decrypt to device event from ${event.senderId}|$deviceId reason:<${event.mCryptoError ?: exception}>")
             }
 
             if (null != result) {
@@ -80,6 +87,9 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
                         forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                 )
                 return true
+            } else {
+                // should not happen
+                Timber.e("## CRYPTO | ERROR NULL DECRYPTION RESULT from ${event.senderId}")
             }
         }
 

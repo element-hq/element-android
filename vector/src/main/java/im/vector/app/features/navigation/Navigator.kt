@@ -78,7 +78,7 @@ interface Navigator {
 
     fun openRoomMemberProfile(userId: String, roomId: String?, context: Context, buildTask: Boolean = false)
 
-    fun openRoomProfile(context: Context, roomId: String)
+    fun openRoomProfile(context: Context, roomId: String, directAccess: Int? = null)
 
     fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem)
 

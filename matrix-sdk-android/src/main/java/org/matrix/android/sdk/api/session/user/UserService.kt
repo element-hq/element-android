@@ -36,6 +36,11 @@ interface UserService {
     fun getUser(userId: String): User?
 
     /**
+     * Try to resolve user from known users, or using profile api
+     */
+    fun resolveUser(userId: String, callback: MatrixCallback<User>)
+
+    /**
      * Search list of users on server directory.
      * @param search the searched term
      * @param limit the max number of users to return

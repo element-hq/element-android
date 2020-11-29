@@ -80,7 +80,8 @@
                 android:resource="@xml/shortcuts" />
         </activity-alias>
 
-        <activity android:name=".features.home.HomeActivity" />
+        <activity android:name=".features.home.HomeActivity"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".features.login.LoginActivity"
             android:launchMode="singleTask"
@@ -192,10 +193,9 @@
         <activity
             android:name=".features.signout.soft.SoftLogoutActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".features.permalink.PermalinkHandlerActivity">
+        <activity android:name=".features.permalink.PermalinkHandlerActivity" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -232,6 +232,7 @@
         <activity android:name=".features.widgets.WidgetActivity" />
         <activity android:name=".features.pin.PinActivity" />
         <activity android:name=".features.home.room.detail.search.SearchActivity" />
+        <activity android:name=".features.usercode.UserCodeActivity" />
 
         <!-- Services -->
 

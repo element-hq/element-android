@@ -43,8 +43,8 @@ class DeactivateAccountTest : InstrumentedTest {
         val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
 
         // Deactivate the account
-        commonTestHelper.doSync<Unit> {
-            session.deactivateAccount(TestConstants.PASSWORD, false, it)
+        commonTestHelper.runBlockingTest {
+            session.deactivateAccount(TestConstants.PASSWORD, false)
         }
 
         // Try to login on the previous account, it will fail (M_USER_DEACTIVATED)

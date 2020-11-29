@@ -17,10 +17,12 @@
 package im.vector.app.features.home.room.detail
 
 import android.net.Uri
+import android.view.View
 import androidx.annotation.StringRes
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.features.command.Command
 import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import java.io.File
 
@@ -42,6 +44,11 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     data class NavigateToEvent(val eventId: String) : RoomDetailViewEvents()
     data class JoinJitsiConference(val widget: Widget, val withVideo: Boolean) : RoomDetailViewEvents()
+
+    object OpenInvitePeople : RoomDetailViewEvents()
+    object OpenSetRoomAvatarDialog : RoomDetailViewEvents()
+    object OpenRoomSettings : RoomDetailViewEvents()
+    data class ShowRoomAvatarFullScreen(val matrixItem: MatrixItem?, val view: View?) : RoomDetailViewEvents()
 
     object ShowWaitingView : RoomDetailViewEvents()
     object HideWaitingView : RoomDetailViewEvents()

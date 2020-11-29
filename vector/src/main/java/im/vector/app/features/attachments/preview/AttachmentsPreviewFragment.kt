@@ -38,6 +38,7 @@ import com.airbnb.mvrx.withState
 import com.yalantis.ucrop.UCrop
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
+import im.vector.app.core.extensions.insertBeforeLast
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
@@ -170,7 +171,7 @@ class AttachmentsPreviewFragment @Inject constructor(
 
     private fun handleEditAction() = withState(viewModel) {
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
-        val destinationFile = File(requireContext().cacheDir, "${currentAttachment.name}_edited_image_${System.currentTimeMillis()}")
+        val destinationFile = File(requireContext().cacheDir, currentAttachment.name.insertBeforeLast("_edited_image_${System.currentTimeMillis()}"))
         val uri = currentAttachment.queryUri
         createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), currentAttachment.name)
                 .getIntent(requireContext())

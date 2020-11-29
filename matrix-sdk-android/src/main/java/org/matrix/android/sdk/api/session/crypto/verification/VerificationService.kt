@@ -41,7 +41,7 @@ interface VerificationService {
 
     fun getExistingTransaction(otherUserId: String, tid: String): VerificationTransaction?
 
-    fun getExistingVerificationRequest(otherUserId: String): List<PendingVerificationRequest>?
+    fun getExistingVerificationRequests(otherUserId: String): List<PendingVerificationRequest>
 
     fun getExistingVerificationRequest(otherUserId: String, tid: String?): PendingVerificationRequest?
 
