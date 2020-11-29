@@ -90,8 +90,10 @@ class RoomProfileController @Inject constructor(
                 text(stringProvider.getString(learnMoreSubtitle))
             }
             buildEncryptionAction(data.actionPermissions, roomSummary)
+        }
 
-            // More
+        // More | category header only if displaying other sections above
+        if (enableNonSimplifiedMode || roomSummary.topic.isNotEmpty()) {
             buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
         }
         buildProfileAction(
