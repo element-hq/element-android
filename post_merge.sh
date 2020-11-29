@@ -22,6 +22,15 @@ restore_sc() {
     fi
 }
 
+# Color corrections | TODO more?
+sed -i 's|@color/riotx_accent|?colorAccent|g' vector/src/main/res/layout/*
+uncommitted=`git status --porcelain`
+if [ -z "$uncommitted" ]; then
+    echo "Seems like colors are still fine :)"
+else
+    git add -A
+    git commit -m 'Automatic color correction'
+fi
 
 # Keep in sync with pre_merge.sh!
 restore_sc README.md
