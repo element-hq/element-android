@@ -65,7 +65,7 @@
     <string name="local_address_book_header">Helyi címjegyzék</string>
     <string name="matrix_only_filter">Csak Matrix névjegyek</string>
     <string name="no_conversation_placeholder">Nincsenek beszélgetések</string>
-    <string name="no_contact_access_placeholder">Nem adtál hozzáférést a SchildiChatnek a helyi névjegyeidhez</string>
+    <string name="no_contact_access_placeholder">Nem adtál hozzáférést a Elementnek a helyi névjegyeidhez</string>
     <string name="no_result_placeholder">Nincs találat</string>
     <string name="rooms_header">Szobák</string>
     <string name="rooms_directory_header">Szobalista</string>
@@ -192,22 +192,22 @@
     <string name="media_picker_both_capture_title">Kép vagy videó készítése</string>
     <string name="media_picker_cannot_record_video">Videorögzítés sikertelen</string>
     <string name="permissions_rationale_popup_title">Információ</string>
-    <string name="permissions_rationale_msg_storage">A SchildiChatnek szüksége van a fénykép- és videótárad elérési engedélyéhez a mellékletek küldéséhez és mentéséhez.
+    <string name="permissions_rationale_msg_storage">A Elementnek szüksége van a fénykép- és videótárad elérési engedélyéhez a mellékletek küldéséhez és mentéséhez.
 \n
 \nEngedélyezd a hozzáférést a következő felugró ablakon, hogy fájlokat tudj küldeni a telefonodról.</string>
-    <string name="permissions_rationale_msg_camera">Az SchildiChatnek engedélyre van szüksége a kamera eléréséhez, hogy képeket tudj készítsen és videóhívást tudj indítani.</string>
+    <string name="permissions_rationale_msg_camera">Az Elementnek engedélyre van szüksége a kamera eléréséhez, hogy képeket tudj készítsen és videóhívást tudj indítani.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nEngedélyezd a hozzáférést a következő felugró ablakon, hogy hívást tudj indítani."</string>
-    <string name="permissions_rationale_msg_record_audio">A SchildiChatnek engedélyre van szüksége a mikrofon eléréséhez, hogy hanghívás tudjon indítani.</string>
+    <string name="permissions_rationale_msg_record_audio">A Elementnek engedélyre van szüksége a mikrofon eléréséhez, hogy hanghívás tudjon indítani.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nEngedélyezd a hozzáférést a következő felugró ablakon, hogy hívást tudj indítani."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">A SchildiChatnek engedélyre van szüksége a mikrofonod és kamerád eléréséhez, hogy videohívást tudj indítani.
+    <string name="permissions_rationale_msg_camera_and_audio">A Elementnek engedélyre van szüksége a mikrofonod és kamerád eléréséhez, hogy videohívást tudj indítani.
 \n
 \nEngedélyezd a hozzáférést a következő felugró ablakon, hogy hívást tudj indítani.</string>
-    <string name="permissions_rationale_msg_contacts">A SchildiChat a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókar. Ha egyetértesz a névjegyek ilyen célú megosztásával, kérlek engedélyezd a hozzáférést a következő felugró üzenetben.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">A SchildiChat a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókar.
+    <string name="permissions_rationale_msg_contacts">A Element a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókar. Ha egyetértesz a névjegyek ilyen célú megosztásával, kérlek engedélyezd a hozzáférést a következő felugró üzenetben.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">A Element a névjegyekben lévő e-mail és telefonszám alapján képes felkutatni más Matrix felhasználókar.
 \n
 \nEgyetértesz a névjegyek ilyen célú megosztásával\?</string>
     <string name="permissions_action_not_performed_missing_permissions">"Elnézést.  A művelet nem lett végre hajtva hiányzó engedélyek miatt"</string>
@@ -696,7 +696,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="settings_notification_privacy_metadata">• Az értesítések csak metaadatokat tartalmaznak</string>
     <string name="settings_notification_privacy_secure_message_content">• Az értesítés tartalma <b>közvetlenül a Matrix szerverről kerül letöltésre</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">Az értesítések <b>meta- és üzenet adatot is</b> tartalmaznak</string>
-    <string name="startup_notification_privacy_message">SchildiChat futtatható a háttérben az értesítések biztonságos és titkos kezeléséhez, ami hatással lehet az akkumulátor használatra.</string>
+    <string name="startup_notification_privacy_message">Element futtatható a háttérben az értesítések biztonságos és titkos kezeléséhez, ami hatással lehet az akkumulátor használatra.</string>
     <string name="startup_notification_privacy_button_grant">Engedély megadása</string>
     <string name="startup_notification_privacy_button_other">Más lehetőség választása</string>
     <string name="settings_notification_privacy">Értesítés adatvédelme</string>
@@ -712,8 +712,8 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="settings_deactivate_account_section">Fiók felfüggesztése</string>
     <string name="settings_deactivate_my_account">Saját fiók felfüggesztése</string>
     <string name="settings_opt_in_of_analytics">Analitikai adatok küldése</string>
-    <string name="settings_opt_in_of_analytics_summary">SchildiChat anonim analitikai adatokat gyűjt, hogy javítani tudjuk az alkalmazást.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Kérlek engedélyezd az analitikai adatok gyűjtését ezzel segítve a SchildiChat fejlesztését.</string>
+    <string name="settings_opt_in_of_analytics_summary">Element anonim analitikai adatokat gyűjt, hogy javítani tudjuk az alkalmazást.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Kérlek engedélyezd az analitikai adatok gyűjtését ezzel segítve a Element fejlesztését.</string>
     <string name="settings_opt_in_of_analytics_ok">Igen, segíteni akarok!</string>
     <string name="widget_integration_missing_parameter">A szükséges paraméter hiányzik.</string>
     <string name="widget_integration_invalid_parameter">Nem érvényes paraméter.</string>
@@ -735,7 +735,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="e2e_re_request_encryption_key">Végpontok közötti titkosításhoz használt kulcsok újrakérése a többi munkamenetedtől.</string>
     <string name="e2e_re_request_encryption_key_sent">Kulcs újrakérve.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Kérés elküldve</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Índítsd el a SchildiChatet egy olyan eszközön, amely vissza tudja fejteni az üzenetet, hogy elküldhesse a kulcsot ennek a munkamenetnek.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Índítsd el a Elementet egy olyan eszközön, amely vissza tudja fejteni az üzenetet, hogy elküldhesse a kulcsot ennek a munkamenetnek.</string>
     <string name="lock_screen_hint">Ide írj…</string>
     <string name="option_send_voice">Hangüzenet küldése</string>
     <string name="go_on_with">tovább ezzel…</string>
@@ -844,13 +844,13 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="settings_show_avatar_display_name_changes_messages">Fiók események megjelenítése</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Avatar és név változásokat tartalmaz.</string>
     <string name="settings_password">Jelszó</string>
-    <string name="settings_labs_native_camera_summary">Rendszer kamera indítása a SchildiChat egyedi kamera alkalmazása helyett.</string>
+    <string name="settings_labs_native_camera_summary">Rendszer kamera indítása a Element egyedi kamera alkalmazása helyett.</string>
     <string name="settings_labs_enable_send_voice_summary">Ehhez az opcióhoz egy harmadik féltől származó alkalmazásra van szükség, hogy felvedd az üzenetet.</string>
     <string name="command_problem_with_parameters">\"%s\" parancsnak több paraméterre van szüksége vagy valamelyik paraméter hibás.</string>
     <string name="markdown_has_been_enabled">Markdown engedélyezve.</string>
     <string name="markdown_has_been_disabled">Markdown tiltva.</string>
     <string name="settings_call_category">Hívások</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Az alapértelmezett SchildiChat csengőhang használata bejövő hívásokhoz</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Az alapértelmezett Element csengőhang használata bejövő hívásokhoz</string>
     <string name="settings_call_ringtone_title">Bejövő hívás csengőhangja</string>
     <string name="settings_call_ringtone_dialog_title">Csengőhang kiválasztása a hívásokhoz:</string>
     <string name="accept">Elfogadás</string>
@@ -874,11 +874,11 @@ Kérlek ellenőrizd a fiókbeállításokat.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Engedélyez</string>
     <string name="settings_troubleshoot_test_device_settings_title">Munkamenet beállítások.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Az értesítések engedélyezve vannak ezen az munkameneten.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Az értesítések tiltva vannak ezen a munkameneten. Kérlek ellenőrizd a SchildiChat beállításokat.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Az értesítések tiltva vannak ezen a munkameneten. Kérlek ellenőrizd a Element beállításokat.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Engedélyez</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Szolgáltatások ellenőrzése</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK elérhető és a legújabb verziójú.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">"SchildiChat a Google Play Services-t használja  a „push” értesítések fogadásához, de úgy tűnik az nincs megfelelően beállítva:
+    <string name="settings_troubleshoot_test_play_services_failed">"Element a Google Play Services-t használja  a „push” értesítések fogadásához, de úgy tűnik az nincs megfelelően beállítva:
 \n%1$s"</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Play Services javítása</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase token</string>
@@ -900,22 +900,22 @@ Próbáld újraindítani a szolgáltatást.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">A szolgáltatást nem sikerült újraindítani</string>
     <string name="settings_troubleshoot_test_service_boot_title">Indítás az eszköz indulásakor</string>
     <string name="settings_troubleshoot_test_service_boot_success">A szolgáltatás az eszköz újraindulásakor elindul.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">A szolgáltatás az eszköz újraindulásakor nem fog elindulni, addig nem kapsz értesítést amíg egyszer el nem indítod a SchildiChat-ot.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">A szolgáltatás az eszköz újraindulásakor nem fog elindulni, addig nem kapsz értesítést amíg egyszer el nem indítod a Element-ot.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Indulás engedélyezése amikor az eszköz elindul</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Háttér korlátozások ellenőrzése</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">A háttér korlátozások nincsenek érvényben a SchildiChat-hoz. Ezt a tesztet mobil hálózaton kell elvégezni (WiFi nélkül).
+    <string name="settings_troubleshoot_test_bg_restricted_success">A háttér korlátozások nincsenek érvényben a Element-hoz. Ezt a tesztet mobil hálózaton kell elvégezni (WiFi nélkül).
 %1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Háttér korlátozások vannak érvényben a SchildiChat-hoz.
-Bármi amit a SchildiChat el akar végezni amíg a háttérben fut, agresszívan korlátozva van. Ez érintheti az értesítéseket is.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Háttér korlátozások vannak érvényben a Element-hoz.
+Bármi amit a Element el akar végezni amíg a háttérben fut, agresszívan korlátozva van. Ez érintheti az értesítéseket is.
 %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Korlátozások tiltása</string>
     <string name="settings_troubleshoot_test_battery_title">Akkumulátor optimalizáció</string>
-    <string name="settings_troubleshoot_test_battery_success">SchildiChatot nem érinti az akkumulátor optimalizáció.</string>
+    <string name="settings_troubleshoot_test_battery_success">Elementot nem érinti az akkumulátor optimalizáció.</string>
     <string name="settings_troubleshoot_test_battery_failed">Ha a felhasználó töltés nélkül kikapcsolt képernyővel egy ideig magára hagyja az eszközt, az eszköz „Doze” módba kerül. Ez megakadályozza az alkalmazás számára, hogy hozzáférjen a hálózathoz, nem engedi elvégezni a feladatait, szinkronizációt és az alapértelmezett riasztásait.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Optimalizáció figyelmen kívül hagyása</string>
     <string name="startup_notification_fdroid_battery_optim_title">Háttér kapcsolat</string>
-    <string name="startup_notification_fdroid_battery_optim_message">SchildiChatnak szüksége van egy minimális háttér kapcsolat fenntartására ahhoz, hogy az értesítések biztonságban megérkezhessenek.
-A következő képernyőn el kell fogadnod, hogy a SchildiChat folyamatosan fusson a háttérben.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Elementnak szüksége van egy minimális háttér kapcsolat fenntartására ahhoz, hogy az értesítések biztonságban megérkezhessenek.
+A következő képernyőn el kell fogadnod, hogy a Element folyamatosan fusson a háttérben.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Jogosultság megadása</string>
     <string name="account_email_error">Az e-mail címed ellenőrzésekor hiba történt.</string>
     <string name="account_phone_number_error">A telefonszámod ellenőrzésekor hiba történt.</string>
@@ -935,11 +935,11 @@ A következő képernyőn el kell fogadnod, hogy a SchildiChat folyamatosan fuss
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Az egyedi szabályokat nem sikerült betölteni, kérlek próbáld újra.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Beállítások ellenőrzése</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-Ez a hiba a SchildiChaton kívül van és a Google szerint ez a hiba azt jelzi, hogy túl sok alkalmazás használja az FCM-et. Ez a hiba akkor szokott előfordulni, ha nagyon sok alkalmazás van ezért egy átlagos felhasználót nem nagyon érinthet.</string>
+Ez a hiba a Elementon kívül van és a Google szerint ez a hiba azt jelzi, hogy túl sok alkalmazás használja az FCM-et. Ez a hiba akkor szokott előfordulni, ha nagyon sok alkalmazás van ezért egy átlagos felhasználót nem nagyon érinthet.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-Ez a hiba a SchildiChaton kívül van. Több okból is előjöhet. Lehet, ha később próbálod már működni fog, de megnézheted, hogy a Google Play szolgáltatásnak nincs beállítva adathasználati korlátozás a rendszer beállításokban vagy, hogy az eszközöd órája helyesen jár-e de ezt előfordulhat egyedi ROM esetén is.</string>
+Ez a hiba a Elementon kívül van. Több okból is előjöhet. Lehet, ha később próbálod már működni fog, de megnézheted, hogy a Google Play szolgáltatásnak nincs beállítva adathasználati korlátozás a rendszer beállításokban vagy, hogy az eszközöd órája helyesen jár-e de ezt előfordulhat egyedi ROM esetén is.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-Ez a hiba a SchildiChaton kívül van. Nincs Google fiók az eszközön. Kérlek nyisd meg a fiókkezelőt és adj hozzá egy Google fiókot.</string>
+Ez a hiba a Elementon kívül van. Nincs Google fiók az eszközön. Kérlek nyisd meg a fiókkezelőt és adj hozzá egy Google fiókot.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Fiók hozzáadása</string>
     <string name="settings_noisy_notifications_preferences">Hangos értesítések beállítása</string>
     <string name="settings_call_notifications_preferences">Hívás értesítések beállítása</string>
@@ -950,7 +950,7 @@ Ez a hiba a SchildiChaton kívül van. Nincs Google fiók az eszközön. Kérlek
     <string name="notification_silent">Csendes</string>
     <string name="passphrase_empty_error_message">Kérlek adj meg egy jelmondatot</string>
     <string name="passphrase_passphrase_too_weak">A jelmondat túl gyenge</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Ha azt szeretnéd, hogy a SchildiChat Visszaállítási Kulcsot generáljon akkor kérlek töröld a jelmondatot.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Ha azt szeretnéd, hogy a Element Visszaállítási Kulcsot generáljon akkor kérlek töröld a jelmondatot.</string>
     <string name="keys_backup_no_session_error">Jelenleg nincs Matrix kapcsolat</string>
     <string name="keys_backup_setup_step1_title">Soha ne veszíts el titkosított üzenetet</string>
     <string name="keys_backup_setup_step1_description">A titkosított szobákban az üzenetek végponttól-végpontig titkosítva vannak. Csak neked és a címzetteknek vannak meg az üzenet elolvasásához szükséges kulcsok.
@@ -1080,7 +1080,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="passwords_do_not_match">A jelszavak nem egyeznek meg</string>
     <string name="autodiscover_invalid_response">A Matrix szerver felderítésére érvénytelen válasz érkezett</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Szerver beállítások automatikus kiegészítése</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">SchildiChat egyedi szerver beállítást észlelt a felhasználói azonosítód domain-jéhez: \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">Element egyedi szerver beállítást észlelt a felhasználói azonosítód domain-jéhez: \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Beállítás használata</string>
     <string name="notification_sync_init">Szolgáltatás indítása</string>
@@ -1195,7 +1195,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="please_wait">Kérlek várj…</string>
     <string name="group_all_communities">Minden közösség</string>
     <string name="room_preview_no_preview">Ennek a szobának nincs előnézete</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">A SchildiChat-ben a nyilvános szoba előnézete egyelőre nem támogatott</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">A Element-ben a nyilvános szoba előnézete egyelőre nem támogatott</string>
     <string name="fab_menu_create_room">Szobák</string>
     <string name="fab_menu_create_chat">Közvetlen üzenetek</string>
     <string name="create_room_title">Új szoba</string>
@@ -1290,11 +1290,11 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="invite_no_identity_server_error">A beállításokban adj hozzá egy azonosítási szervert ehhez a művelethez.</string>
     <string name="settings_background_fdroid_sync_mode">Háttér Szinkronizálási Mód (Kísérleti)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimalizált akkumulátor használat</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat a háttérben úgy szinkronizál, hogy a leginkább kímélje az eszköz korlátozott erőforrásait (akkumulátor).
+    <string name="settings_background_fdroid_sync_mode_battery_description">Element a háttérben úgy szinkronizál, hogy a leginkább kímélje az eszköz korlátozott erőforrásait (akkumulátor).
 \nAz eszköz erőforrásainak állapotától függően a szinkronizációt az operációs rendszer elhalaszthatja.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimalizálás valós idejű használatra</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat a háttérben rendszeresen, pontosan a megadott időközönként, szinkronizálni fog (beállítható).
-\nEz befolyásolja a rádió és az akkumulátor használatot, és folyamatosan egy értesítés fog megjelenni arról, hogy a SchildiChat figyel a neki küldött eseményekre.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Element a háttérben rendszeresen, pontosan a megadott időközönként, szinkronizálni fog (beállítható).
+\nEz befolyásolja a rádió és az akkumulátor használatot, és folyamatosan egy értesítés fog megjelenni arról, hogy a Element figyel a neki küldött eseményekre.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Nincs szinkroniziálás a háttérben</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Nem leszel értesítve az érkező üzenetekről, ha az alkalmazás csak a háttérben fut.</string>
     <string name="settings_background_sync_update_error">A beállítások frissítése nem sikerült.</string>
@@ -1379,12 +1379,12 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="content_reported_as_inappropriate_content">Ez a tartalom nem idevalónak lett bejelentve.
 \n
 \n Ha nem akarsz ettől a felhasználótól több üzenetet látni akkor blokkolhatod, hogy az üzenetei ne jelenjenek meg számodra</string>
-    <string name="permissions_rationale_msg_keys_backup_export">SchildiChatnak engedélyre van szüksége ahhoz, hogy a végponttól végpontig titkosító kulcsokat a lemezre menthesse.
+    <string name="permissions_rationale_msg_keys_backup_export">Elementnak engedélyre van szüksége ahhoz, hogy a végponttól végpontig titkosító kulcsokat a lemezre menthesse.
 \n
 \nKérlek a következő felugró ablakban engedélyezd a hozzáférést, hogy a kulcsokat kézzel kimenthesd.</string>
     <string name="no_network_indicator">Jelenleg nincs hálózati kapcsolat</string>
     <string name="settings_add_3pid_confirm_password_title">Jelszó megerősítés</string>
-    <string name="settings_add_3pid_flow_not_supported">SchildiChat mobilról ezt nem teheted meg</string>
+    <string name="settings_add_3pid_flow_not_supported">Element mobilról ezt nem teheted meg</string>
     <string name="settings_add_3pid_authentication_needed">Azonosítás szükséges</string>
     <string name="settings_integrations">Integrációk</string>
     <string name="settings_integrations_summary">Botok, hidak, kisalkalmazások és matrica csomagok kezeléséhez használj Integrációs Menedzsert.
@@ -1453,8 +1453,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_server_url_form_modular_hint">Element Matrix Services Cím</string>
     <string name="login_server_url_form_other_hint">Cím</string>
     <string name="login_server_url_form_modular_text">Prémium üzemeltetés szervezetek részére</string>
-    <string name="login_server_url_form_modular_notice">Add meg az általad használt Modular szerver, vagy a hozzá tartozó SchildiChat címét</string>
-    <string name="login_server_url_form_other_notice">Add meg a szerver vagy SchildiChat címét amihez csatlakozni szeretnél</string>
+    <string name="login_server_url_form_modular_notice">Add meg az általad használt Modular szerver, vagy a hozzá tartozó Element címét</string>
+    <string name="login_server_url_form_other_notice">Add meg a szerver vagy Element címét amihez csatlakozni szeretnél</string>
     <string name="login_sso_error_message">Az oldal betöltésekor hiba történt: %1$s (%2$d)</string>
     <string name="login_registration_disabled">Ne haragudj, ez a szerver nem fogad új fiókokat.</string>
     <string name="login_login_with_email_error">Ez az e-mail cím egyik fiókhoz sincs társítva.</string>
@@ -1553,7 +1553,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \nA fiók és az üzeneteid eléréséhez jelentkezz be.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Elveszted a hozzáférésedet a titkosított üzeneteidhez ha nem jelentkezel be a titkosítási kulcsok visszaállításához.</string>
     <string name="soft_logout_clear_data_dialog_submit">Adat törlése</string>
-    <string name="soft_logout_sso_not_same_user_error">A jelenlegi munkamenet %1$s felhasználóhoz tartozik és %2$s azonosítási adatait adtad meg. Ez SchildiChat-ben nem támogatott.
+    <string name="soft_logout_sso_not_same_user_error">A jelenlegi munkamenet %1$s felhasználóhoz tartozik és %2$s azonosítási adatait adtad meg. Ez Element-ben nem támogatott.
 \nElőször töröld az adatokat, majd a másik felhasználói fiókba lépj be.</string>
     <string name="permalink_malformed">A matrix.to linked hibás</string>
     <string name="bug_report_error_too_short">A leírás túl rövid</string>
@@ -1571,7 +1571,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="devices_other_devices">Más munkamenetek</string>
     <string name="autocomplete_limited_results">Csak az első találat megmutatása, gépelj több betűt…</string>
     <string name="settings_developer_mode_fail_fast_title">Összeomlás-hamar</string>
-    <string name="settings_developer_mode_fail_fast_summary">SchildiChat a nem várt hibák esetén többször fog összeomlani</string>
+    <string name="settings_developer_mode_fail_fast_summary">Element a nem várt hibák esetén többször fog összeomlani</string>
     <string name="command_description_shrug">Hozzáteszi a sima szöveges üzenethez ezt: ¯\\_(ツ)_/¯</string>
     <string name="create_room_encryption_title">Titkosítás engedélyezése</string>
     <string name="create_room_encryption_description">Ha egyszer bekapcsolod, már nem lehet kikapcsolni.</string>
@@ -1642,9 +1642,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_member_power_level_moderator_in">Moderátor itt: %1$s</string>
     <string name="room_member_power_level_custom_in">Egyedi (%1$d) itt: %2$s</string>
     <string name="room_member_jump_to_read_receipt">Olvasási visszaigazolásra ugrás</string>
-    <string name="rendering_event_error_type_of_event_not_handled">SchildiChat nem kezeli ezt az eseményt: \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">SchildiChat nem kezeli ezt az üzenet típust: \'%1$s\'</string>
-    <string name="rendering_event_error_exception">SchildiChat problémába ütközött az esemény (azon: %1$s) megjelenítésekor</string>
+    <string name="rendering_event_error_type_of_event_not_handled">Element nem kezeli ezt az eseményt: \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">Element nem kezeli ezt az üzenet típust: \'%1$s\'</string>
+    <string name="rendering_event_error_exception">Element problémába ütközött az esemény (azon: %1$s) megjelenítésekor</string>
     <string name="unignore">Figyelembe vesz</string>
     <string name="verify_cannot_cross_sign">Ez a munkamenet nem tudja megosztani ezt az ellenőrzést a másik munkameneteddel.
 \nAz ellenőrzés helyileg elmentésre kerül és az alkalmazás jövőbeli verziójával meg lesz osztva.</string>
@@ -1739,7 +1739,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="event_redacted_by_user_reason_with_reason">Az eseményt a felhasználó törölte, ezért: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Az eseményt a szoba adminisztrátora moderálta, ezért: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">A kulcsok már frissek!</string>
-    <string name="login_default_session_public_name">SchildiChat Android</string>
+    <string name="login_default_session_public_name">Element Android</string>
     <string name="settings_key_requests">Kulcs kérések</string>
     <string name="e2e_use_keybackup">Régi titkosított üzenetek feloldása</string>
     <string name="refresh">Frissítés</string>
@@ -1843,9 +1843,9 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
     <string name="app_ios_android">Element iOS
-\nSchildiChat Android</string>
+\nElement Android</string>
     <string name="or_other_mx_capabale_client">"vagy más eszközök közötti hitelesítést támogató  Matrix-klienst"</string>
-    <string name="use_latest_app">Az SchildiChat legújabb kliensét használd a többi eszközödön:</string>
+    <string name="use_latest_app">Az Element legújabb kliensét használd a többi eszközödön:</string>
     <string name="command_description_discard_session">A jelenlegi csoport munkamenet törlését kikényszeríti a titkosított szobában</string>
     <string name="command_description_discard_session_not_handled">Csak a titkosított szobákban támogatott</string>
     <string name="enter_secret_storage_passphrase_or_key">Használd ezt: %1$s vagy ezt: %2$s a továbblépéshez.</string>
@@ -1866,7 +1866,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="error_empty_field_choose_password">Kérlek válassz jelszót.</string>
     <string name="external_link_confirmation_title">Ezt a hivatkozást ellenőrizd le még egyszer</string>
     <string name="create_room_dm_failure">A közvetlen üzenetedet nem sikerült elkészíteni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
-    <string name="use_other_session_content_description">"Használd a legújabb SchildiChat/Elementet a többi eszközödön, azaz az Element Webet, az Element Desktopot, az SchildiChat for Androidot vagy más eszközök közötti hitelesítést támogató  Matrix-klienst"</string>
+    <string name="use_other_session_content_description">"Használd a legújabb Elementet a többi eszközödön, azaz az Element Webet, az Element Desktopot, az Element for Androidot vagy más eszközök közötti hitelesítést támogató  Matrix-klienst"</string>
     <string name="confirm_your_identity">Erősítsd meg ebben a bejelentkezésben a személyazonosságodat egy másik munkamenetből, hogy hozzáférhess a titkosított üzenetekhez.</string>
     <string name="external_link_confirmation_message">%1$s hivatkozás egy másik oldalra visz: %2$s.
 \n
@@ -1908,11 +1908,11 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="choose_locale_other_locales_title">További elérhető nyelvek</string>
     <string name="choose_locale_loading_locales">Elérhető nyelvek betöltése…</string>
     <string name="open_terms_of">Megnyitás: %s feltételek</string>
-    <string name="identity_server_error_outdated_identity_server">Ez az azonosítási szerver régi. SchildiChat csak az API V2-t támogatja.</string>
+    <string name="identity_server_error_outdated_identity_server">Ez az azonosítási szerver régi. Element csak az API V2-t támogatja.</string>
     <string name="identity_server_error_outdated_home_server">Ez a művelet nem támogatott. A Matrix szerver elavult.</string>
     <string name="identity_server_error_no_identity_server_configured">Kérlek először állíts be egy azonosítási szervert.</string>
     <string name="identity_server_error_terms_not_signed">Kérlek először fogadd el az azonosítási szerver felhasználási feltételeit a beállításokban.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">A biztonságod érdekében SchildiChat csak hash-selt e-mail cím és telefonszám küldését támogatja.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">A biztonságod érdekében Element csak hash-selt e-mail cím és telefonszám küldését támogatja.</string>
     <string name="identity_server_error_binding_error">A megfeleltetés sikertelen.</string>
     <string name="identity_server_error_no_current_binding_error">Ezzel az azonosítóval jelenleg nincs megfeleltetve semmi.</string>
     <string name="identity_server_set_default_notice">A Matrix szervered (%1$s) ezt az azonosítási szervert javasolja: %2$s</string>
@@ -1963,7 +1963,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="cannot_call_yourself_with_invite">Nem hívhatod fel saját magad, várj amíg a résztvevők elfogadják a meghívást</string>
     <string name="failed_to_add_widget">Kisalkalmazás hozzáadása sikertelen</string>
     <string name="failed_to_remove_widget">Kisalkalmazás eltávolítása sikertelen</string>
-    <string name="call_failed_no_connection">SchildiChat hívás sikertelen</string>
+    <string name="call_failed_no_connection">Element hívás sikertelen</string>
     <string name="call_failed_no_connection_description">Nem sikerült felépíteni a valós idejű kapcsolatot.
 \nKérd meg a Matrix-kiszolgálód rendszergazdáját, hogy állítson be egy TURN-kiszolgálót, hogy a hívások megbízhatóan működjenek.</string>
     <string name="login_error_ssl_peer_unverified">SSL hiba: a partner személyazonossága nem lett megerősítve.</string>
@@ -2062,7 +2062,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="crypto_error_withheld_unverified">Nem érheted el ezt az üzenetet, mert a feladó nem bízik a munkamenetedben</string>
     <string name="crypto_error_withheld_generic">Nem érheted el ezt az üzenetet, mert a feladó szándékosan nem küldte el a kulcsokat</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Várakozás a titkosítási előzményekre</string>
-    <string name="element_disclaimer_title">A Riot mostantól SchildiChat!</string>
+    <string name="element_disclaimer_title">A Riot mostantól Element!</string>
     <string name="element_disclaimer_content">Örömmel jelentjük be, hogy nevet változtattunk! Az alkalmazás naprakész, és be vagy jelentkezve a fiókodba.</string>
     <string name="element_disclaimer_negative_button">ÉRTEM</string>
     <string name="element_disclaimer_positive_button">TOVÁBBI INFORMÁCIÓK</string>
@@ -2100,7 +2100,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="auth_pin_confirm_to_disable_title">Erősítsd meg a PIN-kódot a PIN-kód kikapcsolásához</string>
     <string name="settings_security_pin_code_notifications_summary_on">Részletek mutatása, mint például a szoba neve, vagy az üzenet tartalma.</string>
     <string name="settings_security_pin_code_notifications_title">Üzenetek tartalmának mutatása az értesítésekben</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">Az SchildiChat feloldása csak PIN kóddal lehetséges.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">Az Element feloldása csak PIN kóddal lehetséges.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Biometrikus azonosítás engedélyezése</string>
     <string name="settings_security_application_protection_screen_title">Védelem beállítása</string>
     <string name="settings_security_application_protection_summary">Hozzáférés védése PIN kóddal és biometrikus azonosítással.</string>
