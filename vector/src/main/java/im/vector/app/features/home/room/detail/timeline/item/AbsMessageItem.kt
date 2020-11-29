@@ -322,17 +322,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val contentInBubble = infoInBubbles(holder.memberNameView.context)
 
         when (bubbleStyle) {
-            BubbleThemeUtils.BUBBLE_STYLE_NONE                                      -> {
-                bubbleView.background = null
-                (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = 0
-                (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = 0
-                /*
-                (bubbleView.layoutParams as RelativeLayout.LayoutParams).marginStart = 0
-                (bubbleView.layoutParams as RelativeLayout.LayoutParams).topMargin = 0
-                (bubbleView.layoutParams as RelativeLayout.LayoutParams).bottomMargin = 0
-                 */
-                bubbleView.setPadding(0, 0, 0, 0)
-            }
             BubbleThemeUtils.BUBBLE_STYLE_START,
             BubbleThemeUtils.BUBBLE_STYLE_BOTH,
             BubbleThemeUtils.BUBBLE_STYLE_BOTH_HIDDEN,
@@ -450,6 +439,18 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                         removeFooterOverlayStyle(holder, density)
                     }
                 }
+            }
+            //BubbleThemeUtils.BUBBLE_STYLE_NONE,
+            else -> {
+                bubbleView.background = null
+                (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginStart = 0
+                (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).marginEnd = 0
+                /*
+                (bubbleView.layoutParams as RelativeLayout.LayoutParams).marginStart = 0
+                (bubbleView.layoutParams as RelativeLayout.LayoutParams).topMargin = 0
+                (bubbleView.layoutParams as RelativeLayout.LayoutParams).bottomMargin = 0
+                 */
+                bubbleView.setPadding(0, 0, 0, 0)
             }
         }
 
