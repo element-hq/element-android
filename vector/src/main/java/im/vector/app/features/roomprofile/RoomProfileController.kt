@@ -60,6 +60,7 @@ class RoomProfileController @Inject constructor(
             return
         }
         val roomSummary = data.roomSummary() ?: return
+        val enableNonSimplifiedMode = !vectorPreferences.simplifiedMode()
 
         // Topic
         roomSummary
@@ -76,21 +77,23 @@ class RoomProfileController @Inject constructor(
                 }
 
         // Security
-        buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
-        val learnMoreSubtitle = if (roomSummary.isEncrypted) {
-            if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_subtitle else R.string.room_profile_encrypted_subtitle
-        } else {
-            if (roomSummary.isDirect) R.string.direct_room_profile_not_encrypted_subtitle else R.string.room_profile_not_encrypted_subtitle
-        }
-        genericFooterItem {
-            id("e2e info")
-            centered(false)
-            text(stringProvider.getString(learnMoreSubtitle))
-        }
-        buildEncryptionAction(data.actionPermissions, roomSummary)
+        if (enableNonSimplifiedMode) {
+            buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
+            val learnMoreSubtitle = if (roomSummary.isEncrypted) {
+                if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_subtitle else R.string.room_profile_encrypted_subtitle
+            } else {
+                if (roomSummary.isDirect) R.string.direct_room_profile_not_encrypted_subtitle else R.string.room_profile_not_encrypted_subtitle
+            }
+            genericFooterItem {
+                id("e2e info")
+                centered(false)
+                text(stringProvider.getString(learnMoreSubtitle))
+            }
+            buildEncryptionAction(data.actionPermissions, roomSummary)
 
-        // More
-        buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
+            // More
+            buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
+        }
         buildProfileAction(
                 id = "settings",
                 title = stringProvider.getString(if (roomSummary.isDirect) {
