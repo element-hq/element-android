@@ -247,12 +247,14 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     }
 
     open fun getViewStubMinimumWidth(holder: H, contentInBubble: Boolean, showInformation: Boolean): Int {
+        val memberName = attributes.informationData.memberName.toString()
+        val time = attributes.informationData.time.toString()
         return if (contentInBubble) {
             if (BubbleThemeUtils.getBubbleTimeLocation(holder.bubbleTimeView.context) == BubbleThemeUtils.BUBBLE_TIME_BOTTOM) {
                 if (attributes.informationData.showInformation) {
                     // Since timeView automatically gets enough space, either within or outside the viewStub, we just need to ensure the member name view has enough space
                     // Somehow not enough without extra space...
-                    ceil(BubbleThemeUtils.guessTextWidth(holder.bubbleMemberNameView, holder.bubbleMemberNameView.text.toString() + " ")).toInt()
+                    ceil(BubbleThemeUtils.guessTextWidth(holder.bubbleMemberNameView, "$memberName ")).toInt()
                 } else {
                     // wrap_content works!
                     0
@@ -260,9 +262,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             } else if (attributes.informationData.showInformation || attributes.informationData.forceShowTimestamp) {
                 // Guess text width for name and time next to each other
                 val text = if (attributes.informationData.showInformation) {
-                    holder.bubbleMemberNameView.text.toString() + " " + holder.bubbleTimeView.text.toString()
+                    "$memberName $time"
                 } else {
-                    holder.bubbleTimeView.text.toString()
+                    time
                 }
                 val textSize = if (attributes.informationData.showInformation) {
                     max(holder.bubbleMemberNameView.textSize, holder.bubbleTimeView.textSize)
