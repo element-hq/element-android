@@ -43,7 +43,7 @@
         app:iconGravity="textStart"
         app:iconPadding="0dp"
         app:iconSize="20dp"
-        app:iconTint="@color/riotx_accent"
+        app:iconTint="?colorAccent"
         app:layout_constraintBottom_toBottomOf="@id/userCodeMyCodeButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@id/userCodeMyCodeButton"

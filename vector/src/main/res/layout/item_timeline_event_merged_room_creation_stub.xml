@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:textColor="?riotx_text_secondary"
-            android:textColorLink="@color/riotx_accent"
+            android:textColorLink="?colorAccent"
             android:textSize="15sp"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +121,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="@drawable/circle"
-                android:backgroundTint="@color/riotx_accent"
+                android:backgroundTint="?colorAccent"
                 android:importantForAccessibility="no"
                 android:scaleType="center"
                 android:src="@drawable/ic_add_people" />
@@ -132,7 +132,7 @@
                 android:layout_marginTop="4dp"
                 android:importantForAccessibility="no"
                 android:text="@string/add_people"
-                android:textColor="@color/riotx_accent" />
+                android:textColor="?colorAccent" />
 
         </LinearLayout>
 
