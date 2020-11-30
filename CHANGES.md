@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Add Setting Item to Change PIN (#2462)
 
 Bugfix 🐛:
  - Double bottomsheet effect after verify with passphrase

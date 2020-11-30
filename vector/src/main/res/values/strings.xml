@@ -2686,6 +2686,8 @@
     <string name="settings_security_pin_code_grace_period_title">Require PIN after 2 minutes</string>
     <string name="settings_security_pin_code_grace_period_summary_on">PIN code is required after 2 minutes of not using Element.</string>
     <string name="settings_security_pin_code_grace_period_summary_off">PIN code is required every time you open Element.</string>
+    <string name="settings_security_pin_code_change_pin_title">Change PIN</string>
+    <string name="settings_security_pin_code_change_pin_summary">Change your current PIN</string>
     <string name="auth_pin_confirm_to_disable_title">Confirm PIN to disable PIN</string>
     <string name="error_opening_banned_room">Can\'t open a room where you are banned from.</string>
     <string name="room_error_not_found">Can\'t find this room. Make sure it exists.</string>

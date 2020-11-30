@@ -56,6 +56,7 @@ class PinFragment @Inject constructor(
         when (fragmentArgs.pinMode) {
             PinMode.CREATE -> showCreateFragment()
             PinMode.AUTH   -> showAuthFragment()
+            PinMode.MODIFY -> showCreateFragment() // No need to create another function for now because texts are generic
         }
     }
 
