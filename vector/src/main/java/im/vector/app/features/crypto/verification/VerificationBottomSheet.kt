@@ -155,6 +155,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 // all have been reset, so we are verified?
                 viewModel.handle(VerificationAction.SecuredStorageHasBeenReset)
             }
+        } else {
+            viewModel.handle(VerificationAction.CancelledFromSsss)
         }
     }
 
@@ -209,6 +211,10 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
             return@withState
         }
 
+        if (state.selfVerificationMode && state.verifyingFrom4S) {
+            showFragment(QuadSLoadingFragment::class, Bundle())
+            return@withState
+        }
         if (state.selfVerificationMode && state.verifiedFromPrivateKeys) {
             showFragment(VerificationConclusionFragment::class, Bundle().apply {
                 putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))

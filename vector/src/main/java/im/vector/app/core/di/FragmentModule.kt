@@ -36,6 +36,7 @@ import im.vector.app.features.crypto.recover.BootstrapMigrateBackupFragment
 import im.vector.app.features.crypto.recover.BootstrapSaveRecoveryKeyFragment
 import im.vector.app.features.crypto.recover.BootstrapSetupRecoveryKeyFragment
 import im.vector.app.features.crypto.recover.BootstrapWaitingFragment
+import im.vector.app.features.crypto.verification.QuadSLoadingFragment
 import im.vector.app.features.crypto.verification.cancel.VerificationCancelFragment
 import im.vector.app.features.crypto.verification.cancel.VerificationNotMeFragment
 import im.vector.app.features.crypto.verification.choose.VerificationChooseMethodFragment
@@ -417,6 +418,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VerificationCancelFragment::class)
     fun bindVerificationCancelFragment(fragment: VerificationCancelFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(QuadSLoadingFragment::class)
+    fun bindQuadSLoadingFragment(fragment: QuadSLoadingFragment): Fragment
 
     @Binds
     @IntoMap
