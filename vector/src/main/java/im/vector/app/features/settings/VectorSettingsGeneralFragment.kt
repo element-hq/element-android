@@ -58,7 +58,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
@@ -214,7 +213,9 @@ class VectorSettingsGeneralFragment @Inject constructor(
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 // Disable it while updating the state, will be re-enabled by the account data listener.
                 it.isEnabled = false
-                session.integrationManagerService().setIntegrationEnabled(newValue as Boolean, NoOpMatrixCallback())
+                lifecycleScope.launch {
+                    session.integrationManagerService().setIntegrationEnabled(newValue as Boolean)
+                }
                 true
             }
         }

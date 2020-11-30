@@ -28,8 +28,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.terms.GetTermsResponse
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 
 class ReviewTermsViewModel @AssistedInject constructor(
@@ -94,15 +92,12 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                awaitCallback<Unit> {
-                    session.agreeToTerms(
-                            termsArgs.type,
-                            termsArgs.baseURL,
-                            agreedUrls,
-                            termsArgs.token,
-                            it
-                    )
-                }
+                session.agreeToTerms(
+                        termsArgs.type,
+                        termsArgs.baseURL,
+                        agreedUrls,
+                        termsArgs.token
+                )
                 _viewEvents.post(ReviewTermsViewEvents.Success)
             } catch (failure: Throwable) {
                 Timber.e(failure, "Failed to agree to terms")
@@ -122,9 +117,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                val data = awaitCallback<GetTermsResponse> {
-                    session.getTerms(termsArgs.type, termsArgs.baseURL, it)
-                }
+                val data = session.getTerms(termsArgs.type, termsArgs.baseURL)
                 val terms = data.serverResponse.getLocalizedTerms(action.preferredLanguageCode).map {
                     Term(it.localizedUrl ?: "",
                             it.localizedName ?: "",

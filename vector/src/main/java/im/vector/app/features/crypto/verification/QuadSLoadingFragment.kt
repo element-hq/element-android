@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.terms
+package im.vector.app.features.crypto.verification
 
-interface TermsService {
-    enum class ServiceType {
-        IntegrationManager,
-        IdentityService
-    }
+import im.vector.app.R
+import im.vector.app.core.platform.VectorBaseFragment
+import javax.inject.Inject
 
-    suspend fun getTerms(serviceType: ServiceType, baseUrl: String): GetTermsResponse
-
-    suspend fun agreeToTerms(serviceType: ServiceType,
-                             baseUrl: String,
-                             agreedUrls: List<String>,
-                             token: String?)
+class QuadSLoadingFragment @Inject constructor() : VectorBaseFragment() {
+    override fun getLayoutResId() = R.layout.fragment_progress
 }

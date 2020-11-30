@@ -62,8 +62,8 @@ data class MainActivityArgs(
 ) : Parcelable
 
 /**
- * This is the entry point of RiotX
- * This Activity, when started with argument, is also doing some cleanup when user disconnects,
+ * This is the entry point of Element Android
+ * This Activity, when started with argument, is also doing some cleanup when user signs out,
  * clears cache, is logged out, or is soft logged out
  */
 class MainActivity : VectorBaseActivity(), UnlockedActivity {
@@ -78,6 +78,8 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
 
             intent.putExtra(EXTRA_ARGS, args)
             activity.startActivity(intent)
+            // Ensure all the Activities are destroyed, it seems that the intent flags are not enough now.
+            activity.finishAffinity()
         }
     }
 

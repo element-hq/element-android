@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.terms
+package im.vector.app.core.extensions
 
-interface TermsService {
-    enum class ServiceType {
-        IntegrationManager,
-        IdentityService
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+
+fun ConstraintLayout.updateConstraintSet(block: (ConstraintSet) -> Unit) {
+    ConstraintSet().let {
+        it.clone(this)
+        block.invoke(it)
+        it.applyTo(this)
     }
-
-    suspend fun getTerms(serviceType: ServiceType, baseUrl: String): GetTermsResponse
-
-    suspend fun agreeToTerms(serviceType: ServiceType,
-                             baseUrl: String,
-                             agreedUrls: List<String>,
-                             token: String?)
 }
