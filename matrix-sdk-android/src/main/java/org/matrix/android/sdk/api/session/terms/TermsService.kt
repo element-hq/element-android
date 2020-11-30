@@ -16,22 +16,16 @@
 
 package org.matrix.android.sdk.api.session.terms
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
-
 interface TermsService {
     enum class ServiceType {
         IntegrationManager,
         IdentityService
     }
 
-    fun getTerms(serviceType: ServiceType,
-                 baseUrl: String,
-                 callback: MatrixCallback<GetTermsResponse>): Cancelable
+    suspend fun getTerms(serviceType: ServiceType, baseUrl: String): GetTermsResponse
 
-    fun agreeToTerms(serviceType: ServiceType,
-                     baseUrl: String,
-                     agreedUrls: List<String>,
-                     token: String?,
-                     callback: MatrixCallback<Unit>): Cancelable
+    suspend fun agreeToTerms(serviceType: ServiceType,
+                             baseUrl: String,
+                             agreedUrls: List<String>,
+                             token: String?)
 }
