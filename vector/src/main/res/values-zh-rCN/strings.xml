@@ -1723,7 +1723,7 @@
     <string name="command_description_rainbow_emote">发送彩虹色给定表情</string>
     <string name="settings_category_timeline">时间线</string>
     <string name="settings_category_composer">消息编辑器</string>
-    <string name="room_settings_enable_encryption">启用端到端加密</string>
+    <string name="room_settings_enable_encryption">启用端到端加密…</string>
     <string name="room_settings_enable_encryption_warning">一旦启用，加密无法禁用。</string>
     <string name="room_settings_enable_encryption_dialog_title">是否启用加密？</string>
     <string name="room_settings_enable_encryption_dialog_content">启用后，将无法禁用聊天室加密。服务器无法看到加密聊天室中发送的消息，只有聊天室的参与者才能看到。启用加密可能会阻止许多机器人和桥接正常工作。</string>
