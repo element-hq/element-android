@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Double bottomsheet effect after verify with passphrase
+ - EditText cursor jumps to the start while typing fast (#2469)
 
 Translations 🗣:
  -

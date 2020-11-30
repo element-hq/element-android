@@ -67,6 +67,8 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         // Update only if text is different and value is not null
         if (value != null && holder.textInputEditText.text.toString() != value) {
             holder.textInputEditText.setText(value)
+            // To fix jumping cursor to the start https://github.com/airbnb/epoxy/issues/426
+            holder.textInputEditText.setSelection(value?.length ?: 0)
         }
         holder.textInputEditText.isEnabled = enabled
         inputType?.let { holder.textInputEditText.inputType = it }
