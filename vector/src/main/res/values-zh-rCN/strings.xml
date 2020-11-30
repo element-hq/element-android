@@ -702,7 +702,7 @@
     <string name="settings_opt_in_of_analytics_prompt">请允许资料分析以帮助我们改进 Element。</string>
     <string name="settings_opt_in_of_analytics_ok">是的，我愿意帮助！</string>
     <string name="deactivate_account_title">停用账户</string>
-    <string name="deactivate_account_content"></string>
+    <string name="deactivate_account_content"/>
     <string name="deactivate_account_delete_checkbox">请在我停用账户的同时忘记我发送的所有消息（警告：这将导致未来的用户看到残缺的对话）</string>
     <string name="deactivate_account_prompt_password">请输入您的密码以继续：</string>
     <string name="deactivate_account_submit">停用账户</string>
@@ -2148,4 +2148,8 @@
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">您没有权限发起通话</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">您没有权限发起会议通话</string>
     <string name="reset">重置</string>
+    <string name="permissions_denied_add_contact">允许访问您的联系人。</string>
+    <string name="permissions_denied_qr_code">如需扫描二维码，您须允许相机访问权限。</string>
+    <string name="no_more_results">没有更多结果</string>
+    <string name="start_chatting">开始畅聊</string>
 </resources>
