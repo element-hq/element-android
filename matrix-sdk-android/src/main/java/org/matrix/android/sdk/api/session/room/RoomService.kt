@@ -123,6 +123,11 @@ interface RoomService {
                          callback: MatrixCallback<Optional<String>>): Cancelable
 
     /**
+     * Delete a room alias
+     */
+    suspend fun deleteRoomAlias(roomAlias: String)
+
+    /**
      * Return a live data of all local changes membership that happened since the session has been opened.
      * It allows you to track this in your client to known what is currently being processed by the SDK.
      * It won't know anything about change being done in other client.

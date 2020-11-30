@@ -42,14 +42,14 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
-class RoomBannedListMemberViewModel @AssistedInject constructor(@Assisted initialState: RoomBannedMemberListViewState,
+class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomBannedMemberListViewState,
                                                                 private val stringProvider: StringProvider,
                                                                 private val session: Session)
-    : VectorViewModel<RoomBannedMemberListViewState, RoomBannedListMemberAction, RoomBannedViewEvents>(initialState) {
+    : VectorViewModel<RoomBannedMemberListViewState, RoomBannedMemberListAction, RoomBannedMemberListViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: RoomBannedMemberListViewState): RoomBannedListMemberViewModel
+        fun create(initialState: RoomBannedMemberListViewState): RoomBannedMemberListViewModel
     }
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -78,24 +78,24 @@ class RoomBannedListMemberViewModel @AssistedInject constructor(@Assisted initia
         }.disposeOnClear()
     }
 
-    companion object : MvRxViewModelFactory<RoomBannedListMemberViewModel, RoomBannedMemberListViewState> {
+    companion object : MvRxViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> {
 
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomBannedMemberListViewState): RoomBannedListMemberViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: RoomBannedMemberListViewState): RoomBannedMemberListViewModel? {
             val fragment: RoomBannedMemberListFragment = (viewModelContext as FragmentViewModelContext).fragment()
             return fragment.viewModelFactory.create(state)
         }
     }
 
-    override fun handle(action: RoomBannedListMemberAction) {
+    override fun handle(action: RoomBannedMemberListAction) {
         when (action) {
-            is RoomBannedListMemberAction.QueryInfo -> onQueryBanInfo(action.roomMemberSummary)
-            is RoomBannedListMemberAction.UnBanUser -> unBanUser(action.roomMemberSummary)
-            is RoomBannedListMemberAction.Filter    -> handleFilter(action)
+            is RoomBannedMemberListAction.QueryInfo -> onQueryBanInfo(action.roomMemberSummary)
+            is RoomBannedMemberListAction.UnBanUser -> unBanUser(action.roomMemberSummary)
+            is RoomBannedMemberListAction.Filter    -> handleFilter(action)
         }.exhaustive
     }
 
-    private fun handleFilter(action: RoomBannedListMemberAction.Filter) {
+    private fun handleFilter(action: RoomBannedMemberListAction.Filter) {
         setState {
             copy(
                     filter = action.filter
@@ -114,7 +114,7 @@ class RoomBannedListMemberViewModel @AssistedInject constructor(@Assisted initia
         val reason = content.reason
         val bannedBy = bannedEvent?.senderId ?: return
 
-        _viewEvents.post(RoomBannedViewEvents.ShowBannedInfo(bannedBy, reason ?: "", roomMemberSummary))
+        _viewEvents.post(RoomBannedMemberListViewEvents.ShowBannedInfo(bannedBy, reason ?: "", roomMemberSummary))
     }
 
     private fun unBanUser(roomMemberSummary: RoomMemberSummary) {
@@ -127,7 +127,7 @@ class RoomBannedListMemberViewModel @AssistedInject constructor(@Assisted initia
                     room.unban(roomMemberSummary.userId, null, it)
                 }
             } catch (failure: Throwable) {
-                _viewEvents.post(RoomBannedViewEvents.ToastError(stringProvider.getString(R.string.failed_to_unban)))
+                _viewEvents.post(RoomBannedMemberListViewEvents.ToastError(stringProvider.getString(R.string.failed_to_unban)))
             } finally {
                 setState {
                     copy(

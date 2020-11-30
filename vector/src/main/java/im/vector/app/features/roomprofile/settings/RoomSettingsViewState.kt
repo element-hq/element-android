@@ -35,7 +35,6 @@ data class RoomSettingsViewState(
         val newName: String? = null,
         val newTopic: String? = null,
         val newHistoryVisibility: RoomHistoryVisibility? = null,
-        val newCanonicalAlias: String? = null,
         val showSaveAction: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
@@ -46,7 +45,6 @@ data class RoomSettingsViewState(
             val canChangeAvatar: Boolean = false,
             val canChangeName: Boolean = false,
             val canChangeTopic: Boolean = false,
-            val canChangeCanonicalAlias: Boolean = false,
             val canChangeHistoryReadability: Boolean = false
     )
 

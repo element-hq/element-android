@@ -137,6 +137,8 @@
     <string name="action_open">Open</string>
     <string name="action_close">Close</string>
     <string name="action_copy">Copy</string>
+    <string name="action_add">Add</string>
+    <string name="action_unpublish">Unpublish</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
 
@@ -1022,6 +1024,40 @@
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
 
+    <!-- room settings : alias -->
+    <string name="room_settings_alias_title">Room addresses</string>
+    <string name="room_settings_alias_subtitle">See and managed addresses of this room, and its visibility in the room directory.</string>
+
+    <string name="room_alias_title">Room Addresses</string>
+    <string name="room_alias_published_alias_title">Published Addresses</string>
+    <string name="room_alias_published_alias_subtitle">Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.</string>
+    <string name="room_alias_published_alias_main">This is the main address</string>
+    <string name="room_alias_main_address_hint">Main address</string>
+    <string name="room_alias_published_other">Other published addresses:</string>
+    <string name="room_alias_published_alias_add_manually">Publish a new address manually</string>
+    <string name="room_alias_published_alias_add_manually_submit">Publish</string>
+    <string name="room_alias_unpublish_confirmation">Unpublish the address \"%1$s\"?</string>
+    <string name="room_alias_delete_confirmation">Delete the address \"%1$s\"?</string>
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_publish">Publish this room to the public in %1$s\'s room directory?</string>
+    <string name="room_alias_address_empty_can_add">No other published addresses yet, add one below.</string>
+    <string name="room_alias_address_empty">No other published addresses yet.</string>
+    <string name="room_alias_address_hint">New published address (e.g. #alias:server)</string>
+
+    <string name="room_alias_local_address_title">Local Addresses</string>
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_local_address_subtitle">Set addresses for this room so users can find this room through your homeserver (%1$s)</string>
+    <string name="room_alias_local_address_empty">This room has no local addresses</string>
+    <string name="room_alias_local_address_add">Add a local address</string>
+
+    <string name="room_alias_action_publish">Publish this address</string>
+    <string name="room_alias_action_unpublish">Unpublish this address</string>
+
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_publish_to_directory">Publish this room to the public in %1$s\'s room directory?</string>
+    <!-- Parameter will be a technical error message -->
+    <string name="room_alias_publish_to_directory_error">Unable to retrieve the current room directory visibility (%1$s).</string>
+
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Anyone</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Members only (since the point in time of selecting this option)</string>
@@ -1068,8 +1104,8 @@
     <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified for this room."</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Main address warnings</string>
 
-    <string name="room_settings_set_main_address">Set as Main Address</string>
-    <string name="room_settings_unset_main_address">Unset as Main Address</string>
+    <string name="room_settings_set_main_address">Set as main address</string>
+    <string name="room_settings_unset_main_address">Unset as main address</string>
     <string name="room_settings_copy_room_id">Copy Room ID</string>
     <string name="room_settings_copy_room_address">Copy Room Address</string>
 

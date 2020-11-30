@@ -61,8 +61,8 @@ abstract class FormSwitchItem : VectorEpoxyModel<FormSwitchItem.Holder>() {
 
         holder.switchView.isEnabled = enabled
 
+        holder.switchView.setOnCheckedChangeListener(null)
         holder.switchView.isChecked = switchChecked
-
         holder.switchView.setOnCheckedChangeListener { _, isChecked ->
             listener?.invoke(isChecked)
         }

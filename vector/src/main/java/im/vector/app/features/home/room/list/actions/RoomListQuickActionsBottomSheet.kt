@@ -77,6 +77,7 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
 
     override fun onDestroyView() {
         recyclerView.cleanup()
+        roomListActionsEpoxyController.listener = null
         super.onDestroyView()
     }
 

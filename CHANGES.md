@@ -2,7 +2,7 @@ Changes in Element 1.0.12 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
 
 Improvements 🙌:
  - Add Setting Item to Change PIN (#2462)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.banned
+package org.matrix.android.sdk.api.session.room.alias
 
-import im.vector.app.core.platform.VectorViewModelAction
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+interface AliasService {
+    /**
+     * Get list of local alias of the room
+     * @return the list of the aliases (full aliases, not only the local part)
+     */
+    suspend fun getRoomAliases(): List<String>
 
-sealed class RoomBannedListMemberAction : VectorViewModelAction {
-    data class QueryInfo(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
-    data class UnBanUser(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
-    data class Filter(val filter: String) : RoomBannedListMemberAction()
+    /**
+     * Add local alias to the room
+     * @param aliasLocalPart the local part of the alias.
+     * Ex: for the alias "#my_alias:example.org", the local part is "my_alias"
+     */
+    suspend fun addAlias(aliasLocalPart: String)
 }

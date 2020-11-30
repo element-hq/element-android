@@ -24,6 +24,8 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.Cancelable
@@ -104,18 +106,19 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         )
     }
 
-    override fun addRoomAlias(roomAlias: String, callback: MatrixCallback<Unit>): Cancelable {
-        return addRoomAliasTask
-                .configureWith(AddRoomAliasTask.Params(roomId, roomAlias)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
-    }
-
-    override fun updateCanonicalAlias(alias: String, callback: MatrixCallback<Unit>): Cancelable {
+    override fun updateCanonicalAlias(alias: String?, altAliases: List<String>, callback: MatrixCallback<Unit>): Cancelable {
         return sendStateEvent(
                 eventType = EventType.STATE_ROOM_CANONICAL_ALIAS,
-                body = mapOf("alias" to alias),
+                body = RoomCanonicalAliasContent(
+                        canonicalAlias = alias,
+                        alternativeAliases = altAliases
+                                // Ensure there is no duplicate
+                                .distinct()
+                                // Ensure the canonical alias is not also included in the alt alias
+                                .minus(listOfNotNull(alias))
+                                // Sort for the cleanup
+                                .sorted()
+                ).toContent(),
                 callback = callback,
                 stateKey = null
         )

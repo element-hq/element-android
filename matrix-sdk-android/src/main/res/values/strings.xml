@@ -246,7 +246,7 @@
 
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s removed %2$s as an address for this room.</item>
-        <item quantity="other">%1$s removed %3$s as addresses for this room.</item>
+        <item quantity="other">%1$s removed %2$s as addresses for this room.</item>
     </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
@@ -261,6 +261,33 @@
     <string name="notice_room_canonical_alias_set_by_you">"You set the main address for this room to %1$s."</string>
     <string name="notice_room_canonical_alias_unset">"%1$s removed the main address for this room."</string>
     <string name="notice_room_canonical_alias_unset_by_you">"You removed the main address for this room."</string>
+
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s added the alternative address %2$s for this room.</item>
+        <item quantity="other">%1$s added the alternative addresses %2$s for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">You added the alternative address %1$s for this room.</item>
+        <item quantity="other">You added the alternative addresses %1$s for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s removed the alternative address %2$s for this room.</item>
+        <item quantity="other">%1$s removed the alternative addresses %2$s for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">You removed the alternative address %1$s for this room.</item>
+        <item quantity="other">You removed the alternative addresses %1$s for this room.</item>
+    </plurals>
+
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s changed the alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">You changed the alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s changed the main and alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">You changed the main and alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s changed the addresses for this room.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">You changed the addresses for this room.</string>
 
     <string name="notice_room_guest_access_can_join">"%1$s has allowed guests to join the room."</string>
     <string name="notice_room_guest_access_can_join_by_you">"You have allowed guests to join the room."</string>

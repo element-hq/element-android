@@ -30,11 +30,13 @@
         app:layout_constraintStart_toEndOf="@+id/itemRoomAliasHash"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- android:imeOptions="actionDone" to fix a crash -->
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/itemRoomAliasTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/create_room_alias_hint"
+            android:imeOptions="actionDone"
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
