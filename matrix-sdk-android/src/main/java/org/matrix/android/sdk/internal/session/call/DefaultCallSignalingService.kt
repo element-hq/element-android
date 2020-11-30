@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
+import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.CallRejectContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallSignallingContent
@@ -163,13 +164,13 @@ internal class DefaultCallSignalingService @Inject constructor(
     }
 
     private fun handleCallNegotiateEvent(event: Event) {
-        val content = event.getClearContent().toModel<CallSelectAnswerContent>() ?: return
+        val content = event.getClearContent().toModel<CallNegotiateContent>() ?: return
         val call = content.getCall() ?: return
         if (call.ourPartyId == content.partyId) {
             // Ignore remote echo
             return
         }
-        callListenersDispatcher.onCallSelectAnswerReceived(content)
+        callListenersDispatcher.onCallNegotiateReceived(content)
     }
 
     private fun handleCallSelectAnswerEvent(event: Event) {

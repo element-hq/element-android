@@ -67,18 +67,8 @@ class WebRtcCallManager @Inject constructor(
 
     interface CurrentCallListener {
         fun onCurrentCallChange(call: WebRtcCall?)
-        fun onCaptureStateChanged() {}
         fun onAudioDevicesChange() {}
-        fun onCameraChange() {}
     }
-
-    var capturerIsInError = false
-        set(value) {
-            field = value
-            currentCallsListeners.forEach {
-                tryOrNull { it.onCaptureStateChanged() }
-            }
-        }
 
     private val currentCallsListeners = emptyList<CurrentCallListener>().toMutableList()
     fun addCurrentCallListener(listener: CurrentCallListener) {

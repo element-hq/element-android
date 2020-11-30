@@ -402,6 +402,10 @@
     <string name="video_call_in_progress">Video Call In Progress…</string>
     <string name="active_call_with_duration">Active Call (%s)</string>
     <string name="return_to_call">Return to call</string>
+    <string name="call_resume_action">Resume</string>
+    <string name="call_hold_action">Hold</string>
+    <string name="call_held_by_user">%s held the call</string>
+    <string name="call_held_by_you">You held the call</string>
 
     <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
     <string name="call_error_ice_failed">Media Connection Failed</string>

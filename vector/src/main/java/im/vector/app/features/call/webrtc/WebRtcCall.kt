@@ -42,7 +42,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
@@ -93,7 +92,8 @@ class WebRtcCall(val mxCall: MxCall,
 
     interface Listener : MxCall.StateListener {
         fun onCaptureStateChanged() {}
-        fun onCameraChange() {}
+        fun onCameraChanged() {}
+        fun onHoldUnhold() {}
     }
 
     private val listeners = ArrayList<Listener>()
@@ -113,6 +113,7 @@ class WebRtcCall(val mxCall: MxCall,
     private var localAudioTrack: AudioTrack? = null
     private var localVideoSource: VideoSource? = null
     private var localVideoTrack: VideoTrack? = null
+    private var remoteAudioTrack: AudioTrack? = null
     private var remoteVideoTrack: VideoTrack? = null
 
     // Perfect negotiation state: https://www.w3.org/TR/webrtc/#perfect-negotiation-example
@@ -192,7 +193,7 @@ class WebRtcCall(val mxCall: MxCall,
                     // send offer to peer
                     mxCall.offerSdp(sessionDescription.description)
                 } else {
-                    mxCall.negotiate(sessionDescription.description)
+                    mxCall.negotiate(sessionDescription.description, SdpType.OFFER)
                 }
             } catch (failure: Throwable) {
                 // Need to handle error properly.
@@ -463,7 +464,7 @@ class WebRtcCall(val mxCall: MxCall,
                 ?: null.also { cameraInUse = null }
 
         listeners.forEach {
-            tryOrNull { it.onCameraChange() }
+            tryOrNull { it.onCameraChanged() }
         }
 
         if (camera != null) {
@@ -532,8 +533,10 @@ class WebRtcCall(val mxCall: MxCall,
     private fun updateMuteStatus() {
         val micShouldBeMuted = micMuted || remoteOnHold
         localAudioTrack?.setEnabled(!micShouldBeMuted)
+        remoteAudioTrack?.setEnabled(!remoteOnHold)
         val vidShouldBeMuted = videoMuted || remoteOnHold
         localVideoTrack?.setEnabled(!vidShouldBeMuted)
+        remoteVideoTrack?.setEnabled(!remoteOnHold)
     }
 
     /**
@@ -608,7 +611,7 @@ class WebRtcCall(val mxCall: MxCall,
                                 it.get()?.setMirror(isFrontCamera)
                             }
                             listeners.forEach {
-                                tryOrNull { it.onCameraChange() }
+                                tryOrNull { it.onCameraChanged() }
                             }
                         }
 
@@ -672,6 +675,11 @@ class WebRtcCall(val mxCall: MxCall,
                 mxCall.hangUp()
                 return@launch
             }
+            if (stream.audioTracks.size == 1) {
+                val remoteAudioTrack = stream.audioTracks.first()
+                remoteAudioTrack.setEnabled(true)
+                this@WebRtcCall.remoteAudioTrack = remoteAudioTrack
+            }
             if (stream.videoTracks.size == 1) {
                 val remoteVideoTrack = stream.videoTracks.first()
                 remoteVideoTrack.setEnabled(true)
@@ -688,11 +696,12 @@ class WebRtcCall(val mxCall: MxCall,
                     .mapNotNull { it.get() }
                     .forEach { remoteVideoTrack?.removeSink(it) }
             remoteVideoTrack = null
+            remoteAudioTrack = null
         }
     }
 
     fun endCall(originatedByMe: Boolean = true, reason: CallHangupContent.Reason? = null) {
-        if(mxCall.state == CallState.Terminated){
+        if (mxCall.state == CallState.Terminated) {
             return
         }
         mxCall.state = CallState.Terminated
@@ -767,15 +776,23 @@ class WebRtcCall(val mxCall: MxCall,
                 Timber.i("Ignoring colliding negotiate event because we're impolite")
                 return@launch
             }
+            val prevOnHold = isLocalOnHold()
             try {
                 val sdp = SessionDescription(type.asWebRTC(), sdpText)
                 peerConnection.awaitSetRemoteDescription(sdp)
                 if (type == SdpType.OFFER) {
-                    createAnswer()
-                    mxCall.negotiate(sdpText)
+                    createAnswer()?.also {
+                        mxCall.negotiate(it.description, SdpType.ANSWER)
+                    }
                 }
             } catch (failure: Throwable) {
                 Timber.e(failure, "Failed to complete negotiation")
+            }
+            val nowOnHold = isLocalOnHold()
+            if (prevOnHold != nowOnHold) {
+                listeners.forEach {
+                    tryOrNull { it.onHoldUnhold() }
+                }
             }
         }
     }

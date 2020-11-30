@@ -38,7 +38,7 @@ data class CallSelectAnswerContent(
         @Json(name = "selected_party_id") val selectedPartyId: String? = null,
 
         /**
-         * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
+         * Required. The version of the VoIP specification this message adheres to.
          */
-        @Json(name = "version") override val version: String? = "0",
+        @Json(name = "version") override val version: String?,
 ): CallSignallingContent

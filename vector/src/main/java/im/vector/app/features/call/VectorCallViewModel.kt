@@ -36,6 +36,7 @@ import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
+import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
 
@@ -53,6 +54,15 @@ class VectorCallViewModel @AssistedInject constructor(
 
     private val callListener = object : WebRtcCall.Listener {
 
+        override fun onHoldUnhold() {
+            setState {
+                copy(
+                        isLocalOnHold = call?.isLocalOnHold() ?: false,
+                        isRemoteOnHold = call?.remoteOnHold ?: false
+                )
+            }
+        }
+
         override fun onCaptureStateChanged() {
             setState {
                 copy(
@@ -62,7 +72,7 @@ class VectorCallViewModel @AssistedInject constructor(
             }
         }
 
-        override fun onCameraChange() {
+        override fun onCameraChanged() {
             setState {
                 copy(
                         canSwitchCamera = call?.canSwitchCamera() ?: false,
@@ -107,6 +117,7 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
+
         override fun onCurrentCallChange(call: WebRtcCall?) {
             // we need to check the state
             if (call == null) {
@@ -201,6 +212,10 @@ class VectorCallViewModel @AssistedInject constructor(
                     }
                 }
                 Unit
+            }
+            VectorCallViewActions.ToggleHoldResume -> {
+                val isRemoteOnHold = state.isRemoteOnHold
+                call?.updateRemoteOnHold(!isRemoteOnHold)
             }
             is VectorCallViewActions.ChangeAudioDevice -> {
                 callManager.callAudioManager.setCurrentSoundDevice(action.device)

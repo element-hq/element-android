@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.call
 
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidate
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
+import org.matrix.android.sdk.api.session.room.model.call.SdpType
 import org.matrix.android.sdk.api.util.Optional
 
 interface MxCallDetail {
@@ -34,7 +35,7 @@ interface MxCallDetail {
 interface MxCall : MxCallDetail {
 
     companion object {
-        const val VOIP_PROTO_VERSION = 0
+        const val VOIP_PROTO_VERSION = 1
     }
 
     val ourPartyId: String
@@ -52,7 +53,7 @@ interface MxCall : MxCallDetail {
     /**
      * SDP negotiation for media pause, hold/resume, ICE restarts and voice/video call up/downgrading
      */
-    fun negotiate(sdpString: String)
+    fun negotiate(sdpString: String, type: SdpType)
 
     /**
      * This has to be sent by the caller's client once it has chosen an answer.

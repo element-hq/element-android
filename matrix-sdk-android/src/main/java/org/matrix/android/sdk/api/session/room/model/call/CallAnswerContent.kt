@@ -37,9 +37,9 @@ data class CallAnswerContent(
          */
         @Json(name = "answer") val answer: Answer,
         /**
-         * Required. The version of the VoIP specification this messages adheres to. This specification is version 0.
+         * Required. The version of the VoIP specification this messages adheres to.
          */
-        @Json(name = "version") override val version: String? = "0"
+        @Json(name = "version") override val version: String?
 ): CallSignallingContent  {
 
     @JsonClass(generateAdapter = true)

@@ -26,6 +26,8 @@ data class VectorCallViewState(
         val callId: String,
         val roomId: String,
         val isVideoCall: Boolean,
+        val isRemoteOnHold: Boolean = false,
+        val isLocalOnHold: Boolean = false,
         val isAudioMuted: Boolean = false,
         val isVideoEnabled: Boolean = true,
         val isVideoCaptureInError: Boolean = false,

@@ -20,25 +20,27 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
-import androidx.core.view.ViewCompat
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.core.view.updatePadding
+import androidx.lifecycle.lifecycleScope
 import butterknife.BindView
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
-import com.jakewharton.rxbinding3.view.clicks
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
@@ -57,11 +59,11 @@ import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCallDetail
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
+import org.matrix.android.sdk.api.util.MatrixItem
 import org.webrtc.EglBase
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @Parcelize
@@ -107,63 +109,16 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     var surfaceRenderersAreInitialized = false
 
     override fun doBeforeSetContentView() {
-        // Set window styles for fullscreen-window size. Needs to be done before adding content.
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-
-        hideSystemUI()
         setContentView(R.layout.activity_call)
     }
 
-    private fun hideSystemUI() {
-        systemUiVisibility = false
-        // Enables regular immersive mode.
-        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
-        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
-                // Set the content to appear under the system bars so that the
-                // content doesn't resize when the system bars hide and show.
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                // Hide the nav bar and status bar
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN)
-    }
-
-    // Shows the system bars by removing all the flags
-// except for the ones that make the content appear under the system bars.
-    private fun showSystemUI() {
-        systemUiVisibility = true
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-    }
-
-    private fun toggleUiSystemVisibility() {
-        if (systemUiVisibility) {
-            hideSystemUI()
-        } else {
-            showSystemUI()
-        }
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        // Rehide when bottom sheet is dismissed
-        if (hasFocus) {
-            hideSystemUI()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
         super.onCreate(savedInstanceState)
-
-        // This will need to be refined
-        ViewCompat.setOnApplyWindowInsetsListener(constraintLayout) { v, insets ->
-            v.updatePadding(bottom = if (systemUiVisibility) insets.systemWindowInsetBottom else 0)
-            insets
-        }
-
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         if (intent.hasExtra(MvRx.KEY_ARG)) {
@@ -178,12 +133,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         if (intent.getStringExtra(EXTRA_MODE) == INCOMING_RINGING) {
             turnScreenOnAndKeyguardOff()
         }
-
-        constraintLayout.clicks()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { toggleUiSystemVisibility() }
-                .disposeOnDestroy()
 
         configureCallViews()
 
@@ -232,6 +181,9 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         callControlsView.updateForState(state)
         val callState = state.callState.invoke()
         callConnectingProgress.isVisible = false
+        callActionText.setOnClickListener(null)
+        callActionText.isVisible = false
+        smallIsHeldIcon.isVisible = false
         when (callState) {
             is CallState.Idle,
             is CallState.Dialing -> {
@@ -257,15 +209,33 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             }
             is CallState.Connected -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
-                    if (callArgs.isVideoCall) {
-                        callVideoGroup.isVisible = true
-                        callInfoGroup.isVisible = false
-                        pip_video_view.isVisible = !state.isVideoCaptureInError
-                    } else {
+                    if (state.isLocalOnHold) {
+                        smallIsHeldIcon.isVisible = true
                         callVideoGroup.isInvisible = true
                         callInfoGroup.isVisible = true
                         configureCallInfo(state)
+                        if (state.isRemoteOnHold) {
+                            callActionText.setText(R.string.call_resume_action)
+                            callActionText.isVisible = true
+                            callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.ToggleHoldResume) }
+                            callStatusText.setText(R.string.call_held_by_you)
+                        } else {
+                            callActionText.isInvisible = true
+                            state.otherUserMatrixItem.invoke()?.let {
+                                callStatusText.text = getString(R.string.call_held_by_user, it.getBestName())
+                            }
+                        }
+                    } else {
                         callStatusText.text = null
+                        if (callArgs.isVideoCall) {
+                            callVideoGroup.isVisible = true
+                            callInfoGroup.isVisible = false
+                            pip_video_view.isVisible = !state.isVideoCaptureInError
+                        } else {
+                            callVideoGroup.isInvisible = true
+                            callInfoGroup.isVisible = true
+                            configureCallInfo(state)
+                        }
                     }
                 } else {
                     // This state is not final, if you change network, new candidates will be sent
@@ -288,9 +258,8 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
     private fun configureCallInfo(state: VectorCallViewState) {
         state.otherUserMatrixItem.invoke()?.let {
-            avatarRenderer.render(it, otherMemberAvatar)
             participantNameText.text = it.getBestName()
-            callTypeText.setText(if (state.isVideoCall) R.string.action_video_call else R.string.action_voice_call)
+            avatarRenderer.render(it, otherMemberAvatar)
         }
     }
 

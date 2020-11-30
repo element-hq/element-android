@@ -24,7 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_share"
+        tools:src="@drawable/ic_call_resume_action"
         tools:visibility="visible"
         app:tint="?riotx_text_primary"
         tools:ignore="MissingPrefix" />
@@ -60,7 +60,7 @@
         app:layout_constraintStart_toStartOf="@+id/itemVerificationActionTitle"
         app:layout_constraintTop_toBottomOf="@+id/itemVerificationActionTitle"
         tools:text="For maximum security, do this in person"
-        tools:visibility="visible" />
+        />
 
     <ImageView
         android:id="@+id/itemVerificationActionIcon"

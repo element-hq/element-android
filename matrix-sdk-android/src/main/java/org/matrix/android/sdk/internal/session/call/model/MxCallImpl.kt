@@ -97,7 +97,8 @@ internal class MxCallImpl(
                 callId = callId,
                 partyId = ourPartyId,
                 lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
-                offer = CallInviteContent.Offer(sdp = sdpString)
+                offer = CallInviteContent.Offer(sdp = sdpString),
+                version = MxCall.VOIP_PROTO_VERSION.toString()
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
@@ -107,7 +108,8 @@ internal class MxCallImpl(
         CallCandidatesContent(
                 callId = callId,
                 partyId = ourPartyId,
-                candidates = candidates
+                candidates = candidates,
+                version = MxCall.VOIP_PROTO_VERSION.toString()
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_CANDIDATES, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
@@ -139,7 +141,8 @@ internal class MxCallImpl(
         CallHangupContent(
                 callId = callId,
                 partyId = ourPartyId,
-                reason = reason ?: CallHangupContent.Reason.USER_HANGUP
+                reason = reason ?: CallHangupContent.Reason.USER_HANGUP,
+                version = MxCall.VOIP_PROTO_VERSION.toString()
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
@@ -153,19 +156,21 @@ internal class MxCallImpl(
         CallAnswerContent(
                 callId = callId,
                 partyId = ourPartyId,
-                answer = CallAnswerContent.Answer(sdp = sdpString)
+                answer = CallAnswerContent.Answer(sdp = sdpString),
+                version = MxCall.VOIP_PROTO_VERSION.toString()
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_ANSWER, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
     }
 
-    override fun negotiate(sdpString: String) {
+    override fun negotiate(sdpString: String, type: SdpType) {
         Timber.v("## VOIP negotiate $callId")
         CallNegotiateContent(
                 callId = callId,
                 partyId = ourPartyId,
                 lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
-                description = CallNegotiateContent.Description(sdp = sdpString, type = SdpType.OFFER)
+                description = CallNegotiateContent.Description(sdp = sdpString, type = type),
+                version = MxCall.VOIP_PROTO_VERSION.toString()
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_NEGOTIATE, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
@@ -178,7 +183,8 @@ internal class MxCallImpl(
         CallSelectAnswerContent(
                 callId = callId,
                 partyId = ourPartyId,
-                selectedPartyId = opponentPartyId?.getOrNull()
+                selectedPartyId = opponentPartyId?.getOrNull(),
+                version = MxCall.VOIP_PROTO_VERSION.toString()
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_SELECT_ANSWER, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }

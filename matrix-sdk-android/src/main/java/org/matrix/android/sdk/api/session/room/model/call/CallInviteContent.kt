@@ -37,9 +37,9 @@ data class CallInviteContent(
          */
         @Json(name = "offer") val offer: Offer?,
         /**
-         * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
+         * Required. The version of the VoIP specification this message adheres to.
          */
-        @Json(name = "version") override val version: String? = "0",
+        @Json(name = "version") override val version: String?,
         /**
          * Required. The time in milliseconds that the invite is valid for.
          * Once the invite age exceeds this value, clients should discard it.

@@ -121,6 +121,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     fun getCachedDrawable(glideRequests: GlideRequests, matrixItem: MatrixItem): Drawable {
         return buildGlideRequest(glideRequests, matrixItem.avatarUrl)
                 .onlyRetrieveFromCache(true)
+                .apply(RequestOptions.circleCropTransform())
                 .submit()
                 .get()
     }

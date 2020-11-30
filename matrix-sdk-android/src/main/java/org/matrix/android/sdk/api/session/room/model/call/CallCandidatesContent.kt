@@ -38,7 +38,7 @@ data class CallCandidatesContent(
          */
         @Json(name = "candidates") val candidates: List<CallCandidate> = emptyList(),
         /**
-         * Required. The version of the VoIP specification this messages adheres to. This specification is version 0.
+         * Required. The version of the VoIP specification this messages adheres to.
          */
-        @Json(name = "version") override val version: String? = "0"
+        @Json(name = "version") override val version: String?
 ): CallSignallingContent

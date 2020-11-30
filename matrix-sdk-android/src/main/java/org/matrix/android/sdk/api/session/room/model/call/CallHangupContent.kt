@@ -34,9 +34,9 @@ data class CallHangupContent(
          */
         @Json(name = "party_id") override val partyId: String? = null,
         /**
-         * Required. The version of the VoIP specification this message adheres to. This specification is version 0.
+         * Required. The version of the VoIP specification this message adheres to.
          */
-        @Json(name = "version") override val version: String? = "0",
+        @Json(name = "version") override val version: String?,
         /**
          * Optional error reason for the hangup. This should not be provided when the user naturally ends or rejects the call.
          * When there was an error in the call negotiation, this should be `ice_failed` for when ICE negotiation fails

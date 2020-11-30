@@ -18,6 +18,7 @@
     <color name="riotx_positive_accent_alpha12">#1E0DBD8B</color>
     <color name="riotx_button_disabled_alpha12">#1E61708B</color>
 
+    <color name="bg_call_screen">#99000000</color>
 
     <color name="riotx_notice">#FFFF4B55</color>
     <color name="riotx_notice_secondary">#FF61708B</color>
@@ -45,6 +46,7 @@
     <!-- Palette: format fo naming:
       'riotx_<name in the palette snake case>_<theme>'
       -->
+
 
     <attr name="riotx_background" format="color" />
     <color name="riotx_background_light">#FFFFFFFF</color>
