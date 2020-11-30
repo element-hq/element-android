@@ -33,7 +33,7 @@ internal class RedactQueuedTask(
 
     override fun toString() = "[RedactQueuedTask $redactionLocalEchoId]"
 
-    override suspend fun execute() {
+    override suspend fun doExecute() {
         redactEventTask.execute(RedactEventTask.Params(redactionLocalEchoId, roomId, toRedactEventId, reason))
     }
 

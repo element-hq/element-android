@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix cancellation of sending event (#2438)
 
 Translations 🗣:
  -

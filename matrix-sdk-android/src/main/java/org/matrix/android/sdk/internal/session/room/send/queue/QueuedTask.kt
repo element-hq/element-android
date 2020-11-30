@@ -23,7 +23,13 @@ abstract class QueuedTask : Cancelable {
 
     private var hasBeenCancelled: Boolean = false
 
-    abstract suspend fun execute()
+    suspend fun execute() {
+        if (!isCancelled()) {
+            doExecute()
+        }
+    }
+
+    abstract suspend fun doExecute()
 
     abstract fun onTaskFailed()
 
