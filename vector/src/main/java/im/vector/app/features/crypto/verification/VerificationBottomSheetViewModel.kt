@@ -482,7 +482,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         }
 
         when (tx) {
-            is SasVerificationTransaction -> {
+            is SasVerificationTransaction    -> {
                 if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
                     // A SAS tx has been started following this request
                     setState {

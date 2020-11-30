@@ -106,7 +106,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         viewModel.observeViewEvents {
             when (it) {
-                is VerificationBottomSheetViewEvents.Dismiss -> dismiss()
+                is VerificationBottomSheetViewEvents.Dismiss           -> dismiss()
                 is VerificationBottomSheetViewEvents.AccessSecretStore -> {
                     secretStartForActivityResult.launch(SharedSecureStorageActivity.newIntent(
                             requireContext(),
@@ -115,7 +115,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                             SharedSecureStorageActivity.DEFAULT_RESULT_KEYSTORE_ALIAS
                     ))
                 }
-                is VerificationBottomSheetViewEvents.ModalError -> {
+                is VerificationBottomSheetViewEvents.ModalError        -> {
                     AlertDialog.Builder(requireContext())
                             .setTitle(getString(R.string.dialog_title_error))
                             .setMessage(it.errorMessage)
@@ -124,7 +124,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                             .show()
                     Unit
                 }
-                VerificationBottomSheetViewEvents.GoToSettings -> {
+                VerificationBottomSheetViewEvents.GoToSettings         -> {
                     dismiss()
                     (activity as? VectorBaseActivity)?.navigator?.openSettings(requireContext(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY)
                 }
@@ -248,7 +248,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                                 state.pendingRequest.invoke()?.transactionId ?: state.transactionId))
                     })
                 }
-                is VerificationTxState.Verified -> {
+                is VerificationTxState.Verified  -> {
                     showFragment(VerificationConclusionFragment::class, Bundle().apply {
                         putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
                     })
@@ -264,7 +264,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         when (state.qrTransactionState) {
-            is VerificationTxState.QrScannedByOther -> {
+            is VerificationTxState.QrScannedByOther               -> {
                 showFragment(VerificationQrScannedByOtherFragment::class, Bundle())
                 return@withState
             }
@@ -278,13 +278,13 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 })
                 return@withState
             }
-            is VerificationTxState.Verified -> {
+            is VerificationTxState.Verified                       -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(true, null, state.isMe))
                 })
                 return@withState
             }
-            is VerificationTxState.Cancelled -> {
+            is VerificationTxState.Cancelled                      -> {
                 showFragment(VerificationConclusionFragment::class, Bundle().apply {
                     putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(false, state.qrTransactionState.cancelCode.value, state.isMe))
                 })
