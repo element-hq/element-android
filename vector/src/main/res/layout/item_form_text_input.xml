@@ -20,10 +20,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- android:imeOptions="actionDone" to fix a crash -->
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/formTextInputTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
             tools:hint="@string/create_room_name_hint" />
 
     </com.google.android.material.textfield.TextInputLayout>

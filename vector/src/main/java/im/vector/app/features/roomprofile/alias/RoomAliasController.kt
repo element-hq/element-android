@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.alias
 
+import android.text.InputType
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -169,6 +170,7 @@ class RoomAliasController @Inject constructor(
                     value(data.publishManuallyState.value)
                     showBottomSeparator(false)
                     hint(stringProvider.getString(R.string.room_alias_address_hint))
+                    inputType(InputType.TYPE_CLASS_TEXT)
                     onTextChange { text ->
                         callback?.setNewAlias(text)
                     }
