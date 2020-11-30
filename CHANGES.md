@@ -3,9 +3,11 @@ Changes in Element 1.0.12 (2020-XX-XX)
 
 Features ✨:
  - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
+ - Room setting: update join rules and guest access (#2442)
 
 Improvements 🙌:
  - Add Setting Item to Change PIN (#2462)
+ - Improve room history visibility setting UX (#1579)
 
 Bugfix 🐛:
  - Double bottomsheet effect after verify with passphrase
@@ -32,7 +34,6 @@ Features ✨:
  - Create DMs with users by scanning their QR code (#2025)
  - Add Invite friends quick invite actions (#2348)
  - Add friend by scanning QR code, show your code to friends (#2025)
- - Room setting: update join rules and guest access (#2442)
 
 Improvements 🙌:
  - New room creation tile with quick action (#2346)
@@ -44,7 +45,6 @@ Improvements 🙌:
  - Move "Enable Encryption" from room setting screen to room profile screen (#2394)
  - Home empty screens quick design update (#2347)
  - Improve Invite user screen (seamless search for matrix ID)
- - Improve room history visibility setting UX (#1579)
 
 Bugfix 🐛:
  - Fix crash on AttachmentViewer (#2365)
