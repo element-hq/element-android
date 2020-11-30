@@ -2,7 +2,7 @@ Changes in Element 1.0.12 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
 
 Improvements 🙌:
  -
@@ -32,7 +32,6 @@ Features ✨:
  - Create DMs with users by scanning their QR code (#2025)
  - Add Invite friends quick invite actions (#2348)
  - Add friend by scanning QR code, show your code to friends (#2025)
- - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
 
 Improvements 🙌:
  - New room creation tile with quick action (#2346)
