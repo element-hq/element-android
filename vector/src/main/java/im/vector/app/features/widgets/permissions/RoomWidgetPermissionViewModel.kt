@@ -29,7 +29,6 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.net.URL
@@ -106,14 +105,11 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
                 if (state.permissionData()?.isWebviewWidget.orFalse()) {
                     WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, widgetId, false)
                 } else {
-                    awaitCallback<Unit> {
-                        session.integrationManagerService().setNativeWidgetDomainAllowed(
-                                state.permissionData.invoke()?.widget?.type?.preferred ?: "",
-                                state.permissionData.invoke()?.widgetDomain ?: "",
-                                false,
-                                it
-                        )
-                    }
+                    session.integrationManagerService().setNativeWidgetDomainAllowed(
+                            state.permissionData.invoke()?.widget?.type?.preferred ?: "",
+                            state.permissionData.invoke()?.widgetDomain ?: "",
+                            false
+                    )
                 }
             } catch (failure: Throwable) {
                 Timber.v("Failure revoking widget: ${state.widgetId}")
@@ -131,14 +127,11 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
                 if (state.permissionData()?.isWebviewWidget.orFalse()) {
                     WidgetPermissionsHelper(integrationManagerService, widgetService).changePermission(state.roomId, widgetId, true)
                 } else {
-                    awaitCallback<Unit> {
-                        session.integrationManagerService().setNativeWidgetDomainAllowed(
-                                state.permissionData.invoke()?.widget?.type?.preferred ?: "",
-                                state.permissionData.invoke()?.widgetDomain ?: "",
-                                true,
-                                it
-                        )
-                    }
+                    session.integrationManagerService().setNativeWidgetDomainAllowed(
+                            state.permissionData.invoke()?.widget?.type?.preferred ?: "",
+                            state.permissionData.invoke()?.widgetDomain ?: "",
+                            true
+                    )
                 }
             } catch (failure: Throwable) {
                 Timber.v("Failure allowing widget: ${state.widgetId}")
