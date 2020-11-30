@@ -1699,7 +1699,7 @@
     <string name="verification_request_notice">برای امنیت بیشتر، %s را با بررسی یک کد یکبارمصرف تایید کنید.</string>
     <string name="room_settings_enable_encryption_dialog_content">پس از فعال‌شدن ، نمی‌توان رمزگذاری برای یک اتاق را غیرفعال کرد. پیام های ارسالی در یک اتاق رمزگذاری شده توسط سرور قابل مشاهده نیست و فقط توسط اعضای اتاق قابل مشاهده است. فعال کردن رمزنگاری ممکن است از کارکرد بسیاری از ربات ها و پل ها جلوگیری کند.</string>
     <string name="room_settings_enable_encryption_dialog_title">رمزگذاری فعال شود؟</string>
-    <string name="room_settings_enable_encryption">فعال‌سازی رمزنگاری سرتاسر</string>
+    <string name="room_settings_enable_encryption">به کار انداختن رمزنگاری سرتاسری…</string>
     <string name="command_description_rainbow_emote">شکلک را با رنگ‌بندی رنگین گمان ارسال می کند</string>
     <string name="command_description_rainbow">پیام را با رنگ‌بندی رنگین کمان ارسال می کند</string>
     <string name="verify_cannot_cross_sign">این نشست نمی‌تواند تائید را با نشست‌های دیگر شما به اشتراک بگذارد.
@@ -2159,4 +2159,76 @@
     <string name="room_member_open_or_create_dm">پیام مستقیم</string>
     <string name="send_bug_report_include_key_share_history">ارسال تاریخچهٔ درخواست‌های هم‌رسانی کلید</string>
     <string name="no_more_results">نتایج بیش‌تری نیست</string>
+    <string name="save_your_security_key_notice">کلید امنیتیتان را در جایی امن، مانند مدیر گذرواژه یا گاوصندوق نگه دارید.</string>
+    <string name="set_a_security_phrase_notice">عبارت امنیتی‌ای را که تنها خودتان می‌دانید، برای امن کردن رمزها روی کارسازتان وارد کنید.</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">کلید امنیتیتان را در جایی امن، مانند مدیر گذرواژه یا گاوصندوق نگه دارید.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">عبارت رمزی که فقط خودتان می‌دانید را وارد کرده و کلیدی برای پشتیبان تولید کنید.</string>
+    <string name="identity_server_set_alternative_notice">به هنوتم جایگزین، می‌توانید نشامی هر کارساز هویت دیگری را وارد کنید</string>
+    <string name="identity_server_set_default_notice">کارساز خانگیتان (%1$s) پیشنهاد استفاده از %2$s برای کارساز هویتتان را می‌دهد</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">برای محرمانگیتان، المنت تنها از فرستادن شماره تلفن و رایانامه‌های کاربری در هم ریخته پشتیبانی می‌کند.</string>
+    <string name="identity_server_error_outdated_home_server">این عملیات ممکن نیست. کارساز خانگی منقضی شده است.</string>
+    <string name="invite_users_to_room_failure">نتوانستیم کاربران را دعوت کنیم. لطفاً کاربرانی که می‌خواهید دعوت کنید را بررسی کرده و دوباره تلاش کنید.</string>
+    <string name="create_room_dm_failure">نتوانستیم پیامتان را ایجاد کنیم. لطفاً کاربرانی که می‌خواهید دعوت کنید را بررسی کرده و دوباره تلاش کنید.</string>
+    <string name="create_room_disable_federation_title">انسداد هرکسی خارج از %s از پیوستن به این اتاق</string>
+    <string name="matrix_to_card_title">پیوند ماتریکس</string>
+    <string name="warning_unsaved_change_discard">دور ریختن تغییرات</string>
+    <string name="warning_unsaved_change">تغییرات ذخیره‌نشده‌ای وجود دارد. دور ریختن تغییرات؟</string>
+    <string name="warning_room_not_created_yet">اتاق هنوز ایجاد نشده است. لغو ایجاد اتاق؟</string>
+    <string name="qr_code_not_scanned">رمز QR پویش نشد!</string>
+    <string name="invalid_qr_code_uri">رمز QR نامعتبر (نشانی نامعتبر)!</string>
+    <string name="cannot_dm_self">نمی‌توانید به خودتان پیام دهید!</string>
+    <string name="share_by_text">هم‌رسانی با متن</string>
+    <string name="phone_book_perform_lookup">جست‌وجوی مخاطبان در ماتریکس</string>
+    <string name="room_settings_set_avatar">تنظیم آواتار</string>
+    <string name="save_your_security_key_title">ذخیرهٔ کلید امنیتیتان</string>
+    <string name="set_a_security_phrase_again_notice">برای تأیید عبارت امنیتیتان، دوباره واردش کنید.</string>
+    <string name="set_a_security_phrase_hint">عبارت امنیتی</string>
+    <string name="set_a_security_phrase_title">تنظیم یک عبارت امنیتی</string>
+    <string name="bottom_sheet_save_your_recovery_key_title">ذخیرهٔ کلید امنیتیتان</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">استفاده از یک عبارت امنیتی</string>
+    <string name="identity_server_set_alternative_notice_no_default">نشانی کارساز هویتی را وارد کنید</string>
+    <string name="identity_server_user_consent_not_provided">رضایت کاربر فراهم نشده است.</string>
+    <string name="identity_server_error_terms_not_signed">لطفاً نخست شرایط کارساز هویت را در تنظیمات بپذیرید.</string>
+    <string name="identity_server_error_no_identity_server_configured">لطفاً نخست کارساز هویتی را پیکربندی کنید.</string>
+    <string name="identity_server_error_outdated_identity_server">کارساز هویت منقضی شده اسن. المنت تنها نگارش ۲ از API را پشتیبانی می‌کند.</string>
+    <string name="user_code_info_text">این رمز را افراد هم‌رسانی کرده تا بتوانند برای افزودنتان و شروع گپ، بپویندش.</string>
+    <string name="user_code_my_code">رمزم</string>
+    <string name="user_code_share">هم‌رسانی رمزم</string>
+    <string name="user_code_scan">پویش یک رمز QR</string>
+    <string name="not_a_valid_qr_code">این یک رمز QR ماتریکس معتبر نیست</string>
+    <string name="invite_friends_rich_title">🔐️ پیوستن به من روی المنت</string>
+    <string name="invite_friends_text">سلام. روی المنت باهام حرف بزن: %s</string>
+    <string name="invite_friends">دعوت دوستان</string>
+    <string name="add_people">افزودن افراد</string>
+    <string name="topic_prefix">"موضوع: "</string>
+    <string name="add_a_topic_link_text">افزودن موضوع</string>
+    <string name="room_created_summary_no_topic_creation_text">%s برای دادن اجازهٔ دانستن موضوع این اتاق به افراد.</string>
+    <string name="this_is_the_beginning_of_dm">این، آغاز تاریخچهٔ پیام مستقیمتان با %s است.</string>
+    <string name="this_is_the_beginning_of_room">این، آغاز %s است.</string>
+    <string name="this_is_the_beginning_of_room_no_name">این، آغاز گفت‌وگوست.</string>
+    <string name="room_settings_enable_encryption_no_permission">اجازهٔ به کار انداختن رمزنگاری در این اتاق را ندارید.</string>
+    <string name="create_room_in_progress">ایجاد کردن اتاق…</string>
+    <string name="create_room_alias_invalid">برخی نویسه‌ها مجاز نیستند</string>
+    <string name="create_room_alias_empty">لطفاً نام اتاقی را وارد کنید</string>
+    <string name="create_room_alias_already_in_use">این نشانی در حال استفاده است</string>
+    <string name="create_room_alias_hint">نشانی اتاق</string>
+    <string name="hide_advanced">نهفتن پیشرفته</string>
+    <string name="show_advanced">نمایش پیشرفته</string>
+    <string name="attachment_viewer_item_x_of_y">%1$d از %2$d</string>
+    <string name="a11y_create_direct_message_by_qr_code">ایجاد گفت‌وگوی مسنقیمی جدید با پویش یک رمز QR</string>
+    <string name="a11y_create_direct_message_by_mxid">ایجاد گفت‌وگوی مستقیمی جدید با شناسهٔ ماتریکس</string>
+    <string name="identity_server_consent_dialog_title">فرستادن رایانامه‌ها و شماره تلفن‌ها</string>
+    <string name="settings_discovery_consent_action_give_consent">رضایت دادن</string>
+    <string name="settings_discovery_consent_action_revoke">ابطال رضایتم</string>
+    <string name="settings_discovery_consent_title">فرستادن رایانامه‌ها و شماره تلفن‌ها</string>
+    <string name="direct_room_user_list_suggestions_title">پیشنهادها</string>
+    <string name="direct_room_user_list_contacts_title">مخاطبان</string>
+    <string name="direct_room_user_list_known_title">کاربران شناخته</string>
+    <string name="direct_room_user_list_recent_title">اخیر</string>
+    <string name="qr_code">رمز QR</string>
+    <string name="add_by_qr_code">افزودن با رمز QR</string>
+    <string name="user_directory_search_hint">جست‌وجو با نام یا شناسه</string>
+    <string name="permissions_denied_add_contact">دسترسی به مخاطبانتان را مجاز کنید.</string>
+    <string name="permissions_denied_qr_code">برای پویش یک رمز QR نیاز است دسترسی به دوربین را مجاز کنید.</string>
+    <string name="start_chatting">آغاز به گپ</string>
 </resources>
