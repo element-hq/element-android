@@ -85,7 +85,7 @@ class VectorSettingsPinFragment @Inject constructor(
                     navigator.openPinCode(
                             requireContext(),
                             pinActivityResultLauncher,
-                            PinMode.CREATE
+                            PinMode.MODIFY
                     )
                 }
                 true
