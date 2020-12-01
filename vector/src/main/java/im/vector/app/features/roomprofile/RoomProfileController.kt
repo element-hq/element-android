@@ -77,25 +77,22 @@ class RoomProfileController @Inject constructor(
                 }
 
         // Security
-        if (enableNonSimplifiedMode) {
-            buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
-            val learnMoreSubtitle = if (roomSummary.isEncrypted) {
-                if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_subtitle else R.string.room_profile_encrypted_subtitle
-            } else {
-                if (roomSummary.isDirect) R.string.direct_room_profile_not_encrypted_subtitle else R.string.room_profile_not_encrypted_subtitle
-            }
-            genericFooterItem {
-                id("e2e info")
-                centered(false)
-                text(stringProvider.getString(learnMoreSubtitle))
-            }
-            buildEncryptionAction(data.actionPermissions, roomSummary)
+        buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
+        val learnMoreSubtitle = if (roomSummary.isEncrypted) {
+            if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_subtitle else R.string.room_profile_encrypted_subtitle
+        } else {
+            if (roomSummary.isDirect) R.string.direct_room_profile_not_encrypted_subtitle else R.string.room_profile_not_encrypted_subtitle
         }
+        genericFooterItem {
+            id("e2e info")
+            centered(false)
+            text(stringProvider.getString(learnMoreSubtitle))
+        }
+        // SC: Move down in the list, this one-time action is not important to enough to show this prevalent at the top
+        //buildEncryptionAction(data.actionPermissions, roomSummary)
 
-        // More | category header only if displaying other sections above
-        if (enableNonSimplifiedMode || roomSummary.topic.isNotEmpty()) {
-            buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
-        }
+        // More
+        buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
         buildProfileAction(
                 id = "settings",
                 title = stringProvider.getString(if (roomSummary.isDirect) {
@@ -151,6 +148,9 @@ class RoomProfileController @Inject constructor(
                     action = { callback?.createShortcut() }
             )
         }
+        if (enableNonSimplifiedMode) {
+            buildEncryptionAction(data.actionPermissions, roomSummary)
+        }
         buildProfileAction(
                 id = "leave",
                 title = stringProvider.getString(if (roomSummary.isDirect) {
@@ -193,6 +193,7 @@ class RoomProfileController @Inject constructor(
                         editable = false,
                         action = { callback?.onEnableEncryptionClicked() }
                 )
+            /* SC: disable useless button
             } else {
                 buildProfileAction(
                         id = "enableEncryption",
@@ -202,6 +203,7 @@ class RoomProfileController @Inject constructor(
                         divider = false,
                         editable = false
                 )
+            */
             }
         }
     }
