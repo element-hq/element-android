@@ -128,9 +128,6 @@ class RoomDetailViewModel @AssistedInject constructor(
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
 
-    // Slot to keep a pending uri during permission request
-    var pendingUri: Uri? = null
-
     // Slot to store if we want to prevent preview of attachment
     var preventAttachmentPreview = false
 

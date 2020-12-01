@@ -1100,18 +1100,6 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val writingFileActivityResultLauncher = registerForPermissionsResult { allGranted ->
-        if (allGranted) {
-            val pendingUri = roomDetailViewModel.pendingUri
-            if (pendingUri != null) {
-                roomDetailViewModel.pendingUri = null
-                sendUri(pendingUri)
-            }
-        } else {
-            cleanUpAfterPermissionNotGranted()
-        }
-    }
-
     private fun setupComposer() {
         val composerEditText = composerLayout.composerEditText
         autoCompleter.setup(composerEditText)
@@ -1157,14 +1145,7 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onRichContentSelected(contentUri: Uri): Boolean {
-                // We need WRITE_EXTERNAL permission
-                return if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, requireActivity(), writingFileActivityResultLauncher)) {
-                    sendUri(contentUri)
-                } else {
-                    roomDetailViewModel.pendingUri = contentUri
-                    // Always intercept when we request some permission
-                    true
-                }
+                return sendUri(contentUri)
             }
         }
     }
@@ -1561,7 +1542,6 @@ class RoomDetailFragment @Inject constructor(
     private fun cleanUpAfterPermissionNotGranted() {
         // Reset all pending data
         roomDetailViewModel.pendingAction = null
-        roomDetailViewModel.pendingUri = null
         attachmentsHelper.pendingType = null
     }
 
