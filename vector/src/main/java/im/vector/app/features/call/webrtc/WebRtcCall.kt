@@ -729,6 +729,9 @@ class WebRtcCall(val mxCall: MxCall,
     fun onCallIceCandidateReceived(iceCandidatesContent: CallCandidatesContent) {
         GlobalScope.launch(dispatcher) {
             iceCandidatesContent.candidates.forEach {
+                if (it.sdpMid.isNullOrEmpty() || it.candidate.isNullOrEmpty()) {
+                    return@forEach
+                }
                 Timber.v("## VOIP onCallIceCandidateReceived for call ${mxCall.callId} sdp: ${it.candidate}")
                 val iceCandidate = IceCandidate(it.sdpMid, it.sdpMLineIndex, it.candidate)
                 remoteCandidateSource.onNext(iceCandidate)
