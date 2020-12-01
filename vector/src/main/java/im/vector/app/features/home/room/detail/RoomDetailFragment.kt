@@ -1176,11 +1176,9 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun sendUri(uri: Uri): Boolean {
-        roomDetailViewModel.preventAttachmentPreview = true
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
         val isHandled = attachmentsHelper.handleShareIntent(requireContext(), shareIntent)
         if (!isHandled) {
-            roomDetailViewModel.preventAttachmentPreview = false
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
         }
         return isHandled
@@ -1936,24 +1934,18 @@ class RoomDetailFragment @Inject constructor(
 // AttachmentsHelper.Callback
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        if (roomDetailViewModel.preventAttachmentPreview) {
-            roomDetailViewModel.preventAttachmentPreview = false
-            roomDetailViewModel.handle(RoomDetailAction.SendMedia(attachments, false))
-        } else {
-            val grouped = attachments.toGroupedContentAttachmentData()
-            if (grouped.notPreviewables.isNotEmpty()) {
-                // Send the not previewable attachments right now (?)
-                roomDetailViewModel.handle(RoomDetailAction.SendMedia(grouped.notPreviewables, false))
-            }
-            if (grouped.previewables.isNotEmpty()) {
-                val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
-                contentAttachmentActivityResultLauncher.launch(intent)
-            }
+        val grouped = attachments.toGroupedContentAttachmentData()
+        if (grouped.notPreviewables.isNotEmpty()) {
+            // Send the not previewable attachments right now (?)
+            roomDetailViewModel.handle(RoomDetailAction.SendMedia(grouped.notPreviewables, false))
+        }
+        if (grouped.previewables.isNotEmpty()) {
+            val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
+            contentAttachmentActivityResultLauncher.launch(intent)
         }
     }
 
     override fun onAttachmentsProcessFailed() {
-        roomDetailViewModel.preventAttachmentPreview = false
         Toast.makeText(requireContext(), R.string.error_attachment, Toast.LENGTH_SHORT).show()
     }
 
