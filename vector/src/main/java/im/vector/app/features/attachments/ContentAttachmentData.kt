@@ -18,10 +18,12 @@ package im.vector.app.features.attachments
 
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 
+private val listOfPreviewableMimeTypes = listOf("image/jpeg", "image/png", "image/jpg", "image/gif")
+
 fun ContentAttachmentData.isPreviewable(): Boolean {
     // For now the preview only supports still image
     return type == ContentAttachmentData.Type.IMAGE
-            && listOf("image/jpeg", "image/png", "image/jpg").contains(getSafeMimeType() ?: "")
+            && listOfPreviewableMimeTypes.contains(getSafeMimeType() ?: "")
 }
 
 data class GroupedContentAttachmentData(
