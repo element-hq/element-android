@@ -12,6 +12,13 @@
     android:background="@color/bg_call_screen"
     tools:ignore="MergeRootFrame">
 
+    <ImageView
+        android:id="@+id/bgCallView"
+        tools:src="@tools:sample/avatars"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <org.webrtc.SurfaceViewRenderer
         android:id="@+id/fullscreen_video_view"
         android:layout_width="match_parent"
@@ -40,7 +47,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
-    
+
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"

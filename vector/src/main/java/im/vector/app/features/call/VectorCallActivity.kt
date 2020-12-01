@@ -26,21 +26,17 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.view.WindowManager
-import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import butterknife.BindView
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
@@ -59,7 +55,6 @@ import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCallDetail
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
-import org.matrix.android.sdk.api.util.MatrixItem
 import org.webrtc.EglBase
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
@@ -104,8 +99,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
     private var rootEglBase: EglBase? = null
 
-    var systemUiVisibility = false
-
     var surfaceRenderersAreInitialized = false
 
     override fun doBeforeSetContentView() {
@@ -113,13 +106,12 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-        window.statusBarColor = Color.TRANSPARENT
-        window.navigationBarColor = Color.TRANSPARENT
-        super.onCreate(savedInstanceState)
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.BLACK
+        super.onCreate(savedInstanceState)
 
         if (intent.hasExtra(MvRx.KEY_ARG)) {
             callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
@@ -213,7 +205,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                         smallIsHeldIcon.isVisible = true
                         callVideoGroup.isInvisible = true
                         callInfoGroup.isVisible = true
-                        configureCallInfo(state)
+                        configureCallInfo(state, blurAvatar = true)
                         if (state.isRemoteOnHold) {
                             callActionText.setText(R.string.call_resume_action)
                             callActionText.isVisible = true
@@ -256,10 +248,16 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         }
     }
 
-    private fun configureCallInfo(state: VectorCallViewState) {
+    private fun configureCallInfo(state: VectorCallViewState, blurAvatar: Boolean = false) {
         state.otherUserMatrixItem.invoke()?.let {
+            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
+            avatarRenderer.renderBlur(it, bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter)
             participantNameText.text = it.getBestName()
-            avatarRenderer.render(it, otherMemberAvatar)
+            if (blurAvatar) {
+                avatarRenderer.renderBlur(it, otherMemberAvatar, sampling = 2, rounded = true, colorFilter = colorFilter)
+            } else {
+                avatarRenderer.render(it, otherMemberAvatar)
+            }
         }
     }
 
@@ -289,7 +287,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
 
         // Init Full Screen renderer
         fullscreenRenderer.init(rootEglBase!!.eglBaseContext, null)
-        fullscreenRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
+        fullscreenRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL)
 
         pipRenderer.setZOrderMediaOverlay(true)
         pipRenderer.setEnableHardwareScaler(true /* enabled */)
