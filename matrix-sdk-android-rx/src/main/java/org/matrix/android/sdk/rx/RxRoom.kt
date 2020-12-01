@@ -35,6 +35,8 @@ import org.matrix.android.sdk.api.util.toOptional
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 
 class RxRoom(private val room: Room) {
 
@@ -129,6 +131,10 @@ class RxRoom(private val room: Room) {
 
     fun updateHistoryReadability(readability: RoomHistoryVisibility): Completable = completableBuilder<Unit> {
         room.updateHistoryReadability(readability, it)
+    }
+
+    fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?): Completable = completableBuilder<Unit> {
+        room.updateJoinRule(joinRules, guestAccess, it)
     }
 
     fun updateAvatar(avatarUri: Uri, fileName: String): Completable = completableBuilder<Unit> {

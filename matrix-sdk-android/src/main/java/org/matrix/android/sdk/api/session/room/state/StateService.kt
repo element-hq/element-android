@@ -21,7 +21,9 @@ import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
@@ -49,6 +51,11 @@ interface StateService {
      * Update the history readability of the room
      */
     fun updateHistoryReadability(readability: RoomHistoryVisibility, callback: MatrixCallback<Unit>): Cancelable
+
+    /**
+     * Update the join rule and/or the guest access
+     */
+    fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?, callback: MatrixCallback<Unit>): Cancelable
 
     /**
      * Update the avatar of the room

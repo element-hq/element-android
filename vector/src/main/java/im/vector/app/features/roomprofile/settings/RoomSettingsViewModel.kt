@@ -33,6 +33,9 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
+import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.rx.mapOptional
 import org.matrix.android.sdk.rx.rx
@@ -60,6 +63,9 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
     init {
         observeRoomSummary()
+        observeRoomHistoryVisibility()
+        observeJoinRule()
+        observeGuestAccess()
         observeRoomAvatar()
         observeState()
     }
@@ -70,10 +76,12 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 RoomSettingsViewState::newName,
                 RoomSettingsViewState::newTopic,
                 RoomSettingsViewState::newHistoryVisibility,
+                RoomSettingsViewState::newRoomJoinRules,
                 RoomSettingsViewState::roomSummary) { avatarAction,
                                                       newName,
                                                       newTopic,
                                                       newHistoryVisibility,
+                                                      newJoinRule,
                                                       asyncSummary ->
             val summary = asyncSummary()
             setState {
@@ -81,7 +89,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                         showSaveAction = avatarAction !is RoomSettingsViewState.AvatarAction.None
                                 || summary?.name != newName
                                 || summary?.topic != newTopic
-                                || newHistoryVisibility != null
+                                || (newHistoryVisibility != null && newHistoryVisibility != currentHistoryVisibility)
+                                || newJoinRule.hasChanged()
                 )
             }
         }
@@ -93,7 +102,6 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .execute { async ->
                     val roomSummary = async.invoke()
                     copy(
-                            historyVisibilityEvent = room.getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY),
                             roomSummary = async,
                             newName = roomSummary?.name,
                             newTopic = roomSummary?.topic
@@ -109,10 +117,53 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR),
                             canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME),
                             canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC),
-                            canChangeHistoryReadability = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_HISTORY_VISIBILITY)
+                            canChangeHistoryVisibility = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
+                                    EventType.STATE_ROOM_HISTORY_VISIBILITY),
+                            canChangeJoinRule = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
+                                    EventType.STATE_ROOM_JOIN_RULES)
+                                    && powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
+                                    EventType.STATE_ROOM_GUEST_ACCESS)
                     )
                     setState { copy(actionPermissions = permissions) }
+                }
+                .disposeOnClear()
+    }
+
+    private fun observeRoomHistoryVisibility() {
+        room.rx()
+                .liveStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY, QueryStringValue.NoCondition)
+                .mapOptional { it.content.toModel<RoomHistoryVisibilityContent>() }
+                .unwrap()
+                .subscribe {
+                    it.historyVisibility?.let {
+                        setState { copy(currentHistoryVisibility = it) }
+                    }
+                }
+                .disposeOnClear()
+    }
+
+    private fun observeGuestAccess() {
+        room.rx()
+                .liveStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
+                .mapOptional { it.content.toModel<RoomJoinRulesContent>() }
+                .unwrap()
+                .subscribe {
+                    it.joinRules?.let {
+                        setState { copy(currentRoomJoinRules = it) }
+                    }
+                }
+                .disposeOnClear()
+    }
+
+    private fun observeJoinRule() {
+        room.rx()
+                .liveStateEvent(EventType.STATE_ROOM_GUEST_ACCESS, QueryStringValue.NoCondition)
+                .mapOptional { it.content.toModel<RoomGuestAccessContent>() }
+                .unwrap()
+                .subscribe {
+                    it.guestAccess?.let {
+                        setState { copy(currentGuestAccess = it) }
+                    }
                 }
                 .disposeOnClear()
     }
@@ -137,9 +188,19 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             is RoomSettingsAction.SetRoomName              -> setState { copy(newName = action.newName) }
             is RoomSettingsAction.SetRoomTopic             -> setState { copy(newTopic = action.newTopic) }
             is RoomSettingsAction.SetRoomHistoryVisibility -> setState { copy(newHistoryVisibility = action.visibility) }
+            is RoomSettingsAction.SetRoomJoinRule          -> handleSetRoomJoinRule(action)
             is RoomSettingsAction.Save                     -> saveSettings()
             is RoomSettingsAction.Cancel                   -> cancel()
         }.exhaustive
+    }
+
+    private fun handleSetRoomJoinRule(action: RoomSettingsAction.SetRoomJoinRule) = withState { state ->
+        setState {
+            copy(newRoomJoinRules = RoomSettingsViewState.NewJoinRule(
+                    action.roomJoinRule.takeIf { it != state.currentRoomJoinRules },
+                    action.roomGuestAccess.takeIf { it != state.currentGuestAccess }
+            ))
+        }
     }
 
     private fun handleSetAvatarAction(action: RoomSettingsAction.SetAvatarAction) {
@@ -188,6 +249,10 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
             operationList.add(room.rx().updateHistoryReadability(state.newHistoryVisibility))
         }
 
+        if (state.newRoomJoinRules.hasChanged()) {
+            operationList.add(room.rx().updateJoinRule(state.newRoomJoinRules.newJoinRules, state.newRoomJoinRules.newGuestAccess))
+        }
+
         Observable
                 .fromIterable(operationList)
                 .concatMapCompletable { it }
@@ -198,7 +263,8 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                                 deletePendingAvatar(this)
                                 copy(
                                         avatarAction = RoomSettingsViewState.AvatarAction.None,
-                                        newHistoryVisibility = null
+                                        newHistoryVisibility = null,
+                                        newRoomJoinRules = RoomSettingsViewState.NewJoinRule()
                                 )
                             }
                             _viewEvents.post(RoomSettingsViewEvents.Success)

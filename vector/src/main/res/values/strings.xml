@@ -1022,7 +1022,9 @@
     <string name="room_settings_room_access_rules_pref_title">Room Access</string>
     <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
+    <string name="room_settings_room_access_title">Room access</string>
 
     <!-- room settings : alias -->
     <string name="room_settings_alias_title">Room addresses</string>
