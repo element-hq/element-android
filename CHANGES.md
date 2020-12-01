@@ -25,7 +25,7 @@ Test:
  -
 
 Other changes:
- -
+ - Remove "Status.im" theme #2424
 
 Changes in Element 1.0.11 (2020-11-27)
 ===================================================

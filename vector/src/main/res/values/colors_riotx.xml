@@ -202,13 +202,11 @@
     <color name="riotx_bottom_nav_background_color_light">@color/riot_primary_background_color_light</color>
     <color name="riotx_bottom_nav_background_color_dark">@color/primary_color_dark</color>
     <color name="riotx_bottom_nav_background_color_black">@color/primary_color_black</color>
-    <color name="riotx_bottom_nav_background_color_status">@color/riot_primary_background_color_status</color>
 
     <attr name="riotx_bottom_nav_background_border_color" format="color" />
     <color name="riotx_bottom_nav_background_border_color_light">#E9EDF1</color>
     <color name="riotx_bottom_nav_background_border_color_dark">#55555555</color>
     <color name="riotx_bottom_nav_background_border_color_black">#FF15171b</color>
-    <color name="riotx_bottom_nav_background_border_color_status">#FFE9EDF1</color>
 
     <attr name="riotx_bottom_nav_icon_color" format="color" />
     <color name="riotx_bottom_nav_icon_color_light">#C1C6CD</color>
@@ -218,7 +216,6 @@
     <attr name="riotx_waiting_background_color" format="color" />
     <color name="riotx_waiting_background_color_light">#AAAAAAAA</color>
     <color name="riotx_waiting_background_color_dark">#55555555</color>
-    <color name="riotx_waiting_background_color_status">#AAAAAAAA</color>
 
     <attr name="riotx_disabled_view_color" format="color" />
     <color name="riotx_disabled_view_color_light">#EEEEEE</color>

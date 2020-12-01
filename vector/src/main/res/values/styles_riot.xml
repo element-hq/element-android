@@ -280,14 +280,6 @@
         <item name="android:textColorLink">@color/riotx_links</item>
     </style>
 
-    <style name="Vector.BottomSheet.Status" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="android:textColorPrimary">@color/riot_primary_text_color_status</item>
-        <item name="android:textColorSecondary">@color/riot_secondary_text_color_status</item>
-        <!-- Default color for text View -->
-        <item name="android:textColorTertiary">@color/riot_tertiary_text_color_status</item>
-        <item name="android:textColorLink">@color/link_color_status</item>
-    </style>
-
 
     <style name="TimelineContentStubBaseParams">
         <item name="android:layout_width">match_parent</item>
