@@ -315,7 +315,6 @@ dependencies {
 
     implementation "androidx.recyclerview:recyclerview:1.2.0-alpha06"
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation "androidx.fragment:fragment:$fragment_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation "androidx.sharetarget:sharetarget:1.0.0"
