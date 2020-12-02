@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.database.model.UserThreePidEntity
@@ -80,7 +81,7 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
 
     override fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String, matrixCallback: MatrixCallback<Unit>): Cancelable {
         return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, matrixCallback) {
-            val response = fileUploader.uploadFromUri(newAvatarUri, fileName, "image/jpeg")
+            val response = fileUploader.uploadFromUri(newAvatarUri, fileName, MimeTypes.Jpeg)
             setAvatarUrlTask.execute(SetAvatarUrlTask.Params(userId = userId, newAvatarUrl = response.contentUri))
             userStore.updateAvatar(userId, response.contentUri)
         }

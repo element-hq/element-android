@@ -17,8 +17,14 @@
 package im.vector.app.features.attachments
 
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.util.MimeTypes
 
-private val listOfPreviewableMimeTypes = listOf("image/jpeg", "image/png", "image/jpg", "image/gif")
+private val listOfPreviewableMimeTypes = listOf(
+        MimeTypes.Jpeg,
+        MimeTypes.BadJpg,
+        MimeTypes.Png,
+        MimeTypes.Gif
+)
 
 fun ContentAttachmentData.isPreviewable(): Boolean {
     // For now the preview only supports still image
