@@ -18,7 +18,7 @@ package im.vector.app.gplay.features.settings.troubleshoot
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.startAddGoogleAccountIntent
@@ -36,7 +36,7 @@ class TestFirebaseToken @Inject constructor(private val context: AppCompatActivi
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         status = TestStatus.RUNNING
         try {
-            FirebaseInstanceId.getInstance().instanceId
+            FirebaseMessaging.getInstance().token
                     .addOnCompleteListener(context) { task ->
                         if (!task.isSuccessful) {
                             val errorMsg = if (task.exception == null) "Unknown" else task.exception!!.localizedMessage
@@ -57,7 +57,7 @@ class TestFirebaseToken @Inject constructor(private val context: AppCompatActivi
                             }
                             status = TestStatus.FAILED
                         } else {
-                            task.result?.token?.let { token ->
+                            task.result?.let { token ->
                                 val tok = token.substring(0, Math.min(8, token.length)) + "********************"
                                 description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
                                 Timber.e("Retrieved FCM token success [$tok].")
