@@ -16,30 +16,12 @@
 
 package im.vector.app.features.roomprofile.settings.joinrule
 
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 
-class RoomJoinRuleViewModel @AssistedInject constructor(@Assisted initialState: RoomJoinRuleState)
+class RoomJoinRuleViewModel(initialState: RoomJoinRuleState)
     : VectorViewModel<RoomJoinRuleState, EmptyAction, EmptyViewEvents>(initialState) {
-
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(initialState: RoomJoinRuleState): RoomJoinRuleViewModel
-    }
-
-    companion object : MvRxViewModelFactory<RoomJoinRuleViewModel, RoomJoinRuleState> {
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomJoinRuleState): RoomJoinRuleViewModel? {
-            val fragment: RoomJoinRuleBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.roomJoinRuleViewModelFactory.create(state)
-        }
-    }
 
     override fun handle(action: EmptyAction) {
         // No op

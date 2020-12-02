@@ -16,30 +16,12 @@
 
 package im.vector.app.features.roomprofile.settings.historyvisibility
 
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 
-class RoomHistoryVisibilityViewModel @AssistedInject constructor(@Assisted initialState: RoomHistoryVisibilityState)
+class RoomHistoryVisibilityViewModel(initialState: RoomHistoryVisibilityState)
     : VectorViewModel<RoomHistoryVisibilityState, EmptyAction, EmptyViewEvents>(initialState) {
-
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(initialState: RoomHistoryVisibilityState): RoomHistoryVisibilityViewModel
-    }
-
-    companion object : MvRxViewModelFactory<RoomHistoryVisibilityViewModel, RoomHistoryVisibilityState> {
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomHistoryVisibilityState): RoomHistoryVisibilityViewModel? {
-            val fragment: RoomHistoryVisibilityBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.roomHistoryVisibilityViewModelFactory.create(state)
-        }
-    }
 
     override fun handle(action: EmptyAction) {
         // No op

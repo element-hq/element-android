@@ -59,7 +59,6 @@ data class AttachmentsPreviewArgs(
 ) : Parcelable
 
 class AttachmentsPreviewFragment @Inject constructor(
-        val viewModelFactory: AttachmentsPreviewViewModel.Factory,
         private val attachmentMiniaturePreviewController: AttachmentMiniaturePreviewController,
         private val attachmentBigPreviewController: AttachmentBigPreviewController,
         private val colorProvider: ColorProvider
