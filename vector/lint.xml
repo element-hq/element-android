@@ -52,6 +52,9 @@
     <!-- Manifest -->
     <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
 
+    <!-- Dependencies -->
+    <issue id="KtxExtensionAvailable" severity="error" />
+
     <!-- Timber -->
     <!--    This rule is failing on CI because it's marked as unknwown rule id :/-->
     <!--    <issue id="BinaryOperationInTimber" severity="error" />-->

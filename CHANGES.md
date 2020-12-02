@@ -21,6 +21,7 @@ SDK API changes ⚠️:
 
 Build 🧱:
  - Upgrade some dependencies and Kotlin version
+ - Use fragment-ktx and preference-ktx dependencies (fix lint issue KtxExtensionAvailable)
 
 Test:
  -

@@ -362,7 +362,7 @@ dependencies {
     implementation "io.arrow-kt:arrow-core:$arrow_version"
 
     // Pref
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
 
     // UI
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
