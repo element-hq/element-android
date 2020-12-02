@@ -16,14 +16,7 @@
 
 package im.vector.app.features.roomprofile.settings.historyvisibility
 
-import im.vector.app.core.platform.EmptyAction
-import im.vector.app.core.platform.EmptyViewEvents
-import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.ui.bottomsheet.BottomSheetGenericViewModel
 
 class RoomHistoryVisibilityViewModel(initialState: RoomHistoryVisibilityState)
-    : VectorViewModel<RoomHistoryVisibilityState, EmptyAction, EmptyViewEvents>(initialState) {
-
-    override fun handle(action: EmptyAction) {
-        // No op
-    }
-}
+    : BottomSheetGenericViewModel<RoomHistoryVisibilityState>(initialState)

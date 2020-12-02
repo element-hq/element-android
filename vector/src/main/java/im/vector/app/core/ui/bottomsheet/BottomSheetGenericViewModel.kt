@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.settings.joinrule
+package im.vector.app.core.ui.bottomsheet
 
-import im.vector.app.core.ui.bottomsheet.BottomSheetGenericViewModel
+import com.airbnb.mvrx.MvRxState
+import im.vector.app.core.platform.EmptyAction
+import im.vector.app.core.platform.EmptyViewEvents
+import im.vector.app.core.platform.VectorViewModel
 
-class RoomJoinRuleViewModel(initialState: RoomJoinRuleState)
-    : BottomSheetGenericViewModel<RoomJoinRuleState>(initialState)
+abstract class BottomSheetGenericViewModel<State : MvRxState>(initialState: State) :
+        VectorViewModel<State, EmptyAction, EmptyViewEvents>(initialState) {
+
+    override fun handle(action: EmptyAction) {
+        // No op
+    }
+}
