@@ -24,7 +24,9 @@ import io.reactivex.Single
 fun <T> singleBuilder(builder: (MatrixCallback<T>) -> Cancelable): Single<T> = Single.create { emitter ->
     val callback = object : MatrixCallback<T> {
         override fun onSuccess(data: T) {
-            emitter.onSuccess(data)
+            // Add `!!` to fix the warning:
+            // "Type mismatch: type parameter with nullable bounds is used T is used where T was expected. This warning will become an error soon"
+            emitter.onSuccess(data!!)
         }
 
         override fun onFailure(failure: Throwable) {
