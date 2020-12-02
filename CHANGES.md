@@ -20,7 +20,7 @@ SDK API changes ⚠️:
  -
 
 Build 🧱:
- -
+ - Upgrade some dependencies and Kotlin version
 
 Test:
  -
