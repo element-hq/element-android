@@ -41,6 +41,7 @@
     <issue id="ObsoleteSdkInt" severity="error" />
     <issue id="Recycle" severity="error" />
     <issue id="KotlinPropertyAccess" severity="error" />
+    <issue id="DefaultLocale" severity="error" />
 
     <issue id="InvalidPackage">
         <!-- Ignore error from HtmlCompressor lib -->
