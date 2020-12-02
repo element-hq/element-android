@@ -220,7 +220,8 @@
         <activity
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/AppTheme.AttachmentsPreview" />
-        <activity android:name=".features.call.VectorCallActivity" />
+        <activity android:name=".features.call.VectorCallActivity"
+            android:excludeFromRecents="true"/>
         <activity
             android:name=".features.call.conference.VectorJitsiActivity"
             android:configChanges="orientation|screenSize" />
