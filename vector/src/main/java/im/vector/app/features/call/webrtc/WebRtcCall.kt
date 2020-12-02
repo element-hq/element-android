@@ -165,17 +165,16 @@ class WebRtcCall(val mxCall: MxCall,
 
     fun onIceCandidate(iceCandidate: IceCandidate) = iceCandidateSource.onNext(iceCandidate)
 
-    fun onRenegationNeeded() {
+    fun onRenegationNeeded(restartIce: Boolean) {
         GlobalScope.launch(dispatcher) {
             if (mxCall.state != CallState.CreateOffer && mxCall.opponentVersion == 0) {
                 Timber.v("Opponent does not support renegotiation: ignoring onRenegotiationNeeded event")
                 return@launch
             }
             val constraints = MediaConstraints()
-            // These are deprecated options
-//        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"))
-//        constraints.mandatory.add(MediaConstraints.KeyValuePair("OfferToReceiveVideo", if (currentCall?.mxCall?.isVideoCall == true) "true" else "false"))
-
+            if (restartIce) {
+                constraints.mandatory.add(MediaConstraints.KeyValuePair("IceRestart", "true"))
+            }
             val peerConnection = peerConnection ?: return@launch
             Timber.v("## VOIP creating offer...")
             makingOffer = true
