@@ -785,7 +785,7 @@ internal class DefaultTimeline(
 
     private fun List<TimelineEvent>.filterEventsWithSettings(): List<TimelineEvent> {
         return filter {
-            val filterType = !settings.filters.filterTypes || settings.filters.allowedTypes.contains(it.root.type)
+            val filterType = !settings.filters.filterTypes || settings.filters.allowedTypes.map { it.eventType }.contains(it.root.type)
             if (!filterType) return@filter false
 
             val filterEdits = if (settings.filters.filterEdits && it.root.getClearType() == EventType.MESSAGE) {

@@ -71,8 +71,23 @@ internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
 }
 
 internal fun RealmQuery<TimelineEventEntity>.filterEvents(filters: TimelineEventFilters): RealmQuery<TimelineEventEntity> {
-    if (filters.filterTypes) {
-        `in`(TimelineEventEntityFields.ROOT.TYPE, filters.allowedTypes.toTypedArray())
+    if (filters.filterTypes && filters.allowedTypes.isNotEmpty()) {
+        beginGroup()
+        filters.allowedTypes.forEachIndexed { index, filter ->
+            if (filter.stateKey == null) {
+                equalTo(TimelineEventEntityFields.ROOT.TYPE, filter.eventType)
+            } else {
+                beginGroup()
+                equalTo(TimelineEventEntityFields.ROOT.TYPE, filter.eventType)
+                and()
+                equalTo(TimelineEventEntityFields.ROOT.STATE_KEY, filter.stateKey)
+                endGroup()
+            }
+            if (index != filters.allowedTypes.size - 1) {
+                or()
+            }
+        }
+        endGroup()
     }
     if (filters.filterUseless) {
         not()

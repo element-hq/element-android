@@ -151,7 +151,7 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         beginGroup()
         var needOr = false
         if (settings.filters.filterTypes) {
-            val allowedTypes = settings.filters.allowedTypes.toTypedArray()
+            val allowedTypes = settings.filters.allowedTypes.map { it.eventType }.toTypedArray()
             not().`in`("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", allowedTypes)
             needOr = true
         }

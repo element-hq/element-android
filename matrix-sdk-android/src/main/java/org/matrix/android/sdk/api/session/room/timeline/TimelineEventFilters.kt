@@ -36,5 +36,5 @@ data class TimelineEventFilters(
         /**
          * If [filterTypes] is true, the list of types allowed by the list.
          */
-        val allowedTypes: List<String> = emptyList()
+        val allowedTypes: List<EventTypeFilter> = emptyList()
 )
