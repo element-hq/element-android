@@ -1880,7 +1880,7 @@
     <string name="command_description_rainbow">Посылает сообщение, окрашенное в цвет радуги</string>
     <string name="command_description_rainbow_emote">Посылает данную эмоцию, окрашенную в цвет радуги</string>
     <string name="settings_category_composer">Редактор сообщений</string>
-    <string name="room_settings_enable_encryption">Включить сквозное шифрование</string>
+    <string name="room_settings_enable_encryption">Включить сквозное шифрование…</string>
     <string name="room_settings_enable_encryption_warning">После включения шифрования оно не может быть отключено.</string>
     <string name="room_settings_enable_encryption_dialog_title">Активировать шифрование\?</string>
     <string name="room_settings_enable_encryption_dialog_content">После включения шифрование для комнаты не может быть отключено. Сообщения, отправленные в зашифрованном помещении, не могут быть замечены сервером, только участниками помещения. Включение шифрования может помешать правильной работе многих ботов и мостов.</string>
@@ -2351,4 +2351,13 @@
     <string name="qr_code">QR-код</string>
     <string name="send_bug_report_include_key_share_history">Отправить историю запросов на обмен ключами</string>
     <string name="start_chatting">Начать беседу</string>
+    <string name="direct_room_user_list_recent_title">Недавние</string>
+    <string name="room_created_summary_no_topic_creation_text">%s чтобы люди знали, о чём эта комната.</string>
+    <string name="this_is_the_beginning_of_dm">Это начало вашей истории диалога с %s.</string>
+    <string name="settings_export_trail">Экспорт аудита</string>
+    <string name="room_member_open_or_create_dm">Диалог</string>
+    <string name="a11y_create_direct_message_by_qr_code">Создать новый диалог через сканирование QR-кода</string>
+    <string name="a11y_create_direct_message_by_mxid">Создать новый диалог по Matrix ID</string>
+    <string name="identity_server_consent_dialog_title">Отправить электронную почту и номера телефонов</string>
+    <string name="settings_discovery_consent_title">Отправить электронную почту и номера телефонов</string>
 </resources>
