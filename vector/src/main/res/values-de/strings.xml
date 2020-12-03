@@ -2248,4 +2248,5 @@
     <string name="room_member_open_or_create_dm">Direktnachricht</string>
     <string name="send_bug_report_include_key_share_history">Geschichte der Anfragen von Schlüsselfreigaben senden</string>
     <string name="no_more_results">Keine weiteren Ergebnisse</string>
+    <string name="start_chatting">Starte die Diskussion</string>
 </resources>
