@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.media
 
+import androidx.collection.LruCache
 import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.media.MediaService
@@ -26,11 +27,22 @@ import javax.inject.Inject
 internal class DefaultMediaService @Inject constructor(
         private val clearPreviewUrlCacheTask: ClearPreviewUrlCacheTask,
         private val getPreviewUrlTask: GetPreviewUrlTask,
-        private val getRawPreviewUrlTask: GetRawPreviewUrlTask
+        private val getRawPreviewUrlTask: GetRawPreviewUrlTask,
+        private val urlsExtractor: UrlsExtractor
 ) : MediaService {
+    // Cache of extracted URLs
+    private val extractedUrlsCache = LruCache<String, List<String>>(1_000)
+
     override fun extractUrls(event: Event): List<String> {
-        TODO("Not yet implemented")
+        val cacheKey = event.cacheKey()
+        return extractedUrlsCache.get(cacheKey)
+                ?: let {
+                    urlsExtractor.extract(event)
+                            .also { extractedUrlsCache.put(cacheKey, it) }
+                }
     }
+
+    private fun Event.cacheKey() = "${eventId ?: ""}-${roomId ?: ""}"
 
     override suspend fun getRawPreviewUrl(url: String, timestamp: Long?): JsonDict {
         return getRawPreviewUrlTask.execute(GetRawPreviewUrlTask.Params(url, timestamp))
@@ -41,6 +53,7 @@ internal class DefaultMediaService @Inject constructor(
     }
 
     override suspend fun clearCache() {
+        extractedUrlsCache.evictAll()
         clearPreviewUrlCacheTask.execute(Unit)
     }
 }
