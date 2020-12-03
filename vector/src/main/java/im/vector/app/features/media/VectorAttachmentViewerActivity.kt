@@ -70,7 +70,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
     private var initialIndex = 0
     private var isAnimatingOut = false
 
-    var currentSourceProvider: BaseAttachmentProvider? = null
+    private var currentSourceProvider: BaseAttachmentProvider<*>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,36 +117,22 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         val room = args.roomId?.let { session.getRoom(it) }
 
         val inMemoryData = intent.getParcelableArrayListExtra<AttachmentData>(EXTRA_IN_MEMORY_DATA)
-        if (inMemoryData != null) {
-            val sourceProvider = dataSourceFactory.createProvider(inMemoryData, room, initialIndex)
-            val index = inMemoryData.indexOfFirst { it.eventId == args.eventId }
-            initialIndex = index
-            sourceProvider.interactionListener = this
-            setSourceProvider(sourceProvider)
-            this.currentSourceProvider = sourceProvider
-            if (savedInstanceState == null) {
-                pager2.setCurrentItem(index, false)
-                // The page change listener is not notified of the change...
-                pager2.post {
-                    onSelectedPositionChanged(index)
-                }
-            }
+        val sourceProvider = if (inMemoryData != null) {
+            initialIndex = inMemoryData.indexOfFirst { it.eventId == args.eventId }.coerceAtLeast(0)
+            dataSourceFactory.createProvider(inMemoryData, room)
         } else {
-            val events = room?.getAttachmentMessages()
-                    ?: emptyList()
-            val index = events.indexOfFirst { it.eventId == args.eventId }
-            initialIndex = index
-
-            val sourceProvider = dataSourceFactory.createProvider(events, index)
-            sourceProvider.interactionListener = this
-            setSourceProvider(sourceProvider)
-            this.currentSourceProvider = sourceProvider
-            if (savedInstanceState == null) {
-                pager2.setCurrentItem(index, false)
-                // The page change listener is not notified of the change...
-                pager2.post {
-                    onSelectedPositionChanged(index)
-                }
+            val events = room?.getAttachmentMessages().orEmpty()
+            initialIndex = events.indexOfFirst { it.eventId == args.eventId }.coerceAtLeast(0)
+            dataSourceFactory.createProvider(events)
+        }
+        sourceProvider.interactionListener = this
+        setSourceProvider(sourceProvider)
+        currentSourceProvider = sourceProvider
+        if (savedInstanceState == null) {
+            pager2.setCurrentItem(initialIndex, false)
+            // The page change listener is not notified of the change...
+            pager2.post {
+                onSelectedPositionChanged(initialIndex)
             }
         }
 
@@ -278,7 +264,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
     }
 
     override fun onShareTapped() {
-        this.currentSourceProvider?.getFileForSharing(currentPosition) { data ->
+        currentSourceProvider?.getFileForSharing(currentPosition) { data ->
             if (data != null && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
                 shareMedia(this@VectorAttachmentViewerActivity, data, getMimeTypeFromUri(this@VectorAttachmentViewerActivity, data.toUri()))
             }

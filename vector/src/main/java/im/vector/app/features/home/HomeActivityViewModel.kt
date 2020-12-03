@@ -78,29 +78,30 @@ class HomeActivityViewModel @AssistedInject constructor(
     }
 
     private fun observeCrossSigningReset() {
-        val safeActiveSession = activeSessionHolder.getSafeActiveSession()
-        val crossSigningService = safeActiveSession
-                ?.cryptoService()
-                ?.crossSigningService()
-        onceTrusted = crossSigningService
-                ?.allPrivateKeysKnown() ?: false
+        val safeActiveSession = activeSessionHolder.getSafeActiveSession() ?: return
+
+        onceTrusted = safeActiveSession
+                .cryptoService()
+                .crossSigningService().allPrivateKeysKnown()
 
         safeActiveSession
-                ?.rx()
-                ?.liveCrossSigningInfo(safeActiveSession.myUserId)
-                ?.subscribe {
+                .rx()
+                .liveCrossSigningInfo(safeActiveSession.myUserId)
+                .subscribe {
                     val isVerified = it.getOrNull()?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {
                         // cross signing keys have been reset
-                        // Tigger a popup to re-verify
-                        _viewEvents.post(
-                                HomeActivityViewEvents.OnCrossSignedInvalidated(
-                                        safeActiveSession.getUser(safeActiveSession.myUserId)?.toMatrixItem()
-                                )
-                        )
+                        // Trigger a popup to re-verify
+                        // Note: user can be null in case of logout
+                        safeActiveSession.getUser(safeActiveSession.myUserId)
+                                ?.toMatrixItem()
+                                ?.let { user ->
+                                    _viewEvents.post(HomeActivityViewEvents.OnCrossSignedInvalidated(user))
+                                }
                     }
                     onceTrusted = isVerified
-                }?.disposeOnClear()
+                }
+                .disposeOnClear()
     }
 
     private fun observeInitialSync() {

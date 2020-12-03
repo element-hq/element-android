@@ -26,7 +26,7 @@ import androidx.annotation.DrawableRes
 import im.vector.app.R
 import im.vector.app.core.platform.SimpleTextWatcher
 
-fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_filter,
+fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_search,
                            @DrawableRes clearIconRes: Int = R.drawable.ic_x_gray) {
     addTextChangedListener(object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
@@ -56,4 +56,16 @@ fun EditText.setupAsSearch(@DrawableRes searchIconRes: Int = R.drawable.ic_filte
         }
         return@OnTouchListener false
     })
+}
+
+/**
+ * Update the edit text value, only if necessary and move the cursor to the end of the text
+ */
+fun EditText.setTextSafe(value: String?) {
+    if (value != null && text.toString() != value) {
+        setText(value)
+        // To fix jumping cursor to the start https://github.com/airbnb/epoxy/issues/426
+        // Note: there is still a known bug if deleting char in the middle of the text, by long pressing on the backspace button.
+        setSelection(value.length)
+    }
 }

@@ -22,7 +22,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.features.home.room.list.widget.FabMenuView
+import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 
 @EpoxyModelClass(layout = R.layout.item_room_filter_footer)
 abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.Holder>() {
@@ -46,7 +46,7 @@ abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.
         val openRoomDirectory by bind<Button>(R.id.roomFilterFooterOpenRoomDirectory)
     }
 
-    interface FilteredRoomFooterItemListener : FabMenuView.Listener {
+    interface FilteredRoomFooterItemListener : NotifsFabMenuView.Listener {
         fun createRoom(initialName: String)
     }
 }

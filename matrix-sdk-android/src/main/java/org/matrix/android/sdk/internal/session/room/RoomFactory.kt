@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.room.alias.DefaultAliasService
 import org.matrix.android.sdk.internal.session.room.call.DefaultRoomCallService
 import org.matrix.android.sdk.internal.session.room.draft.DefaultDraftService
 import org.matrix.android.sdk.internal.session.room.membership.DefaultMembershipService
@@ -54,6 +55,7 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                                                       private val roomCallServiceFactory: DefaultRoomCallService.Factory,
                                                       private val readServiceFactory: DefaultReadService.Factory,
                                                       private val typingServiceFactory: DefaultTypingService.Factory,
+                                                      private val aliasServiceFactory: DefaultAliasService.Factory,
                                                       private val tagsServiceFactory: DefaultTagsService.Factory,
                                                       private val relationServiceFactory: DefaultRelationService.Factory,
                                                       private val membershipServiceFactory: DefaultMembershipService.Factory,
@@ -76,6 +78,7 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                 roomCallService = roomCallServiceFactory.create(roomId),
                 readService = readServiceFactory.create(roomId),
                 typingService = typingServiceFactory.create(roomId),
+                aliasService = aliasServiceFactory.create(roomId),
                 tagsService = tagsServiceFactory.create(roomId),
                 cryptoService = cryptoService,
                 relationService = relationServiceFactory.create(roomId),

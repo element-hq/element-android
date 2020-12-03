@@ -79,6 +79,7 @@
     <string name="pause_video">Pause</string>
     <string name="dismiss">Dismiss</string>
     <string name="reset">Reset</string>
+    <string name="start_chatting">Start Chatting</string>
 
 
     <!-- First param will be replace by the value of ongoing_conference_call_voice, and second one by the value of ongoing_conference_call_video -->
@@ -136,6 +137,8 @@
     <string name="action_open">Open</string>
     <string name="action_close">Close</string>
     <string name="action_copy">Copy</string>
+    <string name="action_add">Add</string>
+    <string name="action_unpublish">Unpublish</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
 
@@ -428,6 +431,8 @@
     <string name="permissions_msg_contacts_warning_other_androids">Element can check your address book to find other Matrix users based on their email and phone numbers.\n\nDo you agree to share your address book for this purpose?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
+    <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
+    <string name="permissions_denied_add_contact">Allow permission to access your contacts.</string>
 
     <!-- medias slider string -->
     <string name="media_slider_saved">Saved</string>
@@ -1021,7 +1026,43 @@
     <string name="room_settings_room_access_rules_pref_title">Room Access</string>
     <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
+    <string name="room_settings_room_access_title">Room access</string>
+
+    <!-- room settings : alias -->
+    <string name="room_settings_alias_title">Room addresses</string>
+    <string name="room_settings_alias_subtitle">See and managed addresses of this room, and its visibility in the room directory.</string>
+
+    <string name="room_alias_title">Room Addresses</string>
+    <string name="room_alias_published_alias_title">Published Addresses</string>
+    <string name="room_alias_published_alias_subtitle">Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.</string>
+    <string name="room_alias_published_alias_main">This is the main address</string>
+    <string name="room_alias_main_address_hint">Main address</string>
+    <string name="room_alias_published_other">Other published addresses:</string>
+    <string name="room_alias_published_alias_add_manually">Publish a new address manually</string>
+    <string name="room_alias_published_alias_add_manually_submit">Publish</string>
+    <string name="room_alias_unpublish_confirmation">Unpublish the address \"%1$s\"?</string>
+    <string name="room_alias_delete_confirmation">Delete the address \"%1$s\"?</string>
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_publish">Publish this room to the public in %1$s\'s room directory?</string>
+    <string name="room_alias_address_empty_can_add">No other published addresses yet, add one below.</string>
+    <string name="room_alias_address_empty">No other published addresses yet.</string>
+    <string name="room_alias_address_hint">New published address (e.g. #alias:server)</string>
+
+    <string name="room_alias_local_address_title">Local Addresses</string>
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_local_address_subtitle">Set addresses for this room so users can find this room through your homeserver (%1$s)</string>
+    <string name="room_alias_local_address_empty">This room has no local addresses</string>
+    <string name="room_alias_local_address_add">Add a local address</string>
+
+    <string name="room_alias_action_publish">Publish this address</string>
+    <string name="room_alias_action_unpublish">Unpublish this address</string>
+
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_publish_to_directory">Publish this room to the public in %1$s\'s room directory?</string>
+    <!-- Parameter will be a technical error message -->
+    <string name="room_alias_publish_to_directory_error">Unable to retrieve the current room directory visibility (%1$s).</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Anyone</string>
@@ -1069,8 +1110,8 @@
     <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified for this room."</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Main address warnings</string>
 
-    <string name="room_settings_set_main_address">Set as Main Address</string>
-    <string name="room_settings_unset_main_address">Unset as Main Address</string>
+    <string name="room_settings_set_main_address">Set as main address</string>
+    <string name="room_settings_unset_main_address">Unset as main address</string>
     <string name="room_settings_copy_room_id">Copy Room ID</string>
     <string name="room_settings_copy_room_address">Copy Room Address</string>
 
@@ -1645,9 +1686,9 @@
     <string name="room_list_catchup_welcome_title">Welcome home!</string>
     <string name="room_list_catchup_welcome_body">Catch up on unread messages here</string>
     <string name="room_list_people_empty_title">Conversations</string>
-    <string name="room_list_people_empty_body">Your direct message conversations will be displayed here</string>
+    <string name="room_list_people_empty_body">Your direct message conversations will be displayed here. Tap the + bottom right to start some.</string>
     <string name="room_list_rooms_empty_title">Rooms</string>
-    <string name="room_list_rooms_empty_body">Your rooms will be displayed here</string>
+    <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + bottom right to find existing ones or start some of your own.</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
     <string name="reactions_agree">Agree</string>
@@ -1758,6 +1799,7 @@
     <string name="room_filtering_footer_open_room_directory">View the room directory</string>
 
     <string name="room_directory_search_hint">Name or ID (#example:matrix.org)</string>
+    <string name="user_directory_search_hint">Search by name or ID</string>
 
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
     <string name="labs_show_unread_notifications_as_tab">Add a dedicated tab for unread notifications on main screen.</string>
@@ -1765,10 +1807,16 @@
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
     <string name="add_by_matrix_id">Add by matrix ID</string>
+    <string name="add_by_qr_code">Add by QR code</string>
+    <string name="qr_code">QR code</string>
     <string name="creating_direct_room">"Creating room…"</string>
     <string name="direct_room_no_known_users">"No result found, use Add by matrix ID to search on server."</string>
     <string name="direct_room_start_search">"Start typing to get results"</string>
     <string name="direct_room_filter_hint">"Filter by username or ID…"</string>
+    <string name="direct_room_user_list_recent_title">Recent</string>
+    <string name="direct_room_user_list_known_title">Known Users</string>
+    <string name="direct_room_user_list_contacts_title">Contacts</string>
+    <string name="direct_room_user_list_suggestions_title">Suggestions</string>
 
     <string name="joining_room">"Joining room…"</string>
 
@@ -1797,6 +1845,14 @@
     <string name="settings_discovery_confirm_mail">We sent you a confirm email to %s, check your email and click on the confirmation link</string>
     <string name="settings_discovery_confirm_mail_not_clicked">We sent you a confirm email to %s, please first check your email and click on the confirmation link</string>
     <string name="settings_discovery_mail_pending">Pending</string>
+    <string name="settings_discovery_consent_title">Send emails and phone numbers</string>
+    <string name="settings_discovery_consent_notice_on">You have given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
+    <string name="settings_discovery_consent_notice_off">You have not given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
+    <string name="settings_discovery_consent_action_revoke">Revoke my consent</string>
+    <string name="settings_discovery_consent_action_give_consent">Give consent</string>
+
+    <string name="identity_server_consent_dialog_title">Send emails and phone numbers</string>
+    <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured Identity Server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
     <string name="settings_discovery_bad_identity_server">Could not connect to identity server</string>
@@ -1824,6 +1880,8 @@
     <string name="a11y_create_menu_open">Open the create room menu</string>
     <string name="a11y_create_menu_close">Close the create room menu…</string>
     <string name="a11y_create_direct_message">Create a new direct conversation</string>
+    <string name="a11y_create_direct_message_by_mxid">Create a new direct conversation by Matrix ID</string>
+    <string name="a11y_create_direct_message_by_qr_code">Create a new direct conversation by scanning a QR code</string>
     <string name="a11y_create_room">Create a new room</string>
     <string name="a11y_close_keys_backup_banner">Close keys backup banner</string>
     <string name="a11y_show_password">Show password</string>
@@ -1855,6 +1913,8 @@
     <string name="attachment_type_sticker">"Sticker"</string>
     <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
+
+    <string name="attachment_viewer_item_x_of_y">%1$d of %2$d</string>
 
     <string name="uploads_media_title">MEDIA</string>
     <string name="uploads_media_no_result">There are no media in this room</string>
@@ -2090,6 +2150,18 @@
     <string name="create_room_encryption_title">"Enable encryption"</string>
     <string name="create_room_encryption_description">"Once enabled, encryption cannot be disabled."</string>
 
+    <string name="show_advanced">Show advanced</string>
+    <string name="hide_advanced">Hide advanced</string>
+
+    <string name="create_room_disable_federation_title">Block anyone not part of %s from ever joining this room</string>
+    <string name="create_room_disable_federation_description">You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.</string>
+
+    <string name="create_room_alias_hint">Room address</string>
+    <string name="create_room_alias_already_in_use">This address is already in use</string>
+    <string name="create_room_alias_empty">Please provide a room address</string>
+    <string name="create_room_alias_invalid">Some characters are not allowed</string>
+    <string name="create_room_in_progress">Creating room…</string>
+
     <string name="login_error_threepid_denied">Your email domain is not authorized to register on this server</string>
 
     <string name="verification_conclusion_warning">Untrusted sign in</string>
@@ -2196,7 +2268,8 @@
     <!-- Title for category in the settings which affect the behavior of the message editor (ex: enable Markdown, send typing notification, etc.) -->
     <string name="settings_category_composer">Message editor</string>
 
-    <string name="room_settings_enable_encryption">Enable end-to-end encryption</string>
+    <string name="room_settings_enable_encryption">Enable end-to-end encryption…</string>
+    <string name="room_settings_enable_encryption_no_permission">You don\'t have permission to enable encryption in this room.</string>
     <string name="room_settings_enable_encryption_warning">Once enabled, encryption cannot be disabled.</string>
 
     <string name="room_settings_enable_encryption_dialog_title">Enable encryption?</string>
@@ -2399,6 +2472,13 @@
     <string name="room_created_summary_item_by_you">You created and configured the room.</string>
     <string name="direct_room_created_summary_item">%s joined.</string>
     <string name="direct_room_created_summary_item_by_you">You joined.</string>
+    <string name="this_is_the_beginning_of_room">This is the beginning of %s.</string>
+    <string name="this_is_the_beginning_of_room_no_name">This is the beginning of this conversation.</string>
+    <string name="this_is_the_beginning_of_dm">This is the beginning of your direct message history with %s.</string>
+    <!-- First param will be replaced by the value of add_a_topic_link_text, that will be clickable-->
+    <string name="room_created_summary_no_topic_creation_text">%s to let people know what this room is about.</string>
+    <string name="add_a_topic_link_text">Add a topic</string>
+    <string name="topic_prefix">"Topic: "</string>
 
     <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing the same shield?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Almost there! Waiting for confirmation…</string>
@@ -2507,16 +2587,26 @@
     <string name="create_room_dm_failure">"We couldn't create your DM. Please check the users you want to invite and try again."</string>
 
     <string name="add_members_to_room">Add members</string>
+    <string name="add_people">Add people</string>
     <string name="invite_users_to_room_action_invite">INVITE</string>
     <string name="inviting_users_to_room">Inviting users…</string>
     <string name="invite_users_to_room_title">Invite Users</string>
+    <string name="invite_friends">Invite friends</string>
+    <string name="invite_friends_text">Hey, talk to me on Element: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Join me on element</string>
     <string name="invitation_sent_to_one_user">Invitation sent to %1$s</string>
     <string name="invitations_sent_to_two_users">Invitations sent to %1$s and %2$s</string>
+    <string name="not_a_valid_qr_code">"It's not a valid matrix QR code"</string>
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="one">Invitations sent to %1$s and one more</item>
         <item quantity="other">Invitations sent to %1$s and %2$d more</item>
     </plurals>
     <string name="invite_users_to_room_failure">We could not invite users. Please check the users you want to invite and try again.</string>
+
+    <string name="user_code_scan">Scan a QR code</string>
+    <string name="user_code_share">Share my code</string>
+    <string name="user_code_my_code">My code</string>
+    <string name="user_code_info_text">Share this code with people so they can scan it to add you and start chatting.</string>
 
     <string name="choose_locale_current_locale_title">Current language</string>
     <string name="choose_locale_other_locales_title">Other available languages</string>
@@ -2531,6 +2621,7 @@
     <string name="identity_server_error_bulk_sha256_not_supported">For your privacy, Element only supports sending hashed user emails and phone number.</string>
     <string name="identity_server_error_binding_error">The association has failed.</string>
     <string name="identity_server_error_no_current_binding_error">The is no current association with this identifier.</string>
+    <string name="identity_server_user_consent_not_provided">The user consent has not been provided.</string>
 
     <string name="identity_server_set_default_notice">Your homeserver (%1$s) proposes to use %2$s for your identity server</string>
     <string name="identity_server_set_default_submit">Use %1$s</string>
@@ -2570,6 +2661,8 @@
     <string name="room_settings_name_hint">Room Name</string>
     <string name="room_settings_topic_hint">Topic</string>
     <string name="room_settings_save_success">You changed room settings successfully</string>
+    <string name="room_settings_set_avatar">Set avatar</string>
+
 
     <string name="notice_crypto_unable_to_decrypt_final">You cannot access this message</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Waiting for this message, this may take a while</string>
@@ -2597,6 +2690,7 @@
     <string name="loading_contact_book">Retrieving your contacts…</string>
     <string name="empty_contact_book">Your contact book is empty</string>
     <string name="contacts_book_title">Contacts book</string>
+    <string name="phone_book_perform_lookup">Search for contacts on Matrix</string>
 
     <string name="three_pid_revoke_invite_dialog_title">Revoke invite</string>
     <string name="three_pid_revoke_invite_dialog_content">Revoke invite to %1$s?</string>
@@ -2634,13 +2728,23 @@
     <string name="settings_security_pin_code_grace_period_title">Require PIN after 2 minutes</string>
     <string name="settings_security_pin_code_grace_period_summary_on">PIN code is required after 2 minutes of not using Element.</string>
     <string name="settings_security_pin_code_grace_period_summary_off">PIN code is required every time you open Element.</string>
+    <string name="settings_security_pin_code_change_pin_title">Change PIN</string>
+    <string name="settings_security_pin_code_change_pin_summary">Change your current PIN</string>
     <string name="auth_pin_confirm_to_disable_title">Confirm PIN to disable PIN</string>
     <string name="error_opening_banned_room">Can\'t open a room where you are banned from.</string>
     <string name="room_error_not_found">Can\'t find this room. Make sure it exists.</string>
+
+    <!-- Add by QR code -->
+    <string name="share_by_text">Share by text</string>
+    <string name="cannot_dm_self">Cannot DM yourself!</string>
+    <string name="invalid_qr_code_uri">Invalid QR code (Invalid URI)!</string>
+    <string name="qr_code_not_scanned">QR code not scanned!</string>
 
     <!-- Universal link -->
     <string name="universal_link_malformed">The link was malformed</string>
     <string name="warning_room_not_created_yet">The room is not yet created. Cancel the room creation?</string>
     <string name="warning_unsaved_change">There are unsaved changes. Discard the changes?</string>
     <string name="warning_unsaved_change_discard">Discard changes</string>
+
+    <string name="matrix_to_card_title">Matrix Link</string>
 </resources>

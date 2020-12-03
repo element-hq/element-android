@@ -136,13 +136,19 @@ fun startSharePlainTextIntent(fragment: Fragment,
                               activityResultLauncher: ActivityResultLauncher<Intent>?,
                               chooserTitle: String?,
                               text: String,
-                              subject: String? = null) {
+                              subject: String? = null,
+                              extraTitle: String? = null) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
     share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
     // Add data to the intent, the receiving app will decide what to do with it.
     share.putExtra(Intent.EXTRA_SUBJECT, subject)
     share.putExtra(Intent.EXTRA_TEXT, text)
+
+    extraTitle?.let {
+        share.putExtra(Intent.EXTRA_TITLE, it)
+    }
+
     val intent = Intent.createChooser(share, chooserTitle)
     try {
         if (activityResultLauncher != null) {

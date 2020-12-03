@@ -13,6 +13,7 @@
     android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp">
 
+    <!-- Used for sub items -->
     <Space
         android:id="@+id/actionStartSpace"
         android:layout_width="32dp"
@@ -25,37 +26,44 @@
 
     <ImageView
         android:id="@+id/actionIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="16dp"
         android:layout_toEndOf="@id/actionStartSpace"
         android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/actionTitleContainer"
         app:layout_constraintStart_toEndOf="@+id/actionStartSpace"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_room_actions_notifications_all"
         app:tint="?riotx_text_secondary"
-        tools:ignore="MissingPrefix" />
+        tools:ignore="MissingPrefix"
+        tools:src="@drawable/ic_room_actions_notifications_all" />
 
-    <TextView
-        android:id="@+id/actionTitle"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/actionTitleContainer"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="16dp"
-        android:drawablePadding="16dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="17sp"
-        app:layout_constrainedWidth="true"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/actionSelected"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@id/actionStartSpace"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="zbla azjazjaz s sdkqdskdsqk kqsdkdqsk kdqsksqdk" />
+        app:layout_constraintStart_toEndOf="@id/actionIcon"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/actionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:drawablePadding="16dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="?riotx_text_secondary"
+            android:textSize="17sp"
+            tools:drawableEnd="@drawable/ic_material_expand_more_black"
+            tools:drawableTint="?riotx_text_secondary"
+            tools:text="kdqsksqdk" />
+
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/actionSelected"
@@ -66,9 +74,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible"
         app:tint="@color/riotx_accent"
-        tools:ignore="MissingPrefix" />
-
+        tools:ignore="MissingPrefix"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

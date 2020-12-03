@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.room
 
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
@@ -39,4 +40,14 @@ interface RoomDirectoryService {
      * Includes both the available protocols and all fields required for queries against each protocol.
      */
     fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>): Cancelable
+
+    /**
+     * Get the visibility of a room in the directory
+     */
+    suspend fun getRoomDirectoryVisibility(roomId: String): RoomDirectoryVisibility
+
+    /**
+     * Set the visibility of a room in the directory
+     */
+    suspend fun setRoomDirectoryVisibility(roomId: String, roomDirectoryVisibility: RoomDirectoryVisibility)
 }

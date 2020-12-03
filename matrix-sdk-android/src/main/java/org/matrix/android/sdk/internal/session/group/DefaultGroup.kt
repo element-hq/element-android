@@ -16,20 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.group
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.group.Group
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 
 internal class DefaultGroup(override val groupId: String,
-                            private val taskExecutor: TaskExecutor,
                             private val getGroupDataTask: GetGroupDataTask) : Group {
 
-    override fun fetchGroupData(callback: MatrixCallback<Unit>): Cancelable {
+    override suspend fun fetchGroupData() {
         val params = GetGroupDataTask.Params.FetchWithIds(listOf(groupId))
-        return getGroupDataTask.configureWith(params) {
-            this.callback = callback
-        }.executeBy(taskExecutor)
+        getGroupDataTask.execute(params)
     }
 }

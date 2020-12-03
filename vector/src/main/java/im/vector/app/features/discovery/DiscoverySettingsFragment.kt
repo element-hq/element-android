@@ -55,7 +55,7 @@ class DiscoverySettingsFragment @Inject constructor(
         sharedViewModel = activityViewModelProvider.get(DiscoverySharedViewModel::class.java)
 
         controller.listener = this
-        recyclerView.configureWith(controller)
+        genericRecyclerView.configureWith(controller)
 
         sharedViewModel.navigateEvent.observeEvent(this) {
             when (it) {
@@ -74,7 +74,7 @@ class DiscoverySettingsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         controller.listener = null
         super.onDestroyView()
     }
@@ -167,6 +167,23 @@ class DiscoverySettingsFragment @Inject constructor(
                     .setPositiveButton(R.string.disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.DisconnectIdentityServer) }
                     .setNegativeButton(R.string.cancel, null)
                     .show()
+        }
+    }
+
+    override fun onTapUpdateUserConsent(newValue: Boolean) {
+        if (newValue) {
+            withState(viewModel) { state ->
+                AlertDialog.Builder(requireActivity())
+                        .setTitle(R.string.identity_server_consent_dialog_title)
+                        .setMessage(getString(R.string.identity_server_consent_dialog_content, state.identityServer.invoke()))
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(true))
+                        }
+                        .setNegativeButton(R.string.no, null)
+                        .show()
+            }
+        } else {
+            viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(false))
         }
     }
 

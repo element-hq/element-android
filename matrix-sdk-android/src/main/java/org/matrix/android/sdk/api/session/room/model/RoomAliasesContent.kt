@@ -21,6 +21,9 @@ import com.squareup.moshi.JsonClass
 
 /**
  * Class representing the EventType.STATE_ROOM_ALIASES state event content
+ * Note that this Event has been deprecated, see
+ * - https://matrix.org/docs/spec/client_server/r0.6.1#historical-events
+ * - https://github.com/matrix-org/matrix-doc/pull/2432
  */
 @JsonClass(generateAdapter = true)
 data class RoomAliasesContent(

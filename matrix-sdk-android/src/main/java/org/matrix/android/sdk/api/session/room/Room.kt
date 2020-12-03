@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.room
 
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.room.alias.AliasService
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.api.session.room.crypto.RoomCryptoService
 import org.matrix.android.sdk.api.session.room.members.MembershipService
@@ -46,6 +47,7 @@ interface Room :
         DraftService,
         ReadService,
         TypingService,
+        AliasService,
         TagsService,
         MembershipService,
         StateService,

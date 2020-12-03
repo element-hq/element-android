@@ -1002,4 +1002,20 @@
     <string name="sign_out_bottom_sheet_backing_up_keys">Резервне копіювання ключів…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Якщо вийти зараз, ви втратите свої зашифровані повідомлення</string>
     <string name="title_activity_verify_device">Перевірка сеансу</string>
+    <string name="attachment_type_sticker">Стікер</string>
+    <string name="attachment_type_gallery">Галерея</string>
+    <string name="attachment_type_file">Файл</string>
+    <string name="attachment_type_dialog_title">Додати зображення з</string>
+    <string name="attachment_type_contact">Контакт</string>
+    <string name="attachment_type_camera">Камера</string>
+    <string name="attachment_type_audio">Аудіо</string>
+    <string name="room_filtering_footer_create_new_room">Створити нову кімнату</string>
+    <string name="room_list_rooms_empty_title">Кімнати</string>
+    <string name="search_is_not_supported_in_e2e_room">Пошук в зашифрованих кімнатах не підтримується на даний момент.</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Запитувати підтвердження перед початком дзвінку</string>
+    <string name="settings_call_show_confirmation_dialog_title">Запобігати випадковим дзвінкам</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">Мені не потрібні мої зашифровані повідомлення</string>
+    <string name="warning_unsaved_change_discard">Скасувати зміни</string>
+    <string name="login_error_ssl_other">SSL помилка.</string>
+    <string name="cannot_call_yourself_with_invite">Ви не можете здійснити дзвінок із самим собою, дочекайтесь, доки інші учасники приймуть ваше запрошення</string>
 </resources>

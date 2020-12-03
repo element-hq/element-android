@@ -1204,7 +1204,7 @@ internal class DefaultVerificationService @Inject constructor(
         Timber.i("## Requesting verification to user: $otherUserId with device list $otherDevices")
 
         val targetDevices = otherDevices ?: cryptoStore.getUserDevices(otherUserId)
-                ?.values?.map { it.deviceId } ?: emptyList()
+                ?.values?.map { it.deviceId }.orEmpty()
 
         val requestsForUser = pendingRequests.getOrPut(otherUserId) { mutableListOf() }
 

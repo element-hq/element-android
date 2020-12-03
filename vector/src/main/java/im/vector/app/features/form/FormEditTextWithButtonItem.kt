@@ -26,6 +26,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.extensions.setTextSafe
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_form_text_input_with_button)
@@ -61,9 +62,7 @@ abstract class FormEditTextWithButtonItem : VectorEpoxyModel<FormEditTextWithBut
         holder.textInputLayout.hint = hint
 
         // Update only if text is different
-        if (holder.textInputEditText.text.toString() != value) {
-            holder.textInputEditText.setText(value)
-        }
+        holder.textInputEditText.setTextSafe(value)
         holder.textInputEditText.isEnabled = enabled
 
         holder.textInputEditText.addTextChangedListener(onTextChangeListener)

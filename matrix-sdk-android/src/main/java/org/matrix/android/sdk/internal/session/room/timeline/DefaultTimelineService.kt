@@ -103,7 +103,7 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                     .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
                     .findAll()
                     ?.mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() || it.root.isVideoMessage() } }
-                    ?: emptyList()
+                    .orEmpty()
         }
     }
 }

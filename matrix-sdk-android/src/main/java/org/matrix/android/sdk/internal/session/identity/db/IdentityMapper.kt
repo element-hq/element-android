@@ -26,7 +26,8 @@ internal object IdentityMapper {
                 identityServerUrl = entity.identityServerUrl,
                 token = entity.token,
                 hashLookupPepper = entity.hashLookupPepper,
-                hashLookupAlgorithm = entity.hashLookupAlgorithm.toList()
+                hashLookupAlgorithm = entity.hashLookupAlgorithm.toList(),
+                userConsent = entity.userConsent
         )
     }
 

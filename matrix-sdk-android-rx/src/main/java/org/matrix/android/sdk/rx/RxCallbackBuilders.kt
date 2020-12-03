@@ -21,34 +21,36 @@ import org.matrix.android.sdk.api.util.Cancelable
 import io.reactivex.Completable
 import io.reactivex.Single
 
-fun <T> singleBuilder(builder: (callback: MatrixCallback<T>) -> Cancelable): Single<T> = Single.create {
-    val callback: MatrixCallback<T> = object : MatrixCallback<T> {
+fun <T> singleBuilder(builder: (MatrixCallback<T>) -> Cancelable): Single<T> = Single.create { emitter ->
+    val callback = object : MatrixCallback<T> {
         override fun onSuccess(data: T) {
-            it.onSuccess(data)
+            // Add `!!` to fix the warning:
+            // "Type mismatch: type parameter with nullable bounds is used T is used where T was expected. This warning will become an error soon"
+            emitter.onSuccess(data!!)
         }
 
         override fun onFailure(failure: Throwable) {
-            it.tryOnError(failure)
+            emitter.tryOnError(failure)
         }
     }
     val cancelable = builder(callback)
-    it.setCancellable {
+    emitter.setCancellable {
         cancelable.cancel()
     }
 }
 
-fun <T> completableBuilder(builder: (callback: MatrixCallback<T>) -> Cancelable): Completable = Completable.create {
-    val callback: MatrixCallback<T> = object : MatrixCallback<T> {
+fun <T> completableBuilder(builder: (MatrixCallback<T>) -> Cancelable): Completable = Completable.create { emitter ->
+    val callback = object : MatrixCallback<T> {
         override fun onSuccess(data: T) {
-            it.onComplete()
+            emitter.onComplete()
         }
 
         override fun onFailure(failure: Throwable) {
-            it.tryOnError(failure)
+            emitter.tryOnError(failure)
         }
     }
     val cancelable = builder(callback)
-    it.setCancellable {
+    emitter.setCancellable {
         cancelable.cancel()
     }
 }

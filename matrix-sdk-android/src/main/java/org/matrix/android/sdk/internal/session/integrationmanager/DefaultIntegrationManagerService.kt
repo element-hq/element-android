@@ -16,10 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.integrationmanager
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
-import org.matrix.android.sdk.api.util.Cancelable
 import javax.inject.Inject
 
 internal class DefaultIntegrationManagerService @Inject constructor(private val integrationManager: IntegrationManager) : IntegrationManagerService {
@@ -44,20 +42,20 @@ internal class DefaultIntegrationManagerService @Inject constructor(private val 
         return integrationManager.isIntegrationEnabled()
     }
 
-    override fun setIntegrationEnabled(enable: Boolean, callback: MatrixCallback<Unit>): Cancelable {
-        return integrationManager.setIntegrationEnabled(enable, callback)
+    override suspend fun setIntegrationEnabled(enable: Boolean) {
+        integrationManager.setIntegrationEnabled(enable)
     }
 
-    override fun setWidgetAllowed(stateEventId: String, allowed: Boolean, callback: MatrixCallback<Unit>): Cancelable {
-        return integrationManager.setWidgetAllowed(stateEventId, allowed, callback)
+    override suspend fun setWidgetAllowed(stateEventId: String, allowed: Boolean) {
+        integrationManager.setWidgetAllowed(stateEventId, allowed)
     }
 
     override fun isWidgetAllowed(stateEventId: String): Boolean {
         return integrationManager.isWidgetAllowed(stateEventId)
     }
 
-    override fun setNativeWidgetDomainAllowed(widgetType: String, domain: String, allowed: Boolean, callback: MatrixCallback<Unit>): Cancelable {
-        return integrationManager.setNativeWidgetDomainAllowed(widgetType, domain, allowed, callback)
+    override suspend fun setNativeWidgetDomainAllowed(widgetType: String, domain: String, allowed: Boolean) {
+        integrationManager.setNativeWidgetDomainAllowed(widgetType, domain, allowed)
     }
 
     override fun isNativeWidgetDomainAllowed(widgetType: String, domain: String): Boolean {

@@ -68,8 +68,8 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         if (encryptedRoom) {
             val room = aliceSession.getRoom(roomId)!!
 
-            mTestHelper.doSync<Unit> {
-                room.enableEncryption(callback = it)
+            mTestHelper.runBlockingTest {
+                room.enableEncryption()
             }
         }
 

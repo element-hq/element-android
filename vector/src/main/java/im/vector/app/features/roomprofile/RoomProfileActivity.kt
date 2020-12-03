@@ -36,6 +36,7 @@ import im.vector.app.features.room.RequireActiveMembershipViewState
 import im.vector.app.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.app.features.roomprofile.members.RoomMemberListFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
+import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import javax.inject.Inject
 
@@ -46,10 +47,16 @@ class RoomProfileActivity :
 
     companion object {
 
-        fun newIntent(context: Context, roomId: String): Intent {
+        private const val EXTRA_DIRECT_ACCESS = "EXTRA_DIRECT_ACCESS"
+
+        const val EXTRA_DIRECT_ACCESS_ROOM_ROOT = 0
+        const val EXTRA_DIRECT_ACCESS_ROOM_SETTINGS = 1
+
+        fun newIntent(context: Context, roomId: String, directAccess: Int?): Intent {
             val roomProfileArgs = RoomProfileArgs(roomId)
             return Intent(context, RoomProfileActivity::class.java).apply {
                 putExtra(MvRx.KEY_ARG, roomProfileArgs)
+                putExtra(EXTRA_DIRECT_ACCESS, directAccess)
             }
         }
     }
@@ -80,16 +87,23 @@ class RoomProfileActivity :
         sharedActionViewModel = viewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
         roomProfileArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
         if (isFirstCreation()) {
-            addFragment(R.id.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
+            when (intent?.extras?.getInt(EXTRA_DIRECT_ACCESS, EXTRA_DIRECT_ACCESS_ROOM_ROOT)) {
+                EXTRA_DIRECT_ACCESS_ROOM_SETTINGS -> {
+                    addFragment(R.id.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
+                    addFragmentToBackstack(R.id.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
+                }
+                else -> addFragment(R.id.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
+            }
         }
         sharedActionViewModel
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is RoomProfileSharedAction.OpenRoomMembers       -> openRoomMembers()
-                        is RoomProfileSharedAction.OpenRoomSettings      -> openRoomSettings()
-                        is RoomProfileSharedAction.OpenRoomUploads       -> openRoomUploads()
-                        is RoomProfileSharedAction.OpenBannedRoomMembers -> openBannedRoomMembers()
+                        is RoomProfileSharedAction.OpenRoomMembers         -> openRoomMembers()
+                        is RoomProfileSharedAction.OpenRoomSettings        -> openRoomSettings()
+                        is RoomProfileSharedAction.OpenRoomAliasesSettings -> openRoomAlias()
+                        is RoomProfileSharedAction.OpenRoomUploads         -> openRoomUploads()
+                        is RoomProfileSharedAction.OpenBannedRoomMembers   -> openBannedRoomMembers()
                     }
                 }
                 .disposeOnDestroy()
@@ -121,6 +135,10 @@ class RoomProfileActivity :
 
     private fun openRoomSettings() {
         addFragmentToBackstack(R.id.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
+    }
+
+    private fun openRoomAlias() {
+        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomAliasFragment::class.java, roomProfileArgs)
     }
 
     private fun openRoomMembers() {

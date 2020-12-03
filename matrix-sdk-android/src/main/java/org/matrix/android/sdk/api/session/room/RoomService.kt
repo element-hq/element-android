@@ -19,6 +19,7 @@ package org.matrix.android.sdk.api.session.room
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.util.Cancelable
@@ -122,6 +123,11 @@ interface RoomService {
                          callback: MatrixCallback<Optional<String>>): Cancelable
 
     /**
+     * Delete a room alias
+     */
+    suspend fun deleteRoomAlias(roomAlias: String)
+
+    /**
      * Return a live data of all local changes membership that happened since the session has been opened.
      * It allows you to track this in your client to known what is currently being processed by the SDK.
      * It won't know anything about change being done in other client.
@@ -141,4 +147,20 @@ interface RoomService {
      *  - the power level of the users are not taken into account. Normally in a DM, the 2 members are admins of the room
      */
     fun getExistingDirectRoomWithUser(otherUserId: String): String?
+
+    /**
+     * Get a room member for the tuple {userId,roomId}
+     * @param userId the userId to look for.
+     * @param roomId the roomId to look for.
+     * @return the room member or null
+     */
+    fun getRoomMember(userId: String, roomId: String): RoomMemberSummary?
+
+    /**
+     * Observe a live room member for the tuple {userId,roomId}
+     * @param userId the userId to look for.
+     * @param roomId the roomId to look for.
+     * @return a LiveData of the optional found room member
+     */
+    fun getRoomMemberLive(userId: String, roomId: String): LiveData<Optional<RoomMemberSummary>>
 }

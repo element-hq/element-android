@@ -17,32 +17,44 @@
 package org.matrix.android.sdk.internal.session.room
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.mapper.asDomain
+import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
+import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
+import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateBreadcrumbsTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
+import org.matrix.android.sdk.internal.util.fetchCopied
 import javax.inject.Inject
 
 internal class DefaultRoomService @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
         private val createRoomTask: CreateRoomTask,
         private val joinRoomTask: JoinRoomTask,
         private val markAllRoomsReadTask: MarkAllRoomsReadTask,
         private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
         private val roomIdByAliasTask: GetRoomIdByAliasTask,
+        private val deleteRoomAliasTask: DeleteRoomAliasTask,
         private val roomGetter: RoomGetter,
         private val roomSummaryDataSource: RoomSummaryDataSource,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
@@ -115,7 +127,31 @@ internal class DefaultRoomService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
+    override suspend fun deleteRoomAlias(roomAlias: String) {
+        deleteRoomAliasTask.execute(DeleteRoomAliasTask.Params(roomAlias))
+    }
+
     override fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>> {
         return roomChangeMembershipStateDataSource.getLiveStates()
+    }
+
+    override fun getRoomMember(userId: String, roomId: String): RoomMemberSummary? {
+        val roomMemberEntity = monarchy.fetchCopied {
+            RoomMemberHelper(it, roomId).getLastRoomMember(userId)
+        }
+        return roomMemberEntity?.asDomain()
+    }
+
+    override fun getRoomMemberLive(userId: String, roomId: String): LiveData<Optional<RoomMemberSummary>> {
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm ->
+                    RoomMemberHelper(realm, roomId).queryRoomMembersEvent()
+                            .equalTo(RoomMemberSummaryEntityFields.USER_ID, userId)
+                },
+                { it.asDomain() }
+        )
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().toOptional()
+        }
     }
 }

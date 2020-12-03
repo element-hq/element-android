@@ -82,7 +82,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/recyclerViewBarrier"
+        android:id="@+id/timelineRecyclerViewBarrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="top"
@@ -113,11 +113,11 @@
         tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/timelineRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="always"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewBarrier"
+        app:layout_constraintBottom_toTopOf="@+id/timelineRecyclerViewBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activeConferenceView"

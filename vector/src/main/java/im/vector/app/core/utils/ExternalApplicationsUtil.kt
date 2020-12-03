@@ -29,6 +29,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.Browser
 import android.provider.MediaStore
+import android.provider.Settings
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -445,6 +446,19 @@ fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID
         } catch (activityNotFoundException: ActivityNotFoundException) {
             activity.toast(R.string.error_no_external_application_found)
         }
+    }
+}
+
+fun openAppSettingsPage(activity: Activity) {
+    try {
+        activity.startActivity(
+                Intent().apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    data = Uri.fromParts("package", activity.packageName, null)
+                })
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        activity.toast(R.string.error_no_external_application_found)
     }
 }
 

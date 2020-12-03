@@ -23,11 +23,9 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.core.utils.toast
+import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.LoadingFragment
 import im.vector.app.features.login.LoginActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class PermalinkHandlerActivity : VectorBaseActivity() {
@@ -45,23 +43,28 @@ class PermalinkHandlerActivity : VectorBaseActivity() {
         if (isFirstCreation()) {
             replaceFragment(R.id.simpleFragmentContainer, LoadingFragment::class.java)
         }
+        handleIntent()
+    }
+
+    private fun handleIntent() {
         // If we are not logged in, open login screen.
         // In the future, we might want to relaunch the process after login.
         if (!sessionHolder.hasActiveSession()) {
             startLoginActivity()
             return
         }
-        val uri = intent.dataString
-        permalinkHandler.launch(this, uri, buildTask = true)
-                .delay(500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { isHandled ->
-                    if (!isHandled) {
-                        toast(R.string.permalink_malformed)
-                    }
-                    finish()
-                }
-                .disposeOnDestroy()
+        // We forward intent to HomeActivity (singleTask) to avoid the dueling app problem
+        // https://stackoverflow.com/questions/25884954/deep-linking-and-multiple-app-instances
+        intent.setClass(this, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
+
+        finish()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent()
     }
 
     private fun startLoginActivity() {

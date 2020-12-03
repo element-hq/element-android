@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.sync.SyncState
@@ -89,6 +90,13 @@ class RxSession(private val session: Session) {
         return session.getUserLive(userId).asObservable()
                 .startWithCallable {
                     session.getUser(userId).toOptional()
+                }
+    }
+
+    fun liveRoomMember(userId: String, roomId: String): Observable<Optional<RoomMemberSummary>> {
+        return session.getRoomMemberLive(userId, roomId).asObservable()
+                .startWithCallable {
+                    session.getRoomMember(userId, roomId).toOptional()
                 }
     }
 

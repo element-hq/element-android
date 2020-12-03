@@ -31,10 +31,14 @@ import im.vector.app.features.home.room.detail.timeline.item.MergedMembershipEve
 import im.vector.app.features.home.room.detail.timeline.item.MergedMembershipEventsItem_
 import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationItem_
+import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
@@ -187,6 +191,11 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                 collapsedEventIds.removeAll(mergedEventIds)
             }
             val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
+            val powerLevelsHelper = roomSummaryHolder.roomSummary?.roomId
+                    ?.let { activeSessionHolder.getSafeActiveSession()?.getRoom(it) }
+                    ?.let { it.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)?.content?.toModel<PowerLevelsContent>() }
+                    ?.let { PowerLevelsHelper(it) }
+            val currentUserId = activeSessionHolder.getSafeActiveSession()?.myUserId ?: ""
             val attributes = MergedRoomCreationItem.Attributes(
                     isCollapsed = isCollapsed,
                     mergeData = mergedData,
@@ -198,13 +207,19 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                     hasEncryptionEvent = hasEncryption,
                     isEncryptionAlgorithmSecure = encryptionAlgorithm == MXCRYPTO_ALGORITHM_MEGOLM,
                     readReceiptsCallback = callback,
-                    currentUserId = activeSessionHolder.getSafeActiveSession()?.myUserId ?: ""
+                    callback = callback,
+                    currentUserId = currentUserId,
+                    roomSummary = roomSummaryHolder.roomSummary,
+                    canChangeAvatar = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_AVATAR) ?: false,
+                    canChangeTopic = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_TOPIC) ?: false,
+                    canChangeName = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_NAME) ?: false
             )
             MergedRoomCreationItem_()
                     .id(mergeId)
                     .leftGuideline(avatarSizeProvider.leftGuideline)
                     .highlighted(isCollapsed && highlighted)
                     .attributes(attributes)
+                    .movementMethod(createLinkMovementMethod(callback))
                     .also {
                         it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
                     }

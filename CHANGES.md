@@ -1,24 +1,72 @@
-Changes in Element 1.0.11 (2020-XX-XX)
+Changes in Element 1.0.12 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
+ - Room setting: update join rules and guest access (#2442)
 
 Improvements 🙌:
- - Open an existing DM instead of creating a new one (#2319)
+ - Add Setting Item to Change PIN (#2462)
+ - Improve room history visibility setting UX (#1579)
 
 Bugfix 🐛:
- - Fix issue when updating the avatar of a room (new avatar vanishing)
- - Discard change dialog displayed by mistake when avatar has been updated
+ - Double bottomsheet effect after verify with passphrase
+ - EditText cursor jumps to the start while typing fast (#2469)
 
 Translations 🗣:
  -
 
 SDK API changes ⚠️:
- - AccountService now exposes suspendable function instead of using MatrixCallback (#2354). Note: We will incrementally migrate all the SDK API in a near future.
+ -
 
 Build 🧱:
+ - Upgrade some dependencies and Kotlin version
+ - Use fragment-ktx and preference-ktx dependencies (fix lint issue KtxExtensionAvailable)
+
+Test:
  -
+
+Other changes:
+ - Remove "Status.im" theme #2424
+
+Changes in Element 1.0.11 (2020-11-27)
+===================================================
+
+Features ✨:
+ - Create DMs with users by scanning their QR code (#2025)
+ - Add Invite friends quick invite actions (#2348)
+ - Add friend by scanning QR code, show your code to friends (#2025)
+
+Improvements 🙌:
+ - New room creation tile with quick action (#2346)
+ - Open an existing DM instead of creating a new one (#2319)
+ - Use RoomMember instead of User in the context of a Room.
+ - Ask for explicit user consent to send their contact details to the identity server (#2375)
+ - Handle events of type "m.room.server_acl" (#890)
+ - Room creation form: add advanced section to disable federation (#1314)
+ - Move "Enable Encryption" from room setting screen to room profile screen (#2394)
+ - Home empty screens quick design update (#2347)
+ - Improve Invite user screen (seamless search for matrix ID)
+
+Bugfix 🐛:
+ - Fix crash on AttachmentViewer (#2365)
+ - Exclude yourself when decorating rooms which are direct or don't have more than 2 users (#2370)
+ - F-Droid version: ensure timeout of sync request can be more than 60 seconds (#2169)
+ - Fix issue when restoring draft after sharing (#2287)
+ - Fix issue when updating the avatar of a room (new avatar vanishing)
+ - Discard change dialog displayed by mistake when avatar has been updated
+ - Try to fix cropped image in timeline (#2126)
+ - Registration: annoying error message scares every new user when they add an email (#2391)
+ - Fix jitsi integration for those with non-vanilla dialler frameworks
+ - Update profile has no effect if user is in zero rooms
+ - Fix issues with matrix.to deep linking (#2349)
+
+SDK API changes ⚠️:
+ - AccountService now exposes suspendable function instead of using MatrixCallback (#2354).
+   Note: We will incrementally migrate all the SDK API in a near future (#2449)
+
+Test:
+ - Add `allScreensTest` to cover all screens of the app
 
 Other changes:
  - Upgrade Realm dependency to 10.0.0
@@ -1031,6 +1079,9 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
+ -
+
+Test:
  -
 
 Other changes:

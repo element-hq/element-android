@@ -79,7 +79,7 @@ class SecurityBootstrapTest : VerificationTestBase() {
     fun testBasicBootstrap() {
         val userId: String = existingSession!!.myUserId
 
-        doLogin(homeServerUrl, userId, password)
+        uiTestBase.login(userId = userId, password = password, homeServerUrl = homeServerUrl)
 
         // Thread.sleep(6000)
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {

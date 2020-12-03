@@ -28,12 +28,15 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.ShortcutCreator
+import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.rx.RxRoom
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
@@ -65,6 +68,7 @@ class RoomProfileViewModel @AssistedInject constructor(
         val rxRoom = room.rx()
         observeRoomSummary(rxRoom)
         observeBannedRoomMembers(rxRoom)
+        observePermissions()
     }
 
     private fun observeRoomSummary(rxRoom: RxRoom) {
@@ -82,13 +86,45 @@ class RoomProfileViewModel @AssistedInject constructor(
                 }
     }
 
+    private fun observePermissions() {
+        PowerLevelsObservableFactory(room)
+                .createObservable()
+                .subscribe {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    val permissions = RoomProfileViewState.ActionPermissions(
+                            canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                    )
+                    setState { copy(actionPermissions = permissions) }
+                }
+                .disposeOnClear()
+    }
+
     override fun handle(action: RoomProfileAction) {
         when (action) {
+            is RoomProfileAction.EnableEncryption            -> handleEnableEncryption()
             RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
             is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
             is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
             RoomProfileAction.CreateShortcut                 -> handleCreateShortcut()
         }.exhaustive
+    }
+
+    private fun handleEnableEncryption() {
+        postLoading(true)
+
+        viewModelScope.launch {
+            val result = runCatching { room.enableEncryption() }
+            postLoading(false)
+            result.onFailure { failure ->
+                _viewEvents.post(RoomProfileViewEvents.Failure(failure))
+            }
+        }
+    }
+
+    private fun postLoading(isLoading: Boolean) {
+        setState {
+            copy(isLoading = isLoading)
+        }
     }
 
     private fun handleCreateShortcut() {
@@ -102,11 +138,13 @@ class RoomProfileViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeNotificationMode(action: RoomProfileAction.ChangeRoomNotificationState) {
-        room.setRoomNotificationState(action.notificationState, object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
+        viewModelScope.launch {
+            try {
+                room.setRoomNotificationState(action.notificationState)
+            } catch (failure: Throwable) {
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))
             }
-        })
+        }
     }
 
     private fun handleLeaveRoom() {

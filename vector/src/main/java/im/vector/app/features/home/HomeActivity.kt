@@ -18,6 +18,7 @@ package im.vector.app.features.home
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.MenuItem
@@ -38,8 +39,12 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.utils.toast
 import im.vector.app.features.disclaimer.showDisclaimerDialog
+import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.permalink.NavigationInterceptor
+import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.popup.DefaultVectorAlert
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
@@ -50,10 +55,12 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.matrix.android.sdk.api.session.InitialSyncProgressService
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
 import javax.inject.Inject
@@ -64,7 +71,8 @@ data class HomeActivityArgs(
         val accountCreation: Boolean
 ) : Parcelable
 
-class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDetectorSharedViewModel.Factory, ServerBackupStatusViewModel.Factory {
+class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDetectorSharedViewModel.Factory, ServerBackupStatusViewModel.Factory,
+        NavigationInterceptor {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
@@ -82,6 +90,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
     @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
+    @Inject lateinit var permalinkHandler: PermalinkHandler
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -145,6 +154,28 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
 
         shortcutsHandler.observeRoomsAndBuildShortcuts()
                 .disposeOnDestroy()
+
+        if (isFirstCreation()) {
+            handleIntent(intent)
+        }
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        intent?.dataString?.let { deepLink ->
+            if (!deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)) return@let
+
+            permalinkHandler.launch(this, deepLink,
+                    navigationInterceptor = this,
+                    buildTask = true)
+                    // .delay(500, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { isHandled ->
+                        if (!isHandled) {
+                            toast(R.string.permalink_malformed)
+                        }
+                    }
+                    .disposeOnDestroy()
+        }
     }
 
     private fun renderState(state: HomeActivityViewState) {
@@ -270,6 +301,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
         if (intent?.getParcelableExtra<HomeActivityArgs>(MvRx.KEY_ARG)?.clearNotification == true) {
             notificationDrawerManager.clearAllEvents()
         }
+        handleIntent(intent)
     }
 
     override fun onDestroy() {
@@ -313,11 +345,11 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 bugReporter.openBugReportScreen(this, false)
                 return true
             }
-            R.id.menu_home_filter     -> {
+            R.id.menu_home_filter -> {
                 navigator.openRoomsFiltering(this)
                 return true
             }
-            R.id.menu_home_setting    -> {
+            R.id.menu_home_setting -> {
                 navigator.openSettings(this)
                 return true
             }
@@ -332,6 +364,18 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
+        val listener = object : MatrixToBottomSheet.InteractionListener {
+            override fun navigateToRoom(roomId: String) {
+                navigator.openRoom(this@HomeActivity, roomId)
+            }
+        }
+        // TODO check if there is already one??
+        MatrixToBottomSheet.withLink(deepLink.toString(), listener)
+                .show(supportFragmentManager, "HA#MatrixToBottomSheet")
+        return true
     }
 
     companion object {
