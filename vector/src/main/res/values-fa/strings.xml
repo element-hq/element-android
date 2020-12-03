@@ -506,7 +506,7 @@
     <string name="send_file_step_sending_file">فرستادن پرونده (%1$s / %2$s)</string>
     <string name="downloading_file">بارگری پرونده %1$s…</string>
     <string name="downloaded_file">پرونده %1$s بارگیری شد!</string>
-    <string name="edited_suffix">(ویراسته)</string>
+    <string name="edited_suffix">(ویرایش شده)</string>
     <string name="room_filtering_filter_hint">پالایش گفت‌وگوها…</string>
     <string name="room_filtering_footer_create_new_room">ایجاد اتاقی جدید</string>
     <string name="room_filtering_footer_create_new_direct_message">فرستادن یک پیام مستقیم جدید</string>
