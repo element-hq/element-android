@@ -12,6 +12,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Double bottomsheet effect after verify with passphrase
  - EditText cursor jumps to the start while typing fast (#2469)
+ - UTD for events before invitation if member state events are hidden (#2486)
 
 Translations 🗣:
  -
