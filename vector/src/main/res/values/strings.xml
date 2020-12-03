@@ -1989,6 +1989,7 @@
     <string name="login_social_continue_with">Continue with %s</string>
     <string name="login_social_signup_with">Sign up with %s</string>
     <string name="login_social_signin_with">Sign in with %s</string>
+    <string name="login_social_sso">single sign-on</string>
 
     <string name="login_continue">Continue</string>
     <!-- Replaced string is the homeserver url -->

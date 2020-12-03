@@ -28,7 +28,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
-import org.matrix.android.sdk.api.auth.data.IdentityProvider
 import javax.inject.Inject
 
 /**
@@ -53,32 +52,36 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
                 loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
                 loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
-            ServerType.EMS       -> {
+            ServerType.EMS -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                 loginSignupSigninServerIcon.isVisible = true
                 loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
                 loginSignupSigninText.text = state.homeServerUrl.toReducedUrl()
             }
-            ServerType.Other     -> {
+            ServerType.Other -> {
                 loginSignupSigninServerIcon.isVisible = false
                 loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
                 loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
             }
-            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.Unknown -> Unit /* Should not happen */
         }
 
         val identityProviders = state.loginMode.ssoProviders()
-        if (state.loginMode.hasSso() && identityProviders.isNullOrEmpty().not()) {
-            loginSignupSigninSignInSocialLoginContainer.isVisible = true
-            loginSignupSigninSocialLoginButtons.identityProviders = identityProviders
-            loginSignupSigninSocialLoginButtons.listener = object: SocialLoginButtonsView.InteractionListener {
-                override fun onProviderSelected(id: IdentityProvider) {
-                    ssoUrls[id.id]?.let { openUrlInChromeCustomTab(requireContext(), customTabsSession, it) }
+        when (state.loginMode) {
+            is LoginMode.SsoAndPassword -> {
+                loginSignupSigninSignInSocialLoginContainer.isVisible = true
+                loginSignupSigninSocialLoginButtons.identityProviders = identityProviders
+                loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
+                    override fun onProviderSelected(id: String?) {
+                        ssoUrls[id]?.let { openUrlInChromeCustomTab(requireContext(), customTabsSession, it) }
+                    }
                 }
             }
-        } else {
-            loginSignupSigninSignInSocialLoginContainer.isVisible = false
-            loginSignupSigninSocialLoginButtons.identityProviders = null
+            else                        -> {
+                // SSO only is managed without container as well as No sso
+                loginSignupSigninSignInSocialLoginContainer.isVisible = false
+                loginSignupSigninSocialLoginButtons.identityProviders = null
+            }
         }
     }
 

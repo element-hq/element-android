@@ -32,7 +32,7 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
     : LinearLayout(context, attrs, defStyle) {
 
     interface InteractionListener {
-        fun onProviderSelected(id: IdentityProvider)
+        fun onProviderSelected(id: String?)
     }
 
     enum class Mode {
@@ -66,53 +66,61 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
         }
         removeAllViews()
         if (identityProviders.isNullOrEmpty()) {
+            // Put a default sign in with sso button
+            MaterialButton(context, null, R.attr.materialButtonOutlinedStyle).apply {
+                transformationMethod = null
+                textAlignment = View.TEXT_ALIGNMENT_CENTER
+            }.let {
+                it.text = getButtonTitle(context.getString(R.string.login_social_sso))
+                it.textAlignment = View.TEXT_ALIGNMENT_CENTER
+                it.setOnClickListener {
+                    listener?.onProviderSelected(null)
+                }
+                addView(it)
+            }
             return
         }
 
         identityProviders?.forEach { identityProvider ->
             // Use some heuristic to render buttons according to branding guidelines
-            val cached = cachedViews[identityProvider.id]
-            val button: MaterialButton = if (cached != null) {
-                cached
-            } else {
-               when (identityProvider.id) {
-                    "google" -> {
-                        MaterialButton(context, null, R.attr.vctr_social_login_button_google_style)
-                    }
-                    "github" -> {
-                        MaterialButton(context, null, R.attr.vctr_social_login_button_github_style)
-                    }
-                    "apple" -> {
-                        MaterialButton(context, null, R.attr.vctr_social_login_button_apple_style)
-                    }
-                    "facebook" -> {
-                        MaterialButton(context, null, R.attr.vctr_social_login_button_facebook_style)
-                    }
-                    "twitter" -> {
-                        MaterialButton(context, null, R.attr.vctr_social_login_button_twitter_style)
-                    }
-                    else       -> {
-                        MaterialButton(context, null, R.attr.materialButtonStyle).apply {
-                            transformationMethod = null
-                            textAlignment = View.TEXT_ALIGNMENT_CENTER
+            val button: MaterialButton = cachedViews[identityProvider.id]
+                    ?: when (identityProvider.id) {
+                        "google" -> {
+                            MaterialButton(context, null, R.attr.vctr_social_login_button_google_style)
+                        }
+                        "github" -> {
+                            MaterialButton(context, null, R.attr.vctr_social_login_button_github_style)
+                        }
+                        "apple" -> {
+                            MaterialButton(context, null, R.attr.vctr_social_login_button_apple_style)
+                        }
+                        "facebook" -> {
+                            MaterialButton(context, null, R.attr.vctr_social_login_button_facebook_style)
+                        }
+                        "twitter" -> {
+                            MaterialButton(context, null, R.attr.vctr_social_login_button_twitter_style)
+                        }
+                        else       -> {
+                            MaterialButton(context, null, R.attr.materialButtonStyle).apply {
+                                transformationMethod = null
+                                textAlignment = View.TEXT_ALIGNMENT_CENTER
+                            }
                         }
                     }
-                }
-            }
-            button.text = getButtonTitle(identityProvider)
+            button.text = getButtonTitle(identityProvider.name)
             button.setTag(R.id.loginSignupSigninSocialLoginButtons, identityProvider.id)
             button.setOnClickListener {
-                listener?.onProviderSelected(identityProvider)
+                listener?.onProviderSelected(identityProvider.id)
             }
             addView(button)
         }
     }
 
-    private fun getButtonTitle(provider: IdentityProvider): String {
+    private fun getButtonTitle(providerName: String?): String {
         return when (mode) {
-            Mode.MODE_SIGN_IN -> context.getString(R.string.login_social_signin_with, provider.name)
-            Mode.MODE_SIGN_UP -> context.getString(R.string.login_social_signup_with, provider.name)
-            Mode.MODE_CONTINUE -> context.getString(R.string.login_social_continue_with, provider.name)
+            Mode.MODE_SIGN_IN -> context.getString(R.string.login_social_signin_with, providerName)
+            Mode.MODE_SIGN_UP -> context.getString(R.string.login_social_signup_with, providerName)
+            Mode.MODE_CONTINUE -> context.getString(R.string.login_social_continue_with, providerName)
         }
     }
 
@@ -140,6 +148,7 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
             else     -> Mode.MODE_CONTINUE
         }
         typedArray.recycle()
+        update()
     }
 
     fun dpToPx(dp: Int): Int {
