@@ -14,17 +14,26 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.homeserver
+package org.matrix.android.sdk.internal.session.media
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import dagger.Module
+import dagger.Provides
+import org.matrix.android.sdk.internal.session.SessionScope
+import retrofit2.Retrofit
 
-@JsonClass(generateAdapter = true)
-internal data class GetUploadCapabilitiesResult(
-        /**
-         * The maximum size an upload can be in bytes. Clients SHOULD use this as a guide when uploading content.
-         * If not listed or null, the size limit should be treated as unknown.
-         */
-        @Json(name = "m.upload.size")
-        val maxUploadSize: Long? = null
-)
+@Module
+internal abstract class MediaModule {
+
+    @Module
+    companion object {
+        @Provides
+        @JvmStatic
+        @SessionScope
+        fun providesMediaAPI(retrofit: Retrofit): MediaAPI {
+            return retrofit.create(MediaAPI::class.java)
+        }
+    }
+
+//    @Binds
+//    abstract fun bindGetHomeServerCapabilitiesTask(task: DefaultGetHomeServerCapabilitiesTask): GetHomeServerCapabilitiesTask
+}
