@@ -16,8 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.media
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.internal.session.SessionScope
 import retrofit2.Retrofit
 
@@ -34,6 +36,15 @@ internal abstract class MediaModule {
         }
     }
 
-//    @Binds
-//    abstract fun bindGetHomeServerCapabilitiesTask(task: DefaultGetHomeServerCapabilitiesTask): GetHomeServerCapabilitiesTask
+    @Binds
+    abstract fun bindMediaService(service: DefaultMediaService): MediaService
+
+    @Binds
+    abstract fun bindGetRawPreviewUrlTask(task: DefaultGetRawPreviewUrlTask): GetRawPreviewUrlTask
+
+    @Binds
+    abstract fun bindGetPreviewUrlTask(task: DefaultGetPreviewUrlTask): GetPreviewUrlTask
+
+    @Binds
+    abstract fun bindClearMediaCacheTask(task: DefaultClearPreviewUrlCacheTask): ClearPreviewUrlCacheTask
 }

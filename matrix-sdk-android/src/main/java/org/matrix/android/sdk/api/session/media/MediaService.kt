@@ -29,14 +29,19 @@ interface MediaService {
 
     /**
      * Get Raw Url Preview data from the homeserver. There is no cache management for this request
+     * @param url The url to get the preview data from
+     * @param timestamp The optional timestamp
      */
-    suspend fun getRawPreviewUrl(url: String): JsonDict
+    suspend fun getRawPreviewUrl(url: String, timestamp: Long?): JsonDict
 
     /**
      * Get Url Preview data from the homeserver, or from cache, depending on the cache strategy
-     * @param url
+     * @param url The url to get the preview data from
+     * @param timestamp The optional timestamp. Note that this parameter is not taken into account
+     * if the data is already in cache and the cache strategy allow to use it
+     * @param cacheStrategy the cache strategy, see the type for more details
      */
-    suspend fun getPreviewUrl(url: String, cacheStrategy: CacheStrategy): PreviewUrlData
+    suspend fun getPreviewUrl(url: String, timestamp: Long?, cacheStrategy: CacheStrategy): PreviewUrlData
 
     /**
      * Clear the cache of all retrieved UrlPreview data

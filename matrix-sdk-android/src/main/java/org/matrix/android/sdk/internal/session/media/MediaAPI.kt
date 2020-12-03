@@ -39,5 +39,5 @@ internal interface MediaAPI {
      * if it does not have the requested version available.
      */
     @GET(NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "preview_url")
-    fun getPreviewUrlData(@Query("url") url: String, @Query("ts") ts: Int?): Call<JsonDict>
+    fun getPreviewUrlData(@Query("url") url: String, @Query("ts") ts: Long?): Call<JsonDict>
 }
