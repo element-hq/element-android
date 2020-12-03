@@ -111,7 +111,7 @@ class KeysBackupTestHelper(
         Assert.assertTrue(keysBackup.isEnabled)
 
         stateObserver.stopAndCheckStates(null)
-        return PrepareKeysBackupDataResult(megolmBackupCreationInfo, keysVersion.version!!)
+        return PrepareKeysBackupDataResult(megolmBackupCreationInfo, keysVersion.version)
     }
 
     /**
