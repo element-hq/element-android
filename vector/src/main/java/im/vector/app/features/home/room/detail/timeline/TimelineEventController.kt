@@ -43,6 +43,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisi
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.BaseEventItem
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
+import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
@@ -184,10 +185,22 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     override fun intercept(models: MutableList<EpoxyModel<*>>) = synchronized(modelCache) {
         positionOfReadMarker = null
         adapterPositionMapping.clear()
-        models.forEachIndexed { index, epoxyModel ->
+        val callIds = mutableSetOf<String>()
+        val modelsIterator = models.listIterator()
+        modelsIterator.withIndex().forEach {
+            val index = it.index
+            val epoxyModel = it.value
+            if (epoxyModel is CallTileTimelineItem) {
+                val callId = epoxyModel.attributes.callId
+                if (callIds.contains(callId)) {
+                    modelsIterator.remove()
+                    return@forEach
+                }
+                callIds.add(callId)
+            }
             if (epoxyModel is BaseEventItem) {
-                epoxyModel.getEventIds().forEach {
-                    adapterPositionMapping[it] = index
+                epoxyModel.getEventIds().forEach { eventId ->
+                    adapterPositionMapping[eventId] = index
                 }
             }
         }

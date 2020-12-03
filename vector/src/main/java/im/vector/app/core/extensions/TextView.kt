@@ -22,7 +22,11 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.widget.TextView
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
 import im.vector.app.R
@@ -69,6 +73,18 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
                     setSpan(UnderlineSpan(), index, index + coloredPart.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
+}
+
+fun TextView.setLeftDrawable(@DrawableRes iconRes: Int, @ColorRes tintColor: Int? = null) {
+    val icon = if(tintColor != null){
+        val tint = ContextCompat.getColor(context, tintColor)
+        ContextCompat.getDrawable(context, iconRes)?.also {
+            DrawableCompat.setTint(it, tint)
+        }
+    }else {
+        ContextCompat.getDrawable(context, iconRes)
+    }
+    setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
 }
 
 /**

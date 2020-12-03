@@ -34,6 +34,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val roomCreateItemFactory: RoomCreateItemFactory,
                                               private val roomSummaryHolder: RoomSummaryHolder,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
+                                              private val callItemFactory: CallItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {
 
     fun create(event: TimelineEvent,
@@ -45,7 +46,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
         val computedModel = try {
             when (event.root.getClearType()) {
                 EventType.STICKER,
-                EventType.MESSAGE               -> messageItemFactory.create(event, nextEvent, highlight, callback)
+                EventType.MESSAGE -> messageItemFactory.create(event, nextEvent, highlight, callback)
                 // State and call
                 EventType.STATE_ROOM_TOMBSTONE,
                 EventType.STATE_ROOM_NAME,
@@ -60,17 +61,19 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_GUEST_ACCESS,
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET,
-                EventType.CALL_INVITE,
-                EventType.CALL_HANGUP,
-                EventType.CALL_ANSWER,
                 EventType.STATE_ROOM_POWER_LEVELS,
                 EventType.REACTION,
-                EventType.REDACTION             -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+                EventType.REDACTION -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
                 EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(event, highlight, callback)
                 // State room create
-                EventType.STATE_ROOM_CREATE     -> roomCreateItemFactory.create(event, callback)
+                EventType.STATE_ROOM_CREATE -> roomCreateItemFactory.create(event, callback)
+                // Calls
+                EventType.CALL_INVITE,
+                EventType.CALL_HANGUP,
+                EventType.CALL_REJECT,
+                EventType.CALL_ANSWER -> callItemFactory.create(event, highlight, callback)
                 // Crypto
-                EventType.ENCRYPTED             -> {
+                EventType.ENCRYPTED -> {
                     if (event.root.isRedacted()) {
                         // Redacted event, let the MessageItemFactory handle it
                         messageItemFactory.create(event, nextEvent, highlight, callback)
@@ -84,7 +87,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_MAC,
-                EventType.CALL_CANDIDATES       -> {
+                EventType.CALL_CANDIDATES -> {
                     // TODO These are not filtered out by timeline when encrypted
                     // For now manually ignore
                     if (userPreferencesProvider.shouldShowHiddenEvents()) {
