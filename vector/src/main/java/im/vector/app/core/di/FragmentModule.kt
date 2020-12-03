@@ -64,7 +64,6 @@ import im.vector.app.features.login.LoginResetPasswordSuccessFragment
 import im.vector.app.features.login.LoginServerSelectionFragment
 import im.vector.app.features.login.LoginServerUrlFormFragment
 import im.vector.app.features.login.LoginSignUpSignInSelectionFragment
-import im.vector.app.features.login.LoginSignUpSignInSsoFragment
 import im.vector.app.features.login.LoginSplashFragment
 import im.vector.app.features.login.LoginWaitForEmailFragment
 import im.vector.app.features.login.LoginWebFragment
@@ -229,11 +228,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LoginSignUpSignInSelectionFragment::class)
     fun bindLoginSignUpSignInSelectionFragment(fragment: LoginSignUpSignInSelectionFragment): Fragment
-
-    @Binds
-    @IntoMap
-    @FragmentKey(LoginSignUpSignInSsoFragment::class)
-    fun bindLoginSignUpSignInSsoFragment(fragment: LoginSignUpSignInSsoFragment): Fragment
+//
+//    @Binds
+//    @IntoMap
+//    @FragmentKey(LoginSignUpSignInSsoFragment::class)
+//    fun bindLoginSignUpSignInSsoFragment(fragment: LoginSignUpSignInSsoFragment): Fragment
 
     @Binds
     @IntoMap

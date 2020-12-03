@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.auth.data
+package org.matrix.android.sdk.internal.database.model
 
-sealed class LoginFlowResult {
-    data class Success(
-            val supportedLoginTypes: List<String>,
-            val ssoIdentityProviders: List<IdentityProvider>?,
-            val isLoginAndRegistrationSupported: Boolean,
-            val homeServerUrl: String,
-            val isOutdatedHomeserver: Boolean
-    ) : LoginFlowResult()
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+
+internal open class KnownServerUrlEntity(
+        @PrimaryKey
+        var url: String = ""
+) : RealmObject() {
+    companion object
 }

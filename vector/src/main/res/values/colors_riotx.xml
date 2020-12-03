@@ -41,6 +41,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black_alpha">#55000000</color>
+    <color name="black_54">#8A000000</color>
 
     <!-- Palette: format fo naming:
       'riotx_<name in the palette snake case>_<theme>'

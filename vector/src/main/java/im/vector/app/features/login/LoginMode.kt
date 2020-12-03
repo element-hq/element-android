@@ -16,9 +16,31 @@
 
 package im.vector.app.features.login
 
-enum class LoginMode {
-    Unknown,
-    Password,
-    Sso,
-    Unsupported
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import org.matrix.android.sdk.api.auth.data.IdentityProvider
+
+sealed class LoginMode : Parcelable
+/** because persist state */ {
+    @Parcelize object Unknown : LoginMode()
+    @Parcelize object Password : LoginMode()
+    @Parcelize data class Sso(val identityProviders: List<IdentityProvider>?) : LoginMode()
+    @Parcelize data class SsoAndPassword(val identityProviders: List<IdentityProvider>?) : LoginMode()
+    @Parcelize object Unsupported : LoginMode()
+}
+
+fun LoginMode.ssoProviders() : List<IdentityProvider>? {
+    return when (this) {
+        is LoginMode.Sso            -> identityProviders
+        is LoginMode.SsoAndPassword -> identityProviders
+        else                        -> null
+    }
+}
+
+fun LoginMode.hasSso() : Boolean {
+    return when (this) {
+        is LoginMode.Sso            -> true
+        is LoginMode.SsoAndPassword -> true
+        else                        -> false
+    }
 }

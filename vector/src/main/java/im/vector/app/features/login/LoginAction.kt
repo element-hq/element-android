@@ -18,6 +18,7 @@ package im.vector.app.features.login
 
 import im.vector.app.core.platform.VectorViewModelAction
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.auth.data.IdentityProvider
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
@@ -60,7 +61,7 @@ sealed class LoginAction : VectorViewModelAction {
     object ResetResetPassword : ResetAction()
 
     // For the soft logout case
-    data class SetupSsoForSessionRecovery(val homeServerUrl: String, val deviceId: String) : LoginAction()
+    data class SetupSsoForSessionRecovery(val homeServerUrl: String, val deviceId: String, val identityProvider: List<IdentityProvider>?) : LoginAction()
 
     data class PostViewEvent(val viewEvent: LoginViewEvents) : LoginAction()
 

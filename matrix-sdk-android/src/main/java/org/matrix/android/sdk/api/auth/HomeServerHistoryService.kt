@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2020 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.auth.data
+package org.matrix.android.sdk.api.auth
 
-sealed class LoginFlowResult {
-    data class Success(
-            val supportedLoginTypes: List<String>,
-            val ssoIdentityProviders: List<IdentityProvider>?,
-            val isLoginAndRegistrationSupported: Boolean,
-            val homeServerUrl: String,
-            val isOutdatedHomeserver: Boolean
-    ) : LoginFlowResult()
+/**
+ * A simple service to remember homeservers you already connected to.
+ */
+interface HomeServerHistoryService {
+
+    fun getKnownServersUrls(): List<String>
+
+    fun addHomeServerToHistory(url: String)
+
+    fun clearHistory()
 }

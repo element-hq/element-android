@@ -24,7 +24,9 @@ import dagger.Module
 import dagger.Provides
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.internal.auth.DefaultHomeServerHistoryService
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.GlobalDatabase
 import org.matrix.android.sdk.internal.di.MatrixScope
@@ -57,6 +59,8 @@ internal abstract class RawModule {
                         realmKeysUtils.configureEncryption(this, DB_ALIAS)
                     }
                     .name("matrix-sdk-global.realm")
+                    .schemaVersion(GlobalRealmMigration.SCHEMA_VERSION)
+                    .migration(GlobalRealmMigration)
                     .modules(GlobalRealmModule())
                     .build()
         }
@@ -77,4 +81,7 @@ internal abstract class RawModule {
 
     @Binds
     abstract fun bindCleanRawCacheTask(task: DefaultCleanRawCacheTask): CleanRawCacheTask
+
+    @Binds
+    abstract fun bindHomeServerHistoryService(service: DefaultHomeServerHistoryService): HomeServerHistoryService
 }

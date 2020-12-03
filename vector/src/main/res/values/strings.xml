@@ -1984,6 +1984,12 @@
     <string name="login_server_other_title">Other</string>
     <string name="login_server_other_text">Custom &amp; advanced settings</string>
 
+
+    <string name="login_social_continue">Or</string>
+    <string name="login_social_continue_with">Continue with %s</string>
+    <string name="login_social_signup_with">Sign up with %s</string>
+    <string name="login_social_signin_with">Sign in with %s</string>
+
     <string name="login_continue">Continue</string>
     <!-- Replaced string is the homeserver url -->
     <string name="login_connect_to">Connect to %1$s</string>

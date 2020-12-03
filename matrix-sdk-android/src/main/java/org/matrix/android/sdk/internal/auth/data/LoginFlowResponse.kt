@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.auth.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.auth.data.IdentityProvider
 
 @JsonClass(generateAdapter = true)
 internal data class LoginFlowResponse(
@@ -34,5 +35,13 @@ internal data class LoginFlow(
          * The login type. This is supplied as the type when logging in.
          */
         @Json(name = "type")
-        val type: String?
+        val type: String?,
+
+        /**
+         * Augments m.login.sso flow discovery definition to include metadata on the supported IDPs
+         * the client can show a button for each of the supported providers
+         * See MSC #2858
+         */
+        @Json(name = "identity_providers")
+        val identityProvider: List<IdentityProvider>?
 )

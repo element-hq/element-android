@@ -37,6 +37,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
@@ -79,15 +80,17 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
     private fun setupAutoFill(state: LoginViewState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             when (state.signMode) {
-                SignMode.Unknown            -> error("developer error")
-                SignMode.SignUp             -> {
+                SignMode.Unknown -> error("developer error")
+                SignMode.SignUp -> {
                     loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
                     passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
+                    loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_UP
                 }
                 SignMode.SignIn,
                 SignMode.SignInWithMatrixId -> {
                     loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
                     passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
+                    loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_IN
                 }
             }.exhaustive
         }
@@ -142,9 +145,9 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
             loginPasswordNotice.isVisible = true
         } else {
             val resId = when (state.signMode) {
-                SignMode.Unknown            -> error("developer error")
-                SignMode.SignUp             -> R.string.login_signup_to
-                SignMode.SignIn             -> R.string.login_connect_to
+                SignMode.Unknown -> error("developer error")
+                SignMode.SignUp -> R.string.login_signup_to
+                SignMode.SignIn -> R.string.login_connect_to
                 SignMode.SignInWithMatrixId -> R.string.login_connect_to
             }
 
@@ -155,20 +158,28 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
                     loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
                     loginNotice.text = getString(R.string.login_server_matrix_org_text)
                 }
-                ServerType.EMS       -> {
+                ServerType.EMS -> {
                     loginServerIcon.isVisible = true
                     loginServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                     loginTitle.text = getString(resId, "Element Matrix Services")
                     loginNotice.text = getString(R.string.login_server_modular_text)
                 }
-                ServerType.Other     -> {
+                ServerType.Other -> {
                     loginServerIcon.isVisible = false
                     loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
                     loginNotice.text = getString(R.string.login_server_other_text)
                 }
-                ServerType.Unknown   -> Unit /* Should not happen */
+                ServerType.Unknown -> Unit /* Should not happen */
             }
             loginPasswordNotice.isVisible = false
+
+            if (state.loginMode is LoginMode.SsoAndPassword) {
+                loginSocialLoginContainer.isVisible = true
+                loginSocialLoginButtons.identityProviders = state.loginMode.identityProviders
+            } else {
+                loginSocialLoginContainer.isVisible = false
+                loginSocialLoginButtons.identityProviders = null
+            }
         }
     }
 
@@ -257,7 +268,7 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
                 passwordShown = false
                 renderPasswordField()
             }
-            is Fail    -> {
+            is Fail -> {
                 val error = state.asyncLoginAction.error
                 if (error is Failure.ServerError
                         && error.error.code == MatrixError.M_FORBIDDEN

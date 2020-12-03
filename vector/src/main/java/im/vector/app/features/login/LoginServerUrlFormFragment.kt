@@ -20,8 +20,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import butterknife.OnClick
+import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
@@ -55,6 +57,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
 
         loginServerUrlFormHomeServerUrl.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                loginServerUrlFormHomeServerUrl.dismissDropDown()
                 submit()
                 return@setOnEditorActionListener true
             }
@@ -81,6 +84,13 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
                 loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_common_notice)
             }
         }
+        val completions =  state.knownCustomHomeServersUrls
+        loginServerUrlFormHomeServerUrl.setAdapter(ArrayAdapter(requireContext(), android.R.layout.select_dialog_item,
+                completions
+        ))
+        loginServerUrlFormHomeServerUrlTil.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+                .takeIf { completions.isNotEmpty() }
+                ?: TextInputLayout.END_ICON_NONE
     }
 
     @OnClick(R.id.loginServerUrlFormLearnMore)
@@ -105,7 +115,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
                 loginServerUrlFormHomeServerUrlTil.error = getString(R.string.login_error_invalid_home_server)
             }
             else                -> {
-                loginServerUrlFormHomeServerUrl.setText(serverUrl)
+                loginServerUrlFormHomeServerUrl.setText(serverUrl, false /* to avoid completion dialog flicker*/)
                 loginViewModel.handle(LoginAction.UpdateHomeServer(serverUrl))
             }
         }
@@ -131,7 +141,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
 
         if (state.loginMode != LoginMode.Unknown) {
             // The home server url is valid
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved(state.loginMode == LoginMode.Sso)))
+            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved(state.loginMode is LoginMode.Sso)))
         }
     }
 }

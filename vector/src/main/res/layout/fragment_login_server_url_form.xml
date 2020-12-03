@@ -53,14 +53,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginServerUrlFormHomeServerUrlTil"
-                style="@style/VectorTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
                 app:errorEnabled="true"
                 tools:hint="@string/login_server_url_form_modular_hint">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:id="@+id/loginServerUrlFormHomeServerUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

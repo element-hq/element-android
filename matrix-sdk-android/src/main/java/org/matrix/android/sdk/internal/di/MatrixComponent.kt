@@ -25,6 +25,7 @@ import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.auth.AuthModule
@@ -61,6 +62,8 @@ internal interface MatrixComponent {
     fun authenticationService(): AuthenticationService
 
     fun rawService(): RawService
+
+    fun homeServerHistoryService(): HomeServerHistoryService
 
     fun context(): Context
 

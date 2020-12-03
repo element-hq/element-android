@@ -54,14 +54,27 @@ class SoftLogoutFragment @Inject constructor(
 
         softLogoutViewModel.subscribe(this) { softLogoutViewState ->
             softLogoutController.update(softLogoutViewState)
-
-            when (softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke()) {
-                LoginMode.Sso,
+            when (val mode = softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke()) {
+                is LoginMode.SsoAndPassword -> {
+                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
+                            softLogoutViewState.homeServerUrl,
+                            softLogoutViewState.deviceId,
+                            mode.identityProviders
+                    ))
+                }
+                is LoginMode.Sso -> {
+                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
+                            softLogoutViewState.homeServerUrl,
+                            softLogoutViewState.deviceId,
+                            mode.identityProviders
+                    ))
+                }
                 LoginMode.Unsupported -> {
                     // Prepare the loginViewModel for a SSO/login fallback recovery
                     loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
                             softLogoutViewState.homeServerUrl,
-                            softLogoutViewState.deviceId
+                            softLogoutViewState.deviceId,
+                            null
                     ))
                 }
                 else                  -> Unit

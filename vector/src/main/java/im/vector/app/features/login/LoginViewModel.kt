@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
@@ -38,6 +39,7 @@ import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.signout.soft.SoftLogoutActivity
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
@@ -63,7 +65,8 @@ class LoginViewModel @AssistedInject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
         private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val homeServerHistoryService: HomeServerHistoryService
 ) : VectorViewModel<LoginViewState, LoginAction, LoginViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -71,12 +74,21 @@ class LoginViewModel @AssistedInject constructor(
         fun create(initialState: LoginViewState): LoginViewModel
     }
 
+    init {
+        if (BuildConfig.DEBUG) {
+            homeServerHistoryService.addHomeServerToHistory("http://10.0.2.2:8080")
+        }
+        setState {
+            copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
+        }
+    }
+
     companion object : MvRxViewModelFactory<LoginViewModel, LoginViewState> {
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: LoginViewState): LoginViewModel? {
             return when (val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()) {
-                is LoginActivity      -> activity.loginViewModelFactory.create(state)
+                is LoginActivity -> activity.loginViewModelFactory.create(state)
                 is SoftLogoutActivity -> activity.loginViewModelFactory.create(state)
                 else                  -> error("Invalid Activity")
             }
@@ -108,20 +120,20 @@ class LoginViewModel @AssistedInject constructor(
 
     override fun handle(action: LoginAction) {
         when (action) {
-            is LoginAction.UpdateServerType           -> handleUpdateServerType(action)
-            is LoginAction.UpdateSignMode             -> handleUpdateSignMode(action)
-            is LoginAction.InitWith                   -> handleInitWith(action)
-            is LoginAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
-            is LoginAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
-            is LoginAction.LoginWithToken             -> handleLoginWithToken(action)
-            is LoginAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
-            is LoginAction.ResetPassword              -> handleResetPassword(action)
+            is LoginAction.UpdateServerType -> handleUpdateServerType(action)
+            is LoginAction.UpdateSignMode -> handleUpdateSignMode(action)
+            is LoginAction.InitWith -> handleInitWith(action)
+            is LoginAction.UpdateHomeServer -> handleUpdateHomeserver(action).also { lastAction = action }
+            is LoginAction.LoginOrRegister -> handleLoginOrRegister(action).also { lastAction = action }
+            is LoginAction.LoginWithToken -> handleLoginWithToken(action)
+            is LoginAction.WebLoginSuccess -> handleWebLoginSuccess(action)
+            is LoginAction.ResetPassword -> handleResetPassword(action)
             is LoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
-            is LoginAction.RegisterAction             -> handleRegisterAction(action)
-            is LoginAction.ResetAction                -> handleResetAction(action)
+            is LoginAction.RegisterAction -> handleRegisterAction(action)
+            is LoginAction.ResetAction -> handleResetAction(action)
             is LoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
-            is LoginAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
-            is LoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
+            is LoginAction.UserAcceptCertificate -> handleUserAcceptCertificate(action)
+            is LoginAction.PostViewEvent -> _viewEvents.post(action.viewEvent)
         }.exhaustive
     }
 
@@ -129,11 +141,13 @@ class LoginViewModel @AssistedInject constructor(
         // It happen when we get the login flow, or during direct authentication.
         // So alter the homeserver config and retrieve again the login flow
         when (val finalLastAction = lastAction) {
-            is LoginAction.UpdateHomeServer ->
+            is LoginAction.UpdateHomeServer -> {
+                rememberHomeServer(finalLastAction.homeServerUrl)
                 currentHomeServerConnectionConfig
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
                         ?.let { getLoginFlow(it) }
-            is LoginAction.LoginOrRegister  ->
+            }
+            is LoginAction.LoginOrRegister ->
                 handleDirectLogin(
                         finalLastAction,
                         HomeServerConnectionConfig.Builder()
@@ -142,6 +156,13 @@ class LoginViewModel @AssistedInject constructor(
                                 .withAllowedFingerPrints(listOf(action.fingerprint))
                                 .build()
                 )
+        }
+    }
+
+    private fun rememberHomeServer(homeServerUrl: String) {
+        homeServerHistoryService.addHomeServerToHistory(homeServerUrl)
+        setState {
+            copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
         }
     }
 
@@ -184,7 +205,7 @@ class LoginViewModel @AssistedInject constructor(
         setState {
             copy(
                     signMode = SignMode.SignIn,
-                    loginMode = LoginMode.Sso,
+                    loginMode = LoginMode.Sso(action.identityProvider),
                     homeServerUrl = action.homeServerUrl,
                     deviceId = action.deviceId
             )
@@ -193,14 +214,14 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun handleRegisterAction(action: LoginAction.RegisterAction) {
         when (action) {
-            is LoginAction.CaptchaDone                  -> handleCaptchaDone(action)
-            is LoginAction.AcceptTerms                  -> handleAcceptTerms()
-            is LoginAction.RegisterDummy                -> handleRegisterDummy()
-            is LoginAction.AddThreePid                  -> handleAddThreePid(action)
-            is LoginAction.SendAgainThreePid            -> handleSendAgainThreePid()
-            is LoginAction.ValidateThreePid             -> handleValidateThreePid(action)
+            is LoginAction.CaptchaDone -> handleCaptchaDone(action)
+            is LoginAction.AcceptTerms -> handleAcceptTerms()
+            is LoginAction.RegisterDummy -> handleRegisterDummy()
+            is LoginAction.AddThreePid -> handleAddThreePid(action)
+            is LoginAction.SendAgainThreePid -> handleSendAgainThreePid()
+            is LoginAction.ValidateThreePid -> handleValidateThreePid(action)
             is LoginAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailHasBeenValidated(action)
-            is LoginAction.StopEmailValidationCheck     -> handleStopEmailValidationCheck()
+            is LoginAction.StopEmailValidationCheck -> handleStopEmailValidationCheck()
         }
     }
 
@@ -237,7 +258,7 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             when (data) {
-                is RegistrationResult.Success      -> onSessionCreated(data.session)
+                is RegistrationResult.Success -> onSessionCreated(data.session)
                 is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
             }
         }
@@ -337,7 +358,7 @@ class LoginViewModel @AssistedInject constructor(
                     )
                 }
             }
-            LoginAction.ResetHomeServerUrl  -> {
+            LoginAction.ResetHomeServerUrl -> {
                 authenticationService.reset()
 
                 setState {
@@ -350,7 +371,7 @@ class LoginViewModel @AssistedInject constructor(
                     )
                 }
             }
-            LoginAction.ResetSignMode       -> {
+            LoginAction.ResetSignMode -> {
                 setState {
                     copy(
                             asyncHomeServerLoginFlowRequest = Uninitialized,
@@ -360,7 +381,7 @@ class LoginViewModel @AssistedInject constructor(
                     )
                 }
             }
-            LoginAction.ResetLogin          -> {
+            LoginAction.ResetLogin -> {
                 authenticationService.cancelPendingLoginOrRegistration()
 
                 setState {
@@ -370,7 +391,7 @@ class LoginViewModel @AssistedInject constructor(
                     )
                 }
             }
-            LoginAction.ResetResetPassword  -> {
+            LoginAction.ResetResetPassword -> {
                 setState {
                     copy(
                             asyncResetPassword = Uninitialized,
@@ -390,10 +411,10 @@ class LoginViewModel @AssistedInject constructor(
         }
 
         when (action.signMode) {
-            SignMode.SignUp             -> startRegistrationFlow()
-            SignMode.SignIn             -> startAuthenticationFlow()
+            SignMode.SignUp -> startRegistrationFlow()
+            SignMode.SignIn -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(LoginViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
-            SignMode.Unknown            -> Unit
+            SignMode.Unknown -> Unit
         }
     }
 
@@ -405,12 +426,12 @@ class LoginViewModel @AssistedInject constructor(
         }
 
         when (action.serverType) {
-            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.Unknown -> Unit /* Should not happen */
             ServerType.MatrixOrg ->
                 // Request login flow here
                 handle(LoginAction.UpdateHomeServer(matrixOrgUrl))
             ServerType.EMS,
-            ServerType.Other     -> _viewEvents.post(LoginViewEvents.OnServerSelectionDone(action.serverType))
+            ServerType.Other -> _viewEvents.post(LoginViewEvents.OnServerSelectionDone(action.serverType))
         }.exhaustive
     }
 
@@ -514,9 +535,9 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun handleLoginOrRegister(action: LoginAction.LoginOrRegister) = withState { state ->
         when (state.signMode) {
-            SignMode.Unknown            -> error("Developer error, invalid sign mode")
-            SignMode.SignIn             -> handleLogin(action)
-            SignMode.SignUp             -> handleRegisterWith(action)
+            SignMode.Unknown -> error("Developer error, invalid sign mode")
+            SignMode.SignIn -> handleLogin(action)
+            SignMode.SignUp -> handleRegisterWith(action)
             SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
         }.exhaustive
     }
@@ -713,11 +734,11 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun handleUpdateHomeserver(action: LoginAction.UpdateHomeServer) {
         val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
-
         if (homeServerConnectionConfig == null) {
             // This is invalid
             _viewEvents.post(LoginViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
+            rememberHomeServer(action.homeServerUrl)
             getLoginFlow(homeServerConnectionConfig)
         }
     }
@@ -755,9 +776,11 @@ class LoginViewModel @AssistedInject constructor(
                     is LoginFlowResult.Success -> {
                         val loginMode = when {
                             // SSO login is taken first
-                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)      -> LoginMode.Sso
-                            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
-                            else                                                       -> LoginMode.Unsupported
+                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                                    && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+                            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+                            else                                                                  -> LoginMode.Unsupported
                         }
 
                         // FIXME We should post a view event here normally?
