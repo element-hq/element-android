@@ -299,7 +299,7 @@
     <string name="auth_add_email_message_2">رایانامه‌ای برای بازیابی تنظیم کرده تا بتوانید در صورت نیاز، از طریقش به دست افرادی که می‌شناسید، قابل کشف باشید.</string>
     <string name="auth_add_phone_message_2">ثبت شماره تلفن (بعدا در صورت دلخواه می توانید از آن برای شناسایی دوستان خود استفاده کنید).</string>
     <string name="auth_reset_password_message">نشانی رایانامهٔ پیوسته به حسابتان را برای بازنشانی گذواژه‌تان وارد کنید:</string>
-    <string name="resources_script">Latn</string>
+    <string name="resources_script">Arab</string>
     <string name="room_participants_invite_search_another_user">شناسهٔ کاربری، نام یا رایانامه</string>
     <string name="room_message_placeholder_reply_to_encrypted">فرستادن پاسخی رمزشده…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">فرستادن یک پاسخ (رمزنشده)…</string>
@@ -2231,4 +2231,19 @@
     <string name="permissions_denied_add_contact">دسترسی به مخاطبانتان را مجاز کنید.</string>
     <string name="permissions_denied_qr_code">برای پویش یک رمز QR نیاز است دسترسی به دوربین را مجاز کنید.</string>
     <string name="start_chatting">آغاز به گپ</string>
+    <string name="settings_export_trail">خروجی گرفتن</string>
+    <string name="create_room_disable_federation_description">اگر اتاق فقط برای تعامل با افراد داخل سرور خانه شما می‌باشد، این قابلیت را فعال کنید. این تنظیم را بعدا نمی‌توانید تغییر دهید.</string>
+    <string name="identity_server_consent_dialog_content">آیا می‌خواهید جهت کشف مخاطبینی که می شناسید، داده های مخاطب خود را (شماره تلفن و ایمیل) به سرور هویت‌سنجی(%1$s) ارسال کنید؟
+\n
+\nبرای حفظ حریم خصوصی بیشتر، داده‌ها قبل از ارسال هش می‌شوند.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">یک کلید امنیتی ایجاد کنید تا در مکانی امن مانند سامانه مدیریت رمز عبور یا گاوصندوق آن را ذخیره کنید.</string>
+    <string name="identity_server_error_no_current_binding_error">در حال حاضر هیچ ارتباطی با این شناسه وجود ندارد.</string>
+    <string name="confirm_your_identity_quad_s">هویت خود را تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
+    <string name="confirm_your_identity">هویت خود را با تأیید این ورود به سیستم از یکی دیگر از نشست‌های خود، تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده</item>
+        <item quantity="other">%d دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده</item>
+    </plurals>
+    <string name="settings_discovery_consent_notice_off">شما عدم رضایت خود را برای ارسال ایمیل و شماره تلفن به این سرور اعلام کرده‌اید در نتیجه نمی‌توانید کاربران دیگر را با استفاده از مخاطبین خود پیدا کنید.</string>
+    <string name="settings_discovery_consent_notice_on">شما رضایت خود را برای ارسال ایمیل و شماره تلفن به این سرور اعلام کرده‌اید تا بتوانید کاربران دیگر را مخاطبین خود پیدا کنید.</string>
 </resources>
