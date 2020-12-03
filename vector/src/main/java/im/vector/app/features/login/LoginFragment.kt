@@ -51,7 +51,7 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class LoginFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
 
     private var passwordShown = false
     private var isSignupMode = false
@@ -176,6 +176,11 @@ class LoginFragment @Inject constructor() : AbstractLoginFragment() {
             if (state.loginMode is LoginMode.SsoAndPassword) {
                 loginSocialLoginContainer.isVisible = true
                 loginSocialLoginButtons.identityProviders = state.loginMode.identityProviders
+                loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
+                    override fun onProviderSelected(id: String?) {
+                        openInCustomTab(state.getSsoUrl(id))
+                    }
+                }
             } else {
                 loginSocialLoginContainer.isVisible = false
                 loginSocialLoginButtons.identityProviders = null

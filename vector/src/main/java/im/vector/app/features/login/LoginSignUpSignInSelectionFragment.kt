@@ -16,31 +16,18 @@
 
 package im.vector.app.features.login
 
-import android.content.ComponentName
-import android.net.Uri
-import androidx.browser.customtabs.CustomTabsClient
-import androidx.browser.customtabs.CustomTabsServiceConnection
-import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
-import im.vector.app.core.utils.openUrlInChromeCustomTab
 import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver
  */
-class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFragment() {
-
-    // Map of sso urls by providers if any
-    private var ssoUrls = emptyMap<String?, String>().toMutableMap()
-
-    private var customTabsServiceConnection: CustomTabsServiceConnection? = null
-    private var customTabsClient: CustomTabsClient? = null
-    private var customTabsSession: CustomTabsSession? = null
+class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_signup_signin_selection
 
@@ -73,7 +60,8 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
                 loginSignupSigninSocialLoginButtons.identityProviders = identityProviders
                 loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
-                        ssoUrls[id]?.let { openUrlInChromeCustomTab(requireContext(), customTabsSession, it) }
+                        val url = withState(loginViewModel) { it.getSsoUrl(id) }
+                        openInCustomTab(url)
                     }
                 }
             }
@@ -83,72 +71,6 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
                 loginSignupSigninSocialLoginButtons.identityProviders = null
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val hasSSO = withState(loginViewModel) { it.loginMode.hasSso() }
-        if (hasSSO) {
-            val packageName = CustomTabsClient.getPackageName(requireContext(), null)
-
-            // packageName can be null if there are 0 or several CustomTabs compatible browsers installed on the device
-            if (packageName != null) {
-                customTabsServiceConnection = object : CustomTabsServiceConnection() {
-                    override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
-                        customTabsClient = client
-                                .also { it.warmup(0L) }
-
-                        // prefetch urls
-                        prefetchSsoUrls()
-                    }
-
-                    override fun onServiceDisconnected(name: ComponentName?) {
-                    }
-                }
-                        .also {
-                            CustomTabsClient.bindCustomTabsService(
-                                    requireContext(),
-                                    // Despite the API, packageName cannot be null
-                                    packageName,
-                                    it
-                            )
-                        }
-            }
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        val hasSSO = withState(loginViewModel) { it.loginMode.hasSso() }
-        if (hasSSO) {
-            customTabsServiceConnection?.let { requireContext().unbindService(it) }
-            customTabsServiceConnection = null
-        }
-    }
-
-    private fun prefetchSsoUrls() = withState(loginViewModel) { state ->
-        val providers = state.loginMode.ssoProviders()
-        if (providers.isNullOrEmpty()) {
-            state.getSsoUrl(null).let {
-                ssoUrls[null] = it
-                prefetchUrl(it)
-            }
-        } else {
-            providers.forEach { identityProvider ->
-                state.getSsoUrl(identityProvider.id).let {
-                    ssoUrls[identityProvider.id] = it
-                    // we don't prefetch for privacy reasons
-                }
-            }
-        }
-    }
-
-    private fun prefetchUrl(url: String) {
-        if (customTabsSession == null) {
-            customTabsSession = customTabsClient?.newSession(null)
-        }
-
-        customTabsSession?.mayLaunchUrl(Uri.parse(url), null, null)
     }
 
     private fun setupButtons(state: LoginViewState) {
@@ -168,7 +90,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFr
     @OnClick(R.id.loginSignupSigninSubmit)
     fun submit() = withState(loginViewModel) { state ->
         if (state.loginMode is LoginMode.Sso) {
-            ssoUrls[null]?.let { openUrlInChromeCustomTab(requireContext(), customTabsSession, it) }
+            openInCustomTab(state.getSsoUrl(null))
         } else {
             loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
         }
