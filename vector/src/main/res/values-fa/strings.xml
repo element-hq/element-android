@@ -1062,7 +1062,7 @@
     <string name="attachment_type_contact">مخاطب</string>
     <string name="attachment_type_camera">دوربین</string>
     <string name="attachment_type_audio">صدا</string>
-    <string name="attachment_type_gallery">جُنگ</string>
+    <string name="attachment_type_gallery">گالری</string>
     <string name="attachment_type_sticker">برچسب</string>
     <string name="uploads_media_title">رسانه</string>
     <string name="uploads_media_no_result">هیچ رسانه‌ای در این اتاق نیست</string>
@@ -1525,7 +1525,7 @@
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nاین خطا از کنترل المنت خارج است و به چند دلیل ممکن است رخ داده باشد. امکان دارد در صورت تلاش مجدد مشکل رفع شود، همچنین می‌توانید بررسی کنید که سرویس Google Play در استفاده از اینترنت در تنظیمات گوشی محدودیتی نداشته باشد یا ساعت دستگاه شما درست باشد. همچنین ممکن است به علت استفاده از ROM سفارشی‌شده این خطا رخ داده باشد.</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nاین خطا از کنترل هیوا خارج است و طبق گفته گوگل ، این خطا نشان می دهد که دستگاه بیش از حد مجاز، برنامه های ثبت شده در FCM دارد. این خطا فقط در مواردی رخ می دهد که تعداد زیادی برنامه وجود دارد، بنابراین نباید بر کاربر عادی رخ دهد.</string>
+\nاین خطا از کنترل المنت خارج است و طبق گفته گوگل ، این خطا نشان می دهد که دستگاه بیش از حد مجاز، برنامه های ثبت شده در FCM دارد. این خطا فقط در مواردی رخ می دهد که تعداد زیادی برنامه وجود دارد، بنابراین نباید بر کاربر عادی رخ دهد.</string>
     <string name="settings_troubleshoot_test_fcm_failed">بازیابی توکن FCM با مشکل مواجه شد:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_success">توکن FCM با موفقیت بازیابی شد:
@@ -1588,21 +1588,21 @@
     <string name="room_preview_unlinked_email_warning">این دعوت به %s ارسال شده که ارتباطی با این حساب ندارد.
 \nممکن است بخواهید با حسابی دیگر وارد شده یا این رایانامه را به حسابتان بیفزایید.</string>
     <string name="permissions_action_not_performed_missing_permissions">متاسفانه به دلیل عدم دسترسی، درخواست شما امکان پذیر نمی باشد</string>
-    <string name="permissions_msg_contacts_warning_other_androids">هیوا می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر هیوا را بر اساس ایمبل و شماره تلفنشان پیدا کند. 
+    <string name="permissions_msg_contacts_warning_other_androids">المنت می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر ماتریکس را بر اساس ایمبل و شماره تلفنشان پیدا کند.
 \n
 \nآیا موافق با اشتراک‌گذاری دفترچه تلفنتان به این منظور هستید؟</string>
-    <string name="permissions_rationale_msg_contacts">هیوا می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر هیوا را بر اساس ایمبل و شماره تلفنشان پیدا کند. اگر مایل به اشتراک گذاری دفترچه تلفنتان به این منظور هستید لطفا در پنجره‌ی بعد اجازه‌ی این کار را بدهید.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">هیوا برای برقراری تماس تصویری نیازمند دسترسی به میکروفون و دوربین است.
+    <string name="permissions_rationale_msg_contacts">المنت می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر ماتریکس را بر اساس ایمبل و شماره تلفنشان پیدا کند. اگر مایل به اشتراک گذاری دفترچه تلفنتان به این منظور هستید لطفا در پنجره‌ی بعد اجازه‌ی این کار را بدهید.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">المنت برای برقراری تماس تصویری نیازمند دسترسی به میکروفون و دوربین است.
 \n
 \nلطفا در پنجره های بعدی دسترسی های لازم را بدهید.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nلطفا برای برقراری تماس در پنجره بعدی دسترسی لازم را بدهید."</string>
-    <string name="permissions_rationale_msg_record_audio">هیوا برای برقراری تماس صوتی نیازمند دسترسی به میکروفون است.</string>
+    <string name="permissions_rationale_msg_record_audio">المنت برای برقراری تماس صوتی نیازمند دسترسی به میکروفون است.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nلطفا برای برقراری تماس در پنجره بعدی دسترسی لازم را بدهید."</string>
-    <string name="permissions_rationale_msg_storage">هیوا برای ارسال و ذخیره‌ی فایل‌ها نیاز به دسترسی به گالری شما را دارد.
+    <string name="permissions_rationale_msg_storage">المنت برای ارسال و ذخیره‌ی فایل‌ها نیاز به دسترسی به گالری شما را دارد.
 \n
 \nلطفا در پنجره‌ای که باز می‌شود این دسترسی را بدهید.</string>
     <string name="settings_call_ringtone_use_default_stun_sum">هنگامی که سرور شما قابلیت تماس ندارد، از سرور %s استفاده کن</string>
@@ -2044,7 +2044,7 @@
     <string name="dialog_user_consent_content">برای ادامه استفاده از سرور %1$s باید شرایط و ضوابط را خوانده و موافقت کنید.</string>
     <string name="markdown_has_been_disabled">Markdown غیرفعال شده است.</string>
     <string name="markdown_has_been_enabled">Markdown فعال شده است.</string>
-    <string name="command_description_clear_scalar_token">جهت رفع مشکلات مدیریت برنامه‌های هیوا</string>
+    <string name="command_description_clear_scalar_token">جهت رفع مشکلات مدیریت برنامه‌های ماتریکس</string>
     <string name="command_description_markdown">فعال و غیرفعال کردن markdown</string>
     <string name="command_description_nick">نام مستعار شما را تغییر می‌دهد</string>
     <string name="command_description_kick_user">اخراج کاربر با شناسه داده شده</string>
