@@ -17,7 +17,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - RawCacheStrategy has been moved and renamed to CacheStrategy
 
 Build 🧱:
  -
