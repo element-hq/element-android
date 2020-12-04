@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.filtered
 
+import android.view.View
 import android.widget.Button
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -23,6 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
+import im.vector.app.features.settings.VectorPreferences
 
 @EpoxyModelClass(layout = R.layout.item_room_filter_footer)
 abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.Holder>() {
@@ -35,9 +37,11 @@ abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+        val vectorPreferences = VectorPreferences(holder.createRoomButton.context)
         holder.createRoomButton.setOnClickListener { listener?.createRoom(currentFilter) }
         holder.createDirectChat.setOnClickListener { listener?.createDirectChat() }
         holder.openRoomDirectory.setOnClickListener { listener?.openRoomDirectory(currentFilter) }
+        holder.openRoomDirectory.visibility = if (vectorPreferences.simplifiedMode()) View.GONE else View.VISIBLE
     }
 
     class Holder : VectorEpoxyHolder() {
