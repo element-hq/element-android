@@ -64,9 +64,9 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         }
 
         // Url preview
+        /*
+        TODO Note: we keep the setting client side for now
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_SHOW_URL_PREVIEW_KEY)!!.let {
-            /*
-            TODO
             it.isChecked = session.isURLPreviewEnabled
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
@@ -100,8 +100,8 @@ class VectorSettingsPreferencesFragment @Inject constructor(
 
                 false
             }
-            */
         }
+        */
 
         // update keep medias period
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_MEDIA_SAVING_PERIOD_KEY)!!.let {

@@ -1354,9 +1354,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         timelineEvents.accept(snapshot)
 
         // PreviewUrl
-        // TODO Check if URL preview is enable, check if encrypted room, etc.
-        snapshot.forEach {
-            previewUrlRetriever.getPreviewUrl(it.root, viewModelScope)
+        if (vectorPreferences.showUrlPreviews()) {
+            withState { state ->
+                snapshot
+                        .takeIf { state.asyncRoomSummary.invoke()?.isEncrypted == false }
+                        ?.forEach {
+                            previewUrlRetriever.getPreviewUrl(it.root, viewModelScope)
+                        }
+            }
         }
     }
 
