@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import javax.inject.Inject
 
 internal class UrlsExtractor @Inject constructor() {
+    // Sadly Patterns.WEB_URL_WITH_PROTOCOL is not public so filter the protocol later
     private val urlRegex = Patterns.WEB_URL.toRegex()
 
     fun extract(event: Event): List<String> {
@@ -35,6 +36,7 @@ internal class UrlsExtractor @Inject constructor() {
                 ?.body
                 ?.let { urlRegex.findAll(it) }
                 ?.map { it.value }
+                ?.filter { it.startsWith("https://") || it.startsWith("http://") }
                 ?.distinct()
                 ?.toList()
                 .orEmpty()
