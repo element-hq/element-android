@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.ui.views
+package im.vector.app.features.home.room.detail.timeline.url
 
 import android.content.Context
 import android.util.AttributeSet
@@ -27,10 +27,8 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
 import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
-import timber.log.Timber
 
 /**
  * A View to display a PreviewUrl and some other state
@@ -70,10 +68,8 @@ class PreviewUrlView @JvmOverloads constructor(
                imageContentRenderer: ImageContentRenderer,
                force: Boolean = false) {
         if (newState == state && !force) {
-            Timber.v("State unchanged")
             return
         }
-        Timber.v("Rendering $newState")
 
         state = newState
 
@@ -121,7 +117,7 @@ class PreviewUrlView @JvmOverloads constructor(
             imageContentRenderer.render(mxcUrl, imageView)
         }
         descriptionView.setTextOrHide(previewUrlData.description)
-        siteView.setTextOrHide(previewUrlData.siteName)
+        siteView.setTextOrHide(previewUrlData.siteName.takeIf { it != previewUrlData.title })
     }
 
     /**

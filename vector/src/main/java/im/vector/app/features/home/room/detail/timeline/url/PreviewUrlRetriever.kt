@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.url
 
+import im.vector.app.BuildConfig
 import im.vector.app.core.di.ScreenScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -34,7 +35,7 @@ class PreviewUrlRetriever @Inject constructor(
     fun getPreviewUrl(event: Event, coroutineScope: CoroutineScope) {
         val eventId = event.eventId ?: return
 
-        val urlToRetrieve = synchronized(data) {
+        synchronized(data) {
             if (data[eventId] == null) {
                 // Keep only the first URL for the moment
                 val url = session.mediaService().extractUrls(event).firstOrNull()
@@ -48,15 +49,13 @@ class PreviewUrlRetriever @Inject constructor(
                 // Already handled
                 null
             }
-        }
-
-        urlToRetrieve?.let { urlToRetrieve ->
+        }?.let { urlToRetrieve ->
             coroutineScope.launch {
                 runCatching {
                     session.mediaService().getPreviewUrl(
                             url = urlToRetrieve,
                             timestamp = null,
-                            cacheStrategy = CacheStrategy.TtlCache(CACHE_VALIDITY, false)
+                            cacheStrategy = if (BuildConfig.DEBUG) CacheStrategy.NoCache else CacheStrategy.TtlCache(CACHE_VALIDITY, false)
                     )
                 }.fold(
                         {

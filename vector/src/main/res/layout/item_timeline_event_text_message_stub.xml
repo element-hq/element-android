@@ -13,7 +13,7 @@
         android:textSize="14sp"
         tools:text="@sample/matrix.json/data/message" />
 
-    <im.vector.app.core.ui.views.PreviewUrlView
+    <im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
         android:id="@+id/messageUrlPreview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
