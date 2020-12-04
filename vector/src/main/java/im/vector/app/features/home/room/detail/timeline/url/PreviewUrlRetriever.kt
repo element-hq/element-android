@@ -116,7 +116,7 @@ class PreviewUrlRetriever @Inject constructor(
 
     // Called by the Epoxy item during unbinding
     fun removeListener(key: String, listener: PreviewUrlRetrieverListener) {
-        listeners.getOrPut(key) { mutableSetOf() }.remove(listener)
+        listeners[key]?.remove(listener)
     }
 
     interface PreviewUrlRetrieverListener {
