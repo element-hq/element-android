@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import javax.inject.Inject
 
 internal class UrlsExtractor @Inject constructor() {
@@ -30,6 +31,7 @@ internal class UrlsExtractor @Inject constructor() {
         return event.takeIf { it.getClearType() == EventType.MESSAGE }
                 ?.getClearContent()
                 ?.toModel<MessageContent>()
+                ?.takeIf { it.msgType == MessageType.MSGTYPE_TEXT || it.msgType == MessageType.MSGTYPE_EMOTE }
                 ?.body
                 ?.let { urlRegex.findAll(it) }
                 ?.map { it.value }

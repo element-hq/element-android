@@ -84,6 +84,19 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
     }
 
     /**
+     * For url preview
+     */
+    fun render(mxcUrl: String, imageView: ImageView) {
+        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
+        val imageUrl = contentUrlResolver.resolveFullSize(mxcUrl) ?: return
+
+        GlideApp.with(imageView)
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_image)
+                .into(imageView)
+    }
+
+    /**
      * For gallery
      */
     fun render(data: Data, imageView: ImageView, size: Int) {
@@ -227,7 +240,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
             val resolvedUrl = when (mode) {
                 Mode.FULL_SIZE,
-                Mode.STICKER   -> resolveUrl(data)
+                Mode.STICKER -> resolveUrl(data)
                 Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
             }
             // Fallback to base url
@@ -295,7 +308,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                     finalHeight = min(maxImageWidth * height / width, maxImageHeight)
                     finalWidth = finalHeight * width / height
                 }
-                Mode.STICKER   -> {
+                Mode.STICKER -> {
                     // limit on width
                     val maxWidthDp = min(dimensionConverter.dpToPx(120), maxImageWidth / 2)
                     finalWidth = min(dimensionConverter.dpToPx(width), maxWidthDp)

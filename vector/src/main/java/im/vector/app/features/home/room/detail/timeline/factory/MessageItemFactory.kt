@@ -58,6 +58,7 @@ import im.vector.app.features.home.room.detail.timeline.item.VerificationRequest
 import im.vector.app.features.home.room.detail.timeline.item.VerificationRequestItem_
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.html.CodeVisitor
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
@@ -107,6 +108,7 @@ class MessageItemFactory @Inject constructor(
         private val defaultItemFactory: DefaultItemFactory,
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
+        private val previewUrlRetriever: PreviewUrlRetriever,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val session: Session) {
 
@@ -424,6 +426,8 @@ class MessageItemFactory @Inject constructor(
         }
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
                 .searchForPills(isFormatted)
+                .previewUrlRetriever(previewUrlRetriever)
+                .imageContentRenderer(imageContentRenderer)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
@@ -529,6 +533,8 @@ class MessageItemFactory @Inject constructor(
                     }
                 }
                 .leftGuideline(avatarSizeProvider.leftGuideline)
+                .previewUrlRetriever(previewUrlRetriever)
+                .imageContentRenderer(imageContentRenderer)
                 .attributes(attributes)
                 .highlighted(highlight)
                 .movementMethod(createLinkMovementMethod(callback))
