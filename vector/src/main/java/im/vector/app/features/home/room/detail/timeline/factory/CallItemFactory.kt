@@ -63,25 +63,25 @@ class CallItemFactory @Inject constructor(
         }
         return when (event.root.getClearType()) {
             EventType.CALL_ANSWER -> {
-                if (call == null) return null
                 createCallTileTimelineItem(
                         callId = callId,
                         callStatus = CallTileTimelineItem.CallStatus.IN_CALL,
                         callKind = callKind,
                         callback = callback,
                         highlight = highlight,
-                        informationData = informationData
+                        informationData = informationData,
+                        isStillActive = call != null
                 )
             }
             EventType.CALL_INVITE -> {
-                if (call == null) return null
                 createCallTileTimelineItem(
                         callId = callId,
                         callStatus = CallTileTimelineItem.CallStatus.INVITED,
                         callKind = callKind,
                         callback = callback,
                         highlight = highlight,
-                        informationData = informationData
+                        informationData = informationData,
+                        isStillActive = call != null
                 )
             }
             EventType.CALL_REJECT -> {
@@ -91,7 +91,8 @@ class CallItemFactory @Inject constructor(
                         callKind = callKind,
                         callback = callback,
                         highlight = highlight,
-                        informationData = informationData
+                        informationData = informationData,
+                        isStillActive = false
                 )
             }
             EventType.CALL_HANGUP -> {
@@ -101,7 +102,8 @@ class CallItemFactory @Inject constructor(
                         callKind = callKind,
                         callback = callback,
                         highlight = highlight,
-                        informationData = informationData
+                        informationData = informationData,
+                        isStillActive = false
                 )
             }
             else                  -> null
@@ -124,6 +126,7 @@ class CallItemFactory @Inject constructor(
             callStatus: CallTileTimelineItem.CallStatus,
             informationData: MessageInformationData,
             highlight: Boolean,
+            isStillActive: Boolean,
             callback: TimelineEventController.Callback?
     ): CallTileTimelineItem? {
 
@@ -140,7 +143,9 @@ class CallItemFactory @Inject constructor(
                     itemLongClickListener = it.itemLongClickListener,
                     reactionPillCallback = it.reactionPillCallback,
                     readReceiptsCallback = it.readReceiptsCallback,
-                    userOfInterest = userOfInterest
+                    userOfInterest = userOfInterest,
+                    callback = callback,
+                    isStillActive = isStillActive
             )
         }
         return CallTileTimelineItem_()

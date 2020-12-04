@@ -339,12 +339,12 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         const val INCOMING_RINGING = "INCOMING_RINGING"
         const val INCOMING_ACCEPT = "INCOMING_ACCEPT"
 
-        fun newIntent(context: Context, mxCall: MxCallDetail): Intent {
+        fun newIntent(context: Context, mxCall: MxCallDetail, mode: String?): Intent {
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 putExtra(MvRx.KEY_ARG, CallArgs(mxCall.roomId, mxCall.callId, mxCall.opponentUserId, !mxCall.isOutgoing, mxCall.isVideoCall))
-                putExtra(EXTRA_MODE, OUTGOING_CREATED)
+                putExtra(EXTRA_MODE, mode)
             }
         }
 

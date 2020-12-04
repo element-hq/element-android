@@ -15,31 +15,26 @@
  */
 package im.vector.app.features.home.room.detail.timeline.item
 
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.extensions.setLeftDrawable
-import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import org.matrix.android.sdk.api.util.MatrixItem
-import timber.log.Timber
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
 abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Holder>() {
@@ -62,14 +57,14 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         attributes.avatarRenderer.render(attributes.userOfInterest, holder.creatorAvatarView)
         holder.callKindView.setText(attributes.callKind.title)
         holder.callKindView.setLeftDrawable(attributes.callKind.icon)
-        if (attributes.callStatus == CallStatus.INVITED && !attributes.informationData.sentByMe) {
+        if (attributes.callStatus == CallStatus.INVITED && !attributes.informationData.sentByMe && attributes.isStillActive) {
             holder.acceptRejectViewGroup.isVisible = true
             holder.acceptView.setOnClickListener {
-                Timber.v("On accept call: $attributes.callId ")
+                attributes.callback?.onTimelineItemAction(RoomDetailAction.AcceptCall(callId = attributes.callId))
             }
             holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.color.riotx_notice)
             holder.rejectView.setOnClickListener {
-                Timber.v("On reject call: $attributes.callId")
+                attributes.callback?.onTimelineItemAction(RoomDetailAction.EndCall)
             }
             holder.statusView.isVisible = false
             when (attributes.callKind) {
@@ -101,6 +96,8 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         when (attributes.callStatus) {
             CallStatus.INVITED -> if (attributes.informationData.sentByMe) {
                 setText(R.string.call_tile_you_started_call)
+            }else {
+                text = context.getString(R.string.call_tile_other_started_call, attributes.userOfInterest.getBestName())
             }
             CallStatus.IN_CALL -> setText(R.string.call_tile_in_call)
             CallStatus.REJECTED -> if (attributes.informationData.sentByMe) {
@@ -133,6 +130,8 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             val callKind: CallKind,
             val callStatus: CallStatus,
             val userOfInterest: MatrixItem,
+            val isStillActive: Boolean,
+            val callback: TimelineEventController.Callback? = null,
             override val informationData: MessageInformationData,
             override val avatarRenderer: AvatarRenderer,
             override val messageColorProvider: MessageColorProvider,
@@ -152,6 +151,8 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         INVITED,
         IN_CALL,
         REJECTED,
-        ENDED
+        ENDED;
+
+        fun isActive() = this == INVITED || this == IN_CALL
     }
 }

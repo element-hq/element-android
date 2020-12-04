@@ -79,7 +79,7 @@ fun TextView.setLeftDrawable(@DrawableRes iconRes: Int, @ColorRes tintColor: Int
     val icon = if(tintColor != null){
         val tint = ContextCompat.getColor(context, tintColor)
         ContextCompat.getDrawable(context, iconRes)?.also {
-            DrawableCompat.setTint(it, tint)
+            DrawableCompat.setTint(it.mutate(), tint)
         }
     }else {
         ContextCompat.getDrawable(context, iconRes)

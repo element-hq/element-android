@@ -269,6 +269,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
             is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall                        -> handleStartCall(action)
+            is RoomDetailAction.AcceptCall -> handleAcceptCall(action)
             is RoomDetailAction.EndCall                          -> handleEndCall()
             is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
             is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)
@@ -287,6 +288,12 @@ class RoomDetailViewModel @AssistedInject constructor(
                 )
             }
         }.exhaustive
+    }
+
+    private fun handleAcceptCall(action: RoomDetailAction.AcceptCall) {
+        callManager.getCallById(action.callId)?.also {
+            _viewEvents.post(RoomDetailViewEvents.DisplayAndAcceptCall(it))
+        }
     }
 
     private fun handleSetNewAvatar(action: RoomDetailAction.SetAvatarAction) {

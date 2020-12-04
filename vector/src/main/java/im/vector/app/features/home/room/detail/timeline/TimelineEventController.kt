@@ -30,10 +30,12 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.LoadingItem_
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.extensions.nextOrNull
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.home.room.detail.UnreadState
 import im.vector.app.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
+import im.vector.app.features.home.room.detail.timeline.factory.NoticeItemFactory
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
@@ -47,6 +49,7 @@ import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineIte
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.app.features.home.room.detail.timeline.item.NoticeItemBuilder
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
 import im.vector.app.features.media.ImageContentRenderer
@@ -73,6 +76,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
                                                   private val session: Session,
+                                                  private val callManager: WebRtcCallManager,
+                                                  private val noticeItemFactory: NoticeItemFactory,
                                                   @TimelineEventControllerHandler
                                                   private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
@@ -187,12 +192,17 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         adapterPositionMapping.clear()
         val callIds = mutableSetOf<String>()
         val modelsIterator = models.listIterator()
+        val showHiddenEvents = vectorPreferences.shouldShowHiddenEvents()
         modelsIterator.withIndex().forEach {
             val index = it.index
             val epoxyModel = it.value
             if (epoxyModel is CallTileTimelineItem) {
                 val callId = epoxyModel.attributes.callId
-                if (callIds.contains(callId)) {
+                val call = callManager.getCallById(callId)
+                // We should remove the call tile if we already have one for this call or
+                // if this is an active call tile without an actual call (which can happen with permalink)
+                val shouldRemoveCallItem = callIds.contains(callId) || (call == null && epoxyModel.attributes.callStatus.isActive())
+                if (shouldRemoveCallItem && !showHiddenEvents) {
                     modelsIterator.remove()
                     return@forEach
                 }
