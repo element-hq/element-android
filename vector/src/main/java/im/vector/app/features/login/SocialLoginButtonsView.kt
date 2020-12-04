@@ -85,19 +85,19 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
             // Use some heuristic to render buttons according to branding guidelines
             val button: MaterialButton = cachedViews[identityProvider.id]
                     ?: when (identityProvider.id) {
-                        "google" -> {
+                        "google"   -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_google_style)
                         }
-                        "github" -> {
+                        "github"   -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_github_style)
                         }
-                        "apple" -> {
+                        "apple"    -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_apple_style)
                         }
                         "facebook" -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_facebook_style)
                         }
-                        "twitter" -> {
+                        "twitter"  -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_twitter_style)
                         }
                         else       -> {
@@ -143,9 +143,9 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
         val typedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.SocialLoginButtonsView, 0, 0)
         val modeAttr = typedArray.getInt(R.styleable.SocialLoginButtonsView_signMode, 2)
         mode = when (modeAttr) {
-            0 -> Mode.MODE_SIGN_IN
-            1 -> Mode.MODE_SIGN_UP
-            else     -> Mode.MODE_CONTINUE
+            0    -> Mode.MODE_SIGN_IN
+            1    -> Mode.MODE_SIGN_UP
+            else -> Mode.MODE_CONTINUE
         }
         typedArray.recycle()
         update()

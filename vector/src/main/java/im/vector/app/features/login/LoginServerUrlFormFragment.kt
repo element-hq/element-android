@@ -85,7 +85,9 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
             }
         }
         val completions =  state.knownCustomHomeServersUrls
-        loginServerUrlFormHomeServerUrl.setAdapter(ArrayAdapter(requireContext(), android.R.layout.select_dialog_item,
+        loginServerUrlFormHomeServerUrl.setAdapter( ArrayAdapter(
+                requireContext(),
+                R.layout.item_completion_homeserver,
                 completions
         ))
         loginServerUrlFormHomeServerUrlTil.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
