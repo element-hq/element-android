@@ -35,5 +35,7 @@ sealed class PreviewUrlUiState {
     data class Error(val throwable: Throwable) : PreviewUrlUiState()
 
     // PreviewUrl data
-    data class Data(val url: String, val previewUrlData: PreviewUrlData) : PreviewUrlUiState()
+    data class Data(val eventId: String,
+                    val url: String,
+                    val previewUrlData: PreviewUrlData) : PreviewUrlUiState()
 }

@@ -53,6 +53,9 @@ class PreviewUrlView @JvmOverloads constructor(
     @BindView(R.id.url_preview_site)
     lateinit var siteView: TextView
 
+    @BindView(R.id.url_preview_close)
+    lateinit var closeView: View
+
     var delegate: TimelineEventController.PreviewUrlCallback? = null
 
     init {
@@ -78,16 +81,23 @@ class PreviewUrlView @JvmOverloads constructor(
         hideAll()
         when (newState) {
             PreviewUrlUiState.Unknown,
-            PreviewUrlUiState.NoUrl    -> renderHidden()
-            PreviewUrlUiState.Loading  -> renderLoading()
+            PreviewUrlUiState.NoUrl -> renderHidden()
+            PreviewUrlUiState.Loading -> renderLoading()
             is PreviewUrlUiState.Error -> renderHidden()
-            is PreviewUrlUiState.Data  -> renderData(newState.previewUrlData, imageContentRenderer)
+            is PreviewUrlUiState.Data -> renderData(newState.previewUrlData, imageContentRenderer)
         }
     }
 
     override fun onClick(v: View?) {
         when (val finalState = state) {
             is PreviewUrlUiState.Data -> delegate?.onPreviewUrlClicked(finalState.url)
+            else                      -> Unit
+        }
+    }
+
+    private fun onCloseClick() {
+        when (val finalState = state) {
+            is PreviewUrlUiState.Data -> delegate?.onPreviewUrlCloseClicked(finalState.eventId, finalState.url)
             else                      -> Unit
         }
     }
@@ -99,6 +109,7 @@ class PreviewUrlView @JvmOverloads constructor(
         ButterKnife.bind(this)
 
         setOnClickListener(this)
+        closeView.setOnClickListener { onCloseClick() }
     }
 
     private fun renderHidden() {

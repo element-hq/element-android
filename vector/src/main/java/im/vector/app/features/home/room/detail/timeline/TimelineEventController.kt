@@ -126,7 +126,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     interface PreviewUrlCallback {
         fun onPreviewUrlClicked(url: String)
-        fun onPreviewUrlCloseClicked(url: String)
+        fun onPreviewUrlCloseClicked(eventId: String, url: String)
     }
 
     // Map eventId to adapter position

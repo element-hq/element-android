@@ -32,13 +32,18 @@ class PreviewUrlRetriever @Inject constructor(
     private val data = mutableMapOf<String, PreviewUrlUiState>()
     private val listeners = mutableMapOf<String, MutableSet<PreviewUrlRetrieverListener>>()
 
+    // In memory list
+    private val blockedUrl = mutableSetOf<String>()
+
     fun getPreviewUrl(event: Event, coroutineScope: CoroutineScope) {
         val eventId = event.eventId ?: return
 
         synchronized(data) {
             if (data[eventId] == null) {
                 // Keep only the first URL for the moment
-                val url = session.mediaService().extractUrls(event).firstOrNull()
+                val url = session.mediaService().extractUrls(event)
+                        .firstOrNull()
+                        ?.takeIf { it !in blockedUrl }
                 if (url == null) {
                     updateState(eventId, PreviewUrlUiState.NoUrl)
                 } else {
@@ -60,7 +65,12 @@ class PreviewUrlRetriever @Inject constructor(
                 }.fold(
                         {
                             synchronized(data) {
-                                updateState(eventId, PreviewUrlUiState.Data(urlToRetrieve, it))
+                                // Blocked after the request has been sent?
+                                if (urlToRetrieve in blockedUrl) {
+                                    updateState(eventId, PreviewUrlUiState.NoUrl)
+                                } else {
+                                    updateState(eventId, PreviewUrlUiState.Data(eventId, urlToRetrieve, it))
+                                }
                             }
                         },
                         {
@@ -70,6 +80,19 @@ class PreviewUrlRetriever @Inject constructor(
                         }
                 )
             }
+        }
+    }
+
+    fun doNotShowPreviewUrlFor(eventId: String, url: String) {
+        blockedUrl.add(url)
+
+        // Notify the listener
+        synchronized(data) {
+            data[eventId]
+                    ?.takeIf { it is PreviewUrlUiState.Data && it.url == url }
+                    ?.let {
+                        updateState(eventId, PreviewUrlUiState.NoUrl)
+                    }
         }
     }
 

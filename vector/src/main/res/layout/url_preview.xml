@@ -26,6 +26,7 @@
         android:textColor="?riotx_text_primary"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/url_preview_close"
         app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Jo Malone denounces her former brand's John Boyega decision" />
@@ -70,5 +71,16 @@
         app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
         app:layout_constraintTop_toBottomOf="@+id/url_preview_description"
         tools:text="BBC News" />
+
+    <ImageView
+        android:id="@+id/url_preview_close"
+        android:layout_width="@dimen/layout_touch_size"
+        android:layout_height="@dimen/layout_touch_size"
+        android:scaleType="center"
+        android:src="@drawable/ic_close_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?riotx_text_secondary"
+        tools:ignore="MissingPrefix" />
 
 </merge>

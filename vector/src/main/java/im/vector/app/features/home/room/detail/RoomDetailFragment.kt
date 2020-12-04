@@ -140,6 +140,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageInformationD
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
@@ -215,6 +216,7 @@ class RoomDetailFragment @Inject constructor(
         private val session: Session,
         private val avatarRenderer: AvatarRenderer,
         private val timelineEventController: TimelineEventController,
+        private val previewUrlRetriever: PreviewUrlRetriever,
         autoCompleterFactory: AutoCompleter.Factory,
         private val permalinkHandler: PermalinkHandler,
         private val notificationDrawerManager: NotificationDrawerManager,
@@ -1656,8 +1658,8 @@ class RoomDetailFragment @Inject constructor(
         onUrlClicked(url, url)
     }
 
-    override fun onPreviewUrlCloseClicked(url: String) {
-        TODO("Not yet implemented")
+    override fun onPreviewUrlCloseClicked(eventId: String, url: String) {
+        previewUrlRetriever.doNotShowPreviewUrlFor(eventId, url)
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {
