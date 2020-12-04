@@ -53,6 +53,7 @@
         android:maxLines="4"
         android:textColor="?riotx_text_secondary"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
         app:layout_constraintTop_toBottomOf="@+id/url_preview_image"
         tools:text="The British perfumer says removing actor John Boyega from his own advert was “utterly despicable”." />
@@ -68,6 +69,7 @@
         android:singleLine="true"
         android:textColor="?riotx_text_tertiary"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
         app:layout_constraintTop_toBottomOf="@+id/url_preview_description"
         tools:text="BBC News" />

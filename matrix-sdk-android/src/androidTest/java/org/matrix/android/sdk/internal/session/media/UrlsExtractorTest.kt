@@ -51,12 +51,29 @@ internal class UrlsExtractorTest : InstrumentedTest {
     }
 
     @Test
+    fun withoutProtocolTest() {
+        createEvent(body = "www.matrix.org")
+                .let { urlsExtractor.extract(it) }
+                .size shouldBeEqualTo 0
+    }
+
+    @Test
     fun oneUrlWithParamTest() {
         createEvent(body = "https://matrix.org?foo=bar")
                 .let { urlsExtractor.extract(it) }
                 .let { result ->
                     result.size shouldBeEqualTo 1
                     result[0] shouldBeEqualTo "https://matrix.org?foo=bar"
+                }
+    }
+
+    @Test
+    fun oneUrlWithParamsTest() {
+        createEvent(body = "https://matrix.org?foo=bar&bar=foo")
+                .let { urlsExtractor.extract(it) }
+                .let { result ->
+                    result.size shouldBeEqualTo 1
+                    result[0] shouldBeEqualTo "https://matrix.org?foo=bar&bar=foo"
                 }
     }
 

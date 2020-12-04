@@ -117,7 +117,7 @@ class PreviewUrlView @JvmOverloads constructor(
     }
 
     private fun renderLoading() {
-        // TODO
+        // Just hide for the moment
         isVisible = false
     }
 
