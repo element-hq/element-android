@@ -29,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.media.ImageContentRenderer
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 
 /**
@@ -112,11 +113,7 @@ class PreviewUrlView @JvmOverloads constructor(
     private fun renderData(previewUrlData: PreviewUrlData, imageContentRenderer: ImageContentRenderer) {
         isVisible = true
         titleView.setTextOrHide(previewUrlData.title)
-        val mxcUrl = previewUrlData.mxcUrl
-        imageView.isVisible = mxcUrl != null
-        if (mxcUrl != null) {
-            imageContentRenderer.render(mxcUrl, imageView)
-        }
+        imageView.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, imageView) }.orFalse()
         descriptionView.setTextOrHide(previewUrlData.description)
         siteView.setTextOrHide(previewUrlData.siteName.takeIf { it != previewUrlData.title })
     }

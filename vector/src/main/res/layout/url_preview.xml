@@ -11,7 +11,7 @@
         android:id="@+id/url_preview_left_border"
         android:layout_width="2dp"
         android:layout_height="0dp"
-        android:background="#8D99A5"
+        android:background="?riotx_text_tertiary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,10 +32,11 @@
 
     <ImageView
         android:id="@+id/url_preview_image"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="157dp"
         android:layout_marginTop="16dp"
         android:importantForAccessibility="no"
+        android:scaleType="fitStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/url_preview_title"
         app:layout_constraintTop_toBottomOf="@+id/url_preview_title"
@@ -64,7 +65,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:textColor="?riotx_text_secondary"
+        android:textColor="?riotx_text_tertiary"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
         app:layout_constraintTop_toBottomOf="@+id/url_preview_description"

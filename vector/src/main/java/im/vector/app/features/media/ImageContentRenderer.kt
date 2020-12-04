@@ -86,14 +86,14 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
     /**
      * For url preview
      */
-    fun render(mxcUrl: String, imageView: ImageView) {
+    fun render(mxcUrl: String, imageView: ImageView): Boolean {
         val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
-        val imageUrl = contentUrlResolver.resolveFullSize(mxcUrl) ?: return
+        val imageUrl = contentUrlResolver.resolveFullSize(mxcUrl) ?: return false
 
         GlideApp.with(imageView)
                 .load(imageUrl)
-                .placeholder(R.drawable.ic_image)
                 .into(imageView)
+        return true
     }
 
     /**
