@@ -22,7 +22,6 @@ import android.widget.CheckedTextView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
-import androidx.preference.SwitchPreference
 import im.vector.app.R
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.preference.VectorListPreference
