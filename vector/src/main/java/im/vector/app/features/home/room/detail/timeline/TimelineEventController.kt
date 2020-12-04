@@ -76,7 +76,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
 
-    interface Callback : BaseCallback, ReactionPillCallback, AvatarCallback, UrlClickCallback, ReadReceiptsCallback {
+    interface Callback :
+            BaseCallback,
+            ReactionPillCallback,
+            AvatarCallback,
+            UrlClickCallback,
+            ReadReceiptsCallback,
+            PreviewUrlCallback {
         fun onLoadMore(direction: Timeline.Direction)
         fun onEventInvisible(event: TimelineEvent)
         fun onEventVisible(event: TimelineEvent)
@@ -116,6 +122,11 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     interface UrlClickCallback {
         fun onUrlClicked(url: String, title: String): Boolean
         fun onUrlLongClicked(url: String): Boolean
+    }
+
+    interface PreviewUrlCallback {
+        fun onPreviewUrlClicked(url: String)
+        fun onPreviewUrlCloseClicked(url: String)
     }
 
     // Map eventId to adapter position

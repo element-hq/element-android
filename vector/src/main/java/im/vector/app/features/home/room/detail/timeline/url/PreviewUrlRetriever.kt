@@ -60,7 +60,7 @@ class PreviewUrlRetriever @Inject constructor(
                 }.fold(
                         {
                             synchronized(data) {
-                                updateState(eventId, PreviewUrlUiState.Data(it))
+                                updateState(eventId, PreviewUrlUiState.Data(urlToRetrieve, it))
                             }
                         },
                         {

@@ -27,6 +27,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 
@@ -51,7 +52,7 @@ class PreviewUrlView @JvmOverloads constructor(
     @BindView(R.id.url_preview_site)
     lateinit var siteView: TextView
 
-    var delegate: Delegate? = null
+    var delegate: TimelineEventController.PreviewUrlCallback? = null
 
     init {
         setupView()
@@ -85,7 +86,7 @@ class PreviewUrlView @JvmOverloads constructor(
 
     override fun onClick(v: View?) {
         when (val finalState = state) {
-            is PreviewUrlUiState.Data -> delegate?.onUrlClicked(finalState.previewUrlData.url)
+            is PreviewUrlUiState.Data -> delegate?.onPreviewUrlClicked(finalState.url)
             else                      -> Unit
         }
     }
@@ -128,16 +129,5 @@ class PreviewUrlView @JvmOverloads constructor(
         imageView.isVisible = false
         descriptionView.isVisible = false
         siteView.isVisible = false
-    }
-
-    /**
-     * An interface to delegate some actions to another object
-     */
-    interface Delegate {
-        // TODO
-        fun onUrlClicked(url: String)
-
-        // TODO
-        //  fun close()
     }
 }

@@ -23,6 +23,7 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
@@ -45,6 +46,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var previewUrlRetriever: PreviewUrlRetriever? = null
 
     @EpoxyAttribute
+    var previewUrlCallback: TimelineEventController.PreviewUrlCallback? = null
+
+    @EpoxyAttribute
     var imageContentRenderer: ImageContentRenderer? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
@@ -53,9 +57,11 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     private val previewUrlViewUpdater = PreviewUrlViewUpdater()
 
     override fun bind(holder: Holder) {
+        // Preview URL
         previewUrlViewUpdater.previewUrlView = holder.previewUrlView
         previewUrlViewUpdater.imageContentRenderer = imageContentRenderer
         previewUrlRetriever?.addListener(attributes.informationData.eventId, previewUrlViewUpdater)
+        holder.previewUrlView.delegate = previewUrlCallback
 
         if (useBigFont) {
             holder.messageView.textSize = 44F

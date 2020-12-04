@@ -1652,6 +1652,14 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.EnterTrackingUnreadMessagesState)
     }
 
+    override fun onPreviewUrlClicked(url: String) {
+        onUrlClicked(url, url)
+    }
+
+    override fun onPreviewUrlCloseClicked(url: String) {
+        TODO("Not yet implemented")
+    }
+
     private fun onShareActionClicked(action: EventSharedAction.Share) {
         if (action.messageContent is MessageTextContent) {
             shareText(requireContext(), action.messageContent.body)
