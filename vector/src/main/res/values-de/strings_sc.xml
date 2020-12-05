@@ -44,6 +44,9 @@
     <string name="settings_unimportant_counter_badge">Zähle unwichtige Chat-Ereignisse</string>
     <string name="settings_unimportant_counter_badge_summary">Betrachte auch Chats ohne Benachrichtigung beim Zählen der ungelesenen Nachrichten pro Kategorie</string>
 
+    <string name="labs_mark_rooms_unread">Chats als ungelesen markieren</string>
+    <string name="labs_mark_rooms_unread_summary">Erlaube, Chats als ungelesen zu markieren. Andere Matrix-Clients unterstützen diese Funktionalität möglicherweise noch nicht.</string>
+
     <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="bottom_action_all">Übersicht</string>
     <string name="all_list_rooms_empty_title">SchildiChat</string>

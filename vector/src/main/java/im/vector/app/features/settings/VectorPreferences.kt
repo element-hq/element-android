@@ -183,6 +183,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_ROOM_UNREAD_KIND = "SETTINGS_ROOM_UNREAD_KIND"
         private const val SETTINGS_UNIMPORTANT_COUNTER_BADGE = "SETTINGS_UNIMPORTANT_COUNTER_BADGE"
         private const val SETTINGS_SIMPLIFIED_MODE = "SETTINGS_SIMPLIFIED_MODE"
+        private const val SETTINGS_LABS_ALLOW_MARK_UNREAD = "SETTINGS_LABS_ALLOW_MARK_UNREAD"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
@@ -882,6 +883,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 .edit()
                 .putBoolean(SETTINGS_SIMPLIFIED_MODE, simplified)
                 .apply()
+    }
+
+    // SC addition
+    fun labAllowMarkUnread(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_MARK_UNREAD, false)
     }
 
     /**

@@ -34,6 +34,7 @@ import javax.inject.Inject
 class RoomListQuickActionsEpoxyController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
+        private val vectorPreferences: VectorPreferences,
         private val scSdkPreferences: ScSdkPreferences
 ) : TypedEpoxyController<RoomListQuickActionsState>() {
 
@@ -57,14 +58,16 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
                 lowPriorityClickListener { listener?.didSelectMenuAction(RoomListQuickActionsSharedAction.LowPriority(roomSummary.roomId)) }
             }
 
-            // Mark read/unread
-            dividerItem {
-                id("mark_unread_separator")
-            }
-            if (roomSummary.scIsUnread(scSdkPreferences)) {
-                RoomListQuickActionsSharedAction.MarkRead(roomSummary.roomId).toBottomSheetItem(-1)
-            } else {
-                RoomListQuickActionsSharedAction.MarkUnread(roomSummary.roomId).toBottomSheetItem(-1)
+            if (vectorPreferences.labAllowMarkUnread()) {
+                // Mark read/unread
+                dividerItem {
+                    id("mark_unread_separator")
+                }
+                if (roomSummary.scIsUnread(scSdkPreferences)) {
+                    RoomListQuickActionsSharedAction.MarkRead(roomSummary.roomId).toBottomSheetItem(-1)
+                } else {
+                    RoomListQuickActionsSharedAction.MarkUnread(roomSummary.roomId).toBottomSheetItem(-1)
+                }
             }
 
             // Notifications
