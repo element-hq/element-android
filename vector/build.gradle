@@ -122,10 +122,10 @@ android {
 
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
         // Other branches (master, features, etc.) will have version code based on application version.
-        versionCode 40100360
+        versionCode 40100370
 
         // Required for sonar analysis
-        versionName "1.0.10.sc.26"
+        versionName "1.0.11.sc.26"
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_revision", "\"${gitRevision()}\""
@@ -241,7 +241,7 @@ android {
         gplay {
             dimension "store"
 
-            versionName "1.0.10.sc.26"
+            versionName "1.0.11.sc.26"
 
             resValue "bool", "isGplay", "true"
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
@@ -252,7 +252,7 @@ android {
         fdroid {
             dimension "store"
 
-            versionName "1.0.10.sc.26"
+            versionName "1.0.11.sc.26"
 
             resValue "bool", "isGplay", "false"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"

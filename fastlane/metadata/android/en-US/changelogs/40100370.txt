@@ -1,0 +1,3 @@
+- Update codebase to Element 1.0.11
+- Minor easy-mode improvements and fixes
+- Increase the margin to the display edge for outgoing messages (now it's identical to incoming messages)
