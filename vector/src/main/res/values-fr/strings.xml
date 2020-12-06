@@ -102,8 +102,8 @@
     <string name="auth_password_placeholder">Mot de passe</string>
     <string name="auth_new_password_placeholder">Nouveau mot de passe</string>
     <string name="auth_user_name_placeholder">Nom d’utilisateur</string>
-    <string name="auth_email_placeholder">Adresse e-mail</string>
-    <string name="auth_opt_email_placeholder">Adresse e-mail (facultatif)</string>
+    <string name="auth_email_placeholder">Adresse électronique</string>
+    <string name="auth_opt_email_placeholder">Adresse électronique (facultatif)</string>
     <string name="auth_phone_number_placeholder">Numéro de téléphone</string>
     <string name="auth_opt_phone_number_placeholder">Numéro de téléphone (facultatif)</string>
     <string name="auth_repeat_password_placeholder">Répéter le mot de passe</string>
@@ -704,9 +704,9 @@
     <string name="startup_notification_privacy_button_grant">Donner la permission</string>
     <string name="startup_notification_privacy_button_other">Choisir une autre option</string>
     <string name="notice_avatar">Avatar d’avertissement</string>
-    <string name="title_activity_choose_sticker">Envoyer un sticker</string>
-    <string name="option_send_sticker">Envoyer un sticker</string>
-    <string name="no_sticker_application_dialog_content">Vous n’avez aucun jeu d\'étiquettes activé pour le moment.
+    <string name="title_activity_choose_sticker">Envoyer un autocollant</string>
+    <string name="option_send_sticker">Envoyer un autocollant</string>
+    <string name="no_sticker_application_dialog_content">Vous n’avez aucun jeu d\'autocollants activé pour le moment.
 \n
 \nVoulez-vous en ajouter \?</string>
     <string name="settings_deactivate_account_section">Désactiver le compte</string>
@@ -1269,7 +1269,7 @@
     <string name="terms_of_service">Conditions de service</string>
     <string name="review_terms">Examiner les conditions</string>
     <string name="terms_description_for_identity_server">Être découvrable par les autres</string>
-    <string name="terms_description_for_integration_manager">Utiliser des robots, passerelles, widgets et packs de stickers</string>
+    <string name="terms_description_for_integration_manager">Utiliser des robots, passerelles, widgets et jeux d\'autocollants</string>
     <string name="read_at">Lu à</string>
     <string name="none">Aucun</string>
     <string name="revoke">Révoquer</string>
@@ -1388,7 +1388,7 @@
     <string name="settings_add_3pid_flow_not_supported">Vous ne pouvez pas faire cela depuis Element mobile</string>
     <string name="settings_add_3pid_authentication_needed">Une authentification est nécessaire</string>
     <string name="settings_integrations">Intégrations</string>
-    <string name="settings_integrations_summary">Utilisez un gestionnaire d’intégrations pour gérer les bots, les passerelles, les widgets et les packs de stickers.
+    <string name="settings_integrations_summary">Utilisez un gestionnaire d’intégrations pour gérer les bots, les passerelles, les widgets et les jeux d\'autocollants.
 \nLes gestionnaires d’intégrations reçoivent des données de configuration et peuvent modifier des widgets, envoyer des invitations de salon et définir des rangs à votre place.</string>
     <string name="settings_integration_allow">Autoriser les intégrations</string>
     <string name="room_widget_activity_title">Widget</string>
@@ -2231,4 +2231,27 @@
     <string name="permissions_denied_add_contact">Autoriser l\'accès à vos contacts.</string>
     <string name="permissions_denied_qr_code">Pour scanner un QR code, vous devez autoriser l\'accès à votre appareil photo.</string>
     <string name="start_chatting">Débuter la discussion</string>
+    <string name="matrix_to_card_title">Lien Matrix</string>
+    <string name="qr_code_not_scanned">Code QR non scanné !</string>
+    <string name="invalid_qr_code_uri">Code QR invalide (URI invalide) !</string>
+    <string name="cannot_dm_self">Impossible avec vous-même !</string>
+    <string name="share_by_text">Partager par texto</string>
+    <string name="phone_book_perform_lookup">Rechercher des contacts sur Matrix</string>
+    <string name="room_settings_set_avatar">Définir l\'avatar</string>
+    <string name="identity_server_user_consent_not_provided">Le consentement de l\'utilisateur n\'a pas été fourni.</string>
+    <string name="user_code_info_text">Partagez ce code avec des gens pour qu\'ils puissent le scanner pour vous ajouter et commencer à discuter.</string>
+    <string name="user_code_my_code">Mon code</string>
+    <string name="user_code_share">Partager mon code</string>
+    <string name="user_code_scan">Scanner un code QR</string>
+    <string name="not_a_valid_qr_code">Ce n\'est pas un code QR matrix valide</string>
+    <string name="invite_friends_rich_title">🔐️ Rejoins-moi sur element</string>
+    <string name="invite_friends_text">Salut, parle-moi sur Element : %s</string>
+    <string name="invite_friends">Ajouter des amis</string>
+    <string name="add_people">Ajouter des gens</string>
+    <string name="topic_prefix">"Sujet : "</string>
+    <string name="add_a_topic_link_text">Ajouter un sujet</string>
+    <string name="create_room_disable_federation_description">Vous devriez l\'activer si le salon n\'est utilisé que pour collaborer avec des équipes internes sur votre serveur d\'accueil. Ceci ne peut pas être changé plus tard.</string>
+    <string name="create_room_disable_federation_title">Bloquer les personnes qui ne sont pas membres de %s de rejoindre ce salon</string>
+    <string name="hide_advanced">Masquer les avancés</string>
+    <string name="show_advanced">Afficher les avancés</string>
 </resources>
