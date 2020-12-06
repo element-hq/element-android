@@ -2159,7 +2159,7 @@
     <string name="call_format_turn_hd_on">Activer la HD</string>
     <string name="call_format_turn_hd_off">Désactiver la HD</string>
     <string name="call_camera_back">Arrière</string>
-    <string name="call_camera_front">Frontale</string>
+    <string name="call_camera_front">Frontal</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Vous n’avez pas la permission de démarrer un appel</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Vous n’avez pas la permission de démarrer une téléconférence</string>
     <string name="reset">Réinitialiser</string>
