@@ -999,7 +999,7 @@
     <string name="settings_lazy_loading_description">افزایش کارایی با فقط بار کردن اعضای اتاق در نمای نخست.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">کارساز خانگیتان هنوز از بار کردن تنبلانهٔ اعضای اتاق پشتیبانی نمی‌کند. بعداً تلاش کنید.</string>
     <string name="keys_backup_setup_step1_title">هرگز پیام‌های رمزشده را از دست ندهید</string>
-    <string name="keys_backup_setup">شروع با استفاده از پشتیبان کلید</string>
+    <string name="keys_backup_setup">شروع به استفاده از پشتیبانِ کلید</string>
     <string name="keys_backup_setup_step1_manual_export">برون‌ریزی دستی کلیدها</string>
     <string name="keys_backup_setup_step2_text_title">امن کردن پشتیبانتان با یک عبارت عبور.</string>
     <string name="keys_backup_setup_step2_button_title">تنظیم عبارت عبور</string>
@@ -1024,7 +1024,7 @@
     <string name="keys_backup_recovery_code_empty_error_message">لطفاً یک کلید بازیابی وارد کنید</string>
     <string name="new_recovery_method_popup_was_me">من بودم</string>
     <string name="keys_backup_banner_setup_line1">هرگز پیام‌های رمزشده را از دست ندهید</string>
-    <string name="keys_backup_banner_setup_line2">شروع با استفاده از پشتیبان کلید</string>
+    <string name="keys_backup_banner_setup_line2">شروع به استفاده از پشتیبانِ کلید</string>
     <string name="secure_backup_banner_setup_line1">پشتیبان امن</string>
     <string name="secure_backup_banner_setup_line2">سپرامنیتی در برابر از دست دادن دسترسی به داده‌ها و پیام‌های رمزشده</string>
     <string name="keys_backup_banner_recover_line1">هرگز پیام‌های رمزشده را از دست ندهید</string>
