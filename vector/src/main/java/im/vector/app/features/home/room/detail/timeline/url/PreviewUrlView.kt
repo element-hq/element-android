@@ -81,10 +81,10 @@ class PreviewUrlView @JvmOverloads constructor(
         hideAll()
         when (newState) {
             PreviewUrlUiState.Unknown,
-            PreviewUrlUiState.NoUrl -> renderHidden()
-            PreviewUrlUiState.Loading -> renderLoading()
+            PreviewUrlUiState.NoUrl    -> renderHidden()
+            PreviewUrlUiState.Loading  -> renderLoading()
             is PreviewUrlUiState.Error -> renderHidden()
-            is PreviewUrlUiState.Data -> renderData(newState.previewUrlData, imageContentRenderer)
+            is PreviewUrlUiState.Data  -> renderData(newState.previewUrlData, imageContentRenderer)
         }
     }
 
