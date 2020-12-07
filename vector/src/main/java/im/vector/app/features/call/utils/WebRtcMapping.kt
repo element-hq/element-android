@@ -36,5 +36,3 @@ fun SdpType.asWebRTC(): SessionDescription.Type {
         SessionDescription.Type.ANSWER
     }
 }
-
-

@@ -25,8 +25,6 @@ import im.vector.app.core.services.BluetoothHeadsetReceiver
 import im.vector.app.core.services.CallService
 import im.vector.app.core.services.WiredHeadsetStateReceiver
 import im.vector.app.features.call.CallAudioManager
-import im.vector.app.features.call.CameraType
-import im.vector.app.features.call.CaptureFormat
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.push.fcm.FcmHelper
@@ -46,7 +44,6 @@ import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerConten
 import org.webrtc.DefaultVideoDecoderFactory
 import org.webrtc.DefaultVideoEncoderFactory
 import org.webrtc.PeerConnectionFactory
-import org.webrtc.SurfaceViewRenderer
 import timber.log.Timber
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -230,7 +227,8 @@ class WebRtcCallManager @Inject constructor(
         )
         currentCall = webRtcCall
         callsByCallId[mxCall.callId] = webRtcCall
-        callsByRoomId.getOrPut(mxCall.roomId, { ArrayList() }).add(webRtcCall)
+        callsByRoomId.getOrPut(mxCall.roomId) { ArrayList() }
+                .add(webRtcCall)
         return webRtcCall
     }
 
@@ -332,7 +330,7 @@ class WebRtcCallManager @Inject constructor(
                 }
         val selectedPartyId = callSelectAnswerContent.selectedPartyId
         if (selectedPartyId != call.mxCall.ourPartyId) {
-            Timber.i("Got select_answer for party ID ${selectedPartyId}: we are party ID ${call.mxCall.ourPartyId}.");
+            Timber.i("Got select_answer for party ID $selectedPartyId: we are party ID ${call.mxCall.ourPartyId}.")
             // The other party has picked somebody else's answer
             call.endCall(false)
         }

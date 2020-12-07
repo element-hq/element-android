@@ -35,7 +35,7 @@ data class CallNegotiateContent(
         /**
          * Required. The time in milliseconds that the negotiation is valid for. Once exceeded the sender
          * of the negotiate event should consider the negotiation failed (timed out) and the recipient should ignore it.
-        **/
+         **/
         @Json(name = "lifetime") val lifetime: Int?,
         /**
          * Required. The session description object
@@ -45,9 +45,9 @@ data class CallNegotiateContent(
         /**
          * Required. The version of the VoIP specification this message adheres to.
          */
-        @Json(name = "version") override val version: String?,
+        @Json(name = "version") override val version: String?
 
-): CallSignallingContent  {
+        ): CallSignallingContent  {
     @JsonClass(generateAdapter = true)
     data class Description(
             /**
@@ -59,6 +59,4 @@ data class CallNegotiateContent(
              */
             @Json(name = "sdp") val sdp: String?
     )
-
 }
-
