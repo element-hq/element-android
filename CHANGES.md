@@ -10,6 +10,7 @@ Improvements 🙌:
  - Improve room history visibility setting UX (#1579)
 
 Bugfix 🐛:
+ - Fix cancellation of sending event (#2438)
  - Double bottomsheet effect after verify with passphrase
  - EditText cursor jumps to the start while typing fast (#2469)
 

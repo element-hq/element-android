@@ -210,6 +210,8 @@ internal class DefaultSendService @AssistedInject constructor(
 
     override fun cancelSend(eventId: String) {
         cancelSendTracker.markLocalEchoForCancel(eventId, roomId)
+        // This is maybe the current task, so cancel it too
+        eventSenderProcessor.cancel(eventId, roomId)
         taskExecutor.executorScope.launch {
             localEchoRepository.deleteFailedEcho(roomId, eventId)
         }
