@@ -48,6 +48,7 @@ import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
@@ -97,6 +98,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
         // TODO move all callbacks to this?
         fun onTimelineItemAction(itemAction: RoomDetailAction)
+
+        fun getPreviewUrlRetriever(): PreviewUrlRetriever
     }
 
     interface ReactionPillCallback {

@@ -216,7 +216,6 @@ class RoomDetailFragment @Inject constructor(
         private val session: Session,
         private val avatarRenderer: AvatarRenderer,
         private val timelineEventController: TimelineEventController,
-        private val previewUrlRetriever: PreviewUrlRetriever,
         autoCompleterFactory: AutoCompleter.Factory,
         private val permalinkHandler: PermalinkHandler,
         private val notificationDrawerManager: NotificationDrawerManager,
@@ -1632,6 +1631,10 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(itemAction)
     }
 
+    override fun getPreviewUrlRetriever(): PreviewUrlRetriever {
+        return roomDetailViewModel.previewUrlRetriever
+    }
+
     override fun onRoomCreateLinkClicked(url: String) {
         permalinkHandler
                 .launch(requireContext(), url, object : NavigationInterceptor {
@@ -1659,7 +1662,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onPreviewUrlCloseClicked(eventId: String, url: String) {
-        previewUrlRetriever.doNotShowPreviewUrlFor(eventId, url)
+        roomDetailViewModel.handle(RoomDetailAction.DoNotShowPreviewUrlFor(eventId, url))
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {

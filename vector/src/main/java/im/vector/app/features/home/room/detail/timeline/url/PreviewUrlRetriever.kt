@@ -17,18 +17,15 @@
 package im.vector.app.features.home.room.detail.timeline.url
 
 import im.vector.app.BuildConfig
-import im.vector.app.core.di.ScreenScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
-import javax.inject.Inject
 
-@ScreenScope
-class PreviewUrlRetriever @Inject constructor(
-        private val session: Session
-) {
+class PreviewUrlRetriever(session: Session) {
+    private val mediaService = session.mediaService()
+
     private val data = mutableMapOf<String, PreviewUrlUiState>()
     private val listeners = mutableMapOf<String, MutableSet<PreviewUrlRetrieverListener>>()
 
@@ -41,7 +38,7 @@ class PreviewUrlRetriever @Inject constructor(
         synchronized(data) {
             if (data[eventId] == null) {
                 // Keep only the first URL for the moment
-                val url = session.mediaService().extractUrls(event)
+                val url = mediaService.extractUrls(event)
                         .firstOrNull()
                         ?.takeIf { it !in blockedUrl }
                 if (url == null) {
@@ -57,7 +54,7 @@ class PreviewUrlRetriever @Inject constructor(
         }?.let { urlToRetrieve ->
             coroutineScope.launch {
                 runCatching {
-                    session.mediaService().getPreviewUrl(
+                    mediaService.getPreviewUrl(
                             url = urlToRetrieve,
                             timestamp = null,
                             cacheStrategy = if (BuildConfig.DEBUG) CacheStrategy.NoCache else CacheStrategy.TtlCache(CACHE_VALIDITY, false)

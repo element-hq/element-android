@@ -89,6 +89,8 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     override fun unbind(holder: Holder) {
         super.unbind(holder)
+        previewUrlViewUpdater.previewUrlView = null
+        previewUrlViewUpdater.imageContentRenderer = null
         previewUrlRetriever?.removeListener(attributes.informationData.eventId, previewUrlViewUpdater)
     }
 

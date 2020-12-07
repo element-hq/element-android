@@ -113,7 +113,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val rainbowGenerator: RainbowGenerator,
         private val session: Session,
         private val rawService: RawService,
-        private val previewUrlRetriever: PreviewUrlRetriever,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
         private val roomSummaryHolder: RoomSummaryHolder,
@@ -129,6 +128,9 @@ class RoomDetailViewModel @AssistedInject constructor(
     private val timelineSettings = timelineSettingsFactory.create()
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
     val timeline = room.createTimeline(eventId, timelineSettings)
+
+    // Same lifecycle than the ViewModel (survive to screen rotation)
+    val previewUrlRetriever = PreviewUrlRetriever(session)
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
@@ -288,7 +290,12 @@ class RoomDetailViewModel @AssistedInject constructor(
                         RoomDetailViewEvents.ShowRoomAvatarFullScreen(action.matrixItem, action.transitionView)
                 )
             }
+            is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
         }.exhaustive
+    }
+
+    private fun handleDoNotShowPreviewUrlFor(action: RoomDetailAction.DoNotShowPreviewUrlFor) {
+        previewUrlRetriever.doNotShowPreviewUrlFor(action.eventId, action.url)
     }
 
     private fun handleSetNewAvatar(action: RoomDetailAction.SetAvatarAction) {
