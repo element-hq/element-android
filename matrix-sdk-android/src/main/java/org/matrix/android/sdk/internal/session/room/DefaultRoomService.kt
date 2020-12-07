@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
@@ -53,6 +54,7 @@ internal class DefaultRoomService @Inject constructor(
         private val markAllRoomsReadTask: MarkAllRoomsReadTask,
         private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
         private val roomIdByAliasTask: GetRoomIdByAliasTask,
+        private val deleteRoomAliasTask: DeleteRoomAliasTask,
         private val roomGetter: RoomGetter,
         private val roomSummaryDataSource: RoomSummaryDataSource,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
@@ -123,6 +125,10 @@ internal class DefaultRoomService @Inject constructor(
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override suspend fun deleteRoomAlias(roomAlias: String) {
+        deleteRoomAliasTask.execute(DeleteRoomAliasTask.Params(roomAlias))
     }
 
     override fun getChangeMembershipsLive(): LiveData<Map<String, ChangeMembershipState>> {

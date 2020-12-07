@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.banned
+package im.vector.app.features.roomprofile.settings.historyvisibility
 
-import im.vector.app.core.platform.VectorViewEvents
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import im.vector.app.core.ui.bottomsheet.BottomSheetGenericState
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 
-sealed class RoomBannedViewEvents : VectorViewEvents {
-    data class ShowBannedInfo(val bannedByUserId: String, val banReason: String, val roomMemberSummary: RoomMemberSummary) : RoomBannedViewEvents()
-    data class ToastError(val info: String) : RoomBannedViewEvents()
+data class RoomHistoryVisibilityState(
+        val currentRoomHistoryVisibility: RoomHistoryVisibility = RoomHistoryVisibility.SHARED
+) : BottomSheetGenericState() {
+
+    constructor(args: RoomHistoryVisibilityBottomSheetArgs) : this(currentRoomHistoryVisibility = args.currentRoomHistoryVisibility)
 }

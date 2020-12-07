@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.findByAlias
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.executeRequest
-import org.matrix.android.sdk.internal.session.room.RoomAPI
+import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
@@ -38,7 +38,7 @@ internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Opti
 
 internal class DefaultGetRoomIdByAliasTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
-        private val roomAPI: RoomAPI,
+        private val directoryAPI: DirectoryAPI,
         private val eventBus: EventBus
 ) : GetRoomIdByAliasTask {
 
@@ -53,7 +53,7 @@ internal class DefaultGetRoomIdByAliasTask @Inject constructor(
         } else {
             roomId = tryOrNull("## Failed to get roomId from alias") {
                 executeRequest<RoomAliasDescription>(eventBus) {
-                    apiCall = roomAPI.getRoomIdByAlias(params.roomAlias)
+                    apiCall = directoryAPI.getRoomIdByAlias(params.roomAlias)
                 }
             }?.roomId
             Optional.from(roomId)

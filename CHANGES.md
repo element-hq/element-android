@@ -2,13 +2,17 @@ Changes in Element 1.0.12 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
+ - Room setting: update join rules and guest access (#2442)
 
 Improvements 🙌:
- -
+ - Add Setting Item to Change PIN (#2462)
+ - Improve room history visibility setting UX (#1579)
 
 Bugfix 🐛:
  - Fix cancellation of sending event (#2438)
+ - Double bottomsheet effect after verify with passphrase
+ - EditText cursor jumps to the start while typing fast (#2469)
 
 Translations 🗣:
  -
@@ -17,13 +21,14 @@ SDK API changes ⚠️:
  -
 
 Build 🧱:
- -
+ - Upgrade some dependencies and Kotlin version
+ - Use fragment-ktx and preference-ktx dependencies (fix lint issue KtxExtensionAvailable)
 
 Test:
  -
 
 Other changes:
- -
+ - Remove "Status.im" theme #2424
 
 Changes in Element 1.0.11 (2020-11-27)
 ===================================================

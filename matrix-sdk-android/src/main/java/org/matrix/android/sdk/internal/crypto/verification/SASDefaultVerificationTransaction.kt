@@ -31,6 +31,7 @@ import org.matrix.android.sdk.internal.extensions.toUnsignedInt
 import org.matrix.olm.OlmSAS
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
+import java.util.Locale
 
 /**
  * Represents an ongoing short code interactive key verification between two devices.
@@ -344,7 +345,7 @@ internal abstract class SASDefaultVerificationTransaction(
     }
 
     protected fun hashUsingAgreedHashMethod(toHash: String): String? {
-        if ("sha256".toLowerCase() == accepted?.hash?.toLowerCase()) {
+        if ("sha256" == accepted?.hash?.toLowerCase(Locale.ROOT)) {
             val olmUtil = OlmUtility()
             val hashBytes = olmUtil.sha256(toHash)
             olmUtil.releaseUtility()
@@ -354,12 +355,11 @@ internal abstract class SASDefaultVerificationTransaction(
     }
 
     private fun macUsingAgreedMethod(message: String, info: String): String? {
-        if (SAS_MAC_SHA256_LONGKDF.toLowerCase() == accepted?.messageAuthenticationCode?.toLowerCase()) {
-            return getSAS().calculateMacLongKdf(message, info)
-        } else if (SAS_MAC_SHA256.toLowerCase() == accepted?.messageAuthenticationCode?.toLowerCase()) {
-            return getSAS().calculateMac(message, info)
+        return when (accepted?.messageAuthenticationCode?.toLowerCase(Locale.ROOT)) {
+            SAS_MAC_SHA256_LONGKDF -> getSAS().calculateMacLongKdf(message, info)
+            SAS_MAC_SHA256         -> getSAS().calculateMac(message, info)
+            else                   -> null
         }
-        return null
     }
 
     override fun getDecimalCodeRepresentation(): String {

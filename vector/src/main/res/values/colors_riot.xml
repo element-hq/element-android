@@ -20,7 +20,6 @@
     <color name="riot_primary_background_color_dark">#FF181B21</color>
     <!-- Black/Background-->
     <color name="riot_primary_background_color_black">#F000</color>
-    <color name="riot_primary_background_color_status">#FFEEF2F5</color>
 
     <!--Default/Android Status Bar-->
     <color name="primary_color_dark_light">#FF1A2027</color>
@@ -41,10 +40,6 @@
     <!--Black/Base-->
     <color name="primary_color_black">#FF060708</color>
 
-    <color name="primary_color_dark_status">#FF465561</color>
-    <color name="primary_color_status">#FF586C7B</color>
-    <color name="accent_color_status">#FF586C7B</color>
-
     <!--Default/Line break mobile-->
     <attr name="list_divider_color" format="color" />
     <color name="list_divider_color_light">#EEEFEF</color>
@@ -56,12 +51,10 @@
     <attr name="tab_bar_selected_background_color" format="color" />
     <color name="tab_bar_selected_background_color_light">@color/riotx_android_secondary_light</color>
     <color name="tab_bar_selected_background_color_dark">@color/riotx_android_secondary_dark</color>
-    <color name="tab_bar_selected_background_color_status">@color/riotx_android_secondary_black</color>
 
     <attr name="tab_bar_unselected_background_color" format="color" />
     <color name="tab_bar_unselected_background_color_light">@color/riotx_background_light</color>
     <color name="tab_bar_unselected_background_color_dark">@color/riotx_background_dark</color>
-    <color name="tab_bar_unselected_background_color_status">@color/riotx_background_black</color>
 
     <!-- Hint Colors -->
     <color name="primary_hint_text_color_light">#FFFFFF</color>
@@ -88,13 +81,6 @@
     <color name="riot_secondary_text_color_dark">#FFA1B2D1</color>
     <color name="riot_tertiary_text_color_dark">@color/riot_primary_text_color_dark</color>
 
-    <!-- Status/Text Primary-->
-    <color name="riot_primary_text_color_status">#FF70808D</color>
-    <color name="riot_primary_text_color_disabled_status">#7F70808D</color>
-    <!-- Status/Text Secondary-->
-    <color name="riot_secondary_text_color_status">#7F70808D</color>
-    <color name="riot_tertiary_text_color_status">@color/riot_primary_text_color_status</color>
-
     <!-- Notification view colors -->
     <color name="soft_resource_limit_exceeded">#2f9edb</color>
     <color name="hard_resource_limit_exceeded">@color/vector_fuchsia_color</color>
@@ -118,7 +104,6 @@
     <!-- Link color -->
     <color name="link_color_light">#368BD6</color>
     <color name="link_color_dark">#368BD6</color>
-    <color name="link_color_status">#368BD6</color>
 
     <!-- Notification (do not depends on theme) -->
     <color name="notification_accent_color">#368BD6</color>

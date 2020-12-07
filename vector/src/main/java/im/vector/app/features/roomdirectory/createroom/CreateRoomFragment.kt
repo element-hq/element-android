@@ -84,7 +84,7 @@ class CreateRoomFragment @Inject constructor(
 
     override fun showFailure(throwable: Throwable) {
         // Note: RoomAliasError are displayed directly in the form
-        if (throwable !is CreateRoomFailure.RoomAliasError) {
+        if (throwable !is CreateRoomFailure.AliasError) {
             super.showFailure(throwable)
         }
     }

@@ -19,6 +19,7 @@ package im.vector.app.core.utils
 import android.content.Context
 import timber.log.Timber
 import java.io.File
+import java.util.Locale
 
 // Implementation should return true in case of success
 typealias ActionOnFile = (file: File) -> Boolean
@@ -113,7 +114,7 @@ fun getFileExtension(fileUri: String): String? {
                 val ext = filename.substring(dotPos + 1)
 
                 if (ext.isNotBlank()) {
-                    return ext.toLowerCase()
+                    return ext.toLowerCase(Locale.ROOT)
                 }
             }
         }

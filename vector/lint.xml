@@ -41,6 +41,7 @@
     <issue id="ObsoleteSdkInt" severity="error" />
     <issue id="Recycle" severity="error" />
     <issue id="KotlinPropertyAccess" severity="error" />
+    <issue id="DefaultLocale" severity="error" />
 
     <issue id="InvalidPackage">
         <!-- Ignore error from HtmlCompressor lib -->
@@ -51,6 +52,9 @@
 
     <!-- Manifest -->
     <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
+
+    <!-- Dependencies -->
+    <issue id="KtxExtensionAvailable" severity="error" />
 
     <!-- Timber -->
     <!--    This rule is failing on CI because it's marked as unknwown rule id :/-->

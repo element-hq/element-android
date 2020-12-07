@@ -17,14 +17,17 @@
 package im.vector.app.features.roomprofile.settings
 
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 
 sealed class RoomSettingsAction : VectorViewModelAction {
     data class SetAvatarAction(val avatarAction: RoomSettingsViewState.AvatarAction) : RoomSettingsAction()
     data class SetRoomName(val newName: String) : RoomSettingsAction()
     data class SetRoomTopic(val newTopic: String) : RoomSettingsAction()
     data class SetRoomHistoryVisibility(val visibility: RoomHistoryVisibility) : RoomSettingsAction()
-    data class SetRoomCanonicalAlias(val newCanonicalAlias: String) : RoomSettingsAction()
+    data class SetRoomJoinRule(val roomJoinRule: RoomJoinRules?, val roomGuestAccess: GuestAccess?) : RoomSettingsAction()
+
     object Save : RoomSettingsAction()
     object Cancel : RoomSettingsAction()
 }

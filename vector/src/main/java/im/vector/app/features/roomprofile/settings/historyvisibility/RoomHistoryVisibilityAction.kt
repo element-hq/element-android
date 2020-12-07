@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.banned
+package im.vector.app.features.roomprofile.settings.historyvisibility
 
-import im.vector.app.core.platform.VectorViewModelAction
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import androidx.annotation.DrawableRes
+import im.vector.app.core.ui.bottomsheet.BottomSheetGenericAction
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 
-sealed class RoomBannedListMemberAction : VectorViewModelAction {
-    data class QueryInfo(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
-    data class UnBanUser(val roomMemberSummary: RoomMemberSummary) : RoomBannedListMemberAction()
-    data class Filter(val filter: String) : RoomBannedListMemberAction()
-}
+class RoomHistoryVisibilityAction(
+        val roomHistoryVisibility: RoomHistoryVisibility,
+        title: String,
+        @DrawableRes iconResId: Int,
+        isSelected: Boolean
+) : BottomSheetGenericAction(
+        title = title,
+        iconResId = iconResId,
+        isSelected = isSelected,
+        destructive = false
+)

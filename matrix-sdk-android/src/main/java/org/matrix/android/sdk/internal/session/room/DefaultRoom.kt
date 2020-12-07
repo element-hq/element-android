@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.alias.AliasService
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -58,6 +59,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
                                                private val roomCallService: RoomCallService,
                                                private val readService: ReadService,
                                                private val typingService: TypingService,
+                                               private val aliasService: AliasService,
                                                private val tagsService: TagsService,
                                                private val cryptoService: CryptoService,
                                                private val relationService: RelationService,
@@ -76,6 +78,7 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         RoomCallService by roomCallService,
         ReadService by readService,
         TypingService by typingService,
+        AliasService by aliasService,
         TagsService by tagsService,
         RelationService by relationService,
         MembershipService by roomMembersService,

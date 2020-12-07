@@ -21,13 +21,17 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomprofile.RoomProfileArgs
-import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 data class RoomSettingsViewState(
         val roomId: String,
-        val historyVisibilityEvent: Event? = null,
+        // Default value: https://matrix.org/docs/spec/client_server/r0.6.1#id88
+        val currentHistoryVisibility: RoomHistoryVisibility = RoomHistoryVisibility.SHARED,
+        val currentRoomJoinRules: RoomJoinRules = RoomJoinRules.INVITE,
+        val currentGuestAccess: GuestAccess? = null,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
         val currentRoomAvatarUrl: String? = null,
@@ -35,7 +39,7 @@ data class RoomSettingsViewState(
         val newName: String? = null,
         val newTopic: String? = null,
         val newHistoryVisibility: RoomHistoryVisibility? = null,
-        val newCanonicalAlias: String? = null,
+        val newRoomJoinRules: NewJoinRule = NewJoinRule(),
         val showSaveAction: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MvRxState {
@@ -46,8 +50,8 @@ data class RoomSettingsViewState(
             val canChangeAvatar: Boolean = false,
             val canChangeName: Boolean = false,
             val canChangeTopic: Boolean = false,
-            val canChangeCanonicalAlias: Boolean = false,
-            val canChangeHistoryReadability: Boolean = false
+            val canChangeHistoryVisibility: Boolean = false,
+            val canChangeJoinRule: Boolean = false
     )
 
     sealed class AvatarAction {
@@ -55,5 +59,12 @@ data class RoomSettingsViewState(
         object DeleteAvatar : AvatarAction()
         data class UpdateAvatar(val newAvatarUri: Uri,
                                 val newAvatarFileName: String) : AvatarAction()
+    }
+
+    data class NewJoinRule(
+            val newJoinRules: RoomJoinRules? = null,
+            val newGuestAccess: GuestAccess? = null
+    ) {
+        fun hasChanged() = newJoinRules != null || newGuestAccess != null
     }
 }

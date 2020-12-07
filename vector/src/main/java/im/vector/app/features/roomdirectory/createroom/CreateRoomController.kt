@@ -20,7 +20,6 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import im.vector.app.R
-import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.form.formAdvancedToggleItem
@@ -31,8 +30,9 @@ import im.vector.app.features.form.formSwitchItem
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import javax.inject.Inject
 
-class CreateRoomController @Inject constructor(private val stringProvider: StringProvider,
-                                               private val errorFormatter: ErrorFormatter
+class CreateRoomController @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val roomAliasErrorFormatter: RoomAliasErrorFormatter
 ) : TypedEpoxyController<CreateRoomViewState>() {
 
     var listener: Listener? = null
@@ -104,13 +104,8 @@ class CreateRoomController @Inject constructor(private val stringProvider: Strin
                 value(viewState.roomType.aliasLocalPart)
                 homeServer(":" + viewState.homeServerName)
                 errorMessage(
-                        when ((viewState.asyncCreateRoomRequest as? Fail)?.error) {
-                            is CreateRoomFailure.RoomAliasError.AliasEmpty        -> R.string.create_room_alias_empty
-                            is CreateRoomFailure.RoomAliasError.AliasNotAvailable -> R.string.create_room_alias_already_in_use
-                            is CreateRoomFailure.RoomAliasError.AliasInvalid      -> R.string.create_room_alias_invalid
-                            else                                                  -> null
-                        }
-                                ?.let { stringProvider.getString(it) }
+                        roomAliasErrorFormatter.format(
+                                (((viewState.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError)
                 )
                 onTextChange { value ->
                     listener?.setAliasLocalPart(value)

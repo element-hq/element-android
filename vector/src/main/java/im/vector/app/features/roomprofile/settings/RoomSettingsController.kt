@@ -26,9 +26,8 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.RoomHistoryVisibilityFormatter
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -46,7 +45,8 @@ class RoomSettingsController @Inject constructor(
         fun onNameChanged(name: String)
         fun onTopicChanged(topic: String)
         fun onHistoryVisibilityClicked()
-        fun onAliasChanged(alias: String)
+        fun onRoomAliasesClicked()
+        fun onJoinRuleClicked()
     }
 
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
@@ -60,20 +60,17 @@ class RoomSettingsController @Inject constructor(
     override fun buildModels(data: RoomSettingsViewState?) {
         val roomSummary = data?.roomSummary?.invoke() ?: return
 
-        val historyVisibility = data.historyVisibilityEvent?.let { formatRoomHistoryVisibilityEvent(it) } ?: ""
-        val newHistoryVisibility = data.newHistoryVisibility?.let { roomHistoryVisibilityFormatter.format(it) }
-
         formEditableAvatarItem {
             id("avatar")
             enabled(data.actionPermissions.canChangeAvatar)
             when (val avatarAction = data.avatarAction) {
-                RoomSettingsViewState.AvatarAction.None -> {
+                RoomSettingsViewState.AvatarAction.None            -> {
                     // Use the current value
                     avatarRenderer(avatarRenderer)
                     // We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
                     matrixItem(roomSummary.toMatrixItem().copy(avatarUrl = data.currentRoomAvatarUrl))
                 }
-                RoomSettingsViewState.AvatarAction.DeleteAvatar ->
+                RoomSettingsViewState.AvatarAction.DeleteAvatar    ->
                     imageUri(null)
                 is RoomSettingsViewState.AvatarAction.UpdateAvatar ->
                     imageUri(avatarAction.newAvatarUri)
@@ -108,30 +105,48 @@ class RoomSettingsController @Inject constructor(
             }
         }
 
-        formEditTextItem {
-            id("alias")
-            enabled(data.actionPermissions.canChangeCanonicalAlias)
-            value(data.newCanonicalAlias ?: roomSummary.canonicalAlias)
-            hint(stringProvider.getString(R.string.room_settings_addresses_add_new_address))
-
-            onTextChange { text ->
-                callback?.onAliasChanged(text)
-            }
-        }
+        buildProfileAction(
+                id = "alias",
+                title = stringProvider.getString(R.string.room_settings_alias_title),
+                subtitle = stringProvider.getString(R.string.room_settings_alias_subtitle),
+                dividerColor = dividerColor,
+                divider = true,
+                editable = true,
+                action = { callback?.onRoomAliasesClicked() }
+        )
 
         buildProfileAction(
                 id = "historyReadability",
                 title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
-                subtitle = newHistoryVisibility ?: historyVisibility,
+                subtitle = roomHistoryVisibilityFormatter.getSetting(data.newHistoryVisibility ?: data.currentHistoryVisibility),
+                dividerColor = dividerColor,
+                divider = true,
+                editable = data.actionPermissions.canChangeHistoryVisibility,
+                action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
+        )
+
+        buildProfileAction(
+                id = "joinRule",
+                title = stringProvider.getString(R.string.room_settings_room_access_title),
+                subtitle = data.getJoinRuleWording(),
                 dividerColor = dividerColor,
                 divider = false,
-                editable = data.actionPermissions.canChangeHistoryReadability,
-                action = { if (data.actionPermissions.canChangeHistoryReadability) callback?.onHistoryVisibilityClicked() }
+                editable = data.actionPermissions.canChangeJoinRule,
+                action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
         )
     }
 
-    private fun formatRoomHistoryVisibilityEvent(event: Event): String? {
-        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
-        return roomHistoryVisibilityFormatter.format(historyVisibility)
+    private fun RoomSettingsViewState.getJoinRuleWording(): String {
+        val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules
+        val guestAccess = newRoomJoinRules.newGuestAccess ?: currentGuestAccess
+        return stringProvider.getString(if (joinRule == RoomJoinRules.INVITE) {
+            R.string.room_settings_room_access_entry_only_invited
+        } else {
+            if (guestAccess == GuestAccess.CanJoin) {
+                R.string.room_settings_room_access_entry_anyone_with_link_including_guest
+            } else {
+                R.string.room_settings_room_access_entry_anyone_with_link_apart_guest
+            }
+        })
     }
 }

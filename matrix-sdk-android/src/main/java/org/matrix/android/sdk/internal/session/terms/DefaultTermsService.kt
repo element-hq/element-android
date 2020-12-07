@@ -17,11 +17,10 @@
 package org.matrix.android.sdk.internal.session.terms
 
 import dagger.Lazy
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.terms.GetTermsResponse
 import org.matrix.android.sdk.api.session.terms.TermsService
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.network.RetrofitFactory
@@ -33,8 +32,6 @@ import org.matrix.android.sdk.internal.session.sync.model.accountdata.AcceptedTe
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 import okhttp3.OkHttpClient
@@ -49,13 +46,11 @@ internal class DefaultTermsService @Inject constructor(
         private val getOpenIdTokenTask: GetOpenIdTokenTask,
         private val identityRegisterTask: IdentityRegisterTask,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val taskExecutor: TaskExecutor
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : TermsService {
-    override fun getTerms(serviceType: TermsService.ServiceType,
-                          baseUrl: String,
-                          callback: MatrixCallback<GetTermsResponse>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
+    override suspend fun getTerms(serviceType: TermsService.ServiceType,
+                                 baseUrl: String): GetTermsResponse {
+        return withContext(coroutineDispatchers.main) {
             val url = buildUrl(baseUrl, serviceType)
             val termsResponse = executeRequest<TermsResponse>(null) {
                 apiCall = termsAPI.getTerms("${url}terms")
@@ -64,12 +59,11 @@ internal class DefaultTermsService @Inject constructor(
         }
     }
 
-    override fun agreeToTerms(serviceType: TermsService.ServiceType,
-                              baseUrl: String,
-                              agreedUrls: List<String>,
-                              token: String?,
-                              callback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
+    override suspend fun agreeToTerms(serviceType: TermsService.ServiceType,
+                                      baseUrl: String,
+                                      agreedUrls: List<String>,
+                                      token: String?) {
+        withContext(coroutineDispatchers.main) {
             val url = buildUrl(baseUrl, serviceType)
             val tokenToUse = token?.takeIf { it.isNotEmpty() } ?: getToken(baseUrl)
 

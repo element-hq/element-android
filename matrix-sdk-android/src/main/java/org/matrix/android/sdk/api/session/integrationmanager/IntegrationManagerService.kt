@@ -16,9 +16,6 @@
 
 package org.matrix.android.sdk.api.session.integrationmanager
 
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.util.Cancelable
-
 /**
  * This is the entry point to manage integration. You can grab an instance of this service through an active session.
  */
@@ -80,19 +77,17 @@ interface IntegrationManagerService {
     /**
      * Offers to enable or disable the integration.
      * @param enable the param to change
-     * @param callback the matrix callback to listen for result.
      * @return Cancelable
      */
-    fun setIntegrationEnabled(enable: Boolean, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun setIntegrationEnabled(enable: Boolean)
 
     /**
      * Offers to allow or disallow a widget.
      * @param stateEventId the eventId of the state event defining the widget.
      * @param allowed the param to change
-     * @param callback the matrix callback to listen for result.
      * @return Cancelable
      */
-    fun setWidgetAllowed(stateEventId: String, allowed: Boolean, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun setWidgetAllowed(stateEventId: String, allowed: Boolean)
 
     /**
      * Returns true if the widget is allowed, false otherwise.
@@ -105,7 +100,7 @@ interface IntegrationManagerService {
      * @param widgetType the widget type to check for
      * @param domain the domain to check for
      */
-    fun setNativeWidgetDomainAllowed(widgetType: String, domain: String, allowed: Boolean, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun setNativeWidgetDomainAllowed(widgetType: String, domain: String, allowed: Boolean)
 
     /**
      * Returns true if the widget domain is allowed, false otherwise.
