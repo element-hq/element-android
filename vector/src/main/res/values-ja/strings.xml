@@ -1112,4 +1112,9 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="qr_code">QR コード</string>
     <string name="add_by_qr_code">QR コードによる追加</string>
     <string name="user_code_share">コードを共有</string>
+    <string name="invite_friends_text">Element で会話しましょう: %s</string>
+    <string name="invite_friends">フレンドを招待</string>
+    <string name="user_directory_search_hint">名前または ID で検索</string>
+    <string name="direct_room_user_list_known_title">既知のユーザー</string>
+    <string name="invalid_qr_code_uri">無効な QR コード (無効な URI)！</string>
 </resources>
