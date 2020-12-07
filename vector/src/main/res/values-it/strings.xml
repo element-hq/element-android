@@ -1490,7 +1490,7 @@
     <string name="timeline_unread_messages">Messaggi non letti</string>
     <string name="login_splash_title">È la tua conversazione. Tienitela.</string>
     <string name="login_splash_text1">Chatta con persone direttamente o in gruppi</string>
-    <string name="login_splash_text2">Tieni private le conversazioni con la cifratura</string>
+    <string name="login_splash_text2">Tieni private le conversazioni con la crittografia</string>
     <string name="login_splash_text3">Estendi e personalizza la tua esperienza</string>
     <string name="login_splash_submit">Inizia</string>
     <string name="login_server_title">Seleziona un server</string>
