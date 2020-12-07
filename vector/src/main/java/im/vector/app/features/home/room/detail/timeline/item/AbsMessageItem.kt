@@ -251,7 +251,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val time = attributes.informationData.time.toString()
         return if (contentInBubble) {
             if (BubbleThemeUtils.getBubbleTimeLocation(holder.bubbleTimeView.context) == BubbleThemeUtils.BUBBLE_TIME_BOTTOM) {
-                if (attributes.informationData.showInformation) {
+                if (attributes.informationData.showInformation && !canHideAvatars()) {
                     // Since timeView automatically gets enough space, either within or outside the viewStub, we just need to ensure the member name view has enough space
                     // Somehow not enough without extra space...
                     ceil(BubbleThemeUtils.guessTextWidth(holder.bubbleMemberNameView, "$memberName ")).toInt()
