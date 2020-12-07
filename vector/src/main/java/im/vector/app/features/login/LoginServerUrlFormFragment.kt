@@ -85,7 +85,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
             }
         }
         val completions =  state.knownCustomHomeServersUrls
-        loginServerUrlFormHomeServerUrl.setAdapter( ArrayAdapter(
+        loginServerUrlFormHomeServerUrl.setAdapter(ArrayAdapter(
                 requireContext(),
                 R.layout.item_completion_homeserver,
                 completions
