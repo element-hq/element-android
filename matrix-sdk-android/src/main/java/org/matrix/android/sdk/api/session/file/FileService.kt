@@ -60,9 +60,14 @@ interface FileService {
     fun fileState(mxcUrl: String, mimeType: String?): FileState
 
     /**
-     * Clears all the files downloaded by the service
+     * Clears all the files downloaded by the service, including decrypted files
      */
     fun clearCache()
+
+    /**
+     * Clears all the decrypted files by the service
+     */
+    fun clearDecryptedCache()
 
     /**
      * Get size of cached files

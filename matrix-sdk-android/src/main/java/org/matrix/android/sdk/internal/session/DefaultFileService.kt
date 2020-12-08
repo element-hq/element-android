@@ -63,7 +63,15 @@ internal class DefaultFileService @Inject constructor(
 
     private fun String.safeFileName() = URLEncoder.encode(this, Charsets.US_ASCII.displayName())
 
-    private val downloadFolder = File(sessionCacheDirectory, "MF")
+    // Folder to store downloaded file (not decrypted)
+    private val legacyFolder = File(sessionCacheDirectory, "MF")
+    private val downloadFolder = File(sessionCacheDirectory, "F")
+    private val decryptedFolder = File(downloadFolder, "D")
+
+    init {
+        // Clear the legacy downloaded files
+        legacyFolder.deleteRecursively()
+    }
 
     /**
      * Retain ongoing downloads to avoid re-downloading and already downloading file
@@ -103,8 +111,8 @@ internal class DefaultFileService @Inject constructor(
         return taskExecutor.executorScope.launch(coroutineDispatchers.main) {
             withContext(coroutineDispatchers.io) {
                 Try {
-                    if (!downloadFolder.exists()) {
-                        downloadFolder.mkdirs()
+                    if (!decryptedFolder.exists()) {
+                        decryptedFolder.mkdirs()
                     }
                     // ensure we use unique file name by using URL (mapped to suitable file name)
                     // Also we need to add extension for the FileProvider, if not it lot's of app that it's
@@ -134,28 +142,41 @@ internal class DefaultFileService @Inject constructor(
 
                         Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${!source.exhausted()}")
 
-                        if (elementToDecrypt != null) {
-                            Timber.v("## FileService: decrypt file")
-                            val decryptSuccess = destFile.outputStream().buffered().use {
-                                MXEncryptedAttachments.decryptAttachment(
-                                        source.inputStream(),
-                                        elementToDecrypt,
-                                        it
-                                )
-                            }
-                            response.close()
-                            if (!decryptSuccess) {
-                                return@flatMap Try.Failure(IllegalStateException("Decryption error"))
-                            }
-                        } else {
-                            writeToFile(source.inputStream(), destFile)
-                            response.close()
-                        }
+                        // Write the file to cache (encrypted version if the file is encrypted)
+                        writeToFile(source.inputStream(), destFile)
+                        response.close()
                     } else {
                         Timber.v("## FileService: cache hit for $url")
                     }
 
                     Try.just(destFile)
+                }
+            }.flatMap { downloadedFile ->
+                // Decrypt if necessary
+                if (elementToDecrypt != null) {
+                    val decryptedFile = File(decryptedFolder, fileForUrl(unwrappedUrl, mimeType))
+
+                    if (!decryptedFile.exists()) {
+                        Timber.v("## FileService: decrypt file")
+                        val decryptSuccess = decryptedFile.outputStream().buffered().use { outputStream ->
+                            downloadedFile.inputStream().use { inputStream ->
+                                MXEncryptedAttachments.decryptAttachment(
+                                        inputStream,
+                                        elementToDecrypt,
+                                        outputStream
+                                )
+                            }
+                        }
+                        if (!decryptSuccess) {
+                            return@flatMap Try.Failure(IllegalStateException("Decryption error"))
+                        }
+                    } else {
+                        Timber.v("## FileService: cache hit for decrypted file")
+                    }
+                    Try.just(decryptedFile)
+                } else {
+                    // Clear file
+                    Try.just(downloadedFile)
                 }
             }.fold(
                     { throwable ->
@@ -239,5 +260,9 @@ internal class DefaultFileService @Inject constructor(
 
     override fun clearCache() {
         downloadFolder.deleteRecursively()
+    }
+
+    override fun clearDecryptedCache() {
+        decryptedFolder.deleteRecursively()
     }
 }
