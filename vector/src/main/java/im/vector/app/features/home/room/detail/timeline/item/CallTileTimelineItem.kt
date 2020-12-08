@@ -96,12 +96,15 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         when (attributes.callStatus) {
             CallStatus.INVITED -> if (attributes.informationData.sentByMe) {
                 setText(R.string.call_tile_you_started_call)
-            }else {
+            } else {
                 text = context.getString(R.string.call_tile_other_started_call, attributes.userOfInterest.getBestName())
             }
             CallStatus.IN_CALL -> setText(R.string.call_tile_in_call)
             CallStatus.REJECTED -> if (attributes.informationData.sentByMe) {
-                setTextWithColoredPart(R.string.call_tile_you_declined, R.string.call_tile_call_back)
+                setTextWithColoredPart(R.string.call_tile_you_declined, R.string.call_tile_call_back) {
+                    val callbackAction = RoomDetailAction.StartCall(attributes.callKind == CallKind.VIDEO)
+                    attributes.callback?.onTimelineItemAction(callbackAction)
+                }
             } else {
                 text = context.getString(R.string.call_tile_other_declined, attributes.userOfInterest.getBestName())
             }

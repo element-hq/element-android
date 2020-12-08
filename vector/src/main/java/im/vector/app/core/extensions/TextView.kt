@@ -18,8 +18,12 @@ package im.vector.app.core.extensions
 
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
+import android.view.View
 import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
@@ -52,11 +56,13 @@ fun TextView.setTextOrHide(newText: CharSequence?, hideWhenBlank: Boolean = true
  * @param coloredTextRes the resource id of the colored part of the text
  * @param colorAttribute attribute of the color. Default to colorAccent
  * @param underline true to also underline the text. Default to false
+ * @param onClick attributes to handle click on the colored part if needed required
  */
 fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
                                     @StringRes coloredTextRes: Int,
                                     @AttrRes colorAttribute: Int = R.attr.colorAccent,
-                                    underline: Boolean = false) {
+                                    underline: Boolean = false,
+                                    onClick: (() -> Unit)?) {
     val coloredPart = resources.getString(coloredTextRes)
     // Insert colored part into the full text
     val fullText = resources.getString(fullTextRes, coloredPart)
@@ -69,6 +75,21 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
     text = SpannableString(fullText)
             .apply {
                 setSpan(foregroundSpan, index, index + coloredPart.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (onClick != null) {
+                    val clickableSpan = object : ClickableSpan() {
+                        override fun onClick(widget: View) {
+                            onClick()
+                        }
+
+                        override fun updateDrawState(ds: TextPaint) {
+                            ds.color = color
+                            // underline will be handled separately if needed, see below
+                            ds.isUnderlineText = false
+                        }
+                    }
+                    setSpan(clickableSpan, index, index + coloredPart.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    movementMethod = LinkMovementMethod.getInstance()
+                }
                 if (underline) {
                     setSpan(UnderlineSpan(), index, index + coloredPart.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
@@ -76,12 +97,12 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
 }
 
 fun TextView.setLeftDrawable(@DrawableRes iconRes: Int, @ColorRes tintColor: Int? = null) {
-    val icon = if(tintColor != null){
+    val icon = if (tintColor != null) {
         val tint = ContextCompat.getColor(context, tintColor)
         ContextCompat.getDrawable(context, iconRes)?.also {
             DrawableCompat.setTint(it.mutate(), tint)
         }
-    }else {
+    } else {
         ContextCompat.getDrawable(context, iconRes)
     }
     setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
