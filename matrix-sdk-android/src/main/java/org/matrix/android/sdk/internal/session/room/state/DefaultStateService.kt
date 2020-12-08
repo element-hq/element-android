@@ -20,7 +20,6 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -36,12 +35,10 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
 import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasTask
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val stateEventDataSource: StateEventDataSource,
                                                                private val sendStateTask: SendStateTask,
-                                                               private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                                private val fileUploader: FileUploader,
                                                                private val addRoomAliasTask: AddRoomAliasTask
 ) : StateService {
@@ -123,33 +120,29 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
     }
 
     override suspend fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?) {
-        withContext(coroutineDispatchers.main) {
-            if (joinRules != null) {
-                sendStateEvent(
-                        eventType = EventType.STATE_ROOM_JOIN_RULES,
-                        body = RoomJoinRulesContent(joinRules).toContent(),
-                        stateKey = null
-                )
-            }
-            if (guestAccess != null) {
-                sendStateEvent(
-                        eventType = EventType.STATE_ROOM_GUEST_ACCESS,
-                        body = RoomGuestAccessContent(guestAccess).toContent(),
-                        stateKey = null
-                )
-            }
+        if (joinRules != null) {
+            sendStateEvent(
+                    eventType = EventType.STATE_ROOM_JOIN_RULES,
+                    body = RoomJoinRulesContent(joinRules).toContent(),
+                    stateKey = null
+            )
+        }
+        if (guestAccess != null) {
+            sendStateEvent(
+                    eventType = EventType.STATE_ROOM_GUEST_ACCESS,
+                    body = RoomGuestAccessContent(guestAccess).toContent(),
+                    stateKey = null
+            )
         }
     }
 
     override suspend fun updateAvatar(avatarUri: Uri, fileName: String) {
-        withContext(coroutineDispatchers.main) {
-            val response = fileUploader.uploadFromUri(avatarUri, fileName, "image/jpeg")
-            sendStateEvent(
-                    eventType = EventType.STATE_ROOM_AVATAR,
-                    body = mapOf("url" to response.contentUri),
-                    stateKey = null
-            )
-        }
+        val response = fileUploader.uploadFromUri(avatarUri, fileName, "image/jpeg")
+        sendStateEvent(
+                eventType = EventType.STATE_ROOM_AVATAR,
+                body = mapOf("url" to response.contentUri),
+                stateKey = null
+        )
     }
 
     override suspend fun deleteAvatar() {
