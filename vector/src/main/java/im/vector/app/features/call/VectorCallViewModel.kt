@@ -36,7 +36,6 @@ import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
-import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
 
@@ -141,7 +140,6 @@ class VectorCallViewModel @AssistedInject constructor(
                 )
             }
         }
-
     }
 
     init {

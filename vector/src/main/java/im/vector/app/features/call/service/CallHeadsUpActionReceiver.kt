@@ -37,7 +37,6 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
                 ?.webRtcCallManager()
                 ?: return
 
-
         when (intent?.getIntExtra(EXTRA_CALL_ACTION_KEY, 0)) {
             CALL_ACTION_REJECT -> {
                 val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: return

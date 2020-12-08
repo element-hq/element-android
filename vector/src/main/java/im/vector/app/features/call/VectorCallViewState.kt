@@ -45,6 +45,4 @@ data class VectorCallViewState(
             roomId = callArgs.roomId,
             isVideoCall = callArgs.isVideoCall
     )
-
-
 }

@@ -330,7 +330,7 @@ class WebRtcCall(val mxCall: MxCall,
         // 2. Access camera (if video call) + microphone, create local stream
         createLocalStream()
         attachViewRenderersInternal()
-        Timber.v("## VOIP remoteCandidateSource ${remoteCandidateSource}")
+        Timber.v("## VOIP remoteCandidateSource $remoteCandidateSource")
         remoteIceCandidateDisposable = remoteCandidateSource.subscribe({
             Timber.v("## VOIP adding remote ice candidate $it")
             peerConnection?.addIceCandidate(it)
@@ -383,7 +383,7 @@ class WebRtcCall(val mxCall: MxCall,
         createAnswer()?.also {
             mxCall.accept(it.description)
         }
-        Timber.v("## VOIP remoteCandidateSource ${remoteCandidateSource}")
+        Timber.v("## VOIP remoteCandidateSource $remoteCandidateSource")
         remoteIceCandidateDisposable = remoteCandidateSource.subscribe({
             Timber.v("## VOIP adding remote ice candidate $it")
             peerConnection?.addIceCandidate(it)
@@ -554,9 +554,9 @@ class WebRtcCall(val mxCall: MxCall,
         for (transceiver in peerConnection?.transceivers ?: emptyList()) {
             val trackOnHold = transceiver.currentDirection == RtpTransceiver.RtpTransceiverDirection.INACTIVE
                     || transceiver.currentDirection == RtpTransceiver.RtpTransceiverDirection.RECV_ONLY
-            if (!trackOnHold) callOnHold = false;
+            if (!trackOnHold) callOnHold = false
         }
-        return callOnHold;
+        return callOnHold
     }
 
     fun updateRemoteOnHold(onHold: Boolean) {
@@ -704,7 +704,7 @@ class WebRtcCall(val mxCall: MxCall,
             return
         }
         mxCall.state = CallState.Terminated
-        //Close tracks ASAP
+        // Close tracks ASAP
         localVideoTrack?.setEnabled(false)
         localVideoTrack?.setEnabled(false)
         cameraAvailabilityCallback?.let { cameraAvailabilityCallback ->
@@ -760,7 +760,7 @@ class WebRtcCall(val mxCall: MxCall,
             val type = description?.type
             val sdpText = description?.sdp
             if (type == null || sdpText == null) {
-                Timber.i("Ignoring invalid m.call.negotiate event");
+                Timber.i("Ignoring invalid m.call.negotiate event")
                 return@launch
             }
             val peerConnection = peerConnection ?: return@launch

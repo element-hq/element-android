@@ -121,8 +121,8 @@ internal class MxCallImpl(
     }
 
     override fun reject() {
-        if(opponentVersion < 1){
-            Timber.v("Opponent version is less than 1 (${opponentVersion}): sending hangup instead of reject")
+        if (opponentVersion < 1) {
+            Timber.v("Opponent version is less than 1 ($opponentVersion): sending hangup instead of reject")
             hangUp()
             return
         }
@@ -203,5 +203,4 @@ internal class MxCallImpl(
         )
                 .also { localEchoEventFactory.createLocalEcho(it) }
     }
-
 }

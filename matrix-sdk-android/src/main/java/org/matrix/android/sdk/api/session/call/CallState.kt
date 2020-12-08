@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.call
 
-
 sealed class CallState {
 
     /** Idle, setting up objects */

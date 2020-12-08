@@ -30,7 +30,6 @@ import im.vector.app.R
 import kotlinx.android.synthetic.main.view_call_controls.view.*
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
-import org.webrtc.PeerConnection
 
 class CallControlsView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
