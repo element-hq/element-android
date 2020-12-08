@@ -21,6 +21,13 @@ import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import arrow.core.Try
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okio.buffer
+import okio.sink
+import okio.source
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
@@ -36,13 +43,6 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.toCancelable
 import org.matrix.android.sdk.internal.util.writeToFile
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okio.buffer
-import okio.sink
-import okio.source
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -157,30 +157,33 @@ internal class DefaultFileService @Inject constructor(
 
                     Try.just(destFile)
                 }
-            }.fold({
-                callback.onFailure(it)
-                // notify concurrent requests
-                val toNotify = synchronized(ongoing) {
-                    ongoing[unwrappedUrl]?.also {
-                        ongoing.remove(unwrappedUrl)
+            }.fold(
+                    { throwable ->
+                        callback.onFailure(throwable)
+                        // notify concurrent requests
+                        val toNotify = synchronized(ongoing) {
+                            ongoing[unwrappedUrl]?.also {
+                                ongoing.remove(unwrappedUrl)
+                            }
+                        }
+                        toNotify?.forEach { otherCallbacks ->
+                            tryOrNull { otherCallbacks.onFailure(throwable) }
+                        }
+                    },
+                    { file ->
+                        callback.onSuccess(file)
+                        // notify concurrent requests
+                        val toNotify = synchronized(ongoing) {
+                            ongoing[unwrappedUrl]?.also {
+                                ongoing.remove(unwrappedUrl)
+                            }
+                        }
+                        Timber.v("## FileService additional to notify ${toNotify?.size ?: 0} ")
+                        toNotify?.forEach { otherCallbacks ->
+                            tryOrNull { otherCallbacks.onSuccess(file) }
+                        }
                     }
-                }
-                toNotify?.forEach { otherCallbacks ->
-                    tryOrNull { otherCallbacks.onFailure(it) }
-                }
-            }, { file ->
-                callback.onSuccess(file)
-                // notify concurrent requests
-                val toNotify = synchronized(ongoing) {
-                    ongoing[unwrappedUrl]?.also {
-                        ongoing.remove(unwrappedUrl)
-                    }
-                }
-                Timber.v("## FileService additional to notify ${toNotify?.size ?: 0} ")
-                toNotify?.forEach { otherCallbacks ->
-                    tryOrNull { otherCallbacks.onSuccess(file) }
-                }
-            })
+            )
         }.toCancelable()
     }
 
