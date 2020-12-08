@@ -27,23 +27,6 @@ import java.io.File
  */
 interface FileService {
 
-    enum class DownloadMode {
-        /**
-         * Download file in external storage
-         */
-        TO_EXPORT,
-
-        /**
-         * Download file in cache
-         */
-        FOR_INTERNAL_USE,
-
-        /**
-         * Download file in file provider path
-         */
-        FOR_EXTERNAL_SHARE
-    }
-
     enum class FileState {
         IN_CACHE,
         DOWNLOADING,
@@ -55,7 +38,6 @@ interface FileService {
      * Result will be a decrypted file, stored in the cache folder. url parameter will be used to create unique filename to avoid name collision.
      */
     fun downloadFile(
-            downloadMode: DownloadMode,
             id: String,
             fileName: String,
             mimeType: String?,

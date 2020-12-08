@@ -69,7 +69,6 @@ import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
@@ -1033,7 +1032,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
         } else {
             session.fileService().downloadFile(
-                    downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
                     id = action.eventId,
                     fileName = action.messageFileContent.getFileName(),
                     mimeType = action.messageFileContent.mimeType,

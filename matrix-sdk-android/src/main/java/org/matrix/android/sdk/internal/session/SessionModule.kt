@@ -50,6 +50,7 @@ import org.matrix.android.sdk.internal.database.EventInsertLiveObserver
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.SessionRealmConfigurationFactory
 import org.matrix.android.sdk.internal.di.Authenticated
+import org.matrix.android.sdk.internal.di.CacheDirectory
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
@@ -170,8 +171,8 @@ internal abstract class SessionModule {
         @Provides
         @SessionDownloadsDirectory
         fun providesDownloadsCacheDir(@SessionId sessionId: String,
-                                      context: Context): File {
-            return File(context.cacheDir, "downloads/$sessionId")
+                                      @CacheDirectory cacheFile: File): File {
+            return File(cacheFile, "downloads/$sessionId")
         }
 
         @JvmStatic

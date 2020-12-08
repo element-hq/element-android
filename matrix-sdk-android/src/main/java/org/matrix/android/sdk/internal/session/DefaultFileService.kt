@@ -29,8 +29,6 @@ import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
-import org.matrix.android.sdk.internal.di.CacheDirectory
-import org.matrix.android.sdk.internal.di.ExternalFilesDirectory
 import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificateWithProgress
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
@@ -54,10 +52,6 @@ import javax.inject.Inject
 
 internal class DefaultFileService @Inject constructor(
         private val context: Context,
-        @CacheDirectory
-        private val cacheDirectory: File,
-        @ExternalFilesDirectory
-        private val externalFilesDirectory: File?,
         @SessionDownloadsDirectory
         private val sessionCacheDirectory: File,
         private val contentUrlResolver: ContentUrlResolver,
@@ -81,8 +75,7 @@ internal class DefaultFileService @Inject constructor(
      * Download file in the cache folder, and eventually decrypt it
      * TODO looks like files are copied 3 times
      */
-    override fun downloadFile(downloadMode: FileService.DownloadMode,
-                              id: String,
+    override fun downloadFile(id: String,
                               fileName: String,
                               mimeType: String?,
                               url: String?,
@@ -162,7 +155,7 @@ internal class DefaultFileService @Inject constructor(
                         Timber.v("## FileService: cache hit for $url")
                     }
 
-                    Try.just(copyFile(destFile, downloadMode))
+                    Try.just(destFile)
                 }
             }.fold({
                 callback.onFailure(it)
@@ -230,18 +223,6 @@ internal class DefaultFileService @Inject constructor(
         val targetFile = File(downloadFolder, fileForUrl(mxcUrl, mimeType))
         if (!targetFile.exists()) return null
         return FileProvider.getUriForFile(context, authority, targetFile)
-    }
-
-    private fun copyFile(file: File, downloadMode: FileService.DownloadMode): File {
-        // TODO some of this seems outdated, will need to be re-worked
-        return when (downloadMode) {
-            FileService.DownloadMode.TO_EXPORT          ->
-                file.copyTo(File(externalFilesDirectory, file.name), true)
-            FileService.DownloadMode.FOR_EXTERNAL_SHARE ->
-                file.copyTo(File(File(cacheDirectory, "ext_share"), file.name), true)
-            FileService.DownloadMode.FOR_INTERNAL_USE   ->
-                file
-        }
     }
 
     override fun getCacheSize(): Int {

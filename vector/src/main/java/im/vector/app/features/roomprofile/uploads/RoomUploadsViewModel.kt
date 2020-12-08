@@ -30,7 +30,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
@@ -134,7 +133,6 @@ class RoomUploadsViewModel @AssistedInject constructor(
             try {
                 val file = awaitCallback<File> {
                     session.fileService().downloadFile(
-                            downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
                             id = action.uploadEvent.eventId,
                             fileName = action.uploadEvent.contentWithAttachmentContent.body,
                             url = action.uploadEvent.contentWithAttachmentContent.getFileUrl(),
@@ -155,7 +153,6 @@ class RoomUploadsViewModel @AssistedInject constructor(
             try {
                 val file = awaitCallback<File> {
                     session.fileService().downloadFile(
-                            downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
                             id = action.uploadEvent.eventId,
                             fileName = action.uploadEvent.contentWithAttachmentContent.body,
                             mimeType = action.uploadEvent.contentWithAttachmentContent.mimeType,

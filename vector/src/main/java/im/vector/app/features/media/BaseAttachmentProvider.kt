@@ -153,7 +153,6 @@ abstract class BaseAttachmentProvider<Type>(
         } else {
             target.onVideoFileLoading(info.uid)
             fileService.downloadFile(
-                    downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
                     id = data.eventId,
                     mimeType = data.mimeType,
                     elementToDecrypt = data.elementToDecrypt,

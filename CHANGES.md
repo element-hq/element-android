@@ -18,7 +18,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - FileService: remove useless FileService.DownloadMode
 
 Build 🧱:
  - Upgrade some dependencies and Kotlin version
