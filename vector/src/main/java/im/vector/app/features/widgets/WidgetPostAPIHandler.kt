@@ -21,6 +21,8 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
@@ -310,12 +312,19 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
 
         val params = HashMap<String, Any>()
         params["status"] = status
-        room.sendStateEvent(
-                eventType = EventType.PLUMBING,
-                stateKey = null,
-                body = params,
-                callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-        )
+
+        GlobalScope.launch {
+            try {
+                room.sendStateEvent(
+                        eventType = EventType.PLUMBING,
+                        stateKey = null,
+                        body = params
+                )
+                widgetPostAPIMediator.sendSuccess(eventData)
+            } catch (failure: Exception) {
+                widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
+            }
+        }
     }
 
     /**
@@ -333,12 +342,18 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         Timber.d(description)
         val content = eventData["content"] as JsonDict
         val stateKey = "_$userId"
-        room.sendStateEvent(
-                eventType = EventType.BOT_OPTIONS,
-                stateKey = stateKey,
-                body = content,
-                callback = createWidgetAPICallback(widgetPostAPIMediator, eventData)
-        )
+        GlobalScope.launch {
+            try {
+                room.sendStateEvent(
+                        eventType = EventType.BOT_OPTIONS,
+                        stateKey = stateKey,
+                        body = content
+                )
+                widgetPostAPIMediator.sendSuccess(eventData)
+            } catch (failure: Exception) {
+                widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
+            }
+        }
     }
 
     /**

@@ -17,7 +17,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - StateService now exposes suspendable function instead of using MatrixCallback.
 
 Build 🧱:
  - Upgrade some dependencies and Kotlin version

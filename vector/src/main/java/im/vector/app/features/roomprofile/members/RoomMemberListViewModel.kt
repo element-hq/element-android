@@ -197,8 +197,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
             room.sendStateEvent(
                     eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                     stateKey = action.stateKey,
-                    body = emptyMap(),
-                    callback = NoOpMatrixCallback()
+                    body = emptyMap()
             )
         }
     }

@@ -292,9 +292,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleSetNewAvatar(action: RoomDetailAction.SetAvatarAction) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                awaitCallback<Unit> {
-                    room.updateAvatar(action.newAvatarUri, action.newAvatarFileName, it)
-                }
+                room.updateAvatar(action.newAvatarUri, action.newAvatarFileName)
                 _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
@@ -854,8 +852,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
-        launchSlashCommandFlow {
-            room.updateTopic(changeTopic.topic, it)
+        launchSlashCommandFlowSuspendable {
+            room.updateTopic(changeTopic.topic)
         }
     }
 
@@ -876,9 +874,9 @@ class RoomDetailViewModel @AssistedInject constructor(
                 ?.content
                 ?.toModel<PowerLevelsContent>() ?: return
 
-        launchSlashCommandFlow {
+        launchSlashCommandFlowSuspendable {
             currentPowerLevelsContent.setUserPowerLevel(setUserPowerLevel.userId, setUserPowerLevel.powerLevel)
-            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent(), it)
+            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent())
         }
     }
 
@@ -918,6 +916,19 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
         }
         lambda.invoke(matrixCallback)
+    }
+
+    private fun launchSlashCommandFlowSuspendable(block: suspend () -> Unit) {
+        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+        viewModelScope.launch {
+            val event = try {
+                block()
+                RoomDetailViewEvents.SlashCommandResultOk
+            } catch (failure: Exception) {
+                RoomDetailViewEvents.SlashCommandResultError(failure)
+            }
+            _viewEvents.post(event)
+        }
     }
 
     private fun handleSendReaction(action: RoomDetailAction.SendReaction) {

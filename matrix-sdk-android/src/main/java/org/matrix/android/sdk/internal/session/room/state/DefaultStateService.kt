@@ -20,7 +20,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -32,20 +32,14 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.state.StateService
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
 import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
-import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import org.matrix.android.sdk.internal.util.awaitCallback
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val stateEventDataSource: StateEventDataSource,
-                                                               private val taskExecutor: TaskExecutor,
                                                                private val sendStateTask: SendStateTask,
                                                                private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                                private val fileUploader: FileUploader,
@@ -73,45 +67,41 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         return stateEventDataSource.getStateEventsLive(roomId, eventTypes, stateKey)
     }
 
-    override fun sendStateEvent(
+    override suspend fun sendStateEvent(
             eventType: String,
             stateKey: String?,
-            body: JsonDict,
-            callback: MatrixCallback<Unit>
-    ): Cancelable {
-        val params = SendStateTask.Params(
-                roomId = roomId,
-                stateKey = stateKey,
-                eventType = eventType,
-                body = body
-        )
-        return sendStateTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+            body: JsonDict
+    ) {
+        withContext(coroutineDispatchers.main) {
+            val params = SendStateTask.Params(
+                    roomId = roomId,
+                    stateKey = stateKey,
+                    eventType = eventType,
+                    body = body
+            )
+
+            sendStateTask.execute(params)
+        }
     }
 
-    override fun updateTopic(topic: String, callback: MatrixCallback<Unit>): Cancelable {
-        return sendStateEvent(
+    override suspend fun updateTopic(topic: String) {
+        sendStateEvent(
                 eventType = EventType.STATE_ROOM_TOPIC,
                 body = mapOf("topic" to topic),
-                callback = callback,
                 stateKey = null
         )
     }
 
-    override fun updateName(name: String, callback: MatrixCallback<Unit>): Cancelable {
-        return sendStateEvent(
+    override suspend fun updateName(name: String) {
+        sendStateEvent(
                 eventType = EventType.STATE_ROOM_NAME,
                 body = mapOf("name" to name),
-                callback = callback,
                 stateKey = null
         )
     }
 
-    override fun updateCanonicalAlias(alias: String?, altAliases: List<String>, callback: MatrixCallback<Unit>): Cancelable {
-        return sendStateEvent(
+    override suspend fun updateCanonicalAlias(alias: String?, altAliases: List<String>) {
+        sendStateEvent(
                 eventType = EventType.STATE_ROOM_CANONICAL_ALIAS,
                 body = RoomCanonicalAliasContent(
                         canonicalAlias = alias,
@@ -123,64 +113,52 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                                 // Sort for the cleanup
                                 .sorted()
                 ).toContent(),
-                callback = callback,
                 stateKey = null
         )
     }
 
-    override fun updateHistoryReadability(readability: RoomHistoryVisibility, callback: MatrixCallback<Unit>): Cancelable {
-        return sendStateEvent(
+    override suspend fun updateHistoryReadability(readability: RoomHistoryVisibility) {
+        sendStateEvent(
                 eventType = EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 body = mapOf("history_visibility" to readability),
-                callback = callback,
                 stateKey = null
         )
     }
 
-    override fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?, callback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
+    override suspend fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?) {
+        withContext(coroutineDispatchers.main) {
             if (joinRules != null) {
-                awaitCallback<Unit> {
-                    sendStateEvent(
-                            eventType = EventType.STATE_ROOM_JOIN_RULES,
-                            body = RoomJoinRulesContent(joinRules).toContent(),
-                            callback = it,
-                            stateKey = null
-                    )
-                }
+                sendStateEvent(
+                        eventType = EventType.STATE_ROOM_JOIN_RULES,
+                        body = RoomJoinRulesContent(joinRules).toContent(),
+                        stateKey = null
+                )
             }
             if (guestAccess != null) {
-                awaitCallback<Unit> {
-                    sendStateEvent(
-                            eventType = EventType.STATE_ROOM_GUEST_ACCESS,
-                            body = RoomGuestAccessContent(guestAccess).toContent(),
-                            callback = it,
-                            stateKey = null
-                    )
-                }
-            }
-        }
-    }
-
-    override fun updateAvatar(avatarUri: Uri, fileName: String, callback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            val response = fileUploader.uploadFromUri(avatarUri, fileName, "image/jpeg")
-            awaitCallback<Unit> {
                 sendStateEvent(
-                        eventType = EventType.STATE_ROOM_AVATAR,
-                        body = mapOf("url" to response.contentUri),
-                        callback = it,
+                        eventType = EventType.STATE_ROOM_GUEST_ACCESS,
+                        body = RoomGuestAccessContent(guestAccess).toContent(),
                         stateKey = null
                 )
             }
         }
     }
 
-    override fun deleteAvatar(callback: MatrixCallback<Unit>): Cancelable {
-        return sendStateEvent(
+    override suspend fun updateAvatar(avatarUri: Uri, fileName: String) {
+        withContext(coroutineDispatchers.main) {
+            val response = fileUploader.uploadFromUri(avatarUri, fileName, "image/jpeg")
+            sendStateEvent(
+                    eventType = EventType.STATE_ROOM_AVATAR,
+                    body = mapOf("url" to response.contentUri),
+                    stateKey = null
+            )
+        }
+    }
+
+    override suspend fun deleteAvatar() {
+        sendStateEvent(
                 eventType = EventType.STATE_ROOM_AVATAR,
                 body = emptyMap(),
-                callback = callback,
                 stateKey = null
         )
     }
