@@ -82,10 +82,9 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         when (cryptoError) {
                             MXCryptoError.ErrorType.KEYS_WITHHELD -> {
                                 span {
-                                    apply {
-                                        drawableProvider.getDrawable(R.drawable.ic_forbidden, colorFromAttribute)?.let {
-                                            image(it, "baseline")
-                                        }
+                                    drawableProvider.getDrawable(R.drawable.ic_forbidden, colorFromAttribute)?.let {
+                                        image(it, "baseline")
+                                        +" "
                                     }
                                     span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_final)) {
                                         textStyle = "italic"
@@ -95,10 +94,9 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                             }
                             else                                  -> {
                                 span {
-                                    apply {
-                                        drawableProvider.getDrawable(R.drawable.ic_clock, colorFromAttribute)?.let {
-                                            image(it, "baseline")
-                                        }
+                                    drawableProvider.getDrawable(R.drawable.ic_clock, colorFromAttribute)?.let {
+                                        image(it, "baseline")
+                                        +" "
                                     }
                                     span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_friendly)) {
                                         textStyle = "italic"
