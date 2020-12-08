@@ -30,7 +30,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue

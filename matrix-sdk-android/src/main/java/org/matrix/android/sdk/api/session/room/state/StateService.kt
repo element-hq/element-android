@@ -18,13 +18,11 @@ package org.matrix.android.sdk.api.session.room.state
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
 
