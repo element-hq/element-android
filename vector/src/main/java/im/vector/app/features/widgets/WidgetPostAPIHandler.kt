@@ -22,6 +22,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -312,18 +313,12 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
 
         val params = HashMap<String, Any>()
         params["status"] = status
-
-        GlobalScope.launch {
-            try {
-                room.sendStateEvent(
-                        eventType = EventType.PLUMBING,
-                        stateKey = null,
-                        body = params
-                )
-                widgetPostAPIMediator.sendSuccess(eventData)
-            } catch (failure: Exception) {
-                widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
-            }
+        launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+            room.sendStateEvent(
+                    eventType = EventType.PLUMBING,
+                    stateKey = null,
+                    body = params
+            )
         }
     }
 
@@ -342,17 +337,13 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         Timber.d(description)
         val content = eventData["content"] as JsonDict
         val stateKey = "_$userId"
-        GlobalScope.launch {
-            try {
-                room.sendStateEvent(
-                        eventType = EventType.BOT_OPTIONS,
-                        stateKey = stateKey,
-                        body = content
-                )
-                widgetPostAPIMediator.sendSuccess(eventData)
-            } catch (failure: Exception) {
-                widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
-            }
+
+        launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
+            room.sendStateEvent(
+                    eventType = EventType.BOT_OPTIONS,
+                    stateKey = stateKey,
+                    body = content
+            )
         }
     }
 
@@ -470,5 +461,20 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
 
     private fun createWidgetAPICallback(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict): WidgetAPICallback {
         return WidgetAPICallback(widgetPostAPIMediator, eventData, stringProvider)
+    }
+
+    private fun launchWidgetAPIAction(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict, block: suspend () -> Unit): Job {
+        return GlobalScope.launch {
+            kotlin.runCatching {
+                block()
+            }.fold(
+                    onSuccess = {
+                        widgetPostAPIMediator.sendSuccess(eventData)
+                    },
+                    onFailure = {
+                        widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
+                    }
+            )
+        }
     }
 }
