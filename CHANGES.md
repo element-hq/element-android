@@ -23,6 +23,7 @@ SDK API changes ⚠️:
 Build 🧱:
  - Upgrade some dependencies and Kotlin version
  - Use fragment-ktx and preference-ktx dependencies (fix lint issue KtxExtensionAvailable)
+ - Upgrade Realm dependency to 10.1.2
 
 Test:
  -
