@@ -29,6 +29,7 @@ Test:
 
 Other changes:
  - Remove "Status.im" theme #2424
+ - Log HTTP requests and responses in production (level BASIC, i.e. without any private data)
 
 Changes in Element 1.0.11 (2020-11-27)
 ===================================================
