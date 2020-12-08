@@ -1009,10 +1009,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {
-        val mxcUrl = action.messageFileContent.getFileUrl()
+        val mxcUrl = action.messageFileContent.getFileUrl() ?: return
         val isLocalSendingFile = action.senderId == session.myUserId
-                && mxcUrl?.startsWith("content://") ?: false
-        val isDownloaded = mxcUrl?.let { session.fileService().isFileInCache(it, action.messageFileContent.mimeType) } ?: false
+                && mxcUrl.startsWith("content://")
+        val isDownloaded = session.fileService().isFileInCache(action.messageFileContent)
         if (isLocalSendingFile) {
             tryOrNull { Uri.parse(mxcUrl) }?.let {
                 _viewEvents.post(RoomDetailViewEvents.OpenFile(
@@ -1023,7 +1023,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
         } else if (isDownloaded) {
             // we can open it
-            session.fileService().getTemporarySharableURI(mxcUrl!!, action.messageFileContent.mimeType)?.let { uri ->
+            session.fileService().getTemporarySharableURI(action.messageFileContent)?.let { uri ->
                 _viewEvents.post(RoomDetailViewEvents.OpenFile(
                         action.messageFileContent.mimeType,
                         uri,
@@ -1033,10 +1033,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         } else {
             session.fileService().downloadFile(
                     id = action.eventId,
-                    fileName = action.messageFileContent.getFileName(),
-                    mimeType = action.messageFileContent.mimeType,
-                    url = mxcUrl,
-                    elementToDecrypt = action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
+                    messageContent = action.messageFileContent,
                     callback = object : MatrixCallback<File> {
                         override fun onSuccess(data: File) {
                             _viewEvents.post(RoomDetailViewEvents.DownloadFileState(

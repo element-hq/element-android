@@ -225,12 +225,23 @@ internal class DefaultFileService @Inject constructor(
         return if (extension != null) "${url.safeFileName()}.$extension" else url.safeFileName()
     }
 
-    override fun isFileInCache(mxcUrl: String, mimeType: String?): Boolean {
-        return File(downloadFolder, fileForUrl(mxcUrl, mimeType)).exists()
+    override fun isFileInCache(mxcUrl: String?, mimeType: String?, elementToDecrypt: ElementToDecrypt?): Boolean {
+        return fileState(mxcUrl, mimeType, elementToDecrypt) == FileService.FileState.IN_CACHE
     }
 
-    override fun fileState(mxcUrl: String, mimeType: String?): FileService.FileState {
-        if (isFileInCache(mxcUrl, mimeType)) return FileService.FileState.IN_CACHE
+    private fun getClearFile(mxcUrl: String, mimeType: String?, elementToDecrypt: ElementToDecrypt?): File {
+        return if (elementToDecrypt == null) {
+            // Clear file
+            File(downloadFolder, fileForUrl(mxcUrl, mimeType))
+        } else {
+            // Encrypted file
+            File(decryptedFolder, fileForUrl(mxcUrl, mimeType))
+        }
+    }
+
+    override fun fileState(mxcUrl: String?, mimeType: String?, elementToDecrypt: ElementToDecrypt?): FileService.FileState {
+        mxcUrl ?: return FileService.FileState.UNKNOWN
+        if (getClearFile(mxcUrl, mimeType, elementToDecrypt).exists()) return FileService.FileState.IN_CACHE
         val isDownloading = synchronized(ongoing) {
             ongoing[mxcUrl] != null
         }
@@ -241,10 +252,11 @@ internal class DefaultFileService @Inject constructor(
      * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION
      * (if not other app won't be able to access it)
      */
-    override fun getTemporarySharableURI(mxcUrl: String, mimeType: String?): Uri? {
+    override fun getTemporarySharableURI(mxcUrl: String?, mimeType: String?, elementToDecrypt: ElementToDecrypt?): Uri? {
+        mxcUrl ?: return null
         // this string could be extracted no?
         val authority = "${context.packageName}.mx-sdk.fileprovider"
-        val targetFile = File(downloadFolder, fileForUrl(mxcUrl, mimeType))
+        val targetFile = getClearFile(mxcUrl, mimeType, elementToDecrypt)
         if (!targetFile.exists()) return null
         return FileProvider.getUriForFile(context, authority, targetFile)
     }

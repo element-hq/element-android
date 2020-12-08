@@ -1657,10 +1657,7 @@ class RoomDetailFragment @Inject constructor(
         } else if (action.messageContent is MessageWithAttachmentContent) {
             session.fileService().downloadFile(
                     id = action.eventId,
-                    fileName = action.messageContent.body,
-                    mimeType = action.messageContent.mimeType,
-                    url = action.messageContent.getFileUrl(),
-                    elementToDecrypt = action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                    messageContent = action.messageContent,
                     callback = object : MatrixCallback<File> {
                         override fun onSuccess(data: File) {
                             if (isAdded) {
@@ -1691,10 +1688,7 @@ class RoomDetailFragment @Inject constructor(
         }
         session.fileService().downloadFile(
                 id = action.eventId,
-                fileName = action.messageContent.body,
-                mimeType = action.messageContent.mimeType,
-                url = action.messageContent.getFileUrl(),
-                elementToDecrypt = action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                messageContent = action.messageContent,
                 callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
                         if (isAdded) {

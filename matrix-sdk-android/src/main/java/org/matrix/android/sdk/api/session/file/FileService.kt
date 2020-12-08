@@ -18,8 +18,12 @@ package org.matrix.android.sdk.api.session.file
 
 import android.net.Uri
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
+import org.matrix.android.sdk.api.session.room.model.message.getFileName
+import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import java.io.File
 
 /**
@@ -45,19 +49,59 @@ interface FileService {
             elementToDecrypt: ElementToDecrypt?,
             callback: MatrixCallback<File>): Cancelable
 
-    fun isFileInCache(mxcUrl: String, mimeType: String?): Boolean
+    fun downloadFile(
+            id: String,
+            messageContent: MessageWithAttachmentContent,
+            callback: MatrixCallback<File>): Cancelable =
+            downloadFile(
+                    id = id,
+                    fileName = messageContent.getFileName(),
+                    mimeType = messageContent.mimeType,
+                    url = messageContent.getFileUrl(),
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                    callback = callback
+            )
+
+    fun isFileInCache(mxcUrl: String?,
+                      mimeType: String?,
+                      elementToDecrypt: ElementToDecrypt?
+    ): Boolean
+
+    fun isFileInCache(messageContent: MessageWithAttachmentContent) =
+            isFileInCache(
+                    mxcUrl = messageContent.getFileUrl(),
+                    mimeType = messageContent.mimeType,
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
 
     /**
      * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION
      * (if not other app won't be able to access it)
      */
-    fun getTemporarySharableURI(mxcUrl: String, mimeType: String?): Uri?
+    fun getTemporarySharableURI(mxcUrl: String?,
+                                mimeType: String?,
+                                elementToDecrypt: ElementToDecrypt?): Uri?
+
+    fun getTemporarySharableURI(messageContent: MessageWithAttachmentContent): Uri? =
+            getTemporarySharableURI(
+                    mxcUrl = messageContent.getFileUrl(),
+                    mimeType = messageContent.mimeType,
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+            )
 
     /**
      * Get information on the given file.
      * Mimetype should be the same one as passed to downloadFile (limitation for now)
      */
-    fun fileState(mxcUrl: String, mimeType: String?): FileState
+    fun fileState(mxcUrl: String?,
+                  mimeType: String?,
+                  elementToDecrypt: ElementToDecrypt?): FileState
+
+    fun fileState(messageContent: MessageWithAttachmentContent): FileState =
+            fileState(
+                    mxcUrl = messageContent.getFileUrl(),
+                    mimeType = messageContent.mimeType,
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+            )
 
     /**
      * Clears all the files downloaded by the service, including decrypted files
