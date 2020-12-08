@@ -72,16 +72,13 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
             stateKey: String?,
             body: JsonDict
     ) {
-        withContext(coroutineDispatchers.main) {
-            val params = SendStateTask.Params(
-                    roomId = roomId,
-                    stateKey = stateKey,
-                    eventType = eventType,
-                    body = body
-            )
-
-            sendStateTask.execute(params)
-        }
+        val params = SendStateTask.Params(
+                roomId = roomId,
+                stateKey = stateKey,
+                eventType = eventType,
+                body = body
+        )
+        sendStateTask.execute(params)
     }
 
     override suspend fun updateTopic(topic: String) {
