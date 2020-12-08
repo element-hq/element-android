@@ -169,8 +169,8 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionDownloadsDirectory
-        fun providesCacheDir(@SessionId sessionId: String,
-                             context: Context): File {
+        fun providesDownloadsCacheDir(@SessionId sessionId: String,
+                                      context: Context): File {
             return File(context.cacheDir, "downloads/$sessionId")
         }
 
