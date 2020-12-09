@@ -107,6 +107,7 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     val callId = mxCall.callId
+    val roomId = mxCall.roomId
 
     private var peerConnection: PeerConnection? = null
     private var localAudioSource: AudioSource? = null
@@ -237,16 +238,9 @@ class WebRtcCall(val mxCall: MxCall,
         mxCall
                 .takeIf { it.state is CallState.Connected }
                 ?.let { mxCall ->
-                    val session = sessionProvider.get()
-                    val name = session?.getUser(mxCall.opponentUserId)?.getBestName()
-                            ?: mxCall.roomId
                     // Start background service with notification
                     CallService.onPendingCall(
                             context = context,
-                            isVideo = mxCall.isVideoCall,
-                            roomName = name,
-                            roomId = mxCall.roomId,
-                            matrixId = session?.myUserId ?: "",
                             callId = mxCall.callId)
                 }
 
@@ -307,15 +301,8 @@ class WebRtcCall(val mxCall: MxCall,
                     .takeIf { it.state is CallState.Connected }
                     ?.let { mxCall ->
                         // Start background service with notification
-                        val session = sessionProvider.get()
-                        val name = session?.getUser(mxCall.opponentUserId)?.getBestName()
-                                ?: mxCall.opponentUserId
                         CallService.onOnGoingCallBackground(
                                 context = context,
-                                isVideo = mxCall.isVideoCall,
-                                roomName = name,
-                                roomId = mxCall.roomId,
-                                matrixId = session?.myUserId ?: "",
                                 callId = mxCall.callId
                         )
                     }
@@ -344,15 +331,8 @@ class WebRtcCall(val mxCall: MxCall,
         val turnServerResponse = getTurnServer()
         // Update service state
         withContext(Dispatchers.Main) {
-            val session = sessionProvider.get()
-            val name = session?.getUser(mxCall.opponentUserId)?.getBestName()
-                    ?: mxCall.roomId
             CallService.onPendingCall(
                     context = context,
-                    isVideo = mxCall.isVideoCall,
-                    roomName = name,
-                    roomId = mxCall.roomId,
-                    matrixId = session?.myUserId ?: "",
                     callId = mxCall.callId
             )
         }

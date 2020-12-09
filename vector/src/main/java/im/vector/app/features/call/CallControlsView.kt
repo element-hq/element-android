@@ -18,7 +18,9 @@ package im.vector.app.features.call
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +35,7 @@ import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 
 class CallControlsView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     var interactionListener: InteractionListener? = null
 
@@ -56,8 +58,7 @@ class CallControlsView @JvmOverloads constructor(
     lateinit var videoToggleIcon: ImageView
 
     init {
-        ConstraintLayout.inflate(context, R.layout.view_call_controls, this)
-        // layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        View.inflate(context, R.layout.view_call_controls, this)
         ButterKnife.bind(this)
     }
 

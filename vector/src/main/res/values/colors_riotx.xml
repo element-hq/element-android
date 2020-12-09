@@ -238,9 +238,16 @@
     <color name="riotx_reaction_background_on_dark">#4011BC8A</color>
     <color name="riotx_reaction_background_on_black">#4011BC8A</color>
 
+    <attr name="riotx_alerter_background" format="color" />
+    <color name="riotx_alerter_background_light">#FFF3F8FD</color>
+    <color name="riotx_alerter_background_dark">#FF282C35</color>
+    <color name="riotx_alerter_background_black">#FF282C35</color>
+
     <!-- (color from RiotWeb) -->
     <attr name="riotx_keys_backup_banner_accent_color" format="color" />
     <color name="riotx_keys_backup_banner_accent_color_light">#FFF8E3</color>
     <color name="riotx_keys_backup_banner_accent_color_dark">#22262E</color>
+
+
 
 </resources>

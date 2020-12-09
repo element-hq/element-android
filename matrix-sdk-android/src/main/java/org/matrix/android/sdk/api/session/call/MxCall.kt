@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.session.room.model.call.SdpType
 import org.matrix.android.sdk.api.util.Optional
 
 interface MxCallDetail {
+    val sessionId: String
     val callId: String
     val isOutgoing: Boolean
     val roomId: String

@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.di.DeviceId
+import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.call.model.MxCallImpl
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
@@ -29,21 +30,23 @@ import java.util.UUID
 import javax.inject.Inject
 
 internal class MxCallFactory @Inject constructor(
+        @SessionId private val sessionId: String,
         @DeviceId private val deviceId: String?,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val eventSenderProcessor: EventSenderProcessor,
         @UserId private val userId: String
 ) {
 
-    fun createIncomingCall(roomId: String, senderId: String, content: CallInviteContent): MxCall? {
+    fun createIncomingCall(roomId: String, opponentUserId: String, content: CallInviteContent): MxCall? {
         if (content.callId == null) return null
         return MxCallImpl(
+                sessionId = sessionId,
                 callId = content.callId,
                 isOutgoing = false,
                 roomId = roomId,
                 userId = userId,
                 ourPartyId = deviceId ?: "",
-                opponentUserId = senderId,
+                opponentUserId = opponentUserId,
                 isVideoCall = content.isVideo(),
                 localEchoEventFactory = localEchoEventFactory,
                 eventSenderProcessor = eventSenderProcessor
@@ -53,14 +56,15 @@ internal class MxCallFactory @Inject constructor(
         }
     }
 
-    fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall {
+    fun createOutgoingCall(roomId: String, opponentUserId: String, isVideoCall: Boolean): MxCall {
         return MxCallImpl(
+                sessionId = sessionId,
                 callId = UUID.randomUUID().toString(),
                 isOutgoing = true,
                 roomId = roomId,
                 userId = userId,
                 ourPartyId = deviceId ?: "",
-                opponentUserId = otherUserId,
+                opponentUserId = opponentUserId,
                 isVideoCall = isVideoCall,
                 localEchoEventFactory = localEchoEventFactory,
                 eventSenderProcessor = eventSenderProcessor

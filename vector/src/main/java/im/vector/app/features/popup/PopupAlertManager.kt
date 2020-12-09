@@ -21,14 +21,11 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.ImageView
 import com.tapadoo.alerter.Alerter
 import com.tapadoo.alerter.OnHideAlertListener
-import dagger.Lazy
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.isAnimationDisabled
-import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
@@ -41,7 +38,7 @@ import javax.inject.Singleton
  * Alerts are stacked and will be displayed sequentially
  */
 @Singleton
-class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<AvatarRenderer>) {
+class PopupAlertManager @Inject constructor() {
 
     private var weakCurrentActivity: WeakReference<Activity>? = null
     private var currentAlerter: VectorAlert? = null
@@ -191,17 +188,13 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
         val noAnimation = !animate || isAnimationDisabled(activity)
 
         alert.weakCurrentActivity = WeakReference(activity)
-        val alerter = if (alert is VerificationVectorAlert) Alerter.create(activity, R.layout.alerter_verification_layout)
-        else Alerter.create(activity)
+        val alerter = Alerter.create(activity, alert.layoutRes)
 
         alerter.setTitle(alert.title)
                 .setText(alert.description)
                 .also { al ->
-                    if (alert is VerificationVectorAlert) {
-                        val tvCustomView = al.getLayoutContainer()
-                        tvCustomView?.findViewById<ImageView>(R.id.ivUserAvatar)?.let { imageView ->
-                            alert.matrixItem?.let { avatarRenderer.get().render(it, imageView) }
-                        }
+                    al.getLayoutContainer()?.also {
+                        alert.viewBinder?.bind(it)
                     }
                 }
                 .apply {
@@ -251,6 +244,8 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
                 .apply {
                     if (alert.colorInt != null) {
                         setBackgroundColorInt(alert.colorInt!!)
+                    } else if (alert.colorAttribute != null) {
+                        setBackgroundColorInt(ThemeUtils.getColor(activity, alert.colorAttribute!!))
                     } else {
                         setBackgroundColorRes(alert.colorRes ?: R.color.notification_accent_color)
                     }

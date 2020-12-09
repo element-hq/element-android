@@ -239,7 +239,7 @@ android {
     productFlavors {
         gplay {
             dimension "store"
-
+            isDefault = true
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
 
             resValue "bool", "isGplay", "true"
