@@ -268,7 +268,7 @@ internal class DefaultFileService @Inject constructor(
             // Encrypted file
             CachedFiles(
                     File(downloadFolder, "$hashFolder/$ENCRYPTED_FILENAME"),
-                    File(decryptedFolder, "$hashFolder/$safeFileName"),
+                    File(decryptedFolder, "$hashFolder/$safeFileName")
             )
         } else {
             // Clear file

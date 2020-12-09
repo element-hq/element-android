@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.network.interceptors
 
 import androidx.annotation.NonNull
-import org.matrix.android.sdk.BuildConfig
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONArray
 import org.json.JSONException
