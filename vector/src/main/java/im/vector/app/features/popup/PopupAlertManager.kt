@@ -35,19 +35,25 @@ import javax.inject.Singleton
 
 /**
  * Responsible of displaying important popup alerts on top of the screen.
- * Alerts are stacked and will be displayed sequentially
+ * Alerts are stacked and will be displayed sequentially but sorted by priority.
+ * So if a new alert is posted with a higher priority than the current one it will show it instead and the current one
+ * will be back in the queue in first position.
  */
 @Singleton
 class PopupAlertManager @Inject constructor() {
 
+    companion object {
+        const val INCOMING_CALL_PRIORITY = Int.MAX_VALUE
+    }
+
     private var weakCurrentActivity: WeakReference<Activity>? = null
     private var currentAlerter: VectorAlert? = null
 
-    private val alertFiFo = mutableListOf<VectorAlert>()
+    private val alertQueue = mutableListOf<VectorAlert>()
 
     fun postVectorAlert(alert: VectorAlert) {
-        synchronized(alertFiFo) {
-            alertFiFo.add(alert)
+        synchronized(alertQueue) {
+            alertQueue.add(alert)
         }
         weakCurrentActivity?.get()?.runOnUiThread {
             displayNextIfPossible()
@@ -55,8 +61,8 @@ class PopupAlertManager @Inject constructor() {
     }
 
     fun cancelAlert(uid: String) {
-        synchronized(alertFiFo) {
-            alertFiFo.listIterator().apply {
+        synchronized(alertQueue) {
+            alertQueue.listIterator().apply {
                 while (this.hasNext()) {
                     val next = this.next()
                     if (next.uid == uid) {
@@ -79,8 +85,8 @@ class PopupAlertManager @Inject constructor() {
      * Cancel all alerts, after a sign out for instance
      */
     fun cancelAll() {
-        synchronized(alertFiFo) {
-            alertFiFo.clear()
+        synchronized(alertQueue) {
+            alertQueue.clear()
         }
 
         // Cancel any displayed alert
@@ -126,15 +132,21 @@ class PopupAlertManager @Inject constructor() {
     }
 
     private fun displayNextIfPossible() {
-        val currentActivity = weakCurrentActivity?.get()
-        if (Alerter.isShowing || currentActivity == null) {
-            // will retry later
-            return
-        }
+        val currentActivity = weakCurrentActivity?.get() ?: return
         val next: VectorAlert?
-        synchronized(alertFiFo) {
-            next = alertFiFo.firstOrNull()
-            if (next != null) alertFiFo.remove(next)
+        synchronized(alertQueue) {
+            next = alertQueue.maxByOrNull { it.priority }
+            // If next alert with highest priority is higher than the current one, we should display it
+            // and add the current one to queue again.
+            if (next != null && next.priority > currentAlerter?.priority ?: Int.MIN_VALUE) {
+                alertQueue.remove(next)
+                currentAlerter?.also {
+                    alertQueue.add(0, it)
+                }
+            } else {
+                // otherwise, we don't do anything
+                return
+            }
         }
         currentAlerter = next
         next?.let {

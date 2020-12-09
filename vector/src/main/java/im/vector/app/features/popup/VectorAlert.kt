@@ -34,6 +34,7 @@ interface VectorAlert {
     val title: String
     val description: String
     val iconId: Int?
+    val priority: Int
     val shouldBeDisplayedIn: ((Activity) -> Boolean)
 
     data class Button(val title: String, val action: Runnable, val autoClose: Boolean)
@@ -83,6 +84,7 @@ open class DefaultVectorAlert(
         override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true },
 ) : VectorAlert {
 
+
     // will be set by manager, and accessible by actions at runtime
     override var weakCurrentActivity: WeakReference<Activity>? = null
 
@@ -96,6 +98,8 @@ open class DefaultVectorAlert(
 
     @LayoutRes
     override val layoutRes = R.layout.alerter_alert_default_layout
+
+    override val priority: Int = 0
 
     @ColorRes
     override var colorRes: Int? = null

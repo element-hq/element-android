@@ -29,6 +29,7 @@ class IncomingCallAlert(uid: String,
                         override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
 ) : DefaultVectorAlert(uid, "", "", 0, shouldBeDisplayedIn) {
 
+    override val priority = PopupAlertManager.INCOMING_CALL_PRIORITY
     override val layoutRes = R.layout.alerter_incoming_call_layout
     override var colorAttribute: Int? = R.attr.riotx_alerter_background
 

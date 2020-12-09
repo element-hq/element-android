@@ -158,10 +158,6 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
     /**
      * Display a permanent notification when there is an incoming call.
      *
-     * @param session  the session
-     * @param isVideo  true if this is a video call, false for voice call
-     * @param room     the room
-     * @param callId   the callId
      */
     private fun displayIncomingCallNotification(intent: Intent) {
         Timber.v("## VOIP displayIncomingCallNotification $intent")
