@@ -170,29 +170,26 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         val fromBg = intent.getBooleanExtra(EXTRA_IS_IN_BG, false)
         val opponentMatrixItem = getOpponentMatrixItem(call)
         Timber.v("displayIncomingCallNotification : display the dedicated notification")
-        if (!fromBg) {
-            // Show in-app notification if app is in foreground.
-            val incomingCallAlert = IncomingCallAlert(INCOMING_CALL_ALERT_UID,
-                    shouldBeDisplayedIn = { activity ->
-                        if (activity is RoomDetailActivity) {
-                            call.roomId != activity.currentRoomId
-                        } else if(activity is VectorCallActivity) {
-                            activity.intent.getParcelableExtra<CallArgs>(MvRx.KEY_ARG)?.callId != call.callId
-                        } else true
-                    }
-            ).apply {
-                viewBinder = IncomingCallAlert.ViewBinder(
-                        matrixItem = opponentMatrixItem,
-                        avatarRenderer = avatarRenderer,
-                        isVideoCall = isVideoCall,
-                        onAccept = { showCallScreen(call, VectorCallActivity.INCOMING_ACCEPT) },
-                        onReject = { call.endCall() }
-                )
-                dismissedAction = Runnable { call.endCall() }
-                contentAction = Runnable { showCallScreen(call, VectorCallActivity.INCOMING_RINGING) }
-            }
-            alertManager.postVectorAlert(incomingCallAlert)
+        val incomingCallAlert = IncomingCallAlert(INCOMING_CALL_ALERT_UID,
+                shouldBeDisplayedIn = { activity ->
+                    if (activity is RoomDetailActivity) {
+                        call.roomId != activity.currentRoomId
+                    } else if (activity is VectorCallActivity) {
+                        activity.intent.getParcelableExtra<CallArgs>(MvRx.KEY_ARG)?.callId != call.callId
+                    } else true
+                }
+        ).apply {
+            viewBinder = IncomingCallAlert.ViewBinder(
+                    matrixItem = opponentMatrixItem,
+                    avatarRenderer = avatarRenderer,
+                    isVideoCall = isVideoCall,
+                    onAccept = { showCallScreen(call, VectorCallActivity.INCOMING_ACCEPT) },
+                    onReject = { call.endCall() }
+            )
+            dismissedAction = Runnable { call.endCall() }
+            contentAction = Runnable { showCallScreen(call, VectorCallActivity.INCOMING_RINGING) }
         }
+        alertManager.postVectorAlert(incomingCallAlert)
         val notification = notificationUtils.buildIncomingCallNotification(
                 mxCall = call.mxCall,
                 title = opponentMatrixItem?.getBestName() ?: call.mxCall.opponentUserId,

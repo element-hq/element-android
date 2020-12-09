@@ -47,13 +47,4 @@ class VerificationVectorAlert(uid: String,
             }
         }
     }
-
-
-
 }
-
-
-
-
-
-

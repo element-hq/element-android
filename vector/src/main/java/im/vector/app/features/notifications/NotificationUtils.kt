@@ -30,6 +30,10 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.Build
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
@@ -53,7 +57,6 @@ import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.troubleshoot.TestNotificationReceiver
 import org.matrix.android.sdk.api.session.call.MxCall
-import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -323,19 +326,19 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         builder.addAction(
                 NotificationCompat.Action(
-                        R.drawable.ic_call_answer,
-                        // IconCompat.createWithResource(applicationContext, R.drawable.ic_call)
-                        // .setTint(ContextCompat.getColor(applicationContext, R.color.riotx_positive_accent)),
-                        context.getString(R.string.call_notification_answer),
-                        answerCallPendingIntent
-                )
+                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
+                        getActionText(R.string.call_notification_reject, R.color.riotx_notice),
+                        rejectCallPendingIntent)
         )
 
         builder.addAction(
                 NotificationCompat.Action(
-                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
-                        context.getString(R.string.call_notification_reject),
-                        rejectCallPendingIntent)
+                        R.drawable.ic_call_answer,
+                        // IconCompat.createWithResource(applicationContext, R.drawable.ic_call)
+                        // .setTint(ContextCompat.getColor(applicationContext, R.color.riotx_positive_accent)),
+                        getActionText(R.string.call_notification_answer, R.color.riotx_positive_accent),
+                        answerCallPendingIntent
+                )
         )
 
         builder.setFullScreenIntent(contentPendingIntent, true)
@@ -369,8 +372,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         builder.addAction(
                 NotificationCompat.Action(
-                        IconCompat.createWithResource(context, R.drawable.ic_call_end).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
-                        context.getString(R.string.call_notification_hangup),
+                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
+                        getActionText(R.string.call_notification_hangup, R.color.riotx_notice),
                         rejectCallPendingIntent)
         )
         builder.setContentIntent(contentPendingIntent)
@@ -413,8 +416,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         builder.addAction(
                 NotificationCompat.Action(
-                        IconCompat.createWithResource(context, R.drawable.ic_call_end).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
-                        context.getString(R.string.call_notification_hangup),
+                        IconCompat.createWithResource(context, R.drawable.ic_call_hangup).setTint(ContextCompat.getColor(context, R.color.riotx_notice)),
+                        getActionText(R.string.call_notification_hangup, R.color.riotx_notice),
                         rejectCallPendingIntent)
         )
 
@@ -864,6 +867,13 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
         return setting == NotificationManager.INTERRUPTION_FILTER_NONE
                 || setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
+    }
+
+    private fun getActionText(@StringRes stringRes: Int, @ColorRes colorRes: Int): Spannable {
+        return SpannableString(context.getText(stringRes)).apply {
+            val foregroundColorSpan = ForegroundColorSpan(ContextCompat.getColor(context, colorRes))
+            setSpan(foregroundColorSpan, 0, length, 0)
+        }
     }
 
     private fun ensureTitleNotEmpty(title: String?): CharSequence {

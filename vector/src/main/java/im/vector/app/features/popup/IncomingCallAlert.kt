@@ -18,7 +18,6 @@ package im.vector.app.features.popup
 
 import android.app.Activity
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import im.vector.app.R

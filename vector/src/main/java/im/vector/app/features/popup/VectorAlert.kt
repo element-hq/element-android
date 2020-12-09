@@ -24,10 +24,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import im.vector.app.R
-import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
-
 
 interface VectorAlert {
     val uid: String
@@ -68,7 +65,6 @@ interface VectorAlert {
     interface ViewBinder {
         fun bind(view: View)
     }
-
 }
 
 /**
@@ -82,9 +78,8 @@ open class DefaultVectorAlert(
         /**
          * Alert are displayed by default, but let this lambda return false to prevent displaying
          */
-        override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true },
+        override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
 ) : VectorAlert {
-
 
     // will be set by manager, and accessible by actions at runtime
     override var weakCurrentActivity: WeakReference<Activity>? = null
@@ -114,6 +109,4 @@ open class DefaultVectorAlert(
     override var colorAttribute: Int? = null
 
     override var viewBinder: VectorAlert.ViewBinder? = null
-
 }
-

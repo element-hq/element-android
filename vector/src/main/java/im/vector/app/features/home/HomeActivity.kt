@@ -51,7 +51,6 @@ import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
-import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
@@ -283,7 +282,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                         uid = "upgradeSecurity",
                         title = getString(titleRes),
                         description = getString(descRes),
-                        iconId = R.drawable.ic_shield_warning,
+                        iconId = R.drawable.ic_shield_warning
                 ).apply {
                     viewBinder = VerificationVectorAlert.ViewBinder(userItem, avatarRenderer)
                     colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
