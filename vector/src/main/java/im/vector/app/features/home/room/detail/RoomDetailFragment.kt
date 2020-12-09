@@ -69,6 +69,7 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.jakewharton.rxbinding3.widget.textChanges
+import com.vanniktech.emoji.EmojiPopup
 import im.vector.app.R
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
@@ -296,6 +297,8 @@ class RoomDetailFragment @Inject constructor(
     private var lockSendButton = false
     private val activeCallViewHolder = ActiveCallViewHolder()
 
+    private lateinit var emojiPopup: EmojiPopup
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
@@ -311,6 +314,7 @@ class RoomDetailFragment @Inject constructor(
         setupActiveCallView()
         setupJumpToBottomView()
         setupConfBannerView()
+        setupEmojiPopup()
 
         roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
@@ -475,6 +479,23 @@ class RoomDetailFragment @Inject constructor(
             override fun onDelete(jitsiWidget: Widget) {
                 roomDetailViewModel.handle(RoomDetailAction.RemoveWidget(jitsiWidget.widgetId))
             }
+        }
+    }
+
+    private fun setupEmojiPopup() {
+        EmojiPopup
+                .Builder
+                .fromRootView(rootConstraintLayout)
+                .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
+                .setOnEmojiPopupShownListener { composerLayout.composerEmojiButton.setImageResource(R.drawable.ic_keyboard) }
+                .setOnEmojiPopupDismissListener { composerLayout.composerEmojiButton.setImageResource(R.drawable.ic_insert_emoji) }
+                .build(composerLayout.composerEditText)
+                .also {
+                    emojiPopup = it
+                }
+
+        composerLayout.composerEmojiButton.debouncedClicks {
+            emojiPopup.toggle()
         }
     }
 
@@ -1211,9 +1232,6 @@ class RoomDetailFragment @Inject constructor(
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             inviteView.visibility = View.GONE
-            val uid = session.myUserId
-            val meMember = state.myRoomMember()
-            avatarRenderer.render(MatrixItem.UserItem(uid, meMember?.displayName, meMember?.avatarUrl), composerLayout.composerAvatarImageView)
             if (state.tombstoneEvent == null) {
                 if (state.canSendMessage) {
                     composerLayout.visibility = View.VISIBLE
