@@ -1869,4 +1869,10 @@
     <string name="cannot_call_yourself_with_invite">Et voi aloittaa puhelua itsesi kanssa. Odota, että muut osallistujat hyväksyvät kutsun</string>
     <string name="cannot_call_yourself">Et voi aloittaa puhelua itsesi kanssa</string>
     <string name="room_participants_action_cancel_invite_title">Peruuta kutsu</string>
+    <string name="call_format_turn_hd_on">Korkea laatu päälle</string>
+    <string name="call_format_turn_hd_off">Korkea laatu pois</string>
+    <string name="call_failed_no_connection_description">Reaaliaikaisen yhteyden muodostus epäonnistui.
+\nPyydäthän kotipalvelimesi ylläpitäjää asentamaan TURN-palvelimen varmistaaksesi puhelujen luotettavan toiminnan.</string>
+    <string name="call_notification_answer">Vastaa</string>
+    <string name="start_chatting">Aloita keskustelu</string>
 </resources>
