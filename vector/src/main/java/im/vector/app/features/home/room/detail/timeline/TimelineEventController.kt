@@ -49,7 +49,6 @@ import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineIte
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.app.features.home.room.detail.timeline.item.NoticeItemBuilder
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
 import im.vector.app.features.media.ImageContentRenderer

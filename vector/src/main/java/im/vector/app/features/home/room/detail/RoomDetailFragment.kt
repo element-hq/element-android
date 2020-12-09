@@ -382,7 +382,6 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.ShowRoomAvatarFullScreen         -> it.matrixItem?.let { item ->
                     navigator.openBigImageViewer(requireActivity(), it.view, item)
                 }
-
             }.exhaustive
         }
 
@@ -846,8 +845,6 @@ class RoomDetailFragment @Inject constructor(
             cleanUpAfterPermissionNotGranted()
         }
     }
-
-
 
     private fun safeStartCall2(isVideoCall: Boolean) {
         val startCallAction = RoomDetailAction.StartCall(isVideoCall)

@@ -129,7 +129,6 @@ class CallItemFactory @Inject constructor(
             isStillActive: Boolean,
             callback: TimelineEventController.Callback?
     ): CallTileTimelineItem? {
-
         val userOfInterest = roomSummaryHolder.roomSummary?.toMatrixItem() ?: return null
         val attributes = messageItemAttributesFactory.create(null, informationData, callback).let {
             CallTileTimelineItem.Attributes(
