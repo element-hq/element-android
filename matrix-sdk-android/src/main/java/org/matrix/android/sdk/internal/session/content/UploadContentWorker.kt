@@ -199,9 +199,10 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
                 Timber.v("## FileService: Update cache storage for ${contentUploadResponse.contentUri}")
                 try {
+                    /* TODO
                     context.contentResolver.openInputStream(attachment.queryUri)?.let {
                         fileService.storeDataFor(contentUploadResponse.contentUri, params.attachment.getSafeMimeType(), it)
-                    }
+                    } */
                     Timber.v("## FileService: cache storage updated")
                 } catch (failure: Throwable) {
                     Timber.e(failure, "## FileService: Failed to update file cache")

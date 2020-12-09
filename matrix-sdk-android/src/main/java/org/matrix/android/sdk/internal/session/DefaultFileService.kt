@@ -25,9 +25,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okio.buffer
-import okio.sink
-import okio.source
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
@@ -41,13 +38,12 @@ import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificateWithProg
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.md5
 import org.matrix.android.sdk.internal.util.toCancelable
 import org.matrix.android.sdk.internal.util.writeToFile
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
-import java.net.URLEncoder
 import javax.inject.Inject
 
 internal class DefaultFileService @Inject constructor(
@@ -60,8 +56,6 @@ internal class DefaultFileService @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor
 ) : FileService {
-
-    private fun String.safeFileName() = URLEncoder.encode(this, Charsets.US_ASCII.displayName())
 
     // Folder to store downloaded file (not decrypted)
     private val legacyFolder = File(sessionCacheDirectory, "MF")
@@ -89,21 +83,21 @@ internal class DefaultFileService @Inject constructor(
                               url: String?,
                               elementToDecrypt: ElementToDecrypt?,
                               callback: MatrixCallback<File>): Cancelable {
-        val unwrappedUrl = url ?: return NoOpCancellable.also {
+        url ?: return NoOpCancellable.also {
             callback.onFailure(IllegalArgumentException("url is null"))
         }
 
-        Timber.v("## FileService downloadFile $unwrappedUrl")
+        Timber.v("## FileService downloadFile $url")
 
         synchronized(ongoing) {
-            val existing = ongoing[unwrappedUrl]
+            val existing = ongoing[url]
             if (existing != null) {
                 Timber.v("## FileService downloadFile is already downloading.. ")
                 existing.add(callback)
                 return NoOpCancellable
             } else {
                 // mark as tracked
-                ongoing[unwrappedUrl] = ArrayList()
+                ongoing[url] = ArrayList()
                 // and proceed to download
             }
         }
@@ -117,9 +111,9 @@ internal class DefaultFileService @Inject constructor(
                     // ensure we use unique file name by using URL (mapped to suitable file name)
                     // Also we need to add extension for the FileProvider, if not it lot's of app that it's
                     // shared with will not function well (even if mime type is passed in the intent)
-                    File(downloadFolder, fileForUrl(unwrappedUrl, mimeType))
-                }.flatMap { destFile ->
-                    if (!destFile.exists()) {
+                    getFiles(url, fileName, mimeType, elementToDecrypt)
+                }.flatMap { cachedFiles ->
+                    if (!cachedFiles.file.exists()) {
                         val resolvedUrl = contentUrlResolver.resolveFullSize(url) ?: return@flatMap Try.Failure(IllegalArgumentException("url is null"))
 
                         val request = Request.Builder()
@@ -143,23 +137,23 @@ internal class DefaultFileService @Inject constructor(
                         Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${!source.exhausted()}")
 
                         // Write the file to cache (encrypted version if the file is encrypted)
-                        writeToFile(source.inputStream(), destFile)
+                        writeToFile(source.inputStream(), cachedFiles.file)
                         response.close()
                     } else {
                         Timber.v("## FileService: cache hit for $url")
                     }
 
-                    Try.just(destFile)
+                    Try.just(cachedFiles)
                 }
-            }.flatMap { downloadedFile ->
+            }.flatMap { cachedFiles ->
                 // Decrypt if necessary
-                if (elementToDecrypt != null) {
-                    val decryptedFile = File(decryptedFolder, fileForUrl(unwrappedUrl, mimeType))
-
-                    if (!decryptedFile.exists()) {
+                if (cachedFiles.decryptedFile != null) {
+                    if (!cachedFiles.decryptedFile.exists()) {
                         Timber.v("## FileService: decrypt file")
-                        val decryptSuccess = decryptedFile.outputStream().buffered().use { outputStream ->
-                            downloadedFile.inputStream().use { inputStream ->
+                        // Ensure the parent folder exists
+                        cachedFiles.decryptedFile.parentFile?.mkdirs()
+                        val decryptSuccess = cachedFiles.file.inputStream().use { inputStream ->
+                            cachedFiles.decryptedFile.outputStream().buffered().use { outputStream ->
                                 MXEncryptedAttachments.decryptAttachment(
                                         inputStream,
                                         elementToDecrypt,
@@ -173,18 +167,18 @@ internal class DefaultFileService @Inject constructor(
                     } else {
                         Timber.v("## FileService: cache hit for decrypted file")
                     }
-                    Try.just(decryptedFile)
+                    Try.just(cachedFiles.decryptedFile)
                 } else {
                     // Clear file
-                    Try.just(downloadedFile)
+                    Try.just(cachedFiles.file)
                 }
             }.fold(
                     { throwable ->
                         callback.onFailure(throwable)
                         // notify concurrent requests
                         val toNotify = synchronized(ongoing) {
-                            ongoing[unwrappedUrl]?.also {
-                                ongoing.remove(unwrappedUrl)
+                            ongoing[url]?.also {
+                                ongoing.remove(url)
                             }
                         }
                         toNotify?.forEach { otherCallbacks ->
@@ -195,8 +189,8 @@ internal class DefaultFileService @Inject constructor(
                         callback.onSuccess(file)
                         // notify concurrent requests
                         val toNotify = synchronized(ongoing) {
-                            ongoing[unwrappedUrl]?.also {
-                                ongoing.remove(unwrappedUrl)
+                            ongoing[url]?.also {
+                                ongoing.remove(url)
                             }
                         }
                         Timber.v("## FileService additional to notify ${toNotify?.size ?: 0} ")
@@ -208,6 +202,7 @@ internal class DefaultFileService @Inject constructor(
         }.toCancelable()
     }
 
+    /*
     fun storeDataFor(url: String, mimeType: String?, inputStream: InputStream) {
         val file = File(downloadFolder, fileForUrl(url, mimeType))
         val source = inputStream.source().buffer()
@@ -219,29 +214,70 @@ internal class DefaultFileService @Inject constructor(
             }
         }
     }
+     */
 
-    private fun fileForUrl(url: String, mimeType: String?): String {
-        val extension = mimeType?.let { MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) }
-        return if (extension != null) "${url.safeFileName()}.$extension" else url.safeFileName()
-    }
-
-    override fun isFileInCache(mxcUrl: String?, mimeType: String?, elementToDecrypt: ElementToDecrypt?): Boolean {
-        return fileState(mxcUrl, mimeType, elementToDecrypt) == FileService.FileState.IN_CACHE
-    }
-
-    private fun getClearFile(mxcUrl: String, mimeType: String?, elementToDecrypt: ElementToDecrypt?): File {
-        return if (elementToDecrypt == null) {
-            // Clear file
-            File(downloadFolder, fileForUrl(mxcUrl, mimeType))
-        } else {
-            // Encrypted file
-            File(decryptedFolder, fileForUrl(mxcUrl, mimeType))
+    private fun safeFileName(fileName: String, mimeType: String?): String {
+        return buildString {
+            // filename has to be safe for the Android System
+            val result = fileName.replace("[^a-z A-Z0-9\\\\.\\-]".toRegex(), "_")
+            append(result)
+            // Check that the extension is correct regarding the mimeType
+            val extensionFromMime = mimeType?.let { MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) }
+            if (extensionFromMime != null) {
+                // Compare
+                val fileExtension = result.substringAfterLast(delimiter = ".", missingDelimiterValue = "")
+                if (fileExtension.isEmpty() || fileExtension != extensionFromMime) {
+                    // Missing extension, or diff in extension, add the one provided by the mimetype
+                    append(".")
+                    append(extensionFromMime)
+                }
+            }
         }
     }
 
-    override fun fileState(mxcUrl: String?, mimeType: String?, elementToDecrypt: ElementToDecrypt?): FileService.FileState {
+    override fun isFileInCache(mxcUrl: String?,
+                               fileName: String,
+                               mimeType: String?,
+                               elementToDecrypt: ElementToDecrypt?): Boolean {
+        return fileState(mxcUrl, fileName, mimeType, elementToDecrypt) == FileService.FileState.IN_CACHE
+    }
+
+    internal data class CachedFiles(
+            // This is the downloaded file. Can be clear or encrypted
+            val file: File,
+            // This is the decrypted file. Null if the original file is not encrypted
+            val decryptedFile: File?
+    ) {
+        fun getClearFile(): File = decryptedFile ?: file
+    }
+
+    private fun getFiles(mxcUrl: String,
+                         fileName: String,
+                         mimeType: String?,
+                         elementToDecrypt: ElementToDecrypt?): CachedFiles {
+        val hashFolder = mxcUrl.md5()
+        val safeFileName = safeFileName(fileName, mimeType)
+        return if (elementToDecrypt == null) {
+            // Clear file
+            CachedFiles(
+                    File(downloadFolder, "$hashFolder/$safeFileName"),
+                    null
+            )
+        } else {
+            // Encrypted file
+            CachedFiles(
+                    File(downloadFolder, "$hashFolder/$ENCRYPTED_FILENAME"),
+                    File(decryptedFolder, "$hashFolder/$safeFileName"),
+            )
+        }
+    }
+
+    override fun fileState(mxcUrl: String?,
+                           fileName: String,
+                           mimeType: String?,
+                           elementToDecrypt: ElementToDecrypt?): FileService.FileState {
         mxcUrl ?: return FileService.FileState.UNKNOWN
-        if (getClearFile(mxcUrl, mimeType, elementToDecrypt).exists()) return FileService.FileState.IN_CACHE
+        if (getFiles(mxcUrl, fileName, mimeType, elementToDecrypt).file.exists()) return FileService.FileState.IN_CACHE
         val isDownloading = synchronized(ongoing) {
             ongoing[mxcUrl] != null
         }
@@ -252,11 +288,14 @@ internal class DefaultFileService @Inject constructor(
      * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION
      * (if not other app won't be able to access it)
      */
-    override fun getTemporarySharableURI(mxcUrl: String?, mimeType: String?, elementToDecrypt: ElementToDecrypt?): Uri? {
+    override fun getTemporarySharableURI(mxcUrl: String?,
+                                         fileName: String,
+                                         mimeType: String?,
+                                         elementToDecrypt: ElementToDecrypt?): Uri? {
         mxcUrl ?: return null
         // this string could be extracted no?
         val authority = "${context.packageName}.mx-sdk.fileprovider"
-        val targetFile = getClearFile(mxcUrl, mimeType, elementToDecrypt)
+        val targetFile = getFiles(mxcUrl, fileName, mimeType, elementToDecrypt).getClearFile()
         if (!targetFile.exists()) return null
         return FileProvider.getUriForFile(context, authority, targetFile)
     }
@@ -276,5 +315,9 @@ internal class DefaultFileService @Inject constructor(
 
     override fun clearDecryptedCache() {
         decryptedFolder.deleteRecursively()
+    }
+
+    companion object {
+        private const val ENCRYPTED_FILENAME = "encrypted.bin"
     }
 }

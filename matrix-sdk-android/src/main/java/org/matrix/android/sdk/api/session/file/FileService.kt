@@ -63,6 +63,7 @@ interface FileService {
             )
 
     fun isFileInCache(mxcUrl: String?,
+                      fileName: String,
                       mimeType: String?,
                       elementToDecrypt: ElementToDecrypt?
     ): Boolean
@@ -70,6 +71,7 @@ interface FileService {
     fun isFileInCache(messageContent: MessageWithAttachmentContent) =
             isFileInCache(
                     mxcUrl = messageContent.getFileUrl(),
+                    fileName = messageContent.getFileName(),
                     mimeType = messageContent.mimeType,
                     elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
 
@@ -78,12 +80,14 @@ interface FileService {
      * (if not other app won't be able to access it)
      */
     fun getTemporarySharableURI(mxcUrl: String?,
+                                fileName: String,
                                 mimeType: String?,
                                 elementToDecrypt: ElementToDecrypt?): Uri?
 
     fun getTemporarySharableURI(messageContent: MessageWithAttachmentContent): Uri? =
             getTemporarySharableURI(
                     mxcUrl = messageContent.getFileUrl(),
+                    fileName = messageContent.getFileName(),
                     mimeType = messageContent.mimeType,
                     elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
             )
@@ -93,12 +97,14 @@ interface FileService {
      * Mimetype should be the same one as passed to downloadFile (limitation for now)
      */
     fun fileState(mxcUrl: String?,
+                  fileName: String,
                   mimeType: String?,
                   elementToDecrypt: ElementToDecrypt?): FileState
 
     fun fileState(messageContent: MessageWithAttachmentContent): FileState =
             fileState(
                     mxcUrl = messageContent.getFileUrl(),
+                    fileName = messageContent.getFileName(),
                     mimeType = messageContent.mimeType,
                     elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
             )
