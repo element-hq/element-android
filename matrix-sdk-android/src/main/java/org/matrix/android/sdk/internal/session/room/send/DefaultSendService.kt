@@ -177,7 +177,7 @@ internal class DefaultSendService @AssistedInject constructor(
                     val attachmentData = ContentAttachmentData(
                             size = messageContent.info!!.size,
                             mimeType = messageContent.info.mimeType!!,
-                            name = messageContent.body,
+                            name = messageContent.getFileName(),
                             queryUri = Uri.parse(messageContent.url),
                             type = ContentAttachmentData.Type.FILE
                     )
