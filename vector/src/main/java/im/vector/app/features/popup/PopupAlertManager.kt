@@ -230,17 +230,19 @@ class PopupAlertManager @Inject constructor() {
                             }
                         })
                     }
-                    setOnClickListener(View.OnClickListener { _ ->
+                    setOnClickListener { _ ->
                         alert.contentAction?.let {
-                            currentIsDismissed()
-                            Alerter.hide()
+                            if (alert.dismissOnClick) {
+                                currentIsDismissed()
+                                Alerter.hide()
+                            }
                             try {
                                 it.run()
                             } catch (e: java.lang.Exception) {
                                 Timber.e("## failed to perform action")
                             }
                         }
-                    })
+                    }
                 }
                 .setOnHideListener(OnHideAlertListener {
                     // called when dismissed on swipe

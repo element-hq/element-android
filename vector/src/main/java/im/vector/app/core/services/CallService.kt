@@ -24,12 +24,15 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.view.KeyEvent
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
+import com.airbnb.mvrx.MvRx
 import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.features.call.CallArgs
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.telecom.CallConnection
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.popup.IncomingCallAlert
 import im.vector.app.features.popup.PopupAlertManager
@@ -169,7 +172,15 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         Timber.v("displayIncomingCallNotification : display the dedicated notification")
         if (!fromBg) {
             // Show in-app notification if app is in foreground.
-            val incomingCallAlert = IncomingCallAlert(INCOMING_CALL_ALERT_UID).apply {
+            val incomingCallAlert = IncomingCallAlert(INCOMING_CALL_ALERT_UID,
+                    shouldBeDisplayedIn = { activity ->
+                        if (activity is RoomDetailActivity) {
+                            call.roomId != activity.currentRoomId
+                        } else if(activity is VectorCallActivity) {
+                            activity.intent.getParcelableExtra<CallArgs>(MvRx.KEY_ARG)?.callId != call.callId
+                        } else true
+                    }
+            ).apply {
                 viewBinder = IncomingCallAlert.ViewBinder(
                         matrixItem = opponentMatrixItem,
                         avatarRenderer = avatarRenderer,

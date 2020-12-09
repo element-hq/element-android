@@ -35,6 +35,7 @@ interface VectorAlert {
     val description: String
     val iconId: Int?
     val priority: Int
+    val dismissOnClick: Boolean
     val shouldBeDisplayedIn: ((Activity) -> Boolean)
 
     data class Button(val title: String, val action: Runnable, val autoClose: Boolean)
@@ -98,6 +99,8 @@ open class DefaultVectorAlert(
 
     @LayoutRes
     override val layoutRes = R.layout.alerter_alert_default_layout
+
+    override val dismissOnClick: Boolean = true
 
     override val priority: Int = 0
 
