@@ -291,6 +291,10 @@ object CommandParser {
                 Command.DISCARD_SESSION.command        -> {
                     ParsedCommand.DiscardSession
                 }
+                Command.CONFETTI.command               -> {
+                    val message = textMessage.substring(Command.CONFETTI.command.length).trim()
+                    ParsedCommand.Confetti(message)
+                }
                 else                                   -> {
                     // Unknown command
                     ParsedCommand.ErrorUnknownSlashCommand(slashCommand)

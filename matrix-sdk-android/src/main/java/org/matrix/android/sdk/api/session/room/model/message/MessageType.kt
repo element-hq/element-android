@@ -33,4 +33,7 @@ object MessageType {
     // Add, in local, a fake message type in order to StickerMessage can inherit Message class
     // Because sticker isn't a message type but a event type without msgtype field
     const val MSGTYPE_STICKER_LOCAL = "org.matrix.android.sdk.sticker"
+
+    const val MSGTYPE_CONFETTI = "nic.custom.confetti"
+    const val MSGTYPE_SNOW = "nic.custom.snow"
 }

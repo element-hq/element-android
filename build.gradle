@@ -43,6 +43,10 @@ allprojects {
                 includeGroupByRegex 'com\\.github\\.chrisbanes'
                 // PFLockScreen-Android
                 includeGroupByRegex 'com\\.github\\.vector-im'
+
+                //Chat effects
+                includeGroupByRegex 'com\\.github\\.jetradarmobile'
+                includeGroupByRegex 'nl\\.dionsegijn'
             }
         }
         maven {
