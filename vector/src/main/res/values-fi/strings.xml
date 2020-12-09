@@ -1840,7 +1840,7 @@
     <string name="room_participants_power_level_demote">Alenna</string>
     <string name="room_participants_power_level_demote_warning_prompt">Et voi perua tätä muutosta, koska olet alentamassa itseäsi. Jos olet viimeinen oikeutettu henkilö tässä huoneessa, oikeuksia ei voi enää saada takaisin.</string>
     <string name="room_participants_power_level_demote_warning_title">Alenna itsesi\?</string>
-    <string name="room_participants_action_cancel_invite">Peru kutsu</string>
+    <string name="room_participants_action_cancel_invite">Peruuta kutsu</string>
     <string name="permissions_denied_add_contact">Anna lupa hakea yhteystiedot.</string>
     <string name="permissions_denied_qr_code">QR-koodin skannaaminen vaatii luvan kameran käyttöön.</string>
     <string name="return_to_call">Palaa puheluun</string>
@@ -1868,4 +1868,5 @@
     <string name="failed_to_add_widget">Sovelman lisääminen epäonnistui</string>
     <string name="cannot_call_yourself_with_invite">Et voi aloittaa puhelua itsesi kanssa. Odota, että muut osallistujat hyväksyvät kutsun</string>
     <string name="cannot_call_yourself">Et voi aloittaa puhelua itsesi kanssa</string>
+    <string name="room_participants_action_cancel_invite_title">Peruuta kutsu</string>
 </resources>
