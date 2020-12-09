@@ -4,6 +4,7 @@ Changes in Element 1.0.12 (2020-XX-XX)
 Features ✨:
  - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
  - Room setting: update join rules and guest access (#2442)
+ - Store encrypted file in cache and cleanup decrypted file at each app start
 
 Improvements 🙌:
  - Add Setting Item to Change PIN (#2462)

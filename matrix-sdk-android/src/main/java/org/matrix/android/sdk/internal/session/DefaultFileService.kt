@@ -57,9 +57,11 @@ internal class DefaultFileService @Inject constructor(
         private val taskExecutor: TaskExecutor
 ) : FileService {
 
-    // Folder to store downloaded file (not decrypted)
+    // Legacy folder, will be deleted
     private val legacyFolder = File(sessionCacheDirectory, "MF")
+    // Folder to store downloaded files (not decrypted)
     private val downloadFolder = File(sessionCacheDirectory, "F")
+    // Folder to store decrypted files
     private val decryptedFolder = File(downloadFolder, "D")
 
     init {
