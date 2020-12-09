@@ -174,10 +174,11 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
                         matrixItem = opponentMatrixItem,
                         avatarRenderer = avatarRenderer,
                         isVideoCall = isVideoCall,
-                        onAccept = { acceptIncomingCall(call) },
+                        onAccept = { showCallScreen(call, VectorCallActivity.INCOMING_ACCEPT) },
                         onReject = { call.endCall() }
                 )
                 dismissedAction = Runnable { call.endCall() }
+                contentAction = Runnable { showCallScreen(call, VectorCallActivity.INCOMING_RINGING) }
             }
             alertManager.postVectorAlert(incomingCallAlert)
         }
@@ -189,11 +190,11 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         startForeground(NOTIFICATION_ID, notification)
     }
 
-    private fun acceptIncomingCall(call: WebRtcCall){
+    private fun showCallScreen(call: WebRtcCall, mode: String) {
         val intent = VectorCallActivity.newIntent(
                 context = this,
                 mxCall = call.mxCall,
-                mode = VectorCallActivity.INCOMING_ACCEPT
+                mode = mode
         )
         startActivity(intent)
     }
