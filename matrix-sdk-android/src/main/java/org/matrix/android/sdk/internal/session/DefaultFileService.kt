@@ -111,7 +111,7 @@ internal class DefaultFileService @Inject constructor(
                     // ensure we use unique file name by using URL (mapped to suitable file name)
                     // Also we need to add extension for the FileProvider, if not it lot's of app that it's
                     // shared with will not function well (even if mime type is passed in the intent)
-                    getFiles(url, fileName, mimeType, elementToDecrypt)
+                    getFiles(url, fileName, mimeType, elementToDecrypt != null)
                 }.flatMap { cachedFiles ->
                     if (!cachedFiles.file.exists()) {
                         val resolvedUrl = contentUrlResolver.resolveFullSize(url) ?: return@flatMap Try.Failure(IllegalArgumentException("url is null"))
@@ -202,24 +202,29 @@ internal class DefaultFileService @Inject constructor(
         }.toCancelable()
     }
 
-    /*
-    fun storeDataFor(url: String, mimeType: String?, inputStream: InputStream) {
-        val file = File(downloadFolder, fileForUrl(url, mimeType))
-        val source = inputStream.source().buffer()
-        file.sink().buffer().let { sink ->
-            source.use { input ->
-                sink.use { output ->
-                    output.writeAll(input)
-                }
-            }
+    fun storeDataFor(mxcUrl: String,
+                     filename: String?,
+                     mimeType: String?,
+                     originalFile: File,
+                     encryptedFile: File?) {
+        val files = getFiles(mxcUrl, filename, mimeType, encryptedFile != null)
+        if (encryptedFile != null) {
+            // We switch the two files here, original file it the decrypted file
+            files.decryptedFile?.let { originalFile.copyTo(it) }
+            encryptedFile.copyTo(files.file)
+        } else {
+            // Just copy the original file
+            originalFile.copyTo(files.file)
         }
     }
-     */
 
-    private fun safeFileName(fileName: String, mimeType: String?): String {
+    private fun safeFileName(fileName: String?, mimeType: String?): String {
         return buildString {
             // filename has to be safe for the Android System
-            val result = fileName.replace("[^a-z A-Z0-9\\\\.\\-]".toRegex(), "_")
+            val result = fileName
+                    ?.replace("[^a-z A-Z0-9\\\\.\\-]".toRegex(), "_")
+                    ?.takeIf { it.isNotEmpty() }
+                    ?: DEFAULT_FILENAME
             append(result)
             // Check that the extension is correct regarding the mimeType
             val extensionFromMime = mimeType?.let { MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) }
@@ -252,22 +257,22 @@ internal class DefaultFileService @Inject constructor(
     }
 
     private fun getFiles(mxcUrl: String,
-                         fileName: String,
+                         fileName: String?,
                          mimeType: String?,
-                         elementToDecrypt: ElementToDecrypt?): CachedFiles {
+                         isEncrypted: Boolean): CachedFiles {
         val hashFolder = mxcUrl.md5()
         val safeFileName = safeFileName(fileName, mimeType)
-        return if (elementToDecrypt == null) {
-            // Clear file
-            CachedFiles(
-                    File(downloadFolder, "$hashFolder/$safeFileName"),
-                    null
-            )
-        } else {
+        return if (isEncrypted) {
             // Encrypted file
             CachedFiles(
                     File(downloadFolder, "$hashFolder/$ENCRYPTED_FILENAME"),
                     File(decryptedFolder, "$hashFolder/$safeFileName"),
+            )
+        } else {
+            // Clear file
+            CachedFiles(
+                    File(downloadFolder, "$hashFolder/$safeFileName"),
+                    null
             )
         }
     }
@@ -277,7 +282,7 @@ internal class DefaultFileService @Inject constructor(
                            mimeType: String?,
                            elementToDecrypt: ElementToDecrypt?): FileService.FileState {
         mxcUrl ?: return FileService.FileState.UNKNOWN
-        if (getFiles(mxcUrl, fileName, mimeType, elementToDecrypt).file.exists()) return FileService.FileState.IN_CACHE
+        if (getFiles(mxcUrl, fileName, mimeType, elementToDecrypt != null).file.exists()) return FileService.FileState.IN_CACHE
         val isDownloading = synchronized(ongoing) {
             ongoing[mxcUrl] != null
         }
@@ -295,7 +300,7 @@ internal class DefaultFileService @Inject constructor(
         mxcUrl ?: return null
         // this string could be extracted no?
         val authority = "${context.packageName}.mx-sdk.fileprovider"
-        val targetFile = getFiles(mxcUrl, fileName, mimeType, elementToDecrypt).getClearFile()
+        val targetFile = getFiles(mxcUrl, fileName, mimeType, elementToDecrypt != null).getClearFile()
         if (!targetFile.exists()) return null
         return FileProvider.getUriForFile(context, authority, targetFile)
     }
@@ -319,5 +324,7 @@ internal class DefaultFileService @Inject constructor(
 
     companion object {
         private const val ENCRYPTED_FILENAME = "encrypted.bin"
+        // The extension would be added from the mimetype
+        private const val DEFAULT_FILENAME = "file"
     }
 }
