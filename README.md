@@ -1,8 +1,8 @@
 # SchildiChat for Android
 
-SchildiChat is an Android Matrix Client based on [Element](https://github.com/vector-im/riotX-android).
+SchildiChat for Android is a Matrix Client based on [Element Android](https://github.com/vector-im/element-android).
 
-Compared to the Element app, SchildiChat features following changes:
+Compared to Element, SchildiChat features following changes:
 - A unified chat list for both direct and group chats
 - Optional message bubbles
 - Follows the system setting for dark/light mode
@@ -19,4 +19,4 @@ The latest version should also be available for direct download [here](https://s
 
 ## Screenshots
 
-<img src="https://raw.githubusercontent.com/SpiritCroc/SchildiChat-android/sc/fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" height="500"/> <img src="https://raw.githubusercontent.com/SpiritCroc/SchildiChat-android/sc/fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" height="500"/> <img src="https://raw.githubusercontent.com/SpiritCroc/SchildiChat-android/sc/fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" height="500"/> <img src="https://raw.githubusercontent.com/SpiritCroc/SchildiChat-android/sc/fastlane/metadata/android/en-US/images/phoneScreenshots/4_en-US.png" height="500"/>
+<img src="https://raw.githubusercontent.com/SchildiChat/SchildiChat-android/sc/fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" height="500"/> <img src="https://raw.githubusercontent.com/SchildiChat/SchildiChat-android/sc/fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" height="500"/> <img src="https://raw.githubusercontent.com/SchildiChat/SchildiChat-android/sc/fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" height="500"/> <img src="https://raw.githubusercontent.com/SchildiChat/SchildiChat-android/sc/fastlane/metadata/android/en-US/images/phoneScreenshots/4_en-US.png" height="500"/>
