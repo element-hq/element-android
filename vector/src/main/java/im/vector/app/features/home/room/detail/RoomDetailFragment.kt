@@ -1654,7 +1654,6 @@ class RoomDetailFragment @Inject constructor(
             shareText(requireContext(), action.messageContent.body)
         } else if (action.messageContent is MessageWithAttachmentContent) {
             session.fileService().downloadFile(
-                    id = action.eventId,
                     messageContent = action.messageContent,
                     callback = object : MatrixCallback<File> {
                         override fun onSuccess(data: File) {
@@ -1685,7 +1684,6 @@ class RoomDetailFragment @Inject constructor(
             return
         }
         session.fileService().downloadFile(
-                id = action.eventId,
                 messageContent = action.messageContent,
                 callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {

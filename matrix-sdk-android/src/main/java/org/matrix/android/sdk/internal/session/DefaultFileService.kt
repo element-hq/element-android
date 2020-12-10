@@ -79,8 +79,7 @@ internal class DefaultFileService @Inject constructor(
      * Download file in the cache folder, and eventually decrypt it
      * TODO looks like files are copied 3 times
      */
-    override fun downloadFile(id: String,
-                              fileName: String,
+    override fun downloadFile(fileName: String,
                               mimeType: String?,
                               url: String?,
                               elementToDecrypt: ElementToDecrypt?,

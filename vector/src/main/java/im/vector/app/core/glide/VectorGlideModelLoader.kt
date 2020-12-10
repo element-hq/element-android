@@ -109,10 +109,9 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
         }
         // Use the file vector service, will avoid flickering and redownload after upload
         fileService.downloadFile(
-                mimeType = data.mimeType,
-                id = data.eventId,
-                url = data.url,
                 fileName = data.filename,
+                mimeType = data.mimeType,
+                url = data.url,
                 elementToDecrypt = data.elementToDecrypt,
                 callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {

@@ -41,20 +41,15 @@ interface FileService {
      * Download a file.
      * Result will be a decrypted file, stored in the cache folder. url parameter will be used to create unique filename to avoid name collision.
      */
-    fun downloadFile(
-            id: String,
-            fileName: String,
-            mimeType: String?,
-            url: String?,
-            elementToDecrypt: ElementToDecrypt?,
-            callback: MatrixCallback<File>): Cancelable
+    fun downloadFile(fileName: String,
+                     mimeType: String?,
+                     url: String?,
+                     elementToDecrypt: ElementToDecrypt?,
+                     callback: MatrixCallback<File>): Cancelable
 
-    fun downloadFile(
-            id: String,
-            messageContent: MessageWithAttachmentContent,
-            callback: MatrixCallback<File>): Cancelable =
+    fun downloadFile(messageContent: MessageWithAttachmentContent,
+                     callback: MatrixCallback<File>): Cancelable =
             downloadFile(
-                    id = id,
                     fileName = messageContent.getFileName(),
                     mimeType = messageContent.mimeType,
                     url = messageContent.getFileUrl(),

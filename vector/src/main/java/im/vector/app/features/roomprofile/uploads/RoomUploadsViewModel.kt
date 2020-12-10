@@ -131,7 +131,6 @@ class RoomUploadsViewModel @AssistedInject constructor(
             try {
                 val file = awaitCallback<File> {
                     session.fileService().downloadFile(
-                            id = action.uploadEvent.eventId,
                             messageContent = action.uploadEvent.contentWithAttachmentContent,
                             callback = it
                     )
@@ -148,7 +147,6 @@ class RoomUploadsViewModel @AssistedInject constructor(
             try {
                 val file = awaitCallback<File> {
                     session.fileService().downloadFile(
-                            id = action.uploadEvent.eventId,
                             messageContent = action.uploadEvent.contentWithAttachmentContent,
                             callback = it)
                 }

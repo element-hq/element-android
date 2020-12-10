@@ -125,7 +125,6 @@ class RoomEventsAttachmentProvider(
                     as? MessageWithAttachmentContent
                     ?: return@let
             fileService.downloadFile(
-                    id = timelineEvent.eventId,
                     fileName = messageContent.body,
                     mimeType = messageContent.mimeType,
                     url = messageContent.getFileUrl(),

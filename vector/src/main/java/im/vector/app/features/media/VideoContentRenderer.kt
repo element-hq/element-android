@@ -75,7 +75,6 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
 
                 activeSessionHolder.getActiveSession().fileService()
                         .downloadFile(
-                                id = data.eventId,
                                 fileName = data.filename,
                                 mimeType = data.mimeType,
                                 url = data.url,
@@ -114,7 +113,6 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
 
                 activeSessionHolder.getActiveSession().fileService()
                         .downloadFile(
-                                id = data.eventId,
                                 fileName = data.filename,
                                 mimeType = data.mimeType,
                                 url = data.url,

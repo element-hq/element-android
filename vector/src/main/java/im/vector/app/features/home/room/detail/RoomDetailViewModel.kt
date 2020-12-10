@@ -1030,7 +1030,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
         } else {
             session.fileService().downloadFile(
-                    id = action.eventId,
                     messageContent = action.messageFileContent,
                     callback = object : MatrixCallback<File> {
                         override fun onSuccess(data: File) {
