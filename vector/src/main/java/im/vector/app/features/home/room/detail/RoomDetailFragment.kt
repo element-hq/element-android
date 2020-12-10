@@ -53,7 +53,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
@@ -290,14 +289,10 @@ class RoomDetailFragment @Inject constructor(
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var keyboardStateUtils: KeyboardStateUtils
 
-    @BindView(R.id.composerLayout)
-    lateinit var composerLayout: TextComposerView
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
     private val activeCallViewHolder = ActiveCallViewHolder()
-
-    private lateinit var emojiPopup: EmojiPopup
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -483,16 +478,13 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupEmojiPopup() {
-        EmojiPopup
+        val emojiPopup = EmojiPopup
                 .Builder
                 .fromRootView(rootConstraintLayout)
                 .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
-                .setOnEmojiPopupShownListener { composerLayout.composerEmojiButton.setImageResource(R.drawable.ic_keyboard) }
-                .setOnEmojiPopupDismissListener { composerLayout.composerEmojiButton.setImageResource(R.drawable.ic_insert_emoji) }
+                .setOnEmojiPopupShownListener { composerLayout?.composerEmojiButton?.setImageResource(R.drawable.ic_keyboard) }
+                .setOnEmojiPopupDismissListener { composerLayout?.composerEmojiButton?.setImageResource(R.drawable.ic_insert_emoji) }
                 .build(composerLayout.composerEditText)
-                .also {
-                    emojiPopup = it
-                }
 
         composerLayout.composerEmojiButton.debouncedClicks {
             emojiPopup.toggle()
