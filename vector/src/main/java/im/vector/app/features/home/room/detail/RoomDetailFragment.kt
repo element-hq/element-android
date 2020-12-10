@@ -368,7 +368,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.DisplayEnableIntegrationsWarning -> displayDisabledIntegrationDialog()
                 is RoomDetailViewEvents.OpenIntegrationManager           -> openIntegrationManager()
                 is RoomDetailViewEvents.OpenFile                         -> startOpenFileIntent(it)
-                is RoomDetailViewEvents.DisplayAndAcceptCall ->             acceptIncomingCall(it)
+                is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
                 RoomDetailViewEvents.OpenActiveWidgetBottomSheet         -> onViewWidgetsClicked()
                 is RoomDetailViewEvents.ShowInfoOkDialog                 -> showDialogWithMessage(it.message)
                 is RoomDetailViewEvents.JoinJitsiConference              -> joinJitsiRoom(it.widget, it.withVideo)

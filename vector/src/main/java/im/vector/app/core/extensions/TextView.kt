@@ -56,7 +56,7 @@ fun TextView.setTextOrHide(newText: CharSequence?, hideWhenBlank: Boolean = true
  * @param coloredTextRes the resource id of the colored part of the text
  * @param colorAttribute attribute of the color. Default to colorAccent
  * @param underline true to also underline the text. Default to false
- * @param onClick attributes to handle click on the colored part if needed required
+ * @param onClick attributes to handle click on the colored part if needed
  */
 fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
                                     @StringRes coloredTextRes: Int,
@@ -83,8 +83,7 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
 
                         override fun updateDrawState(ds: TextPaint) {
                             ds.color = color
-                            // underline will be handled separately if needed, see below
-                            ds.isUnderlineText = false
+                            ds.isUnderlineText = !underline
                         }
                     }
                     setSpan(clickableSpan, index, index + coloredPart.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

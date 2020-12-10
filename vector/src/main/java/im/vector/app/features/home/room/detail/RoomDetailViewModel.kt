@@ -269,7 +269,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
             is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
             is RoomDetailAction.StartCall                        -> handleStartCall(action)
-            is RoomDetailAction.AcceptCall -> handleAcceptCall(action)
+            is RoomDetailAction.AcceptCall                       -> handleAcceptCall(action)
             is RoomDetailAction.EndCall                          -> handleEndCall()
             is RoomDetailAction.ManageIntegrations               -> handleManageIntegrations()
             is RoomDetailAction.AddJitsiWidget                   -> handleAddJitsiConference(action)

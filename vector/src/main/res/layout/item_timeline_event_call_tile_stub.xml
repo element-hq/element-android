@@ -10,6 +10,7 @@
         android:id="@+id/itemCallCreatorAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        tools:src="@tools:sample/avatars"
         android:layout_gravity="center_horizontal" />
 
     <TextView
