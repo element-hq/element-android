@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.di.DeviceId
-import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.call.model.MxCallImpl
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
@@ -30,7 +29,6 @@ import java.util.UUID
 import javax.inject.Inject
 
 internal class MxCallFactory @Inject constructor(
-        @SessionId private val sessionId: String,
         @DeviceId private val deviceId: String?,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val eventSenderProcessor: EventSenderProcessor,
@@ -40,7 +38,6 @@ internal class MxCallFactory @Inject constructor(
     fun createIncomingCall(roomId: String, opponentUserId: String, content: CallInviteContent): MxCall? {
         if (content.callId == null) return null
         return MxCallImpl(
-                sessionId = sessionId,
                 callId = content.callId,
                 isOutgoing = false,
                 roomId = roomId,
@@ -58,7 +55,6 @@ internal class MxCallFactory @Inject constructor(
 
     fun createOutgoingCall(roomId: String, opponentUserId: String, isVideoCall: Boolean): MxCall {
         return MxCallImpl(
-                sessionId = sessionId,
                 callId = UUID.randomUUID().toString(),
                 isOutgoing = true,
                 roomId = roomId,

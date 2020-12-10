@@ -22,7 +22,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import com.tapadoo.alerter.Alerter
-import com.tapadoo.alerter.OnHideAlertListener
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.isAnimationDisabled
@@ -101,7 +100,9 @@ class PopupAlertManager @Inject constructor() {
         if (currentAlerter != null) {
             weakCurrentActivity?.get()?.let {
                 Alerter.clearCurrent(it)
-                setLightStatusBar()
+                if (currentAlerter?.isLight == false) {
+                    setLightStatusBar()
+                }
             }
         }
         weakCurrentActivity = WeakReference(activity)
@@ -195,8 +196,9 @@ class PopupAlertManager @Inject constructor() {
     }
 
     private fun showAlert(alert: VectorAlert, activity: Activity, animate: Boolean = true) {
-        clearLightStatusBar()
-
+        if (!alert.isLight) {
+            clearLightStatusBar()
+        }
         val noAnimation = !animate || isAnimationDisabled(activity)
 
         alert.weakCurrentActivity = WeakReference(activity)
@@ -218,7 +220,7 @@ class PopupAlertManager @Inject constructor() {
                         setIcon(it)
                     }
                     alert.actions.forEach { action ->
-                        addButton(action.title, R.style.AlerterButton, View.OnClickListener {
+                        addButton(action.title, R.style.AlerterButton) {
                             if (action.autoClose) {
                                 currentIsDismissed()
                                 Alerter.hide()
@@ -228,7 +230,7 @@ class PopupAlertManager @Inject constructor() {
                             } catch (e: java.lang.Exception) {
                                 Timber.e("## failed to perform action")
                             }
-                        })
+                        }
                     }
                     setOnClickListener { _ ->
                         alert.contentAction?.let {
@@ -244,7 +246,7 @@ class PopupAlertManager @Inject constructor() {
                         }
                     }
                 }
-                .setOnHideListener(OnHideAlertListener {
+                .setOnHideListener {
                     // called when dismissed on swipe
                     try {
                         alert.dismissedAction?.run()
@@ -252,7 +254,7 @@ class PopupAlertManager @Inject constructor() {
                         Timber.e("## failed to perform action")
                     }
                     currentIsDismissed()
-                })
+                }
                 .enableSwipeToDismiss()
                 .enableInfiniteDuration(true)
                 .apply {
@@ -270,8 +272,9 @@ class PopupAlertManager @Inject constructor() {
 
     private fun currentIsDismissed() {
         // current alert has been hidden
-        setLightStatusBar()
-
+        if (currentAlerter?.isLight == false) {
+            setLightStatusBar()
+        }
         currentAlerter = null
         Handler(Looper.getMainLooper()).postDelayed({
             displayNextIfPossible()

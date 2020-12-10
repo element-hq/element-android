@@ -32,6 +32,7 @@ class IncomingCallAlert(uid: String,
     override val layoutRes = R.layout.alerter_incoming_call_layout
     override var colorAttribute: Int? = R.attr.riotx_alerter_background
     override val dismissOnClick: Boolean = false
+    override val isLight: Boolean = true
 
     class ViewBinder(private val matrixItem: MatrixItem?,
                      private val avatarRenderer: AvatarRenderer,

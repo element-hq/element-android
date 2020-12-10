@@ -40,7 +40,6 @@ import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import timber.log.Timber
 
 internal class MxCallImpl(
-        override val sessionId: String,
         override val callId: String,
         override val isOutgoing: Boolean,
         override val roomId: String,

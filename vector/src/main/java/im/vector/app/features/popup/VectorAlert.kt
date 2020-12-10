@@ -33,6 +33,7 @@ interface VectorAlert {
     val iconId: Int?
     val priority: Int
     val dismissOnClick: Boolean
+    val isLight: Boolean
     val shouldBeDisplayedIn: ((Activity) -> Boolean)
 
     data class Button(val title: String, val action: Runnable, val autoClose: Boolean)
@@ -98,6 +99,8 @@ open class DefaultVectorAlert(
     override val dismissOnClick: Boolean = true
 
     override val priority: Int = 0
+
+    override val isLight: Boolean = false
 
     @ColorRes
     override var colorRes: Int? = null

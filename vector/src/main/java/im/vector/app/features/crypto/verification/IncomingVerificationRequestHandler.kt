@@ -63,7 +63,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
             is VerificationTxState.OnStarted       -> {
                 // Add a notification for every incoming request
                 val user = session?.getUser(tx.otherUserId)
-                val name = user?.displayName ?: tx.otherUserId
+                val name = user?.getBestName() ?: tx.otherUserId
                 val alert = VerificationVectorAlert(
                         uid,
                         context.getString(R.string.sas_incoming_request_notif_title),
@@ -122,7 +122,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
         // For incoming request we should prompt (if not in activity where this request apply)
         if (pr.isIncoming) {
             val user = session?.getUser(pr.otherUserId)
-            val name = user?.displayName ?: pr.otherUserId
+            val name = user?.getBestName() ?: pr.otherUserId
 
             val alert = VerificationVectorAlert(
                     uniqueIdForVerificationRequest(pr),

@@ -339,9 +339,9 @@ class RoomDetailFragment @Inject constructor(
             }
             when (mode) {
                 is SendMode.REGULAR -> renderRegularMode(mode.text)
-                is SendMode.EDIT -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
-                is SendMode.QUOTE -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
-                is SendMode.REPLY -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
+                is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
+                is SendMode.QUOTE   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
+                is SendMode.REPLY   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
             }
         }
 
@@ -351,33 +351,33 @@ class RoomDetailFragment @Inject constructor(
 
         roomDetailViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.Failure -> showErrorInSnackbar(it.throwable)
-                is RoomDetailViewEvents.OnNewTimelineEvents -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
-                is RoomDetailViewEvents.ActionSuccess -> displayRoomDetailActionSuccess(it)
-                is RoomDetailViewEvents.ActionFailure -> displayRoomDetailActionFailure(it)
-                is RoomDetailViewEvents.ShowMessage -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
-                is RoomDetailViewEvents.NavigateToEvent -> navigateToEvent(it)
-                is RoomDetailViewEvents.FileTooBigError -> displayFileTooBigError(it)
-                is RoomDetailViewEvents.DownloadFileState -> handleDownloadFileState(it)
-                is RoomDetailViewEvents.JoinRoomCommandSuccess -> handleJoinedToAnotherRoom(it)
-                is RoomDetailViewEvents.SendMessageResult -> renderSendMessageResult(it)
-                is RoomDetailViewEvents.ShowE2EErrorMessage -> displayE2eError(it.withHeldCode)
-                RoomDetailViewEvents.DisplayPromptForIntegrationManager -> displayPromptForIntegrationManager()
-                is RoomDetailViewEvents.OpenStickerPicker -> openStickerPicker(it)
+                is RoomDetailViewEvents.Failure                          -> showErrorInSnackbar(it.throwable)
+                is RoomDetailViewEvents.OnNewTimelineEvents              -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
+                is RoomDetailViewEvents.ActionSuccess                    -> displayRoomDetailActionSuccess(it)
+                is RoomDetailViewEvents.ActionFailure                    -> displayRoomDetailActionFailure(it)
+                is RoomDetailViewEvents.ShowMessage                      -> showSnackWithMessage(it.message, Snackbar.LENGTH_LONG)
+                is RoomDetailViewEvents.NavigateToEvent                  -> navigateToEvent(it)
+                is RoomDetailViewEvents.FileTooBigError                  -> displayFileTooBigError(it)
+                is RoomDetailViewEvents.DownloadFileState                -> handleDownloadFileState(it)
+                is RoomDetailViewEvents.JoinRoomCommandSuccess           -> handleJoinedToAnotherRoom(it)
+                is RoomDetailViewEvents.SendMessageResult                -> renderSendMessageResult(it)
+                is RoomDetailViewEvents.ShowE2EErrorMessage              -> displayE2eError(it.withHeldCode)
+                RoomDetailViewEvents.DisplayPromptForIntegrationManager  -> displayPromptForIntegrationManager()
+                is RoomDetailViewEvents.OpenStickerPicker                -> openStickerPicker(it)
                 is RoomDetailViewEvents.DisplayEnableIntegrationsWarning -> displayDisabledIntegrationDialog()
-                is RoomDetailViewEvents.OpenIntegrationManager -> openIntegrationManager()
-                is RoomDetailViewEvents.OpenFile -> startOpenFileIntent(it)
-                RoomDetailViewEvents.OpenActiveWidgetBottomSheet -> onViewWidgetsClicked()
-                is RoomDetailViewEvents.ShowInfoOkDialog -> showDialogWithMessage(it.message)
-                is RoomDetailViewEvents.JoinJitsiConference -> joinJitsiRoom(it.widget, it.withVideo)
-                RoomDetailViewEvents.ShowWaitingView -> vectorBaseActivity.showWaitingView()
-                RoomDetailViewEvents.HideWaitingView -> vectorBaseActivity.hideWaitingView()
-                is RoomDetailViewEvents.RequestNativeWidgetPermission -> requestNativeWidgetPermission(it)
-                is RoomDetailViewEvents.OpenRoom -> handleOpenRoom(it)
-                RoomDetailViewEvents.OpenInvitePeople -> navigator.openInviteUsersToRoom(requireContext(), roomDetailArgs.roomId)
-                RoomDetailViewEvents.OpenSetRoomAvatarDialog -> galleryOrCameraDialogHelper.show()
-                RoomDetailViewEvents.OpenRoomSettings -> handleOpenRoomSettings()
-                is RoomDetailViewEvents.ShowRoomAvatarFullScreen -> it.matrixItem?.let { item ->
+                is RoomDetailViewEvents.OpenIntegrationManager           -> openIntegrationManager()
+                is RoomDetailViewEvents.OpenFile                         -> startOpenFileIntent(it)
+                RoomDetailViewEvents.OpenActiveWidgetBottomSheet         -> onViewWidgetsClicked()
+                is RoomDetailViewEvents.ShowInfoOkDialog                 -> showDialogWithMessage(it.message)
+                is RoomDetailViewEvents.JoinJitsiConference              -> joinJitsiRoom(it.widget, it.withVideo)
+                RoomDetailViewEvents.ShowWaitingView                     -> vectorBaseActivity.showWaitingView()
+                RoomDetailViewEvents.HideWaitingView                     -> vectorBaseActivity.hideWaitingView()
+                is RoomDetailViewEvents.RequestNativeWidgetPermission    -> requestNativeWidgetPermission(it)
+                is RoomDetailViewEvents.OpenRoom                         -> handleOpenRoom(it)
+                RoomDetailViewEvents.OpenInvitePeople                    -> navigator.openInviteUsersToRoom(requireContext(), roomDetailArgs.roomId)
+                RoomDetailViewEvents.OpenSetRoomAvatarDialog             -> galleryOrCameraDialogHelper.show()
+                RoomDetailViewEvents.OpenRoomSettings                    -> handleOpenRoomSettings()
+                is RoomDetailViewEvents.ShowRoomAvatarFullScreen         -> it.matrixItem?.let { item ->
                     navigator.openBigImageViewer(requireActivity(), it.view, item)
                 }
             }.exhaustive
