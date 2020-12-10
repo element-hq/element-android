@@ -72,8 +72,8 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
     @BindView(R.id.composerEditText)
     lateinit var composerEditText: ComposerEditText
 
-    @BindView(R.id.composer_avatar_view)
-    lateinit var composerAvatarImageView: ImageView
+    @BindView(R.id.composer_emoji)
+    lateinit var composerEmojiButton: ImageButton
 
     @BindView(R.id.composer_shield)
     lateinit var composerShieldImageView: ImageView

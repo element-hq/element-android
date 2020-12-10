@@ -70,8 +70,8 @@
         android:id="@+id/composer_related_message_action_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:ignore="MissingConstraints,MissingPrefix"
-        app:tint="?riotx_text_primary" />
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingConstraints,MissingPrefix" />
 
     <ImageButton
         android:id="@+id/composer_related_message_close"
@@ -83,13 +83,13 @@
         android:tint="@color/riotx_notice"
         tools:ignore="MissingConstraints" />
 
-
-    <ImageView
-        android:id="@+id/composer_avatar_view"
+    <ImageButton
+        android:id="@+id/composer_emoji"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:ignore="MissingConstraints"
-        tools:src="@tools:sample/avatars" />
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_insert_emoji"
+        tools:ignore="MissingConstraints" />
 
     <ImageButton
         android:id="@+id/attachmentButton"
@@ -98,7 +98,6 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/option_send_files"
         android:src="@drawable/ic_attachment"
-        android:tint="?attr/colorAccent"
         tools:ignore="MissingConstraints" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -115,10 +114,9 @@
         android:id="@+id/sendButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="@drawable/bg_send"
         android:contentDescription="@string/send"
         android:src="@drawable/ic_send"
-        android:tint="?attr/colorAccent"
         tools:ignore="MissingConstraints" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
