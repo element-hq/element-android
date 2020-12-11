@@ -113,7 +113,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         app:layout_constraintBottom_toBottomOf="@id/attachmentButton"
-        app:layout_constraintEnd_toStartOf="@+id/attachmentButton"
+        app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintStart_toEndOf="@+id/attachmentButton"
         app:layout_constraintTop_toTopOf="@id/attachmentButton"
         tools:src="@drawable/ic_shield_black"
