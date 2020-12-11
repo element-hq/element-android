@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.sync.SyncTask
-import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.util.Debouncer
 import org.matrix.android.sdk.internal.util.createUIHandler
@@ -50,14 +49,13 @@ private const val RETRY_WAIT_TIME_MS = 10_000L
 private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
 
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
-                                              private val typingUsersTracker: DefaultTypingUsersTracker,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
                                               private val backgroundDetectionObserver: BackgroundDetectionObserver,
                                               private val activeCallHandler: ActiveCallHandler
 ) : Thread("SyncThread"), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.Idle
-    private var liveState = MutableLiveData<SyncState>(state)
+    private var liveState = MutableLiveData(state)
     private val lock = Object()
     private val syncScope = CoroutineScope(SupervisorJob())
     private val debouncer = Debouncer(createUIHandler())
@@ -231,7 +229,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
             return
         }
         state = newState
-        debouncer.debounce("post_state", Runnable {
+        debouncer.debounce("post_state", {
             liveState.value = newState
         }, 150)
     }

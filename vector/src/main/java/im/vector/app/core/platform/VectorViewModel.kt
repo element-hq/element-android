@@ -43,7 +43,7 @@ abstract class VectorViewModel<S : MvRxState, VA : VectorViewModelAction, VE : V
      * so you can use this in a switchMap or a flatMap
      */
     // False positive
-    @Suppress("USELESS_CAST")
+    @Suppress("USELESS_CAST", "NULLABLE_TYPE_PARAMETER_AGAINST_NOT_NULL_TYPE_PARAMETER")
     fun <T> Single<T>.toAsync(stateReducer: S.(Async<T>) -> S): Single<Async<T>> {
         setState { stateReducer(Loading()) }
         return map { Success(it) as Async<T> }
@@ -56,7 +56,7 @@ abstract class VectorViewModel<S : MvRxState, VA : VectorViewModelAction, VE : V
      * so you can use this in a switchMap or a flatMap
      */
     // False positive
-    @Suppress("USELESS_CAST")
+    @Suppress("USELESS_CAST", "NULLABLE_TYPE_PARAMETER_AGAINST_NOT_NULL_TYPE_PARAMETER")
     fun <T> Observable<T>.toAsync(stateReducer: S.(Async<T>) -> S): Observable<Async<T>> {
         setState { stateReducer(Loading()) }
         return map { Success(it) as Async<T> }

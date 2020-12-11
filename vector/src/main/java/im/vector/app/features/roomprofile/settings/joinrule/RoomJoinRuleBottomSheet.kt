@@ -39,7 +39,6 @@ class RoomJoinRuleBottomSheet : BottomSheetGeneric<RoomJoinRuleState, RoomJoinRu
 
     private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
     @Inject lateinit var controller: RoomJoinRuleController
-    @Inject lateinit var roomJoinRuleViewModelFactory: RoomJoinRuleViewModel.Factory
     private val viewModel: RoomJoinRuleViewModel by fragmentViewModel(RoomJoinRuleViewModel::class)
 
     override fun injectWith(injector: ScreenComponent) {

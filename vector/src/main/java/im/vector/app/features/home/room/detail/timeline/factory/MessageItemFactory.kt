@@ -84,6 +84,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_POLL
+import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -204,7 +205,12 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
                 .attributes(attributes)
                 .izLocalFile(fileUrl.isLocalFile())
-                .izDownloaded(session.fileService().isFileInCache(fileUrl, messageContent.mimeType))
+                .izDownloaded(session.fileService().isFileInCache(
+                        fileUrl,
+                        messageContent.getFileName(),
+                        messageContent.mimeType,
+                        messageContent.encryptedFileInfo?.toElementToDecrypt())
+                )
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
@@ -264,7 +270,7 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .izLocalFile(messageContent.getFileUrl().isLocalFile())
-                .izDownloaded(session.fileService().isFileInCache(mxcUrl, messageContent.mimeType))
+                .izDownloaded(session.fileService().isFileInCache(messageContent))
                 .mxcUrl(mxcUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)

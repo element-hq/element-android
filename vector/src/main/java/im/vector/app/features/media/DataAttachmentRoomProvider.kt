@@ -77,11 +77,9 @@ class DataAttachmentRoomProvider(
     override fun getFileForSharing(position: Int, callback: (File?) -> Unit) {
         val item = getItem(position)
         fileService.downloadFile(
-                downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                id = item.eventId,
                 fileName = item.filename,
                 mimeType = item.mimeType,
-                url = item.url ?: "",
+                url = item.url,
                 elementToDecrypt = item.elementToDecrypt,
                 callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {

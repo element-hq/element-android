@@ -33,11 +33,9 @@ internal class SendEventQueuedTask(
         val cancelSendTracker: CancelSendTracker
 ) : QueuedTask() {
 
-    private var _isCancelled: Boolean = false
+    override fun toString() = "[SendEventQueuedTask ${event.eventId}]"
 
-    override fun toString() = "[SendEventRunnableTask ${event.eventId}]"
-
-    override suspend fun execute() {
+    override suspend fun doExecute() {
         sendEventTask.execute(SendEventTask.Params(event, encrypt))
     }
 
@@ -56,10 +54,6 @@ internal class SendEventQueuedTask(
     }
 
     override fun isCancelled(): Boolean {
-        return _isCancelled || cancelSendTracker.isCancelRequestedFor(event.eventId, event.roomId)
-    }
-
-    override fun cancel() {
-        _isCancelled = true
+        return super.isCancelled() || cancelSendTracker.isCancelRequestedFor(event.eventId, event.roomId)
     }
 }

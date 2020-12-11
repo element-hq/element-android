@@ -5,12 +5,15 @@ Features ✨:
  - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
  - Room setting: update join rules and guest access (#2442)
  - Url preview (#481)
+ - Store encrypted file in cache and cleanup decrypted file at each app start (#2512)
+ - Emoji Keyboard (#2520)
 
 Improvements 🙌:
  - Add Setting Item to Change PIN (#2462)
  - Improve room history visibility setting UX (#1579)
 
 Bugfix 🐛:
+ - Fix cancellation of sending event (#2438)
  - Double bottomsheet effect after verify with passphrase
  - EditText cursor jumps to the start while typing fast (#2469)
 
@@ -19,15 +22,19 @@ Translations 🗣:
 
 SDK API changes ⚠️:
  - RawCacheStrategy has been moved and renamed to CacheStrategy
+ - FileService: remove useless FileService.DownloadMode
 
 Build 🧱:
- -
+ - Upgrade some dependencies and Kotlin version
+ - Use fragment-ktx and preference-ktx dependencies (fix lint issue KtxExtensionAvailable)
+ - Upgrade Realm dependency to 10.1.2
 
 Test:
  -
 
 Other changes:
  - Remove "Status.im" theme #2424
+ - Log HTTP requests and responses in production (level BASIC, i.e. without any private data)
 
 Changes in Element 1.0.11 (2020-11-27)
 ===================================================
