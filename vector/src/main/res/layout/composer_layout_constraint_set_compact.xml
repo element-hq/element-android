@@ -102,20 +102,20 @@
         android:layout_margin="12dp"
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_attachment"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/sendButton"
         app:layout_constraintEnd_toStartOf="@+id/composer_shield"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sendButton"
         tools:ignore="MissingPrefix" />
 
     <ImageView
         android:id="@+id/composer_shield"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        app:layout_constraintBottom_toBottomOf="@id/attachmentButton"
+        app:layout_constraintBottom_toBottomOf="@id/sendButton"
         app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintStart_toEndOf="@+id/attachmentButton"
-        app:layout_constraintTop_toTopOf="@id/attachmentButton"
+        app:layout_constraintTop_toTopOf="@id/sendButton"
         tools:src="@drawable/ic_shield_black"
         tools:visibility="visible" />
 
@@ -145,11 +145,11 @@
 
     <ImageButton
         android:id="@+id/sendButton"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="2dp"
         android:background="@drawable/bg_send"
+        android:scaleType="center"
         android:src="@drawable/ic_send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
