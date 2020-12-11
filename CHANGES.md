@@ -23,6 +23,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
+ - StateService now exposes suspendable function instead of using MatrixCallback.
  - RawCacheStrategy has been moved and renamed to CacheStrategy
  - FileService: remove useless FileService.DownloadMode
 

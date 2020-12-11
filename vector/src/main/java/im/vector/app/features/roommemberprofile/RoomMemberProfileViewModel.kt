@@ -166,9 +166,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             viewModelScope.launch {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
                 try {
-                    awaitCallback<Unit> {
-                        room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent(), it)
-                    }
+                    room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent())
                     _viewEvents.post(RoomMemberProfileViewEvents.OnSetPowerLevelSuccess)
                 } catch (failure: Throwable) {
                     _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
