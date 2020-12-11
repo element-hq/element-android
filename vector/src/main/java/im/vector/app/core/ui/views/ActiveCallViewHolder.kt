@@ -16,7 +16,6 @@
 
 package im.vector.app.core.ui.views
 
-import android.view.View
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import im.vector.app.core.utils.DebouncedClickListener
@@ -35,13 +34,14 @@ class ActiveCallViewHolder {
 
     private var activeCallPipInitialized = false
 
-    fun updateCall(activeCall: WebRtcCall?) {
+    fun updateCall(activeCall: WebRtcCall?, calls: List<WebRtcCall>) {
         this.activeCall = activeCall
         val hasActiveCall = activeCall?.mxCall?.state is CallState.Connected
         if (hasActiveCall) {
             val isVideoCall = activeCall?.mxCall?.isVideoCall == true
             if (isVideoCall) initIfNeeded()
             activeCallView?.isVisible = !isVideoCall
+            activeCallView?.render(calls)
             pipWrapper?.isVisible = isVideoCall
             activeCallPiP?.isVisible = isVideoCall
             activeCallPiP?.let {
@@ -74,10 +74,9 @@ class ActiveCallViewHolder {
         this.activeCallPiP = activeCallPiP
         this.activeCallView = activeCallView
         this.pipWrapper = pipWrapper
-
         this.activeCallView?.callback = interactionListener
         pipWrapper.setOnClickListener(
-                DebouncedClickListener(View.OnClickListener { _ ->
+                DebouncedClickListener({ _ ->
                     interactionListener.onTapToReturnToCall()
                 })
         )

@@ -350,7 +350,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleEndCall() {
-        callManager.endCall()
+        callManager.endCallForRoom(initialState.roomId)
     }
 
     private fun handleSelectStickerAttachment() {

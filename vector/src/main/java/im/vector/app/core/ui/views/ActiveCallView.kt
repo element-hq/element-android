@@ -20,7 +20,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.RelativeLayout
 import im.vector.app.R
+import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.themes.ThemeUtils
+import kotlinx.android.synthetic.main.view_active_call_view.view.*
+import org.matrix.android.sdk.api.session.call.CallState
 
 class ActiveCallView @JvmOverloads constructor(
         context: Context,
@@ -42,5 +45,22 @@ class ActiveCallView @JvmOverloads constructor(
         inflate(context, R.layout.view_active_call_view, this)
         setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorPrimary))
         setOnClickListener { callback?.onTapToReturnToCall() }
+    }
+
+    fun render(calls: List<WebRtcCall>) {
+        if (calls.size == 1) {
+            activeCallInfo.setText(R.string.call_active_call)
+        } else if (calls.size == 2) {
+            val activeCall = calls.firstOrNull {
+                it.mxCall.state is CallState.Connected && !it.isLocalOnHold()
+            }
+            if (activeCall == null) {
+                activeCallInfo.setText(R.string.call_two_paused_calls)
+            } else {
+                activeCallInfo.setText(R.string.call_one_active_one_paused_call)
+            }
+        } else {
+            visibility = GONE
+        }
     }
 }

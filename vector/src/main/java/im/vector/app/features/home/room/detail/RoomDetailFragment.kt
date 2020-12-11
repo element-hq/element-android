@@ -49,7 +49,6 @@ import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -116,7 +115,7 @@ import im.vector.app.features.attachments.ContactAttachment
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
-import im.vector.app.features.call.SharedActiveCallViewModel
+import im.vector.app.features.call.SharedCurrentCallViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -280,7 +279,7 @@ class RoomDetailFragment @Inject constructor(
     override fun getMenuRes() = R.menu.menu_timeline
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
-    private lateinit var sharedCallActionViewModel: SharedActiveCallViewModel
+    private lateinit var sharedCurrentCallViewModel: SharedCurrentCallViewModel
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var jumpToBottomViewVisibilityManager: JumpToBottomViewVisibilityManager
@@ -299,7 +298,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        sharedCallActionViewModel = activityViewModelProvider.get(SharedActiveCallViewModel::class.java)
+        sharedCurrentCallViewModel = activityViewModelProvider.get(SharedCurrentCallViewModel::class.java)
         attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(roomToolbar)
@@ -322,10 +321,10 @@ class RoomDetailFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        sharedCallActionViewModel
-                .activeCall
-                .observe(viewLifecycleOwner, Observer {
-                    activeCallViewHolder.updateCall(it)
+        sharedCurrentCallViewModel
+                .currentCall
+                .observe(viewLifecycleOwner, {
+                    activeCallViewHolder.updateCall(it, callManager.getCalls())
                     invalidateOptionsMenu()
                 })
 
@@ -753,7 +752,7 @@ class RoomDetailFragment @Inject constructor(
                 }
             }
             2 -> {
-                val activeCall = sharedCallActionViewModel.activeCall.value
+                val activeCall = sharedCurrentCallViewModel.currentCall.value
                 if (activeCall != null) {
                     // resume existing if same room, if not prompt to kill and then restart new call?
                     if (activeCall.mxCall.roomId == roomDetailArgs.roomId) {
@@ -2001,7 +2000,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onTapToReturnToCall() {
-        sharedCallActionViewModel.activeCall.value?.let { call ->
+        sharedCurrentCallViewModel.currentCall.value?.let { call ->
             VectorCallActivity.newIntent(
                     context = requireContext(),
                     callId = call.callId,
