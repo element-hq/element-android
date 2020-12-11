@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,31 +26,12 @@ import org.matrix.android.sdk.api.session.room.model.RoomNameContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsFilter
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
+import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.directory.GetPublicRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.GetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
-
-sealed class PeekResult {
-    data class Success(
-            val roomId: String,
-            val alias: String?,
-            val name: String?,
-            val topic: String?,
-            val avatarUrl: String?,
-            val numJoinedMembers: Int?,
-            val viaServers: List<String>
-    ) : PeekResult()
-
-    data class PeekingNotAllowed(
-            val roomId: String,
-            val alias: String?,
-            val viaServers: List<String>
-    ) : PeekResult()
-
-    object UnknownAlias : PeekResult()
-}
 
 internal interface PeekRoomTask : Task<PeekRoomTask.Params, PeekResult> {
     data class Params(
@@ -66,11 +47,10 @@ internal class DefaultPeekRoomTask @Inject constructor(
 ) : PeekRoomTask {
 
     override suspend fun execute(params: PeekRoomTask.Params): PeekResult {
-        val roomId: String?
+        val roomId: String
         val serverList: List<String>
-        val isAlias: Boolean
-        if (MatrixPatterns.isRoomAlias(params.roomIdOrAlias)) {
-            isAlias = true
+        val isAlias = MatrixPatterns.isRoomAlias(params.roomIdOrAlias)
+        if (isAlias) {
             // get alias description
             val aliasDescription = getRoomIdByAliasTask
                     .execute(GetRoomIdByAliasTask.Params(params.roomIdOrAlias, true))
@@ -80,7 +60,6 @@ internal class DefaultPeekRoomTask @Inject constructor(
             roomId = aliasDescription.roomId
             serverList = aliasDescription.servers
         } else {
-            isAlias = false
             roomId = params.roomIdOrAlias
             serverList = emptyList()
         }
@@ -91,7 +70,7 @@ internal class DefaultPeekRoomTask @Inject constructor(
                 // We cannot resolve this room :/
                 null
             }
-            RoomDirectoryVisibility.PUBLIC -> {
+            RoomDirectoryVisibility.PUBLIC  -> {
                 // Try to find it in directory
                 val filter = if (isAlias) PublicRoomsFilter(searchTerm = params.roomIdOrAlias.substring(1))
                 else null
@@ -121,34 +100,30 @@ internal class DefaultPeekRoomTask @Inject constructor(
         // mm... try to peek state ? maybe the room is not public but yet allow guest to get events?
         // this could be slow
         try {
-            val stateEvents = resolveRoomStateTask
-                    .execute(ResolveRoomStateTask.Params(roomId))
-            val name = stateEvents.lastOrNull {
-                it.type == EventType.STATE_ROOM_NAME
-                        && it.stateKey == ""
-            }?.let { it.content?.toModel<RoomNameContent>()?.name }
+            val stateEvents = resolveRoomStateTask.execute(ResolveRoomStateTask.Params(roomId))
+            val name = stateEvents
+                    .lastOrNull { it.type == EventType.STATE_ROOM_NAME && it.stateKey == "" }
+                    ?.let { it.content?.toModel<RoomNameContent>()?.name }
 
-            val topic = stateEvents.lastOrNull {
-                it.type == EventType.STATE_ROOM_TOPIC
-                        && it.stateKey == ""
-            }?.let { it.content?.toModel<RoomTopicContent>()?.topic }
+            val topic = stateEvents
+                    .lastOrNull { it.type == EventType.STATE_ROOM_TOPIC && it.stateKey == "" }
+                    ?.let { it.content?.toModel<RoomTopicContent>()?.topic }
 
-            val avatarUrl = stateEvents.lastOrNull {
-                it.type == EventType.STATE_ROOM_AVATAR
-            }?.let { it.content?.toModel<RoomAvatarContent>()?.avatarUrl }
+            val avatarUrl = stateEvents
+                    .lastOrNull { it.type == EventType.STATE_ROOM_AVATAR }
+                    ?.let { it.content?.toModel<RoomAvatarContent>()?.avatarUrl }
 
-            val alias = stateEvents.lastOrNull {
-                it.type == EventType.STATE_ROOM_CANONICAL_ALIAS
-            }?.let {
-                it.content?.toModel<RoomCanonicalAliasContent>()?.canonicalAlias
-                        ?: it.content?.toModel<RoomCanonicalAliasContent>()?.alternativeAliases?.firstOrNull()
-            }
+            val alias = stateEvents
+                    .lastOrNull { it.type == EventType.STATE_ROOM_CANONICAL_ALIAS }
+                    ?.let {
+                        it.content?.toModel<RoomCanonicalAliasContent>()?.canonicalAlias
+                                ?: it.content?.toModel<RoomCanonicalAliasContent>()?.alternativeAliases?.firstOrNull()
+                    }
 
             // not sure if it's the right way to do that :/
-            val memberCount = stateEvents.filter {
-                it.type == EventType.STATE_ROOM_MEMBER
-                        && it.stateKey?.isNotEmpty() == true
-            }.distinctBy { it.stateKey }
+            val memberCount = stateEvents
+                    .filter { it.type == EventType.STATE_ROOM_MEMBER && it.stateKey?.isNotEmpty() == true }
+                    .distinctBy { it.stateKey }
                     .count()
 
             return PeekResult.Success(

@@ -22,15 +22,7 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomdirectory.JoinState
 import org.matrix.android.sdk.api.util.MatrixItem
 
-enum class PeekingState {
-    UNKNOWN,
-    FOUND,
-    NOT_FOUND,
-    NO_ACCESS
-}
-
 data class RoomPreviewViewState(
-
         val peekingState: Async<PeekingState> = Uninitialized,
         // The room id
         val roomId: String = "",

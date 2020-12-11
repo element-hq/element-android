@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
@@ -41,7 +42,6 @@ import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
-import org.matrix.android.sdk.internal.session.room.peeking.PeekResult
 import org.matrix.android.sdk.internal.session.room.peeking.PeekRoomTask
 import org.matrix.android.sdk.internal.session.room.peeking.ResolveRoomStateTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask

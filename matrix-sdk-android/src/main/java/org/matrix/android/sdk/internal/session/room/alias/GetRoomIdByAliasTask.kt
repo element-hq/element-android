@@ -43,13 +43,13 @@ internal class DefaultGetRoomIdByAliasTask @Inject constructor(
 ) : GetRoomIdByAliasTask {
 
     override suspend fun execute(params: GetRoomIdByAliasTask.Params): Optional<RoomAliasDescription> {
-        var roomId = Realm.getInstance(monarchy.realmConfiguration).use {
+        val roomId = Realm.getInstance(monarchy.realmConfiguration).use {
             RoomSummaryEntity.findByAlias(it, params.roomAlias)?.roomId
         }
         return if (roomId != null) {
             Optional.from(RoomAliasDescription(roomId))
         } else if (!params.searchOnServer) {
-            Optional.from<RoomAliasDescription>(null)
+            Optional.from(null)
         } else {
             val description  = tryOrNull("## Failed to get roomId from alias") {
                 executeRequest<RoomAliasDescription>(eventBus) {

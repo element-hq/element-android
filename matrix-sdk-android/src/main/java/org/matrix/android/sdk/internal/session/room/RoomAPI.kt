@@ -183,7 +183,7 @@ internal interface RoomAPI {
                    @Body body: ThreePidInviteBody): Call<Unit>
 
     /**
-     * Send a generic state events
+     * Send a generic state event
      *
      * @param roomId         the room id.
      * @param stateEventType the state event type
@@ -195,7 +195,7 @@ internal interface RoomAPI {
                        @Body params: JsonDict): Call<Unit>
 
     /**
-     * Send a generic state events
+     * Send a generic state event
      *
      * @param roomId         the room id.
      * @param stateEventType the state event type
@@ -207,6 +207,13 @@ internal interface RoomAPI {
                        @Path("state_event_type") stateEventType: String,
                        @Path("state_key") stateKey: String,
                        @Body params: JsonDict): Call<Unit>
+
+    /**
+     * Get state events of a room
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-rooms-roomid-state
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state")
+    fun getRoomState(@Path("roomId") roomId: String) : Call<List<Event>>
 
     /**
      * Send a relation event to a room.
@@ -354,7 +361,4 @@ internal interface RoomAPI {
     fun deleteTag(@Path("userId") userId: String,
                   @Path("roomId") roomId: String,
                   @Path("tag") tag: String): Call<Unit>
-
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state")
-    fun getRoomState(@Path("roomId") roomId: String) : Call<List<Event>>
 }

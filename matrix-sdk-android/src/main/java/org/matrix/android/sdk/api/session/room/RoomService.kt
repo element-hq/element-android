@@ -23,10 +23,10 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
-import org.matrix.android.sdk.internal.session.room.peeking.PeekResult
 
 /**
  * This interface defines methods to get rooms. It's implemented at the session level.
@@ -167,6 +167,9 @@ interface RoomService {
      */
     fun getRoomMemberLive(userId: String, roomId: String): LiveData<Optional<RoomMemberSummary>>
 
+    /**
+     * Get some state events about a room
+     */
     fun getRoomState(roomId: String, callback: MatrixCallback<List<Event>>)
 
     /**
