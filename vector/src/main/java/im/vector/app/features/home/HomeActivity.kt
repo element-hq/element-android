@@ -126,9 +126,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is HomeActivitySharedAction.OpenDrawer  -> drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenDrawer -> drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.CloseDrawer -> drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup   -> {
+                        is HomeActivitySharedAction.OpenGroup -> {
                             drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
                         }
@@ -145,9 +145,9 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
         homeActivityViewModel.observeViewEvents {
             when (it) {
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
-                is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
-                HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
-                is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
+                is HomeActivityViewEvents.OnNewSession -> handleOnNewSession(it)
+                HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
+                is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
             }.exhaustive
         }
         homeActivityViewModel.subscribe(this) { renderState(it) }
@@ -162,9 +162,27 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
 
     private fun handleIntent(intent: Intent?) {
         intent?.dataString?.let { deepLink ->
-            if (!deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)) return@let
+            val resolvedLink = if (deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)) {
+                deepLink
+            } else if (deepLink.startsWith(PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE)) {
+                // This is a bit hugly, but for now just convert to matrix.to link for compatibility
+                val service = activeSessionHolder.getSafeActiveSession()?.permalinkService()
+                val roomLinkPrefix = "${PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
+                val userPrefix = "${PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
+                when {
+                    deepLink.startsWith(userPrefix)     -> {
+                        val userId = deepLink.substring(userPrefix.length)
+                        service?.createPermalink(userId)
+                    }
+                    deepLink.startsWith(roomLinkPrefix) -> {
+                        val param = deepLink.substring(roomLinkPrefix.length)
+                        service?.createRoomPermalink(param)
+                    }
+                    else                                -> null
+                }
+            } else null
 
-            permalinkHandler.launch(this, deepLink,
+            permalinkHandler.launch(this, resolvedLink,
                     navigationInterceptor = this,
                     buildTask = true)
                     // .delay(500, TimeUnit.MILLISECONDS)
@@ -180,7 +198,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.initialSyncProgressServiceStatus) {
-            is InitialSyncProgressService.Status.Idle        -> {
+            is InitialSyncProgressService.Status.Idle -> {
                 waiting_view.isVisible = false
             }
             is InitialSyncProgressService.Status.Progressing -> {

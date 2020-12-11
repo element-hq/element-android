@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
@@ -35,10 +36,14 @@ import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFie
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
+import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
+import org.matrix.android.sdk.internal.session.room.peeking.PeekResult
+import org.matrix.android.sdk.internal.session.room.peeking.PeekRoomTask
+import org.matrix.android.sdk.internal.session.room.peeking.ResolveRoomStateTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateBreadcrumbsTask
@@ -55,6 +60,8 @@ internal class DefaultRoomService @Inject constructor(
         private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
         private val roomIdByAliasTask: GetRoomIdByAliasTask,
         private val deleteRoomAliasTask: DeleteRoomAliasTask,
+        private val resolveRoomStateTask: ResolveRoomStateTask,
+        private val peekRoomTask: PeekRoomTask,
         private val roomGetter: RoomGetter,
         private val roomSummaryDataSource: RoomSummaryDataSource,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
@@ -119,7 +126,7 @@ internal class DefaultRoomService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun getRoomIdByAlias(roomAlias: String, searchOnServer: Boolean, callback: MatrixCallback<Optional<String>>): Cancelable {
+    override fun getRoomIdByAlias(roomAlias: String, searchOnServer: Boolean, callback: MatrixCallback<Optional<RoomAliasDescription>>): Cancelable {
         return roomIdByAliasTask
                 .configureWith(GetRoomIdByAliasTask.Params(roomAlias, searchOnServer)) {
                     this.callback = callback
@@ -153,5 +160,21 @@ internal class DefaultRoomService @Inject constructor(
         return Transformations.map(liveData) { results ->
             results.firstOrNull().toOptional()
         }
+    }
+
+    override fun getRoomState(roomId: String, callback: MatrixCallback<List<Event>>) {
+        resolveRoomStateTask
+                .configureWith(ResolveRoomStateTask.Params(roomId)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
+    }
+
+    override fun peekRoom(roomIdOrAlias: String, callback: MatrixCallback<PeekResult>) {
+        peekRoomTask
+                .configureWith(PeekRoomTask.Params(roomIdOrAlias)) {
+                    this.callback = callback
+                }
+                .executeBy(taskExecutor)
     }
 }

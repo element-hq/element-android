@@ -354,4 +354,7 @@ internal interface RoomAPI {
     fun deleteTag(@Path("userId") userId: String,
                   @Path("roomId") roomId: String,
                   @Path("tag") tag: String): Call<Unit>
+
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state")
+    fun getRoomState(@Path("roomId") roomId: String) : Call<List<Event>>
 }
