@@ -53,7 +53,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
@@ -69,6 +68,7 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.jakewharton.rxbinding3.widget.textChanges
+import com.vanniktech.emoji.EmojiPopup
 import im.vector.app.R
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
@@ -286,8 +286,6 @@ class RoomDetailFragment @Inject constructor(
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var keyboardStateUtils: KeyboardStateUtils
 
-    @BindView(R.id.composerLayout)
-    lateinit var composerLayout: TextComposerView
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
@@ -308,6 +306,7 @@ class RoomDetailFragment @Inject constructor(
         setupActiveCallView()
         setupJumpToBottomView()
         setupConfBannerView()
+        setupEmojiPopup()
 
         roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
@@ -472,6 +471,20 @@ class RoomDetailFragment @Inject constructor(
             override fun onDelete(jitsiWidget: Widget) {
                 roomDetailViewModel.handle(RoomDetailAction.RemoveWidget(jitsiWidget.widgetId))
             }
+        }
+    }
+
+    private fun setupEmojiPopup() {
+        val emojiPopup = EmojiPopup
+                .Builder
+                .fromRootView(rootConstraintLayout)
+                .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
+                .setOnEmojiPopupShownListener { composerLayout?.composerEmojiButton?.setImageResource(R.drawable.ic_keyboard) }
+                .setOnEmojiPopupDismissListener { composerLayout?.composerEmojiButton?.setImageResource(R.drawable.ic_insert_emoji) }
+                .build(composerLayout.composerEditText)
+
+        composerLayout.composerEmojiButton.debouncedClicks {
+            emojiPopup.toggle()
         }
     }
 
@@ -1208,9 +1221,6 @@ class RoomDetailFragment @Inject constructor(
             scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             inviteView.visibility = View.GONE
-            val uid = session.myUserId
-            val meMember = state.myRoomMember()
-            avatarRenderer.render(MatrixItem.UserItem(uid, meMember?.displayName, meMember?.avatarUrl), composerLayout.composerAvatarImageView)
             if (state.tombstoneEvent == null) {
                 if (state.canSendMessage) {
                     composerLayout.visibility = View.VISIBLE
