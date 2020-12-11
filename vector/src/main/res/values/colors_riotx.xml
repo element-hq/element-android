@@ -107,6 +107,13 @@
     <color name="riotx_text_secondary_dark">#FFA1B2D1</color>
     <color name="riotx_text_secondary_black">#FFA1B2D1</color>
 
+    <attr name="riotx_text_tertiary" format="color" />
+    <color name="riotx_text_tertiary_light">#FF8D99A5</color>
+    <!-- TODO Pick color from Figma, I do not know where to find it -->
+    <color name="riotx_text_tertiary_dark">#FF8D99A5</color>
+    <!-- TODO Pick color from Figma, I do not know where to find it -->
+    <color name="riotx_text_tertiary_black">#FF8D99A5</color>
+
     <attr name="riotx_text_primary_body_contrast" format="color" />
     <color name="riotx_text_primary_body_contrast_light">#FF61708B</color>
     <color name="riotx_text_primary_body_contrast_dark">#FFA1B2D1</color>

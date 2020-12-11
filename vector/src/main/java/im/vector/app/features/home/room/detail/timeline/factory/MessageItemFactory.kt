@@ -146,16 +146,16 @@ class MessageItemFactory @Inject constructor(
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageTextContent -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
-            is MessageImageInfoContent -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageVideoContent -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageFileContent -> buildFileMessageItem(messageContent, highlight, attributes)
-            is MessageAudioContent -> buildAudioMessageItem(messageContent, informationData, highlight, attributes)
+            is MessageEmoteContent               -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageTextContent                -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
+            is MessageImageInfoContent           -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageNoticeContent              -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVideoContent               -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageFileContent                -> buildFileMessageItem(messageContent, highlight, attributes)
+            is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageOptionsContent -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollResponseContent -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+            is MessageOptionsContent             -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }
@@ -166,7 +166,7 @@ class MessageItemFactory @Inject constructor(
                                         callback: TimelineEventController.Callback?,
                                         attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
         return when (messageContent.optionType) {
-            OPTION_TYPE_POLL -> {
+            OPTION_TYPE_POLL    -> {
                 MessagePollItem_()
                         .attributes(attributes)
                         .callback(callback)
@@ -378,7 +378,7 @@ class MessageItemFactory @Inject constructor(
             val codeVisitor = CodeVisitor()
             codeVisitor.visit(localFormattedBody)
             when (codeVisitor.codeKind) {
-                CodeVisitor.Kind.BLOCK -> {
+                CodeVisitor.Kind.BLOCK  -> {
                     val codeFormattedBlock = htmlRenderer.get().render(localFormattedBody)
                     if (codeFormattedBlock == null) {
                         buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
@@ -394,7 +394,7 @@ class MessageItemFactory @Inject constructor(
                         buildMessageTextItem(codeFormatted, false, informationData, highlight, callback, attributes)
                     }
                 }
-                CodeVisitor.Kind.NONE -> {
+                CodeVisitor.Kind.NONE   -> {
                     buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
                 }
             }
@@ -431,6 +431,9 @@ class MessageItemFactory @Inject constructor(
         }
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
                 .searchForPills(isFormatted)
+                .previewUrlRetriever(callback?.getPreviewUrlRetriever())
+                .imageContentRenderer(imageContentRenderer)
+                .previewUrlCallback(callback)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
@@ -536,6 +539,9 @@ class MessageItemFactory @Inject constructor(
                     }
                 }
                 .leftGuideline(avatarSizeProvider.leftGuideline)
+                .previewUrlRetriever(callback?.getPreviewUrlRetriever())
+                .imageContentRenderer(imageContentRenderer)
+                .previewUrlCallback(callback)
                 .attributes(attributes)
                 .highlighted(highlight)
                 .movementMethod(createLinkMovementMethod(callback))

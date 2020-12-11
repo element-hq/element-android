@@ -23,7 +23,12 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
+import im.vector.app.features.media.ImageContentRenderer
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
@@ -37,10 +42,27 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     @EpoxyAttribute
     var useBigFont: Boolean = false
 
+    @EpoxyAttribute
+    var previewUrlRetriever: PreviewUrlRetriever? = null
+
+    @EpoxyAttribute
+    var previewUrlCallback: TimelineEventController.PreviewUrlCallback? = null
+
+    @EpoxyAttribute
+    var imageContentRenderer: ImageContentRenderer? = null
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var movementMethod: MovementMethod? = null
 
+    private val previewUrlViewUpdater = PreviewUrlViewUpdater()
+
     override fun bind(holder: Holder) {
+        // Preview URL
+        previewUrlViewUpdater.previewUrlView = holder.previewUrlView
+        previewUrlViewUpdater.imageContentRenderer = imageContentRenderer
+        previewUrlRetriever?.addListener(attributes.informationData.eventId, previewUrlViewUpdater)
+        holder.previewUrlView.delegate = previewUrlCallback
+
         if (useBigFont) {
             holder.messageView.textSize = 44F
         } else {
@@ -65,12 +87,29 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         holder.messageView.setTextFuture(textFuture)
     }
 
+    override fun unbind(holder: Holder) {
+        super.unbind(holder)
+        previewUrlViewUpdater.previewUrlView = null
+        previewUrlViewUpdater.imageContentRenderer = null
+        previewUrlRetriever?.removeListener(attributes.informationData.eventId, previewUrlViewUpdater)
+    }
+
     override fun getViewType() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val messageView by bind<AppCompatTextView>(R.id.messageTextView)
+        val previewUrlView by bind<PreviewUrlView>(R.id.messageUrlPreview)
     }
 
+    inner class PreviewUrlViewUpdater : PreviewUrlRetriever.PreviewUrlRetrieverListener {
+        var previewUrlView: PreviewUrlView? = null
+        var imageContentRenderer: ImageContentRenderer? = null
+
+        override fun onStateUpdated(state: PreviewUrlUiState) {
+            val safeImageContentRenderer = imageContentRenderer ?: return
+            previewUrlView?.render(state, safeImageContentRenderer)
+        }
+    }
     companion object {
         private const val STUB_ID = R.id.messageContentTextStub
     }

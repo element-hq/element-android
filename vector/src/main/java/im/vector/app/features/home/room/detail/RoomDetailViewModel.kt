@@ -40,6 +40,7 @@ import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineSettingsFactory
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -124,6 +125,9 @@ class RoomDetailViewModel @AssistedInject constructor(
     private val timelineSettings = timelineSettingsFactory.create()
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
     val timeline = room.createTimeline(eventId, timelineSettings)
+
+    // Same lifecycle than the ViewModel (survive to screen rotation)
+    val previewUrlRetriever = PreviewUrlRetriever(session)
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
@@ -277,7 +281,12 @@ class RoomDetailViewModel @AssistedInject constructor(
                         RoomDetailViewEvents.ShowRoomAvatarFullScreen(action.matrixItem, action.transitionView)
                 )
             }
+            is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
         }.exhaustive
+    }
+
+    private fun handleDoNotShowPreviewUrlFor(action: RoomDetailAction.DoNotShowPreviewUrlFor) {
+        previewUrlRetriever.doNotShowPreviewUrlFor(action.eventId, action.url)
     }
 
     private fun handleSetNewAvatar(action: RoomDetailAction.SetAvatarAction) {
@@ -1336,6 +1345,17 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
         timelineEvents.accept(snapshot)
+
+        // PreviewUrl
+        if (vectorPreferences.showUrlPreviews()) {
+            withState { state ->
+                snapshot
+                        .takeIf { state.asyncRoomSummary.invoke()?.isEncrypted == false }
+                        ?.forEach {
+                            previewUrlRetriever.getPreviewUrl(it.root, viewModelScope)
+                        }
+            }
+        }
     }
 
     override fun onTimelineFailure(throwable: Throwable) {

@@ -140,6 +140,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageInformationD
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
@@ -1615,6 +1616,10 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(itemAction)
     }
 
+    override fun getPreviewUrlRetriever(): PreviewUrlRetriever {
+        return roomDetailViewModel.previewUrlRetriever
+    }
+
     override fun onRoomCreateLinkClicked(url: String) {
         permalinkHandler
                 .launch(requireContext(), url, object : NavigationInterceptor {
@@ -1635,6 +1640,14 @@ class RoomDetailFragment @Inject constructor(
     override fun onReadMarkerVisible() {
         updateJumpToReadMarkerViewVisibility()
         roomDetailViewModel.handle(RoomDetailAction.EnterTrackingUnreadMessagesState)
+    }
+
+    override fun onPreviewUrlClicked(url: String) {
+        onUrlClicked(url, url)
+    }
+
+    override fun onPreviewUrlCloseClicked(eventId: String, url: String) {
+        roomDetailViewModel.handle(RoomDetailAction.DoNotShowPreviewUrlFor(eventId, url))
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {

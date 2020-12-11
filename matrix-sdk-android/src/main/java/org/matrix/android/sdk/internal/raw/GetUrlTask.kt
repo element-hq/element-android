@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.raw
 
 import com.zhuinden.monarchy.Monarchy
 import okhttp3.ResponseBody
-import org.matrix.android.sdk.api.raw.RawCacheStrategy
+import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.internal.database.model.RawCacheEntity
 import org.matrix.android.sdk.internal.database.query.get
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -32,7 +32,7 @@ import javax.inject.Inject
 internal interface GetUrlTask : Task<GetUrlTask.Params, String> {
     data class Params(
             val url: String,
-            val rawCacheStrategy: RawCacheStrategy
+            val cacheStrategy: CacheStrategy
     )
 }
 
@@ -42,14 +42,14 @@ internal class DefaultGetUrlTask @Inject constructor(
 ) : GetUrlTask {
 
     override suspend fun execute(params: GetUrlTask.Params): String {
-        return when (params.rawCacheStrategy) {
-            RawCacheStrategy.NoCache       -> doRequest(params.url)
-            is RawCacheStrategy.TtlCache   -> doRequestWithCache(
+        return when (params.cacheStrategy) {
+            CacheStrategy.NoCache       -> doRequest(params.url)
+            is CacheStrategy.TtlCache   -> doRequestWithCache(
                     params.url,
-                    params.rawCacheStrategy.validityDurationInMillis,
-                    params.rawCacheStrategy.strict
+                    params.cacheStrategy.validityDurationInMillis,
+                    params.cacheStrategy.strict
             )
-            RawCacheStrategy.InfiniteCache -> doRequestWithCache(
+            CacheStrategy.InfiniteCache -> doRequestWithCache(
                     params.url,
                     Long.MAX_VALUE,
                     true

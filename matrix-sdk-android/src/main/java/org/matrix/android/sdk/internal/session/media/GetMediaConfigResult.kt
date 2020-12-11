@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.utils
+package org.matrix.android.sdk.internal.session.media
 
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.Looper
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-internal fun createBackgroundHandler(name: String): Handler = Handler(
-        HandlerThread(name).apply { start() }.looper
-)
-
-internal fun createUIHandler(): Handler = Handler(
-        Looper.getMainLooper()
+@JsonClass(generateAdapter = true)
+internal data class GetMediaConfigResult(
+        /**
+         * The maximum size an upload can be in bytes. Clients SHOULD use this as a guide when uploading content.
+         * If not listed or null, the size limit should be treated as unknown.
+         */
+        @Json(name = "m.upload.size")
+        val maxUploadSize: Long? = null
 )
