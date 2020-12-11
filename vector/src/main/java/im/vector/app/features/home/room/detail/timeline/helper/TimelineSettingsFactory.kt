@@ -40,7 +40,7 @@ class TimelineSettingsFactory @Inject constructor(
                             filterTypes = false),
                     buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
         } else {
-            val allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES.filterDisplayableTypes()
+            val allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES.createAllowedEventTypeFilters()
             TimelineSettings(
                     initialSize = 30,
                     filters = TimelineEventFilters(
@@ -53,7 +53,7 @@ class TimelineSettingsFactory @Inject constructor(
         }
     }
 
-    private fun List<String>.filterDisplayableTypes(): List<EventTypeFilter> {
+    private fun List<String>.createAllowedEventTypeFilters(): List<EventTypeFilter> {
         return map {
             EventTypeFilter(
                     eventType = it,
