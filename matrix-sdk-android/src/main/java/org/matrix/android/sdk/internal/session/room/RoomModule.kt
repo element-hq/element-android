@@ -57,6 +57,10 @@ import org.matrix.android.sdk.internal.session.room.membership.leaving.DefaultLe
 import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.DefaultInviteThreePidTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
+import org.matrix.android.sdk.internal.session.room.peeking.DefaultPeekRoomTask
+import org.matrix.android.sdk.internal.session.room.peeking.DefaultResolveRoomStateTask
+import org.matrix.android.sdk.internal.session.room.peeking.PeekRoomTask
+import org.matrix.android.sdk.internal.session.room.peeking.ResolveRoomStateTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultMarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultSetReadMarkersTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
@@ -223,4 +227,10 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindDeleteTagFromRoomTask(task: DefaultDeleteTagFromRoomTask): DeleteTagFromRoomTask
+
+    @Binds
+    abstract fun bindResolveRoomStateTask(task: DefaultResolveRoomStateTask): ResolveRoomStateTask
+
+    @Binds
+    abstract fun bindPeekRoomTask(task: DefaultPeekRoomTask): PeekRoomTask
 }

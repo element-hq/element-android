@@ -11,11 +11,13 @@ Features ✨:
 Improvements 🙌:
  - Add Setting Item to Change PIN (#2462)
  - Improve room history visibility setting UX (#1579)
+ - Matrix.to deeplink custom scheme support
 
 Bugfix 🐛:
  - Fix cancellation of sending event (#2438)
  - Double bottomsheet effect after verify with passphrase
  - EditText cursor jumps to the start while typing fast (#2469)
+ - No known servers error is given when joining rooms on new Gitter bridge (#2516)
  - Show preview when sending attachment from the keyboard (#2440)
  - Do not compress GIFs (#1616, #1254)
 

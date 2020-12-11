@@ -20,6 +20,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.transition.TransitionManager
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -30,6 +32,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomdirectory.JoinState
 import kotlinx.android.synthetic.main.fragment_room_preview_no_preview.*
+import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 /**
@@ -48,22 +51,6 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(roomPreviewNoPreviewToolbar)
-        val titleText = roomPreviewData.roomName ?: roomPreviewData.roomAlias ?: roomPreviewData.roomId
-
-        // Toolbar
-        avatarRenderer.render(roomPreviewData.matrixItem, roomPreviewNoPreviewToolbarAvatar)
-        roomPreviewNoPreviewToolbarTitle.text = titleText
-
-        // Screen
-        avatarRenderer.render(roomPreviewData.matrixItem, roomPreviewNoPreviewAvatar)
-        roomPreviewNoPreviewName.text = titleText
-        roomPreviewNoPreviewTopic.setTextOrHide(roomPreviewData.topic)
-
-        if (roomPreviewData.worldReadable) {
-            roomPreviewNoPreviewLabel.setText(R.string.room_preview_world_readable_room_not_supported_yet)
-        } else {
-            roomPreviewNoPreviewLabel.setText(R.string.room_preview_no_preview)
-        }
 
         roomPreviewNoPreviewJoin.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
@@ -100,7 +87,62 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
             // Quit this screen
             requireActivity().finish()
             // Open room
-            navigator.openRoom(requireActivity(), roomPreviewData.roomId, roomPreviewData.eventId, roomPreviewData.buildTask)
+            navigator.openRoom(requireActivity(), state.roomId, roomPreviewData.eventId, roomPreviewData.buildTask)
         }
+
+        val bestName = state.roomName ?: state.roomAlias ?: state.roomId
+        when (state.peekingState) {
+            is Loading -> {
+                roomPreviewPeekingProgress.isVisible = true
+                roomPreviewNoPreviewJoin.isVisible = false
+            }
+            is Success -> {
+                roomPreviewPeekingProgress.isVisible = false
+                when (state.peekingState.invoke()) {
+                    PeekingState.FOUND     -> {
+                        // show join buttons
+                        roomPreviewNoPreviewJoin.isVisible = true
+                        renderState(bestName, state.matrixItem(), state.roomTopic)
+                    }
+                    PeekingState.NO_ACCESS -> {
+                        roomPreviewNoPreviewJoin.isVisible = true
+                        roomPreviewNoPreviewLabel.isVisible = true
+                        roomPreviewNoPreviewLabel.setText(R.string.room_preview_no_preview_join)
+                        renderState(bestName, state.matrixItem().takeIf { state.roomAlias != null }, state.roomTopic)
+                    }
+                    else                   -> {
+                        roomPreviewNoPreviewJoin.isVisible = false
+                        roomPreviewNoPreviewLabel.isVisible = true
+                        roomPreviewNoPreviewLabel.setText(R.string.room_preview_not_found)
+                        renderState(bestName, null, state.roomTopic)
+                    }
+                }
+            }
+            else       -> {
+                // Render with initial state, no peeking
+                roomPreviewPeekingProgress.isVisible = false
+                roomPreviewNoPreviewJoin.isVisible = true
+                renderState(bestName, state.matrixItem(), state.roomTopic)
+                roomPreviewNoPreviewLabel.isVisible = false
+            }
+        }
+    }
+
+    private fun renderState(roomName: String, matrixItem: MatrixItem?, topic: String?) {
+        // Toolbar
+        if (matrixItem != null) {
+            roomPreviewNoPreviewToolbarAvatar.isVisible = true
+            roomPreviewNoPreviewAvatar.isVisible = true
+            avatarRenderer.render(matrixItem, roomPreviewNoPreviewToolbarAvatar)
+            avatarRenderer.render(matrixItem, roomPreviewNoPreviewAvatar)
+        } else {
+            roomPreviewNoPreviewToolbarAvatar.isVisible = false
+            roomPreviewNoPreviewAvatar.isVisible = false
+        }
+        roomPreviewNoPreviewToolbarTitle.text = roomName
+
+        // Screen
+        roomPreviewNoPreviewName.text = roomName
+        roomPreviewNoPreviewTopic.setTextOrHide(topic)
     }
 }
