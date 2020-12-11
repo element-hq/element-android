@@ -174,14 +174,15 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     }
                 }
 
+                val encryptedFile: File?
                 val contentUploadResponse = if (params.isEncrypted) {
                     Timber.v("## FileService: Encrypt file")
 
-                    val tmpEncrypted = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
+                    encryptedFile = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
                             .also { filesToDelete.add(it) }
 
                     uploadedFileEncryptedFileInfo =
-                            MXEncryptedAttachments.encrypt(fileToUpload.inputStream(), attachment.getSafeMimeType(), tmpEncrypted) { read, total ->
+                            MXEncryptedAttachments.encrypt(fileToUpload.inputStream(), attachment.getSafeMimeType(), encryptedFile) { read, total ->
                                 notifyTracker(params) {
                                     contentUploadStateTracker.setEncrypting(it, read.toLong(), total.toLong())
                                 }
@@ -190,18 +191,23 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     Timber.v("## FileService: Uploading file")
 
                     fileUploader
-                            .uploadFile(tmpEncrypted, attachment.name, "application/octet-stream", progressListener)
+                            .uploadFile(encryptedFile, attachment.name, "application/octet-stream", progressListener)
                 } else {
                     Timber.v("## FileService: Clear file")
+                    encryptedFile = null
                     fileUploader
                             .uploadFile(fileToUpload, attachment.name, attachment.getSafeMimeType(), progressListener)
                 }
 
                 Timber.v("## FileService: Update cache storage for ${contentUploadResponse.contentUri}")
                 try {
-                    context.contentResolver.openInputStream(attachment.queryUri)?.let {
-                        fileService.storeDataFor(contentUploadResponse.contentUri, params.attachment.getSafeMimeType(), it)
-                    }
+                    fileService.storeDataFor(
+                            mxcUrl = contentUploadResponse.contentUri,
+                            filename = params.attachment.name,
+                            mimeType = params.attachment.getSafeMimeType(),
+                            originalFile = workingFile,
+                            encryptedFile = encryptedFile
+                    )
                     Timber.v("## FileService: cache storage updated")
                 } catch (failure: Throwable) {
                     Timber.e(failure, "## FileService: Failed to update file cache")

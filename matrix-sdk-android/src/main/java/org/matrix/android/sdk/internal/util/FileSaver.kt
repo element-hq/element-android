@@ -25,6 +25,9 @@ import java.io.InputStream
  */
 @WorkerThread
 fun writeToFile(inputStream: InputStream, outputFile: File) {
+    // Ensure the parent folder exists, else it will crash
+    outputFile.parentFile?.mkdirs()
+
     outputFile.outputStream().use {
         inputStream.copyTo(it)
     }

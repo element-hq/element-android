@@ -23,6 +23,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
@@ -129,6 +130,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             GlideApp
                     .with(contextView)
                     .load(data)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
             val resolvedUrl = resolveUrl(data)
@@ -183,6 +185,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             GlideApp
                     .with(imageView)
                     .load(data)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
             val resolvedUrl = resolveUrl(data)
@@ -214,14 +217,16 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
                 .into(imageView)
     }
 
-    fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
+    private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
         return createGlideRequest(data, mode, GlideApp.with(imageView), size)
     }
 
     fun createGlideRequest(data: Data, mode: Mode, glideRequests: GlideRequests, size: Size = processSize(data, mode)): GlideRequest<Drawable> {
         return if (data.elementToDecrypt != null) {
             // Encrypted image
-            glideRequests.load(data)
+            glideRequests
+                    .load(data)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
             val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
