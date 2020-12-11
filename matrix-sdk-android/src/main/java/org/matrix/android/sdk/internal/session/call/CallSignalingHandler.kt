@@ -160,7 +160,7 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
         val content = event.getClearContent().toModel<CallInviteContent>() ?: return
         val incomingCall = mxCallFactory.createIncomingCall(
                 roomId = event.roomId,
-                senderId = event.senderId,
+                opponentUserId = event.senderId,
                 content = content
         ) ?: return
         activeCallHandler.addCall(incomingCall)

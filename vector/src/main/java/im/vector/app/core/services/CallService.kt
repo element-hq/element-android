@@ -24,10 +24,20 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.view.KeyEvent
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
+import com.airbnb.mvrx.MvRx
 import im.vector.app.core.extensions.vectorComponent
-import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.call.CallArgs
+import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.telecom.CallConnection
+import im.vector.app.features.call.webrtc.WebRtcCall
+import im.vector.app.features.call.webrtc.WebRtcCallManager
+import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.features.popup.IncomingCallAlert
+import im.vector.app.features.popup.PopupAlertManager
+import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 
 /**
@@ -39,6 +49,8 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
 
     private lateinit var notificationUtils: NotificationUtils
     private lateinit var callManager: WebRtcCallManager
+    private lateinit var avatarRenderer: AvatarRenderer
+    private lateinit var alertManager: PopupAlertManager
 
     private var callRingPlayerIncoming: CallRingPlayerIncoming? = null
     private var callRingPlayerOutgoing: CallRingPlayerOutgoing? = null
@@ -64,6 +76,8 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         super.onCreate()
         notificationUtils = vectorComponent().notificationUtils()
         callManager = vectorComponent().webRtcCallManager()
+        avatarRenderer = vectorComponent().avatarRenderer()
+        alertManager = vectorComponent().alertManager()
         callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext)
         callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext)
         wiredHeadsetStateReceiver = WiredHeadsetStateReceiver.createAndRegister(this, this)
@@ -111,20 +125,20 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
                 callRingPlayerOutgoing?.start()
                 displayOutgoingRingingCallNotification(intent)
             }
-            ACTION_ONGOING_CALL          -> {
+            ACTION_ONGOING_CALL -> {
                 callRingPlayerIncoming?.stop()
                 callRingPlayerOutgoing?.stop()
                 displayCallInProgressNotification(intent)
             }
-            ACTION_NO_ACTIVE_CALL        -> hideCallNotifications()
-            ACTION_CALL_CONNECTING       -> {
+            ACTION_NO_ACTIVE_CALL -> hideCallNotifications()
+            ACTION_CALL_CONNECTING -> {
                 // lower notification priority
                 displayCallInProgressNotification(intent)
                 // stop ringing
                 callRingPlayerIncoming?.stop()
                 callRingPlayerOutgoing?.stop()
             }
-            ACTION_ONGOING_CALL_BG       -> {
+            ACTION_ONGOING_CALL_BG -> {
                 // there is an ongoing call but call activity is in background
                 displayCallOnGoingInBackground(intent)
             }
@@ -147,63 +161,61 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
     /**
      * Display a permanent notification when there is an incoming call.
      *
-     * @param session  the session
-     * @param isVideo  true if this is a video call, false for voice call
-     * @param room     the room
-     * @param callId   the callId
      */
     private fun displayIncomingCallNotification(intent: Intent) {
         Timber.v("## VOIP displayIncomingCallNotification $intent")
-
-        // the incoming call in progress is already displayed
-//        if (!TextUtils.isEmpty(mIncomingCallId)) {
-//            Timber.v("displayIncomingCallNotification : the incoming call in progress is already displayed")
-//        } else if (!TextUtils.isEmpty(mCallIdInProgress)) {
-//            Timber.v("displayIncomingCallNotification : a 'call in progress' notification is displayed")
-//        } else
-// //            if (null == webRtcPeerConnectionManager.currentCall)
-//        {
-        val callId = intent.getStringExtra(EXTRA_CALL_ID)
-
+        val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
+        val call = callManager.getCallById(callId) ?: return
+        val isVideoCall = call.mxCall.isVideoCall
+        val fromBg = intent.getBooleanExtra(EXTRA_IS_IN_BG, false)
+        val opponentMatrixItem = getOpponentMatrixItem(call)
         Timber.v("displayIncomingCallNotification : display the dedicated notification")
+        val incomingCallAlert = IncomingCallAlert(INCOMING_CALL_ALERT_UID,
+                shouldBeDisplayedIn = { activity ->
+                    if (activity is RoomDetailActivity) {
+                        call.roomId != activity.currentRoomId
+                    } else if (activity is VectorCallActivity) {
+                        activity.intent.getParcelableExtra<CallArgs>(MvRx.KEY_ARG)?.callId != call.callId
+                    } else true
+                }
+        ).apply {
+            viewBinder = IncomingCallAlert.ViewBinder(
+                    matrixItem = opponentMatrixItem,
+                    avatarRenderer = avatarRenderer,
+                    isVideoCall = isVideoCall,
+                    onAccept = { showCallScreen(call, VectorCallActivity.INCOMING_ACCEPT) },
+                    onReject = { call.endCall() }
+            )
+            dismissedAction = Runnable { call.endCall() }
+            contentAction = Runnable { showCallScreen(call, VectorCallActivity.INCOMING_RINGING) }
+        }
+        alertManager.postVectorAlert(incomingCallAlert)
         val notification = notificationUtils.buildIncomingCallNotification(
-                intent.getBooleanExtra(EXTRA_IS_VIDEO, false),
-                intent.getStringExtra(EXTRA_ROOM_NAME) ?: "",
-                intent.getStringExtra(EXTRA_ROOM_ID) ?: "",
-                callId ?: "")
+                mxCall = call.mxCall,
+                title = opponentMatrixItem?.getBestName() ?: call.mxCall.opponentUserId,
+                fromBg = fromBg
+        )
         startForeground(NOTIFICATION_ID, notification)
+    }
 
-//            mIncomingCallId = callId
-
-        // turn the screen on for 3 seconds
-//            if (Matrix.getInstance(VectorApp.getInstance())!!.pushManager.isScreenTurnedOn) {
-//                try {
-//                    val pm = getSystemService<PowerManager>()!!
-//                    val wl = pm.newWakeLock(
-//                            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or PowerManager.ACQUIRE_CAUSES_WAKEUP,
-//                            CallService::class.java.simpleName)
-//                    wl.acquire(3000)
-//                    wl.release()
-//                } catch (re: RuntimeException) {
-//                    Timber.e(re, "displayIncomingCallNotification : failed to turn screen on ")
-//                }
-//
-//            }
-//        }
-//        else {
-//            Timber.i("displayIncomingCallNotification : do not display the incoming call notification because there is a pending call")
-//        }
+    private fun showCallScreen(call: WebRtcCall, mode: String) {
+        val intent = VectorCallActivity.newIntent(
+                context = this,
+                mxCall = call.mxCall,
+                mode = mode
+        )
+        startActivity(intent)
     }
 
     private fun displayOutgoingRingingCallNotification(intent: Intent) {
-        val callId = intent.getStringExtra(EXTRA_CALL_ID)
-
+        val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: return
+        val call = callManager.getCallById(callId) ?: return
+        val opponentMatrixItem = getOpponentMatrixItem(call)
         Timber.v("displayOutgoingCallNotification : display the dedicated notification")
         val notification = notificationUtils.buildOutgoingRingingCallNotification(
-                intent.getBooleanExtra(EXTRA_IS_VIDEO, false),
-                intent.getStringExtra(EXTRA_ROOM_NAME) ?: "",
-                intent.getStringExtra(EXTRA_ROOM_ID) ?: "",
-                callId ?: "")
+                mxCall = call.mxCall,
+                title = opponentMatrixItem?.getBestName() ?: call.mxCall.opponentUserId
+        )
         startForeground(NOTIFICATION_ID, notification)
     }
 
@@ -213,16 +225,14 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
     private fun displayCallInProgressNotification(intent: Intent) {
         Timber.v("## VOIP displayCallInProgressNotification")
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
-
+        val call = callManager.getCallById(callId) ?: return
+        val opponentMatrixItem = getOpponentMatrixItem(call)
+        alertManager.cancelAlert(INCOMING_CALL_ALERT_UID)
         val notification = notificationUtils.buildPendingCallNotification(
-                intent.getBooleanExtra(EXTRA_IS_VIDEO, false),
-                intent.getStringExtra(EXTRA_ROOM_NAME) ?: "",
-                intent.getStringExtra(EXTRA_ROOM_ID) ?: "",
-                intent.getStringExtra(EXTRA_MATRIX_ID) ?: "",
-                callId)
-
+                mxCall = call.mxCall,
+                title = opponentMatrixItem?.getBestName() ?: call.mxCall.opponentUserId
+        )
         startForeground(NOTIFICATION_ID, notification)
-
         // mCallIdInProgress = callId
     }
 
@@ -231,18 +241,15 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
      */
     private fun displayCallOnGoingInBackground(intent: Intent) {
         Timber.v("## VOIP displayCallInProgressNotification")
-        val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
+        val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: return
+        val call = callManager.getCallById(callId) ?: return
+        val opponentMatrixItem = getOpponentMatrixItem(call)
 
         val notification = notificationUtils.buildPendingCallNotification(
-                isVideo = intent.getBooleanExtra(EXTRA_IS_VIDEO, false),
-                roomName = intent.getStringExtra(EXTRA_ROOM_NAME) ?: "",
-                roomId = intent.getStringExtra(EXTRA_ROOM_ID) ?: "",
-                matrixId = intent.getStringExtra(EXTRA_MATRIX_ID) ?: "",
-                callId = callId,
+                mxCall = call.mxCall,
+                title = opponentMatrixItem?.getBestName() ?: call.mxCall.opponentUserId,
                 fromBg = true)
-
         startForeground(NOTIFICATION_ID, notification)
-
         // mCallIdInProgress = callId
     }
 
@@ -251,7 +258,7 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
      */
     private fun hideCallNotifications() {
         val notification = notificationUtils.buildCallEndedNotification()
-
+        alertManager.cancelAlert(INCOMING_CALL_ALERT_UID)
         mediaSession?.isActive = false
         // It's mandatory to startForeground to avoid crash
         startForeground(NOTIFICATION_ID, notification)
@@ -263,9 +270,14 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         connections[callConnection.callId] = callConnection
     }
 
+    private fun getOpponentMatrixItem(call: WebRtcCall): MatrixItem? {
+        return vectorComponent().currentSession().getUser(call.mxCall.opponentUserId)?.toMatrixItem()
+    }
+
     companion object {
         private const val NOTIFICATION_ID = 6480
 
+        private const val INCOMING_CALL_ALERT_UID = "INCOMING_CALL_ALERT_UID"
         private const val ACTION_INCOMING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_INCOMING_RINGING_CALL"
         private const val ACTION_OUTGOING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_OUTGOING_RINGING_CALL"
         private const val ACTION_CALL_CONNECTING = "im.vector.app.core.services.CallService.ACTION_CALL_CONNECTING"
@@ -275,44 +287,26 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
 //        private const val ACTION_ACTIVITY_VISIBLE = "im.vector.app.core.services.CallService.ACTION_ACTIVITY_VISIBLE"
 //        private const val ACTION_STOP_RINGING = "im.vector.app.core.services.CallService.ACTION_STOP_RINGING"
 
-        private const val EXTRA_IS_VIDEO = "EXTRA_IS_VIDEO"
-        private const val EXTRA_ROOM_NAME = "EXTRA_ROOM_NAME"
-        private const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
-        private const val EXTRA_MATRIX_ID = "EXTRA_MATRIX_ID"
         private const val EXTRA_CALL_ID = "EXTRA_CALL_ID"
+        private const val EXTRA_IS_IN_BG = "EXTRA_IS_IN_BG"
 
         fun onIncomingCallRinging(context: Context,
-                                  isVideo: Boolean,
-                                  roomName: String,
-                                  roomId: String,
-                                  matrixId: String,
-                                  callId: String) {
+                                  callId: String,
+                                  isInBackground: Boolean) {
             val intent = Intent(context, CallService::class.java)
                     .apply {
                         action = ACTION_INCOMING_RINGING_CALL
-                        putExtra(EXTRA_IS_VIDEO, isVideo)
-                        putExtra(EXTRA_ROOM_NAME, roomName)
-                        putExtra(EXTRA_ROOM_ID, roomId)
-                        putExtra(EXTRA_MATRIX_ID, matrixId)
                         putExtra(EXTRA_CALL_ID, callId)
+                        putExtra(EXTRA_IS_IN_BG, isInBackground)
                     }
-
             ContextCompat.startForegroundService(context, intent)
         }
 
         fun onOnGoingCallBackground(context: Context,
-                                    isVideo: Boolean,
-                                    roomName: String,
-                                    roomId: String,
-                                    matrixId: String,
                                     callId: String) {
             val intent = Intent(context, CallService::class.java)
                     .apply {
                         action = ACTION_ONGOING_CALL_BG
-                        putExtra(EXTRA_IS_VIDEO, isVideo)
-                        putExtra(EXTRA_ROOM_NAME, roomName)
-                        putExtra(EXTRA_ROOM_ID, roomId)
-                        putExtra(EXTRA_MATRIX_ID, matrixId)
                         putExtra(EXTRA_CALL_ID, callId)
                     }
 
@@ -320,18 +314,10 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         }
 
         fun onOutgoingCallRinging(context: Context,
-                                  isVideo: Boolean,
-                                  roomName: String,
-                                  roomId: String,
-                                  matrixId: String,
                                   callId: String) {
             val intent = Intent(context, CallService::class.java)
                     .apply {
                         action = ACTION_OUTGOING_RINGING_CALL
-                        putExtra(EXTRA_IS_VIDEO, isVideo)
-                        putExtra(EXTRA_ROOM_NAME, roomName)
-                        putExtra(EXTRA_ROOM_ID, roomId)
-                        putExtra(EXTRA_MATRIX_ID, matrixId)
                         putExtra(EXTRA_CALL_ID, callId)
                     }
 
@@ -339,18 +325,10 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         }
 
         fun onPendingCall(context: Context,
-                          isVideo: Boolean,
-                          roomName: String,
-                          roomId: String,
-                          matrixId: String,
                           callId: String) {
             val intent = Intent(context, CallService::class.java)
                     .apply {
                         action = ACTION_ONGOING_CALL
-                        putExtra(EXTRA_IS_VIDEO, isVideo)
-                        putExtra(EXTRA_ROOM_NAME, roomName)
-                        putExtra(EXTRA_ROOM_ID, roomId)
-                        putExtra(EXTRA_MATRIX_ID, matrixId)
                         putExtra(EXTRA_CALL_ID, callId)
                     }
 
@@ -362,7 +340,6 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
                     .apply {
                         action = ACTION_NO_ACTIVE_CALL
                     }
-
             ContextCompat.startForegroundService(context, intent)
         }
     }

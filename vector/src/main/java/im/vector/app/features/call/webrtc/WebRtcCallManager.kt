@@ -189,14 +189,8 @@ class WebRtcCallManager @Inject constructor(
         createWebRtcCall(mxCall)
         callAudioManager.startForCall(mxCall)
 
-        val name = currentSession?.getUser(mxCall.opponentUserId)?.getBestName()
-                ?: mxCall.opponentUserId
         CallService.onOutgoingCallRinging(
                 context = context.applicationContext,
-                isVideo = mxCall.isVideoCall,
-                roomName = name,
-                roomId = mxCall.roomId,
-                matrixId = currentSession?.myUserId ?: "",
                 callId = mxCall.callId)
 
         // start the activity now
@@ -264,15 +258,10 @@ class WebRtcCallManager @Inject constructor(
         }
         callAudioManager.startForCall(mxCall)
         // Start background service with notification
-        val name = currentSession?.getUser(mxCall.opponentUserId)?.getBestName()
-                ?: mxCall.opponentUserId
         CallService.onIncomingCallRinging(
                 context = context,
-                isVideo = mxCall.isVideoCall,
-                roomName = name,
-                roomId = mxCall.roomId,
-                matrixId = currentSession?.myUserId ?: "",
-                callId = mxCall.callId
+                callId = mxCall.callId,
+                isInBackground = isInBackground
         )
         // If this is received while in background, the app will not sync,
         // and thus won't be able to received events. For example if the call is
@@ -294,14 +283,8 @@ class WebRtcCallManager @Inject constructor(
                 }
         val mxCall = call.mxCall
         // Update service state
-        val name = currentSession?.getUser(mxCall.opponentUserId)?.getBestName()
-                ?: mxCall.opponentUserId
         CallService.onPendingCall(
                 context = context,
-                isVideo = mxCall.isVideoCall,
-                roomName = name,
-                roomId = mxCall.roomId,
-                matrixId = currentSession?.myUserId ?: "",
                 callId = mxCall.callId
         )
         call.onCallAnswerReceived(callAnswerContent)

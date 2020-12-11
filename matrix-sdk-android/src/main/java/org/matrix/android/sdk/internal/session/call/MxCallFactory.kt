@@ -35,7 +35,7 @@ internal class MxCallFactory @Inject constructor(
         @UserId private val userId: String
 ) {
 
-    fun createIncomingCall(roomId: String, senderId: String, content: CallInviteContent): MxCall? {
+    fun createIncomingCall(roomId: String, opponentUserId: String, content: CallInviteContent): MxCall? {
         if (content.callId == null) return null
         return MxCallImpl(
                 callId = content.callId,
@@ -43,7 +43,7 @@ internal class MxCallFactory @Inject constructor(
                 roomId = roomId,
                 userId = userId,
                 ourPartyId = deviceId ?: "",
-                opponentUserId = senderId,
+                opponentUserId = opponentUserId,
                 isVideoCall = content.isVideo(),
                 localEchoEventFactory = localEchoEventFactory,
                 eventSenderProcessor = eventSenderProcessor
@@ -53,14 +53,14 @@ internal class MxCallFactory @Inject constructor(
         }
     }
 
-    fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall {
+    fun createOutgoingCall(roomId: String, opponentUserId: String, isVideoCall: Boolean): MxCall {
         return MxCallImpl(
                 callId = UUID.randomUUID().toString(),
                 isOutgoing = true,
                 roomId = roomId,
                 userId = userId,
                 ourPartyId = deviceId ?: "",
-                opponentUserId = otherUserId,
+                opponentUserId = opponentUserId,
                 isVideoCall = isVideoCall,
                 localEchoEventFactory = localEchoEventFactory,
                 eventSenderProcessor = eventSenderProcessor
