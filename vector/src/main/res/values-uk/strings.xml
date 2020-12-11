@@ -1012,10 +1012,23 @@
     <string name="room_filtering_footer_create_new_room">Створити нову кімнату</string>
     <string name="room_list_rooms_empty_title">Кімнати</string>
     <string name="search_is_not_supported_in_e2e_room">Пошук в зашифрованих кімнатах не підтримується на даний момент.</string>
-    <string name="settings_call_show_confirmation_dialog_summary">Запитувати підтвердження перед початком дзвінку</string>
-    <string name="settings_call_show_confirmation_dialog_title">Запобігати випадковим дзвінкам</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Запитувати підтвердження перед початком виклику</string>
+    <string name="settings_call_show_confirmation_dialog_title">Запобігати випадковим викликам</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Мені не потрібні мої зашифровані повідомлення</string>
     <string name="warning_unsaved_change_discard">Скасувати зміни</string>
     <string name="login_error_ssl_other">SSL помилка.</string>
     <string name="cannot_call_yourself_with_invite">Ви не можете здійснити дзвінок із самим собою, дочекайтесь, доки інші учасники приймуть ваше запрошення</string>
+    <string name="uploads_files_title">ФАЙЛИ</string>
+    <string name="uploads_media_no_result">В цій кімнаті немає медіа</string>
+    <string name="uploads_media_title">МЕДІА</string>
+    <string name="room_profile_section_more_uploads">Завантаження</string>
+    <string name="command_description_discard_session_not_handled">Підтримується тільки в зашифрованих кімнатах</string>
+    <string name="room_list_sharing_header_other_rooms">Інші кімнати</string>
+    <string name="create_room_title">Нова кімната</string>
+    <string name="create_new_room">Створити нову кімнату</string>
+    <string name="send_suggestion">Залишити відгук</string>
+    <string name="settings_developer_mode">Режим розробника</string>
+    <string name="settings_advanced_settings">Додаткові налаштування</string>
+    <string name="settings_notification_advanced">Розширені налаштування сповіщень</string>
+    <string name="preference_voice_and_video">Голос та відео</string>
 </resources>
