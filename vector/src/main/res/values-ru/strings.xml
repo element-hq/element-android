@@ -2324,7 +2324,7 @@
     <string name="invite_friends">Пригласить друзей</string>
     <string name="add_people">Добавить людей</string>
     <string name="topic_prefix">"Тема: "</string>
-    <string name="add_a_topic_link_text">Добавить тему</string>
+    <string name="add_a_topic_link_text">Добавьте тему</string>
     <string name="this_is_the_beginning_of_room_no_name">Это начало разговора.</string>
     <string name="this_is_the_beginning_of_room">Это начало %s.</string>
     <string name="room_settings_enable_encryption_no_permission">У вас нет разрешения на включение шифрования в этой комнате.</string>
