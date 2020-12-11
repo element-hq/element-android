@@ -368,6 +368,7 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.DisplayEnableIntegrationsWarning -> displayDisabledIntegrationDialog()
                 is RoomDetailViewEvents.OpenIntegrationManager           -> openIntegrationManager()
                 is RoomDetailViewEvents.OpenFile                         -> startOpenFileIntent(it)
+                is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
                 RoomDetailViewEvents.OpenActiveWidgetBottomSheet         -> onViewWidgetsClicked()
                 is RoomDetailViewEvents.ShowInfoOkDialog                 -> showDialogWithMessage(it.message)
                 is RoomDetailViewEvents.JoinJitsiConference              -> joinJitsiRoom(it.widget, it.withVideo)
@@ -387,6 +388,15 @@ class RoomDetailFragment @Inject constructor(
         if (savedInstanceState == null) {
             handleShareData()
         }
+    }
+
+    private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
+        val intent = VectorCallActivity.newIntent(
+                context = vectorBaseActivity,
+                mxCall = event.call.mxCall,
+                mode = VectorCallActivity.INCOMING_ACCEPT
+        )
+        startActivity(intent)
     }
 
     override fun onImageReady(uri: Uri?) {

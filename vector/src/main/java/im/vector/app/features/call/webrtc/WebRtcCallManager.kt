@@ -200,7 +200,7 @@ class WebRtcCallManager @Inject constructor(
                 callId = mxCall.callId)
 
         // start the activity now
-        context.startActivity(VectorCallActivity.newIntent(context, mxCall))
+        context.startActivity(VectorCallActivity.newIntent(context, mxCall, VectorCallActivity.OUTGOING_CREATED))
     }
 
     override fun onCallIceCandidateReceived(mxCall: MxCall, iceCandidatesContent: CallCandidatesContent) {

@@ -34,6 +34,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val roomCreateItemFactory: RoomCreateItemFactory,
                                               private val roomSummaryHolder: RoomSummaryHolder,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
+                                              private val callItemFactory: CallItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {
 
     fun create(event: TimelineEvent,
@@ -60,15 +61,17 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_GUEST_ACCESS,
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET,
-                EventType.CALL_INVITE,
-                EventType.CALL_HANGUP,
-                EventType.CALL_ANSWER,
                 EventType.STATE_ROOM_POWER_LEVELS,
                 EventType.REACTION,
                 EventType.REDACTION             -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
                 EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(event, highlight, callback)
                 // State room create
                 EventType.STATE_ROOM_CREATE     -> roomCreateItemFactory.create(event, callback)
+                // Calls
+                EventType.CALL_INVITE,
+                EventType.CALL_HANGUP,
+                EventType.CALL_REJECT,
+                EventType.CALL_ANSWER           -> callItemFactory.create(event, highlight, callback)
                 // Crypto
                 EventType.ENCRYPTED             -> {
                     if (event.root.isRedacted()) {
