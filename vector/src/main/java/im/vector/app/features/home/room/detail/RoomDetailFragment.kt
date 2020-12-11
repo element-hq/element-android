@@ -140,6 +140,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageInformationD
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
@@ -165,7 +166,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
-import kotlinx.android.synthetic.main.merge_composer_layout.view.*
+import kotlinx.android.synthetic.main.composer_layout.view.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
@@ -174,7 +175,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -185,7 +185,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
-import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -194,7 +193,6 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import timber.log.Timber
@@ -1103,18 +1101,6 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val writingFileActivityResultLauncher = registerForPermissionsResult { allGranted ->
-        if (allGranted) {
-            val pendingUri = roomDetailViewModel.pendingUri
-            if (pendingUri != null) {
-                roomDetailViewModel.pendingUri = null
-                sendUri(pendingUri)
-            }
-        } else {
-            cleanUpAfterPermissionNotGranted()
-        }
-    }
-
     private fun setupComposer() {
         val composerEditText = composerLayout.composerEditText
         autoCompleter.setup(composerEditText)
@@ -1160,14 +1146,7 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onRichContentSelected(contentUri: Uri): Boolean {
-                // We need WRITE_EXTERNAL permission
-                return if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, requireActivity(), writingFileActivityResultLauncher)) {
-                    sendUri(contentUri)
-                } else {
-                    roomDetailViewModel.pendingUri = contentUri
-                    // Always intercept when we request some permission
-                    true
-                }
+                return sendUri(contentUri)
             }
         }
     }
@@ -1198,11 +1177,9 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun sendUri(uri: Uri): Boolean {
-        roomDetailViewModel.preventAttachmentPreview = true
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
         val isHandled = attachmentsHelper.handleShareIntent(requireContext(), shareIntent)
         if (!isHandled) {
-            roomDetailViewModel.preventAttachmentPreview = false
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
         }
         return isHandled
@@ -1564,7 +1541,6 @@ class RoomDetailFragment @Inject constructor(
     private fun cleanUpAfterPermissionNotGranted() {
         // Reset all pending data
         roomDetailViewModel.pendingAction = null
-        roomDetailViewModel.pendingUri = null
         attachmentsHelper.pendingType = null
     }
 
@@ -1640,6 +1616,10 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(itemAction)
     }
 
+    override fun getPreviewUrlRetriever(): PreviewUrlRetriever {
+        return roomDetailViewModel.previewUrlRetriever
+    }
+
     override fun onRoomCreateLinkClicked(url: String) {
         permalinkHandler
                 .launch(requireContext(), url, object : NavigationInterceptor {
@@ -1662,17 +1642,20 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.EnterTrackingUnreadMessagesState)
     }
 
+    override fun onPreviewUrlClicked(url: String) {
+        onUrlClicked(url, url)
+    }
+
+    override fun onPreviewUrlCloseClicked(eventId: String, url: String) {
+        roomDetailViewModel.handle(RoomDetailAction.DoNotShowPreviewUrlFor(eventId, url))
+    }
+
     private fun onShareActionClicked(action: EventSharedAction.Share) {
         if (action.messageContent is MessageTextContent) {
             shareText(requireContext(), action.messageContent.body)
         } else if (action.messageContent is MessageWithAttachmentContent) {
             session.fileService().downloadFile(
-                    downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                    id = action.eventId,
-                    fileName = action.messageContent.body,
-                    mimeType = action.messageContent.mimeType,
-                    url = action.messageContent.getFileUrl(),
-                    elementToDecrypt = action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                    messageContent = action.messageContent,
                     callback = object : MatrixCallback<File> {
                         override fun onSuccess(data: File) {
                             if (isAdded) {
@@ -1702,12 +1685,7 @@ class RoomDetailFragment @Inject constructor(
             return
         }
         session.fileService().downloadFile(
-                downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                id = action.eventId,
-                fileName = action.messageContent.body,
-                mimeType = action.messageContent.mimeType,
-                url = action.messageContent.getFileUrl(),
-                elementToDecrypt = action.messageContent.encryptedFileInfo?.toElementToDecrypt(),
+                messageContent = action.messageContent,
                 callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {
                         if (isAdded) {
@@ -1969,24 +1947,18 @@ class RoomDetailFragment @Inject constructor(
 // AttachmentsHelper.Callback
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        if (roomDetailViewModel.preventAttachmentPreview) {
-            roomDetailViewModel.preventAttachmentPreview = false
-            roomDetailViewModel.handle(RoomDetailAction.SendMedia(attachments, false))
-        } else {
-            val grouped = attachments.toGroupedContentAttachmentData()
-            if (grouped.notPreviewables.isNotEmpty()) {
-                // Send the not previewable attachments right now (?)
-                roomDetailViewModel.handle(RoomDetailAction.SendMedia(grouped.notPreviewables, false))
-            }
-            if (grouped.previewables.isNotEmpty()) {
-                val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
-                contentAttachmentActivityResultLauncher.launch(intent)
-            }
+        val grouped = attachments.toGroupedContentAttachmentData()
+        if (grouped.notPreviewables.isNotEmpty()) {
+            // Send the not previewable attachments right now (?)
+            roomDetailViewModel.handle(RoomDetailAction.SendMedia(grouped.notPreviewables, false))
+        }
+        if (grouped.previewables.isNotEmpty()) {
+            val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
+            contentAttachmentActivityResultLauncher.launch(intent)
         }
     }
 
     override fun onAttachmentsProcessFailed() {
-        roomDetailViewModel.preventAttachmentPreview = false
         Toast.makeText(requireContext(), R.string.error_attachment, Toast.LENGTH_SHORT).show()
     }
 

@@ -87,7 +87,6 @@
             android:id="@+id/messageContentTextStub"
             style="@style/TimelineContentStubBaseParams"
             android:layout_height="wrap_content"
-            android:inflatedId="@id/messageTextView"
             android:layout="@layout/item_timeline_event_text_message_stub"
             tools:visibility="visible" />
 

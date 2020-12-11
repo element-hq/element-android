@@ -264,7 +264,7 @@ class KeysBackupTest : InstrumentedTest {
         assertNotNull(decryption)
         // - Check decryptKeyBackupData() returns stg
         val sessionData = keysBackup
-                .decryptKeyBackupData(keyBackupData!!,
+                .decryptKeyBackupData(keyBackupData,
                         session.olmInboundGroupSession!!.sessionIdentifier(),
                         cryptoTestData.roomId,
                         decryption!!)

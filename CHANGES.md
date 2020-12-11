@@ -4,6 +4,8 @@ Changes in Element 1.0.12 (2020-XX-XX)
 Features ✨:
  - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
  - Room setting: update join rules and guest access (#2442)
+ - Url preview (#481)
+ - Store encrypted file in cache and cleanup decrypted file at each app start (#2512)
  - Emoji Keyboard (#2520)
 
 Improvements 🙌:
@@ -16,22 +18,28 @@ Bugfix 🐛:
  - Double bottomsheet effect after verify with passphrase
  - EditText cursor jumps to the start while typing fast (#2469)
  - No known servers error is given when joining rooms on new Gitter bridge (#2516)
+ - Show preview when sending attachment from the keyboard (#2440)
+ - Do not compress GIFs (#1616, #1254)
 
 Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - StateService now exposes suspendable function instead of using MatrixCallback.
+ - RawCacheStrategy has been moved and renamed to CacheStrategy
+ - FileService: remove useless FileService.DownloadMode
 
 Build 🧱:
  - Upgrade some dependencies and Kotlin version
  - Use fragment-ktx and preference-ktx dependencies (fix lint issue KtxExtensionAvailable)
+ - Upgrade Realm dependency to 10.1.2
 
 Test:
  -
 
 Other changes:
  - Remove "Status.im" theme #2424
+ - Log HTTP requests and responses in production (level BASIC, i.e. without any private data)
 
 Changes in Element 1.0.11 (2020-11-27)
 ===================================================

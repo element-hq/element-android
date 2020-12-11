@@ -21,6 +21,7 @@ import android.os.Parcelable
 import androidx.exifinterface.media.ExifInterface
 import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
+import org.matrix.android.sdk.api.util.MimeTypes.normalizeMimeType
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -45,5 +46,5 @@ data class ContentAttachmentData(
         VIDEO
     }
 
-    fun getSafeMimeType() = if (mimeType == "image/jpg") "image/jpeg" else mimeType
+    fun getSafeMimeType() = mimeType?.normalizeMimeType()
 }
