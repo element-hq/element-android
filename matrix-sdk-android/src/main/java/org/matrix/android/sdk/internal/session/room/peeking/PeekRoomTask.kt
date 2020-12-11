@@ -115,10 +115,7 @@ internal class DefaultPeekRoomTask @Inject constructor(
 
             val alias = stateEvents
                     .lastOrNull { it.type == EventType.STATE_ROOM_CANONICAL_ALIAS }
-                    ?.let {
-                        it.content?.toModel<RoomCanonicalAliasContent>()?.canonicalAlias
-                                ?: it.content?.toModel<RoomCanonicalAliasContent>()?.alternativeAliases?.firstOrNull()
-                    }
+                    ?.let { it.content?.toModel<RoomCanonicalAliasContent>()?.canonicalAlias }
 
             // not sure if it's the right way to do that :/
             val memberCount = stateEvents
