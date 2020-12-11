@@ -166,7 +166,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
-import kotlinx.android.synthetic.main.merge_composer_layout.view.*
+import kotlinx.android.synthetic.main.composer_layout.view.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
@@ -1101,18 +1101,6 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val writingFileActivityResultLauncher = registerForPermissionsResult { allGranted ->
-        if (allGranted) {
-            val pendingUri = roomDetailViewModel.pendingUri
-            if (pendingUri != null) {
-                roomDetailViewModel.pendingUri = null
-                sendUri(pendingUri)
-            }
-        } else {
-            cleanUpAfterPermissionNotGranted()
-        }
-    }
-
     private fun setupComposer() {
         val composerEditText = composerLayout.composerEditText
         autoCompleter.setup(composerEditText)
@@ -1158,14 +1146,7 @@ class RoomDetailFragment @Inject constructor(
             }
 
             override fun onRichContentSelected(contentUri: Uri): Boolean {
-                // We need WRITE_EXTERNAL permission
-                return if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, requireActivity(), writingFileActivityResultLauncher)) {
-                    sendUri(contentUri)
-                } else {
-                    roomDetailViewModel.pendingUri = contentUri
-                    // Always intercept when we request some permission
-                    true
-                }
+                return sendUri(contentUri)
             }
         }
     }
@@ -1196,11 +1177,9 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun sendUri(uri: Uri): Boolean {
-        roomDetailViewModel.preventAttachmentPreview = true
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
         val isHandled = attachmentsHelper.handleShareIntent(requireContext(), shareIntent)
         if (!isHandled) {
-            roomDetailViewModel.preventAttachmentPreview = false
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
         }
         return isHandled
@@ -1562,7 +1541,6 @@ class RoomDetailFragment @Inject constructor(
     private fun cleanUpAfterPermissionNotGranted() {
         // Reset all pending data
         roomDetailViewModel.pendingAction = null
-        roomDetailViewModel.pendingUri = null
         attachmentsHelper.pendingType = null
     }
 
@@ -1969,24 +1947,18 @@ class RoomDetailFragment @Inject constructor(
 // AttachmentsHelper.Callback
 
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
-        if (roomDetailViewModel.preventAttachmentPreview) {
-            roomDetailViewModel.preventAttachmentPreview = false
-            roomDetailViewModel.handle(RoomDetailAction.SendMedia(attachments, false))
-        } else {
-            val grouped = attachments.toGroupedContentAttachmentData()
-            if (grouped.notPreviewables.isNotEmpty()) {
-                // Send the not previewable attachments right now (?)
-                roomDetailViewModel.handle(RoomDetailAction.SendMedia(grouped.notPreviewables, false))
-            }
-            if (grouped.previewables.isNotEmpty()) {
-                val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
-                contentAttachmentActivityResultLauncher.launch(intent)
-            }
+        val grouped = attachments.toGroupedContentAttachmentData()
+        if (grouped.notPreviewables.isNotEmpty()) {
+            // Send the not previewable attachments right now (?)
+            roomDetailViewModel.handle(RoomDetailAction.SendMedia(grouped.notPreviewables, false))
+        }
+        if (grouped.previewables.isNotEmpty()) {
+            val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(grouped.previewables))
+            contentAttachmentActivityResultLauncher.launch(intent)
         }
     }
 
     override fun onAttachmentsProcessFailed() {
-        roomDetailViewModel.preventAttachmentPreview = false
         Toast.makeText(requireContext(), R.string.error_attachment, Toast.LENGTH_SHORT).show()
     }
 

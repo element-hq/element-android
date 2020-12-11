@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
 import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasTask
@@ -164,7 +165,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
 
     override fun updateAvatar(avatarUri: Uri, fileName: String, callback: MatrixCallback<Unit>): Cancelable {
         return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            val response = fileUploader.uploadFromUri(avatarUri, fileName, "image/jpeg")
+            val response = fileUploader.uploadFromUri(avatarUri, fileName, MimeTypes.Jpeg)
             awaitCallback<Unit> {
                 sendStateEvent(
                         eventType = EventType.STATE_ROOM_AVATAR,
