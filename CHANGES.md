@@ -15,6 +15,8 @@ Bugfix 🐛:
  - Fix cancellation of sending event (#2438)
  - Double bottomsheet effect after verify with passphrase
  - EditText cursor jumps to the start while typing fast (#2469)
+ - Show preview when sending attachment from the keyboard (#2440)
+ - Do not compress GIFs (#1616, #1254)
 
 Translations 🗣:
  -
