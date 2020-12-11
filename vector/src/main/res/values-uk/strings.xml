@@ -136,7 +136,7 @@
     <string name="auth_new_password_placeholder">Новий пароль</string>
     <string name="auth_user_name_placeholder">Логін</string>
     <string name="auth_email_placeholder">Email адреса</string>
-    <string name="auth_opt_email_placeholder">Email адреса (oдодаткова)</string>
+    <string name="auth_opt_email_placeholder">Email адреса (додаткова)</string>
     <string name="auth_phone_number_placeholder">Номер телефону</string>
     <string name="auth_opt_phone_number_placeholder">Номер телефону (додатковий)</string>
     <string name="auth_repeat_password_placeholder">Повторіть пароль</string>
@@ -661,7 +661,7 @@
     <string name="room_settings_all_messages">Всі повідомлення</string>
     <string name="room_settings_mention_only">Тільки упоминания</string>
     <string name="room_settings_mute">Без звука</string>
-    <string name="room_settings_add_homescreen_shortcut">Добавити ярлик на головний екран</string>
+    <string name="room_settings_add_homescreen_shortcut">Додати ярлик на головний екран</string>
     <string name="settings_notification_privacy">Конфіденційність сповіщень</string>
     <string name="settings_notification_privacy_normal">Нормальний</string>
     <string name="title_activity_choose_sticker">Відправити наліпку</string>
@@ -1026,7 +1026,7 @@
     <string name="room_list_sharing_header_other_rooms">Інші кімнати</string>
     <string name="create_room_title">Нова кімната</string>
     <string name="create_new_room">Створити нову кімнату</string>
-    <string name="send_suggestion">Залишити відгук</string>
+    <string name="send_suggestion">Внести пропозицію</string>
     <string name="settings_developer_mode">Режим розробника</string>
     <string name="settings_advanced_settings">Додаткові налаштування</string>
     <string name="settings_notification_advanced">Розширені налаштування сповіщень</string>
@@ -1049,4 +1049,24 @@
     <string name="power_level_title">Роль</string>
     <string name="power_level_edit_title">Призначити роль</string>
     <string name="identity_server_set_alternative_submit">Надіслати</string>
+    <string name="settings_phone_numbers">Номери телефонів</string>
+    <string name="settings_emails">Email адреси</string>
+    <string name="room_participants_action_cancel_invite">Скасувати запрошення</string>
+    <string name="invite_friends_rich_title">🔐️ Приєднуйтесь до мене в Element</string>
+    <string name="invite_friends_text">Привіт, поспілкуйся зі мною в Element: %s</string>
+    <string name="invite_friends">Запросити друзів</string>
+    <string name="group_all_communities">Всі спільноти</string>
+    <string name="settings_show_redacted_summary">Показувати заглушку на місці видалених повідомлень</string>
+    <string name="settings_general_title">Основні</string>
+    <string name="send_suggestion_failed">Не вдалось надіслати пропозицію (%s)</string>
+    <string name="send_suggestion_sent">Дякуємо, вашу пропозицію було успішно надіслано</string>
+    <string name="send_suggestion_report_placeholder">Опишіть вашу пропозицію тут</string>
+    <string name="send_suggestion_content">Будь ласка, залиште вашу пропозицію нижче.</string>
+    <string name="settings_show_redacted">Показувати видалені повідомлення</string>
+    <string name="settings_send_message_with_enter_summary">Натискання Enter на програмній клавіатурі буде відправляти повідомлення замість додавання переносу рядку</string>
+    <string name="settings_send_message_with_enter">Відправляти повідомлення натисканням Enter</string>
+    <string name="room_profile_section_more_settings">Налаштування кімнати</string>
+    <string name="room_profile_section_security_learn_more">Дізнатись більше</string>
+    <string name="uploads_files_no_result">В цій кімнаті немає файлів</string>
+    <string name="uploads_files_subtitle">%1$s о %2$s</string>
 </resources>
