@@ -27,7 +27,6 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.utils.isLocalFile
 import kotlinx.android.parcel.Parcelize
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import timber.log.Timber
 import java.io.File
@@ -76,8 +75,6 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
 
                 activeSessionHolder.getActiveSession().fileService()
                         .downloadFile(
-                                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
-                                id = data.eventId,
                                 fileName = data.filename,
                                 mimeType = data.mimeType,
                                 url = data.url,
@@ -116,8 +113,6 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
 
                 activeSessionHolder.getActiveSession().fileService()
                         .downloadFile(
-                                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
-                                id = data.eventId,
                                 fileName = data.filename,
                                 mimeType = data.mimeType,
                                 url = data.url,

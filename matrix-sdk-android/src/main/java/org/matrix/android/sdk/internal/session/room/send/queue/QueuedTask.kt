@@ -16,14 +16,26 @@
 
 package org.matrix.android.sdk.internal.session.room.send.queue
 
-abstract class QueuedTask {
+import org.matrix.android.sdk.api.util.Cancelable
+
+abstract class QueuedTask : Cancelable {
     var retryCount = 0
 
-    abstract suspend fun execute()
+    private var hasBeenCancelled: Boolean = false
+
+    suspend fun execute() {
+        if (!isCancelled()) {
+            doExecute()
+        }
+    }
+
+    abstract suspend fun doExecute()
 
     abstract fun onTaskFailed()
 
-    abstract fun isCancelled() : Boolean
+    open fun isCancelled() = hasBeenCancelled
 
-    abstract fun cancel()
+    final override fun cancel() {
+        hasBeenCancelled = true
+    }
 }

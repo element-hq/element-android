@@ -48,6 +48,7 @@ import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
@@ -76,7 +77,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
 
-    interface Callback : BaseCallback, ReactionPillCallback, AvatarCallback, UrlClickCallback, ReadReceiptsCallback {
+    interface Callback :
+            BaseCallback,
+            ReactionPillCallback,
+            AvatarCallback,
+            UrlClickCallback,
+            ReadReceiptsCallback,
+            PreviewUrlCallback {
         fun onLoadMore(direction: Timeline.Direction)
         fun onEventInvisible(event: TimelineEvent)
         fun onEventVisible(event: TimelineEvent)
@@ -91,6 +98,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
         // TODO move all callbacks to this?
         fun onTimelineItemAction(itemAction: RoomDetailAction)
+
+        fun getPreviewUrlRetriever(): PreviewUrlRetriever
     }
 
     interface ReactionPillCallback {
@@ -116,6 +125,11 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     interface UrlClickCallback {
         fun onUrlClicked(url: String, title: String): Boolean
         fun onUrlLongClicked(url: String): Boolean
+    }
+
+    interface PreviewUrlCallback {
+        fun onPreviewUrlClicked(url: String)
+        fun onPreviewUrlCloseClicked(eventId: String, url: String)
     }
 
     // Map eventId to adapter position

@@ -784,6 +784,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
+     * Tells if the user wants to see URL previews in the timeline
+     *
+     * @return true if the user wants to see URL previews in the timeline
+     */
+    fun showUrlPreviews(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_URL_PREVIEW_KEY, true)
+    }
+
+    /**
      * Enable or disable the analytics tracking.
      *
      * @param useAnalytics true to enable the analytics tracking

@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.util.MimeTypes
 import java.io.File
 
 class DataAttachmentRoomProvider(
@@ -38,7 +39,7 @@ class DataAttachmentRoomProvider(
         return getItem(position).let {
             when (it) {
                 is ImageContentRenderer.Data -> {
-                    if (it.mimeType == "image/gif") {
+                    if (it.mimeType == MimeTypes.Gif) {
                         AttachmentInfo.AnimatedImage(
                                 uid = it.eventId,
                                 url = it.url ?: "",
@@ -77,11 +78,9 @@ class DataAttachmentRoomProvider(
     override fun getFileForSharing(position: Int, callback: (File?) -> Unit) {
         val item = getItem(position)
         fileService.downloadFile(
-                downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                id = item.eventId,
                 fileName = item.filename,
                 mimeType = item.mimeType,
-                url = item.url ?: "",
+                url = item.url,
                 elementToDecrypt = item.elementToDecrypt,
                 callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {

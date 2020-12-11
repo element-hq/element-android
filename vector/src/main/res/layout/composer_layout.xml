@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:constraintSet="@layout/constraint_set_composer_layout_compact"
+    tools:constraintSet="@layout/composer_layout_constraint_set_compact"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <!-- ========================
@@ -12,7 +12,7 @@
         /!\ These 3 files must be modified to stay coherent!
     ======================== -->
     <View
-        android:id="@+id/related_message_backround"
+        android:id="@+id/related_message_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?riotx_bottom_nav_background_color"
@@ -39,13 +39,6 @@
         tools:ignore="MissingConstraints"
         tools:src="@tools:sample/avatars" />
 
-    <ImageView
-        android:id="@+id/composer_shield"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        tools:ignore="MissingConstraints"
-        tools:src="@drawable/ic_shield_black" />
-
     <TextView
         android:id="@+id/composer_related_message_sender"
         android:layout_width="0dp"
@@ -70,8 +63,8 @@
         android:id="@+id/composer_related_message_action_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:ignore="MissingConstraints,MissingPrefix"
-        app:tint="?riotx_text_primary" />
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingConstraints,MissingPrefix" />
 
     <ImageButton
         android:id="@+id/composer_related_message_close"
@@ -81,24 +74,6 @@
         android:contentDescription="@string/cancel"
         android:src="@drawable/ic_close_round"
         android:tint="@color/riotx_notice"
-        tools:ignore="MissingConstraints" />
-
-
-    <ImageView
-        android:id="@+id/composer_avatar_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        tools:ignore="MissingConstraints"
-        tools:src="@tools:sample/avatars" />
-
-    <ImageButton
-        android:id="@+id/attachmentButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/option_send_files"
-        android:src="@drawable/ic_attachment"
-        android:tint="?attr/colorAccent"
         tools:ignore="MissingConstraints" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -112,14 +87,20 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/sendButton"
+        android:id="@+id/attachmentButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/send"
-        android:src="@drawable/ic_send"
-        android:tint="?attr/colorAccent"
+        android:contentDescription="@string/option_send_files"
+        android:src="@drawable/ic_attachment"
         tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/composer_shield"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:ignore="MissingConstraints"
+        tools:src="@drawable/ic_shield_black" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
@@ -129,6 +110,23 @@
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
         tools:hint="@string/room_message_placeholder_not_encrypted"
+        tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/composer_emoji"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_insert_emoji"
+        tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/sendButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_send"
+        android:contentDescription="@string/send"
+        android:src="@drawable/ic_send"
         tools:ignore="MissingConstraints" />
 
 </merge>

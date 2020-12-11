@@ -30,10 +30,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
@@ -134,12 +131,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
             try {
                 val file = awaitCallback<File> {
                     session.fileService().downloadFile(
-                            downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                            id = action.uploadEvent.eventId,
-                            fileName = action.uploadEvent.contentWithAttachmentContent.body,
-                            url = action.uploadEvent.contentWithAttachmentContent.getFileUrl(),
-                            mimeType = action.uploadEvent.contentWithAttachmentContent.mimeType,
-                            elementToDecrypt = action.uploadEvent.contentWithAttachmentContent.encryptedFileInfo?.toElementToDecrypt(),
+                            messageContent = action.uploadEvent.contentWithAttachmentContent,
                             callback = it
                     )
                 }
@@ -155,12 +147,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
             try {
                 val file = awaitCallback<File> {
                     session.fileService().downloadFile(
-                            downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                            id = action.uploadEvent.eventId,
-                            fileName = action.uploadEvent.contentWithAttachmentContent.body,
-                            mimeType = action.uploadEvent.contentWithAttachmentContent.mimeType,
-                            url = action.uploadEvent.contentWithAttachmentContent.getFileUrl(),
-                            elementToDecrypt = action.uploadEvent.contentWithAttachmentContent.encryptedFileInfo?.toElementToDecrypt(),
+                            messageContent = action.uploadEvent.contentWithAttachmentContent,
                             callback = it)
                 }
                 _viewEvents.post(RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body))

@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.send.queue
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.auth.data.SessionParams
@@ -106,16 +107,20 @@ internal class EventSenderProcessor @Inject constructor(
         // non blocking add to queue
         sendingQueue.add(task)
         markAsManaged(task)
-        return object : Cancelable {
-            override fun cancel() {
-                task.cancel()
-            }
-        }
+        return task
+    }
+
+    fun cancel(eventId: String, roomId: String) {
+        (currentTask as? SendEventQueuedTask)
+                ?.takeIf { it -> it.event.eventId == eventId && it.event.roomId == roomId }
+                ?.cancel()
     }
 
     companion object {
         private const val RETRY_WAIT_TIME_MS = 10_000L
     }
+
+    private var currentTask: QueuedTask? = null
 
     private var sendingQueue = LinkedBlockingQueue<QueuedTask>()
 
@@ -129,6 +134,7 @@ internal class EventSenderProcessor @Inject constructor(
             while (!isInterrupted) {
                 Timber.v("## SendThread wait for task to process")
                 val task = sendingQueue.take()
+                        .also { currentTask = it }
                 Timber.v("## SendThread Found task to process $task")
 
                 if (task.isCancelled()) {
@@ -182,6 +188,10 @@ internal class EventSenderProcessor @Inject constructor(
                                     // we can exit the loop
                                     task.onTaskFailed()
                                     throw InterruptedException()
+                                }
+                                exception is CancellationException                                                         -> {
+                                    Timber.v("## SendThread task has been cancelled")
+                                    break@retryLoop
                                 }
                                 else                                                                                       -> {
                                     Timber.v("## SendThread retryLoop Un-Retryable error, try next task")
