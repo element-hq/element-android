@@ -20,8 +20,9 @@ restore_upstream() {
     fi
 }
 
-revert_last 'Resolve required manual intervention in german strings'
-revert_last 'Automatic SchildiChat string correction'
+# Revert Schildi's upstream string changes
+git checkout `upstream_previous_tag` -- `find "$mydir/vector/src/main/res" -name strings.xml`
+git commit -m "Automatic revert to unchanged upstream strings, pt.1"
 
 # Keep in sync with post_merge.sh!
 restore_upstream .github
