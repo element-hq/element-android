@@ -1705,7 +1705,7 @@
     <string name="command_description_rainbow_emote">Sendet das angegebene Emote in Regenbogenfarben</string>
     <string name="settings_category_timeline">Zeitleiste</string>
     <string name="settings_category_composer">Nachrichteneditor</string>
-    <string name="room_settings_enable_encryption">Aktivieren Ende-zu-Ende-Verschlüsselung</string>
+    <string name="room_settings_enable_encryption">Ende-zu-Ende-Verschlüsselung aktivieren</string>
     <string name="room_settings_enable_encryption_warning">Einmal aktiviert kann die Verschlüsselung nicht rückgängig gemacht werden.</string>
     <string name="room_settings_enable_encryption_dialog_title">Verschlüsselung aktivieren\?</string>
     <string name="room_settings_enable_encryption_dialog_content">Nach der Aktivierung kann die Verschlüsselung für einen Raum nicht deaktiviert werden. In einem verschlüsselten Raum gesendete Nachrichten können vom Server nicht gesehen werden, nur von den Teilnehmenden des Raums. Durch die Verschlüsselung funktionieren viele Bots und Bridges möglicherweise nicht ordnungsgemäß.</string>
