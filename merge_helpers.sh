@@ -25,7 +25,8 @@ upstream_latest_tag() {
     git describe --abbrev=0 upstream/master --tags
 }
 upstream_previous_tag() {
-    git describe --abbrev=0 `upstream_latest_tag`~1 --tags
+    #git describe --abbrev=0 `upstream_latest_tag`~1 --tags
+    downstream_latest_tag | sed 's|sc_\(v.*\).sc.*|\1|'
 }
 downstream_latest_tag() {
     local commit="HEAD"
