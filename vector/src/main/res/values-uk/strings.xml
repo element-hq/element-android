@@ -530,7 +530,7 @@
     <!-- Directory -->
     <string name="directory_title">Каталог</string>
     <!-- matrix error -->
-    <string name="failed_to_load_timeline_position">%s намагався завантажити певну точку на шкалі часу цієї кімнати, але не зміг її знайти.</string>
+    <string name="failed_to_load_timeline_position">%s намагався завантажити певну точку зі стрічки подій цієї кімнати, але не зміг її знайти.</string>
     <!-- encryption dialog -->
     <string name="encryption_information_title">Дані про наскрізне шифрування</string>
     <string name="encryption_information_device_info">Інформація про подію</string>
@@ -934,7 +934,7 @@
     <string name="notification_sync_init">Запуск сервісу</string>
     <string name="title_activity_keys_backup_setup">Резервна копія ключа</string>
     <string name="title_activity_keys_backup_restore">Використати резервну копію ключа</string>
-    <string name="room_list_people_empty_body">Тут буде список Ваших прямих чатів</string>
+    <string name="room_list_people_empty_body">Тут з\'явиться список ваших прямих чатів</string>
     <string name="event_redacted">Повідомлення видалено</string>
     <string name="fab_menu_create_chat">Прямі чати</string>
     <string name="bottom_action_people_x">Прямі чати</string>
@@ -1079,4 +1079,53 @@
     <string name="settings_emails_and_phone_numbers_summary">Керування електронними адресами та номерами телефонів, пов’язаними з вашим обліковим записом Matrix</string>
     <string name="settings_emails_and_phone_numbers_title">Електорнні адреси та номери телефонів</string>
     <string name="send_bug_report_include_key_share_history">Надіслати історію запитів спільного доступу до ключових даних</string>
+    <string name="settings_category_timeline">Стрічка подій</string>
+    <string name="timeline_unread_messages">Не прчитані повідомлення</string>
+    <string name="labs_swipe_to_reply_in_timeline">Провести пальцем, щоб відповісти у стрічці подій</string>
+    <string name="settings_labs_show_hidden_events_in_timeline">Показувати приховані події у стрічці подій</string>
+    <string name="settings_troubleshoot_title">Усунення несправностей</string>
+    <string name="settings_troubleshoot_test_play_services_success">APK служб Google Play доступні та оновлені.</string>
+    <string name="settings_troubleshoot_test_play_services_title">Перевірка служб Play</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Перевірка налаштувань</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Не вдалося завантажити власні правила, повторіть спробу.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Деякі сповіщення вимкнено у ваших власних налаштуваннях.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Зверніть увагу, що для деяких типів повідомлень встановлено беззвучність (беззвучні сповіщення).</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">Власні налаштування.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">Увімкнути</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Сповіщення не ввімкнено для цього сеансу.
+\nПеревірте налаштування Element.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Сповіщення ввімкнено для цього сеансу.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Налаштування сеансу.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">Увімкнути</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Сповіщення для вашого облікового запису вимкнено.
+\nПеревірте налаштування облікового запису.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Сповіщення ввімкнено для вашого облікового запису.</string>
+    <string name="settings_troubleshoot_test_account_settings_title">Налаштування облікового запису.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Сповіщення ввімкнено в налаштуваннях системи.</string>
+    <string name="settings_troubleshoot_test_system_settings_title">Налаштування системи.</string>
+    <string name="settings_troubleshoot_diagnostic">Виявлення несправностей</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Перевірка… (%1$d з %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Перевірити</string>
+    <string name="settings_notification_troubleshoot">Сповіщення усунення несправностей</string>
+    <string name="login_splash_text2">Захистити приватність діалогів шифруванням</string>
+    <string name="room_filtering_filter_hint">Фільтрувати діалоги…</string>
+    <string name="room_list_people_empty_title">Діалоги</string>
+    <string name="room_list_catchup_empty_body">У вас більше немає непрочитаних повідомлень</string>
+    <string name="room_list_catchup_empty_title">Все прочитано!</string>
+    <string name="settings_notification_advanced_summary">Встановти важливість сповіщень за подіями</string>
+    <string name="hide_advanced">Сховати розширені</string>
+    <string name="show_advanced">Показати розширені</string>
+    <string name="login_server_other_text">Власні та розширені налаштування</string>
+    <string name="keys_backup_setup_step1_advanced">(Розширені)</string>
+    <string name="preference_root_help_about">Довідка та опис</string>
+    <string name="settings_preferences">Налаштування</string>
+    <string name="settings_system_preferences_summary">Виберіть колір світлодіода, вібрацію, звук…</string>
+    <string name="settings_silent_notifications_preferences">Налаштування приглушених сповіщень</string>
+    <string name="settings_call_notifications_preferences">Налаштування сповіщень викликів</string>
+    <string name="settings_noisy_notifications_preferences">Налаштування гучних сповіщень</string>
+    <string name="notification_initial_sync">Початкова синхронізація…</string>
+    <string name="settings_discovery_emails_title">Видимі електронні адреси</string>
+    <string name="autodiscover_invalid_response">Недійсна відповідь виявлення домашнього сервера</string>
+    <string name="settings_discovery_manage">Налаштуйте свою видимість.</string>
+    <string name="settings_discovery_category">Видимість</string>
 </resources>
