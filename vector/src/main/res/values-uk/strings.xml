@@ -1078,7 +1078,7 @@
     <string name="settings_discovery_consent_title">Надіслати електронні адреси та номери телефонів</string>
     <string name="settings_emails_and_phone_numbers_summary">Керування електронними адресами та номерами телефонів, пов’язаними з вашим обліковим записом Matrix</string>
     <string name="settings_emails_and_phone_numbers_title">Електорнні адреси та номери телефонів</string>
-    <string name="send_bug_report_include_key_share_history">Надіслати історію запитів спільного доступу до ключових даних</string>
+    <string name="send_bug_report_include_key_share_history">Надіслати історію запитів спільного доступу до ключів</string>
     <string name="settings_category_timeline">Стрічка подій</string>
     <string name="timeline_unread_messages">Не прчитані повідомлення</string>
     <string name="labs_swipe_to_reply_in_timeline">Провести пальцем, щоб відповісти у стрічці подій</string>
