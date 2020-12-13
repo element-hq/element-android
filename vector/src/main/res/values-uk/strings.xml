@@ -80,11 +80,11 @@
     <string name="invitations_header">Запрошення</string>
     <string name="low_priority_header">Низький пріоритет</string>
     <!-- People fragment -->
-    <string name="direct_chats_header">Діалоги</string>
+    <string name="direct_chats_header">Бесіди</string>
     <string name="local_address_book_header">Локальні контакти</string>
     <string name="user_directory_header">Каталог користувачів</string>
     <string name="matrix_only_filter">Лише Matrix-контакти</string>
-    <string name="no_conversation_placeholder">Немає діалогів</string>
+    <string name="no_conversation_placeholder">Немає бесід</string>
     <string name="no_contact_access_placeholder">Ви не надали Element доступу до контактів</string>
     <string name="no_result_placeholder">Немає результатів</string>
     <!-- Rooms fragment -->
@@ -1107,9 +1107,9 @@
     <string name="settings_troubleshoot_diagnostic_running_status">Перевірка… (%1$d з %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Перевірити</string>
     <string name="settings_notification_troubleshoot">Сповіщення усунення несправностей</string>
-    <string name="login_splash_text2">Захистити приватність діалогів шифруванням</string>
-    <string name="room_filtering_filter_hint">Фільтрувати діалоги…</string>
-    <string name="room_list_people_empty_title">Діалоги</string>
+    <string name="login_splash_text2">Захистити приватність бесід шифруванням</string>
+    <string name="room_filtering_filter_hint">Фільтрувати бесіди…</string>
+    <string name="room_list_people_empty_title">Бесіди</string>
     <string name="room_list_catchup_empty_body">У вас більше немає непрочитаних повідомлень</string>
     <string name="room_list_catchup_empty_title">Все прочитано!</string>
     <string name="settings_notification_advanced_summary">Встановти важливість сповіщень за подіями</string>
