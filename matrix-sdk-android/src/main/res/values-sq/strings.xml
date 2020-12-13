@@ -226,4 +226,10 @@
     <string name="notice_room_server_acl_updated_title">%s ndryshoi ACL-ra shërbyesi për këtë dhomë.</string>
     <string name="notice_room_server_acl_set_title_by_you">Ujdisët ACL-ra shërbyesi për këtë dhomë.</string>
     <string name="notice_room_server_acl_set_title">%s ujdisi ACL-ra shërbyesi për këtë dhomë.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Shërbyes që kanë përputhje me %s u hoqën nga lista e të lejuarve.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Shërbyesit që kanë përputhje me %s tani janë të lejuar.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Shërbyesit që kanë përputhje me %s u hoqën nga lista e ndalimeve.</string>
+    <string name="notice_room_server_acl_updated_banned">• Shërbyesit që kanë përputhje me %s tani janë të ndaluar.</string>
+    <string name="notice_room_server_acl_set_allowed">• Shërbyesit që kanë përputhje me %s janë të ndaluar.</string>
+    <string name="notice_room_server_acl_set_banned">• Shërbyesit që kanë përputhje me %s janë të ndaluar.</string>
 </resources>
