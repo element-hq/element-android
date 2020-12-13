@@ -56,7 +56,7 @@
     <string name="action_voice_call">Голосовий виклик</string>
     <string name="action_video_call">Відеовиклик</string>
     <string name="action_global_search">Глообальний пошук</string>
-    <string name="action_mark_all_as_read">Позначити все як прочитане</string>
+    <string name="action_mark_all_as_read">Позначити все прочитаним</string>
     <string name="action_historical">Історичний</string>
     <string name="action_quick_reply">Швидка відповідь</string>
     <string name="action_open">Відкрити</string>
@@ -1026,7 +1026,7 @@
     <string name="room_list_sharing_header_other_rooms">Інші кімнати</string>
     <string name="create_room_title">Нова кімната</string>
     <string name="create_new_room">Створити нову кімнату</string>
-    <string name="send_suggestion">Внести пропозицію</string>
+    <string name="send_suggestion">Запропонувати</string>
     <string name="settings_developer_mode">Режим розробника</string>
     <string name="settings_advanced_settings">Додаткові налаштування</string>
     <string name="settings_notification_advanced">Розширені налаштування сповіщень</string>
@@ -1061,7 +1061,7 @@
     <string name="send_suggestion_failed">Не вдалось надіслати пропозицію (%s)</string>
     <string name="send_suggestion_sent">Дякуємо, вашу пропозицію було успішно надіслано</string>
     <string name="send_suggestion_report_placeholder">Опишіть вашу пропозицію тут</string>
-    <string name="send_suggestion_content">Будь ласка, залиште вашу пропозицію нижче.</string>
+    <string name="send_suggestion_content">Залиште вашу пропозицію внизу.</string>
     <string name="settings_show_redacted">Показувати видалені повідомлення</string>
     <string name="settings_send_message_with_enter_summary">Натискання Enter на програмній клавіатурі буде відправляти повідомлення замість додавання переносу рядку</string>
     <string name="settings_send_message_with_enter">Відправляти повідомлення натисканням Enter</string>
@@ -1069,4 +1069,14 @@
     <string name="room_profile_section_security_learn_more">Дізнатись більше</string>
     <string name="uploads_files_no_result">В цій кімнаті немає файлів</string>
     <string name="uploads_files_subtitle">%1$s о %2$s</string>
+    <string name="settings_phone_number_empty">Жодного номера телефону не додано до вашого облікового запису</string>
+    <string name="settings_emails_empty">У ваш обліковий запис не додано жодної електронної адреси</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Для вашої приватності Element підтримує лише надсилання хешованих електронних адрес користувачів та номера телефону.</string>
+    <string name="settings_discovery_consent_notice_off">Ви не погодилися надіслати електронні адреси та телефонні номери на цей сервер ідентифікації для виявлення інших користувачів із ваших контактів.</string>
+    <string name="settings_discovery_consent_notice_on">Ви погодилися надіслати електронні адреси та телефонні номери на цей сервер ідентифікації для виявлення інших користувачів із ваших контактів.</string>
+    <string name="identity_server_consent_dialog_title">Надіслати електронні адреси та номери телефонів</string>
+    <string name="settings_discovery_consent_title">Надіслати електронні адреси та номери телефонів</string>
+    <string name="settings_emails_and_phone_numbers_summary">Керування електронними адресами та номерами телефонів, пов’язаними з вашим обліковим записом Matrix</string>
+    <string name="settings_emails_and_phone_numbers_title">Електорнні адреси та номери телефонів</string>
+    <string name="send_bug_report_include_key_share_history">Надіслати історію запитів спільного доступу до ключових даних</string>
 </resources>
