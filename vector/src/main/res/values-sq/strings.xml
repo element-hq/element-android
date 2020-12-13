@@ -1099,7 +1099,8 @@
     <string name="error_jitsi_not_supported_on_old_device">Na ndjeni, thirrjet konferencë me Jitsi-n nuk mbulohen në pajisje të vjetra (pajisje me Android OS nën 5.0)</string>
     <string name="title_activity_verify_device">Verifiko sesion</string>
     <string name="encryption_information_unknown_ip">ip e panjohur</string>
-    <string name="you_added_a_new_device_with_info">Një sesion i ri po kërkon emër keys.ession fshehtëzimi: %1$s
+    <string name="you_added_a_new_device_with_info">Një sesion i ri po kërkon emër kyçe fshehtëzimi.
+\nEmër sesioni: %1$s
 \nParë së fundi më: %2$s
 \nNëse s’keni bërë hyrje në një tjetër sesion, shpërfilleni këtë kërkesë.</string>
     <string name="your_unverified_device_requesting_with_info">Një sesion i paverifikuar po kërkon kyçe fshehtëzimi. 
@@ -1615,7 +1616,7 @@
     <string name="command_description_rainbow_emote">E dërgon emote-n e dhënë të ngjyrosur si ylber</string>
     <string name="settings_category_timeline">Rrjedhë kohore</string>
     <string name="settings_category_composer">Përpunues mesazhesh</string>
-    <string name="room_settings_enable_encryption">Aktivizoni fshehtëzim skaj-më-skaj</string>
+    <string name="room_settings_enable_encryption">Aktivizoni fshehtëzim skaj-më-skaj…</string>
     <string name="room_settings_enable_encryption_warning">Pasi të aktivizohet, fshehtëzimi s’mund të çaktivizohet më.</string>
     <string name="room_settings_enable_encryption_dialog_title">Të aktivizohet fshehtëzimi\?</string>
     <string name="room_settings_enable_encryption_dialog_content">Pasi të aktivizohet, fshehtëzimi për një dhomë nuk mund të çaktivizohet. Mesazhet e dërguar në një dhomë të fshehtëzuar s’mund të shihen nga shërbyesi, vetëm nga pjesëmarrësit te dhoma. Aktivizimi i fshehtëzimit mund të pengojë funksionimin si duhet të mjaft robotëve dhe urave.</string>
@@ -2234,4 +2235,5 @@
     <string name="user_directory_search_hint">Kërkoni sipas emri ose ID-je</string>
     <string name="permissions_denied_qr_code">Që të skanoni një kod QR, lypset të lejoni përdorim kamere.</string>
     <string name="start_chatting">Filloni të Llafoseni</string>
+    <string name="permissions_denied_add_contact">Jepni leje për hyrje te kontaktet tuaja.</string>
 </resources>
