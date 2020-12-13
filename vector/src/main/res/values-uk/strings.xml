@@ -9,7 +9,7 @@
     <string name="dark_theme">Темна Тема</string>
     <string name="black_them">OLED Тема</string>
     <!-- permanent notification subtitle -->
-    <string name="notification_sync_in_progress">Синхронізую</string>
+    <string name="notification_sync_in_progress">Синхронізація…</string>
     <string name="notification_listening_for_events">Слухати події</string>
     <!-- titles -->
     <string name="title_activity_home">Повідомлення</string>
@@ -127,7 +127,7 @@
     <!-- Authentication -->
     <string name="auth_login">Увійти</string>
     <string name="auth_register">Реєстрація</string>
-    <string name="auth_submit">Вогонь!</string>
+    <string name="auth_submit">Надіслати</string>
     <string name="auth_skip">Пропустити</string>
     <string name="auth_send_reset_email">Скинути</string>
     <string name="auth_return_to_login">Повернутися на екран входу</string>
@@ -212,7 +212,7 @@
     <string name="incoming_call">Вхідний виклик</string>
     <string name="incoming_video_call">Вхідний Відеовиклик</string>
     <string name="incoming_voice_call">Вхідний Голосовий Виклик</string>
-    <string name="call_in_progress">Виконується Виклик</string>
+    <string name="call_in_progress">Виконується виклик…</string>
     <string name="call_error_user_not_responding">Абонент не відповідає.</string>
     <string name="call_error_ice_failed">Медіавиклик не вдався</string>
     <string name="call_error_camera_init_failed">Неможливо ініціювати камеру</string>
@@ -228,10 +228,10 @@
     <string name="permissions_rationale_msg_record_audio">Для здійснення аудіодзвінків потрібен доступ до мікрофону.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nБудь ласка, надайте його у наступному виринаючому вікні, щоб мати змогу здійснити дзвінок.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Для здійснення відеодзвінків потрібен доступ до камери та мікрофону.\n\nБудь ласка, надайте його у наступних виринаючих вікнах, щоб мати змогу їх здійснити.</string>
-    <string name="permissions_rationale_msg_contacts">Element потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix за їх email та номерами телефонів.\n\nБудь ласка, надайте його у наступному виринаючому діалозі, щоб знати, які з контактів теж використовують Element.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix по email чи за номерами телефонів.
-
-Надати Element доступ до ваших контактів?</string>
+    <string name="permissions_rationale_msg_contacts">Element потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix за їх електронними адресами та номерами телефонів. Якщо ви згодні, надайте його у наступному діалоговому вікні, щоб знати, які з контактів теж використовують Element.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Element потребує доступу до ваших контактів, щоб знайти інших користувачів Matrix за електронною поштою чи номерами телефонів.
+\n
+\nНадати Element доступ до ваших контактів\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Вибачте.. Дію не виконано через нестачу дозволів</string>
     <!-- medias slider string -->
     <string name="media_slider_saved">Збережено</string>
@@ -329,9 +329,9 @@
     <string name="room_details_people_present_group_name">ПРИЄДНАЛИСЯ</string>
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Причина скарги на цей вміст</string>
-    <string name="room_event_action_report_prompt_ignore_user">Бажаєте сховати всі повідомлення цього користувача?
-
-Зауважте, що це перезавантажить додаток та може зайняти деякий час.</string>
+    <string name="room_event_action_report_prompt_ignore_user">Бажаєте сховати всі повідомлення цього користувача\?
+\n
+\nЗауважте, що це перезавантажить застосунок та може тривати деякий час.</string>
     <string name="room_event_action_cancel_upload">Скасувати відвантаження</string>
     <string name="room_event_action_cancel_download">Скасувати завантаження</string>
     <!-- Search -->
@@ -356,7 +356,7 @@
     <string name="room_recents_join_room_prompt">Введіть id кімнати чи аліас</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Огляд каталогу</string>
-    <string name="directory_searching_title">Пошук у каталозі..</string>
+    <string name="directory_searching_title">Пошук у каталозі…</string>
     <!-- home room settings -->
     <string name="room_settings_favourite">Обране</string>
     <string name="room_settings_de_prioritize">Не терміново</string>
@@ -433,7 +433,7 @@
     <string name="devices_delete_dialog_text">Операція потребує додаткової аутентифікації.\nДля продовження введіть ваш пароль.</string>
     <string name="devices_delete_dialog_title">Аутентифікація</string>
     <string name="devices_delete_pswd">Пароль:</string>
-    <string name="devices_delete_submit_button_label">Вогонь!</string>
+    <string name="devices_delete_submit_button_label">Надіслати</string>
     <string name="settings_logged_in">Залоговано як</string>
     <string name="settings_home_server">Cервер</string>
     <string name="settings_identity_server">Сервер Аутентифікації</string>
@@ -452,9 +452,9 @@
     <string name="settings_confirm_password">Підтвердіть пароль</string>
     <string name="settings_fail_to_update_password">Не вдалося оновити пароль</string>
     <string name="settings_password_updated">Пароль успішно оновлено</string>
-    <string name="settings_unignore_user">Показувати всі повідомлення %s?
-
-Зауважте, що це перезавантажить додаток та може зайняти деякий час.</string>
+    <string name="settings_unignore_user">Показувати всі повідомлення %s\?
+\n
+\nЗауважте, що це перезавантажить застосунок та може тривати деякий час.</string>
     <string name="settings_delete_notification_targets_confirmation">Ви справді бажаєте видалити цю ціль сповіщень?</string>
     <string name="settings_delete_threepid_confirmation">Справді бажаєте видалити %1$s %2$s?</string>
     <string name="settings_select_country">Оберіть країну</string>
@@ -553,9 +553,9 @@
     <string name="encryption_export_export">Експорт</string>
     <string name="passphrase_enter_passphrase">Введіть парольну фразу</string>
     <string name="passphrase_confirm_passphrase">Підтвердіть парольну фразу</string>
-    <string name="encryption_export_saved_as">E2E ключі кімнати збережено у \'%s\'
-
-Попередження: цей файл може бути видалений, якщо видалити додаток.</string>
+    <string name="encryption_export_saved_as">E2E ключі кімнати збережено до \'%s\'.
+\n
+\nПопередження: цей файл може бути видалено, якщо видалити застосунок.</string>
     <string name="encryption_import_e2e_room_keys">Імпортувати E2E ключі кімнати</string>
     <string name="encryption_import_room_keys">Імпортувати ключі кімнати</string>
     <string name="encryption_import_room_keys_summary">Імпортувати ключі з локального файлу</string>
@@ -643,7 +643,7 @@
     <string name="groups_invite_header">Запросити</string>
     <string name="groups_header">Спільноти</string>
     <string name="no_group_placeholder">Нема груп</string>
-    <string name="send_bug_report_rage_shake">"Струснути  пристрій, щоб повідомити про помилку"</string>
+    <string name="send_bug_report_rage_shake">Струснути пристрій, щоб повідомити про помилку</string>
     <string name="start_new_chat_prompt_msg">Ви дійсно хочете почати новий чат з %s?</string>
     <string name="start_voice_call_prompt_msg">Ви впевнені, що бажаєте почати голосовий виклик?</string>
     <string name="start_video_call_prompt_msg">Ви впевнені, що бажаєте почати відео виклик?</string>
@@ -666,9 +666,9 @@
     <string name="settings_notification_privacy_normal">Нормальний</string>
     <string name="title_activity_choose_sticker">Відправити наліпку</string>
     <string name="option_send_sticker">Відправити стікер</string>
-    <string name="no_sticker_application_dialog_content">У вас зараз не має доступних стікерів.
-
-Добавити зараз?</string>
+    <string name="no_sticker_application_dialog_content">У вас зараз не має стікерів.
+\n
+\nДодати зараз\?</string>
     <plurals name="room_header_active_members_count">
         <item quantity="one">%d активний участник</item>
         <item quantity="few">%d активних участника</item>
@@ -681,7 +681,7 @@
         <item quantity="many">%d участників</item>
         <item quantity="other"/>
     </plurals>
-    <string name="room_participants_ban_prompt_msg">Ви впевнені, що хочете забанити цього користувача в цьому чаті?</string>
+    <string name="room_participants_ban_prompt_msg">Користувачів з забороною буде вилучено з цієї кімнати й вони не зможуть приєднатися знову.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d нове повідомлення</item>
         <item quantity="few">%d нових повідомленя</item>
@@ -720,22 +720,22 @@
     <string name="send_bug_report_description_in_english">Якщо можливо, будь ласка, напишіть опис англійською.</string>
     <string name="go_on_with">продовжити з…</string>
     <plurals name="format_time_s">
-        <item quantity="one">%d сек.</item>
-        <item quantity="few">%d сек.</item>
-        <item quantity="many">%d сек.</item>
-        <item quantity="other"/>
+        <item quantity="one">%dс</item>
+        <item quantity="few">%dsс</item>
+        <item quantity="many">%dsс</item>
+        <item quantity="other">%dsс</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">%d хв.</item>
-        <item quantity="few">%d хв.</item>
-        <item quantity="many">%d хв.</item>
-        <item quantity="other"/>
+        <item quantity="one">%dхв</item>
+        <item quantity="few">%dхв</item>
+        <item quantity="many">%dхв</item>
+        <item quantity="other">%dхв</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%d год.</item>
-        <item quantity="few">%d год.</item>
-        <item quantity="many">%d год.</item>
-        <item quantity="other"/>
+        <item quantity="one">%dгод</item>
+        <item quantity="few">%dгод</item>
+        <item quantity="many">%dгод</item>
+        <item quantity="other">%dгод</item>
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">%d день</item>
@@ -751,10 +751,10 @@
     <string name="room_message_placeholder_reply_to_encrypted">Надіслати зашифровану відповідь…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">Надіслати відповідь (незашифровано)…</string>
     <plurals name="room_details_selected">
-        <item quantity="one">%d обрано</item>
-        <item quantity="few">"%d  обрано"</item>
-        <item quantity="many">"%d  обрано"</item>
-        <item quantity="other"/>
+        <item quantity="one">%d вибрано</item>
+        <item quantity="few">%d вибрано</item>
+        <item quantity="many">%d вибрано</item>
+        <item quantity="other">%d вибрано</item>
     </plurals>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d кімната</item>
@@ -867,11 +867,11 @@
     <string name="dialog_user_consent_content">Щоб продовжити користуватися домашнім сервером %1$s Вам слід ознайомитись та прийняти Умови використання.</string>
     <string name="dialog_user_consent_submit">Ознайомитись зараз</string>
     <string name="deactivate_account_title">Деактивувати обліковий запис</string>
-    <string name="deactivate_account_content">Це зробить Ваш обліковий запис непридатним до подальшого використання. Ви не будете спроможні заходити у систему, та ніхто інший не зможе зареєструватися з таким самим ID. Це спричинить вихід Вашого облікового запису з усіх кімнат, в яких він зареєстрований, а також видалить усі данні облікового запису із Вашого серверу ідентифікації. <b>Ця дія незворотня</b>.
-
-Деактивація Вашого облікового запису <b>за замовчанням не спричинить видалення надісланих Вами повідомлень</b>. Якщо Ви бажаєте позбавитись Ваших повідомлень, будь ласка, поставте позначку під цим текстом.
-
-Відображення повідомлень у Matrix подібне до електронної пошти. Таке видалення означає, що Ваші надіслані повідомлення не будуть поширюватись серед нових або незареєстрованих користувачів, проте зареєстрованим користувачам, які мали доступ до цих повідомлень, все ще будуть доступні їх копії.</string>
+    <string name="deactivate_account_content">Це зробить ваш обліковий запис непридатним до подальшого використання. Ви не зможете заходити до системи, та ніхто інший не зможе зареєструватися з таким самим ID. Це спричинить вихід з вашого облікового запису з усіх кімнат, до яких ви долучилися, а також вилучить усі данні облікового запису із вашого сервера ідентифікації. <b>Ця дія незворотня</b>.
+\n
+\nДеактивація вашого облікового запису <b>типово не спричинить видалення надісланих вами повідомлень</b>. Якщо ви бажаєте позбавитись цих повідомлень, залиште позначку під цим текстом.
+\n
+\nПоказ повідомлень у Matrix подібне до електронної пошти. Таке видалення означає, що ваші надіслані повідомлення не будуть поширюватись серед нових або незареєстрованих користувачів, проте зареєстрованим користувачам, які мали доступ до цих повідомлень й надалі будуть доступні їхні копії.</string>
     <string name="deactivate_account_delete_checkbox">Будь ласка, після деактивації мого облікового запису видаліть усі надіслані мною повідомлення (Увага: це спричинить неповне відображення розмов для нових користувачів)</string>
     <string name="deactivate_account_prompt_password">Для продовження, будь ласка, введіть Ваш пароль:</string>
     <string name="deactivate_account_submit">Деактивувати обліковий запис</string>
@@ -1031,4 +1031,22 @@
     <string name="settings_advanced_settings">Додаткові налаштування</string>
     <string name="settings_notification_advanced">Розширені налаштування сповіщень</string>
     <string name="preference_voice_and_video">Голос та відео</string>
+    <string name="room_list_quick_actions_settings">Налаштування</string>
+    <string name="devices_other_devices">Інші сеанси</string>
+    <string name="devices_current_device">Поточний сеанс</string>
+    <string name="settings">Налаштування</string>
+    <string name="room_profile_section_more_notifications">Сповіщення</string>
+    <string name="direct_room_profile_section_more_settings">Налаштування</string>
+    <string name="revoke">Відкликати</string>
+    <string name="none">немає</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">Ви втратите доступ до своїх зашифрованих повідомлень, якщо не зробите резервну копію ключів перед виходом з системи.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Безпечне резервне копіювання ключів має бути активним у всіх ваших сеансах, щоб не втратити доступу до ваших зашифрованих повідомлень.</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">Триває резервне копіювання ключів. Якщо вийти зараз, ви втратите доступ до своїх зашифрованих повідомлень.</string>
+    <string name="keys_backup_is_not_finished_please_wait">Резервне копіювання ключів не завершено, зачекайте…</string>
+    <string name="a11y_unmute_microphone">Увімкнути мікрофон</string>
+    <string name="a11y_mute_microphone">Вимкнути мікрофон</string>
+    <string name="a11y_open_chat">Відерити бесіду</string>
+    <string name="power_level_title">Роль</string>
+    <string name="power_level_edit_title">Призначити роль</string>
+    <string name="identity_server_set_alternative_submit">Надіслати</string>
 </resources>
