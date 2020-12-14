@@ -143,7 +143,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
 
         if (state.loginMode != LoginMode.Unknown) {
             // The home server url is valid
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved(state.loginMode is LoginMode.Sso)))
+            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
         }
     }
 }
