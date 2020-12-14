@@ -347,10 +347,6 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar)
     }
