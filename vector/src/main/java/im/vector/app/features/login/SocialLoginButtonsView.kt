@@ -135,7 +135,7 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
                     IdentityProvider("google", "Google", null),
                     IdentityProvider("facebook", "Facebook", null),
                     IdentityProvider("apple", "Apple", null),
-                    IdentityProvider("github", "Github", null),
+                    IdentityProvider("github", "GitHub", null),
                     IdentityProvider("twitter", "Twitter", null),
                     IdentityProvider("Custom_pro", "SSO", null)
             )
