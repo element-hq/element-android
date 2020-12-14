@@ -75,11 +75,15 @@ class LoginViewModel @AssistedInject constructor(
     }
 
     init {
-        if (BuildConfig.DEBUG) {
-            homeServerHistoryService.addHomeServerToHistory("http://10.0.2.2:8080")
-        }
+        getKnownCustomHomeServersUrls()
+    }
+
+    private fun getKnownCustomHomeServersUrls() {
         setState {
-            copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
+            copy(
+                    knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls()
+                            + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
+            )
         }
     }
 
@@ -142,7 +146,6 @@ class LoginViewModel @AssistedInject constructor(
         // So alter the homeserver config and retrieve again the login flow
         when (val finalLastAction = lastAction) {
             is LoginAction.UpdateHomeServer -> {
-                rememberHomeServer(finalLastAction.homeServerUrl)
                 currentHomeServerConnectionConfig
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
                         ?.let { getLoginFlow(it) }
@@ -161,9 +164,7 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun rememberHomeServer(homeServerUrl: String) {
         homeServerHistoryService.addHomeServerToHistory(homeServerUrl)
-        setState {
-            copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
-        }
+        getKnownCustomHomeServersUrls()
     }
 
     private fun handleLoginWithToken(action: LoginAction.LoginWithToken) {
@@ -738,7 +739,6 @@ class LoginViewModel @AssistedInject constructor(
             // This is invalid
             _viewEvents.post(LoginViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
-            rememberHomeServer(action.homeServerUrl)
             getLoginFlow(homeServerConnectionConfig)
         }
     }
@@ -772,6 +772,10 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             override fun onSuccess(data: LoginFlowResult) {
+                // Valid Homeserver, add it to the history.
+                // Note: we add what the user has input, data.homeServerUrl can be different
+                rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
+
                 when (data) {
                     is LoginFlowResult.Success -> {
                         val loginMode = when {
