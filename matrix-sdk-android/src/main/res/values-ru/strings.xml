@@ -225,6 +225,31 @@
     <string name="notice_direct_room_join">%1$s вошел(ла)</string>
     <string name="notice_direct_room_created_by_you">Вы создали обсуждение</string>
     <string name="notice_direct_room_created">%1$s создал(а) обсуждение</string>
-    <string name="notice_direct_room_update_by_you">Вы обновили.</string>
-    <string name="notice_direct_room_update">%s обновлена.</string>
+    <string name="notice_direct_room_update_by_you">Вы обновили эту комнату.</string>
+    <string name="notice_direct_room_update">%s обновил(а) эту комнату.</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s и %4$d другой</item>
+        <item quantity="few">%1$s, %2$s, %3$s и %4$d других</item>
+        <item quantity="many">%1$s, %2$s, %3$s и %4$d другие</item>
+        <item quantity="other">%1$s, %2$s, %3$s и %4$d другие</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s и %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s и %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Всем серверам запрещено участвовать! Эта комната больше не может быть использована.</string>
+    <string name="notice_room_server_acl_updated_no_change">Без изменений.</string>
+    <string name="room_displayname_empty_room_was">Пустая комната (была %s)</string>
+    <string name="notice_room_server_acl_set_banned">• Соответствующий сервер %s заблокирован.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Сервер, соответствующий буквальным IP-адресам, теперь запрещён.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Сервер, соответствующий буквальным IP-адресам, теперь разрешён.</string>
+    <string name="notice_room_server_acl_updated_banned">• Сервер, соответствующий %s, теперь запрещён.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Сервер, соответствующий %s, теперь разрешён.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Сервер, соответствующий %s, был удалён из списка блокировки.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Сервер, соответствующий буквальным IP-адресам, запрещён.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Сервер, соответствующий буквальным IP-адресам, разрешён.</string>
+    <string name="notice_room_server_acl_set_allowed">• Сервер, соответствующий %s, разрешён.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Сервер, соответствующий %s, был удалён из разрешённого списка.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Вы изменили права доступа сервера (ACL) для этой комнаты.</string>
+    <string name="notice_room_server_acl_updated_title">%s изменил права доступа сервера (ACL) для этой комнаты.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Вы настроили права доступа сервера (ACL) для этой комнаты.</string>
+    <string name="notice_room_server_acl_set_title">%s устанавливает права доступа сервера (ACL) для этой комнаты.</string>
 </resources>

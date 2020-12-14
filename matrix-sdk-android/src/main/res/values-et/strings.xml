@@ -213,4 +213,27 @@
     <string name="notice_direct_room_join">%1$s liitus</string>
     <string name="notice_direct_room_created_by_you">Sina alustasid vestlust</string>
     <string name="notice_direct_room_created">%1$s alustas vestlust</string>
+    <string name="room_displayname_empty_room_was">Tühi jututuba (oli %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s ja %4$d muu</item>
+        <item quantity="other">%1$s, %2$s, %3$s ja %4$d muud</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s ja %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s ja %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Kõikide serverite osalemine on keelatud! Seda jututuba ei saa enam kasutada.</string>
+    <string name="notice_room_server_acl_updated_no_change">Muudatusi ei ole.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Nüüd on keelatud serverid, mille ip-aadress vastab mustrile.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Nüüd on lubatud serverid, mille ip-aadress vastab mustrile.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Server, mille nimes leidub %s, eemaldati lubatud serverite loendist.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Nüüd on lubatud serverid, mille nimes leidub %s.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Server, mille nimes leidub %s eemaldati keeluloendist.</string>
+    <string name="notice_room_server_acl_updated_banned">• Keelatud on server, mille nimes leidub %s.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Sina muutsid selle jututoa jaoks serverite pääsuloendit.</string>
+    <string name="notice_room_server_acl_updated_title">%s muutis selle jututoa jaoks serverite pääsuloendit.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Sina kirjeldasid selle jututoa jaoks serverite pääsuloendi.</string>
+    <string name="notice_room_server_acl_set_title">%s kirjeldas selle jututoa jaoks serverite pääsuloendi.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Keelatud on serverid, mille ip-aadress vastab mustrile.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Lubatud on serverid, mille ip-aadress vastab mustrile.</string>
+    <string name="notice_room_server_acl_set_allowed">• Lubatud on serverid, mille nimes leidub %s.</string>
+    <string name="notice_room_server_acl_set_banned">• Keelatud on serverid, mille nimes leidub %s.</string>
 </resources>

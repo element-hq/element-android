@@ -29,7 +29,7 @@
     <string name="ongoing_conference_call_video">Wideo</string>
     <string name="cannot_start_call">Nie można rozpocząć połączenia, spróbuj ponownie później</string>
     <string name="missing_permissions_warning">Ze względu na brak pewnych uprawnień, niektóre funkcje mogą nie działać…</string>
-    <string name="missing_permissions_to_start_conf_call">Musisz posiadać uprawninenia, aby rozpocząć połączenie grupowe</string>
+    <string name="missing_permissions_to_start_conf_call">Musisz posiadać uprawnienia, aby rozpocząć połączenie grupowe</string>
     <string name="missing_permissions_title_to_start_conf_call">Nie można rozpocząć połączenia</string>
     <string name="device_information">Informacje o sesji</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Połączenia grupowe nie są obsługiwane w szyfrowanych pokojach</string>
@@ -1777,7 +1777,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="dismiss">Zamknij</string>
     <string name="pause_video">Wstrzymaj</string>
     <string name="play_video">Odtwórz</string>
-    <string name="no_permissions_to_start_webrtc_call">Nie posiadasz wymaganych uprawnień do rozpoczęcia połaczenia w tym pokoju</string>
+    <string name="no_permissions_to_start_webrtc_call">Nie posiadasz wymaganych uprawnień do rozpoczęcia połączenia w tym pokoju</string>
     <string name="call_notification_answer">Odbierz</string>
     <string name="failed_to_remove_widget">Usuwanie widżetu nie powiodło się</string>
     <string name="failed_to_add_widget">Dodawanie widżetu nie powiodło się</string>
@@ -1787,6 +1787,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="video_meeting">Rozpocznij połączenie wideo</string>
     <string name="conference_call_in_progress">Połączenie grupowe już trwa!</string>
     <string name="no_permissions_to_start_conf_call">Nie posiadasz wymaganych uprawnień aby rozpocząć połączenie grupowe w tym pokoju</string>
-    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Nie posiadasz wymaganych uprawnień do rozpoczęcia połaczenia</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Nie posiadasz wymaganych uprawnień do rozpoczęcia połączenia</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Nie posiadasz wymaganych uprawnień aby rozpocząć połączenie grupowe</string>
 </resources>
