@@ -520,8 +520,8 @@
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' не є дійсним форматом псевдоніму</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Основну адресу для цієї кімнати не вказано.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Попередження про адресу</string>
-    <string name="room_settings_set_main_address">Встановити як Основну Адресу</string>
-    <string name="room_settings_unset_main_address">Видалити як Основну Адресу</string>
+    <string name="room_settings_set_main_address">Встановити основною адресою</string>
+    <string name="room_settings_unset_main_address">Зробити не основною адресою</string>
     <string name="room_settings_copy_room_id">Копіювати ID кімнати</string>
     <string name="room_settings_copy_room_address">Копіювати Адресу Кімнати</string>
     <string name="room_settings_addresses_e2e_enabled">У цій кімнаті увімкнено шифрування.</string>
@@ -934,7 +934,7 @@
     <string name="notification_sync_init">Запуск сервісу</string>
     <string name="title_activity_keys_backup_setup">Резервна копія ключа</string>
     <string name="title_activity_keys_backup_restore">Використати резервну копію ключа</string>
-    <string name="room_list_people_empty_body">Тут з\'явиться список ваших прямих чатів</string>
+    <string name="room_list_people_empty_body">Тут з\'явиться список ваших прямих бесід. Торкніться + внизу праворуч щоб почати бесіду.</string>
     <string name="event_redacted">Повідомлення видалено</string>
     <string name="fab_menu_create_chat">Прямі чати</string>
     <string name="bottom_action_people_x">Прямі чати</string>
@@ -1128,4 +1128,15 @@
     <string name="autodiscover_invalid_response">Недійсна відповідь виявлення домашнього сервера</string>
     <string name="settings_discovery_manage">Налаштуйте свою видимість.</string>
     <string name="settings_discovery_category">Видимість</string>
+    <string name="call_failed_no_connection_description">Не вдалося встановити зв’язок у режимі реального часу.
+\nПопросіть адміністратора вашого домашнього сервера налаштувати сервер TURN для надійної роботи викликів.</string>
+    <string name="call_failed_no_connection">Element не вдалося здійснити виклик</string>
+    <string name="call_failed_no_ice_description">Попросіть адміністратора вашого домашнього сервера (%1$s) налаштувати сервер TURN для надійної роботи дзвінків.
+\n
+\nЯк варіант, ви можете спробувати використати загальнодоступний сервер на рівні %2$s, але це буде не так надійно й він надаватиме вашу IP-адресу цьому серверу. Ви також можете керувати цим у налаштуваннях.</string>
+    <string name="no_more_results">Більше немає результатів</string>
+    <string name="action_unpublish">Відкликати публікування</string>
+    <string name="action_add">Додати</string>
+    <string name="audio_video_meeting_description">Наради використовують політику безпеки та дозволів Jitsi. Усі люди, які зараз перебувають у кімнаті, побачать запрошення приєднатися під час вашої зустрічі.</string>
+    <string name="start_chatting">Почати спілкування</string>
 </resources>
