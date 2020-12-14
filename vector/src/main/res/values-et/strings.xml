@@ -526,7 +526,7 @@
     <string name="sas_incoming_request_notif_content">%s soovib verifitseerida sinu sessiooni</string>
     <string name="sas_error_m_user">Kasutaja tühistas verifitseerimise</string>
     <string name="sas_error_m_timeout">Verifitseerimisprotsess aegus</string>
-    <string name="room_list_rooms_empty_body">Sinu jututoad kuvatakse siin</string>
+    <string name="room_list_rooms_empty_body">Sinu jututoad kuvatakse siin. Olemasolevate jututubade leidmiseks või uute tegemiseks klõpsi all paremal nurgas asuvat + nuppu.</string>
     <string name="title_activity_emoji_reaction_picker">Reageerimised</string>
     <string name="reactions_agree">Nõus</string>
     <string name="reactions_like">Meeldib</string>
@@ -1503,7 +1503,7 @@
     <string name="room_list_catchup_welcome_title">Tere tulemast koju!</string>
     <string name="room_list_catchup_welcome_body">Leiad lugemata sõnumid siit</string>
     <string name="room_list_people_empty_title">Vestlused</string>
-    <string name="room_list_people_empty_body">Sinu otsevestlused kuvatakse siin</string>
+    <string name="room_list_people_empty_body">Sinu otsevestlused kuvatakse siin. Vestluse alustamiseks klõpsi all paremal nurgas asuvat + nuppu.</string>
     <string name="room_list_rooms_empty_title">Jututoad</string>
     <string name="keys_backup_unable_to_get_trust_info">Usaldamiseks vajaliku teabe laadimisel tekkis viga</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Krüptovõtmete varukoopia andmete laadimisel tekkis viga</string>
@@ -2246,4 +2246,37 @@
     <string name="permissions_denied_add_contact">Anna õigused oma kontakte lugeda.</string>
     <string name="permissions_denied_qr_code">QR-koodi lugemiseks pead selleks kaamerale õigused andma.</string>
     <string name="start_chatting">Alusta vestlust</string>
+    <string name="settings_security_pin_code_change_pin_summary">Muuda oma praegune PIN-kood</string>
+    <string name="settings_security_pin_code_change_pin_title">Muuda PIN-kood</string>
+    <string name="room_preview_no_preview_join">Antud jututoal puudub eelvaate võimalus. Kas sa soovid sellega liituda\?</string>
+    <string name="room_preview_not_found">Sellele jututoale puudub hetkel ligipääs.
+\nProovi hiljem uuesti või küsi jututoa haldajalt, kas sul on olemas selleks vajalikud õigused.</string>
+    <string name="room_alias_publish_to_directory_error">Ei õnnestu laadida andmeid selle jututoa nähtavuse kohta (%1$s).</string>
+    <string name="room_alias_publish_to_directory">Kas avaldame selle jututoa %1$s serveri kõigile nähtavad jututubade loendis\?</string>
+    <string name="room_alias_action_unpublish">Tühista selle aadressi avaldamine</string>
+    <string name="room_alias_action_publish">Avalda see aadress</string>
+    <string name="room_alias_local_address_add">Lisa kohalik aadress</string>
+    <string name="room_alias_local_address_empty">Sellel jututoal puuduvad kohalikud aadressid</string>
+    <string name="room_alias_local_address_subtitle">Et muud kasutajad saaks seda jututuba leida sinu koduserveri (%1$s) kaudu, lisa sellele jututoale aadresse</string>
+    <string name="room_alias_local_address_title">Kohalikud aadressid</string>
+    <string name="room_alias_address_hint">Uus avaldatud aadess (näiteks #alias:server)</string>
+    <string name="room_alias_address_empty">Ühtegi muud aadressi pole veel avaldatud.</string>
+    <string name="room_alias_address_empty_can_add">Ühtegi muud aadressi pole veel avaldatud, lisa üks alljärgnevalt.</string>
+    <string name="room_alias_publish">Kas avaldame selle jututoa %1$s serveri jututubade loendis\?</string>
+    <string name="room_alias_delete_confirmation">Kas kustutame „%1$s“ aadressi\?</string>
+    <string name="room_alias_unpublish_confirmation">Kas lõpetame „%1$s“ aadressi avaldamise\?</string>
+    <string name="room_alias_published_alias_add_manually_submit">Avalda</string>
+    <string name="room_alias_published_alias_add_manually">Avalda uus aadress käsitsi</string>
+    <string name="room_alias_published_other">Muud avaldatud aadressid:</string>
+    <string name="room_alias_main_address_hint">Põhiaadress</string>
+    <string name="room_alias_published_alias_main">See on põhiaadress</string>
+    <string name="room_alias_published_alias_subtitle">Avaldatud aadresse saab mis iganes serveri kasutaja pruukida sinu jututoaga liitumiseks. Aadressi avaldamiseks peab ta alustuseks olema määratud kohaliku aadressina.</string>
+    <string name="room_alias_published_alias_title">Avaldatud aadressid</string>
+    <string name="room_alias_title">Jututoa aadressid</string>
+    <string name="room_settings_alias_subtitle">Vaata ja halda selle jututoa aadresse ning nähtavust lututubade loendis.</string>
+    <string name="room_settings_alias_title">Jututoa aadressid</string>
+    <string name="room_settings_room_access_title">Ligipääs jututuppa</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">Kui muudad seda, kes saavad selle jututoa ajalugu lugeda, siis kehtib see vaid tulevaste sõnumite kohta. Senise ajaloo nähtavus sellega ei muutu.</string>
+    <string name="action_unpublish">Tühista avaldamine</string>
+    <string name="action_add">Lisa</string>
 </resources>
