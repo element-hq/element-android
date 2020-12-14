@@ -35,5 +35,7 @@ internal object GlobalRealmMigration : RealmMigration {
     private fun migrateTo1(realm: DynamicRealm) {
         realm.schema.create("KnownServerUrlEntity")
                 .addField(KnownServerUrlEntityFields.URL, String::class.java)
+                .addPrimaryKey(KnownServerUrlEntityFields.URL)
+                .setRequired(KnownServerUrlEntityFields.URL, true)
     }
 }
