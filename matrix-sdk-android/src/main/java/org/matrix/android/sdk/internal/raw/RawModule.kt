@@ -81,7 +81,4 @@ internal abstract class RawModule {
 
     @Binds
     abstract fun bindCleanRawCacheTask(task: DefaultCleanRawCacheTask): CleanRawCacheTask
-
-    @Binds
-    abstract fun bindHomeServerHistoryService(service: DefaultHomeServerHistoryService): HomeServerHistoryService
 }

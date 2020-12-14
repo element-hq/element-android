@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.di.AuthDatabase
 import org.matrix.android.sdk.internal.legacy.DefaultLegacySessionImporter
 import org.matrix.android.sdk.internal.wellknown.WellknownModule
 import io.realm.RealmConfiguration
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import java.io.File
 
 @Module(includes = [WellknownModule::class])
@@ -80,4 +81,7 @@ internal abstract class AuthModule {
 
     @Binds
     abstract fun bindDirectLoginTask(task: DefaultDirectLoginTask): DirectLoginTask
+
+    @Binds
+    abstract fun bindHomeServerHistoryService(service: DefaultHomeServerHistoryService): HomeServerHistoryService
 }
