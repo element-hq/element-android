@@ -73,7 +73,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             }
         }
 
-        return CryptoTestData(aliceSession, roomId)
+        return CryptoTestData(roomId, listOf(aliceSession))
     }
 
     /**
@@ -139,7 +139,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
 //        assertNotNull(roomFromBobPOV.powerLevels)
 //        assertTrue(roomFromBobPOV.powerLevels.maySendMessage(bobSession.myUserId))
 
-        return CryptoTestData(aliceSession, aliceRoomId, bobSession)
+        return CryptoTestData(aliceRoomId, listOf(aliceSession, bobSession))
     }
 
     /**
@@ -157,7 +157,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         // wait the initial sync
         SystemClock.sleep(1000)
 
-        return CryptoTestData(aliceSession, aliceRoomId, cryptoTestData.secondSession, samSession)
+        return CryptoTestData(aliceRoomId, listOf(aliceSession, cryptoTestData.secondSession!!, samSession))
     }
 
     /**
