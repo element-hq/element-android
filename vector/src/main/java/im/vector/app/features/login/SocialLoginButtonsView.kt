@@ -16,7 +16,6 @@
 
 package im.vector.app.features.login
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -85,22 +84,22 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
             // Use some heuristic to render buttons according to branding guidelines
             val button: MaterialButton = cachedViews[identityProvider.id]
                     ?: when (identityProvider.id) {
-                        "google"   -> {
+                        SsoIdentityProvider.ID_GOOGLE   -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_google_style)
                         }
-                        "github"   -> {
+                        SsoIdentityProvider.ID_GITHUB   -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_github_style)
                         }
-                        "apple"    -> {
+                        SsoIdentityProvider.ID_APPLE    -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_apple_style)
                         }
-                        "facebook" -> {
+                        SsoIdentityProvider.ID_FACEBOOK -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_facebook_style)
                         }
-                        "twitter"  -> {
+                        SsoIdentityProvider.ID_TWITTER  -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_twitter_style)
                         }
-                        else       -> {
+                        else                            -> {
                             // TODO Use iconUrl
                             MaterialButton(context, null, R.attr.materialButtonStyle).apply {
                                 transformationMethod = null
@@ -119,8 +118,8 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
 
     private fun getButtonTitle(providerName: String?): String {
         return when (mode) {
-            Mode.MODE_SIGN_IN -> context.getString(R.string.login_social_signin_with, providerName)
-            Mode.MODE_SIGN_UP -> context.getString(R.string.login_social_signup_with, providerName)
+            Mode.MODE_SIGN_IN  -> context.getString(R.string.login_social_signin_with, providerName)
+            Mode.MODE_SIGN_UP  -> context.getString(R.string.login_social_signup_with, providerName)
             Mode.MODE_CONTINUE -> context.getString(R.string.login_social_continue_with, providerName)
         }
     }
@@ -130,14 +129,13 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
         gravity = Gravity.CENTER
         clipToPadding = false
         clipChildren = false
-        @SuppressLint("SetTextI18n")
         if (isInEditMode) {
             ssoIdentityProviders = listOf(
-                    SsoIdentityProvider("google", "Google", null),
-                    SsoIdentityProvider("facebook", "Facebook", null),
-                    SsoIdentityProvider("apple", "Apple", null),
-                    SsoIdentityProvider("github", "GitHub", null),
-                    SsoIdentityProvider("twitter", "Twitter", null),
+                    SsoIdentityProvider(SsoIdentityProvider.ID_GOOGLE, "Google", null),
+                    SsoIdentityProvider(SsoIdentityProvider.ID_FACEBOOK, "Facebook", null),
+                    SsoIdentityProvider(SsoIdentityProvider.ID_APPLE, "Apple", null),
+                    SsoIdentityProvider(SsoIdentityProvider.ID_GITHUB, "GitHub", null),
+                    SsoIdentityProvider(SsoIdentityProvider.ID_TWITTER, "Twitter", null),
                     SsoIdentityProvider("Custom_pro", "SSO", null)
             )
         }

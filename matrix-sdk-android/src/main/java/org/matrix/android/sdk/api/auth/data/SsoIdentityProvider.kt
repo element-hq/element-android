@@ -39,4 +39,14 @@ data class SsoIdentityProvider(
          * This should be hosted by the homeserver service provider to not leak the client's IP address unnecessarily.
          */
         @Json(name = "icon") val iconUrl: String?
-) : Parcelable
+) : Parcelable {
+
+    companion object {
+        // Not really defined by the spec, but we may define some ids here
+        const val ID_GOOGLE = "google"
+        const val ID_GITHUB = "github"
+        const val ID_APPLE = "apple"
+        const val ID_FACEBOOK = "facebook"
+        const val ID_TWITTER = "twitter"
+    }
+}
