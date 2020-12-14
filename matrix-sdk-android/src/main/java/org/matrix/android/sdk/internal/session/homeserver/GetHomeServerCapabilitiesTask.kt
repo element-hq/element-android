@@ -29,6 +29,8 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerConfigExtractor
+import org.matrix.android.sdk.internal.session.media.GetMediaConfigResult
+import org.matrix.android.sdk.internal.session.media.MediaAPI
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.wellknown.GetWellknownTask
@@ -40,6 +42,7 @@ internal interface GetHomeServerCapabilitiesTask : Task<Unit, Unit>
 
 internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val capabilitiesAPI: CapabilitiesAPI,
+        private val mediaAPI: MediaAPI,
         @SessionDatabase private val monarchy: Monarchy,
         private val eventBus: EventBus,
         private val getWellknownTask: GetWellknownTask,
@@ -67,9 +70,9 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             }
         }.getOrNull()
 
-        val uploadCapabilities = runCatching {
-            executeRequest<GetUploadCapabilitiesResult>(eventBus) {
-                apiCall = capabilitiesAPI.getUploadCapabilities()
+        val mediaConfig = runCatching {
+            executeRequest<GetMediaConfigResult>(eventBus) {
+                apiCall = mediaAPI.getMediaConfig()
             }
         }.getOrNull()
 
@@ -83,11 +86,11 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
             getWellknownTask.execute(GetWellknownTask.Params(userId, homeServerConnectionConfig))
         }.getOrNull()
 
-        insertInDb(capabilities, uploadCapabilities, versions, wellknownResult)
+        insertInDb(capabilities, mediaConfig, versions, wellknownResult)
     }
 
     private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?,
-                                   getUploadCapabilitiesResult: GetUploadCapabilitiesResult?,
+                                   getMediaConfigResult: GetMediaConfigResult?,
                                    getVersionResult: Versions?,
                                    getWellknownResult: WellknownResult?) {
         monarchy.awaitTransaction { realm ->
@@ -97,8 +100,8 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                 homeServerCapabilitiesEntity.canChangePassword = getCapabilitiesResult.canChangePassword()
             }
 
-            if (getUploadCapabilitiesResult != null) {
-                homeServerCapabilitiesEntity.maxUploadFileSize = getUploadCapabilitiesResult.maxUploadSize
+            if (getMediaConfigResult != null) {
+                homeServerCapabilitiesEntity.maxUploadFileSize = getMediaConfigResult.maxUploadSize
                         ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
             }
 

@@ -22,20 +22,18 @@ import org.matrix.android.sdk.internal.session.room.send.CancelSendTracker
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 
 internal class RedactQueuedTask(
-        val toRedactEventId: String,
+        private val toRedactEventId: String,
         val redactionLocalEchoId: String,
-        val roomId: String,
-        val reason: String?,
-        val redactEventTask: RedactEventTask,
-        val localEchoRepository: LocalEchoRepository,
-        val cancelSendTracker: CancelSendTracker
+        private val roomId: String,
+        private val reason: String?,
+        private val redactEventTask: RedactEventTask,
+        private val localEchoRepository: LocalEchoRepository,
+        private val cancelSendTracker: CancelSendTracker
 ) : QueuedTask() {
 
-    private var _isCancelled: Boolean = false
+    override fun toString() = "[RedactQueuedTask $redactionLocalEchoId]"
 
-    override fun toString() = "[RedactEventRunnableTask $redactionLocalEchoId]"
-
-    override suspend fun execute() {
+    override suspend fun doExecute() {
         redactEventTask.execute(RedactEventTask.Params(redactionLocalEchoId, roomId, toRedactEventId, reason))
     }
 
@@ -44,10 +42,6 @@ internal class RedactQueuedTask(
     }
 
     override fun isCancelled(): Boolean {
-        return _isCancelled || cancelSendTracker.isCancelRequestedFor(redactionLocalEchoId, roomId)
-    }
-
-    override fun cancel() {
-        _isCancelled = true
+        return super.isCancelled() || cancelSendTracker.isCancelRequestedFor(redactionLocalEchoId, roomId)
     }
 }

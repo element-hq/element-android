@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.toMedium
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
@@ -96,7 +97,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 fileUploader.uploadFromUri(
                         uri = avatarUri,
                         filename = UUID.randomUUID().toString(),
-                        mimeType = "image/jpeg")
+                        mimeType = MimeTypes.Jpeg)
             }
                     ?.let { response ->
                         Event(

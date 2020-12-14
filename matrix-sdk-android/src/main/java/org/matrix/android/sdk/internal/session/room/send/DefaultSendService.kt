@@ -177,7 +177,7 @@ internal class DefaultSendService @AssistedInject constructor(
                     val attachmentData = ContentAttachmentData(
                             size = messageContent.info!!.size,
                             mimeType = messageContent.info.mimeType!!,
-                            name = messageContent.body,
+                            name = messageContent.getFileName(),
                             queryUri = Uri.parse(messageContent.url),
                             type = ContentAttachmentData.Type.FILE
                     )
@@ -210,6 +210,8 @@ internal class DefaultSendService @AssistedInject constructor(
 
     override fun cancelSend(eventId: String) {
         cancelSendTracker.markLocalEchoForCancel(eventId, roomId)
+        // This is maybe the current task, so cancel it too
+        eventSenderProcessor.cancel(eventId, roomId)
         taskExecutor.executorScope.launch {
             localEchoRepository.deleteFailedEcho(roomId, eventId)
         }

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.raw
+package org.matrix.android.sdk.api.cache
 
-sealed class RawCacheStrategy {
+sealed class CacheStrategy {
     // Data is always fetched from the server
-    object NoCache : RawCacheStrategy()
+    object NoCache : CacheStrategy()
 
     // Once data is retrieved, it is stored for the provided amount of time.
     // In case of error, and if strict is set to false, the cache can be returned if available
-    data class TtlCache(val validityDurationInMillis: Long, val strict: Boolean) : RawCacheStrategy()
+    data class TtlCache(val validityDurationInMillis: Long, val strict: Boolean) : CacheStrategy()
 
     // Once retrieved, the data is stored in cache and will be always get from the cache
-    object InfiniteCache : RawCacheStrategy()
+    object InfiniteCache : CacheStrategy()
 }

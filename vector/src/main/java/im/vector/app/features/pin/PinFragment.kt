@@ -74,6 +74,10 @@ class PinFragment @Inject constructor(
                 Toast.makeText(requireContext(), getString(R.string.create_pin_confirm_failure), Toast.LENGTH_SHORT).show()
             }
 
+            override fun onPinCodeEnteredFirst(pinCode: String?): Boolean {
+                return false
+            }
+
             override fun onCodeCreated(encodedCode: String) {
                 lifecycleScope.launch {
                     pinCodeStore.storeEncodedPin(encodedCode)

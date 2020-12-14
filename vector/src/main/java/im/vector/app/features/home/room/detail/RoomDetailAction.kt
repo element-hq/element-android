@@ -98,4 +98,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class SetAvatarAction(val newAvatarUri: Uri, val newAvatarFileName: String) : RoomDetailAction()
     object QuickActionSetTopic : RoomDetailAction()
     data class ShowRoomAvatarFullScreen(val matrixItem: MatrixItem?, val transitionView: View?) : RoomDetailAction()
+
+    // Preview URL
+    data class DoNotShowPreviewUrlFor(val eventId: String, val url: String) : RoomDetailAction()
 }

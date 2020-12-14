@@ -37,7 +37,6 @@ class RoomHistoryVisibilityBottomSheet : BottomSheetGeneric<RoomHistoryVisibilit
 
     private lateinit var roomHistoryVisibilitySharedActionViewModel: RoomHistoryVisibilitySharedActionViewModel
     @Inject lateinit var controller: RoomHistoryVisibilityController
-    @Inject lateinit var roomHistoryVisibilityViewModelFactory: RoomHistoryVisibilityViewModel.Factory
     private val viewModel: RoomHistoryVisibilityViewModel by fragmentViewModel(RoomHistoryVisibilityViewModel::class)
 
     override fun injectWith(injector: ScreenComponent) {

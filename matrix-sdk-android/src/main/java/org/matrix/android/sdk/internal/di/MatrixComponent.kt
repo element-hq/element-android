@@ -71,9 +71,6 @@ internal interface MatrixComponent {
     @CacheDirectory
     fun cacheDir(): File
 
-    @ExternalFilesDirectory
-    fun externalFilesDir(): File?
-
     fun olmManager(): OlmManager
 
     fun taskExecutor(): TaskExecutor

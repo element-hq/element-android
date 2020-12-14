@@ -17,13 +17,13 @@
 package org.matrix.android.sdk.internal.crypto.encryption
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBe
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.Room
@@ -57,13 +57,14 @@ class EncryptionTest : InstrumentedTest {
     @Test
     fun test_EncryptionStateEvent() {
         performTest(roomShouldBeEncrypted = true) { room ->
-            // Send an encryption Event as a State Event
-            room.sendStateEvent(
-                    eventType = EventType.STATE_ROOM_ENCRYPTION,
-                    stateKey = null,
-                    body = EncryptionEventContent(algorithm = MXCRYPTO_ALGORITHM_MEGOLM).toContent(),
-                    callback = NoOpMatrixCallback()
-            )
+            runBlocking {
+                // Send an encryption Event as a State Event
+                room.sendStateEvent(
+                        eventType = EventType.STATE_ROOM_ENCRYPTION,
+                        stateKey = null,
+                        body = EncryptionEventContent(algorithm = MXCRYPTO_ALGORITHM_MEGOLM).toContent()
+                )
+            }
         }
     }
 

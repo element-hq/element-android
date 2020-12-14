@@ -130,7 +130,7 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
 
     private fun displayNextIfPossible() {
         val currentActivity = weakCurrentActivity?.get()
-        if (Alerter.isShowing || currentActivity == null) {
+        if (Alerter.isShowing || currentActivity == null || currentActivity.isDestroyed) {
             // will retry later
             return
         }

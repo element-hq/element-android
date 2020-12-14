@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import java.io.File
 
@@ -56,7 +57,7 @@ class RoomEventsAttachmentProvider(
                         allowNonMxcUrls = it.root.sendState.isSending()
 
                 )
-                if (content.mimeType == "image/gif") {
+                if (content.mimeType == MimeTypes.Gif) {
                     AttachmentInfo.AnimatedImage(
                             uid = it.eventId,
                             url = content.url ?: "",
@@ -125,8 +126,6 @@ class RoomEventsAttachmentProvider(
                     as? MessageWithAttachmentContent
                     ?: return@let
             fileService.downloadFile(
-                    downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                    id = timelineEvent.eventId,
                     fileName = messageContent.body,
                     mimeType = messageContent.mimeType,
                     url = messageContent.getFileUrl(),

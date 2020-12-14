@@ -36,6 +36,8 @@ import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
+import com.vanniktech.emoji.EmojiManager
+import com.vanniktech.emoji.google.GoogleEmojiProvider
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DaggerVectorComponent
 import im.vector.app.core.di.HasVectorInjector
@@ -184,6 +186,8 @@ class VectorApplication :
             addAction(Intent.ACTION_SCREEN_OFF)
             addAction(Intent.ACTION_SCREEN_ON)
         })
+
+        EmojiManager.install(GoogleEmojiProvider())
     }
 
     private fun enableStrictModeIfNeeded() {

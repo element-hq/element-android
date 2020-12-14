@@ -47,6 +47,7 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
+import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 
 class RxSession(private val session: Session) {
 
@@ -139,7 +140,7 @@ class RxSession(private val session: Session) {
     }
 
     fun getRoomIdByAlias(roomAlias: String,
-                         searchOnServer: Boolean): Single<Optional<String>> = singleBuilder {
+                         searchOnServer: Boolean): Single<Optional<RoomAliasDescription>> = singleBuilder {
         session.getRoomIdByAlias(roomAlias, searchOnServer, it)
     }
 

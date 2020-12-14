@@ -57,8 +57,7 @@
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"
             android:summary="@string/settings_inline_url_preview_summary"
-            android:title="@string/settings_inline_url_preview"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
+            android:title="@string/settings_inline_url_preview" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
