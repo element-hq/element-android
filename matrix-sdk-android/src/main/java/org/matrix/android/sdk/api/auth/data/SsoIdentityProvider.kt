@@ -23,7 +23,7 @@ import kotlinx.android.parcel.Parcelize
 
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class IdentityProvider(
+data class SsoIdentityProvider(
         /**
          * The id field would be opaque with the accepted characters matching unreserved URI characters as defined in RFC3986
          * - this was chosen to avoid having to encode special characters in the URL. Max length 128.

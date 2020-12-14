@@ -53,11 +53,10 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
             ServerType.Unknown -> Unit /* Should not happen */
         }
 
-        val identityProviders = state.loginMode.ssoProviders()
         when (state.loginMode) {
             is LoginMode.SsoAndPassword -> {
                 loginSignupSigninSignInSocialLoginContainer.isVisible = true
-                loginSignupSigninSocialLoginButtons.identityProviders = identityProviders
+                loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()
                 loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
                         val url = withState(loginViewModel) { it.getSsoUrl(id) }
@@ -68,7 +67,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
             else                        -> {
                 // SSO only is managed without container as well as No sso
                 loginSignupSigninSignInSocialLoginContainer.isVisible = false
-                loginSignupSigninSocialLoginButtons.identityProviders = null
+                loginSignupSigninSocialLoginButtons.ssoIdentityProviders = null
             }
         }
     }

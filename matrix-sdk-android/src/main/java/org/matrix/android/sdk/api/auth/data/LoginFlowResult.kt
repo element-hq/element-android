@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.auth.data
 sealed class LoginFlowResult {
     data class Success(
             val supportedLoginTypes: List<String>,
-            val ssoIdentityProviders: List<IdentityProvider>?,
+            val ssoIdentityProviders: List<SsoIdentityProvider>?,
             val isLoginAndRegistrationSupported: Boolean,
             val homeServerUrl: String,
             val isOutdatedHomeserver: Boolean

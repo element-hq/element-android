@@ -279,7 +279,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
         return LoginFlowResult.Success(
                 loginFlowResponse.flows.orEmpty().mapNotNull { it.type },
-                loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.identityProvider,
+                loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
                 versions.isLoginAndRegistrationSupportedBySdk(),
                 homeServerUrl,
                 !versions.isSupportedBySdk()

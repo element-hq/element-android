@@ -205,7 +205,7 @@ class LoginViewModel @AssistedInject constructor(
         setState {
             copy(
                     signMode = SignMode.SignIn,
-                    loginMode = LoginMode.Sso(action.identityProvider),
+                    loginMode = LoginMode.Sso(action.ssoIdentityProvider),
                     homeServerUrl = action.homeServerUrl,
                     deviceId = action.deviceId
             )

@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.auth.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.auth.data.IdentityProvider
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 
 @JsonClass(generateAdapter = true)
 internal data class LoginFlowResponse(
@@ -43,5 +43,5 @@ internal data class LoginFlow(
          * See MSC #2858
          */
         @Json(name = "identity_providers")
-        val identityProvider: List<IdentityProvider>?
+        val ssoIdentityProvider: List<SsoIdentityProvider>?
 )

@@ -175,7 +175,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
 
             if (state.loginMode is LoginMode.SsoAndPassword) {
                 loginSocialLoginContainer.isVisible = true
-                loginSocialLoginButtons.identityProviders = state.loginMode.identityProviders
+                loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders
                 loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
                         openInCustomTab(state.getSsoUrl(id))
@@ -183,7 +183,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
                 }
             } else {
                 loginSocialLoginContainer.isVisible = false
-                loginSocialLoginButtons.identityProviders = null
+                loginSocialLoginButtons.ssoIdentityProviders = null
             }
         }
     }
