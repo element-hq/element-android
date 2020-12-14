@@ -21,10 +21,12 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import butterknife.OnClick
 import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.widget.textChanges
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.utils.ensureProtocol
@@ -84,7 +86,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
                 loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_common_notice)
             }
         }
-        val completions =  state.knownCustomHomeServersUrls
+        val completions =  state.knownCustomHomeServersUrls + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
         loginServerUrlFormHomeServerUrl.setAdapter(ArrayAdapter(
                 requireContext(),
                 R.layout.item_completion_homeserver,
@@ -98,6 +100,11 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
     @OnClick(R.id.loginServerUrlFormLearnMore)
     fun learnMore() {
         openUrlInChromeCustomTab(requireActivity(), null, EMS_LINK)
+    }
+
+    @OnClick(R.id.loginServerUrlFormClearHistory)
+    fun clearHistory() {
+        loginViewModel.handle(LoginAction.ClearHomeServerHistory)
     }
 
     override fun resetViewModel() {
@@ -140,6 +147,8 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
 
     override fun updateWithState(state: LoginViewState) {
         setupUi(state)
+
+        loginServerUrlFormClearHistory.isInvisible = state.knownCustomHomeServersUrls.isEmpty()
 
         if (state.loginMode != LoginMode.Unknown) {
             // The home server url is valid

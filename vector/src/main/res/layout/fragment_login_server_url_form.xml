@@ -71,6 +71,17 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
+                android:id="@+id/loginServerUrlFormClearHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/login_clear_homeserver_history"
+                android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
+                android:textColor="@color/riotx_accent"
+                android:visibility="invisible"
+                tools:visibility="visible" />
+
+            <TextView
                 android:id="@+id/loginServerUrlFormNotice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -13,6 +13,7 @@ Improvements 🙌:
  - Add Setting Item to Change PIN (#2462)
  - Improve room history visibility setting UX (#1579)
  - Matrix.to deeplink custom scheme support
+ - Homeserver history (#1933)
 
 Bugfix 🐛:
  - Fix cancellation of sending event (#2438)

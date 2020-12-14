@@ -2001,6 +2001,7 @@
     <string name="login_signup">Sign Up</string>
     <string name="login_signin">Sign In</string>
     <string name="login_signin_sso">Continue with SSO</string>
+    <string name="login_clear_homeserver_history">Clear history</string>
 
     <string name="login_server_url_form_modular_hint">Element Matrix Services Address</string>
     <string name="login_server_url_form_other_hint">Address</string>

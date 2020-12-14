@@ -28,7 +28,6 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
@@ -80,10 +79,7 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun getKnownCustomHomeServersUrls() {
         setState {
-            copy(
-                    knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls()
-                            + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
-            )
+            copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
         }
     }
 
@@ -137,6 +133,7 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.ResetAction                -> handleResetAction(action)
             is LoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
             is LoginAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
+            LoginAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
             is LoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
     }
@@ -164,6 +161,11 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun rememberHomeServer(homeServerUrl: String) {
         homeServerHistoryService.addHomeServerToHistory(homeServerUrl)
+        getKnownCustomHomeServersUrls()
+    }
+
+    private fun handleClearHomeServerHistory() {
+        homeServerHistoryService.clearHistory()
         getKnownCustomHomeServersUrls()
     }
 

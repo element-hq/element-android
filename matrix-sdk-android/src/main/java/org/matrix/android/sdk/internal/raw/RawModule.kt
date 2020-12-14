@@ -24,9 +24,7 @@ import dagger.Module
 import dagger.Provides
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.raw.RawService
-import org.matrix.android.sdk.internal.auth.DefaultHomeServerHistoryService
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.GlobalDatabase
 import org.matrix.android.sdk.internal.di.MatrixScope
@@ -61,6 +59,7 @@ internal abstract class RawModule {
                     .name("matrix-sdk-global.realm")
                     .schemaVersion(GlobalRealmMigration.SCHEMA_VERSION)
                     .migration(GlobalRealmMigration)
+                    .allowWritesOnUiThread(true)
                     .modules(GlobalRealmModule())
                     .build()
         }
