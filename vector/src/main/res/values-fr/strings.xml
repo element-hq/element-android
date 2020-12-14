@@ -2200,7 +2200,7 @@
     <string name="no_more_results">Plus aucun résultat</string>
     <string name="settings_export_trail">Exporter le rapport d\'audit</string>
     <string name="room_created_summary_no_topic_creation_text">%s pour permettre aux gens de connaître le sujet de ce salon.</string>
-    <string name="this_is_the_beginning_of_dm">Ceci est le début de l\'historique de vos message direct avec %s.</string>
+    <string name="this_is_the_beginning_of_dm">Ceci est le début de l\'historique de vos messages directs avec %s.</string>
     <string name="this_is_the_beginning_of_room_no_name">Ceci est le début de cette conversation.</string>
     <string name="this_is_the_beginning_of_room">Ceci est le début de %s.</string>
     <string name="room_settings_enable_encryption_no_permission">Vous n\'avez pas le droit d\'activer le chiffrement dans ce salon.</string>
