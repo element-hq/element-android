@@ -507,7 +507,7 @@
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' não é um formato válido para um alias</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Você não terá endereço principal especificado para esta sala.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Alertas do endereço principal</string>
-    <string name="room_settings_set_main_address">Definir como Endereço Principal</string>
+    <string name="room_settings_set_main_address">Definir como endereço principal</string>
     <string name="room_settings_unset_main_address">Retirar este endereço como principal</string>
     <string name="room_settings_copy_room_id">Copiar o ID desta sala</string>
     <string name="room_settings_copy_room_address">Copiar o endereço desta sala</string>
@@ -2309,4 +2309,20 @@
     <string name="permissions_denied_add_contact">Aceite a permissão para acessar seus contatos.</string>
     <string name="permissions_denied_qr_code">Para escanear um código QR, você precisa permitir o acesso à câmera.</string>
     <string name="start_chatting">Começar a conversar</string>
+    <string name="room_alias_action_publish">Tornar público este endereço</string>
+    <string name="room_alias_local_address_add">Adicionar um endereço local</string>
+    <string name="room_alias_local_address_empty">Esta sala não tem endereços locais</string>
+    <string name="room_alias_local_address_title">Endereços locais</string>
+    <string name="room_alias_delete_confirmation">Remover o endereço \"%1$s\"\?</string>
+    <string name="room_alias_published_alias_add_manually_submit">Publicar</string>
+    <string name="room_alias_published_alias_add_manually">Publicar um novo endereço manualmente</string>
+    <string name="room_alias_published_other">Outros endereços públicos:</string>
+    <string name="room_alias_main_address_hint">Endereço principal</string>
+    <string name="room_alias_published_alias_main">Este é o endereço principal</string>
+    <string name="room_alias_published_alias_subtitle">Os endereços públicos podem ser usados por qualquer pessoa em qualquer servidor para entrar na sua sala. Para tornar público um endereço, primeiramente ele precisa ser definido como um endereço local.</string>
+    <string name="room_alias_published_alias_title">Endereços públicos</string>
+    <string name="room_alias_title">Endereços da sala</string>
+    <string name="room_settings_alias_subtitle">Veja e gerencie os endereços desta sala e a visibilidade dela na lista de salas.</string>
+    <string name="room_settings_alias_title">Endereços da sala</string>
+    <string name="action_add">Adicionar</string>
 </resources>
