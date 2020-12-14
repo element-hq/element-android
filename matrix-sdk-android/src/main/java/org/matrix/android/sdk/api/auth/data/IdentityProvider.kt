@@ -31,12 +31,12 @@ data class IdentityProvider(
         @Json(name = "id") val id: String,
         /**
          * The name field should be the human readable string intended for printing by the client.
-         * */
+         */
         @Json(name = "name") val name: String?,
         /**
          * The icon field is the only optional field and should point to an icon representing the IdP.
-         *  If present then it must be an HTTPS URL to an image resource.
-         *  This should be hosted by the homeserver service provider to not leak the client's IP address unnecessarily.
+         * If present then it must be an HTTPS URL to an image resource.
+         * This should be hosted by the homeserver service provider to not leak the client's IP address unnecessarily.
          */
-        @Json(name = "icon") val icon: String?
+        @Json(name = "icon") val iconUrl: String?
 ) : Parcelable
