@@ -51,6 +51,18 @@ data class RegistrationFlowResponse(
          * The information that the client will need to know in order to use a given type of authentication.
          * For each login stage type presented, that type may be present as a key in this dictionary.
          * For example, the public key of reCAPTCHA stage could be given here.
+         * other example
+         *  "params": {
+         *       "m.login.sso": {
+         *          "identity_providers": [
+         *              {
+         *                  "id": "google",
+         *                  "name": "Google",
+         *                  "icon": "https://..."
+         *              }
+         *          ]
+         *      }
+         *  }
          */
         @Json(name = "params")
         val params: JsonDict? = null

@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.auth
 /**
  * Path to use when the client does not supported any or all login flows
  * Ref: https://matrix.org/docs/spec/client_server/latest#login-fallback
- * */
+ */
 const val LOGIN_FALLBACK_PATH = "/_matrix/static/client/login/"
 
 /**

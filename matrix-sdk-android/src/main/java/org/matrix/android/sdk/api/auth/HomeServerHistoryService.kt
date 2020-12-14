@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.raw
-
-import io.realm.annotations.RealmModule
-import org.matrix.android.sdk.internal.database.model.KnownServerUrlEntity
-import org.matrix.android.sdk.internal.database.model.RawCacheEntity
+package org.matrix.android.sdk.api.auth
 
 /**
- * Realm module for global classes
+ * A simple service to remember homeservers you already connected to.
  */
-@RealmModule(library = true,
-        classes = [
-            RawCacheEntity::class,
-            KnownServerUrlEntity::class
-        ])
-internal class GlobalRealmModule
+interface HomeServerHistoryService {
+
+    fun getKnownServersUrls(): List<String>
+
+    fun addHomeServerToHistory(url: String)
+
+    fun clearHistory()
+}

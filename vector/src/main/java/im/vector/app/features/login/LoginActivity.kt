@@ -157,11 +157,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
             is LoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
             is LoginViewEvents.OnLoginFlowRetrieved                       ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
-                        if (loginViewEvents.isSso) {
-                            LoginSignUpSignInSsoFragment::class.java
-                        } else {
-                            LoginSignUpSignInSelectionFragment::class.java
-                        },
+                        LoginSignUpSignInSelectionFragment::class.java,
                         option = commonOption)
             is LoginViewEvents.OnWebLoginError                            -> onWebLoginError(loginViewEvents)
             is LoginViewEvents.OnForgetPasswordClicked                    ->
@@ -252,7 +248,8 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
                 // It depends on the LoginMode
                 when (state.loginMode) {
                     LoginMode.Unknown,
-                    LoginMode.Sso         -> error("Developer error")
+                    is LoginMode.Sso      -> error("Developer error")
+                    is LoginMode.SsoAndPassword,
                     LoginMode.Password    -> addFragmentToBackstack(R.id.loginFragmentContainer,
                             LoginFragment::class.java,
                             tag = FRAGMENT_LOGIN_TAG,

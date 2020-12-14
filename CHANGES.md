@@ -7,11 +7,13 @@ Features ✨:
  - Url preview (#481)
  - Store encrypted file in cache and cleanup decrypted file at each app start (#2512)
  - Emoji Keyboard (#2520)
+ - Social login (#2452)
 
 Improvements 🙌:
  - Add Setting Item to Change PIN (#2462)
  - Improve room history visibility setting UX (#1579)
  - Matrix.to deeplink custom scheme support
+ - Homeserver history (#1933)
 
 Bugfix 🐛:
  - Fix cancellation of sending event (#2438)
