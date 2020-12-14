@@ -56,7 +56,7 @@
     <!-- medium friendly name -->
     <string name="medium_email">E-Mail-Adresse</string>
     <string name="medium_phone_number">Telefonnummer</string>
-    <string name="summary_user_sent_sticker">%1$s sandte einen Sticker.</string>
+    <string name="summary_user_sent_sticker">%1$s hat einen Sticker gesendet.</string>
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Einladung von %s</string>
     <string name="room_displayname_room_invite">Raumeinladung</string>

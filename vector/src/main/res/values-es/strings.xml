@@ -1577,8 +1577,8 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="conference_call_in_progress">Conferencia en progreso!</string>
     <string name="video_meeting">Iniciar Videoconferencia</string>
     <string name="audio_meeting">Iniciar Audioconferencia</string>
-    <string name="cannot_call_yourself">No puedes hacer llamarte a tí mismo</string>
-    <string name="cannot_call_yourself_with_invite">No puedes hacer llamarte a tí mismo, espera a que los participantes acepten la invitación</string>
+    <string name="cannot_call_yourself">No puedes hacer llamarte a ti mismo</string>
+    <string name="cannot_call_yourself_with_invite">No puedes hacer llamarte a ti mismo, espera a que los participantes acepten la invitación</string>
     <string name="failed_to_add_widget">Fallo al añadir Widget</string>
     <string name="failed_to_remove_widget">Fallo al eliminar Widget</string>
     <string name="settings_call_show_confirmation_dialog_title">Confirmar llamada</string>
@@ -2211,7 +2211,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_security_pin_code_notifications_summary_off">Sólo mostrar el número de mensajes no leídos en una notificación sencilla.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Mostrar detalles, como nombres de salas y contenido de mensajes.</string>
     <string name="settings_security_pin_code_notifications_title">Mostrar contenido de notificaciones</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">Element sólo puede ser desbloqueado via Código PIN.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">Element sólo puede ser desbloqueado vía Código PIN.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Activar biometría de este dispositivo en particular, como huellas dactilares o reconocimiento facial.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Activar biometría</string>
     <string name="settings_security_application_protection_screen_title">Configurar protecciones</string>
