@@ -144,8 +144,6 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="8dp"
-                android:clipToPadding="false"
-                android:clipChildren="false"
                 android:visibility="gone"
                 tools:visibility="visible">
 
@@ -160,10 +158,10 @@
                     android:textSize="14sp" />
 
                 <im.vector.app.features.login.SocialLoginButtonsView
-                    app:signMode="signin"
                     android:id="@+id/loginSocialLoginButtons"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    tools:signMode="signin" />
 
             </LinearLayout>
 
