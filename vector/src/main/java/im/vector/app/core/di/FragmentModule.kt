@@ -228,11 +228,6 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LoginSignUpSignInSelectionFragment::class)
     fun bindLoginSignUpSignInSelectionFragment(fragment: LoginSignUpSignInSelectionFragment): Fragment
-//
-//    @Binds
-//    @IntoMap
-//    @FragmentKey(LoginSignUpSignInSsoFragment::class)
-//    fun bindLoginSignUpSignInSsoFragment(fragment: LoginSignUpSignInSsoFragment): Fragment
 
     @Binds
     @IntoMap
