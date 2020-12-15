@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_layout"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?riotx_bottom_sheet_background"
@@ -32,7 +32,7 @@
         tools:text="@string/sign_out_bottom_sheet_warning_no_backup" />
 
     <LinearLayout
-        android:id="@+id/bottom_sheet_signout_backingup_status_group"
+        android:id="@+id/backingUpStatusGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -44,7 +44,7 @@
         tools:visibility="visible">
 
         <ImageView
-            android:id="@+id/bottom_sheet_signout_icon"
+            android:id="@+id/backupCompleteImage"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:visibility="gone"
@@ -52,7 +52,7 @@
             tools:visibility="visible" />
 
         <ProgressBar
-            android:id="@+id/bottom_sheet_signout_icon_progress_bar"
+            android:id="@+id/backupProgress"
             style="?android:attr/progressBarStyle"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -60,7 +60,7 @@
             tools:visibility="gone" />
 
         <TextView
-            android:id="@+id/bottom_sheet_backup_status_text"
+            android:id="@+id/backupStatusText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

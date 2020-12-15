@@ -19,14 +19,12 @@ import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import arrow.core.Try
-import butterknife.BindView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -50,15 +48,6 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step3
 
-    @BindView(R.id.keys_backup_setup_step3_button)
-    lateinit var mFinishButton: Button
-
-    @BindView(R.id.keys_backup_recovery_key_text)
-    lateinit var mRecoveryKeyTextView: TextView
-
-    @BindView(R.id.keys_backup_setup_step3_line2_text)
-    lateinit var mRecoveryKeyLabel2TextView: TextView
-
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,7 +62,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
                 mRecoveryKeyLabel2TextView.text = getString(R.string.keys_backup_setup_step3_text_line2_no_passphrase)
                 mFinishButton.text = getString(R.string.keys_backup_setup_step3_button_title_no_passphrase)
 
-                mRecoveryKeyTextView.text = viewModel.recoveryKey.value!!
+                keys_backup_recovery_key_text.text = viewModel.recoveryKey.value!!
                         .replace(" ", "")
                         .chunked(16)
                         .joinToString("\n") {
@@ -81,11 +70,11 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
                                     .chunked(4)
                                     .joinToString(" ")
                         }
-                mRecoveryKeyTextView.isVisible = true
+                keys_backup_recovery_key_text.isVisible = true
             } else {
                 mRecoveryKeyLabel2TextView.text = getString(R.string.keys_backup_setup_step3_text_line2)
                 mFinishButton.text = getString(R.string.keys_backup_setup_step3_button_title)
-                mRecoveryKeyTextView.isVisible = false
+                keys_backup_recovery_key_text.isVisible = false
             }
         })
 
@@ -93,7 +82,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
     }
 
     private fun setupViews() {
-        keys_backup_setup_step3_button.setOnClickListener { onFinishButtonClicked() }
+        mFinishButton.setOnClickListener { onFinishButtonClicked() }
         keys_backup_setup_step3_copy_button.setOnClickListener { onCopyButtonClicked() }
         keys_backup_recovery_key_text.setOnClickListener { onRecoveryKeyClicked() }
     }

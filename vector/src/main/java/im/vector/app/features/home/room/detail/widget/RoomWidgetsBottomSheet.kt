@@ -18,8 +18,6 @@ package im.vector.app.features.home.room.detail.widget
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -45,9 +43,6 @@ class RoomWidgetsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidget
     @Inject lateinit var colorProvider: ColorProvider
     @Inject lateinit var navigator: Navigator
 
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
-
     private val roomDetailViewModel: RoomDetailViewModel by parentFragmentViewModel()
 
     override fun injectWith(injector: ScreenComponent) {
@@ -58,7 +53,7 @@ class RoomWidgetsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidget
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(epoxyController, hasFixedSize = false)
+        bottomSheetRecyclerView.configureWith(epoxyController, hasFixedSize = false)
         bottomSheetTitle.text = getString(R.string.active_widgets_title)
         bottomSheetTitle.textSize = 20f
         bottomSheetTitle.setTextColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
@@ -69,7 +64,7 @@ class RoomWidgetsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidget
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        bottomSheetRecyclerView.cleanup()
         epoxyController.listener = null
         super.onDestroyView()
     }

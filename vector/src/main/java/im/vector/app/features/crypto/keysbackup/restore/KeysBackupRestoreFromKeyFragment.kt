@@ -19,11 +19,8 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
@@ -39,12 +36,6 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
 
     private lateinit var viewModel: KeysBackupRestoreFromKeyViewModel
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
-
-    @BindView(R.id.keys_backup_key_enter_til)
-    lateinit var mKeyInputLayout: TextInputLayout
-
-    @BindView(R.id.keys_restore_key_enter_edittext)
-    lateinit var mKeyTextEdit: EditText
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,7 +57,7 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
 
         keys_restore_button.setOnClickListener { onRestoreFromKey() }
         keys_backup_import.setOnClickListener { onImport() }
-        keys_restore_key_enter_edittext.doOnTextChanged { text, _, _, _ -> onRestoreKeyTextEditChange(text) }
+        mKeyTextEdit.doOnTextChanged { text, _, _, _ -> onRestoreKeyTextEditChange(text) }
     }
 
     private fun onRestoreKeyTextEditChange(s: CharSequence?) {

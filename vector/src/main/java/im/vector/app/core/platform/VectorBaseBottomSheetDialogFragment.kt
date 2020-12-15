@@ -27,8 +27,6 @@ import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.ViewModelProvider
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewId
@@ -60,8 +58,6 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
 
     @LayoutRes
     abstract fun getLayoutResId(): Int
-
-    private var unBinder: Unbinder? = null
 
     /* ==========================================================================================
      * View model
@@ -106,16 +102,12 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(getLayoutResId(), container, false)
-        unBinder = ButterKnife.bind(this, view)
-        return view
+        return inflater.inflate(getLayoutResId(), container, false)
     }
 
     @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
-        unBinder?.unbind()
-        unBinder = null
         uiDisposables.clear()
     }
 

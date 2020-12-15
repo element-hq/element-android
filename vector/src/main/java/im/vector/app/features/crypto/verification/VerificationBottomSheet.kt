@@ -21,12 +21,9 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.KeyEvent
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -49,6 +46,7 @@ import im.vector.app.features.crypto.verification.request.VerificationRequestFra
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.bottom_sheet_verification.*
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -85,15 +83,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
-
-    @BindView(R.id.verificationRequestName)
-    lateinit var otherUserNameText: TextView
-
-    @BindView(R.id.verificationRequestShield)
-    lateinit var otherUserShield: ImageView
-
-    @BindView(R.id.verificationRequestAvatar)
-    lateinit var otherUserAvatarImageView: ImageView
 
     override fun getLayoutResId() = R.layout.bottom_sheet_verification
 

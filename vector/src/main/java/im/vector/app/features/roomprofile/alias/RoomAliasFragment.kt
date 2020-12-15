@@ -66,8 +66,8 @@ class RoomAliasFragment @Inject constructor(
         controller.callback = this
         setupToolbar(roomSettingsToolbar)
         roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
-        waiting_view_status_text.setText(R.string.please_wait)
-        waiting_view_status_text.isVisible = true
+        waitingStatusText.setText(R.string.please_wait)
+        waitingStatusText.isVisible = true
 
         viewModel.observeViewEvents {
             when (it) {

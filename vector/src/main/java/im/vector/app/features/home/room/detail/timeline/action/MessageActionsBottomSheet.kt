@@ -17,8 +17,6 @@ package im.vector.app.features.home.room.detail.timeline.action
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -27,6 +25,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import kotlinx.android.synthetic.main.bottom_sheet_generic_list.*
 import javax.inject.Inject
 
 /**
@@ -36,9 +35,6 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
 
     @Inject lateinit var messageActionViewModelFactory: MessageActionsViewModel.Factory
     @Inject lateinit var messageActionsEpoxyController: MessageActionsEpoxyController
-
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
 
     private val viewModel: MessageActionsViewModel by fragmentViewModel(MessageActionsViewModel::class)
 
@@ -55,12 +51,12 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        recyclerView.configureWith(messageActionsEpoxyController, hasFixedSize = false, disableItemAnimation = true)
+        bottomSheetRecyclerView.configureWith(messageActionsEpoxyController, hasFixedSize = false, disableItemAnimation = true)
         messageActionsEpoxyController.listener = this
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        bottomSheetRecyclerView.cleanup()
         super.onDestroyView()
     }
 
@@ -80,8 +76,8 @@ class MessageActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), Message
         if (eventAction is EventSharedAction.ReportContent) {
             // Toggle report menu
             // Enable item animation
-            if (recyclerView.itemAnimator == null) {
-                recyclerView.itemAnimator = MessageActionsAnimator()
+            if (bottomSheetRecyclerView.itemAnimator == null) {
+                bottomSheetRecyclerView.itemAnimator = MessageActionsAnimator()
             }
             viewModel.handle(MessageActionsAction.ToggleReportMenu)
         } else {

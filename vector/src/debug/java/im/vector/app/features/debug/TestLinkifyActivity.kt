@@ -19,28 +19,18 @@ package im.vector.app.features.debug
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import butterknife.BindView
-import butterknife.ButterKnife
 import im.vector.app.R
+import kotlinx.android.synthetic.debug.activity_test_linkify.*
 
 class TestLinkifyActivity : AppCompatActivity() {
-
-    @BindView(R.id.test_linkify_content_view)
-    lateinit var scrollContent: LinearLayout
-
-    @BindView(R.id.test_linkify_coordinator)
-    lateinit var coordinatorLayout: CoordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test_linkify)
-        ButterKnife.bind(this)
 
-        scrollContent.removeAllViews()
+        test_linkify_content_view.removeAllViews()
 
         listOf(
                 "https://www.html5rocks.com/en/tutorials/webrtc/basics/ |",
@@ -89,7 +79,7 @@ class TestLinkifyActivity : AppCompatActivity() {
         )
                 .forEach { textContent ->
                     val item = LayoutInflater.from(this)
-                            .inflate(R.layout.item_test_linkify, scrollContent, false)
+                            .inflate(R.layout.item_test_linkify, test_linkify_content_view, false)
 
                     item.findViewById<TextView>(R.id.test_linkify_auto_text)
                             ?.apply {
@@ -125,7 +115,7 @@ class TestLinkifyActivity : AppCompatActivity() {
                                 // TODO Call VectorLinkify.addLinks(text)
                             }
 
-                    scrollContent.addView(item, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                    test_linkify_content_view.addView(item, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 }
     }
 }

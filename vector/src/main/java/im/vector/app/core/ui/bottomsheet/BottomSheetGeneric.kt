@@ -20,11 +20,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import kotlinx.android.synthetic.main.bottom_sheet_generic_list.*
 import javax.inject.Inject
 
 /**
@@ -36,9 +36,6 @@ abstract class BottomSheetGeneric<STATE : BottomSheetGenericState, ACTION : Bott
 
     @Inject lateinit var sharedViewPool: RecyclerView.RecycledViewPool
 
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
-
     final override val showExpanded = true
 
     final override fun getLayoutResId() = R.layout.bottom_sheet_generic_list
@@ -48,13 +45,13 @@ abstract class BottomSheetGeneric<STATE : BottomSheetGenericState, ACTION : Bott
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(getController(), viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
+        bottomSheetRecyclerView.configureWith(getController(), viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
         getController().listener = this
     }
 
     @CallSuper
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        bottomSheetRecyclerView.cleanup()
         getController().listener = null
         super.onDestroyView()
     }

@@ -114,8 +114,8 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun setupWaitingView() {
-        waiting_view_status_text.setText(R.string.please_wait)
-        waiting_view_status_text.isVisible = true
+        waitingStatusText.setText(R.string.please_wait)
+        waitingStatusText.isVisible = true
     }
 
     private fun setupLongClicks() {

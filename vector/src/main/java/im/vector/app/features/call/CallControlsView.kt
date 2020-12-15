@@ -18,13 +18,9 @@ package im.vector.app.features.call
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import butterknife.BindView
-import butterknife.ButterKnife
 import im.vector.app.R
 import kotlinx.android.synthetic.main.view_call_controls.view.*
 import org.matrix.android.sdk.api.session.call.CallState
@@ -36,34 +32,15 @@ class CallControlsView @JvmOverloads constructor(
 
     var interactionListener: InteractionListener? = null
 
-    @BindView(R.id.ringingControls)
-    lateinit var ringingControls: ViewGroup
-
-    @BindView(R.id.iv_icr_accept_call)
-    lateinit var ringingControlAccept: ImageView
-
-    @BindView(R.id.iv_icr_end_call)
-    lateinit var ringingControlDecline: ImageView
-
-    @BindView(R.id.connectedControls)
-    lateinit var connectedControls: ViewGroup
-
-    @BindView(R.id.iv_mute_toggle)
-    lateinit var muteIcon: ImageView
-
-    @BindView(R.id.iv_video_toggle)
-    lateinit var videoToggleIcon: ImageView
-
     init {
         ConstraintLayout.inflate(context, R.layout.view_call_controls, this)
         // layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        ButterKnife.bind(this)
 
-        iv_icr_accept_call.setOnClickListener { acceptIncomingCall() }
-        iv_icr_end_call.setOnClickListener { declineIncomingCall() }
+        ringingControlAccept.setOnClickListener { acceptIncomingCall() }
+        ringingControlDecline.setOnClickListener { declineIncomingCall() }
         iv_end_call.setOnClickListener { endOngoingCall() }
-        iv_mute_toggle.setOnClickListener { toggleMute() }
-        iv_video_toggle.setOnClickListener { toggleVideo() }
+        muteIcon.setOnClickListener { toggleMute() }
+        videoToggleIcon.setOnClickListener { toggleVideo() }
         iv_leftMiniControl.setOnClickListener { returnToChat() }
         iv_more.setOnClickListener { moreControlOption() }
     }
@@ -132,7 +109,7 @@ class CallControlsView @JvmOverloads constructor(
                 if (callState.iceConnectionState == PeerConnection.PeerConnectionState.CONNECTED) {
                     ringingControls.isVisible = false
                     connectedControls.isVisible = true
-                    iv_video_toggle.isVisible = state.isVideoCall
+                    videoToggleIcon.isVisible = state.isVideoCall
                 } else {
                     ringingControls.isVisible = true
                     ringingControlAccept.isVisible = false

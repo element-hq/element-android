@@ -58,8 +58,8 @@ class VectorSettingsDevicesFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        waiting_view_status_text.setText(R.string.please_wait)
-        waiting_view_status_text.isVisible = true
+        waitingStatusText.setText(R.string.please_wait)
+        waitingStatusText.isVisible = true
         devicesController.callback = this
         genericRecyclerView.configureWith(devicesController, showDivider = true)
         viewModel.observeViewEvents {

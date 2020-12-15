@@ -21,9 +21,6 @@ import android.net.Uri
 import android.text.Editable
 import android.util.AttributeSet
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
@@ -33,8 +30,6 @@ import androidx.transition.Fade
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
-import butterknife.BindView
-import butterknife.ButterKnife
 import im.vector.app.R
 import kotlinx.android.synthetic.main.composer_layout.view.*
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
@@ -54,30 +49,6 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     var callback: Callback? = null
 
-    @BindView(R.id.composer_related_message_sender)
-    lateinit var composerRelatedMessageTitle: TextView
-
-    @BindView(R.id.composer_related_message_preview)
-    lateinit var composerRelatedMessageContent: TextView
-
-    @BindView(R.id.composer_related_message_avatar_view)
-    lateinit var composerRelatedMessageAvatar: ImageView
-
-    @BindView(R.id.composer_related_message_action_image)
-    lateinit var composerRelatedMessageActionIcon: ImageView
-
-    @BindView(R.id.composer_related_message_close)
-    lateinit var composerRelatedMessageCloseButton: ImageButton
-
-    @BindView(R.id.composerEditText)
-    lateinit var composerEditText: ComposerEditText
-
-    @BindView(R.id.composer_emoji)
-    lateinit var composerEmojiButton: ImageButton
-
-    @BindView(R.id.composer_shield)
-    lateinit var composerShieldImageView: ImageView
-
     private var currentConstraintSetId: Int = -1
 
     private val animationDuration = 100L
@@ -87,7 +58,6 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     init {
         inflate(context, R.layout.composer_layout, this)
-        ButterKnife.bind(this)
         collapse(false)
         composerEditText.callback = object : ComposerEditText.Callback {
             override fun onRichContentSelected(contentUri: Uri): Boolean {
@@ -134,7 +104,7 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
         ConstraintSet().also {
             it.clone(context, currentConstraintSetId)
             // in case shield is hidden, we will have glitch without this
-            it.getConstraint(R.id.composer_shield).propertySet.visibility = composerShieldImageView.visibility
+            it.getConstraint(R.id.composerShieldImageView).propertySet.visibility = composerShieldImageView.visibility
             it.applyTo(this)
         }
     }

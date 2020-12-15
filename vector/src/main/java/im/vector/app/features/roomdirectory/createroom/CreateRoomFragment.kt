@@ -90,8 +90,8 @@ class CreateRoomFragment @Inject constructor(
     }
 
     private fun setupWaitingView() {
-        waiting_view_status_text.isVisible = true
-        waiting_view_status_text.setText(R.string.create_room_in_progress)
+        waitingStatusText.isVisible = true
+        waitingStatusText.setText(R.string.create_room_in_progress)
     }
 
     override fun onDestroyView() {

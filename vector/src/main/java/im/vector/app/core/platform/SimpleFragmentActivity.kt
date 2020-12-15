@@ -15,17 +15,14 @@
  */
 package im.vector.app.core.platform
 
-import android.view.View
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.annotation.CallSuper
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import butterknife.BindView
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.activity.*
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
@@ -35,15 +32,6 @@ import javax.inject.Inject
 abstract class SimpleFragmentActivity : VectorBaseActivity() {
 
     override fun getLayoutRes() = R.layout.activity
-
-    @BindView(R.id.waiting_view_status_circular_progress)
-    lateinit var waitingCircularProgress: View
-
-    @BindView(R.id.waiting_view_status_text)
-    lateinit var waitingStatusText: TextView
-
-    @BindView(R.id.waiting_view_status_horizontal_progress)
-    lateinit var waitingHorizontalProgress: ProgressBar
 
     @Inject lateinit var session: Session
 

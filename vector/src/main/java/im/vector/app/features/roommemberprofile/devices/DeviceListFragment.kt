@@ -18,8 +18,6 @@ package im.vector.app.features.roommemberprofile.devices
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -27,6 +25,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
+import kotlinx.android.synthetic.main.bottom_sheet_generic_list.*
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
@@ -39,13 +38,10 @@ class DeviceListFragment @Inject constructor(
 
     private val viewModel: DeviceListBottomSheetViewModel by parentFragmentViewModel(DeviceListBottomSheetViewModel::class)
 
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.setPadding(0, dimensionConverter.dpToPx(16), 0, dimensionConverter.dpToPx(16))
-        recyclerView.configureWith(
+        bottomSheetRecyclerView.setPadding(0, dimensionConverter.dpToPx(16), 0, dimensionConverter.dpToPx(16))
+        bottomSheetRecyclerView.configureWith(
                 epoxyController,
                 showDivider = false,
                 hasFixedSize = false)
@@ -53,7 +49,7 @@ class DeviceListFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        bottomSheetRecyclerView.cleanup()
         super.onDestroyView()
     }
 

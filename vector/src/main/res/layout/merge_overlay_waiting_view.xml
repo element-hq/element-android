@@ -35,14 +35,14 @@
                 android:orientation="horizontal">
 
                 <ProgressBar
-                    android:id="@+id/waiting_view_status_circular_progress"
+                    android:id="@+id/waitingCircularProgress"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="6dp" />
 
                 <TextView
-                    android:id="@+id/waiting_view_status_text"
+                    android:id="@+id/waitingStatusText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -54,7 +54,7 @@
             </LinearLayout>
 
             <ProgressBar
-                android:id="@+id/waiting_view_status_horizontal_progress"
+                android:id="@+id/waitingHorizontalProgress"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"

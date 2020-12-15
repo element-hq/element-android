@@ -17,8 +17,6 @@ package im.vector.app.features.home.room.detail.timeline.edithistory
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -43,9 +41,6 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
     @Inject lateinit var viewEditHistoryViewModelFactory: ViewEditHistoryViewModel.Factory
     @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
 
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
-
     private val epoxyController by lazy {
         ViewEditHistoryEpoxyController(requireContext(), viewModel.dateFormatter, eventHtmlRenderer)
     }
@@ -58,7 +53,7 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(
+        bottomSheetRecyclerView.configureWith(
                 epoxyController,
                 showDivider = true,
                 hasFixedSize = false)
@@ -66,7 +61,7 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        bottomSheetRecyclerView.cleanup()
         super.onDestroyView()
     }
 

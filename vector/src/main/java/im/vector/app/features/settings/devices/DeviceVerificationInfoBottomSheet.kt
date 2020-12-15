@@ -19,8 +19,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
@@ -48,9 +46,6 @@ class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(),
 
     @Inject lateinit var deviceVerificationInfoViewModelFactory: DeviceVerificationInfoBottomSheetViewModel.Factory
 
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
-
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
@@ -61,7 +56,7 @@ class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(
+        bottomSheetRecyclerView.configureWith(
                 controller,
                 showDivider = false,
                 hasFixedSize = false)
@@ -70,7 +65,7 @@ class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(),
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        bottomSheetRecyclerView.cleanup()
         super.onDestroyView()
     }
 

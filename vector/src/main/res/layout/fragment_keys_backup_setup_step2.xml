@@ -83,7 +83,7 @@
             tools:ignore="MissingPrefix" />
 
         <im.vector.app.core.ui.views.PasswordStrengthBar
-            android:id="@+id/keys_backup_passphrase_security_progress"
+            android:id="@+id/mPassphraseProgressLevel"
             android:layout_width="0dp"
             android:layout_height="4dp"
             app:layout_constraintEnd_toEndOf="@id/keys_backup_passphrase_enter_til"
@@ -92,7 +92,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/keys_backup_passphrase_confirm_til"
+            android:id="@+id/mPassphraseConfirmInputLayout"
             style="@style/VectorTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -102,10 +102,10 @@
             app:errorEnabled="true"
             app:layout_constraintEnd_toStartOf="@id/keys_backup_view_show_password"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/keys_backup_passphrase_security_progress">
+            app:layout_constraintTop_toBottomOf="@id/mPassphraseProgressLevel">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/keys_backup_passphrase_confirm_edittext"
+                android:id="@+id/mPassphraseConfirmTextEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/passphrase_confirm_passphrase"
@@ -122,7 +122,7 @@
             android:text="@string/keys_backup_setup_step2_button_title"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/keys_backup_passphrase_confirm_til" />
+            app:layout_constraintTop_toBottomOf="@id/mPassphraseConfirmInputLayout" />
 
 
         <TextView

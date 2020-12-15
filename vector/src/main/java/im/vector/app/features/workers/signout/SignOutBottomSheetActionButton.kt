@@ -20,65 +20,51 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.view.isVisible
-import butterknife.BindView
-import butterknife.ButterKnife
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.themes.ThemeUtils
+import kotlinx.android.synthetic.main.item_signout_action.view.*
 
 class SignOutBottomSheetActionButton @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
-
-    @BindView(R.id.actionTitleText)
-    lateinit var actionTextView: TextView
-
-    @BindView(R.id.actionIconImageView)
-    lateinit var iconImageView: ImageView
-
-    @BindView(R.id.signedOutActionClickable)
-    lateinit var clickableZone: View
 
     var action: (() -> Unit)? = null
 
     var title: String? = null
         set(value) {
             field = value
-            actionTextView.setTextOrHide(value)
+            actionTitleText.setTextOrHide(value)
         }
 
     var leftIcon: Drawable? = null
         set(value) {
             field = value
             if (value == null) {
-                iconImageView.isVisible = false
-                iconImageView.setImageDrawable(null)
+                actionIconImageView.isVisible = false
+                actionIconImageView.setImageDrawable(null)
             } else {
-                iconImageView.isVisible = true
-                iconImageView.setImageDrawable(value)
+                actionIconImageView.isVisible = true
+                actionIconImageView.setImageDrawable(value)
             }
         }
 
     var tint: Int? = null
         set(value) {
             field = value
-            iconImageView.imageTintList = value?.let { ColorStateList.valueOf(value) }
+            actionIconImageView.imageTintList = value?.let { ColorStateList.valueOf(value) }
         }
 
     var textColor: Int? = null
         set(value) {
             field = value
-            textColor?.let { actionTextView.setTextColor(it) }
+            textColor?.let { actionTitleText.setTextColor(it) }
         }
 
     init {
         inflate(context, R.layout.item_signout_action, this)
-        ButterKnife.bind(this)
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SignOutBottomSheetActionButton, 0, 0)
         title = typedArray.getString(R.styleable.SignOutBottomSheetActionButton_actionTitle) ?: ""
@@ -88,7 +74,7 @@ class SignOutBottomSheetActionButton @JvmOverloads constructor(
 
         typedArray.recycle()
 
-        clickableZone.setOnClickListener {
+        signedOutActionClickable.setOnClickListener {
             action?.invoke()
         }
     }

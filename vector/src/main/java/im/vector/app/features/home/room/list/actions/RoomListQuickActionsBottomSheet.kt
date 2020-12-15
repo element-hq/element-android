@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -30,6 +29,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.navigation.Navigator
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.bottom_sheet_generic_list.*
 import javax.inject.Inject
 
 @Parcelize
@@ -57,9 +57,6 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
 
     private val viewModel: RoomListQuickActionsViewModel by fragmentViewModel(RoomListQuickActionsViewModel::class)
 
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
-
     override val showExpanded = true
 
     override fun injectWith(injector: ScreenComponent) {
@@ -71,12 +68,12 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
-        recyclerView.configureWith(roomListActionsEpoxyController, viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
+        bottomSheetRecyclerView.configureWith(roomListActionsEpoxyController, viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
         roomListActionsEpoxyController.listener = this
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        bottomSheetRecyclerView.cleanup()
         roomListActionsEpoxyController.listener = null
         super.onDestroyView()
     }

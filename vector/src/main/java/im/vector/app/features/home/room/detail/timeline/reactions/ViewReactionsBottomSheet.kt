@@ -18,8 +18,6 @@ package im.vector.app.features.home.room.detail.timeline.reactions
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -45,9 +43,6 @@ class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment(), ViewReac
     @Inject lateinit var viewReactionsViewModelFactory: ViewReactionsViewModel.Factory
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
-
     @Inject lateinit var epoxyController: ViewReactionsEpoxyController
 
     override fun injectWith(injector: ScreenComponent) {
@@ -59,13 +54,13 @@ class ViewReactionsBottomSheet : VectorBaseBottomSheetDialogFragment(), ViewReac
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        recyclerView.configureWith(epoxyController, hasFixedSize = false, showDivider = true)
+        bottomSheetRecyclerView.configureWith(epoxyController, hasFixedSize = false, showDivider = true)
         bottomSheetTitle.text = context?.getString(R.string.reactions)
         epoxyController.listener = this
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        bottomSheetRecyclerView.cleanup()
         epoxyController.listener = null
         super.onDestroyView()
     }

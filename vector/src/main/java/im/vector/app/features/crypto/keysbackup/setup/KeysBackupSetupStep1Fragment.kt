@@ -18,10 +18,7 @@ package im.vector.app.features.crypto.keysbackup.setup
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.lifecycle.Observer
-import butterknife.BindView
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
@@ -33,12 +30,6 @@ class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment() 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step1
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
-
-    @BindView(R.id.keys_backup_setup_step1_advanced)
-    lateinit var advancedOptionText: TextView
-
-    @BindView(R.id.keys_backup_setup_step1_manualExport)
-    lateinit var manualExportButton: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,7 +44,7 @@ class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment() 
         })
 
         keys_backup_setup_step1_button.setOnClickListener { onButtonClick() }
-        keys_backup_setup_step1_manualExport.setOnClickListener { onManualExportClick() }
+        manualExportButton.setOnClickListener { onManualExportClick() }
     }
 
     private fun onButtonClick() {

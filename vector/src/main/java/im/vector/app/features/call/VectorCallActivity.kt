@@ -32,7 +32,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
-import butterknife.BindView
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
@@ -58,7 +57,6 @@ import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.webrtc.EglBase
 import org.webrtc.PeerConnection
 import org.webrtc.RendererCommon
-import org.webrtc.SurfaceViewRenderer
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -89,15 +87,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     @Inject lateinit var peerConnectionManager: WebRtcPeerConnectionManager
 
     @Inject lateinit var viewModelFactory: VectorCallViewModel.Factory
-
-    @BindView(R.id.pip_video_view)
-    lateinit var pipRenderer: SurfaceViewRenderer
-
-    @BindView(R.id.fullscreen_video_view)
-    lateinit var fullscreenRenderer: SurfaceViewRenderer
-
-    @BindView(R.id.callControls)
-    lateinit var callControlsView: CallControlsView
 
     private var rootEglBase: EglBase? = null
 
@@ -259,7 +248,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                     if (callArgs.isVideoCall) {
                         callVideoGroup.isVisible = true
                         callInfoGroup.isVisible = false
-                        pip_video_view.isVisible = !state.isVideoCaptureInError
+                        pipRenderer.isVisible = !state.isVideoCaptureInError
                     } else {
                         callVideoGroup.isInvisible = true
                         callInfoGroup.isVisible = true

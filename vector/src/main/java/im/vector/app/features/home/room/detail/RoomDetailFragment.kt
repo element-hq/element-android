@@ -1295,8 +1295,8 @@ class RoomDetailFragment @Inject constructor(
             is Loading -> {
                 // TODO Better handling progress
                 vectorBaseActivity.showWaitingView()
-                vectorBaseActivity.waiting_view_status_text.visibility = View.VISIBLE
-                vectorBaseActivity.waiting_view_status_text.text = getString(R.string.joining_room)
+                vectorBaseActivity.waitingStatusText.visibility = View.VISIBLE
+                vectorBaseActivity.waitingStatusText.text = getString(R.string.joining_room)
             }
             is Success -> {
                 navigator.openRoom(vectorBaseActivity, async())

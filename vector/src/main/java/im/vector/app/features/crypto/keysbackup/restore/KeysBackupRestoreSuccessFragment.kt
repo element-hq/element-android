@@ -17,9 +17,7 @@ package im.vector.app.features.crypto.keysbackup.restore
 
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.core.view.isVisible
-import butterknife.BindView
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
@@ -29,12 +27,6 @@ import javax.inject.Inject
 class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_keys_backup_restore_success
-
-    @BindView(R.id.keys_backup_restore_success)
-    lateinit var mSuccessText: TextView
-
-    @BindView(R.id.keys_backup_restore_success_info)
-    lateinit var mSuccessDetailsText: TextView
 
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
 

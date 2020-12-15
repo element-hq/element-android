@@ -19,8 +19,6 @@ package im.vector.app.features.home.room.detail.readreceipts
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.args
 import im.vector.app.R
@@ -47,9 +45,6 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment(), Di
 
     @Inject lateinit var epoxyController: DisplayReadReceiptsController
 
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
-
     private val displayReadReceiptArgs: DisplayReadReceiptArgs by args()
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
@@ -63,14 +58,14 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment(), Di
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        recyclerView.configureWith(epoxyController, hasFixedSize = false)
+        bottomSheetRecyclerView.configureWith(epoxyController, hasFixedSize = false)
         bottomSheetTitle.text = getString(R.string.seen_by)
         epoxyController.listener = this
         epoxyController.setData(displayReadReceiptArgs.readReceipts)
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        bottomSheetRecyclerView.cleanup()
         epoxyController.listener = null
         super.onDestroyView()
     }

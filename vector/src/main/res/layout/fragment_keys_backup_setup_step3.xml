@@ -53,7 +53,7 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/keys_backup_setup_step3_line2_text"
+            android:id="@+id/mRecoveryKeyLabel2TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -87,7 +87,7 @@
             android:text="@string/keys_backup_setup_step3_copy_button_title" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/keys_backup_setup_step3_button"
+            android:id="@+id/mFinishButton"
             style="@style/VectorButtonStyle"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/layout_vertical_margin"

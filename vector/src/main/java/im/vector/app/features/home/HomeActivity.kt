@@ -204,13 +204,13 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 waiting_view.setOnClickListener {
                     // block interactions
                 }
-                waiting_view_status_horizontal_progress.apply {
+                waitingHorizontalProgress.apply {
                     isIndeterminate = false
                     max = 100
                     progress = status.percentProgress
                     isVisible = true
                 }
-                waiting_view_status_text.apply {
+                waitingStatusText.apply {
                     text = getString(status.statusText)
                     isVisible = true
                 }

@@ -30,20 +30,15 @@ import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.annotation.MenuRes
-import androidx.annotation.Nullable
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
@@ -84,21 +79,13 @@ import im.vector.app.receivers.DebugReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.activity.*
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
 
 abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
-    /* ==========================================================================================
-     * UI
-     * ========================================================================================== */
-
-    @Nullable
-    @JvmField
-    @BindView(R.id.vector_coordinator_layout)
-    var coordinatorLayout: CoordinatorLayout? = null
-
     /* ==========================================================================================
      * View model
      * ========================================================================================== */
@@ -138,8 +125,6 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
 
     // Filter for multiple invalid token error
     private var mainActivityStarted = false
-
-    private var unBinder: Unbinder? = null
 
     private var savedInstanceState: Bundle? = null
 
@@ -229,8 +214,6 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
             setContentView(getLayoutRes())
         }
 
-        unBinder = ButterKnife.bind(this)
-
         this.savedInstanceState = savedInstanceState
 
         initUiAndData()
@@ -308,8 +291,6 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     override fun onDestroy() {
         super.onDestroy()
         Timber.i("onDestroy Activity ${javaClass.simpleName}")
-        unBinder?.unbind()
-        unBinder = null
 
         uiDisposables.dispose()
     }

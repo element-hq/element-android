@@ -33,8 +33,6 @@ import androidx.annotation.MainThread
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
@@ -50,13 +48,11 @@ import im.vector.app.features.navigation.Navigator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.activity.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
-
-    // Butterknife unbinder
-    private var mUnBinder: Unbinder? = null
 
     protected val vectorBaseActivity: VectorBaseActivity by lazy {
         activity as VectorBaseActivity
@@ -125,7 +121,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mUnBinder = ButterKnife.bind(this, view)
+        Timber.i("onViewCreated Fragment ${javaClass.simpleName}")
     }
 
     open fun showLoading(message: CharSequence?) {
@@ -140,8 +136,6 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     override fun onDestroyView() {
         super.onDestroyView()
         Timber.i("onDestroyView Fragment ${javaClass.simpleName}")
-        mUnBinder?.unbind()
-        mUnBinder = null
         uiDisposables.clear()
     }
 

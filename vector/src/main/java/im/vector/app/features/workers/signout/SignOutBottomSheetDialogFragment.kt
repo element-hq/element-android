@@ -20,14 +20,9 @@ import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import butterknife.BindView
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -51,27 +46,6 @@ import javax.inject.Inject
 
 // TODO this needs to be refactored to current standard and remove legacy
 class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), SignoutCheckViewModel.Factory {
-
-    @BindView(R.id.bottom_sheet_signout_warning_text)
-    lateinit var sheetTitle: TextView
-
-    @BindView(R.id.bottom_sheet_signout_backingup_status_group)
-    lateinit var backingUpStatusGroup: ViewGroup
-
-    @BindView(R.id.bottom_sheet_signout_icon_progress_bar)
-    lateinit var backupProgress: ProgressBar
-
-    @BindView(R.id.bottom_sheet_signout_icon)
-    lateinit var backupCompleteImage: ImageView
-
-    @BindView(R.id.bottom_sheet_backup_status_text)
-    lateinit var backupStatusTex: TextView
-
-    @BindView(R.id.signoutExportingLoading)
-    lateinit var signoutExportingLoading: View
-
-    @BindView(R.id.root_layout)
-    lateinit var rootLayout: ViewGroup
 
     var onSignOut: Runnable? = null
 
@@ -164,7 +138,7 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
     override fun invalidate() = withState(viewModel) { state ->
         signoutExportingLoading.isVisible = false
         if (state.crossSigningSetupAllKeysKnown && !state.backupIsSetup) {
-            sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
+            bottom_sheet_signout_warning_text.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
             backingUpStatusGroup.isVisible = false
             // we should show option to setup 4S
             setupRecoveryButton.isVisible = true
@@ -174,7 +148,7 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
             exitAnywayButton.isVisible = true
             signOutButton.isVisible = false
         } else if (state.keysBackupState == KeysBackupState.Unknown || state.keysBackupState == KeysBackupState.Disabled) {
-            sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
+            bottom_sheet_signout_warning_text.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
             backingUpStatusGroup.isVisible = false
             // no key backup and cannot setup full 4S
             // we propose to setup
@@ -192,13 +166,13 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
 
             when (state.keysBackupState) {
                 KeysBackupState.ReadyToBackUp -> {
-                    sheetTitle.text = getString(R.string.action_sign_out_confirmation_simple)
+                    bottom_sheet_signout_warning_text.text = getString(R.string.action_sign_out_confirmation_simple)
 
                     // Ok all keys are backedUp
                     backingUpStatusGroup.isVisible = true
                     backupProgress.isVisible = false
                     backupCompleteImage.isVisible = true
-                    backupStatusTex.text = getString(R.string.keys_backup_info_keys_all_backup_up)
+                    backupStatusText.text = getString(R.string.keys_backup_info_keys_all_backup_up)
 
                     setupMegolmBackupButton.isVisible = false
                     exportManuallyButton.isVisible = false
@@ -208,13 +182,13 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
                 }
                 KeysBackupState.WillBackUp,
                 KeysBackupState.BackingUp     -> {
-                    sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
+                    bottom_sheet_signout_warning_text.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
 
                     // save in progress
                     backingUpStatusGroup.isVisible = true
                     backupProgress.isVisible = true
                     backupCompleteImage.isVisible = false
-                    backupStatusTex.text = getString(R.string.sign_out_bottom_sheet_backing_up_keys)
+                    backupStatusText.text = getString(R.string.sign_out_bottom_sheet_backing_up_keys)
 
                     setupMegolmBackupButton.isVisible = false
                     exportManuallyButton.isVisible = false
@@ -222,7 +196,7 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
                     signOutButton.isVisible = false
                 }
                 KeysBackupState.NotTrusted    -> {
-                    sheetTitle.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
+                    bottom_sheet_signout_warning_text.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
                     // It's not trusted and we know there are unsaved keys..
                     backingUpStatusGroup.isVisible = false
 
@@ -254,7 +228,7 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
             }
             is Success -> {
                 if (state.hasBeenExportedToFile.invoke()) {
-                    sheetTitle.text = getString(R.string.action_sign_out_confirmation_simple)
+                    bottom_sheet_signout_warning_text.text = getString(R.string.action_sign_out_confirmation_simple)
                     backingUpStatusGroup.isVisible = false
 
                     setupRecoveryButton.isVisible = false
