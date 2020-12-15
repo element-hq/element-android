@@ -2571,6 +2571,7 @@
     </plurals>
 
     <string name="command_confetti">Sends the given message with confetti</string>
+    <string name="command_snow">Sends the given message with snow</string>
 
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>

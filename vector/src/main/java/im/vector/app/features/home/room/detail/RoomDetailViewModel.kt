@@ -715,8 +715,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
-                        is ParsedCommand.Confetti                 -> {
-                            room.sendTextMessage(slashCommandResult.message, MessageType.MSGTYPE_CONFETTI)
+                        is ParsedCommand.SendChatEffect            -> {
+                            room.sendTextMessage(slashCommandResult.message, slashCommandResult.chatEffect.toMessageType())
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }

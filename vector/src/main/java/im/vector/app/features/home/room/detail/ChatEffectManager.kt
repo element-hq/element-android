@@ -29,6 +29,13 @@ enum class ChatEffect {
     SNOW
 }
 
+fun ChatEffect.toMessageType(): String {
+    return when (this) {
+        ChatEffect.CONFETTI -> MessageType.MSGTYPE_CONFETTI
+        ChatEffect.SNOW     -> MessageType.MSGTYPE_SNOW
+    }
+}
+
 /**
  * A simple chat effect manager helper class
  * Used by the view model to know if an event that become visible should trigger a chat effect.

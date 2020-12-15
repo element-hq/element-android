@@ -45,7 +45,8 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     SHRUG("/shrug", "<message>", R.string.command_description_shrug),
     PLAIN("/plain", "<message>", R.string.command_description_plain),
     DISCARD_SESSION("/discardsession", "", R.string.command_description_discard_session),
-    CONFETTI("/confetti", "<message>", R.string.command_confetti);
+    CONFETTI("/confetti", "<message>", R.string.command_confetti),
+    SNOW("/snow", "<message>", R.string.command_snow);
 
     val length
         get() = command.length + 1
