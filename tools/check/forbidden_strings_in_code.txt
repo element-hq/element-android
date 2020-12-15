@@ -109,9 +109,6 @@ import retrofit2\.adapter\.rxjava\.HttpException
 ### This is generally not necessary, no need to reset the padding if there is no drawable
 setCompoundDrawablePadding\(0\)
 
-### Deprecated use class form SDK API 26
-ButterKnife\.findById\(
-
 # Change thread with Rx
 # DISABLED
 #runOnUiThread

@@ -386,10 +386,6 @@ dependencies {
 
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
-    // Butterknife
-    implementation 'com.jakewharton:butterknife:10.2.0'
-    kapt 'com.jakewharton:butterknife-compiler:10.2.0'
-
     // Shake detection
     implementation 'com.squareup:seismic:1.0.2'
 
