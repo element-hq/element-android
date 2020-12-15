@@ -21,24 +21,26 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import androidx.annotation.AttrRes
 import androidx.annotation.CallSuper
-import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
@@ -79,13 +81,19 @@ import im.vector.app.receivers.DebugReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.activity.*
+
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
 
-abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
+abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScreenInjector {
+    /* ==========================================================================================
+     * View
+     * ========================================================================================== */
+
+    protected lateinit var views: VB
+
     /* ==========================================================================================
      * View model
      * ========================================================================================== */
@@ -210,9 +218,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         // Hack for font size
         applyFontSize()
 
-        if (getLayoutRes() != -1) {
-            setContentView(getLayoutRes())
-        }
+        views = getBinding()
+        setContentView(views.root)
 
         this.savedInstanceState = savedInstanceState
 
@@ -450,7 +457,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     }
 
     private fun recursivelyDispatchOnBackPressed(fm: FragmentManager, fromToolbar: Boolean): Boolean {
-        val reverseOrder = fm.fragments.filterIsInstance<VectorBaseFragment>().reversed()
+        val reverseOrder = fm.fragments.filterIsInstance<VectorBaseFragment<*>>().reversed()
         for (f in reverseOrder) {
             val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager, fromToolbar)
             if (handledByChildFragments) {
@@ -537,8 +544,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
      * OPEN METHODS
      * ========================================================================================== */
 
-    @LayoutRes
-    open fun getLayoutRes() = -1
+    abstract fun getBinding(): VB
 
     open fun displayInFullscreen() = false
 
@@ -565,13 +571,13 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
      * ========================================================================================== */
 
     fun showSnackbar(message: String) {
-        coordinatorLayout?.let {
+        getCoordinatorLayout()?.let {
             Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show()
         }
     }
 
     fun showSnackbar(message: String, @StringRes withActionTitle: Int?, action: (() -> Unit)?) {
-        coordinatorLayout?.let {
+        getCoordinatorLayout()?.let {
             Snackbar.make(it, message, Snackbar.LENGTH_LONG).apply {
                 withActionTitle?.let {
                     setAction(withActionTitle, { action?.invoke() })
@@ -579,6 +585,9 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
             }.show()
         }
     }
+
+    // TODO BMA Provide the CL from the Views
+    open fun getCoordinatorLayout(): CoordinatorLayout? = null
 
     /* ==========================================================================================
      * User Consent

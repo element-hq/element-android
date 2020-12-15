@@ -35,8 +35,8 @@ import timber.log.Timber
 
 abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScreenInjector {
 
-    val vectorActivity: VectorBaseActivity by lazy {
-        activity as VectorBaseActivity
+    val vectorActivity: VectorBaseActivity<*> by lazy {
+        activity as VectorBaseActivity<*>
     }
 
     private var mLoadingView: View? = null

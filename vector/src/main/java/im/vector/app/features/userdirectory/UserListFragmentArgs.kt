@@ -17,7 +17,7 @@
 package im.vector.app.features.userdirectory
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class UserListFragmentArgs(

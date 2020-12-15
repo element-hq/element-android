@@ -18,7 +18,9 @@ package im.vector.app.features.crypto.quads
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import com.airbnb.mvrx.activityViewModel
 import com.jakewharton.rxbinding3.widget.editorActionEvents
@@ -27,15 +29,19 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
+import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
+import im.vector.app.databinding.FragmentSsssAccessFromKeyBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_ssss_access_from_key.*
+
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment() {
+class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment<FragmentSsssAccessFromKeyBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_ssss_access_from_key
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSsssAccessFromKeyBinding {
+        return FragmentSsssAccessFromKeyBinding.inflate(inflater, container, false)
+    }
 
     val sharedViewModel: SharedSecureStorageViewModel by activityViewModel()
 

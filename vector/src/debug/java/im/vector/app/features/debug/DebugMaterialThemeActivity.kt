@@ -24,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import im.vector.app.R
 import im.vector.app.core.utils.toast
-import kotlinx.android.synthetic.debug.activity_test_material_theme.*
+
 
 // Rendering is not the same with VectorBaseActivity
 abstract class DebugMaterialThemeActivity : AppCompatActivity() {

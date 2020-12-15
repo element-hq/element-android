@@ -24,7 +24,7 @@ import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.updateConstraintSet
-import kotlinx.android.synthetic.main.view_state.view.*
+
 
 class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : FrameLayout(context, attrs, defStyle) {

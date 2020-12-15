@@ -27,6 +27,7 @@ import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxView
 import com.airbnb.mvrx.MvRxViewId
@@ -46,7 +47,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Add MvRx capabilities to bottomsheetdialog (like BaseMvRxFragment)
  */
-abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment(), MvRxView {
+abstract class VectorBaseBottomSheetDialogFragment<VB: ViewBinding> : BottomSheetDialogFragment(), MvRxView {
 
     private val mvrxViewIdProperty = MvRxViewId()
     final override val mvrxViewId: String by mvrxViewIdProperty
@@ -56,8 +57,13 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
      * View
      * ========================================================================================== */
 
-    @LayoutRes
-    abstract fun getLayoutResId(): Int
+    private var _binding: VB? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    protected val views: VB
+        get() = _binding!!
+
+    abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?): VB
 
     /* ==========================================================================================
      * View model
@@ -77,8 +83,8 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
 
     private var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>? = null
 
-    val vectorBaseActivity: VectorBaseActivity by lazy {
-        activity as VectorBaseActivity
+    val vectorBaseActivity: VectorBaseActivity<*> by lazy {
+        activity as VectorBaseActivity<*>
     }
 
     open val showExpanded = false
@@ -102,7 +108,8 @@ abstract class VectorBaseBottomSheetDialogFragment : BottomSheetDialogFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(getLayoutResId(), container, false)
+        _binding = getBinding(inflater, container)
+        return views.root
     }
 
     @CallSuper

@@ -17,17 +17,23 @@
 package im.vector.app.features.crypto.keysbackup.setup
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
-import kotlinx.android.synthetic.main.fragment_keys_backup_setup_step1.*
+import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
+import im.vector.app.databinding.FragmentKeysBackupSetupStep1Binding
+
 import javax.inject.Inject
 
-class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment() {
+class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupSetupStep1Binding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step1
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSetupStep1Binding {
+        return FragmentKeysBackupSetupStep1Binding.inflate(inflater, container, false)
+    }
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
 
@@ -39,12 +45,12 @@ class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment() 
         viewModel.showManualExport.observe(viewLifecycleOwner, Observer {
             val showOption = it ?: false
             // Can't use isVisible because the kotlin compiler will crash with  Back-end (JVM) Internal error: wrong code generated
-            advancedOptionText.visibility = if (showOption) View.VISIBLE else View.GONE
-            manualExportButton.visibility = if (showOption) View.VISIBLE else View.GONE
+            views.advancedOptionText.visibility = if (showOption) View.VISIBLE else View.GONE
+            views.manualExportButton.visibility = if (showOption) View.VISIBLE else View.GONE
         })
 
-        keys_backup_setup_step1_button.setOnClickListener { onButtonClick() }
-        manualExportButton.setOnClickListener { onManualExportClick() }
+        views.keysBackupSetupStep1Button.setOnClickListener { onButtonClick() }
+        views.manualExportButton.setOnClickListener { onManualExportClick() }
     }
 
     private fun onButtonClick() {

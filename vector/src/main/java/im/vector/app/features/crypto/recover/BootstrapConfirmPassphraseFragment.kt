@@ -17,7 +17,9 @@
 package im.vector.app.features.crypto.recover
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isGone
 import com.airbnb.mvrx.parentFragmentViewModel
@@ -28,14 +30,19 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
+import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.*
+
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class BootstrapConfirmPassphraseFragment @Inject constructor() : VectorBaseFragment() {
+class BootstrapConfirmPassphraseFragment @Inject constructor()
+    : VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_bootstrap_enter_passphrase
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapEnterPassphraseBinding {
+        return FragmentBootstrapEnterPassphraseBinding.inflate(inflater, container, false)
+    }
 
     val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 

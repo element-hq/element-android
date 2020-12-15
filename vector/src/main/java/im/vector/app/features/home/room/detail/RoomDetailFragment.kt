@@ -167,10 +167,10 @@ import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_room_detail.*
-import kotlinx.android.synthetic.main.composer_layout.view.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import kotlinx.parcelize.Parcelize
+
+
+
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog

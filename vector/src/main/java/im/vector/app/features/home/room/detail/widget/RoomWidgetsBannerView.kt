@@ -21,7 +21,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
 import im.vector.app.R
-import kotlinx.android.synthetic.main.view_room_widgets_banner.view.*
+
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 
 class RoomWidgetsBannerView @JvmOverloads constructor(

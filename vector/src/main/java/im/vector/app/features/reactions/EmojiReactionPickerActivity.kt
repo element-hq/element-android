@@ -35,9 +35,10 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_emoji_reaction_picker.*
+
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -47,7 +48,7 @@ import javax.inject.Inject
  * TODO: Loading indicator while getting emoji data source?
  * TODO: Finish Refactor to vector base activity
  */
-class EmojiReactionPickerActivity : VectorBaseActivity(),
+class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPickerBinding>(),
         EmojiCompatFontProvider.FontProviderListener {
 
     private lateinit var tabLayout: TabLayout
@@ -56,7 +57,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
 
     override fun getMenuRes() = R.menu.menu_emoji_reaction_picker
 
-    override fun getLayoutRes() = R.layout.activity_emoji_reaction_picker
+    override fun getBinding() = ActivityEmojiReactionPickerBinding.inflate(layoutInflater)
 
     override fun getTitleRes() = R.string.title_activity_emoji_reaction_picker
 
@@ -83,7 +84,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
     }
 
     override fun initUiAndData() {
-        configureToolbar(emojiPickerToolbar)
+        configureToolbar(views.emojiPickerToolbar)
         emojiCompatFontProvider.let {
             EmojiDrawView.configureTextPaint(this, it.typeface)
             it.addListener(this)
@@ -127,8 +128,8 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
             }
         }
 
-        emojiPickerWholeListFragmentContainer.isVisible = true
-        emojiPickerFilteredListFragmentContainer.isVisible = false
+        views.emojiPickerWholeListFragmentContainer.isVisible = true
+        views.emojiPickerFilteredListFragmentContainer.isVisible = false
         tabLayout.isVisible = true
     }
 
@@ -191,12 +192,12 @@ class EmojiReactionPickerActivity : VectorBaseActivity(),
     private fun onQueryText(query: String) {
         if (query.isEmpty()) {
             tabLayout.isVisible = true
-            emojiPickerWholeListFragmentContainer.isVisible = true
-            emojiPickerFilteredListFragmentContainer.isVisible = false
+            views.emojiPickerWholeListFragmentContainer.isVisible = true
+            views.emojiPickerFilteredListFragmentContainer.isVisible = false
         } else {
             tabLayout.isVisible = false
-            emojiPickerWholeListFragmentContainer.isVisible = false
-            emojiPickerFilteredListFragmentContainer.isVisible = true
+            views.emojiPickerWholeListFragmentContainer.isVisible = false
+            views.emojiPickerFilteredListFragmentContainer.isVisible = true
             searchResultViewModel.handle(EmojiSearchAction.UpdateQuery(query))
         }
     }

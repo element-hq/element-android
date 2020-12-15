@@ -19,15 +19,17 @@ package im.vector.app.features.attachments.preview
 
 import android.content.Context
 import android.content.Intent
+import android.view.LayoutInflater
 import androidx.appcompat.widget.Toolbar
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.themes.ActivityOtherThemes
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 
-class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
+class AttachmentsPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     companion object {
         private const val EXTRA_FRAGMENT_ARGS = "EXTRA_FRAGMENT_ARGS"
@@ -51,7 +53,7 @@ class AttachmentsPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
 
     override fun getOtherThemes() = ActivityOtherThemes.AttachmentsPreview
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {
         if (isFirstCreation()) {

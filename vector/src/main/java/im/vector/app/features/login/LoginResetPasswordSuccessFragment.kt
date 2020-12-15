@@ -17,22 +17,29 @@
 package im.vector.app.features.login
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import im.vector.app.R
-import kotlinx.android.synthetic.main.fragment_login_reset_password_success.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentLoginResetPasswordBinding
+import im.vector.app.databinding.FragmentLoginResetPasswordSuccessBinding
+
 import javax.inject.Inject
 
 /**
  * In this screen, we confirm to the user that his password has been reset
  */
-class LoginResetPasswordSuccessFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginResetPasswordSuccessFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordSuccessBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_login_reset_password_success
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginResetPasswordSuccessBinding {
+        return FragmentLoginResetPasswordSuccessBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        resetPasswordSuccessSubmit.setOnClickListener { submit() }
+        views.resetPasswordSuccessSubmit.setOnClickListener { submit() }
     }
 
     private fun submit() {

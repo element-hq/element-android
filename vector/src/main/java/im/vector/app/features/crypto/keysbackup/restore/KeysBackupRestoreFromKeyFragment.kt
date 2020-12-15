@@ -17,7 +17,9 @@ package im.vector.app.features.crypto.keysbackup.restore
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
@@ -25,14 +27,18 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
-import kotlinx.android.synthetic.main.fragment_keys_backup_restore_from_key.*
+import im.vector.app.databinding.FragmentAttachmentsPreviewBinding
+import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
+
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
 class KeysBackupRestoreFromKeyFragment @Inject constructor()
-    : VectorBaseFragment() {
+    : VectorBaseFragment<FragmentKeysBackupRestoreFromKeyBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_keys_backup_restore_from_key
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupRestoreFromKeyBinding {
+        return FragmentKeysBackupRestoreFromKeyBinding.inflate(inflater, container, false)
+    }
 
     private lateinit var viewModel: KeysBackupRestoreFromKeyViewModel
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
@@ -41,8 +47,8 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
         super.onViewCreated(view, savedInstanceState)
         viewModel = fragmentViewModelProvider.get(KeysBackupRestoreFromKeyViewModel::class.java)
         sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
-        mKeyTextEdit.setText(viewModel.recoveryCode.value)
-        mKeyTextEdit.setOnEditorActionListener { _, actionId, _ ->
+        views.mKeyTextEdit.setText(viewModel.recoveryCode.value)
+        views.mKeyTextEdit.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 onRestoreFromKey()
                 return@setOnEditorActionListener true
@@ -50,14 +56,14 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
             return@setOnEditorActionListener false
         }
 
-        mKeyInputLayout.error = viewModel.recoveryCodeErrorText.value
+        views.mKeyInputLayout.error = viewModel.recoveryCodeErrorText.value
         viewModel.recoveryCodeErrorText.observe(viewLifecycleOwner, Observer { newValue ->
-            mKeyInputLayout.error = newValue
+            views.mKeyInputLayout.error = newValue
         })
 
-        keys_restore_button.setOnClickListener { onRestoreFromKey() }
-        keys_backup_import.setOnClickListener { onImport() }
-        mKeyTextEdit.doOnTextChanged { text, _, _, _ -> onRestoreKeyTextEditChange(text) }
+        views.keysRestoreButton.setOnClickListener { onRestoreFromKey() }
+        views.keysBackupImport.setOnClickListener { onImport() }
+        views.mKeyTextEdit.doOnTextChanged { text, _, _, _ -> onRestoreKeyTextEditChange(text) }
     }
 
     private fun onRestoreKeyTextEditChange(s: CharSequence?) {
@@ -89,8 +95,8 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
                         ?.bufferedReader()
                         ?.use { it.readText() }
                         ?.let {
-                            mKeyTextEdit.setText(it)
-                            mKeyTextEdit.setSelection(it.length)
+                            views.mKeyTextEdit.setText(it)
+                            views.mKeyTextEdit.setSelection(it.length)
                         }
             }
         }

@@ -18,11 +18,13 @@ package im.vector.app.features.call
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
-import kotlinx.android.synthetic.main.view_call_controls.view.*
+
 import org.matrix.android.sdk.api.session.call.CallState
 import org.webrtc.PeerConnection
 
@@ -30,19 +32,40 @@ class CallControlsView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
+    private var ringingControls: View
+    private var connectedControls: View
+
+    private val ringingControlAccept: View
+    private var ringingControlDecline: View
+    private var iv_end_call: View
+    private var muteIcon: ImageView
+    private var videoToggleIcon: ImageView
+    private var iv_leftMiniControl: View
+    private var iv_more: View
+
     var interactionListener: InteractionListener? = null
 
     init {
-        ConstraintLayout.inflate(context, R.layout.view_call_controls, this)
+        View.inflate(context, R.layout.view_call_controls, this)
         // layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
-        ringingControlAccept.setOnClickListener { acceptIncomingCall() }
-        ringingControlDecline.setOnClickListener { declineIncomingCall() }
-        iv_end_call.setOnClickListener { endOngoingCall() }
-        muteIcon.setOnClickListener { toggleMute() }
-        videoToggleIcon.setOnClickListener { toggleVideo() }
-        iv_leftMiniControl.setOnClickListener { returnToChat() }
-        iv_more.setOnClickListener { moreControlOption() }
+        ringingControlAccept = findViewById<View>(R.id.ringingControlAccept)
+                .also { it.setOnClickListener { acceptIncomingCall() } }
+        ringingControlDecline = findViewById<View>(R.id.ringingControlDecline)
+                .also { it.setOnClickListener { declineIncomingCall() } }
+        iv_end_call = findViewById<View>(R.id.iv_end_call)
+                .also { it.setOnClickListener { endOngoingCall() } }
+        muteIcon = findViewById<ImageView>(R.id.muteIcon)
+                .also { it.setOnClickListener { toggleMute() } }
+        videoToggleIcon = findViewById<ImageView>(R.id.videoToggleIcon)
+                .also { it.setOnClickListener { toggleVideo() } }
+        iv_leftMiniControl = findViewById<View>(R.id.iv_leftMiniControl)
+                .also { it.setOnClickListener { returnToChat() } }
+        iv_more = findViewById<View>(R.id.iv_more)
+                .also { it.setOnClickListener { moreControlOption() } }
+
+        ringingControls = findViewById(R.id.ringingControls)
+        connectedControls = findViewById(R.id.connectedControls)
     }
 
     private fun acceptIncomingCall() {

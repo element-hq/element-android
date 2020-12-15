@@ -17,20 +17,26 @@
 package im.vector.app.features.login
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
-import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
+
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver
  */
-class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLoginFragment() {
+class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLoginSignupSigninSelectionBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_login_signup_signin_selection
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSignupSigninSelectionBinding {
+        return FragmentLoginSignupSigninSelectionBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -17,7 +17,9 @@ package im.vector.app.features.discovery.change
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
 import androidx.core.text.toSpannable
@@ -33,17 +35,21 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentSetIdentityServerBinding
 import im.vector.app.features.discovery.DiscoverySharedViewModel
-import kotlinx.android.synthetic.main.fragment_set_identity_server.*
+
 import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
 class SetIdentityServerFragment @Inject constructor(
         val viewModelFactory: SetIdentityServerViewModel.Factory,
         val colorProvider: ColorProvider
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentSetIdentityServerBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_set_identity_server
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSetIdentityServerBinding {
+        return FragmentSetIdentityServerBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel by fragmentViewModel(SetIdentityServerViewModel::class)
 
@@ -147,7 +153,7 @@ class SetIdentityServerFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.identity_server)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.identity_server)
     }
 
     private val termsActivityResultLauncher = registerStartForActivityResult {

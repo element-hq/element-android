@@ -24,7 +24,7 @@ import androidx.core.content.edit
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
-import kotlinx.android.synthetic.main.view_keys_backup_banner.view.*
+
 import timber.log.Timber
 
 /**

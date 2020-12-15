@@ -104,6 +104,8 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_profile_action" />
 
-    <include layout="@layout/merge_overlay_waiting_view" />
+    <include
+        android:id="@+id/waiting_view"
+        layout="@layout/merge_overlay_waiting_view" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

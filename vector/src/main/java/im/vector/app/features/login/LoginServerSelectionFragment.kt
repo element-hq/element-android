@@ -17,19 +17,25 @@
 package im.vector.app.features.login
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import im.vector.app.R
 import im.vector.app.core.utils.openUrlInChromeCustomTab
-import kotlinx.android.synthetic.main.fragment_login_server_selection.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentLoginServerSelectionBinding
+
 import me.gujun.android.span.span
 import javax.inject.Inject
 
 /**
  * In this screen, the user will choose between matrix.org, modular or other type of homeserver
  */
-class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginServerSelectionBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_login_server_selection
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginServerSelectionBinding {
+        return FragmentLoginServerSelectionBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,19 +45,19 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
     }
 
     private fun initViews() {
-        loginServerChoiceEmsLearnMore.setOnClickListener { learnMore() }
-        loginServerChoiceMatrixOrg.setOnClickListener { selectMatrixOrg() }
-        loginServerChoiceEms.setOnClickListener { selectEMS() }
-        loginServerChoiceOther.setOnClickListener { selectOther() }
-        loginServerIKnowMyIdSubmit.setOnClickListener { loginWithMatrixId() }
+        views.loginServerChoiceEmsLearnMore.setOnClickListener { learnMore() }
+        views.loginServerChoiceMatrixOrg.setOnClickListener { selectMatrixOrg() }
+        views.loginServerChoiceEms.setOnClickListener { selectEMS() }
+        views.loginServerChoiceOther.setOnClickListener { selectOther() }
+        views.loginServerIKnowMyIdSubmit.setOnClickListener { loginWithMatrixId() }
     }
 
     private fun updateSelectedChoice(state: LoginViewState) {
-        loginServerChoiceMatrixOrg.isChecked = state.serverType == ServerType.MatrixOrg
+        views.loginServerChoiceMatrixOrg.isChecked = state.serverType == ServerType.MatrixOrg
     }
 
     private fun initTextViews() {
-        loginServerChoiceEmsLearnMore.text = span {
+        views.loginServerChoiceEmsLearnMore.text = span {
             text = getString(R.string.login_server_modular_learn_more)
             textDecorationLine = "underline"
         }

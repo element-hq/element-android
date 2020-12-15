@@ -33,6 +33,7 @@ import androidx.annotation.MainThread
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
@@ -48,14 +49,14 @@ import im.vector.app.features.navigation.Navigator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.activity.*
+
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
+abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScreenInjector {
 
-    protected val vectorBaseActivity: VectorBaseActivity by lazy {
-        activity as VectorBaseActivity
+    protected val vectorBaseActivity: VectorBaseActivity<*> by lazy {
+        activity as VectorBaseActivity<*>
     }
 
     /* ==========================================================================================
@@ -83,6 +84,16 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         get() = ViewModelProvider(this, viewModelFactory)
 
     /* ==========================================================================================
+     * Views
+     * ========================================================================================== */
+
+    private var _binding: VB? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    protected val views: VB
+        get() = _binding!!
+
+    /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
 
@@ -106,11 +117,11 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Timber.i("onCreateView Fragment ${javaClass.simpleName}")
-        return inflater.inflate(getLayoutResId(), container, false)
+        _binding = getBinding(inflater, container)
+        return views.root
     }
 
-    @LayoutRes
-    abstract fun getLayoutResId(): Int
+    abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?): VB
 
     @CallSuper
     override fun onResume() {
@@ -137,6 +148,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         super.onDestroyView()
         Timber.i("onDestroyView Fragment ${javaClass.simpleName}")
         uiDisposables.clear()
+        _binding = null
     }
 
     override fun onDestroy() {
@@ -174,6 +186,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         arguments = args.toMvRxBundle()
     }
 
+    // TODO BMA Extract this and use simple type in Fragment.kt
     fun Parcelable?.toMvRxBundle(): Bundle? {
         return this?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
     }
@@ -186,7 +199,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     }
 
     protected fun showErrorInSnackbar(throwable: Throwable) {
-        vectorBaseActivity.coordinatorLayout?.let {
+        vectorBaseActivity.getCoordinatorLayout()?.let {
             Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
                     .show()
         }

@@ -17,7 +17,9 @@
 package im.vector.app.features.roomprofile.members
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -29,10 +31,12 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentRoomMemberListBinding
+import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
-import kotlinx.android.synthetic.main.fragment_room_member_list.*
-import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
+
+
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
@@ -44,12 +48,15 @@ class RoomMemberListFragment @Inject constructor(
         val viewModelFactory: RoomMemberListViewModel.Factory,
         private val roomMemberListController: RoomMemberListController,
         private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment(), RoomMemberListController.Callback {
+) : VectorBaseFragment<FragmentRoomMemberListBinding>(),
+        RoomMemberListController.Callback {
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
 
-    override fun getLayoutResId() = R.layout.fragment_room_member_list
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomMemberListBinding {
+        return FragmentRoomMemberListBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,7 +64,7 @@ class RoomMemberListFragment @Inject constructor(
         setupToolbar(roomSettingsToolbar)
         setupSearchView()
         setupInviteUsersButton()
-        roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
+        views.roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
     }
 
     private fun setupInviteUsersButton() {
@@ -65,7 +72,7 @@ class RoomMemberListFragment @Inject constructor(
             navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
         }
         // Hide FAB when list is scrolling
-        roomSettingsRecyclerView.addOnScrollListener(
+        views.roomSettingsRecyclerView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         when (newState) {
@@ -99,7 +106,7 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        roomSettingsRecyclerView.cleanup()
+        views.roomSettingsRecyclerView.cleanup()
         super.onDestroyView()
     }
 

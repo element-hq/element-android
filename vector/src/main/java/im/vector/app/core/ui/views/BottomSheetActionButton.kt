@@ -29,8 +29,6 @@ import androidx.core.content.withStyledAttributes
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import butterknife.BindView
-import butterknife.ButterKnife
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.themes.ThemeUtils
@@ -41,20 +39,11 @@ class BottomSheetActionButton @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    @BindView(R.id.itemVerificationActionTitle)
-    lateinit var actionTextView: TextView
-
-    @BindView(R.id.itemVerificationActionSubTitle)
-    lateinit var descriptionTextView: TextView
-
-    @BindView(R.id.itemVerificationLeftIcon)
-    lateinit var leftIconImageView: ImageView
-
-    @BindView(R.id.itemVerificationActionIcon)
-    lateinit var rightIconImageView: ImageView
-
-    @BindView(R.id.itemVerificationClickableZone)
-    lateinit var clickableView: View
+    private val actionTextView: TextView
+    private val descriptionTextView: TextView
+    private val leftIconImageView: ImageView
+    private val rightIconImageView: ImageView
+    private val clickableView: View
 
     var title: String? = null
         set(value) {
@@ -116,7 +105,12 @@ class BottomSheetActionButton @JvmOverloads constructor(
 
     init {
         inflate(context, R.layout.item_verification_action, this)
-        ButterKnife.bind(this)
+
+        actionTextView = findViewById(R.id.itemVerificationActionTitle)
+        descriptionTextView = findViewById(R.id.itemVerificationActionSubTitle)
+        leftIconImageView = findViewById(R.id.itemVerificationLeftIcon)
+        rightIconImageView = findViewById(R.id.itemVerificationActionIcon)
+        clickableView = findViewById(R.id.itemVerificationClickableZone)
 
         context.withStyledAttributes(attrs, R.styleable.BottomSheetActionButton) {
             title = getString(R.styleable.BottomSheetActionButton_actionTitle) ?: ""

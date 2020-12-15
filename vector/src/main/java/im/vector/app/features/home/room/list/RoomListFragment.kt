@@ -18,9 +18,11 @@ package im.vector.app.features.home.room.list
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -40,6 +42,8 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -47,8 +51,8 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_room_list.*
+import kotlinx.parcelize.Parcelize
+
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -66,7 +70,10 @@ class RoomListFragment @Inject constructor(
         val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
         private val sharedViewPool: RecyclerView.RecycledViewPool
-) : VectorBaseFragment(), RoomSummaryController.Listener, OnBackPressed, NotifsFabMenuView.Listener {
+) : VectorBaseFragment<FragmentRoomListBinding>(),
+        RoomSummaryController.Listener,
+        OnBackPressed,
+        NotifsFabMenuView.Listener {
 
     private var modelBuildListener: OnModelBuildFinishedListener? = null
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -74,7 +81,9 @@ class RoomListFragment @Inject constructor(
     private val roomListViewModel: RoomListViewModel by fragmentViewModel()
     private lateinit var stateRestorer: LayoutManagerStateRestorer
 
-    override fun getLayoutResId() = R.layout.fragment_room_list
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomListBinding {
+        return FragmentRoomListBinding.inflate(inflater, container, false)
+    }
 
     private var hasUnreadRooms = false
 

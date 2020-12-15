@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import im.vector.app.R
-import kotlinx.android.synthetic.debug.activity_test_linkify.*
+
 
 class TestLinkifyActivity : AppCompatActivity() {
 

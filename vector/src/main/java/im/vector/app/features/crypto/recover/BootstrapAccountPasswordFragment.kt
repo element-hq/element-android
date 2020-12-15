@@ -17,7 +17,9 @@
 package im.vector.app.features.crypto.recover
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.text.toSpannable
 import com.airbnb.mvrx.parentFragmentViewModel
@@ -30,18 +32,22 @@ import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
+import im.vector.app.databinding.FragmentBootstrapEnterAccountPasswordBinding
+import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_bootstrap_enter_account_password.*
-import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.bootstrapDescriptionText
-import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.ssss_view_show_password
+
+
+
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class BootstrapAccountPasswordFragment @Inject constructor(
         private val colorProvider: ColorProvider
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentBootstrapEnterAccountPasswordBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_bootstrap_enter_account_password
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapEnterAccountPasswordBinding {
+        return FragmentBootstrapEnterAccountPasswordBinding.inflate(inflater, container, false)
+    }
 
     val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 

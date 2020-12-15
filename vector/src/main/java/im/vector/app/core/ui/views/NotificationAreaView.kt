@@ -28,7 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.error.ResourceLimitErrorFormatter
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.themes.ThemeUtils
-import kotlinx.android.synthetic.main.view_notification_area.view.*
+
 import me.gujun.android.span.span
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.matrix.android.sdk.api.failure.MatrixError

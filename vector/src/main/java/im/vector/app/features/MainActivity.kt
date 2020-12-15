@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import com.bumptech.glide.Glide
@@ -30,6 +31,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
+import im.vector.app.databinding.FragmentLoadingBinding
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.login.LoginActivity
@@ -42,7 +44,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
 import im.vector.app.features.ui.UiStateRepository
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -66,7 +68,7 @@ data class MainActivityArgs(
  * This Activity, when started with argument, is also doing some cleanup when user signs out,
  * clears cache, is logged out, or is soft logged out
  */
-class MainActivity : VectorBaseActivity(), UnlockedActivity {
+class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActivity {
 
     companion object {
         private const val EXTRA_ARGS = "EXTRA_ARGS"
@@ -82,6 +84,8 @@ class MainActivity : VectorBaseActivity(), UnlockedActivity {
             activity.finishAffinity()
         }
     }
+
+    override fun getBinding() = FragmentLoadingBinding.inflate(layoutInflater)
 
     private lateinit var args: MainActivityArgs
 

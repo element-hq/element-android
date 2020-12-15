@@ -15,23 +15,24 @@
  */
 package im.vector.app.core.platform
 
+import android.view.LayoutInflater
 import androidx.annotation.CallSuper
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.hideKeyboard
-import kotlinx.android.synthetic.main.activity.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import im.vector.app.databinding.ActivityBinding
+
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 /**
  * Simple activity with a toolbar, a waiting overlay, and a fragment container and a session.
  */
-abstract class SimpleFragmentActivity : VectorBaseActivity() {
+abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
 
-    override fun getLayoutRes() = R.layout.activity
+    override fun getBinding() = ActivityBinding.inflate(layoutInflater)
 
     @Inject lateinit var session: Session
 
@@ -41,8 +42,8 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
     }
 
     override fun initUiAndData() {
-        configureToolbar(toolbar)
-        waitingView = findViewById(R.id.waiting_view)
+        configureToolbar(views.toolbar)
+        waitingView = views.overlayWaitingView.waitingView
     }
 
     /**
@@ -51,21 +52,21 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
      */
     fun updateWaitingView(data: WaitingViewData?) {
         data?.let {
-            waitingStatusText.text = data.message
+            views.overlayWaitingView.waitingStatusText.text = data.message
 
             if (data.progress != null && data.progressTotal != null) {
-                waitingHorizontalProgress.isIndeterminate = false
-                waitingHorizontalProgress.progress = data.progress
-                waitingHorizontalProgress.max = data.progressTotal
-                waitingHorizontalProgress.isVisible = true
-                waitingCircularProgress.isVisible = false
+                views.overlayWaitingView.waitingHorizontalProgress.isIndeterminate = false
+                views.overlayWaitingView.waitingHorizontalProgress.progress = data.progress
+                views.overlayWaitingView.waitingHorizontalProgress.max = data.progressTotal
+                views.overlayWaitingView.waitingHorizontalProgress.isVisible = true
+                views.overlayWaitingView.waitingCircularProgress.isVisible = false
             } else if (data.isIndeterminate) {
-                waitingHorizontalProgress.isIndeterminate = true
-                waitingHorizontalProgress.isVisible = true
-                waitingCircularProgress.isVisible = false
+                views.overlayWaitingView.waitingHorizontalProgress.isIndeterminate = true
+                views.overlayWaitingView.waitingHorizontalProgress.isVisible = true
+                views.overlayWaitingView.waitingCircularProgress.isVisible = false
             } else {
-                waitingHorizontalProgress.isVisible = false
-                waitingCircularProgress.isVisible = true
+                views.overlayWaitingView.waitingHorizontalProgress.isVisible = false
+                views.overlayWaitingView.waitingCircularProgress.isVisible = true
             }
 
             showWaitingView()
@@ -76,15 +77,15 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
 
     override fun showWaitingView() {
         hideKeyboard()
-        waitingStatusText.isGone = waitingStatusText.text.isNullOrBlank()
+        views.overlayWaitingView.waitingStatusText.isGone = views.overlayWaitingView.waitingStatusText.text.isNullOrBlank()
         super.showWaitingView()
     }
 
     override fun hideWaitingView() {
-        waitingStatusText.text = null
-        waitingStatusText.isGone = true
-        waitingHorizontalProgress.progress = 0
-        waitingHorizontalProgress.isVisible = false
+        views.overlayWaitingView.waitingStatusText.text = null
+        views.overlayWaitingView.waitingStatusText.isGone = true
+        views.overlayWaitingView.waitingHorizontalProgress.progress = 0
+        views.overlayWaitingView.waitingHorizontalProgress.isVisible = false
         super.hideWaitingView()
     }
 

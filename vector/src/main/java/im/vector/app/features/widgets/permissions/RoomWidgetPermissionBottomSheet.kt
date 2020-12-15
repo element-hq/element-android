@@ -20,7 +20,9 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.BulletSpan
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
@@ -28,15 +30,20 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.withArgs
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.databinding.BottomSheetGenericListBinding
+import im.vector.app.databinding.BottomSheetRoomWidgetPermissionBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.widgets.WidgetArgs
-import kotlinx.android.synthetic.main.bottom_sheet_room_widget_permission.*
+
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class RoomWidgetPermissionBottomSheet :
+        VectorBaseBottomSheetDialogFragment<BottomSheetRoomWidgetPermissionBinding>() {
 
-    override fun getLayoutResId(): Int = R.layout.bottom_sheet_room_widget_permission
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetRoomWidgetPermissionBinding {
+        return BottomSheetRoomWidgetPermissionBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: RoomWidgetPermissionViewModel by activityViewModel()
 
@@ -58,17 +65,17 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     private fun setupViews() {
-        widgetPermissionDecline.setOnClickListener { doDecline() }
-        widgetPermissionContinue.setOnClickListener { doAccept() }
+        views.widgetPermissionDecline.setOnClickListener { doDecline() }
+        views.widgetPermissionContinue.setOnClickListener { doAccept() }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
         val permissionData = state.permissionData() ?: return@withState
-        widgetPermissionOwnerId.text = permissionData.widget.senderInfo?.userId ?: ""
-        widgetPermissionOwnerDisplayName.text = permissionData.widget.senderInfo?.disambiguatedDisplayName
+        views.widgetPermissionOwnerId.text = permissionData.widget.senderInfo?.userId ?: ""
+        views.widgetPermissionOwnerDisplayName.text = permissionData.widget.senderInfo?.disambiguatedDisplayName
         permissionData.widget.senderInfo?.toMatrixItem()?.also {
-            avatarRenderer.render(it, widgetPermissionOwnerAvatar)
+            avatarRenderer.render(it, views.widgetPermissionOwnerAvatar)
         }
 
         val domain = permissionData.widgetDomain ?: ""
@@ -85,7 +92,7 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
             infoBuilder.append(bulletPoint, BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         infoBuilder.append("\n")
-        widgetPermissionSharedInfo.text = infoBuilder
+        views.widgetPermissionSharedInfo.text = infoBuilder
     }
 
     private fun doDecline() {

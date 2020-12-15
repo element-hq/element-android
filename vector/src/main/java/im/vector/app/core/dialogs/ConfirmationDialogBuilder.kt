@@ -21,7 +21,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import im.vector.app.R
-import kotlinx.android.synthetic.main.dialog_confirmation_with_reason.view.*
+
 
 object ConfirmationDialogBuilder {
 

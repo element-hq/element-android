@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.utils.isAirplaneModeOn
-import kotlinx.android.synthetic.main.view_sync_state.view.*
+
 import org.matrix.android.sdk.api.session.sync.SyncState
 
 class SyncStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)

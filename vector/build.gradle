@@ -3,15 +3,11 @@ import com.android.build.OutputFile
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
 kapt {
     correctErrorTypes = true
-}
-
-androidExtensions {
-    experimental = true
 }
 
 // Note: 2 digits max for each value
@@ -279,6 +275,10 @@ android {
         test {
             java.srcDirs += "src/sharedTest/java"
         }
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 

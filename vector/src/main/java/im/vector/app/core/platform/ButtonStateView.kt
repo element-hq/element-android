@@ -25,7 +25,7 @@ import android.widget.FrameLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import im.vector.app.R
-import kotlinx.android.synthetic.main.view_button_state.view.*
+
 
 class ButtonStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : FrameLayout(context, attrs, defStyle) {

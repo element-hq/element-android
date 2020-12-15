@@ -21,7 +21,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,12 +33,14 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentRoomSettingGenericBinding
+import im.vector.app.databinding.FragmentSettingsNotificationsTroubleshootBinding
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import im.vector.app.push.fcm.NotificationTroubleshootTestManagerFactory
-import kotlinx.android.synthetic.main.fragment_settings_notifications_troubleshoot.*
+
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
@@ -44,12 +48,14 @@ import javax.inject.Inject
 class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         private val bugReporter: BugReporter,
         private val testManagerFactory: NotificationTroubleshootTestManagerFactory
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentSettingsNotificationsTroubleshootBinding>() {
 
     private var testManager: NotificationTroubleshootTestManager? = null
     // members
 
-    override fun getLayoutResId() = R.layout.fragment_settings_notifications_troubleshoot
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsNotificationsTroubleshootBinding {
+        return FragmentSettingsNotificationsTroubleshootBinding.inflate(inflater, container, false)
+    }
 
     private var interactionListener: VectorSettingsFragmentInteractionListener? = null
 
@@ -143,7 +149,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_notification_troubleshoot)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_notification_troubleshoot)
 
         tryOrNull("Unable to register the receiver") {
             LocalBroadcastManager.getInstance(requireContext())

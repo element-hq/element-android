@@ -20,7 +20,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.InputType
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
@@ -31,8 +33,10 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setTextOrHide
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_login_generic_text_input_form.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentLoginGenericTextInputFormBinding
+import kotlinx.parcelize.Parcelize
+
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.is401
@@ -54,11 +58,13 @@ data class LoginGenericTextInputFormFragmentArgument(
 /**
  * In this screen, the user is asked for a text input
  */
-class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginGenericTextInputFormBinding>() {
 
     private val params: LoginGenericTextInputFormFragmentArgument by args()
 
-    override fun getLayoutResId() = R.layout.fragment_login_generic_text_input_form
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginGenericTextInputFormBinding {
+        return FragmentLoginGenericTextInputFormBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

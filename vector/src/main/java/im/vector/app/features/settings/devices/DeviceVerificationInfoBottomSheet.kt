@@ -17,7 +17,9 @@ package im.vector.app.features.settings.devices
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
@@ -28,8 +30,10 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.bottom_sheet_generic_list_with_title.*
+import im.vector.app.databinding.BottomSheetGenericListBinding
+import im.vector.app.databinding.BottomSheetGenericListWithTitleBinding
+import kotlinx.parcelize.Parcelize
+
 import javax.inject.Inject
 
 @Parcelize
@@ -38,7 +42,9 @@ data class DeviceVerificationInfoArgs(
         val deviceId: String
 ) : Parcelable
 
-class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(), DeviceVerificationInfoBottomSheetController.Callback {
+class DeviceVerificationInfoBottomSheet :
+        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
+        DeviceVerificationInfoBottomSheetController.Callback {
 
     private val viewModel: DeviceVerificationInfoBottomSheetViewModel by fragmentViewModel(DeviceVerificationInfoBottomSheetViewModel::class)
 
@@ -52,20 +58,22 @@ class DeviceVerificationInfoBottomSheet : VectorBaseBottomSheetDialogFragment(),
 
     @Inject lateinit var controller: DeviceVerificationInfoBottomSheetController
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_generic_list_with_title
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {
+        return BottomSheetGenericListWithTitleBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bottomSheetRecyclerView.configureWith(
+        views.bottomSheetRecyclerView.configureWith(
                 controller,
                 showDivider = false,
                 hasFixedSize = false)
         controller.callback = this
-        bottomSheetTitle.isVisible = false
+        views.bottomSheetTitle.isVisible = false
     }
 
     override fun onDestroyView() {
-        bottomSheetRecyclerView.cleanup()
+        views.bottomSheetRecyclerView.cleanup()
         super.onDestroyView()
     }
 

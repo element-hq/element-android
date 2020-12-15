@@ -23,7 +23,7 @@ Test:
  -
 
 Other changes:
- -
+ - Migrate to ViewBindings (#1072)
 
 Changes in Element 1.0.12 (2020-12-15)
 ===================================================

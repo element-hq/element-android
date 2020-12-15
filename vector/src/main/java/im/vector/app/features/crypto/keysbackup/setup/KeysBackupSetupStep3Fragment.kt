@@ -18,7 +18,9 @@ package im.vector.app.features.crypto.keysbackup.setup
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -33,7 +35,9 @@ import im.vector.app.core.utils.LiveEvent
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.core.utils.startSharePlainTextIntent
-import kotlinx.android.synthetic.main.fragment_keys_backup_setup_step3.*
+import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
+import im.vector.app.databinding.FragmentKeysBackupSetupStep3Binding
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -44,9 +48,11 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
-class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() {
+class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupSetupStep3Binding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step3
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSetupStep3Binding {
+        return FragmentKeysBackupSetupStep3Binding.inflate(inflater, container, false)
+    }
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
 

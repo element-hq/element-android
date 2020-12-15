@@ -17,17 +17,23 @@
 package im.vector.app.features.login
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import im.vector.app.R
-import kotlinx.android.synthetic.main.fragment_login_splash.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentLoginSplashBinding
+
 import javax.inject.Inject
 
 /**
  * In this screen, the user is viewing an introduction to what he can do with this application
  */
-class LoginSplashFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginSplashFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginSplashBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_login_splash
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSplashBinding {
+        return FragmentLoginSplashBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,7 +42,7 @@ class LoginSplashFragment @Inject constructor() : AbstractLoginFragment() {
     }
 
     private fun setupViews() {
-        loginSplashSubmit.setOnClickListener { getStarted() }
+        views.loginSplashSubmit.setOnClickListener { getStarted() }
     }
 
     private fun getStarted() {

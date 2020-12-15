@@ -26,7 +26,7 @@ import im.vector.app.R
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.toMatrixItem
-import kotlinx.android.synthetic.main.view_read_receipts.view.*
+
 
 private const val MAX_RECEIPT_DISPLAYED = 5
 private const val MAX_RECEIPT_DESCRIBED = 3

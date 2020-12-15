@@ -18,7 +18,9 @@ package im.vector.app.features.home.room.list.actions
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -27,9 +29,10 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.features.navigation.Navigator
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.bottom_sheet_generic_list.*
+import kotlinx.parcelize.Parcelize
+
 import javax.inject.Inject
 
 @Parcelize
@@ -47,7 +50,9 @@ data class RoomListActionsArgs(
 /**
  * Bottom sheet fragment that shows room information with list of contextual actions
  */
-class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomListQuickActionsEpoxyController.Listener {
+class RoomListQuickActionsBottomSheet :
+        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
+        RoomListQuickActionsEpoxyController.Listener {
 
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     @Inject lateinit var sharedViewPool: RecyclerView.RecycledViewPool
@@ -63,17 +68,19 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
         injector.inject(this)
     }
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_generic_list
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListBinding {
+        return BottomSheetGenericListBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
-        bottomSheetRecyclerView.configureWith(roomListActionsEpoxyController, viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
+        views.views.bottomSheetRecyclerView.configureWith(roomListActionsEpoxyController, viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
         roomListActionsEpoxyController.listener = this
     }
 
     override fun onDestroyView() {
-        bottomSheetRecyclerView.cleanup()
+        views.views.bottomSheetRecyclerView.cleanup()
         roomListActionsEpoxyController.listener = null
         super.onDestroyView()
     }

@@ -22,7 +22,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import im.vector.app.R
-import kotlinx.android.synthetic.main.motion_notifs_fab_menu_merge.view.*
+
 
 class NotifsFabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                                   defStyleAttr: Int = 0) : MotionLayout(context, attrs, defStyleAttr) {

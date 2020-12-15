@@ -31,7 +31,7 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import im.vector.app.R
-import kotlinx.android.synthetic.main.composer_layout.view.*
+
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 
 /**

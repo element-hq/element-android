@@ -18,8 +18,11 @@ package im.vector.app.features.settings.devtools
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -30,7 +33,8 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -40,15 +44,18 @@ class AccountDataFragment @Inject constructor(
         val viewModelFactory: AccountDataViewModel.Factory,
         private val epoxyController: AccountDataEpoxyController,
         private val colorProvider: ColorProvider
-) : VectorBaseFragment(), AccountDataEpoxyController.InteractionListener {
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+        AccountDataEpoxyController.InteractionListener {
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: AccountDataViewModel by fragmentViewModel(AccountDataViewModel::class)
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_account_data)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_account_data)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -57,13 +64,13 @@ class AccountDataFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        genericRecyclerView.configureWith(epoxyController, showDivider = true)
+        views.genericRecyclerView.configureWith(epoxyController, showDivider = true)
         epoxyController.interactionListener = this
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        genericRecyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         epoxyController.interactionListener = null
     }
 

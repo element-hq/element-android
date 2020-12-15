@@ -17,7 +17,9 @@
 package im.vector.app.features.login
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -28,23 +30,27 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentLoginResetPasswordBinding
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.android.synthetic.main.fragment_login_reset_password.*
+
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked for email and new password to reset his password
  */
-class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
 
     private var passwordShown = false
 
     // Show warning only once
     private var showWarning = true
 
-    override fun getLayoutResId() = R.layout.fragment_login_reset_password
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginResetPasswordBinding {
+        return FragmentLoginResetPasswordBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

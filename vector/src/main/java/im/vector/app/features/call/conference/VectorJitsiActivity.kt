@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
@@ -31,8 +32,9 @@ import com.facebook.react.modules.core.PermissionListener
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.activity_jitsi.*
+import im.vector.app.databinding.ActivityJitsiBinding
+import kotlinx.parcelize.Parcelize
+
 import org.jitsi.meet.sdk.JitsiMeetActivityDelegate
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
@@ -42,7 +44,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.net.URL
 import javax.inject.Inject
 
-class VectorJitsiActivity : VectorBaseActivity(), JitsiMeetActivityInterface, JitsiMeetViewListener {
+class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMeetActivityInterface, JitsiMeetViewListener {
 
     @Parcelize
     data class Args(
@@ -51,7 +53,7 @@ class VectorJitsiActivity : VectorBaseActivity(), JitsiMeetActivityInterface, Ji
             val enableVideo: Boolean
     ) : Parcelable
 
-    override fun getLayoutRes() = R.layout.activity_jitsi
+    override fun getBinding() = ActivityJitsiBinding.inflate(layoutInflater)
 
     @Inject lateinit var viewModelFactory: JitsiCallViewModel.Factory
 
@@ -76,7 +78,7 @@ class VectorJitsiActivity : VectorBaseActivity(), JitsiMeetActivityInterface, Ji
         super.initUiAndData()
         jitsiMeetView = JitsiMeetView(this)
         val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
-        jitsi_layout.addView(jitsiMeetView, params)
+        views.jitsiLayout.addView(jitsiMeetView, params)
         jitsiMeetView?.listener = this
     }
 

@@ -21,18 +21,20 @@ import android.content.Intent
 import android.os.Bundle
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySignedOutBinding
+import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
-import kotlinx.android.synthetic.main.activity_signed_out.*
+
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 
 /**
  * In this screen, the user is viewing a message informing that he has been logged out
  */
-class SignedOutActivity : VectorBaseActivity() {
+class SignedOutActivity : VectorBaseActivity<ActivitySignedOutBinding>() {
 
-    override fun getLayoutRes() = R.layout.activity_signed_out
+    override fun getBinding() = ActivitySignedOutBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +43,7 @@ class SignedOutActivity : VectorBaseActivity() {
     }
 
     private fun setupViews() {
-        signedOutSubmit.setOnClickListener { submit() }
+        views.signedOutSubmit.setOnClickListener { submit() }
     }
 
     private fun submit() {

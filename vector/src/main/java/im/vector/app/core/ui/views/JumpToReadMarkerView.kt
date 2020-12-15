@@ -22,7 +22,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import im.vector.app.R
-import kotlinx.android.synthetic.main.view_jump_to_read_marker.view.*
+
 
 class JumpToReadMarkerView @JvmOverloads constructor(
         context: Context,

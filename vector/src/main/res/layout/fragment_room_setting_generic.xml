@@ -101,6 +101,8 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <include layout="@layout/merge_overlay_waiting_view" />
+    <include
+        android:id="@+id/waiting_view"
+        layout="@layout/merge_overlay_waiting_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,9 @@
 package im.vector.app.features.crypto.keysbackup.setup
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
@@ -26,15 +28,19 @@ import com.nulabinc.zxcvbn.Zxcvbn
 import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
+import im.vector.app.databinding.FragmentKeysBackupSetupStep2Binding
 import im.vector.app.features.settings.VectorLocale
-import kotlinx.android.synthetic.main.fragment_keys_backup_setup_step2.*
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() {
+class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupSetupStep2Binding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step2
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSetupStep2Binding {
+        return FragmentKeysBackupSetupStep2Binding.inflate(inflater, container, false)
+    }
 
     private val zxcvbn = Zxcvbn()
 

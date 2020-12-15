@@ -18,7 +18,9 @@ package im.vector.app.features.login
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import androidx.core.view.isInvisible
@@ -30,7 +32,9 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.openUrlInChromeCustomTab
-import kotlinx.android.synthetic.main.fragment_login_server_url_form.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentLoginServerUrlFormBinding
+
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -38,9 +42,11 @@ import javax.inject.Inject
 /**
  * In this screen, the user is prompted to enter a homeserver url
  */
-class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginServerUrlFormBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_login_server_url_form
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginServerUrlFormBinding {
+        return FragmentLoginServerUrlFormBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

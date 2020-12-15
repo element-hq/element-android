@@ -18,7 +18,9 @@ package im.vector.app.features.settings.account.deactivation
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -27,23 +29,27 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentDeactivateAccountBinding
+import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.settings.VectorSettingsActivity
-import kotlinx.android.synthetic.main.fragment_deactivate_account.*
+
 import javax.inject.Inject
 
 class DeactivateAccountFragment @Inject constructor(
         val viewModelFactory: DeactivateAccountViewModel.Factory
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentDeactivateAccountBinding>() {
 
     private val viewModel: DeactivateAccountViewModel by fragmentViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_deactivate_account
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentDeactivateAccountBinding {
+        return FragmentDeactivateAccountBinding.inflate(inflater, container, false)
+    }
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.deactivate_account_title)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.deactivate_account_title)
     }
 
     private var settingsActivity: VectorSettingsActivity? = null

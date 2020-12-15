@@ -19,8 +19,10 @@ package im.vector.app.features.roomprofile
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -40,6 +42,8 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
@@ -47,10 +51,10 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomS
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.media.BigImageViewerActivity
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_matrix_profile.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
-import kotlinx.android.synthetic.main.view_stub_room_profile_header.*
+import kotlinx.parcelize.Parcelize
+
+
+
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -66,7 +70,7 @@ class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
         val roomProfileViewModelFactory: RoomProfileViewModel.Factory
-) : VectorBaseFragment(),
+) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomProfileController.Callback {
 
     private val roomProfileArgs: RoomProfileArgs by args()
@@ -76,7 +80,9 @@ class RoomProfileFragment @Inject constructor(
 
     private var appBarStateChangeListener: AppBarStateChangeListener? = null
 
-    override fun getLayoutResId() = R.layout.fragment_matrix_profile
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentMatrixProfileBinding {
+        return FragmentMatrixProfileBinding.inflate(inflater, container, false)
+    }
 
     override fun getMenuRes() = R.menu.vector_room_profile
 

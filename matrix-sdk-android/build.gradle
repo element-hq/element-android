@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'realm-android'
 
 buildscript {
@@ -11,10 +11,6 @@ buildscript {
     dependencies {
         classpath "io.realm:realm-gradle-plugin:10.1.2"
     }
-}
-
-androidExtensions {
-    experimental = true
 }
 
 android {

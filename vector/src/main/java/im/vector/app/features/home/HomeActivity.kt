@@ -21,8 +21,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -40,6 +42,7 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -56,9 +59,9 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import im.vector.app.push.fcm.FcmHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import kotlinx.parcelize.Parcelize
+
+
 import org.matrix.android.sdk.api.session.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -71,7 +74,11 @@ data class HomeActivityArgs(
         val accountCreation: Boolean
 ) : Parcelable
 
-class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDetectorSharedViewModel.Factory, ServerBackupStatusViewModel.Factory,
+class HomeActivity :
+        VectorBaseActivity<ActivityHomeBinding>(),
+        ToolbarConfigurable,
+        UnknownDeviceDetectorSharedViewModel.Factory,
+        ServerBackupStatusViewModel.Factory,
         NavigationInterceptor {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -98,7 +105,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
         }
     }
 
-    override fun getLayoutRes() = R.layout.activity_home
+    override fun getBinding() = ActivityHomeBinding.inflate(layoutInflater)
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -116,7 +123,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
         super.onCreate(savedInstanceState)
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
-        drawerLayout.addDrawerListener(drawerListener)
+        views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
             replaceFragment(R.id.homeDetailFragmentContainer, LoadingFragment::class.java)
             replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
@@ -126,10 +133,10 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is HomeActivitySharedAction.OpenDrawer  -> drawerLayout.openDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.CloseDrawer -> drawerLayout.closeDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenDrawer  -> views.drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.OpenGroup   -> {
-                            drawerLayout.closeDrawer(GravityCompat.START)
+                            views.drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
                         }
                     }.exhaustive
@@ -197,24 +204,24 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.initialSyncProgressServiceStatus) {
             is InitialSyncProgressService.Status.Idle        -> {
-                waiting_view.isVisible = false
+                views.waitingView.root.isVisible = false
             }
             is InitialSyncProgressService.Status.Progressing -> {
                 Timber.v("${getString(status.statusText)} ${status.percentProgress}")
-                waiting_view.setOnClickListener {
+                views.waitingView.root.setOnClickListener {
                     // block interactions
                 }
-                waitingHorizontalProgress.apply {
+                views.waitingView.waitingHorizontalProgress.apply {
                     isIndeterminate = false
                     max = 100
                     progress = status.percentProgress
                     isVisible = true
                 }
-                waitingStatusText.apply {
+                views.waitingView.waitingStatusText.apply {
                     text = getString(status.statusText)
                     isVisible = true
                 }
-                waiting_view.isVisible = true
+                views.waitingView.root.isVisible = true
             }
         }.exhaustive
     }
@@ -269,7 +276,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 ).apply {
                     colorInt = ThemeUtils.getColor(this@HomeActivity, R.attr.vctr_notice_secondary)
                     contentAction = Runnable {
-                        (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             // action(it)
                             homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
                             it.navigator.openSettings(it, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_NOTIFICATIONS)
@@ -282,7 +289,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                         homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
                     }, true)
                     addButton(getString(R.string.settings), Runnable {
-                        (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             // action(it)
                             homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
                             it.navigator.openSettings(it, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_NOTIFICATIONS)
@@ -292,7 +299,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
         )
     }
 
-    private fun promptSecurityEvent(userItem: MatrixItem.UserItem?, titleRes: Int, descRes: Int, action: ((VectorBaseActivity) -> Unit)) {
+    private fun promptSecurityEvent(userItem: MatrixItem.UserItem?, titleRes: Int, descRes: Int, action: ((VectorBaseActivity<*>) -> Unit)) {
         popupAlertManager.postVectorAlert(
                 VerificationVectorAlert(
                         uid = "upgradeSecurity",
@@ -303,7 +310,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 ).apply {
                     colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
                     contentAction = Runnable {
-                        (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             action(it)
                         }
                     }
@@ -321,7 +328,7 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
     }
 
     override fun onDestroy() {
-        drawerLayout.removeDrawerListener(drawerListener)
+        views.drawerLayout.removeDrawerListener(drawerListener)
         super.onDestroy()
     }
 
@@ -375,8 +382,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
     }
 
     override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
+        if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }

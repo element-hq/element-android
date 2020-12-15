@@ -17,41 +17,47 @@
 package im.vector.app.core.ui.bottomsheet
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import kotlinx.android.synthetic.main.bottom_sheet_generic_list.*
+import im.vector.app.databinding.BottomSheetGenericListBinding
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+
 import javax.inject.Inject
 
 /**
  * Generic Bottom sheet with actions
  */
 abstract class BottomSheetGeneric<STATE : BottomSheetGenericState, ACTION : BottomSheetGenericAction> :
-        VectorBaseBottomSheetDialogFragment(),
+        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
         BottomSheetGenericController.Listener<ACTION> {
 
     @Inject lateinit var sharedViewPool: RecyclerView.RecycledViewPool
 
     final override val showExpanded = true
 
-    final override fun getLayoutResId() = R.layout.bottom_sheet_generic_list
+    final override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListBinding {
+        return BottomSheetGenericListBinding.inflate(inflater, container, false)
+    }
 
     abstract fun getController(): BottomSheetGenericController<STATE, ACTION>
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bottomSheetRecyclerView.configureWith(getController(), viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
+        views.views.bottomSheetRecyclerView.configureWith(getController(), viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
         getController().listener = this
     }
 
     @CallSuper
     override fun onDestroyView() {
-        bottomSheetRecyclerView.cleanup()
+        views.views.bottomSheetRecyclerView.cleanup()
         getController().listener = null
         super.onDestroyView()
     }

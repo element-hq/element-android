@@ -20,7 +20,9 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.airbnb.mvrx.activityViewModel
@@ -32,18 +34,22 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentQrCodeScannerWithButtonBinding
 import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.utils.ImageUtils
-import kotlinx.android.synthetic.main.fragment_qr_code_scanner_with_button.*
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
 class ScanUserCodeFragment @Inject constructor()
-    : VectorBaseFragment(),
+    : VectorBaseFragment<FragmentQrCodeScannerWithButtonBinding>(),
         ZXingScannerView.ResultHandler {
 
-    override fun getLayoutResId() = R.layout.fragment_qr_code_scanner_with_button
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentQrCodeScannerWithButtonBinding {
+        return FragmentQrCodeScannerWithButtonBinding.inflate(inflater, container, false)
+    }
 
     val sharedViewModel: UserCodeSharedViewModel by activityViewModel()
 

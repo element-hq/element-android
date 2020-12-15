@@ -37,8 +37,8 @@ import im.vector.app.features.room.RequireActiveMembershipViewModel
 import im.vector.app.features.room.RequireActiveMembershipViewState
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
-import kotlinx.android.synthetic.main.activity_room_detail.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+
+
 import javax.inject.Inject
 
 class RoomDetailActivity :

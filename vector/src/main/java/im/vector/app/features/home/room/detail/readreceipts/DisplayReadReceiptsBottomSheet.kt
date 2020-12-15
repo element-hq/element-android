@@ -18,7 +18,9 @@ package im.vector.app.features.home.room.detail.readreceipts
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.args
 import im.vector.app.R
@@ -26,11 +28,13 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.databinding.BottomSheetGenericListBinding
+import im.vector.app.databinding.BottomSheetGenericListWithTitleBinding
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.bottom_sheet_generic_list_with_title.*
+import kotlinx.parcelize.Parcelize
+
 import javax.inject.Inject
 
 @Parcelize
@@ -41,7 +45,9 @@ data class DisplayReadReceiptArgs(
 /**
  * Bottom sheet displaying list of read receipts for a given event ordered by descending timestamp
  */
-class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment(), DisplayReadReceiptsController.Listener {
+class DisplayReadReceiptsBottomSheet :
+        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
+        DisplayReadReceiptsController.Listener {
 
     @Inject lateinit var epoxyController: DisplayReadReceiptsController
 
@@ -53,19 +59,21 @@ class DisplayReadReceiptsBottomSheet : VectorBaseBottomSheetDialogFragment(), Di
         injector.inject(this)
     }
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_generic_list_with_title
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {
+        return BottomSheetGenericListWithTitleBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        bottomSheetRecyclerView.configureWith(epoxyController, hasFixedSize = false)
-        bottomSheetTitle.text = getString(R.string.seen_by)
+        views.bottomSheetRecyclerView.configureWith(epoxyController, hasFixedSize = false)
+        views.bottomSheetTitle.text = getString(R.string.seen_by)
         epoxyController.listener = this
         epoxyController.setData(displayReadReceiptArgs.readReceipts)
     }
 
     override fun onDestroyView() {
-        bottomSheetRecyclerView.cleanup()
+        views.bottomSheetRecyclerView.cleanup()
         epoxyController.listener = null
         super.onDestroyView()
     }

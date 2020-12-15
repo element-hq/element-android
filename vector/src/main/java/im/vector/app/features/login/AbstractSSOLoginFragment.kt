@@ -21,10 +21,11 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.browser.customtabs.CustomTabsSession
+import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.withState
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 
-abstract class AbstractSSOLoginFragment : AbstractLoginFragment() {
+abstract class AbstractSSOLoginFragment<VB: ViewBinding> : AbstractLoginFragment<VB>() {
 
     // For sso
     private var customTabsServiceConnection: CustomTabsServiceConnection? = null

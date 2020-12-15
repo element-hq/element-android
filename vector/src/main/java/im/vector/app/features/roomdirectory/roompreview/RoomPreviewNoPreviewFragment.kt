@@ -17,7 +17,9 @@
 package im.vector.app.features.roomdirectory.roompreview
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.transition.TransitionManager
 import com.airbnb.mvrx.Loading
@@ -29,9 +31,11 @@ import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentRoomPreviewNoPreviewBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomdirectory.JoinState
-import kotlinx.android.synthetic.main.fragment_room_preview_no_preview.*
+
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
@@ -41,12 +45,14 @@ import javax.inject.Inject
 class RoomPreviewNoPreviewFragment @Inject constructor(
         val roomPreviewViewModelFactory: RoomPreviewViewModel.Factory,
         private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentRoomPreviewNoPreviewBinding>() {
 
     private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()
     private val roomPreviewData: RoomPreviewData by args()
 
-    override fun getLayoutResId() = R.layout.fragment_room_preview_no_preview
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomPreviewNoPreviewBinding {
+        return FragmentRoomPreviewNoPreviewBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -21,7 +21,9 @@ import android.os.Bundle
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
 import android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
@@ -37,9 +39,11 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.startImportTextFromFileIntent
+import im.vector.app.databinding.FragmentBootstrapMigrateBackupBinding
+import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_bootstrap_enter_passphrase.bootstrapDescriptionText
-import kotlinx.android.synthetic.main.fragment_bootstrap_migrate_backup.*
+
+
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.isValidRecoveryKey
 import java.util.concurrent.TimeUnit
@@ -47,9 +51,11 @@ import javax.inject.Inject
 
 class BootstrapMigrateBackupFragment @Inject constructor(
         private val colorProvider: ColorProvider
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentBootstrapMigrateBackupBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_bootstrap_migrate_backup
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapMigrateBackupBinding {
+        return FragmentBootstrapMigrateBackupBinding.inflate(inflater, container, false)
+    }
 
     val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 

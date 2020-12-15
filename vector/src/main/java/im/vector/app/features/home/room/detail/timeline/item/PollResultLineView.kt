@@ -23,7 +23,7 @@ import android.widget.LinearLayout
 import androidx.core.content.withStyledAttributes
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
-import kotlinx.android.synthetic.main.item_timeline_event_poll_result_item.view.*
+
 
 class PollResultLineView @JvmOverloads constructor(
         context: Context,

@@ -19,8 +19,10 @@ package im.vector.app.features.roommemberprofile
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -41,15 +43,17 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailPendingAction
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_matrix_profile.*
-import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
+import kotlinx.parcelize.Parcelize
+
+
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -65,14 +69,17 @@ class RoomMemberProfileFragment @Inject constructor(
         private val roomMemberProfileController: RoomMemberProfileController,
         private val avatarRenderer: AvatarRenderer,
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore
-) : VectorBaseFragment(), RoomMemberProfileController.Callback {
+) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
+        RoomMemberProfileController.Callback {
 
     private val fragmentArgs: RoomMemberProfileArgs by args()
     private val viewModel: RoomMemberProfileViewModel by fragmentViewModel()
 
     private var appBarStateChangeListener: AppBarStateChangeListener? = null
 
-    override fun getLayoutResId() = R.layout.fragment_matrix_profile
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentMatrixProfileBinding {
+        return FragmentMatrixProfileBinding.inflate(inflater, container, false)
+    }
 
     override fun getMenuRes() = R.menu.vector_room_member_profile
 

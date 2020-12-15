@@ -19,13 +19,15 @@ package im.vector.app.features.invite
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import im.vector.app.R
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.features.home.AvatarRenderer
-import kotlinx.android.synthetic.main.vector_invite_view.view.*
+
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -44,6 +46,13 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
         SMALL
     }
 
+    private val inviteAvatarView: ImageView
+    private val inviteLabelView: TextView
+    private val inviteNameView: TextView
+    private val inviteIdentifierView: TextView
+    private val inviteAcceptView: ButtonStateView
+    private val inviteRejectView: ButtonStateView
+
     @Inject lateinit var avatarRenderer: AvatarRenderer
     var callback: Callback? = null
 
@@ -52,6 +61,7 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
             context.injector().inject(this)
         }
         View.inflate(context, R.layout.vector_invite_view, this)
+        inviteAcceptView = findViewById(R.id.inviteAcceptView)
         inviteAcceptView.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
                 callback?.onAcceptInvite()
@@ -62,6 +72,7 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         }
 
+        inviteRejectView = findViewById(R.id.inviteRejectView)
         inviteRejectView.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
                 callback?.onRejectInvite()
@@ -71,6 +82,11 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
                 callback?.onRejectInvite()
             }
         }
+
+        inviteAvatarView = findViewById(R.id.inviteAvatarView)
+        inviteLabelView = findViewById(R.id.inviteLabelView)
+        inviteNameView = findViewById(R.id.inviteNameView)
+        inviteIdentifierView = findViewById(R.id.inviteIdentifierView)
     }
 
     fun render(sender: RoomMemberSummary, mode: Mode = Mode.LARGE, changeMembershipState: ChangeMembershipState) {

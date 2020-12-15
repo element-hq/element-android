@@ -21,6 +21,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
 import android.os.Build
+import android.view.LayoutInflater
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.content.getSystemService
@@ -34,16 +35,17 @@ import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.ActivityDebugMenuBinding
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
 import im.vector.app.features.qrcode.QrCodeScannerActivity
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
-import kotlinx.android.synthetic.debug.activity_debug_menu.*
+
 import timber.log.Timber
 import javax.inject.Inject
 
-class DebugMenuActivity : VectorBaseActivity() {
+class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
-    override fun getLayoutRes() = R.layout.activity_debug_menu
+    override fun getBinding() = ActivityDebugMenuBinding.inflate(layoutInflater)
 
     @Inject
     lateinit var activeSessionHolder: ActiveSessionHolder
@@ -69,17 +71,17 @@ class DebugMenuActivity : VectorBaseActivity() {
     }
 
     private fun setupViews() {
-        debug_test_text_view_link.setOnClickListener { testTextViewLink() }
-        debug_show_sas_emoji.setOnClickListener { showSasEmoji() }
-        debug_test_notification.setOnClickListener { testNotification() }
-        debug_test_material_theme_light.setOnClickListener { testMaterialThemeLight() }
-        debug_test_material_theme_dark.setOnClickListener { testMaterialThemeDark() }
-        debug_test_crash.setOnClickListener { testCrash() }
-        debug_scan_qr_code.setOnClickListener { scanQRCode() }
+        views.debugTestTextViewLink.setOnClickListener { testTextViewLink() }
+        views.debugShowSasEmoji.setOnClickListener { showSasEmoji() }
+        views.debugTestNotification.setOnClickListener { testNotification() }
+        views.debugTestMaterialThemeLight.setOnClickListener { testMaterialThemeLight() }
+        views.debugTestMaterialThemeDark.setOnClickListener { testMaterialThemeDark() }
+        views.debugTestCrash.setOnClickListener { testCrash() }
+        views.debugScanQrCode.setOnClickListener { scanQRCode() }
     }
 
     private fun renderQrCode(text: String) {
-        debug_qr_code.setData(text)
+        views.debugQrCode.setData(text)
     }
 
     private fun testTextViewLink() {

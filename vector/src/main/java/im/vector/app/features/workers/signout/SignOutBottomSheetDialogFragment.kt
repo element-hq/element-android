@@ -19,7 +19,9 @@ package im.vector.app.features.workers.signout
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -35,17 +37,21 @@ import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.databinding.BottomSheetGenericListBinding
+import im.vector.app.databinding.BottomSheetLogoutAndBackupBinding
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.recover.SetupMode
-import kotlinx.android.synthetic.main.bottom_sheet_logout_and_backup.*
+
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import timber.log.Timber
 import javax.inject.Inject
 
 // TODO this needs to be refactored to current standard and remove legacy
-class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), SignoutCheckViewModel.Factory {
+class SignOutBottomSheetDialogFragment :
+        VectorBaseBottomSheetDialogFragment<BottomSheetLogoutAndBackupBinding>(),
+        SignoutCheckViewModel.Factory {
 
     var onSignOut: Runnable? = null
 
@@ -78,11 +84,11 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupRecoveryButton.action = {
+        views.setupRecoveryButton.action = {
             BootstrapBottomSheet.show(parentFragmentManager, SetupMode.NORMAL)
         }
 
-        exitAnywayButton.action = {
+        views.exitAnywayButton.action = {
             context?.let {
                 AlertDialog.Builder(it)
                         .setTitle(R.string.are_you_sure)
@@ -95,17 +101,17 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
             }
         }
 
-        signOutButton.action = {
+        views.signOutButton.action = {
             onSignOut?.run()
         }
 
-        exportManuallyButton.action = {
+        views.exportManuallyButton.action = {
             withState(viewModel) { state ->
                 queryExportKeys(state.userId, manualExportKeysActivityResultLauncher)
             }
         }
 
-        setupMegolmBackupButton.action = {
+        views.setupMegolmBackupButton.action = {
             setupBackupActivityResultLauncher.launch(KeysBackupSetupActivity.intent(requireContext(), true))
         }
 
@@ -136,80 +142,80 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        signoutExportingLoading.isVisible = false
+        views.signoutExportingLoading.isVisible = false
         if (state.crossSigningSetupAllKeysKnown && !state.backupIsSetup) {
-            bottom_sheet_signout_warning_text.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
-            backingUpStatusGroup.isVisible = false
+            views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
+            views.backingUpStatusGroup.isVisible = false
             // we should show option to setup 4S
-            setupRecoveryButton.isVisible = true
-            setupMegolmBackupButton.isVisible = false
+            views.setupRecoveryButton.isVisible = true
+            views.setupMegolmBackupButton.isVisible = false
             // We let the option to ignore and quit
-            exportManuallyButton.isVisible = true
-            exitAnywayButton.isVisible = true
-            signOutButton.isVisible = false
+            views.exportManuallyButton.isVisible = true
+            views.exitAnywayButton.isVisible = true
+            views.signOutButton.isVisible = false
         } else if (state.keysBackupState == KeysBackupState.Unknown || state.keysBackupState == KeysBackupState.Disabled) {
-            bottom_sheet_signout_warning_text.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
-            backingUpStatusGroup.isVisible = false
+            views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_no_backup)
+            views.backingUpStatusGroup.isVisible = false
             // no key backup and cannot setup full 4S
             // we propose to setup
             // we should show option to setup 4S
-            setupRecoveryButton.isVisible = false
-            setupMegolmBackupButton.isVisible = true
+            views.setupRecoveryButton.isVisible = false
+            views.setupMegolmBackupButton.isVisible = true
             // We let the option to ignore and quit
-            exportManuallyButton.isVisible = true
-            exitAnywayButton.isVisible = true
-            signOutButton.isVisible = false
+            views.exportManuallyButton.isVisible = true
+            views.exitAnywayButton.isVisible = true
+            views.signOutButton.isVisible = false
         } else {
             // so keybackup is setup
             // You should wait until all are uploaded
-            setupRecoveryButton.isVisible = false
+            views.setupRecoveryButton.isVisible = false
 
             when (state.keysBackupState) {
                 KeysBackupState.ReadyToBackUp -> {
-                    bottom_sheet_signout_warning_text.text = getString(R.string.action_sign_out_confirmation_simple)
+                    views.bottomSheetSignoutWarningText.text = getString(R.string.action_sign_out_confirmation_simple)
 
                     // Ok all keys are backedUp
-                    backingUpStatusGroup.isVisible = true
-                    backupProgress.isVisible = false
-                    backupCompleteImage.isVisible = true
-                    backupStatusText.text = getString(R.string.keys_backup_info_keys_all_backup_up)
+                    views.backingUpStatusGroup.isVisible = true
+                    views.backupProgress.isVisible = false
+                    views.backupCompleteImage.isVisible = true
+                    views.backupStatusText.text = getString(R.string.keys_backup_info_keys_all_backup_up)
 
-                    setupMegolmBackupButton.isVisible = false
-                    exportManuallyButton.isVisible = false
-                    exitAnywayButton.isVisible = false
+                    views.setupMegolmBackupButton.isVisible = false
+                    views.exportManuallyButton.isVisible = false
+                    views.exitAnywayButton.isVisible = false
                     // You can signout
-                    signOutButton.isVisible = true
+                    views.signOutButton.isVisible = true
                 }
                 KeysBackupState.WillBackUp,
                 KeysBackupState.BackingUp     -> {
-                    bottom_sheet_signout_warning_text.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
+                    views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
 
                     // save in progress
-                    backingUpStatusGroup.isVisible = true
-                    backupProgress.isVisible = true
-                    backupCompleteImage.isVisible = false
-                    backupStatusText.text = getString(R.string.sign_out_bottom_sheet_backing_up_keys)
+                    views.backingUpStatusGroup.isVisible = true
+                    views.backupProgress.isVisible = true
+                    views.backupCompleteImage.isVisible = false
+                    views.backupStatusText.text = getString(R.string.sign_out_bottom_sheet_backing_up_keys)
 
-                    setupMegolmBackupButton.isVisible = false
-                    exportManuallyButton.isVisible = false
-                    exitAnywayButton.isVisible = true
-                    signOutButton.isVisible = false
+                    views.setupMegolmBackupButton.isVisible = false
+                    views.exportManuallyButton.isVisible = false
+                    views.exitAnywayButton.isVisible = true
+                    views.signOutButton.isVisible = false
                 }
                 KeysBackupState.NotTrusted    -> {
-                    bottom_sheet_signout_warning_text.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
+                    views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
                     // It's not trusted and we know there are unsaved keys..
-                    backingUpStatusGroup.isVisible = false
+                    views.backingUpStatusGroup.isVisible = false
 
                     // option to enter pass/key
-                    setupMegolmBackupButton.isVisible = true
-                    exportManuallyButton.isVisible = true
-                    exitAnywayButton.isVisible = true
-                    signOutButton.isVisible = false
+                    views.setupMegolmBackupButton.isVisible = true
+                    views.exportManuallyButton.isVisible = true
+                    views.exitAnywayButton.isVisible = true
+                    views.signOutButton.isVisible = false
                 }
                 else                          -> {
                     // mmm.. strange state
 
-                    exitAnywayButton.isVisible = true
+                    views.exitAnywayButton.isVisible = true
                 }
             }
         }
@@ -217,25 +223,25 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
         // final call if keys have been exported
         when (state.hasBeenExportedToFile) {
             is Loading -> {
-                signoutExportingLoading.isVisible = true
-                backingUpStatusGroup.isVisible = false
+                views.signoutExportingLoading.isVisible = true
+                views.backingUpStatusGroup.isVisible = false
 
-                setupRecoveryButton.isVisible = false
-                setupMegolmBackupButton.isVisible = false
-                exportManuallyButton.isVisible = false
-                exitAnywayButton.isVisible = true
-                signOutButton.isVisible = false
+                views.setupRecoveryButton.isVisible = false
+                views.setupMegolmBackupButton.isVisible = false
+                views.exportManuallyButton.isVisible = false
+                views.exitAnywayButton.isVisible = true
+                views.signOutButton.isVisible = false
             }
             is Success -> {
                 if (state.hasBeenExportedToFile.invoke()) {
-                    bottom_sheet_signout_warning_text.text = getString(R.string.action_sign_out_confirmation_simple)
-                    backingUpStatusGroup.isVisible = false
+                    views.bottomSheetSignoutWarningText.text = getString(R.string.action_sign_out_confirmation_simple)
+                    views.backingUpStatusGroup.isVisible = false
 
-                    setupRecoveryButton.isVisible = false
-                    setupMegolmBackupButton.isVisible = false
-                    exportManuallyButton.isVisible = false
-                    exitAnywayButton.isVisible = false
-                    signOutButton.isVisible = true
+                    views.setupRecoveryButton.isVisible = false
+                    views.setupMegolmBackupButton.isVisible = false
+                    views.exportManuallyButton.isVisible = false
+                    views.exitAnywayButton.isVisible = false
+                    views.signOutButton.isVisible = true
                 }
             }
             else       -> {
@@ -244,7 +250,9 @@ class SignOutBottomSheetDialogFragment : VectorBaseBottomSheetDialogFragment(), 
         super.invalidate()
     }
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_logout_and_backup
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetLogoutAndBackupBinding {
+        return BottomSheetLogoutAndBackupBinding.inflate(inflater, container, false)
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)

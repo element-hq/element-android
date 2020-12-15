@@ -22,7 +22,7 @@ import android.widget.LinearLayout
 import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
 import im.vector.app.R
-import kotlinx.android.synthetic.main.view_password_strength_bar.view.*
+
 
 /**
  * A password strength bar custom widget

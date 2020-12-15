@@ -20,7 +20,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <include layout="@layout/merge_overlay_waiting_view" />
+            <include
+                android:id="@+id/waiting_view"
+                layout="@layout/merge_overlay_waiting_view" />
 
         </FrameLayout>
 

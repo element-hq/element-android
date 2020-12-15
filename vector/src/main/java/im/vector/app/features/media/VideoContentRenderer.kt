@@ -25,7 +25,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.utils.isLocalFile
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import timber.log.Timber

@@ -21,9 +21,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -40,11 +42,13 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInExternalBrowser
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.webview.WebViewEventListener
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_room_widget.*
+import kotlinx.parcelize.Parcelize
+
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
 import java.net.URISyntaxException
@@ -59,12 +63,17 @@ data class WidgetArgs(
         val urlParams: Map<String, String> = emptyMap()
 ) : Parcelable
 
-class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventListener, OnBackPressed {
+class WidgetFragment @Inject constructor() :
+        VectorBaseFragment<FragmentRoomWidgetBinding>(),
+        WebViewEventListener,
+        OnBackPressed {
 
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: WidgetViewModel by activityViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_room_widget
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomWidgetBinding {
+        return FragmentRoomWidgetBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

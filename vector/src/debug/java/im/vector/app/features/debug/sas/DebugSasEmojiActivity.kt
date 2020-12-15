@@ -22,7 +22,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import org.matrix.android.sdk.api.crypto.getAllVerificationEmojis
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+
 
 class DebugSasEmojiActivity : AppCompatActivity() {
 
@@ -30,12 +30,12 @@ class DebugSasEmojiActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_generic_recycler)
         val controller = SasEmojiController()
-        genericRecyclerView.configureWith(controller)
+        views.genericRecyclerView.configureWith(controller)
         controller.setData(SasState(getAllVerificationEmojis()))
     }
 
     override fun onDestroy() {
-        genericRecyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         super.onDestroy()
     }
 }
