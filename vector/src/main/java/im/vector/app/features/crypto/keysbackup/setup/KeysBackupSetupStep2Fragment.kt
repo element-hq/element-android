@@ -21,12 +21,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import androidx.transition.TransitionManager
 import butterknife.BindView
-import butterknife.OnClick
-import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import com.nulabinc.zxcvbn.Zxcvbn
 import im.vector.app.R
@@ -34,6 +33,7 @@ import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.ui.views.PasswordStrengthBar
 import im.vector.app.features.settings.VectorLocale
+import kotlinx.android.synthetic.main.fragment_keys_backup_setup_step2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -65,14 +65,12 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
 
     private val zxcvbn = Zxcvbn()
 
-    @OnTextChanged(R.id.keys_backup_passphrase_enter_edittext)
-    fun onPassphraseChanged() {
+    private fun onPassphraseChanged() {
         viewModel.passphrase.value = mPassphraseTextEdit.text.toString()
         viewModel.confirmPassphraseError.value = null
     }
 
-    @OnTextChanged(R.id.keys_backup_passphrase_confirm_edittext)
-    fun onConfirmPassphraseChanged() {
+    private fun onConfirmPassphraseChanged() {
         viewModel.confirmPassphrase.value = mPassphraseConfirmTextEdit.text.toString()
     }
 
@@ -85,6 +83,7 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
 
         viewModel.shouldPromptOnBack = true
         bindViewToViewModel()
+        setupViews()
     }
 
     /* ==========================================================================================
@@ -159,13 +158,20 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
         }
     }
 
-    @OnClick(R.id.keys_backup_view_show_password)
-    fun toggleVisibilityMode() {
+    private fun setupViews() {
+        keys_backup_view_show_password.setOnClickListener { toggleVisibilityMode() }
+        keys_backup_setup_step2_button.setOnClickListener { doNext() }
+        keys_backup_setup_step2_skip_button.setOnClickListener { skipPassphrase() }
+
+        keys_backup_passphrase_enter_edittext.doOnTextChanged { _, _, _, _ ->  onPassphraseChanged()}
+        keys_backup_passphrase_confirm_edittext.doOnTextChanged { _, _, _, _ ->  onConfirmPassphraseChanged()}
+    }
+
+    private fun toggleVisibilityMode() {
         viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
     }
 
-    @OnClick(R.id.keys_backup_setup_step2_button)
-    fun doNext() {
+    private fun doNext() {
         when {
             viewModel.passphrase.value.isNullOrEmpty()                      -> {
                 viewModel.passphraseError.value = context?.getString(R.string.passphrase_empty_error_message)
@@ -184,8 +190,7 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment() 
         }
     }
 
-    @OnClick(R.id.keys_backup_setup_step2_skip_button)
-    fun skipPassphrase() {
+    private fun skipPassphrase() {
         when {
             viewModel.passphrase.value.isNullOrEmpty() -> {
                 // Generate a recovery key for the user

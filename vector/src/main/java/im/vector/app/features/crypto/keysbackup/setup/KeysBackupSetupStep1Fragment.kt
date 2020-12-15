@@ -22,10 +22,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import butterknife.BindView
-import butterknife.OnClick
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
+import kotlinx.android.synthetic.main.fragment_keys_backup_setup_step1.*
 import javax.inject.Inject
 
 class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment() {
@@ -51,15 +51,16 @@ class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment() 
             advancedOptionText.visibility = if (showOption) View.VISIBLE else View.GONE
             manualExportButton.visibility = if (showOption) View.VISIBLE else View.GONE
         })
+
+        keys_backup_setup_step1_button.setOnClickListener { onButtonClick() }
+        keys_backup_setup_step1_manualExport.setOnClickListener { onManualExportClick() }
     }
 
-    @OnClick(R.id.keys_backup_setup_step1_button)
-    fun onButtonClick() {
+    private fun onButtonClick() {
         viewModel.navigateEvent.value = LiveEvent(KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2)
     }
 
-    @OnClick(R.id.keys_backup_setup_step1_manualExport)
-    fun onManualExportClick() {
+    private fun onManualExportClick() {
         viewModel.navigateEvent.value = LiveEvent(KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT)
     }
 }

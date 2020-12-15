@@ -19,7 +19,6 @@ package im.vector.app.features.login.terms
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import butterknife.OnClick
 import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
@@ -55,6 +54,8 @@ class LoginTermsFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupViews()
         loginTermsPolicyList.configureWith(policyController)
         policyController.listener = this
 
@@ -66,6 +67,10 @@ class LoginTermsFragment @Inject constructor(
                 }
 
         loginTermsViewState = LoginTermsViewState(list)
+    }
+
+    private fun setupViews() {
+        loginTermsSubmit.setOnClickListener { submit() }
     }
 
     override fun onDestroyView() {
@@ -99,8 +104,7 @@ class LoginTermsFragment @Inject constructor(
                 }
     }
 
-    @OnClick(R.id.loginTermsSubmit)
-    internal fun submit() {
+    private fun submit() {
         loginViewModel.handle(LoginAction.AcceptTerms)
     }
 

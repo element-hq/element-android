@@ -16,8 +16,9 @@
 
 package im.vector.app.features.login
 
+import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AlertDialog
-import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import im.vector.app.R
@@ -32,12 +33,17 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor() : Abstrac
 
     override fun getLayoutResId() = R.layout.fragment_login_reset_password_mail_confirmation
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        resetPasswordMailConfirmationSubmit.setOnClickListener { submit() }
+    }
+
     private fun setupUi(state: LoginViewState) {
         resetPasswordMailConfirmationNotice.text = getString(R.string.login_reset_password_mail_confirmation_notice, state.resetPasswordEmail)
     }
 
-    @OnClick(R.id.resetPasswordMailConfirmationSubmit)
-    fun submit() {
+    private fun submit() {
         loginViewModel.handle(LoginAction.ResetPasswordMailConfirmed)
     }
 

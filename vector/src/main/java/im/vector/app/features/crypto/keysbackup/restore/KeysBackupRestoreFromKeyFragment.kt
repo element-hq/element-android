@@ -17,19 +17,18 @@ package im.vector.app.features.crypto.keysbackup.restore
 
 import android.app.Activity
 import android.os.Bundle
-import android.text.Editable
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import butterknife.BindView
-import butterknife.OnClick
-import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
+import kotlinx.android.synthetic.main.fragment_keys_backup_restore_from_key.*
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
@@ -64,17 +63,19 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
         viewModel.recoveryCodeErrorText.observe(viewLifecycleOwner, Observer { newValue ->
             mKeyInputLayout.error = newValue
         })
+
+        keys_restore_button.setOnClickListener { onRestoreFromKey() }
+        keys_backup_import.setOnClickListener { onImport() }
+        keys_restore_key_enter_edittext.doOnTextChanged { text, _, _, _ -> onRestoreKeyTextEditChange(text) }
     }
 
-    @OnTextChanged(R.id.keys_restore_key_enter_edittext)
-    fun onRestoreKeyTextEditChange(s: Editable?) {
+    private fun onRestoreKeyTextEditChange(s: CharSequence?) {
         s?.toString()?.let {
             viewModel.updateCode(it)
         }
     }
 
-    @OnClick(R.id.keys_restore_button)
-    fun onRestoreFromKey() {
+    private fun onRestoreFromKey() {
         val value = viewModel.recoveryCode.value
         if (value.isNullOrBlank()) {
             viewModel.recoveryCodeErrorText.value = context?.getString(R.string.keys_backup_recovery_code_empty_error_message)
@@ -83,8 +84,7 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
         }
     }
 
-    @OnClick(R.id.keys_backup_import)
-    fun onImport() {
+    private fun onImport() {
         startImportTextFromFileIntent(requireContext(), textFileStartForActivityResult)
     }
 

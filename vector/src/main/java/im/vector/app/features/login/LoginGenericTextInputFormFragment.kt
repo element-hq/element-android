@@ -23,7 +23,6 @@ import android.text.InputType
 import android.view.View
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
-import butterknife.OnClick
 import com.airbnb.mvrx.args
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
@@ -64,10 +63,16 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupViews()
         setupUi()
         setupSubmitButton()
         setupTil()
         setupAutoFill()
+    }
+
+    private fun setupViews() {
+        loginGenericTextInputFormOtherButton.setOnClickListener { onOtherButtonClicked() }
+        loginGenericTextInputFormSubmit.setOnClickListener { submit() }
     }
 
     private fun setupAutoFill() {
@@ -126,8 +131,7 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
         }
     }
 
-    @OnClick(R.id.loginGenericTextInputFormOtherButton)
-    fun onOtherButtonClicked() {
+    private fun onOtherButtonClicked() {
         when (params.mode) {
             TextInputFormFragmentMode.ConfirmMsisdn -> {
                 loginViewModel.handle(LoginAction.SendAgainThreePid)
@@ -138,8 +142,7 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
         }
     }
 
-    @OnClick(R.id.loginGenericTextInputFormSubmit)
-    fun submit() {
+    private fun submit() {
         cleanupUi()
         val text = loginGenericTextInputFormTextInput.text.toString()
 

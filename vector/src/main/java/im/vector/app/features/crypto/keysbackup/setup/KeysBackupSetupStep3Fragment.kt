@@ -27,7 +27,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import arrow.core.Try
 import butterknife.BindView
-import butterknife.OnClick
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -36,6 +35,7 @@ import im.vector.app.core.utils.LiveEvent
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.core.utils.startSharePlainTextIntent
+import kotlinx.android.synthetic.main.fragment_keys_backup_setup_step3.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -88,10 +88,17 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
                 mRecoveryKeyTextView.isVisible = false
             }
         })
+
+        setupViews()
     }
 
-    @OnClick(R.id.keys_backup_setup_step3_button)
-    fun onFinishButtonClicked() {
+    private fun setupViews() {
+        keys_backup_setup_step3_button.setOnClickListener { onFinishButtonClicked() }
+        keys_backup_setup_step3_copy_button.setOnClickListener { onCopyButtonClicked() }
+        keys_backup_recovery_key_text.setOnClickListener { onRecoveryKeyClicked() }
+    }
+
+    private fun onFinishButtonClicked() {
         if (viewModel.megolmBackupCreationInfo == null) {
             // nothing
         } else {
@@ -103,8 +110,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
         }
     }
 
-    @OnClick(R.id.keys_backup_setup_step3_copy_button)
-    fun onCopyButtonClicked() {
+    private fun onCopyButtonClicked() {
         val dialog = BottomSheetDialog(requireActivity())
         dialog.setContentView(R.layout.bottom_sheet_save_recovery_key)
         dialog.setCanceledOnTouchOutside(true)
@@ -155,8 +161,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment() 
         dialog.show()
     }
 
-    @OnClick(R.id.keys_backup_recovery_key_text)
-    fun onRecoveryKeyClicked() {
+    private fun onRecoveryKeyClicked() {
         viewModel.recoveryKey.value?.let {
             viewModel.copyHasBeenMade = true
 

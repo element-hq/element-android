@@ -24,7 +24,6 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.content.getSystemService
-import butterknife.OnClick
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -66,24 +65,32 @@ class DebugMenuActivity : VectorBaseActivity() {
         val string = buffer.toString(Charsets.ISO_8859_1)
 
         renderQrCode(string)
+        setupViews()
+    }
+
+    private fun setupViews() {
+        debug_test_text_view_link.setOnClickListener { testTextViewLink() }
+        debug_show_sas_emoji.setOnClickListener { showSasEmoji() }
+        debug_test_notification.setOnClickListener { testNotification() }
+        debug_test_material_theme_light.setOnClickListener { testMaterialThemeLight() }
+        debug_test_material_theme_dark.setOnClickListener { testMaterialThemeDark() }
+        debug_test_crash.setOnClickListener { testCrash() }
+        debug_scan_qr_code.setOnClickListener { scanQRCode() }
     }
 
     private fun renderQrCode(text: String) {
         debug_qr_code.setData(text)
     }
 
-    @OnClick(R.id.debug_test_text_view_link)
-    fun testTextViewLink() {
+    private fun testTextViewLink() {
         startActivity(Intent(this, TestLinkifyActivity::class.java))
     }
 
-    @OnClick(R.id.debug_show_sas_emoji)
-    fun showSasEmoji() {
+    private fun showSasEmoji() {
         startActivity(Intent(this, DebugSasEmojiActivity::class.java))
     }
 
-    @OnClick(R.id.debug_test_notification)
-    fun testNotification() {
+    private fun testNotification() {
         val notificationManager = getSystemService<NotificationManager>()!!
 
         // Create channel first
@@ -166,23 +173,19 @@ class DebugMenuActivity : VectorBaseActivity() {
         )
     }
 
-    @OnClick(R.id.debug_test_material_theme_light)
-    fun testMaterialThemeLight() {
+    private fun testMaterialThemeLight() {
         startActivity(Intent(this, DebugMaterialThemeLightActivity::class.java))
     }
 
-    @OnClick(R.id.debug_test_material_theme_dark)
-    fun testMaterialThemeDark() {
+    private fun testMaterialThemeDark() {
         startActivity(Intent(this, DebugMaterialThemeDarkActivity::class.java))
     }
 
-    @OnClick(R.id.debug_test_crash)
-    fun testCrash() {
+    private fun testCrash() {
         throw RuntimeException("Application crashed from user demand")
     }
 
-    @OnClick(R.id.debug_scan_qr_code)
-    fun scanQRCode() {
+    private fun scanQRCode() {
         if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
             doScanQRCode()
         }

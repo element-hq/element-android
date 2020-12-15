@@ -16,8 +16,10 @@
 
 package im.vector.app.features.login
 
-import butterknife.OnClick
+import android.os.Bundle
+import android.view.View
 import im.vector.app.R
+import kotlinx.android.synthetic.main.fragment_login_splash.*
 import javax.inject.Inject
 
 /**
@@ -27,8 +29,17 @@ class LoginSplashFragment @Inject constructor() : AbstractLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_splash
 
-    @OnClick(R.id.loginSplashSubmit)
-    fun getStarted() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupViews()
+    }
+
+    private fun setupViews() {
+        loginSplashSubmit.setOnClickListener { getStarted() }
+    }
+
+    private fun getStarted() {
         loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OpenServerSelection))
     }
 

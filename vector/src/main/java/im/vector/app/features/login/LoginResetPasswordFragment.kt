@@ -19,7 +19,6 @@ package im.vector.app.features.login
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -59,6 +58,8 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment()
     }
 
     private fun setupSubmitButton() {
+        resetPasswordSubmit.setOnClickListener { submit() }
+
         Observable
                 .combineLatest(
                         resetPasswordEmail.textChanges().map { it.isEmail() },
@@ -75,8 +76,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment()
                 .disposeOnDestroyView()
     }
 
-    @OnClick(R.id.resetPasswordSubmit)
-    fun submit() {
+    private fun submit() {
         cleanupUi()
 
         if (showWarning) {

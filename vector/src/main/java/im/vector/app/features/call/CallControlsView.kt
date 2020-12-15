@@ -25,7 +25,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.ButterKnife
-import butterknife.OnClick
 import im.vector.app.R
 import kotlinx.android.synthetic.main.view_call_controls.view.*
 import org.matrix.android.sdk.api.session.call.CallState
@@ -59,40 +58,41 @@ class CallControlsView @JvmOverloads constructor(
         ConstraintLayout.inflate(context, R.layout.view_call_controls, this)
         // layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         ButterKnife.bind(this)
+
+        iv_icr_accept_call.setOnClickListener { acceptIncomingCall() }
+        iv_icr_end_call.setOnClickListener { declineIncomingCall() }
+        iv_end_call.setOnClickListener { endOngoingCall() }
+        iv_mute_toggle.setOnClickListener { toggleMute() }
+        iv_video_toggle.setOnClickListener { toggleVideo() }
+        iv_leftMiniControl.setOnClickListener { returnToChat() }
+        iv_more.setOnClickListener { moreControlOption() }
     }
 
-    @OnClick(R.id.iv_icr_accept_call)
-    fun acceptIncomingCall() {
+    private fun acceptIncomingCall() {
         interactionListener?.didAcceptIncomingCall()
     }
 
-    @OnClick(R.id.iv_icr_end_call)
-    fun declineIncomingCall() {
+    private fun declineIncomingCall() {
         interactionListener?.didDeclineIncomingCall()
     }
 
-    @OnClick(R.id.iv_end_call)
-    fun endOngoingCall() {
+    private fun endOngoingCall() {
         interactionListener?.didEndCall()
     }
 
-    @OnClick(R.id.iv_mute_toggle)
-    fun toggleMute() {
+    private fun toggleMute() {
         interactionListener?.didTapToggleMute()
     }
 
-    @OnClick(R.id.iv_video_toggle)
-    fun toggleVideo() {
+    private fun toggleVideo() {
         interactionListener?.didTapToggleVideo()
     }
 
-    @OnClick(R.id.iv_leftMiniControl)
-    fun returnToChat() {
+    private fun returnToChat() {
         interactionListener?.returnToChat()
     }
 
-    @OnClick(R.id.iv_more)
-    fun moreControlOption() {
+    private fun moreControlOption() {
         interactionListener?.didTapMore()
     }
 

@@ -23,7 +23,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import butterknife.OnClick
 import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.BuildConfig
@@ -46,7 +45,14 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupViews()
         setupHomeServerField()
+    }
+
+    private fun setupViews() {
+        loginServerUrlFormLearnMore.setOnClickListener { learnMore() }
+        loginServerUrlFormClearHistory.setOnClickListener { clearHistory() }
+        loginServerUrlFormSubmit.setOnClickListener { submit() }
     }
 
     private fun setupHomeServerField() {
@@ -86,7 +92,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
                 loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_common_notice)
             }
         }
-        val completions =  state.knownCustomHomeServersUrls + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
+        val completions = state.knownCustomHomeServersUrls + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
         loginServerUrlFormHomeServerUrl.setAdapter(ArrayAdapter(
                 requireContext(),
                 R.layout.item_completion_homeserver,
@@ -97,13 +103,11 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
                 ?: TextInputLayout.END_ICON_NONE
     }
 
-    @OnClick(R.id.loginServerUrlFormLearnMore)
-    fun learnMore() {
+    private fun learnMore() {
         openUrlInChromeCustomTab(requireActivity(), null, EMS_LINK)
     }
 
-    @OnClick(R.id.loginServerUrlFormClearHistory)
-    fun clearHistory() {
+    private fun clearHistory() {
         loginViewModel.handle(LoginAction.ClearHomeServerHistory)
     }
 
@@ -112,8 +116,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment()
     }
 
     @SuppressLint("SetTextI18n")
-    @OnClick(R.id.loginServerUrlFormSubmit)
-    fun submit() {
+    private fun submit() {
         cleanupUi()
 
         // Static check of homeserver url, empty, malformed, etc.

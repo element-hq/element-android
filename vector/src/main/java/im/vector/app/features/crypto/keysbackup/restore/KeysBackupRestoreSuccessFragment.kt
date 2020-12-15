@@ -20,10 +20,10 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
 import butterknife.BindView
-import butterknife.OnClick
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
+import kotlinx.android.synthetic.main.fragment_keys_backup_restore_success.*
 import javax.inject.Inject
 
 class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragment() {
@@ -56,10 +56,10 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
             mSuccessText.text = context?.getString(R.string.keys_backup_restore_success_title_already_up_to_date)
             mSuccessDetailsText.isVisible = false
         }
+        keys_backup_setup_done_button.setOnClickListener { onDone() }
     }
 
-    @OnClick(R.id.keys_backup_setup_done_button)
-    fun onDone() {
+    private fun onDone() {
         sharedViewModel.importRoomKeysFinishWithResult.value = LiveEvent(sharedViewModel.importKeyResult!!)
     }
 }

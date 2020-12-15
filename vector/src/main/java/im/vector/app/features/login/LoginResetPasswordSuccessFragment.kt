@@ -16,8 +16,10 @@
 
 package im.vector.app.features.login
 
-import butterknife.OnClick
+import android.os.Bundle
+import android.view.View
 import im.vector.app.R
+import kotlinx.android.synthetic.main.fragment_login_reset_password_success.*
 import javax.inject.Inject
 
 /**
@@ -27,8 +29,13 @@ class LoginResetPasswordSuccessFragment @Inject constructor() : AbstractLoginFra
 
     override fun getLayoutResId() = R.layout.fragment_login_reset_password_success
 
-    @OnClick(R.id.resetPasswordSuccessSubmit)
-    fun submit() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        resetPasswordSuccessSubmit.setOnClickListener { submit() }
+    }
+
+    private fun submit() {
         loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnResetPasswordMailConfirmationSuccessDone))
     }
 

@@ -16,7 +16,6 @@
 package im.vector.app.features.crypto.keysbackup.restore
 
 import android.os.Bundle
-import android.text.Editable
 import android.text.SpannableString
 import android.text.style.ClickableSpan
 import android.view.View
@@ -25,14 +24,14 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.set
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import butterknife.BindView
-import butterknife.OnClick
-import butterknife.OnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
+import kotlinx.android.synthetic.main.fragment_keys_backup_restore_from_passphrase.*
 import javax.inject.Inject
 
 class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBaseFragment() {
@@ -54,8 +53,7 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
     @BindView(R.id.keys_backup_passphrase_help_with_link)
     lateinit var helperTextWithLink: TextView
 
-    @OnClick(R.id.keys_backup_view_show_password)
-    fun toggleVisibilityMode() {
+    private fun toggleVisibilityMode() {
         viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
     }
 
@@ -84,6 +82,11 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
             }
             return@setOnEditorActionListener false
         }
+
+        keys_backup_view_show_password.setOnClickListener { toggleVisibilityMode() }
+        keys_backup_passphrase_help_with_link.setOnClickListener { onUseRecoveryKey() }
+        keys_backup_restore_with_passphrase_submit.setOnClickListener { onRestoreBackup() }
+        keys_backup_passphrase_enter_edittext.doOnTextChanged { text, _, _, _ -> onPassphraseTextEditChange(text) }
     }
 
     private fun spannableStringForHelperText(): SpannableString {
@@ -102,18 +105,15 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
         return spanString
     }
 
-    @OnTextChanged(R.id.keys_backup_passphrase_enter_edittext)
-    fun onPassphraseTextEditChange(s: Editable?) {
+    private fun onPassphraseTextEditChange(s: CharSequence?) {
         s?.toString()?.let { viewModel.updatePassphrase(it) }
     }
 
-    @OnClick(R.id.keys_backup_passphrase_help_with_link)
-    fun onUseRecoveryKey() {
+    private fun onUseRecoveryKey() {
         sharedViewModel.moveToRecoverWithKey()
     }
 
-    @OnClick(R.id.keys_backup_restore_with_passphrase_submit)
-    fun onRestoreBackup() {
+    private fun onRestoreBackup() {
         val value = viewModel.passphrase.value
         if (value.isNullOrBlank()) {
             viewModel.passphraseErrorText.value = getString(R.string.passphrase_empty_error_message)

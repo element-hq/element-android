@@ -20,8 +20,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.view.isVisible
-import butterknife.OnCheckedChanged
-import butterknife.OnTextChanged
+import androidx.core.widget.doOnTextChanged
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
@@ -43,6 +42,7 @@ class BugReportActivity : VectorBaseActivity() {
 
     override fun initUiAndData() {
         configureToolbar(bugReportToolbar)
+        setupViews()
 
         if (bugReporter.screenshot != null) {
             bug_report_screenshot_preview.setImageBitmap(bugReporter.screenshot)
@@ -76,6 +76,11 @@ class BugReportActivity : VectorBaseActivity() {
         } else {
             supportActionBar?.setTitle(R.string.title_activity_bug_report)
         }
+    }
+
+    private fun setupViews() {
+        bug_report_edit_text.doOnTextChanged { _, _, _, _ -> textChanged() }
+        bug_report_button_include_screenshot.setOnCheckedChangeListener { _, _ -> onSendScreenshotChanged() }
     }
 
     override fun getMenuRes() = R.menu.bug_report
@@ -186,12 +191,10 @@ class BugReportActivity : VectorBaseActivity() {
      * UI Event
      * ========================================================================================== */
 
-    @OnTextChanged(R.id.bug_report_edit_text)
-    internal fun textChanged() {
+    private fun textChanged() {
         bug_report_text_input_layout.error = null
     }
 
-    @OnCheckedChanged(R.id.bug_report_button_include_screenshot)
     internal fun onSendScreenshotChanged() {
         bug_report_screenshot_preview.isVisible = bug_report_button_include_screenshot.isChecked && bugReporter.screenshot != null
     }

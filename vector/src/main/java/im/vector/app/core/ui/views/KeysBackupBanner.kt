@@ -25,9 +25,9 @@ import androidx.core.content.edit
 import androidx.core.view.isVisible
 import butterknife.BindView
 import butterknife.ButterKnife
-import butterknife.OnClick
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import kotlinx.android.synthetic.main.view_keys_backup_banner.view.*
 import timber.log.Timber
 
 /**
@@ -100,8 +100,7 @@ class KeysBackupBanner @JvmOverloads constructor(
         }
     }
 
-    @OnClick(R.id.view_keys_backup_banner_close)
-    internal fun onCloseClicked() {
+    private fun onCloseClicked() {
         state.let {
             when (it) {
                 is State.Setup   -> {
@@ -138,6 +137,7 @@ class KeysBackupBanner @JvmOverloads constructor(
         setOnClickListener(this)
         textView1.setOnClickListener(this)
         textView2.setOnClickListener(this)
+        view_keys_backup_banner_close.setOnClickListener { onCloseClicked() }
     }
 
     private fun renderInitial() {

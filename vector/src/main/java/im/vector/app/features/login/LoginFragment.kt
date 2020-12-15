@@ -23,7 +23,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
-import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -66,6 +65,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupSubmitButton()
+        setupForgottenPasswordButton()
         setupPasswordReveal()
 
         passwordField.setOnEditorActionListener { _, actionId, _ ->
@@ -75,6 +75,10 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
             }
             return@setOnEditorActionListener false
         }
+    }
+
+    private fun setupForgottenPasswordButton() {
+        forgetPasswordButton.setOnClickListener { forgetPasswordClicked() }
     }
 
     private fun setupAutoFill(state: LoginViewState) {
@@ -96,8 +100,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
         }
     }
 
-    @OnClick(R.id.loginSubmit)
-    fun submit() {
+    private fun submit() {
         cleanupUi()
 
         val login = loginField.text.toString()
@@ -200,6 +203,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
     }
 
     private fun setupSubmitButton() {
+        loginSubmit.setOnClickListener { submit() }
         Observable
                 .combineLatest(
                         loginField.textChanges().map { it.trim().isNotEmpty() },
@@ -216,8 +220,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
                 .disposeOnDestroyView()
     }
 
-    @OnClick(R.id.forgetPasswordButton)
-    fun forgetPasswordClicked() {
+    private fun forgetPasswordClicked() {
         loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnForgetPasswordClicked))
     }
 

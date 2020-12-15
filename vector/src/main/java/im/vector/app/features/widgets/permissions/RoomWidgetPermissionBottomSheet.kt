@@ -16,10 +16,11 @@
 package im.vector.app.features.widgets.permissions
 
 import android.content.DialogInterface
+import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.BulletSpan
-import butterknife.OnClick
+import android.view.View
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
@@ -50,6 +51,17 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
     // Use this if you don't need the full activity view model
     var directListener: ((Boolean) -> Unit)? = null
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupViews()
+    }
+
+    private fun setupViews() {
+        widgetPermissionDecline.setOnClickListener { doDecline() }
+        widgetPermissionContinue.setOnClickListener { doAccept() }
+    }
+
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
         val permissionData = state.permissionData() ?: return@withState
@@ -76,16 +88,14 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         widgetPermissionSharedInfo.text = infoBuilder
     }
 
-    @OnClick(R.id.widgetPermissionDecline)
-    fun doDecline() {
+    private fun doDecline() {
         viewModel.handle(RoomWidgetPermissionActions.BlockWidget)
         directListener?.invoke(false)
         // optimistic dismiss
         dismiss()
     }
 
-    @OnClick(R.id.widgetPermissionContinue)
-    fun doAccept() {
+    private fun doAccept() {
         viewModel.handle(RoomWidgetPermissionActions.AllowWidget)
         directListener?.invoke(true)
         // optimistic dismiss

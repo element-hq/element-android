@@ -26,6 +26,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import androidx.annotation.AttrRes
+import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.annotation.MenuRes
@@ -176,6 +177,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         uiDisposables.add(this)
     }
 
+    @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate Activity ${javaClass.simpleName}")
         val vectorComponent = getVectorComponent()

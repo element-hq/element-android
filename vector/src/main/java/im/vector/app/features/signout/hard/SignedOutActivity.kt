@@ -18,11 +18,12 @@ package im.vector.app.features.signout.hard
 
 import android.content.Context
 import android.content.Intent
-import butterknife.OnClick
+import android.os.Bundle
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import kotlinx.android.synthetic.main.activity_signed_out.*
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 
@@ -33,8 +34,17 @@ class SignedOutActivity : VectorBaseActivity() {
 
     override fun getLayoutRes() = R.layout.activity_signed_out
 
-    @OnClick(R.id.signedOutSubmit)
-    fun submit() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setupViews()
+    }
+
+    private fun setupViews() {
+        signedOutSubmit.setOnClickListener { submit() }
+    }
+
+    private fun submit() {
         // All is already cleared when we are here
         MainActivity.restartApp(this, MainActivityArgs())
     }

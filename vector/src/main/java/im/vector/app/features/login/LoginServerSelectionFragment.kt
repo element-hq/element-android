@@ -18,7 +18,6 @@ package im.vector.app.features.login
 
 import android.os.Bundle
 import android.view.View
-import butterknife.OnClick
 import im.vector.app.R
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import kotlinx.android.synthetic.main.fragment_login_server_selection.*
@@ -35,7 +34,16 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initViews()
         initTextViews()
+    }
+
+    private fun initViews() {
+        loginServerChoiceEmsLearnMore.setOnClickListener { learnMore() }
+        loginServerChoiceMatrixOrg.setOnClickListener { selectMatrixOrg() }
+        loginServerChoiceEms.setOnClickListener { selectEMS() }
+        loginServerChoiceOther.setOnClickListener { selectOther() }
+        loginServerIKnowMyIdSubmit.setOnClickListener { loginWithMatrixId() }
     }
 
     private fun updateSelectedChoice(state: LoginViewState) {
@@ -49,28 +57,23 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
         }
     }
 
-    @OnClick(R.id.loginServerChoiceEmsLearnMore)
-    fun learnMore() {
+    private fun learnMore() {
         openUrlInChromeCustomTab(requireActivity(), null, EMS_LINK)
     }
 
-    @OnClick(R.id.loginServerChoiceMatrixOrg)
-    fun selectMatrixOrg() {
+    private fun selectMatrixOrg() {
         loginViewModel.handle(LoginAction.UpdateServerType(ServerType.MatrixOrg))
     }
 
-    @OnClick(R.id.loginServerChoiceEms)
-    fun selectEMS() {
+    private fun selectEMS() {
         loginViewModel.handle(LoginAction.UpdateServerType(ServerType.EMS))
     }
 
-    @OnClick(R.id.loginServerChoiceOther)
-    fun selectOther() {
+    private fun selectOther() {
         loginViewModel.handle(LoginAction.UpdateServerType(ServerType.Other))
     }
 
-    @OnClick(R.id.loginServerIKnowMyIdSubmit)
-    fun loginWithMatrixId() {
+    private fun loginWithMatrixId() {
         loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignInWithMatrixId))
     }
 

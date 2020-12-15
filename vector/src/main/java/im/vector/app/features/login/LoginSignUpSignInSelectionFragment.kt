@@ -16,8 +16,9 @@
 
 package im.vector.app.features.login
 
+import android.os.Bundle
+import android.view.View
 import androidx.core.view.isVisible
-import butterknife.OnClick
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
@@ -31,6 +32,17 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
 
     override fun getLayoutResId() = R.layout.fragment_login_signup_signin_selection
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupViews()
+    }
+
+    private fun setupViews() {
+        loginSignupSigninSubmit.setOnClickListener { submit() }
+        loginSignupSigninSignIn.setOnClickListener { signIn() }
+    }
+
     private fun setupUi(state: LoginViewState) {
         when (state.serverType) {
             ServerType.MatrixOrg -> {
@@ -39,18 +51,18 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
                 loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
                 loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
-            ServerType.EMS -> {
+            ServerType.EMS       -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                 loginSignupSigninServerIcon.isVisible = true
                 loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
                 loginSignupSigninText.text = state.homeServerUrl.toReducedUrl()
             }
-            ServerType.Other -> {
+            ServerType.Other     -> {
                 loginSignupSigninServerIcon.isVisible = false
                 loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
                 loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
             }
-            ServerType.Unknown -> Unit /* Should not happen */
+            ServerType.Unknown   -> Unit /* Should not happen */
         }
 
         when (state.loginMode) {
@@ -86,18 +98,15 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
         }
     }
 
-    @OnClick(R.id.loginSignupSigninSubmit)
-    fun submit() = withState(loginViewModel) { state ->
+    private fun submit() = withState(loginViewModel) { state ->
         if (state.loginMode is LoginMode.Sso) {
             openInCustomTab(state.getSsoUrl(null))
         } else {
             loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
         }
-        Unit
     }
 
-    @OnClick(R.id.loginSignupSigninSignIn)
-    fun signIn() {
+    private fun signIn() {
         loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignIn))
     }
 
