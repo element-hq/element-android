@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
+import android.os.SystemClock
+import android.util.Log
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,10 +31,13 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import java.util.concurrent.CountDownLatch
+import kotlin.test.assertEquals
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 class TimelineWithManyMembersTest : InstrumentedTest {
+
+    private val NUMBER_OF_MEMBERS = 5
 
     private val commonTestHelper = CommonTestHelper(context())
     private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
@@ -90,5 +95,43 @@ class TimelineWithManyMembersTest : InstrumentedTest {
             commonTestHelper.await(lock)
         }
         samSession.stopSync()
+    }
+
+    /**
+     * Ensures when someone sends a message to a crowded room, everyone can decrypt the message.
+     */
+    @Test
+    fun everyone_should_decrypt_message_in_a_crowded_room() {
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithManyMembers(NUMBER_OF_MEMBERS)
+
+        val sessionForFirstMember = cryptoTestData.firstSession
+        val roomForFirstMember = sessionForFirstMember.getRoom(cryptoTestData.roomId)!!
+
+        val firstMessage = "First messages from Alice"
+        commonTestHelper.sendTextMessage(
+                roomForFirstMember,
+                firstMessage,
+                1)
+
+        for (index in 1 until cryptoTestData.sessions.size) {
+            val session = cryptoTestData.sessions[index]
+            val roomForCurrentMember = session.getRoom(cryptoTestData.roomId)!!
+            val timelineForCurrentMember = roomForCurrentMember.createTimeline(null, TimelineSettings(30))
+            timelineForCurrentMember.start()
+
+            session.startSync(true)
+
+            run {
+                val lock = CountDownLatch(1)
+                val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
+                    val decryptedMessage = snapshot.firstOrNull()?.root?.getClearContent()?.toModel<MessageContent>()?.body
+                    println("Decrypted Message: $decryptedMessage")
+                    return@createEventListener decryptedMessage?.startsWith(firstMessage).orFalse()
+                }
+                timelineForCurrentMember.addListener(eventsListener)
+                commonTestHelper.await(lock)
+            }
+            session.stopSync()
+        }
     }
 }
