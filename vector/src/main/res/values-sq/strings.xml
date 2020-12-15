@@ -1099,7 +1099,8 @@
     <string name="error_jitsi_not_supported_on_old_device">Na ndjeni, thirrjet konferencë me Jitsi-n nuk mbulohen në pajisje të vjetra (pajisje me Android OS nën 5.0)</string>
     <string name="title_activity_verify_device">Verifiko sesion</string>
     <string name="encryption_information_unknown_ip">ip e panjohur</string>
-    <string name="you_added_a_new_device_with_info">Një sesion i ri po kërkon emër keys.ession fshehtëzimi: %1$s
+    <string name="you_added_a_new_device_with_info">Një sesion i ri po kërkon emër kyçe fshehtëzimi.
+\nEmër sesioni: %1$s
 \nParë së fundi më: %2$s
 \nNëse s’keni bërë hyrje në një tjetër sesion, shpërfilleni këtë kërkesë.</string>
     <string name="your_unverified_device_requesting_with_info">Një sesion i paverifikuar po kërkon kyçe fshehtëzimi. 
@@ -1615,7 +1616,7 @@
     <string name="command_description_rainbow_emote">E dërgon emote-n e dhënë të ngjyrosur si ylber</string>
     <string name="settings_category_timeline">Rrjedhë kohore</string>
     <string name="settings_category_composer">Përpunues mesazhesh</string>
-    <string name="room_settings_enable_encryption">Aktivizoni fshehtëzim skaj-më-skaj</string>
+    <string name="room_settings_enable_encryption">Aktivizoni fshehtëzim skaj-më-skaj…</string>
     <string name="room_settings_enable_encryption_warning">Pasi të aktivizohet, fshehtëzimi s’mund të çaktivizohet më.</string>
     <string name="room_settings_enable_encryption_dialog_title">Të aktivizohet fshehtëzimi\?</string>
     <string name="room_settings_enable_encryption_dialog_content">Pasi të aktivizohet, fshehtëzimi për një dhomë nuk mund të çaktivizohet. Mesazhet e dërguar në një dhomë të fshehtëzuar s’mund të shihen nga shërbyesi, vetëm nga pjesëmarrësit te dhoma. Aktivizimi i fshehtëzimit mund të pengojë funksionimin si duhet të mjaft robotëve dhe urave.</string>
@@ -2181,4 +2182,58 @@
     <string name="room_member_open_or_create_dm">Mesazh i drejtpërdrejtë</string>
     <string name="send_bug_report_include_key_share_history">Dërgo historik kërkesash për dhënie kyçesh</string>
     <string name="no_more_results">S’ka më përfundime</string>
+    <string name="matrix_to_card_title">Lidhje Matrix</string>
+    <string name="qr_code_not_scanned">Kod QR jo i skanuar!</string>
+    <string name="invalid_qr_code_uri">Kod QR i pavlefshëm (URI e pavlefshme)!</string>
+    <string name="cannot_dm_self">S’mund t’i dërgoni mesazh të drejtpërdrejtë vetes!</string>
+    <string name="share_by_text">Jepuani si tekst</string>
+    <string name="phone_book_perform_lookup">Kërkoni për kontakte në Matrix</string>
+    <string name="room_settings_set_avatar">Caktoni avatar</string>
+    <string name="identity_server_user_consent_not_provided">S’është dhënë pranimi nga përdoruesi.</string>
+    <string name="user_code_info_text">Jepuani këtë kod njerëzve, që të mund ta skanojnë për t’ju shtuar dhe për të filluar të bisedoni.</string>
+    <string name="user_code_my_code">Kodi im</string>
+    <string name="user_code_share">Ndaje kodin tim me të tjerët</string>
+    <string name="user_code_scan">Skanoni një kod QR</string>
+    <string name="not_a_valid_qr_code">S’është kod QR Matrix i vlefshëm</string>
+    <string name="invite_friends_rich_title">Takohuni me mua në Element</string>
+    <string name="invite_friends_text">Hej, bisedoni me mua në Element: %s</string>
+    <string name="invite_friends">Ftoni shokë</string>
+    <string name="add_people">Shtoni persona</string>
+    <string name="topic_prefix">"Temë: "</string>
+    <string name="add_a_topic_link_text">Shtoni një temë</string>
+    <string name="room_created_summary_no_topic_creation_text">%s, që t’u bëni me dije njerëzve se për çfarë është kjo dhomë.</string>
+    <string name="this_is_the_beginning_of_dm">Ky është fillimi i historikut të mesazheve tuaj të drejtpërdrejtë me %s.</string>
+    <string name="this_is_the_beginning_of_room_no_name">Ky është fillimi i kësaj bisede.</string>
+    <string name="this_is_the_beginning_of_room">Ky është fillimi i %s.</string>
+    <string name="room_settings_enable_encryption_no_permission">S’keni leje të aktivizoni fshehtëzim në këtë dhomë.</string>
+    <string name="create_room_in_progress">Po krijohet dhoma…</string>
+    <string name="create_room_alias_invalid">Disa nga shenja nuk lejohen</string>
+    <string name="create_room_alias_empty">Ju lutemi, jepni një adresë dhome</string>
+    <string name="create_room_alias_already_in_use">Kjo adresë është e përdorur tashmë</string>
+    <string name="create_room_alias_hint">Adresë dhome</string>
+    <string name="create_room_disable_federation_description">Mund ta aktivizoni këtë, nëse dhoma do të përdoret vetëm për bashkëpunim mes ekipesh të brendshëm në shërbyesin tuaj Home. Kjo s’mund të ndryshohet më vonë.</string>
+    <string name="create_room_disable_federation_title">Blloko përgjithnjë pjesëmarrjen në këtë dhomë të kujtdo që s’është pjesë e %s</string>
+    <string name="hide_advanced">Fshihi të mëtejshmet</string>
+    <string name="show_advanced">Shfaq të mëtejshme</string>
+    <string name="attachment_viewer_item_x_of_y">%1$d nga %2$d</string>
+    <string name="a11y_create_direct_message_by_qr_code">Krijoni një bisedë të re të drejtpërdrejtë duke skanuar një kod QR</string>
+    <string name="a11y_create_direct_message_by_mxid">Krijoni një bisedë të re të drejtpërdrejtë përmes ID-je Matrix</string>
+    <string name="identity_server_consent_dialog_content">Që të mund të zbulohet kontakte ekzistuese që njihni, pranoni të dërgohen të dhënat tuaja të kontaktit (numra telefonash dhe/ose email-e) te Shërbyesi i formësuar për Identitete (%1$s)\?
+\n
+\nPër më tepër privatësi, të dhënat e dërguara do të kodohen, para se të dërgohen.</string>
+    <string name="identity_server_consent_dialog_title">Dërgoni email-e dhe numra telefonash</string>
+    <string name="settings_discovery_consent_action_give_consent">Jepe pranimin</string>
+    <string name="settings_discovery_consent_action_revoke">Shfuqizoje pranimin tim</string>
+    <string name="settings_discovery_consent_notice_off">S’keni dhënë pranimin tuaj për të dërguar email-e dhe numra telefonash te ky shërbyes identitetesh që të zbulojë përdorues të tjerë prej kontakteve tuaj.</string>
+    <string name="settings_discovery_consent_notice_on">Keni dhënë pranimin tuaj për të dërguar email-e dhe numra telefonash te ky shërbyes identitetesh që të zbulojë përdorues të tjerë prej kontakteve tuaj.</string>
+    <string name="settings_discovery_consent_title">Dërgo email-e dhe numra telefonash</string>
+    <string name="direct_room_user_list_suggestions_title">Sugjerime</string>
+    <string name="direct_room_user_list_contacts_title">Kontakte</string>
+    <string name="direct_room_user_list_known_title">Përdorues të Ditur</string>
+    <string name="qr_code">Kod QR</string>
+    <string name="add_by_qr_code">Shtoni përmes kodi QR</string>
+    <string name="user_directory_search_hint">Kërkoni sipas emri ose ID-je</string>
+    <string name="permissions_denied_qr_code">Që të skanoni një kod QR, lypset të lejoni përdorim kamere.</string>
+    <string name="start_chatting">Filloni të Llafoseni</string>
+    <string name="permissions_denied_add_contact">Jepni leje për hyrje te kontaktet tuaja.</string>
 </resources>

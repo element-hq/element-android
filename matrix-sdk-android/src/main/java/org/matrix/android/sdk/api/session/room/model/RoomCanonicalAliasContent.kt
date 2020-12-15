@@ -24,5 +24,14 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class RoomCanonicalAliasContent(
-        @Json(name = "alias") val canonicalAlias: String? = null
+        /**
+         * The canonical alias for the room. If not present, null, or empty the room should be considered to have no canonical alias.
+         */
+        @Json(name = "alias") val canonicalAlias: String? = null,
+
+        /**
+         * Alternative aliases the room advertises.
+         * This list can have aliases despite the alias field being null, empty, or otherwise not present.
+         */
+        @Json(name = "alt_aliases") val alternativeAliases: List<String>? = null
 )

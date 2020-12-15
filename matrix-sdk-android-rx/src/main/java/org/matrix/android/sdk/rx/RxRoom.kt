@@ -17,14 +17,20 @@
 package org.matrix.android.sdk.rx
 
 import android.net.Uri
+import io.reactivex.Completable
+import io.reactivex.Observable
+import io.reactivex.Single
+import kotlinx.coroutines.rx2.rxCompletable
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
@@ -32,9 +38,6 @@ import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
 
 class RxRoom(private val room: Room) {
 
@@ -119,32 +122,28 @@ class RxRoom(private val room: Room) {
         room.invite3pid(threePid, it)
     }
 
-    fun updateTopic(topic: String): Completable = completableBuilder<Unit> {
-        room.updateTopic(topic, it)
+    fun updateTopic(topic: String): Completable = rxCompletable {
+        room.updateTopic(topic)
     }
 
-    fun updateName(name: String): Completable = completableBuilder<Unit> {
-        room.updateName(name, it)
+    fun updateName(name: String): Completable = rxCompletable {
+        room.updateName(name)
     }
 
-    fun addRoomAlias(alias: String): Completable = completableBuilder<Unit> {
-        room.addRoomAlias(alias, it)
+    fun updateHistoryReadability(readability: RoomHistoryVisibility): Completable = rxCompletable {
+        room.updateHistoryReadability(readability)
     }
 
-    fun updateCanonicalAlias(alias: String): Completable = completableBuilder<Unit> {
-        room.updateCanonicalAlias(alias, it)
+    fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?): Completable = rxCompletable {
+        room.updateJoinRule(joinRules, guestAccess)
     }
 
-    fun updateHistoryReadability(readability: RoomHistoryVisibility): Completable = completableBuilder<Unit> {
-        room.updateHistoryReadability(readability, it)
+    fun updateAvatar(avatarUri: Uri, fileName: String): Completable = rxCompletable {
+        room.updateAvatar(avatarUri, fileName)
     }
 
-    fun updateAvatar(avatarUri: Uri, fileName: String): Completable = completableBuilder<Unit> {
-        room.updateAvatar(avatarUri, fileName, it)
-    }
-
-    fun deleteAvatar(): Completable = completableBuilder<Unit> {
-        room.deleteAvatar(it)
+    fun deleteAvatar(): Completable = rxCompletable {
+        room.deleteAvatar()
     }
 }
 

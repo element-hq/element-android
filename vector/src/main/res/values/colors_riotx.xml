@@ -41,6 +41,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black_alpha">#55000000</color>
+    <color name="black_54">#8A000000</color>
 
     <!-- Palette: format fo naming:
       'riotx_<name in the palette snake case>_<theme>'
@@ -106,6 +107,13 @@
     <color name="riotx_text_secondary_light">#FF9E9E9E</color>
     <color name="riotx_text_secondary_dark">#FFA1B2D1</color>
     <color name="riotx_text_secondary_black">#FFA1B2D1</color>
+
+    <attr name="riotx_text_tertiary" format="color" />
+    <color name="riotx_text_tertiary_light">#FF8D99A5</color>
+    <!-- TODO Pick color from Figma, I do not know where to find it -->
+    <color name="riotx_text_tertiary_dark">#FF8D99A5</color>
+    <!-- TODO Pick color from Figma, I do not know where to find it -->
+    <color name="riotx_text_tertiary_black">#FF8D99A5</color>
 
     <attr name="riotx_text_primary_body_contrast" format="color" />
     <color name="riotx_text_primary_body_contrast_light">#FF61708B</color>
@@ -202,13 +210,11 @@
     <color name="riotx_bottom_nav_background_color_light">@color/riot_primary_background_color_light</color>
     <color name="riotx_bottom_nav_background_color_dark">@color/primary_color_dark</color>
     <color name="riotx_bottom_nav_background_color_black">@color/primary_color_black</color>
-    <color name="riotx_bottom_nav_background_color_status">@color/riot_primary_background_color_status</color>
 
     <attr name="riotx_bottom_nav_background_border_color" format="color" />
     <color name="riotx_bottom_nav_background_border_color_light">#E9EDF1</color>
     <color name="riotx_bottom_nav_background_border_color_dark">#55555555</color>
     <color name="riotx_bottom_nav_background_border_color_black">#FF15171b</color>
-    <color name="riotx_bottom_nav_background_border_color_status">#FFE9EDF1</color>
 
     <attr name="riotx_bottom_nav_icon_color" format="color" />
     <color name="riotx_bottom_nav_icon_color_light">#C1C6CD</color>
@@ -218,7 +224,6 @@
     <attr name="riotx_waiting_background_color" format="color" />
     <color name="riotx_waiting_background_color_light">#AAAAAAAA</color>
     <color name="riotx_waiting_background_color_dark">#55555555</color>
-    <color name="riotx_waiting_background_color_status">#AAAAAAAA</color>
 
     <attr name="riotx_disabled_view_color" format="color" />
     <color name="riotx_disabled_view_color_light">#EEEEEE</color>

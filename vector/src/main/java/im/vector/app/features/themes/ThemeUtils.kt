@@ -26,6 +26,7 @@ import android.view.Menu
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.core.graphics.drawable.DrawableCompat
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
@@ -45,7 +46,6 @@ object ThemeUtils {
     private const val THEME_DARK_VALUE = "dark"
     private const val THEME_LIGHT_VALUE = "light"
     private const val THEME_BLACK_VALUE = "black"
-    private const val THEME_STATUS_VALUE = "status"
     private const val THEME_SC_LIGHT_VALUE = "sc_light"
     private const val THEME_SC_VALUE = "sc"
     private const val THEME_SC_DARK_VALUE = "sc_dark"
@@ -113,7 +113,6 @@ object ThemeUtils {
         return when (getApplicationTheme(context)) {
             THEME_LIGHT_VALUE,
             THEME_SC_LIGHT_VALUE,
-            THEME_STATUS_VALUE -> true
             else               -> false
         }
     }
@@ -138,8 +137,13 @@ object ThemeUtils {
     fun getApplicationLightTheme(context: Context): String {
         val currentTheme = this.currentLightTheme.get()
         return if (currentTheme == null) {
-            val themeFromPref = DefaultSharedPreferences.getInstance(context)
-                    .getString(APPLICATION_THEME_KEY, THEME_SC_LIGHT_VALUE) ?: THEME_SC_LIGHT_VALUE
+            val prefs = DefaultSharedPreferences.getInstance(context)
+            val themeFromPref = prefs.getString(APPLICATION_THEME_KEY, THEME_SC_LIGHT_VALUE) ?: THEME_SC_LIGHT_VALUE
+            if (themeFromPref == "status") {
+                // Migrate to light theme, which is the closest theme
+                themeFromPref = THEME_LIGHT_VALUE
+                prefs.edit { putString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE) }
+            }
             this.currentLightTheme.set(themeFromPref)
             themeFromPref
         } else {
@@ -157,8 +161,13 @@ object ThemeUtils {
     fun getApplicationDarkTheme(context: Context): String {
         val currentTheme = this.currentDarkTheme.get()
         return if (currentTheme == null) {
-            val themeFromPref = DefaultSharedPreferences.getInstance(context)
-                    .getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_VALUE) ?: THEME_SC_DARK_VALUE
+            val prefs = DefaultSharedPreferences.getInstance(context)
+            val themeFromPref = prefs.getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_VALUE) ?: THEME_SC_DARK_VALUE
+            if (themeFromPref == "status") {
+                // Migrate to light theme, which is the closest theme
+                themeFromPref = THEME_LIGHT_VALUE
+                prefs.edit { putString(APPLICATION_DARK_THEME_KEY, THEME_LIGHT_VALUE) }
+            }
             this.currentDarkTheme.set(themeFromPref)
             themeFromPref
         } else {
@@ -199,7 +208,6 @@ object ThemeUtils {
             THEME_LIGHT_VALUE  -> context.setTheme(R.style.AppTheme_Light)
             THEME_DARK_VALUE   -> context.setTheme(R.style.AppTheme_Dark)
             THEME_BLACK_VALUE  -> context.setTheme(R.style.AppTheme_Black)
-            THEME_STATUS_VALUE -> context.setTheme(R.style.AppTheme_Status)
             THEME_SC_LIGHT_VALUE -> context.setTheme(R.style.AppTheme_SC_Light)
             THEME_SC_VALUE     -> context.setTheme(R.style.AppTheme_SC)
             THEME_SC_DARK_VALUE     -> context.setTheme(R.style.AppTheme_SC_Dark)
@@ -230,7 +238,6 @@ object ThemeUtils {
             THEME_LIGHT_VALUE  -> activity.setTheme(otherThemes.light)
             THEME_DARK_VALUE   -> activity.setTheme(otherThemes.dark)
             THEME_BLACK_VALUE  -> activity.setTheme(otherThemes.black)
-            THEME_STATUS_VALUE -> activity.setTheme(otherThemes.status)
             THEME_SC_LIGHT_VALUE     -> activity.setTheme(otherThemes.sc_light)
             THEME_SC_VALUE     -> activity.setTheme(otherThemes.sc)
             THEME_SC_DARK_VALUE     -> activity.setTheme(otherThemes.sc_dark)

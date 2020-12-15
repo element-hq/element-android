@@ -43,6 +43,7 @@ import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
@@ -102,6 +103,7 @@ internal class DefaultSession @Inject constructor(
         private val permalinkService: Lazy<PermalinkService>,
         private val secureStorageService: Lazy<SecureStorageService>,
         private val profileService: Lazy<ProfileService>,
+        private val mediaService: Lazy<MediaService>,
         private val widgetService: Lazy<WidgetService>,
         private val syncThreadProvider: Provider<SyncThread>,
         private val contentUrlResolver: ContentUrlResolver,
@@ -262,6 +264,8 @@ internal class DefaultSession @Inject constructor(
     override fun permalinkService(): PermalinkService = permalinkService.get()
 
     override fun widgetService(): WidgetService = widgetService.get()
+
+    override fun mediaService(): MediaService = mediaService.get()
 
     override fun integrationManagerService() = integrationManagerService
 

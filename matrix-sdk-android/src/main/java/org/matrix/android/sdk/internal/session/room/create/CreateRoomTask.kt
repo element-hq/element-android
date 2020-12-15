@@ -22,6 +22,7 @@ import kotlinx.coroutines.TimeoutCancellationException
 import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
@@ -31,10 +32,9 @@ import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
-import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
+import org.matrix.android.sdk.internal.session.room.alias.RoomAliasAvailabilityChecker
 import org.matrix.android.sdk.internal.session.room.read.SetReadMarkersTask
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
@@ -47,8 +47,8 @@ internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
 internal class DefaultCreateRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        @UserId private val userId: String,
         @SessionDatabase private val monarchy: Monarchy,
+        private val aliasAvailabilityChecker: RoomAliasAvailabilityChecker,
         private val directChatsHelper: DirectChatsHelper,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val readMarkersTask: SetReadMarkersTask,
@@ -65,28 +65,11 @@ internal class DefaultCreateRoomTask @Inject constructor(
         } else null
 
         if (params.preset == CreateRoomPreset.PRESET_PUBLIC_CHAT) {
-            if (params.roomAliasName.isNullOrEmpty()) {
-                throw CreateRoomFailure.RoomAliasError.AliasEmpty
-            }
-            // Check alias availability
-            val fullAlias = "#" + params.roomAliasName + ":" + userId.substringAfter(":")
             try {
-                executeRequest<RoomAliasDescription>(eventBus) {
-                    apiCall = roomAPI.getRoomIdByAlias(fullAlias)
-                }
-            } catch (throwable: Throwable) {
-                if (throwable is Failure.ServerError && throwable.httpCode == 404) {
-                    // This is a 404, so the alias is available: nominal case
-                    null
-                } else {
-                    // Other error, propagate it
-                    throw throwable
-                }
+                aliasAvailabilityChecker.check(params.roomAliasName)
+            } catch (aliasError: RoomAliasError) {
+                throw CreateRoomFailure.AliasError(aliasError)
             }
-                    ?.let {
-                        // Alias already exists: error case
-                        throw CreateRoomFailure.RoomAliasError.AliasNotAvailable
-                    }
         }
 
         val createRoomBody = createRoomBodyBuilder.build(params)
@@ -104,7 +87,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
                 } else if (throwable.httpCode == 400
                         && throwable.error.code == MatrixError.M_UNKNOWN
                         && throwable.error.message == "Invalid characters in room alias") {
-                    throw CreateRoomFailure.RoomAliasError.AliasInvalid
+                    throw CreateRoomFailure.AliasError(RoomAliasError.AliasInvalid)
                 }
             }
             throw throwable

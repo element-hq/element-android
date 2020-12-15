@@ -137,6 +137,8 @@
     <string name="action_open">Open</string>
     <string name="action_close">Close</string>
     <string name="action_copy">Copy</string>
+    <string name="action_add">Add</string>
+    <string name="action_unpublish">Unpublish</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
 
@@ -875,6 +877,8 @@
     <string name="settings_show_read_receipts">Show read receipts</string>
     <string name="settings_show_read_receipts_summary">Click on the read receipts for a detailed list.</string>
     <string name="settings_show_room_member_state_events">Show room member state events</string>
+    <string name="settings_chat_effects_title">Show chat effects</string>
+    <string name="settings_chat_effects_description">Use /confetti command or send a message containing ❄️ or 🎉</string>
     <string name="settings_show_room_member_state_events_summary">Includes invite/join/left/kick/ban events and avatar/display name changes.</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
     <string name="settings_show_join_leave_messages_summary">Invites, kicks, and bans are unaffected.</string>
@@ -1020,7 +1024,43 @@
     <string name="room_settings_room_access_rules_pref_title">Room Access</string>
     <string name="room_settings_room_read_history_rules_pref_title">Room History Readability</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Who can read history?</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Who can access this room?</string>
+    <string name="room_settings_room_access_title">Room access</string>
+
+    <!-- room settings : alias -->
+    <string name="room_settings_alias_title">Room addresses</string>
+    <string name="room_settings_alias_subtitle">See and managed addresses of this room, and its visibility in the room directory.</string>
+
+    <string name="room_alias_title">Room Addresses</string>
+    <string name="room_alias_published_alias_title">Published Addresses</string>
+    <string name="room_alias_published_alias_subtitle">Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.</string>
+    <string name="room_alias_published_alias_main">This is the main address</string>
+    <string name="room_alias_main_address_hint">Main address</string>
+    <string name="room_alias_published_other">Other published addresses:</string>
+    <string name="room_alias_published_alias_add_manually">Publish a new address manually</string>
+    <string name="room_alias_published_alias_add_manually_submit">Publish</string>
+    <string name="room_alias_unpublish_confirmation">Unpublish the address \"%1$s\"?</string>
+    <string name="room_alias_delete_confirmation">Delete the address \"%1$s\"?</string>
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_publish">Publish this room to the public in %1$s\'s room directory?</string>
+    <string name="room_alias_address_empty_can_add">No other published addresses yet, add one below.</string>
+    <string name="room_alias_address_empty">No other published addresses yet.</string>
+    <string name="room_alias_address_hint">New published address (e.g. #alias:server)</string>
+
+    <string name="room_alias_local_address_title">Local Addresses</string>
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_local_address_subtitle">Set addresses for this room so users can find this room through your homeserver (%1$s)</string>
+    <string name="room_alias_local_address_empty">This room has no local addresses</string>
+    <string name="room_alias_local_address_add">Add a local address</string>
+
+    <string name="room_alias_action_publish">Publish this address</string>
+    <string name="room_alias_action_unpublish">Unpublish this address</string>
+
+    <!-- Parameter will be the url of the homeserver, ex: matrix.org -->
+    <string name="room_alias_publish_to_directory">Publish this room to the public in %1$s\'s room directory?</string>
+    <!-- Parameter will be a technical error message -->
+    <string name="room_alias_publish_to_directory_error">Unable to retrieve the current room directory visibility (%1$s).</string>
 
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Anyone</string>
@@ -1068,8 +1108,8 @@
     <string name="room_settings_addresses_disable_main_address_prompt_msg">You will have no main address specified for this room."</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Main address warnings</string>
 
-    <string name="room_settings_set_main_address">Set as Main Address</string>
-    <string name="room_settings_unset_main_address">Unset as Main Address</string>
+    <string name="room_settings_set_main_address">Set as main address</string>
+    <string name="room_settings_unset_main_address">Unset as main address</string>
     <string name="room_settings_copy_room_id">Copy Room ID</string>
     <string name="room_settings_copy_room_address">Copy Room Address</string>
 
@@ -1673,7 +1713,8 @@
 
     <string name="room_preview_no_preview">"This room can't be previewed"</string>
     <string name="room_preview_world_readable_room_not_supported_yet">"The preview of world-readable room is not supported yet in Element"</string>
-
+    <string name="room_preview_not_found">This room is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
+    <string name="room_preview_no_preview_join">"This room can't be previewed. Do you want to join it?"</string>
     <string name="fab_menu_create_room">"Rooms"</string>
     <string name="fab_menu_create_chat">"Direct Messages"</string>
 
@@ -1945,6 +1986,13 @@
     <string name="login_server_other_title">Other</string>
     <string name="login_server_other_text">Custom &amp; advanced settings</string>
 
+
+    <string name="login_social_continue">Or</string>
+    <string name="login_social_continue_with">Continue with %s</string>
+    <string name="login_social_signup_with">Sign up with %s</string>
+    <string name="login_social_signin_with">Sign in with %s</string>
+    <string name="login_social_sso">single sign-on</string>
+
     <string name="login_continue">Continue</string>
     <!-- Replaced string is the homeserver url -->
     <string name="login_connect_to">Connect to %1$s</string>
@@ -1955,6 +2003,7 @@
     <string name="login_signup">Sign Up</string>
     <string name="login_signin">Sign In</string>
     <string name="login_signin_sso">Continue with SSO</string>
+    <string name="login_clear_homeserver_history">Clear history</string>
 
     <string name="login_server_url_form_modular_hint">Element Matrix Services Address</string>
     <string name="login_server_url_form_other_hint">Address</string>
@@ -2521,6 +2570,13 @@
         <item quantity="other">Show %d devices you can verify with now</item>
     </plurals>
 
+    <string name="command_confetti">Sends the given message with confetti</string>
+    <string name="command_snow">Sends the given message with snow</string>
+    <!-- Note to translator: please use the same emoji 🎉 in your translation -->
+    <string name="default_message_emote_confetti">sends confetti 🎉</string>
+    <!-- Note to translator: please use the same emoji ❄️ in your translation -->
+    <string name="default_message_emote_snow">sends snow ❄️</string>
+
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>
     <string name="review_logins">Review where you’re logged in</string>
@@ -2686,6 +2742,8 @@
     <string name="settings_security_pin_code_grace_period_title">Require PIN after 2 minutes</string>
     <string name="settings_security_pin_code_grace_period_summary_on">PIN code is required after 2 minutes of not using Element.</string>
     <string name="settings_security_pin_code_grace_period_summary_off">PIN code is required every time you open Element.</string>
+    <string name="settings_security_pin_code_change_pin_title">Change PIN</string>
+    <string name="settings_security_pin_code_change_pin_summary">Change your current PIN</string>
     <string name="auth_pin_confirm_to_disable_title">Confirm PIN to disable PIN</string>
     <string name="error_opening_banned_room">Can\'t open a room where you are banned from.</string>
     <string name="room_error_not_found">Can\'t find this room. Make sure it exists.</string>

@@ -21,6 +21,7 @@ import android.net.Uri
 import android.webkit.MimeTypeMap
 import im.vector.app.core.utils.getFileExtension
 import timber.log.Timber
+import java.util.Locale
 
 /**
  * Returns the mimetype from a uri.
@@ -44,7 +45,7 @@ fun getMimeTypeFromUri(context: Context, uri: Uri): String? {
 
         if (null != mimeType) {
             // the mimetype is sometimes in uppercase.
-            mimeType = mimeType.toLowerCase()
+            mimeType = mimeType.toLowerCase(Locale.ROOT)
         }
     } catch (e: Exception) {
         Timber.e(e, "Failed to open resource input stream")

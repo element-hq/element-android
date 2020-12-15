@@ -23,8 +23,7 @@ import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsRe
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasBody
-import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
+import org.matrix.android.sdk.internal.session.room.alias.GetAliasesResponse
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomBody
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomResponse
 import org.matrix.android.sdk.internal.session.room.create.JoinRoomResponse
@@ -184,7 +183,7 @@ internal interface RoomAPI {
                    @Body body: ThreePidInviteBody): Call<Unit>
 
     /**
-     * Send a generic state events
+     * Send a generic state event
      *
      * @param roomId         the room id.
      * @param stateEventType the state event type
@@ -196,7 +195,7 @@ internal interface RoomAPI {
                        @Body params: JsonDict): Call<Unit>
 
     /**
-     * Send a generic state events
+     * Send a generic state event
      *
      * @param roomId         the room id.
      * @param stateEventType the state event type
@@ -208,6 +207,13 @@ internal interface RoomAPI {
                        @Path("state_event_type") stateEventType: String,
                        @Path("state_key") stateKey: String,
                        @Body params: JsonDict): Call<Unit>
+
+    /**
+     * Get state events of a room
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-rooms-roomid-state
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state")
+    fun getRoomState(@Path("roomId") roomId: String) : Call<List<Event>>
 
     /**
      * Send a relation event to a room.
@@ -321,20 +327,11 @@ internal interface RoomAPI {
                       @Body body: ReportContentBody): Call<Unit>
 
     /**
-     * Get the room ID associated to the room alias.
-     *
-     * @param roomAlias the room alias.
+     * Get a list of aliases maintained by the local server for the given room.
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-rooms-roomid-aliases
      */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
-    fun getRoomIdByAlias(@Path("roomAlias") roomAlias: String): Call<RoomAliasDescription>
-
-    /**
-     * Add alias to the room.
-     * @param roomAlias the room alias.
-     */
-    @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "directory/room/{roomAlias}")
-    fun addRoomAlias(@Path("roomAlias") roomAlias: String,
-                     @Body body: AddRoomAliasBody): Call<Unit>
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2432/rooms/{roomId}/aliases")
+    fun getAliases(@Path("roomId") roomId: String): Call<GetAliasesResponse>
 
     /**
      * Inform that the user is starting to type or has stopped typing

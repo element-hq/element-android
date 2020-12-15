@@ -557,7 +557,7 @@
     <string name="encryption_information_unblock">Разрешить</string>
     <string name="encryption_information_verify_device">Проверить сессию</string>
     <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этой сессии можно доверять, обратитесь к его владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этой сессии:</string>
-    <string name="encryption_information_verify_device_warning2">"Если совпадает, то нажмите кнопку подтвердить ниже. Если не совпадает, возможно кто-то пытается перехватить сессию и  вы захотите добавить его в черный список. В будущем данный процесс будет улучшен."</string>
+    <string name="encryption_information_verify_device_warning2">Если совпадает, то нажмите кнопку подтвердить ниже. Если не совпадает, возможно кто-то пытается перехватить сессию и вы захотите добавить его в черный список. В будущем данный процесс будет улучшен.</string>
     <string name="encryption_information_verify_key_match">Я проверил, что ключи совпадают</string>
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Комната содержит неизвестные сессии</string>
@@ -647,7 +647,7 @@
     <string name="encrypted_message">Зашифрованное сообщение</string>
     <string name="title_activity_group_details">Сведения о сообществе</string>
     <string name="loading">Загрузка…</string>
-    <string name="action_exit">"Закрыть  приложение"</string>
+    <string name="action_exit">Закрыть приложение</string>
     <string name="bottom_action_groups">Сообщества</string>
     <string name="home_filter_placeholder_groups">Поиск сообществ</string>
     <string name="groups_invite_header">Пригласить</string>
@@ -1053,7 +1053,7 @@
     <string name="keys_backup_settings_deleting_backup">Удаление резервной копии…</string>
     <string name="keys_backup_settings_untrusted_backup">Чтобы использовать резервную копию ключа в этой сессии, восстановите его с помощью своей парольной фразы или ключа восстановления.</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">Резервная копия имеет недействительную подпись из подтвержденной сессии %s</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">"Резервная копия имеет  действительную подпись из неподтвержденной сессии %s"</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">Резервная копия имеет действительную подпись из неподтвержденной сессии %s</string>
     <string name="keys_backup_settings_valid_signature_from_verified_device">Резервная копия имеет действительно подпись из подтверждённой сессии %s.</string>
     <string name="keys_backup_settings_valid_signature_from_this_device">Резервная копия имеет действительную подпись с этой сессии.</string>
     <string name="keys_backup_settings_signature_from_unknown_device">Резервная копия подписана сессией с идентификатором %s.</string>
@@ -1192,7 +1192,7 @@
     <string name="autodiscover_well_known_autofill_confirm">Использовать настройку</string>
     <string name="title_activity_verify_device">Проверить сессию</string>
     <string name="login_error_ssl_handshake">Ваше устройство использует устаревший TLS протокол, уязвимый для атак, для вашей же безопасности вам отказано в подключении</string>
-    <string name="settings_notification_privacy_no_background_sync">Приложениям <b>не</b>" нужно  подключаться к HomeServer в фоновом режиме, это должно снизить расход заряда батареи"</string>
+    <string name="settings_notification_privacy_no_background_sync">Приложениям <b>не</b> нужно подключаться к домашнему серверу в фоновом режиме, это должно снизить расход заряда батареи</string>
     <string name="settings_send_message_with_enter_summary">Клавиша Ввод отправит сообщение вместо переноса строки</string>
     <string name="settings_play_shutter_sound">Воспроизвести звук затвора</string>
     <string name="encryption_information_unknown_ip">неизвестный IP</string>
@@ -1252,7 +1252,7 @@
     <string name="sas_error_m_user_error">Несоответствие пользователя</string>
     <string name="sas_error_unknown">Неизвестная ошибка</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">Резервная копия существует на домашнем сервере</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">"Похоже, у вас уже есть резервная копия  ключа настройки из другой сессии. Хотите заменить его новым\?"</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Похоже, у вас уже есть резервная копия ключа настройки из другой сессии. Хотите заменить его новым\?</string>
     <string name="keys_backup_setup_override_replace">Заменить</string>
     <string name="keys_backup_setup_override_stop">Стоп</string>
     <string name="keys_backup_settings_checking_backup_state">Проверка состояния резервного копирования</string>
@@ -1348,7 +1348,7 @@
     <string name="link_copied_to_clipboard">Ссылка скопирована в буфер обмена</string>
     <string name="add_by_matrix_id">Добавить по Matrix ID</string>
     <string name="creating_direct_room">Создание комнаты…</string>
-    <string name="direct_room_no_known_users">"Результат не найден, используйте добавить matrix ID  для поиска на сервере."</string>
+    <string name="direct_room_no_known_users">Результатов не найдено, используйте \"Добавить по matrix ID\" для поиска на сервере.</string>
     <string name="direct_room_start_search">Начните печатать, чтобы получить результат</string>
     <string name="direct_room_filter_hint">Фильтр по имени пользователя или ID…</string>
     <string name="joining_room">Присоединение к комнате…</string>
@@ -1406,7 +1406,7 @@
     <string name="add_identity_server">Настроить идентификационный сервер</string>
     <string name="change_identity_server">Изменить идентификационный сервер</string>
     <string name="settings_discovery_identity_server_info">В настоящее время вы используете %1$s для обнаружения и быть найденным вашими контактами.</string>
-    <string name="settings_discovery_identity_server_info_none">"Вы в настоящее время не используете идентификационный сервер. Чтобы обнаружить и быть найденным  вашими существующими контактами, настройте один из них ниже."</string>
+    <string name="settings_discovery_identity_server_info_none">Вы в настоящее время не используете идентификационный сервер. Чтобы обнаружить и быть найденным вашими существующими контактами, настройте один из них ниже.</string>
     <string name="settings_discovery_emails_title">Видимые адреса электронной почты</string>
     <string name="settings_discovery_msisdn_title">Доступные номера телефонов</string>
     <string name="settings_discovery_mail_pending">В ожидании</string>
@@ -1444,7 +1444,7 @@
     <string name="resources_script">Cyrl</string>
     <string name="settings_integrations_summary">Используйте менеджер интеграций чтобы управлять ботами, мостами, виджетами и наборами стикеров.
 \nМенеджеры интеграций получают данные о конфигурации, могут изменять виджеты, отправлять приглашения в комнаты и устанавливать права от вашего имени.</string>
-    <string name="room_widget_permission_webview_shared_info_title">"Использование может оставить cookie на вашем устройстве и отправить данные в  %s:"</string>
+    <string name="room_widget_permission_webview_shared_info_title">Использование может оставить cookie на вашем устройстве и отправить данные в %s:</string>
     <string name="room_widget_permission_shared_info_title">Использование может отправить данные в %s:</string>
     <string name="room_widget_failed_to_load">Не удалось загрузить виджет.
 \n%s</string>
@@ -1880,7 +1880,7 @@
     <string name="command_description_rainbow">Посылает сообщение, окрашенное в цвет радуги</string>
     <string name="command_description_rainbow_emote">Посылает данную эмоцию, окрашенную в цвет радуги</string>
     <string name="settings_category_composer">Редактор сообщений</string>
-    <string name="room_settings_enable_encryption">Включить сквозное шифрование</string>
+    <string name="room_settings_enable_encryption">Включить сквозное шифрование…</string>
     <string name="room_settings_enable_encryption_warning">После включения шифрования оно не может быть отключено.</string>
     <string name="room_settings_enable_encryption_dialog_title">Активировать шифрование\?</string>
     <string name="room_settings_enable_encryption_dialog_content">После включения шифрование для комнаты не может быть отключено. Сообщения, отправленные в зашифрованном помещении, не могут быть замечены сервером, только участниками помещения. Включение шифрования может помешать правильной работе многих ботов и мостов.</string>
@@ -1929,7 +1929,7 @@
     <string name="settings_messages_at_room">Сообщения, содержащие @room</string>
     <string name="settings_troubleshoot_title">Отладка</string>
     <string name="settings_notification_advanced_summary">Настройки важности уведомлений для событий</string>
-    <string name="use_other_session_content_description">Используйте последнюю версию Element на других ваших устройствах, веб-клиент Element, Element для ПК, Element для iOS, Element для Андроид или другой клиент Matrix, поддерживающий кросс-подпись</string>
+    <string name="use_other_session_content_description">Используйте последнюю версию Element на других ваших устройствах, веб-клиент Element, Element для ПК, Element для iOS, Element для Android или другой клиент Matrix, поддерживающий кросс-подпись</string>
     <string name="use_latest_app">Используйте последнюю версию Element на других ваших устройствах:</string>
     <string name="verify_this_session">Подтвердите новую сессию вашей учетной записи: %1$s</string>
     <string name="settings_setup_secure_backup">Настроить безопасное резервное копирование</string>
@@ -2301,4 +2301,63 @@
     <string name="attachment_type_dialog_title">Добавить изображение из</string>
     <string name="create_room_topic_hint">Тема</string>
     <string name="create_room_name_section">Название Комнаты</string>
+    <string name="settings_discovery_consent_notice_on">Вы дали свое согласие на отправку электронных писем и телефонных номеров на этот сервер идентификации для обнаружения других пользователей из ваших контактов.</string>
+    <string name="add_by_qr_code">Добавить по QR-коду</string>
+    <string name="user_directory_search_hint">Поиск по имени или идентификатору</string>
+    <string name="permissions_denied_add_contact">Разрешить доступ к вашим контактам.</string>
+    <string name="permissions_denied_qr_code">Чтобы отсканировать QR-код, вам нужно разрешить доступ к камере.</string>
+    <string name="matrix_to_card_title">Ссылка Matrix</string>
+    <string name="qr_code_not_scanned">QR-код не отсканирован!</string>
+    <string name="invalid_qr_code_uri">Недействительный QR-код (недопустимый URI)!</string>
+    <string name="cannot_dm_self">Нельзя отправлять сообщения самому себе!</string>
+    <string name="share_by_text">Поделиться по тексту</string>
+    <string name="phone_book_perform_lookup">Поиск контактов в Matrix</string>
+    <string name="room_settings_set_avatar">Установить аватар</string>
+    <string name="identity_server_user_consent_not_provided">Согласие пользователя не предоставлено.</string>
+    <string name="user_code_info_text">Поделитесь этим кодом с людьми, чтобы они могли отсканировать его, добавить вас и начать общение.</string>
+    <string name="user_code_my_code">Мой код</string>
+    <string name="user_code_share">Поделиться моим кодом</string>
+    <string name="user_code_scan">Сканировать QR-код</string>
+    <string name="not_a_valid_qr_code">Это недействительный QR-код matrix</string>
+    <string name="invite_friends_rich_title">🔐️ Присоединяйтесь ко мне в Element</string>
+    <string name="invite_friends_text">Привет, поговори со мной в Element: %s</string>
+    <string name="invite_friends">Пригласить друзей</string>
+    <string name="add_people">Добавить людей</string>
+    <string name="topic_prefix">"Тема: "</string>
+    <string name="add_a_topic_link_text">Добавьте тему</string>
+    <string name="this_is_the_beginning_of_room_no_name">Это начало разговора.</string>
+    <string name="this_is_the_beginning_of_room">Это начало %s.</string>
+    <string name="room_settings_enable_encryption_no_permission">У вас нет разрешения на включение шифрования в этой комнате.</string>
+    <string name="create_room_in_progress">Создание комнаты…</string>
+    <string name="create_room_alias_invalid">Некоторые символы не разрешены</string>
+    <string name="create_room_alias_empty">Укажите адрес комнаты</string>
+    <string name="create_room_alias_already_in_use">Этот адрес уже используется</string>
+    <string name="create_room_alias_hint">Адрес комнаты</string>
+    <string name="create_room_disable_federation_description">Вы можете включить это, если комната будет использоваться только для совместной работы с внутренними командами на вашем домашнем сервере. Это не может быть изменено позже.</string>
+    <string name="create_room_disable_federation_title">Запретить кому-либо, не входящему в %s, когда-либо присоединяться к этой комнате</string>
+    <string name="hide_advanced">Скрыть дополнительные настройки</string>
+    <string name="show_advanced">Показать дополнительные настройки</string>
+    <string name="attachment_viewer_item_x_of_y">%1$d из %2$d</string>
+    <string name="identity_server_consent_dialog_content">Согласны ли вы на отправку своих контактных данных (номера телефонов и/или электронную почту) на настроенный сервер идентификации (%1$s) для обнаружения контактов\?
+\n
+\nДля большей конфиденциальности отправленные данные перед отправкой будут хешированы.</string>
+    <string name="settings_discovery_consent_action_give_consent">Дать согласие</string>
+    <string name="settings_discovery_consent_action_revoke">Отозвать моё согласие</string>
+    <string name="settings_discovery_consent_notice_off">Вы не дали свое согласие на отправку электронной почты и номеров телефонов на этот сервер идентификации для обнаружения других пользователей из ваших контактов.</string>
+    <string name="no_more_results">Больше никаких результатов</string>
+    <string name="direct_room_user_list_suggestions_title">Предложения</string>
+    <string name="direct_room_user_list_contacts_title">Контакты</string>
+    <string name="direct_room_user_list_known_title">Известные пользователи</string>
+    <string name="qr_code">QR-код</string>
+    <string name="send_bug_report_include_key_share_history">Отправить историю запросов на обмен ключами</string>
+    <string name="start_chatting">Начать беседу</string>
+    <string name="direct_room_user_list_recent_title">Недавние</string>
+    <string name="room_created_summary_no_topic_creation_text">%s чтобы люди знали, о чём эта комната.</string>
+    <string name="this_is_the_beginning_of_dm">Это начало вашей истории диалога с %s.</string>
+    <string name="settings_export_trail">Экспорт аудита</string>
+    <string name="room_member_open_or_create_dm">Диалог</string>
+    <string name="a11y_create_direct_message_by_qr_code">Создать новый диалог через сканирование QR-кода</string>
+    <string name="a11y_create_direct_message_by_mxid">Создать новый диалог по Matrix ID</string>
+    <string name="identity_server_consent_dialog_title">Отправить электронную почту и номера телефонов</string>
+    <string name="settings_discovery_consent_title">Отправить электронную почту и номера телефонов</string>
 </resources>

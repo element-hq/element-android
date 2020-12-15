@@ -153,12 +153,10 @@ abstract class BaseAttachmentProvider<Type>(
         } else {
             target.onVideoFileLoading(info.uid)
             fileService.downloadFile(
-                    downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
-                    id = data.eventId,
-                    mimeType = data.mimeType,
-                    elementToDecrypt = data.elementToDecrypt,
                     fileName = data.filename,
+                    mimeType = data.mimeType,
                     url = data.url,
+                    elementToDecrypt = data.elementToDecrypt,
                     callback = object : MatrixCallback<File> {
                         override fun onSuccess(data: File) {
                             target.onVideoFileReady(info.uid, data)

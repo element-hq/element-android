@@ -20,6 +20,7 @@ import io.realm.DynamicRealm
 import io.realm.RealmMigration
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
+import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import timber.log.Timber
 import javax.inject.Inject
@@ -32,9 +33,8 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         const val SESSION_STORE_SCHEMA_SC_VERSION = 1L
         const val SESSION_STORE_SCHEMA_SC_VERSION_OFFSET = (1L shl 12)
 
-        const val SESSION_STORE_SCHEMA_VERSION = 5L +
+        const val SESSION_STORE_SCHEMA_VERSION = 6L +
                 SESSION_STORE_SCHEMA_SC_VERSION * SESSION_STORE_SCHEMA_SC_VERSION_OFFSET
-
     }
 
     override fun migrate(realm: DynamicRealm, combinedOldVersion: Long, newVersion: Long) {
@@ -48,6 +48,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 2) migrateTo3(realm)
         if (oldVersion <= 3) migrateTo4(realm)
         if (oldVersion <= 4) migrateTo5(realm)
+        if (oldVersion <= 5) migrateTo6(realm)
 
         if (oldScVersion <= 0) migrateToSc1(realm)
     }
@@ -109,5 +110,19 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         realm.schema.get("HomeServerCapabilitiesEntity")
                 ?.removeField("adminE2EByDefault")
                 ?.removeField("preferredJitsiDomain")
+    }
+
+    private fun migrateTo6(realm: DynamicRealm) {
+        Timber.d("Step 5 -> 6")
+        realm.schema.create("PreviewUrlCacheEntity")
+                .addField(PreviewUrlCacheEntityFields.URL, String::class.java)
+                .setRequired(PreviewUrlCacheEntityFields.URL, true)
+                .addPrimaryKey(PreviewUrlCacheEntityFields.URL)
+                .addField(PreviewUrlCacheEntityFields.URL_FROM_SERVER, String::class.java)
+                .addField(PreviewUrlCacheEntityFields.SITE_NAME, String::class.java)
+                .addField(PreviewUrlCacheEntityFields.TITLE, String::class.java)
+                .addField(PreviewUrlCacheEntityFields.DESCRIPTION, String::class.java)
+                .addField(PreviewUrlCacheEntityFields.MXC_URL, String::class.java)
+                .addField(PreviewUrlCacheEntityFields.LAST_UPDATED_TIMESTAMP, Long::class.java)
     }
 }

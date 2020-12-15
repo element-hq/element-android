@@ -18,11 +18,11 @@ package org.matrix.android.sdk.api.session.room.state
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
-import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
 
@@ -31,39 +31,41 @@ interface StateService {
     /**
      * Update the topic of the room
      */
-    fun updateTopic(topic: String, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun updateTopic(topic: String)
 
     /**
      * Update the name of the room
      */
-    fun updateName(name: String, callback: MatrixCallback<Unit>): Cancelable
-
-    /**
-     * Add new alias to the room.
-     */
-    fun addRoomAlias(roomAlias: String, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun updateName(name: String)
 
     /**
      * Update the canonical alias of the room
+     * @param alias the canonical alias, or null to reset the canonical alias of this room
+     * @param altAliases the alternative aliases for this room. It should include the canonical alias if any.
      */
-    fun updateCanonicalAlias(alias: String, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun updateCanonicalAlias(alias: String?, altAliases: List<String>)
 
     /**
      * Update the history readability of the room
      */
-    fun updateHistoryReadability(readability: RoomHistoryVisibility, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun updateHistoryReadability(readability: RoomHistoryVisibility)
+
+    /**
+     * Update the join rule and/or the guest access
+     */
+    suspend fun updateJoinRule(joinRules: RoomJoinRules?, guestAccess: GuestAccess?)
 
     /**
      * Update the avatar of the room
      */
-    fun updateAvatar(avatarUri: Uri, fileName: String, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun updateAvatar(avatarUri: Uri, fileName: String)
 
     /**
      * Delete the avatar of the room
      */
-    fun deleteAvatar(callback: MatrixCallback<Unit>): Cancelable
+    suspend fun deleteAvatar()
 
-    fun sendStateEvent(eventType: String, stateKey: String?, body: JsonDict, callback: MatrixCallback<Unit>): Cancelable
+    suspend fun sendStateEvent(eventType: String, stateKey: String?, body: JsonDict)
 
     fun getStateEvent(eventType: String, stateKey: QueryStringValue = QueryStringValue.NoCondition): Event?
 
