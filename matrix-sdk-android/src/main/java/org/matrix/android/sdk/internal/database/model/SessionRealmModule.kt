@@ -48,6 +48,7 @@ import io.realm.annotations.RealmModule
             PushRulesEntity::class,
             PushRuleEntity::class,
             PushConditionEntity::class,
+            PreviewUrlCacheEntity::class,
             PusherEntity::class,
             PusherDataEntity::class,
             ReadReceiptsSummaryEntity::class,

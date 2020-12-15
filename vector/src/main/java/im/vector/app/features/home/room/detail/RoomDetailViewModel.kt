@@ -40,6 +40,7 @@ import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineSettingsFactory
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -69,7 +70,6 @@ import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
@@ -80,7 +80,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.OptionItem
-import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.tombstone.RoomTombstoneContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -92,7 +91,6 @@ import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import org.matrix.android.sdk.internal.util.awaitCallback
@@ -100,7 +98,6 @@ import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
 import java.io.File
-import java.lang.Exception
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -117,8 +114,9 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val roomSummaryHolder: RoomSummaryHolder,
         private val typingHelper: TypingHelper,
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        private val chatEffectManager: ChatEffectManager,
         timelineSettingsFactory: TimelineSettingsFactory
-) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
+) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener, ChatEffectManager.Delegate {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
@@ -128,14 +126,11 @@ class RoomDetailViewModel @AssistedInject constructor(
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
     val timeline = room.createTimeline(eventId, timelineSettings)
 
+    // Same lifecycle than the ViewModel (survive to screen rotation)
+    val previewUrlRetriever = PreviewUrlRetriever(session)
+
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
-
-    // Slot to keep a pending uri during permission request
-    var pendingUri: Uri? = null
-
-    // Slot to store if we want to prevent preview of attachment
-    var preventAttachmentPreview = false
 
     private var trackUnreadMessages = AtomicBoolean(false)
     private var mostRecentDisplayedEvent: TimelineEvent? = null
@@ -176,6 +171,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
+        chatEffectManager.delegate = this
     }
 
     private fun observePowerLevel() {
@@ -286,15 +282,18 @@ class RoomDetailViewModel @AssistedInject constructor(
                         RoomDetailViewEvents.ShowRoomAvatarFullScreen(action.matrixItem, action.transitionView)
                 )
             }
+            is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
         }.exhaustive
+    }
+
+    private fun handleDoNotShowPreviewUrlFor(action: RoomDetailAction.DoNotShowPreviewUrlFor) {
+        previewUrlRetriever.doNotShowPreviewUrlFor(action.eventId, action.url)
     }
 
     private fun handleSetNewAvatar(action: RoomDetailAction.SetAvatarAction) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                awaitCallback<Unit> {
-                    room.updateAvatar(action.newAvatarUri, action.newAvatarFileName, it)
-                }
+                room.updateAvatar(action.newAvatarUri, action.newAvatarFileName)
                 _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
@@ -551,7 +550,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                                 SendMode.EDIT(timelineEvent, currentDraft.text)
                             }
                         }
-                        else -> null
+                        else                 -> null
                     } ?: SendMode.REGULAR("", fromSharing = false)
             )
         }
@@ -594,16 +593,16 @@ class RoomDetailViewModel @AssistedInject constructor(
             return@withState false
         }
         when (itemId) {
-            R.id.resend_all          -> state.asyncRoomSummary()?.hasFailedSending == true
-            R.id.timeline_setting    -> true
-            R.id.invite              -> state.canInvite
-            R.id.clear_all           -> state.asyncRoomSummary()?.hasFailedSending == true
-            R.id.open_matrix_apps    -> true
+            R.id.resend_all       -> state.asyncRoomSummary()?.hasFailedSending == true
+            R.id.timeline_setting -> true
+            R.id.invite           -> state.canInvite
+            R.id.clear_all        -> state.asyncRoomSummary()?.hasFailedSending == true
+            R.id.open_matrix_apps -> true
             R.id.voice_call,
-            R.id.video_call          -> true // always show for discoverability
-            R.id.hangup_call         -> webRtcPeerConnectionManager.currentCall != null
-            R.id.search              -> true
-            else                     -> false
+            R.id.video_call       -> true // always show for discoverability
+            R.id.hangup_call      -> webRtcPeerConnectionManager.currentCall != null
+            R.id.search           -> true
+            else                  -> false
         }
     }
 
@@ -716,6 +715,11 @@ class RoomDetailViewModel @AssistedInject constructor(
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
+                        is ParsedCommand.SendChatEffect            -> {
+                            sendChatEffect(slashCommandResult)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
                         is ParsedCommand.SendPoll                 -> {
                             room.sendPoll(slashCommandResult.question, slashCommandResult.options.mapIndexed { index, s -> OptionItem(s, "$index. $s") })
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
@@ -804,6 +808,19 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
+    private fun sendChatEffect(sendChatEffect: ParsedCommand.SendChatEffect) {
+        // If message is blank, convert to an emote, with default message
+        if (sendChatEffect.message.isBlank()) {
+            val defaultMessage = stringProvider.getString(when (sendChatEffect.chatEffect) {
+                ChatEffect.CONFETTI -> R.string.default_message_emote_confetti
+                ChatEffect.SNOW     -> R.string.default_message_emote_snow
+            })
+            room.sendTextMessage(defaultMessage, MessageType.MSGTYPE_EMOTE)
+        } else {
+            room.sendTextMessage(sendChatEffect.message, sendChatEffect.chatEffect.toMessageType())
+        }
+    }
+
     private fun popDraft() = withState {
         if (it.sendMode is SendMode.REGULAR && it.sendMode.fromSharing) {
             // If we were sharing, we want to get back our last value from draft
@@ -854,8 +871,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
-        launchSlashCommandFlow {
-            room.updateTopic(changeTopic.topic, it)
+        launchSlashCommandFlowSuspendable {
+            room.updateTopic(changeTopic.topic)
         }
     }
 
@@ -876,9 +893,9 @@ class RoomDetailViewModel @AssistedInject constructor(
                 ?.content
                 ?.toModel<PowerLevelsContent>() ?: return
 
-        launchSlashCommandFlow {
+        launchSlashCommandFlowSuspendable {
             currentPowerLevelsContent.setUserPowerLevel(setUserPowerLevel.userId, setUserPowerLevel.powerLevel)
-            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent(), it)
+            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent())
         }
     }
 
@@ -918,6 +935,19 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
         }
         lambda.invoke(matrixCallback)
+    }
+
+    private fun launchSlashCommandFlowSuspendable(block: suspend () -> Unit) {
+        _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+        viewModelScope.launch {
+            val event = try {
+                block()
+                RoomDetailViewEvents.SlashCommandResultOk
+            } catch (failure: Exception) {
+                RoomDetailViewEvents.SlashCommandResultError(failure)
+            }
+            _viewEvents.post(event)
+        }
     }
 
     private fun handleSendReaction(action: RoomDetailAction.SendReaction) {
@@ -972,7 +1002,20 @@ class RoomDetailViewModel @AssistedInject constructor(
                     visibleEventsObservable.accept(RoomDetailAction.TimelineEventTurnsVisible(event))
                 }
             }
+
+            // handle chat effects here
+            if (vectorPreferences.chatEffectsEnabled()) {
+                chatEffectManager.checkForEffect(action.event)
+            }
         }
+    }
+
+    override fun shouldStartEffect(effect: ChatEffect) {
+        _viewEvents.post(RoomDetailViewEvents.StartChatEffect(effect))
+    }
+
+    override fun stopEffects() {
+        _viewEvents.post(RoomDetailViewEvents.StopChatEffects)
     }
 
     private fun handleLoadMore(action: RoomDetailAction.LoadMoreTimelineEvents) {
@@ -1010,10 +1053,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {
-        val mxcUrl = action.messageFileContent.getFileUrl()
+        val mxcUrl = action.messageFileContent.getFileUrl() ?: return
         val isLocalSendingFile = action.senderId == session.myUserId
-                && mxcUrl?.startsWith("content://") ?: false
-        val isDownloaded = mxcUrl?.let { session.fileService().isFileInCache(it, action.messageFileContent.mimeType) } ?: false
+                && mxcUrl.startsWith("content://")
+        val isDownloaded = session.fileService().isFileInCache(action.messageFileContent)
         if (isLocalSendingFile) {
             tryOrNull { Uri.parse(mxcUrl) }?.let {
                 _viewEvents.post(RoomDetailViewEvents.OpenFile(
@@ -1024,7 +1067,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
         } else if (isDownloaded) {
             // we can open it
-            session.fileService().getTemporarySharableURI(mxcUrl!!, action.messageFileContent.mimeType)?.let { uri ->
+            session.fileService().getTemporarySharableURI(action.messageFileContent)?.let { uri ->
                 _viewEvents.post(RoomDetailViewEvents.OpenFile(
                         action.messageFileContent.mimeType,
                         uri,
@@ -1033,12 +1076,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
         } else {
             session.fileService().downloadFile(
-                    downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
-                    id = action.eventId,
-                    fileName = action.messageFileContent.getFileName(),
-                    mimeType = action.messageFileContent.mimeType,
-                    url = mxcUrl,
-                    elementToDecrypt = action.messageFileContent.encryptedFileInfo?.toElementToDecrypt(),
+                    messageContent = action.messageFileContent,
                     callback = object : MatrixCallback<File> {
                         override fun onSuccess(data: File) {
                             _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
@@ -1350,6 +1388,17 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
         timelineEvents.accept(snapshot)
+
+        // PreviewUrl
+        if (vectorPreferences.showUrlPreviews()) {
+            withState { state ->
+                snapshot
+                        .takeIf { state.asyncRoomSummary.invoke()?.isEncrypted == false }
+                        ?.forEach {
+                            previewUrlRetriever.getPreviewUrl(it.root, viewModelScope)
+                        }
+            }
+        }
     }
 
     override fun onTimelineFailure(throwable: Throwable) {
@@ -1370,6 +1419,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (vectorPreferences.sendTypingNotifs()) {
             room.userStopsTyping()
         }
+        chatEffectManager.delegate = null
+        chatEffectManager.dispose()
         super.onCleared()
     }
 }

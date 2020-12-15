@@ -24,6 +24,8 @@
       <w>pbkdf</w>
       <w>pids</w>
       <w>pkcs</w>
+      <w>previewable</w>
+      <w>previewables</w>
       <w>riotx</w>
       <w>signin</w>
       <w>signout</w>
@@ -31,6 +33,7 @@
       <w>ssss</w>
       <w>sygnal</w>
       <w>threepid</w>
+      <w>unpublish</w>
       <w>unwedging</w>
     </words>
   </dictionary>

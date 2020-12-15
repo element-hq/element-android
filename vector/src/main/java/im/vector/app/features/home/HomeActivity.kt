@@ -162,11 +162,27 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
 
     private fun handleIntent(intent: Intent?) {
         intent?.dataString?.let { deepLink ->
-            if (!deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)) return@let
+            val resolvedLink = when {
+                deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)               -> deepLink
+                deepLink.startsWith(PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> {
+                    // This is a bit ugly, but for now just convert to matrix.to link for compatibility
+                    when {
+                        deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)
+                        deepLink.startsWith(ROOM_LINK_PREFIX) -> deepLink.substring(ROOM_LINK_PREFIX.length)
+                        else                                  -> null
+                    }?.let {
+                        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(it)
+                    }
+                }
+                else                                                                   -> null
+            }
 
-            permalinkHandler.launch(this, deepLink,
+            permalinkHandler.launch(
+                    context = this,
+                    deepLink = resolvedLink,
                     navigationInterceptor = this,
-                    buildTask = true)
+                    buildTask = true
+            )
                     // .delay(500, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { isHandled ->
@@ -345,11 +361,11 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                 bugReporter.openBugReportScreen(this, false)
                 return true
             }
-            R.id.menu_home_filter -> {
+            R.id.menu_home_filter     -> {
                 navigator.openRoomsFiltering(this)
                 return true
             }
-            R.id.menu_home_setting -> {
+            R.id.menu_home_setting    -> {
                 navigator.openSettings(this)
                 return true
             }
@@ -390,5 +406,8 @@ class HomeActivity : VectorBaseActivity(), ToolbarConfigurable, UnknownDeviceDet
                         putExtra(MvRx.KEY_ARG, args)
                     }
         }
+
+        private const val ROOM_LINK_PREFIX = "${PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
+        private const val USER_LINK_PREFIX = "${PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
     }
 }

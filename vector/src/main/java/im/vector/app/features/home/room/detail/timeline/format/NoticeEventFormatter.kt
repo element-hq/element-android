@@ -182,8 +182,8 @@ class NoticeEventFormatter @Inject constructor(
         }
     }
 
-    private fun formatDebug(event: Event): CharSequence? {
-        return "{ \"type\": ${event.getClearType()} }"
+    private fun formatDebug(event: Event): CharSequence {
+        return "Debug: event type \"${event.getClearType()}\""
     }
 
     private fun formatRoomCreateEvent(event: Event, rs: RoomSummary?): CharSequence? {
@@ -260,13 +260,13 @@ class NoticeEventFormatter @Inject constructor(
     private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?, rs: RoomSummary?): CharSequence? {
         val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
 
-        val formattedVisibility = roomHistoryVisibilityFormatter.format(historyVisibility)
+        val historyVisibilitySuffix = roomHistoryVisibilityFormatter.getNoticeSuffix(historyVisibility)
         return if (event.isSentByCurrentUser()) {
             sp.getString(if (rs.isDm()) R.string.notice_made_future_direct_room_visibility_by_you else R.string.notice_made_future_room_visibility_by_you,
-                    formattedVisibility)
+                    historyVisibilitySuffix)
         } else {
             sp.getString(if (rs.isDm()) R.string.notice_made_future_direct_room_visibility else R.string.notice_made_future_room_visibility,
-                    senderName, formattedVisibility)
+                    senderName, historyVisibilitySuffix)
         }
     }
 
@@ -465,21 +465,72 @@ class NoticeEventFormatter @Inject constructor(
 
     private fun formatRoomCanonicalAliasEvent(event: Event, senderName: String?): String? {
         val eventContent: RoomCanonicalAliasContent? = event.getClearContent().toModel()
-        val canonicalAlias = eventContent?.canonicalAlias
-        return canonicalAlias
-                ?.takeIf { it.isNotBlank() }
-                ?.let {
+        val prevContent: RoomCanonicalAliasContent? = event.resolvedPrevContent().toModel()
+        val canonicalAlias = eventContent?.canonicalAlias?.takeIf { it.isNotEmpty() }
+        val prevCanonicalAlias = prevContent?.canonicalAlias?.takeIf { it.isNotEmpty() }
+        val altAliases = eventContent?.alternativeAliases.orEmpty()
+        val prevAltAliases = prevContent?.alternativeAliases.orEmpty()
+        val added = altAliases - prevAltAliases
+        val removed = prevAltAliases - altAliases
+
+        return when {
+            added.isEmpty() && removed.isEmpty() && canonicalAlias == prevCanonicalAlias -> {
+                // No difference between the two events say something as we can't simply hide the event from here
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_room_canonical_alias_no_change_by_you)
+                } else {
+                    sp.getString(R.string.notice_room_canonical_alias_no_change, senderName)
+                }
+            }
+            added.isEmpty() && removed.isEmpty()                                         -> {
+                // Canonical has changed
+                if (canonicalAlias != null) {
                     if (event.isSentByCurrentUser()) {
-                        sp.getString(R.string.notice_room_canonical_alias_set_by_you, it)
+                        sp.getString(R.string.notice_room_canonical_alias_set_by_you, canonicalAlias)
                     } else {
-                        sp.getString(R.string.notice_room_canonical_alias_set, senderName, it)
+                        sp.getString(R.string.notice_room_canonical_alias_set, senderName, canonicalAlias)
+                    }
+                } else {
+                    if (event.isSentByCurrentUser()) {
+                        sp.getString(R.string.notice_room_canonical_alias_unset_by_you)
+                    } else {
+                        sp.getString(R.string.notice_room_canonical_alias_unset, senderName)
                     }
                 }
-                ?: if (event.isSentByCurrentUser()) {
-                    sp.getString(R.string.notice_room_canonical_alias_unset_by_you)
+            }
+            added.isEmpty() && canonicalAlias == prevCanonicalAlias                      -> {
+                // Some alternative has been removed
+                if (event.isSentByCurrentUser()) {
+                    sp.getQuantityString(R.plurals.notice_room_canonical_alias_alternative_removed_by_you, removed.size, removed.joinToString())
                 } else {
-                    sp.getString(R.string.notice_room_canonical_alias_unset, senderName)
+                    sp.getQuantityString(R.plurals.notice_room_canonical_alias_alternative_removed, removed.size, senderName, removed.joinToString())
                 }
+            }
+            removed.isEmpty() && canonicalAlias == prevCanonicalAlias                    -> {
+                // Some alternative has been added
+                if (event.isSentByCurrentUser()) {
+                    sp.getQuantityString(R.plurals.notice_room_canonical_alias_alternative_added_by_you, added.size, added.joinToString())
+                } else {
+                    sp.getQuantityString(R.plurals.notice_room_canonical_alias_alternative_added, added.size, senderName, added.joinToString())
+                }
+            }
+            canonicalAlias == prevCanonicalAlias                                         -> {
+                // Alternative added and removed
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_room_canonical_alias_alternative_changed_by_you)
+                } else {
+                    sp.getString(R.string.notice_room_canonical_alias_alternative_changed, senderName)
+                }
+            }
+            else                                                                         -> {
+                // Main and removed, or main and added, or main and added and removed
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.notice_room_canonical_alias_main_and_alternative_changed_by_you)
+                } else {
+                    sp.getString(R.string.notice_room_canonical_alias_main_and_alternative_changed, senderName)
+                }
+            }
+        }
     }
 
     private fun formatRoomGuestAccessEvent(event: Event, senderName: String?, rs: RoomSummary?): String? {

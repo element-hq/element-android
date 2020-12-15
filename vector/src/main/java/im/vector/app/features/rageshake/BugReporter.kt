@@ -46,6 +46,7 @@ import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
 import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.util.MimeTypes
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -274,7 +275,7 @@ class BugReporter @Inject constructor(
 
                     // add the gzipped files
                     for (file in gzippedFiles) {
-                        builder.addFormDataPart("compressed-log", file.name, file.asRequestBody("application/octet-stream".toMediaTypeOrNull()))
+                        builder.addFormDataPart("compressed-log", file.name, file.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull()))
                     }
 
                     mBugReportFiles.addAll(gzippedFiles)
@@ -295,7 +296,7 @@ class BugReporter @Inject constructor(
                                 }
 
                                 builder.addFormDataPart("file",
-                                        logCatScreenshotFile.name, logCatScreenshotFile.asRequestBody("application/octet-stream".toMediaTypeOrNull()))
+                                        logCatScreenshotFile.name, logCatScreenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull()))
                             } catch (e: Exception) {
                                 Timber.e(e, "## sendBugReport() : fail to write screenshot$e")
                             }

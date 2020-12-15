@@ -26,16 +26,25 @@ import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.internal.session.DefaultFileService
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
 import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.DefaultAddRoomAliasTask
+import org.matrix.android.sdk.internal.session.room.alias.DefaultDeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.DefaultGetRoomIdByAliasTask
+import org.matrix.android.sdk.internal.session.room.alias.DefaultGetRoomLocalAliasesTask
+import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
+import org.matrix.android.sdk.internal.session.room.alias.GetRoomLocalAliasesTask
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.session.room.create.DefaultCreateRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.DefaultGetPublicRoomTask
+import org.matrix.android.sdk.internal.session.room.directory.DefaultGetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.directory.DefaultGetThirdPartyProtocolsTask
+import org.matrix.android.sdk.internal.session.room.directory.DefaultSetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.directory.GetPublicRoomTask
+import org.matrix.android.sdk.internal.session.room.directory.GetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.directory.GetThirdPartyProtocolsTask
+import org.matrix.android.sdk.internal.session.room.directory.SetRoomDirectoryVisibilityTask
 import org.matrix.android.sdk.internal.session.room.membership.DefaultLoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.membership.admin.DefaultMembershipAdminTask
@@ -48,6 +57,10 @@ import org.matrix.android.sdk.internal.session.room.membership.leaving.DefaultLe
 import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.DefaultInviteThreePidTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
+import org.matrix.android.sdk.internal.session.room.peeking.DefaultPeekRoomTask
+import org.matrix.android.sdk.internal.session.room.peeking.DefaultResolveRoomStateTask
+import org.matrix.android.sdk.internal.session.room.peeking.PeekRoomTask
+import org.matrix.android.sdk.internal.session.room.peeking.ResolveRoomStateTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultMarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.room.read.DefaultSetReadMarkersTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
@@ -92,6 +105,13 @@ internal abstract class RoomModule {
 
         @Provides
         @JvmStatic
+        @SessionScope
+        fun providesDirectoryAPI(retrofit: Retrofit): DirectoryAPI {
+            return retrofit.create(DirectoryAPI::class.java)
+        }
+
+        @Provides
+        @JvmStatic
         fun providesParser(): Parser {
             return Parser.builder().build()
         }
@@ -126,6 +146,12 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindGetPublicRoomTask(task: DefaultGetPublicRoomTask): GetPublicRoomTask
+
+    @Binds
+    abstract fun bindGetRoomDirectoryVisibilityTask(task: DefaultGetRoomDirectoryVisibilityTask): GetRoomDirectoryVisibilityTask
+
+    @Binds
+    abstract fun bindSetRoomDirectoryVisibilityTask(task: DefaultSetRoomDirectoryVisibilityTask): SetRoomDirectoryVisibilityTask
 
     @Binds
     abstract fun bindGetThirdPartyProtocolsTask(task: DefaultGetThirdPartyProtocolsTask): GetThirdPartyProtocolsTask
@@ -182,7 +208,13 @@ internal abstract class RoomModule {
     abstract fun bindGetRoomIdByAliasTask(task: DefaultGetRoomIdByAliasTask): GetRoomIdByAliasTask
 
     @Binds
+    abstract fun bindGetRoomLocalAliasesTask(task: DefaultGetRoomLocalAliasesTask): GetRoomLocalAliasesTask
+
+    @Binds
     abstract fun bindAddRoomAliasTask(task: DefaultAddRoomAliasTask): AddRoomAliasTask
+
+    @Binds
+    abstract fun bindDeleteRoomAliasTask(task: DefaultDeleteRoomAliasTask): DeleteRoomAliasTask
 
     @Binds
     abstract fun bindSendTypingTask(task: DefaultSendTypingTask): SendTypingTask
@@ -195,4 +227,10 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindDeleteTagFromRoomTask(task: DefaultDeleteTagFromRoomTask): DeleteTagFromRoomTask
+
+    @Binds
+    abstract fun bindResolveRoomStateTask(task: DefaultResolveRoomStateTask): ResolveRoomStateTask
+
+    @Binds
+    abstract fun bindPeekRoomTask(task: DefaultPeekRoomTask): PeekRoomTask
 }

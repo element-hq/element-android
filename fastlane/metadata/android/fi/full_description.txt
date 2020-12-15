@@ -1,0 +1,30 @@
+Element on uudenlainen viestinsovellus, joka:
+
+1. Antaa sinun päättää yksityisyydestäsi.
+2. Antaa sinun kommunikoida kenen tahansa kanssa Matrix-verkossa ja jopa sen ulkopuolella siltaamalla sovelluksiin, kuten Slack
+3. Suojaa sinua mainonnalta, tietojen keräämiseltä ja suljetuilta alustoilta
+4. Suojaa sinut päästä päähän -salauksella sekä ristiin varmentamisella muiden todentamiseksi
+
+Element eroaa täysin muista viestintäsovelluksista, koska se on hajautettu ja avointa lähdekoodia.
+
+Element antaa sinun isännöidä itse - valita isännän - jotta sinulla on yksityisyys ja voit hallita tietojasi sekä keskustelujasi. Se antaa sinulle pääsyn avoimeen verkkoon; joten et ole jumissa Elementin käyttäjissä.
+
+Element pystyy tekemään kaiken tämän, koska se toimii Matrixilla - avoimella, hajautetun viestinnän standardilla.
+
+Element antaa sinulle hallinnan antamalla sinun valita, kuka isännöi keskustelujasi. Element-sovelluksessa voit valita isännän eri tavoin:
+
+1. Hanki ilmainen tili Matrix-kehittäjien ylläpitämällä matrix.org-palvelimella tai valitse tuhansista vapaaehtoisten ylläpitämistä julkisista palvelimista.
+2. Isännöi tiliäsi itse suorittamalla palvelinta omalla laitteellasi
+3. Luo tili mukautetulla palvelimella yksinkertaisesti tilaamalla Element Matrix Services -palvelu
+
+<b>Miksi valita Element?</b>
+
+<b>OMAT TIEDOT</b>: Sinä päätät, missä tietosi ja viestisi säilytetään. Hallitset sitä itse, eikä jokin MEGAYHTIÖ, joka tutkii tietojasi tai antaa niitä kolmansille osapuolille.
+
+<b>AVOIN KOMMUNIKOINYI JA YHTEISTYÖ</b>: Voit keskustella kaikkien muiden Matrix-verkon käyttäjien kanssa, riippumatta siitä käyttävätkö he Elementiä tai muuta Matrix-sovellusta, ja vaikka he käyttäisivät eri viestijärjestelmiä, kuten Slack, IRC tai XMPP.
+
+<b>ERITTÄIN TURVALLINEN</b>: Vahva päästä päähän -salaus (vain keskustelussa olevat voivat purkaa viestien salauksen), ja ristiin varmentaminen keskustelun osallistujien laitteiden tarkistamiseksi.
+
+<b>TÄYDELLISTÄ VIESTINTÄÄ</b>: Viestit, ääni- ja videopuhelut, tiedostojen jakaminen, näytön jakaminen ja koko joukko integraatioita, botteja ja widgettejä. Rakenna huoneita, yhteisöjä, pidä yhteyttä ja tee asioita.
+
+<b>MISSÄ TAHANSA OLETKIN</b>: Pidä yhteyttä missä tahansa, täysin synkronoidun viestihistorian kautta kaikilla laitteillasi ja verkossa osoitteessa https://app.element.io.

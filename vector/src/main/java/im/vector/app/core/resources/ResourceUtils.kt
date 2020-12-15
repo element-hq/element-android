@@ -20,16 +20,10 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import im.vector.app.core.utils.getFileExtension
+import org.matrix.android.sdk.api.util.MimeTypes
+import org.matrix.android.sdk.api.util.MimeTypes.normalizeMimeType
 import timber.log.Timber
 import java.io.InputStream
-
-/**
- * Mime types
- */
-const val MIME_TYPE_JPEG = "image/jpeg"
-const val MIME_TYPE_JPG = "image/jpg"
-const val MIME_TYPE_IMAGE_ALL = "image/*"
-const val MIME_TYPE_ALL_CONTENT = "*/*"
 
 data class Resource(
         var mContentStream: InputStream? = null,
@@ -55,7 +49,7 @@ data class Resource(
      * @return true if the opened resource is a jpeg one.
      */
     fun isJpegResource(): Boolean {
-        return MIME_TYPE_JPEG == mMimeType || MIME_TYPE_JPG == mMimeType
+        return mMimeType.normalizeMimeType() == MimeTypes.Jpeg
     }
 }
 

@@ -25,6 +25,7 @@ import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.common.DaggerTestMatrixComponent
@@ -49,6 +50,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
     @Inject internal lateinit var sessionManager: SessionManager
+    @Inject internal lateinit var homeServerHistoryService: HomeServerHistoryService
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -70,6 +72,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     }
 
     fun rawService() = rawService
+
+    fun homeServerHistoryService() = homeServerHistoryService
 
     fun legacySessionImporter(): LegacySessionImporter {
         return legacySessionImporter

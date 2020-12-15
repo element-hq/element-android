@@ -17,12 +17,17 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.resources.UserPreferencesProvider
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.room.timeline.EventTypeFilter
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEventFilters
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import javax.inject.Inject
 
-class TimelineSettingsFactory @Inject constructor(private val userPreferencesProvider: UserPreferencesProvider) {
+class TimelineSettingsFactory @Inject constructor(
+        private val userPreferencesProvider: UserPreferencesProvider,
+        private val session: Session
+) {
 
     fun create(): TimelineSettings {
         return if (userPreferencesProvider.shouldShowHiddenEvents()) {
@@ -35,7 +40,7 @@ class TimelineSettingsFactory @Inject constructor(private val userPreferencesPro
                             filterTypes = false),
                     buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
         } else {
-            val allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES.filterDisplayableTypes()
+            val allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES.createAllowedEventTypeFilters()
             TimelineSettings(
                     initialSize = 30,
                     filters = TimelineEventFilters(
@@ -48,12 +53,12 @@ class TimelineSettingsFactory @Inject constructor(private val userPreferencesPro
         }
     }
 
-    private fun List<String>.filterDisplayableTypes(): List<String> {
-        return filter { type ->
-            when (type) {
-                EventType.STATE_ROOM_MEMBER -> userPreferencesProvider.shouldShowRoomMemberStateEvents()
-                else                        -> true
-            }
+    private fun List<String>.createAllowedEventTypeFilters(): List<EventTypeFilter> {
+        return map {
+            EventTypeFilter(
+                    eventType = it,
+                    stateKey = if (it == EventType.STATE_ROOM_MEMBER && userPreferencesProvider.shouldShowRoomMemberStateEvents()) session.myUserId else null
+            )
         }
     }
 }

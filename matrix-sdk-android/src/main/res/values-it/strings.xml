@@ -214,4 +214,27 @@
     <string name="notice_direct_room_join">%1$s è entrato</string>
     <string name="notice_direct_room_created_by_you">Hai creato la discussione</string>
     <string name="notice_direct_room_created">%1$s ha creato la discussione</string>
+    <string name="room_displayname_empty_room_was">Stanza vuota (era %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s e %4$d altro</item>
+        <item quantity="other">%1$s, %2$s, %3$s e altri %4$d</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s e %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s e %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Tutti i server sono banditi dalla partecipazione! Questa stanza non può più essere usata.</string>
+    <string name="notice_room_server_acl_updated_no_change">Nessuna modifica.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• I server che corrispondono a IP letterali ora sono banditi.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• I server che corrispondono a IP letterali ora sono permessi.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• I server che corrispondono a %s sono stati rimossi dalla lista dei consentiti.</string>
+    <string name="notice_room_server_acl_updated_allowed">• I server che corrispondono a %s ora sono permessi.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• I server che corrispondono a %s sono stati rimossi dalla lista di ban.</string>
+    <string name="notice_room_server_acl_updated_banned">• I server che corrispondono a %s ora sono banditi.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Hai cambiato le ACL del server per questa stanza.</string>
+    <string name="notice_room_server_acl_updated_title">%s ha cambiato le ACL del server per questa stanza.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• I server che corrispondono a IP letterali sono banditi.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• I server che corrispondono a IP letterali sono permessi.</string>
+    <string name="notice_room_server_acl_set_allowed">• I server che corrispondono a %s sono permessi.</string>
+    <string name="notice_room_server_acl_set_banned">• I server che corrispondono a %s sono banditi.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Hai impostato le ACL del server per questa stanza.</string>
+    <string name="notice_room_server_acl_set_title">%s ha impostato le ACL del server per questa stanza.</string>
 </resources>

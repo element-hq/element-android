@@ -36,6 +36,7 @@ import im.vector.app.features.crypto.recover.BootstrapMigrateBackupFragment
 import im.vector.app.features.crypto.recover.BootstrapSaveRecoveryKeyFragment
 import im.vector.app.features.crypto.recover.BootstrapSetupRecoveryKeyFragment
 import im.vector.app.features.crypto.recover.BootstrapWaitingFragment
+import im.vector.app.features.crypto.verification.QuadSLoadingFragment
 import im.vector.app.features.crypto.verification.cancel.VerificationCancelFragment
 import im.vector.app.features.crypto.verification.cancel.VerificationNotMeFragment
 import im.vector.app.features.crypto.verification.choose.VerificationChooseMethodFragment
@@ -63,7 +64,6 @@ import im.vector.app.features.login.LoginResetPasswordSuccessFragment
 import im.vector.app.features.login.LoginServerSelectionFragment
 import im.vector.app.features.login.LoginServerUrlFormFragment
 import im.vector.app.features.login.LoginSignUpSignInSelectionFragment
-import im.vector.app.features.login.LoginSignUpSignInSsoFragment
 import im.vector.app.features.login.LoginSplashFragment
 import im.vector.app.features.login.LoginWaitForEmailFragment
 import im.vector.app.features.login.LoginWebFragment
@@ -83,6 +83,7 @@ import im.vector.app.features.roomprofile.RoomProfileFragment
 import im.vector.app.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.app.features.roomprofile.members.RoomMemberListFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
+import im.vector.app.features.roomprofile.alias.RoomAliasFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
@@ -230,11 +231,6 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(LoginSignUpSignInSsoFragment::class)
-    fun bindLoginSignUpSignInSsoFragment(fragment: LoginSignUpSignInSsoFragment): Fragment
-
-    @Binds
-    @IntoMap
     @FragmentKey(LoginSplashFragment::class)
     fun bindLoginSplashFragment(fragment: LoginSplashFragment): Fragment
 
@@ -365,6 +361,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(RoomAliasFragment::class)
+    fun bindRoomAliasFragment(fragment: RoomAliasFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(RoomMemberProfileFragment::class)
     fun bindRoomMemberProfileFragment(fragment: RoomMemberProfileFragment): Fragment
 
@@ -417,6 +418,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VerificationCancelFragment::class)
     fun bindVerificationCancelFragment(fragment: VerificationCancelFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(QuadSLoadingFragment::class)
+    fun bindQuadSLoadingFragment(fragment: QuadSLoadingFragment): Fragment
 
     @Binds
     @IntoMap

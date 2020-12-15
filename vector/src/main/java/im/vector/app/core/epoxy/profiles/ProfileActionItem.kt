@@ -17,7 +17,6 @@
 package im.vector.app.core.epoxy.profiles
 
 import android.content.res.ColorStateList
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -26,8 +25,10 @@ import androidx.core.widget.ImageViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.themes.ThemeUtils
@@ -67,11 +68,11 @@ abstract class ProfileActionItem : VectorEpoxyModel<ProfileActionItem.Holder>() 
     var destructive: Boolean = false
 
     @EpoxyAttribute
-    var listener: View.OnClickListener? = null
+    var listener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.view.setOnClickListener(listener)
+        holder.view.onClick(listener)
         if (listener == null) {
             holder.view.isClickable = false
         }

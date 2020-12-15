@@ -213,4 +213,27 @@
     <string name="notice_room_ban_by_you">Vous avez exclus %1$s</string>
     <string name="notice_room_unban_by_you">Vous avez révoqué l\'exclusion de %1$s</string>
     <string name="notice_room_kick_with_reason_by_you">Vous avez expulsé %1$s. Raison : %2$s</string>
+    <string name="room_displayname_empty_room_was">Salon vide (était %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s et %4$d autre</item>
+        <item quantity="other">%1$s, %2$s, %3$s et %4$d autres</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s et %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s et %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Tous les serveurs sont interdits de participer ! Ce salon ne peut plus être utilisé.</string>
+    <string name="notice_room_server_acl_updated_no_change">Aucun changement.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Les serveurs correspondant à des IP littérales sont maintenant interdits.</string>
+    <string name="notice_room_server_acl_set_banned">• Les serveurs correspondant à %s sont interdits.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Les serveurs correspondants à des IP littérales sont interdites.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Les serveurs correspondants à des IP littérales sont autorisés.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Les serveurs correspondants à des IP littérales sont maintenant autorisées.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Les serveurs correspondant à %s sont supprimés de la liste autorisée.</string>
+    <string name="notice_room_server_acl_updated_allowed">• les serveur correspondant à %s sont maintenant autorisés.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Les serveurs correspondant à %s étaient supprimés de la liste des interdits.</string>
+    <string name="notice_room_server_acl_updated_banned">• Les serveurs correspondant à %s sont maintenant interdits.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Vous avez changé les droits ACL du serveur pour ce salon.</string>
+    <string name="notice_room_server_acl_updated_title">%s a changé les droits ACL du serveur pour ce salon.</string>
+    <string name="notice_room_server_acl_set_allowed">• Les serveurs correspondant à %s sont autorisés.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Vous avez paramétré les ACL pour ce salon.</string>
+    <string name="notice_room_server_acl_set_title">%s paramètre les autorisations étendues (ACL) du serveur pour ce salon.</string>
 </resources>

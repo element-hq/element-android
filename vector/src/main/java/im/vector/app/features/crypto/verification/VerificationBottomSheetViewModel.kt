@@ -32,6 +32,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.Session
@@ -70,6 +71,7 @@ data class VerificationBottomSheetViewState(
         // true when we display the loading and we wait for the other (incoming request)
         val selfVerificationMode: Boolean = false,
         val verifiedFromPrivateKeys: Boolean = false,
+        val verifyingFrom4S: Boolean = false,
         val isMe: Boolean = false,
         val currentDeviceCanCrossSign: Boolean = false,
         val userWantsToCancel: Boolean = false,
@@ -170,7 +172,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             }
         } else {
             // if the verification is already done you can't cancel anymore
-            if (state.pendingRequest.invoke()?.cancelConclusion != null || state.sasTransactionState is VerificationTxState.TerminalTxState) {
+            if (state.pendingRequest.invoke()?.cancelConclusion != null
+                    || state.sasTransactionState is VerificationTxState.TerminalTxState
+                    || state.verifyingFrom4S) {
                 // you cannot cancel anymore
             } else {
                 setState {
@@ -346,6 +350,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
             is VerificationAction.VerifyFromPassphrase         -> {
+                setState { copy(verifyingFrom4S = true) }
                 _viewEvents.post(VerificationBottomSheetViewEvents.AccessSecretStore)
             }
             is VerificationAction.GotResultFromSsss            -> {
@@ -354,56 +359,73 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             VerificationAction.SecuredStorageHasBeenReset      -> {
                 if (session.cryptoService().crossSigningService().allPrivateKeysKnown()) {
                     setState {
-                        copy(quadSHasBeenReset = true)
+                        copy(quadSHasBeenReset = true, verifyingFrom4S = false)
                     }
                 }
                 Unit
+            }
+            VerificationAction.CancelledFromSsss               -> {
+                setState {
+                    copy(verifyingFrom4S = false)
+                }
             }
         }.exhaustive
     }
 
     private fun handleSecretBackFromSSSS(action: VerificationAction.GotResultFromSsss) {
-        try {
-            action.cypherData.fromBase64().inputStream().use { ins ->
-                val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
-                val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
-                        res?.get(MASTER_KEY_SSSS_NAME),
-                        res?.get(USER_SIGNING_KEY_SSSS_NAME),
-                        res?.get(SELF_SIGNING_KEY_SSSS_NAME)
-                )
-                if (trustResult.isVerified()) {
-                    // Sign this device and upload the signature
-                    session.sessionParams.deviceId?.let { deviceId ->
-                        session.cryptoService()
-                                .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
-                                    override fun onFailure(failure: Throwable) {
-                                        Timber.w(failure, "Failed to sign my device after recovery")
-                                    }
-                                })
-                    }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                action.cypherData.fromBase64().inputStream().use { ins ->
+                    val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
+                    val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
+                            res?.get(MASTER_KEY_SSSS_NAME),
+                            res?.get(USER_SIGNING_KEY_SSSS_NAME),
+                            res?.get(SELF_SIGNING_KEY_SSSS_NAME)
+                    )
+                    if (trustResult.isVerified()) {
+                        // Sign this device and upload the signature
+                        session.sessionParams.deviceId?.let { deviceId ->
+                            session.cryptoService()
+                                    .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
+                                        override fun onFailure(failure: Throwable) {
+                                            Timber.w(failure, "Failed to sign my device after recovery")
+                                        }
+                                    })
+                        }
 
-                    setState {
-                        copy(verifiedFromPrivateKeys = true)
-                    }
+                        setState {
+                            copy(
+                                    verifyingFrom4S = false,
+                                    verifiedFromPrivateKeys = true
+                            )
+                        }
 
-                    // try to get keybackup key
-                } else {
-                    // POP UP something
-                    _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(stringProvider.getString(R.string.error_failed_to_import_keys)))
+                        // try the keybackup
+                        tentativeRestoreBackup(res)
+                    } else {
+                        setState {
+                            copy(
+                                    verifyingFrom4S = false
+                            )
+                        }
+                        // POP UP something
+                        _viewEvents.post(VerificationBottomSheetViewEvents.ModalError(stringProvider.getString(R.string.error_failed_to_import_keys)))
+                    }
                 }
-
-                // try the keybackup
-                tentativeRestoreBackup(res)
-                Unit
+            } catch (failure: Throwable) {
+                setState {
+                    copy(
+                            verifyingFrom4S = false
+                    )
+                }
+                _viewEvents.post(
+                        VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
             }
-        } catch (failure: Throwable) {
-            _viewEvents.post(
-                    VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
         }
     }
 
     private fun tentativeRestoreBackup(res: Map<String, String>?) {
-        viewModelScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME) ?: return@launch Unit.also {
                     Timber.v("## Keybackup secret not restored from SSSS")

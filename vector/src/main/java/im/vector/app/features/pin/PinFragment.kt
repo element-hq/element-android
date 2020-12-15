@@ -56,6 +56,7 @@ class PinFragment @Inject constructor(
         when (fragmentArgs.pinMode) {
             PinMode.CREATE -> showCreateFragment()
             PinMode.AUTH   -> showAuthFragment()
+            PinMode.MODIFY -> showCreateFragment() // No need to create another function for now because texts are generic
         }
     }
 
@@ -71,6 +72,10 @@ class PinFragment @Inject constructor(
         createFragment.setCodeCreateListener(object : PFLockScreenFragment.OnPFLockScreenCodeCreateListener {
             override fun onNewCodeValidationFailed() {
                 Toast.makeText(requireContext(), getString(R.string.create_pin_confirm_failure), Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onPinCodeEnteredFirst(pinCode: String?): Boolean {
+                return false
             }
 
             override fun onCodeCreated(encodedCode: String) {

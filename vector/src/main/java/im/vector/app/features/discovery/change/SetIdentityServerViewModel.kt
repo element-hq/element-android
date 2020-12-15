@@ -31,7 +31,6 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
-import org.matrix.android.sdk.api.session.terms.GetTermsResponse
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.internal.util.awaitCallback
 import java.net.UnknownHostException
@@ -117,9 +116,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
 
     private suspend fun checkTerms(baseUrl: String) {
         try {
-            val data = awaitCallback<GetTermsResponse> {
-                mxSession.getTerms(TermsService.ServiceType.IdentityService, baseUrl, it)
-            }
+            val data = mxSession.getTerms(TermsService.ServiceType.IdentityService, baseUrl)
 
             // has all been accepted?
             val resp = data.serverResponse

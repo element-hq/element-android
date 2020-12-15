@@ -51,7 +51,8 @@ data class LoginViewState(
         val loginMode: LoginMode = LoginMode.Unknown,
         @PersistState
         // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
-        val loginModeSupportedTypes: List<String> = emptyList()
+        val loginModeSupportedTypes: List<String> = emptyList(),
+        val knownCustomHomeServersUrls: List<String> = emptyList()
 ) : MvRxState {
 
     fun isLoading(): Boolean {
@@ -68,10 +69,13 @@ data class LoginViewState(
         return asyncLoginAction is Success
     }
 
-    fun getSsoUrl(): String {
+    fun getSsoUrl(providerId: String?): String {
         return buildString {
             append(homeServerUrl?.trim { it == '/' })
             append(SSO_REDIRECT_PATH)
+            if (providerId != null) {
+                append("/$providerId")
+            }
             // Set a redirect url we will intercept later
             appendParamToUrl(SSO_REDIRECT_URL_PARAM, VECTOR_REDIRECT_URL)
             deviceId?.takeIf { it.isNotBlank() }?.let {

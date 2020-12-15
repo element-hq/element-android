@@ -49,6 +49,12 @@ object EventType {
     const val STATE_ROOM_JOIN_RULES = "m.room.join_rules"
     const val STATE_ROOM_GUEST_ACCESS = "m.room.guest_access"
     const val STATE_ROOM_POWER_LEVELS = "m.room.power_levels"
+
+    /**
+     * Note that this Event has been deprecated, see
+     * - https://matrix.org/docs/spec/client_server/r0.6.1#historical-events
+     * - https://github.com/matrix-org/matrix-doc/pull/2432
+     */
     const val STATE_ROOM_ALIASES = "m.room.aliases"
     const val STATE_ROOM_TOMBSTONE = "m.room.tombstone"
     const val STATE_ROOM_CANONICAL_ALIAS = "m.room.canonical_alias"

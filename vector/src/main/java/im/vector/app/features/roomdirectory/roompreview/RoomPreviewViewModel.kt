@@ -16,8 +16,11 @@
 
 package im.vector.app.features.roomdirectory.roompreview
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -25,12 +28,17 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.roomdirectory.JoinState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
@@ -56,6 +64,56 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
         // Observe joined room (from the sync)
         observeRoomSummary()
         observeMembershipChanges()
+
+        if (initialState.shouldPeekFromServer) {
+            peekRoomFromServer()
+        }
+    }
+
+    private fun peekRoomFromServer() {
+        setState {
+            copy(peekingState = Loading())
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            val peekResult = tryOrNull {
+                awaitCallback<PeekResult> {
+                    session.peekRoom(initialState.roomAlias ?: initialState.roomId, it)
+                }
+            }
+
+            when (peekResult) {
+                is PeekResult.Success           -> {
+                    setState {
+                        copy(
+                                roomId = peekResult.roomId,
+                                avatarUrl = peekResult.avatarUrl,
+                                roomAlias = peekResult.alias ?: initialState.roomAlias,
+                                roomTopic = peekResult.topic,
+                                homeServers = peekResult.viaServers,
+                                peekingState = Success(PeekingState.FOUND)
+                        )
+                    }
+                }
+                is PeekResult.PeekingNotAllowed -> {
+                    setState {
+                        copy(
+                                roomId = peekResult.roomId,
+                                roomAlias = peekResult.alias ?: initialState.roomAlias,
+                                homeServers = peekResult.viaServers,
+                                peekingState = Success(PeekingState.NO_ACCESS)
+                        )
+                    }
+                }
+                PeekResult.UnknownAlias,
+                null                            -> {
+                    setState {
+                        copy(
+                                peekingState = Success(PeekingState.NOT_FOUND)
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private fun observeRoomSummary() {
