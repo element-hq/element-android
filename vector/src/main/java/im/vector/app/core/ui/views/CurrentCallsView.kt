@@ -47,7 +47,7 @@ class CurrentCallsView @JvmOverloads constructor(
         setOnClickListener { callback?.onTapToReturnToCall() }
     }
 
-    fun render(calls: List<WebRtcCall>) {
+    fun render(calls: List<WebRtcCall>, formattedDuration: String) {
         val connectedCalls = calls.filter {
             it.mxCall.state is CallState.Connected
         }
@@ -58,15 +58,15 @@ class CurrentCallsView @JvmOverloads constructor(
             if (heldCalls.size == 1) {
                 currentCallsInfo.setText(R.string.call_only_paused)
             } else {
-                currentCallsInfo.setText(R.string.call_only_active)
+                currentCallsInfo.text = resources.getString(R.string.call_only_active, formattedDuration)
             }
         } else {
             if (heldCalls.size > 1) {
                 currentCallsInfo.text = resources.getString(R.string.call_only_multiple_paused , heldCalls.size)
             } else if (heldCalls.size == 1) {
-                currentCallsInfo.setText(R.string.call_active_and_single_paused)
+                currentCallsInfo.text = resources.getString(R.string.call_active_and_single_paused, formattedDuration)
             } else {
-                currentCallsInfo.text = resources.getString(R.string.call_active_and_multiple_paused, "00:00", heldCalls.size)
+                currentCallsInfo.text = resources.getString(R.string.call_active_and_multiple_paused, formattedDuration, heldCalls.size)
             }
         }
     }

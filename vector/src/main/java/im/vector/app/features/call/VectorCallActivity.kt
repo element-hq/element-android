@@ -51,6 +51,7 @@ import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call.*
+import okhttp3.internal.concurrent.formatDuration
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCallDetail
@@ -216,7 +217,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                             }
                         }
                     } else {
-                        callStatusText.text = null
+                        callStatusText.text = state.formattedDuration
                         if (callArgs.isVideoCall) {
                             callVideoGroup.isVisible = true
                             callInfoGroup.isVisible = false

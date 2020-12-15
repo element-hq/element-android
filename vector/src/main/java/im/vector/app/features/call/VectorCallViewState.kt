@@ -38,7 +38,8 @@ data class VectorCallViewState(
         val availableSoundDevices: List<CallAudioManager.SoundDevice> = emptyList(),
         val callState: Async<CallState> = Uninitialized,
         val otherKnownCallInfo: CallInfo? = null,
-        val callInfo: CallInfo = CallInfo(callId)
+        val callInfo: CallInfo = CallInfo(callId),
+        val formattedDuration: String = ""
 ) : MvRxState {
 
     data class CallInfo(

@@ -20,6 +20,7 @@ import android.content.Context
 import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
 import im.vector.app.core.services.CallService
+import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.features.call.CallAudioManager
 import im.vector.app.features.call.CameraEventsHandlerAdapter
 import im.vector.app.features.call.CameraProxy
@@ -45,6 +46,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
+import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
@@ -53,6 +55,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.SdpType
 import org.matrix.android.sdk.internal.util.awaitCallback
+import org.threeten.bp.Duration
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
 import org.webrtc.Camera1Enumerator
@@ -96,6 +99,8 @@ class WebRtcCall(val mxCall: MxCall,
         fun onCaptureStateChanged() {}
         fun onCameraChanged() {}
         fun onHoldUnhold() {}
+        fun onTick(formattedDuration: String) {}
+        override fun onStateUpdate(call: MxCall) {}
     }
 
     private val listeners = CopyOnWriteArrayList<Listener>()
@@ -129,6 +134,18 @@ class WebRtcCall(val mxCall: MxCall,
     private var cameraInUse: CameraProxy? = null
     private var currentCaptureFormat: CaptureFormat = CaptureFormat.HD
     private var cameraAvailabilityCallback: CameraManager.AvailabilityCallback? = null
+
+    private val timer = CountUpTimer(1000).apply {
+        tickListener = object : CountUpTimer.TickListener {
+            override fun onTick(milliseconds: Long) {
+                val formattedDuration = formatDuration(Duration.ofMillis(milliseconds))
+                listeners.forEach {
+                    tryOrNull { it.onTick(formattedDuration) }
+                }
+            }
+        }
+    }
+
 
     // Mute status
     var micMuted = false
@@ -207,6 +224,12 @@ class WebRtcCall(val mxCall: MxCall,
                 makingOffer = false
             }
         }
+    }
+
+    fun formattedDuration(): String {
+        return formatDuration(
+                Duration.ofMillis(timer.time)
+        )
     }
 
     private fun createPeerConnection(turnServerResponse: TurnServerResponse?) {
@@ -547,7 +570,7 @@ class WebRtcCall(val mxCall: MxCall,
         return callOnHold
     }
 
-    fun updateRemoteOnHold(onHold: Boolean) = synchronized(this){
+    fun updateRemoteOnHold(onHold: Boolean) = synchronized(this) {
         if (remoteOnHold == onHold) return
         remoteOnHold = onHold
         if (!onHold) {
@@ -574,11 +597,11 @@ class WebRtcCall(val mxCall: MxCall,
         updateMuteStatus()
     }
 
-    fun canSwitchCamera(): Boolean  = synchronized(this){
+    fun canSwitchCamera(): Boolean = synchronized(this) {
         return availableCamera.size > 1
     }
 
-    private fun getOppositeCameraIfAny(): CameraProxy?  = synchronized(this){
+    private fun getOppositeCameraIfAny(): CameraProxy? = synchronized(this) {
         val currentCamera = cameraInUse ?: return null
         return if (currentCamera.type == CameraType.FRONT) {
             availableCamera.firstOrNull { it.type == CameraType.BACK }
@@ -587,7 +610,7 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
-    fun switchCamera() = synchronized(this){
+    fun switchCamera() = synchronized(this) {
         Timber.v("## VOIP switchCamera")
         if (mxCall.state is CallState.Connected && mxCall.isVideoCall) {
             val oppositeCamera = getOppositeCameraIfAny() ?: return
@@ -630,7 +653,7 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
-    fun currentCameraType(): CameraType? = synchronized(this){
+    fun currentCameraType(): CameraType? = synchronized(this) {
         return cameraInUse?.type
     }
 
@@ -638,8 +661,10 @@ class WebRtcCall(val mxCall: MxCall,
         return currentCaptureFormat
     }
 
-    private fun release()  {
+    private fun release() {
         mxCall.removeListener(this)
+        timer.reset()
+        timer.tickListener = null
         videoCapturer?.stopCapture()
         videoCapturer?.dispose()
         videoCapturer = null
@@ -784,6 +809,11 @@ class WebRtcCall(val mxCall: MxCall,
             }
             val nowOnHold = isLocalOnHold()
             if (prevOnHold != nowOnHold) {
+                if (nowOnHold) {
+                    timer.pause()
+                } else {
+                    timer.resume()
+                }
                 listeners.forEach {
                     tryOrNull { it.onHoldUnhold() }
                 }
@@ -791,9 +821,26 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
+    private fun formatDuration(duration: Duration): String {
+        val hours = duration.seconds / 3600
+        val minutes = (duration.seconds % 3600) / 60
+        val seconds = duration.seconds % 60
+        return if (hours > 0) {
+            String.format("%d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            String.format("%02d:%02d", minutes, seconds)
+        }
+    }
+
     // MxCall.StateListener
 
     override fun onStateUpdate(call: MxCall) {
+        val state = call.state
+        if (state is CallState.Connected && state.iceConnectionState == MxPeerConnectionState.CONNECTED) {
+            timer.resume()
+        } else {
+            timer.pause()
+        }
         listeners.forEach {
             tryOrNull { it.onStateUpdate(call) }
         }
