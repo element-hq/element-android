@@ -74,7 +74,7 @@
     <string name="local_address_book_header">Vietējā adrešu grāmata</string>
     <string name="matrix_only_filter">Vienīgi Matrix kontakti</string>
     <string name="no_conversation_placeholder">Nav sarunu</string>
-    <string name="no_contact_access_placeholder">Tu neesi atļāvis/usi SchildiChat piekļūt taviem vietējiem kontaktiem</string>
+    <string name="no_contact_access_placeholder">Tu neesi atļāvis/usi Element piekļūt taviem vietējiem kontaktiem</string>
     <string name="no_result_placeholder">Nav rezultātu</string>
 
     <string name="rooms_header">Istabas</string>
@@ -256,27 +256,27 @@ Tu esi izrakstīts no visām ierīcēm un vairāk nesaņemsi \"push\" paziņojum
     <string name="media_picker_both_capture_title">Uzņemt foto vai video</string>
     <string name="media_picker_cannot_record_video">Neizdodas ierakstīt video</string>
 
-    <string name="permissions_rationale_popup_title">SchildiChat informācija</string>
-    <string name="permissions_rationale_msg_storage">SchildiChat-am nepieciešama atļauja piekļūt foto un video bibliotēkai, lai nosūtītu un saglabātu pielikumus.
+    <string name="permissions_rationale_popup_title">Element informācija</string>
+    <string name="permissions_rationale_msg_storage">Element-am nepieciešama atļauja piekļūt foto un video bibliotēkai, lai nosūtītu un saglabātu pielikumus.
 
 Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja nosūtīt failus no Tava tālruņa.</string>
-    <string name="permissions_rationale_msg_camera">SchildiChat-am nepieciešama atļauja piekļūt kamerai, lai uzņemtu foto un nodrošinātu video zvanus.</string>
+    <string name="permissions_rationale_msg_camera">Element-am nepieciešama atļauja piekļūt kamerai, lai uzņemtu foto un nodrošinātu video zvanus.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Lūdzu dot piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja veikt zvanus.</string>
-    <string name="permissions_rationale_msg_record_audio">SchildiChat-am nepieciešama atļauja piekļūt mikrofonam, lai nodrošinātu audio zvanus.</string>
+    <string name="permissions_rationale_msg_record_audio">Element-am nepieciešama atļauja piekļūt mikrofonam, lai nodrošinātu audio zvanus.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja veikt zvanus.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat-am nepieciešama atļauja piekļūt kamerai un mikrofonam, lai veiktu videozvanus.
+    <string name="permissions_rationale_msg_camera_and_audio">Element-am nepieciešama atļauja piekļūt kamerai un mikrofonam, lai veiktu videozvanus.
 
 Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja veikt zvanus.</string>
-    <string name="permissions_rationale_msg_contacts">SchildiChat-am nepieciešama atļauja piekļūt kontaktiem, lai varētu atrast citus lietotājus tīklā pēc to epasta adreses vai tālruņa #.
+    <string name="permissions_rationale_msg_contacts">Element-am nepieciešama atļauja piekļūt kontaktiem, lai varētu atrast citus lietotājus tīklā pēc to epasta adreses vai tālruņa #.
 
-Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja atrast Tavus kontaktus, kuri ir sasniedzami SchildiChatā.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat-am nepieciešama atļauja piekļūt kontaktiem, lai varētu atrast citus lietotājus tīklā pēc to epasta adreses vai tālruņa #.
+Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja atrast Tavus kontaktus, kuri ir sasniedzami Elementā.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Element-am nepieciešama atļauja piekļūt kontaktiem, lai varētu atrast citus lietotājus tīklā pēc to epasta adreses vai tālruņa #.
 
-Vai dot SchildiChatam piekļuvi kontaktiem?</string>
+Vai dot Elementam piekļuvi kontaktiem?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Atvaino… Darbība nav veikta dēļ nepietiekamām piekļuves atļaujām</string>
 
