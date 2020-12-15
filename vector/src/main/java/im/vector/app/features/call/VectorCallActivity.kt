@@ -35,10 +35,10 @@ import butterknife.BindView
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.allGranted
@@ -51,6 +51,7 @@ import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call.*
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCallDetail
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
@@ -210,7 +211,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                             callStatusText.setText(R.string.call_held_by_you)
                         } else {
                             callActionText.isInvisible = true
-                            state.otherUserMatrixItem.invoke()?.let {
+                            state.callInfo.otherUserItem?.let {
                                 callStatusText.text = getString(R.string.call_held_by_user, it.getBestName())
                             }
                         }
@@ -219,7 +220,8 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                         if (callArgs.isVideoCall) {
                             callVideoGroup.isVisible = true
                             callInfoGroup.isVisible = false
-                            pip_video_view.isVisible = !state.isVideoCaptureInError
+                            pip_video_view.isVisible = !state.isVideoCaptureInError && state.otherKnownCallInfo == null
+                            configureCallInfo(state)
                         } else {
                             callVideoGroup.isInvisible = true
                             callInfoGroup.isVisible = true
@@ -246,7 +248,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     private fun configureCallInfo(state: VectorCallViewState, blurAvatar: Boolean = false) {
-        state.otherUserMatrixItem.invoke()?.let {
+        state.callInfo.otherUserItem?.let {
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
             avatarRenderer.renderBlur(it, bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter)
             participantNameText.text = it.getBestName()
@@ -256,10 +258,26 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                 avatarRenderer.render(it, otherMemberAvatar)
             }
         }
+        if (state.otherKnownCallInfo?.otherUserItem == null) {
+            otherKnownCallLayout.isVisible = false
+        } else {
+            val otherCall = callManager.getCallById(state.otherKnownCallInfo.callId)
+            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
+            avatarRenderer.renderBlur(state.otherKnownCallInfo.otherUserItem, otherKnownCallAvatarView, sampling = 20, rounded = false, colorFilter = colorFilter)
+            otherKnownCallLayout.isVisible = true
+            otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold() || it.remoteOnHold }.orFalse()
+        }
     }
 
     private fun configureCallViews() {
         callControlsView.interactionListener = this
+        otherKnownCallAvatarView.setOnClickListener {
+            withState(callViewModel) {
+                val otherCall = callManager.getCallById(it.otherKnownCallInfo?.callId ?: "") ?: return@withState
+                startActivity(newIntent(this, otherCall.mxCall, null))
+                finish()
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

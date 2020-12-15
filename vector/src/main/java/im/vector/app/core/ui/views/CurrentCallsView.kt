@@ -22,10 +22,10 @@ import android.widget.RelativeLayout
 import im.vector.app.R
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.themes.ThemeUtils
-import kotlinx.android.synthetic.main.view_active_call_view.view.*
+import kotlinx.android.synthetic.main.view_current_calls.view.*
 import org.matrix.android.sdk.api.session.call.CallState
 
-class ActiveCallView @JvmOverloads constructor(
+class CurrentCallsView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
@@ -42,25 +42,32 @@ class ActiveCallView @JvmOverloads constructor(
     }
 
     private fun setupView() {
-        inflate(context, R.layout.view_active_call_view, this)
+        inflate(context, R.layout.view_current_calls, this)
         setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorPrimary))
         setOnClickListener { callback?.onTapToReturnToCall() }
     }
 
     fun render(calls: List<WebRtcCall>) {
-        if (calls.size == 1) {
-            activeCallInfo.setText(R.string.call_active_call)
-        } else if (calls.size == 2) {
-            val activeCall = calls.firstOrNull {
-                it.mxCall.state is CallState.Connected && !it.isLocalOnHold()
-            }
-            if (activeCall == null) {
-                activeCallInfo.setText(R.string.call_two_paused_calls)
+        val connectedCalls = calls.filter {
+            it.mxCall.state is CallState.Connected
+        }
+        val heldCalls = connectedCalls.filter {
+            it.isLocalOnHold() || it.remoteOnHold
+        }
+        if (connectedCalls.size == 1) {
+            if (heldCalls.size == 1) {
+                currentCallsInfo.setText(R.string.call_only_paused)
             } else {
-                activeCallInfo.setText(R.string.call_one_active_one_paused_call)
+                currentCallsInfo.setText(R.string.call_only_active)
             }
         } else {
-            visibility = GONE
+            if (heldCalls.size > 1) {
+                currentCallsInfo.text = resources.getString(R.string.call_only_multiple_paused , heldCalls.size)
+            } else if (heldCalls.size == 1) {
+                currentCallsInfo.setText(R.string.call_active_and_single_paused)
+            } else {
+                currentCallsInfo.text = resources.getString(R.string.call_active_and_multiple_paused, "00:00", heldCalls.size)
+            }
         }
     }
 }

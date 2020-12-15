@@ -72,6 +72,7 @@ import org.webrtc.VideoSource
 import org.webrtc.VideoTrack
 import timber.log.Timber
 import java.lang.ref.WeakReference
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 import javax.inject.Provider
 import kotlin.coroutines.CoroutineContext
@@ -97,7 +98,7 @@ class WebRtcCall(val mxCall: MxCall,
         fun onHoldUnhold() {}
     }
 
-    private val listeners = ArrayList<Listener>()
+    private val listeners = CopyOnWriteArrayList<Listener>()
 
     fun addListener(listener: Listener) {
         listeners.add(listener)
@@ -277,7 +278,7 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
-    fun detachRenderers(renderers: List<SurfaceViewRenderer>?) {
+    fun detachRenderers(renderers: List<SurfaceViewRenderer>?) = synchronized(this) {
         Timber.v("## VOIP detachRenderers")
         // currentCall?.localMediaStream?.let { currentCall?.peerConnection?.removeStream(it) }
         if (renderers.isNullOrEmpty()) {
@@ -533,7 +534,7 @@ class WebRtcCall(val mxCall: MxCall,
      * rather than 'sendonly')
      * @returns true if the other party has put us on hold
      */
-    fun isLocalOnHold(): Boolean {
+    fun isLocalOnHold(): Boolean = synchronized(this) {
         if (mxCall.state !is CallState.Connected) return false
         var callOnHold = true
         // We consider a call to be on hold only if *all* the tracks are on hold
@@ -546,7 +547,7 @@ class WebRtcCall(val mxCall: MxCall,
         return callOnHold
     }
 
-    fun updateRemoteOnHold(onHold: Boolean) {
+    fun updateRemoteOnHold(onHold: Boolean) = synchronized(this){
         if (remoteOnHold == onHold) return
         remoteOnHold = onHold
         if (!onHold) {
@@ -563,21 +564,21 @@ class WebRtcCall(val mxCall: MxCall,
         updateMuteStatus()
     }
 
-    fun muteCall(muted: Boolean) {
+    fun muteCall(muted: Boolean) = synchronized(this) {
         micMuted = muted
         updateMuteStatus()
     }
 
-    fun enableVideo(enabled: Boolean) {
+    fun enableVideo(enabled: Boolean) = synchronized(this) {
         videoMuted = !enabled
         updateMuteStatus()
     }
 
-    fun canSwitchCamera(): Boolean {
+    fun canSwitchCamera(): Boolean  = synchronized(this){
         return availableCamera.size > 1
     }
 
-    private fun getOppositeCameraIfAny(): CameraProxy? {
+    private fun getOppositeCameraIfAny(): CameraProxy?  = synchronized(this){
         val currentCamera = cameraInUse ?: return null
         return if (currentCamera.type == CameraType.FRONT) {
             availableCamera.firstOrNull { it.type == CameraType.BACK }
@@ -586,7 +587,7 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
-    fun switchCamera() {
+    fun switchCamera() = synchronized(this){
         Timber.v("## VOIP switchCamera")
         if (mxCall.state is CallState.Connected && mxCall.isVideoCall) {
             val oppositeCamera = getOppositeCameraIfAny() ?: return
@@ -629,15 +630,15 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
-    fun currentCameraType(): CameraType? {
+    fun currentCameraType(): CameraType? = synchronized(this){
         return cameraInUse?.type
     }
 
-    fun currentCaptureFormat(): CaptureFormat {
+    fun currentCaptureFormat(): CaptureFormat = synchronized(this) {
         return currentCaptureFormat
     }
 
-    private fun release() {
+    private fun release()  {
         mxCall.removeListener(this)
         videoCapturer?.stopCapture()
         videoCapturer?.dispose()
@@ -689,7 +690,7 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
-    fun endCall(originatedByMe: Boolean = true, reason: CallHangupContent.Reason? = null) {
+    fun endCall(originatedByMe: Boolean = true, reason: CallHangupContent.Reason? = null) = synchronized(this) {
         if (mxCall.state == CallState.Terminated) {
             return
         }
@@ -702,6 +703,7 @@ class WebRtcCall(val mxCall: MxCall,
             cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
         }
         release()
+        listeners.clear()
         onCallEnded(this)
         if (originatedByMe) {
             // send hang up event

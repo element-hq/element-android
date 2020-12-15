@@ -21,6 +21,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import im.vector.app.R
+import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -43,7 +44,7 @@ class VerificationVectorAlert(uid: String,
 
         override fun bind(view: View) {
             view.findViewById<ImageView>(R.id.ivUserAvatar)?.let { imageView ->
-                matrixItem?.let { avatarRenderer.render(it, imageView) }
+                matrixItem?.let { avatarRenderer.render(it, imageView, GlideApp.with(view.context.applicationContext)) }
             }
         }
     }

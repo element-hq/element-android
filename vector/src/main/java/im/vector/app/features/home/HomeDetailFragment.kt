@@ -29,10 +29,10 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.ui.views.ActiveCallView
+import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.ActiveCallViewHolder
 import im.vector.app.core.ui.views.KeysBackupBanner
-import im.vector.app.features.call.SharedCurrentCallViewModel
+import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.RoomListFragment
@@ -63,14 +63,14 @@ class HomeDetailFragment @Inject constructor(
         private val alertManager: PopupAlertManager,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences
-) : VectorBaseFragment(), KeysBackupBanner.Delegate, ActiveCallView.Callback, ServerBackupStatusViewModel.Factory {
+) : VectorBaseFragment(), KeysBackupBanner.Delegate, CurrentCallsView.Callback, ServerBackupStatusViewModel.Factory {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
-    private lateinit var sharedCallActionViewModel: SharedCurrentCallViewModel
+    private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
 
     override fun getLayoutResId() = R.layout.fragment_home_detail
 
@@ -79,7 +79,7 @@ class HomeDetailFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
-        sharedCallActionViewModel = activityViewModelProvider.get(SharedCurrentCallViewModel::class.java)
+        sharedCallActionViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
 
         setupBottomNavigationView()
         setupToolbar()
@@ -117,9 +117,9 @@ class HomeDetailFragment @Inject constructor(
         }
 
         sharedCallActionViewModel
-                .currentCall
+                .liveKnownCalls
                 .observe(viewLifecycleOwner, {
-                    activeCallViewHolder.updateCall(it, callManager.getCalls())
+                    activeCallViewHolder.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 })
     }
@@ -326,7 +326,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     override fun onTapToReturnToCall() {
-        sharedCallActionViewModel.currentCall.value?.let { call ->
+        callManager.getCurrentCall()?.let { call ->
             VectorCallActivity.newIntent(
                     context = requireContext(),
                     callId = call.callId,

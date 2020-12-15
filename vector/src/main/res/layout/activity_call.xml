@@ -14,10 +14,10 @@
 
     <ImageView
         android:id="@+id/bgCallView"
-        tools:src="@tools:sample/avatars"
-        android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars" />
 
     <org.webrtc.SurfaceViewRenderer
         android:id="@+id/fullscreen_video_view"
@@ -36,6 +36,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <FrameLayout
+        android:id="@+id/otherKnownCallLayout"
+        android:layout_width="80dp"
+        android:layout_height="144dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="@color/riotx_background_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/otherKnownCallAvatarView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="?attr/selectableItemBackground"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/otherSmallIsHeldIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_call_small_pause" />
+
+    </FrameLayout>
+
     <ImageView
         android:id="@+id/otherMemberAvatar"
         android:layout_width="80dp"
@@ -49,14 +78,14 @@
         tools:src="@tools:sample/avatars" />
 
     <ImageView
+        android:id="@+id/smallIsHeldIcon"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:id="@+id/smallIsHeldIcon"
         android:src="@drawable/ic_call_small_pause"
-        app:layout_constraintTop_toTopOf="@id/otherMemberAvatar"
         app:layout_constraintBottom_toBottomOf="@id/otherMemberAvatar"
+        app:layout_constraintEnd_toEndOf="@id/otherMemberAvatar"
         app:layout_constraintStart_toStartOf="@id/otherMemberAvatar"
-        app:layout_constraintEnd_toEndOf="@id/otherMemberAvatar" />
+        app:layout_constraintTop_toTopOf="@id/otherMemberAvatar" />
 
 
     <TextView
@@ -95,10 +124,10 @@
         android:id="@+id/callActionText"
         android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_margin="8dp"
         android:gravity="center"
         android:textColor="?attr/colorAccent"
         android:textSize="14sp"
-        android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/callStatusText"

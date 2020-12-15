@@ -36,9 +36,15 @@ data class VectorCallViewState(
         val canSwitchCamera: Boolean = true,
         val soundDevice: CallAudioManager.SoundDevice = CallAudioManager.SoundDevice.PHONE,
         val availableSoundDevices: List<CallAudioManager.SoundDevice> = emptyList(),
-        val otherUserMatrixItem: Async<MatrixItem> = Uninitialized,
-        val callState: Async<CallState> = Uninitialized
+        val callState: Async<CallState> = Uninitialized,
+        val otherKnownCallInfo: CallInfo? = null,
+        val callInfo: CallInfo = CallInfo(callId)
 ) : MvRxState {
+
+    data class CallInfo(
+            val callId: String,
+            val otherUserItem: MatrixItem? = null
+    )
 
     constructor(callArgs: CallArgs): this(
             callId = callArgs.callId,
