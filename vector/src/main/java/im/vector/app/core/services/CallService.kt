@@ -144,10 +144,6 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
             ACTION_CALL_TERMINATED -> {
                 handleCallTerminated(intent)
             }
-            ACTION_ONGOING_CALL_BG -> {
-                // there is an ongoing call but call activity is in background
-                displayCallOnGoingInBackground(intent)
-            }
             else                         -> {
                 // Should not happen
                 callRingPlayerIncoming?.stop()
@@ -278,26 +274,6 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         notificationManager.notify(callId.hashCode(), notification)
     }
 
-    /**
-     * Display a call in progress notification.
-     */
-    private fun displayCallOnGoingInBackground(intent: Intent) {
-        Timber.v("## VOIP displayCallInProgressNotification")
-        val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: return
-        val call = callManager.getCallById(callId) ?: return
-        if (!knownCalls.contains(callId)) {
-            Timber.v("Call in in background for unknown call $callId$")
-            return
-        }
-        val opponentMatrixItem = getOpponentMatrixItem(call)
-
-        val notification = notificationUtils.buildPendingCallNotification(
-                mxCall = call.mxCall,
-                title = opponentMatrixItem?.getBestName() ?: call.mxCall.opponentUserId,
-                fromBg = true)
-        notificationManager.notify(callId.hashCode(), notification)
-    }
-
     fun addConnection(callConnection: CallConnection) {
         connections[callConnection.callId] = callConnection
     }
@@ -313,7 +289,6 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         private const val ACTION_OUTGOING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_OUTGOING_RINGING_CALL"
         private const val ACTION_CALL_CONNECTING = "im.vector.app.core.services.CallService.ACTION_CALL_CONNECTING"
         private const val ACTION_ONGOING_CALL = "im.vector.app.core.services.CallService.ACTION_ONGOING_CALL"
-        private const val ACTION_ONGOING_CALL_BG = "im.vector.app.core.services.CallService.ACTION_ONGOING_CALL_BG"
         private const val ACTION_CALL_TERMINATED = "im.vector.app.core.services.CallService.ACTION_CALL_TERMINATED"
         private const val ACTION_NO_ACTIVE_CALL = "im.vector.app.core.services.CallService.NO_ACTIVE_CALL"
 //        private const val ACTION_ACTIVITY_VISIBLE = "im.vector.app.core.services.CallService.ACTION_ACTIVITY_VISIBLE"
@@ -334,16 +309,6 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun onOnGoingCallBackground(context: Context,
-                                    callId: String) {
-            val intent = Intent(context, CallService::class.java)
-                    .apply {
-                        action = ACTION_ONGOING_CALL_BG
-                        putExtra(EXTRA_CALL_ID, callId)
-                    }
-
-            ContextCompat.startForegroundService(context, intent)
-        }
 
         fun onOutgoingCallRinging(context: Context,
                                   callId: String) {

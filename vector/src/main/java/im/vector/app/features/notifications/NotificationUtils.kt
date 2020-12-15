@@ -393,9 +393,9 @@ class NotificationUtils @Inject constructor(private val context: Context,
      */
     @SuppressLint("NewApi")
     fun buildPendingCallNotification(mxCall: MxCall,
-                                     title: String,
-                                     fromBg: Boolean = false): Notification {
-        val builder = NotificationCompat.Builder(context, if (fromBg) CALL_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+                                     title: String): Notification {
+
+        val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {
                     if (mxCall.isVideoCall) {
@@ -406,11 +406,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 }
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
-
-        if (fromBg) {
-            builder.priority = NotificationCompat.PRIORITY_LOW
-            builder.setOngoing(true)
-        }
 
         val rejectCallPendingIntent = buildRejectCallPendingIntent(mxCall.callId)
 
