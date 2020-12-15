@@ -16,25 +16,14 @@
 
 package org.matrix.android.sdk.api.session.room.timeline
 
-data class TimelineEventFilters(
+data class EventTypeFilter(
         /**
-         * A flag to filter edit events
+         * Allowed event type.
          */
-        val filterEdits: Boolean = false,
+        val eventType: String,
         /**
-         * A flag to filter redacted events
+         * Allowed state key. Set null if you want to allow all events,
+         * otherwise allowed events will be filtered according to the given stateKey.
          */
-        val filterRedacted: Boolean = false,
-        /**
-         * A flag to filter useless events, such as membership events without any change
-         */
-        val filterUseless: Boolean = false,
-        /**
-         * A flag to filter by types. It should be used with [allowedTypes] field
-         */
-        val filterTypes: Boolean = false,
-        /**
-         * If [filterTypes] is true, the list of types allowed by the list.
-         */
-        val allowedTypes: List<EventTypeFilter> = emptyList()
+        val stateKey: String?
 )
