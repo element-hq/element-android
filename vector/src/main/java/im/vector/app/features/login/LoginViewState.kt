@@ -72,9 +72,11 @@ data class LoginViewState(
     fun getSsoUrl(providerId: String?): String {
         return buildString {
             append(homeServerUrl?.trim { it == '/' })
-            append(SSO_REDIRECT_PATH)
             if (providerId != null) {
+                append(MSC2858_SSO_REDIRECT_PATH)
                 append("/$providerId")
+            } else {
+                append(SSO_REDIRECT_PATH)
             }
             // Set a redirect url we will intercept later
             appendParamToUrl(SSO_REDIRECT_URL_PARAM, VECTOR_REDIRECT_URL)
