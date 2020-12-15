@@ -1,4 +1,4 @@
-Changes in Element 1.0.12 (2020-XX-XX)
+Changes in Element 1.0.12 (2020-12-15)
 ===================================================
 
 Features ✨:
@@ -25,9 +25,6 @@ Bugfix 🐛:
  - Show preview when sending attachment from the keyboard (#2440)
  - Do not compress GIFs (#1616, #1254)
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
  - StateService now exposes suspendable function instead of using MatrixCallback.
  - RawCacheStrategy has been moved and renamed to CacheStrategy
@@ -37,9 +34,6 @@ Build 🧱:
  - Upgrade some dependencies and Kotlin version
  - Use fragment-ktx and preference-ktx dependencies (fix lint issue KtxExtensionAvailable)
  - Upgrade Realm dependency to 10.1.2
-
-Test:
- -
 
 Other changes:
  - Remove "Status.im" theme #2424
