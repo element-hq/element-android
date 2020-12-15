@@ -716,7 +716,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                             popDraft()
                         }
                         is ParsedCommand.SendChatEffect            -> {
-                            room.sendTextMessage(slashCommandResult.message, slashCommandResult.chatEffect.toMessageType())
+                            sendChatEffect(slashCommandResult)
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
@@ -805,6 +805,19 @@ class RoomDetailViewModel @AssistedInject constructor(
                     }
                 }
             }.exhaustive
+        }
+    }
+
+    private fun sendChatEffect(sendChatEffect: ParsedCommand.SendChatEffect) {
+        // If message is blank, convert to an emote, with default message
+        if (sendChatEffect.message.isBlank()) {
+            val defaultMessage = stringProvider.getString(when (sendChatEffect.chatEffect) {
+                ChatEffect.CONFETTI -> R.string.default_message_emote_confetti
+                ChatEffect.SNOW     -> R.string.default_message_emote_snow
+            })
+            room.sendTextMessage(defaultMessage, MessageType.MSGTYPE_EMOTE)
+        } else {
+            room.sendTextMessage(sendChatEffect.message, sendChatEffect.chatEffect.toMessageType())
         }
     }
 
