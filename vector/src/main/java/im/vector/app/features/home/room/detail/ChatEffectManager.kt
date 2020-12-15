@@ -35,7 +35,7 @@ enum class ChatEffect {
  * It also manages effect duration and some cool down, for example if an effect is currently playing,
  * any other trigger will be ignored
  * For now it uses visibility callback to check for an effect (that means that a fail to decrypt event - more
- * precisly an event decrypted with a few delay won't trigger an effect; it's acceptable)
+ * precisely an event decrypted with a few delay won't trigger an effect; it's acceptable)
  * Events that are more that 10s old won't trigger effects
  */
 class ChatEffectManager @Inject constructor() {
@@ -50,7 +50,7 @@ class ChatEffectManager @Inject constructor() {
     private var stopTimer: Timer? = null
 
     // an in memory store to avoid trigger twice for an event (quick close/open timeline)
-    private val alreadyPlayed = emptyList<String>().toMutableList()
+    private val alreadyPlayed = mutableListOf<String>()
 
     fun checkForEffect(event: TimelineEvent) {
         val age = event.root.ageLocalTs ?: 0
@@ -80,7 +80,6 @@ class ChatEffectManager @Inject constructor() {
     fun dispose() {
         stopTimer?.cancel()
         stopTimer = null
-        delegate = null
         alreadyPlayed.clear()
     }
 
@@ -98,7 +97,7 @@ class ChatEffectManager @Inject constructor() {
         }
     }
 
-    private fun hasAlreadyPlayed(event: TimelineEvent) : Boolean {
+    private fun hasAlreadyPlayed(event: TimelineEvent): Boolean {
         return alreadyPlayed.contains(event.eventId)
                 || (event.root.unsignedData?.transactionId?.let { alreadyPlayed.contains(it) } ?: false)
     }
@@ -106,20 +105,30 @@ class ChatEffectManager @Inject constructor() {
     private fun findEffect(content: MessageContent, event: TimelineEvent): ChatEffect? {
         return when (content.msgType) {
             MessageType.MSGTYPE_CONFETTI -> ChatEffect.CONFETTI
-            MessageType.MSGTYPE_SNOW -> ChatEffect.SNOW
-
-            MessageType.MSGTYPE_TEXT -> {
-                val text = event.root.getClearContent().toModel<MessageContent>()?.body ?: ""
-                if (text.contains("🎉")
-                        || text.contains("🎊")) {
-                    ChatEffect.CONFETTI
-                } else if (text.contains("⛄️")
-                        || text.contains("☃️")
-                        || text.contains("❄️")) {
-                    ChatEffect.SNOW
-                } else null
+            MessageType.MSGTYPE_SNOW     -> ChatEffect.SNOW
+            MessageType.MSGTYPE_TEXT     -> {
+                event.root.getClearContent().toModel<MessageContent>()?.body
+                        ?.let { text ->
+                            when {
+                                EMOJIS_FOR_CONFETTI.any { text.contains(it) } -> ChatEffect.CONFETTI
+                                EMOJIS_FOR_SNOW.any { text.contains(it) }     -> ChatEffect.SNOW
+                                else                                          -> null
+                            }
+                        }
             }
             else                         -> null
         }
+    }
+
+    companion object {
+        private val EMOJIS_FOR_CONFETTI = listOf(
+                "🎉",
+                "🎊"
+        )
+        private val EMOJIS_FOR_SNOW = listOf(
+                "⛄️",
+                "☃️",
+                "❄️"
+        )
     }
 }
