@@ -88,6 +88,12 @@
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
+            android:key="SETTINGS_ENABLE_CHAT_EFFECTS"
+            android:summary="@string/settings_chat_effects_description"
+            android:title="@string/settings_chat_effects_title" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
             android:key="SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY"
             android:summary="@string/settings_show_join_leave_messages_summary"
             android:title="@string/settings_show_join_leave_messages"

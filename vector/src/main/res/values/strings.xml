@@ -877,6 +877,8 @@
     <string name="settings_show_read_receipts">Show read receipts</string>
     <string name="settings_show_read_receipts_summary">Click on the read receipts for a detailed list.</string>
     <string name="settings_show_room_member_state_events">Show room member state events</string>
+    <string name="settings_chat_effects_title">Show chat effects</string>
+    <string name="settings_chat_effects_description">Use /confetti command or send a message containing ❄️ or 🎉</string>
     <string name="settings_show_room_member_state_events_summary">Includes invite/join/left/kick/ban events and avatar/display name changes.</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
     <string name="settings_show_join_leave_messages_summary">Invites, kicks, and bans are unaffected.</string>
@@ -2567,6 +2569,9 @@
         <item quantity="one">Show the device you can verify with now</item>
         <item quantity="other">Show %d devices you can verify with now</item>
     </plurals>
+
+    <string name="command_confetti">Sends the given message with confetti</string>
+    <string name="command_snow">Sends the given message with snow</string>
 
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>

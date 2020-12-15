@@ -410,6 +410,9 @@ dependencies {
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 
+    // Chat effects
+    implementation 'nl.dionsegijn:konfetti:1.2.5'
+    implementation 'com.github.jetradarmobile:android-snowfall:1.2.0'
     // DI
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"

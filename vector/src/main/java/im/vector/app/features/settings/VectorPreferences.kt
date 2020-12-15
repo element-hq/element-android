@@ -97,6 +97,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY = "SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY"
         private const val SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY"
         private const val SETTINGS_SEND_MESSAGE_WITH_ENTER = "SETTINGS_SEND_MESSAGE_WITH_ENTER"
+        private const val SETTINGS_ENABLE_CHAT_EFFECTS = "SETTINGS_ENABLE_CHAT_EFFECTS"
 
         // Help
         private const val SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY = "SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY"
@@ -867,6 +868,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun useGracePeriod(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG, true)
+    }
+
+    fun chatEffectsEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_ENABLE_CHAT_EFFECTS, true)
     }
 
     /**

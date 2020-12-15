@@ -98,7 +98,6 @@ import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 import timber.log.Timber
 import java.io.File
-import java.lang.Exception
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -115,8 +114,9 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val roomSummaryHolder: RoomSummaryHolder,
         private val typingHelper: TypingHelper,
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        private val chatEffectManager: ChatEffectManager,
         timelineSettingsFactory: TimelineSettingsFactory
-) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener {
+) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener, ChatEffectManager.Delegate {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
@@ -171,6 +171,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
+        chatEffectManager.delegate = this
     }
 
     private fun observePowerLevel() {
@@ -549,7 +550,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                                 SendMode.EDIT(timelineEvent, currentDraft.text)
                             }
                         }
-                        else -> null
+                        else                 -> null
                     } ?: SendMode.REGULAR("", fromSharing = false)
             )
         }
@@ -592,16 +593,16 @@ class RoomDetailViewModel @AssistedInject constructor(
             return@withState false
         }
         when (itemId) {
-            R.id.resend_all          -> state.asyncRoomSummary()?.hasFailedSending == true
-            R.id.timeline_setting    -> true
-            R.id.invite              -> state.canInvite
-            R.id.clear_all           -> state.asyncRoomSummary()?.hasFailedSending == true
-            R.id.open_matrix_apps    -> true
+            R.id.resend_all       -> state.asyncRoomSummary()?.hasFailedSending == true
+            R.id.timeline_setting -> true
+            R.id.invite           -> state.canInvite
+            R.id.clear_all        -> state.asyncRoomSummary()?.hasFailedSending == true
+            R.id.open_matrix_apps -> true
             R.id.voice_call,
-            R.id.video_call          -> true // always show for discoverability
-            R.id.hangup_call         -> webRtcPeerConnectionManager.currentCall != null
-            R.id.search              -> true
-            else                     -> false
+            R.id.video_call       -> true // always show for discoverability
+            R.id.hangup_call      -> webRtcPeerConnectionManager.currentCall != null
+            R.id.search           -> true
+            else                  -> false
         }
     }
 
@@ -711,6 +712,11 @@ class RoomDetailViewModel @AssistedInject constructor(
                                 }
                             }
                             room.sendTextMessage(sequence)
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.SendChatEffect            -> {
+                            room.sendTextMessage(slashCommandResult.message, slashCommandResult.chatEffect.toMessageType())
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
@@ -983,7 +989,20 @@ class RoomDetailViewModel @AssistedInject constructor(
                     visibleEventsObservable.accept(RoomDetailAction.TimelineEventTurnsVisible(event))
                 }
             }
+
+            // handle chat effects here
+            if (vectorPreferences.chatEffectsEnabled()) {
+                chatEffectManager.checkForEffect(action.event)
+            }
         }
+    }
+
+    override fun shouldStartEffect(effect: ChatEffect) {
+        _viewEvents.post(RoomDetailViewEvents.StartChatEffect(effect))
+    }
+
+    override fun stopEffects() {
+        _viewEvents.post(RoomDetailViewEvents.StopChatEffects)
     }
 
     private fun handleLoadMore(action: RoomDetailAction.LoadMoreTimelineEvents) {
@@ -1387,6 +1406,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (vectorPreferences.sendTypingNotifs()) {
             room.userStopsTyping()
         }
+        chatEffectManager.delegate = null
+        chatEffectManager.dispose()
         super.onCleared()
     }
 }

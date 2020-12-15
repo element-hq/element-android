@@ -8,6 +8,7 @@ Features ✨:
  - Store encrypted file in cache and cleanup decrypted file at each app start (#2512)
  - Emoji Keyboard (#2520)
  - Social login (#2452)
+ - Support for chat effects in timeline (confetti, snow) (#2535)
 
 Improvements 🙌:
  - Add Setting Item to Change PIN (#2462)

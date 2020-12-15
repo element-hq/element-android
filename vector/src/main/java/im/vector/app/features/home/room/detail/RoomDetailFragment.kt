@@ -21,6 +21,7 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
@@ -48,11 +49,13 @@ import androidx.core.text.toSpannable
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
@@ -168,6 +171,8 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_detail.*
 import kotlinx.android.synthetic.main.composer_layout.view.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import nl.dionsegijn.konfetti.models.Shape
+import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
 import org.matrix.android.sdk.api.MatrixCallback
@@ -378,12 +383,42 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.ShowRoomAvatarFullScreen         -> it.matrixItem?.let { item ->
                     navigator.openBigImageViewer(requireActivity(), it.view, item)
                 }
+                is RoomDetailViewEvents.StartChatEffect                  -> handleChatEffect(it.type)
+                RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
             }.exhaustive
         }
 
         if (savedInstanceState == null) {
             handleShareData()
         }
+    }
+
+    private fun handleChatEffect(chatEffect: ChatEffect) {
+        when (chatEffect) {
+            ChatEffect.CONFETTI -> {
+                viewKonfetti.isVisible = true
+                viewKonfetti.build()
+                        .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+                        .setDirection(0.0, 359.0)
+                        .setSpeed(2f, 5f)
+                        .setFadeOutEnabled(true)
+                        .setTimeToLive(2000L)
+                        .addShapes(Shape.Square, Shape.Circle)
+                        .addSizes(Size(12))
+                        .setPosition(-50f, viewKonfetti.width + 50f, -50f, -50f)
+                        .streamFor(150, 3000L)
+            }
+            ChatEffect.SNOW -> {
+                viewSnowFall.isVisible = true
+                viewSnowFall.restartFalling()
+            }
+        }
+    }
+    private fun handleStopChatEffects() {
+        TransitionManager.beginDelayedTransition(rootConstraintLayout)
+        viewSnowFall.isVisible = false
+        // when gone the effect is a bit buggy
+        viewKonfetti.isInvisible = true
     }
 
     override fun onImageReady(uri: Uri?) {

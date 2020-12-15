@@ -225,4 +225,17 @@
         app:maxImageSize="16dp"
         app:tint="@color/black" />
 
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/viewKonfetti"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
+
+    <com.jetradarmobile.snowfall.SnowfallView
+        android:id="@+id/viewSnowFall"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?vctr_chat_effect_snow_background"
+        android:visibility="invisible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
