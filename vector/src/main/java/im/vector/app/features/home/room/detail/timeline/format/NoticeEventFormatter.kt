@@ -182,8 +182,8 @@ class NoticeEventFormatter @Inject constructor(
         }
     }
 
-    private fun formatDebug(event: Event): CharSequence? {
-        return "{ \"type\": ${event.getClearType()} }"
+    private fun formatDebug(event: Event): CharSequence {
+        return "Debug: event type \"${event.getClearType()}\""
     }
 
     private fun formatRoomCreateEvent(event: Event, rs: RoomSummary?): CharSequence? {

@@ -113,6 +113,7 @@ class ChatEffectManager @Inject constructor() {
         return when (content.msgType) {
             MessageType.MSGTYPE_CONFETTI -> ChatEffect.CONFETTI
             MessageType.MSGTYPE_SNOW     -> ChatEffect.SNOW
+            MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT     -> {
                 event.root.getClearContent().toModel<MessageContent>()?.body
                         ?.let { text ->

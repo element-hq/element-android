@@ -2572,6 +2572,10 @@
 
     <string name="command_confetti">Sends the given message with confetti</string>
     <string name="command_snow">Sends the given message with snow</string>
+    <!-- Note to translator: please use the same emoji 🎉 in your translation -->
+    <string name="default_message_emote_confetti">sends confetti 🎉</string>
+    <!-- Note to translator: please use the same emoji ❄️ in your translation -->
+    <string name="default_message_emote_snow">sends snow ❄️</string>
 
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>
