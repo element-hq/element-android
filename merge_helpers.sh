@@ -7,7 +7,8 @@ find_last_commit_for_title() {
 
 revert_last() {
     local title="$1"
-    git revert --no-edit `find_last_commit_for_title "$title"`
+    shift
+    git revert --no-edit `find_last_commit_for_title "$title"` $@
 }
 
 require_clean_git() {
