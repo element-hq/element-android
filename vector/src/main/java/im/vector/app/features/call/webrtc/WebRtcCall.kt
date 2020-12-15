@@ -323,18 +323,6 @@ class WebRtcCall(val mxCall: MxCall,
                 remoteVideoTrack?.removeSink(it)
             }
         }
-        if (remoteSurfaceRenderers.isEmpty()) {
-            // The call is going to continue in background, so ensure notification is visible
-            mxCall
-                    .takeIf { it.state is CallState.Connected }
-                    ?.let { mxCall ->
-                        // Start background service with notification
-                        CallService.onOnGoingCallBackground(
-                                context = context,
-                                callId = mxCall.callId
-                        )
-                    }
-        }
     }
 
     private suspend fun setupOutgoingCall() = withContext(dispatcher) {

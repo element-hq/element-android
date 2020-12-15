@@ -1323,6 +1323,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     }
                 }
                 .subscribe {
+                    Timber.v("Unread state: $it")
                     setState { copy(unreadState = it) }
                 }
                 .disposeOnClear()
