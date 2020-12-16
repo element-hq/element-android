@@ -55,7 +55,7 @@ class VectorCallViewModel @AssistedInject constructor(
         override fun onHoldUnhold() {
             setState {
                 copy(
-                        isLocalOnHold = call?.isLocalOnHold() ?: false,
+                        isLocalOnHold = call?.isLocalOnHold ?: false,
                         isRemoteOnHold = call?.remoteOnHold ?: false
                 )
             }
@@ -179,7 +179,7 @@ class VectorCallViewModel @AssistedInject constructor(
                         callState = Success(webRtcCall.mxCall.state),
                         callInfo = VectorCallViewState.CallInfo(callId, item),
                         soundDevice = currentSoundDevice,
-                        isLocalOnHold = webRtcCall.isLocalOnHold(),
+                        isLocalOnHold = webRtcCall.isLocalOnHold,
                         isRemoteOnHold = webRtcCall.remoteOnHold,
                         availableSoundDevices = callManager.callAudioManager.getAvailableSoundDevices(),
                         isFrontCamera = webRtcCall.currentCameraType() == CameraType.FRONT,

@@ -16,79 +16,42 @@
 
 package im.vector.app.core.utils
 
-import android.os.Handler
-import android.os.SystemClock
+import io.reactivex.Flowable
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 
 class CountUpTimer(private val intervalInMs: Long) {
 
-    private var startTimestamp: Long = 0
-    private var delayTime: Long = 0
-    private var lastPauseTimestamp: Long = 0
-    private var isRunning: Boolean = false
+    private val elapsedTime: AtomicLong = AtomicLong()
+    private val resumed: AtomicBoolean = AtomicBoolean(false)
+
+    private val disposable = Observable.interval(intervalInMs, TimeUnit.MILLISECONDS)
+            .filter { _ -> resumed.get() }
+            .doOnNext { _ -> elapsedTime.addAndGet(intervalInMs) }
+            .subscribe {
+                tickListener?.onTick(elapsedTime.get())
+            }
 
     var tickListener: TickListener? = null
 
-    private val tickHandler: Handler = Handler()
-    private val tickSelector = Runnable {
-        if (isRunning) {
-            tickListener?.onTick(time)
-            startTicking()
-        }
+    fun elapsedTime(): Long{
+        return elapsedTime.get()
     }
 
-    init {
-        reset()
-    }
-
-    /**
-     * Reset the timer, also clears all laps information. Running status will not affected
-     */
-    fun reset() {
-        startTimestamp = SystemClock.elapsedRealtime()
-        delayTime = 0
-        lastPauseTimestamp = startTimestamp
-    }
-
-    /**
-     * Pause the timer
-     */
     fun pause() {
-        if (isRunning) {
-            lastPauseTimestamp = SystemClock.elapsedRealtime()
-            isRunning = false
-            stopTicking()
-        }
+        resumed.set(false)
     }
 
-    /**
-     * Resume the timer
-     */
     fun resume() {
-        if (!isRunning) {
-            val currentTime: Long = SystemClock.elapsedRealtime()
-            delayTime += currentTime - lastPauseTimestamp
-            isRunning = true
-            startTicking()
-        }
-    }
-    val time: Long
-        get() = if (isRunning) {
-                SystemClock.elapsedRealtime() - startTimestamp - delayTime
-        } else {
-            lastPauseTimestamp - startTimestamp - delayTime
-        }
-
-    private fun startTicking() {
-        tickHandler.removeCallbacksAndMessages(null)
-        val time = time
-        val remainingTimeInInterval = intervalInMs - time % intervalInMs
-        tickHandler.postDelayed(tickSelector, remainingTimeInInterval)
+        resumed.set(true)
     }
 
-    private fun stopTicking() {
-        tickHandler.removeCallbacksAndMessages(null)
+    fun stop() {
+        disposable.dispose()
     }
-
 
     interface TickListener {
         fun onTick(milliseconds: Long)

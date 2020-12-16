@@ -51,7 +51,6 @@ import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call.*
-import okhttp3.internal.concurrent.formatDuration
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCallDetail
@@ -177,7 +176,8 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         smallIsHeldIcon.isVisible = false
         when (callState) {
             is CallState.Idle,
-            is CallState.Dialing -> {
+            is CallState.CreateOffer,
+            is CallState.Dialing,     -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_ring)
@@ -191,16 +191,16 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                 configureCallInfo(state)
             }
 
-            is CallState.Answering -> {
+            is CallState.Answering    -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_connecting)
                 callConnectingProgress.isVisible = true
                 configureCallInfo(state)
             }
-            is CallState.Connected -> {
+            is CallState.Connected    -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
-                    if (state.isLocalOnHold) {
+                    if (state.isLocalOnHold || state.isRemoteOnHold) {
                         smallIsHeldIcon.isVisible = true
                         callVideoGroup.isInvisible = true
                         callInfoGroup.isVisible = true
@@ -237,13 +237,11 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                     callStatusText.setText(R.string.call_connecting)
                     callConnectingProgress.isVisible = true
                 }
-                // ensure all attached?
-                callManager.getCallById(callArgs.callId)?.attachViewRenderers(pipRenderer, fullscreenRenderer, null)
             }
-            is CallState.Terminated -> {
+            is CallState.Terminated   -> {
                 finish()
             }
-            null -> {
+            null                      -> {
             }
         }
     }
@@ -266,7 +264,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
             avatarRenderer.renderBlur(state.otherKnownCallInfo.otherUserItem, otherKnownCallAvatarView, sampling = 20, rounded = false, colorFilter = colorFilter)
             otherKnownCallLayout.isVisible = true
-            otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold() || it.remoteOnHold }.orFalse()
+            otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold || it.remoteOnHold }.orFalse()
         }
     }
 
