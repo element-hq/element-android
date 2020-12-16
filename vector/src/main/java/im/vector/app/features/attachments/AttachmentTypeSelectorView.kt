@@ -30,7 +30,6 @@ import android.view.animation.AnimationSet
 import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
-import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.PopupWindow
@@ -68,16 +67,14 @@ class AttachmentTypeSelectorView(context: Context,
     private var anchor: View? = null
 
     init {
-        val root = FrameLayout(context)
-        inflater.inflate(R.layout.view_attachment_type_selector, root, true)
-        views = ViewAttachmentTypeSelectorBinding.bind(root)
+        contentView = inflater.inflate(R.layout.view_attachment_type_selector, null, false)
+        views = ViewAttachmentTypeSelectorBinding.bind(contentView)
         views.attachmentGalleryButton.configure(Type.GALLERY)
         views.attachmentCameraButton.configure(Type.CAMERA)
         views.attachmentFileButton.configure(Type.FILE)
         views.attachmentStickersButton.configure(Type.STICKER)
         views.attachmentAudioButton.configure(Type.AUDIO)
         views.attachmentContactButton.configure(Type.CONTACT)
-        contentView = root
         width = LinearLayout.LayoutParams.MATCH_PARENT
         height = LinearLayout.LayoutParams.WRAP_CONTENT
         animationStyle = 0
