@@ -64,10 +64,10 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
         viewModel.passphrase.observe(viewLifecycleOwner, Observer {
             if (it.isNullOrBlank()) {
                 // Recovery was generated, so show key and options to save
-                views.mRecoveryKeyLabel2TextView.text = getString(R.string.keys_backup_setup_step3_text_line2_no_passphrase)
-                views.mFinishButton.text = getString(R.string.keys_backup_setup_step3_button_title_no_passphrase)
+                views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_text_line2_no_passphrase)
+                views.keysBackupSetupStep3FinishButton.text = getString(R.string.keys_backup_setup_step3_button_title_no_passphrase)
 
-                views.keysBackupRecoveryKeyText.text = viewModel.recoveryKey.value!!
+                views.keysBackupSetupStep3RecoveryKeyText.text = viewModel.recoveryKey.value!!
                         .replace(" ", "")
                         .chunked(16)
                         .joinToString("\n") {
@@ -75,11 +75,11 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
                                     .chunked(4)
                                     .joinToString(" ")
                         }
-                views.keysBackupRecoveryKeyText.isVisible = true
+                views.keysBackupSetupStep3RecoveryKeyText.isVisible = true
             } else {
-                views.mRecoveryKeyLabel2TextView.text = getString(R.string.keys_backup_setup_step3_text_line2)
-                views.mFinishButton.text = getString(R.string.keys_backup_setup_step3_button_title)
-                views.keysBackupRecoveryKeyText.isVisible = false
+                views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_text_line2)
+                views.keysBackupSetupStep3FinishButton.text = getString(R.string.keys_backup_setup_step3_button_title)
+                views.keysBackupSetupStep3RecoveryKeyText.isVisible = false
             }
         })
 
@@ -87,9 +87,9 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
     }
 
     private fun setupViews() {
-        views.mFinishButton.setOnClickListener { onFinishButtonClicked() }
+        views.keysBackupSetupStep3FinishButton.setOnClickListener { onFinishButtonClicked() }
         views.keysBackupSetupStep3CopyButton.setOnClickListener { onCopyButtonClicked() }
-        views.keysBackupRecoveryKeyText.setOnClickListener { onRecoveryKeyClicked() }
+        views.keysBackupSetupStep3RecoveryKeyText.setOnClickListener { onRecoveryKeyClicked() }
     }
 
     private fun onFinishButtonClicked() {

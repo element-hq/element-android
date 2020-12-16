@@ -45,13 +45,13 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
                         it.totalNumberOfKeys, it.totalNumberOfKeys)
                 val part2 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part2,
                         it.successfullyNumberOfImportedKeys, it.successfullyNumberOfImportedKeys)
-                views.mSuccessDetailsText.text = String.format("%s\n%s", part1, part2)
+                views.successDetailsText.text = String.format("%s\n%s", part1, part2)
             }
             // We don't put emoji in string xml as it will crash on old devices
-            views.mSuccessText.text = context?.getString(R.string.keys_backup_restore_success_title, "🎉")
+            views.successText.text = context?.getString(R.string.keys_backup_restore_success_title, "🎉")
         } else {
-            views.mSuccessText.text = context?.getString(R.string.keys_backup_restore_success_title_already_up_to_date)
-            views.mSuccessDetailsText.isVisible = false
+            views.successText.text = context?.getString(R.string.keys_backup_restore_success_title_already_up_to_date)
+            views.successDetailsText.isVisible = false
         }
         views.keysBackupSetupDoneButton.setOnClickListener { onDone() }
     }

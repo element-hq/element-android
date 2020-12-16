@@ -46,8 +46,8 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
         super.onViewCreated(view, savedInstanceState)
         viewModel = fragmentViewModelProvider.get(KeysBackupRestoreFromKeyViewModel::class.java)
         sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
-        views.mKeyTextEdit.setText(viewModel.recoveryCode.value)
-        views.mKeyTextEdit.setOnEditorActionListener { _, actionId, _ ->
+        views.keyTextEdit.setText(viewModel.recoveryCode.value)
+        views.keyTextEdit.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 onRestoreFromKey()
                 return@setOnEditorActionListener true
@@ -55,14 +55,14 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
             return@setOnEditorActionListener false
         }
 
-        views.mKeyInputLayout.error = viewModel.recoveryCodeErrorText.value
+        views.keyInputLayout.error = viewModel.recoveryCodeErrorText.value
         viewModel.recoveryCodeErrorText.observe(viewLifecycleOwner, Observer { newValue ->
-            views.mKeyInputLayout.error = newValue
+            views.keyInputLayout.error = newValue
         })
 
         views.keysRestoreButton.setOnClickListener { onRestoreFromKey() }
         views.keysBackupImport.setOnClickListener { onImport() }
-        views.mKeyTextEdit.doOnTextChanged { text, _, _, _ -> onRestoreKeyTextEditChange(text) }
+        views.keyTextEdit.doOnTextChanged { text, _, _, _ -> onRestoreKeyTextEditChange(text) }
     }
 
     private fun onRestoreKeyTextEditChange(s: CharSequence?) {
@@ -94,8 +94,8 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
                         ?.bufferedReader()
                         ?.use { it.readText() }
                         ?.let {
-                            views.mKeyTextEdit.setText(it)
-                            views.mKeyTextEdit.setSelection(it.length)
+                            views.keyTextEdit.setText(it)
+                            views.keyTextEdit.setSelection(it.length)
                         }
             }
         }

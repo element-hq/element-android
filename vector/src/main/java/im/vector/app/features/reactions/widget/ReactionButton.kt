@@ -64,7 +64,7 @@ class ReactionButton @JvmOverloads constructor(context: Context,
 
     @Inject lateinit var emojiCompatWrapper: EmojiCompatWrapper
 
-    private lateinit var views: ReactionButtonBinding
+    private val views: ReactionButtonBinding
 
     var reactedListener: ReactedListener? = null
     private var dotPrimaryColor: Int = 0
