@@ -30,8 +30,9 @@ import javax.inject.Inject
  */
 abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
 
-    override fun getBinding() = ActivityBinding.inflate(layoutInflater)
+    final override fun getBinding() = ActivityBinding.inflate(layoutInflater)
 
+    // TODO BMA This is strange to have @Inject AND assign this member in injectWith()
     @Inject lateinit var session: Session
 
     @CallSuper
