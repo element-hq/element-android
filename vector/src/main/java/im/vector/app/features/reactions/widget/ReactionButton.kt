@@ -23,15 +23,14 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
-import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import im.vector.app.EmojiCompatWrapper
@@ -48,7 +47,7 @@ import javax.inject.Inject
 class ReactionButton @JvmOverloads constructor(context: Context,
                                                attrs: AttributeSet? = null,
                                                defStyleAttr: Int = 0)
-    : FrameLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
+    : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
 
     init {
         if (context is HasScreenInjector) {
@@ -96,7 +95,7 @@ class ReactionButton @JvmOverloads constructor(context: Context,
     private var offDrawable: Drawable? = null
 
     init {
-        LayoutInflater.from(getContext()).inflate(R.layout.reaction_button, this, true)
+        inflate(context, R.layout.reaction_button, this)
         views = ReactionButtonBinding.bind(this)
         views.reactionCount.text = TextUtils.formatCountToShortDecimal(reactionCount)
 
@@ -158,7 +157,7 @@ class ReactionButton @JvmOverloads constructor(context: Context,
         isChecked = !isChecked
 
         // icon!!.setImageDrawable(if (isChecked) likeDrawable else unLikeDrawable)
-        views.reactionSelector.background = if (isChecked) onDrawable else offDrawable
+        background = if (isChecked) onDrawable else offDrawable
 
         if (isChecked) {
             reactedListener?.onReacted(this)
@@ -320,10 +319,10 @@ class ReactionButton @JvmOverloads constructor(context: Context,
     fun setChecked(status: Boolean?) {
         if (status!!) {
             isChecked = true
-            views.reactionSelector.background = onDrawable
+            background = onDrawable
         } else {
             isChecked = false
-            views.reactionSelector.background = offDrawable
+            background = offDrawable
         }
     }
 

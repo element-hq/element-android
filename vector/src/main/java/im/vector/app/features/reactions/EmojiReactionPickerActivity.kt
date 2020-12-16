@@ -51,8 +51,6 @@ import javax.inject.Inject
 class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPickerBinding>(),
         EmojiCompatFontProvider.FontProviderListener {
 
-    private lateinit var tabLayout: TabLayout
-
     lateinit var viewModel: EmojiChooserViewModel
 
     override fun getMenuRes() = R.menu.menu_emoji_reaction_picker
@@ -90,30 +88,28 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
             it.addListener(this)
         }
 
-        tabLayout = findViewById(R.id.tabs)
-
         viewModel = viewModelProvider.get(EmojiChooserViewModel::class.java)
 
         viewModel.eventId = intent.getStringExtra(EXTRA_EVENT_ID)
 
         emojiDataSource.rawData.categories.forEach { category ->
             val s = category.emojis[0]
-            tabLayout.newTab()
+            views.tabs.newTab()
                     .also { tab ->
                         tab.text = emojiDataSource.rawData.emojis[s]!!.emoji
                         tab.contentDescription = category.name
                     }
                     .also { tab ->
-                        tabLayout.addTab(tab)
+                        views.tabs.addTab(tab)
                     }
         }
-        tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
+        views.tabs.addOnTabSelectedListener(tabLayoutSelectionListener)
 
         viewModel.currentSection.observe(this, Observer { section ->
             section?.let {
-                tabLayout.removeOnTabSelectedListener(tabLayoutSelectionListener)
-                tabLayout.getTabAt(it)?.select()
-                tabLayout.addOnTabSelectedListener(tabLayoutSelectionListener)
+                views.tabs.removeOnTabSelectedListener(tabLayoutSelectionListener)
+                views.tabs.getTabAt(it)?.select()
+                views.tabs.addOnTabSelectedListener(tabLayoutSelectionListener)
             }
         })
 
@@ -130,7 +126,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
 
         views.emojiPickerWholeListFragmentContainer.isVisible = true
         views.emojiPickerFilteredListFragmentContainer.isVisible = false
-        tabLayout.isVisible = true
+        views.tabs.isVisible = true
     }
 
     override fun compatibilityFontUpdate(typeface: Typeface?) {
@@ -191,11 +187,11 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
 
     private fun onQueryText(query: String) {
         if (query.isEmpty()) {
-            tabLayout.isVisible = true
+            views.tabs.isVisible = true
             views.emojiPickerWholeListFragmentContainer.isVisible = true
             views.emojiPickerFilteredListFragmentContainer.isVisible = false
         } else {
-            tabLayout.isVisible = false
+            views.tabs.isVisible = false
             views.emojiPickerWholeListFragmentContainer.isVisible = false
             views.emojiPickerFilteredListFragmentContainer.isVisible = true
             searchResultViewModel.handle(EmojiSearchAction.UpdateQuery(query))
