@@ -57,6 +57,7 @@ Bugfix 🐛:
  - No known servers error is given when joining rooms on new Gitter bridge (#2516)
  - Show preview when sending attachment from the keyboard (#2440)
  - Do not compress GIFs (#1616, #1254)
+ - Wait for all room members to be known before sending a message to a e2e room (#2518)
 
 SDK API changes ⚠️:
  - StateService now exposes suspendable function instead of using MatrixCallback.
