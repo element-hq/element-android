@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
-import android.os.SystemClock
-import android.util.Log
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,7 +29,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import java.util.concurrent.CountDownLatch
-import kotlin.test.assertEquals
+import kotlin.test.fail
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -111,7 +109,9 @@ class TimelineWithManyMembersTest : InstrumentedTest {
         commonTestHelper.sendTextMessage(
                 roomForFirstMember,
                 firstMessage,
-                1)
+                1,
+                600_000
+        )
 
         for (index in 1 until cryptoTestData.sessions.size) {
             val session = cryptoTestData.sessions[index]
@@ -124,12 +124,19 @@ class TimelineWithManyMembersTest : InstrumentedTest {
             run {
                 val lock = CountDownLatch(1)
                 val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
-                    val decryptedMessage = snapshot.firstOrNull()?.root?.getClearContent()?.toModel<MessageContent>()?.body
-                    println("Decrypted Message: $decryptedMessage")
-                    return@createEventListener decryptedMessage?.startsWith(firstMessage).orFalse()
+                    snapshot
+                            .find { it.isEncrypted() }
+                            ?.let {
+                                val body = it.root.getClearContent()?.toModel<MessageContent>()?.body
+                                if (body?.startsWith(firstMessage).orFalse()) {
+                                    return@createEventListener true
+                                } else {
+                                    fail("User " + session.myUserId + " decrypted as " + body + " CryptoError: " + it.root.mCryptoError)
+                                }
+                            } ?: return@createEventListener false
                 }
                 timelineForCurrentMember.addListener(eventsListener)
-                commonTestHelper.await(lock)
+                commonTestHelper.await(lock, 600_000)
             }
             session.stopSync()
         }

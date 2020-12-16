@@ -119,7 +119,7 @@ class CommonTestHelper(context: Context) {
      * @param message      the message to send
      * @param nbOfMessages the number of time the message will be sent
      */
-    fun sendTextMessage(room: Room, message: String, nbOfMessages: Int): List<TimelineEvent> {
+    fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
         val timeline = room.createTimeline(null, TimelineSettings(10))
         val sentEvents = ArrayList<TimelineEvent>(nbOfMessages)
         val latch = CountDownLatch(1)
@@ -151,7 +151,7 @@ class CommonTestHelper(context: Context) {
             room.sendTextMessage(message + " #" + (i + 1))
         }
         // Wait 3 second more per message
-        await(latch, timeout = TestConstants.timeOutMillis + 3_000L * nbOfMessages)
+        await(latch, timeout = timeout + 3_000L * nbOfMessages)
         timeline.dispose()
 
         // Check that all events has been created

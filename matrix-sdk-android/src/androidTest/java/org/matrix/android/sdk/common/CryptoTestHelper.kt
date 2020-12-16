@@ -399,7 +399,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         for (index in 1 until numberOfMembers) {
             mTestHelper
                     .createAccount("User_$index", defaultSessionParams)
-                    .also { session -> mTestHelper.doSync<Unit> { room.invite(session.myUserId, null, it) } }
+                    .also { session -> mTestHelper.doSync<Unit>(timeout = 600_000) { room.invite(session.myUserId, null, it) } }
                     .also { println("TEST -> " + it.myUserId + " invited") }
                     .also { session -> mTestHelper.doSync<Unit> { session.joinRoom(room.roomId, null, emptyList(), it) } }
                     .also { println("TEST -> " + it.myUserId + " joined") }
