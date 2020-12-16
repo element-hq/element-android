@@ -19,7 +19,6 @@ package im.vector.app.features.settings
 import android.app.Activity
 import android.content.Context
 import android.widget.CheckedTextView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.children
 import androidx.preference.Preference
@@ -170,4 +169,3 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 }
     }
 }
-

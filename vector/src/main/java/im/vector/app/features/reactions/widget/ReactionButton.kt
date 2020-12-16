@@ -199,7 +199,8 @@ class ReactionButton @JvmOverloads constructor(context: Context,
             starScaleXAnimator.startDelay = 250
             starScaleXAnimator.interpolator = OVERSHOOT_INTERPOLATOR
 
-            val dotsAnimator = ObjectAnimator.ofFloat(views.dots, DotsView.DOTS_PROGRESS, 0f, 1f) // .ofFloat<DotsView>(views.dots, DotsView.DOTS_PROGRESS, 0, 1f)
+            val dotsAnimator = ObjectAnimator.ofFloat(views.dots, DotsView.DOTS_PROGRESS, 0f, 1f)
+            // .ofFloat<DotsView>(views.dots, DotsView.DOTS_PROGRESS, 0, 1f)
             dotsAnimator.duration = 900
             dotsAnimator.startDelay = 50
             dotsAnimator.interpolator = ACCELERATE_DECELERATE_INTERPOLATOR

@@ -113,7 +113,11 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
         // This can be called by the IME action, so deal with empty cases
         var error = 0
         if (login.isEmpty()) {
-            views.loginFieldTil.error = getString(if (isSignupMode) R.string.error_empty_field_choose_user_name else R.string.error_empty_field_enter_user_name)
+            views.loginFieldTil.error = getString(if (isSignupMode) {
+                R.string.error_empty_field_choose_user_name
+            } else {
+                R.string.error_empty_field_enter_user_name
+            })
             error++
         }
         if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
@@ -121,7 +125,11 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
             error++
         }
         if (password.isEmpty()) {
-            views.passwordFieldTil.error = getString(if (isSignupMode) R.string.error_empty_field_choose_password else R.string.error_empty_field_your_password)
+            views.passwordFieldTil.error = getString(if (isSignupMode) {
+                R.string.error_empty_field_choose_password
+            } else {
+                R.string.error_empty_field_your_password
+            })
             error++
         }
 

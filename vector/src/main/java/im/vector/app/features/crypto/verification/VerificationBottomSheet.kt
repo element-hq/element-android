@@ -119,7 +119,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 }
                 VerificationBottomSheetViewEvents.GoToSettings         -> {
                     dismiss()
-                    (activity as? VectorBaseActivity<*>)?.navigator?.openSettings(requireContext(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY)
+                    (activity as? VectorBaseActivity<*>)?.let { activity ->
+                        activity.navigator.openSettings(activity, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY)
+                    }
                 }
             }.exhaustive
         }
