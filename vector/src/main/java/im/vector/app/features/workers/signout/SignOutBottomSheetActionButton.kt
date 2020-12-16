@@ -82,4 +82,3 @@ class SignOutBottomSheetActionButton @JvmOverloads constructor(
         }
     }
 }
-
