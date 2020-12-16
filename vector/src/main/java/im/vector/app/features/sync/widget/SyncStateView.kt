@@ -23,26 +23,30 @@ import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.utils.isAirplaneModeOn
+import im.vector.app.databinding.ViewSyncStateBinding
 
 import org.matrix.android.sdk.api.session.sync.SyncState
 
 class SyncStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : FrameLayout(context, attrs, defStyle) {
 
+    private val views: ViewSyncStateBinding
+
     init {
-        View.inflate(context, R.layout.view_sync_state, this)
+        inflate(context, R.layout.view_sync_state, this)
+        views = ViewSyncStateBinding.bind(this)
     }
 
     fun render(newState: SyncState) {
-        syncStateProgressBar.isVisible = newState is SyncState.Running && newState.afterPause
+        views.syncStateProgressBar.isVisible = newState is SyncState.Running && newState.afterPause
 
         if (newState == SyncState.NoNetwork) {
             val isAirplaneModeOn = isAirplaneModeOn(context)
-            syncStateNoNetwork.isVisible = isAirplaneModeOn.not()
-            syncStateNoNetworkAirplane.isVisible = isAirplaneModeOn
+            views.syncStateNoNetwork.isVisible = isAirplaneModeOn.not()
+            views.syncStateNoNetworkAirplane.isVisible = isAirplaneModeOn
         } else {
-            syncStateNoNetwork.isVisible = false
-            syncStateNoNetworkAirplane.isVisible = false
+            views.syncStateNoNetwork.isVisible = false
+            views.syncStateNoNetworkAirplane.isVisible = false
         }
     }
 }

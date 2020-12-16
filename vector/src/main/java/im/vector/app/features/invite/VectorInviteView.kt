@@ -26,6 +26,7 @@ import androidx.core.view.updateLayoutParams
 import im.vector.app.R
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.ButtonStateView
+import im.vector.app.databinding.VectorInviteViewBinding
 import im.vector.app.features.home.AvatarRenderer
 
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -46,12 +47,7 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
         SMALL
     }
 
-    private val inviteAvatarView: ImageView
-    private val inviteLabelView: TextView
-    private val inviteNameView: TextView
-    private val inviteIdentifierView: TextView
-    private val inviteAcceptView: ButtonStateView
-    private val inviteRejectView: ButtonStateView
+    private val views: VectorInviteViewBinding
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
     var callback: Callback? = null
@@ -60,9 +56,9 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
         if (context is HasScreenInjector) {
             context.injector().inject(this)
         }
-        View.inflate(context, R.layout.vector_invite_view, this)
-        inviteAcceptView = findViewById(R.id.inviteAcceptView)
-        inviteAcceptView.callback = object : ButtonStateView.Callback {
+        inflate(context, R.layout.vector_invite_view, this)
+        views = VectorInviteViewBinding.bind(this)
+        views.inviteAcceptView.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
                 callback?.onAcceptInvite()
             }
@@ -72,8 +68,7 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         }
 
-        inviteRejectView = findViewById(R.id.inviteRejectView)
-        inviteRejectView.callback = object : ButtonStateView.Callback {
+        views.inviteRejectView.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
                 callback?.onRejectInvite()
             }
@@ -82,27 +77,22 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
                 callback?.onRejectInvite()
             }
         }
-
-        inviteAvatarView = findViewById(R.id.inviteAvatarView)
-        inviteLabelView = findViewById(R.id.inviteLabelView)
-        inviteNameView = findViewById(R.id.inviteNameView)
-        inviteIdentifierView = findViewById(R.id.inviteIdentifierView)
     }
 
     fun render(sender: RoomMemberSummary, mode: Mode = Mode.LARGE, changeMembershipState: ChangeMembershipState) {
         if (mode == Mode.LARGE) {
             updateLayoutParams { height = LayoutParams.MATCH_CONSTRAINT }
-            avatarRenderer.render(sender.toMatrixItem(), inviteAvatarView)
-            inviteIdentifierView.text = sender.userId
-            inviteNameView.text = sender.displayName
-            inviteLabelView.text = context.getString(R.string.send_you_invite)
+            avatarRenderer.render(sender.toMatrixItem(), views.inviteAvatarView)
+            views.inviteIdentifierView.text = sender.userId
+            views.inviteNameView.text = sender.displayName
+            views.inviteLabelView.text = context.getString(R.string.send_you_invite)
         } else {
             updateLayoutParams { height = LayoutParams.WRAP_CONTENT }
-            inviteAvatarView.visibility = View.GONE
-            inviteIdentifierView.visibility = View.GONE
-            inviteNameView.visibility = View.GONE
-            inviteLabelView.text = context.getString(R.string.invited_by, sender.userId)
+            views.inviteAvatarView.visibility = View.GONE
+            views.inviteIdentifierView.visibility = View.GONE
+            views.inviteNameView.visibility = View.GONE
+            views.inviteLabelView.text = context.getString(R.string.invited_by, sender.userId)
         }
-        InviteButtonStateBinder.bind(inviteAcceptView, inviteRejectView, changeMembershipState)
+        InviteButtonStateBinder.bind(views.inviteAcceptView, views.inviteRejectView, changeMembershipState)
     }
 }

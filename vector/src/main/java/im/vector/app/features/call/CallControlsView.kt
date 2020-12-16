@@ -38,7 +38,7 @@ class CallControlsView @JvmOverloads constructor(
     var interactionListener: InteractionListener? = null
 
     init {
-        View.inflate(context, R.layout.view_call_controls, this)
+        inflate(context, R.layout.view_call_controls, this)
         // layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         views = ViewCallControlsBinding.bind(this)
 
