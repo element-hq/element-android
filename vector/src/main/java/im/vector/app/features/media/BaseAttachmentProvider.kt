@@ -85,7 +85,7 @@ abstract class BaseAttachmentProvider<Type>(
                     counter = stringProvider.getString(R.string.attachment_viewer_item_x_of_y, position + 1, getItemCount()),
                     senderInfo = "${timelineEvent.senderInfo.displayName} $dateString"
             )
-            overlayView?.videoControlsGroup?.isVisible = timelineEvent.root.isVideoMessage()
+            overlayView?.views?.overlayVideoControlsGroup?.isVisible = timelineEvent.root.isVideoMessage()
         } else {
             overlayView?.updateWith("", "")
         }

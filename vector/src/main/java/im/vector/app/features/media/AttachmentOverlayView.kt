@@ -39,7 +39,7 @@ class AttachmentOverlayView @JvmOverloads constructor(
     var onPlayPause: ((play: Boolean) -> Unit)? = null
     var videoSeekTo: ((progress: Int) -> Unit)? = null
 
-    private val views: MergeImageAttachmentOverlayBinding
+    val views: MergeImageAttachmentOverlayBinding
 
     var isPlaying = false
 
