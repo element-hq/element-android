@@ -87,6 +87,8 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
 
     final override fun getBinding() = ActivityLoginBinding.inflate(layoutInflater)
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun initUiAndData() {
         if (isFirstCreation()) {
             addFirstFragment()

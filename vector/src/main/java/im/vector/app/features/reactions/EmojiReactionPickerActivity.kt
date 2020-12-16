@@ -57,6 +57,8 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
 
     override fun getBinding() = ActivityEmojiReactionPickerBinding.inflate(layoutInflater)
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun getTitleRes() = R.string.title_activity_emoji_reaction_picker
 
     @Inject lateinit var emojiSearchResultViewModelFactory: EmojiSearchResultViewModel.Factory

@@ -75,6 +75,8 @@ class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), Toolbar
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar)
     }

@@ -585,7 +585,6 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
         }
     }
 
-    // TODO BMA Provide the CL from the Views
     open fun getCoordinatorLayout(): CoordinatorLayout? = null
 
     /* ==========================================================================================

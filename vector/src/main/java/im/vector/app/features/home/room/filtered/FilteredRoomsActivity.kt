@@ -38,6 +38,8 @@ class FilteredRoomsActivity : VectorBaseActivity<ActivityFilteredRoomsBinding>()
 
     override fun getBinding() = ActivityFilteredRoomsBinding.inflate(layoutInflater)
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }

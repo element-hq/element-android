@@ -38,6 +38,8 @@ class PinActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigur
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun initUiAndData() {
         if (isFirstCreation()) {
             val fragmentArgs: PinArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return

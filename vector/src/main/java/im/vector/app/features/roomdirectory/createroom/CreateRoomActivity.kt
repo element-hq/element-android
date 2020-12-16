@@ -38,6 +38,8 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar)
     }

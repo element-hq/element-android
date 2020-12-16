@@ -43,6 +43,8 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
 
     override fun getBinding() = ActivityVectorSettingsBinding.inflate(layoutInflater)
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun getTitleRes() = R.string.title_activity_settings
 
     private var keyToHighlight: String? = null

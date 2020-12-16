@@ -27,6 +27,8 @@ class IncomingShareActivity : VectorBaseActivity<ActivitySimpleBinding>(), Toolb
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun initUiAndData() {
         if (isFirstCreation()) {
             addFragment(R.id.simpleFragmentContainer, IncomingShareFragment::class.java)

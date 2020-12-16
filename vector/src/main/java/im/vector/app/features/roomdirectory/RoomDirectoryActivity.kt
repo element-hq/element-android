@@ -40,6 +40,8 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }

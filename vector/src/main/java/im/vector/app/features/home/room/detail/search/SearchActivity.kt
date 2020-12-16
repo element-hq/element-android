@@ -36,6 +36,8 @@ class SearchActivity : VectorBaseActivity<ActivitySearchBinding>() {
 
     override fun getBinding() = ActivitySearchBinding.inflate(layoutInflater)
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
         injector.inject(this)

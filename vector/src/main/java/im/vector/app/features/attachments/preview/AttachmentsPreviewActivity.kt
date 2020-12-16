@@ -54,6 +54,8 @@ class AttachmentsPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), 
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
     override fun initUiAndData() {
         if (isFirstCreation()) {
             val fragmentArgs: AttachmentsPreviewArgs = intent?.extras?.getParcelable(EXTRA_FRAGMENT_ARGS) ?: return

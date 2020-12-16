@@ -31,6 +31,8 @@ abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
 
     final override fun getBinding() = ActivityBinding.inflate(layoutInflater)
 
+    final override fun getCoordinatorLayout() = views.coordinatorLayout
+
     lateinit var session: Session
 
     @CallSuper
