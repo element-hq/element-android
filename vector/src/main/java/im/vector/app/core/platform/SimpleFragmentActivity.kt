@@ -23,7 +23,6 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.databinding.ActivityBinding
 
 import org.matrix.android.sdk.api.session.Session
-import javax.inject.Inject
 
 /**
  * Simple activity with a toolbar, a waiting overlay, and a fragment container and a session.
@@ -32,8 +31,7 @@ abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
 
     final override fun getBinding() = ActivityBinding.inflate(layoutInflater)
 
-    // TODO BMA This is strange to have @Inject AND assign this member in injectWith()
-    @Inject lateinit var session: Session
+    lateinit var session: Session
 
     @CallSuper
     override fun injectWith(injector: ScreenComponent) {
