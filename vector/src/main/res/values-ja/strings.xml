@@ -1098,4 +1098,23 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="no_permissions_to_start_conf_call_in_direct_room">グループ通話を開始する権限がありません</string>
     <string name="reset">リセット</string>
     <string name="none">なし</string>
+    <string name="room_settings_topic_hint">トピック</string>
+    <string name="room_settings_name_hint">部屋名</string>
+    <string name="room_profile_not_encrypted_subtitle">この部屋内のメッセージはエンドツーエンド暗号化されていません。</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">ここでのメッセージはエンドツーエンド暗号化されていません。</string>
+    <string name="direct_room_profile_section_more_settings">設定</string>
+    <string name="room_settings_enable_encryption_no_permission">あなたにはこの部屋の暗号化を有効にする権限がありません。</string>
+    <string name="timeline_unread_messages">未読メッセージ</string>
+    <string name="labs_swipe_to_reply_in_timeline">タイムラインでスワイプして返信を有効にする</string>
+    <string name="settings_labs_show_hidden_events_in_timeline">タイムラインで非表示のイベントを表示する</string>
+    <string name="user_code_scan">QR コードをスキャン</string>
+    <string name="a13n_qr_code_description">QR コード画像</string>
+    <string name="qr_code">QR コード</string>
+    <string name="add_by_qr_code">QR コードによる追加</string>
+    <string name="user_code_share">コードを共有</string>
+    <string name="invite_friends_text">Element で会話しましょう: %s</string>
+    <string name="invite_friends">フレンドを招待</string>
+    <string name="user_directory_search_hint">名前または ID で検索</string>
+    <string name="direct_room_user_list_known_title">既知のユーザー</string>
+    <string name="invalid_qr_code_uri">無効な QR コード (無効な URI)！</string>
 </resources>

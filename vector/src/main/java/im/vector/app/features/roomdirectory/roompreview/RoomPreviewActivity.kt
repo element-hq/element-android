@@ -40,6 +40,7 @@ data class RoomPreviewData(
         val worldReadable: Boolean = false,
         val avatarUrl: String? = null,
         val homeServers: List<String> = emptyList(),
+        val peekFromServer: Boolean = false,
         val buildTask: Boolean = false
 ) : Parcelable {
     val matrixItem: MatrixItem

@@ -213,4 +213,9 @@
     <string name="notice_direct_room_join">%1$s پیوست</string>
     <string name="notice_direct_room_created_by_you">گفت‌وگو را ایجاد کردید</string>
     <string name="notice_direct_room_created">%1$s گفت‌وگو را ایجاد کرد</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s، %2$s، %3$s و %4$d نفر دیگر</item>
+        <item quantity="other">%1$s، %2$s، %3$s و %4$d نفر دیگر</item>
+    </plurals>
+    <string name="room_displayname_3_members">%1$s، %2$s و %3$s</string>
 </resources>

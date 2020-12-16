@@ -9,7 +9,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:10.0.0"
+        classpath "io.realm:realm-gradle-plugin:10.1.2"
     }
 }
 
@@ -63,7 +63,7 @@ android {
 
         release {
             buildConfigField "boolean", "LOG_PRIVATE_DATA", "false"
-            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.NONE"
+            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BASIC"
         }
     }
 

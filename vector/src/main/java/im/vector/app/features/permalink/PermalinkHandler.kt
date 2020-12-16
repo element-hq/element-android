@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.rx.rx
 import javax.inject.Inject
 
@@ -111,7 +112,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     private fun PermalinkData.RoomLink.getRoomId(): Single<Optional<String>> {
         val session = activeSessionHolder.getSafeActiveSession()
         return if (isRoomAlias && session != null) {
-            session.rx().getRoomIdByAlias(roomIdOrAlias, true).subscribeOn(Schedulers.io())
+            session.rx().getRoomIdByAlias(roomIdOrAlias, true).map { it.getOrNull()?.roomId.toOptional() }.subscribeOn(Schedulers.io())
         } else {
             Single.just(Optional.from(roomIdOrAlias))
         }
@@ -149,16 +150,28 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                 navigator.openRoom(context, roomId, eventId, buildTask)
             }
             else                             -> {
-                val roomPreviewData = RoomPreviewData(
-                        roomId = roomId,
-                        eventId = eventId,
-                        roomAlias = roomAlias ?: roomSummary?.canonicalAlias,
-                        roomName = roomSummary?.displayName,
-                        avatarUrl = roomSummary?.avatarUrl,
-                        buildTask = buildTask,
-                        homeServers = permalinkData.viaParameters
-                )
-                navigator.openRoomPreview(context, roomPreviewData)
+                if (roomSummary == null) {
+                    // we don't know this room, try to peek
+                    val roomPreviewData = RoomPreviewData(
+                            roomId = roomId,
+                            roomAlias = roomAlias,
+                            peekFromServer = true,
+                            buildTask = buildTask,
+                            homeServers = permalinkData.viaParameters
+                    )
+                    navigator.openRoomPreview(context, roomPreviewData)
+                } else {
+                    val roomPreviewData = RoomPreviewData(
+                            roomId = roomId,
+                            eventId = eventId,
+                            roomAlias = roomAlias ?: roomSummary.canonicalAlias,
+                            roomName = roomSummary.displayName,
+                            avatarUrl = roomSummary.avatarUrl,
+                            buildTask = buildTask,
+                            homeServers = permalinkData.viaParameters
+                    )
+                    navigator.openRoomPreview(context, roomPreviewData)
+                }
             }
         }
     }

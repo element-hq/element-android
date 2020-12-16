@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/informationUrlPreviewContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <View
+        android:id="@+id/url_preview_left_border"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="?riotx_text_tertiary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/url_preview_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="?riotx_text_primary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/url_preview_close"
+        app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Jo Malone denounces her former brand's John Boyega decision" />
+
+    <ImageView
+        android:id="@+id/url_preview_image"
+        android:layout_width="0dp"
+        android:layout_height="157dp"
+        android:layout_marginTop="16dp"
+        android:importantForAccessibility="no"
+        android:scaleType="fitStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/url_preview_title"
+        app:layout_constraintTop_toBottomOf="@+id/url_preview_title"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/url_preview_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
+        app:layout_constraintTop_toBottomOf="@+id/url_preview_image"
+        tools:text="The British perfumer says removing actor John Boyega from his own advert was “utterly despicable”." />
+
+    <TextView
+        android:id="@+id/url_preview_site"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="?riotx_text_tertiary"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
+        app:layout_constraintTop_toBottomOf="@+id/url_preview_description"
+        tools:text="BBC News" />
+
+    <ImageView
+        android:id="@+id/url_preview_close"
+        android:layout_width="@dimen/layout_touch_size"
+        android:layout_height="@dimen/layout_touch_size"
+        android:scaleType="center"
+        android:src="@drawable/ic_close_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?riotx_text_secondary"
+        tools:ignore="MissingPrefix" />
+
+</merge>

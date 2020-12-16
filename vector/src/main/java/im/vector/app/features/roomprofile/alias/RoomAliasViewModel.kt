@@ -30,7 +30,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -301,21 +300,20 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
 
     private fun updateCanonicalAlias(canonicalAlias: String?, alternativeAliases: List<String>, closeForm: Boolean) {
         postLoading(true)
-        room.updateCanonicalAlias(canonicalAlias, alternativeAliases, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                room.updateCanonicalAlias(canonicalAlias, alternativeAliases)
                 setState {
                     copy(
                             isLoading = false,
                             publishManuallyState = if (closeForm) RoomAliasViewState.AddAliasState.Closed else publishManuallyState
                     )
                 }
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 postLoading(false)
                 _viewEvents.post(RoomAliasViewEvents.Failure(failure))
             }
-        })
+        }
     }
 
     private fun handleAddLocalAlias() = withState { state ->

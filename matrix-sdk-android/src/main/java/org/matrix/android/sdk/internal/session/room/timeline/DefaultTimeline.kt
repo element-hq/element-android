@@ -784,19 +784,20 @@ internal class DefaultTimeline(
     }
 
     private fun List<TimelineEvent>.filterEventsWithSettings(): List<TimelineEvent> {
-        return filter {
-            val filterType = !settings.filters.filterTypes || settings.filters.allowedTypes.contains(it.root.type)
+        return filter { event ->
+            val filterType = !settings.filters.filterTypes
+                    || settings.filters.allowedTypes.any { it.eventType == event.root.type && (it.stateKey == null || it.stateKey == event.root.senderId) }
             if (!filterType) return@filter false
 
-            val filterEdits = if (settings.filters.filterEdits && it.root.getClearType() == EventType.MESSAGE) {
-                val messageContent = it.root.getClearContent().toModel<MessageContent>()
+            val filterEdits = if (settings.filters.filterEdits && event.root.getClearType() == EventType.MESSAGE) {
+                val messageContent = event.root.getClearContent().toModel<MessageContent>()
                 messageContent?.relatesTo?.type != RelationType.REPLACE && messageContent?.relatesTo?.type != RelationType.RESPONSE
             } else {
                 true
             }
             if (!filterEdits) return@filter false
 
-            val filterRedacted = settings.filters.filterRedacted && it.root.isRedacted()
+            val filterRedacted = settings.filters.filterRedacted && event.root.isRedacted()
             !filterRedacted
         }
     }

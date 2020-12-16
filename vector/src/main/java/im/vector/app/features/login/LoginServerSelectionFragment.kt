@@ -83,7 +83,7 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
         if (state.loginMode != LoginMode.Unknown) {
             // LoginFlow for matrix.org has been retrieved
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved(state.loginMode == LoginMode.Sso)))
+            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
         }
     }
 }

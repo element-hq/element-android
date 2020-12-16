@@ -17,7 +17,7 @@ androidExtensions {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 12
+ext.versionPatch = 13
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -414,6 +414,9 @@ dependencies {
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 
+    // Chat effects
+    implementation 'nl.dionsegijn:konfetti:1.2.5'
+    implementation 'com.github.jetradarmobile:android-snowfall:1.2.0'
     // DI
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
@@ -443,6 +446,10 @@ dependencies {
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
     implementation 'com.google.zxing:core:3.3.3'
     implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+
+    // Emoji Keyboard
+    implementation 'com.vanniktech:emoji-material:0.7.0'
+    implementation 'com.vanniktech:emoji-google:0.7.0'
 
     // TESTS
     testImplementation 'junit:junit:4.13'

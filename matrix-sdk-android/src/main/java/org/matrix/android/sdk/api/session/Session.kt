@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
@@ -180,6 +181,11 @@ interface Session :
      * Returns the widget service associated with the session
      */
     fun widgetService(): WidgetService
+
+    /**
+     * Returns the media service associated with the session
+     */
+    fun mediaService(): MediaService
 
     /**
      * Returns the integration manager service associated with the session

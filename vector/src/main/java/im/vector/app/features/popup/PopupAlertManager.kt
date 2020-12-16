@@ -133,7 +133,11 @@ class PopupAlertManager @Inject constructor() {
     }
 
     private fun displayNextIfPossible() {
-        val currentActivity = weakCurrentActivity?.get() ?: return
+        val currentActivity = weakCurrentActivity?.get()
+        if (Alerter.isShowing || currentActivity == null || currentActivity.isDestroyed) {
+            // will retry later
+            return
+        }
         val next: VectorAlert?
         synchronized(alertQueue) {
             next = alertQueue.maxByOrNull { it.priority }

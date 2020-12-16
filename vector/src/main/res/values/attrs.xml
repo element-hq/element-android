@@ -41,6 +41,13 @@
         <attr name="vctr_icon_tint_on_light_action_bar_color" format="color" />
         <attr name="vctr_settings_icon_tint_color" format="color" />
 
+        <attr name="vctr_social_login_button_google_style" format="reference" />
+        <attr name="vctr_social_login_button_github_style" format="reference" />
+        <attr name="vctr_social_login_button_facebook_style" format="reference" />
+        <attr name="vctr_social_login_button_twitter_style" format="reference" />
+        <attr name="vctr_social_login_button_apple_style" format="reference" />
+
+        <attr name="vctr_chat_effect_snow_background" format="color" />
     </declare-styleable>
 
     <declare-styleable name="PollResultLineView">
@@ -65,5 +72,13 @@
         <attr name="actionTitle"/>
         <attr name="leftIcon" />
         <attr name="textColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="SocialLoginButtonsView">
+        <attr name="signMode" format="enum">
+            <enum name="signin" value="0"/>
+            <enum name="signup" value="1"/>
+            <enum name="continue_with" value="2"/>
+        </attr>
     </declare-styleable>
 </resources>

@@ -18,6 +18,7 @@
         <item name="riotx_header_panel_text_secondary">@color/riotx_header_panel_text_secondary_black</item>
         <item name="riotx_text_primary">@color/riotx_text_primary_black</item>
         <item name="riotx_text_secondary">@color/riotx_text_secondary_black</item>
+        <item name="riotx_text_tertiary">@color/riotx_text_tertiary_black</item>
         <item name="riotx_text_primary_body_contrast">@color/riotx_text_primary_body_contrast_black</item>
         <item name="riotx_android_secondary">@color/riotx_android_secondary_black</item>
         <item name="riotx_search_placeholder">@color/riotx_search_placeholder_black</item>

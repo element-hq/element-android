@@ -102,8 +102,8 @@
     <string name="auth_password_placeholder">Mot de passe</string>
     <string name="auth_new_password_placeholder">Nouveau mot de passe</string>
     <string name="auth_user_name_placeholder">Nom d’utilisateur</string>
-    <string name="auth_email_placeholder">Adresse e-mail</string>
-    <string name="auth_opt_email_placeholder">Adresse e-mail (facultatif)</string>
+    <string name="auth_email_placeholder">Adresse électronique</string>
+    <string name="auth_opt_email_placeholder">Adresse électronique (facultatif)</string>
     <string name="auth_phone_number_placeholder">Numéro de téléphone</string>
     <string name="auth_opt_phone_number_placeholder">Numéro de téléphone (facultatif)</string>
     <string name="auth_repeat_password_placeholder">Répéter le mot de passe</string>
@@ -704,9 +704,9 @@
     <string name="startup_notification_privacy_button_grant">Donner la permission</string>
     <string name="startup_notification_privacy_button_other">Choisir une autre option</string>
     <string name="notice_avatar">Avatar d’avertissement</string>
-    <string name="title_activity_choose_sticker">Envoyer un sticker</string>
-    <string name="option_send_sticker">Envoyer un sticker</string>
-    <string name="no_sticker_application_dialog_content">Vous n’avez aucun jeu d\'étiquettes activé pour le moment.
+    <string name="title_activity_choose_sticker">Envoyer un autocollant</string>
+    <string name="option_send_sticker">Envoyer un autocollant</string>
+    <string name="no_sticker_application_dialog_content">Vous n’avez aucun jeu d\'autocollants activé pour le moment.
 \n
 \nVoulez-vous en ajouter \?</string>
     <string name="settings_deactivate_account_section">Désactiver le compte</string>
@@ -1269,7 +1269,7 @@
     <string name="terms_of_service">Conditions de service</string>
     <string name="review_terms">Examiner les conditions</string>
     <string name="terms_description_for_identity_server">Être découvrable par les autres</string>
-    <string name="terms_description_for_integration_manager">Utiliser des robots, passerelles, widgets et packs de stickers</string>
+    <string name="terms_description_for_integration_manager">Utiliser des robots, passerelles, widgets et jeux d\'autocollants</string>
     <string name="read_at">Lu à</string>
     <string name="none">Aucun</string>
     <string name="revoke">Révoquer</string>
@@ -1388,7 +1388,7 @@
     <string name="settings_add_3pid_flow_not_supported">Vous ne pouvez pas faire cela depuis Element mobile</string>
     <string name="settings_add_3pid_authentication_needed">Une authentification est nécessaire</string>
     <string name="settings_integrations">Intégrations</string>
-    <string name="settings_integrations_summary">Utilisez un gestionnaire d’intégrations pour gérer les bots, les passerelles, les widgets et les packs de stickers.
+    <string name="settings_integrations_summary">Utilisez un gestionnaire d’intégrations pour gérer les bots, les passerelles, les widgets et les jeux d\'autocollants.
 \nLes gestionnaires d’intégrations reçoivent des données de configuration et peuvent modifier des widgets, envoyer des invitations de salon et définir des rangs à votre place.</string>
     <string name="settings_integration_allow">Autoriser les intégrations</string>
     <string name="room_widget_activity_title">Widget</string>
@@ -1654,7 +1654,7 @@
     <string name="command_description_rainbow_emote">Envoie la réaction fournie colorée comme un arc-en-ciel</string>
     <string name="settings_category_timeline">Discussions</string>
     <string name="settings_category_composer">Éditeur de messages</string>
-    <string name="room_settings_enable_encryption">Activer le chiffrement de bout en bout</string>
+    <string name="room_settings_enable_encryption">Active le chiffrement de bout en bout…</string>
     <string name="room_settings_enable_encryption_warning">Une fois qu’il est activé, le chiffrement ne peut pas être désactivé.</string>
     <string name="room_settings_enable_encryption_dialog_title">Activer le chiffrement \?</string>
     <string name="room_settings_enable_encryption_dialog_content">Une fois qu’il est activé, le chiffrement ne peut pas être désactivé. Les messages envoyés dans les salons chiffrés ne peuvent pas être vus par le serveur, uniquement par les participants du salon. Activer le chiffrement empêchera peut-être les robots et les passerelles de fonctionner correctement.</string>
@@ -2159,7 +2159,7 @@
     <string name="call_format_turn_hd_on">Activer la HD</string>
     <string name="call_format_turn_hd_off">Désactiver la HD</string>
     <string name="call_camera_back">Arrière</string>
-    <string name="call_camera_front">Frontale</string>
+    <string name="call_camera_front">Frontal</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Vous n’avez pas la permission de démarrer un appel</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Vous n’avez pas la permission de démarrer une téléconférence</string>
     <string name="reset">Réinitialiser</string>
@@ -2199,4 +2199,59 @@
     <string name="send_bug_report_include_key_share_history">Inclure l\'historique d\'échange de clés</string>
     <string name="no_more_results">Plus aucun résultat</string>
     <string name="settings_export_trail">Exporter le rapport d\'audit</string>
+    <string name="room_created_summary_no_topic_creation_text">%s pour permettre aux gens de connaître le sujet de ce salon.</string>
+    <string name="this_is_the_beginning_of_dm">Ceci est le début de l\'historique de vos messages directs avec %s.</string>
+    <string name="this_is_the_beginning_of_room_no_name">Ceci est le début de cette conversation.</string>
+    <string name="this_is_the_beginning_of_room">Ceci est le début de %s.</string>
+    <string name="room_settings_enable_encryption_no_permission">Vous n\'avez pas le droit d\'activer le chiffrement dans ce salon.</string>
+    <string name="create_room_in_progress">Création du salon…</string>
+    <string name="create_room_alias_invalid">Certains caractères sont interdits</string>
+    <string name="create_room_alias_empty">Veuillez fournir une adresse de salon</string>
+    <string name="create_room_alias_already_in_use">Cette adresse est déjà utilisée</string>
+    <string name="create_room_alias_hint">Adresse du salon</string>
+    <string name="a11y_create_direct_message_by_qr_code">Créer une nouvelle conversation directe en scannant un QR Code</string>
+    <string name="attachment_viewer_item_x_of_y">%1$d de %2$d</string>
+    <string name="a11y_create_direct_message_by_mxid">Créer une nouvelle conversation directe avec un identifiant Matrix</string>
+    <string name="identity_server_consent_dialog_content">Dans le but de découvrir des contacts que vous connaîtriez, acceptez-vous d\'envoyer vos données de contact (numéros de téléphone et/ou e-mails) au serveur d\'identité configuré (%1$s) \?
+\n
+\nPour une meilleure protection de la vie privée, les données seront condensées (hash) avant l\'envoi.</string>
+    <string name="identity_server_consent_dialog_title">Envoyer des e-mails et des numéros de téléphone</string>
+    <string name="settings_discovery_consent_action_give_consent">Autoriser</string>
+    <string name="settings_discovery_consent_action_revoke">Révoquer mon autorisation</string>
+    <string name="settings_discovery_consent_notice_off">Vous n\'avez pas donné votre autorisation pour envoyer des e-mails et des numéros de téléphone à ce serveur d\'identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
+    <string name="settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des e-mails et des numéros de téléphone à ce serveur d\'identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
+    <string name="settings_discovery_consent_title">Envoyer des e-mails et des numéros de téléphone</string>
+    <string name="direct_room_user_list_suggestions_title">Suggestions</string>
+    <string name="direct_room_user_list_contacts_title">Contacts</string>
+    <string name="direct_room_user_list_known_title">Utilisateurs connus</string>
+    <string name="direct_room_user_list_recent_title">Récent</string>
+    <string name="qr_code">QR code</string>
+    <string name="add_by_qr_code">Ajouter avec un QR Code</string>
+    <string name="user_directory_search_hint">Chercher par nom ou identifiant</string>
+    <string name="permissions_denied_add_contact">Autoriser l\'accès à vos contacts.</string>
+    <string name="permissions_denied_qr_code">Pour scanner un QR code, vous devez autoriser l\'accès à votre appareil photo.</string>
+    <string name="start_chatting">Débuter la discussion</string>
+    <string name="matrix_to_card_title">Lien Matrix</string>
+    <string name="qr_code_not_scanned">Code QR non scanné !</string>
+    <string name="invalid_qr_code_uri">Code QR invalide (URI invalide) !</string>
+    <string name="cannot_dm_self">Impossible avec vous-même !</string>
+    <string name="share_by_text">Partager par texto</string>
+    <string name="phone_book_perform_lookup">Rechercher des contacts sur Matrix</string>
+    <string name="room_settings_set_avatar">Définir l\'avatar</string>
+    <string name="identity_server_user_consent_not_provided">Le consentement de l\'utilisateur n\'a pas été fourni.</string>
+    <string name="user_code_info_text">Partagez ce code avec des gens pour qu\'ils puissent le scanner pour vous ajouter et commencer à discuter.</string>
+    <string name="user_code_my_code">Mon code</string>
+    <string name="user_code_share">Partager mon code</string>
+    <string name="user_code_scan">Scanner un code QR</string>
+    <string name="not_a_valid_qr_code">Ce n\'est pas un code QR matrix valide</string>
+    <string name="invite_friends_rich_title">🔐️ Rejoins-moi sur element</string>
+    <string name="invite_friends_text">Salut, parle-moi sur Element : %s</string>
+    <string name="invite_friends">Ajouter des amis</string>
+    <string name="add_people">Ajouter des gens</string>
+    <string name="topic_prefix">"Sujet : "</string>
+    <string name="add_a_topic_link_text">Ajouter un sujet</string>
+    <string name="create_room_disable_federation_description">Vous devriez l\'activer si le salon n\'est utilisé que pour collaborer avec des équipes internes sur votre serveur d\'accueil. Ceci ne peut pas être changé plus tard.</string>
+    <string name="create_room_disable_federation_title">Bloquer les personnes qui ne sont pas membres de %s de rejoindre ce salon</string>
+    <string name="hide_advanced">Masquer les avancés</string>
+    <string name="show_advanced">Afficher les avancés</string>
 </resources>

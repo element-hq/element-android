@@ -40,6 +40,7 @@ import org.matrix.android.sdk.internal.session.group.GroupModule
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesModule
 import org.matrix.android.sdk.internal.session.identity.IdentityModule
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerModule
+import org.matrix.android.sdk.internal.session.media.MediaModule
 import org.matrix.android.sdk.internal.session.openid.OpenIdModule
 import org.matrix.android.sdk.internal.session.profile.ProfileModule
 import org.matrix.android.sdk.internal.session.pushers.AddHttpPusherWorker
@@ -75,6 +76,7 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
             GroupModule::class,
             ContentModule::class,
             CacheModule::class,
+            MediaModule::class,
             CryptoModule::class,
             PushersModule::class,
             OpenIdModule::class,

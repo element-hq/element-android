@@ -42,6 +42,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black_alpha">#55000000</color>
+    <color name="black_54">#8A000000</color>
 
     <!-- Palette: format fo naming:
       'riotx_<name in the palette snake case>_<theme>'
@@ -108,6 +109,13 @@
     <color name="riotx_text_secondary_light">#FF9E9E9E</color>
     <color name="riotx_text_secondary_dark">#FFA1B2D1</color>
     <color name="riotx_text_secondary_black">#FFA1B2D1</color>
+
+    <attr name="riotx_text_tertiary" format="color" />
+    <color name="riotx_text_tertiary_light">#FF8D99A5</color>
+    <!-- TODO Pick color from Figma, I do not know where to find it -->
+    <color name="riotx_text_tertiary_dark">#FF8D99A5</color>
+    <!-- TODO Pick color from Figma, I do not know where to find it -->
+    <color name="riotx_text_tertiary_black">#FF8D99A5</color>
 
     <attr name="riotx_text_primary_body_contrast" format="color" />
     <color name="riotx_text_primary_body_contrast_light">#FF61708B</color>

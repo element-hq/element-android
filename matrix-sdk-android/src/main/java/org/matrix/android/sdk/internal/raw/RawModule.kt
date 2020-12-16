@@ -57,6 +57,9 @@ internal abstract class RawModule {
                         realmKeysUtils.configureEncryption(this, DB_ALIAS)
                     }
                     .name("matrix-sdk-global.realm")
+                    .schemaVersion(GlobalRealmMigration.SCHEMA_VERSION)
+                    .migration(GlobalRealmMigration)
+                    .allowWritesOnUiThread(true)
                     .modules(GlobalRealmModule())
                     .build()
         }

@@ -13,7 +13,7 @@
     <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Peruuta</string>
-    <string name="save">Säästä</string>
+    <string name="save">Tallenna</string>
     <string name="leave">Poistu</string>
     <string name="send">Lähetä</string>
     <string name="resend">Lähetä uudelleen</string>
@@ -1231,7 +1231,7 @@
     <string name="fab_menu_create_chat">Yksityisviestit</string>
     <string name="create_room_title">Uusi huone</string>
     <string name="create_room_action_create">LUO</string>
-    <string name="create_room_name_hint">Huoneen nimi</string>
+    <string name="create_room_name_hint">Nimi</string>
     <string name="create_room_public_title">Julkinen</string>
     <string name="create_room_public_description">Kuka tahansa voi liittyä tähän huoneeseen</string>
     <string name="keys_backup_unable_to_get_trust_info">Luottamustietoa haettaessa tapahtui virhe</string>
@@ -1711,7 +1711,7 @@
     <string name="room_list_sharing_header_recent_rooms">Viimeaikaiset huoneet</string>
     <string name="room_list_sharing_header_other_rooms">Muut huoneet</string>
     <string name="command_description_rainbow">Lähettää annetun viestin väritettynä sateenkaaren väreillä</string>
-    <string name="room_settings_enable_encryption">Ota käyttöön osapuolten välinen salaus</string>
+    <string name="room_settings_enable_encryption">Ota käyttöön osapuolten välinen salaus…</string>
     <string name="room_settings_enable_encryption_warning">Salausta ei voi enää poistaa käytöstä sen jälkeen kun se on otettu käyttöön.</string>
     <string name="room_settings_enable_encryption_dialog_title">Otetaanko salaus käyttöön\?</string>
     <string name="room_settings_enable_encryption_dialog_content">Salausta ei voi ottaa pois käytöstä sen jälkeen kun se on otettu käyttöön. Salattuja viestejä ei pysty lukemaan edes palvelin, vain ainoastaan huoneessa olijat. Salauksen käyttöönotto voi estää bottien ja siltojen toiminnan huoneessa.</string>
@@ -1833,4 +1833,46 @@
     <string name="dismiss">Jätä huomiotta</string>
     <string name="pause_video">Tauko</string>
     <string name="play_video">Toista</string>
+    <string name="room_participants_action_ignore_prompt_msg">Käyttäjän huomiotta jättäminen piilottaa kyseisen käyttäjän viestit sinulta.
+\n
+\nVoit perua tämän milloin tahansa yleisissä asetuksissa.</string>
+    <string name="room_participants_action_ignore_title">Jätä käyttäjä huomiotta</string>
+    <string name="room_participants_power_level_demote">Alenna</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Et voi perua tätä muutosta, koska olet alentamassa itseäsi. Jos olet viimeinen oikeutettu henkilö tässä huoneessa, oikeuksia ei voi enää saada takaisin.</string>
+    <string name="room_participants_power_level_demote_warning_title">Alenna itsesi\?</string>
+    <string name="room_participants_action_cancel_invite">Peruuta kutsu</string>
+    <string name="permissions_denied_add_contact">Anna lupa hakea yhteystiedot.</string>
+    <string name="permissions_denied_qr_code">QR-koodin skannaaminen vaatii luvan kameran käyttöön.</string>
+    <string name="return_to_call">Palaa puheluun</string>
+    <string name="active_call_with_duration">Aktiivinen puhelu (%s)</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Kysy varmistusta ennen puhelun aloittamista</string>
+    <string name="settings_call_show_confirmation_dialog_title">Estä vahinkopuhelut</string>
+    <string name="login_error_ssl_other">SSL Virhe.</string>
+    <string name="call_camera_back">Takakamera</string>
+    <string name="call_camera_front">Etukamera</string>
+    <string name="call_switch_camera">Vaihda kameraa</string>
+    <string name="sound_device_wireless_headset">Langattomat kuulokkeet</string>
+    <string name="sound_device_headset">Kuulokkeet</string>
+    <string name="sound_device_speaker">Kaiutin</string>
+    <string name="sound_device_phone">Puhelin</string>
+    <string name="call_select_sound_device">Valitse äänilaite</string>
+    <string name="call_failed_no_connection">Element-puhelu epäonnistui</string>
+    <string name="send_bug_report_include_key_share_history">Lähetä avaimen jakopyyntöjen historia</string>
+    <string name="no_more_results">Ei enempää tuloksia</string>
+    <string name="bottom_action_notification">Ilmoitukset</string>
+    <string name="dialog_title_success">Onnistui</string>
+    <string name="action_copy">Kopioi</string>
+    <string name="call_notification_hangup">Lopeta puhelu</string>
+    <string name="call_notification_reject">Hylkää</string>
+    <string name="failed_to_remove_widget">Sovelman poistaminen epäonnistui</string>
+    <string name="failed_to_add_widget">Sovelman lisääminen epäonnistui</string>
+    <string name="cannot_call_yourself_with_invite">Et voi aloittaa puhelua itsesi kanssa. Odota, että muut osallistujat hyväksyvät kutsun</string>
+    <string name="cannot_call_yourself">Et voi aloittaa puhelua itsesi kanssa</string>
+    <string name="room_participants_action_cancel_invite_title">Peruuta kutsu</string>
+    <string name="call_format_turn_hd_on">Korkea laatu päälle</string>
+    <string name="call_format_turn_hd_off">Korkea laatu pois</string>
+    <string name="call_failed_no_connection_description">Reaaliaikaisen yhteyden muodostus epäonnistui.
+\nPyydäthän kotipalvelimesi ylläpitäjää asentamaan TURN-palvelimen varmistaaksesi puhelujen luotettavan toiminnan.</string>
+    <string name="call_notification_answer">Vastaa</string>
+    <string name="start_chatting">Aloita keskustelu</string>
 </resources>
