@@ -23,8 +23,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -47,6 +45,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
+import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailPendingAction
@@ -72,13 +71,7 @@ class RoomMemberProfileFragment @Inject constructor(
 ) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomMemberProfileController.Callback {
 
-    private lateinit var memberProfileStateView: StateView
-    private lateinit var memberProfileInfoContainer: View
-    private lateinit var memberProfileDecorationImageView: ImageView
-    private lateinit var memberProfileAvatarView: ImageView
-    private lateinit var memberProfileNameView: TextView
-    private lateinit var memberProfileIdView: TextView
-    private lateinit var memberProfilePowerLevelView: TextView
+    private lateinit var headerViews: ViewStubRoomMemberProfileHeaderBinding
 
     private val fragmentArgs: RoomMemberProfileArgs by args()
     private val viewModel: RoomMemberProfileViewModel by fragmentViewModel()
@@ -98,13 +91,13 @@ class RoomMemberProfileFragment @Inject constructor(
             it.layoutResource = R.layout.view_stub_room_member_profile_header
             it.inflate()
         }
-        findHeaderSubViews(headerView)
-        memberProfileStateView.eventCallback = object : StateView.EventCallback {
+        headerViews = ViewStubRoomMemberProfileHeaderBinding.bind(headerView)
+        headerViews.memberProfileStateView.eventCallback = object : StateView.EventCallback {
             override fun onRetryClicked() {
                 viewModel.handle(RoomMemberProfileAction.RetryFetchingInfo)
             }
         }
-        memberProfileStateView.contentView = memberProfileInfoContainer
+        headerViews.memberProfileStateView.contentView = headerViews.memberProfileInfoContainer
         views.matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
         roomMemberProfileController.callback = this
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView,
@@ -133,19 +126,9 @@ class RoomMemberProfileFragment @Inject constructor(
         setupLongClicks()
     }
 
-    private fun findHeaderSubViews(headerView: View) {
-        memberProfileStateView = headerView.findViewById(R.id.memberProfileStateView)
-        memberProfileInfoContainer = headerView.findViewById(R.id.memberProfileInfoContainer)
-        memberProfileNameView = headerView.findViewById(R.id.roomProfileNameView)
-        memberProfileIdView = headerView.findViewById(R.id.memberProfileIdView)
-        memberProfileAvatarView = headerView.findViewById(R.id.roomProfileAvatarView)
-        memberProfilePowerLevelView = headerView.findViewById(R.id.memberProfilePowerLevelView)
-        memberProfileDecorationImageView = headerView.findViewById(R.id.roomProfileDecorationImageView)
-    }
-
     private fun setupLongClicks() {
-        memberProfileNameView.copyOnLongClick()
-        memberProfileIdView.copyOnLongClick()
+        headerViews.memberProfileNameView.copyOnLongClick()
+        headerViews.memberProfileIdView.copyOnLongClick()
     }
 
     private fun handleShowPowerLevelDemoteWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning) {
@@ -202,26 +185,26 @@ class RoomMemberProfileFragment @Inject constructor(
             is Incomplete -> {
                 views.matrixProfileToolbarTitleView.text = state.userId
                 avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
-                memberProfileStateView.state = StateView.State.Loading
+                headerViews.memberProfileStateView.state = StateView.State.Loading
             }
             is Fail       -> {
                 avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
                 views.matrixProfileToolbarTitleView.text = state.userId
                 val failureMessage = errorFormatter.toHumanReadable(asyncUserMatrixItem.error)
-                memberProfileStateView.state = StateView.State.Error(failureMessage)
+                headerViews.memberProfileStateView.state = StateView.State.Error(failureMessage)
             }
             is Success    -> {
                 val userMatrixItem = asyncUserMatrixItem()
-                memberProfileStateView.state = StateView.State.Content
-                memberProfileIdView.text = userMatrixItem.id
+                headerViews.memberProfileStateView.state = StateView.State.Content
+                headerViews.memberProfileIdView.text = userMatrixItem.id
                 val bestName = userMatrixItem.getBestName()
-                memberProfileNameView.text = bestName
+                headerViews.memberProfileNameView.text = bestName
                 views.matrixProfileToolbarTitleView.text = bestName
-                avatarRenderer.render(userMatrixItem, memberProfileAvatarView)
+                avatarRenderer.render(userMatrixItem, headerViews.memberProfileAvatarView)
                 avatarRenderer.render(userMatrixItem, views.matrixProfileToolbarAvatarImageView)
 
                 if (state.isRoomEncrypted) {
-                    memberProfileDecorationImageView.isVisible = true
+                    headerViews.memberProfileDecorationImageView.isVisible = true
                     if (state.userMXCrossSigningInfo != null) {
                         // Cross signing is enabled for this user
                         val icon = if (state.userMXCrossSigningInfo.isTrusted()) {
@@ -235,23 +218,23 @@ class RoomMemberProfileFragment @Inject constructor(
                             R.drawable.ic_shield_black
                         }
 
-                        memberProfileDecorationImageView.setImageResource(icon)
+                        headerViews.memberProfileDecorationImageView.setImageResource(icon)
                         views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(icon)
                     } else {
                         // Legacy
                         if (state.allDevicesAreTrusted) {
-                            memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_trusted)
+                            headerViews.memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_trusted)
                             views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
                         } else {
-                            memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_warning)
+                            headerViews.memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_warning)
                             views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
                         }
                     }
                 } else {
-                    memberProfileDecorationImageView.isVisible = false
+                    headerViews.memberProfileDecorationImageView.isVisible = false
                 }
 
-                memberProfileAvatarView.setOnClickListener { view ->
+                headerViews.memberProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
                 views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
@@ -259,7 +242,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 }
             }
         }
-        memberProfilePowerLevelView.setTextOrHide(state.userPowerLevelString())
+        headerViews.memberProfilePowerLevelView.setTextOrHide(state.userPowerLevelString())
         roomMemberProfileController.setData(state)
     }
 

@@ -23,8 +23,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -45,6 +43,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentMatrixProfileBinding
+import im.vector.app.databinding.ViewStubRoomProfileHeaderBinding
 import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
@@ -72,10 +71,7 @@ class RoomProfileFragment @Inject constructor(
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomProfileController.Callback {
 
-    private lateinit var roomProfileDecorationImageView: ImageView
-    private lateinit var roomProfileAvatarView: ImageView
-    private lateinit var roomProfileAliasView: TextView
-    private lateinit var roomProfileNameView: TextView
+    private lateinit var headerViews: ViewStubRoomProfileHeaderBinding
 
     private val roomProfileArgs: RoomProfileArgs by args()
     private lateinit var roomListQuickActionsSharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -98,7 +94,7 @@ class RoomProfileFragment @Inject constructor(
             it.layoutResource = R.layout.view_stub_room_profile_header
             it.inflate()
         }
-        findHeaderSubViews(headerView)
+        headerViews = ViewStubRoomProfileHeaderBinding.bind(headerView)
         setupWaitingView()
         setupToolbar(views.matrixProfileToolbar)
         setupRecyclerView()
@@ -124,21 +120,14 @@ class RoomProfileFragment @Inject constructor(
         setupLongClicks()
     }
 
-    private fun findHeaderSubViews(headerView: View) {
-        roomProfileNameView = headerView.findViewById(R.id.roomProfileNameView)
-        roomProfileAliasView = headerView.findViewById(R.id.roomProfileAliasView)
-        roomProfileAvatarView = headerView.findViewById(R.id.roomProfileAvatarView)
-        roomProfileDecorationImageView = headerView.findViewById(R.id.roomProfileDecorationImageView)
-    }
-
     private fun setupWaitingView() {
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
     }
 
     private fun setupLongClicks() {
-        roomProfileNameView.copyOnLongClick()
-        roomProfileAliasView.copyOnLongClick()
+        headerViews.roomProfileNameView.copyOnLongClick()
+        headerViews.roomProfileAliasView.copyOnLongClick()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -187,17 +176,17 @@ class RoomProfileFragment @Inject constructor(
                 Timber.w("The room has been left")
                 activity?.finish()
             } else {
-                roomProfileNameView.text = it.displayName
+                headerViews.roomProfileNameView.text = it.displayName
                 views.matrixProfileToolbarTitleView.text = it.displayName
-                roomProfileAliasView.setTextOrHide(it.canonicalAlias)
+                headerViews.roomProfileAliasView.setTextOrHide(it.canonicalAlias)
                 val matrixItem = it.toMatrixItem()
-                avatarRenderer.render(matrixItem, roomProfileAvatarView)
+                avatarRenderer.render(matrixItem, headerViews.roomProfileAvatarView)
                 avatarRenderer.render(matrixItem, views.matrixProfileToolbarAvatarImageView)
-                roomProfileDecorationImageView.isVisible = it.roomEncryptionTrustLevel != null
-                roomProfileDecorationImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
+                headerViews.roomProfileDecorationImageView.isVisible = it.roomEncryptionTrustLevel != null
+                headerViews.roomProfileDecorationImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
                 views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
 
-                roomProfileAvatarView.setOnClickListener { view ->
+                headerViews.roomProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, matrixItem)
                 }
                 views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
