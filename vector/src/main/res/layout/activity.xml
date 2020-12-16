@@ -27,8 +27,9 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <include
-            android:id="@+id/overlay_waiting_view"
+            android:id="@+id/waiting_view"
             layout="@layout/merge_overlay_waiting_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -42,7 +42,7 @@ abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
 
     override fun initUiAndData() {
         configureToolbar(views.toolbar)
-        waitingView = views.overlayWaitingView.waitingView
+        waitingView = views.waitingView.waitingView
     }
 
     /**
@@ -51,21 +51,21 @@ abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
      */
     fun updateWaitingView(data: WaitingViewData?) {
         data?.let {
-            views.overlayWaitingView.waitingStatusText.text = data.message
+            views.waitingView.waitingStatusText.text = data.message
 
             if (data.progress != null && data.progressTotal != null) {
-                views.overlayWaitingView.waitingHorizontalProgress.isIndeterminate = false
-                views.overlayWaitingView.waitingHorizontalProgress.progress = data.progress
-                views.overlayWaitingView.waitingHorizontalProgress.max = data.progressTotal
-                views.overlayWaitingView.waitingHorizontalProgress.isVisible = true
-                views.overlayWaitingView.waitingCircularProgress.isVisible = false
+                views.waitingView.waitingHorizontalProgress.isIndeterminate = false
+                views.waitingView.waitingHorizontalProgress.progress = data.progress
+                views.waitingView.waitingHorizontalProgress.max = data.progressTotal
+                views.waitingView.waitingHorizontalProgress.isVisible = true
+                views.waitingView.waitingCircularProgress.isVisible = false
             } else if (data.isIndeterminate) {
-                views.overlayWaitingView.waitingHorizontalProgress.isIndeterminate = true
-                views.overlayWaitingView.waitingHorizontalProgress.isVisible = true
-                views.overlayWaitingView.waitingCircularProgress.isVisible = false
+                views.waitingView.waitingHorizontalProgress.isIndeterminate = true
+                views.waitingView.waitingHorizontalProgress.isVisible = true
+                views.waitingView.waitingCircularProgress.isVisible = false
             } else {
-                views.overlayWaitingView.waitingHorizontalProgress.isVisible = false
-                views.overlayWaitingView.waitingCircularProgress.isVisible = true
+                views.waitingView.waitingHorizontalProgress.isVisible = false
+                views.waitingView.waitingCircularProgress.isVisible = true
             }
 
             showWaitingView()
@@ -76,15 +76,15 @@ abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
 
     override fun showWaitingView() {
         hideKeyboard()
-        views.overlayWaitingView.waitingStatusText.isGone = views.overlayWaitingView.waitingStatusText.text.isNullOrBlank()
+        views.waitingView.waitingStatusText.isGone = views.waitingView.waitingStatusText.text.isNullOrBlank()
         super.showWaitingView()
     }
 
     override fun hideWaitingView() {
-        views.overlayWaitingView.waitingStatusText.text = null
-        views.overlayWaitingView.waitingStatusText.isGone = true
-        views.overlayWaitingView.waitingHorizontalProgress.progress = 0
-        views.overlayWaitingView.waitingHorizontalProgress.isVisible = false
+        views.waitingView.waitingStatusText.text = null
+        views.waitingView.waitingStatusText.isGone = true
+        views.waitingView.waitingHorizontalProgress.progress = 0
+        views.waitingView.waitingHorizontalProgress.isVisible = false
         super.hideWaitingView()
     }
 
