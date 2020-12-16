@@ -90,7 +90,6 @@
         app:leftIcon="@drawable/ic_secure_backup"
         app:textColor="?riotx_text_secondary" />
 
-
     <im.vector.app.features.workers.signout.SignOutBottomSheetActionButton
         android:id="@+id/setupMegolmBackupButton"
         android:layout_width="match_parent"
