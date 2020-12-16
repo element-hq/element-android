@@ -17,8 +17,6 @@
 package im.vector.lib.attachmentviewer
 
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
 import im.vector.lib.attachmentviewer.databinding.ItemAnimatedImageAttachmentBinding
 
 class AnimatedImageViewHolder constructor(itemView: View) :

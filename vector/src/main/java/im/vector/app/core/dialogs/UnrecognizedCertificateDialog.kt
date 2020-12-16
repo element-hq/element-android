@@ -16,8 +16,6 @@
 package im.vector.app.core.dialogs
 
 import android.app.Activity
-import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder

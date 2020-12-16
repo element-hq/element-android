@@ -29,7 +29,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import im.vector.app.databinding.FragmentSsssAccessFromKeyBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 

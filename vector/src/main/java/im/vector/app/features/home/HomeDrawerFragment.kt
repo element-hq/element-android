@@ -29,7 +29,6 @@ import im.vector.app.core.extensions.observeK
 import im.vector.app.core.extensions.replaceChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentHomeDrawerBinding
 import im.vector.app.features.grouplist.GroupListFragment
 import im.vector.app.features.settings.VectorPreferences

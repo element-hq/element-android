@@ -32,7 +32,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.toast
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentPinBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.rageshake
 
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast

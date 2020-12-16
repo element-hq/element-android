@@ -30,11 +30,9 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.databinding.BottomSheetMatrixToCardBinding
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize

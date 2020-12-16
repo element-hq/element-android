@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.filtered
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.appcompat.widget.SearchView
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
@@ -29,7 +28,6 @@ import im.vector.app.databinding.ActivityFilteredRoomsBinding
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
-
 
 class FilteredRoomsActivity : VectorBaseActivity<ActivityFilteredRoomsBinding>() {
 

@@ -28,7 +28,6 @@ import com.nulabinc.zxcvbn.Zxcvbn
 import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import im.vector.app.databinding.FragmentKeysBackupSetupStep2Binding
 import im.vector.app.features.settings.VectorLocale
 

@@ -23,7 +23,6 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import im.vector.app.databinding.FragmentKeysBackupRestoreSuccessBinding
 
 import javax.inject.Inject

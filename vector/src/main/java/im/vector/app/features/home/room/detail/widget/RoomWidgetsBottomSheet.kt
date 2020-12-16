@@ -28,7 +28,6 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.databinding.BottomSheetGenericListWithTitleBinding
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewModel

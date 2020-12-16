@@ -42,7 +42,7 @@ class KeysBackupBanner @JvmOverloads constructor(
     private var state: State = State.Initial
 
     private lateinit var views: ViewKeysBackupBannerBinding
-    
+
     init {
         setupView()
         DefaultSharedPreferences.getInstance(context).edit {

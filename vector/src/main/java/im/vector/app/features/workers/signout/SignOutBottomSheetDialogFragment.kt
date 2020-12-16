@@ -37,7 +37,6 @@ import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.databinding.BottomSheetLogoutAndBackupBinding
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet

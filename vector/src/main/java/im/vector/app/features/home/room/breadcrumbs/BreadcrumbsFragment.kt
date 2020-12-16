@@ -22,12 +22,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBreadcrumbsBinding
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.home.room.detail.RoomDetailSharedAction
 import im.vector.app.features.home.room.detail.RoomDetailSharedActionViewModel
 

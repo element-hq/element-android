@@ -28,7 +28,6 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.databinding.ActivityWidgetBinding
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents

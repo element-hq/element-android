@@ -35,7 +35,6 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentLoginCaptchaBinding
 import kotlinx.parcelize.Parcelize
 

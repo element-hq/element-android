@@ -31,7 +31,6 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 import java.util.concurrent.TimeUnit

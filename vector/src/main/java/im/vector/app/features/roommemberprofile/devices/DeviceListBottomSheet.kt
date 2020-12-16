@@ -32,7 +32,6 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.databinding.BottomSheetWithFragmentsBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import kotlinx.parcelize.Parcelize

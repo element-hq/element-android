@@ -28,10 +28,8 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.showPassword
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentDeactivateAccountBinding
-import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.settings.VectorSettingsActivity

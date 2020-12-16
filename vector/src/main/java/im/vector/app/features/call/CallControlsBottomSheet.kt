@@ -27,7 +27,6 @@ import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetCallControlsBinding
-import im.vector.app.databinding.BottomSheetGenericListBinding
 
 import me.gujun.android.span.span
 

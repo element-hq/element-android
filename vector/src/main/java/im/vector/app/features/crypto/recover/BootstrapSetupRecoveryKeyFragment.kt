@@ -26,7 +26,6 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapSetupRecoveryBinding
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 
 import javax.inject.Inject
 

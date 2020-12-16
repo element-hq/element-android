@@ -20,10 +20,7 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.text.Editable
 import android.view.KeyEvent
-import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword

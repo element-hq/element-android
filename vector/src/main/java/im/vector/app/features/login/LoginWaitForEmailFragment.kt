@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
 import im.vector.app.R
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentLoginWaitForEmailBinding
 import kotlinx.parcelize.Parcelize
 

@@ -18,10 +18,7 @@ package im.vector.app.features.call
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.databinding.ViewCallControlsBinding
@@ -92,7 +89,7 @@ class CallControlsView @JvmOverloads constructor(
             views.videoToggleIcon.setImageResource(R.drawable.ic_video)
             views.videoToggleIcon.contentDescription = resources.getString(R.string.a11y_stop_camera)
         } else {
-          views.  videoToggleIcon.setImageResource(R.drawable.ic_video_off)
+          views.videoToggleIcon.setImageResource(R.drawable.ic_video_off)
             views.videoToggleIcon.contentDescription = resources.getString(R.string.a11y_start_camera)
         }
 

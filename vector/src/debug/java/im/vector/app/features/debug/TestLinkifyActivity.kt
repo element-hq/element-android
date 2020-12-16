@@ -23,7 +23,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import im.vector.app.R
 import im.vector.app.databinding.ActivityTestLinkifyBinding
-import im.vector.app.databinding.ActivityTestMaterialThemeBinding
 
 class TestLinkifyActivity : AppCompatActivity() {
 

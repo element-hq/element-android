@@ -36,7 +36,6 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentSearchBinding
 import kotlinx.parcelize.Parcelize
 
@@ -80,7 +79,7 @@ class SearchFragment @Inject constructor(
 
     override fun onDestroy() {
         super.onDestroy()
-        views.searchResultRecycler?.cleanup()
+        views.searchResultRecycler.cleanup()
         controller.listener = null
     }
 

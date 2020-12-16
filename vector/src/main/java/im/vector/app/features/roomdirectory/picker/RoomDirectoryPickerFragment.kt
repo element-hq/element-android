@@ -28,9 +28,7 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentRoomDirectoryPickerBinding
 import im.vector.app.features.roomdirectory.RoomDirectoryAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction

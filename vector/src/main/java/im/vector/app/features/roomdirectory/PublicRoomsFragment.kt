@@ -32,7 +32,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.toast
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentPublicRoomsBinding
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler

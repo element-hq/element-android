@@ -18,10 +18,6 @@ package im.vector.lib.attachmentviewer
 
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.VideoView
 import androidx.core.view.isVisible
 import im.vector.lib.attachmentviewer.databinding.ItemVideoAttachmentBinding
 import io.reactivex.Observable

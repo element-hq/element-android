@@ -19,7 +19,6 @@ package im.vector.app.features.attachments.preview
 
 import android.content.Context
 import android.content.Intent
-import android.view.LayoutInflater
 import androidx.appcompat.widget.Toolbar
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment

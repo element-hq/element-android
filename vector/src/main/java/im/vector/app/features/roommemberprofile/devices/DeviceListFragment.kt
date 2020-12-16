@@ -22,13 +22,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.BottomSheetGenericListBinding
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject

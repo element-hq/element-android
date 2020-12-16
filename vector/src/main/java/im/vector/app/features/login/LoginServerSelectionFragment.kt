@@ -22,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import im.vector.app.R
 import im.vector.app.core.utils.openUrlInChromeCustomTab
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentLoginServerSelectionBinding
 
 import me.gujun.android.span.span

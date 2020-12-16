@@ -38,11 +38,9 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentCreateRoomBinding
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import kotlinx.parcelize.Parcelize
-
 
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import javax.inject.Inject

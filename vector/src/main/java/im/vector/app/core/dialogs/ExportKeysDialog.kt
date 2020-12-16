@@ -18,11 +18,7 @@ package im.vector.app.core.dialogs
 
 import android.app.Activity
 import android.text.Editable
-import android.widget.Button
-import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.SimpleTextWatcher

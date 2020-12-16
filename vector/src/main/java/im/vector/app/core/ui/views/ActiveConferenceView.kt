@@ -23,7 +23,6 @@ import android.text.style.ClickableSpan
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.utils.tappableMatchingText

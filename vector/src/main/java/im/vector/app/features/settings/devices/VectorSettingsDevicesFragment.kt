@@ -34,12 +34,9 @@ import im.vector.app.core.dialogs.PromptPasswordDialog
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
-
 
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject

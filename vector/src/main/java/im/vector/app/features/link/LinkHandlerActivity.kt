@@ -18,7 +18,6 @@ package im.vector.app.features.link
 
 import android.content.Intent
 import android.net.Uri
-import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder

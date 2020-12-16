@@ -31,7 +31,6 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentAttachmentsPreviewBinding
 import im.vector.app.databinding.FragmentContactsBookBinding
 import im.vector.app.features.userdirectory.PendingInvitee
 import im.vector.app.features.userdirectory.UserListAction

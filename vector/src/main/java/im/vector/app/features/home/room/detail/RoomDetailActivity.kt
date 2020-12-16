@@ -39,7 +39,6 @@ import im.vector.app.features.room.RequireActiveMembershipViewState
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
 
-
 import javax.inject.Inject
 
 class RoomDetailActivity :

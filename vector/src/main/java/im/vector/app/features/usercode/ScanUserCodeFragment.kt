@@ -34,7 +34,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentQrCodeScannerWithButtonBinding
 import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.utils.ImageUtils

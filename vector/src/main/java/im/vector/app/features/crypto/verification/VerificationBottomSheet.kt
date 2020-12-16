@@ -36,7 +36,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.databinding.BottomSheetVerificationBinding
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.crypto.verification.cancel.VerificationCancelFragment

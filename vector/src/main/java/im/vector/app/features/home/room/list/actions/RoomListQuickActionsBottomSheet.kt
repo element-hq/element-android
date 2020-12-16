@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith

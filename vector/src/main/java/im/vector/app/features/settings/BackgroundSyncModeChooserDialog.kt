@@ -18,7 +18,6 @@ package im.vector.app.features.settings
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import im.vector.app.R

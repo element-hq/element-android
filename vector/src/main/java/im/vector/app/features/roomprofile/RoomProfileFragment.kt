@@ -54,8 +54,6 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.media.BigImageViewerActivity
 import kotlinx.parcelize.Parcelize
 
-
-
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -108,8 +106,8 @@ class RoomProfileFragment @Inject constructor(
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
                 headerView,
                 listOf(views.matrixProfileToolbarAvatarImageView,
-                       views. matrixProfileToolbarTitleView,
-                       views. matrixProfileDecorationToolbarAvatarImageView)
+                       views.matrixProfileToolbarTitleView,
+                       views.matrixProfileDecorationToolbarAvatarImageView)
         )
         views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.observeViewEvents {

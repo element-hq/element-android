@@ -36,7 +36,6 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
 import im.vector.app.core.platform.OnBackPressed
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 

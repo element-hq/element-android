@@ -27,7 +27,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
-import im.vector.app.databinding.FragmentAttachmentsPreviewBinding
 import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 
 import org.matrix.android.sdk.api.extensions.tryOrNull

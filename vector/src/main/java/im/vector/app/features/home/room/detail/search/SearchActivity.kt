@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.detail.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.appcompat.widget.SearchView
 import com.airbnb.mvrx.MvRx
 import im.vector.app.R

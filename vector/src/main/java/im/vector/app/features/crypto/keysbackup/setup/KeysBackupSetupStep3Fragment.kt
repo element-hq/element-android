@@ -35,8 +35,6 @@ import im.vector.app.core.utils.LiveEvent
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.core.utils.startSharePlainTextIntent
-import im.vector.app.databinding.BottomSheetSaveRecoveryKeyBinding
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import im.vector.app.databinding.FragmentKeysBackupSetupStep3Binding
 
 import kotlinx.coroutines.Dispatchers

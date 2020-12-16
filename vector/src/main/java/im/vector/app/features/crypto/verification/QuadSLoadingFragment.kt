@@ -18,9 +18,7 @@ package im.vector.app.features.crypto.verification
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import im.vector.app.databinding.FragmentProgressBinding
 import javax.inject.Inject
 

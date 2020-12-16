@@ -28,7 +28,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
-import im.vector.app.databinding.FragmentAttachmentsPreviewBinding
 import im.vector.app.databinding.FragmentQrCodeScannerBinding
 import im.vector.app.features.userdirectory.PendingInvitee
 

@@ -29,7 +29,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import im.vector.app.features.settings.VectorLocale
 import io.reactivex.android.schedulers.AndroidSchedulers
 

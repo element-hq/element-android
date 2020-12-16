@@ -17,8 +17,6 @@
 package im.vector.lib.attachmentviewer
 
 import android.view.View
-import android.widget.ProgressBar
-import com.github.chrisbanes.photoview.PhotoView
 import im.vector.lib.attachmentviewer.databinding.ItemImageAttachmentBinding
 
 class ZoomableImageViewHolder constructor(itemView: View) :

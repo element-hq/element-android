@@ -19,12 +19,8 @@ package im.vector.app.features.media
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.view.View
-import android.widget.ImageView
 import android.widget.SeekBar
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Group
 import im.vector.app.R
 import im.vector.app.databinding.MergeImageAttachmentOverlayBinding
 import im.vector.lib.attachmentviewer.AttachmentEventListener

@@ -19,11 +19,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.EmojiChooserFragmentBinding
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 
 import javax.inject.Inject
 

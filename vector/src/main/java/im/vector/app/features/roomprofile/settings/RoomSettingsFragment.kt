@@ -48,7 +48,6 @@ import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistory
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleBottomSheet
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
 
-
 import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.UUID
 import javax.inject.Inject

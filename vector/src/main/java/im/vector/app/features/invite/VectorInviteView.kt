@@ -19,8 +19,6 @@ package im.vector.app.features.invite
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import im.vector.app.R

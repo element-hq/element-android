@@ -32,7 +32,6 @@ import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
-import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.databinding.FragmentRoomUploadsBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils

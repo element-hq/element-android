@@ -35,7 +35,6 @@ import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
 import im.vector.app.core.extensions.appendParamToUrl
 import im.vector.app.core.utils.AssetReader
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentLoginWebBinding
 import im.vector.app.features.signout.soft.SoftLogoutAction
 import im.vector.app.features.signout.soft.SoftLogoutViewModel

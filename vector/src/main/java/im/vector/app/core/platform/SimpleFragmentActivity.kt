@@ -15,11 +15,9 @@
  */
 package im.vector.app.core.platform
 
-import android.view.LayoutInflater
 import androidx.annotation.CallSuper
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.databinding.ActivityBinding

@@ -19,7 +19,6 @@ package im.vector.app.features.crypto.recover
 import android.app.Activity
 import android.content.DialogInterface
 import android.view.KeyEvent
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import im.vector.app.R

@@ -36,7 +36,7 @@ class PinActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigur
         }
     }
 
-    override fun getBinding() =ActivitySimpleBinding.inflate(layoutInflater)
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {
         if (isFirstCreation()) {

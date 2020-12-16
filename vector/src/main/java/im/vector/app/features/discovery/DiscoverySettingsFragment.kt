@@ -30,10 +30,8 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.ensureProtocol
-import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
 import im.vector.app.features.settings.VectorSettingsActivity

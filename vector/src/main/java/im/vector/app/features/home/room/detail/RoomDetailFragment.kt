@@ -52,7 +52,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -170,8 +169,6 @@ import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomShee
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.parcelize.Parcelize
-
-
 
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
@@ -331,7 +328,7 @@ class RoomDetailFragment @Inject constructor(
 
         sharedCallActionViewModel
                 .activeCall
-                .observe(viewLifecycleOwner, Observer {
+                .observe(viewLifecycleOwner, {
                     activeCallViewHolder.updateCall(it, webRtcPeerConnectionManager)
                     invalidateOptionsMenu()
                 })
@@ -1114,7 +1111,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun updateJumpToReadMarkerViewVisibility() {
-        views.jumpToReadMarkerView?.post {
+        views.jumpToReadMarkerView.post {
             withState(roomDetailViewModel) {
                 val showJumpToUnreadBanner = when (it.unreadState) {
                     UnreadState.Unknown,
@@ -1134,7 +1131,7 @@ class RoomDetailFragment @Inject constructor(
                         }
                     }
                 }
-                views.jumpToReadMarkerView?.isVisible = showJumpToUnreadBanner
+                views.jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
             }
         }
     }

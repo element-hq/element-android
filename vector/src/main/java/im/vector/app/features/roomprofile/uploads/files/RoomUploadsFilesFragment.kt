@@ -33,7 +33,6 @@ import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericStateViewRecyclerBinding
-import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
 

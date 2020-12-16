@@ -28,7 +28,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.themes.ThemeUtils
 
-
 class SignOutBottomSheetActionButton @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {

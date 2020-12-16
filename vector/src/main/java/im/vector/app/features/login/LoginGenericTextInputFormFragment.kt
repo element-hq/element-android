@@ -33,7 +33,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentLoginGenericTextInputFormBinding
 import kotlinx.parcelize.Parcelize
 

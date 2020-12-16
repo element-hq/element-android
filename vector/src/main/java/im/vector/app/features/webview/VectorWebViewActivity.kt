@@ -24,7 +24,6 @@ import androidx.annotation.CallSuper
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.databinding.ActivityVectorWebViewBinding
 
 import org.matrix.android.sdk.api.session.Session

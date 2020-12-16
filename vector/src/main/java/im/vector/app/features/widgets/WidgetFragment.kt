@@ -42,7 +42,6 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInExternalBrowser
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.webview.WebViewEventListener
 import im.vector.app.features.widgets.webview.clearAfterWidget
@@ -119,7 +118,7 @@ class WidgetFragment @Inject constructor() :
 
     override fun onResume() {
         super.onResume()
-        views.widgetWebView?.let {
+        views.widgetWebView.let {
             it.resumeTimers()
             it.onResume()
         }
@@ -127,7 +126,7 @@ class WidgetFragment @Inject constructor() :
 
     override fun onPause() {
         super.onPause()
-        views.widgetWebView?.let {
+        views.widgetWebView.let {
             it.pauseTimers()
             it.onPause()
         }

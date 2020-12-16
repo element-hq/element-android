@@ -33,10 +33,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentBootstrapEnterAccountPasswordBinding
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-
-
 
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

@@ -27,7 +27,6 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
 
-
 class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<TroubleshootTest>)
     : RecyclerView.Adapter<NotificationTroubleshootRecyclerViewAdapter.ViewHolder>() {
 

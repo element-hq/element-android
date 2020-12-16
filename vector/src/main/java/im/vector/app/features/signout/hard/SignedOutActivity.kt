@@ -19,10 +19,8 @@ package im.vector.app.features.signout.hard
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySignedOutBinding
-import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 

@@ -35,11 +35,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.databinding.FragmentDevtoolKeyrequestsBinding
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject

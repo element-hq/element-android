@@ -28,7 +28,6 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.toMatrixItem
 
-
 private const val MAX_RECEIPT_DISPLAYED = 5
 private const val MAX_RECEIPT_DESCRIBED = 3
 

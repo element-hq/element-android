@@ -28,7 +28,6 @@ import androidx.lifecycle.Observer
 import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import im.vector.app.databinding.FragmentKeysBackupRestoreFromPassphraseBinding
 
 import javax.inject.Inject

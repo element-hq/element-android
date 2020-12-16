@@ -33,7 +33,6 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentBootstrapSaveKeyBinding
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

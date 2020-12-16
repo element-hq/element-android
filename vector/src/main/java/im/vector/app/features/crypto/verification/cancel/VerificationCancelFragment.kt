@@ -22,12 +22,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
-import im.vector.app.databinding.FragmentKeysBackupRestoreFromKeyBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
 
 import javax.inject.Inject

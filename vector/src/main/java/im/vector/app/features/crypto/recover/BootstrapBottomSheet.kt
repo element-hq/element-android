@@ -37,7 +37,6 @@ import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetBootstrapBinding
-import im.vector.app.databinding.BottomSheetGenericListBinding
 import kotlinx.parcelize.Parcelize
 
 import javax.inject.Inject

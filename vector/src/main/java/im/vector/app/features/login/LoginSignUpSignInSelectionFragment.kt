@@ -24,7 +24,6 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
 
 import javax.inject.Inject

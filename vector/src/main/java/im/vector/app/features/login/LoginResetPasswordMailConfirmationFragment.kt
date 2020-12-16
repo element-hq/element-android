@@ -24,7 +24,6 @@ import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import im.vector.app.R
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentLoginResetPasswordMailConfirmationBinding
 
 import org.matrix.android.sdk.api.failure.is401

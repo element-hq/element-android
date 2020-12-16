@@ -30,7 +30,6 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.withArgs
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.databinding.BottomSheetRoomWidgetPermissionBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.widgets.WidgetArgs
