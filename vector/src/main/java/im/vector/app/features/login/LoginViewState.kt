@@ -23,6 +23,7 @@ import com.airbnb.mvrx.PersistState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.extensions.appendParamToUrl
+import org.matrix.android.sdk.api.auth.MSC2858_SSO_REDIRECT_PATH
 import org.matrix.android.sdk.api.auth.SSO_REDIRECT_PATH
 import org.matrix.android.sdk.api.auth.SSO_REDIRECT_URL_PARAM
 
@@ -69,11 +70,15 @@ data class LoginViewState(
         return asyncLoginAction is Success
     }
 
-    fun getSsoUrl(providerId: String?): String {
+    fun getSsoUrl(providerId: String?, useMsc2858SsoPath: Boolean): String {
         return buildString {
             append(homeServerUrl?.trim { it == '/' })
             if (providerId != null) {
-                append(MSC2858_SSO_REDIRECT_PATH)
+                if (useMsc2858SsoPath) {
+                    append(MSC2858_SSO_REDIRECT_PATH)
+                } else {
+                    append(SSO_REDIRECT_PATH)
+                }
                 append("/$providerId")
             } else {
                 append(SSO_REDIRECT_PATH)

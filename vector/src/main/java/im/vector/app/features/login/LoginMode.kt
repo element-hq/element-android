@@ -24,8 +24,10 @@ sealed class LoginMode : Parcelable
 /** because persist state */ {
     @Parcelize object Unknown : LoginMode()
     @Parcelize object Password : LoginMode()
-    @Parcelize data class Sso(val ssoIdentityProviders: List<SsoIdentityProvider>?) : LoginMode()
-    @Parcelize data class SsoAndPassword(val ssoIdentityProviders: List<SsoIdentityProvider>?) : LoginMode()
+    @Parcelize data class Sso(val ssoIdentityProviders: List<SsoIdentityProvider>?,
+                              val useMsc2858SsoPath: Boolean) : LoginMode()
+    @Parcelize data class SsoAndPassword(val ssoIdentityProviders: List<SsoIdentityProvider>?,
+                                         val useMsc2858SsoPath: Boolean) : LoginMode()
     @Parcelize object Unsupported : LoginMode()
 }
 

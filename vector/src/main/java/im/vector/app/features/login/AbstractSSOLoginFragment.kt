@@ -86,7 +86,7 @@ abstract class AbstractSSOLoginFragment : AbstractLoginFragment() {
         withState(loginViewModel) { state ->
             if (state.loginMode.hasSso() && state.loginMode.ssoIdentityProviders().isNullOrEmpty()) {
                 // in this case we can prefetch (not other cases for privacy concerns)
-                prefetchUrl(state.getSsoUrl(null))
+                prefetchUrl(state.getSsoUrl(null, false))
             }
         }
     }

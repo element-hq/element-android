@@ -42,6 +42,22 @@ internal data class LoginFlow(
          * the client can show a button for each of the supported providers
          * See MSC #2858
          */
+        @Json(name = "identity_providers")
+        val _ssoIdentityProvider: List<SsoIdentityProvider>?,
+
+        /**
+         * Augments m.login.sso flow discovery definition to include metadata on the supported IDPs
+         * the client can show a button for each of the supported providers
+         * Temporary field since the MSC #2858 is not merged yet
+         */
         @Json(name = "org.matrix.msc2858.identity_providers")
-        val ssoIdentityProvider: List<SsoIdentityProvider>?
-)
+        val _msc2858SsoIdentityProvider: List<SsoIdentityProvider>?
+) {
+    // Return the stable version if available or the unstable if any
+    val bestSsoIdentityProvider: List<SsoIdentityProvider>?
+        get() = _ssoIdentityProvider ?: _msc2858SsoIdentityProvider
+
+    val useMsc2858SsoPath: Boolean
+        get() = _ssoIdentityProvider == null
+}
+

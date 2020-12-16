@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.Cancelable
@@ -277,9 +278,11 @@ internal class DefaultAuthenticationService @Inject constructor(
         val loginFlowResponse = executeRequest<LoginFlowResponse>(null) {
             apiCall = authAPI.getLoginFlows()
         }
+        val ssoLoginFlow = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }
         return LoginFlowResult.Success(
                 loginFlowResponse.flows.orEmpty().mapNotNull { it.type },
-                loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
+                ssoLoginFlow?.bestSsoIdentityProvider,
+                ssoLoginFlow?.useMsc2858SsoPath.orFalse(),
                 versions.isLoginAndRegistrationSupportedBySdk(),
                 homeServerUrl,
                 !versions.isSupportedBySdk()

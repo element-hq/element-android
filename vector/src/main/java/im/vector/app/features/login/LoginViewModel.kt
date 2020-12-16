@@ -208,7 +208,7 @@ class LoginViewModel @AssistedInject constructor(
         setState {
             copy(
                     signMode = SignMode.SignIn,
-                    loginMode = LoginMode.Sso(action.ssoIdentityProviders),
+                    loginMode = LoginMode.Sso(action.ssoIdentityProviders, action.useMsc2858SsoPath),
                     homeServerUrl = action.homeServerUrl,
                     deviceId = action.deviceId
             )
@@ -781,12 +781,15 @@ class LoginViewModel @AssistedInject constructor(
                 when (data) {
                     is LoginFlowResult.Success -> {
                         val loginMode = when {
-                            // SSO login is taken first
                             data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                                    && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                            else                                                                  -> LoginMode.Unsupported
+                                    && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) ->
+                                LoginMode.SsoAndPassword(data.ssoIdentityProviders, data.useMsc2858SsoPath)
+                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 ->
+                                LoginMode.Sso(data.ssoIdentityProviders, data.useMsc2858SsoPath)
+                            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            ->
+                                LoginMode.Password
+                            else                                                                  ->
+                                LoginMode.Unsupported
                         }
 
                         // FIXME We should post a view event here normally?

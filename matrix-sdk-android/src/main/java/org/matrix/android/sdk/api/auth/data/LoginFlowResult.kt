@@ -20,6 +20,7 @@ sealed class LoginFlowResult {
     data class Success(
             val supportedLoginTypes: List<String>,
             val ssoIdentityProviders: List<SsoIdentityProvider>?,
+            val useMsc2858SsoPath: Boolean,
             val isLoginAndRegistrationSupported: Boolean,
             val homeServerUrl: String,
             val isOutdatedHomeserver: Boolean

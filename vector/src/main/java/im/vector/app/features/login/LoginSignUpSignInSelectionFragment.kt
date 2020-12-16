@@ -59,7 +59,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
                 loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()
                 loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
-                        val url = withState(loginViewModel) { it.getSsoUrl(id) }
+                        val url = withState(loginViewModel) { it.getSsoUrl(id, state.loginMode.useMsc2858SsoPath) }
                         openInCustomTab(url)
                     }
                 }
@@ -89,7 +89,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
     @OnClick(R.id.loginSignupSigninSubmit)
     fun submit() = withState(loginViewModel) { state ->
         if (state.loginMode is LoginMode.Sso) {
-            openInCustomTab(state.getSsoUrl(null))
+            openInCustomTab(state.getSsoUrl(null, false))
         } else {
             loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
         }

@@ -178,7 +178,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
                 loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders
                 loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
-                        openInCustomTab(state.getSsoUrl(id))
+                        openInCustomTab(state.getSsoUrl(id, state.loginMode.useMsc2858SsoPath))
                     }
                 }
             } else {
