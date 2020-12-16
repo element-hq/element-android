@@ -45,16 +45,16 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             renderState(it)
         }
 
-        views.callControlsSoundDevice.clickableView.debouncedClicks {
+        views.callControlsSoundDevice.views.itemVerificationClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.SwitchSoundDevice)
         }
 
-        views.callControlsSwitchCamera.clickableView.debouncedClicks {
+        views.callControlsSwitchCamera.views.itemVerificationClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleCamera)
             dismiss()
         }
 
-        views.callControlsToggleSDHD.clickableView.debouncedClicks {
+        views.callControlsToggleSDHD.views.itemVerificationClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleHDSD)
             dismiss()
         }

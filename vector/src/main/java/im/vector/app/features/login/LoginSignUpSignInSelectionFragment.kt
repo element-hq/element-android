@@ -45,37 +45,37 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
     }
 
     private fun setupViews() {
-        loginSignupSigninSubmit.setOnClickListener { submit() }
-        loginSignupSigninSignIn.setOnClickListener { signIn() }
+        views.loginSignupSigninSubmit.setOnClickListener { submit() }
+        views.loginSignupSigninSignIn.setOnClickListener { signIn() }
     }
 
     private fun setupUi(state: LoginViewState) {
         when (state.serverType) {
             ServerType.MatrixOrg -> {
-                loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                loginSignupSigninServerIcon.isVisible = true
-                loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
-                loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
+                views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
+                views.loginSignupSigninServerIcon.isVisible = true
+                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
+                views.loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.EMS       -> {
-                loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
-                loginSignupSigninServerIcon.isVisible = true
-                loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
-                loginSignupSigninText.text = state.homeServerUrl.toReducedUrl()
+                views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
+                views.loginSignupSigninServerIcon.isVisible = true
+                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
+                views.loginSignupSigninText.text = state.homeServerUrl.toReducedUrl()
             }
             ServerType.Other     -> {
-                loginSignupSigninServerIcon.isVisible = false
-                loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
-                loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
+                views.loginSignupSigninServerIcon.isVisible = false
+                views.loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
+                views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
             }
             ServerType.Unknown   -> Unit /* Should not happen */
         }
 
         when (state.loginMode) {
             is LoginMode.SsoAndPassword -> {
-                loginSignupSigninSignInSocialLoginContainer.isVisible = true
-                loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()
-                loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
+                views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
+                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()
+                views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
                         val url = withState(loginViewModel) { it.getSsoUrl(id) }
                         openInCustomTab(url)
@@ -84,8 +84,8 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
             }
             else                        -> {
                 // SSO only is managed without container as well as No sso
-                loginSignupSigninSignInSocialLoginContainer.isVisible = false
-                loginSignupSigninSocialLoginButtons.ssoIdentityProviders = null
+                views.loginSignupSigninSignInSocialLoginContainer.isVisible = false
+                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = null
             }
         }
     }
@@ -94,12 +94,12 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
         when (state.loginMode) {
             is LoginMode.Sso -> {
                 // change to only one button that is sign in with sso
-                loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
-                loginSignupSigninSignIn.isVisible = false
+                views.loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
+                views.loginSignupSigninSignIn.isVisible = false
             }
             else             -> {
-                loginSignupSigninSubmit.text = getString(R.string.login_signup)
-                loginSignupSigninSignIn.isVisible = true
+                views.loginSignupSigninSubmit.text = getString(R.string.login_signup)
+                views.loginSignupSigninSignIn.isVisible = true
             }
         }
     }

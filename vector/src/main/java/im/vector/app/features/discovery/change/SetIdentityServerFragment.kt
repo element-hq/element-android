@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
@@ -58,11 +59,11 @@ class SetIdentityServerFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { state ->
         if (state.defaultIdentityServerUrl.isNullOrEmpty()) {
             // No default
-            identityServerSetDefaultNotice.isVisible = false
-            identityServerSetDefaultSubmit.isVisible = false
-            identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice_no_default)
+            views.identityServerSetDefaultNotice.isVisible = false
+            views.identityServerSetDefaultSubmit.isVisible = false
+            views.identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice_no_default)
         } else {
-            identityServerSetDefaultNotice.text = getString(
+            views.identityServerSetDefaultNotice.text = getString(
                     R.string.identity_server_set_default_notice,
                     state.homeServerUrl.toReducedUrl(),
                     state.defaultIdentityServerUrl.toReducedUrl()
@@ -71,10 +72,10 @@ class SetIdentityServerFragment @Inject constructor(
                     .colorizeMatchingText(state.defaultIdentityServerUrl.toReducedUrl(),
                             colorProvider.getColorFromAttribute(R.attr.riotx_text_primary_body_contrast))
 
-            identityServerSetDefaultNotice.isVisible = true
-            identityServerSetDefaultSubmit.isVisible = true
-            identityServerSetDefaultSubmit.text = getString(R.string.identity_server_set_default_submit, state.defaultIdentityServerUrl.toReducedUrl())
-            identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice)
+            views.identityServerSetDefaultNotice.isVisible = true
+            views.identityServerSetDefaultSubmit.isVisible = true
+            views.identityServerSetDefaultSubmit.text = getString(R.string.identity_server_set_default_submit, state.defaultIdentityServerUrl.toReducedUrl())
+            views.identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice)
         }
     }
 
@@ -83,28 +84,28 @@ class SetIdentityServerFragment @Inject constructor(
 
         sharedViewModel = activityViewModelProvider.get(DiscoverySharedViewModel::class.java)
 
-        identityServerSetDefaultAlternativeTextInput.setOnEditorActionListener { _, actionId, _ ->
+        views.identityServerSetDefaultAlternativeTextInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.handle(SetIdentityServerAction.UseCustomIdentityServer(identityServerSetDefaultAlternativeTextInput.text.toString()))
+                viewModel.handle(SetIdentityServerAction.UseCustomIdentityServer(views.identityServerSetDefaultAlternativeTextInput.text.toString()))
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
         }
 
-        identityServerSetDefaultAlternativeTextInput
+        views.identityServerSetDefaultAlternativeTextInput
                 .textChanges()
                 .subscribe {
-                    identityServerSetDefaultAlternativeTil.error = null
-                    identityServerSetDefaultAlternativeSubmit.isEnabled = it.isNotEmpty()
+                    views.identityServerSetDefaultAlternativeTil.error = null
+                    views.identityServerSetDefaultAlternativeSubmit.isEnabled = it.isNotEmpty()
                 }
                 .disposeOnDestroyView()
 
-        identityServerSetDefaultSubmit.debouncedClicks {
+        views.identityServerSetDefaultSubmit.debouncedClicks {
             viewModel.handle(SetIdentityServerAction.UseDefaultIdentityServer)
         }
 
-        identityServerSetDefaultAlternativeSubmit.debouncedClicks {
-            viewModel.handle(SetIdentityServerAction.UseCustomIdentityServer(identityServerSetDefaultAlternativeTextInput.text.toString()))
+        views.identityServerSetDefaultAlternativeSubmit.debouncedClicks {
+            viewModel.handle(SetIdentityServerAction.UseCustomIdentityServer(views.identityServerSetDefaultAlternativeTextInput.text.toString()))
         }
 
         viewModel.observeViewEvents {
@@ -147,7 +148,7 @@ class SetIdentityServerFragment @Inject constructor(
                     .show()
         } else {
             // Display the error inlined
-            identityServerSetDefaultAlternativeTil.error = message
+            views.identityServerSetDefaultAlternativeTil.error = message
         }
     }
 

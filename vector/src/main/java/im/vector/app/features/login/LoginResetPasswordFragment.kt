@@ -60,24 +60,24 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
     }
 
     private fun setupUi(state: LoginViewState) {
-        resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrl.toReducedUrl())
+        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrl.toReducedUrl())
     }
 
     private fun setupSubmitButton() {
-        resetPasswordSubmit.setOnClickListener { submit() }
+        views.resetPasswordSubmit.setOnClickListener { submit() }
 
         Observable
                 .combineLatest(
-                        resetPasswordEmail.textChanges().map { it.isEmail() },
-                        passwordField.textChanges().map { it.isNotEmpty() },
+                        views.resetPasswordEmail.textChanges().map { it.isEmail() },
+                        views.passwordField.textChanges().map { it.isNotEmpty() },
                         BiFunction<Boolean, Boolean, Boolean> { isEmail, isPasswordNotEmpty ->
                             isEmail && isPasswordNotEmpty
                         }
                 )
                 .subscribeBy {
-                    resetPasswordEmailTil.error = null
-                    passwordFieldTil.error = null
-                    resetPasswordSubmit.isEnabled = it
+                    views.resetPasswordEmailTil.error = null
+                    views.passwordFieldTil.error = null
+                    views.resetPasswordSubmit.isEnabled = it
                 }
                 .disposeOnDestroyView()
     }
@@ -102,22 +102,22 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
     }
 
     private fun doSubmit() {
-        val email = resetPasswordEmail.text.toString()
-        val password = passwordField.text.toString()
+        val email = views.resetPasswordEmail.text.toString()
+        val password = views.passwordField.text.toString()
 
         loginViewModel.handle(LoginAction.ResetPassword(email, password))
     }
 
     private fun cleanupUi() {
-        resetPasswordSubmit.hideKeyboard()
-        resetPasswordEmailTil.error = null
-        passwordFieldTil.error = null
+        views.resetPasswordSubmit.hideKeyboard()
+        views.resetPasswordEmailTil.error = null
+        views.passwordFieldTil.error = null
     }
 
     private fun setupPasswordReveal() {
         passwordShown = false
 
-        passwordReveal.setOnClickListener {
+        views.passwordReveal.setOnClickListener {
             passwordShown = !passwordShown
 
             renderPasswordField()
@@ -127,14 +127,14 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
     }
 
     private fun renderPasswordField() {
-        passwordField.showPassword(passwordShown)
+        views.passwordField.showPassword(passwordShown)
 
         if (passwordShown) {
-            passwordReveal.setImageResource(R.drawable.ic_eye_closed)
-            passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
+            views.passwordReveal.setImageResource(R.drawable.ic_eye_closed)
+            views.passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
         } else {
-            passwordReveal.setImageResource(R.drawable.ic_eye)
-            passwordReveal.contentDescription = getString(R.string.a11y_show_password)
+            views.passwordReveal.setImageResource(R.drawable.ic_eye)
+            views.passwordReveal.contentDescription = getString(R.string.a11y_show_password)
         }
     }
 
@@ -152,7 +152,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
                 renderPasswordField()
             }
             is Fail    -> {
-                resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
+                views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
             is Success -> {
                 Unit

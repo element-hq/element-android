@@ -22,7 +22,7 @@ import android.widget.LinearLayout
 import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
 import im.vector.app.R
-
+import im.vector.app.databinding.ViewPasswordStrengthBarBinding
 
 /**
  * A password strength bar custom widget
@@ -39,6 +39,8 @@ class PasswordStrengthBar @JvmOverloads constructor(
         defStyleAttr: Int = 0)
     : LinearLayout(context, attrs, defStyleAttr) {
 
+    private val views: ViewPasswordStrengthBarBinding
+
     private val colorBackground = ContextCompat.getColor(context, R.color.password_strength_bar_undefined)
     private val colorWeak = ContextCompat.getColor(context, R.color.password_strength_bar_weak)
     private val colorLow = ContextCompat.getColor(context, R.color.password_strength_bar_low)
@@ -52,34 +54,34 @@ class PasswordStrengthBar @JvmOverloads constructor(
 
             when (newValue) {
                 0 -> {
-                    password_strength_bar_1.setBackgroundColor(colorBackground)
-                    password_strength_bar_2.setBackgroundColor(colorBackground)
-                    password_strength_bar_3.setBackgroundColor(colorBackground)
-                    password_strength_bar_4.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar1.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar2.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar3.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar4.setBackgroundColor(colorBackground)
                 }
                 1 -> {
-                    password_strength_bar_1.setBackgroundColor(colorWeak)
-                    password_strength_bar_2.setBackgroundColor(colorBackground)
-                    password_strength_bar_3.setBackgroundColor(colorBackground)
-                    password_strength_bar_4.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar1.setBackgroundColor(colorWeak)
+                    views.passwordStrengthBar2.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar3.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar4.setBackgroundColor(colorBackground)
                 }
                 2 -> {
-                    password_strength_bar_1.setBackgroundColor(colorLow)
-                    password_strength_bar_2.setBackgroundColor(colorLow)
-                    password_strength_bar_3.setBackgroundColor(colorBackground)
-                    password_strength_bar_4.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar1.setBackgroundColor(colorLow)
+                    views.passwordStrengthBar2.setBackgroundColor(colorLow)
+                    views.passwordStrengthBar3.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar4.setBackgroundColor(colorBackground)
                 }
                 3 -> {
-                    password_strength_bar_1.setBackgroundColor(colorOk)
-                    password_strength_bar_2.setBackgroundColor(colorOk)
-                    password_strength_bar_3.setBackgroundColor(colorOk)
-                    password_strength_bar_4.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar1.setBackgroundColor(colorOk)
+                    views.passwordStrengthBar2.setBackgroundColor(colorOk)
+                    views.passwordStrengthBar3.setBackgroundColor(colorOk)
+                    views.passwordStrengthBar4.setBackgroundColor(colorBackground)
                 }
                 4 -> {
-                    password_strength_bar_1.setBackgroundColor(colorStrong)
-                    password_strength_bar_2.setBackgroundColor(colorStrong)
-                    password_strength_bar_3.setBackgroundColor(colorStrong)
-                    password_strength_bar_4.setBackgroundColor(colorStrong)
+                    views.passwordStrengthBar1.setBackgroundColor(colorStrong)
+                    views.passwordStrengthBar2.setBackgroundColor(colorStrong)
+                    views.passwordStrengthBar3.setBackgroundColor(colorStrong)
+                    views.passwordStrengthBar4.setBackgroundColor(colorStrong)
                 }
             }
         }
@@ -87,6 +89,7 @@ class PasswordStrengthBar @JvmOverloads constructor(
     init {
         LayoutInflater.from(context)
                 .inflate(R.layout.view_password_strength_bar, this, true)
+        views = ViewPasswordStrengthBarBinding.bind(this)
         orientation = HORIZONTAL
         strength = 0
     }

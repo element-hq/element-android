@@ -55,13 +55,13 @@ class BootstrapAccountPasswordFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         val recPassPhrase = getString(R.string.account_password)
-        bootstrapDescriptionText.text = getString(R.string.enter_account_password, recPassPhrase)
+        views.bootstrapDescriptionText.text = getString(R.string.enter_account_password, recPassPhrase)
                 .toSpannable()
                 .colorizeMatchingText(recPassPhrase, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
-        bootstrapAccountPasswordEditText.hint = getString(R.string.account_password)
+        views.bootstrapAccountPasswordEditText.hint = getString(R.string.account_password)
 
-        bootstrapAccountPasswordEditText.editorActionEvents()
+        views.bootstrapAccountPasswordEditText.editorActionEvents()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -71,21 +71,21 @@ class BootstrapAccountPasswordFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        bootstrapAccountPasswordEditText.textChanges()
+        views.bootstrapAccountPasswordEditText.textChanges()
                 .distinctUntilChanged()
                 .subscribe {
                     if (!it.isNullOrBlank()) {
-                        bootstrapAccountPasswordTil.error = null
+                        views.bootstrapAccountPasswordTil.error = null
                     }
                 }
                 .disposeOnDestroyView()
 
-        ssss_view_show_password.debouncedClicks { sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility) }
-        bootstrapPasswordButton.debouncedClicks { submit() }
+        views.ssssViewShowPassword.debouncedClicks { sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility) }
+        views.bootstrapPasswordButton.debouncedClicks { submit() }
 
         withState(sharedViewModel) { state ->
             (state.step as? BootstrapStep.AccountPassword)?.failure?.let {
-                bootstrapAccountPasswordTil.error = it
+                views.bootstrapAccountPasswordTil.error = it
             }
         }
     }
@@ -94,9 +94,9 @@ class BootstrapAccountPasswordFragment @Inject constructor(
         if (state.step !is BootstrapStep.AccountPassword) {
             return@withState
         }
-        val accountPassword = bootstrapAccountPasswordEditText.text?.toString()
+        val accountPassword = views.bootstrapAccountPasswordEditText.text?.toString()
         if (accountPassword.isNullOrBlank()) {
-            bootstrapAccountPasswordTil.error = getString(R.string.error_empty_field_your_password)
+            views.bootstrapAccountPasswordTil.error = getString(R.string.error_empty_field_your_password)
         } else {
             view?.hideKeyboard()
             sharedViewModel.handle(BootstrapActions.ReAuth(accountPassword))
@@ -106,8 +106,8 @@ class BootstrapAccountPasswordFragment @Inject constructor(
     override fun invalidate() = withState(sharedViewModel) { state ->
         if (state.step is BootstrapStep.AccountPassword) {
             val isPasswordVisible = state.step.isPasswordVisible
-            bootstrapAccountPasswordEditText.showPassword(isPasswordVisible, updateCursor = false)
-            ssss_view_show_password.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+            views.bootstrapAccountPasswordEditText.showPassword(isPasswordVisible, updateCursor = false)
+            views.ssssViewShowPassword.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
         }
     }
 }

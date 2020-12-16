@@ -64,9 +64,9 @@ class BootstrapMigrateBackupFragment @Inject constructor(
 
         withState(sharedViewModel) {
             // set initial value (useful when coming back)
-            bootstrapMigrateEditText.setText(it.passphrase ?: "")
+            views.bootstrapMigrateEditText.setText(it.passphrase ?: "")
         }
-        bootstrapMigrateEditText.editorActionEvents()
+        views.bootstrapMigrateEditText.editorActionEvents()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -76,19 +76,19 @@ class BootstrapMigrateBackupFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        bootstrapMigrateEditText.textChanges()
+        views.bootstrapMigrateEditText.textChanges()
                 .skipInitialValue()
                 .subscribe {
-                    bootstrapRecoveryKeyEnterTil.error = null
+                    views.bootstrapRecoveryKeyEnterTil.error = null
                     // sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it?.toString() ?: ""))
                 }
                 .disposeOnDestroyView()
 
         // sharedViewModel.observeViewEvents {}
-        bootstrapMigrateContinueButton.debouncedClicks { submit() }
-        bootstrapMigrateShowPassword.debouncedClicks { sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility) }
-        bootstrapMigrateForgotPassphrase.debouncedClicks { sharedViewModel.handle(BootstrapActions.HandleForgotBackupPassphrase) }
-        bootstrapMigrateUseFile.debouncedClicks { startImportTextFromFileIntent(requireContext(), importFileStartForActivityResult) }
+        views.bootstrapMigrateContinueButton.debouncedClicks { submit() }
+        views.bootstrapMigrateShowPassword.debouncedClicks { sharedViewModel.handle(BootstrapActions.TogglePasswordVisibility) }
+        views.bootstrapMigrateForgotPassphrase.debouncedClicks { sharedViewModel.handle(BootstrapActions.HandleForgotBackupPassphrase) }
+        views.bootstrapMigrateUseFile.debouncedClicks { startImportTextFromFileIntent(requireContext(), importFileStartForActivityResult) }
     }
 
     private fun submit() = withState(sharedViewModel) { state ->
@@ -96,12 +96,12 @@ class BootstrapMigrateBackupFragment @Inject constructor(
 
         val isEnteringKey = getBackupSecretForMigration.useKey()
 
-        val secret = bootstrapMigrateEditText.text?.toString()
+        val secret = views.bootstrapMigrateEditText.text?.toString()
         if (secret.isNullOrEmpty()) {
             val errRes = if (isEnteringKey) R.string.recovery_key_empty_error_message else R.string.passphrase_empty_error_message
-            bootstrapRecoveryKeyEnterTil.error = getString(errRes)
+            views.bootstrapRecoveryKeyEnterTil.error = getString(errRes)
         } else if (isEnteringKey && !isValidRecoveryKey(secret)) {
-            bootstrapRecoveryKeyEnterTil.error = getString(R.string.bootstrap_invalid_recovery_key)
+            views.bootstrapRecoveryKeyEnterTil.error = getString(R.string.bootstrap_invalid_recovery_key)
         } else {
             view?.hideKeyboard()
             if (isEnteringKey) {
@@ -118,38 +118,38 @@ class BootstrapMigrateBackupFragment @Inject constructor(
         val isEnteringKey = getBackupSecretForMigration.useKey()
 
         if (isEnteringKey) {
-            bootstrapMigrateShowPassword.isVisible = false
-            bootstrapMigrateEditText.inputType = TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or TYPE_TEXT_FLAG_MULTI_LINE
+            views.bootstrapMigrateShowPassword.isVisible = false
+            views.bootstrapMigrateEditText.inputType = TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or TYPE_TEXT_FLAG_MULTI_LINE
 
             val recKey = getString(R.string.bootstrap_migration_backup_recovery_key)
-            bootstrapDescriptionText.text = getString(R.string.enter_account_password, recKey)
+            views.bootstrapDescriptionText.text = getString(R.string.enter_account_password, recKey)
 
-            bootstrapMigrateEditText.hint = recKey
+            views.bootstrapMigrateEditText.hint = recKey
 
-            bootstrapMigrateEditText.hint = recKey
-            bootstrapMigrateForgotPassphrase.isVisible = false
-            bootstrapMigrateUseFile.isVisible = true
+            views.bootstrapMigrateEditText.hint = recKey
+            views.bootstrapMigrateForgotPassphrase.isVisible = false
+            views.bootstrapMigrateUseFile.isVisible = true
         } else {
-            bootstrapMigrateShowPassword.isVisible = true
+            views.bootstrapMigrateShowPassword.isVisible = true
 
             if (state.step is BootstrapStep.GetBackupSecretPassForMigration) {
                 val isPasswordVisible = state.step.isPasswordVisible
-                bootstrapMigrateEditText.showPassword(isPasswordVisible, updateCursor = false)
-                bootstrapMigrateShowPassword.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+                views.bootstrapMigrateEditText.showPassword(isPasswordVisible, updateCursor = false)
+                views.bootstrapMigrateShowPassword.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
             }
 
-            bootstrapDescriptionText.text = getString(R.string.bootstrap_migration_enter_backup_password)
+            views.bootstrapDescriptionText.text = getString(R.string.bootstrap_migration_enter_backup_password)
 
-            bootstrapMigrateEditText.hint = getString(R.string.passphrase_enter_passphrase)
+            views.bootstrapMigrateEditText.hint = getString(R.string.passphrase_enter_passphrase)
 
-            bootstrapMigrateForgotPassphrase.isVisible = true
+            views.bootstrapMigrateForgotPassphrase.isVisible = true
 
             val recKey = getString(R.string.bootstrap_migration_use_recovery_key)
-            bootstrapMigrateForgotPassphrase.text = getString(R.string.bootstrap_migration_with_passphrase_helper_with_link, recKey)
+            views.bootstrapMigrateForgotPassphrase.text = getString(R.string.bootstrap_migration_with_passphrase_helper_with_link, recKey)
                     .toSpannable()
                     .colorizeMatchingText(recKey, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
-            bootstrapMigrateUseFile.isVisible = false
+            views.bootstrapMigrateUseFile.isVisible = false
         }
     }
 
@@ -161,7 +161,7 @@ class BootstrapMigrateBackupFragment @Inject constructor(
                             ?.bufferedReader()
                             ?.use { it.readText() }
                             ?.let {
-                                bootstrapMigrateEditText.setText(it)
+                                views.bootstrapMigrateEditText.setText(it)
                             }
                 }
             }

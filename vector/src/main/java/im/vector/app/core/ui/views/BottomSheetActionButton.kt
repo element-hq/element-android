@@ -39,7 +39,7 @@ class BottomSheetActionButton @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-    private val views : ItemVerificationActionBinding
+    val views : ItemVerificationActionBinding
 
     var title: String? = null
         set(value) {

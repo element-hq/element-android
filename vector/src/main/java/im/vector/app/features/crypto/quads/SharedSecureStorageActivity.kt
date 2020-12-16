@@ -65,7 +65,7 @@ class SharedSecureStorageActivity :
         super.onCreate(savedInstanceState)
         supportFragmentManager.addFragmentOnAttachListener(this)
 
-        toolbar.visibility = View.GONE
+        views.toolbar.visibility = View.GONE
 
         viewModel.observeViewEvents { observeViewEvents(it) }
 
@@ -132,7 +132,7 @@ class SharedSecureStorageActivity :
     }
 
     override fun onAttachFragment(fragmentManager: FragmentManager, fragment: Fragment) {
-        if (fragment is VectorBaseBottomSheetDialogFragment) {
+        if (fragment is VectorBaseBottomSheetDialogFragment<*>) {
             fragment.resultListener = this
         }
     }

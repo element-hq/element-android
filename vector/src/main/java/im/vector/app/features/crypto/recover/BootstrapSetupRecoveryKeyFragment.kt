@@ -43,15 +43,15 @@ class BootstrapSetupRecoveryKeyFragment @Inject constructor()
         super.onViewCreated(view, savedInstanceState)
 
         // Actions when a key backup exist
-        views.bootstrapSetupSecureSubmit.clickableView.debouncedClicks {
+        views.bootstrapSetupSecureSubmit.views.itemVerificationClickableZone.debouncedClicks {
             sharedViewModel.handle(BootstrapActions.StartKeyBackupMigration)
         }
 
         // Actions when there is no key backup
-        views.bootstrapSetupSecureUseSecurityKey.clickableView.debouncedClicks {
+        views.bootstrapSetupSecureUseSecurityKey.views.itemVerificationClickableZone.debouncedClicks {
             sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
         }
-        views.bootstrapSetupSecureUseSecurityPassphrase.clickableView.debouncedClicks {
+        views.bootstrapSetupSecureUseSecurityPassphrase.views.itemVerificationClickableZone.debouncedClicks {
             sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = true))
         }
     }

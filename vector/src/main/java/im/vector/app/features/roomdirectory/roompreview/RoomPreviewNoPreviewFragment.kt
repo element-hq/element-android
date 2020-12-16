@@ -56,9 +56,9 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(roomPreviewNoPreviewToolbar)
+        setupToolbar(views.roomPreviewNoPreviewToolbar)
 
-        roomPreviewNoPreviewJoin.callback = object : ButtonStateView.Callback {
+        views.roomPreviewNoPreviewJoin.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
                 roomPreviewViewModel.handle(RoomPreviewAction.Join)
             }
@@ -71,9 +71,9 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(roomPreviewViewModel) { state ->
-        TransitionManager.beginDelayedTransition(roomPreviewNoPreviewRoot)
+        TransitionManager.beginDelayedTransition(views.roomPreviewNoPreviewRoot)
 
-        roomPreviewNoPreviewJoin.render(
+        views.roomPreviewNoPreviewJoin.render(
                 when (state.roomJoinState) {
                     JoinState.NOT_JOINED    -> ButtonStateView.State.Button
                     JoinState.JOINING       -> ButtonStateView.State.Loading
@@ -83,10 +83,10 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
         )
 
         if (state.lastError == null) {
-            roomPreviewNoPreviewError.isVisible = false
+            views.roomPreviewNoPreviewError.isVisible = false
         } else {
-            roomPreviewNoPreviewError.isVisible = true
-            roomPreviewNoPreviewError.text = errorFormatter.toHumanReadable(state.lastError)
+            views.roomPreviewNoPreviewError.isVisible = true
+            views.roomPreviewNoPreviewError.text = errorFormatter.toHumanReadable(state.lastError)
         }
 
         if (state.roomJoinState == JoinState.JOINED) {
@@ -99,37 +99,37 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
         val bestName = state.roomName ?: state.roomAlias ?: state.roomId
         when (state.peekingState) {
             is Loading -> {
-                roomPreviewPeekingProgress.isVisible = true
-                roomPreviewNoPreviewJoin.isVisible = false
+                views.roomPreviewPeekingProgress.isVisible = true
+                views.roomPreviewNoPreviewJoin.isVisible = false
             }
             is Success -> {
-                roomPreviewPeekingProgress.isVisible = false
+                views.roomPreviewPeekingProgress.isVisible = false
                 when (state.peekingState.invoke()) {
                     PeekingState.FOUND     -> {
                         // show join buttons
-                        roomPreviewNoPreviewJoin.isVisible = true
+                        views.roomPreviewNoPreviewJoin.isVisible = true
                         renderState(bestName, state.matrixItem(), state.roomTopic)
                     }
                     PeekingState.NO_ACCESS -> {
-                        roomPreviewNoPreviewJoin.isVisible = true
-                        roomPreviewNoPreviewLabel.isVisible = true
-                        roomPreviewNoPreviewLabel.setText(R.string.room_preview_no_preview_join)
+                        views.roomPreviewNoPreviewJoin.isVisible = true
+                        views.roomPreviewNoPreviewLabel.isVisible = true
+                        views.roomPreviewNoPreviewLabel.setText(R.string.room_preview_no_preview_join)
                         renderState(bestName, state.matrixItem().takeIf { state.roomAlias != null }, state.roomTopic)
                     }
                     else                   -> {
-                        roomPreviewNoPreviewJoin.isVisible = false
-                        roomPreviewNoPreviewLabel.isVisible = true
-                        roomPreviewNoPreviewLabel.setText(R.string.room_preview_not_found)
+                        views.roomPreviewNoPreviewJoin.isVisible = false
+                        views.roomPreviewNoPreviewLabel.isVisible = true
+                        views.roomPreviewNoPreviewLabel.setText(R.string.room_preview_not_found)
                         renderState(bestName, null, state.roomTopic)
                     }
                 }
             }
             else       -> {
                 // Render with initial state, no peeking
-                roomPreviewPeekingProgress.isVisible = false
-                roomPreviewNoPreviewJoin.isVisible = true
+                views.roomPreviewPeekingProgress.isVisible = false
+                views.roomPreviewNoPreviewJoin.isVisible = true
                 renderState(bestName, state.matrixItem(), state.roomTopic)
-                roomPreviewNoPreviewLabel.isVisible = false
+                views.roomPreviewNoPreviewLabel.isVisible = false
             }
         }
     }
@@ -137,18 +137,18 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
     private fun renderState(roomName: String, matrixItem: MatrixItem?, topic: String?) {
         // Toolbar
         if (matrixItem != null) {
-            roomPreviewNoPreviewToolbarAvatar.isVisible = true
-            roomPreviewNoPreviewAvatar.isVisible = true
-            avatarRenderer.render(matrixItem, roomPreviewNoPreviewToolbarAvatar)
-            avatarRenderer.render(matrixItem, roomPreviewNoPreviewAvatar)
+            views.roomPreviewNoPreviewToolbarAvatar.isVisible = true
+            views.roomPreviewNoPreviewAvatar.isVisible = true
+            avatarRenderer.render(matrixItem, views.roomPreviewNoPreviewToolbarAvatar)
+            avatarRenderer.render(matrixItem, views.roomPreviewNoPreviewAvatar)
         } else {
-            roomPreviewNoPreviewToolbarAvatar.isVisible = false
-            roomPreviewNoPreviewAvatar.isVisible = false
+            views.roomPreviewNoPreviewToolbarAvatar.isVisible = false
+            views.roomPreviewNoPreviewAvatar.isVisible = false
         }
-        roomPreviewNoPreviewToolbarTitle.text = roomName
+        views.roomPreviewNoPreviewToolbarTitle.text = roomName
 
         // Screen
-        roomPreviewNoPreviewName.text = roomName
-        roomPreviewNoPreviewTopic.setTextOrHide(topic)
+        views.roomPreviewNoPreviewName.text = roomName
+        views.roomPreviewNoPreviewTopic.setTextOrHide(topic)
     }
 }

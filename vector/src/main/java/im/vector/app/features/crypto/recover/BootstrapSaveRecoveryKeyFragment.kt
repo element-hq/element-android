@@ -53,9 +53,9 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.recoverySave.clickableView.debouncedClicks { downloadRecoveryKey() }
-        views.recoveryCopy.clickableView.debouncedClicks { shareRecoveryKey() }
-        views.recoveryContinue.clickableView.debouncedClicks {
+        views.recoverySave.views.itemVerificationClickableZone.debouncedClicks { downloadRecoveryKey() }
+        views.recoveryCopy.views.itemVerificationClickableZone.debouncedClicks { shareRecoveryKey() }
+        views.recoveryContinue.views.itemVerificationClickableZone.debouncedClicks {
             // We do not display the final Fragment anymore
             // TODO Do some cleanup
             // sharedViewModel.handle(BootstrapActions.GoToCompleted)
