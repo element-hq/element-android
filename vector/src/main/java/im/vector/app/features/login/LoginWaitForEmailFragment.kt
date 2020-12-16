@@ -25,7 +25,6 @@ import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginWaitForEmailBinding
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
 

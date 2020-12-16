@@ -27,7 +27,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import kotlinx.parcelize.Parcelize
-
 import javax.inject.Inject
 
 class VerificationQRWaitingFragment @Inject constructor(

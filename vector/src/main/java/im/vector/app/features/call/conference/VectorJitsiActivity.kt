@@ -31,7 +31,6 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
 import kotlinx.parcelize.Parcelize
-
 import org.jitsi.meet.sdk.JitsiMeetActivityDelegate
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions

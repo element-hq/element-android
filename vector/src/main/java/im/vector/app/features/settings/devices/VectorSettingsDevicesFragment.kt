@@ -35,6 +35,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 
@@ -139,15 +140,14 @@ class VectorSettingsDevicesFragment @Inject constructor(
     private fun displayDeviceRenameDialog(deviceInfo: DeviceInfo) {
         val inflater = requireActivity().layoutInflater
         val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
-
-        val input = layout.findViewById<EditText>(R.id.editText)
-        input.setText(deviceInfo.displayName)
+        val views = DialogBaseEditTextBinding.bind(layout)
+        views.editText.setText(deviceInfo.displayName)
 
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.devices_details_device_name)
                 .setView(layout)
                 .setPositiveButton(R.string.ok) { _, _ ->
-                    val newName = input.text.toString()
+                    val newName = views.editText.text.toString()
 
                     viewModel.handle(DevicesAction.Rename(deviceInfo.deviceId!!, newName))
                 }

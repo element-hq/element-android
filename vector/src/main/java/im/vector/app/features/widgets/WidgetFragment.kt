@@ -47,7 +47,6 @@ import im.vector.app.features.webview.WebViewEventListener
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
 import java.net.URISyntaxException

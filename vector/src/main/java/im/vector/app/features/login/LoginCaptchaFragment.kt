@@ -37,7 +37,6 @@ import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginCaptchaBinding
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
 import java.net.URLDecoder

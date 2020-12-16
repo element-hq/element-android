@@ -46,7 +46,6 @@ import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
 import im.vector.app.features.userdirectory.UserListViewState
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.HttpURLConnection
 import javax.inject.Inject

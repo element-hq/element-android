@@ -69,7 +69,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.vanniktech.emoji.EmojiPopup
 import im.vector.app.R
@@ -113,6 +112,7 @@ import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.core.utils.shareText
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentRoomDetailBinding
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
@@ -169,7 +169,6 @@ import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomShee
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.parcelize.Parcelize
-
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
@@ -409,12 +408,13 @@ class RoomDetailFragment @Inject constructor(
                         .setPosition(-50f, views.viewKonfetti.width + 50f, -50f, -50f)
                         .streamFor(150, 3000L)
             }
-            ChatEffect.SNOW -> {
+            ChatEffect.SNOW     -> {
                 views.viewSnowFall.isVisible = true
                 views.viewSnowFall.restartFalling()
             }
         }
     }
+
     private fun handleStopChatEffects() {
         TransitionManager.beginDelayedTransition(views.rootConstraintLayout)
         views.viewSnowFall.isVisible = false
@@ -735,36 +735,36 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.invite              -> {
+            R.id.invite           -> {
                 navigator.openInviteUsersToRoom(requireActivity(), roomDetailArgs.roomId)
                 true
             }
-            R.id.timeline_setting    -> {
+            R.id.timeline_setting -> {
                 navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
                 true
             }
-            R.id.resend_all          -> {
+            R.id.resend_all       -> {
                 roomDetailViewModel.handle(RoomDetailAction.ResendAll)
                 true
             }
-            R.id.open_matrix_apps    -> {
+            R.id.open_matrix_apps -> {
                 roomDetailViewModel.handle(RoomDetailAction.ManageIntegrations)
                 true
             }
             R.id.voice_call,
-            R.id.video_call          -> {
+            R.id.video_call       -> {
                 handleCallRequest(item)
                 true
             }
-            R.id.hangup_call         -> {
+            R.id.hangup_call      -> {
                 roomDetailViewModel.handle(RoomDetailAction.EndCall)
                 true
             }
-            R.id.search              -> {
+            R.id.search           -> {
                 handleSearchAction()
                 true
             }
-            else                     -> super.onOptionsItemSelected(item)
+            else                  -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -1361,14 +1361,13 @@ class RoomDetailFragment @Inject constructor(
     private fun promptReasonToReportContent(action: EventSharedAction.ReportContentCustom) {
         val inflater = requireActivity().layoutInflater
         val layout = inflater.inflate(R.layout.dialog_report_content, null)
-
-        val input = layout.findViewById<TextInputEditText>(R.id.dialog_report_content_input)
+        val views = DialogReportContentBinding.bind(layout)
 
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.report_content_custom_title)
                 .setView(layout)
                 .setPositiveButton(R.string.report_content_custom_submit) { _, _ ->
-                    val reason = input.text.toString()
+                    val reason = views.dialogReportContentInput.text.toString()
                     roomDetailViewModel.handle(RoomDetailAction.ReportContent(action.eventId, action.senderId, reason))
                 }
                 .setNegativeButton(R.string.cancel, null)

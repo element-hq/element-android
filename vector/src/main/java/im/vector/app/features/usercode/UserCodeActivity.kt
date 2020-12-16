@@ -36,7 +36,6 @@ import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import kotlinx.parcelize.Parcelize
-
 import javax.inject.Inject
 import kotlin.reflect.KClass
 

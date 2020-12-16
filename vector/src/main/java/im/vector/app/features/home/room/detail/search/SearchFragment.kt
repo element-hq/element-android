@@ -38,7 +38,6 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSearchBinding
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.api.session.events.model.Event
 import javax.inject.Inject
 

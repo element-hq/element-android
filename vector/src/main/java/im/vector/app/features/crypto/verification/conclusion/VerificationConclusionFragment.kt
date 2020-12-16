@@ -30,7 +30,6 @@ import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
 import kotlinx.parcelize.Parcelize
-
 import javax.inject.Inject
 
 class VerificationConclusionFragment @Inject constructor(

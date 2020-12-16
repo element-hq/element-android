@@ -53,7 +53,6 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.media.BigImageViewerActivity
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem

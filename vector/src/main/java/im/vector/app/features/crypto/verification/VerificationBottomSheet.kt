@@ -49,7 +49,6 @@ import im.vector.app.features.crypto.verification.request.VerificationRequestFra
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME

@@ -36,7 +36,6 @@ import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.crypto.recover.SetupMode
 import kotlinx.parcelize.Parcelize
-
 import javax.inject.Inject
 import kotlin.reflect.KClass
 

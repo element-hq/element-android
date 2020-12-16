@@ -49,7 +49,6 @@ import im.vector.app.core.utils.attachSnapHelperWithListener
 import im.vector.app.databinding.FragmentAttachmentsPreviewBinding
 import im.vector.app.features.media.createUCropWithDefaultSettings
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import java.io.File

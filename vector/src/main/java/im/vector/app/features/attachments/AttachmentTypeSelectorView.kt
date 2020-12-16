@@ -69,8 +69,8 @@ class AttachmentTypeSelectorView(context: Context,
 
     init {
         val root = FrameLayout(context)
-        val layout = inflater.inflate(R.layout.view_attachment_type_selector, root, true)
-        views = ViewAttachmentTypeSelectorBinding.bind(layout)
+        inflater.inflate(R.layout.view_attachment_type_selector, root, true)
+        views = ViewAttachmentTypeSelectorBinding.bind(root)
         views.attachmentGalleryButton.configure(Type.GALLERY)
         views.attachmentCameraButton.configure(Type.CAMERA)
         views.attachmentFileButton.configure(Type.FILE)

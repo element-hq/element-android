@@ -31,7 +31,6 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetGenericListBinding
 import im.vector.app.features.navigation.Navigator
 import kotlinx.parcelize.Parcelize
-
 import javax.inject.Inject
 
 @Parcelize

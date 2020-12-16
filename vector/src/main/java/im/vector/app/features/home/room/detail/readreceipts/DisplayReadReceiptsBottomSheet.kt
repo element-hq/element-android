@@ -33,7 +33,6 @@ import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import kotlinx.parcelize.Parcelize
-
 import javax.inject.Inject
 
 @Parcelize

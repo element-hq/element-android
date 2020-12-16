@@ -38,7 +38,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetBootstrapBinding
 import kotlinx.parcelize.Parcelize
-
 import javax.inject.Inject
 import kotlin.reflect.KClass
 

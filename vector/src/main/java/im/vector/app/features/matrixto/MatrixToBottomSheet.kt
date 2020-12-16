@@ -36,7 +36,6 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetMatrixToCardBinding
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize
-
 import javax.inject.Inject
 
 class MatrixToBottomSheet :

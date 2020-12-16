@@ -50,7 +50,6 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.EglUtils
 import org.matrix.android.sdk.api.session.call.MxCallDetail

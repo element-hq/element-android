@@ -30,7 +30,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetGenericListBinding
 import kotlinx.parcelize.Parcelize
-
 import javax.inject.Inject
 
 @Parcelize

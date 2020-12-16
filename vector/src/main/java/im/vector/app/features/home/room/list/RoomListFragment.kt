@@ -51,7 +51,6 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary

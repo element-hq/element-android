@@ -35,7 +35,6 @@ import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.FragmentLoginGenericTextInputFormBinding
 import kotlinx.parcelize.Parcelize
-
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.is401
