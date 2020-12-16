@@ -23,6 +23,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -43,6 +45,7 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
@@ -72,6 +75,14 @@ class RoomMemberProfileFragment @Inject constructor(
 ) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomMemberProfileController.Callback {
 
+    private lateinit var memberProfileStateView: StateView
+    private lateinit var memberProfileInfoContainer: View
+    private lateinit var memberProfileDecorationImageView: ImageView
+    private lateinit var memberProfileAvatarView: ImageView
+    private lateinit var memberProfileNameView: TextView
+    private lateinit var memberProfileIdView: TextView
+    private lateinit var memberProfilePowerLevelView: TextView
+
     private val fragmentArgs: RoomMemberProfileArgs by args()
     private val viewModel: RoomMemberProfileViewModel by fragmentViewModel()
 
@@ -85,27 +96,28 @@ class RoomMemberProfileFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(matrixProfileToolbar)
-        val headerView = matrixProfileHeaderView.let {
+        setupToolbar(views.matrixProfileToolbar)
+        val headerView = views.matrixProfileHeaderView.let {
             it.layoutResource = R.layout.view_stub_room_member_profile_header
             it.inflate()
         }
+        findHeaderSubViews(headerView)
         memberProfileStateView.eventCallback = object : StateView.EventCallback {
             override fun onRetryClicked() {
                 viewModel.handle(RoomMemberProfileAction.RetryFetchingInfo)
             }
         }
         memberProfileStateView.contentView = memberProfileInfoContainer
-        matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
+        views.matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
         roomMemberProfileController.callback = this
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView,
                 listOf(
-                        matrixProfileToolbarAvatarImageView,
-                        matrixProfileToolbarTitleView,
-                        matrixProfileDecorationToolbarAvatarImageView
+                        views.matrixProfileToolbarAvatarImageView,
+                        views.matrixProfileToolbarTitleView,
+                        views.matrixProfileDecorationToolbarAvatarImageView
                 )
         )
-        matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
+        views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
                 is RoomMemberProfileViewEvents.Loading                     -> showLoading(it.message)
@@ -122,6 +134,16 @@ class RoomMemberProfileFragment @Inject constructor(
             }.exhaustive
         }
         setupLongClicks()
+    }
+
+    private fun findHeaderSubViews(headerView: View) {
+        memberProfileStateView = headerView.findViewById(R.id.memberProfileStateView)
+        memberProfileInfoContainer = headerView.findViewById(R.id.memberProfileInfoContainer)
+        memberProfileNameView = headerView.findViewById(R.id.roomProfileNameView)
+        memberProfileIdView = headerView.findViewById(R.id.memberProfileIdView)
+        memberProfileAvatarView = headerView.findViewById(R.id.roomProfileAvatarView)
+        memberProfilePowerLevelView = headerView.findViewById(R.id.memberProfilePowerLevelView)
+        memberProfileDecorationImageView = headerView.findViewById(R.id.roomProfileDecorationImageView)
     }
 
     private fun setupLongClicks() {
@@ -171,23 +193,23 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
+        views.matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
         roomMemberProfileController.callback = null
         appBarStateChangeListener = null
-        matrixProfileRecyclerView.cleanup()
+        views.matrixProfileRecyclerView.cleanup()
         super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         when (val asyncUserMatrixItem = state.userMatrixItem) {
             is Incomplete -> {
-                matrixProfileToolbarTitleView.text = state.userId
-                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), matrixProfileToolbarAvatarImageView)
+                views.matrixProfileToolbarTitleView.text = state.userId
+                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
                 memberProfileStateView.state = StateView.State.Loading
             }
             is Fail       -> {
-                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), matrixProfileToolbarAvatarImageView)
-                matrixProfileToolbarTitleView.text = state.userId
+                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
+                views.matrixProfileToolbarTitleView.text = state.userId
                 val failureMessage = errorFormatter.toHumanReadable(asyncUserMatrixItem.error)
                 memberProfileStateView.state = StateView.State.Error(failureMessage)
             }
@@ -197,9 +219,9 @@ class RoomMemberProfileFragment @Inject constructor(
                 memberProfileIdView.text = userMatrixItem.id
                 val bestName = userMatrixItem.getBestName()
                 memberProfileNameView.text = bestName
-                matrixProfileToolbarTitleView.text = bestName
+                views.matrixProfileToolbarTitleView.text = bestName
                 avatarRenderer.render(userMatrixItem, memberProfileAvatarView)
-                avatarRenderer.render(userMatrixItem, matrixProfileToolbarAvatarImageView)
+                avatarRenderer.render(userMatrixItem, views.matrixProfileToolbarAvatarImageView)
 
                 if (state.isRoomEncrypted) {
                     memberProfileDecorationImageView.isVisible = true
@@ -217,15 +239,15 @@ class RoomMemberProfileFragment @Inject constructor(
                         }
 
                         memberProfileDecorationImageView.setImageResource(icon)
-                        matrixProfileDecorationToolbarAvatarImageView.setImageResource(icon)
+                        views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(icon)
                     } else {
                         // Legacy
                         if (state.allDevicesAreTrusted) {
                             memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_trusted)
-                            matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
+                            views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
                         } else {
                             memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_warning)
-                            matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
+                            views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
                         }
                     }
                 } else {
@@ -235,7 +257,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 memberProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
-                matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
+                views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
             }
@@ -302,8 +324,8 @@ class RoomMemberProfileFragment @Inject constructor(
 
     private fun handleShareRoomMemberProfile(permalink: String) {
         val view = layoutInflater.inflate(R.layout.dialog_share_qr_code, null)
-        val qrCode = view.findViewById<im.vector.app.core.ui.views.QrCodeImageView>(R.id.itemShareQrCodeImage)
-        qrCode.setData(permalink)
+        val views = DialogShareQrCodeBinding.bind(view)
+        views.itemShareQrCodeImage.setData(permalink)
         AlertDialog.Builder(requireContext())
             .setView(view)
             .setNeutralButton(R.string.ok, null)

@@ -18,6 +18,10 @@ package im.vector.app.features.settings.troubleshoot
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.app.R
@@ -43,68 +47,73 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
     override fun getItemCount(): Int = tests.size
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val troubleshootProgressBar = itemView.findViewById<ProgressBar>(R.id.troubleshootProgressBar)
+        private val troubleshootTestTitle = itemView.findViewById<TextView>(R.id.troubleshootTestTitle)
+        private val troubleshootTestDescription = itemView.findViewById<TextView>(R.id.troubleshootTestDescription)
+        private val troubleshootStatusIcon = itemView.findViewById<ImageView>(R.id.troubleshootStatusIcon)
+        private val troubleshootTestButton = itemView.findViewById<Button>(R.id.troubleshootTestButton)
 
         fun bind(test: TroubleshootTest) {
             val context = itemView.context
-            itemView.troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_primary))
-            itemView.troubleshootTestDescription.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
+            troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_primary))
+            troubleshootTestDescription.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
 
             when (test.status) {
                 TroubleshootTest.TestStatus.NOT_STARTED      -> {
-                    itemView.troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
+                    troubleshootTestTitle.setTextColor(ThemeUtils.getColor(context, R.attr.riotx_text_secondary))
 
-                    itemView.troubleshootProgressBar.visibility = View.INVISIBLE
-                    itemView.troubleshootStatusIcon.visibility = View.VISIBLE
-                    itemView.troubleshootStatusIcon.setImageResource(R.drawable.unit_test)
+                    troubleshootProgressBar.visibility = View.INVISIBLE
+                    troubleshootStatusIcon.visibility = View.VISIBLE
+                    troubleshootStatusIcon.setImageResource(R.drawable.unit_test)
                 }
                 TroubleshootTest.TestStatus.WAITING_FOR_USER -> {
-                    itemView.troubleshootProgressBar.visibility = View.INVISIBLE
-                    itemView.troubleshootStatusIcon.visibility = View.VISIBLE
+                    troubleshootProgressBar.visibility = View.INVISIBLE
+                    troubleshootStatusIcon.visibility = View.VISIBLE
                     val infoColor = ContextCompat.getColor(context, R.color.vector_info_color)
                     val drawable = ContextCompat.getDrawable(itemView.context, R.drawable.ic_notification_privacy_warning)?.apply {
                         ThemeUtils.tintDrawableWithColor(this, infoColor)
                     }
-                    itemView.troubleshootStatusIcon.setImageDrawable(drawable)
-                    itemView.troubleshootTestDescription.setTextColor(infoColor)
+                    troubleshootStatusIcon.setImageDrawable(drawable)
+                    troubleshootTestDescription.setTextColor(infoColor)
                 }
                 TroubleshootTest.TestStatus.RUNNING          -> {
-                    itemView.troubleshootProgressBar.visibility = View.VISIBLE
-                    itemView.troubleshootStatusIcon.visibility = View.INVISIBLE
+                    troubleshootProgressBar.visibility = View.VISIBLE
+                    troubleshootStatusIcon.visibility = View.INVISIBLE
                 }
                 TroubleshootTest.TestStatus.FAILED           -> {
-                    itemView.troubleshootProgressBar.visibility = View.INVISIBLE
-                    itemView.troubleshootStatusIcon.visibility = View.VISIBLE
-                    itemView.troubleshootStatusIcon.setImageResource(R.drawable.unit_test_ko)
+                    troubleshootProgressBar.visibility = View.INVISIBLE
+                    troubleshootStatusIcon.visibility = View.VISIBLE
+                    troubleshootStatusIcon.setImageResource(R.drawable.unit_test_ko)
 
-                    itemView.troubleshootStatusIcon.imageTintList = null
+                    troubleshootStatusIcon.imageTintList = null
 
-                    itemView.troubleshootTestDescription.setTextColor(ContextCompat.getColor(context, R.color.riotx_notice))
+                    troubleshootTestDescription.setTextColor(ContextCompat.getColor(context, R.color.riotx_notice))
                 }
                 TroubleshootTest.TestStatus.SUCCESS          -> {
-                    itemView.troubleshootProgressBar.visibility = View.INVISIBLE
-                    itemView.troubleshootStatusIcon.visibility = View.VISIBLE
-                    itemView.troubleshootStatusIcon.setImageResource(R.drawable.unit_test_ok)
+                    troubleshootProgressBar.visibility = View.INVISIBLE
+                    troubleshootStatusIcon.visibility = View.VISIBLE
+                    troubleshootStatusIcon.setImageResource(R.drawable.unit_test_ok)
                 }
             }
 
             val quickFix = test.quickFix
             if (quickFix != null) {
-                itemView.troubleshootTestButton.setText(test.quickFix!!.title)
-                itemView.troubleshootTestButton.setOnClickListener { _ ->
+                troubleshootTestButton.setText(test.quickFix!!.title)
+                troubleshootTestButton.setOnClickListener { _ ->
                     test.quickFix!!.doFix()
                 }
-                itemView.troubleshootTestButton.visibility = View.VISIBLE
+                troubleshootTestButton.visibility = View.VISIBLE
             } else {
-                itemView.troubleshootTestButton.visibility = View.GONE
+                troubleshootTestButton.visibility = View.GONE
             }
 
-            itemView.troubleshootTestTitle.setText(test.titleResId)
+            troubleshootTestTitle.setText(test.titleResId)
             val description = test.description
             if (description == null) {
-                itemView.troubleshootTestDescription.visibility = View.GONE
+                troubleshootTestDescription.visibility = View.GONE
             } else {
-                itemView.troubleshootTestDescription.visibility = View.VISIBLE
-                itemView.troubleshootTestDescription.text = description
+                troubleshootTestDescription.visibility = View.VISIBLE
+                troubleshootTestDescription.text = description
             }
         }
     }

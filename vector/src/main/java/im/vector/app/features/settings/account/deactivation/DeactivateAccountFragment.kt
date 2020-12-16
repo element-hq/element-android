@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -73,23 +74,23 @@ class DeactivateAccountFragment @Inject constructor(
     }
 
     private fun setupUi() {
-        deactivateAccountPassword.textChanges()
+        views.deactivateAccountPassword.textChanges()
                 .subscribe {
-                    deactivateAccountPasswordTil.error = null
-                    deactivateAccountSubmit.isEnabled = it.isNotEmpty()
+                    views.deactivateAccountPasswordTil.error = null
+                    views.deactivateAccountSubmit.isEnabled = it.isNotEmpty()
                 }
                 .disposeOnDestroyView()
     }
 
     private fun setupViewListeners() {
-        deactivateAccountPasswordReveal.setOnClickListener {
+        views.deactivateAccountPasswordReveal.setOnClickListener {
             viewModel.handle(DeactivateAccountAction.TogglePassword)
         }
 
-        deactivateAccountSubmit.debouncedClicks {
+        views.deactivateAccountSubmit.debouncedClicks {
             viewModel.handle(DeactivateAccountAction.DeactivateAccount(
-                    deactivateAccountPassword.text.toString(),
-                    deactivateAccountEraseCheckbox.isChecked))
+                    views.deactivateAccountPassword.text.toString(),
+                    views.deactivateAccountEraseCheckbox.isChecked))
         }
     }
 
@@ -102,11 +103,11 @@ class DeactivateAccountFragment @Inject constructor(
                 }
                 DeactivateAccountViewEvents.EmptyPassword   -> {
                     settingsActivity?.ignoreInvalidTokenError = false
-                    deactivateAccountPasswordTil.error = getString(R.string.error_empty_field_your_password)
+                    views.deactivateAccountPasswordTil.error = getString(R.string.error_empty_field_your_password)
                 }
                 DeactivateAccountViewEvents.InvalidPassword -> {
                     settingsActivity?.ignoreInvalidTokenError = false
-                    deactivateAccountPasswordTil.error = getString(R.string.settings_fail_to_update_password_invalid_current_password)
+                    views.deactivateAccountPasswordTil.error = getString(R.string.settings_fail_to_update_password_invalid_current_password)
                 }
                 is DeactivateAccountViewEvents.OtherFailure -> {
                     settingsActivity?.ignoreInvalidTokenError = false
@@ -119,7 +120,7 @@ class DeactivateAccountFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        deactivateAccountPassword.showPassword(state.passwordShown)
-        deactivateAccountPasswordReveal.setImageResource(if (state.passwordShown) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+        views.deactivateAccountPassword.showPassword(state.passwordShown)
+        views.deactivateAccountPasswordReveal.setImageResource(if (state.passwordShown) R.drawable.ic_eye_closed else R.drawable.ic_eye)
     }
 }

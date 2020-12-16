@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -58,10 +59,10 @@ class ReviewTermsFragment @Inject constructor(
         }
 
         termsController.listener = this
-        reviewTermsRecyclerView.configureWith(termsController)
+        views.reviewTermsRecyclerView.configureWith(termsController)
 
-        reviewTermsAccept.onClick { reviewTermsViewModel.handle(ReviewTermsAction.Accept) }
-        reviewTermsDecline.onClick { activity?.finish() }
+        views.reviewTermsAccept.onClick { reviewTermsViewModel.handle(ReviewTermsAction.Accept) }
+        views.reviewTermsDecline.onClick { activity?.finish() }
 
         reviewTermsViewModel.observeViewEvents {
             when (it) {
@@ -79,7 +80,7 @@ class ReviewTermsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        reviewTermsRecyclerView.cleanup()
+        views.reviewTermsRecyclerView.cleanup()
         termsController.listener = null
         super.onDestroyView()
     }
@@ -94,11 +95,11 @@ class ReviewTermsFragment @Inject constructor(
 
         when (state.termsList) {
             is Loading -> {
-                reviewTermsBottomBar.isVisible = false
+                views.reviewTermsBottomBar.isVisible = false
             }
             is Success -> {
-                reviewTermsBottomBar.isVisible = true
-                reviewTermsAccept.isEnabled = state.termsList.invoke().all { it.accepted }
+                views.reviewTermsBottomBar.isVisible = true
+                views.reviewTermsAccept.isEnabled = state.termsList.invoke().all { it.accepted }
             }
             else       -> Unit
         }

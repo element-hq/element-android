@@ -23,6 +23,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -42,7 +44,6 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
-import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.home.AvatarRenderer
@@ -70,8 +71,14 @@ class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
         val roomProfileViewModelFactory: RoomProfileViewModel.Factory
-) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
+) :
+        VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomProfileController.Callback {
+
+    private lateinit var roomProfileDecorationImageView: ImageView
+    private lateinit var roomProfileAvatarView: ImageView
+    private lateinit var roomProfileAliasView: TextView
+    private lateinit var roomProfileNameView: TextView
 
     private val roomProfileArgs: RoomProfileArgs by args()
     private lateinit var roomListQuickActionsSharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -90,20 +97,21 @@ class RoomProfileFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomListQuickActionsSharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
-        val headerView = matrixProfileHeaderView.let {
+        val headerView = views.matrixProfileHeaderView.let {
             it.layoutResource = R.layout.view_stub_room_profile_header
             it.inflate()
         }
+        findHeaderSubViews(headerView)
         setupWaitingView()
-        setupToolbar(matrixProfileToolbar)
+        setupToolbar(views.matrixProfileToolbar)
         setupRecyclerView()
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
                 headerView,
-                listOf(matrixProfileToolbarAvatarImageView,
-                        matrixProfileToolbarTitleView,
-                        matrixProfileDecorationToolbarAvatarImageView)
+                listOf(views.matrixProfileToolbarAvatarImageView,
+                       views. matrixProfileToolbarTitleView,
+                       views. matrixProfileDecorationToolbarAvatarImageView)
         )
-        matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
+        views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.observeViewEvents {
             when (it) {
                 is RoomProfileViewEvents.Loading          -> showLoading(it.message)
@@ -119,9 +127,16 @@ class RoomProfileFragment @Inject constructor(
         setupLongClicks()
     }
 
+    private fun findHeaderSubViews(headerView: View) {
+        roomProfileNameView = headerView.findViewById(R.id.roomProfileNameView)
+        roomProfileAliasView = headerView.findViewById(R.id.roomProfileAliasView)
+        roomProfileAvatarView = headerView.findViewById(R.id.roomProfileAvatarView)
+        roomProfileDecorationImageView = headerView.findViewById(R.id.roomProfileDecorationImageView)
+    }
+
     private fun setupWaitingView() {
-        waitingStatusText.setText(R.string.please_wait)
-        waitingStatusText.isVisible = true
+        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.isVisible = true
     }
 
     private fun setupLongClicks() {
@@ -157,18 +172,18 @@ class RoomProfileFragment @Inject constructor(
 
     private fun setupRecyclerView() {
         roomProfileController.callback = this
-        matrixProfileRecyclerView.configureWith(roomProfileController, hasFixedSize = true, disableItemAnimation = true)
+        views.matrixProfileRecyclerView.configureWith(roomProfileController, hasFixedSize = true, disableItemAnimation = true)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
-        matrixProfileRecyclerView.cleanup()
+        views.matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
+        views.matrixProfileRecyclerView.cleanup()
         appBarStateChangeListener = null
     }
 
     override fun invalidate() = withState(roomProfileViewModel) { state ->
-        waiting_view.isVisible = state.isLoading
+        views.waitingView.root.isVisible = state.isLoading
 
         state.roomSummary()?.also {
             if (it.membership.isLeft()) {
@@ -176,19 +191,19 @@ class RoomProfileFragment @Inject constructor(
                 activity?.finish()
             } else {
                 roomProfileNameView.text = it.displayName
-                matrixProfileToolbarTitleView.text = it.displayName
+                views.matrixProfileToolbarTitleView.text = it.displayName
                 roomProfileAliasView.setTextOrHide(it.canonicalAlias)
                 val matrixItem = it.toMatrixItem()
                 avatarRenderer.render(matrixItem, roomProfileAvatarView)
-                avatarRenderer.render(matrixItem, matrixProfileToolbarAvatarImageView)
+                avatarRenderer.render(matrixItem, views.matrixProfileToolbarAvatarImageView)
                 roomProfileDecorationImageView.isVisible = it.roomEncryptionTrustLevel != null
                 roomProfileDecorationImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
-                matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
+                views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
 
                 roomProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, matrixItem)
                 }
-                matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
+                views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
                     onAvatarClicked(view, matrixItem)
                 }
             }

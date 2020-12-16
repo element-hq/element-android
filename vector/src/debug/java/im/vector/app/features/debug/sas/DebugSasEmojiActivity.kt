@@ -21,14 +21,18 @@ import androidx.appcompat.app.AppCompatActivity
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import org.matrix.android.sdk.api.crypto.getAllVerificationEmojis
 
 
 class DebugSasEmojiActivity : AppCompatActivity() {
 
+    private lateinit var views: FragmentGenericRecyclerBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_generic_recycler)
+        views = FragmentGenericRecyclerBinding.inflate(layoutInflater)
+        setContentView(views.root)
         val controller = SasEmojiController()
         views.genericRecyclerView.configureWith(controller)
         controller.setData(SasState(getAllVerificationEmojis()))

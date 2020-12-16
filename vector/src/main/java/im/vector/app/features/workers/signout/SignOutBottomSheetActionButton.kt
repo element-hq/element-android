@@ -20,7 +20,9 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
@@ -30,6 +32,9 @@ import im.vector.app.features.themes.ThemeUtils
 class SignOutBottomSheetActionButton @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
+
+    private val actionIconImageView: ImageView
+    private val actionTitleText: TextView
 
     var action: (() -> Unit)? = null
 
@@ -72,9 +77,12 @@ class SignOutBottomSheetActionButton @JvmOverloads constructor(
         tint = typedArray.getColor(R.styleable.SignOutBottomSheetActionButton_iconTint, ThemeUtils.getColor(context, android.R.attr.textColor))
         textColor = typedArray.getColor(R.styleable.SignOutBottomSheetActionButton_textColor, ThemeUtils.getColor(context, android.R.attr.textColor))
 
+        actionIconImageView = findViewById(R.id.actionIconImageView)
+        actionTitleText = findViewById(R.id.actionTitleText)
+
         typedArray.recycle()
 
-        signedOutActionClickable.setOnClickListener {
+        setOnClickListener {
             action?.invoke()
         }
     }

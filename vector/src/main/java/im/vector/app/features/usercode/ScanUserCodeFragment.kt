@@ -57,11 +57,11 @@ class ScanUserCodeFragment @Inject constructor()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userCodeMyCodeButton.debouncedClicks {
+        views.userCodeMyCodeButton.debouncedClicks {
             sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
         }
 
-        userCodeOpenGalleryButton.debouncedClicks {
+        views.userCodeOpenGalleryButton.debouncedClicks {
             MultiPicker.get(MultiPicker.IMAGE).single().startWith(pickImageActivityResultLauncher)
         }
     }
@@ -94,11 +94,11 @@ class ScanUserCodeFragment @Inject constructor()
     }
 
     private fun startCamera() {
-        userCodeScannerView.startCamera()
-        userCodeScannerView.setAutoFocus(autoFocus)
-        userCodeScannerView.debouncedClicks {
+        views.userCodeScannerView.startCamera()
+        views.userCodeScannerView.setAutoFocus(autoFocus)
+        views.userCodeScannerView.debouncedClicks {
             this.autoFocus = !autoFocus
-            userCodeScannerView.setAutoFocus(autoFocus)
+            views.userCodeScannerView.setAutoFocus(autoFocus)
         }
     }
 
@@ -112,7 +112,7 @@ class ScanUserCodeFragment @Inject constructor()
     override fun onResume() {
         super.onResume()
         // Register ourselves as a handler for scan results.
-        userCodeScannerView.setResultHandler(this)
+        views.userCodeScannerView.setResultHandler(this)
         if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)) {
             startCamera()
         }
@@ -120,9 +120,9 @@ class ScanUserCodeFragment @Inject constructor()
 
     override fun onPause() {
         super.onPause()
-        userCodeScannerView.setResultHandler(null)
+        views.userCodeScannerView.setResultHandler(null)
         // Stop camera on pause
-        userCodeScannerView.stopCamera()
+        views.userCodeScannerView.stopCamera()
     }
 
     override fun handleResult(result: Result?) {

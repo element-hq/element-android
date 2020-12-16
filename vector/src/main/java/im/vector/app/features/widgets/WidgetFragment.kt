@@ -78,9 +78,9 @@ class WidgetFragment @Inject constructor() :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        widgetWebView.setupForWidget(this)
+        views.widgetWebView.setupForWidget(this)
         if (fragmentArgs.kind.isAdmin()) {
-            viewModel.getPostAPIMediator().setWebView(widgetWebView)
+            viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
         }
         viewModel.observeViewEvents {
             Timber.v("Observed view events: $it")
@@ -114,12 +114,12 @@ class WidgetFragment @Inject constructor() :
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().clearWebView()
         }
-        widgetWebView.clearAfterWidget()
+        views.widgetWebView.clearAfterWidget()
     }
 
     override fun onResume() {
         super.onResume()
-        widgetWebView?.let {
+        views.widgetWebView?.let {
             it.resumeTimers()
             it.onResume()
         }
@@ -127,7 +127,7 @@ class WidgetFragment @Inject constructor() :
 
     override fun onPause() {
         super.onPause()
-        widgetWebView?.let {
+        views.widgetWebView?.let {
             it.pauseTimers()
             it.onPause()
         }
@@ -166,7 +166,7 @@ class WidgetFragment @Inject constructor() :
                 return@withState true
             }
             R.id.action_refresh         -> if (state.formattedURL.complete) {
-                widgetWebView.reload()
+                views.widgetWebView.reload()
                 return@withState true
             }
             R.id.action_widget_open_ext -> if (state.formattedURL.complete) {
@@ -183,8 +183,8 @@ class WidgetFragment @Inject constructor() :
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean = withState(viewModel) { state ->
         if (state.formattedURL.complete) {
-            if (widgetWebView.canGoBack()) {
-                widgetWebView.goBack()
+            if (views.widgetWebView.canGoBack()) {
+                views.widgetWebView.goBack()
                 return@withState true
             }
         }
@@ -196,37 +196,37 @@ class WidgetFragment @Inject constructor() :
         when (state.formattedURL) {
             is Incomplete -> {
                 setStateError(null)
-                widgetWebView.isInvisible = true
-                widgetProgressBar.isIndeterminate = true
-                widgetProgressBar.isVisible = true
+                views.widgetWebView.isInvisible = true
+                views.widgetProgressBar.isIndeterminate = true
+                views.widgetProgressBar.isVisible = true
             }
             is Success    -> {
                 setStateError(null)
                 when (state.webviewLoadedUrl) {
                     Uninitialized -> {
-                        widgetWebView.isInvisible = true
+                        views.widgetWebView.isInvisible = true
                     }
                     is Loading    -> {
                         setStateError(null)
-                        widgetWebView.isInvisible = false
-                        widgetProgressBar.isIndeterminate = true
-                        widgetProgressBar.isVisible = true
+                        views.widgetWebView.isInvisible = false
+                        views.widgetProgressBar.isIndeterminate = true
+                        views.widgetProgressBar.isVisible = true
                     }
                     is Success    -> {
-                        widgetWebView.isInvisible = false
-                        widgetProgressBar.isVisible = false
+                        views.widgetWebView.isInvisible = false
+                        views.widgetProgressBar.isVisible = false
                         setStateError(null)
                     }
                     is Fail       -> {
-                        widgetProgressBar.isInvisible = true
+                        views.widgetProgressBar.isInvisible = true
                         setStateError(state.webviewLoadedUrl.error.message)
                     }
                 }
             }
             is Fail       -> {
                 // we need to show Error
-                widgetWebView.isInvisible = true
-                widgetProgressBar.isVisible = false
+                views.widgetWebView.isInvisible = true
+                views.widgetProgressBar.isVisible = false
                 setStateError(state.formattedURL.error.message)
             }
         }
@@ -282,19 +282,19 @@ class WidgetFragment @Inject constructor() :
     }
 
     private fun loadFormattedUrl(event: WidgetViewEvents.OnURLFormatted) {
-        widgetWebView.clearHistory()
-        widgetWebView.loadUrl(event.formattedURL)
+        views.widgetWebView.clearHistory()
+        views.widgetWebView.loadUrl(event.formattedURL)
     }
 
     private fun setStateError(message: String?) {
         if (message == null) {
-            widgetErrorLayout.isVisible = false
-            widgetErrorText.text = null
+            views.widgetErrorLayout.isVisible = false
+            views.widgetErrorText.text = null
         } else {
-            widgetProgressBar.isVisible = false
-            widgetErrorLayout.isVisible = true
-            widgetWebView.isInvisible = true
-            widgetErrorText.text = getString(R.string.room_widget_failed_to_load, message)
+            views.widgetProgressBar.isVisible = false
+            views.widgetErrorLayout.isVisible = true
+            views.widgetWebView.isInvisible = true
+            views.widgetErrorText.text = getString(R.string.room_widget_failed_to_load, message)
         }
     }
 

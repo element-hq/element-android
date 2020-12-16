@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/fragment_room_setting_generic" />
+    <include
+        android:id="@+id/room_setting_generic"
+        layout="@layout/fragment_room_setting_generic" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/inviteUsersButton"

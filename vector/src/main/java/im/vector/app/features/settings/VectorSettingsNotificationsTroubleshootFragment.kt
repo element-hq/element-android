@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -63,71 +64,70 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         val layoutManager = LinearLayoutManager(context)
-        troubleshoot_test_recycler_view.layoutManager = layoutManager
+        views.troubleshootTestRecyclerView.layoutManager = layoutManager
 
-        val dividerItemDecoration = DividerItemDecoration(troubleshoot_test_recycler_view.context,
-                layoutManager.orientation)
-        troubleshoot_test_recycler_view.addItemDecoration(dividerItemDecoration)
+        val dividerItemDecoration = DividerItemDecoration(view.context, layoutManager.orientation)
+        views.troubleshootTestRecyclerView.addItemDecoration(dividerItemDecoration)
 
-        troubleshoot_summ_button.debouncedClicks {
+        views.troubleshootSummButton.debouncedClicks {
             bugReporter.openBugReportScreen(requireActivity())
         }
 
-        troubleshoot_run_button.debouncedClicks {
+        views.troubleshootRunButton.debouncedClicks {
             testManager?.retry(testStartForActivityResult)
         }
         startUI()
     }
 
     private fun startUI() {
-        toubleshoot_summ_description.text = getString(R.string.settings_troubleshoot_diagnostic_running_status, 0, 0)
+        views.toubleshootSummDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status, 0, 0)
         testManager = testManagerFactory.create(this)
         testManager?.statusListener = { troubleshootTestManager ->
             if (isAdded) {
-                TransitionManager.beginDelayedTransition(troubleshoot_bottom_view)
+                TransitionManager.beginDelayedTransition(views.troubleshootBottomView)
                 when (troubleshootTestManager.diagStatus) {
                     TroubleshootTest.TestStatus.NOT_STARTED      -> {
-                        toubleshoot_summ_description.text = ""
-                        troubleshoot_summ_button.visibility = View.GONE
-                        troubleshoot_run_button.visibility = View.VISIBLE
+                        views.toubleshootSummDescription.text = ""
+                        views.troubleshootSummButton.visibility = View.GONE
+                        views.troubleshootRunButton.visibility = View.VISIBLE
                     }
                     TroubleshootTest.TestStatus.RUNNING,
                     TroubleshootTest.TestStatus.WAITING_FOR_USER -> {
                         val size = troubleshootTestManager.testListSize
                         val currentTestIndex = troubleshootTestManager.currentTestIndex
-                        toubleshoot_summ_description.text = getString(
+                        views.toubleshootSummDescription.text = getString(
                                 R.string.settings_troubleshoot_diagnostic_running_status,
                                 currentTestIndex,
                                 size
                         )
-                        troubleshoot_summ_button.visibility = View.GONE
-                        troubleshoot_run_button.visibility = View.GONE
+                        views.troubleshootSummButton.visibility = View.GONE
+                        views.troubleshootRunButton.visibility = View.GONE
                     }
                     TroubleshootTest.TestStatus.FAILED           -> {
                         // check if there are quick fixes
                         val hasQuickFix = testManager?.hasQuickFix().orFalse()
                         if (hasQuickFix) {
-                            toubleshoot_summ_description.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_with_quickfix)
+                            views.toubleshootSummDescription.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_with_quickfix)
                         } else {
-                            toubleshoot_summ_description.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_no_quickfix)
+                            views.toubleshootSummDescription.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_no_quickfix)
                         }
-                        troubleshoot_summ_button.visibility = View.VISIBLE
-                        troubleshoot_run_button.visibility = View.VISIBLE
+                        views.troubleshootSummButton.visibility = View.VISIBLE
+                        views.troubleshootRunButton.visibility = View.VISIBLE
                     }
                     TroubleshootTest.TestStatus.SUCCESS          -> {
-                        toubleshoot_summ_description.text = getString(R.string.settings_troubleshoot_diagnostic_success_status)
-                        troubleshoot_summ_button.visibility = View.VISIBLE
-                        troubleshoot_run_button.visibility = View.VISIBLE
+                        views.toubleshootSummDescription.text = getString(R.string.settings_troubleshoot_diagnostic_success_status)
+                        views.troubleshootSummButton.visibility = View.VISIBLE
+                        views.troubleshootRunButton.visibility = View.VISIBLE
                     }
                 }
             }
         }
-        troubleshoot_test_recycler_view.adapter = testManager?.adapter
+        views.troubleshootTestRecyclerView.adapter = testManager?.adapter
         testManager?.runDiagnostic(testStartForActivityResult)
     }
 
     override fun onDestroyView() {
-        troubleshoot_test_recycler_view.cleanup()
+        views.troubleshootTestRecyclerView.cleanup()
         super.onDestroyView()
     }
 

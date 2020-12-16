@@ -61,29 +61,29 @@ class RoomMemberListFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
-        setupToolbar(roomSettingsToolbar)
+        setupToolbar(views.roomSettingGeneric.roomSettingsToolbar)
         setupSearchView()
         setupInviteUsersButton()
-        views.roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
+        views.roomSettingGeneric.roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
     }
 
     private fun setupInviteUsersButton() {
-        inviteUsersButton.debouncedClicks {
+        views.inviteUsersButton.debouncedClicks {
             navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
         }
         // Hide FAB when list is scrolling
-        views.roomSettingsRecyclerView.addOnScrollListener(
+        views.roomSettingGeneric.roomSettingsRecyclerView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         when (newState) {
                             RecyclerView.SCROLL_STATE_IDLE     -> {
                                 if (withState(viewModel) { it.actionsPermissions.canInvite }) {
-                                    inviteUsersButton.show()
+                                    views.inviteUsersButton.show()
                                 }
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
-                                inviteUsersButton.hide()
+                                views.inviteUsersButton.hide()
                             }
                         }
                     }
@@ -92,8 +92,8 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     private fun setupSearchView() {
-        searchView.queryHint = getString(R.string.search_members_hint)
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        views.roomSettingGeneric.searchView.queryHint = getString(R.string.search_members_hint)
+        views.roomSettingGeneric.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return true
             }
@@ -106,16 +106,16 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        views.roomSettingsRecyclerView.cleanup()
+        views.roomSettingGeneric.roomSettingsRecyclerView.cleanup()
         super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
         roomMemberListController.setData(viewState)
         renderRoomSummary(viewState)
-        inviteUsersButton.isVisible = viewState.actionsPermissions.canInvite
+        views.inviteUsersButton.isVisible = viewState.actionsPermissions.canInvite
         // Display filter only if there are more than 2 members in this room
-        searchViewAppBarLayout.isVisible = viewState.roomSummary()?.otherMemberIds.orEmpty().size > 1
+        views.roomSettingGeneric.searchViewAppBarLayout.isVisible = viewState.roomSummary()?.otherMemberIds.orEmpty().size > 1
     }
 
     override fun onRoomMemberClicked(roomMember: RoomMemberSummary) {
@@ -140,8 +140,8 @@ class RoomMemberListFragment @Inject constructor(
 
     private fun renderRoomSummary(state: RoomMemberListViewState) {
         state.roomSummary()?.let {
-            roomSettingsToolbarTitleView.text = it.displayName
-            avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
+            views.roomSettingGeneric.roomSettingsToolbarTitleView.text = it.displayName
+            avatarRenderer.render(it.toMatrixItem(), views.roomSettingGeneric.roomSettingsToolbarAvatarImageView)
         }
     }
 }

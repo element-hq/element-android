@@ -28,6 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.SimpleTextWatcher
+import im.vector.app.databinding.DialogPromptPasswordBinding
 
 class PromptPasswordDialog {
 
@@ -35,20 +36,18 @@ class PromptPasswordDialog {
 
     fun show(activity: Activity, listener: (String) -> Unit) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_prompt_password, null)
-
-        val passwordTil = dialogLayout.findViewById<TextInputLayout>(R.id.promptPasswordTil)
-        val passwordEditText = dialogLayout.findViewById<TextInputEditText>(R.id.promptPassword)
+        val views = DialogPromptPasswordBinding.bind(dialogLayout)
         val textWatcher = object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
-                passwordTil.error = null
+                views.promptPasswordTil.error = null
             }
         }
-        passwordEditText.addTextChangedListener(textWatcher)
+        views.promptPassword.addTextChangedListener(textWatcher)
 
         val showPassword = dialogLayout.findViewById<ImageView>(R.id.promptPasswordPasswordReveal)
         showPassword.setOnClickListener {
             passwordVisible = !passwordVisible
-            passwordEditText.showPassword(passwordVisible)
+            views.promptPassword.showPassword(passwordVisible)
             showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
         }
 
@@ -73,10 +72,10 @@ class PromptPasswordDialog {
                     setOnShowListener {
                         getButton(AlertDialog.BUTTON_POSITIVE)
                                 .setOnClickListener {
-                                    if (passwordEditText.text.toString().isEmpty()) {
-                                        passwordTil.error = activity.getString(R.string.error_empty_field_your_password)
+                                    if (views.promptPassword.text.toString().isEmpty()) {
+                                        views.promptPasswordTil.error = activity.getString(R.string.error_empty_field_your_password)
                                     } else {
-                                        listener.invoke(passwordEditText.text.toString())
+                                        listener.invoke(views.promptPassword.text.toString())
                                         dismiss()
                                     }
                                 }

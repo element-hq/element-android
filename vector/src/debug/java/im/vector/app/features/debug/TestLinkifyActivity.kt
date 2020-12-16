@@ -22,15 +22,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import im.vector.app.R
-
+import im.vector.app.databinding.ActivityTestLinkifyBinding
+import im.vector.app.databinding.ActivityTestMaterialThemeBinding
 
 class TestLinkifyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test_linkify)
-
-        test_linkify_content_view.removeAllViews()
+        val views = ActivityTestLinkifyBinding.inflate(layoutInflater)
+        setContentView(views.root)
+        views.testLinkifyContentView.removeAllViews()
 
         listOf(
                 "https://www.html5rocks.com/en/tutorials/webrtc/basics/ |",
@@ -79,7 +80,7 @@ class TestLinkifyActivity : AppCompatActivity() {
         )
                 .forEach { textContent ->
                     val item = LayoutInflater.from(this)
-                            .inflate(R.layout.item_test_linkify, test_linkify_content_view, false)
+                            .inflate(R.layout.item_test_linkify, views.testLinkifyContentView, false)
 
                     item.findViewById<TextView>(R.id.test_linkify_auto_text)
                             ?.apply {
@@ -115,7 +116,7 @@ class TestLinkifyActivity : AppCompatActivity() {
                                 // TODO Call VectorLinkify.addLinks(text)
                             }
 
-                    test_linkify_content_view.addView(item, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                    views.testLinkifyContentView.addView(item, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 }
     }
 }
