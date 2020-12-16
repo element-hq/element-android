@@ -51,13 +51,13 @@ abstract class BottomSheetGeneric<STATE : BottomSheetGenericState, ACTION : Bott
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.views.bottomSheetRecyclerView.configureWith(getController(), viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
+        views.bottomSheetRecyclerView.configureWith(getController(), viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
         getController().listener = this
     }
 
     @CallSuper
     override fun onDestroyView() {
-        views.views.bottomSheetRecyclerView.cleanup()
+        views.bottomSheetRecyclerView.cleanup()
         getController().listener = null
         super.onDestroyView()
     }

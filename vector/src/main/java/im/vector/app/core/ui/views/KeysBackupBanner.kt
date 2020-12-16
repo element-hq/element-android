@@ -24,6 +24,7 @@ import androidx.core.content.edit
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.databinding.ViewKeysBackupBannerBinding
 
 import timber.log.Timber
 
@@ -40,6 +41,8 @@ class KeysBackupBanner @JvmOverloads constructor(
     var delegate: Delegate? = null
     private var state: State = State.Initial
 
+    private lateinit var views: ViewKeysBackupBannerBinding
+    
     init {
         setupView()
         DefaultSharedPreferences.getInstance(context).edit {
@@ -119,9 +122,10 @@ class KeysBackupBanner @JvmOverloads constructor(
         inflate(context, R.layout.view_keys_backup_banner, this)
 
         setOnClickListener(this)
-        view_keys_backup_banner_text_1.setOnClickListener(this)
-        view_keys_backup_banner_text_2.setOnClickListener(this)
-        view_keys_backup_banner_close.setOnClickListener { onCloseClicked() }
+        views = ViewKeysBackupBannerBinding.bind(this)
+        views.viewKeysBackupBannerText1.setOnClickListener(this)
+        views.viewKeysBackupBannerText2.setOnClickListener(this)
+        views.viewKeysBackupBannerClose.setOnClickListener { onCloseClicked() }
     }
 
     private fun renderInitial() {
@@ -140,10 +144,10 @@ class KeysBackupBanner @JvmOverloads constructor(
         } else {
             isVisible = true
 
-            view_keys_backup_banner_text_1.setText(R.string.secure_backup_banner_setup_line1)
-            view_keys_backup_banner_text_2.isVisible = true
-            view_keys_backup_banner_text_2.setText(R.string.secure_backup_banner_setup_line2)
-            view_keys_backup_banner_close_group.isVisible = true
+            views.viewKeysBackupBannerText1.setText(R.string.secure_backup_banner_setup_line1)
+            views.viewKeysBackupBannerText2.isVisible = true
+            views.viewKeysBackupBannerText2.setText(R.string.secure_backup_banner_setup_line2)
+            views.viewKeysBackupBannerCloseGroup.isVisible = true
         }
     }
 
@@ -153,10 +157,10 @@ class KeysBackupBanner @JvmOverloads constructor(
         } else {
             isVisible = true
 
-            view_keys_backup_banner_text_1.setText(R.string.keys_backup_banner_recover_line1)
-            view_keys_backup_banner_text_2.isVisible = true
-            view_keys_backup_banner_text_2.setText(R.string.keys_backup_banner_recover_line2)
-            view_keys_backup_banner_close_group.isVisible = true
+            views.viewKeysBackupBannerText1.setText(R.string.keys_backup_banner_recover_line1)
+            views.viewKeysBackupBannerText2.isVisible = true
+            views.viewKeysBackupBannerText2.setText(R.string.keys_backup_banner_recover_line2)
+            views.viewKeysBackupBannerCloseGroup.isVisible = true
         }
     }
 
@@ -166,28 +170,28 @@ class KeysBackupBanner @JvmOverloads constructor(
         } else {
             isVisible = true
 
-            view_keys_backup_banner_text_1.setText(R.string.keys_backup_banner_update_line1)
-            view_keys_backup_banner_text_2.isVisible = true
-            view_keys_backup_banner_text_2.setText(R.string.keys_backup_banner_update_line2)
-            view_keys_backup_banner_close_group.isVisible = true
+            views.viewKeysBackupBannerText1.setText(R.string.keys_backup_banner_update_line1)
+            views.viewKeysBackupBannerText2.isVisible = true
+            views.viewKeysBackupBannerText2.setText(R.string.keys_backup_banner_update_line2)
+            views.viewKeysBackupBannerCloseGroup.isVisible = true
         }
     }
 
     private fun renderBackingUp() {
         isVisible = true
-        view_keys_backup_banner_text_1.setText(R.string.secure_backup_banner_setup_line1)
-        view_keys_backup_banner_text_2.isVisible = true
-        view_keys_backup_banner_text_2.setText(R.string.keys_backup_banner_in_progress)
-        view_keys_backup_banner_loading.isVisible = true
+        views.viewKeysBackupBannerText1.setText(R.string.secure_backup_banner_setup_line1)
+        views.viewKeysBackupBannerText2.isVisible = true
+        views.viewKeysBackupBannerText2.setText(R.string.keys_backup_banner_in_progress)
+        views.viewKeysBackupBannerLoading.isVisible = true
     }
 
     /**
      * Hide all views that are not visible in all state
      */
     private fun hideAll() {
-        view_keys_backup_banner_text_2.isVisible = false
-        view_keys_backup_banner_close_group.isVisible = false
-        view_keys_backup_banner_loading.isVisible = false
+        views.viewKeysBackupBannerText2.isVisible = false
+        views.viewKeysBackupBannerCloseGroup.isVisible = false
+        views.viewKeysBackupBannerLoading.isVisible = false
     }
 
     /**
