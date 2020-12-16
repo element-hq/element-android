@@ -85,9 +85,9 @@ class RoomUploadsMediaFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         views.genericStateViewListRecycler.cleanup()
         controller.listener = null
+        super.onDestroyView()
     }
 
     // It's very strange i can't just access

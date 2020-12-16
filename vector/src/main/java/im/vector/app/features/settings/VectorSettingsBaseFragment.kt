@@ -78,8 +78,8 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
 
     @CallSuper
     override fun onDestroyView() {
-        super.onDestroyView()
         uiDisposables.clear()
+        super.onDestroyView()
     }
 
     override fun onDestroy() {

@@ -68,9 +68,9 @@ class AccountDataFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         views.genericRecyclerView.cleanup()
         epoxyController.interactionListener = null
+        super.onDestroyView()
     }
 
     override fun didTap(data: UserAccountDataEvent) {

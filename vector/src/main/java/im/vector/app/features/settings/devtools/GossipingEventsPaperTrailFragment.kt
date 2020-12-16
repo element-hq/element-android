@@ -60,9 +60,9 @@ class GossipingEventsPaperTrailFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         views.genericRecyclerView.cleanup()
         epoxyController.interactionListener = null
+        super.onDestroyView()
     }
 
     override fun didTap(event: Event) {

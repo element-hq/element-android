@@ -144,10 +144,10 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
 
     @CallSuper
     override fun onDestroyView() {
-        super.onDestroyView()
         Timber.i("onDestroyView Fragment ${javaClass.simpleName}")
         uiDisposables.clear()
         _binding = null
+        super.onDestroyView()
     }
 
     override fun onDestroy() {

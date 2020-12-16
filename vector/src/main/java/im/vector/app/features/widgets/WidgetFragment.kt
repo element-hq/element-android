@@ -109,11 +109,11 @@ class WidgetFragment @Inject constructor() :
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().clearWebView()
         }
         views.widgetWebView.clearAfterWidget()
+        super.onDestroyView()
     }
 
     override fun onResume() {

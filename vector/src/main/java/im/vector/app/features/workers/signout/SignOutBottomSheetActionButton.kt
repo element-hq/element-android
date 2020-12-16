@@ -77,7 +77,7 @@ class SignOutBottomSheetActionButton @JvmOverloads constructor(
 
         typedArray.recycle()
 
-        setOnClickListener {
+        views.signedOutActionClickable.setOnClickListener {
             action?.invoke()
         }
     }

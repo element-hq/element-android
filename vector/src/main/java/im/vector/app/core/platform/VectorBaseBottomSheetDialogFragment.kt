@@ -113,8 +113,8 @@ abstract class VectorBaseBottomSheetDialogFragment<VB: ViewBinding> : BottomShee
 
     @CallSuper
     override fun onDestroyView() {
-        super.onDestroyView()
         uiDisposables.clear()
+        super.onDestroyView()
     }
 
     @CallSuper

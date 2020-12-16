@@ -123,10 +123,10 @@ class AttachmentsPreviewFragment @Inject constructor(
     override fun getMenuRes() = R.menu.vector_attachments_preview
 
     override fun onDestroyView() {
-        super.onDestroyView()
         views.attachmentPreviewerMiniatureList.cleanup()
         views.attachmentPreviewerBigList.cleanup()
         attachmentMiniaturePreviewController.callback = null
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->

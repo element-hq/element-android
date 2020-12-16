@@ -53,7 +53,7 @@ class IncomingKeyRequestListFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         views.genericRecyclerView.cleanup()
+        super.onDestroyView()
     }
 }

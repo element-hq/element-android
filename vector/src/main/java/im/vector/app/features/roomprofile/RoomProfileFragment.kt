@@ -174,10 +174,10 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         views.matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
         views.matrixProfileRecyclerView.cleanup()
         appBarStateChangeListener = null
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(roomProfileViewModel) { state ->

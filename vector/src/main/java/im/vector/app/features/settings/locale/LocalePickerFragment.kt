@@ -62,9 +62,9 @@ class LocalePickerFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         views.localeRecyclerView.cleanup()
         controller.listener = null
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->

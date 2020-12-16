@@ -63,9 +63,9 @@ class RoomUploadsFilesFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         views.genericStateViewListRecycler.cleanup()
         controller.listener = null
+        super.onDestroyView()
     }
 
     override fun onOpenClicked(uploadEvent: UploadEvent) {

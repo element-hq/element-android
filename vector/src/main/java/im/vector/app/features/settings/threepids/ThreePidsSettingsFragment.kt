@@ -77,9 +77,9 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         views.genericRecyclerView.cleanup()
         epoxyController.interactionListener = null
+        super.onDestroyView()
     }
 
     override fun onResume() {

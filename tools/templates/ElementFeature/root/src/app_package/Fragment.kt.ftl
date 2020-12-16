@@ -36,8 +36,8 @@ class ${fragmentClass} @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
 		// Clear your view, unsubscribe...
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->
