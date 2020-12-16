@@ -31,6 +31,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.databinding.ItemVerificationActionBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class BottomSheetActionButton @JvmOverloads constructor(
@@ -38,23 +39,18 @@ class BottomSheetActionButton @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-
-    private val actionTextView: TextView
-    private val descriptionTextView: TextView
-    private val leftIconImageView: ImageView
-    private val rightIconImageView: ImageView
-    private val clickableView: View
+    private val views : ItemVerificationActionBinding
 
     var title: String? = null
         set(value) {
             field = value
-            actionTextView.setTextOrHide(value)
+            views.itemVerificationActionTitle.setTextOrHide(value)
         }
 
     var subTitle: String? = null
         set(value) {
             field = value
-            descriptionTextView.setTextOrHide(value)
+            views.itemVerificationActionSubTitle.setTextOrHide(value)
         }
 
     var forceStartPadding: Boolean? = null
@@ -62,9 +58,9 @@ class BottomSheetActionButton @JvmOverloads constructor(
             field = value
             if (leftIcon == null) {
                 if (forceStartPadding == true) {
-                    leftIconImageView.isInvisible = true
+                    views.itemVerificationLeftIcon.isInvisible = true
                 } else {
-                    leftIconImageView.isGone = true
+                    views.itemVerificationLeftIcon.isGone = true
                 }
             }
         }
@@ -74,43 +70,38 @@ class BottomSheetActionButton @JvmOverloads constructor(
             field = value
             if (value == null) {
                 if (forceStartPadding == true) {
-                    leftIconImageView.isInvisible = true
+                    views.itemVerificationLeftIcon.isInvisible = true
                 } else {
-                    leftIconImageView.isGone = true
+                    views.itemVerificationLeftIcon.isGone = true
                 }
-                leftIconImageView.setImageDrawable(null)
+                views.itemVerificationLeftIcon.setImageDrawable(null)
             } else {
-                leftIconImageView.isVisible = true
-                leftIconImageView.setImageDrawable(value)
+                views.itemVerificationLeftIcon.isVisible = true
+                views.itemVerificationLeftIcon.setImageDrawable(value)
             }
         }
 
     var rightIcon: Drawable? = null
         set(value) {
             field = value
-            rightIconImageView.setImageDrawable(value)
+            views.itemVerificationActionIcon.setImageDrawable(value)
         }
 
     var tint: Int? = null
         set(value) {
             field = value
-            leftIconImageView.imageTintList = value?.let { ColorStateList.valueOf(value) }
+            views.itemVerificationLeftIcon.imageTintList = value?.let { ColorStateList.valueOf(value) }
         }
 
     var titleTextColor: Int? = null
         set(value) {
             field = value
-            value?.let { actionTextView.setTextColor(it) }
+            value?.let { views.itemVerificationActionTitle.setTextColor(it) }
         }
 
     init {
         inflate(context, R.layout.item_verification_action, this)
-
-        actionTextView = findViewById(R.id.itemVerificationActionTitle)
-        descriptionTextView = findViewById(R.id.itemVerificationActionSubTitle)
-        leftIconImageView = findViewById(R.id.itemVerificationLeftIcon)
-        rightIconImageView = findViewById(R.id.itemVerificationActionIcon)
-        clickableView = findViewById(R.id.itemVerificationClickableZone)
+        views = ItemVerificationActionBinding.bind(this)
 
         context.withStyledAttributes(attrs, R.styleable.BottomSheetActionButton) {
             title = getString(R.styleable.BottomSheetActionButton_actionTitle) ?: ""

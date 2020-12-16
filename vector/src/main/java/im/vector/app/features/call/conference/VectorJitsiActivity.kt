@@ -86,13 +86,13 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         when (viewState.widget) {
             is Fail    -> finish()
             is Success -> {
-                findViewById<View>(R.id.jitsi_progress_layout).isVisible = false
+                views.jitsiProgressLayout.isVisible = false
                 jitsiMeetView?.isVisible = true
                 configureJitsiView(viewState)
             }
             else       -> {
                 jitsiMeetView?.isVisible = false
-                findViewById<View>(R.id.jitsi_progress_layout).isVisible = true
+                views.jitsiProgressLayout.isVisible = true
             }
         }
     }

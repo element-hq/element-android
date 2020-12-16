@@ -61,12 +61,11 @@ class ExportKeysDialog {
         views.exportDialogEt.addTextChangedListener(textWatcher)
         views.exportDialogEtConfirm.addTextChangedListener(textWatcher)
 
-        val showPassword = dialogLayout.findViewById<ImageView>(R.id.exportDialogShowPassword)
-        showPassword.setOnClickListener {
+        views.exportDialogShowPassword.setOnClickListener {
             passwordVisible = !passwordVisible
             views.exportDialogEt.showPassword(passwordVisible)
             views.exportDialogEtConfirm.showPassword(passwordVisible)
-            showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+            views.exportDialogShowPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
         }
 
         val exportDialog = builder.show()

@@ -27,6 +27,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.utils.tappableMatchingText
+import im.vector.app.databinding.ViewActiveConferenceViewBinding
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -48,12 +49,15 @@ class ActiveConferenceView @JvmOverloads constructor(
     var callback: Callback? = null
     var jitsiWidget: Widget? = null
 
+    private lateinit var views: ViewActiveConferenceViewBinding
+
     init {
         setupView()
     }
 
     private fun setupView() {
         inflate(context, R.layout.view_active_conference_view, this)
+        views = ViewActiveConferenceViewBinding.bind(this)
         setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorPrimary))
 
         // "voice" and "video" texts are underlined and clickable
@@ -78,12 +82,12 @@ class ActiveConferenceView @JvmOverloads constructor(
             }
         })
 
-        findViewById<TextView>(R.id.activeConferenceInfo).apply {
+        views.activeConferenceInfo.apply {
             text = styledText
             movementMethod = LinkMovementMethod.getInstance()
         }
 
-        findViewById<TextView>(R.id.deleteWidgetButton).setOnClickListener {
+        views.deleteWidgetButton.setOnClickListener {
             jitsiWidget?.let { callback?.onDelete(it) }
         }
     }
@@ -105,7 +109,7 @@ class ActiveConferenceView @JvmOverloads constructor(
                 jitsiWidget = activeConf
             }
             // if sent by me or if i can moderate?
-            findViewById<TextView>(R.id.deleteWidgetButton).isVisible = state.isAllowedToManageWidgets
+            views.deleteWidgetButton.isVisible = state.isAllowedToManageWidgets
         } else {
             isVisible = false
         }

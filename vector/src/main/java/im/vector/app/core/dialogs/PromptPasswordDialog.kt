@@ -44,11 +44,10 @@ class PromptPasswordDialog {
         }
         views.promptPassword.addTextChangedListener(textWatcher)
 
-        val showPassword = dialogLayout.findViewById<ImageView>(R.id.promptPasswordPasswordReveal)
-        showPassword.setOnClickListener {
+        views.promptPasswordPasswordReveal.setOnClickListener {
             passwordVisible = !passwordVisible
             views.promptPassword.showPassword(passwordVisible)
-            showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+            views.promptPasswordPasswordReveal.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
         }
 
         AlertDialog.Builder(activity)

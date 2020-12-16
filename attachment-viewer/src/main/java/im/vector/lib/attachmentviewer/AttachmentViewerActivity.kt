@@ -104,7 +104,6 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         attachmentsAdapter = AttachmentsAdapter()
         views.attachmentPager.adapter = attachmentsAdapter
         imageTransitionView = views.transitionImageView
-        transitionImageContainer = findViewById(R.id.transitionImageContainer)
         pager2 = views.attachmentPager
         directionDetector = createSwipeDirectionDetector()
         gestureDetector = createGestureDetector()
