@@ -123,7 +123,11 @@ class VectorCallViewModel @AssistedInject constructor(
     private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
 
         override fun onCurrentCallChange(call: WebRtcCall?) {
-            updateOtherKnownCall(call)
+            if (call == null) {
+                _viewEvents.post(VectorCallViewEvents.DismissNoCall)
+            } else {
+                updateOtherKnownCall(call)
+            }
         }
 
         override fun onAudioDevicesChange() {
@@ -143,8 +147,7 @@ class VectorCallViewModel @AssistedInject constructor(
         }
     }
 
-    private fun updateOtherKnownCall(currentCall: WebRtcCall?) {
-        if (currentCall == null) return
+    private fun updateOtherKnownCall(currentCall: WebRtcCall) {
         val otherCall = callManager.getCalls().firstOrNull {
             it.callId != currentCall.callId && it.mxCall.state is CallState.Connected
         }

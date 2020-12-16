@@ -21,6 +21,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import im.vector.app.R
+import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -43,18 +44,24 @@ class IncomingCallAlert(uid: String,
         : VectorAlert.ViewBinder {
 
         override fun bind(view: View) {
-            val callKind = if (isVideoCall) {
-                R.string.action_video_call
+            val (callKindText, callKindIcon) = if (isVideoCall) {
+                Pair(R.string.action_video_call, R.drawable.ic_call_video_small)
             } else {
-                R.string.action_voice_call
+                Pair(R.string.action_voice_call, R.drawable.ic_call_audio_small)
             }
-            view.findViewById<TextView>(R.id.incomingCallKindView).setText(callKind)
+            view.findViewById<TextView>(R.id.incomingCallKindView).apply {
+                setText(callKindText)
+                setLeftDrawable(callKindIcon)
+            }
             view.findViewById<TextView>(R.id.incomingCallNameView).text = matrixItem?.getBestName()
             view.findViewById<ImageView>(R.id.incomingCallAvatar)?.let { imageView ->
                 matrixItem?.let { avatarRenderer.render(it, imageView, GlideApp.with(view.context.applicationContext)) }
             }
-            view.findViewById<ImageView>(R.id.incomingCallAcceptView).setOnClickListener {
-                onAccept()
+            view.findViewById<ImageView>(R.id.incomingCallAcceptView).apply {
+                setOnClickListener {
+                    onAccept()
+                }
+                setImageResource(callKindIcon)
             }
             view.findViewById<ImageView>(R.id.incomingCallRejectView).setOnClickListener {
                 onReject()
