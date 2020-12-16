@@ -45,6 +45,8 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:textColor="?riotx_text_secondary"
+        app:drawableTint="?riotx_text_secondary"
+        android:drawablePadding="4dp"
         android:textSize="15sp"
         android:maxLines="1"
         app:layout_constraintEnd_toStartOf="@+id/incomingCallRejectView"
@@ -65,6 +67,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white"
         android:src="@drawable/ic_call_answer" />
 
     <ImageView

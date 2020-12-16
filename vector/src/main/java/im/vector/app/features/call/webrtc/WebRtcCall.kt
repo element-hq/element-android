@@ -707,7 +707,6 @@ class WebRtcCall(val mxCall: MxCall,
         if (mxCall.state == CallState.Terminated) {
             return
         }
-        val wasConnected = mxCall.state is CallState.Connected
         mxCall.state = CallState.Terminated
         // Close tracks ASAP
         localVideoTrack?.setEnabled(false)
@@ -721,8 +720,7 @@ class WebRtcCall(val mxCall: MxCall,
         }
         onCallEnded(this)
         if (originatedByMe) {
-            // send hang up event
-            if (wasConnected) {
+            if (mxCall.state is CallState.Connected || mxCall.isOutgoing) {
                 mxCall.hangUp(reason)
             } else {
                 mxCall.reject()
