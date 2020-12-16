@@ -23,7 +23,7 @@ import android.widget.LinearLayout
 import androidx.core.content.withStyledAttributes
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
-
+import im.vector.app.databinding.ItemTimelineEventPollResultItemBinding
 
 class PollResultLineView @JvmOverloads constructor(
         context: Context,
@@ -31,34 +31,37 @@ class PollResultLineView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
+    private val views: ItemTimelineEventPollResultItemBinding
+
     var label: String? = null
         set(value) {
             field = value
-            pollResultItemLabel.setTextOrHide(value)
+            views.pollResultItemLabel.setTextOrHide(value)
         }
 
     var percent: String? = null
         set(value) {
             field = value
-            pollResultItemPercent.setTextOrHide(value)
+            views.pollResultItemPercent.setTextOrHide(value)
         }
 
     var optionSelected: Boolean = false
         set(value) {
             field = value
-            pollResultItemSelectedIcon.visibility = if (value) View.VISIBLE else View.INVISIBLE
+            views.pollResultItemSelectedIcon.visibility = if (value) View.VISIBLE else View.INVISIBLE
         }
 
     var isWinner: Boolean = false
         set(value) {
             field = value
             // Text in main color
-            pollResultItemLabel.setTypeface(pollResultItemLabel.typeface, if (value) Typeface.BOLD else Typeface.NORMAL)
-            pollResultItemPercent.setTypeface(pollResultItemPercent.typeface, if (value) Typeface.BOLD else Typeface.NORMAL)
+            views.pollResultItemLabel.setTypeface(views.pollResultItemLabel.typeface, if (value) Typeface.BOLD else Typeface.NORMAL)
+            views.pollResultItemPercent.setTypeface(views.pollResultItemPercent.typeface, if (value) Typeface.BOLD else Typeface.NORMAL)
         }
 
     init {
         inflate(context, R.layout.item_timeline_event_poll_result_item, this)
+        views = ItemTimelineEventPollResultItemBinding.bind(this)
         orientation = HORIZONTAL
 
         context.withStyledAttributes(attrs, R.styleable.PollResultLineView) {

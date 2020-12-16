@@ -119,7 +119,7 @@ class RoomListFragment @Inject constructor(
             }.exhaustive
         }
 
-        createChatFabMenu.listener = this
+        views.createChatFabMenu.listener = this
 
         sharedActionViewModel
                 .observe()
@@ -134,10 +134,10 @@ class RoomListFragment @Inject constructor(
     override fun onDestroyView() {
         roomController.removeModelBuildListener(modelBuildListener)
         modelBuildListener = null
-        roomListView.cleanup()
+        views.roomListView.cleanup()
         roomController.listener = null
         stateRestorer.clear()
-        createChatFabMenu.listener = null
+        views.createChatFabMenu.listener = null
         super.onDestroyView()
     }
 
@@ -147,35 +147,35 @@ class RoomListFragment @Inject constructor(
 
     private fun setupCreateRoomButton() {
         when (roomListParams.displayMode) {
-            RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.isVisible = true
-            RoomListDisplayMode.PEOPLE        -> createChatRoomButton.isVisible = true
-            RoomListDisplayMode.ROOMS         -> createGroupRoomButton.isVisible = true
+            RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.isVisible = true
+            RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.isVisible = true
+            RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.isVisible = true
             else                              -> Unit // No button in this mode
         }
 
-        createChatRoomButton.debouncedClicks {
+        views.createChatRoomButton.debouncedClicks {
             createDirectChat()
         }
-        createGroupRoomButton.debouncedClicks {
+        views.createGroupRoomButton.debouncedClicks {
             openRoomDirectory()
         }
 
         // Hide FAB when list is scrolling
-        roomListView.addOnScrollListener(
+        views.roomListView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                        createChatFabMenu.removeCallbacks(showFabRunnable)
+                        views.createChatFabMenu.removeCallbacks(showFabRunnable)
 
                         when (newState) {
                             RecyclerView.SCROLL_STATE_IDLE     -> {
-                                createChatFabMenu.postDelayed(showFabRunnable, 250)
+                                views.createChatFabMenu.postDelayed(showFabRunnable, 250)
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
                                 when (roomListParams.displayMode) {
-                                    RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.hide()
-                                    RoomListDisplayMode.PEOPLE        -> createChatRoomButton.hide()
-                                    RoomListDisplayMode.ROOMS         -> createGroupRoomButton.hide()
+                                    RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.hide()
+                                    RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.hide()
+                                    RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.hide()
                                     else                              -> Unit
                                 }
                             }
@@ -186,7 +186,7 @@ class RoomListFragment @Inject constructor(
 
     fun filterRoomsWith(filter: String) {
         // Scroll the list to top
-        roomListView.scrollToPosition(0)
+        views.roomListView.scrollToPosition(0)
 
         roomListViewModel.handle(RoomListAction.FilterWith(filter))
     }
@@ -202,23 +202,23 @@ class RoomListFragment @Inject constructor(
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
         stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
-        roomListView.layoutManager = layoutManager
-        roomListView.itemAnimator = RoomListAnimator()
-        roomListView.setRecycledViewPool(sharedViewPool)
+        views.roomListView.layoutManager = layoutManager
+        views.roomListView.itemAnimator = RoomListAnimator()
+        views.roomListView.setRecycledViewPool(sharedViewPool)
         layoutManager.recycleChildrenOnDetach = true
         roomController.listener = this
         modelBuildListener = OnModelBuildFinishedListener { it.dispatchTo(stateRestorer) }
         roomController.addModelBuildListener(modelBuildListener)
-        roomListView.adapter = roomController.adapter
-        stateView.contentView = roomListView
+        views.roomListView.adapter = roomController.adapter
+        views.stateView.contentView = views.roomListView
     }
 
     private val showFabRunnable = Runnable {
         if (isAdded) {
             when (roomListParams.displayMode) {
-                RoomListDisplayMode.NOTIFICATIONS -> createChatFabMenu.show()
-                RoomListDisplayMode.PEOPLE        -> createChatRoomButton.show()
-                RoomListDisplayMode.ROOMS         -> createGroupRoomButton.show()
+                RoomListDisplayMode.NOTIFICATIONS -> views.createChatFabMenu.show()
+                RoomListDisplayMode.PEOPLE        -> views.createChatRoomButton.show()
+                RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.show()
                 else                              -> Unit
             }
         }
@@ -289,7 +289,7 @@ class RoomListFragment @Inject constructor(
         if (filteredRooms.isNullOrEmpty()) {
             renderEmptyState(allRooms)
         } else {
-            stateView.state = StateView.State.Content
+            views.stateView.state = StateView.State.Content
         }
     }
 
@@ -332,11 +332,11 @@ class RoomListFragment @Inject constructor(
                 // Always display the content in this mode, because if the footer
                 StateView.State.Content
         }
-        stateView.state = emptyState
+        views.stateView.state = emptyState
     }
 
     private fun renderLoading() {
-        stateView.state = StateView.State.Loading
+        views.stateView.state = StateView.State.Loading
     }
 
     private fun renderFailure(error: Throwable) {
@@ -344,11 +344,11 @@ class RoomListFragment @Inject constructor(
             is Failure.NetworkConnection -> getString(R.string.network_error_please_check_and_retry)
             else                         -> getString(R.string.unknown_error)
         }
-        stateView.state = StateView.State.Error(message)
+        views.stateView.state = StateView.State.Error(message)
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        if (createChatFabMenu.onBackPressed()) {
+        if (views.createChatFabMenu.onBackPressed()) {
             return true
         }
         return false

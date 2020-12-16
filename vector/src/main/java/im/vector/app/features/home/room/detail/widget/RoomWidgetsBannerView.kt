@@ -21,6 +21,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
 import im.vector.app.R
+import im.vector.app.databinding.ViewRoomWidgetsBannerBinding
 
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 
@@ -34,10 +35,13 @@ class RoomWidgetsBannerView @JvmOverloads constructor(
         fun onViewWidgetsClicked()
     }
 
+    private val views: ViewRoomWidgetsBannerBinding
+
     var callback: Callback? = null
 
     init {
         setupView()
+        views = ViewRoomWidgetsBannerBinding.bind(this)
     }
 
     private fun setupView() {
@@ -53,7 +57,7 @@ class RoomWidgetsBannerView @JvmOverloads constructor(
             visibility = View.GONE
         } else {
             visibility = View.VISIBLE
-            activeWidgetsLabel.text = context.resources.getQuantityString(R.plurals.active_widgets, widgets.size, widgets.size)
+            views.activeWidgetsLabel.text = context.resources.getQuantityString(R.plurals.active_widgets, widgets.size, widgets.size)
         }
     }
 }

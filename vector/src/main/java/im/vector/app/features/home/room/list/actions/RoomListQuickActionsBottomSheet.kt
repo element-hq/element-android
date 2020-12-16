@@ -75,12 +75,12 @@ class RoomListQuickActionsBottomSheet :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
-        views.views.bottomSheetRecyclerView.configureWith(roomListActionsEpoxyController, viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
+        views.bottomSheetRecyclerView.configureWith(roomListActionsEpoxyController, viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
         roomListActionsEpoxyController.listener = this
     }
 
     override fun onDestroyView() {
-        views.views.bottomSheetRecyclerView.cleanup()
+        views.bottomSheetRecyclerView.cleanup()
         roomListActionsEpoxyController.listener = null
         super.onDestroyView()
     }

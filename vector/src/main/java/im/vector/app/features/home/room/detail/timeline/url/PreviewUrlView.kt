@@ -23,6 +23,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.databinding.UrlPreviewBinding
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.media.ImageContentRenderer
 
@@ -38,10 +39,13 @@ class PreviewUrlView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
 
+    private val views: UrlPreviewBinding
+
     var delegate: TimelineEventController.PreviewUrlCallback? = null
 
     init {
         setupView()
+        views = UrlPreviewBinding.bind(this)
     }
 
     private var state: PreviewUrlUiState = PreviewUrlUiState.Unknown
@@ -90,7 +94,7 @@ class PreviewUrlView @JvmOverloads constructor(
         inflate(context, R.layout.url_preview, this)
 
         setOnClickListener(this)
-        url_preview_close.setOnClickListener { onCloseClick() }
+        views.urlPreviewClose.setOnClickListener { onCloseClick() }
     }
 
     private fun renderHidden() {
@@ -104,19 +108,19 @@ class PreviewUrlView @JvmOverloads constructor(
 
     private fun renderData(previewUrlData: PreviewUrlData, imageContentRenderer: ImageContentRenderer) {
         isVisible = true
-        url_preview_title.setTextOrHide(previewUrlData.title)
-        url_preview_image.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, url_preview_image) }.orFalse()
-        url_preview_description.setTextOrHide(previewUrlData.description)
-        url_preview_site.setTextOrHide(previewUrlData.siteName.takeIf { it != previewUrlData.title })
+        views.urlPreviewTitle.setTextOrHide(previewUrlData.title)
+        views.urlPreviewImage.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, views.urlPreviewImage) }.orFalse()
+        views.urlPreviewDescription.setTextOrHide(previewUrlData.description)
+        views.urlPreviewSite.setTextOrHide(previewUrlData.siteName.takeIf { it != previewUrlData.title })
     }
 
     /**
      * Hide all views that are not visible in all state
      */
     private fun hideAll() {
-        url_preview_title.isVisible = false
-        url_preview_image.isVisible = false
-        url_preview_description.isVisible = false
-        url_preview_site.isVisible = false
+        views.urlPreviewTitle.isVisible = false
+        views.urlPreviewImage.isVisible = false
+        views.urlPreviewDescription.isVisible = false
+        views.urlPreviewSite.isVisible = false
     }
 }
