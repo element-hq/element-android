@@ -174,4 +174,4 @@ getSystemService\(Context
 PreferenceManager\.getDefaultSharedPreferences==2
 
 ### Use ViewBindings
-findViewById
+# findViewById
