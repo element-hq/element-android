@@ -39,13 +39,12 @@ class PreviewUrlView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
 
-    private val views: UrlPreviewBinding
+    private lateinit var views: UrlPreviewBinding
 
     var delegate: TimelineEventController.PreviewUrlCallback? = null
 
     init {
         setupView()
-        views = UrlPreviewBinding.bind(this)
     }
 
     private var state: PreviewUrlUiState = PreviewUrlUiState.Unknown
@@ -92,6 +91,7 @@ class PreviewUrlView @JvmOverloads constructor(
 
     private fun setupView() {
         inflate(context, R.layout.url_preview, this)
+        views = UrlPreviewBinding.bind(this)
 
         setOnClickListener(this)
         views.urlPreviewClose.setOnClickListener { onCloseClick() }
