@@ -33,5 +33,6 @@ const val REGISTER_FALLBACK_PATH = "/_matrix/static/client/register/"
  * Ref: https://matrix.org/docs/spec/client_server/latest#sso-client-login
  */
 const val SSO_REDIRECT_PATH = "/_matrix/client/r0/login/sso/redirect"
+const val MSC2858_SSO_REDIRECT_PATH = "/_matrix/client/unstable/org.matrix.msc2858/login/sso/redirect"
 
 const val SSO_REDIRECT_URL_PARAM = "redirectUrl"
