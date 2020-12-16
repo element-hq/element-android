@@ -35,7 +35,6 @@ import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.home.room.detail.UnreadState
 import im.vector.app.features.home.room.detail.timeline.factory.MergedHeaderItemFactory
-import im.vector.app.features.home.room.detail.timeline.factory.NoticeItemFactory
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
@@ -77,7 +76,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
                                                   private val session: Session,
                                                   private val callManager: WebRtcCallManager,
-                                                  private val noticeItemFactory: NoticeItemFactory,
                                                   @TimelineEventControllerHandler
                                                   private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
@@ -104,6 +102,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         // TODO move all callbacks to this?
         fun onTimelineItemAction(itemAction: RoomDetailAction)
 
+        // Introduce ViewModel scoped component (or Hilt?)
         fun getPreviewUrlRetriever(): PreviewUrlRetriever
     }
 

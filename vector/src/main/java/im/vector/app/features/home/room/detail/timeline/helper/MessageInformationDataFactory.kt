@@ -116,7 +116,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
     }
 
     private fun getE2EDecoration(event: TimelineEvent): E2EDecoration {
-        val roomSummary = roomSummaryHolder.roomSummary
+        val roomSummary = roomSummaryHolder.get(event.roomId)
         return if (
                 event.root.sendState == SendState.SYNCED
                 && roomSummary?.isEncrypted.orFalse()

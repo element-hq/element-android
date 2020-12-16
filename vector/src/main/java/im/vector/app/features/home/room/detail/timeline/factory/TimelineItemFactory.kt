@@ -63,7 +63,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_WIDGET,
                 EventType.STATE_ROOM_POWER_LEVELS,
                 EventType.REACTION,
-                EventType.REDACTION             -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+                EventType.REDACTION             -> noticeItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(event, highlight, callback)
                 // State room create
                 EventType.STATE_ROOM_CREATE     -> roomCreateItemFactory.create(event, callback)
@@ -91,7 +91,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                     // TODO These are not filtered out by timeline when encrypted
                     // For now manually ignore
                     if (userPreferencesProvider.shouldShowHiddenEvents()) {
-                        noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+                        noticeItemFactory.create(event, highlight, callback)
                     } else {
                         null
                     }
