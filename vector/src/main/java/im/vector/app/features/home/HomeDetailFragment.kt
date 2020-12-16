@@ -28,6 +28,7 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
+import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity

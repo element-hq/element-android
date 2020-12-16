@@ -70,7 +70,7 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(roomPreviewViewModel) { state ->
-        TransitionManager.beginDelayedTransition(views.roomPreviewNoPreviewRoot)
+        TransitionManager.beginDelayedTransition(views.coordinatorLayout)
 
         views.roomPreviewNoPreviewJoin.render(
                 when (state.roomJoinState) {

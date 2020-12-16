@@ -24,7 +24,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import im.vector.app.R
-import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.selectTxtFileToWrite
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -42,7 +41,7 @@ fun Fragment.addFragment(
     parentFragmentManager.commitTransaction(allowStateLoss) { add(frameId, fragment) }
 }
 
-fun <T : Fragment> VectorBaseFragment<*>.addFragment(
+fun <T : Fragment> Fragment.addFragment(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -62,7 +61,7 @@ fun Fragment.replaceFragment(
     parentFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment) }
 }
 
-fun <T : Fragment> VectorBaseFragment<*>.replaceFragment(
+fun <T : Fragment> Fragment.replaceFragment(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -83,7 +82,7 @@ fun Fragment.addFragmentToBackstack(
     parentFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment, tag).addToBackStack(tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment<*>.addFragmentToBackstack(
+fun <T : Fragment> Fragment.addFragmentToBackstack(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -104,7 +103,7 @@ fun Fragment.addChildFragment(
     childFragmentManager.commitTransaction(allowStateLoss) { add(frameId, fragment, tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment<*>.addChildFragment(
+fun <T : Fragment> Fragment.addChildFragment(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -125,7 +124,7 @@ fun Fragment.replaceChildFragment(
     childFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment, tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment<*>.replaceChildFragment(
+fun <T : Fragment> Fragment.replaceChildFragment(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -146,7 +145,7 @@ fun Fragment.addChildFragmentToBackstack(
     childFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment).addToBackStack(tag) }
 }
 
-fun <T : Fragment> VectorBaseFragment<*>.addChildFragmentToBackstack(
+fun <T : Fragment> Fragment.addChildFragmentToBackstack(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,

@@ -95,7 +95,7 @@ class PublicRoomsFragment @Inject constructor(
     private fun handleViewEvents(viewEvents: RoomDirectoryViewEvents) {
         when (viewEvents) {
             is RoomDirectoryViewEvents.Failure -> {
-                Snackbar.make(views.publicRoomsCoordinator, errorFormatter.toHumanReadable(viewEvents.throwable), Snackbar.LENGTH_SHORT)
+                Snackbar.make(views.coordinatorLayout, errorFormatter.toHumanReadable(viewEvents.throwable), Snackbar.LENGTH_SHORT)
                         .show()
             }
         }.exhaustive

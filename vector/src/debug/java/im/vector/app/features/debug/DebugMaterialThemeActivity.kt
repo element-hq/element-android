@@ -35,7 +35,7 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
         setContentView(views.root)
 
         views.debugShowSnackbar.setOnClickListener {
-            Snackbar.make(views.debugMaterialCoordinator, "Snackbar!", Snackbar.LENGTH_SHORT)
+            Snackbar.make(views.coordinatorLayout, "Snackbar!", Snackbar.LENGTH_SHORT)
                     .setAction("Action") { }
                     .show()
         }

@@ -34,7 +34,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.BaseMvRxFragment
-import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
@@ -44,6 +43,7 @@ import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.features.navigation.Navigator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -183,11 +183,6 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
 
     protected fun setArguments(args: Parcelable? = null) {
         arguments = args.toMvRxBundle()
-    }
-
-    // TODO BMA Extract this and use simple type in Fragment.kt
-    fun Parcelable?.toMvRxBundle(): Bundle? {
-        return this?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
     }
 
     @MainThread

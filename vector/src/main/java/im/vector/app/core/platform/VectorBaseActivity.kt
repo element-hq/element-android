@@ -20,7 +20,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -40,7 +39,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
-import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
 import im.vector.app.BuildConfig
@@ -500,10 +498,6 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
             it.setDisplayHomeAsUpEnabled(displayBack)
             it.title = null
         }
-    }
-
-    fun Parcelable?.toMvRxBundle(): Bundle? {
-        return this?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
     }
 
     // ==============================================================================================
