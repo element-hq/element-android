@@ -60,4 +60,3 @@ internal data class LoginFlow(
     val useMsc2858SsoPath: Boolean
         get() = _ssoIdentityProvider == null
 }
-
