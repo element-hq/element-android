@@ -1294,11 +1294,7 @@ class RoomDetailFragment @Inject constructor(
         when (async) {
             is Loading -> {
                 // TODO Better handling progress
-                /* TODO BMA Yes, improve that
-                vectorBaseActivity.showWaitingView()
-                vectorBaseActivity.waitingStatusText.visibility = View.VISIBLE
-                vectorBaseActivity.waitingStatusText.text = getString(R.string.joining_room)
-                 */
+                vectorBaseActivity.showWaitingView(getString(R.string.joining_room))
             }
             is Success -> {
                 navigator.openRoom(vectorBaseActivity, async())

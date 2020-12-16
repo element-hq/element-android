@@ -24,6 +24,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
@@ -56,6 +57,7 @@ import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.observeNotNull
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
@@ -520,10 +522,13 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
     fun isWaitingViewVisible() = waitingView?.isVisible == true
 
     /**
-     * Show the waiting view
+     * Show the waiting view, and set text if not null.
      */
-    open fun showWaitingView() {
+    open fun showWaitingView(text: String? = null) {
         waitingView?.isVisible = true
+        if (text != null) {
+            waitingView?.findViewById<TextView>(R.id.waitingStatusText)?.setTextOrHide(text)
+        }
     }
 
     /**

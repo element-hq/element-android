@@ -74,10 +74,10 @@ abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
         }
     }
 
-    override fun showWaitingView() {
+    override fun showWaitingView(text: String?) {
         hideKeyboard()
         views.waitingView.waitingStatusText.isGone = views.waitingView.waitingStatusText.text.isNullOrBlank()
-        super.showWaitingView()
+        super.showWaitingView(text)
     }
 
     override fun hideWaitingView() {
