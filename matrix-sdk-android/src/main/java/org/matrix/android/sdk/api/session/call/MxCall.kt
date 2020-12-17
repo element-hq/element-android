@@ -89,6 +89,11 @@ interface MxCall : MxCallDetail {
      */
     fun sendLocalIceCandidateRemovals(candidates: List<CallCandidate>)
 
+    /**
+     * Send a m.call.replaces event to initiate call transfer.
+     */
+    suspend fun transfer(targetUserId: String, targetRoomId: String?)
+
     fun addListener(listener: StateListener)
     fun removeListener(listener: StateListener)
 
