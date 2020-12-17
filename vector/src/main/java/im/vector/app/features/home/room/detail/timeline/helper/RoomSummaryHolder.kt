@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
-import im.vector.app.core.di.ScreenScope
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -36,7 +35,7 @@ class RoomSummaryHolder @Inject constructor() {
 
     fun get(roomId: String) = roomSummaries[roomId]
 
-    fun remove(roomId: String)= roomSummaries.remove(roomId)
+    fun remove(roomId: String) = roomSummaries.remove(roomId)
 
     fun clear() {
         roomSummaries.clear()

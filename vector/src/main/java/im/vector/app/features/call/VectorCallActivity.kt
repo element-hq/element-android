@@ -177,7 +177,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         when (callState) {
             is CallState.Idle,
             is CallState.CreateOffer,
-            is CallState.Dialing,     -> {
+            is CallState.Dialing     -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_ring)
@@ -262,7 +262,13 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         } else {
             val otherCall = callManager.getCallById(state.otherKnownCallInfo.callId)
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
-            avatarRenderer.renderBlur(state.otherKnownCallInfo.otherUserItem, otherKnownCallAvatarView, sampling = 20, rounded = false, colorFilter = colorFilter)
+            avatarRenderer.renderBlur(
+                    matrixItem = state.otherKnownCallInfo.otherUserItem,
+                    imageView = otherKnownCallAvatarView,
+                    sampling = 20,
+                    rounded = false,
+                    colorFilter = colorFilter
+            )
             otherKnownCallLayout.isVisible = true
             otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold || it.remoteOnHold }.orFalse()
         }

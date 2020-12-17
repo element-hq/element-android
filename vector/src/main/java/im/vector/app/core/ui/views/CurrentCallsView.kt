@@ -62,7 +62,7 @@ class CurrentCallsView @JvmOverloads constructor(
             }
         } else {
             if (heldCalls.size > 1) {
-                currentCallsInfo.text = resources.getString(R.string.call_only_multiple_paused , heldCalls.size)
+                currentCallsInfo.text = resources.getString(R.string.call_only_multiple_paused, heldCalls.size)
             } else if (heldCalls.size == 1) {
                 currentCallsInfo.text = resources.getString(R.string.call_active_and_single_paused, formattedDuration)
             } else {

@@ -558,11 +558,15 @@ class WebRtcCall(val mxCall: MxCall,
                 remoteOnHold = true
                 isLocalOnHold = true
                 direction = RtpTransceiver.RtpTransceiverDirection.INACTIVE
+                timer.pause()
             } else {
                 remoteOnHold = false
                 isLocalOnHold = wasLocalOnHold
                 onCallBecomeActive(this@WebRtcCall)
                 direction = RtpTransceiver.RtpTransceiverDirection.SEND_RECV
+                if (!isLocalOnHold) {
+                    timer.resume()
+                }
             }
             for (transceiver in peerConnection?.transceivers ?: emptyList()) {
                 transceiver.direction = direction

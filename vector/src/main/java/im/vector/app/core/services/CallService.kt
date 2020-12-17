@@ -309,7 +309,6 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
             ContextCompat.startForegroundService(context, intent)
         }
 
-
         fun onOutgoingCallRinging(context: Context,
                                   callId: String) {
             val intent = Intent(context, CallService::class.java)

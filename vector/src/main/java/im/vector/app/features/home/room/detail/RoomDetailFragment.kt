@@ -805,7 +805,7 @@ class RoomDetailFragment @Inject constructor(
                     // resume existing if same room, if not prompt to kill and then restart new call?
                     if (currentCall.mxCall.roomId == roomDetailArgs.roomId) {
                         onTapToReturnToCall()
-                    }else {
+                    } else {
                         safeStartCall(isVideoCall)
                     }
                 } else if (!state.isAllowedToStartWebRTCCall) {
