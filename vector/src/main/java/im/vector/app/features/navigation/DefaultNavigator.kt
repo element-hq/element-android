@@ -33,6 +33,8 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
+import im.vector.app.features.call.transfer.CallTransferActivity
+import im.vector.app.features.call.transfer.CallTransferArgs
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
@@ -340,6 +342,11 @@ class DefaultNavigator @Inject constructor(
 
     override fun openSearch(context: Context, roomId: String) {
         val intent = SearchActivity.newIntent(context, SearchArgs(roomId))
+        context.startActivity(intent)
+    }
+
+    override fun openCallTransfer(context: Context, callId: String) {
+        val intent = CallTransferActivity.newIntent(context, callId)
         context.startActivity(intent)
     }
 

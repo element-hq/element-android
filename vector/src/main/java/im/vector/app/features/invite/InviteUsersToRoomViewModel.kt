@@ -17,6 +17,7 @@
 package im.vector.app.features.invite
 
 import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
@@ -24,6 +25,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.userdirectory.PendingInvitee
 import io.reactivex.Observable
 import org.matrix.android.sdk.api.session.Session
@@ -46,8 +48,11 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: InviteUsersToRoomViewState): InviteUsersToRoomViewModel? {
-            val activity: InviteUsersToRoomActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.inviteUsersToRoomViewModelFactory.create(state)
+            val factory = when (viewModelContext) {
+                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
+                is ActivityViewModelContext -> viewModelContext.activity as? Factory
+            }
+            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 

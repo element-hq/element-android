@@ -43,7 +43,7 @@ import javax.inject.Inject
 class ContactsBookFragment @Inject constructor(
         val contactsBookViewModelFactory: ContactsBookViewModel.Factory,
         private val contactsBookController: ContactsBookController
-) : VectorBaseFragment(), ContactsBookController.Callback {
+) : VectorBaseFragment(), ContactsBookController.Callback, ContactsBookViewModel.Factory {
 
     override fun getLayoutResId() = R.layout.fragment_contacts_book
     private val viewModel: UserListViewModel by activityViewModel()
@@ -52,6 +52,10 @@ class ContactsBookFragment @Inject constructor(
     private val contactsBookViewModel: ContactsBookViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
+
+    override fun create(initialState: ContactsBookViewState): ContactsBookViewModel {
+        return contactsBookViewModelFactory.create(initialState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
