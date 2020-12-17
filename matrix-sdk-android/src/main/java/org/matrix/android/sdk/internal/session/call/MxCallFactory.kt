@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.call.model.MxCallImpl
+import org.matrix.android.sdk.internal.session.profile.GetProfileInfoTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import java.math.BigDecimal
@@ -35,6 +36,7 @@ internal class MxCallFactory @Inject constructor(
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val eventSenderProcessor: EventSenderProcessor,
         private val matrixConfiguration: MatrixConfiguration,
+        private val getProfileInfoTask: GetProfileInfoTask,
         @UserId private val userId: String
 ) {
 
@@ -50,7 +52,8 @@ internal class MxCallFactory @Inject constructor(
                 isVideoCall = content.isVideo(),
                 localEchoEventFactory = localEchoEventFactory,
                 eventSenderProcessor = eventSenderProcessor,
-                matrixConfiguration = matrixConfiguration
+                matrixConfiguration = matrixConfiguration,
+                getProfileInfoTask = getProfileInfoTask
         ).apply {
             opponentPartyId = Optional.from(content.partyId)
             opponentVersion = content.version?.let { BigDecimal(it).intValueExact() } ?: MxCall.VOIP_PROTO_VERSION
@@ -69,7 +72,8 @@ internal class MxCallFactory @Inject constructor(
                 isVideoCall = isVideoCall,
                 localEchoEventFactory = localEchoEventFactory,
                 eventSenderProcessor = eventSenderProcessor,
-                matrixConfiguration = matrixConfiguration
+                matrixConfiguration = matrixConfiguration,
+                getProfileInfoTask = getProfileInfoTask
         )
     }
 }

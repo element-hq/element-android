@@ -71,11 +71,11 @@ data class CallReplacesContent(
             /**
              * Optional. The display name of the transfer target.
              */
-            @Json(name = "display_name") val displayName: String,
+            @Json(name = "display_name") val displayName: String?,
             /**
              * Optional. The avatar URL of the transfer target.
              */
-            @Json(name = "avatar_url") val avatarUrl: String
+            @Json(name = "avatar_url") val avatarUrl: String?
 
     )
 }
