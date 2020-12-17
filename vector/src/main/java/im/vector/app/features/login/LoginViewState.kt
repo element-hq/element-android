@@ -90,6 +90,6 @@ data class LoginViewState(
 
     companion object {
         // Note that the domain can be displayed to the user for confirmation that he trusts it. So use a human readable string
-        private const val VECTOR_REDIRECT_URL = "element://element"
+        private const val VECTOR_REDIRECT_URL = "element://connect"
     }
 }
