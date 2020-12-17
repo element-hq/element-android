@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix MSC2858 implementation details (#2540)
 
 Translations 🗣:
  -
