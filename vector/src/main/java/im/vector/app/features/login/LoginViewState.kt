@@ -23,6 +23,7 @@ import com.airbnb.mvrx.PersistState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.extensions.appendParamToUrl
+import org.matrix.android.sdk.api.auth.MSC2858_SSO_REDIRECT_PATH
 import org.matrix.android.sdk.api.auth.SSO_REDIRECT_PATH
 import org.matrix.android.sdk.api.auth.SSO_REDIRECT_URL_PARAM
 
