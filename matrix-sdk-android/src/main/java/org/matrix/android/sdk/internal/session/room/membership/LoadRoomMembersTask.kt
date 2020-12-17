@@ -36,6 +36,7 @@ import org.matrix.android.sdk.internal.util.awaitTransaction
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import javax.inject.Inject
 
 internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> {
@@ -84,14 +85,14 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
                 }
                 roomMemberEventHandler.handle(realm, roomId, roomMemberEvent)
             }
-            roomEntity.areAllMembersLoaded = true
+            roomEntity.membersLoadStatus = RoomMembersLoadStatusType.LOADED
             roomSummaryUpdater.update(realm, roomId, updateMembers = true)
         }
     }
 
     private fun areAllMembersAlreadyLoaded(roomId: String): Boolean {
         return Realm.getInstance(monarchy.realmConfiguration).use {
-            RoomEntity.where(it, roomId).findFirst()?.areAllMembersLoaded ?: false
+            RoomEntity.where(it, roomId).findFirst()?.membersLoadStatus == RoomMembersLoadStatusType.LOADED
         }
     }
 }
