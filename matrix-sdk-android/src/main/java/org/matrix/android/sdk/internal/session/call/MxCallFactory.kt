@@ -16,7 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.call
 
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.call.MxCall
+import org.matrix.android.sdk.api.session.room.model.call.CallCapabilities
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.di.DeviceId
@@ -32,6 +34,7 @@ internal class MxCallFactory @Inject constructor(
         @DeviceId private val deviceId: String?,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val eventSenderProcessor: EventSenderProcessor,
+        private val matrixConfiguration: MatrixConfiguration,
         @UserId private val userId: String
 ) {
 
@@ -46,10 +49,12 @@ internal class MxCallFactory @Inject constructor(
                 opponentUserId = opponentUserId,
                 isVideoCall = content.isVideo(),
                 localEchoEventFactory = localEchoEventFactory,
-                eventSenderProcessor = eventSenderProcessor
+                eventSenderProcessor = eventSenderProcessor,
+                matrixConfiguration = matrixConfiguration
         ).apply {
             opponentPartyId = Optional.from(content.partyId)
             opponentVersion = content.version?.let { BigDecimal(it).intValueExact() } ?: MxCall.VOIP_PROTO_VERSION
+            capabilities = content.capabilities ?: CallCapabilities()
         }
     }
 
@@ -63,7 +68,8 @@ internal class MxCallFactory @Inject constructor(
                 opponentUserId = opponentUserId,
                 isVideoCall = isVideoCall,
                 localEchoEventFactory = localEchoEventFactory,
-                eventSenderProcessor = eventSenderProcessor
+                eventSenderProcessor = eventSenderProcessor,
+                matrixConfiguration = matrixConfiguration
         )
     }
 }

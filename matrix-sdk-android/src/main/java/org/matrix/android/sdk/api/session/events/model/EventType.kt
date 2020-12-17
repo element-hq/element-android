@@ -72,6 +72,7 @@ object EventType {
     const val CALL_NEGOTIATE = "m.call.negotiate"
     const val CALL_REJECT = "m.call.reject"
     const val CALL_HANGUP = "m.call.hangup"
+    const val CALL_REPLACES = "m.call.replaces"
 
     // Key share events
     const val ROOM_KEY_REQUEST = "m.room_key_request"
