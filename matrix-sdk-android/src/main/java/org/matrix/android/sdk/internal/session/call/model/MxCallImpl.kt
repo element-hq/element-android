@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.call.model
 
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -27,6 +28,7 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidate
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
+import org.matrix.android.sdk.api.session.room.model.call.CallCapabilities
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
@@ -35,8 +37,8 @@ import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerConten
 import org.matrix.android.sdk.api.session.room.model.call.SdpType
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.call.DefaultCallSignalingService
-import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import timber.log.Timber
 
 internal class MxCallImpl(
@@ -48,11 +50,13 @@ internal class MxCallImpl(
         override val isVideoCall: Boolean,
         override val ourPartyId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val eventSenderProcessor: EventSenderProcessor
+        private val eventSenderProcessor: EventSenderProcessor,
+        private val matrixConfiguration: MatrixConfiguration
 ) : MxCall {
 
     override var opponentPartyId: Optional<String>? = null
     override var opponentVersion: Int = MxCall.VOIP_PROTO_VERSION
+    override var capabilities: CallCapabilities? = null
 
     override var state: CallState = CallState.Idle
         set(value) {
@@ -98,7 +102,8 @@ internal class MxCallImpl(
                 partyId = ourPartyId,
                 lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
                 offer = CallInviteContent.Offer(sdp = sdpString),
-                version = MxCall.VOIP_PROTO_VERSION.toString()
+                version = MxCall.VOIP_PROTO_VERSION.toString(),
+                capabilities = buildCapabilities()
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
@@ -158,7 +163,8 @@ internal class MxCallImpl(
                 callId = callId,
                 partyId = ourPartyId,
                 answer = CallAnswerContent.Answer(sdp = sdpString),
-                version = MxCall.VOIP_PROTO_VERSION.toString()
+                version = MxCall.VOIP_PROTO_VERSION.toString(),
+                capabilities = buildCapabilities()
         )
                 .let { createEventAndLocalEcho(type = EventType.CALL_ANSWER, roomId = roomId, content = it.toContent()) }
                 .also { eventSenderProcessor.postEvent(it) }
@@ -202,5 +208,13 @@ internal class MxCallImpl(
                 unsignedData = UnsignedData(age = null, transactionId = localId)
         )
                 .also { localEchoEventFactory.createLocalEcho(it) }
+    }
+
+    private fun buildCapabilities(): CallCapabilities? {
+        return if (matrixConfiguration.supportsCallTransfer) {
+            CallCapabilities(true)
+        } else {
+            null
+        }
     }
 }

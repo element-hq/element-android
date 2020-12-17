@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
+import org.matrix.android.sdk.api.session.room.model.call.CallCapabilities
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
@@ -185,6 +186,7 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
             call.apply {
                 opponentPartyId = Optional.from(content.partyId)
                 opponentVersion = content.version?.let { BigDecimal(it).intValueExact() } ?: MxCall.VOIP_PROTO_VERSION
+                capabilities = content.capabilities ?: CallCapabilities()
             }
             callListenersDispatcher.onCallAnswerReceived(content)
         }
