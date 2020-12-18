@@ -397,13 +397,12 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
 
         val sessions = mutableListOf(aliceSession)
         for (index in 1 until numberOfMembers) {
-            mTestHelper
-                    .createAccount("User_$index", defaultSessionParams)
-                    .also { session -> mTestHelper.doSync<Unit>(timeout = 600_000) { room.invite(session.myUserId, null, it) } }
-                    .also { println("TEST -> " + it.myUserId + " invited") }
-                    .also { session -> mTestHelper.doSync<Unit> { session.joinRoom(room.roomId, null, emptyList(), it) } }
-                    .also { println("TEST -> " + it.myUserId + " joined") }
-                    .also { session -> sessions.add(session) }
+            val session = mTestHelper.createAccount("User_$index", defaultSessionParams)
+            mTestHelper.doSync<Unit>(timeout = 600_000) { room.invite(session.myUserId, null, it) }
+            println("TEST -> " + session.myUserId + " invited")
+            mTestHelper.doSync<Unit> { session.joinRoom(room.roomId, null, emptyList(), it) }
+            println("TEST -> " + session.myUserId + " joined")
+            sessions.add(session)
         }
 
         return CryptoTestData(roomId, sessions)
