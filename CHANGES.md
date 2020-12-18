@@ -1,29 +1,8 @@
-Changes in Element 1.0.13 (2020-XX-XX)
+Changes in Element 1.0.13 (2020-12-18)
 ===================================================
-
-Features ✨:
- -
-
-Improvements 🙌:
- -
 
 Bugfix 🐛:
  - Fix MSC2858 implementation details (#2540)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
-
-Build 🧱:
- -
-
-Test:
- -
-
-Other changes:
- -
 
 Changes in Element 1.0.12 (2020-12-15)
 ===================================================
