@@ -19,7 +19,7 @@ package org.matrix.android.sdk.common
 import org.matrix.android.sdk.api.session.Session
 
 data class CryptoTestData(val roomId: String,
-                          val sessions: MutableList<Session> = mutableListOf()) {
+                          val sessions: List<Session>) {
 
     val firstSession: Session
         get() = sessions.first()

@@ -73,7 +73,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             }
         }
 
-        return CryptoTestData(roomId, mutableListOf(aliceSession))
+        return CryptoTestData(roomId, listOf(aliceSession))
     }
 
     /**
@@ -139,7 +139,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
 //        assertNotNull(roomFromBobPOV.powerLevels)
 //        assertTrue(roomFromBobPOV.powerLevels.maySendMessage(bobSession.myUserId))
 
-        return CryptoTestData(aliceRoomId, mutableListOf(aliceSession, bobSession))
+        return CryptoTestData(aliceRoomId, listOf(aliceSession, bobSession))
     }
 
     /**
@@ -157,7 +157,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         // wait the initial sync
         SystemClock.sleep(1000)
 
-        return CryptoTestData(aliceRoomId, mutableListOf(aliceSession, cryptoTestData.secondSession!!, samSession))
+        return CryptoTestData(aliceRoomId, listOf(aliceSession, cryptoTestData.secondSession!!, samSession))
     }
 
     /**
@@ -395,7 +395,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             room.enableEncryption()
         }
 
-        val cryptoTestData = CryptoTestData(roomId, mutableListOf(aliceSession))
+        val sessions = mutableListOf(aliceSession)
         for (index in 1 until numberOfMembers) {
             mTestHelper
                     .createAccount("User_$index", defaultSessionParams)
@@ -403,9 +403,9 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
                     .also { println("TEST -> " + it.myUserId + " invited") }
                     .also { session -> mTestHelper.doSync<Unit> { session.joinRoom(room.roomId, null, emptyList(), it) } }
                     .also { println("TEST -> " + it.myUserId + " joined") }
-                    .also { session -> cryptoTestData.sessions.add(session) }
+                    .also { session -> sessions.add(session) }
         }
 
-        return cryptoTestData
+        return CryptoTestData(roomId, sessions)
     }
 }
