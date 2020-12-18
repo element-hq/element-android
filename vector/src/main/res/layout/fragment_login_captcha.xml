@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?riotx_background">
 
-    <!-- Missing attributes are in the style -->
     <!-- No scroll view in the screen, but use the style -->
     <LinearLayout
         style="@style/LoginFormScrollView"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="16dp"
-        tools:ignore="MissingConstraints">
+        android:paddingBottom="16dp">
+
+        <ImageView
+            style="@style/LoginLogo"
+            android:layout_marginBottom="8dp"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/loginCaptchaNotice"
@@ -36,16 +38,12 @@
 
     </LinearLayout>
 
-    <!-- Id is defined in the style -->
     <ProgressBar
         android:id="@+id/loginCaptchaProgress"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        app:layout_constraintBottom_toBottomOf="@id/loginFormScrollView"
-        app:layout_constraintEnd_toEndOf="@id/loginFormScrollView"
-        app:layout_constraintStart_toStartOf="@id/loginFormScrollView"
-        app:layout_constraintTop_toTopOf="@id/loginFormScrollView"
+        android:layout_gravity="center"
         tools:ignore="UnknownId,NotSibling" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
 

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +18,13 @@ package org.matrix.android.sdk.internal.session
 
 import androidx.annotation.MainThread
 import dagger.Lazy
+import io.realm.RealmConfiguration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
@@ -37,10 +43,13 @@ import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.api.session.media.MediaService
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
+import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
@@ -51,25 +60,19 @@ import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
-import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDecryptor
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.createUIHandler
-import io.realm.RealmConfiguration
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
@@ -94,10 +97,13 @@ internal class DefaultSession @Inject constructor(
         private val pushRuleService: Lazy<PushRuleService>,
         private val pushersService: Lazy<PushersService>,
         private val termsService: Lazy<TermsService>,
+        private val searchService: Lazy<SearchService>,
         private val cryptoService: Lazy<DefaultCryptoService>,
         private val defaultFileService: Lazy<FileService>,
+        private val permalinkService: Lazy<PermalinkService>,
         private val secureStorageService: Lazy<SecureStorageService>,
         private val profileService: Lazy<ProfileService>,
+        private val mediaService: Lazy<MediaService>,
         private val widgetService: Lazy<WidgetService>,
         private val syncThreadProvider: Provider<SyncThread>,
         private val contentUrlResolver: ContentUrlResolver,
@@ -111,14 +117,14 @@ internal class DefaultSession @Inject constructor(
         private val accountDataService: Lazy<AccountDataService>,
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
-        private val timelineEventDecryptor: TimelineEventDecryptor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val defaultIdentityService: DefaultIdentityService,
         private val integrationManagerService: IntegrationManagerService,
         private val taskExecutor: TaskExecutor,
         private val callSignalingService: Lazy<CallSignalingService>,
         @UnauthenticatedWithCertificate
-        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
+        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
+        private val eventSenderProcessor: EventSenderProcessor
 ) : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
@@ -157,15 +163,15 @@ internal class DefaultSession @Inject constructor(
             lifecycleObservers.forEach { it.onStart() }
         }
         eventBus.register(this)
-        timelineEventDecryptor.start()
+        eventSenderProcessor.start()
     }
 
     override fun requireBackgroundSync() {
         SyncWorker.requireBackgroundSync(workManagerProvider, sessionId)
     }
 
-    override fun startAutomaticBackgroundSync(repeatDelay: Long) {
-        SyncWorker.automaticallyBackgroundSync(workManagerProvider, sessionId, 0, repeatDelay)
+    override fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long) {
+        SyncWorker.automaticallyBackgroundSync(workManagerProvider, sessionId, timeOutInSeconds, repeatDelayInSeconds)
     }
 
     override fun stopAnyBackgroundSync() {
@@ -194,13 +200,14 @@ internal class DefaultSession @Inject constructor(
     override fun close() {
         assert(isOpen)
         stopSync()
-        timelineEventDecryptor.destroy()
+        // timelineEventDecryptor.destroy()
         uiHandler.post {
             lifecycleObservers.forEach { it.onStop() }
         }
         cryptoService.get().close()
         isOpen = false
         eventBus.unregister(this)
+        eventSenderProcessor.interrupt()
     }
 
     override fun getSyncStateLive() = getSyncThread().liveState()
@@ -254,11 +261,17 @@ internal class DefaultSession @Inject constructor(
 
     override fun fileService(): FileService = defaultFileService.get()
 
+    override fun permalinkService(): PermalinkService = permalinkService.get()
+
     override fun widgetService(): WidgetService = widgetService.get()
+
+    override fun mediaService(): MediaService = mediaService.get()
 
     override fun integrationManagerService() = integrationManagerService
 
     override fun callSignalingService(): CallSignalingService = callSignalingService.get()
+
+    override fun searchService(): SearchService = searchService.get()
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()
@@ -275,5 +288,9 @@ internal class DefaultSession @Inject constructor(
     // For easy debugging
     override fun toString(): String {
         return "$myUserId - ${sessionParams.deviceId}"
+    }
+
+    override fun logDbUsageInfo() {
+        RealmDebugTools(realmConfiguration).logInfo("Session")
     }
 }

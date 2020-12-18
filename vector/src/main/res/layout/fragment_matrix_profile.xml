@@ -95,7 +95,6 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -104,5 +103,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_profile_action" />
+
+    <include layout="@layout/merge_overlay_waiting_view" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

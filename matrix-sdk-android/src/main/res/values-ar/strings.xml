@@ -6,21 +6,21 @@
     <string name="notice_room_invite_no_invitee">دعوة من ⁨%s⁩</string>
     <string name="notice_room_invite">دعى ⁨%1$s⁩ ⁨%2$s⁩</string>
     <string name="notice_room_invite_you">دعاك ⁨%1$s⁩</string>
-    <string name="notice_room_join">انضمّ ⁨%1$s⁩</string>
-    <string name="notice_room_leave">غادر ⁨%1$s⁩</string>
+    <string name="notice_room_join">انضمّ ⁨%1$s⁩ إلى الغرفة</string>
+    <string name="notice_room_leave">غادر ⁨%1$s⁩ الغرفة</string>
     <string name="notice_room_reject">رفض ⁨%1$s⁩ الدعوة</string>
     <string name="notice_room_kick">طرد ⁨%1$s⁩ ⁨%2$s⁩</string>
-    <string name="notice_room_unban">رفع ⁨%1$s⁩ الحظر عن ⁨%2$s⁩</string>
+    <string name="notice_room_unban">رفع ⁨%1$s⁩ المنع عن ⁨%2$s⁩</string>
     <string name="notice_room_ban">منع ⁨%1$s⁩ ⁨%2$s⁩</string>
     <string name="notice_avatar_url_changed">غيّر ⁨%1$s⁩ صورته</string>
     <string name="notice_display_name_set">ضبط ⁨%1$s⁩ اسم العرض على ⁨%2$s⁩</string>
-    <string name="notice_display_name_changed_from">غيّر ⁨%1$s⁩ اسم الحساب المعروض من %2$s⁩ إلى %3$s⁩</string>
-    <string name="notice_display_name_removed">أزال ⁨%1$s⁩ اسم الحساب المعروض (⁨%2$s⁩)</string>
+    <string name="notice_display_name_changed_from">غيّر ⁨%1$s⁩ اسم العرض من ⁨%2$s⁩ إلى ⁨%3$s⁩</string>
+    <string name="notice_display_name_removed">أزال ⁨%1$s⁩ اسم العرض (⁨كان ⁨%2$s⁩)</string>
     <string name="notice_room_topic_changed">غيّر ⁨%1$s⁩ الموضوع إلى: ⁨%2$s⁩</string>
     <string name="notice_room_name_changed">غيّر ⁨%1$s⁩ اسم الغرفة إلى: ⁨%2$s⁩</string>
     <string name="notice_answered_call">ردّ ⁨%s⁩ على المكالمة.</string>
     <string name="notice_ended_call">أنهى ⁨%s⁩ المكالمة.</string>
-    <string name="notice_made_future_room_visibility">جعل ⁨%1$s⁩ تأريخ الغرفة مستقبلًا ظاهرا على %2$s</string>
+    <string name="notice_made_future_room_visibility">جعل ⁨%1$s⁩ تأريخ الغرفة مستقبلًا ظاهرًا على ⁨%2$s⁩</string>
     <string name="notice_room_visibility_invited">كل أعضاء الغرفة من لحظة دعوتهم.</string>
     <string name="notice_room_visibility_joined">كل أعضاء الغرفة من لحظة انضمامهم.</string>
     <string name="notice_room_visibility_shared">كل أعضاء الغرفة.</string>
@@ -46,7 +46,7 @@
     <string name="network_error">خطأ في الشبكة</string>
     <string name="matrix_error">خطأ في «ماترِكس»</string>
 
-    <string name="room_error_join_failed_empty_room">ليس ممكنا الانضمام ثانيةً إلى غرفة فارغة.</string>
+    <string name="room_error_join_failed_empty_room">لا يمكنك حاليًا الانضمام ثانيةً إلى غرفة فارغة.</string>
 
     <string name="encrypted_message">رسالة معمّاة</string>
 
@@ -54,13 +54,13 @@
     <string name="medium_phone_number">رقم الهاتف</string>
 
     <string name="summary_message">‏‏⁨%1$s⁩: ‏⁨%2$s⁩</string>
-    <string name="notice_room_withdraw">انسحب ⁨%1$s⁩ من الدعوة ⁨%2$s⁩</string>
+    <string name="notice_room_withdraw">انسحب ⁨%1$s⁩ من دعوة ⁨%2$s⁩</string>
     <string name="notice_placed_video_call">أجرى ⁨%s⁩ مكالمة مرئية.</string>
     <string name="notice_placed_voice_call">أجرى ⁨%s⁩ مكالمة صوتية.</string>
-    <string name="notice_room_third_party_registered_invite">قبل ⁨%1$s⁩ دعوة ⁨%2$s⁩</string>
+    <string name="notice_room_third_party_registered_invite">قَبِل ⁨%1$s⁩ دعوة ⁨%2$s⁩</string>
 
     <string name="could_not_redact">تعذر التهذيب</string>
-    <string name="summary_user_sent_sticker">أرسل ⁨%1$s⁩ ملصقا.</string>
+    <string name="summary_user_sent_sticker">أرسل ⁨%1$s⁩ ملصقًا.</string>
 
     <string name="notice_avatar_changed_too">(تغيّرت الصورة أيضا)</string>
 
@@ -71,12 +71,77 @@
     <string name="room_displayname_room_invite">دعوة إلى غرفة</string>
 
     <plurals name="room_displayname_three_and_more_members">
-        <item quantity="zero">صفر</item>
-        <item quantity="one">واحد</item>
-        <item quantity="two">اثنان</item>
-        <item quantity="few">قليل</item>
-        <item quantity="many">كثير</item>
-        <item quantity="other">اخرى</item>
+        <item quantity="zero"></item>
+        <item quantity="one"></item>
+        <item quantity="two"></item>
+        <item quantity="few"></item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
     </plurals>
 
+    <string name="summary_you_sent_image">أرسلت صورة.</string>
+    <string name="summary_you_sent_sticker">أرسلت ملصقًا.</string>
+
+    <string name="notice_room_invite_no_invitee_by_you">دعوة منك أنت</string>
+    <string name="notice_room_created">أنشأ ⁨%1$s⁩ الغرفة</string>
+    <string name="notice_room_created_by_you">أنشأت الغرفة</string>
+    <string name="notice_room_invite_by_you">دعوت ⁨%1$s⁩</string>
+    <string name="notice_room_join_by_you">انضممت إلى الغرفة</string>
+    <string name="notice_room_leave_by_you">غادرت الغرفة</string>
+    <string name="notice_room_reject_by_you">رفضت الدعوة</string>
+    <string name="notice_room_kick_by_you">طردت ⁨%1$s⁩</string>
+    <string name="notice_room_unban_by_you">رفعت المنع عن ⁨%1$s⁩</string>
+    <string name="notice_room_ban_by_you">منعت ⁨%1$s⁩</string>
+    <string name="notice_room_withdraw_by_you">انسحبت من دعوة ⁨%1$s⁩</string>
+    <string name="notice_avatar_url_changed_by_you">غيّرت صورتك</string>
+    <string name="notice_display_name_set_by_you">ضبطت اسم العرض على ⁨%1$s⁩</string>
+    <string name="notice_display_name_changed_from_by_you">غيّرت اسم العرض من ⁨%1$s⁩ إلى ⁨%2$s⁩</string>
+    <string name="notice_display_name_removed_by_you">أزلت اسم العرض (كان ⁨%1$s⁩)</string>
+    <string name="notice_room_topic_changed_by_you">غيّرت الموضوع إلى: ⁨%1$s⁩</string>
+    <string name="notice_room_avatar_changed">غيّر ⁨%1$s⁩ صورة الغرفة</string>
+    <string name="notice_room_avatar_changed_by_you">غيّرت صورة الغرفة</string>
+    <string name="notice_room_name_changed_by_you">غيّرت اسم الغرفة إلى: ⁨%1$s⁩</string>
+    <string name="notice_placed_video_call_by_you">أجريت مكالمة مرئية.</string>
+    <string name="notice_placed_voice_call_by_you">أجريت مكالمة صوتية.</string>
+    <string name="notice_call_candidates">أرسل ⁨%s⁩ البيانات لإعداد المكالمة.</string>
+    <string name="notice_call_candidates_by_you">أرسلت البيانات لإعداد المكالمة.</string>
+    <string name="notice_answered_call_by_you">رددت على المكالمة.</string>
+    <string name="notice_ended_call_by_you">أنهيت المكالمة.</string>
+    <string name="notice_made_future_room_visibility_by_you">جعلت تأريخ الغرفة مستقبلًا ظاهرًا على ⁨%1$s⁩</string>
+    <string name="notice_end_to_end_by_you">فعّلت تعمية الطرفين (⁨%1$s⁩)</string>
+    <string name="notice_room_update">رقّى ⁨%s⁩ هذه الغرفة.</string>
+    <string name="notice_room_update_by_you">رقّيت هذه الغرفة.</string>
+
+    <string name="notice_requested_voip_conference_by_you">طلبت اجتماع VoIP</string>
+    <string name="notice_room_name_removed_by_you">أزلت اسم الغرفة</string>
+    <string name="notice_room_topic_removed_by_you">أزلت موضوع الغرفة</string>
+    <string name="notice_room_avatar_removed">أزال ⁨%1$s⁩ صورة الغرفة</string>
+    <string name="notice_room_avatar_removed_by_you">أزلت صورة الغرفة</string>
+    <string name="notice_event_redacted">أُزيلت الرسالة</string>
+    <string name="notice_event_redacted_by">أزال ⁨%1$s⁩ الرسالة</string>
+    <string name="notice_event_redacted_with_reason">أُزيلت الرسالة [السبب: ⁨%1$s⁩]</string>
+    <string name="notice_event_redacted_by_with_reason">أزال ⁨%1$s⁩ الرسالة [السبب: ⁨%2$s⁩]</string>
+    <string name="notice_room_third_party_invite_by_you">أرسلت دعوة إلى ⁨%1$s⁩ للانضمام إلى الغرفة</string>
+    <string name="notice_room_third_party_revoked_invite">سحب ⁨%1$s⁩ دعوة ⁨%2$s⁩ للانضمام إلى الغرفة</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">سحبت دعوة ⁨%1$s⁩ للانضمام إلى الغرفة</string>
+    <string name="notice_room_third_party_registered_invite_by_you">قَبِلت دعوة ⁨%1$s⁩</string>
+
+    <string name="notice_widget_added">أضاف ⁨%1$s⁩ الودجة ⁨%2$s⁩</string>
+    <string name="notice_widget_added_by_you">أضفت الودجة ⁨%1$s⁩</string>
+    <string name="notice_widget_removed">أزال ⁨%1$s⁩ الودجة ⁨%2$s⁩</string>
+    <string name="notice_widget_removed_by_you">أزلت الودجة ⁨%1$s⁩</string>
+    <string name="notice_widget_modified">عدّل ⁨%1$s⁩ الودجة ⁨%2$s⁩</string>
+    <string name="notice_widget_modified_by_you">عدّلت الودجة ⁨%1$s⁩</string>
+
+    <string name="power_level_admin">مدير</string>
+    <string name="power_level_default">المبدئي</string>
+    <string name="power_level_custom">مخصّص (⁨%1$d⁩)</string>
+    <string name="power_level_custom_no_value">مخصّص</string>
+
+    <string name="notice_power_level_changed_by_you">غيّرت مستوى قوّة %1$s⁩.</string>
+    <string name="notice_power_level_changed">غيّر ⁨%1$s⁩ مستوى قوّة %2$s⁩.</string>
+    <string name="notice_power_level_diff">‏⁨%1$s⁩ من ⁨%2$s⁩ إلى ⁨%3$s⁩</string>
+
+    <string name="initial_sync_start_importing_account">المزامنة الأولية:
+\nيستورد الحساب…</string>
 </resources>

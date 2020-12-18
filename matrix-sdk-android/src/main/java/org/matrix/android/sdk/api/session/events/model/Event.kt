@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -239,9 +238,28 @@ fun Event.isVideoMessage(): Boolean {
     }
 }
 
+fun Event.isAudioMessage(): Boolean {
+    return getClearType() == EventType.MESSAGE
+            && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
+        MessageType.MSGTYPE_AUDIO -> true
+        else                      -> false
+    }
+}
+
 fun Event.isFileMessage(): Boolean {
     return getClearType() == EventType.MESSAGE
             && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
+        MessageType.MSGTYPE_FILE -> true
+        else                     -> false
+    }
+}
+
+fun Event.isAttachmentMessage(): Boolean {
+    return getClearType() == EventType.MESSAGE
+            && when (getClearContent()?.toModel<MessageContent>()?.msgType) {
+        MessageType.MSGTYPE_IMAGE,
+        MessageType.MSGTYPE_AUDIO,
+        MessageType.MSGTYPE_VIDEO,
         MessageType.MSGTYPE_FILE -> true
         else                     -> false
     }

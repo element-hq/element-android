@@ -28,6 +28,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.signout.soft.epoxy.loginCenterButtonItem
 import im.vector.app.features.signout.soft.epoxy.loginErrorWithRetryItem
+import im.vector.app.features.signout.soft.epoxy.loginHeaderItem
 import im.vector.app.features.signout.soft.epoxy.loginPasswordFormItem
 import im.vector.app.features.signout.soft.epoxy.loginRedButtonItem
 import im.vector.app.features.signout.soft.epoxy.loginTextItem
@@ -64,6 +65,9 @@ class SoftLogoutController @Inject constructor(
     }
 
     private fun buildHeader(state: SoftLogoutViewState) {
+        loginHeaderItem {
+            id("header")
+        }
         loginTitleItem {
             id("title")
             text(stringProvider.getString(R.string.soft_logout_title))
@@ -103,7 +107,7 @@ class SoftLogoutController @Inject constructor(
             }
             is Success    -> {
                 when (state.asyncHomeServerLoginFlowRequest.invoke()) {
-                    LoginMode.Password    -> {
+                    LoginMode.Password          -> {
                         loginPasswordFormItem {
                             id("passwordForm")
                             stringProvider(stringProvider)
@@ -116,21 +120,23 @@ class SoftLogoutController @Inject constructor(
                             submitClickListener { password -> listener?.signinSubmit(password) }
                         }
                     }
-                    LoginMode.Sso         -> {
+                    is LoginMode.Sso            -> {
                         loginCenterButtonItem {
                             id("sso")
                             text(stringProvider.getString(R.string.login_signin_sso))
                             listener { listener?.signinFallbackSubmit() }
                         }
                     }
-                    LoginMode.Unsupported -> {
+                    is LoginMode.SsoAndPassword -> {
+                    }
+                    LoginMode.Unsupported       -> {
                         loginCenterButtonItem {
                             id("fallback")
                             text(stringProvider.getString(R.string.login_signin))
                             listener { listener?.signinFallbackSubmit() }
                         }
                     }
-                    LoginMode.Unknown     -> Unit // Should not happen
+                    LoginMode.Unknown           -> Unit // Should not happen
                 }
             }
         }

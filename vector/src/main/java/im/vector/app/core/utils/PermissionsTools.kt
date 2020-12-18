@@ -22,15 +22,16 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import im.vector.app.R
+import im.vector.app.core.platform.VectorBaseActivity
 import timber.log.Timber
-
-private const val LOG_TAG = "PermissionUtils"
 
 // Android M permission request code management
 private const val PERMISSIONS_GRANTED = true
@@ -42,16 +43,18 @@ const val PERMISSION_CAMERA = 0x1
 private const val PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1 shl 1
 private const val PERMISSION_RECORD_AUDIO = 0x1 shl 2
 private const val PERMISSION_READ_CONTACTS = 0x1 shl 3
+private const val PERMISSION_READ_EXTERNAL_STORAGE = 0x1 shl 4
 
 // Permissions sets
 const val PERMISSIONS_FOR_AUDIO_IP_CALL = PERMISSION_RECORD_AUDIO
 const val PERMISSIONS_FOR_VIDEO_IP_CALL = PERMISSION_CAMERA or PERMISSION_RECORD_AUDIO
-const val PERMISSIONS_FOR_TAKING_PHOTO = PERMISSION_CAMERA or PERMISSION_WRITE_EXTERNAL_STORAGE
+const val PERMISSIONS_FOR_TAKING_PHOTO = PERMISSION_CAMERA
 const val PERMISSIONS_FOR_MEMBERS_SEARCH = PERMISSION_READ_CONTACTS
 const val PERMISSIONS_FOR_MEMBER_DETAILS = PERMISSION_READ_CONTACTS
 const val PERMISSIONS_FOR_ROOM_AVATAR = PERMISSION_CAMERA
 const val PERMISSIONS_FOR_VIDEO_RECORDING = PERMISSION_CAMERA or PERMISSION_RECORD_AUDIO
 const val PERMISSIONS_FOR_WRITING_FILES = PERMISSION_WRITE_EXTERNAL_STORAGE
+const val PERMISSIONS_FOR_READING_FILES = PERMISSION_READ_EXTERNAL_STORAGE
 const val PERMISSIONS_FOR_PICKING_CONTACT = PERMISSION_READ_CONTACTS
 
 const val PERMISSIONS_EMPTY = PERMISSION_BYPASSED
@@ -67,7 +70,6 @@ const val PERMISSION_REQUEST_CODE_CHANGE_AVATAR = 574
 const val PERMISSION_REQUEST_CODE_DOWNLOAD_FILE = 575
 const val PERMISSION_REQUEST_CODE_PICK_ATTACHMENT = 576
 const val PERMISSION_REQUEST_CODE_INCOMING_URI = 577
-const val PERMISSION_REQUEST_CODE_PREVIEW_FRAGMENT = 578
 const val PERMISSION_REQUEST_CODE_READ_CONTACTS = 579
 
 /**
@@ -79,6 +81,7 @@ fun logPermissionStatuses(context: Context) {
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.READ_CONTACTS)
 
         Timber.v("## logPermissionStatuses() : log the permissions status used by the app")
@@ -91,6 +94,12 @@ fun logPermissionStatuses(context: Context) {
                         "PERMISSION_DENIED"
                     }))
         }
+    }
+}
+
+fun Fragment.registerForPermissionsResult(allGranted: (Boolean) -> Unit): ActivityResultLauncher<Array<String>> {
+    return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+        allGranted.invoke(result.keys.all { result[it] == true })
     }
 }
 
@@ -112,14 +121,14 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int,
  * See [.checkPermissions]
  *
  * @param permissionsToBeGrantedBitMap
- * @param fragment
+ * @param activityResultLauncher       from the calling fragment that is requesting the permissions
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
 fun checkPermissions(permissionsToBeGrantedBitMap: Int,
-                     fragment: Fragment,
-                     requestCode: Int,
+                     activity: Activity,
+                     activityResultLauncher: ActivityResultLauncher<Array<String>>,
                      @StringRes rationaleMessage: Int = 0): Boolean {
-    return checkPermissions(permissionsToBeGrantedBitMap, fragment.activity, fragment, requestCode, rationaleMessage)
+    return checkPermissions(permissionsToBeGrantedBitMap, activity, activityResultLauncher, 0, rationaleMessage)
 }
 
 /**
@@ -137,22 +146,19 @@ fun checkPermissions(permissionsToBeGrantedBitMap: Int,
  *
  * @param permissionsToBeGrantedBitMap the permissions bit map to be granted
  * @param activity                     the calling Activity that is requesting the permissions (or fragment parent)
- * @param fragment                     the calling fragment that is requesting the permissions
+ * @param activityResultLauncher       from the calling fragment that is requesting the permissions
  * @return true if the permissions are granted (synchronous flow), false otherwise (asynchronous flow)
  */
 private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
-                             activity: Activity?,
-                             fragment: Fragment?,
+                             activity: Activity,
+                             activityResultLauncher: ActivityResultLauncher<Array<String>>?,
                              requestCode: Int,
                              @StringRes rationaleMessage: Int
-                             ): Boolean {
+): Boolean {
     var isPermissionGranted = false
 
     // sanity check
-    if (null == activity) {
-        Timber.w("## checkPermissions(): invalid input data")
-        isPermissionGranted = false
-    } else if (PERMISSIONS_EMPTY == permissionsToBeGrantedBitMap) {
+    if (PERMISSIONS_EMPTY == permissionsToBeGrantedBitMap) {
         isPermissionGranted = true
     } else if (PERMISSIONS_FOR_AUDIO_IP_CALL != permissionsToBeGrantedBitMap
             && PERMISSIONS_FOR_VIDEO_IP_CALL != permissionsToBeGrantedBitMap
@@ -161,7 +167,8 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
             && PERMISSIONS_FOR_MEMBER_DETAILS != permissionsToBeGrantedBitMap
             && PERMISSIONS_FOR_ROOM_AVATAR != permissionsToBeGrantedBitMap
             && PERMISSIONS_FOR_VIDEO_RECORDING != permissionsToBeGrantedBitMap
-            && PERMISSIONS_FOR_WRITING_FILES != permissionsToBeGrantedBitMap) {
+            && PERMISSIONS_FOR_WRITING_FILES != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_READING_FILES != permissionsToBeGrantedBitMap) {
         Timber.w("## checkPermissions(): permissions to be granted are not supported")
         isPermissionGranted = false
     } else {
@@ -184,6 +191,12 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
 
         if (PERMISSION_WRITE_EXTERNAL_STORAGE == permissionsToBeGrantedBitMap and PERMISSION_WRITE_EXTERNAL_STORAGE) {
             val permissionType = Manifest.permission.WRITE_EXTERNAL_STORAGE
+            isRequestPermissionRequired = isRequestPermissionRequired or
+                    updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
+        }
+
+        if (PERMISSION_READ_EXTERNAL_STORAGE == permissionsToBeGrantedBitMap and PERMISSION_READ_EXTERNAL_STORAGE) {
+            val permissionType = Manifest.permission.READ_EXTERNAL_STORAGE
             isRequestPermissionRequired = isRequestPermissionRequired or
                     updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
         }
@@ -215,7 +228,8 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                     .setOnCancelListener { Toast.makeText(activity, R.string.missing_permissions_warning, Toast.LENGTH_SHORT).show() }
                     .setPositiveButton(R.string.ok) { _, _ ->
                         if (permissionsListToBeGranted.isNotEmpty()) {
-                            fragment?.requestPermissions(permissionsListToBeGranted.toTypedArray(), requestCode)
+                            activityResultLauncher
+                                    ?.launch(permissionsListToBeGranted.toTypedArray())
                                     ?: run {
                                         ActivityCompat.requestPermissions(activity, permissionsListToBeGranted.toTypedArray(), requestCode)
                                     }
@@ -255,7 +269,8 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
                             .show()
                     */
                 } else {
-                    fragment?.requestPermissions(permissionsArrayToBeGranted, requestCode)
+                    activityResultLauncher
+                            ?.launch(permissionsArrayToBeGranted)
                             ?: run {
                                 ActivityCompat.requestPermissions(activity, permissionsArrayToBeGranted, requestCode)
                             }
@@ -270,71 +285,40 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
     return isPermissionGranted
 }
 
+fun VectorBaseActivity.onPermissionDeniedSnackbar(@StringRes rationaleMessage: Int) {
+    showSnackbar(getString(rationaleMessage), R.string.settings) {
+        openAppSettingsPage(this)
+    }
+}
+
 /**
  * Helper method used in [.checkPermissions] to populate the list of the
- * permissions to be granted (permissionsListToBeGranted_out) and the list of the permissions already denied (permissionAlreadyDeniedList_out).
+ * permissions to be granted (permissionsListToBeGrantedOut) and the list of the permissions already denied (permissionAlreadyDeniedListOut).
  *
- * @param activity                        calling activity
- * @param permissionAlreadyDeniedList_out list to be updated with the permissions already denied by the user
- * @param permissionsListToBeGranted_out  list to be updated with the permissions to be granted
- * @param permissionType                  the permission to be checked
+ * @param activity                       calling activity
+ * @param permissionAlreadyDeniedListOut list to be updated with the permissions already denied by the user
+ * @param permissionsListToBeGrantedOut  list to be updated with the permissions to be granted
+ * @param permissionType                 the permission to be checked
  * @return true if the permission requires to be granted, false otherwise
  */
 private fun updatePermissionsToBeGranted(activity: Activity,
-                                         permissionAlreadyDeniedList_out: MutableList<String>,
-                                         permissionsListToBeGranted_out: MutableList<String>,
+                                         permissionAlreadyDeniedListOut: MutableList<String>,
+                                         permissionsListToBeGrantedOut: MutableList<String>,
                                          permissionType: String): Boolean {
     var isRequestPermissionRequested = false
 
     // add permission to be granted
-    permissionsListToBeGranted_out.add(permissionType)
+    permissionsListToBeGrantedOut.add(permissionType)
 
     if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(activity.applicationContext, permissionType)) {
         isRequestPermissionRequested = true
 
         // add permission to the ones that were already asked to the user
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permissionType)) {
-            permissionAlreadyDeniedList_out.add(permissionType)
+            permissionAlreadyDeniedListOut.add(permissionType)
         }
     }
     return isRequestPermissionRequested
-}
-
-/**
- * Helper method to process [.PERMISSIONS_FOR_AUDIO_IP_CALL]
- * on onRequestPermissionsResult() methods.
- *
- * @param context      App context
- * @param grantResults permissions granted results
- * @return true if audio IP call is permitted, false otherwise
- */
-fun onPermissionResultAudioIpCall(context: Context, grantResults: IntArray): Boolean {
-    val arePermissionsGranted = allGranted(grantResults)
-
-    if (!arePermissionsGranted) {
-        Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
-    }
-
-    return arePermissionsGranted
-}
-
-/**
- * Helper method to process [.PERMISSIONS_FOR_VIDEO_IP_CALL]
- * on onRequestPermissionsResult() methods.
- * For video IP calls, record audio and camera permissions are both mandatory.
- *
- * @param context      App context
- * @param grantResults permissions granted results
- * @return true if video IP call is permitted, false otherwise
- */
-fun onPermissionResultVideoIpCall(context: Context, grantResults: IntArray): Boolean {
-    val arePermissionsGranted = allGranted(grantResults)
-
-    if (!arePermissionsGranted) {
-        Toast.makeText(context, R.string.permissions_action_not_performed_missing_permissions, Toast.LENGTH_SHORT).show()
-    }
-
-    return arePermissionsGranted
 }
 
 /**

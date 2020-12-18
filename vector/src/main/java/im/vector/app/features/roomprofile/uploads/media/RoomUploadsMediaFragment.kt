@@ -29,10 +29,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.AppBarLayout
-import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
-import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.trackItemsVisibilityChange
@@ -48,6 +44,10 @@ import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewState
 import kotlinx.android.synthetic.main.fragment_generic_state_view_recycler.*
 import kotlinx.android.synthetic.main.fragment_room_uploads.*
+import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
+import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import javax.inject.Inject
 
 class RoomUploadsMediaFragment @Inject constructor(

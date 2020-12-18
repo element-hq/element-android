@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,6 +61,14 @@ interface ReadService {
      * Returns a live read receipt id for the room.
      */
     fun getMyReadReceiptLive(): LiveData<Optional<String>>
+
+    /**
+     * Get the eventId where the read receipt for the provided user is
+     * @param userId the id of the user to look for
+     *
+     * @return the eventId where the read receipt for the provided user is attached, or null if not found
+     */
+    fun getUserReadReceipt(userId: String): String?
 
     /**
      * Returns a live list of read receipts for a given event

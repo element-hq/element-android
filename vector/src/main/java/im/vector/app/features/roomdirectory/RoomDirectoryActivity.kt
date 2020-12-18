@@ -20,23 +20,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.airbnb.mvrx.viewModel
+import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.features.roomdirectory.createroom.CreateRoomAction
 import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
-import im.vector.app.features.roomdirectory.createroom.CreateRoomViewModel
+import im.vector.app.features.roomdirectory.createroom.CreateRoomArgs
 import im.vector.app.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import javax.inject.Inject
 
 class RoomDirectoryActivity : VectorBaseActivity() {
 
-    @Inject lateinit var createRoomViewModelFactory: CreateRoomViewModel.Factory
     @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory
     private val roomDirectoryViewModel: RoomDirectoryViewModel by viewModel()
-    private val createRoomViewModel: CreateRoomViewModel by viewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
     override fun getLayoutRes() = R.layout.activity_simple
@@ -58,19 +56,22 @@ class RoomDirectoryActivity : VectorBaseActivity() {
                 .subscribe { sharedAction ->
                     when (sharedAction) {
                         is RoomDirectorySharedAction.Back           -> onBackPressed()
-                        is RoomDirectorySharedAction.CreateRoom     ->
-                            addFragmentToBackstack(R.id.simpleFragmentContainer, CreateRoomFragment::class.java)
+                        is RoomDirectorySharedAction.CreateRoom     -> {
+                            // Transmit the filter to the CreateRoomFragment
+                            withState(roomDirectoryViewModel) {
+                                addFragmentToBackstack(
+                                        R.id.simpleFragmentContainer,
+                                        CreateRoomFragment::class.java,
+                                        CreateRoomArgs(it.currentFilter)
+                                )
+                            }
+                        }
                         is RoomDirectorySharedAction.ChangeProtocol ->
                             addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
                         is RoomDirectorySharedAction.Close          -> finish()
                     }
                 }
                 .disposeOnDestroy()
-
-        roomDirectoryViewModel.selectSubscribe(this, PublicRoomsViewState::currentFilter) { currentFilter ->
-            // Transmit the filter to the createRoomViewModel
-            createRoomViewModel.handle(CreateRoomAction.SetName(currentFilter))
-        }
     }
 
     override fun initUiAndData() {

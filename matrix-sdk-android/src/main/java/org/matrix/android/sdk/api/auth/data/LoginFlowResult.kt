@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +16,12 @@
 
 package org.matrix.android.sdk.api.auth.data
 
-// Either a list of supported login types, or an error if the homeserver is outdated
 sealed class LoginFlowResult {
     data class Success(
             val supportedLoginTypes: List<String>,
+            val ssoIdentityProviders: List<SsoIdentityProvider>?,
             val isLoginAndRegistrationSupported: Boolean,
-            val homeServerUrl: String
+            val homeServerUrl: String,
+            val isOutdatedHomeserver: Boolean
     ) : LoginFlowResult()
-
-    object OutdatedHomeserver : LoginFlowResult()
 }

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +20,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.util.MimeTypes
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
@@ -59,7 +59,7 @@ internal object ThumbnailExtractor {
                     height = thumbnailHeight,
                     size = thumbnailSize.toLong(),
                     bytes = outputStream.toByteArray(),
-                    mimeType = "image/jpeg"
+                    mimeType = MimeTypes.Jpeg
             )
             thumbnail.recycle()
             outputStream.reset()

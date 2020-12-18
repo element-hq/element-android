@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,25 +25,9 @@ data class TimelineSettings(
          */
         val initialSize: Int,
         /**
-         * A flag to filter edit events
+         * Filters for timeline event
          */
-        val filterEdits: Boolean = false,
-        /**
-         * A flag to filter redacted events
-         */
-        val filterRedacted: Boolean = false,
-        /**
-         * A flag to filter useless events, such as membership events without any change
-         */
-        val filterUseless: Boolean = false,
-        /**
-         * A flag to filter by types. It should be used with [allowedTypes] field
-         */
-        val filterTypes: Boolean = false,
-        /**
-         * If [filterTypes] is true, the list of types allowed by the list.
-         */
-        val allowedTypes: List<String> = emptyList(),
+        val filters: TimelineEventFilters = TimelineEventFilters(),
         /**
          * If true, will build read receipts for each event.
          */

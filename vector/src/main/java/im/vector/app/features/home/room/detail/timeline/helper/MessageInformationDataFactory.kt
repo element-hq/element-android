@@ -1,32 +1,31 @@
 /*
-
-  * Copyright 2019 New Vector Ltd
-  *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
-  *
-  *     http://www.apache.org/licenses/LICENSE-2.0
-  *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-
+ * Copyright 2019 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
+import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.localDateTime
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
+import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -48,7 +47,7 @@ import javax.inject.Inject
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
                                                         private val roomSummaryHolder: RoomSummaryHolder,
                                                         private val dateFormatter: VectorDateFormatter,
-                                                        private val colorProvider: ColorProvider) {
+                                                        private val vectorPreferences: VectorPreferences) {
 
     fun create(event: TimelineEvent, nextEvent: TimelineEvent?): MessageInformationData {
         // Non nullability has been tested before
@@ -68,7 +67,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         || isNextMessageReceivedMoreThanOneHourAgo
                         || isTileTypeMessage(nextEvent)
 
-        val time = dateFormatter.formatMessageHour(date)
+        val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val e2eDecoration = getE2EDecoration(event)
 
         return MessageInformationData(
@@ -80,6 +79,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 avatarUrl = event.senderInfo.avatarUrl,
                 memberName = event.senderInfo.disambiguatedDisplayName,
                 showInformation = showInformation,
+                forceShowTimestamp = vectorPreferences.alwaysShowTimeStamps(),
                 orderedReactionList = event.annotations?.reactionsSummary
                         // ?.filter { isSingleEmoji(it.key) }
                         ?.map {

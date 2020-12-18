@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,16 @@ import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.di.MatrixModule
 import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.di.NetworkModule
+import org.matrix.android.sdk.internal.raw.RawModule
 
-@Component(modules = [TestModule::class, MatrixModule::class, NetworkModule::class, AuthModule::class, TestNetworkModule::class])
+@Component(modules = [
+    TestModule::class,
+    MatrixModule::class,
+    NetworkModule::class,
+    AuthModule::class,
+    RawModule::class,
+    TestNetworkModule::class
+])
 @MatrixScope
 internal interface TestMatrixComponent : MatrixComponent {
 

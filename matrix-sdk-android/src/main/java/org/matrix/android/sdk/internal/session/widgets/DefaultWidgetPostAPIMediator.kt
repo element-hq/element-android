@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.widgets
 
-import android.os.Build
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import com.squareup.moshi.Moshi
@@ -69,6 +67,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
         Timber.d("BRIDGE onWidgetEvent : $jsonEventData")
         try {
             val dataAsDict = jsonAdapter.fromJson(jsonEventData)
+
             @Suppress("UNCHECKED_CAST")
             val eventData = (dataAsDict?.get("event.data") as? JsonDict) ?: return
             onWidgetMessage(eventData)
@@ -172,11 +171,7 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
             val functionLine = "sendResponseFromRiotAndroid('" + eventData["_id"] + "' , " + jsString + ");"
             Timber.v("BRIDGE sendResponse: $functionLine")
             // call the javascript method
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                webView?.loadUrl("javascript:$functionLine")
-            } else {
-                webView?.evaluateJavascript(functionLine, null)
-            }
+            webView?.evaluateJavascript(functionLine, null)
         } catch (e: Exception) {
             Timber.e(e, "## sendResponse() failed ")
         }

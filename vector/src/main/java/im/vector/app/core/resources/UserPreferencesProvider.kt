@@ -40,4 +40,8 @@ class UserPreferencesProvider @Inject constructor(private val vectorPreferences:
     fun neverShowLongClickOnRoomHelpAgain() {
         vectorPreferences.neverShowLongClickOnRoomHelpAgain()
     }
+
+    fun shouldShowRoomMemberStateEvents(): Boolean {
+        return vectorPreferences.showRoomMemberStateEvents()
+    }
 }

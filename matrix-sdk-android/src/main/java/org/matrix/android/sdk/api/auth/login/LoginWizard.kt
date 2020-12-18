@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +27,7 @@ interface LoginWizard {
      * @param password the password field
      * @param deviceName the initial device name
      * @param callback  the matrix callback on which you'll receive the result of authentication.
-     * @return return a [Cancelable]
+     * @return a [Cancelable]
      */
     fun login(login: String,
               password: String,

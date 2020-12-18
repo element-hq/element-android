@@ -29,24 +29,29 @@ import android.os.Build
 import android.os.Environment
 import android.provider.Browser
 import android.provider.MediaStore
+import android.provider.Settings
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
-import androidx.fragment.app.Fragment
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
-import org.matrix.android.sdk.api.extensions.tryThis
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okio.buffer
 import okio.sink
 import okio.source
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.util.MimeTypes
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeAudio
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeImage
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeVideo
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -130,20 +135,18 @@ fun openSoundRecorder(activity: Activity, requestCode: Int) {
  * Open file selection activity
  */
 fun openFileSelection(activity: Activity,
-                      fragment: Fragment?,
+                      activityResultLauncher: ActivityResultLauncher<Intent>?,
                       allowMultipleSelection: Boolean,
                       requestCode: Int) {
     val fileIntent = Intent(Intent.ACTION_GET_CONTENT)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-        fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultipleSelection)
-    }
+    fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultipleSelection)
 
     fileIntent.addCategory(Intent.CATEGORY_OPENABLE)
-    fileIntent.type = "*/*"
+    fileIntent.type = MimeTypes.Any
 
     try {
-        fragment
-                ?.startActivityForResult(fileIntent, requestCode)
+        activityResultLauncher
+                ?.launch(fileIntent)
                 ?: run {
                     activity.startActivityForResult(fileIntent, requestCode)
                 }
@@ -183,7 +186,7 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
     // The Galaxy S not only requires the name of the file to output the image to, but will also not
     // set the mime type of the picture it just took (!!!). We assume that the Galaxy S takes image/jpegs
     // so the attachment uploader doesn't freak out about there being no mimetype in the content database.
-    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+    values.put(MediaStore.Images.Media.MIME_TYPE, MimeTypes.Jpeg)
     var dummyUri: Uri? = null
     try {
         dummyUri = activity.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
@@ -302,28 +305,53 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
         sendIntent.type = mediaMimeType
         sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri)
 
-        try {
-            context.startActivity(sendIntent)
-        } catch (activityNotFoundException: ActivityNotFoundException) {
-            context.toast(R.string.error_no_external_application_found)
-        }
+        sendShareIntent(context, sendIntent)
     }
+}
+
+fun shareText(context: Context, text: String) {
+    val sendIntent = Intent()
+    sendIntent.action = Intent.ACTION_SEND
+    sendIntent.type = "text/plain"
+    sendIntent.putExtra(Intent.EXTRA_TEXT, text)
+
+    sendShareIntent(context, sendIntent)
+}
+
+private fun sendShareIntent(context: Context, intent: Intent) {
+    try {
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        context.toast(R.string.error_no_external_application_found)
+    }
+}
+
+private fun appendTimeToFilename(name: String): String {
+    val dateExtension = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
+    if (!name.contains(".")) return name + "_" + dateExtension
+
+    val filename = name.substringBeforeLast(".")
+    val fileExtension = name.substringAfterLast(".")
+
+    return """${filename}_$dateExtension.$fileExtension"""
 }
 
 fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?, notificationUtils: NotificationUtils) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val filename = appendTimeToFilename(title)
+
         val values = ContentValues().apply {
-            put(MediaStore.Images.Media.TITLE, title)
-            put(MediaStore.Images.Media.DISPLAY_NAME, title)
+            put(MediaStore.Images.Media.TITLE, filename)
+            put(MediaStore.Images.Media.DISPLAY_NAME, filename)
             put(MediaStore.Images.Media.MIME_TYPE, mediaMimeType)
             put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
             put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
         }
         val externalContentUri = when {
-            mediaMimeType?.startsWith("image/") == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            mediaMimeType?.startsWith("video/") == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-            mediaMimeType?.startsWith("audio/") == true -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-            else                                        -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+            mediaMimeType?.isMimeTypeImage() == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            mediaMimeType?.isMimeTypeVideo() == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            mediaMimeType?.isMimeTypeAudio() == true -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            else                                     -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
         }
 
         val uri = context.contentResolver.insert(externalContentUri, values)
@@ -340,8 +368,8 @@ fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String
             }
             notificationUtils.buildDownloadFileNotification(
                     uri,
-                    title,
-                    mediaMimeType ?: "application/octet-stream"
+                    filename,
+                    mediaMimeType ?: MimeTypes.OctetStream
             ).let { notification ->
                 notificationUtils.showNotificationMessage("DL", uri.hashCode(), notification)
             }
@@ -361,10 +389,10 @@ private fun saveMediaLegacy(context: Context, mediaMimeType: String?, title: Str
 
     GlobalScope.launch(Dispatchers.IO) {
         val dest = when {
-            mediaMimeType?.startsWith("image/") == true -> Environment.DIRECTORY_PICTURES
-            mediaMimeType?.startsWith("video/") == true -> Environment.DIRECTORY_MOVIES
-            mediaMimeType?.startsWith("audio/") == true -> Environment.DIRECTORY_MUSIC
-            else                                        -> Environment.DIRECTORY_DOWNLOADS
+            mediaMimeType?.isMimeTypeImage() == true -> Environment.DIRECTORY_PICTURES
+            mediaMimeType?.isMimeTypeVideo() == true -> Environment.DIRECTORY_MOVIES
+            mediaMimeType?.isMimeTypeAudio() == true -> Environment.DIRECTORY_MUSIC
+            else                                     -> Environment.DIRECTORY_DOWNLOADS
         }
         val downloadDir = Environment.getExternalStoragePublicDirectory(dest)
         try {
@@ -381,7 +409,7 @@ private fun saveMediaLegacy(context: Context, mediaMimeType: String?, title: Str
                         savedFile.name,
                         title,
                         true,
-                        mediaMimeType ?: "application/octet-stream",
+                        mediaMimeType ?: MimeTypes.OctetStream,
                         savedFile.absolutePath,
                         savedFile.length(),
                         true)
@@ -425,15 +453,27 @@ fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID
     }
 }
 
+fun openAppSettingsPage(activity: Activity) {
+    try {
+        activity.startActivity(
+                Intent().apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    data = Uri.fromParts("package", activity.packageName, null)
+                })
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        activity.toast(R.string.error_no_external_application_found)
+    }
+}
+
 /**
  * Ask the user to select a location and a file name to write in
  */
 fun selectTxtFileToWrite(
         activity: Activity,
-        fragment: Fragment?,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
         defaultFileName: String,
-        chooserHint: String,
-        requestCode: Int
+        chooserHint: String
 ) {
     val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
     intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -442,11 +482,7 @@ fun selectTxtFileToWrite(
 
     try {
         val chooserIntent = Intent.createChooser(intent, chooserHint)
-        if (fragment != null) {
-            fragment.startActivityForResult(chooserIntent, requestCode)
-        } else {
-            activity.startActivityForResult(chooserIntent, requestCode)
-        }
+        activityResultLauncher.launch(chooserIntent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         activity.toast(R.string.error_no_external_application_found)
     }
@@ -508,8 +544,8 @@ fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: Strin
     var outputStream: FileOutputStream? = null
     try {
         dstFile.createNewFile()
-        inputStream = FileInputStream(sourceFile)
-        outputStream = FileOutputStream(dstFile)
+        inputStream = sourceFile.inputStream()
+        outputStream = dstFile.outputStream()
         val buffer = ByteArray(1024 * 10)
         var len: Int
         while (inputStream.read(buffer).also { len = it } != -1) {
@@ -520,7 +556,7 @@ fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: Strin
         return null
     } finally {
         // Close resources
-        tryThis { inputStream?.close() }
-        tryThis { outputStream?.close() }
+        tryOrNull { inputStream?.close() }
+        tryOrNull { outputStream?.close() }
     }
 }

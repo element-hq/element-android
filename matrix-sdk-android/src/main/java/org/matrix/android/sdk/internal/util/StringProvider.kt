@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +17,8 @@
 package org.matrix.android.sdk.internal.util
 
 import android.content.res.Resources
-import androidx.annotation.ArrayRes
 import androidx.annotation.NonNull
+import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import dagger.Reusable
 import javax.inject.Inject
@@ -56,8 +55,8 @@ internal class StringProvider @Inject constructor(private val resources: Resourc
         return resources.getString(resId, *formatArgs)
     }
 
-    @Throws(Resources.NotFoundException::class)
-    fun getStringArray(@ArrayRes id: Int): Array<String> {
-        return resources.getStringArray(id)
+    @NonNull
+    fun getQuantityString(@PluralsRes resId: Int, quantity: Int, vararg formatArgs: Any?): String {
+        return resources.getQuantityString(resId, quantity, *formatArgs)
     }
 }

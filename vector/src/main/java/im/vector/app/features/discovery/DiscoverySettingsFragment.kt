@@ -16,7 +16,6 @@
 package im.vector.app.features.discovery
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -27,15 +26,16 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.observeEvent
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
-import im.vector.app.features.terms.ReviewTermsActivity
+import im.vector.app.features.settings.VectorSettingsActivity
+import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.terms.TermsService
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
 class DiscoverySettingsFragment @Inject constructor(
@@ -55,7 +55,7 @@ class DiscoverySettingsFragment @Inject constructor(
         sharedViewModel = activityViewModelProvider.get(DiscoverySharedViewModel::class.java)
 
         controller.listener = this
-        recyclerView.configureWith(controller)
+        genericRecyclerView.configureWith(controller)
 
         sharedViewModel.navigateEvent.observeEvent(this) {
             when (it) {
@@ -74,7 +74,7 @@ class DiscoverySettingsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         controller.listener = null
         super.onDestroyView()
     }
@@ -91,22 +91,19 @@ class DiscoverySettingsFragment @Inject constructor(
         viewModel.handle(DiscoverySettingsAction.Refresh)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ReviewTermsActivity.TERMS_REQUEST_CODE) {
-            if (Activity.RESULT_OK == resultCode) {
-                viewModel.handle(DiscoverySettingsAction.RetrieveBinding)
-            } else {
-                // add some error?
-            }
+    private val termsActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            viewModel.handle(DiscoverySettingsAction.RetrieveBinding)
+        } else {
+            // add some error?
         }
-
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun openIdentityServerTerms() = withState(viewModel) { state ->
         if (state.termsNotSigned) {
             navigator.openTerms(
-                    this,
+                    requireContext(),
+                    termsActivityResultLauncher,
                     TermsService.ServiceType.IdentityService,
                     state.identityServer()?.ensureProtocol() ?: "",
                     null)
@@ -173,15 +170,28 @@ class DiscoverySettingsFragment @Inject constructor(
         }
     }
 
+    override fun onTapUpdateUserConsent(newValue: Boolean) {
+        if (newValue) {
+            withState(viewModel) { state ->
+                AlertDialog.Builder(requireActivity())
+                        .setTitle(R.string.identity_server_consent_dialog_title)
+                        .setMessage(getString(R.string.identity_server_consent_dialog_content, state.identityServer.invoke()))
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(true))
+                        }
+                        .setNegativeButton(R.string.no, null)
+                        .show()
+            }
+        } else {
+            viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(false))
+        }
+    }
+
     override fun onTapRetryToRetrieveBindings() {
         viewModel.handle(DiscoverySettingsAction.RetrieveBinding)
     }
 
     private fun navigateToChangeIdentityServerFragment() {
-        parentFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom, R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_bottom)
-                .replace(R.id.vector_settings_page, SetIdentityServerFragment::class.java, null)
-                .addToBackStack(null)
-                .commit()
+        (vectorBaseActivity as? VectorSettingsActivity)?.navigateTo(SetIdentityServerFragment::class.java)
     }
 }

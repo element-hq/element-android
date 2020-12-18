@@ -20,7 +20,6 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import androidx.core.util.PatternsCompat.WEB_URL
 
 /**
@@ -87,12 +86,8 @@ fun analyseIntent(intent: Intent): List<ExternalIntentData> {
         }
     }
 
-    var clipData: ClipData? = null
+    val clipData: ClipData? = intent.clipData
     var mimeTypes: List<String>? = null
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-        clipData = intent.clipData
-    }
 
     // multiple data
     if (null != clipData) {
@@ -114,7 +109,7 @@ fun analyseIntent(intent: Intent): List<ExternalIntentData> {
         for (i in 0 until clipData.itemCount) {
             val item = clipData.getItemAt(i)
             val mimeType = mimeTypes?.getOrElse(i) { mimeTypes[0] }
-                        // uris list is not a valid mimetype
+                    // uris list is not a valid mimetype
                     .takeUnless { it == ClipDescription.MIMETYPE_TEXT_URILIST }
 
             externalIntentDataList.add(ExternalIntentData.IntentDataClipData(item, mimeType))

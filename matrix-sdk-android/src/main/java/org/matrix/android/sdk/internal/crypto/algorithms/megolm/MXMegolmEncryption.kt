@@ -1,7 +1,4 @@
 /*
- * Copyright 2015 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +16,13 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Content
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -42,6 +42,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
+import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.convertToUTF8
 import timber.log.Timber
 
@@ -57,7 +58,9 @@ internal class MXMegolmEncryption(
         private val sendToDeviceTask: SendToDeviceTask,
         private val messageEncrypter: MessageEncrypter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
-        private val taskExecutor: TaskExecutor
+        private val taskExecutor: TaskExecutor,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val cryptoCoroutineScope: CoroutineScope
 ) : IMXEncrypting {
 
     // OutboundSessionInfo. Null if we haven't yet started setting one up. Note
@@ -87,15 +90,18 @@ internal class MXMegolmEncryption(
     }
 
     private fun notifyWithheldForSession(devices: MXUsersDevicesMap<WithHeldCode>, outboundSession: MXOutboundSessionInfo) {
-        mutableListOf<Pair<UserDevice, WithHeldCode>>().apply {
-            devices.forEach { userId, deviceId, withheldCode ->
-                this.add(UserDevice(userId, deviceId) to withheldCode)
+        // offload to computation thread
+        cryptoCoroutineScope.launch(coroutineDispatchers.computation) {
+            mutableListOf<Pair<UserDevice, WithHeldCode>>().apply {
+                devices.forEach { userId, deviceId, withheldCode ->
+                    this.add(UserDevice(userId, deviceId) to withheldCode)
+                }
+            }.groupBy(
+                    { it.second },
+                    { it.first }
+            ).forEach { (code, targets) ->
+                notifyKeyWithHeld(targets, outboundSession.sessionId, olmDevice.deviceCurve25519Key, code)
             }
-        }.groupBy(
-                { it.second },
-                { it.first }
-        ).forEach { (code, targets) ->
-            notifyKeyWithHeld(targets, outboundSession.sessionId, olmDevice.deviceCurve25519Key, code)
         }
     }
 
@@ -211,8 +217,10 @@ internal class MXMegolmEncryption(
         Timber.v("## CRYPTO | shareUserDevicesKey() : starts")
 
         val results = ensureOlmSessionsForDevicesAction.handle(devicesByUser)
-        Timber.v("## CRYPTO | shareUserDevicesKey() : ensureOlmSessionsForDevices succeeds after "
-                + (System.currentTimeMillis() - t0) + " ms")
+        Timber.v(
+                """## CRYPTO | shareUserDevicesKey(): ensureOlmSessionsForDevices succeeds after ${System.currentTimeMillis() - t0} ms"""
+                        .trimMargin()
+        )
         val contentMap = MXUsersDevicesMap<Any>()
         var haveTargets = false
         val userIds = results.userIds
@@ -236,7 +244,7 @@ internal class MXMegolmEncryption(
 
                     continue
                 }
-                Timber.v("## CRYPTO | shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
+                Timber.i("## CRYPTO | shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
                 contentMap.setObject(userId, deviceID, messageEncrypter.encryptMessage(payload, listOf(sessionResult.deviceInfo)))
                 haveTargets = true
             }
@@ -250,26 +258,36 @@ internal class MXMegolmEncryption(
         for ((userId, devicesToShareWith) in devicesByUser) {
             for ((deviceId) in devicesToShareWith) {
                 session.sharedWithHelper.markedSessionAsShared(userId, deviceId, chainIndex)
+                cryptoStore.saveGossipingEvent(Event(
+                        type = EventType.ROOM_KEY,
+                        senderId = credentials.userId,
+                        content = submap.apply {
+                            this["session_key"] = ""
+                            // we add a fake key for trail
+                            this["_dest"] = "$userId|$deviceId"
+                        }
+                ))
             }
         }
 
         if (haveTargets) {
             t0 = System.currentTimeMillis()
-            Timber.v("## CRYPTO | shareUserDevicesKey() : has target")
+            Timber.i("## CRYPTO | shareUserDevicesKey() ${session.sessionId} : has target")
             val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, contentMap)
             try {
                 sendToDeviceTask.execute(sendToDeviceParams)
-                Timber.v("## CRYPTO | shareUserDevicesKey() : sendToDevice succeeds after ${System.currentTimeMillis() - t0} ms")
+                Timber.i("## CRYPTO | shareUserDevicesKey() : sendToDevice succeeds after ${System.currentTimeMillis() - t0} ms")
             } catch (failure: Throwable) {
                 // What to do here...
                 Timber.e("## CRYPTO | shareUserDevicesKey() : Failed to share session <${session.sessionId}> with $devicesByUser ")
             }
         } else {
-            Timber.v("## CRYPTO | shareUserDevicesKey() : no need to sharekey")
+            Timber.i("## CRYPTO | shareUserDevicesKey() : no need to sharekey")
         }
     }
 
     private fun notifyKeyWithHeld(targets: List<UserDevice>, sessionId: String, senderKey: String?, code: WithHeldCode) {
+        Timber.i("## CRYPTO | notifyKeyWithHeld() :sending withheld key for $targets session:$sessionId ")
         val withHeldContent = RoomKeyWithHeldContent(
                 roomId = roomId,
                 senderKey = senderKey,
@@ -378,16 +396,16 @@ internal class MXMegolmEncryption(
                                     userId: String,
                                     deviceId: String,
                                     senderKey: String): Boolean {
-        Timber.d("[MXMegolmEncryption] reshareKey: $sessionId to $userId:$deviceId")
+        Timber.i("## Crypto process reshareKey for $sessionId to $userId:$deviceId")
         val deviceInfo = cryptoStore.getUserDevice(userId, deviceId) ?: return false
-                .also { Timber.w("Device not found") }
+                .also { Timber.w("## Crypto reshareKey: Device not found") }
 
         // Get the chain index of the key we previously sent this device
         val chainIndex = outboundSession?.sharedWithHelper?.wasSharedWith(userId, deviceId) ?: return false
                 .also {
                     // Send a room key with held
                     notifyKeyWithHeld(listOf(UserDevice(userId, deviceId)), sessionId, senderKey, WithHeldCode.UNAUTHORISED)
-                    Timber.w("[MXMegolmEncryption] reshareKey : ERROR : Never share megolm with this device")
+                    Timber.w("## Crypto reshareKey: ERROR : Never share megolm with this device")
                 }
 
         val devicesByUser = mapOf(userId to listOf(deviceInfo))
@@ -396,9 +414,11 @@ internal class MXMegolmEncryption(
         olmSessionResult?.sessionId
                 ?: // no session with this device, probably because there were no one-time keys.
                 // ensureOlmSessionsForDevicesAction has already done the logging, so just skip it.
-                return false
+                return false.also {
+                    Timber.w("## Crypto reshareKey: no session with this device, probably because there were no one-time keys")
+                }
 
-        Timber.d("[MXMegolmEncryption] reshareKey: sharing keys for session $senderKey|$sessionId:$chainIndex with device $userId:$deviceId")
+        Timber.i("[MXMegolmEncryption] reshareKey: sharing keys for session $senderKey|$sessionId:$chainIndex with device $userId:$deviceId")
 
         val payloadJson = mutableMapOf<String, Any>("type" to EventType.FORWARDED_ROOM_KEY)
 
@@ -410,6 +430,7 @@ internal class MXMegolmEncryption(
                         },
                         {
                             // TODO
+                            Timber.e(it, "[MXMegolmEncryption] reshareKey: failed to get session $sessionId|$senderKey|$roomId")
                         }
 
                 )
@@ -417,13 +438,14 @@ internal class MXMegolmEncryption(
         val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
         val sendToDeviceMap = MXUsersDevicesMap<Any>()
         sendToDeviceMap.setObject(userId, deviceId, encodedPayload)
-        Timber.v("## CRYPTO | CRYPTO | reshareKey() : sending to $userId:$deviceId")
+        Timber.i("## CRYPTO | reshareKey() : sending session $sessionId to $userId:$deviceId")
         val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
         return try {
             sendToDeviceTask.execute(sendToDeviceParams)
+            Timber.i("## CRYPTO reshareKey() : successfully send <$sessionId> to $userId:$deviceId")
             true
         } catch (failure: Throwable) {
-            Timber.v("## CRYPTO | CRYPTO | reshareKey() : fail to send <$sessionId> to $userId:$deviceId")
+            Timber.e(failure, "## CRYPTO reshareKey() : fail to send <$sessionId> to $userId:$deviceId")
             false
         }
     }

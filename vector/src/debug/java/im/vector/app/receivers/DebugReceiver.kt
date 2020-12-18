@@ -22,7 +22,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
+import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.utils.lsFiles
 import timber.log.Timber
 
@@ -44,7 +44,7 @@ class DebugReceiver : BroadcastReceiver() {
     }
 
     private fun dumpPreferences(context: Context) {
-        logPrefs("DefaultSharedPreferences", PreferenceManager.getDefaultSharedPreferences(context))
+        logPrefs("DefaultSharedPreferences", DefaultSharedPreferences.getInstance(context))
     }
 
     private fun logPrefs(name: String, sharedPreferences: SharedPreferences?) {
@@ -58,7 +58,7 @@ class DebugReceiver : BroadcastReceiver() {
     }
 
     private fun alterScalarToken(context: Context) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit {
+        DefaultSharedPreferences.getInstance(context).edit {
             // putString("SCALAR_TOKEN_PREFERENCE_KEY" + Matrix.getInstance(context).defaultSession.myUserId, "bad_token")
         }
     }

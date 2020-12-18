@@ -18,11 +18,10 @@ package im.vector.app.features.settings
 
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.di.DefaultSharedPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -53,14 +52,14 @@ object VectorLocale {
     var applicationLocale = defaultLocale
         private set
 
-    lateinit var context: Context
+    private lateinit var context: Context
 
     /**
      * Init this object
      */
     fun init(context: Context) {
         this.context = context
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val preferences = DefaultSharedPreferences.getInstance(context)
 
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
             applicationLocale = Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
@@ -86,7 +85,7 @@ object VectorLocale {
     fun saveApplicationLocale(locale: Locale) {
         applicationLocale = locale
 
-        PreferenceManager.getDefaultSharedPreferences(context).edit {
+        DefaultSharedPreferences.getInstance(context).edit {
             val language = locale.language
             if (language.isEmpty()) {
                 remove(APPLICATION_LOCALE_LANGUAGE_KEY)
@@ -108,13 +107,11 @@ object VectorLocale {
                 putString(APPLICATION_LOCALE_VARIANT_KEY, variant)
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val script = locale.script
-                if (script.isEmpty()) {
-                    remove(APPLICATION_LOCALE_SCRIPT_KEY)
-                } else {
-                    putString(APPLICATION_LOCALE_SCRIPT_KEY, script)
-                }
+            val script = locale.script
+            if (script.isEmpty()) {
+                remove(APPLICATION_LOCALE_SCRIPT_KEY)
+            } else {
+                putString(APPLICATION_LOCALE_SCRIPT_KEY, script)
             }
         }
     }
@@ -128,40 +125,15 @@ object VectorLocale {
      * @return the localized string
      */
     private fun getString(context: Context, locale: Locale, resourceId: Int): String {
-        val result: String
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            val config = Configuration(context.resources.configuration)
-            config.setLocale(locale)
-            result = try {
-                context.createConfigurationContext(config).getText(resourceId).toString()
-            } catch (e: Exception) {
-                Timber.e(e, "## getString() failed")
-                // use the default one
-                context.getString(resourceId)
-            }
-        } else {
-            val resources = context.resources
-            val conf = resources.configuration
-
-            @Suppress("DEPRECATION")
-            val savedLocale = conf.locale
-            @Suppress("DEPRECATION")
-            conf.locale = locale
-            @Suppress("DEPRECATION")
-            resources.updateConfiguration(conf, null)
-
-            // retrieve resources from desired locale
-            result = resources.getString(resourceId)
-
-            // restore original locale
-            @Suppress("DEPRECATION")
-            conf.locale = savedLocale
-            @Suppress("DEPRECATION")
-            resources.updateConfiguration(conf, null)
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(locale)
+        return try {
+            context.createConfigurationContext(config).getText(resourceId).toString()
+        } catch (e: Exception) {
+            Timber.e(e, "## getString() failed")
+            // use the default one
+            context.getString(resourceId)
         }
-
-        return result
     }
 
     /**
@@ -194,22 +166,18 @@ object VectorLocale {
         }
 
         val list = knownLocalesSet.mapNotNull { (language, country, script) ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                try {
-                    Locale.Builder()
-                            .setLanguage(language)
-                            .setRegion(country)
-                            .setScript(script)
-                            .build()
-                } catch (exception: IllformedLocaleException) {
-                    if (BuildConfig.DEBUG) {
-                        throw exception
-                    }
-                    // Ignore this locale in production
-                    null
+            try {
+                Locale.Builder()
+                        .setLanguage(language)
+                        .setRegion(country)
+                        .setScript(script)
+                        .build()
+            } catch (exception: IllformedLocaleException) {
+                if (BuildConfig.DEBUG) {
+                    throw exception
                 }
-            } else {
-                Locale(language, country)
+                // Ignore this locale in production
+                null
             }
         }
                 // sort by human display names
@@ -229,9 +197,7 @@ object VectorLocale {
         return buildString {
             append(locale.getDisplayLanguage(locale))
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                    && locale.script != ISO_15924_LATN
-                    && locale.getDisplayScript(locale).isNotEmpty()) {
+            if (locale.script != ISO_15924_LATN && locale.getDisplayScript(locale).isNotEmpty()) {
                 append(" - ")
                 append(locale.getDisplayScript(locale))
             }
@@ -254,7 +220,7 @@ object VectorLocale {
         return buildString {
             append("[")
             append(locale.displayLanguage)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && locale.script != ISO_15924_LATN) {
+            if (locale.script != ISO_15924_LATN) {
                 append(" - ")
                 append(locale.displayScript)
             }

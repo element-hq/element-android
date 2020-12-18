@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +24,7 @@ sealed class IdentityServiceError : Failure.FeatureFailure() {
     object NoIdentityServerConfigured : IdentityServiceError()
     object TermsNotSignedException : IdentityServiceError()
     object BulkLookupSha256NotSupported : IdentityServiceError()
+    object UserConsentNotProvided : IdentityServiceError()
     object BindingError : IdentityServiceError()
     object NoCurrentBindingError : IdentityServiceError()
 }

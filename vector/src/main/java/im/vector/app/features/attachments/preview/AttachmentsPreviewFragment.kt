@@ -19,7 +19,6 @@ package im.vector.app.features.attachments.preview
 
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
@@ -39,21 +38,18 @@ import com.airbnb.mvrx.withState
 import com.yalantis.ucrop.UCrop
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
+import im.vector.app.core.extensions.insertBeforeLast
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.OnSnapPositionChangeListener
-import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_PREVIEW_FRAGMENT
 import im.vector.app.core.utils.SnapOnScrollListener
-import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.attachSnapHelperWithListener
-import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.media.createUCropWithDefaultSettings
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_attachments_preview.*
-import timber.log.Timber
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import java.io.File
 import javax.inject.Inject
 
@@ -63,7 +59,6 @@ data class AttachmentsPreviewArgs(
 ) : Parcelable
 
 class AttachmentsPreviewFragment @Inject constructor(
-        val viewModelFactory: AttachmentsPreviewViewModel.Factory,
         private val attachmentMiniaturePreviewController: AttachmentMiniaturePreviewController,
         private val attachmentBigPreviewController: AttachmentBigPreviewController,
         private val colorProvider: ColorProvider
@@ -84,15 +79,14 @@ class AttachmentsPreviewFragment @Inject constructor(
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == UCrop.REQUEST_CROP && data != null) {
-                Timber.v("Crop success")
-                handleCropResult(data)
+    private val uCropActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == RESULT_OK) {
+            val resultUri = activityResult.data?.let { UCrop.getOutput(it) }
+            if (resultUri != null) {
+                viewModel.handle(AttachmentsPreviewAction.UpdatePathOfCurrentAttachment(resultUri))
+            } else {
+                Toast.makeText(requireContext(), "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
             }
-        }
-        if (resultCode == UCrop.RESULT_ERROR) {
-            Timber.v("Crop error")
         }
     }
 
@@ -170,40 +164,17 @@ class AttachmentsPreviewFragment @Inject constructor(
         }
     }
 
-    private fun handleCropResult(result: Intent) {
-        val resultUri = UCrop.getOutput(result)
-        if (resultUri != null) {
-            viewModel.handle(AttachmentsPreviewAction.UpdatePathOfCurrentAttachment(resultUri))
-        } else {
-            Toast.makeText(requireContext(), "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun handleRemoveAction() {
         viewModel.handle(AttachmentsPreviewAction.RemoveCurrentAttachment)
     }
 
-    private fun handleEditAction() {
-        // check permissions
-        if (checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_PREVIEW_FRAGMENT)) {
-            doHandleEditAction()
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == PERMISSION_REQUEST_CODE_PREVIEW_FRAGMENT && allGranted(grantResults)) {
-            doHandleEditAction()
-        }
-    }
-
-    private fun doHandleEditAction() = withState(viewModel) {
+    private fun handleEditAction() = withState(viewModel) {
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
-        val destinationFile = File(requireContext().cacheDir, "${currentAttachment.name}_edited_image_${System.currentTimeMillis()}")
+        val destinationFile = File(requireContext().cacheDir, currentAttachment.name.insertBeforeLast("_edited_image_${System.currentTimeMillis()}"))
         val uri = currentAttachment.queryUri
-        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), currentAttachment.name)
-                .start(requireContext(), this)
+        createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), currentAttachment.name)
+                .getIntent(requireContext())
+                .let { intent -> uCropActivityResultLauncher.launch(intent) }
     }
 
     private fun setupRecyclerViews() {

@@ -27,6 +27,9 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.pushrules.RuleIds
@@ -38,9 +41,7 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.rx.asObservable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 
 class HomeActivityViewModel @AssistedInject constructor(
@@ -67,11 +68,46 @@ class HomeActivityViewModel @AssistedInject constructor(
     }
 
     private var checkBootstrap = false
+    private var onceTrusted = false
 
     init {
+        cleanupFiles()
         observeInitialSync()
         mayBeInitializeCrossSigning()
         checkSessionPushIsOn()
+        observeCrossSigningReset()
+    }
+
+    private fun cleanupFiles() {
+        // Mitigation: delete all cached decrypted files each time the application is started.
+        activeSessionHolder.getSafeActiveSession()?.fileService()?.clearDecryptedCache()
+    }
+
+    private fun observeCrossSigningReset() {
+        val safeActiveSession = activeSessionHolder.getSafeActiveSession() ?: return
+
+        onceTrusted = safeActiveSession
+                .cryptoService()
+                .crossSigningService().allPrivateKeysKnown()
+
+        safeActiveSession
+                .rx()
+                .liveCrossSigningInfo(safeActiveSession.myUserId)
+                .subscribe {
+                    val isVerified = it.getOrNull()?.isTrusted() ?: false
+                    if (!isVerified && onceTrusted) {
+                        // cross signing keys have been reset
+                        // Trigger a popup to re-verify
+                        // Note: user can be null in case of logout
+                        safeActiveSession.getUser(safeActiveSession.myUserId)
+                                ?.toMatrixItem()
+                                ?.let { user ->
+                                    _viewEvents.post(HomeActivityViewEvents.OnCrossSignedInvalidated(user))
+                                }
+                    }
+                    onceTrusted = isVerified
+                }
+                .disposeOnClear()
     }
 
     private fun observeInitialSync() {

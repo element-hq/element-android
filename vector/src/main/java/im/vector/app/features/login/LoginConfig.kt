@@ -22,7 +22,7 @@ import kotlinx.android.parcel.Parcelize
 
 /**
  * Parameters extracted from a configuration url
- * Ex: https://riot.im/config/config?hs_url=https%3A%2F%2Fexample.modular.im&is_url=https%3A%2F%2Fcustom.identity.org
+ * Ex: https://mobile.element.io?hs_url=https%3A%2F%2Fexample.modular.im&is_url=https%3A%2F%2Fcustom.identity.org
  *
  * Note: On RiotX, identityServerUrl will never be used, so is declared private. Keep it for compatibility reason.
  */
@@ -33,10 +33,13 @@ data class LoginConfig(
 ) : Parcelable {
 
     companion object {
+        const val CONFIG_HS_PARAMETER = "hs_url"
+        private const val CONFIG_IS_PARAMETER = "is_url"
+
         fun parse(from: Uri): LoginConfig {
             return LoginConfig(
-                    homeServerUrl = from.getQueryParameter("hs_url"),
-                    identityServerUrl = from.getQueryParameter("is_url")
+                    homeServerUrl = from.getQueryParameter(CONFIG_HS_PARAMETER),
+                    identityServerUrl = from.getQueryParameter(CONFIG_IS_PARAMETER)
             )
         }
     }

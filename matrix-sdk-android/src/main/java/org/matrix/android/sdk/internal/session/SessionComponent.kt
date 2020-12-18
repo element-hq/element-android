@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +24,7 @@ import org.matrix.android.sdk.internal.crypto.CancelGossipRequestWorker
 import org.matrix.android.sdk.internal.crypto.CryptoModule
 import org.matrix.android.sdk.internal.crypto.SendGossipRequestWorker
 import org.matrix.android.sdk.internal.crypto.SendGossipWorker
+import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessageWorker
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.di.SessionAssistedInjectModule
@@ -40,16 +40,17 @@ import org.matrix.android.sdk.internal.session.group.GroupModule
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesModule
 import org.matrix.android.sdk.internal.session.identity.IdentityModule
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerModule
+import org.matrix.android.sdk.internal.session.media.MediaModule
 import org.matrix.android.sdk.internal.session.openid.OpenIdModule
 import org.matrix.android.sdk.internal.session.profile.ProfileModule
 import org.matrix.android.sdk.internal.session.pushers.AddHttpPusherWorker
 import org.matrix.android.sdk.internal.session.pushers.PushersModule
 import org.matrix.android.sdk.internal.session.room.RoomModule
 import org.matrix.android.sdk.internal.session.room.relation.SendRelationWorker
-import org.matrix.android.sdk.internal.session.room.send.EncryptEventWorker
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.session.room.send.RedactEventWorker
 import org.matrix.android.sdk.internal.session.room.send.SendEventWorker
+import org.matrix.android.sdk.internal.session.search.SearchModule
 import org.matrix.android.sdk.internal.session.signout.SignOutModule
 import org.matrix.android.sdk.internal.session.sync.SyncModule
 import org.matrix.android.sdk.internal.session.sync.SyncTask
@@ -75,6 +76,7 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
             GroupModule::class,
             ContentModule::class,
             CacheModule::class,
+            MediaModule::class,
             CryptoModule::class,
             PushersModule::class,
             OpenIdModule::class,
@@ -86,7 +88,8 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
             ProfileModule::class,
             SessionAssistedInjectModule::class,
             AccountModule::class,
-            CallModule::class
+            CallModule::class,
+            SearchModule::class
         ]
 )
 @SessionScope
@@ -108,8 +111,6 @@ internal interface SessionComponent {
 
     fun inject(worker: SendRelationWorker)
 
-    fun inject(worker: EncryptEventWorker)
-
     fun inject(worker: MultipleEventSendingDispatcherWorker)
 
     fun inject(worker: RedactEventWorker)
@@ -129,6 +130,8 @@ internal interface SessionComponent {
     fun inject(worker: CancelGossipRequestWorker)
 
     fun inject(worker: SendGossipWorker)
+
+    fun inject(worker: UpdateTrustWorker)
 
     @Component.Factory
     interface Factory {

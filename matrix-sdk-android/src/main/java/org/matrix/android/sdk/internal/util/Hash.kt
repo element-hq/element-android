@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,7 @@
 package org.matrix.android.sdk.internal.util
 
 import java.security.MessageDigest
+import java.util.Locale
 
 /**
  * Compute a Hash of a String, using md5 algorithm
@@ -27,7 +27,7 @@ fun String.md5() = try {
     digest.update(toByteArray())
     digest.digest()
             .joinToString("") { String.format("%02X", it) }
-            .toLowerCase()
+            .toLowerCase(Locale.ROOT)
 } catch (exc: Exception) {
     // Should not happen, but just in case
     hashCode().toString()

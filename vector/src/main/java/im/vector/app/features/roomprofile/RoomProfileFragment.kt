@@ -17,41 +17,27 @@
 
 package im.vector.app.features.roomprofile
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.net.toUri
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.yalantis.ucrop.UCrop
-import im.vector.lib.multipicker.MultiPicker
-import im.vector.lib.multipicker.entity.MultiPickerImageType
-import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
-import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.copyOnLongClick
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
-import im.vector.app.core.utils.allGranted
-import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.features.crypto.util.toImageRes
@@ -61,12 +47,14 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomS
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.media.BigImageViewerActivity
-import im.vector.app.features.media.createUCropWithDefaultSettings
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import kotlinx.android.synthetic.main.view_stub_room_profile_header.*
+import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
+import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 @Parcelize
@@ -78,7 +66,8 @@ class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
         val roomProfileViewModelFactory: RoomProfileViewModel.Factory
-) : VectorBaseFragment(), RoomProfileController.Callback {
+) : VectorBaseFragment(),
+        RoomProfileController.Callback {
 
     private val roomProfileArgs: RoomProfileArgs by args()
     private lateinit var roomListQuickActionsSharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -99,6 +88,7 @@ class RoomProfileFragment @Inject constructor(
             it.layoutResource = R.layout.view_stub_room_profile_header
             it.inflate()
         }
+        setupWaitingView()
         setupToolbar(matrixProfileToolbar)
         setupRecyclerView()
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
@@ -110,16 +100,27 @@ class RoomProfileFragment @Inject constructor(
         matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.observeViewEvents {
             when (it) {
-                is RoomProfileViewEvents.Loading            -> showLoading(it.message)
-                is RoomProfileViewEvents.Failure            -> showFailure(it.throwable)
-                is RoomProfileViewEvents.ShareRoomProfile   -> onShareRoomProfile(it.permalink)
-                RoomProfileViewEvents.OnChangeAvatarSuccess -> dismissLoadingDialog()
+                is RoomProfileViewEvents.Loading          -> showLoading(it.message)
+                is RoomProfileViewEvents.Failure          -> showFailure(it.throwable)
+                is RoomProfileViewEvents.ShareRoomProfile -> onShareRoomProfile(it.permalink)
+                is RoomProfileViewEvents.OnShortcutReady  -> addShortcut(it)
             }.exhaustive
         }
         roomListQuickActionsSharedActionViewModel
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
+        setupLongClicks()
+    }
+
+    private fun setupWaitingView() {
+        waiting_view_status_text.setText(R.string.please_wait)
+        waiting_view_status_text.isVisible = true
+    }
+
+    private fun setupLongClicks() {
+        roomProfileNameView.copyOnLongClick()
+        roomProfileAliasView.copyOnLongClick()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -148,14 +149,6 @@ class RoomProfileFragment @Inject constructor(
         else                                                          -> Timber.v("$action not handled")
     }
 
-    private fun onLeaveRoom() {
-        vectorBaseActivity.finish()
-    }
-
-    private fun showError(throwable: Throwable) {
-        showErrorInSnackbar(throwable)
-    }
-
     private fun setupRecyclerView() {
         roomProfileController.callback = this
         matrixProfileRecyclerView.configureWith(roomProfileController, hasFixedSize = true, disableItemAnimation = true)
@@ -169,6 +162,8 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(roomProfileViewModel) { state ->
+        waiting_view.isVisible = state.isLoading
+
         state.roomSummary()?.also {
             if (it.membership.isLeft()) {
                 Timber.w("The room has been left")
@@ -177,7 +172,6 @@ class RoomProfileFragment @Inject constructor(
                 roomProfileNameView.text = it.displayName
                 matrixProfileToolbarTitleView.text = it.displayName
                 roomProfileAliasView.setTextOrHide(it.canonicalAlias)
-                roomProfileTopicView.setTextOrHide(it.topic)
                 val matrixItem = it.toMatrixItem()
                 avatarRenderer.render(matrixItem, roomProfileAvatarView)
                 avatarRenderer.render(matrixItem, matrixProfileToolbarAvatarImageView)
@@ -202,6 +196,17 @@ class RoomProfileFragment @Inject constructor(
         vectorBaseActivity.notImplemented()
     }
 
+    override fun onEnableEncryptionClicked() {
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.room_settings_enable_encryption_dialog_title)
+                .setMessage(R.string.room_settings_enable_encryption_dialog_content)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.room_settings_enable_encryption_dialog_submit) { _, _ ->
+                    roomProfileViewModel.handle(RoomProfileAction.EnableEncryption)
+                }
+                .show()
+    }
+
     override fun onMemberListClicked() {
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomMembers)
     }
@@ -224,6 +229,16 @@ class RoomProfileFragment @Inject constructor(
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomUploads)
     }
 
+    override fun createShortcut() {
+        // Ask the view model to prepare it...
+        roomProfileViewModel.handle(RoomProfileAction.CreateShortcut)
+    }
+
+    private fun addShortcut(onShortcutReady: RoomProfileViewEvents.OnShortcutReady) {
+        // ... and propose the user to add it
+        ShortcutManagerCompat.requestPinShortcut(requireContext(), onShortcutReady.shortcutInfo, null)
+    }
+
     override fun onLeaveRoomClicked() {
         AlertDialog.Builder(requireContext())
                 .setTitle(R.string.room_participants_leave_prompt_title)
@@ -240,92 +255,21 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun onShareRoomProfile(permalink: String) {
-        startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
+        startSharePlainTextIntent(
+                fragment = this,
+                activityResultLauncher = null,
+                chooserTitle = null,
+                text = permalink
+        )
     }
 
     private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) = withState(roomProfileViewModel) {
-        if (matrixItem.avatarUrl?.isNotEmpty() == true) {
-            val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), matrixItem.avatarUrl!!, it.canChangeAvatar)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
-            startActivityForResult(intent, BigImageViewerActivity.REQUEST_CODE, options.toBundle())
-        } else if (it.canChangeAvatar) {
-            showAvatarSelector()
-        }
-    }
-
-    private fun showAvatarSelector() {
-        AlertDialog.Builder(requireContext())
-                .setItems(arrayOf(
-                        getString(R.string.attachment_type_camera),
-                        getString(R.string.attachment_type_gallery)
-                )) { dialog, which ->
-                    dialog.cancel()
-                    onAvatarTypeSelected(isCamera = (which == 0))
+        matrixItem.avatarUrl
+                ?.takeIf { it.isNotEmpty() }
+                ?.let { avatarUrl ->
+                    val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), avatarUrl)
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
+                    startActivity(intent, options.toBundle())
                 }
-                .show()
-    }
-
-    private var avatarCameraUri: Uri? = null
-    private fun onAvatarTypeSelected(isCamera: Boolean) {
-        if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
-            }
-        } else {
-            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
-        }
-    }
-
-    private fun onRoomAvatarSelected(image: MultiPickerImageType) {
-        val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
-        val uri = image.contentUri
-        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
-                .apply { withAspectRatio(1f, 1f) }
-                .start(requireContext(), this)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
-                    avatarCameraUri?.let { uri ->
-                        MultiPicker.get(MultiPicker.CAMERA)
-                                .getTakenPhoto(requireContext(), requestCode, resultCode, uri)
-                                ?.let {
-                                    onRoomAvatarSelected(it)
-                                }
-                    }
-                }
-                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
-                    MultiPicker
-                            .get(MultiPicker.IMAGE)
-                            .getSelectedFiles(requireContext(), requestCode, resultCode, data)
-                            .firstOrNull()?.let {
-                                // TODO. UCrop library cannot read from Gallery. For now, we will set avatar as it is.
-                                // onRoomAvatarSelected(it)
-                                onAvatarCropped(it.contentUri)
-                            }
-                }
-                UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
-                BigImageViewerActivity.REQUEST_CODE -> data?.let { onAvatarCropped(it.data) }
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            when (requestCode) {
-                PERMISSION_REQUEST_CODE_LAUNCH_CAMERA -> onAvatarTypeSelected(true)
-            }
-        }
-    }
-
-    private fun onAvatarCropped(uri: Uri?) {
-        if (uri != null) {
-            roomProfileViewModel.handle(RoomProfileAction.ChangeRoomAvatar(uri, getFilenameFromUri(context, uri)))
-        } else {
-            Toast.makeText(requireContext(), "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
-        }
     }
 }

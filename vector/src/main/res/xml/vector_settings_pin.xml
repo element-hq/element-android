@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
+        android:summary="@string/settings_security_pin_code_summary"
+        android:title="@string/settings_security_pin_code_title" />
+
+    <im.vector.app.core.preference.VectorPreference
+        android:dependency="SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
+        android:key="SETTINGS_SECURITY_CHANGE_PIN_CODE_FLAG"
+        android:summary="@string/settings_security_pin_code_change_pin_summary"
+        android:title="@string/settings_security_pin_code_change_pin_title" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:dependency="SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
+        android:key="SETTINGS_SECURITY_USE_BIOMETRICS_FLAG"
+        android:summaryOff="@string/settings_security_pin_code_use_biometrics_summary_off"
+        android:summaryOn="@string/settings_security_pin_code_use_biometrics_summary_on"
+        android:title="@string/settings_security_pin_code_use_biometrics_title" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:dependency="SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
+        android:key="SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG"
+        android:summaryOff="@string/settings_security_pin_code_notifications_summary_off"
+        android:summaryOn="@string/settings_security_pin_code_notifications_summary_on"
+        android:title="@string/settings_security_pin_code_notifications_title" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:dependency="SETTINGS_SECURITY_USE_PIN_CODE_FLAG"
+        android:key="SETTINGS_SECURITY_USE_GRACE_PERIOD_FLAG"
+        android:summaryOff="@string/settings_security_pin_code_grace_period_summary_off"
+        android:summaryOn="@string/settings_security_pin_code_grace_period_summary_on"
+        android:title="@string/settings_security_pin_code_grace_period_title" />
+
+</androidx.preference.PreferenceScreen>

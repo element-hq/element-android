@@ -16,42 +16,32 @@
 
 package im.vector.app.features.media
 
-import android.content.Context
-import android.view.View
-import androidx.core.view.isVisible
 import im.vector.app.core.date.VectorDateFormatter
-import im.vector.app.core.extensions.localDateTime
+import im.vector.app.core.resources.StringProvider
 import im.vector.lib.attachmentviewer.AttachmentInfo
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import java.io.File
-import javax.inject.Inject
 
 class RoomEventsAttachmentProvider(
-        private val attachments: List<TimelineEvent>,
-        private val initialIndex: Int,
+        attachments: List<TimelineEvent>,
         imageContentRenderer: ImageContentRenderer,
-        private val dateFormatter: VectorDateFormatter,
-        fileService: FileService
-) : BaseAttachmentProvider(imageContentRenderer, fileService) {
-
-    override fun getItemCount(): Int {
-        return attachments.size
-    }
+        dateFormatter: VectorDateFormatter,
+        fileService: FileService,
+        stringProvider: StringProvider
+) : BaseAttachmentProvider<TimelineEvent>(attachments, imageContentRenderer, fileService, dateFormatter, stringProvider) {
 
     override fun getAttachmentInfoAt(position: Int): AttachmentInfo {
-        return attachments[position].let {
+        return getItem(position).let {
             val content = it.root.getClearContent().toModel<MessageContent>() as? MessageWithAttachmentContent
             if (content is MessageImageContent) {
                 val data = ImageContentRenderer.Data(
@@ -63,9 +53,11 @@ class RoomEventsAttachmentProvider(
                         maxHeight = -1,
                         maxWidth = -1,
                         width = null,
-                        height = null
+                        height = null,
+                        allowNonMxcUrls = it.root.sendState.isSending()
+
                 )
-                if (content.mimeType == "image/gif") {
+                if (content.mimeType == MimeTypes.Gif) {
                     AttachmentInfo.AnimatedImage(
                             uid = it.eventId,
                             url = content.url ?: "",
@@ -89,7 +81,8 @@ class RoomEventsAttachmentProvider(
                         height = content.videoInfo?.height,
                         maxHeight = -1,
                         width = content.videoInfo?.width,
-                        maxWidth = -1
+                        maxWidth = -1,
+                        allowNonMxcUrls = it.root.sendState.isSending()
                 )
                 val data = VideoContentRenderer.Data(
                         eventId = it.eventId,
@@ -97,7 +90,8 @@ class RoomEventsAttachmentProvider(
                         mimeType = content.mimeType,
                         url = content.getFileUrl(),
                         elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
-                        thumbnailMediaData = thumbnailData
+                        thumbnailMediaData = thumbnailData,
+                        allowNonMxcUrls = it.root.sendState.isSending()
                 )
                 AttachmentInfo.Video(
                         uid = it.eventId,
@@ -121,26 +115,17 @@ class RoomEventsAttachmentProvider(
         }
     }
 
-    override fun overlayViewAtPosition(context: Context, position: Int): View? {
-        super.overlayViewAtPosition(context, position)
-        val item = attachments[position]
-        val dateString = item.root.localDateTime().let {
-            "${dateFormatter.formatMessageDay(it)} at ${dateFormatter.formatMessageHour(it)} "
-        }
-        overlayView?.updateWith("${position + 1} of ${attachments.size}", "${item.senderInfo.displayName} $dateString")
-        overlayView?.videoControlsGroup?.isVisible = item.root.isVideoMessage()
-        return overlayView
+    override fun getTimelineEventAtPosition(position: Int): TimelineEvent? {
+        return getItem(position)
     }
 
     override fun getFileForSharing(position: Int, callback: (File?) -> Unit) {
-        attachments[position].let { timelineEvent ->
+        getItem(position).let { timelineEvent ->
 
             val messageContent = timelineEvent.root.getClearContent().toModel<MessageContent>()
                     as? MessageWithAttachmentContent
                     ?: return@let
             fileService.downloadFile(
-                    downloadMode = FileService.DownloadMode.FOR_EXTERNAL_SHARE,
-                    id = timelineEvent.eventId,
                     fileName = messageContent.body,
                     mimeType = messageContent.mimeType,
                     url = messageContent.getFileUrl(),
@@ -156,20 +141,5 @@ class RoomEventsAttachmentProvider(
                     }
             )
         }
-    }
-}
-
-class AttachmentProviderFactory @Inject constructor(
-        private val imageContentRenderer: ImageContentRenderer,
-        private val vectorDateFormatter: VectorDateFormatter,
-        private val session: Session
-) {
-
-    fun createProvider(attachments: List<TimelineEvent>, initialIndex: Int): RoomEventsAttachmentProvider {
-        return RoomEventsAttachmentProvider(attachments, initialIndex, imageContentRenderer, vectorDateFormatter, session.fileService())
-    }
-
-    fun createProvider(attachments: List<AttachmentData>, room: Room?, initialIndex: Int): DataAttachmentRoomProvider {
-        return DataAttachmentRoomProvider(attachments, room, initialIndex, imageContentRenderer, vectorDateFormatter, session.fileService())
     }
 }

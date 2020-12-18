@@ -19,12 +19,12 @@ package im.vector.app.core.ui.views
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
@@ -105,13 +105,13 @@ class BottomSheetActionButton @JvmOverloads constructor(
     var tint: Int? = null
         set(value) {
             field = value
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                leftIconImageView.imageTintList = value?.let { ColorStateList.valueOf(value) }
-            } else {
-                leftIcon?.let {
-                    leftIcon = ThemeUtils.tintDrawable(context, it, value ?: ThemeUtils.getColor(context, android.R.attr.textColor))
-                }
-            }
+            leftIconImageView.imageTintList = value?.let { ColorStateList.valueOf(value) }
+        }
+
+    var titleTextColor: Int? = null
+        set(value) {
+            field = value
+            value?.let { actionTextView.setTextColor(it) }
         }
 
     init {
@@ -127,6 +127,7 @@ class BottomSheetActionButton @JvmOverloads constructor(
             rightIcon = getDrawable(R.styleable.BottomSheetActionButton_rightIcon)
 
             tint = getColor(R.styleable.BottomSheetActionButton_tint, ThemeUtils.getColor(context, android.R.attr.textColor))
+            titleTextColor = getColor(R.styleable.BottomSheetActionButton_titleTextColor, ContextCompat.getColor(context, R.color.riotx_accent))
         }
     }
 }

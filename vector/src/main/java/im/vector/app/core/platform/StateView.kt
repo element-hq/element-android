@@ -23,6 +23,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.extensions.updateConstraintSet
 import kotlinx.android.synthetic.main.view_state.view.*
 
 class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
@@ -31,7 +32,12 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     sealed class State {
         object Content : State()
         object Loading : State()
-        data class Empty(val title: CharSequence? = null, val image: Drawable? = null, val message: CharSequence? = null) : State()
+        data class Empty(
+                val title: CharSequence? = null,
+                val image: Drawable? = null,
+                val isBigImage: Boolean = false,
+                val message: CharSequence? = null
+        ) : State()
 
         data class Error(val message: CharSequence? = null) : State()
     }
@@ -71,6 +77,9 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             is State.Loading -> Unit
             is State.Empty   -> {
                 emptyImageView.setImageDrawable(newState.image)
+                emptyView.updateConstraintSet {
+                    it.constrainPercentHeight(R.id.emptyImageView, if (newState.isBigImage) 0.5f else 0.1f)
+                }
                 emptyMessageView.text = newState.message
                 emptyTitleView.text = newState.title
             }

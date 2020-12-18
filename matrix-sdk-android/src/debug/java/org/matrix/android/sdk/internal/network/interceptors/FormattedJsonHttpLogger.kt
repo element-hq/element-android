@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.network.interceptors
 
 import androidx.annotation.NonNull
-import org.matrix.android.sdk.BuildConfig
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONArray
 import org.json.JSONException
@@ -38,37 +37,34 @@ class FormattedJsonHttpLogger : HttpLoggingInterceptor.Logger {
      */
     @Synchronized
     override fun log(@NonNull message: String) {
-        // In RELEASE there is no log, but for sure, test again BuildConfig.DEBUG
-        if (BuildConfig.DEBUG) {
-            Timber.v(message)
+        Timber.v(message)
 
-            if (message.startsWith("{")) {
-                // JSON Detected
-                try {
-                    val o = JSONObject(message)
-                    logJson(o.toString(INDENT_SPACE))
-                } catch (e: JSONException) {
-                    // Finally this is not a JSON string...
-                    Timber.e(e)
-                }
-            } else if (message.startsWith("[")) {
-                // JSON Array detected
-                try {
-                    val o = JSONArray(message)
-                    logJson(o.toString(INDENT_SPACE))
-                } catch (e: JSONException) {
-                    // Finally not JSON...
-                    Timber.e(e)
-                }
+        if (message.startsWith("{")) {
+            // JSON Detected
+            try {
+                val o = JSONObject(message)
+                logJson(o.toString(INDENT_SPACE))
+            } catch (e: JSONException) {
+                // Finally this is not a JSON string...
+                Timber.e(e)
             }
-            // Else not a json string to log
+        } else if (message.startsWith("[")) {
+            // JSON Array detected
+            try {
+                val o = JSONArray(message)
+                logJson(o.toString(INDENT_SPACE))
+            } catch (e: JSONException) {
+                // Finally not JSON...
+                Timber.e(e)
+            }
         }
+        // Else not a json string to log
     }
 
     private fun logJson(formattedJson: String) {
-        val arr = formattedJson.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        for (s in arr) {
-            Timber.v(s)
-        }
+        formattedJson
+                .lines()
+                .dropLastWhile { it.isEmpty() }
+                .forEach { Timber.v(it) }
     }
 }

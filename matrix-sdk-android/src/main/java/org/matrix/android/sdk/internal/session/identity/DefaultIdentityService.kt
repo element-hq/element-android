@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +22,7 @@ import androidx.lifecycle.LifecycleRegistry
 import dagger.Lazy
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.SessionParams
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -56,6 +55,7 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.ensureProtocol
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
@@ -113,7 +113,7 @@ internal class DefaultIdentityService @Inject constructor(
             // Url has changed, we have to reset our store, update internal configuration and notify listeners
             identityStore.setUrl(baseUrl)
             updateIdentityAPI(baseUrl)
-            listeners.toList().forEach { tryThis { it.onIdentityServerChange() } }
+            listeners.toList().forEach { tryOrNull { it.onIdentityServerChange() } }
         }
     }
 
@@ -236,7 +236,7 @@ internal class DefaultIdentityService @Inject constructor(
     private suspend fun updateAccountData(url: String?) {
         // Also notify the listener
         withContext(coroutineDispatchers.main) {
-            listeners.toList().forEach { tryThis { it.onIdentityServerChange() } }
+            listeners.toList().forEach { tryOrNull { it.onIdentityServerChange() } }
         }
 
         updateUserAccountDataTask.execute(UpdateUserAccountDataTask.IdentityParams(
@@ -244,7 +244,20 @@ internal class DefaultIdentityService @Inject constructor(
         ))
     }
 
+    override fun getUserConsent(): Boolean {
+        return identityStore.getIdentityData()?.userConsent.orFalse()
+    }
+
+    override fun setUserConsent(newValue: Boolean) {
+        identityStore.setUserConsent(newValue)
+    }
+
     override fun lookUp(threePids: List<ThreePid>, callback: MatrixCallback<List<FoundThreePid>>): Cancelable {
+        if (!getUserConsent()) {
+            callback.onFailure(IdentityServiceError.UserConsentNotProvided)
+            return NoOpCancellable
+        }
+
         if (threePids.isEmpty()) {
             callback.onSuccess(emptyList())
             return NoOpCancellable
@@ -256,6 +269,9 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override fun getShareStatus(threePids: List<ThreePid>, callback: MatrixCallback<Map<ThreePid, SharedState>>): Cancelable {
+        // Note: we do not require user consent here, because it is used for emails and phone numbers that the user has already sent
+        // to the home server, and not emails and phone numbers from the contact book of the user
+
         if (threePids.isEmpty()) {
             callback.onSuccess(emptyMap())
             return NoOpCancellable

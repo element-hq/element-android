@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -74,8 +73,8 @@ internal class DefaultContentUploadStateTracker @Inject constructor() : ContentU
         updateState(key, progressData)
     }
 
-    internal fun setEncrypting(key: String) {
-        val progressData = ContentUploadStateTracker.State.Encrypting
+    internal fun setEncrypting(key: String, current: Long, total: Long) {
+        val progressData = ContentUploadStateTracker.State.Encrypting(current, total)
         updateState(key, progressData)
     }
 

@@ -32,8 +32,9 @@
             android:layout_height="40dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_material_done"
-            android:tint="@android:color/white"
-            android:visibility="visible" />
+            android:visibility="visible"
+            app:tint="@android:color/white"
+            tools:ignore="MissingPrefix" />
     </FrameLayout>
 
     <TextView

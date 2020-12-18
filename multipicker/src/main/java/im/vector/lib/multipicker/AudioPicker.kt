@@ -16,7 +16,6 @@
 
 package im.vector.lib.multipicker
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.MediaMetadataRetriever
@@ -26,19 +25,13 @@ import im.vector.lib.multipicker.entity.MultiPickerAudioType
 /**
  * Audio file picker implementation
  */
-class AudioPicker(override val requestCode: Int) : Picker<MultiPickerAudioType>(requestCode) {
+class AudioPicker : Picker<MultiPickerAudioType>() {
 
     /**
      * Call this function from onActivityResult(int, int, Intent).
-     * Returns selected audio files or empty list if request code is wrong
-     * or result code is not Activity.RESULT_OK
-     * or user did not select any files.
+     * Returns selected audio files or empty list if user did not select any files.
      */
-    override fun getSelectedFiles(context: Context, requestCode: Int, resultCode: Int, data: Intent?): List<MultiPickerAudioType> {
-        if (requestCode != this.requestCode && resultCode != Activity.RESULT_OK) {
-            return emptyList()
-        }
-
+    override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerAudioType> {
         val audioList = mutableListOf<MultiPickerAudioType>()
 
         getSelectedUriList(data).forEach { selectedUri ->
@@ -84,7 +77,7 @@ class AudioPicker(override val requestCode: Int) : Picker<MultiPickerAudioType>(
     }
 
     override fun createIntent(): Intent {
-        return Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        return Intent(Intent.ACTION_GET_CONTENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !single)
             type = "audio/*"

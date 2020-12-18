@@ -16,7 +16,6 @@
 
 package im.vector.app.features.login
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
@@ -48,9 +47,7 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        }
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
     @CallSuper
@@ -72,6 +69,11 @@ abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
     }
 
     override fun showFailure(throwable: Throwable) {
+        // Only the resumed Fragment can eventually show the error, to avoid multiple dialog display
+        if (!isResumed) {
+            return
+        }
+
         when (throwable) {
             is Failure.Cancelled                      ->
                 /* Ignore this error, user has cancelled the action */

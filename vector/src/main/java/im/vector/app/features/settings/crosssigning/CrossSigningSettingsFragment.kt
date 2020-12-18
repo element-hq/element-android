@@ -29,6 +29,9 @@ import im.vector.app.core.platform.VectorBaseFragment
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
+/**
+ * This Fragment is only used when user activates developer mode from the settings
+ */
 class CrossSigningSettingsFragment @Inject constructor(
         private val controller: CrossSigningSettingsController,
         val viewModelFactory: CrossSigningSettingsViewModel.Factory
@@ -38,26 +41,18 @@ class CrossSigningSettingsFragment @Inject constructor(
 
     private val viewModel: CrossSigningSettingsViewModel by fragmentViewModel()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
         viewModel.observeViewEvents {
             when (it) {
-                is CrossSigningSettingsViewEvents.Failure    -> {
+                is CrossSigningSettingsViewEvents.Failure -> {
                     AlertDialog.Builder(requireContext())
                             .setTitle(R.string.dialog_title_error)
                             .setMessage(errorFormatter.toHumanReadable(it.throwable))
                             .setPositiveButton(R.string.ok, null)
                             .show()
                     Unit
-                }
-                CrossSigningSettingsViewEvents.VerifySession -> {
-                    navigator.requestSelfSessionVerification(requireActivity())
-                }
-                CrossSigningSettingsViewEvents.SetUpRecovery -> {
-                    navigator.upgradeSessionSecurity(requireActivity(), false)
-                }
-                CrossSigningSettingsViewEvents.SetupCrossSigning -> {
-                    navigator.upgradeSessionSecurity(requireActivity(), true)
                 }
             }.exhaustive
         }
@@ -68,35 +63,18 @@ class CrossSigningSettingsFragment @Inject constructor(
         (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.encryption_information_cross_signing_state)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
-    }
-
     override fun invalidate() = withState(viewModel) { state ->
         controller.setData(state)
     }
 
     private fun setupRecyclerView() {
-        recyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
+        genericRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
         controller.interactionListener = this
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         controller.interactionListener = null
         super.onDestroyView()
-    }
-
-    override fun setupRecovery() {
-        viewModel.handle(CrossSigningSettingsAction.SetUpRecovery)
-    }
-
-    override fun verifySession() {
-        viewModel.handle(CrossSigningSettingsAction.VerifySession)
-    }
-
-    override fun initCrossSigning() {
-        viewModel.handle(CrossSigningSettingsAction.SetupCrossSigning)
     }
 }

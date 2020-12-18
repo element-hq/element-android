@@ -16,11 +16,9 @@
 
 package im.vector.app.features.workers.signout
 
-import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import im.vector.app.R
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.cannotLogoutSafely
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.features.MainActivity
@@ -28,11 +26,8 @@ import im.vector.app.features.MainActivityArgs
 
 class SignOutUiWorker(private val activity: FragmentActivity) {
 
-    lateinit var activeSessionHolder: ActiveSessionHolder
-
-    fun perform(context: Context) {
-        activeSessionHolder = context.vectorComponent().activeSessionHolder()
-        val session = activeSessionHolder.getActiveSession()
+    fun perform() {
+        val session = activity.vectorComponent().activeSessionHolder().getSafeActiveSession() ?: return
         if (session.cannotLogoutSafely()) {
             // The backup check on logout flow has to be displayed if there are keys in the store, and the keys backup state is not Ready
             val signOutDialog = SignOutBottomSheetDialogFragment.newInstance()

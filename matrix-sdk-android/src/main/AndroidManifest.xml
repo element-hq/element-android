@@ -1,11 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.matrix.android.sdk">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- TODO Is WRITE_EXTERNAL_STORAGE necessary? -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application android:networkSecurityConfig="@xml/network_security_config">
+
+        <!--
+        This is mandatory to run integration tests
+        -->
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            android:exported="false"
+            tools:node="remove" />
 
         <!--
          The SDK offers a secured File provider to access downloaded files.

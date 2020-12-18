@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +35,7 @@ import io.realm.annotations.RealmModule
             RoomSummaryEntity::class,
             RoomTagEntity::class,
             SyncEntity::class,
+            PendingThreePidEntity::class,
             UserEntity::class,
             IgnoredUserEntity::class,
             BreadcrumbsEntity::class,
@@ -48,6 +48,7 @@ import io.realm.annotations.RealmModule
             PushRulesEntity::class,
             PushRuleEntity::class,
             PushConditionEntity::class,
+            PreviewUrlCacheEntity::class,
             PusherEntity::class,
             PusherDataEntity::class,
             ReadReceiptsSummaryEntity::class,

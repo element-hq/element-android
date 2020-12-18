@@ -16,6 +16,7 @@
         <item name="riotx_header_panel_text_secondary">@color/riotx_header_panel_text_secondary_dark</item>
         <item name="riotx_text_primary">@color/riotx_text_primary_dark</item>
         <item name="riotx_text_secondary">@color/riotx_text_secondary_dark</item>
+        <item name="riotx_text_tertiary">@color/riotx_text_tertiary_dark</item>
         <item name="riotx_text_primary_body_contrast">@color/riotx_text_primary_body_contrast_dark</item>
         <item name="riotx_android_secondary">@color/riotx_android_secondary_dark</item>
         <item name="riotx_search_placeholder">@color/riotx_search_placeholder_dark</item>
@@ -34,6 +35,8 @@
         <item name="riotx_attachment_selector_border">@color/riotx_attachment_selector_border_dark</item>
         <item name="riotx_room_active_widgets_banner_bg">@color/riotx_room_active_widgets_banner_bg_dark</item>
         <item name="riotx_room_active_widgets_banner_text">@color/riotx_room_active_widgets_banner_text_dark</item>
+        <item name="riotx_reaction_background_off">@color/riotx_reaction_background_off_dark</item>
+        <item name="riotx_reaction_background_on">@color/riotx_reaction_background_on_dark</item>
 
         <item name="riotx_bottom_nav_icon_color">@color/riotx_bottom_nav_icon_color_dark</item>
 
@@ -182,6 +185,24 @@
         <item name="pf_fingerprint_button">@style/PinCodeFingerprintButtonStyle</item>
         <item name="pf_next">@style/PinCodeNextButtonStyle</item>
 
+        <item name="android:statusBarColor">@color/riotx_header_panel_background_dark</item>
+        <item name="android:navigationBarColor">@color/riotx_header_panel_background_dark</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- specify shared element enter and exit transitions -->
+        <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
+
+        <item name="vctr_social_login_button_google_style">@style/WidgetButtonSocialLogin.Google.Dark</item>
+        <item name="vctr_social_login_button_github_style">@style/WidgetButtonSocialLogin.Github.Dark</item>
+        <item name="vctr_social_login_button_facebook_style">@style/WidgetButtonSocialLogin.Facebook.Dark</item>
+        <item name="vctr_social_login_button_twitter_style">@style/WidgetButtonSocialLogin.Twitter.Dark</item>
+        <item name="vctr_social_login_button_apple_style">@style/WidgetButtonSocialLogin.Apple.Dark</item>
+
+        <!-- chat effect -->
+        <item name="vctr_chat_effect_snow_background">@android:color/transparent</item>
     </style>
 
     <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />

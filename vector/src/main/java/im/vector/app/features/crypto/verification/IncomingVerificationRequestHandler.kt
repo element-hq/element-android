@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.util.toMatrixItem
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -69,17 +70,17 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         R.drawable.ic_shield_black,
                         shouldBeDisplayedIn = { activity ->
                             if (activity is VectorBaseActivity) {
-                                // TODO a bit too hugly :/
+                                // TODO a bit too ugly :/
                                 activity.supportFragmentManager.findFragmentByTag(VerificationBottomSheet.WAITING_SELF_VERIF_TAG)?.let {
                                     false.also {
                                         popupAlertManager.cancelAlert(uid)
                                     }
                                 } ?: true
                             } else true
-                        })
+                        },
+                        matrixItem = session?.getUser(tx.otherUserId)?.toMatrixItem()
+                )
                         .apply {
-                            matrixItem = session?.getUser(tx.otherUserId)?.toMatrixItem()
-
                             contentAction = Runnable {
                                 (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
                                     it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
@@ -116,6 +117,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
     }
 
     override fun verificationRequestCreated(pr: PendingVerificationRequest) {
+        Timber.v("## SAS verificationRequestCreated ${pr.transactionId}")
         // For incoming request we should prompt (if not in activity where this request apply)
         if (pr.isIncoming) {
             val name = session?.getUser(pr.otherUserId)?.displayName
@@ -132,10 +134,10 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 it.roomId != pr.roomId
                             } ?: true
                         } else true
-                    })
+                    },
+                    matrixItem = session?.getUser(pr.otherUserId)?.toMatrixItem()
+            )
                     .apply {
-                        matrixItem = session?.getUser(pr.otherUserId)?.toMatrixItem()
-
                         contentAction = Runnable {
                             (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
                                 val roomId = pr.roomId
@@ -162,7 +164,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
 
     override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
         // If an incoming request is readied (by another device?) we should discard the alert
-        if (pr.isIncoming && (pr.isReady || pr.handledByOtherSession)) {
+        if (pr.isIncoming && (pr.isReady || pr.handledByOtherSession || pr.cancelConclusion != null)) {
             popupAlertManager.cancelAlert(uniqueIdForVerificationRequest(pr))
         }
     }

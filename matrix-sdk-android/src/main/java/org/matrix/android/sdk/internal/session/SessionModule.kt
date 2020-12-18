@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +24,9 @@ import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
+import io.realm.RealmConfiguration
+import okhttp3.OkHttpClient
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -35,16 +37,20 @@ import org.matrix.android.sdk.api.session.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
-import org.matrix.android.sdk.internal.crypto.crosssigning.ShieldTrustUpdater
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
+import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
+import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
 import org.matrix.android.sdk.internal.crypto.verification.VerificationMessageProcessor
 import org.matrix.android.sdk.internal.database.DatabaseCleaner
 import org.matrix.android.sdk.internal.database.EventInsertLiveObserver
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.SessionRealmConfigurationFactory
 import org.matrix.android.sdk.internal.di.Authenticated
+import org.matrix.android.sdk.internal.di.CacheDirectory
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
@@ -72,6 +78,7 @@ import org.matrix.android.sdk.internal.session.download.DownloadProgressIntercep
 import org.matrix.android.sdk.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManager
+import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkService
 import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.create.RoomCreateEventProcessor
 import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcessor
@@ -81,9 +88,6 @@ import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.session.user.accountdata.DefaultAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
 import org.matrix.android.sdk.internal.util.md5
-import io.realm.RealmConfiguration
-import okhttp3.OkHttpClient
-import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Provider
@@ -166,9 +170,9 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionDownloadsDirectory
-        fun providesCacheDir(@SessionId sessionId: String,
-                             context: Context): File {
-            return File(context.cacheDir, "downloads/$sessionId")
+        fun providesDownloadsCacheDir(@SessionId sessionId: String,
+                                      @CacheDirectory cacheFile: File): File {
+            return File(cacheFile, "downloads/$sessionId")
         }
 
         @JvmStatic
@@ -323,23 +327,23 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindIntegrationManager(observer: IntegrationManager): SessionLifecycleObserver
+    abstract fun bindIntegrationManager(manager: IntegrationManager): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindWidgetUrlFormatter(observer: DefaultWidgetURLFormatter): SessionLifecycleObserver
+    abstract fun bindWidgetUrlFormatter(formatter: DefaultWidgetURLFormatter): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindShieldTrustUpdated(observer: ShieldTrustUpdater): SessionLifecycleObserver
+    abstract fun bindIdentityService(service: DefaultIdentityService): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindIdentityService(observer: DefaultIdentityService): SessionLifecycleObserver
+    abstract fun bindDatabaseCleaner(cleaner: DatabaseCleaner): SessionLifecycleObserver
 
     @Binds
     @IntoSet
-    abstract fun bindDatabaseCleaner(observer: DatabaseCleaner): SessionLifecycleObserver
+    abstract fun bindRealmSessionProvider(provider: RealmSessionProvider): SessionLifecycleObserver
 
     @Binds
     abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService
@@ -357,5 +361,11 @@ internal abstract class SessionModule {
     abstract fun bindSharedSecretStorageService(service: DefaultSharedSecretStorageService): SharedSecretStorageService
 
     @Binds
+    abstract fun bindPermalinkService(service: DefaultPermalinkService): PermalinkService
+
+    @Binds
     abstract fun bindTypingUsersTracker(tracker: DefaultTypingUsersTracker): TypingUsersTracker
+
+    @Binds
+    abstract fun bindRedactEventTask(task: DefaultRedactEventTask): RedactEventTask
 }

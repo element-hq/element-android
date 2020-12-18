@@ -17,10 +17,14 @@
 package im.vector.app
 
 import android.app.Application
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.StrictMode
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
 import androidx.lifecycle.Lifecycle
@@ -32,16 +36,15 @@ import com.airbnb.epoxy.EpoxyAsyncUtil
 import com.airbnb.epoxy.EpoxyController
 import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
-import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.api.MatrixConfiguration
-import org.matrix.android.sdk.api.auth.AuthenticationService
-import org.matrix.android.sdk.api.legacy.LegacySessionImporter
+import com.vanniktech.emoji.EmojiManager
+import com.vanniktech.emoji.google.GoogleEmojiProvider
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DaggerVectorComponent
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.di.VectorComponent
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.rx.RxConfig
+import im.vector.app.features.call.WebRtcPeerConnectionManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.disclaimer.doNotShowDisclaimerDialog
 import im.vector.app.features.lifecycle.VectorActivityLifecycleCallbacks
@@ -50,16 +53,21 @@ import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
 import im.vector.app.push.fcm.FcmHelper
+import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.Executors
 import javax.inject.Inject
-
 import androidx.work.Configuration as WorkConfiguration
 
 class VectorApplication :
@@ -84,13 +92,24 @@ class VectorApplication :
     @Inject lateinit var rxConfig: RxConfig
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var pinLocker: PinLocker
+    @Inject lateinit var webRtcPeerConnectionManager: WebRtcPeerConnectionManager
 
     lateinit var vectorComponent: VectorComponent
 
     // font thread handler
     private var fontThreadHandler: Handler? = null
 
+    private val powerKeyReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            if (intent.action == Intent.ACTION_SCREEN_OFF
+                    && vectorPreferences.useFlagPinCode()) {
+                pinLocker.screenIsOff()
+            }
+        }
+    }
+
     override fun onCreate() {
+        enableStrictModeIfNeeded()
         super.onCreate()
         appContext = this
         vectorComponent = DaggerVectorComponent.factory().create(this)
@@ -119,7 +138,9 @@ class VectorApplication :
                 R.array.com_google_android_gms_fonts_certs
         )
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
-        vectorConfiguration.initConfiguration()
+        VectorLocale.init(this)
+        ThemeUtils.init(this)
+        vectorConfiguration.applyToApplicationContext()
 
         emojiCompatWrapper.init(fontRequest)
 
@@ -141,7 +162,7 @@ class VectorApplication :
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun entersForeground() {
                 Timber.i("App entered foreground")
-                FcmHelper.onEnterForeground(appContext)
+                FcmHelper.onEnterForeground(appContext, activeSessionHolder)
                 activeSessionHolder.getSafeActiveSession()?.also {
                     it.stopAnyBackgroundSync()
                 }
@@ -156,8 +177,26 @@ class VectorApplication :
         })
         ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)
         ProcessLifecycleOwner.get().lifecycle.addObserver(pinLocker)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(webRtcPeerConnectionManager)
         // This should be done as early as possible
         // initKnownEmojiHashSet(appContext)
+
+        applicationContext.registerReceiver(powerKeyReceiver, IntentFilter().apply {
+            // Looks like i cannot receive OFF, if i don't have both ON and OFF
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_SCREEN_ON)
+        })
+
+        EmojiManager.install(GoogleEmojiProvider())
+    }
+
+    private fun enableStrictModeIfNeeded() {
+        if (BuildConfig.ENABLE_STRICT_MODE_LOGS) {
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build())
+        }
     }
 
     override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)

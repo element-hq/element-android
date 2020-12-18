@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +49,12 @@ object EventType {
     const val STATE_ROOM_JOIN_RULES = "m.room.join_rules"
     const val STATE_ROOM_GUEST_ACCESS = "m.room.guest_access"
     const val STATE_ROOM_POWER_LEVELS = "m.room.power_levels"
+
+    /**
+     * Note that this Event has been deprecated, see
+     * - https://matrix.org/docs/spec/client_server/r0.6.1#historical-events
+     * - https://github.com/matrix-org/matrix-doc/pull/2432
+     */
     const val STATE_ROOM_ALIASES = "m.room.aliases"
     const val STATE_ROOM_TOMBSTONE = "m.room.tombstone"
     const val STATE_ROOM_CANONICAL_ALIAS = "m.room.canonical_alias"
@@ -57,6 +62,7 @@ object EventType {
     const val STATE_ROOM_RELATED_GROUPS = "m.room.related_groups"
     const val STATE_ROOM_PINNED_EVENT = "m.room.pinned_events"
     const val STATE_ROOM_ENCRYPTION = "m.room.encryption"
+    const val STATE_ROOM_SERVER_ACL = "m.room.server_acl"
 
     // Call Events
     const val CALL_INVITE = "m.call.invite"

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,24 +19,28 @@ package org.matrix.android.sdk.internal.session.content
 import android.content.Context
 import android.net.Uri
 import com.squareup.moshi.Moshi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import okio.BufferedSink
+import okio.source
+import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
 import org.matrix.android.sdk.internal.network.awaitResponse
 import org.matrix.android.sdk.internal.network.toFailure
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.util.UUID
 import javax.inject.Inject
 
 internal class FileUploader @Inject constructor(@Authenticated
@@ -54,7 +57,21 @@ internal class FileUploader @Inject constructor(@Authenticated
                            filename: String?,
                            mimeType: String?,
                            progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val uploadBody = file.asRequestBody(mimeType?.toMediaTypeOrNull())
+        val uploadBody = object : RequestBody() {
+            override fun contentLength() = file.length()
+
+            // Disable okhttp auto resend for 'large files'
+            override fun isOneShot() = contentLength() == 0L || contentLength() >= 1_000_000
+
+            override fun contentType(): MediaType? {
+                return mimeType?.toMediaTypeOrNull()
+            }
+
+            override fun writeTo(sink: BufferedSink) {
+                file.source().use { sink.writeAll(it) }
+            }
+        }
+
         return upload(uploadBody, filename, progressListener)
     }
 
@@ -73,9 +90,12 @@ internal class FileUploader @Inject constructor(@Authenticated
         val inputStream = withContext(Dispatchers.IO) {
             context.contentResolver.openInputStream(uri)
         } ?: throw FileNotFoundException()
-
-        inputStream.use {
-            return uploadByteArray(it.readBytes(), filename, mimeType, progressListener)
+        val workingFile = File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
+        workingFile.outputStream().use {
+            inputStream.copyTo(it)
+        }
+        return uploadFile(workingFile, filename, mimeType, progressListener).also {
+            tryOrNull { workingFile.delete() }
         }
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_fragment"
@@ -7,20 +7,20 @@
     android:layout_height="match_parent"
     android:background="?riotx_background">
 
-    <!-- Missing attributes are in the style -->
-    <androidx.core.widget.NestedScrollView
-        style="@style/LoginFormScrollView"
-        tools:ignore="MissingConstraints">
+    <androidx.core.widget.NestedScrollView style="@style/LoginFormScrollView">
 
-        <LinearLayout
-            style="@style/LoginFormContainer"
-            android:orientation="vertical">
+        <LinearLayout style="@style/LoginFormContainer">
+
+            <ImageView
+                style="@style/LoginLogo"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/loginServerIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tint="?riotx_text_primary"
+                app:tint="?riotx_text_primary"
+                tools:ignore="MissingPrefix"
                 tools:src="@drawable/ic_logo_matrix_org" />
 
             <TextView
@@ -95,8 +95,9 @@
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="center"
                     android:src="@drawable/ic_eye"
-                    android:tint="?attr/colorAccent"
-                    tools:contentDescription="@string/a11y_show_password" />
+                    app:tint="?attr/colorAccent"
+                    tools:contentDescription="@string/a11y_show_password"
+                    tools:ignore="MissingPrefix" />
 
             </FrameLayout>
 
@@ -110,7 +111,7 @@
                 android:visibility="gone"
                 tools:visibility="visible" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp">
@@ -120,25 +121,53 @@
                     style="@style/Style.Vector.Login.Button.Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/auth_forgot_password"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:layout_gravity="start"
+                    android:text="@string/auth_forgot_password" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/loginSubmit"
                     style="@style/Style.Vector.Login.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
                     android:text="@string/auth_login"
-                    app:layout_constraintEnd_toEndOf="parent"
                     tools:enabled="false"
                     tools:ignore="RelativeOverlap" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
+
+            <!-- Social Logins buttons -->
+            <LinearLayout
+                android:id="@+id/loginSocialLoginContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/loginSocialLoginHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:text="@string/login_social_continue"
+                    android:textAppearance="@style/TextAppearance.Vector.Login.Text"
+                    android:textSize="14sp" />
+
+                <im.vector.app.features.login.SocialLoginButtonsView
+                    android:id="@+id/loginSocialLoginButtons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:signMode="signin" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
 

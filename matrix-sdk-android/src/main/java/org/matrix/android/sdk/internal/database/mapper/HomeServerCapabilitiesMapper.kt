@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,9 +29,7 @@ internal object HomeServerCapabilitiesMapper {
                 canChangePassword = entity.canChangePassword,
                 maxUploadFileSize = entity.maxUploadFileSize,
                 lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
-                defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
-                adminE2EByDefault = entity.adminE2EByDefault,
-                preferredJitsiDomain = entity.preferredJitsiDomain
+                defaultIdentityServerUrl = entity.defaultIdentityServerUrl
         )
     }
 }

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,22 +18,26 @@ package org.matrix.android.sdk.internal.session.sync.job
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.squareup.moshi.JsonEncodingException
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.sync.SyncTask
-import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.util.Debouncer
 import org.matrix.android.sdk.internal.util.createUIHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.matrix.android.sdk.api.session.call.MxCall
+import org.matrix.android.sdk.internal.session.call.ActiveCallHandler
+import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.util.Timer
@@ -46,13 +49,13 @@ private const val RETRY_WAIT_TIME_MS = 10_000L
 private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
 
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
-                                              private val typingUsersTracker: DefaultTypingUsersTracker,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
-                                              private val backgroundDetectionObserver: BackgroundDetectionObserver)
-    : Thread(), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
+                                              private val backgroundDetectionObserver: BackgroundDetectionObserver,
+                                              private val activeCallHandler: ActiveCallHandler
+) : Thread("SyncThread"), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.Idle
-    private var liveState = MutableLiveData<SyncState>(state)
+    private var liveState = MutableLiveData(state)
     private val lock = Object()
     private val syncScope = CoroutineScope(SupervisorJob())
     private val debouncer = Debouncer(createUIHandler())
@@ -61,6 +64,12 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     private var isStarted = false
     private var isTokenValid = true
     private var retryNoNetworkTask: TimerTask? = null
+
+    private val activeCallListObserver = Observer<MutableList<MxCall>> { activeCalls ->
+        if (activeCalls.isEmpty() && backgroundDetectionObserver.isInBackground) {
+            pause()
+        }
+    }
 
     init {
         updateStateTo(SyncState.Idle)
@@ -115,9 +124,11 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
 
     override fun run() {
         Timber.v("Start syncing...")
+
         isStarted = true
         networkConnectivityChecker.register(this)
         backgroundDetectionObserver.register(this)
+        registerActiveCallsObserver()
         while (state != SyncState.Killing) {
             Timber.v("Entering loop, state: $state")
             if (!isStarted) {
@@ -149,7 +160,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 // No timeout after a pause
                 val timeout = state.let { if (it is SyncState.Running && it.afterPause) 0 else DEFAULT_LONG_POOL_TIMEOUT }
                 Timber.v("Execute sync request with timeout $timeout")
-                val params = SyncTask.Params(timeout)
+                val params = SyncTask.Params(timeout, SyncPresence.Online)
                 val sync = syncScope.launch {
                     doSync(params)
                 }
@@ -163,6 +174,19 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         updateStateTo(SyncState.Killed)
         backgroundDetectionObserver.unregister(this)
         networkConnectivityChecker.unregister(this)
+        unregisterActiveCallsObserver()
+    }
+
+    private fun registerActiveCallsObserver() {
+        syncScope.launch(Dispatchers.Main) {
+            activeCallHandler.getActiveCallsLiveData().observeForever(activeCallListObserver)
+        }
+    }
+
+    private fun unregisterActiveCallsObserver() {
+        syncScope.launch(Dispatchers.Main) {
+            activeCallHandler.getActiveCallsLiveData().removeObserver(activeCallListObserver)
+        }
     }
 
     private suspend fun doSync(params: SyncTask.Params) {
@@ -205,7 +229,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
             return
         }
         state = newState
-        debouncer.debounce("post_state", Runnable {
+        debouncer.debounce("post_state", {
             liveState.value = newState
         }, 150)
     }
@@ -215,6 +239,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     }
 
     override fun onMoveToBackground() {
-        pause()
+        if (activeCallHandler.getActiveCallsLiveData().value.isNullOrEmpty()) {
+            pause()
+        }
     }
 }

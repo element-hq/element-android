@@ -24,9 +24,10 @@
             android:importantForAccessibility="no"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_security_key_24dp"
-            android:tint="?riotx_text_primary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?riotx_text_primary"
+            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/bootstrapTitleText"

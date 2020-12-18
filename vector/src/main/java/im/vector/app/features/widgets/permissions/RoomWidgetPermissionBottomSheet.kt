@@ -16,7 +16,6 @@
 package im.vector.app.features.widgets.permissions
 
 import android.content.DialogInterface
-import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.BulletSpan
@@ -24,7 +23,6 @@ import butterknife.OnClick
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.api.util.toMatrixItem
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.withArgs
@@ -32,6 +30,7 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.widgets.WidgetArgs
 import kotlinx.android.synthetic.main.bottom_sheet_room_widget_permission.*
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
@@ -71,18 +70,7 @@ class RoomWidgetPermissionBottomSheet : VectorBaseBottomSheetDialogFragment() {
         permissionData.permissionsList.forEach {
             infoBuilder.append("\n")
             val bulletPoint = getString(it)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                infoBuilder.append(bulletPoint, BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            } else {
-                val start = infoBuilder.length
-                infoBuilder.append(bulletPoint)
-                infoBuilder.setSpan(
-                        BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()),
-                        start,
-                        bulletPoint.length,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-            }
+            infoBuilder.append(bulletPoint, BulletSpan(resources.getDimension(R.dimen.quote_gap).toInt()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         infoBuilder.append("\n")
         widgetPermissionSharedInfo.text = infoBuilder

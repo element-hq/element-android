@@ -29,8 +29,10 @@ import com.beautycoder.pflockscreen.fragments.PFLockScreenFragment
 import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,7 +43,8 @@ data class PinArgs(
 ) : Parcelable
 
 class PinFragment @Inject constructor(
-        private val pinCodeStore: PinCodeStore
+        private val pinCodeStore: PinCodeStore,
+        private val vectorPreferences: VectorPreferences
 ) : VectorBaseFragment() {
 
     private val fragmentArgs: PinArgs by args()
@@ -52,45 +55,9 @@ class PinFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         when (fragmentArgs.pinMode) {
             PinMode.CREATE -> showCreateFragment()
-            PinMode.DELETE -> showDeleteFragment()
             PinMode.AUTH   -> showAuthFragment()
+            PinMode.MODIFY -> showCreateFragment() // No need to create another function for now because texts are generic
         }
-    }
-
-    private fun showDeleteFragment() {
-        val encodedPin = pinCodeStore.getEncodedPin() ?: return
-        val authFragment = PFLockScreenFragment()
-        val builder = PFFLockScreenConfiguration.Builder(requireContext())
-                .setUseFingerprint(true)
-                .setTitle(getString(R.string.auth_pin_confirm_to_disable_title))
-                .setClearCodeOnError(true)
-                .setMode(PFFLockScreenConfiguration.MODE_AUTH)
-        authFragment.setConfiguration(builder.build())
-        authFragment.setEncodedPinCode(encodedPin)
-        authFragment.setLoginListener(object : PFLockScreenFragment.OnPFLockScreenLoginListener {
-            override fun onPinLoginFailed() {
-            }
-
-            override fun onFingerprintSuccessful() {
-                lifecycleScope.launch {
-                    pinCodeStore.deleteEncodedPin()
-                    vectorBaseActivity.setResult(Activity.RESULT_OK)
-                    vectorBaseActivity.finish()
-                }
-            }
-
-            override fun onFingerprintLoginFailed() {
-            }
-
-            override fun onCodeInputSuccessful() {
-                lifecycleScope.launch {
-                    pinCodeStore.deleteEncodedPin()
-                    vectorBaseActivity.setResult(Activity.RESULT_OK)
-                    vectorBaseActivity.finish()
-                }
-            }
-        })
-        replaceFragment(R.id.pinFragmentContainer, authFragment)
     }
 
     private fun showCreateFragment() {
@@ -107,6 +74,10 @@ class PinFragment @Inject constructor(
                 Toast.makeText(requireContext(), getString(R.string.create_pin_confirm_failure), Toast.LENGTH_SHORT).show()
             }
 
+            override fun onPinCodeEnteredFirst(pinCode: String?): Boolean {
+                return false
+            }
+
             override fun onCodeCreated(encodedCode: String) {
                 lifecycleScope.launch {
                     pinCodeStore.storeEncodedPin(encodedCode)
@@ -121,8 +92,11 @@ class PinFragment @Inject constructor(
     private fun showAuthFragment() {
         val encodedPin = pinCodeStore.getEncodedPin() ?: return
         val authFragment = PFLockScreenFragment()
+        val canUseBiometrics = pinCodeStore.getRemainingBiometricsAttemptsNumber() > 0
         val builder = PFFLockScreenConfiguration.Builder(requireContext())
-                .setUseFingerprint(true)
+                .setAutoShowBiometric(true)
+                .setUseBiometric(vectorPreferences.useBiometricsToUnlock() && canUseBiometrics)
+                .setAutoShowBiometric(canUseBiometrics)
                 .setTitle(getString(R.string.auth_pin_title))
                 .setLeftButton(getString(R.string.auth_pin_forgot))
                 .setClearCodeOnError(true)
@@ -134,22 +108,46 @@ class PinFragment @Inject constructor(
         }
         authFragment.setLoginListener(object : PFLockScreenFragment.OnPFLockScreenLoginListener {
             override fun onPinLoginFailed() {
+                onWrongPin()
             }
 
-            override fun onFingerprintSuccessful() {
+            override fun onBiometricAuthSuccessful() {
+                pinCodeStore.resetCounters()
                 vectorBaseActivity.setResult(Activity.RESULT_OK)
                 vectorBaseActivity.finish()
             }
 
-            override fun onFingerprintLoginFailed() {
+            override fun onBiometricAuthLoginFailed() {
+                val remainingAttempts = pinCodeStore.onWrongBiometrics()
+                if (remainingAttempts <= 0) {
+                    // Disable Biometrics
+                    builder.setUseBiometric(false)
+                    authFragment.setConfiguration(builder.build())
+                }
             }
 
             override fun onCodeInputSuccessful() {
+                pinCodeStore.resetCounters()
                 vectorBaseActivity.setResult(Activity.RESULT_OK)
                 vectorBaseActivity.finish()
             }
         })
         replaceFragment(R.id.pinFragmentContainer, authFragment)
+    }
+
+    private fun onWrongPin() {
+        val remainingAttempts = pinCodeStore.onWrongPin()
+        when {
+            remainingAttempts > 1  ->
+                requireActivity().toast(resources.getQuantityString(R.plurals.wrong_pin_message_remaining_attempts, remainingAttempts, remainingAttempts))
+            remainingAttempts == 1 ->
+                requireActivity().toast(R.string.wrong_pin_message_last_remaining_attempt)
+            else                   -> {
+                requireActivity().toast(R.string.too_many_pin_failures)
+                // Logout
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCredentials = true))
+            }
+        }
     }
 
     private fun displayForgotPinWarningDialog() {

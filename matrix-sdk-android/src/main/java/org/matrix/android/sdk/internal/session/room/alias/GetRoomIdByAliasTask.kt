@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,18 +17,19 @@
 package org.matrix.android.sdk.internal.session.room.alias
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
+import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.findByAlias
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.network.executeRequest
-import org.matrix.android.sdk.internal.session.room.RoomAPI
+import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
 import org.matrix.android.sdk.internal.task.Task
-import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
-internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Optional<String>> {
+internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Optional<RoomAliasDescription>> {
     data class Params(
             val roomAlias: String,
             val searchOnServer: Boolean
@@ -38,23 +38,25 @@ internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Opti
 
 internal class DefaultGetRoomIdByAliasTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
-        private val roomAPI: RoomAPI,
+        private val directoryAPI: DirectoryAPI,
         private val eventBus: EventBus
 ) : GetRoomIdByAliasTask {
 
-    override suspend fun execute(params: GetRoomIdByAliasTask.Params): Optional<String> {
-        var roomId = Realm.getInstance(monarchy.realmConfiguration).use {
+    override suspend fun execute(params: GetRoomIdByAliasTask.Params): Optional<RoomAliasDescription> {
+        val roomId = Realm.getInstance(monarchy.realmConfiguration).use {
             RoomSummaryEntity.findByAlias(it, params.roomAlias)?.roomId
         }
         return if (roomId != null) {
-            Optional.from(roomId)
+            Optional.from(RoomAliasDescription(roomId))
         } else if (!params.searchOnServer) {
-            Optional.from<String>(null)
+            Optional.from(null)
         } else {
-            roomId = executeRequest<RoomAliasDescription>(eventBus) {
-                apiCall = roomAPI.getRoomIdByAlias(params.roomAlias)
-            }.roomId
-            Optional.from(roomId)
+            val description  = tryOrNull("## Failed to get roomId from alias") {
+                executeRequest<RoomAliasDescription>(eventBus) {
+                    apiCall = directoryAPI.getRoomIdByAlias(params.roomAlias)
+                }
+            }
+            Optional.from(description)
         }
     }
 }

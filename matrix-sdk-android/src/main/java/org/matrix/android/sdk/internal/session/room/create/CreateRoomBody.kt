@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,8 +74,8 @@ internal data class CreateRoomBody(
         val invite3pids: List<ThreePidInviteBody>?,
 
         /**
-         * Extra keys to be added to the content of the m.room.create.
-         * The server will clobber the following keys: creator.
+         * Extra keys, such as m.federate, to be added to the content of the m.room.create event.
+         * The server will clobber the following keys: creator, room_version.
          * Future versions of the specification may allow the server to clobber other keys.
          */
         @Json(name = "creation_content")

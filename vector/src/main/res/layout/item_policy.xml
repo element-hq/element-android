@@ -54,9 +54,10 @@
         android:paddingEnd="0dp"
         android:rotationY="@integer/rtl_mirror_flip"
         android:src="@drawable/ic_material_chevron_right_black"
-        android:tint="?riotx_android_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?riotx_android_secondary"
+        tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

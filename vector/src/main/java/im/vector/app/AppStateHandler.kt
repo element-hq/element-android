@@ -20,9 +20,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import arrow.core.Option
-import org.matrix.android.sdk.api.session.group.model.GroupSummary
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import im.vector.app.features.grouplist.ALL_COMMUNITIES_GROUP_ID
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.home.HomeRoomListDataSource
@@ -32,6 +29,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.addTo
+import org.matrix.android.sdk.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

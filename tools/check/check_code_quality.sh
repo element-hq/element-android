@@ -76,13 +76,21 @@ ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt \
 resultForbiddenStringInCode=$?
 
 echo
+echo "Search for forbidden patterns specific for SDK code..."
+
+${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code_sdk.txt \
+    ./matrix-sdk-android/src \
+    ./matrix-sdk-android-rx/src
+
+resultForbiddenStringInCodeSdk=$?
+
+echo
 echo "Search for forbidden patterns in resources..."
 
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_resources.txt \
     ./vector/src/main/res/color \
     ./vector/src/main/res/layout \
     ./vector/src/main/res/values \
-    ./vector/src/main/res/values-v21 \
     ./vector/src/main/res/xml
 
 resultForbiddenStringInResource=$?
@@ -148,7 +156,7 @@ fi
 
 echo
 
-if [[ ${resultNbOfDrawable} -eq 0 ]] && [[ ${resultForbiddenStringInCode} -eq 0 ]] && [[ ${resultForbiddenStringInResource} -eq 0 ]] && [[ ${resultLongFiles} -eq 0 ]] && [[ ${resultPngInDrawable} -eq 0 ]]; then
+if [[ ${resultNbOfDrawable} -eq 0 ]] && [[ ${resultForbiddenStringInCode} -eq 0 ]] && [[ ${resultForbiddenStringInCodeSdk} -eq 0 ]] && [[ ${resultForbiddenStringInResource} -eq 0 ]] && [[ ${resultLongFiles} -eq 0 ]] && [[ ${resultPngInDrawable} -eq 0 ]]; then
    echo "MAIN OK"
 else
    echo "❌ MAIN ERROR"

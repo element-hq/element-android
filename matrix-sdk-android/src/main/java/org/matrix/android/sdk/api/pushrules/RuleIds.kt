@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,4 +44,6 @@ object RuleIds {
 
     // Not documented
     const val RULE_ID_FALLBACK = ".m.rule.fallback"
+
+    const val RULE_ID_REACTION = ".m.rule.reaction"
 }

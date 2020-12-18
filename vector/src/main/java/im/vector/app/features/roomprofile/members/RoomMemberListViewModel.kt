@@ -22,7 +22,14 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.NoOpMatrixCallback
+import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.platform.EmptyViewEvents
+import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -39,14 +46,6 @@ import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.mapOptional
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
-import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.EmptyViewEvents
-import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.BiFunction
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomMemberListViewState,
@@ -188,6 +187,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
     override fun handle(action: RoomMemberListAction) {
         when (action) {
             is RoomMemberListAction.RevokeThreePidInvite -> handleRevokeThreePidInvite(action)
+            is RoomMemberListAction.FilterMemberList     -> handleFilterMemberList(action)
         }.exhaustive
     }
 
@@ -196,8 +196,15 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
             room.sendStateEvent(
                     eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                     stateKey = action.stateKey,
-                    body = emptyMap(),
-                    callback = NoOpMatrixCallback()
+                    body = emptyMap()
+            )
+        }
+    }
+
+    private fun handleFilterMemberList(action: RoomMemberListAction.FilterMemberList) {
+        setState {
+            copy(
+                    filter = action.searchTerm
             )
         }
     }

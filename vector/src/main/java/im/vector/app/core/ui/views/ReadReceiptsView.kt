@@ -23,7 +23,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
-import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.toMatrixItem
@@ -98,7 +97,12 @@ class ReadReceiptsView @JvmOverloads constructor(
                     }
                 else ->
                     if (displayNames.size >= 2) {
-                        context.getString(R.string.two_and_some_others_read, displayNames[0], displayNames[1], (readReceipts.size - 2))
+                        val qty = readReceipts.size - 2
+                        context.resources.getQuantityString(R.plurals.two_and_some_others_read,
+                                qty,
+                                displayNames[0],
+                                displayNames[1],
+                                qty)
                     } else {
                         context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
                     }
@@ -108,9 +112,9 @@ class ReadReceiptsView @JvmOverloads constructor(
         }
     }
 
-    fun unbind() {
+    fun unbind(avatarRenderer: AvatarRenderer?) {
         receiptAvatars.forEach {
-            GlideApp.with(context.applicationContext).clear(it)
+            avatarRenderer?.clear(it)
         }
         isVisible = false
     }

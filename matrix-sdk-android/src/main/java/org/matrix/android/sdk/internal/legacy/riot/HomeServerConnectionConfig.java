@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -182,7 +181,7 @@ public class HomeServerConnectionConfig {
                 if (!TextUtils.isEmpty(jitsiServerUrl)) {
                     // add trailing "/"
                     if (!jitsiServerUrl.endsWith("/")) {
-                        jitsiServerUrl =jitsiServerUrl + "/";
+                        jitsiServerUrl = jitsiServerUrl + "/";
                     }
 
                     Timber.d("Overriding jitsi server url to " + jitsiServerUrl);

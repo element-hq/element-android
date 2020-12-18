@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -100,7 +99,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         return rules.firstOrNull { rule ->
             // All conditions must hold true for an event in order to apply the action for the event.
             rule.enabled && rule.conditions?.all {
-                it.asExecutableCondition()?.isSatisfied(event, conditionResolver) ?: false
+                it.asExecutableCondition(rule)?.isSatisfied(event, conditionResolver) ?: false
             } ?: false
         }
     }

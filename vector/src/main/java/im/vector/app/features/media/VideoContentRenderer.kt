@@ -24,12 +24,13 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import im.vector.app.core.utils.isLocalFile
 import kotlinx.android.parcel.Parcelize
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import timber.log.Timber
 import java.io.File
+import java.net.URLEncoder
 import javax.inject.Inject
 
 class VideoContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
@@ -42,7 +43,9 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
             override val mimeType: String?,
             override val url: String?,
             override val elementToDecrypt: ElementToDecrypt?,
-            val thumbnailMediaData: ImageContentRenderer.Data
+            val thumbnailMediaData: ImageContentRenderer.Data,
+            // If true will load non mxc url, be careful to set it only for video sent by you
+            override val allowNonMxcUrls: Boolean = false
     ) : AttachmentData
 
     fun render(data: Data,
@@ -60,14 +63,18 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 loadingView.isVisible = false
                 errorView.isVisible = true
                 errorView.setText(R.string.unknown_error)
+            } else if (data.url.isLocalFile() && data.allowNonMxcUrls) {
+                thumbnailView.isVisible = false
+                loadingView.isVisible = false
+                videoView.isVisible = true
+                videoView.setVideoPath(URLEncoder.encode(data.url, Charsets.US_ASCII.displayName()))
+                videoView.start()
             } else {
                 thumbnailView.isVisible = true
                 loadingView.isVisible = true
 
                 activeSessionHolder.getActiveSession().fileService()
                         .downloadFile(
-                                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
-                                id = data.eventId,
                                 fileName = data.filename,
                                 mimeType = data.mimeType,
                                 url = data.url,
@@ -91,6 +98,7 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
             }
         } else {
             val resolvedUrl = contentUrlResolver.resolveFullSize(data.url)
+                    ?: data.url?.takeIf { data.url.isLocalFile() && data.allowNonMxcUrls }
 
             if (resolvedUrl == null) {
                 thumbnailView.isVisible = false
@@ -105,8 +113,6 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
 
                 activeSessionHolder.getActiveSession().fileService()
                         .downloadFile(
-                                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
-                                id = data.eventId,
                                 fileName = data.filename,
                                 mimeType = data.mimeType,
                                 url = data.url,

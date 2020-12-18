@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +18,7 @@ package org.matrix.android.sdk.internal.session.download
 
 import android.os.Handler
 import android.os.Looper
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
@@ -61,26 +60,30 @@ internal class DefaultContentDownloadStateTracker @Inject constructor() : Progre
 //    private fun URL.toKey() = toString()
 
     override fun update(url: String, bytesRead: Long, contentLength: Long, done: Boolean) {
-        Timber.v("## DL Progress url:$url read:$bytesRead total:$contentLength done:$done")
-        if (done) {
-            updateState(url, ContentDownloadStateTracker.State.Success)
-        } else {
-            updateState(url, ContentDownloadStateTracker.State.Downloading(bytesRead, contentLength, contentLength == -1L))
+        mainHandler.post {
+            Timber.v("## DL Progress url:$url read:$bytesRead total:$contentLength done:$done")
+            if (done) {
+                updateState(url, ContentDownloadStateTracker.State.Success)
+            } else {
+                updateState(url, ContentDownloadStateTracker.State.Downloading(bytesRead, contentLength, contentLength == -1L))
+            }
         }
     }
 
     override fun error(url: String, errorCode: Int) {
-        Timber.v("## DL Progress Error code:$errorCode")
-        updateState(url, ContentDownloadStateTracker.State.Failure(errorCode))
-        listeners[url]?.forEach {
-            tryThis { it.onDownloadStateUpdate(ContentDownloadStateTracker.State.Failure(errorCode)) }
+        mainHandler.post {
+            Timber.v("## DL Progress Error code:$errorCode")
+            updateState(url, ContentDownloadStateTracker.State.Failure(errorCode))
+            listeners[url]?.forEach {
+                tryOrNull { it.onDownloadStateUpdate(ContentDownloadStateTracker.State.Failure(errorCode)) }
+            }
         }
     }
 
     private fun updateState(url: String, state: ContentDownloadStateTracker.State) {
         states[url] = state
         listeners[url]?.forEach {
-            tryThis { it.onDownloadStateUpdate(state) }
+            tryOrNull { it.onDownloadStateUpdate(state) }
         }
     }
 }

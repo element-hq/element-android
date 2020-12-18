@@ -16,27 +16,35 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
-import androidx.fragment.app.FragmentActivity
-import com.airbnb.mvrx.ActivityViewModelContext
+import androidx.core.net.toFile
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.app.core.platform.EmptyViewEvents
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.roomdirectory.RoomDirectoryActivity
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.raw.wellknown.isE2EByDefault
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: CreateRoomViewState,
-                                                      private val session: Session
-) : VectorViewModel<CreateRoomViewState, CreateRoomAction, EmptyViewEvents>(initialState) {
+                                                      private val session: Session,
+                                                      private val rawService: RawService
+) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -44,11 +52,34 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
     }
 
     init {
+        initHomeServerName()
+        initAdminE2eByDefault()
+    }
+
+    private fun initHomeServerName() {
         setState {
             copy(
-                    isEncrypted = !this.isPublic && session.getHomeServerCapabilities().adminE2EByDefault,
-                    hsAdminHasDisabledE2E = !session.getHomeServerCapabilities().adminE2EByDefault
+                    homeServerName = session.myUserId.substringAfter(":")
             )
+        }
+    }
+
+    private var adminE2EByDefault = true
+
+    private fun initAdminE2eByDefault() {
+        viewModelScope.launch(Dispatchers.IO) {
+            adminE2EByDefault = tryOrNull {
+                rawService.getElementWellknown(session.myUserId)
+                        ?.isE2EByDefault()
+                        ?: true
+            } ?: true
+
+            setState {
+                copy(
+                        isEncrypted = roomType is CreateRoomViewState.RoomType.Private && adminE2EByDefault,
+                        hsAdminHasDisabledE2E = !adminE2EByDefault
+                )
+            }
         }
     }
 
@@ -56,36 +87,93 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: CreateRoomViewState): CreateRoomViewModel? {
-            val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()
+            val fragment: CreateRoomFragment = (viewModelContext as FragmentViewModelContext).fragment()
 
-            return when (activity) {
-                is CreateRoomActivity    -> activity.createRoomViewModelFactory.create(state)
-                is RoomDirectoryActivity -> activity.createRoomViewModelFactory.create(state)
-                else                     -> error("Wrong activity")
-            }
+            return fragment.createRoomViewModelFactory.create(state)
         }
     }
 
     override fun handle(action: CreateRoomAction) {
         when (action) {
-            is CreateRoomAction.SetName              -> setName(action)
-            is CreateRoomAction.SetIsPublic          -> setIsPublic(action)
-            is CreateRoomAction.SetIsInRoomDirectory -> setIsInRoomDirectory(action)
-            is CreateRoomAction.SetIsEncrypted       -> setIsEncrypted(action)
-            is CreateRoomAction.Create               -> doCreateRoom()
+            is CreateRoomAction.SetAvatar             -> setAvatar(action)
+            is CreateRoomAction.SetName               -> setName(action)
+            is CreateRoomAction.SetTopic              -> setTopic(action)
+            is CreateRoomAction.SetIsPublic           -> setIsPublic(action)
+            is CreateRoomAction.SetRoomAliasLocalPart -> setRoomAliasLocalPart(action)
+            is CreateRoomAction.SetIsEncrypted        -> setIsEncrypted(action)
+            is CreateRoomAction.Create                -> doCreateRoom()
+            CreateRoomAction.Reset                    -> doReset()
+            CreateRoomAction.ToggleShowAdvanced       -> toggleShowAdvanced()
+            is CreateRoomAction.DisableFederation     -> disableFederation(action)
+        }.exhaustive
+    }
+
+    private fun disableFederation(action: CreateRoomAction.DisableFederation) {
+        setState {
+            copy(disableFederation = action.disableFederation)
         }
     }
 
-    private fun setName(action: CreateRoomAction.SetName) = setState { copy(roomName = action.name) }
-
-    private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState {
-        copy(
-                isPublic = action.isPublic,
-                isEncrypted = !action.isPublic && session.getHomeServerCapabilities().adminE2EByDefault
-        )
+    private fun toggleShowAdvanced() {
+        setState {
+            copy(
+                    showAdvanced = !showAdvanced,
+                    // Reset to false if advanced is hidden
+                    disableFederation = disableFederation && !showAdvanced
+            )
+        }
     }
 
-    private fun setIsInRoomDirectory(action: CreateRoomAction.SetIsInRoomDirectory) = setState { copy(isInRoomDirectory = action.isInRoomDirectory) }
+    private fun doReset() {
+        setState {
+            // Delete temporary file with the avatar
+            avatarUri?.let { tryOrNull { it.toFile().delete() } }
+
+            CreateRoomViewState(
+                    isEncrypted = adminE2EByDefault,
+                    hsAdminHasDisabledE2E = !adminE2EByDefault
+            )
+        }
+
+        _viewEvents.post(CreateRoomViewEvents.Quit)
+    }
+
+    private fun setAvatar(action: CreateRoomAction.SetAvatar) = setState { copy(avatarUri = action.imageUri) }
+
+    private fun setName(action: CreateRoomAction.SetName) = setState { copy(roomName = action.name) }
+
+    private fun setTopic(action: CreateRoomAction.SetTopic) = setState { copy(roomTopic = action.topic) }
+
+    private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState {
+        if (action.isPublic) {
+            copy(
+                    roomType = CreateRoomViewState.RoomType.Public(""),
+                    // Reset any error in the form about alias
+                    asyncCreateRoomRequest = Uninitialized,
+                    isEncrypted = false
+            )
+        } else {
+            copy(
+                    roomType = CreateRoomViewState.RoomType.Private,
+                    isEncrypted = adminE2EByDefault
+            )
+        }
+    }
+
+    private fun setRoomAliasLocalPart(action: CreateRoomAction.SetRoomAliasLocalPart) {
+        withState { state ->
+            if (state.roomType is CreateRoomViewState.RoomType.Public) {
+                setState {
+                    copy(
+                            roomType = CreateRoomViewState.RoomType.Public(action.aliasLocalPart),
+                            // Reset any error in the form about alias
+                            asyncCreateRoomRequest = Uninitialized
+                    )
+                }
+            }
+        }
+        // Else ignore
+    }
 
     private fun setIsEncrypted(action: CreateRoomAction.SetIsEncrypted) = setState { copy(isEncrypted = action.isEncrypted) }
 
@@ -101,10 +189,25 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
         val createRoomParams = CreateRoomParams()
                 .apply {
                     name = state.roomName.takeIf { it.isNotBlank() }
-                    // Directory visibility
-                    visibility = if (state.isInRoomDirectory) RoomDirectoryVisibility.PUBLIC else RoomDirectoryVisibility.PRIVATE
-                    // Public room
-                    preset = if (state.isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
+                    topic = state.roomTopic.takeIf { it.isNotBlank() }
+                    avatarUri = state.avatarUri
+                    when (state.roomType) {
+                        is CreateRoomViewState.RoomType.Public  -> {
+                            // Directory visibility
+                            visibility = RoomDirectoryVisibility.PUBLIC
+                            // Preset
+                            preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+                            roomAliasName = state.roomType.aliasLocalPart
+                        }
+                        is CreateRoomViewState.RoomType.Private -> {
+                            // Directory visibility
+                            visibility = RoomDirectoryVisibility.PRIVATE
+                            // Preset
+                            preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
+                        }
+                    }.exhaustive
+                    // Disabling federation
+                    disableFederation = state.disableFederation
 
                     // Encryption
                     if (state.isEncrypted) {
@@ -123,6 +226,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
                 setState {
                     copy(asyncCreateRoomRequest = Fail(failure))
                 }
+                _viewEvents.post(CreateRoomViewEvents.Failure(failure))
             }
         })
     }

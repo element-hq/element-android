@@ -15,18 +15,20 @@
  */
 package im.vector.app.features.settings.account.deactivation
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.failure.isInvalidPassword
-import org.matrix.android.sdk.api.session.Session
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.session.Session
+import java.lang.Exception
 
 data class DeactivateAccountViewState(
         val passwordShown: Boolean = false
@@ -67,19 +69,20 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
 
         _viewEvents.post(DeactivateAccountViewEvents.Loading())
 
-        session.deactivateAccount(action.password, action.eraseAllData, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _viewEvents.post(DeactivateAccountViewEvents.Done)
-            }
-
-            override fun onFailure(failure: Throwable) {
+        viewModelScope.launch {
+            val event = try {
+                session.deactivateAccount(action.password, action.eraseAllData)
+                DeactivateAccountViewEvents.Done
+            } catch (failure: Exception) {
                 if (failure.isInvalidPassword()) {
-                    _viewEvents.post(DeactivateAccountViewEvents.InvalidPassword)
+                    DeactivateAccountViewEvents.InvalidPassword
                 } else {
-                    _viewEvents.post(DeactivateAccountViewEvents.OtherFailure(failure))
+                    DeactivateAccountViewEvents.OtherFailure(failure)
                 }
             }
-        })
+
+            _viewEvents.post(event)
+        }
     }
 
     companion object : MvRxViewModelFactory<DeactivateAccountViewModel, DeactivateAccountViewState> {

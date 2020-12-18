@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,12 +16,11 @@
 
 package org.matrix.android.sdk.internal.session.room.membership
 
-import android.content.Context
+import io.realm.Realm
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.RoomAliasesContent
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomNameContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
@@ -34,14 +32,15 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.UserId
-import io.realm.Realm
+import org.matrix.android.sdk.internal.util.StringProvider
 import javax.inject.Inject
 
 /**
  * This class computes room display name
  */
-internal class RoomDisplayNameResolver @Inject constructor(private val context: Context,
-                                                           @UserId private val userId: String
+internal class RoomDisplayNameResolver @Inject constructor(
+        private val stringProvider: StringProvider,
+        @UserId private val userId: String
 ) {
 
     /**
@@ -71,12 +70,6 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
             return name
         }
 
-        val aliases = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ALIASES, stateKey = "")?.root
-        name = ContentMapper.map(aliases?.content).toModel<RoomAliasesContent>()?.aliases?.firstOrNull()
-        if (!name.isNullOrEmpty()) {
-            return name
-        }
-
         val roomMembers = RoomMemberHelper(realm, roomId)
         val activeMembers = roomMembers.queryActiveRoomMembersEvent().findAll()
 
@@ -89,10 +82,12 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
                         .findFirst()
                         ?.displayName
             } else {
-                context.getString(R.string.room_displayname_room_invite)
+                stringProvider.getString(R.string.room_displayname_room_invite)
             }
         } else if (roomEntity?.membership == Membership.JOIN) {
             val roomSummary = RoomSummaryEntity.where(realm, roomId).findFirst()
+            val invitedCount = roomSummary?.invitedMembersCount ?: 0
+            val joinedCount = roomSummary?.joinedMembersCount ?: 0
             val otherMembersSubset: List<RoomMemberSummaryEntity> = if (roomSummary?.heroes?.isNotEmpty() == true) {
                 roomSummary.heroes.mapNotNull { userId ->
                     roomMembers.getLastRoomMember(userId)?.takeIf {
@@ -102,22 +97,49 @@ internal class RoomDisplayNameResolver @Inject constructor(private val context: 
             } else {
                 activeMembers.where()
                         .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
-                        .limit(3)
+                        .limit(5)
                         .findAll()
                         .createSnapshot()
             }
             val otherMembersCount = otherMembersSubset.count()
             name = when (otherMembersCount) {
-                0    -> context.getString(R.string.room_displayname_empty_room)
+                0    -> {
+                    stringProvider.getString(R.string.room_displayname_empty_room)
+                    // TODO (was xx and yyy) ...
+                }
                 1    -> resolveRoomMemberName(otherMembersSubset[0], roomMembers)
-                2    -> context.getString(R.string.room_displayname_two_members,
-                        resolveRoomMemberName(otherMembersSubset[0], roomMembers),
-                        resolveRoomMemberName(otherMembersSubset[1], roomMembers)
-                )
-                else -> context.resources.getQuantityString(R.plurals.room_displayname_three_and_more_members,
-                        roomMembers.getNumberOfJoinedMembers() - 1,
-                        resolveRoomMemberName(otherMembersSubset[0], roomMembers),
-                        roomMembers.getNumberOfJoinedMembers() - 1)
+                2    -> {
+                    stringProvider.getString(R.string.room_displayname_two_members,
+                            resolveRoomMemberName(otherMembersSubset[0], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[1], roomMembers)
+                    )
+                }
+                3    -> {
+                    stringProvider.getString(R.string.room_displayname_3_members,
+                            resolveRoomMemberName(otherMembersSubset[0], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[1], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[2], roomMembers)
+                    )
+                }
+                4    -> {
+                    stringProvider.getString(R.string.room_displayname_4_members,
+                            resolveRoomMemberName(otherMembersSubset[0], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[1], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[2], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[3], roomMembers)
+                    )
+                }
+                else -> {
+                    val remainingCount = invitedCount + joinedCount - otherMembersCount + 1
+                    stringProvider.getQuantityString(
+                            R.plurals.room_displayname_four_and_more_members,
+                            remainingCount,
+                            resolveRoomMemberName(otherMembersSubset[0], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[1], roomMembers),
+                            resolveRoomMemberName(otherMembersSubset[2], roomMembers),
+                            remainingCount
+                    )
+                }
             }
         }
         return name ?: roomId

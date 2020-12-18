@@ -21,9 +21,9 @@ import android.os.Parcelable
 import android.view.View
 import com.airbnb.mvrx.args
 import im.vector.app.R
-import org.matrix.android.sdk.api.failure.is401
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_login_wait_for_email.*
+import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
 
 @Parcelize

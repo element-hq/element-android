@@ -17,6 +17,7 @@
 package im.vector.app.features.settings
 
 import im.vector.app.R
+import im.vector.app.core.preference.VectorPreference
 import javax.inject.Inject
 
 class VectorSettingsRootFragment @Inject constructor() : VectorSettingsBaseFragment() {
@@ -25,6 +26,12 @@ class VectorSettingsRootFragment @Inject constructor() : VectorSettingsBaseFragm
     override val preferenceXmlRes = R.xml.vector_settings_root
 
     override fun bindPref() {
-        // Nothing to do
+        tintIcons()
+    }
+
+    private fun tintIcons() {
+        for (i in 0 until preferenceScreen.preferenceCount) {
+            (preferenceScreen.getPreference(i) as? VectorPreference)?.let { it.tintIcon = true }
+        }
     }
 }

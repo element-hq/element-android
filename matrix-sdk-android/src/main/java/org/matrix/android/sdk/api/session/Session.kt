@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +18,7 @@ package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.pushrules.PushRuleService
@@ -35,10 +35,13 @@ import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.api.session.media.MediaService
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
+import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
@@ -48,7 +51,6 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
-import okhttp3.OkHttpClient
 
 /**
  * This interface defines interactions with a session.
@@ -109,7 +111,7 @@ interface Session :
      * This does not work in doze mode :/
      * If battery optimization is on it can work in app standby but that's all :/
      */
-    fun startAutomaticBackgroundSync(repeatDelay: Long = 30_000L)
+    fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long)
 
     fun stopAnyBackgroundSync()
 
@@ -181,6 +183,11 @@ interface Session :
     fun widgetService(): WidgetService
 
     /**
+     * Returns the media service associated with the session
+     */
+    fun mediaService(): MediaService
+
+    /**
      * Returns the integration manager service associated with the session
      */
     fun integrationManagerService(): IntegrationManagerService
@@ -194,6 +201,16 @@ interface Session :
      * Returns the file download service associated with the session
      */
     fun fileService(): FileService
+
+    /**
+     * Returns the permalink service associated with the session
+     */
+    fun permalinkService(): PermalinkService
+
+    /**
+     * Returns the search service associated with the session
+     */
+    fun searchService(): SearchService
 
     /**
      * Add a listener to the session.
@@ -227,4 +244,9 @@ interface Session :
     }
 
     val sharedSecretStorageService: SharedSecretStorageService
+
+    /**
+     * Maintenance API, allows to print outs info on DB size to logcat
+     */
+    fun logDbUsageInfo()
 }

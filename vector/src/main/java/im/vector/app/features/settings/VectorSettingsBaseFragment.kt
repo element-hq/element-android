@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.preference.PreferenceFragmentCompat
-import org.matrix.android.sdk.api.session.Session
 import im.vector.app.R
 import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.HasScreenInjector
@@ -29,6 +28,9 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
 abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScreenInjector {
@@ -68,15 +70,36 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
 
     override fun onResume() {
         super.onResume()
-        Timber.i("onResume Fragment ${this.javaClass.simpleName}")
+        Timber.i("onResume Fragment ${javaClass.simpleName}")
         vectorActivity.supportActionBar?.setTitle(titleRes)
         // find the view from parent activity
         mLoadingView = vectorActivity.findViewById(R.id.vector_settings_spinner_views)
     }
 
+    @CallSuper
+    override fun onDestroyView() {
+        super.onDestroyView()
+        uiDisposables.clear()
+    }
+
+    override fun onDestroy() {
+        uiDisposables.dispose()
+        super.onDestroy()
+    }
+
     abstract fun bindPref()
 
     abstract var titleRes: Int
+
+    /* ==========================================================================================
+     * Disposable
+     * ========================================================================================== */
+
+    private val uiDisposables = CompositeDisposable()
+
+    protected fun Disposable.disposeOnDestroyView() {
+        uiDisposables.add(this)
+    }
 
     /* ==========================================================================================
      * Protected

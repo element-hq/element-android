@@ -26,11 +26,11 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import org.matrix.android.sdk.api.pushrules.getActions
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.features.notifications.toNotificationAction
+import org.matrix.android.sdk.api.pushrules.getActions
+import org.matrix.android.sdk.api.pushrules.rest.PushRule
 
 @EpoxyModelClass(layout = R.layout.item_pushrule_raw)
 abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
@@ -68,7 +68,7 @@ abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
             val description = StringBuffer()
             pushRule.conditions?.forEachIndexed { i, condition ->
                 if (i > 0) description.append("\n")
-                description.append(condition.asExecutableCondition()?.technicalDescription()
+                description.append(condition.asExecutableCondition(pushRule)?.technicalDescription()
                         ?: "UNSUPPORTED")
             }
             if (description.isBlank()) {

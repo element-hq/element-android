@@ -28,14 +28,16 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
-import androidx.transition.AutoTransition
+import androidx.transition.ChangeBounds
+import androidx.transition.Fade
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
+import androidx.transition.TransitionSet
 import butterknife.BindView
 import butterknife.ButterKnife
 import im.vector.app.R
+import kotlinx.android.synthetic.main.composer_layout.view.*
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
-import kotlinx.android.synthetic.main.merge_composer_layout.view.*
 
 /**
  * Encapsulate the timeline composer UX.
@@ -54,18 +56,25 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     @BindView(R.id.composer_related_message_sender)
     lateinit var composerRelatedMessageTitle: TextView
+
     @BindView(R.id.composer_related_message_preview)
     lateinit var composerRelatedMessageContent: TextView
+
     @BindView(R.id.composer_related_message_avatar_view)
     lateinit var composerRelatedMessageAvatar: ImageView
+
     @BindView(R.id.composer_related_message_action_image)
     lateinit var composerRelatedMessageActionIcon: ImageView
+
     @BindView(R.id.composer_related_message_close)
     lateinit var composerRelatedMessageCloseButton: ImageButton
+
     @BindView(R.id.composerEditText)
     lateinit var composerEditText: ComposerEditText
-    @BindView(R.id.composer_avatar_view)
-    lateinit var composerAvatarImageView: ImageView
+
+    @BindView(R.id.composer_emoji)
+    lateinit var composerEmojiButton: ImageButton
+
     @BindView(R.id.composer_shield)
     lateinit var composerShieldImageView: ImageView
 
@@ -77,7 +86,7 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
         get() = composerEditText.text
 
     init {
-        inflate(context, R.layout.merge_composer_layout, this)
+        inflate(context, R.layout.composer_layout, this)
         ButterKnife.bind(this)
         collapse(false)
         composerEditText.callback = object : ComposerEditText.Callback {
@@ -101,46 +110,42 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     fun collapse(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
-        if (currentConstraintSetId == R.layout.constraint_set_composer_layout_compact) {
+        if (currentConstraintSetId == R.layout.composer_layout_constraint_set_compact) {
             // ignore we good
             return
         }
-        currentConstraintSetId = R.layout.constraint_set_composer_layout_compact
+        currentConstraintSetId = R.layout.composer_layout_constraint_set_compact
+        applyNewConstraintSet(animate, transitionComplete)
+    }
+
+    fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
+        if (currentConstraintSetId == R.layout.composer_layout_constraint_set_expanded) {
+            // ignore we good
+            return
+        }
+        currentConstraintSetId = R.layout.composer_layout_constraint_set_expanded
+        applyNewConstraintSet(animate, transitionComplete)
+    }
+
+    private fun applyNewConstraintSet(animate: Boolean, transitionComplete: (() -> Unit)?) {
         if (animate) {
-            val transition = AutoTransition()
-            transition.duration = animationDuration
-            transition.addListener(object : Transition.TransitionListener {
-                override fun onTransitionEnd(transition: Transition) {
-                    transitionComplete?.invoke()
-                }
-
-                override fun onTransitionResume(transition: Transition) {}
-
-                override fun onTransitionPause(transition: Transition) {}
-
-                override fun onTransitionCancel(transition: Transition) {}
-
-                override fun onTransitionStart(transition: Transition) {}
-            }
-            )
-            TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
+            configureAndBeginTransition(transitionComplete)
         }
         ConstraintSet().also {
             it.clone(context, currentConstraintSetId)
+            // in case shield is hidden, we will have glitch without this
+            it.getConstraint(R.id.composer_shield).propertySet.visibility = composerShieldImageView.visibility
             it.applyTo(this)
         }
     }
 
-    fun expand(animate: Boolean = true, transitionComplete: (() -> Unit)? = null) {
-        if (currentConstraintSetId == R.layout.constraint_set_composer_layout_expanded) {
-            // ignore we good
-            return
-        }
-        currentConstraintSetId = R.layout.constraint_set_composer_layout_expanded
-        if (animate) {
-            val transition = AutoTransition()
-            transition.duration = animationDuration
-            transition.addListener(object : Transition.TransitionListener {
+    private fun configureAndBeginTransition(transitionComplete: (() -> Unit)? = null) {
+        val transition = TransitionSet().apply {
+            ordering = TransitionSet.ORDERING_SEQUENTIAL
+            addTransition(ChangeBounds())
+            addTransition(Fade(Fade.IN))
+            duration = animationDuration
+            addListener(object : Transition.TransitionListener {
                 override fun onTransitionEnd(transition: Transition) {
                     transitionComplete?.invoke()
                 }
@@ -152,14 +157,9 @@ class TextComposerView @JvmOverloads constructor(context: Context, attrs: Attrib
                 override fun onTransitionCancel(transition: Transition) {}
 
                 override fun onTransitionStart(transition: Transition) {}
-            }
-            )
-            TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
+            })
         }
-        ConstraintSet().also {
-            it.clone(context, currentConstraintSetId)
-            it.applyTo(this)
-        }
+        TransitionManager.beginDelayedTransition((parent as? ViewGroup ?: this), transition)
     }
 
     fun setRoomEncrypted(isEncrypted: Boolean, roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {

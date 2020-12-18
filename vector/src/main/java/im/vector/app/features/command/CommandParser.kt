@@ -18,6 +18,7 @@ package im.vector.app.features.command
 
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
+import im.vector.app.features.home.room.detail.ChatEffect
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
@@ -279,11 +280,6 @@ object CommandParser {
 
                     ParsedCommand.SendShrug(message)
                 }
-                Command.VERIFY_USER.command            -> {
-                    val message = textMessage.substring(Command.VERIFY_USER.command.length).trim()
-
-                    ParsedCommand.VerifyUser(message)
-                }
                 Command.POLL.command                   -> {
                     val rawCommand = textMessage.substring(Command.POLL.command.length).trim()
                     val split = rawCommand.split("|").map { it.trim() }
@@ -295,6 +291,14 @@ object CommandParser {
                 }
                 Command.DISCARD_SESSION.command        -> {
                     ParsedCommand.DiscardSession
+                }
+                Command.CONFETTI.command               -> {
+                    val message = textMessage.substring(Command.CONFETTI.command.length).trim()
+                    ParsedCommand.SendChatEffect(ChatEffect.CONFETTI, message)
+                }
+                Command.SNOW.command               -> {
+                    val message = textMessage.substring(Command.SNOW.command.length).trim()
+                    ParsedCommand.SendChatEffect(ChatEffect.SNOW, message)
                 }
                 else                                   -> {
                     // Unknown command

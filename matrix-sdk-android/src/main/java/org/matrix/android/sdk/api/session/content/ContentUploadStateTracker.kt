@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +32,7 @@ interface ContentUploadStateTracker {
         object Idle : State()
         object EncryptingThumbnail : State()
         data class UploadingThumbnail(val current: Long, val total: Long) : State()
-        object Encrypting : State()
+        data class Encrypting(val current: Long, val total: Long) : State()
         data class Uploading(val current: Long, val total: Long) : State()
         object Success : State()
         data class Failure(val throwable: Throwable) : State()

@@ -18,6 +18,7 @@ package im.vector.app.features.login
 
 import im.vector.app.core.platform.VectorViewModelAction
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
@@ -27,7 +28,7 @@ sealed class LoginAction : VectorViewModelAction {
     data class UpdateSignMode(val signMode: SignMode) : LoginAction()
     data class LoginWithToken(val loginToken: String) : LoginAction()
     data class WebLoginSuccess(val credentials: Credentials) : LoginAction()
-    data class InitWith(val loginConfig: LoginConfig) : LoginAction()
+    data class InitWith(val loginConfig: LoginConfig?) : LoginAction()
     data class ResetPassword(val email: String, val newPassword: String) : LoginAction()
     object ResetPasswordMailConfirmed : LoginAction()
 
@@ -39,6 +40,7 @@ sealed class LoginAction : VectorViewModelAction {
 
     data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction()
     object SendAgainThreePid : RegisterAction()
+
     // TODO Confirm Email (from link in the email, open in the phone, intercepted by RiotX)
     data class ValidateThreePid(val code: String) : RegisterAction()
 
@@ -58,8 +60,13 @@ sealed class LoginAction : VectorViewModelAction {
     object ResetLogin : ResetAction()
     object ResetResetPassword : ResetAction()
 
+    // Homeserver history
+    object ClearHomeServerHistory : LoginAction()
+
     // For the soft logout case
-    data class SetupSsoForSessionRecovery(val homeServerUrl: String, val deviceId: String) : LoginAction()
+    data class SetupSsoForSessionRecovery(val homeServerUrl: String,
+                                          val deviceId: String,
+                                          val ssoIdentityProviders: List<SsoIdentityProvider>?) : LoginAction()
 
     data class PostViewEvent(val viewEvent: LoginViewEvents) : LoginAction()
 

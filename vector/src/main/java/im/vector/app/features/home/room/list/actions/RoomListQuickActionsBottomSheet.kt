@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.list.actions
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.mvrx.fragmentViewModel
@@ -67,8 +68,8 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
 
     override fun getLayoutResId() = R.layout.bottom_sheet_generic_list
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         recyclerView.configureWith(roomListActionsEpoxyController, viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
         roomListActionsEpoxyController.listener = this
@@ -76,6 +77,7 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
 
     override fun onDestroyView() {
         recyclerView.cleanup()
+        roomListActionsEpoxyController.listener = null
         super.onDestroyView()
     }
 
@@ -88,8 +90,9 @@ class RoomListQuickActionsBottomSheet : VectorBaseBottomSheetDialogFragment(), R
         sharedActionViewModel.post(quickAction)
         // Do not dismiss for all the actions
         when (quickAction) {
-            is RoomListQuickActionsSharedAction.Favorite -> Unit
-            else                                         -> dismiss()
+            is RoomListQuickActionsSharedAction.LowPriority -> Unit
+            is RoomListQuickActionsSharedAction.Favorite    -> Unit
+            else                                            -> dismiss()
         }
     }
 

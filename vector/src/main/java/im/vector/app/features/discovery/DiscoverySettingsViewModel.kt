@@ -28,13 +28,13 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.internal.util.awaitCallback
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.rx.rx
 
 class DiscoverySettingsViewModel @AssistedInject constructor(
@@ -63,7 +63,10 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             val identityServerUrl = identityService.getCurrentIdentityServerUrl()
             val currentIS = state.identityServer()
             setState {
-                copy(identityServer = Success(identityServerUrl))
+                copy(
+                        identityServer = Success(identityServerUrl),
+                        userConsent = false
+                )
             }
             if (currentIS != identityServerUrl) retrieveBinding()
         }
@@ -71,7 +74,10 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     init {
         setState {
-            copy(identityServer = Success(identityService.getCurrentIdentityServerUrl()))
+            copy(
+                    identityServer = Success(identityService.getCurrentIdentityServerUrl()),
+                    userConsent = identityService.getUserConsent()
+            )
         }
         startListenToIdentityManager()
         observeThreePids()
@@ -97,6 +103,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             DiscoverySettingsAction.RetrieveBinding          -> retrieveBinding()
             DiscoverySettingsAction.DisconnectIdentityServer -> disconnectIdentityServer()
             is DiscoverySettingsAction.ChangeIdentityServer  -> changeIdentityServer(action)
+            is DiscoverySettingsAction.UpdateUserConsent     -> handleUpdateUserConsent(action)
             is DiscoverySettingsAction.RevokeThreePid        -> revokeThreePid(action)
             is DiscoverySettingsAction.ShareThreePid         -> shareThreePid(action)
             is DiscoverySettingsAction.FinalizeBind3pid      -> finalizeBind3pid(action, true)
@@ -105,13 +112,23 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         }.exhaustive
     }
 
+    private fun handleUpdateUserConsent(action: DiscoverySettingsAction.UpdateUserConsent) {
+        identityService.setUserConsent(action.newConsent)
+        setState { copy(userConsent = action.newConsent) }
+    }
+
     private fun disconnectIdentityServer() {
         setState { copy(identityServer = Loading()) }
 
         viewModelScope.launch {
             try {
                 awaitCallback<Unit> { session.identityService().disconnect(it) }
-                setState { copy(identityServer = Success(null)) }
+                setState {
+                    copy(
+                            identityServer = Success(null),
+                            userConsent = false
+                    )
+                }
             } catch (failure: Throwable) {
                 setState { copy(identityServer = Fail(failure)) }
             }
@@ -126,7 +143,12 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 val data = awaitCallback<String?> {
                     session.identityService().setNewIdentityServer(action.url, it)
                 }
-                setState { copy(identityServer = Success(data)) }
+                setState {
+                    copy(
+                            identityServer = Success(data),
+                            userConsent = false
+                    )
+                }
                 retrieveBinding()
             } catch (failure: Throwable) {
                 setState { copy(identityServer = Fail(failure)) }

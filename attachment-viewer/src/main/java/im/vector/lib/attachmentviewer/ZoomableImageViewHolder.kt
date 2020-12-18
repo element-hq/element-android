@@ -39,4 +39,9 @@ class ZoomableImageViewHolder constructor(itemView: View) :
     }
 
     internal val target = DefaultImageLoaderTarget.ZoomableImageTarget(this, touchImageView)
+
+    override fun onRecycled() {
+        super.onRecycled()
+        touchImageView.setImageDrawable(null)
+    }
 }

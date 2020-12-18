@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,22 +21,31 @@ import android.content.res.Resources
 import com.squareup.moshi.Moshi
 import dagger.BindsInstance
 import dagger.Component
+import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.auth.AuthModule
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
+import org.matrix.android.sdk.internal.raw.RawModule
 import org.matrix.android.sdk.internal.session.MockHttpInterceptor
 import org.matrix.android.sdk.internal.session.TestInterceptor
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import okhttp3.OkHttpClient
 import org.matrix.olm.OlmManager
 import java.io.File
 
-@Component(modules = [MatrixModule::class, NetworkModule::class, AuthModule::class, NoOpTestModule::class])
+@Component(modules = [
+    MatrixModule::class,
+    NetworkModule::class,
+    AuthModule::class,
+    RawModule::class,
+    NoOpTestModule::class
+])
 @MatrixScope
 internal interface MatrixComponent {
 
@@ -53,6 +61,10 @@ internal interface MatrixComponent {
 
     fun authenticationService(): AuthenticationService
 
+    fun rawService(): RawService
+
+    fun homeServerHistoryService(): HomeServerHistoryService
+
     fun context(): Context
 
     fun matrixConfiguration(): MatrixConfiguration
@@ -61,9 +73,6 @@ internal interface MatrixComponent {
 
     @CacheDirectory
     fun cacheDir(): File
-
-    @ExternalFilesDirectory
-    fun externalFilesDir(): File?
 
     fun olmManager(): OlmManager
 

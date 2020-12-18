@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,10 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import android.util.SparseArray
+import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.Realm
+import io.realm.RealmQuery
+import io.realm.RealmResults
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.ReadReceiptsSummaryMapper
@@ -27,10 +30,6 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.TimelineEventFilter
 import org.matrix.android.sdk.internal.database.query.whereInRoom
-import io.realm.OrderedRealmCollectionChangeListener
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.RealmResults
 
 /**
  * This class is responsible for handling the read receipts for hidden events (check [TimelineSettings] to see filtering).
@@ -151,23 +150,41 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
     private fun RealmQuery<ReadReceiptsSummaryEntity>.filterReceiptsWithSettings(): RealmQuery<ReadReceiptsSummaryEntity> {
         beginGroup()
         var needOr = false
-        if (settings.filterTypes) {
-            not().`in`("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", settings.allowedTypes.toTypedArray())
+        if (settings.filters.filterTypes) {
+            beginGroup()
+            // Events: A, B, C, D, (E and S1), F, G, (H and S1), I
+            // Allowed: A, B, C, (E and S1), G, (H and S2)
+            // Result: D, F, H, I
+            settings.filters.allowedTypes.forEachIndexed { index, filter ->
+                if (filter.stateKey == null) {
+                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", filter.eventType)
+                } else {
+                    beginGroup()
+                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", filter.eventType)
+                    or()
+                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.STATE_KEY}", filter.stateKey)
+                    endGroup()
+                }
+                if (index != settings.filters.allowedTypes.size - 1) {
+                    and()
+                }
+            }
+            endGroup()
             needOr = true
         }
-        if (settings.filterUseless) {
+        if (settings.filters.filterUseless) {
             if (needOr) or()
             equalTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.IS_USELESS}", true)
             needOr = true
         }
-        if (settings.filterEdits) {
+        if (settings.filters.filterEdits) {
             if (needOr) or()
             like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", TimelineEventFilter.Content.EDIT)
             or()
             like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", TimelineEventFilter.Content.RESPONSE)
             needOr = true
         }
-        if (settings.filterRedacted) {
+        if (settings.filters.filterRedacted) {
             if (needOr) or()
             like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.UNSIGNED_DATA}", TimelineEventFilter.Unsigned.REDACTED)
         }

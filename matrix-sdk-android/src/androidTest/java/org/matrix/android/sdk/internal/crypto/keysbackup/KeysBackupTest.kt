@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,9 +115,8 @@ class KeysBackupTest : InstrumentedTest {
         }
 
         assertEquals(MXCRYPTO_ALGORITHM_MEGOLM_BACKUP, megolmBackupCreationInfo.algorithm)
-        assertNotNull(megolmBackupCreationInfo.authData)
-        assertNotNull(megolmBackupCreationInfo.authData!!.publicKey)
-        assertNotNull(megolmBackupCreationInfo.authData!!.signatures)
+        assertNotNull(megolmBackupCreationInfo.authData.publicKey)
+        assertNotNull(megolmBackupCreationInfo.authData.signatures)
         assertNotNull(megolmBackupCreationInfo.recoveryKey)
 
         stateObserver.stopAndCheckStates(null)
@@ -258,7 +257,7 @@ class KeysBackupTest : InstrumentedTest {
         // - Check encryptGroupSession() returns stg
         val keyBackupData = keysBackup.encryptGroupSession(session)
         assertNotNull(keyBackupData)
-        assertNotNull(keyBackupData.sessionData)
+        assertNotNull(keyBackupData!!.sessionData)
 
         // - Check pkDecryptionFromRecoveryKey() is able to create a OlmPkDecryption
         val decryption = keysBackup.pkDecryptionFromRecoveryKey(keyBackupCreationInfo.recoveryKey)

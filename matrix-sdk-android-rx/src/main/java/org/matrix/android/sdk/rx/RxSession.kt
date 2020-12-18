@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +17,13 @@
 package org.matrix.android.sdk.rx
 
 import androidx.paging.PagedList
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.functions.Function3
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -32,6 +35,7 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.sync.SyncState
@@ -43,10 +47,7 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.functions.Function3
+import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 
 class RxSession(private val session: Session) {
 
@@ -93,6 +94,13 @@ class RxSession(private val session: Session) {
                 }
     }
 
+    fun liveRoomMember(userId: String, roomId: String): Observable<Optional<RoomMemberSummary>> {
+        return session.getRoomMemberLive(userId, roomId).asObservable()
+                .startWithCallable {
+                    session.getRoomMember(userId, roomId).toOptional()
+                }
+    }
+
     fun liveUsers(): Observable<List<User>> {
         return session.getUsersLive().asObservable()
     }
@@ -108,6 +116,11 @@ class RxSession(private val session: Session) {
     fun liveThreePIds(refreshData: Boolean): Observable<List<ThreePid>> {
         return session.getThreePidsLive(refreshData).asObservable()
                 .startWithCallable { session.getThreePids() }
+    }
+
+    fun livePendingThreePIds(): Observable<List<ThreePid>> {
+        return session.getPendingThreePidsLive().asObservable()
+                .startWithCallable { session.getPendingThreePids() }
     }
 
     fun createRoom(roomParams: CreateRoomParams): Single<String> = singleBuilder {
@@ -127,7 +140,7 @@ class RxSession(private val session: Session) {
     }
 
     fun getRoomIdByAlias(roomAlias: String,
-                         searchOnServer: Boolean): Single<Optional<String>> = singleBuilder {
+                         searchOnServer: Boolean): Single<Optional<RoomAliasDescription>> = singleBuilder {
         session.getRoomIdByAlias(roomAlias, searchOnServer, it)
     }
 

@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,9 +22,11 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Case
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.IgnoredUserEntity
 import org.matrix.android.sdk.internal.database.model.IgnoredUserEntityFields
@@ -33,11 +34,10 @@ import org.matrix.android.sdk.internal.database.model.UserEntity
 import org.matrix.android.sdk.internal.database.model.UserEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.util.fetchCopied
-import io.realm.Case
 import javax.inject.Inject
 
-internal class UserDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
+internal class UserDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
+                                                  private val realmSessionProvider: RealmSessionProvider) {
 
     private val realmDataSourceFactory: Monarchy.RealmDataSourceFactory<UserEntity> by lazy {
         monarchy.createDataSourceFactory { realm ->
@@ -58,10 +58,10 @@ internal class UserDataSource @Inject constructor(@SessionDatabase private val m
     }
 
     fun getUser(userId: String): User? {
-        val userEntity = monarchy.fetchCopied { UserEntity.where(it, userId).findFirst() }
-                ?: return null
-
-        return userEntity.asDomain()
+        return realmSessionProvider.withRealm {
+            val userEntity = UserEntity.where(it, userId).findFirst()
+            userEntity?.asDomain()
+        }
     }
 
     fun getUserLive(userId: String): LiveData<Optional<User>> {

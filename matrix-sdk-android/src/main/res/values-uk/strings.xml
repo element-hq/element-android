@@ -1,39 +1,34 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s надіслав(ла) зображення.</string>
-
     <string name="notice_room_invite_no_invitee">%s запрошення</string>
     <string name="notice_room_invite">%1$s запросив(ла) %2$s</string>
     <string name="encrypted_message">Зашифроване повідомлення</string>
-
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Запрошення від %s</string>
     <string name="room_displayname_room_invite">Запрошення до кімнати</string>
     <string name="room_displayname_two_members">%1$s і %2$s</string>
     <string name="room_displayname_empty_room">Порожня кімната</string>
-
-
     <string name="summary_user_sent_sticker">%1$s надіслав(ла) наліпку.</string>
-
     <string name="notice_room_invite_you">%1$s запросив(ла) Вас</string>
-    <string name="notice_room_join">%1$s приєднався(лась)</string>
+    <string name="notice_room_join">%1$s приєднується</string>
     <string name="notice_room_leave">%1$s покинув(ла)</string>
     <string name="notice_room_reject">%1$s відхилив(ла) запрошення</string>
     <string name="notice_room_kick">%1$s копнув(ла) %2$s</string>
     <string name="notice_room_unban">%1$s розблокував(ла) %2$s</string>
     <string name="notice_room_ban">%1$s заблокував(ла) %2$s</string>
     <string name="notice_room_withdraw">%1$s відкликав(ла) запрошення для %2$s</string>
-    <string name="notice_avatar_url_changed">%1$s змінив(ла) свій аватар</string>
-    <string name="notice_display_name_set">%1$s встановив(ла) собі ім’я %2$s</string>
-    <string name="notice_display_name_changed_from">%1$s змінив(ла) своє ім’я з %2$s на %3$s</string>
+    <string name="notice_avatar_url_changed">%1$s змінює свій аватар</string>
+    <string name="notice_display_name_set">%1$s встановлюють собі назву %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s змінює своє ім’я з %2$s на %3$s</string>
     <string name="notice_display_name_removed">%1$s прибрав(ла) своє ім’я (%2$s)</string>
-    <string name="notice_room_topic_changed">%1$s змінив(ла) тему на: %2$s</string>
+    <string name="notice_room_topic_changed">%1$s змінює тему на: %2$s</string>
     <string name="notice_room_name_changed">%1$s змінив(ла) назву кімнати на: %2$s</string>
     <string name="notice_placed_video_call">%s розпочав(ла) відеодзвінок.</string>
     <string name="notice_placed_voice_call">%s розпочав(ла) голосовий дзвінок.</string>
     <string name="notice_answered_call">%s відповів(ла) на дзвінок.</string>
-    <string name="notice_ended_call">%s завершив(ла) дзвінок.</string>
+    <string name="notice_ended_call">%s завершує дзвінок.</string>
     <string name="notice_made_future_room_visibility">%1$s зробив(ла) майбутню історію кімнати видимою для %2$s</string>
     <string name="notice_room_visibility_invited">усіх співрозмовників, з моменту їх запрошення.</string>
     <string name="notice_room_visibility_joined">усіх співрозмовників, з моменту їх приєднання.</string>
@@ -41,43 +36,32 @@
     <string name="notice_room_visibility_world_readable">будь-кого.</string>
     <string name="notice_room_visibility_unknown">невідомо (%s).</string>
     <string name="notice_end_to_end">%1$s увімкнув(ла) наскрізне шифрування (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s запросив(ла) VoIP конференцію</string>
     <string name="notice_voip_started">VoIP конференція розпочалась</string>
     <string name="notice_voip_finished">VoIP конференція завершилась</string>
-
     <string name="notice_avatar_changed_too">(аватар також змінено)</string>
     <string name="notice_room_name_removed">%1$s прибрав(ла) назву кімнати</string>
     <string name="notice_room_topic_removed">%1$s прибрав(ла) тему кімнати</string>
     <string name="notice_profile_change_redacted">%1$s оновив(ла) свій профіль %2$s</string>
     <string name="notice_room_third_party_invite">%1$s надіслав(ла) запрошення %2$s приєднатися до кімнати</string>
     <string name="notice_room_third_party_registered_invite">%1$s прийняв(ла) запрошення у %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Неможливо розшифрувати: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Пристрій відправника не надіслав нам ключ для цього повідомлення.</string>
-
     <string name="could_not_redact">Неможливо відредагувати</string>
     <string name="unable_to_send_message">Не вдалося надіслати повідомлення</string>
-
     <string name="message_failed_to_upload">Не вдалося завантажити зображення</string>
-
     <string name="network_error">Помилка мережі</string>
     <string name="matrix_error">Помилка Matrix</string>
-
     <string name="room_error_join_failed_empty_room">Наразі неможливо переприєднатися до порожньої кімнати.</string>
-
     <string name="medium_email">Адреса електронної пошти</string>
     <string name="medium_phone_number">Номер телефону</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s та 1 інший</item>
         <item quantity="few">%1$s та %2$d інші</item>
         <item quantity="many">%1$s та %2$d інших</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
-
     <string name="notice_room_update">%s вдосконалили цю кімнату.</string>
-
     <string name="notice_event_redacted">Повідомлення видалено</string>
     <string name="notice_event_redacted_by">%1$s видалили повідомлення</string>
     <string name="notice_event_redacted_with_reason">Повідомлення видалено [причина: %1$s]</string>

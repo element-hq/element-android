@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +27,7 @@ import java.io.ObjectStreamClass
  *
  * Ref: https://stackoverflow.com/questions/3884492/how-can-i-change-package-for-a-bunch-of-java-serializable-classes
  */
-internal class SafeObjectInputStream(`in`: InputStream) : ObjectInputStream(`in`) {
+internal class SafeObjectInputStream(inputStream: InputStream) : ObjectInputStream(inputStream) {
 
     init {
         enableResolveObject(true)

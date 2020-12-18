@@ -28,6 +28,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.app.features.html.EventHtmlRenderer
+import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import im.vector.app.features.reactions.data.EmojiDataSource
@@ -35,6 +36,7 @@ import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -50,23 +52,28 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
+import java.util.ArrayList
 
 /**
  * Information related to an event and used to display preview in contextual bottom sheet.
  */
 class MessageActionsViewModel @AssistedInject constructor(@Assisted
-                                                          initialState: MessageActionState,
+                                                          private val initialState: MessageActionState,
                                                           private val eventHtmlRenderer: Lazy<EventHtmlRenderer>,
                                                           private val htmlCompressor: VectorHtmlCompressor,
                                                           private val session: Session,
                                                           private val noticeEventFormatter: NoticeEventFormatter,
                                                           private val stringProvider: StringProvider,
+                                                          private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
                                                           private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
     private val eventId = initialState.eventId
     private val informationData = initialState.informationData
     private val room = session.getRoom(initialState.roomId)
+    private val pillsPostProcessor by lazy {
+        pillsPostProcessorFactory.create(initialState.roomId)
+    }
 
     @AssistedInject.Factory
     interface Factory {
@@ -162,7 +169,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
         return when (timelineEvent.root.getClearType()) {
             EventType.MESSAGE,
-            EventType.STICKER     -> {
+            EventType.STICKER -> {
                 val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
                 if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
                     val html = messageContent.formattedBody
@@ -170,7 +177,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                             ?.let { htmlCompressor.compress(it) }
                             ?: messageContent.body
 
-                    eventHtmlRenderer.get().render(html)
+                    eventHtmlRenderer.get().render(html, pillsPostProcessor)
                 } else if (messageContent is MessageVerificationRequestContent) {
                     stringProvider.getString(R.string.verification_request)
                 } else {
@@ -184,11 +191,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             EventType.STATE_ROOM_ALIASES,
             EventType.STATE_ROOM_CANONICAL_ALIAS,
             EventType.STATE_ROOM_HISTORY_VISIBILITY,
+            EventType.STATE_ROOM_SERVER_ACL,
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER -> {
-                noticeEventFormatter.format(timelineEvent)
+                noticeEventFormatter.format(timelineEvent, room?.roomSummary())
             }
             else                  -> null
         } ?: ""
@@ -230,6 +238,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     add(EventSharedAction.Resend(eventId))
                 }
                 add(EventSharedAction.Remove(eventId))
+                if (vectorPreferences.developerMode()) {
+                    addViewSourceItems(timelineEvent)
+                }
             } else if (timelineEvent.root.sendState.isSending()) {
                 // TODO is uploading attachment?
                 if (canCancel(timelineEvent)) {
@@ -270,8 +281,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                         add(EventSharedAction.ViewEditHistory(informationData))
                     }
 
-                    if (canShare(msgType) && messageContent is MessageWithAttachmentContent) {
-                        add(EventSharedAction.Share(timelineEvent.eventId, messageContent))
+                    if (canShare(msgType)) {
+                        add(EventSharedAction.Share(timelineEvent.eventId, messageContent!!))
                     }
 
                     if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
@@ -298,13 +309,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                             add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
                         }
                     }
-
-                    add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
-                    if (timelineEvent.isEncrypted() && timelineEvent.root.mxDecryptionResult != null) {
-                        val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
-                                ?: stringProvider.getString(R.string.encryption_information_decryption_error)
-                        add(EventSharedAction.ViewDecryptedSource(decryptedContent))
-                    }
+                    addViewSourceItems(timelineEvent)
                 }
                 add(EventSharedAction.CopyPermalink(eventId))
                 if (session.myUserId != timelineEvent.root.senderId) {
@@ -320,8 +325,17 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
+    private fun ArrayList<EventSharedAction>.addViewSourceItems(timelineEvent: TimelineEvent) {
+        add(EventSharedAction.ViewSource(timelineEvent.root.toContentStringWithIndent()))
+        if (timelineEvent.isEncrypted() && timelineEvent.root.mxDecryptionResult != null) {
+            val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
+                    ?: stringProvider.getString(R.string.encryption_information_decryption_error)
+            add(EventSharedAction.ViewDecryptedSource(decryptedContent))
+        }
+    }
+
     private fun canCancel(@Suppress("UNUSED_PARAMETER") event: TimelineEvent): Boolean {
-        return false
+        return true
     }
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
@@ -365,7 +379,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canRetry(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        return event.root.sendState.hasFailed() && event.root.isTextMessage() && actionPermissions.canSendMessage
+        return event.root.sendState.hasFailed()
+                && actionPermissions.canSendMessage
+                && (event.root.isAttachmentMessage() || event.root.isTextMessage())
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
@@ -399,6 +415,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun canShare(msgType: String?): Boolean {
         return when (msgType) {
+            MessageType.MSGTYPE_TEXT,
+            MessageType.MSGTYPE_NOTICE,
+            MessageType.MSGTYPE_EMOTE,
+            MessageType.MSGTYPE_LOCATION,
             MessageType.MSGTYPE_IMAGE,
             MessageType.MSGTYPE_AUDIO,
             MessageType.MSGTYPE_VIDEO,

@@ -28,13 +28,13 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttrib
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.settings.VectorPreferences
+import me.gujun.android.span.image
+import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import me.gujun.android.span.image
-import me.gujun.android.span.span
 import javax.inject.Inject
 
 // This class handles timeline events who haven't been successfully decrypted
@@ -82,10 +82,9 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         when (cryptoError) {
                             MXCryptoError.ErrorType.KEYS_WITHHELD -> {
                                 span {
-                                    apply {
-                                        drawableProvider.getDrawable(R.drawable.ic_forbidden, colorFromAttribute)?.let {
-                                            image(it, "baseline")
-                                        }
+                                    drawableProvider.getDrawable(R.drawable.ic_forbidden, colorFromAttribute)?.let {
+                                        image(it, "baseline")
+                                        +" "
                                     }
                                     span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_final)) {
                                         textStyle = "italic"
@@ -95,10 +94,9 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                             }
                             else                                  -> {
                                 span {
-                                    apply {
-                                        drawableProvider.getDrawable(R.drawable.ic_clock, colorFromAttribute)?.let {
-                                            image(it, "baseline")
-                                        }
+                                    drawableProvider.getDrawable(R.drawable.ic_clock, colorFromAttribute)?.let {
+                                        image(it, "baseline")
+                                        +" "
                                     }
                                     span(stringProvider.getString(R.string.notice_crypto_unable_to_decrypt_friendly)) {
                                         textStyle = "italic"

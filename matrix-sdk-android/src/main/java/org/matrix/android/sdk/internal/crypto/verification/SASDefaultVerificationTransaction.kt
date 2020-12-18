@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,10 +28,10 @@ import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.extensions.toUnsignedInt
-import org.matrix.android.sdk.internal.util.withoutPrefix
 import org.matrix.olm.OlmSAS
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
+import java.util.Locale
 
 /**
  * Represents an ongoing short code interactive key verification between two devices.
@@ -69,10 +68,13 @@ internal abstract class SASDefaultVerificationTransaction(
         // Deprecated maybe removed later, use V2
         const val KEY_AGREEMENT_V1 = "curve25519"
         const val KEY_AGREEMENT_V2 = "curve25519-hkdf-sha256"
+
         // ordered by preferred order
         val KNOWN_AGREEMENT_PROTOCOLS = listOf(KEY_AGREEMENT_V2, KEY_AGREEMENT_V1)
+
         // ordered by preferred order
         val KNOWN_HASHES = listOf("sha256")
+
         // ordered by preferred order
         val KNOWN_MACS = listOf(SAS_MAC_SHA256, SAS_MAC_SHA256_LONGKDF)
 
@@ -102,6 +104,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
     // Visible for test
     var startReq: ValidVerificationInfoStart.SasVerificationInfoStart? = null
+
     // Visible for test
     var accepted: ValidVerificationInfoAccept? = null
     protected var otherKey: String? = null
@@ -175,8 +178,8 @@ internal abstract class SASDefaultVerificationTransaction(
                 ?.unpaddedBase64PublicKey
                 ?.let { masterPublicKey ->
                     val crossSigningKeyId = "ed25519:$masterPublicKey"
-                    macUsingAgreedMethod(masterPublicKey, baseInfo + crossSigningKeyId)?.let { MSKMacString ->
-                        keyMap[crossSigningKeyId] = MSKMacString
+                    macUsingAgreedMethod(masterPublicKey, baseInfo + crossSigningKeyId)?.let { mskMacString ->
+                        keyMap[crossSigningKeyId] = mskMacString
                     }
                 }
 
@@ -247,7 +250,7 @@ internal abstract class SASDefaultVerificationTransaction(
 
         // cannot be empty because it has been validated
         theirMacSafe.mac.keys.forEach {
-            val keyIDNoPrefix = it.withoutPrefix("ed25519:")
+            val keyIDNoPrefix = it.removePrefix("ed25519:")
             val otherDeviceKey = otherUserKnownDevices?.get(keyIDNoPrefix)?.fingerprint()
             if (otherDeviceKey == null) {
                 Timber.w("## SAS Verification: Could not find device $keyIDNoPrefix to verify")
@@ -270,7 +273,7 @@ internal abstract class SASDefaultVerificationTransaction(
         if (otherCrossSigningMasterKeyPublic != null) {
             // Did the user signed his master key
             theirMacSafe.mac.keys.forEach {
-                val keyIDNoPrefix = it.withoutPrefix("ed25519:")
+                val keyIDNoPrefix = it.removePrefix("ed25519:")
                 if (keyIDNoPrefix == otherCrossSigningMasterKeyPublic) {
                     // Check the signature
                     val mac = macUsingAgreedMethod(otherCrossSigningMasterKeyPublic, baseInfo + it)
@@ -342,7 +345,7 @@ internal abstract class SASDefaultVerificationTransaction(
     }
 
     protected fun hashUsingAgreedHashMethod(toHash: String): String? {
-        if ("sha256".toLowerCase() == accepted?.hash?.toLowerCase()) {
+        if ("sha256" == accepted?.hash?.toLowerCase(Locale.ROOT)) {
             val olmUtil = OlmUtility()
             val hashBytes = olmUtil.sha256(toHash)
             olmUtil.releaseUtility()
@@ -352,12 +355,11 @@ internal abstract class SASDefaultVerificationTransaction(
     }
 
     private fun macUsingAgreedMethod(message: String, info: String): String? {
-        if (SAS_MAC_SHA256_LONGKDF.toLowerCase() == accepted?.messageAuthenticationCode?.toLowerCase()) {
-            return getSAS().calculateMacLongKdf(message, info)
-        } else if (SAS_MAC_SHA256.toLowerCase() == accepted?.messageAuthenticationCode?.toLowerCase()) {
-            return getSAS().calculateMac(message, info)
+        return when (accepted?.messageAuthenticationCode?.toLowerCase(Locale.ROOT)) {
+            SAS_MAC_SHA256_LONGKDF -> getSAS().calculateMacLongKdf(message, info)
+            SAS_MAC_SHA256         -> getSAS().calculateMac(message, info)
+            else                   -> null
         }
-        return null
     }
 
     override fun getDecimalCodeRepresentation(): String {

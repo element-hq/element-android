@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,15 +28,13 @@ class RoomMemberCountCondition(
          * If no prefix is present, this parameter defaults to ==.
          */
         val iz: String
-) : Condition(Kind.RoomMemberCount) {
+) : Condition {
 
     override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
         return conditionResolver.resolveRoomMemberCountCondition(event, this)
     }
 
-    override fun technicalDescription(): String {
-        return "Room member count is $iz"
-    }
+    override fun technicalDescription() = "Room member count is $iz"
 
     internal fun isSatisfied(event: Event, roomGetter: RoomGetter): Boolean {
         // sanity checks

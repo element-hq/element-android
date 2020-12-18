@@ -25,12 +25,15 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyTouchHelperCallback
 import com.airbnb.epoxy.EpoxyViewHolder
+import im.vector.app.R
+import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.min
@@ -52,7 +55,16 @@ class RoomMessageTouchHelperCallback(private val context: Context,
     private var replyButtonProgress: Float = 0F
     private var lastReplyButtonAnimationTime: Long = 0
 
-    private var imageDrawable: Drawable = ContextCompat.getDrawable(context, actionIcon)!!
+    private val imageDrawable: Drawable = DrawableCompat.wrap(
+            ContextCompat.getDrawable(context, actionIcon)!!
+    )
+
+    init {
+        DrawableCompat.setTint(
+                imageDrawable,
+                ThemeUtils.getColor(context, R.attr.riotx_text_primary)
+        )
+    }
 
     private val triggerDistance = convertToPx(100)
     private val minShowDistance = convertToPx(20)

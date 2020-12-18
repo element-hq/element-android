@@ -18,10 +18,8 @@ package im.vector.app.features.attachments
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.drawable.BitmapDrawable
-import android.os.Build
 import android.util.Pair
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -44,7 +42,6 @@ import im.vector.app.core.extensions.getMeasurements
 import im.vector.app.core.utils.PERMISSIONS_EMPTY
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.app.features.attachments.AttachmentTypeSelectorView.Callback
 import kotlin.math.max
 
@@ -109,25 +106,19 @@ class AttachmentTypeSelectorView(context: Context,
             showAtLocation(anchor, Gravity.NO_GRAVITY, 0, anchorCoordinates[1] - contentViewHeight)
         }
         contentView.doOnNextLayout {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                animateWindowInCircular(anchor, contentView)
-            } else {
-                animateWindowInTranslate(contentView)
-            }
+            animateWindowInCircular(anchor, contentView)
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            animateButtonIn(galleryButton, ANIMATION_DURATION / 2)
-            animateButtonIn(cameraButton, ANIMATION_DURATION / 2)
-            animateButtonIn(fileButton, ANIMATION_DURATION / 4)
-            animateButtonIn(audioButton, ANIMATION_DURATION / 2)
-            animateButtonIn(contactButton, ANIMATION_DURATION / 4)
-            animateButtonIn(stickersButton, 0)
-        }
+        animateButtonIn(galleryButton, ANIMATION_DURATION / 2)
+        animateButtonIn(cameraButton, ANIMATION_DURATION / 2)
+        animateButtonIn(fileButton, ANIMATION_DURATION / 4)
+        animateButtonIn(audioButton, ANIMATION_DURATION / 2)
+        animateButtonIn(contactButton, ANIMATION_DURATION / 4)
+        animateButtonIn(stickersButton, 0)
     }
 
     override fun dismiss() {
         val capturedAnchor = anchor
-        if (capturedAnchor != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (capturedAnchor != null) {
             animateWindowOutCircular(capturedAnchor, contentView)
         } else {
             animateWindowOutTranslate(contentView)
@@ -144,7 +135,6 @@ class AttachmentTypeSelectorView(context: Context,
         button.startAnimation(animation)
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun animateWindowInCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
         val animator = ViewAnimationUtils.createCircularReveal(contentView,
@@ -162,7 +152,6 @@ class AttachmentTypeSelectorView(context: Context,
         getContentView().startAnimation(animation)
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun animateWindowOutCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
         val animator = ViewAnimationUtils.createCircularReveal(getContentView(),
@@ -225,10 +214,10 @@ class AttachmentTypeSelectorView(context: Context,
      */
     enum class Type(val permissionsBit: Int) {
         CAMERA(PERMISSIONS_FOR_TAKING_PHOTO),
-        GALLERY(PERMISSIONS_FOR_WRITING_FILES),
-        FILE(PERMISSIONS_FOR_WRITING_FILES),
+        GALLERY(PERMISSIONS_EMPTY),
+        FILE(PERMISSIONS_EMPTY),
         STICKER(PERMISSIONS_EMPTY),
-        AUDIO(PERMISSIONS_FOR_WRITING_FILES),
+        AUDIO(PERMISSIONS_EMPTY),
         CONTACT(PERMISSIONS_FOR_PICKING_CONTACT)
     }
 }

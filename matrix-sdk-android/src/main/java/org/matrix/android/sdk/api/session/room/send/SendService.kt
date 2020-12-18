@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -110,13 +109,13 @@ interface SendService {
      * Schedule this message to be resent
      * @param localEcho the unsent local echo
      */
-    fun resendTextMessage(localEcho: TimelineEvent): Cancelable?
+    fun resendTextMessage(localEcho: TimelineEvent): Cancelable
 
     /**
      * Schedule this message to be resent
      * @param localEcho the unsent local echo
      */
-    fun resendMediaMessage(localEcho: TimelineEvent): Cancelable?
+    fun resendMediaMessage(localEcho: TimelineEvent): Cancelable
 
     /**
      * Remove this failed message from the timeline
@@ -124,7 +123,10 @@ interface SendService {
      */
     fun deleteFailedEcho(localEcho: TimelineEvent)
 
-    fun clearSendingQueue()
+    /**
+     * Cancel sending a specific event. It has to be in one of the sending states
+     */
+    fun cancelSend(eventId: String)
 
     /**
      * Resend all failed messages one by one (and keep order)

@@ -19,10 +19,12 @@ package im.vector.app.features.login
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -42,10 +44,10 @@ import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.login.terms.toLocalizedLoginTerms
 import im.vector.app.features.pin.UnlockedActivity
+import kotlinx.android.synthetic.main.activity_login.*
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
-import org.matrix.android.sdk.api.extensions.tryThis
-import kotlinx.android.synthetic.main.activity_login.*
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
 /**
@@ -72,6 +74,13 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
         get() = supportFragmentManager.findFragmentById(R.id.loginFragmentContainer)
 
     private val commonOption: (FragmentTransaction) -> Unit = { ft ->
+        // Find the loginLogo on the current Fragment, this should not return null
+        (topFragment?.view as? ViewGroup)
+                // Find findViewById does not work, I do not know why
+                // findViewById<View?>(R.id.loginLogo)
+                ?.children
+                ?.firstOrNull { it.id == R.id.loginLogo }
+                ?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
         ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
     }
 
@@ -82,19 +91,19 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
             addFirstFragment()
         }
 
-        // Get config extra
-        val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
-        if (loginConfig != null && isFirstCreation()) {
-            // TODO Check this
-            loginViewModel.handle(LoginAction.InitWith(loginConfig))
-        }
-
         loginViewModel
                 .subscribe(this) {
                     updateWithState(it)
                 }
 
         loginViewModel.observeViewEvents { handleLoginViewEvents(it) }
+
+        // Get config extra
+        val loginConfig = intent.getParcelableExtra<LoginConfig?>(EXTRA_CONFIG)
+        if (isFirstCreation()) {
+            // TODO Check this
+            loginViewModel.handle(LoginAction.InitWith(loginConfig))
+        }
     }
 
     protected open fun addFirstFragment() {
@@ -127,7 +136,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
             is LoginViewEvents.OutdatedHomeserver                         -> {
                 AlertDialog.Builder(this)
                         .setTitle(R.string.login_error_outdated_homeserver_title)
-                        .setMessage(R.string.login_error_outdated_homeserver_content)
+                        .setMessage(R.string.login_error_outdated_homeserver_warning_content)
                         .setPositiveButton(R.string.ok, null)
                         .show()
                 Unit
@@ -136,8 +145,11 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
                 addFragmentToBackstack(R.id.loginFragmentContainer,
                         LoginServerSelectionFragment::class.java,
                         option = { ft ->
-                            findViewById<View?>(R.id.loginSplashTitle)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
-                            findViewById<View?>(R.id.loginSplashSubmit)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
+                            findViewById<View?>(R.id.loginSplashLogo)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
+                            // Disable transition of text
+                            // findViewById<View?>(R.id.loginSplashTitle)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
+                            // No transition here now actually
+                            // findViewById<View?>(R.id.loginSplashSubmit)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             // TODO Disabled because it provokes a flickering
                             // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
                         })
@@ -145,11 +157,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
             is LoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
             is LoginViewEvents.OnLoginFlowRetrieved                       ->
                 addFragmentToBackstack(R.id.loginFragmentContainer,
-                        if (loginViewEvents.isSso) {
-                            LoginSignUpSignInSsoFragment::class.java
-                        } else {
-                            LoginSignUpSignInSelectionFragment::class.java
-                        },
+                        LoginSignUpSignInSelectionFragment::class.java,
                         option = commonOption)
             is LoginViewEvents.OnWebLoginError                            -> onWebLoginError(loginViewEvents)
             is LoginViewEvents.OnForgetPasswordClicked                    ->
@@ -240,7 +248,8 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
                 // It depends on the LoginMode
                 when (state.loginMode) {
                     LoginMode.Unknown,
-                    LoginMode.Sso         -> error("Developer error")
+                    is LoginMode.Sso      -> error("Developer error")
+                    is LoginMode.SsoAndPassword,
                     LoginMode.Password    -> addFragmentToBackstack(R.id.loginFragmentContainer,
                             LoginFragment::class.java,
                             tag = FRAGMENT_LOGIN_TAG,
@@ -262,7 +271,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
         super.onNewIntent(intent)
 
         intent?.data
-                ?.let { tryThis { it.getQueryParameter("loginToken") } }
+                ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
                 ?.let { loginViewModel.handle(LoginAction.LoginWithToken(it)) }
     }
 

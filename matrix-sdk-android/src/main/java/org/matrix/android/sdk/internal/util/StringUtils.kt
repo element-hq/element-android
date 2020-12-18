@@ -1,5 +1,4 @@
 /*
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,4 +50,24 @@ fun convertFromUTF8(s: String): String {
     }
 }
 
-fun String.withoutPrefix(prefix: String) = if (startsWith(prefix)) substringAfter(prefix) else this
+/**
+ * Returns whether a string contains an occurrence of another, as a standalone word, regardless of case.
+ *
+ * @param subString  the string to search for
+ * @return whether a match was found
+ */
+fun String.caseInsensitiveFind(subString: String): Boolean {
+    // add sanity checks
+    if (subString.isEmpty() || isEmpty()) {
+        return false
+    }
+
+    try {
+        val regex = Regex("(\\W|^)" + Regex.escape(subString) + "(\\W|$)", RegexOption.IGNORE_CASE)
+        return regex.containsMatchIn(this)
+    } catch (e: Exception) {
+        Timber.e(e, "## caseInsensitiveFind() : failed")
+    }
+
+    return false
+}

@@ -13,13 +13,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"
         android:src="@drawable/backup_keys"
-        android:tint="?riotx_text_primary"
         app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.1"
-        app:layout_constraintVertical_chainStyle="spread" />
+        app:layout_constraintVertical_chainStyle="spread"
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingPrefix" />
 
     <TextView
         android:id="@+id/keys_backup_setup_step1_title"

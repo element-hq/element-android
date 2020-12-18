@@ -21,6 +21,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isInvisible
@@ -42,18 +43,32 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
     @EpoxyAttribute
     @DrawableRes
     var iconRes: Int = 0
+
+    @EpoxyAttribute
+    var showIcon = true
+
+    @EpoxyAttribute
+    var text: String? = null
+
+    @StringRes
     @EpoxyAttribute
     var textRes: Int = 0
+
     @EpoxyAttribute
     var showExpand = false
+
     @EpoxyAttribute
     var expanded = false
+
     @EpoxyAttribute
     var selected = false
+
     @EpoxyAttribute
     var subMenuItem = false
+
     @EpoxyAttribute
     var destructive = false
+
     @EpoxyAttribute
     lateinit var listener: View.OnClickListener
 
@@ -68,9 +83,14 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         } else {
             ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
         }
+        holder.icon.isVisible = showIcon
         holder.icon.setImageResource(iconRes)
         ImageViewCompat.setImageTintList(holder.icon, ColorStateList.valueOf(tintColor))
-        holder.text.setText(textRes)
+        if (text != null) {
+            holder.text.text = text
+        } else {
+            holder.text.setText(textRes)
+        }
         holder.text.setTextColor(tintColor)
         holder.selected.isInvisible = !selected
         if (showExpand) {

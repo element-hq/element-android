@@ -1,4 +1,305 @@
-Changes in Element 1.0.5 (2020-XX-XX)
+Changes in Element 1.0.14 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+- Fix Canvas: trying to draw too large bitmap (#1951)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ -
+
+Test:
+ -
+
+Other changes:
+ -
+
+Changes in Element 1.0.13 (2020-12-18)
+===================================================
+
+Bugfix 🐛:
+ - Fix MSC2858 implementation details (#2540)
+
+Changes in Element 1.0.12 (2020-12-15)
+===================================================
+
+Features ✨:
+ - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
+ - Room setting: update join rules and guest access (#2442)
+ - Url preview (#481)
+ - Store encrypted file in cache and cleanup decrypted file at each app start (#2512)
+ - Emoji Keyboard (#2520)
+ - Social login (#2452)
+ - Support for chat effects in timeline (confetti, snow) (#2535)
+
+Improvements 🙌:
+ - Add Setting Item to Change PIN (#2462)
+ - Improve room history visibility setting UX (#1579)
+ - Matrix.to deeplink custom scheme support
+ - Homeserver history (#1933)
+
+Bugfix 🐛:
+ - Fix cancellation of sending event (#2438)
+ - Double bottomsheet effect after verify with passphrase
+ - EditText cursor jumps to the start while typing fast (#2469)
+ - UTD for events before invitation if member state events are hidden (#2486)
+ - No known servers error is given when joining rooms on new Gitter bridge (#2516)
+ - Show preview when sending attachment from the keyboard (#2440)
+ - Do not compress GIFs (#1616, #1254)
+
+SDK API changes ⚠️:
+ - StateService now exposes suspendable function instead of using MatrixCallback.
+ - RawCacheStrategy has been moved and renamed to CacheStrategy
+ - FileService: remove useless FileService.DownloadMode
+
+Build 🧱:
+ - Upgrade some dependencies and Kotlin version
+ - Use fragment-ktx and preference-ktx dependencies (fix lint issue KtxExtensionAvailable)
+ - Upgrade Realm dependency to 10.1.2
+
+Other changes:
+ - Remove "Status.im" theme #2424
+ - Log HTTP requests and responses in production (level BASIC, i.e. without any private data)
+
+Changes in Element 1.0.11 (2020-11-27)
+===================================================
+
+Features ✨:
+ - Create DMs with users by scanning their QR code (#2025)
+ - Add Invite friends quick invite actions (#2348)
+ - Add friend by scanning QR code, show your code to friends (#2025)
+
+Improvements 🙌:
+ - New room creation tile with quick action (#2346)
+ - Open an existing DM instead of creating a new one (#2319)
+ - Use RoomMember instead of User in the context of a Room.
+ - Ask for explicit user consent to send their contact details to the identity server (#2375)
+ - Handle events of type "m.room.server_acl" (#890)
+ - Room creation form: add advanced section to disable federation (#1314)
+ - Move "Enable Encryption" from room setting screen to room profile screen (#2394)
+ - Home empty screens quick design update (#2347)
+ - Improve Invite user screen (seamless search for matrix ID)
+
+Bugfix 🐛:
+ - Fix crash on AttachmentViewer (#2365)
+ - Exclude yourself when decorating rooms which are direct or don't have more than 2 users (#2370)
+ - F-Droid version: ensure timeout of sync request can be more than 60 seconds (#2169)
+ - Fix issue when restoring draft after sharing (#2287)
+ - Fix issue when updating the avatar of a room (new avatar vanishing)
+ - Discard change dialog displayed by mistake when avatar has been updated
+ - Try to fix cropped image in timeline (#2126)
+ - Registration: annoying error message scares every new user when they add an email (#2391)
+ - Fix jitsi integration for those with non-vanilla dialler frameworks
+ - Update profile has no effect if user is in zero rooms
+ - Fix issues with matrix.to deep linking (#2349)
+
+SDK API changes ⚠️:
+ - AccountService now exposes suspendable function instead of using MatrixCallback (#2354).
+   Note: We will incrementally migrate all the SDK API in a near future (#2449)
+
+Test:
+ - Add `allScreensTest` to cover all screens of the app
+
+Other changes:
+ - Upgrade Realm dependency to 10.0.0
+
+Changes in Element 1.0.10 (2020-11-04)
+===================================================
+
+Improvements 🙌:
+ - Rework sending Event management (#154)
+ - New room creation screen: set topic and avatar in the room creation form (#2078)
+ - Toggle Low priority tag (#1490)
+ - Add option to send with enter (#1195)
+ - Use Hardware keyboard enter to send message (use shift-enter for new line) (#1881, #1440)
+ - Edit and remove icons are now visible on image attachment preview screen (#2294)
+ - Room profile: BigImageViewerActivity now only display the image. Use the room setting to change or delete the room Avatar
+ - Better visibility of text reactions in dark theme (#1118)
+ - Room member profile: Add action to create (or open) a DM (#2310)
+ - Prepare changelog for F-Droid (#2296)
+ - Add graphic resources for F-Droid (#812, #2220)
+ - Highlight text in the body of the displayed result (#2200)
+ - Considerably faster QR-code bitmap generation (#2331)
+
+Bugfix 🐛:
+ - Fixed ringtone handling (#2100 & #2246)
+ - Messages encrypted with no way to decrypt after SDK update from 0.18 to 1.0.0 (#2252)
+ - Incoming call continues to ring if call is answered on another device (#1921)
+ - Search Result | scroll jumps after pagination (#2238)
+ - Badly formatted mentions in body (#1506)
+ - KeysBackup: Avoid using `!!` (#2262)
+ - Two elements in the task switcher (#2299)
+
+Changes in Element 1.0.9 (2020-10-16)
+===================================================
+
+Features ✨:
+ - Search messages in a room - phase 1 (#2110)
+ - Hide encrypted history (before user is invited). Can be shown if wanted in developer settings
+ - Changed rainbow algorithm
+
+Improvements 🙌:
+ - Wording differentiation for direct rooms (#2176)
+ - PIN code: request PIN code if phone has been locked
+ - Small optimisation of scrolling experience in timeline (#2114)
+ - Allow user to reset cross signing if he has no way to recover (#2052)
+ - Ability to share text
+ - Create home shortcut for any room (#1525)
+ - Can't confirm email due to killing by Android (#2021)
+ - Add a menu item to open the setting in room list and in room (#2171)
+ - Add a menu item in the timeline as a shortcut to invite user (#2171)
+ - Drawer: move settings access and add sign out action (#2171)
+ - Filter room member (and banned users) by name (#2184)
+ - Implement "Jump to read receipt" and "Mention" actions on the room member profile screen
+ - Direct share (#2029)
+ - Add FAB to room members list (#2226)
+ - Add Sygnal API implementation to test is Push are correctly received
+ - Add PushGateway API implementation to test if Push are correctly received
+ - Cross signing: shouldn't offer to verify with other session when there is not. (#2227)
+
+Bugfix 🐛:
+ - Improve support for image/audio/video/file selection with intent changes (#1376)
+ - Fix Splash layout on small screens
+ - Invalid popup when pressing back (#1635)
+ - Simplifies draft management and should fix bunch of draft issues (#952, #683)
+ - Very long topic cannot be fully visible (#1957)
+ - Properly detect cross signing keys reset
+ - Don't set presence when handling a push notification or polling (#2156)
+ - Be robust against `StrandHogg` task injection
+ - Clear alerts if user sign out
+ - Fix rows are hidden in Textinput (#2234)
+ - Uploading a file to a room caused it to have a info.size of -1 (#2141)
+
+Translations 🗣:
+ - Move store data to `/fastlane/metadata/android` (#812)
+ - Weblate is now hosted at https://translate.element.io
+
+SDK API changes ⚠️:
+ - Search messages in a room by using Session.searchService() or Room.search()
+
+Build 🧱:
+ - Use Update Gradle Wrapper Action
+ - Updates Gradle Wrapper from 5.6.4 to 6.6.1. (#2193)
+ - Upgrade kotlin version from `1.3.72` to `1.4.10` and kotlin coroutines version from `1.3.8` to `1.3.9`
+ - Upgrade build tools from `3.5.3` to `4.0.1`, then to `4.1.0`
+ - Upgrade com.google.gms:google-services from `4.3.2` to `4.3.4`
+ - Upgrade Moshi to `1.11.0`, Dagger to `2.29.1`, Epoxy to `4.1.0`
+
+Other changes:
+ - Added registration/verification automated UI tests
+ - Create a script to help getting public information form any homeserver
+
+Changes in Element 1.0.8 (2020-09-25)
+===================================================
+
+Improvements 🙌:
+ - Add "show password" in import Megolm keys dialog
+ - Visually disable call buttons in menu and prohibit calling when permissions are insufficient (#2112)
+ - Better management of requested permissions (#2048)
+ - Add a setting to show timestamp for all messages (#2123)
+ - Use cache for user color
+ - Allow using an outdated homeserver, at user's risk (#1972)
+ - Restore small logo on login screens and fix scrolling issue on those screens
+ - PIN Code Improvements: Add more settings: biometrics, grace period, notification content (#1985)
+
+Bugfix 🐛:
+ - Long message cannot be sent/takes infinite time & blocks other messages (#1397)
+ - Fix crash when wellknown are malformed, or redirect to some HTML content (reported by rageshakes)
+ - User Verification in DM not working
+ - Manual import of Megolm keys does back up the imported keys
+ - Auto scrolling to the latest message when sending (#2094)
+ - Fix incorrect permission check when creating widgets (#2137)
+ - Pin code: user has to enter pin code twice (#2005)
+
+SDK API changes ⚠️:
+ - Rename `tryThis` to `tryOrNull`
+
+Other changes:
+ - Add an advanced action to reset an account data entry
+
+Changes in Element 1.0.7 (2020-09-17)
+===================================================
+
+Improvements 🙌:
+ - Handle date formatting properly (show time am/pm if needed, display year when needed)
+ - Improve F-Droid Notification (#2055)
+
+Bugfix 🐛:
+ - Clear the notification when the event is read elsewhere (#1822)
+ - Speakerphone is not used for ringback tone (#1644, #1645)
+ - Back camera preview is not mirrored anymore (#1776)
+ - Various report of people that cannot play video (#2107)
+ - Rooms incorrectly marked as unread (#588)
+ - Allow users to show/hide room member state events (#1231) 
+ - Fix stuck on loader when launching home
+
+SDK API changes ⚠️:
+ - Create a new RawService to get plain data from the server.
+
+Other changes:
+ - Performance: share Realm instance used on UI thread and improve SharedPreferences reading time.
+
+Changes in Element 1.0.6 (2020-09-08)
+===================================================
+
+Features ✨:
+ - List phone numbers and emails added to the Matrix account, and add emails and phone numbers to account (#44, #45)
+
+Improvements 🙌:
+ - You can now join room through permalink and within room directory search
+ - Add long click gesture to copy userId, user display name, room name, room topic and room alias (#1774)
+ - Fix several issues when uploading big files (#1889)
+ - Do not propose to verify session if there is only one session and 4S is not configured (#1901)
+ - Call screen does not use proximity sensor (#1735)
+
+Bugfix 🐛:
+ - Display name not shown under Settings/General (#1926)
+ - Editing message forgets line breaks and markdown (#1939)
+ - Words containing my name should not trigger notifications (#1781)
+ - Fix changing language issue
+ - Fix FontSize issue (#1483, #1787)
+ - Fix bad color for settings icon on Android < 24 (#1786)
+ - Change user or room avatar: when selecting Gallery, I'm not proposed to crop the selected image (#1590)
+ - Loudspeaker is always used (#1685)
+ - Fix uploads still don't work with room v6 (#1879)
+ - Can't handle ongoing call events in background (#1992)
+ - Handle room, user and group links by the Element app (#1795)
+ - Update associated site domain (#1833)
+ - Crash / Attachment viewer: Cannot draw a recycled Bitmap #2034
+ - Login with Matrix-Id | Autodiscovery fails if identity server is invalid and Homeserver ok (#2027)
+ - Support for image compression on Android 10
+ - Verification popup won't show
+ - Android 6: App crash when read Contact permission is granted (#2064)
+ - JSON for verification events leaks in to the room list (#1246)
+ - Replies to poll appears in timeline as unsupported events during sending (#1004)
+
+Translations 🗣:
+ - The SDK is now using SAS string translations from [Weblate Matrix-doc project](https://translate.element.io/projects/matrix-doc/) (#1909)
+ - New translation to kabyle
+
+Build 🧱:
+ - Some dependencies have been upgraded (coroutine, recyclerView, appCompat, core-ktx, firebase-messaging)
+ - Buildkite:
+    New pipeline location: https://github.com/matrix-org/pipelines/blob/master/element-android/pipeline.yml
+    New build location: https://buildkite.com/matrix-dot-org/element-android
+
+Other changes:
+ - Use File extension functions to make code more concise (#1996)
+ - Create a script to import SAS strings (#1909)
+ - Support `data-mx-[bg-]color` attributes on `<font>` tags.
+
+Changes in Element 1.0.5 (2020-08-21)
 ===================================================
 
 Features ✨:
@@ -6,16 +307,27 @@ Features ✨:
  - Conference with Jitsi support (#43)
 
 Improvements 🙌:
+ - Share button in rooms gives room ID link without via parameters (#1927)
  - Give user the possibility to prevent accidental call (#1869)
  - Display device information (name, id and key) in Cryptography setting screen (#1784)
  - Ensure users do not accidentally ignore other users (#1890)
+ - Better handling DM creation when invitees cannot be inviting due to denied federation
+ - Support new config.json format and config.domain.json files (#1682)
+ - Increase Font size on Calling screen (#1643)
+ - Make the user's Avatar live in the general settings
 
 Bugfix 🐛:
+ - Fix incorrect date format for some Asian languages (#1928)
  - Fix invisible toolbar (Status.im theme) (#1746)
  - Fix relative date time formatting (#822)
  - Fix crash reported by RageShake
  - Fix refreshing of sessions list when another session is logged out
- - Fix Canvas: trying to draw too large bitmap (#1951)
+ - Fix IllegalArgumentException: Receiver not registered: NetworkInfoReceiver (#1960)
+ - Failed to build unique file (#1954)
+ - Highlighted Event when opening a permalink from another room (#1033)
+ - A Kick appears has "someone has made no change" (#1959)
+ - Avoid NetworkOnMainThreadException when setting a user avatar
+ - Renew turnserver credentials when ttl runs out
 
 Translations 🗣:
  - Add PlayStore description resources in the Triple-T format, to let Weblate handle them
@@ -33,6 +345,8 @@ Other changes:
  - Rename package `im.vector.riotx.attachmentviewer` to `im.vector.lib.attachmentviewer`
  - Rename package `im.vector.riotx.multipicker` to `im.vector.lib.multipicker`
  - Rename package `im.vector.riotx` to `im.vector.app`
+ - Remove old code that was used on devices with api level <21
+ - Add Official Gradle Wrapper Validation Action
 
 Changes in Element 1.0.4 (2020-08-03)
 ===================================================
@@ -808,6 +1122,9 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
+ -
+
+Test:
  -
 
 Other changes:

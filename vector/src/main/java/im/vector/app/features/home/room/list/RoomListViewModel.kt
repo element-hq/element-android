@@ -16,12 +16,16 @@
 
 package im.vector.app.features.home.room.list
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.utils.DataSource
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -29,9 +33,9 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
-import io.reactivex.schedulers.Schedulers
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
+import java.lang.Exception
 import javax.inject.Inject
 
 class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
@@ -70,7 +74,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             is RoomListAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
             is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-            is RoomListAction.ToggleFavorite              -> handleToggleFavorite(action)
+            is RoomListAction.ToggleTag                   -> handleToggleTag(action)
         }.exhaustive
     }
 
@@ -165,26 +169,47 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     private fun handleChangeNotificationMode(action: RoomListAction.ChangeRoomNotificationState) {
-        session.getRoom(action.roomId)?.setRoomNotificationState(action.notificationState, object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                _viewEvents.post(RoomListViewEvents.Failure(failure))
-            }
-        })
-    }
-
-    private fun handleToggleFavorite(action: RoomListAction.ToggleFavorite) {
-        session.getRoom(action.roomId)?.let {
-            val callback = object : MatrixCallback<Unit> {
-                override fun onFailure(failure: Throwable) {
+        val room = session.getRoom(action.roomId)
+        if (room != null) {
+            viewModelScope.launch {
+                try {
+                    room.setRoomNotificationState(action.notificationState)
+                } catch (failure: Exception) {
                     _viewEvents.post(RoomListViewEvents.Failure(failure))
                 }
             }
-            if (it.roomSummary()?.isFavorite == false) {
-                // Set favorite tag. We do not handle the order for the moment
-                it.addTag(RoomTag.ROOM_TAG_FAVOURITE, 0.5, callback)
-            } else {
-                it.deleteTag(RoomTag.ROOM_TAG_FAVOURITE, callback)
+        }
+    }
+
+    private fun handleToggleTag(action: RoomListAction.ToggleTag) {
+        session.getRoom(action.roomId)?.let { room ->
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    if (room.roomSummary()?.hasTag(action.tag) == false) {
+                        // Favorite and low priority tags are exclusive, so maybe delete the other tag first
+                        action.tag.otherTag()
+                                ?.takeIf { room.roomSummary()?.hasTag(it).orFalse() }
+                                ?.let { tagToRemove ->
+                                    room.deleteTag(tagToRemove)
+                                }
+
+                        // Set the tag. We do not handle the order for the moment
+                        room.addTag(action.tag, 0.5)
+                    } else {
+                        room.deleteTag(action.tag)
+                    }
+                } catch (failure: Throwable) {
+                    _viewEvents.post(RoomListViewEvents.Failure(failure))
+                }
             }
+        }
+    }
+
+    private fun String.otherTag(): String? {
+        return when (this) {
+            RoomTag.ROOM_TAG_FAVOURITE    -> RoomTag.ROOM_TAG_LOW_PRIORITY
+            RoomTag.ROOM_TAG_LOW_PRIORITY -> RoomTag.ROOM_TAG_FAVOURITE
+            else                          -> null
         }
     }
 

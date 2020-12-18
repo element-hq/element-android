@@ -18,15 +18,20 @@ package im.vector.app.features.call
 
 import android.content.Context
 import android.hardware.camera2.CameraManager
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.services.BluetoothHeadsetReceiver
 import im.vector.app.core.services.CallService
 import im.vector.app.core.services.WiredHeadsetStateReceiver
+import im.vector.app.push.fcm.FcmHelper
+import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.ReplaySubject
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.CallsListener
@@ -37,9 +42,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
-import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.ReplaySubject
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
 import org.webrtc.Camera1Enumerator
@@ -74,16 +77,16 @@ import javax.inject.Singleton
 class WebRtcPeerConnectionManager @Inject constructor(
         private val context: Context,
         private val activeSessionDataSource: ActiveSessionDataSource
-) : CallsListener {
+) : CallsListener, LifecycleObserver {
 
     private val currentSession: Session?
         get() = activeSessionDataSource.currentValue?.orNull()
 
     interface CurrentCallListener {
         fun onCurrentCallChange(call: MxCall?)
-        fun onCaptureStateChanged(mgr: WebRtcPeerConnectionManager) {}
-        fun onAudioDevicesChange(mgr: WebRtcPeerConnectionManager) {}
-        fun onCameraChange(mgr: WebRtcPeerConnectionManager) {}
+        fun onCaptureStateChanged() {}
+        fun onAudioDevicesChange() {}
+        fun onCameraChange() {}
     }
 
     private val currentCallsListeners = emptyList<CurrentCallListener>().toMutableList()
@@ -95,9 +98,9 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCallsListeners.remove(listener)
     }
 
-    val audioManager = CallAudioManager(context.applicationContext) {
+    val callAudioManager = CallAudioManager(context.applicationContext) {
         currentCallsListeners.forEach {
-            tryThis { it.onAudioDevicesChange(this) }
+            tryOrNull { it.onAudioDevicesChange() }
         }
     }
 
@@ -172,11 +175,13 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     private var currentCaptureMode: CaptureFormat = CaptureFormat.HD
 
+    private var isInBackground: Boolean = true
+
     var capturerIsInError = false
         set(value) {
             field = value
             currentCallsListeners.forEach {
-                tryThis { it.onCaptureStateChanged(this) }
+                tryOrNull { it.onCaptureStateChanged() }
             }
         }
 
@@ -185,7 +190,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
     fun addIfNeeded(renderer: SurfaceViewRenderer?, list: MutableList<WeakReference<SurfaceViewRenderer>>) {
         if (renderer == null) return
-        val exists = list.firstOrNull() {
+        val exists = list.firstOrNull {
             it.get() == renderer
         } != null
         if (!exists) {
@@ -203,11 +208,21 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun entersForeground() {
+        isInBackground = false
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun entersBackground() {
+        isInBackground = true
+    }
+
     var currentCall: CallContext? = null
         set(value) {
             field = value
             currentCallsListeners.forEach {
-                tryThis { it.onCurrentCallChange(value?.mxCall) }
+                tryOrNull { it.onCurrentCallChange(value?.mxCall) }
             }
         }
 
@@ -316,8 +331,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCall?.mxCall
                 ?.takeIf { it.state is CallState.Connected }
                 ?.let { mxCall ->
-                    val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
-                            ?: mxCall.roomId
+                    val name = currentSession?.getRoomMember(mxCall.otherUserId, mxCall.roomId)?.toMatrixItem()?.getBestName()
+                            ?: mxCall.otherUserId
                     // Start background service with notification
                     CallService.onPendingCall(
                             context = context,
@@ -363,11 +378,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     }
                 }
                 else                                -> {
-                    // Fallback for old android, try to restart capture when attached
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && capturerIsInError && call.mxCall.isVideoCall) {
-                        // try to restart capture?
-                        videoCapturer?.startCapture(currentCaptureMode.width, currentCaptureMode.height, currentCaptureMode.fps)
-                    }
                     // sink existing tracks (configuration change, e.g screen rotation)
                     attachViewRenderersInternal()
                 }
@@ -379,7 +389,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         val mxCall = callContext.mxCall
         // Update service state
 
-        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
+        val name = currentSession?.getRoomMember(mxCall.otherUserId, mxCall.roomId)?.toMatrixItem()?.getBestName()
                 ?: mxCall.roomId
         CallService.onPendingCall(
                 context = context,
@@ -478,12 +488,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
                         // We then register in order to restart capture as soon as the camera is available again
                         Timber.v("## VOIP onCameraClosed")
                         this@WebRtcPeerConnectionManager.capturerIsInError = true
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            val restarter = CameraRestarter(cameraInUse?.name ?: "", callContext.mxCall.callId)
-                            callContext.cameraAvailabilityCallback = restarter
-                            val cameraManager = context.getSystemService<CameraManager>()!!
-                            cameraManager.registerAvailabilityCallback(restarter, null)
-                        }
+                        val restarter = CameraRestarter(cameraInUse?.name ?: "", callContext.mxCall.callId)
+                        callContext.cameraAvailabilityCallback = restarter
+                        val cameraManager = context.getSystemService<CameraManager>()!!
+                        cameraManager.registerAvailabilityCallback(restarter, null)
                     }
                 })
 
@@ -512,7 +520,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         // render local video in pip view
         localSurfaceRenderer.forEach {
             it.get()?.let { pipSurface ->
-                pipSurface.setMirror(true)
+                pipSurface.setMirror(this.cameraInUse?.type == CameraType.FRONT)
                 // no need to check if already added, addSink is checking that
                 currentCall?.localVideoTrack?.addSink(pipSurface)
             }
@@ -569,7 +577,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                     ?.let { mxCall ->
                         // Start background service with notification
 
-                        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
+                        val name =  currentSession?.getRoomMember(mxCall.otherUserId, mxCall.roomId)?.toMatrixItem()?.getBestName()
                                 ?: mxCall.otherUserId
                         CallService.onOnGoingCallBackground(
                                 context = context,
@@ -586,7 +594,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
     fun close() {
         Timber.v("## VOIP WebRtcPeerConnectionManager close() >")
         CallService.onNoActiveCall(context)
-        audioManager.stop()
+        callAudioManager.stop()
         val callToEnd = currentCall
         currentCall = null
         // This must be done in this thread
@@ -640,10 +648,10 @@ class WebRtcPeerConnectionManager @Inject constructor(
         val createdCall = currentSession?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
         val callContext = CallContext(createdCall)
 
-        audioManager.startForCall(createdCall)
+        callAudioManager.startForCall(createdCall)
         currentCall = callContext
 
-        val name = currentSession?.getUser(createdCall.otherUserId)?.getBestName()
+        val name = currentSession?.getRoomMember(createdCall.otherUserId, createdCall.roomId)?.toMatrixItem()?.getBestName()
                 ?: createdCall.otherUserId
         CallService.onOutgoingCallRinging(
                 context = context.applicationContext,
@@ -693,13 +701,13 @@ class WebRtcPeerConnectionManager @Inject constructor(
 
         val callContext = CallContext(mxCall)
         currentCall = callContext
-        audioManager.startForCall(mxCall)
+        callAudioManager.startForCall(mxCall)
         executor.execute {
             callContext.remoteCandidateSource = ReplaySubject.create()
         }
 
         // Start background service with notification
-        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
+        val name = currentSession?.getRoomMember(mxCall.otherUserId, mxCall.roomId)?.toMatrixItem()?.getBestName()
                 ?: mxCall.otherUserId
         CallService.onIncomingCallRinging(
                 context = context,
@@ -711,6 +719,18 @@ class WebRtcPeerConnectionManager @Inject constructor(
         )
 
         callContext.offerSdp = callInviteContent.offer
+
+        // If this is received while in background, the app will not sync,
+        // and thus won't be able to received events. For example if the call is
+        // accepted on an other session this device will continue ringing
+        if (isInBackground) {
+            if (FcmHelper.isPushSupported()) {
+                // only for push version as fdroid version is already doing it?
+                currentSession?.startAutomaticBackgroundSync(30, 0)
+            } else {
+                // Maybe increase sync freq? but how to set back to default values?
+            }
+        }
     }
 
     private fun createAnswer() {
@@ -749,8 +769,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
                 override fun onCameraSwitchDone(isFrontCamera: Boolean) {
                     Timber.v("## VOIP onCameraSwitchDone isFront $isFrontCamera")
                     cameraInUse = availableCamera.first { if (isFrontCamera) it.type == CameraType.FRONT else it.type == CameraType.BACK }
+                    localSurfaceRenderer.forEach {
+                        it.get()?.setMirror(isFrontCamera)
+                    }
+
                     currentCallsListeners.forEach {
-                        tryThis { it.onCameraChange(this@WebRtcPeerConnectionManager) }
+                        tryOrNull { it.onCameraChange() }
                     }
                 }
 
@@ -776,7 +800,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
             // videoCapturer?.stopCapture()
             videoCapturer?.changeCaptureFormat(format.width, format.height, format.fps)
             currentCaptureMode = format
-            currentCallsListeners.forEach { tryThis { it.onCaptureStateChanged(this) } }
+            currentCallsListeners.forEach { tryOrNull { it.onCaptureStateChanged() } }
         }
     }
 
@@ -792,10 +816,8 @@ class WebRtcPeerConnectionManager @Inject constructor(
         currentCall?.localVideoTrack?.setEnabled(false)
 
         currentCall?.cameraAvailabilityCallback?.let { cameraAvailabilityCallback ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val cameraManager = context.getSystemService<CameraManager>()!!
-                cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
-            }
+            val cameraManager = context.getSystemService<CameraManager>()!!
+            cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
         }
 
         if (originatedByMe) {
@@ -809,12 +831,12 @@ class WebRtcPeerConnectionManager @Inject constructor(
         Timber.v("## VOIP onWiredDeviceEvent $event")
         currentCall ?: return
         // sometimes we received un-wanted unplugged...
-        audioManager.wiredStateChange(event)
+        callAudioManager.wiredStateChange(event)
     }
 
     fun onWirelessDeviceEvent(event: BluetoothHeadsetReceiver.BTHeadsetPlugEvent) {
         Timber.v("## VOIP onWirelessDeviceEvent $event")
-        audioManager.bluetoothStateChange(event.plugged)
+        callAudioManager.bluetoothStateChange(event.plugged)
     }
 
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
@@ -824,7 +846,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
         val mxCall = call.mxCall
         // Update service state
-        val name = currentSession?.getUser(mxCall.otherUserId)?.getBestName()
+        val name = currentSession?.getRoomMember(mxCall.otherUserId, mxCall.roomId)?.toMatrixItem()?.getBestName()
                 ?: mxCall.otherUserId
         CallService.onPendingCall(
                 context = context,
@@ -856,6 +878,16 @@ class WebRtcPeerConnectionManager @Inject constructor(
         Timber.v("## VOIP onCallManagedByOtherSession: $callId")
         currentCall = null
         CallService.onNoActiveCall(context)
+
+        // did we start background sync? so we should stop it
+        if (isInBackground) {
+            if (FcmHelper.isPushSupported()) {
+                currentSession?.stopAnyBackgroundSync()
+            } else {
+                // for fdroid we should not stop, it should continue syncing
+                // maybe we should restore default timeout/delay though?
+            }
+        }
     }
 
     private inner class StreamObserver(val callContext: CallContext) : PeerConnection.Observer {
@@ -869,6 +901,7 @@ class WebRtcPeerConnectionManager @Inject constructor(
                  */
                 PeerConnection.PeerConnectionState.CONNECTED    -> {
                     callContext.mxCall.state = CallState.Connected(newState)
+                    callAudioManager.onCallConnected(callContext.mxCall)
                 }
                 /**
                  * One or more of the ICE transports on the connection is in the "failed" state.
@@ -1041,7 +1074,6 @@ class WebRtcPeerConnectionManager @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     inner class CameraRestarter(val cameraId: String, val callId: String) : CameraManager.AvailabilityCallback() {
 
         override fun onCameraAvailable(cameraId: String) {

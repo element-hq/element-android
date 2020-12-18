@@ -38,6 +38,7 @@ import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.signout.soft.SoftLogoutActivity
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
@@ -63,12 +64,23 @@ class LoginViewModel @AssistedInject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
         private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val homeServerHistoryService: HomeServerHistoryService
 ) : VectorViewModel<LoginViewState, LoginAction, LoginViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
         fun create(initialState: LoginViewState): LoginViewModel
+    }
+
+    init {
+        getKnownCustomHomeServersUrls()
+    }
+
+    private fun getKnownCustomHomeServersUrls() {
+        setState {
+            copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
+        }
     }
 
     companion object : MvRxViewModelFactory<LoginViewModel, LoginViewState> {
@@ -121,6 +133,7 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.ResetAction                -> handleResetAction(action)
             is LoginAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
             is LoginAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
+            LoginAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
             is LoginAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
     }
@@ -129,10 +142,11 @@ class LoginViewModel @AssistedInject constructor(
         // It happen when we get the login flow, or during direct authentication.
         // So alter the homeserver config and retrieve again the login flow
         when (val finalLastAction = lastAction) {
-            is LoginAction.UpdateHomeServer ->
+            is LoginAction.UpdateHomeServer -> {
                 currentHomeServerConnectionConfig
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
                         ?.let { getLoginFlow(it) }
+            }
             is LoginAction.LoginOrRegister  ->
                 handleDirectLogin(
                         finalLastAction,
@@ -143,6 +157,16 @@ class LoginViewModel @AssistedInject constructor(
                                 .build()
                 )
         }
+    }
+
+    private fun rememberHomeServer(homeServerUrl: String) {
+        homeServerHistoryService.addHomeServerToHistory(homeServerUrl)
+        getKnownCustomHomeServersUrls()
+    }
+
+    private fun handleClearHomeServerHistory() {
+        homeServerHistoryService.clearHistory()
+        getKnownCustomHomeServersUrls()
     }
 
     private fun handleLoginWithToken(action: LoginAction.LoginWithToken) {
@@ -184,7 +208,7 @@ class LoginViewModel @AssistedInject constructor(
         setState {
             copy(
                     signMode = SignMode.SignIn,
-                    loginMode = LoginMode.Sso,
+                    loginMode = LoginMode.Sso(action.ssoIdentityProviders),
                     homeServerUrl = action.homeServerUrl,
                     deviceId = action.deviceId
             )
@@ -207,7 +231,6 @@ class LoginViewModel @AssistedInject constructor(
     private fun handleCheckIfEmailHasBeenValidated(action: LoginAction.CheckIfEmailHasBeenValidated) {
         // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
         currentTask?.cancel()
-        currentTask = null
         currentTask = registrationWizard?.checkIfEmailHasBeenValidated(action.delayMillis, registrationCallback)
     }
 
@@ -417,6 +440,18 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun handleInitWith(action: LoginAction.InitWith) {
         loginConfig = action.loginConfig
+
+        // If there is a pending email validation continue on this step
+        try {
+            if (registrationWizard?.isRegistrationStarted == true) {
+                currentThreePid?.let {
+                    handle(LoginAction.PostViewEvent(LoginViewEvents.OnSendEmailSuccess(it)))
+                }
+            }
+        } catch (e: Throwable) {
+            // NOOP. API is designed to use wizards in a login/registration flow,
+            // but we need to check the state anyway.
+        }
     }
 
     private fun handleResetPassword(action: LoginAction.ResetPassword) {
@@ -522,6 +557,13 @@ class LoginViewModel @AssistedInject constructor(
                 when (data) {
                     is WellknownResult.Prompt          ->
                         onWellknownSuccess(action, data, homeServerConnectionConfig)
+                    is WellknownResult.FailPrompt      ->
+                        // Relax on IS discovery if home server is valid
+                        if (data.homeServerUrl != null && data.wellKnown != null) {
+                            onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
+                        } else {
+                            onWellKnownError()
+                        }
                     is WellknownResult.InvalidMatrixId -> {
                         setState {
                             copy(
@@ -531,12 +573,7 @@ class LoginViewModel @AssistedInject constructor(
                         _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id))))
                     }
                     else                               -> {
-                        setState {
-                            copy(
-                                    asyncLoginAction = Uninitialized
-                            )
-                        }
-                        _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
+                        onWellKnownError()
                     }
                 }.exhaustive
             }
@@ -545,6 +582,15 @@ class LoginViewModel @AssistedInject constructor(
                 onDirectLoginError(failure)
             }
         })
+    }
+
+    private fun onWellKnownError() {
+        setState {
+            copy(
+                    asyncLoginAction = Uninitialized
+            )
+        }
+        _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
     }
 
     private fun onWellknownSuccess(action: LoginAction.LoginOrRegister,
@@ -661,6 +707,7 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
+        authenticationService.reset()
         session.configureAndStart(applicationContext)
         setState {
             copy(
@@ -690,7 +737,6 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun handleUpdateHomeserver(action: LoginAction.UpdateHomeServer) {
         val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
-
         if (homeServerConnectionConfig == null) {
             // This is invalid
             _viewEvents.post(LoginViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
@@ -728,43 +774,36 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             override fun onSuccess(data: LoginFlowResult) {
+                // Valid Homeserver, add it to the history.
+                // Note: we add what the user has input, data.homeServerUrl can be different
+                rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
+
                 when (data) {
-                    is LoginFlowResult.Success            -> {
+                    is LoginFlowResult.Success -> {
                         val loginMode = when {
                             // SSO login is taken first
-                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)      -> LoginMode.Sso
-                            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
-                            else                                                       -> LoginMode.Unsupported
+                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                                    && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+                            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+                            else                                                                  -> LoginMode.Unsupported
                         }
 
-                        if (loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) {
-                            notSupported()
-                        } else {
-                            // FIXME We should post a view event here normally?
-                            setState {
-                                copy(
-                                        asyncHomeServerLoginFlowRequest = Uninitialized,
-                                        homeServerUrl = data.homeServerUrl,
-                                        loginMode = loginMode,
-                                        loginModeSupportedTypes = data.supportedLoginTypes.toList()
-                                )
-                            }
+                        // FIXME We should post a view event here normally?
+                        setState {
+                            copy(
+                                    asyncHomeServerLoginFlowRequest = Uninitialized,
+                                    homeServerUrl = data.homeServerUrl,
+                                    loginMode = loginMode,
+                                    loginModeSupportedTypes = data.supportedLoginTypes.toList()
+                            )
+                        }
+                        if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
+                                || data.isOutdatedHomeserver) {
+                            // Notify the UI
+                            _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
                         }
                     }
-                    is LoginFlowResult.OutdatedHomeserver -> {
-                        notSupported()
-                    }
-                }
-            }
-
-            private fun notSupported() {
-                // Notify the UI
-                _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
-
-                setState {
-                    copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized
-                    )
                 }
             }
         })

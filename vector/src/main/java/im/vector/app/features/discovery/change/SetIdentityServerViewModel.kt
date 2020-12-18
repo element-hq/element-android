@@ -27,13 +27,12 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureProtocol
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
-import org.matrix.android.sdk.api.session.terms.GetTermsResponse
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.internal.util.awaitCallback
-import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class SetIdentityServerViewModel @AssistedInject constructor(
@@ -117,9 +116,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
 
     private suspend fun checkTerms(baseUrl: String) {
         try {
-            val data = awaitCallback<GetTermsResponse> {
-                mxSession.getTerms(TermsService.ServiceType.IdentityService, baseUrl, it)
-            }
+            val data = mxSession.getTerms(TermsService.ServiceType.IdentityService, baseUrl)
 
             // has all been accepted?
             val resp = data.serverResponse

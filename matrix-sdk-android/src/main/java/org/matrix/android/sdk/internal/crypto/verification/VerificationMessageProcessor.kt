@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,6 @@
  */
 package org.matrix.android.sdk.internal.crypto.verification
 
-import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -35,12 +33,13 @@ import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import io.realm.Realm
+import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import timber.log.Timber
 import java.util.ArrayList
 import javax.inject.Inject
 
 internal class VerificationMessageProcessor @Inject constructor(
-        private val cryptoService: CryptoService,
+        private val eventDecryptor: EventDecryptor,
         private val verificationService: DefaultVerificationService,
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?
@@ -83,7 +82,7 @@ internal class VerificationMessageProcessor @Inject constructor(
             // TODO use a global event decryptor? attache to session and that listen to new sessionId?
             // for now decrypt sync
             try {
-                val result = cryptoService.decryptEvent(event, "")
+                val result = eventDecryptor.decryptEvent(event, "")
                 event.mxDecryptionResult = OlmDecryptionResult(
                         payload = result.clearEvent,
                         senderKey = result.senderCurve25519Key,

@@ -22,7 +22,6 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.api.session.terms.TermsService
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.cleanup
@@ -32,6 +31,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import kotlinx.android.synthetic.main.fragment_review_terms.*
+import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
 class ReviewTermsFragment @Inject constructor(

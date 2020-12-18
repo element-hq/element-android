@@ -1,8 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s ha inviato un\'immagine.</string>
-
     <string name="notice_room_invite_no_invitee">Invito di %s</string>
     <string name="notice_room_invite">%1$s ha invitato %2$s</string>
     <string name="notice_room_invite_you">%1$s ti ha invitato</string>
@@ -30,119 +29,40 @@
     <string name="notice_room_visibility_world_readable">chiunque.</string>
     <string name="notice_room_visibility_unknown">sconosciuto (%s).</string>
     <string name="notice_end_to_end">%1$s ha attivato la crittografia end-to-end (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s ha richiesto una conferenza VoIP</string>
     <string name="notice_voip_started">Conferenza VoIP iniziata</string>
     <string name="notice_voip_finished">Conferenza VoIP terminata</string>
-
     <string name="notice_avatar_changed_too">(anche l\'avatar è cambiato)</string>
     <string name="notice_room_name_removed">%1$s ha rimosso il nome della stanza</string>
     <string name="notice_room_topic_removed">%1$s ha rimosso l\'argomento della stanza</string>
     <string name="notice_profile_change_redacted">%1$s ha aggiornato il profilo %2$s</string>
     <string name="notice_room_third_party_invite">%1$s ha mandato un invito a %2$s per unirsi alla stanza</string>
     <string name="notice_room_third_party_registered_invite">%1$s ha accettato l\'invito per %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Impossibile decriptare: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Il dispositivo del mittente non ci ha inviato le chiavi per questo messaggio.</string>
-
     <string name="could_not_redact">Impossibile revisionare</string>
     <string name="unable_to_send_message">Impossibile inviare il messaggio</string>
-
     <string name="message_failed_to_upload">Invio dell\'immagine fallito</string>
-
     <string name="network_error">Errore di rete</string>
     <string name="matrix_error">Errore di Matrix</string>
-
     <string name="room_error_join_failed_empty_room">Al momento non è possibile rientrare in una stanza vuota.</string>
-
     <string name="encrypted_message">Messaggio criptato</string>
-
     <string name="medium_email">Indirizzo email</string>
     <string name="medium_phone_number">Numero di telefono</string>
-
     <string name="summary_user_sent_sticker">%1$s ha inviato un adesivo.</string>
-
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Invito da %s</string>
     <string name="room_displayname_room_invite">Invito nella stanza</string>
     <string name="room_displayname_two_members">%1$s e %2$s</string>
     <string name="room_displayname_empty_room">Stanza vuota</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s e 1 altro</item>
         <item quantity="other">%1$s e %2$d altri</item>
     </plurals>
-
-
     <string name="notice_event_redacted">Messaggio rimosso</string>
     <string name="notice_event_redacted_by">Messaggio rimosso da %1$s</string>
     <string name="notice_event_redacted_with_reason">Messaggio rimosso [motivo: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Messaggio rimosso da %1$s [motivo: %2$s]</string>
-    <string name="verification_emoji_dog">Cane</string>
-    <string name="verification_emoji_cat">Gatto</string>
-    <string name="verification_emoji_lion">Leone</string>
-    <string name="verification_emoji_horse">Cavallo</string>
-    <string name="verification_emoji_unicorn">Unicorno</string>
-    <string name="verification_emoji_pig">Maiale</string>
-    <string name="verification_emoji_elephant">Elefante</string>
-    <string name="verification_emoji_rabbit">Coniglio</string>
-    <string name="verification_emoji_panda">Panda</string>
-    <string name="verification_emoji_rooster">Gallo</string>
-    <string name="verification_emoji_penguin">Pinguino</string>
-    <string name="verification_emoji_turtle">Tartaruga</string>
-    <string name="verification_emoji_fish">Pesce</string>
-    <string name="verification_emoji_octopus">Piovra</string>
-    <string name="verification_emoji_butterfly">Farfalla</string>
-    <string name="verification_emoji_flower">Fiore</string>
-    <string name="verification_emoji_tree">Albero</string>
-    <string name="verification_emoji_cactus">Cactus</string>
-    <string name="verification_emoji_mushroom">Fungo</string>
-    <string name="verification_emoji_globe">Globo</string>
-    <string name="verification_emoji_moon">Luna</string>
-    <string name="verification_emoji_cloud">Nuvola</string>
-    <string name="verification_emoji_fire">Fuoco</string>
-    <string name="verification_emoji_banana">Banana</string>
-    <string name="verification_emoji_apple">Mela</string>
-    <string name="verification_emoji_strawberry">Fragola</string>
-    <string name="verification_emoji_corn">Mais</string>
-    <string name="verification_emoji_pizza">Pizza</string>
-    <string name="verification_emoji_cake">Torta</string>
-    <string name="verification_emoji_heart">Cuore</string>
-    <string name="verification_emoji_smiley">Sorriso</string>
-    <string name="verification_emoji_robot">Robot</string>
-    <string name="verification_emoji_hat">Cappello</string>
-    <string name="verification_emoji_glasses">Occhiali</string>
-    <string name="verification_emoji_wrench">Chiave inglese</string>
-    <string name="verification_emoji_santa">Babbo Natale</string>
-    <string name="verification_emoji_thumbsup">Pollice in su</string>
-    <string name="verification_emoji_umbrella">Ombrello</string>
-    <string name="verification_emoji_hourglass">Clessidra</string>
-    <string name="verification_emoji_clock">Orologio</string>
-    <string name="verification_emoji_gift">Regalo</string>
-    <string name="verification_emoji_lightbulb">Lampadina</string>
-    <string name="verification_emoji_book">Libro</string>
-    <string name="verification_emoji_pencil">Matita</string>
-    <string name="verification_emoji_paperclip">Graffetta</string>
-    <string name="verification_emoji_scissors">Forbici</string>
-    <string name="verification_emoji_lock">Lucchetto</string>
-    <string name="verification_emoji_key">Chiave</string>
-    <string name="verification_emoji_hammer">Martello</string>
-    <string name="verification_emoji_telephone">Telefono</string>
-    <string name="verification_emoji_flag">Bandiera</string>
-    <string name="verification_emoji_train">Treno</string>
-    <string name="verification_emoji_bicycle">Bicicletta</string>
-    <string name="verification_emoji_airplane">Aeroplano</string>
-    <string name="verification_emoji_rocket">Razzo</string>
-    <string name="verification_emoji_trophy">Trofeo</string>
-    <string name="verification_emoji_ball">Palla</string>
-    <string name="verification_emoji_guitar">Chitarra</string>
-    <string name="verification_emoji_trumpet">Tromba</string>
-    <string name="verification_emoji_bell">Campana</string>
-    <string name="verification_emoji_anchor">Ancora</string>
-    <string name="verification_emoji_headphone">Cuffie</string>
-    <string name="verification_emoji_folder">Cartella</string>
-    <string name="verification_emoji_pin">Spillo</string>
-
     <string name="initial_sync_start_importing_account">Sync iniziale:
 \nImportazione account…</string>
     <string name="initial_sync_start_importing_account_crypto">Sync iniziale:
@@ -159,12 +79,9 @@
 \nImportazione comunità</string>
     <string name="initial_sync_start_importing_account_data">Sync iniziale:
 \nImportazione dati account</string>
-
     <string name="notice_room_update">%s ha aggiornato questa stanza.</string>
-
     <string name="event_status_sending_message">Invio messaggio in corso …</string>
     <string name="clear_timeline_send_queue">Cancella la coda di invio</string>
-
     <string name="notice_room_third_party_revoked_invite">%1$s ha revocato l\'invito a %2$s di unirsi alla stanza</string>
     <string name="notice_room_invite_no_invitee_with_reason">Invito di %1$s. Motivo: %2$s</string>
     <string name="notice_room_invite_with_reason">%1$s ha invitato %2$s. Motivo: %3$s</string>
@@ -179,34 +96,25 @@
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s ha revocato l\'invito a %2$s di unirsi alla stanza. Motivo: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s ha accettato l\'invito per %2$s. Motivo: %3$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s ha rifiutato l\'invito di %2$s. Motivo: %3$s</string>
-
     <plurals name="notice_room_aliases_added">
         <item quantity="one">%1$s ha aggiunto %2$s come indirizzo per questa stanza.</item>
         <item quantity="other">%1$s ha aggiunto %2$s come indirizzi per questa stanza.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s ha rimosso %2$s come indirizzo per questa stanza.</item>
         <item quantity="other">%1$s ha rimosso %3$s come indirizzi per questa stanza.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed">%1$s ha aggiunto %2$s e rimosso %3$s come indirizzi per questa stanza.</string>
-
     <string name="notice_room_canonical_alias_set">%1$s ha impostato l\'indirizzo principale per questa stanza a %2$s.</string>
     <string name="notice_room_canonical_alias_unset">%1$s ha rimosso l\'indirizzo principale per questa stanza.</string>
-
     <string name="notice_room_guest_access_can_join">%1$s ha permesso l\'accesso alla stanza per gli ospiti.</string>
     <string name="notice_room_guest_access_forbidden">%1$s ha impedito l\'accesso alla stanza per gli ospiti.</string>
-
     <string name="notice_end_to_end_ok">%1$s ha attivato la cifratura end-to-end.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s ha attivato la cifratura end-to-end (algoritmo %2$s non riconosciuto).</string>
-
     <string name="key_verification_request_fallback_message">%s sta chiedendo di verificare la tua chiave, ma il tuo client non supporta la verifica in-chat. Dovrai usare il metodo di verifica obsoleto per verificare le chiavi.</string>
-
     <string name="notice_room_created">%1$s ha creato la stanza</string>
     <string name="summary_you_sent_image">Hai inviato un\'immagine.</string>
     <string name="summary_you_sent_sticker">Hai inviato un adesivo.</string>
-
     <string name="notice_room_invite_no_invitee_by_you">Il tuo invito</string>
     <string name="notice_room_created_by_you">Hai creato la stanza</string>
     <string name="notice_room_invite_by_you">Hai invitato %1$s</string>
@@ -234,7 +142,6 @@
     <string name="notice_made_future_room_visibility_by_you">Hai reso visibile la futura cronologia della stanza a %1$s</string>
     <string name="notice_end_to_end_by_you">Hai attivato la crittografia end-to-end (%1$s)</string>
     <string name="notice_room_update_by_you">Hai aggiornato questa stanza.</string>
-
     <string name="notice_requested_voip_conference_by_you">Hai richiesto una conferenza VoIP</string>
     <string name="notice_room_name_removed_by_you">Hai rimosso il nome della stanza</string>
     <string name="notice_room_topic_removed_by_you">Hai rimosso l\'argomento della stanza</string>
@@ -244,24 +151,20 @@
     <string name="notice_room_third_party_invite_by_you">Hai mandato un invito a %1$s a unirsi alla stanza</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Hai revocato l\'invito per %1$s a unirsi alla stanza</string>
     <string name="notice_room_third_party_registered_invite_by_you">Hai accettato l\'invito per %1$s</string>
-
     <string name="notice_widget_added">%1$s ha aggiunto il widget %2$s</string>
     <string name="notice_widget_added_by_you">Hai aggiunto il widget %1$s</string>
     <string name="notice_widget_removed">%1$s ha rimosso il widget %2$s</string>
     <string name="notice_widget_removed_by_you">Hai rimosso il widget %1$s</string>
     <string name="notice_widget_modified">%1$s ha modificato il widget %2$s</string>
     <string name="notice_widget_modified_by_you">Hai modificato il widget %1$s</string>
-
     <string name="power_level_admin">Amministratore</string>
     <string name="power_level_moderator">Moderatore</string>
     <string name="power_level_default">Predefinito</string>
     <string name="power_level_custom">Personalizzato (%1$d)</string>
     <string name="power_level_custom_no_value">Personalizzato</string>
-
     <string name="notice_power_level_changed_by_you">Hai cambiato il livello di potere di %1$s.</string>
     <string name="notice_power_level_changed">%1$s ha cambiato il livello di potere di %2$s.</string>
     <string name="notice_power_level_diff">%1$s da %2$s a %3$s</string>
-
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Il tuo invito. Motivo: %1$s</string>
     <string name="notice_room_invite_with_reason_by_you">Hai invitato %1$s. Motivo: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">Sei entrato nella stanza. Motivo: %1$s</string>
@@ -273,31 +176,65 @@
     <string name="notice_room_third_party_invite_with_reason_by_you">Hai mandato un invito a %1$s a unirsi alla stanza. Motivo: %2$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Hai revocato l\'invito a %1$s a unirsi alla stanza. Motivo: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Hai accettato l\'invito per %1$s. Motivo: %2$s</string>
-    <string name="notice_room_withdraw_with_reason_by_you">Hai ritirato l\'invito di %2$s. Motivo: %2$s</string>
-
+    <string name="notice_room_withdraw_with_reason_by_you">Hai ritirato l\'invito di %1$s. Motivo: %2$s</string>
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">Hai aggiunto %1$s come indirizzo per questa stanza.</item>
         <item quantity="other">Hai aggiunto %1$s come indirizzi per questa stanza.</item>
     </plurals>
-
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Hai rimosso %1$s come indirizzo per questa stanza.</item>
-        <item quantity="other">Hai rimosso %2$s come indirizzi per questa stanza.</item>
+        <item quantity="other">Hai rimosso %1$s come indirizzi per questa stanza.</item>
     </plurals>
-
     <string name="notice_room_aliases_added_and_removed_by_you">Hai aggiunto %1$s e rimosso %2$s come indirizzi per questa stanza.</string>
-
     <string name="notice_room_canonical_alias_set_by_you">Hai impostato l\'indirizzo principale per questa stanza a %1$s.</string>
     <string name="notice_room_canonical_alias_unset_by_you">Hai rimosso l\'indirizzo principale per questa stanza.</string>
-
     <string name="notice_room_guest_access_can_join_by_you">Hai permesso l\'accesso alla stanza per gli ospiti.</string>
     <string name="notice_room_guest_access_forbidden_by_you">Hai impedito l\'accesso alla stanza per gli ospiti.</string>
-
     <string name="notice_end_to_end_ok_by_you">Hai attivato la crittografia end-to-end.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Hai attivato la crittografia end-to-end (algoritmo %1$s sconosciuto).</string>
-
-    <string name="call_notification_answer">Accetta</string>
-    <string name="call_notification_reject">Rifiuta</string>
-    <string name="call_notification_hangup">Riaggancia</string>
-
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Hai impedito l\'accesso alla stanza agli ospiti.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s ha impedito l\'accesso alla stanza agli ospiti.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Hai permesso l\'accesso agli ospiti.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s ha permesso l\'accesso agli ospiti.</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Sei entrato. Motivo: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Sei uscito. Motivo: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s è uscito. Motivo: %2$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s è entrato. Motivo: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Hai revocato l\'invito per %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s ha revocato l\'invito per %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Hai invitato %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s ha invitato %2$s</string>
+    <string name="notice_direct_room_update_by_you">Hai aggiornato la stanza.</string>
+    <string name="notice_direct_room_update">%s ha aggiornato la stanza.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Hai reso visibili i messaggi futuri a %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s ha reso visibili i messaggi futuri a %2$s</string>
+    <string name="notice_direct_room_leave_by_you">Sei uscito dalla stanza</string>
+    <string name="notice_direct_room_leave">%1$s è uscito dalla stanza</string>
+    <string name="notice_direct_room_join_by_you">Sei entrato</string>
+    <string name="notice_direct_room_join">%1$s è entrato</string>
+    <string name="notice_direct_room_created_by_you">Hai creato la discussione</string>
+    <string name="notice_direct_room_created">%1$s ha creato la discussione</string>
+    <string name="room_displayname_empty_room_was">Stanza vuota (era %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s e %4$d altro</item>
+        <item quantity="other">%1$s, %2$s, %3$s e altri %4$d</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s e %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s e %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Tutti i server sono banditi dalla partecipazione! Questa stanza non può più essere usata.</string>
+    <string name="notice_room_server_acl_updated_no_change">Nessuna modifica.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• I server che corrispondono a IP letterali ora sono banditi.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• I server che corrispondono a IP letterali ora sono permessi.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• I server che corrispondono a %s sono stati rimossi dalla lista dei consentiti.</string>
+    <string name="notice_room_server_acl_updated_allowed">• I server che corrispondono a %s ora sono permessi.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• I server che corrispondono a %s sono stati rimossi dalla lista di ban.</string>
+    <string name="notice_room_server_acl_updated_banned">• I server che corrispondono a %s ora sono banditi.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Hai cambiato le ACL del server per questa stanza.</string>
+    <string name="notice_room_server_acl_updated_title">%s ha cambiato le ACL del server per questa stanza.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• I server che corrispondono a IP letterali sono banditi.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• I server che corrispondono a IP letterali sono permessi.</string>
+    <string name="notice_room_server_acl_set_allowed">• I server che corrispondono a %s sono permessi.</string>
+    <string name="notice_room_server_acl_set_banned">• I server che corrispondono a %s sono banditi.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Hai impostato le ACL del server per questa stanza.</string>
+    <string name="notice_room_server_acl_set_title">%s ha impostato le ACL del server per questa stanza.</string>
 </resources>

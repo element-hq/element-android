@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,17 +22,15 @@ import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.user.UserDataSource
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import java.net.URLEncoder
 import javax.inject.Inject
 
-internal class WidgetFactory @Inject constructor(@SessionDatabase private val realmConfiguration: RealmConfiguration,
-                                                 private val userDataSource: UserDataSource,
+internal class WidgetFactory @Inject constructor(private val userDataSource: UserDataSource,
+                                                 private val realmSessionProvider: RealmSessionProvider,
                                                  @UserId private val userId: String) {
 
     fun create(widgetEvent: Event): Widget? {
@@ -44,7 +41,7 @@ internal class WidgetFactory @Inject constructor(@SessionDatabase private val re
         val senderInfo = if (widgetEvent.senderId == null || widgetEvent.roomId == null) {
             null
         } else {
-            Realm.getInstance(realmConfiguration).use {
+            realmSessionProvider.withRealm {
                 val roomMemberHelper = RoomMemberHelper(it, widgetEvent.roomId)
                 val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(widgetEvent.senderId)
                 SenderInfo(

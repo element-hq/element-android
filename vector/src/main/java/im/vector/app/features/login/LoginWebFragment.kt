@@ -22,7 +22,6 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.net.http.SslError
-import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -36,11 +35,11 @@ import im.vector.app.core.extensions.appendParamToUrl
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.features.signout.soft.SoftLogoutAction
 import im.vector.app.features.signout.soft.SoftLogoutViewModel
+import kotlinx.android.synthetic.main.fragment_login_web.*
 import org.matrix.android.sdk.api.auth.LOGIN_FALLBACK_PATH
 import org.matrix.android.sdk.api.auth.REGISTER_FALLBACK_PATH
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import kotlinx.android.synthetic.main.fragment_login_web.*
 import timber.log.Timber
 import java.net.URLDecoder
 import javax.inject.Inject
@@ -102,14 +101,6 @@ class LoginWebFragment @Inject constructor(
             launchWebView(state)
         } else {
             if (!cookieManager.hasCookies()) {
-                launchWebView(state)
-            } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                try {
-                    cookieManager.removeAllCookie()
-                } catch (e: Exception) {
-                    Timber.e(e, " cookieManager.removeAllCookie() fails")
-                }
-
                 launchWebView(state)
             } else {
                 try {

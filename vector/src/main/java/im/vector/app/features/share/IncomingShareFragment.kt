@@ -28,23 +28,20 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_PICK_ATTACHMENT
-import im.vector.app.core.utils.allGranted
-import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.login.LoginActivity
 import kotlinx.android.synthetic.main.fragment_incoming_share.*
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 /**
@@ -74,6 +71,14 @@ class IncomingShareFragment @Inject constructor(
         setupToolbar(incomingShareToolbar)
         attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
 
+        viewModel.observeViewEvents {
+            when (it) {
+                is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
+                is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
+                is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
+            }.exhaustive
+        }
+
         val intent = vectorBaseActivity.intent
         val isShareManaged = when (intent?.action) {
             Intent.ACTION_SEND          -> {
@@ -81,6 +86,13 @@ class IncomingShareFragment @Inject constructor(
                 if (!isShareManaged) {
                     isShareManaged = handleTextShare(intent)
                 }
+
+                // Direct share
+                if (intent.hasExtra(Intent.EXTRA_SHORTCUT_ID)) {
+                    val roomId = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)!!
+                    sessionHolder.getSafeActiveSession()?.getRoomSummary(roomId)?.let { viewModel.handle(IncomingShareAction.ShareToRoom(it)) }
+                }
+
                 isShareManaged
             }
             Intent.ACTION_SEND_MULTIPLE -> attachmentsHelper.handleShareIntent(requireContext(), intent)
@@ -104,13 +116,6 @@ class IncomingShareFragment @Inject constructor(
         sendShareButton.setOnClickListener { _ ->
             handleSendShare()
         }
-        viewModel.observeViewEvents {
-            when (it) {
-                is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
-                is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
-                is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
-            }.exhaustive
-        }
     }
 
     private fun handleMultipleRoomsShareDone(viewEvent: IncomingShareViewEvents.MultipleRoomsShareDone) {
@@ -122,36 +127,16 @@ class IncomingShareFragment @Inject constructor(
 
     private fun handleEditMediaBeforeSending(event: IncomingShareViewEvents.EditMediaBeforeSending) {
         val intent = AttachmentsPreviewActivity.newIntent(requireContext(), AttachmentsPreviewArgs(event.contentAttachmentData))
-        startActivityForResult(intent, AttachmentsPreviewActivity.REQUEST_CODE)
+        attachmentPreviewActivityResultLauncher.launch(intent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val hasBeenHandled = attachmentsHelper.onActivityResult(requestCode, resultCode, data)
-        if (!hasBeenHandled && resultCode == Activity.RESULT_OK && data != null) {
-            when (requestCode) {
-                AttachmentsPreviewActivity.REQUEST_CODE -> {
-                    val sendData = AttachmentsPreviewActivity.getOutput(data)
-                    val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
-                    viewModel.handle(IncomingShareAction.UpdateSharedData(SharedData.Attachments(sendData)))
-                    viewModel.handle(IncomingShareAction.ShareMedia(keepOriginalSize))
-                }
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        // We need the read file permission
-        checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_PICK_ATTACHMENT)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == PERMISSION_REQUEST_CODE_PICK_ATTACHMENT && !allGranted(grantResults)) {
-            // Permission is mandatory
-            cannotManageShare(R.string.missing_permissions_error)
+    private val attachmentPreviewActivityResultLauncher = registerStartForActivityResult {
+        val data = it.data ?: return@registerStartForActivityResult
+        if (it.resultCode == Activity.RESULT_OK) {
+            val sendData = AttachmentsPreviewActivity.getOutput(data)
+            val keepOriginalSize = AttachmentsPreviewActivity.getKeepOriginalSize(data)
+            viewModel.handle(IncomingShareAction.UpdateSharedData(SharedData.Attachments(sendData)))
+            viewModel.handle(IncomingShareAction.ShareMedia(keepOriginalSize))
         }
     }
 

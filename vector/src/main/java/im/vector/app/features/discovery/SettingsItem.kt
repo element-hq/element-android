@@ -16,13 +16,13 @@
 package im.vector.app.features.discovery
 
 import android.view.View
-import android.widget.Switch
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
+import com.google.android.material.switchmaterial.SwitchMaterial
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.extensions.setTextOrHide
@@ -69,6 +69,6 @@ abstract class SettingsItem : EpoxyModelWithHolder<SettingsItem.Holder>() {
     class Holder : VectorEpoxyHolder() {
         val titleText by bind<TextView>(R.id.settings_item_title)
         val descriptionText by bind<TextView>(R.id.settings_item_description)
-        val switchButton by bind<Switch>(R.id.settings_item_switch)
+        val switchButton by bind<SwitchMaterial>(R.id.settings_item_switch)
     }
 }

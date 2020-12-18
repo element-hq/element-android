@@ -1,5 +1,4 @@
 /*
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +18,7 @@ package org.matrix.android.sdk.internal.crypto.store.db
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper
@@ -44,6 +43,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEnti
 import org.matrix.android.sdk.internal.di.SerializeNulls
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
+import io.realm.RealmObjectSchema
 import org.matrix.androidsdk.crypto.data.MXOlmInboundGroupSession2
 import timber.log.Timber
 import javax.inject.Inject
@@ -56,6 +56,27 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         // 3: migrate to RiotX schema
         // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
         const val CRYPTO_STORE_SCHEMA_VERSION = 11L
+    }
+
+    private fun RealmObjectSchema.addFieldIfNotExists(fieldName: String, fieldType: Class<*>): RealmObjectSchema {
+        if (!hasField(fieldName)) {
+            addField(fieldName, fieldType)
+        }
+        return this
+    }
+
+    private fun RealmObjectSchema.removeFieldIfExists(fieldName: String): RealmObjectSchema {
+        if (hasField(fieldName)) {
+            removeField(fieldName)
+        }
+        return this
+    }
+
+    private fun RealmObjectSchema.setRequiredIfNotAlready(fieldName: String, isRequired: Boolean): RealmObjectSchema {
+        if (isRequired != isRequired(fieldName)) {
+            setRequired(fieldName, isRequired)
+        }
+        return this
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -90,13 +111,13 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         Timber.d("Update IncomingRoomKeyRequestEntity format: requestBodyString field is exploded into several fields")
 
         realm.schema.get("IncomingRoomKeyRequestEntity")
-                ?.addField("requestBodyAlgorithm", String::class.java)
-                ?.addField("requestBodyRoomId", String::class.java)
-                ?.addField("requestBodySenderKey", String::class.java)
-                ?.addField("requestBodySessionId", String::class.java)
+                ?.addFieldIfNotExists("requestBodyAlgorithm", String::class.java)
+                ?.addFieldIfNotExists("requestBodyRoomId", String::class.java)
+                ?.addFieldIfNotExists("requestBodySenderKey", String::class.java)
+                ?.addFieldIfNotExists("requestBodySessionId", String::class.java)
                 ?.transform { dynamicObject ->
-                    val requestBodyString = dynamicObject.getString("requestBodyString")
                     try {
+                        val requestBodyString = dynamicObject.getString("requestBodyString")
                         // It was a map before
                         val map: Map<String, String>? = deserializeFromRealm(requestBodyString)
 
@@ -110,18 +131,18 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                         Timber.e(e, "Error")
                     }
                 }
-                ?.removeField("requestBodyString")
+                ?.removeFieldIfExists("requestBodyString")
 
         Timber.d("Update IncomingRoomKeyRequestEntity format: requestBodyString field is exploded into several fields")
 
         realm.schema.get("OutgoingRoomKeyRequestEntity")
-                ?.addField("requestBodyAlgorithm", String::class.java)
-                ?.addField("requestBodyRoomId", String::class.java)
-                ?.addField("requestBodySenderKey", String::class.java)
-                ?.addField("requestBodySessionId", String::class.java)
+                ?.addFieldIfNotExists("requestBodyAlgorithm", String::class.java)
+                ?.addFieldIfNotExists("requestBodyRoomId", String::class.java)
+                ?.addFieldIfNotExists("requestBodySenderKey", String::class.java)
+                ?.addFieldIfNotExists("requestBodySessionId", String::class.java)
                 ?.transform { dynamicObject ->
-                    val requestBodyString = dynamicObject.getString("requestBodyString")
                     try {
+                        val requestBodyString = dynamicObject.getString("requestBodyString")
                         // It was a map before
                         val map: Map<String, String>? = deserializeFromRealm(requestBodyString)
 
@@ -135,16 +156,18 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                         Timber.e(e, "Error")
                     }
                 }
-                ?.removeField("requestBodyString")
+                ?.removeFieldIfExists("requestBodyString")
 
         Timber.d("Create KeysBackupDataEntity")
 
-        realm.schema.create("KeysBackupDataEntity")
-                .addField(KeysBackupDataEntityFields.PRIMARY_KEY, Integer::class.java)
-                .addPrimaryKey(KeysBackupDataEntityFields.PRIMARY_KEY)
-                .setRequired(KeysBackupDataEntityFields.PRIMARY_KEY, true)
-                .addField(KeysBackupDataEntityFields.BACKUP_LAST_SERVER_HASH, String::class.java)
-                .addField(KeysBackupDataEntityFields.BACKUP_LAST_SERVER_NUMBER_OF_KEYS, Integer::class.java)
+        if (!realm.schema.contains("KeysBackupDataEntity")) {
+            realm.schema.create("KeysBackupDataEntity")
+                    .addField(KeysBackupDataEntityFields.PRIMARY_KEY, Integer::class.java)
+                    .addPrimaryKey(KeysBackupDataEntityFields.PRIMARY_KEY)
+                    .setRequired(KeysBackupDataEntityFields.PRIMARY_KEY, true)
+                    .addField(KeysBackupDataEntityFields.BACKUP_LAST_SERVER_HASH, String::class.java)
+                    .addField(KeysBackupDataEntityFields.BACKUP_LAST_SERVER_NUMBER_OF_KEYS, Integer::class.java)
+        }
     }
 
     private fun migrateTo3RiotX(realm: DynamicRealm) {
@@ -152,8 +175,8 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         Timber.d("Migrate to RiotX model")
 
         realm.schema.get("CryptoRoomEntity")
-                ?.addField(CryptoRoomEntityFields.SHOULD_ENCRYPT_FOR_INVITED_MEMBERS, Boolean::class.java)
-                ?.setRequired(CryptoRoomEntityFields.SHOULD_ENCRYPT_FOR_INVITED_MEMBERS, false)
+                ?.addFieldIfNotExists(CryptoRoomEntityFields.SHOULD_ENCRYPT_FOR_INVITED_MEMBERS, Boolean::class.java)
+                ?.setRequiredIfNotAlready(CryptoRoomEntityFields.SHOULD_ENCRYPT_FOR_INVITED_MEMBERS, false)
 
         // Convert format of MXDeviceInfo, package has to be the same.
         realm.schema.get("DeviceInfoEntity")
@@ -205,8 +228,13 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
     // Version 4L added Cross Signing info persistence
     private fun migrateTo4(realm: DynamicRealm) {
         Timber.d("Step 3 -> 4")
-        Timber.d("Create KeyInfoEntity")
 
+        if (realm.schema.contains("TrustLevelEntity")) {
+            Timber.d("Skipping Step 3 -> 4 because entities already exist")
+            return
+        }
+
+        Timber.d("Create KeyInfoEntity")
         val trustLevelEntityEntitySchema = realm.schema.create("TrustLevelEntity")
                 .addField(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, Boolean::class.java)
                 .setNullable(TrustLevelEntityFields.CROSS_SIGNED_VERIFIED, true)
@@ -398,7 +426,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
                 ?.addField(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, Long::class.java)
                 ?.setNullable(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, true)
                 ?.transform { deviceInfoEntity ->
-                    tryThis {
+                    tryOrNull {
                         deviceInfoEntity.setLong(DeviceInfoEntityFields.FIRST_TIME_SEEN_LOCAL_TS, now)
                     }
                 }

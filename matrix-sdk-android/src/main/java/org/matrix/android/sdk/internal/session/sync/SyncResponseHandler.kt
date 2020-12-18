@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -131,7 +130,7 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
 
     /**
      * At the moment we don't get any group data through the sync, so we poll where every hour.
-       You can also force to refetch group data using [Group] API.
+     * You can also force to refetch group data using [Group] API.
      */
     private fun scheduleGroupDataFetchingIfNeeded(groupsSyncResponse: GroupsSyncResponse) {
         val groupIds = ArrayList<String>()

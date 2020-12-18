@@ -26,6 +26,12 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.core.platform.EmptyAction
+import im.vector.app.core.platform.EmptyViewEvents
+import im.vector.app.core.platform.VectorViewModel
+import io.reactivex.Observable
+import io.reactivex.functions.Function4
+import io.reactivex.subjects.PublishSubject
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
@@ -37,12 +43,6 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
-import im.vector.app.core.platform.EmptyAction
-import im.vector.app.core.platform.EmptyViewEvents
-import im.vector.app.core.platform.VectorViewModel
-import io.reactivex.Observable
-import io.reactivex.functions.Function4
-import io.reactivex.subjects.PublishSubject
 import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
 

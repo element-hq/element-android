@@ -1,6 +1,4 @@
 /*
- * Copyright 2017 Vector Creations Ltd
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -361,7 +359,6 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                 cryptoStore.storeUserDevices(userId, workingCopy)
             }
 
-            // Handle cross signing keys update
             val masterKey = response.masterKeys?.get(userId)?.toCryptoModel().also {
                 Timber.v("## CRYPTO | CrossSigning : Got keys for $userId : MSK ${it?.unpaddedBase64PublicKey}")
             }
@@ -380,7 +377,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
 
         // Update devices trust for these users
-        dispatchDeviceChange(downloadUsers)
+        // dispatchDeviceChange(downloadUsers)
 
         return onKeysDownloadSucceed(filteredUsers, response.failures)
     }

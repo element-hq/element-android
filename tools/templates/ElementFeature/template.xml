@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<template
+    format="5"
+    revision="1"
+    name="Element Feature"
+    minApi="19"
+    minBuildApi="19"
+    description="Creates a new activity and a fragment with view model, view state and actions">
+
+    <category value="New Vector" />
+    <formfactor value="Mobile" />
+	
+  	 <parameter
+  	    id="createActivity"
+  	    name="Create host activity"
+  	    type="boolean"
+  	    default="true"
+  	    help="If true, you will have a host activity" />
+
+    <parameter
+        id="activityClass"
+        name="Activity Name"
+        type="string"
+        constraints="class|unique|nonempty"
+		visibility="createActivity"
+        default="MainActivity"
+        help="The name of the activity class to create" />
+
+    <parameter
+        id="fragmentClass"
+        name="Fragment Name"
+        type="string"
+        constraints="class|unique|nonempty"
+        suggest="${underscoreToCamelCase(classToResource(activityClass))}Fragment"
+        default="MainFragment"
+        help="The name of the fragment class to create" />
+		
+   	 <parameter
+   	    id="createFragmentArgs"
+   	    name="Create fragment Args"
+   	    type="boolean"
+   	    default="false"
+   	    help="If true, you will have a fragment args" />
+		
+	 <parameter
+	    id="fragmentArgsClass"
+	    name="Fragment Args"
+	    type="string"
+	    constraints="class|unique|nonempty"
+		visibility="createFragmentArgs"
+        suggest="${underscoreToCamelCase(classToResource(fragmentClass))}Args"
+	    default="MainArgs"
+	    help="The name of the fragment args to create" />
+		
+    <parameter
+        id="fragmentLayout"
+        name="Fragment Layout Name"
+        type="string"
+        constraints="layout|unique|nonempty"
+        suggest="fragment_${classToResource(fragmentClass)}"
+        default="main_fragment"
+        help="The name of the layout to create for the fragment" />
+
+    <parameter
+        id="viewModelClass"
+        name="ViewModel Name"
+        type="string"
+        constraints="class|unique|nonempty"
+        suggest="${underscoreToCamelCase(classToResource(fragmentClass))}ViewModel"
+        default="MainViewModel"
+        help="The name of the view model class to create" />
+		
+	 <parameter
+	    id="actionClass"
+	    name="Action Name"
+	    type="string"
+	    constraints="class|unique|nonempty"
+	    suggest="${underscoreToCamelCase(classToResource(fragmentClass))}Action"
+	    default="MainAction"
+	    help="The name of the action class to create" />
+			
+	  <parameter
+		 id="viewStateClass"
+		 name="ViewState Name"
+		 type="string"
+		 constraints="class|unique|nonempty"
+		 suggest="${underscoreToCamelCase(classToResource(fragmentClass))}ViewState"
+		 default="MainViewState"
+		 help="The name of the ViewState class to create" />
+
+	 <parameter
+   	    id="createViewEvents"
+   	    name="Create ViewEvents"
+   	    type="boolean"
+   	    default="false"
+   	    help="If true, you will have a view events" />
+		
+	 <parameter
+	    id="viewEventsClass"
+	    name="ViewEvents Class"
+	    type="string"
+	    constraints="class|unique|nonempty"
+	    visibility="createViewEvents"
+
+        suggest="${underscoreToCamelCase(classToResource(fragmentClass))}ViewEvents"
+	    default="MainViewEvents"
+	    help="The name of the view events to create" />
+
+
+		
+    <parameter
+        id="packageName"
+        name="Package name"
+        type="string"
+        constraints="package"
+        default="com.mycompany.myapp" />
+
+    <globals file="globals.xml.ftl" />
+    <execute file="recipe.xml.ftl" />
+
+</template>

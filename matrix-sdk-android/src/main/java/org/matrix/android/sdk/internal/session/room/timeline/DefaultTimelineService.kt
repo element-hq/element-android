@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +21,9 @@ import androidx.lifecycle.Transformations
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Sort
+import io.realm.kotlin.where
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -30,7 +32,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.crypto.store.db.doWithRealm
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.ReadReceiptsSummaryMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
@@ -38,13 +40,10 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.fetchCopyMap
-import io.realm.Sort
-import io.realm.kotlin.where
-import org.greenrobot.eventbus.EventBus
 
 internal class DefaultTimelineService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                   @SessionDatabase private val monarchy: Monarchy,
+                                                                  private val realmSessionProvider: RealmSessionProvider,
                                                                   private val eventBus: EventBus,
                                                                   private val taskExecutor: TaskExecutor,
                                                                   private val contextOfEventTask: GetContextOfEventTask,
@@ -73,17 +72,17 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                 hiddenReadReceipts = TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings),
                 eventBus = eventBus,
                 eventDecryptor = eventDecryptor,
-                fetchTokenAndPaginateTask = fetchTokenAndPaginateTask
+                fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
+                realmSessionProvider = realmSessionProvider
         )
     }
 
     override fun getTimeLineEvent(eventId: String): TimelineEvent? {
-        return monarchy
-                .fetchCopyMap({
-                    TimelineEventEntity.where(it, roomId = roomId, eventId = eventId).findFirst()
-                }, { entity, _ ->
-                    timelineEventMapper.map(entity)
-                })
+        return realmSessionProvider.withRealm { realm ->
+            TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId).findFirst()?.let {
+                timelineEventMapper.map(it)
+            }
+        }
     }
 
     override fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>> {
@@ -98,13 +97,13 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
 
     override fun getAttachmentMessages(): List<TimelineEvent> {
         // TODO pretty bad query.. maybe we should denormalize clear type in base?
-        return doWithRealm(monarchy.realmConfiguration) { realm ->
+        return realmSessionProvider.withRealm { realm ->
             realm.where<TimelineEventEntity>()
                     .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
                     .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
                     .findAll()
                     ?.mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() || it.root.isVideoMessage() } }
-                    ?: emptyList()
+                    .orEmpty()
         }
     }
 }

@@ -54,14 +54,27 @@ class SoftLogoutFragment @Inject constructor(
 
         softLogoutViewModel.subscribe(this) { softLogoutViewState ->
             softLogoutController.update(softLogoutViewState)
-
-            when (softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke()) {
-                LoginMode.Sso,
+            when (val mode = softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke()) {
+                is LoginMode.SsoAndPassword -> {
+                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
+                            softLogoutViewState.homeServerUrl,
+                            softLogoutViewState.deviceId,
+                            mode.ssoIdentityProviders
+                    ))
+                }
+                is LoginMode.Sso -> {
+                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
+                            softLogoutViewState.homeServerUrl,
+                            softLogoutViewState.deviceId,
+                            mode.ssoIdentityProviders
+                    ))
+                }
                 LoginMode.Unsupported -> {
                     // Prepare the loginViewModel for a SSO/login fallback recovery
                     loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
                             softLogoutViewState.homeServerUrl,
-                            softLogoutViewState.deviceId
+                            softLogoutViewState.deviceId,
+                            null
                     ))
                 }
                 else                  -> Unit
@@ -70,12 +83,12 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        recyclerView.configureWith(softLogoutController)
+        genericRecyclerView.configureWith(softLogoutController)
         softLogoutController.listener = this
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         softLogoutController.listener = null
         super.onDestroyView()
     }
@@ -121,7 +134,7 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     private fun cleanupUi() {
-        recyclerView.hideKeyboard()
+        genericRecyclerView.hideKeyboard()
     }
 
     override fun forgetPasswordClicked() {

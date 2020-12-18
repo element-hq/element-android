@@ -19,7 +19,7 @@ package im.vector.app.features.rageshake
 import android.content.Context
 import android.os.Build
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
+import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.core.resources.VersionCodeProvider
 import im.vector.app.features.version.VersionProvider
 import org.matrix.android.sdk.api.Matrix
@@ -61,7 +61,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter
      */
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
         Timber.v("Uncaught exception: $throwable")
-        PreferenceManager.getDefaultSharedPreferences(context).edit {
+        DefaultSharedPreferences.getInstance(context).edit {
             putBoolean(PREFS_CRASH_KEY, true)
         }
         val b = StringBuilder()
@@ -115,7 +115,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter
      * @return true if the application crashed
      */
     fun didAppCrash(context: Context): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context)
+        return DefaultSharedPreferences.getInstance(context)
                 .getBoolean(PREFS_CRASH_KEY, false)
     }
 
@@ -123,7 +123,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(private val bugReporter
      * Clear the crash status
      */
     fun clearAppCrashStatus(context: Context) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit {
+        DefaultSharedPreferences.getInstance(context).edit {
             remove(PREFS_CRASH_KEY)
         }
     }

@@ -1,7 +1,4 @@
 /*
- * Copyright 2014 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,5 +41,6 @@ internal data class RegistrationParams(
 
         // Temporary flag to notify the server that we support msisdn flow. Used to prevent old app
         // versions to end up in fallback because the HS returns the msisdn flow which they don't support
-        val x_show_msisdn: Boolean? = null
+        @Json(name = "x_show_msisdn")
+        val xShowMsisdn: Boolean? = null
 )

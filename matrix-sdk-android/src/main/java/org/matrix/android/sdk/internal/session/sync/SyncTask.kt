@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.TimeOutInterceptor
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
 import org.matrix.android.sdk.internal.session.filter.FilterRepository
@@ -26,13 +27,15 @@ import org.matrix.android.sdk.internal.session.homeserver.GetHomeServerCapabilit
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.session.user.UserStore
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
 internal interface SyncTask : Task<SyncTask.Params, Unit> {
 
-    data class Params(var timeout: Long = 30_000L)
+    data class Params(
+            val timeout: Long,
+            val presence: SyncPresence?
+    )
 }
 
 internal class DefaultSyncTask @Inject constructor(
@@ -64,6 +67,7 @@ internal class DefaultSyncTask @Inject constructor(
         }
         requestParams["timeout"] = timeout.toString()
         requestParams["filter"] = filterRepository.getFilter()
+        params.presence?.let { requestParams["set_presence"] = it.value }
 
         val isInitialSync = token == null
         if (isInitialSync) {
@@ -75,13 +79,22 @@ internal class DefaultSyncTask @Inject constructor(
         // Maybe refresh the home server capabilities data we know
         getHomeServerCapabilitiesTask.execute(Unit)
 
+        val readTimeOut = (params.timeout + TIMEOUT_MARGIN).coerceAtLeast(TimeOutInterceptor.DEFAULT_LONG_TIMEOUT)
+
         val syncResponse = executeRequest<SyncResponse>(eventBus) {
-            apiCall = syncAPI.sync(requestParams)
+            apiCall = syncAPI.sync(
+                    params = requestParams,
+                    readTimeOut = readTimeOut
+            )
         }
         syncResponseHandler.handleResponse(syncResponse, token)
         if (isInitialSync) {
             initialSyncProgressService.endAll()
         }
         Timber.v("Sync task finished on Thread: ${Thread.currentThread().name}")
+    }
+
+    companion object {
+        private const val TIMEOUT_MARGIN: Long = 10_000
     }
 }

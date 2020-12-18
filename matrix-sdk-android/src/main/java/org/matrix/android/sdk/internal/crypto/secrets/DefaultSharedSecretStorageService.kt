@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -371,7 +370,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 callback.onFailure(SharedSecretStorageError.BadKeyFormat)
             }
             cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-                kotlin.runCatching {
+                runCatching {
                     // decrypt from recovery key
                     withOlmDecryption { olmPkDecryption ->
                         olmPkDecryption.setPrivateKey(keySpec.privateKey)
@@ -390,7 +389,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 callback.onFailure(SharedSecretStorageError.BadKeyFormat)
             }
             cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-                kotlin.runCatching {
+                runCatching {
                     decryptAesHmacSha2(keySpec, name, secretContent)
                 }.foldToCallback(callback)
             }

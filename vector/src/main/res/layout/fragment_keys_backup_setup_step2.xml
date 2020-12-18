@@ -76,10 +76,11 @@
             android:background="?attr/selectableItemBackground"
             android:scaleType="center"
             android:src="@drawable/ic_eye"
-            android:tint="?attr/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/keys_backup_passphrase_enter_til"
-            app:layout_constraintTop_toTopOf="@id/keys_backup_passphrase_enter_til" />
+            app:layout_constraintTop_toTopOf="@id/keys_backup_passphrase_enter_til"
+            app:tint="?attr/colorAccent"
+            tools:ignore="MissingPrefix" />
 
         <im.vector.app.core.ui.views.PasswordStrengthBar
             android:id="@+id/keys_backup_passphrase_security_progress"

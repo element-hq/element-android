@@ -19,15 +19,14 @@
 
 package im.vector.app.gplay.push.fcm
 
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.Event
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -37,9 +36,13 @@ import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotifiableMessageEvent
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.notifications.SimpleNotifiableEvent
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
+import org.matrix.android.sdk.api.pushrules.Action
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.Event
 import timber.log.Timber
 
 /**
@@ -60,11 +63,13 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onCreate() {
         super.onCreate()
-        notificationDrawerManager = vectorComponent().notificationDrawerManager()
-        notifiableEventResolver = vectorComponent().notifiableEventResolver()
-        pusherManager = vectorComponent().pusherManager()
-        activeSessionHolder = vectorComponent().activeSessionHolder()
-        vectorPreferences = vectorComponent().vectorPreferences()
+        with(vectorComponent()) {
+            notificationDrawerManager = notificationDrawerManager()
+            notifiableEventResolver = notifiableEventResolver()
+            pusherManager = pusherManager()
+            activeSessionHolder = activeSessionHolder()
+            vectorPreferences = vectorPreferences()
+        }
     }
 
     /**
@@ -73,6 +78,13 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * @param message the message
      */
     override fun onMessageReceived(message: RemoteMessage) {
+        // Diagnostic Push
+        if (message.data["event_id"] == PushersManager.TEST_EVENT_ID) {
+            val intent = Intent(NotificationUtils.PUSH_ACTION)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+            return
+        }
+
         if (!vectorPreferences.areNotificationEnabledForDevice()) {
             Timber.i("Notification are disabled for this device")
             return
@@ -130,14 +142,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
                 Timber.i("## onMessageReceivedInternal() : $data")
             }
-            val eventId = data["event_id"]
-            val roomId = data["room_id"]
-            if (eventId == null || roomId == null) {
-                Timber.e("## onMessageReceivedInternal() missing eventId and/or roomId")
-                return
-            }
+
             // update the badge counter
-            val unreadCount = data.get("unread")?.let { Integer.parseInt(it) } ?: 0
+            val unreadCount = data["unread"]?.let { Integer.parseInt(it) } ?: 0
             BadgeProxy.updateBadgeCount(applicationContext, unreadCount)
 
             val session = activeSessionHolder.getSafeActiveSession()
@@ -145,6 +152,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             if (session == null) {
                 Timber.w("## Can't sync from push, no current session")
             } else {
+                val eventId = data["event_id"]
+                val roomId = data["room_id"]
+
                 if (isEventAlreadyKnown(eventId, roomId)) {
                     Timber.i("Ignoring push, event already known")
                 } else {
@@ -196,7 +206,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                     description = "",
                     type = null,
                     timestamp = System.currentTimeMillis(),
-                    soundName = PushRule.ACTION_VALUE_DEFAULT,
+                    soundName = Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT,
                     isPushGatewayEvent = true
             )
             notificationDrawerManager.onNotifiableEventReceived(simpleNotifiableEvent)

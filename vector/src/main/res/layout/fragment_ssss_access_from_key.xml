@@ -15,11 +15,12 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
-            android:tint="?riotx_text_primary"
+            android:src="@drawable/ic_security_key_24dp"
             app:layout_constraintBottom_toBottomOf="@+id/ssss_restore_with_key"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ssss_restore_with_key"
-            android:src="@drawable/ic_security_key_24dp" />
+            app:tint="?riotx_text_primary"
+            tools:ignore="MissingPrefix" />
 
         <TextView
             android:id="@+id/ssss_restore_with_key"
@@ -56,8 +57,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -97,16 +98,32 @@
             tools:ignore="MissingConstraints" />
 
         <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/ssss_key_flow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
-            android:layout_marginBottom="@dimen/layout_vertical_margin_big"
             app:constraint_referenced_ids="ssss_key_use_file,ssss_key_submit"
             app:flow_horizontalStyle="spread_inside"
             app:flow_wrapMode="chain"
+            app:layout_constraintBottom_toTopOf="@+id/ssss_key_reset"
+            app:layout_constraintTop_toBottomOf="@+id/ssss_key_enter_til"
+            app:layout_goneMarginBottom="@dimen/layout_vertical_margin_big" />
+
+
+        <im.vector.app.core.ui.views.BottomSheetActionButton
+            android:id="@+id/ssss_key_reset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="32dp"
+            app:actionTitle="@string/bad_passphrase_key_reset_all_action"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ssss_key_enter_til" />
+            app:layout_constraintTop_toBottomOf="@id/ssss_key_flow"
+            app:leftIcon="@drawable/ic_alert_triangle"
+            app:tint="@color/vector_error_color"
+            app:titleTextColor="?riotx_text_secondary" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

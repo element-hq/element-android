@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,7 @@
  */
 package org.matrix.android.sdk.internal.session.room
 
-import org.matrix.android.sdk.api.session.crypto.CryptoService
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.AggregatedAnnotation
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -48,7 +47,6 @@ import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
-import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -79,9 +77,8 @@ private fun VerificationState?.toState(newState: VerificationState): Verificatio
     return newState
 }
 
-internal class EventRelationsAggregationProcessor @Inject constructor(@UserId private val userId: String,
-                                                                      private val cryptoService: CryptoService
-) : EventInsertLiveProcessor {
+internal class EventRelationsAggregationProcessor @Inject constructor(@UserId private val userId: String)
+    : EventInsertLiveProcessor {
 
     private val allowedTypes = listOf(
             EventType.MESSAGE,
@@ -347,7 +344,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                 if (userId == senderId) {
                     sumModel.myVote = optionIndex
                 }
-                Timber.v("## POLL adding vote $optionIndex for user $senderId in poll :$relatedEventId ")
+                Timber.v("## POLL adding vote $optionIndex for user $senderId in poll :$targetEventId ")
             } else {
                 Timber.v("## POLL Ignoring vote (older than known one)  eventId:$eventId ")
             }
@@ -356,7 +353,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
             if (userId == senderId) {
                 sumModel.myVote = optionIndex
             }
-            Timber.v("## POLL adding vote $optionIndex for user $senderId in poll :$relatedEventId ")
+            Timber.v("## POLL adding vote $optionIndex for user $senderId in poll :$targetEventId ")
         }
         sumModel.votes = votes
         if (isLocalEcho) {

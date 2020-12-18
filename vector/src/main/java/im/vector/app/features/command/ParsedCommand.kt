@@ -16,6 +16,7 @@
 
 package im.vector.app.features.command
 
+import im.vector.app.features.home.room.detail.ChatEffect
 import org.matrix.android.sdk.api.session.identity.ThreePid
 
 /**
@@ -53,7 +54,7 @@ sealed class ParsedCommand {
     object ClearScalarToken : ParsedCommand()
     class SendSpoiler(val message: String) : ParsedCommand()
     class SendShrug(val message: CharSequence) : ParsedCommand()
-    class VerifyUser(val userId: String) : ParsedCommand()
     class SendPoll(val question: String, val options: List<String>) : ParsedCommand()
-    object DiscardSession: ParsedCommand()
+    object DiscardSession : ParsedCommand()
+    class SendChatEffect(val chatEffect: ChatEffect, val message: String) : ParsedCommand()
 }

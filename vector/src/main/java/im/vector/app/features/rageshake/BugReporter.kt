@@ -1,6 +1,4 @@
 /*
- * Copyright 2016 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
  * Copyright 2018 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,10 +33,10 @@ import im.vector.app.core.extensions.getAllChildFragments
 import im.vector.app.core.extensions.toOnOff
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.settings.devtools.GossipingEventsSerializer
 import im.vector.app.features.settings.locale.SystemLocaleProvider
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
-import org.matrix.android.sdk.api.Matrix
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -47,6 +45,8 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
+import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.util.MimeTypes
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -76,6 +76,7 @@ class BugReporter @Inject constructor(
         private const val LOG_CAT_FILENAME = "logcat.log"
         private const val LOG_CAT_SCREENSHOT_FILENAME = "screenshot.png"
         private const val CRASH_FILENAME = "crash.log"
+        private const val KEY_REQUESTS_FILENAME = "keyRequests.log"
 
         private const val BUFFER_SIZE = 1024 * 1024 * 50
     }
@@ -145,6 +146,7 @@ class BugReporter @Inject constructor(
      * @param forSuggestion     true to send a suggestion
      * @param withDevicesLogs   true to include the device log
      * @param withCrashLogs     true to include the crash logs
+     * @param withKeyRequestHistory true to include the crash logs
      * @param withScreenshot    true to include the screenshot
      * @param theBugDescription the bug description
      * @param listener          the listener
@@ -154,6 +156,7 @@ class BugReporter @Inject constructor(
                       forSuggestion: Boolean,
                       withDevicesLogs: Boolean,
                       withCrashLogs: Boolean,
+                      withKeyRequestHistory: Boolean,
                       withScreenshot: Boolean,
                       theBugDescription: String,
                       listener: IMXBugReportListener?) {
@@ -209,6 +212,22 @@ class BugReporter @Inject constructor(
                     }
                 }
 
+                activeSessionHolder.getSafeActiveSession()
+                        ?.takeIf { !mIsCancelled && withKeyRequestHistory }
+                        ?.cryptoService()
+                        ?.getGossipingEvents()
+                        ?.let { GossipingEventsSerializer().serialize(it) }
+                        ?.toByteArray()
+                        ?.let { rawByteArray ->
+                            File(context.cacheDir.absolutePath, KEY_REQUESTS_FILENAME)
+                                    .also {
+                                        it.outputStream()
+                                                .use { os -> os.write(rawByteArray) }
+                                    }
+                        }
+                        ?.let { compressFile(it) }
+                        ?.let { gzippedFiles.add(it) }
+
                 var deviceId = "undefined"
                 var userId = "undefined"
                 var olmVersion = "undefined"
@@ -256,7 +275,7 @@ class BugReporter @Inject constructor(
 
                     // add the gzipped files
                     for (file in gzippedFiles) {
-                        builder.addFormDataPart("compressed-log", file.name, file.asRequestBody("application/octet-stream".toMediaTypeOrNull()))
+                        builder.addFormDataPart("compressed-log", file.name, file.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull()))
                     }
 
                     mBugReportFiles.addAll(gzippedFiles)
@@ -277,7 +296,7 @@ class BugReporter @Inject constructor(
                                 }
 
                                 builder.addFormDataPart("file",
-                                        logCatScreenshotFile.name, logCatScreenshotFile.asRequestBody("application/octet-stream".toMediaTypeOrNull()))
+                                        logCatScreenshotFile.name, logCatScreenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull()))
                             } catch (e: Exception) {
                                 Timber.e(e, "## sendBugReport() : fail to write screenshot$e")
                             }
@@ -428,6 +447,10 @@ class BugReporter @Inject constructor(
      */
     fun openBugReportScreen(activity: FragmentActivity, forSuggestion: Boolean = false) {
         screenshot = takeScreenshot(activity)
+        activeSessionHolder.getSafeActiveSession()?.let {
+            it.logDbUsageInfo()
+            it.cryptoService().logDbUsageInfo()
+        }
 
         val intent = Intent(activity, BugReportActivity::class.java)
         intent.putExtra("FOR_SUGGESTION", forSuggestion)

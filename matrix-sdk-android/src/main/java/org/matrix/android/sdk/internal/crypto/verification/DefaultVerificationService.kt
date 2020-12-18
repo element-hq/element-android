@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +20,6 @@ import android.os.Handler
 import android.os.Looper
 import dagger.Lazy
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -112,9 +110,6 @@ internal class DefaultVerificationService @Inject constructor(
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
-    // Cannot be injected in constructor as it creates a dependency cycle
-    lateinit var cryptoService: CryptoService
-
     // map [sender : [transaction]]
     private val txMap = HashMap<String, HashMap<String, DefaultVerificationTransaction>>()
 
@@ -130,7 +125,8 @@ internal class DefaultVerificationService @Inject constructor(
 
     // Event received from the sync
     fun onToDeviceEvent(event: Event) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        Timber.d("## SAS onToDeviceEvent ${event.getClearType()}")
+        cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START         -> {
                     onStartRequestReceived(event)
@@ -164,7 +160,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     fun onRoomEvent(event: Event) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
                 EventType.KEY_VERIFICATION_START  -> {
                     onRoomStartRequestReceived(event)
@@ -241,6 +237,7 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     private fun dispatchRequestAdded(tx: PendingVerificationRequest) {
+        Timber.v("## SAS dispatchRequestAdded txId:${tx.transactionId}")
         uiHandler.post {
             listeners.forEach {
                 try {
@@ -304,11 +301,14 @@ internal class DefaultVerificationService @Inject constructor(
         // We don't want to block here
         val otherDeviceId = validRequestInfo.fromDevice
 
+        Timber.v("## SAS onRequestReceived from $senderId and device $otherDeviceId, txId:${validRequestInfo.transactionId}")
+
         cryptoCoroutineScope.launch {
             if (checkKeysAreDownloaded(senderId, otherDeviceId) == null) {
                 Timber.e("## Verification device $otherDeviceId is not known")
             }
         }
+        Timber.v("## SAS onRequestReceived .. checkKeysAreDownloaded launched")
 
         // Remember this request
         val requestsForUser = pendingRequests.getOrPut(senderId) { mutableListOf() }
@@ -537,11 +537,10 @@ internal class DefaultVerificationService @Inject constructor(
                     // If there is a corresponding request, we can auto accept
                     // as we are the one requesting in first place (or we accepted the request)
                     // I need to check if the pending request was related to this device also
-                    val autoAccept = getExistingVerificationRequest(otherUserId)?.any {
+                    val autoAccept = getExistingVerificationRequests(otherUserId).any {
                         it.transactionId == startReq.transactionId
                                 && (it.requestInfo?.fromDevice == this.deviceId || it.readyInfo?.fromDevice == this.deviceId)
                     }
-                            ?: false
                     val tx = DefaultIncomingSASDefaultVerificationTransaction(
 //                            this,
                             setDeviceVerificationAction,
@@ -837,8 +836,8 @@ internal class DefaultVerificationService @Inject constructor(
             // SAS do not care for now?
         }
 
-        // Now transactions are udated, let's also update Requests
-        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == doneReq.transactionId }
+        // Now transactions are updated, let's also update Requests
+        val existingRequest = getExistingVerificationRequests(senderId).find { it.transactionId == doneReq.transactionId }
         if (existingRequest == null) {
             Timber.e("## SAS Received Done for unknown request txId:${doneReq.transactionId}")
             return
@@ -892,7 +891,7 @@ internal class DefaultVerificationService @Inject constructor(
     private fun handleReadyReceived(senderId: String,
                                     readyReq: ValidVerificationInfoReady,
                                     transportCreator: (DefaultVerificationTransaction) -> VerificationTransport) {
-        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == readyReq.transactionId }
+        val existingRequest = getExistingVerificationRequests(senderId).find { it.transactionId == readyReq.transactionId }
         if (existingRequest == null) {
             Timber.e("## SAS Received Ready for unknown request txId:${readyReq.transactionId} fromDevice ${readyReq.fromDevice}")
             return
@@ -1041,9 +1040,9 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun getExistingVerificationRequest(otherUserId: String): List<PendingVerificationRequest>? {
+    override fun getExistingVerificationRequests(otherUserId: String): List<PendingVerificationRequest> {
         synchronized(lock = pendingRequests) {
-            return pendingRequests[otherUserId]
+            return pendingRequests[otherUserId].orEmpty()
         }
     }
 
@@ -1204,7 +1203,9 @@ internal class DefaultVerificationService @Inject constructor(
         // TODO refactor this with the DM one
         Timber.i("## Requesting verification to user: $otherUserId with device list $otherDevices")
 
-        val targetDevices = otherDevices ?: cryptoService.getUserDevices(otherUserId).map { it.deviceId }
+        val targetDevices = otherDevices ?: cryptoStore.getUserDevices(otherUserId)
+                ?.values?.map { it.deviceId }.orEmpty()
+
         val requestsForUser = pendingRequests.getOrPut(otherUserId) { mutableListOf() }
 
         val transport = verificationTransportToDeviceFactory.createTransport(null)

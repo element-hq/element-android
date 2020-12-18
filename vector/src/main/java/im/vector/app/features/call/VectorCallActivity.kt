@@ -23,7 +23,6 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.KeyEvent
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -49,13 +48,13 @@ import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
+import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.activity_call.*
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.EglUtils
 import org.matrix.android.sdk.api.session.call.MxCallDetail
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
-import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.activity_call.*
 import org.webrtc.EglBase
 import org.webrtc.PeerConnection
 import org.webrtc.RendererCommon
@@ -299,6 +298,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAPTURE_PERMISSION_REQUEST_CODE && allGranted(grantResults)) {
             start()
         } else {
@@ -332,20 +332,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             callViewModel.handle(VectorCallViewActions.ToggleCamera)
         }
         surfaceRenderersAreInitialized = true
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            // for newer version, it will be passed automatically to active media session
-            // in call service
-            when (keyCode) {
-                KeyEvent.KEYCODE_HEADSETHOOK -> {
-                    callViewModel.handle(VectorCallViewActions.HeadSetButtonPressed)
-                    return true
-                }
-            }
-        }
-        return super.onKeyDown(keyCode, event)
     }
 
     private fun handleViewEvents(event: VectorCallViewEvents?) {

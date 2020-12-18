@@ -31,8 +31,8 @@ import im.vector.app.features.roomdirectory.RoomDirectoryAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.app.features.roomdirectory.RoomDirectoryViewModel
-import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import kotlinx.android.synthetic.main.fragment_room_directory_picker.*
+import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import timber.log.Timber
 import javax.inject.Inject
 

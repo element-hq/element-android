@@ -24,32 +24,30 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import javax.inject.Inject
 
 class OutgoingKeyRequestListFragment @Inject constructor(
         val viewModelFactory: KeyRequestListViewModel.Factory,
-        private val epoxyController: KeyRequestEpoxyController,
-        private val colorProvider: ColorProvider
+        private val epoxyController: OutgoingKeyRequestPagedController
 ) : VectorBaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
     private val viewModel: KeyRequestListViewModel by fragmentViewModel(KeyRequestListViewModel::class)
 
     override fun invalidate() = withState(viewModel) { state ->
-        epoxyController.setData(state)
+        epoxyController.submitList(state.outgoingRoomKeyRequests.invoke())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(epoxyController, showDivider = true)
+        genericRecyclerView.configureWith(epoxyController, showDivider = true)
 //        epoxyController.interactionListener = this
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
 //        epoxyController.interactionListener = null
     }
 }

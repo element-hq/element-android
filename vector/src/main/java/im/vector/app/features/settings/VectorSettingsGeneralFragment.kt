@@ -18,19 +18,16 @@
 
 package im.vector.app.features.settings
 
-import android.app.Activity
-import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.text.Editable
-import android.util.Patterns
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -39,15 +36,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.yalantis.ucrop.UCrop
-import im.vector.lib.multipicker.MultiPicker
-import im.vector.lib.multipicker.entity.MultiPickerImageType
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.NoOpMatrixCallback
-import org.matrix.android.sdk.api.failure.isInvalidPassword
-import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
-import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import im.vector.app.R
+import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.intent.getFilenameFromUri
@@ -55,35 +45,38 @@ import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
-import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.TextUtils
-import im.vector.app.core.utils.allGranted
-import im.vector.app.core.utils.checkPermissions
-import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
-import im.vector.app.features.media.createUCropWithDefaultSettings
-import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.SignOutUiWorker
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
+import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
+import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.rx.unwrap
 import java.io.File
 import java.util.UUID
+import javax.inject.Inject
 
-class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
+class VectorSettingsGeneralFragment @Inject constructor(
+        colorProvider: ColorProvider
+):
+        VectorSettingsBaseFragment(),
+        GalleryOrCameraDialogHelper.Listener {
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
 
-    private var mDisplayedEmails = ArrayList<String>()
-    private var mDisplayedPhoneNumber = ArrayList<String>()
-
-    private var avatarCameraUri: Uri? = null
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
     private val mUserSettingsCategory by lazy {
         findPreference<PreferenceCategory>(VectorPreferences.SETTINGS_USER_SETTINGS_PREFERENCE_KEY)!!
@@ -120,20 +113,50 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observeUserAvatar()
+        observeUserDisplayName()
+    }
+
+    private fun observeUserAvatar() {
+        session.rx()
+                .liveUser(session.myUserId)
+                .unwrap()
+                .distinctUntilChanged { user -> user.avatarUrl }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { mUserAvatarPreference.refreshAvatar(it) }
+                .disposeOnDestroyView()
+    }
+
+    private fun observeUserDisplayName() {
+        session.rx()
+                .liveUser(session.myUserId)
+                .unwrap()
+                .map { it.displayName ?: "" }
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { displayName ->
+                    mDisplayNamePreference.let {
+                        it.summary = displayName
+                        it.text = displayName
+                    }
+                }
+                .disposeOnDestroyView()
+    }
+
     override fun bindPref() {
         // Avatar
         mUserAvatarPreference.let {
-            it.setSession(session)
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                onUpdateAvatarClick()
+                galleryOrCameraDialogHelper.show()
                 false
             }
         }
 
         // Display name
         mDisplayNamePreference.let {
-            it.summary = session.getUser(session.myUserId)?.displayName ?: ""
-            it.text = it.summary.toString()
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 newValue
                         ?.let { value -> (value as? String)?.trim() }
@@ -153,44 +176,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             mPasswordPreference.isVisible = false
         }
 
-        // Add Email
-        findPreference<EditTextPreference>(ADD_EMAIL_PREFERENCE_KEY)!!.let {
-            // It does not work on XML, do it here
-            it.icon = activity?.let {
-                ThemeUtils.tintDrawable(it,
-                        ContextCompat.getDrawable(it, R.drawable.ic_material_add)!!, R.attr.colorAccent)
-            }
-
-            // Unfortunately, this is not supported in lib v7
-            // it.editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            it.setOnPreferenceClickListener {
-                notImplemented()
-                true
-            }
-
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                notImplemented()
-                // addEmail((newValue as String).trim())
-                false
-            }
-        }
-
-        // Add phone number
-        findPreference<VectorPreference>(ADD_PHONE_NUMBER_PREFERENCE_KEY)!!.let {
-            // It does not work on XML, do it here
-            it.icon = activity?.let {
-                ThemeUtils.tintDrawable(it,
-                        ContextCompat.getDrawable(it, R.drawable.ic_material_add)!!, R.attr.colorAccent)
-            }
-
-            it.setOnPreferenceClickListener {
-                notImplemented()
-                // TODO val intent = PhoneNumberAdditionActivity.getIntent(activity, session.credentials.userId)
-                // startActivityForResult(intent, REQUEST_NEW_PHONE_NUMBER)
-                true
-            }
-        }
-
         // Advanced settings
 
         // user account
@@ -201,8 +186,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)!!
                 .summary = session.sessionParams.homeServerUrl
 
-        refreshEmailsList()
-        refreshPhoneNumbersList()
         // Contacts
         setContactsPreferences()
 
@@ -230,7 +213,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 // Disable it while updating the state, will be re-enabled by the account data listener.
                 it.isEnabled = false
-                session.integrationManagerService().setIntegrationEnabled(newValue as Boolean, NoOpMatrixCallback())
+                lifecycleScope.launch {
+                    session.integrationManagerService().setIntegrationEnabled(newValue as Boolean)
+                }
                 true
             }
         }
@@ -249,7 +234,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
                     Glide.get(requireContext()).clearMemory()
                     session.fileService().clearCache()
 
-                    var newSize = 0
+                    var newSize: Int
 
                     withContext(Dispatchers.IO) {
                         // On BG thread
@@ -272,8 +257,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         findPreference<VectorPreference>("SETTINGS_SIGN_OUT_KEY")!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let {
-                SignOutUiWorker(requireActivity())
-                        .perform(requireContext())
+                SignOutUiWorker(requireActivity()).perform()
             }
 
             false
@@ -291,94 +275,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
     override fun onPause() {
         super.onPause()
         session.integrationManagerService().removeListener(integrationServiceListener)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_LAUNCH_CAMERA) {
-                onAvatarTypeSelected(true)
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                REQUEST_NEW_PHONE_NUMBER            -> refreshPhoneNumbersList()
-                REQUEST_PHONEBOOK_COUNTRY           -> onPhonebookCountryUpdate(data)
-                MultiPicker.REQUEST_CODE_TAKE_PHOTO -> {
-                    avatarCameraUri?.let { uri ->
-                        MultiPicker.get(MultiPicker.CAMERA)
-                                .getTakenPhoto(requireContext(), requestCode, resultCode, uri)
-                                ?.let {
-                                    onAvatarSelected(it)
-                                }
-                    }
-                }
-                MultiPicker.REQUEST_CODE_PICK_IMAGE -> {
-                    MultiPicker
-                            .get(MultiPicker.IMAGE)
-                            .getSelectedFiles(requireContext(), requestCode, resultCode, data)
-                            .firstOrNull()?.let {
-                                // TODO. UCrop library cannot read from Gallery. For now, we will set avatar as it is.
-                                onAvatarCropped(it.contentUri)
-                            }
-                }
-                UCrop.REQUEST_CROP                  -> data?.let { onAvatarCropped(UCrop.getOutput(it)) }
-                /* TODO
-                    VectorUtils.TAKE_IMAGE -> {
-                        val thumbnailUri = VectorUtils.getThumbnailUriFromIntent(activity, data, session.mediaCache)
-
-                        if (null != thumbnailUri) {
-                            displayLoadingView()
-
-                            val resource = ResourceUtils.openResource(activity, thumbnailUri, null)
-
-                            if (null != resource) {
-                                session.mediaCache.uploadContent(resource.mContentStream, null, resource.mMimeType, null, object : MXMediaUploadListener() {
-
-                                    override fun onUploadError(uploadId: String?, serverResponseCode: Int, serverErrorMessage: String?) {
-                                        activity?.runOnUiThread { onCommonDone(serverResponseCode.toString() + " : " + serverErrorMessage) }
-                                    }
-
-                                    override fun onUploadComplete(uploadId: String?, contentUri: String?) {
-                                        activity?.runOnUiThread {
-                                            session.myUser.updateAvatarUrl(contentUri, object : MatrixCallback<Unit> {
-                                                override fun onSuccess(info: Void?) {
-                                                    onCommonDone(null)
-                                                    refreshDisplay()
-                                                }
-
-                                                override fun onNetworkError(e: Exception) {
-                                                    onCommonDone(e.localizedMessage)
-                                                }
-
-                                                override fun onMatrixError(e: MatrixError) {
-                                                    if (MatrixError.M_CONSENT_NOT_GIVEN == e.errcode) {
-                                                        activity?.runOnUiThread {
-                                                            hideLoadingView()
-                                                            (activity as VectorAppCompatActivity).consentNotGivenHelper.displayDialog(e)
-                                                        }
-                                                    } else {
-                                                        onCommonDone(e.localizedMessage)
-                                                    }
-                                                }
-
-                                                override fun onUnexpectedError(e: Exception) {
-                                                    onCommonDone(e.localizedMessage)
-                                                }
-                                            })
-                                        }
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    */
-            }
-        }
     }
 
     private fun refreshIntegrationManagerSettings() {
@@ -400,40 +296,7 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         }
     }
 
-    /**
-     * Update the avatar.
-     */
-    private fun onUpdateAvatarClick() {
-        AlertDialog
-                .Builder(requireContext())
-                .setItems(arrayOf(
-                        getString(R.string.attachment_type_camera),
-                        getString(R.string.attachment_type_gallery)
-                )) { dialog, which ->
-                    dialog.cancel()
-                    onAvatarTypeSelected(isCamera = (which == 0))
-                }.show()
-    }
-
-    private fun onAvatarTypeSelected(isCamera: Boolean) {
-        if (isCamera) {
-            if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
-                avatarCameraUri = MultiPicker.get(MultiPicker.CAMERA).startWithExpectingFile(this)
-            }
-        } else {
-            MultiPicker.get(MultiPicker.IMAGE).single().startWith(this)
-        }
-    }
-
-    private fun onAvatarSelected(image: MultiPickerImageType) {
-        val destinationFile = File(requireContext().cacheDir, "${image.displayName}_edited_image_${System.currentTimeMillis()}")
-        val uri = image.contentUri
-        createUCropWithDefaultSettings(requireContext(), uri, destinationFile.toUri(), image.displayName)
-                .apply { withAspectRatio(1f, 1f) }
-                .start(requireContext(), this)
-    }
-
-    private fun onAvatarCropped(uri: Uri?) {
+    override fun onImageReady(uri: Uri?) {
         if (uri != null) {
             uploadAvatar(uri)
         } else {
@@ -447,8 +310,6 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString(), object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
                 if (!isAdded) return
-
-                mUserAvatarPreference.refreshAvatar()
                 onCommonDone(null)
             }
 
@@ -481,317 +342,9 @@ class VectorSettingsGeneralFragment : VectorSettingsBaseFragment() {
         */
     }
 
-    private fun onPhonebookCountryUpdate(data: Intent?) {
-        /* TODO
-        if (data != null && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME)
-                && data.hasExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE)) {
-            val countryCode = data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_CODE)
-            if (!TextUtils.equals(countryCode, PhoneNumberUtils.getCountryCode(activity))) {
-                PhoneNumberUtils.setCountryCode(activity, countryCode)
-                mContactPhonebookCountryPreference.summary = data.getStringExtra(CountryPickerActivity.EXTRA_OUT_COUNTRY_NAME)
-            }
-        }
-        */
-    }
-
     // ==============================================================================================================
     // Phone number management
     // ==============================================================================================================
-
-    /**
-     * Refresh phone number list
-     */
-    private fun refreshPhoneNumbersList() {
-        /* TODO
-        val currentPhoneNumber3PID = ArrayList(session.myUser.getlinkedPhoneNumbers())
-
-        val phoneNumberList = ArrayList<String>()
-        for (identifier in currentPhoneNumber3PID) {
-            phoneNumberList.add(identifier.address)
-        }
-
-        // check first if there is an update
-        var isNewList = true
-        if (phoneNumberList.size == mDisplayedPhoneNumber.size) {
-            isNewList = !mDisplayedPhoneNumber.containsAll(phoneNumberList)
-        }
-
-        if (isNewList) {
-            // remove the displayed one
-            run {
-                var index = 0
-                while (true) {
-                    val preference = mUserSettingsCategory.findPreference(PHONE_NUMBER_PREFERENCE_KEY_BASE + index)
-
-                    if (null != preference) {
-                        mUserSettingsCategory.removePreference(preference)
-                    } else {
-                        break
-                    }
-                    index++
-                }
-            }
-
-            // add new phone number list
-            mDisplayedPhoneNumber = phoneNumberList
-
-            val addPhoneBtn = mUserSettingsCategory.findPreference(ADD_PHONE_NUMBER_PREFERENCE_KEY)
-                    ?: return
-
-            var order = addPhoneBtn.order
-
-            for ((index, phoneNumber3PID) in currentPhoneNumber3PID.withIndex()) {
-                val preference = VectorPreference(activity!!)
-
-                preference.title = getString(R.string.settings_phone_number)
-                var phoneNumberFormatted = phoneNumber3PID.address
-                try {
-                    // Attempt to format phone number
-                    val phoneNumber = PhoneNumberUtil.getInstance().parse("+$phoneNumberFormatted", null)
-                    phoneNumberFormatted = PhoneNumberUtil.getInstance().format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
-                } catch (e: NumberParseException) {
-                    // Do nothing, we will display raw version
-                }
-
-                preference.summary = phoneNumberFormatted
-                preference.key = PHONE_NUMBER_PREFERENCE_KEY_BASE + index
-                preference.order = order
-
-                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    displayDelete3PIDConfirmationDialog(phoneNumber3PID, preference.summary)
-                    true
-                }
-
-                preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
-                    override fun onPreferenceLongClick(preference: Preference): Boolean {
-                        activity?.let { copyToClipboard(it, phoneNumber3PID.address) }
-                        return true
-                    }
-                }
-
-                order++
-                mUserSettingsCategory.addPreference(preference)
-            }
-
-            addPhoneBtn.order = order
-        }    */
-    }
-
-// ==============================================================================================================
-// Email management
-// ==============================================================================================================
-
-    /**
-     * Refresh the emails list
-     */
-    private fun refreshEmailsList() {
-        val currentEmail3PID = emptyList<String>() // TODO ArrayList(session.myUser.getlinkedEmails())
-
-        val newEmailsList = ArrayList<String>()
-        for (identifier in currentEmail3PID) {
-            // TODO newEmailsList.add(identifier.address)
-        }
-
-        // check first if there is an update
-        var isNewList = true
-        if (newEmailsList.size == mDisplayedEmails.size) {
-            isNewList = !mDisplayedEmails.containsAll(newEmailsList)
-        }
-
-        if (isNewList) {
-            // remove the displayed one
-            run {
-                var index = 0
-                while (true) {
-                    val preference = mUserSettingsCategory.findPreference<VectorPreference>(EMAIL_PREFERENCE_KEY_BASE + index)
-
-                    if (null != preference) {
-                        mUserSettingsCategory.removePreference(preference)
-                    } else {
-                        break
-                    }
-                    index++
-                }
-            }
-
-            // add new emails list
-            mDisplayedEmails = newEmailsList
-
-            val addEmailBtn = mUserSettingsCategory.findPreference<VectorPreference>(ADD_EMAIL_PREFERENCE_KEY) ?: return
-
-            var order = addEmailBtn.order
-
-            for ((index, email3PID) in currentEmail3PID.withIndex()) {
-                val preference = VectorPreference(requireActivity())
-
-                preference.title = getString(R.string.settings_email_address)
-                preference.summary = "TODO" // email3PID.address
-                preference.key = EMAIL_PREFERENCE_KEY_BASE + index
-                preference.order = order
-
-                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
-                    displayDelete3PIDConfirmationDialog(/* TODO email3PID, */ pref.summary)
-                    true
-                }
-
-                preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
-                    override fun onPreferenceLongClick(preference: Preference): Boolean {
-                        activity?.let { copyToClipboard(it, "TODO") } // email3PID.address) }
-                        return true
-                    }
-                }
-
-                mUserSettingsCategory.addPreference(preference)
-
-                order++
-            }
-
-            addEmailBtn.order = order
-        }
-    }
-
-    /**
-     * Attempt to add a new email to the account
-     *
-     * @param email the email to add.
-     */
-    private fun addEmail(email: String) {
-        // check first if the email syntax is valid
-        // if email is null , then also its invalid email
-        if (email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            activity?.toast(R.string.auth_invalid_email)
-            return
-        }
-
-        // check first if the email syntax is valid
-        if (mDisplayedEmails.indexOf(email) >= 0) {
-            activity?.toast(R.string.auth_email_already_defined)
-            return
-        }
-
-        notImplemented()
-        /* TODO
-        val pid = ThreePid(email, ThreePid.MEDIUM_EMAIL)
-
-        displayLoadingView()
-
-        session.myUser.requestEmailValidationToken(pid, object : MatrixCallback<Unit> {
-            override fun onSuccess(info: Void?) {
-                activity?.runOnUiThread { showEmailValidationDialog(pid) }
-            }
-
-            override fun onNetworkError(e: Exception) {
-                onCommonDone(e.localizedMessage)
-            }
-
-            override fun onMatrixError(e: MatrixError) {
-                if (TextUtils.equals(MatrixError.THREEPID_IN_USE, e.errcode)) {
-                    onCommonDone(getString(R.string.account_email_already_used_error))
-                } else {
-                    onCommonDone(e.localizedMessage)
-                }
-            }
-
-            override fun onUnexpectedError(e: Exception) {
-                onCommonDone(e.localizedMessage)
-            }
-        })
-        */
-    }
-
-    /**
-     * Show an email validation dialog to warn the user tho valid his email link.
-     *
-     * @param pid the used pid.
-     */
-/* TODO
-private fun showEmailValidationDialog(pid: ThreePid) {
-    activity?.let {
-        AlertDialog.Builder(it)
-                .setTitle(R.string.account_email_validation_title)
-                .setMessage(R.string.account_email_validation_message)
-                .setPositiveButton(R.string._continue) { _, _ ->
-                    session.myUser.add3Pid(pid, true, object : MatrixCallback<Unit> {
-                        override fun onSuccess(info: Void?) {
-                            it.runOnUiThread {
-                                hideLoadingView()
-                                refreshEmailsList()
-                            }
-                        }
-
-                        override fun onNetworkError(e: Exception) {
-                            onCommonDone(e.localizedMessage)
-                        }
-
-                        override fun onMatrixError(e: MatrixError) {
-                            if (TextUtils.equals(e.errcode, MatrixError.THREEPID_AUTH_FAILED)) {
-                                it.runOnUiThread {
-                                    hideLoadingView()
-                                    it.toast(R.string.account_email_validation_error)
-                                }
-                            } else {
-                                onCommonDone(e.localizedMessage)
-                            }
-                        }
-
-                        override fun onUnexpectedError(e: Exception) {
-                            onCommonDone(e.localizedMessage)
-                        }
-                    })
-                }
-                .setNegativeButton(R.string.cancel) { _, _ ->
-                    hideLoadingView()
-                }
-                .show()
-    }
-}    */
-
-    /**
-     * Display a dialog which asks confirmation for the deletion of a 3pid
-     *
-     * @param pid               the 3pid to delete
-     * @param preferenceSummary the displayed 3pid
-     */
-    private fun displayDelete3PIDConfirmationDialog(/* TODO pid: ThirdPartyIdentifier,*/ preferenceSummary: CharSequence) {
-        val mediumFriendlyName = "TODO" // ThreePid.getMediumFriendlyName(pid.medium, activity).toLowerCase(VectorLocale.applicationLocale)
-        val dialogMessage = getString(R.string.settings_delete_threepid_confirmation, mediumFriendlyName, preferenceSummary)
-
-        activity?.let {
-            AlertDialog.Builder(it)
-                    .setTitle(R.string.dialog_title_confirmation)
-                    .setMessage(dialogMessage)
-                    .setPositiveButton(R.string.remove) { _, _ ->
-                        notImplemented()
-                        /* TODO
-                        displayLoadingView()
-
-                        session.myUser.delete3Pid(pid, object : MatrixCallback<Unit> {
-                            override fun onSuccess(info: Void?) {
-                                when (pid.medium) {
-                                    ThreePid.MEDIUM_EMAIL -> refreshEmailsList()
-                                    ThreePid.MEDIUM_MSISDN -> refreshPhoneNumbersList()
-                                }
-                                onCommonDone(null)
-                            }
-
-                            override fun onNetworkError(e: Exception) {
-                                onCommonDone(e.localizedMessage)
-                            }
-
-                            override fun onMatrixError(e: MatrixError) {
-                                onCommonDone(e.localizedMessage)
-                            }
-
-                            override fun onUnexpectedError(e: Exception) {
-                                onCommonDone(e.localizedMessage)
-                            }
-                        })
-                        */
-                    }
-                    .setNegativeButton(R.string.cancel, null)
-                    .show()
-        }
-    }
 
     /**
      * Update the password.
@@ -900,28 +453,25 @@ private fun showEmailValidationDialog(pid: ThreePid) {
                     val newPwd = newPasswordText.text.toString()
 
                     showPasswordLoadingView(true)
-                    session.changePassword(oldPwd, newPwd, object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            if (!isAdded) {
-                                return
-                            }
-                            showPasswordLoadingView(false)
+                    lifecycleScope.launch {
+                        val result = runCatching {
+                            session.changePassword(oldPwd, newPwd)
+                        }
+                        if (!isAdded) {
+                            return@launch
+                        }
+                        showPasswordLoadingView(false)
+                        result.fold({
                             dialog.dismiss()
                             activity.toast(R.string.settings_password_updated)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            if (!isAdded) {
-                                return
-                            }
-                            showPasswordLoadingView(false)
+                        }, { failure ->
                             if (failure.isInvalidPassword()) {
                                 oldPasswordTil.error = getString(R.string.settings_fail_to_update_password_invalid_current_password)
                             } else {
                                 oldPasswordTil.error = getString(R.string.settings_fail_to_update_password)
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             }
             dialog.show()
@@ -951,16 +501,5 @@ private fun showEmailValidationDialog(pid: ThreePid) {
                 }
             })
         }
-    }
-
-    companion object {
-        private const val ADD_EMAIL_PREFERENCE_KEY = "ADD_EMAIL_PREFERENCE_KEY"
-        private const val ADD_PHONE_NUMBER_PREFERENCE_KEY = "ADD_PHONE_NUMBER_PREFERENCE_KEY"
-
-        private const val EMAIL_PREFERENCE_KEY_BASE = "EMAIL_PREFERENCE_KEY_BASE"
-        private const val PHONE_NUMBER_PREFERENCE_KEY_BASE = "PHONE_NUMBER_PREFERENCE_KEY_BASE"
-
-        private const val REQUEST_NEW_PHONE_NUMBER = 456
-        private const val REQUEST_PHONEBOOK_COUNTRY = 789
     }
 }

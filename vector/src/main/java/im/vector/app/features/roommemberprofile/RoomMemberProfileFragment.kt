@@ -35,6 +35,7 @@ import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.copyOnLongClick
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.StateView
@@ -42,13 +43,15 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.RoomDetailPendingAction
+import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
-import org.matrix.android.sdk.api.util.MatrixItem
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_matrix_profile.*
 import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 @Parcelize
@@ -60,7 +63,8 @@ data class RoomMemberProfileArgs(
 class RoomMemberProfileFragment @Inject constructor(
         val viewModelFactory: RoomMemberProfileViewModel.Factory,
         private val roomMemberProfileController: RoomMemberProfileController,
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val roomDetailPendingActionStore: RoomDetailPendingActionStore
 ) : VectorBaseFragment(), RoomMemberProfileController.Callback {
 
     private val fragmentArgs: RoomMemberProfileArgs by args()
@@ -110,6 +114,12 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.OnInviteActionSuccess       -> Unit
             }.exhaustive
         }
+        setupLongClicks()
+    }
+
+    private fun setupLongClicks() {
+        memberProfileNameView.copyOnLongClick()
+        memberProfileIdView.copyOnLongClick()
     }
 
     private fun handleShowPowerLevelDemoteWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning) {
@@ -268,16 +278,36 @@ class RoomMemberProfileFragment @Inject constructor(
         DeviceListBottomSheet.newInstance(it.userId).show(parentFragmentManager, "DEV_LIST")
     }
 
+    override fun onOpenDmClicked() {
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.OpenOrCreateDm(fragmentArgs.userId)
+        vectorBaseActivity.finish()
+    }
+
     override fun onJumpToReadReceiptClicked() {
-        vectorBaseActivity.notImplemented("Jump to read receipts")
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.JumpToReadReceipt(fragmentArgs.userId)
+        vectorBaseActivity.finish()
     }
 
     override fun onMentionClicked() {
-        vectorBaseActivity.notImplemented("Mention")
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.MentionUser(fragmentArgs.userId)
+        vectorBaseActivity.finish()
     }
 
     private fun handleShareRoomMemberProfile(permalink: String) {
-        startSharePlainTextIntent(fragment = this, chooserTitle = null, text = permalink)
+        val view = layoutInflater.inflate(R.layout.dialog_share_qr_code, null)
+        val qrCode = view.findViewById<im.vector.app.core.ui.views.QrCodeImageView>(R.id.itemShareQrCodeImage)
+        qrCode.setData(permalink)
+        AlertDialog.Builder(requireContext())
+            .setView(view)
+            .setNeutralButton(R.string.ok, null)
+            .setPositiveButton(R.string.share_by_text) { _, _ ->
+                startSharePlainTextIntent(
+                        fragment = this,
+                        activityResultLauncher = null,
+                        chooserTitle = null,
+                        text = permalink
+                )
+            }.show()
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {

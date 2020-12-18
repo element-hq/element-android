@@ -1,5 +1,4 @@
 /*
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +26,6 @@ import android.security.KeyPairGeneratorSpec
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
-import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import timber.log.Timber
 import java.io.IOException
@@ -48,7 +46,6 @@ import java.security.cert.CertificateException
 import java.security.spec.AlgorithmParameterSpec
 import java.security.spec.RSAKeyGenParameterSpec
 import java.util.Calendar
-import java.util.zip.GZIPOutputStream
 import javax.crypto.Cipher
 import javax.crypto.CipherInputStream
 import javax.crypto.CipherOutputStream
@@ -83,22 +80,6 @@ object CompatUtil {
     private val prng: SecureRandom by lazy(LazyThreadSafetyMode.NONE) { SecureRandom() }
 
     /**
-     * Create a GZIPOutputStream instance
-     * Special treatment on KitKat device, force the syncFlush param to false
-     * Before Kitkat, this param does not exist and after Kitkat it is set to false by default
-     *
-     * @param outputStream the output stream
-     */
-    @Throws(IOException::class)
-    fun createGzipOutputStream(outputStream: OutputStream): GZIPOutputStream {
-        return if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-            GZIPOutputStream(outputStream, false)
-        } else {
-            GZIPOutputStream(outputStream)
-        }
-    }
-
-    /**
      * Returns the AES key used for local storage encryption/decryption with AES/GCM.
      * The key is created if it does not exist already in the keystore.
      * From Marshmallow, this key is generated and operated directly from the android keystore.
@@ -107,7 +88,6 @@ object CompatUtil {
      *
      * @param context the context holding the application shared preferences
      */
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
     @Synchronized
     @Throws(KeyStoreException::class,
             CertificateException::class,
@@ -249,10 +229,6 @@ object CompatUtil {
             KeyStoreException::class,
             IllegalBlockSizeException::class)
     fun createCipherOutputStream(out: OutputStream, context: Context): OutputStream? {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            return out
-        }
-
         val keyAndVersion = getAesGcmLocalProtectionKey(context)
 
         val cipher = Cipher.getInstance(AES_GCM_CIPHER_TYPE)
@@ -280,12 +256,11 @@ object CompatUtil {
 
     /**
      * Create a CipherInputStream instance.
-     * Before Kitkat, this method will return `in` because local storage encryption is not implemented for devices before KitKat.
-     * Warning, if `in` is not an encrypted stream, it's up to the caller to close and reopen `in`, because the stream has been read.
+     * Warning, if inputStream is not an encrypted stream, it's up to the caller to close and reopen inputStream, because the stream has been read.
      *
-     * @param in      the input stream
-     * @param context the context holding the application shared preferences
-     * @return in, or the created InputStream, or null if the InputStream `in`  does not contain encrypted data
+     * @param inputStream the input stream
+     * @param context     the context holding the application shared preferences
+     * @return inputStream, or the created InputStream, or null if the InputStream inputStream does not contain encrypted data
      */
     @Throws(NoSuchPaddingException::class,
             NoSuchAlgorithmException::class,
@@ -297,19 +272,15 @@ object CompatUtil {
             NoSuchProviderException::class,
             InvalidAlgorithmParameterException::class,
             IOException::class)
-    fun createCipherInputStream(`in`: InputStream, context: Context): InputStream? {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            return `in`
-        }
-
-        val iv_len = `in`.read()
-        if (iv_len != AES_GCM_IV_LENGTH) {
-            Timber.e(TAG, "Invalid IV length $iv_len")
+    fun createCipherInputStream(inputStream: InputStream, context: Context): InputStream? {
+        val ivLen = inputStream.read()
+        if (ivLen != AES_GCM_IV_LENGTH) {
+            Timber.e(TAG, "Invalid IV length $ivLen")
             return null
         }
 
         val iv = ByteArray(AES_GCM_IV_LENGTH)
-        `in`.read(iv)
+        inputStream.read(iv)
 
         val cipher = Cipher.getInstance(AES_GCM_CIPHER_TYPE)
 
@@ -323,6 +294,6 @@ object CompatUtil {
 
         cipher.init(Cipher.DECRYPT_MODE, keyAndVersion.secretKey, spec)
 
-        return CipherInputStream(`in`, cipher)
+        return CipherInputStream(inputStream, cipher)
     }
 }

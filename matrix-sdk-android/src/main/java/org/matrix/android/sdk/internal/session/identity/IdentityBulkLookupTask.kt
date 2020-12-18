@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +22,6 @@ import org.matrix.android.sdk.api.session.identity.FoundThreePid
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.identity.toMedium
-import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments.base64ToBase64Url
 import org.matrix.android.sdk.internal.crypto.tools.withOlmUtility
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -32,6 +30,7 @@ import org.matrix.android.sdk.internal.session.identity.model.IdentityHashDetail
 import org.matrix.android.sdk.internal.session.identity.model.IdentityLookUpParams
 import org.matrix.android.sdk.internal.session.identity.model.IdentityLookUpResponse
 import org.matrix.android.sdk.internal.task.Task
+import org.matrix.android.sdk.internal.util.base64ToBase64Url
 import java.util.Locale
 import javax.inject.Inject
 
@@ -94,7 +93,7 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         } catch (failure: Throwable) {
             // Catch invalid hash pepper and retry
             if (canRetry && failure is Failure.ServerError && failure.error.code == MatrixError.M_INVALID_PEPPER) {
-                // This is not documented, by the error can contain the new pepper!
+                // This is not documented, but the error can contain the new pepper!
                 if (!failure.error.newLookupPepper.isNullOrEmpty()) {
                     // Store it and use it right now
                     hashDetailResponse.copy(pepper = failure.error.newLookupPepper)

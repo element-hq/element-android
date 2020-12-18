@@ -5,7 +5,7 @@
     android:id="@+id/reactionSelector"
     android:layout_width="wrap_content"
     android:layout_height="26dp"
-    android:background="@drawable/rounded_rect_shape"
+    android:background="@drawable/reaction_rounded_rect_shape"
     android:clipChildren="false"
     android:minWidth="44dp">
 

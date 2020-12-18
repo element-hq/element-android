@@ -24,16 +24,16 @@ import android.text.Editable
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
+import com.vanniktech.emoji.EmojiEditText
 import im.vector.app.core.extensions.ooi
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.features.html.PillImageSpan
 import timber.log.Timber
 
 class ComposerEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle)
-    : AppCompatEditText(context, attrs, defStyleAttr) {
+    : EmojiEditText(context, attrs, defStyleAttr) {
 
     interface Callback {
         fun onRichContentSelected(contentUri: Uri): Boolean

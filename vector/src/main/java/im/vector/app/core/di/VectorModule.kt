@@ -33,7 +33,9 @@ import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 
 @Module
@@ -77,6 +79,18 @@ abstract class VectorModule {
         @JvmStatic
         fun providesAuthenticationService(matrix: Matrix): AuthenticationService {
             return matrix.authenticationService()
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesRawService(matrix: Matrix): RawService {
+            return matrix.rawService()
+        }
+
+        @Provides
+        @JvmStatic
+        fun providesHomeServerHistoryService(matrix: Matrix): HomeServerHistoryService {
+            return matrix.homeServerHistoryService()
         }
     }
 

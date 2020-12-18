@@ -38,6 +38,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadSt
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageBlockCodeItem
@@ -59,9 +60,12 @@ import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovement
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.CodeVisitor
 import im.vector.app.features.html.EventHtmlRenderer
+import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
+import me.gujun.android.span.span
+import org.commonmark.node.Document
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -80,13 +84,13 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_POLL
+import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
+import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import me.gujun.android.span.span
-import org.commonmark.node.Document
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
@@ -101,10 +105,16 @@ class MessageItemFactory @Inject constructor(
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
         private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
+        private val roomSummaryHolder: RoomSummaryHolder,
         private val defaultItemFactory: DefaultItemFactory,
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
+        private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val session: Session) {
+
+    private val pillsPostProcessor by lazy {
+        pillsPostProcessorFactory.create(roomSummaryHolder.roomSummary?.roomId)
+    }
 
     fun create(event: TimelineEvent,
                nextEvent: TimelineEvent?,
@@ -112,7 +122,6 @@ class MessageItemFactory @Inject constructor(
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
-
         val informationData = messageInformationDataFactory.create(event, nextEvent)
 
         if (event.root.isRedacted()) {
@@ -130,7 +139,7 @@ class MessageItemFactory @Inject constructor(
                 || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should display it when debugging as a notice event
-            return noticeItemFactory.create(event, highlight, callback)
+            return noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
         }
         val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
 
@@ -146,7 +155,7 @@ class MessageItemFactory @Inject constructor(
             is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageOptionsContent             -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, callback)
+            is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }
@@ -187,10 +196,23 @@ class MessageItemFactory @Inject constructor(
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
                                       attributes: AbsMessageItem.Attributes): MessageFileItem? {
+        val fileUrl = messageContent.getFileUrl()?.let {
+            if (informationData.sentByMe && !informationData.sendState.isSent()) {
+                it
+            } else {
+                it.takeIf { it.startsWith("mxc://") }
+            }
+        } ?: ""
         return MessageFileItem_()
                 .attributes(attributes)
-                .izLocalFile(messageContent.getFileUrl().isLocalFile())
-                .mxcUrl(messageContent.getFileUrl() ?: "")
+                .izLocalFile(fileUrl.isLocalFile())
+                .izDownloaded(session.fileService().isFileInCache(
+                        fileUrl,
+                        messageContent.getFileName(),
+                        messageContent.mimeType,
+                        messageContent.encryptedFileInfo?.toElementToDecrypt())
+                )
+                .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
                 .highlighted(highlight)
@@ -207,13 +229,17 @@ class MessageItemFactory @Inject constructor(
                                                     attributes: AbsMessageItem.Attributes): VerificationRequestItem? {
         // If this request is not sent by me or sent to me, we should ignore it in timeline
         val myUserId = session.myUserId
+        val roomId = roomSummaryHolder.roomSummary?.roomId
         if (informationData.senderId != myUserId && messageContent.toUserId != myUserId) {
             return null
         }
 
         val otherUserId = if (informationData.sentByMe) messageContent.toUserId else informationData.senderId
-        val otherUserName = if (informationData.sentByMe) session.getUser(messageContent.toUserId)?.displayName
-        else informationData.memberName
+        val otherUserName = if (informationData.sentByMe) {
+            session.getRoomMember(messageContent.toUserId, roomId ?: "")?.displayName
+        } else {
+            informationData.memberName
+        }
         return VerificationRequestItem_()
                 .attributes(
                         VerificationRequestItem.Attributes(
@@ -245,7 +271,7 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .izLocalFile(messageContent.getFileUrl().isLocalFile())
-                .izDownloaded(session.fileService().isFileInCache(mxcUrl, messageContent.mimeType))
+                .izDownloaded(session.fileService().isFileInCache(messageContent))
                 .mxcUrl(mxcUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
@@ -286,7 +312,7 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
-                .playable(messageContent.info?.mimeType == "image/gif")
+                .playable(messageContent.info?.mimeType == MimeTypes.Gif)
                 .highlighted(highlight)
                 .mediaData(data)
                 .apply {
@@ -383,7 +409,7 @@ class MessageItemFactory @Inject constructor(
                                        callback: TimelineEventController.Callback?,
                                        attributes: AbsMessageItem.Attributes): MessageTextItem? {
         val compressed = htmlCompressor.compress(messageContent.formattedBody!!)
-        val formattedBody = htmlRenderer.get().render(compressed)
+        val formattedBody = htmlRenderer.get().render(compressed, pillsPostProcessor)
         return buildMessageTextItem(formattedBody, true, informationData, highlight, callback, attributes)
     }
 
@@ -405,6 +431,9 @@ class MessageItemFactory @Inject constructor(
         }
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
                 .searchForPills(isFormatted)
+                .previewUrlRetriever(callback?.getPreviewUrlRetriever())
+                .imageContentRenderer(imageContentRenderer)
+                .previewUrlCallback(callback)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
@@ -510,6 +539,9 @@ class MessageItemFactory @Inject constructor(
                     }
                 }
                 .leftGuideline(avatarSizeProvider.leftGuideline)
+                .previewUrlRetriever(callback?.getPreviewUrlRetriever())
+                .imageContentRenderer(imageContentRenderer)
+                .previewUrlCallback(callback)
                 .attributes(attributes)
                 .highlighted(highlight)
                 .movementMethod(createLinkMovementMethod(callback))
@@ -518,7 +550,7 @@ class MessageItemFactory @Inject constructor(
     private fun MessageContentWithFormattedBody.getHtmlBody(): CharSequence {
         return matrixFormattedBody
                 ?.let { htmlCompressor.compress(it) }
-                ?.let { htmlRenderer.get().render(it) }
+                ?.let { htmlRenderer.get().render(it, pillsPostProcessor) }
                 ?: body
     }
 

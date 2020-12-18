@@ -16,18 +16,27 @@
 
 package im.vector.app.features.roomdirectory.roompreview
 
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.roomdirectory.JoinState
+import org.matrix.android.sdk.api.util.MatrixItem
 
 data class RoomPreviewViewState(
+        val peekingState: Async<PeekingState> = Uninitialized,
         // The room id
         val roomId: String = "",
         val roomAlias: String? = null,
+
+        val roomName: String? = null,
+        val roomTopic: String? = null,
+        val avatarUrl: String? = null,
+
+        val shouldPeekFromServer: Boolean = false,
         /**
-         * The server name (might be null)
-         * Set null when the server is the current user's home server.
+         * Can be empty when the server is the current user's home server.
          */
-        val homeServer: String? = null,
+        val homeServers: List<String> = emptyList(),
         // Current state of the room in preview
         val roomJoinState: JoinState = JoinState.NOT_JOINED,
         // Last error of join room request
@@ -37,6 +46,14 @@ data class RoomPreviewViewState(
     constructor(args: RoomPreviewData) : this(
             roomId = args.roomId,
             roomAlias = args.roomAlias,
-            homeServer = args.homeServer
+            homeServers = args.homeServers,
+            roomName = args.roomName,
+            roomTopic = args.topic,
+            avatarUrl = args.avatarUrl,
+            shouldPeekFromServer = args.peekFromServer
     )
+
+    fun matrixItem() : MatrixItem {
+        return MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
+    }
 }

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,9 +91,9 @@ internal class ReadReceiptHandler @Inject constructor() {
         for ((eventId, receiptDict) in content) {
             val userIdsDict = receiptDict[READ_KEY] ?: continue
             val readReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
-                                      ?: realm.createObject(ReadReceiptsSummaryEntity::class.java, eventId).apply {
-                                          this.roomId = roomId
-                                      }
+                    ?: realm.createObject(ReadReceiptsSummaryEntity::class.java, eventId).apply {
+                        this.roomId = roomId
+                    }
 
             for ((userId, paramsDict) in userIdsDict) {
                 val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0

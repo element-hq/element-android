@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.widget
 
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import com.airbnb.mvrx.parentFragmentViewModel
@@ -31,8 +32,8 @@ import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewModel
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.navigation.Navigator
-import org.matrix.android.sdk.api.session.widgets.model.Widget
 import kotlinx.android.synthetic.main.bottom_sheet_generic_list_with_title.*
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
 /**
@@ -55,8 +56,8 @@ class RoomWidgetsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidget
 
     override fun getLayoutResId() = R.layout.bottom_sheet_generic_list_with_title
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         recyclerView.configureWith(epoxyController, hasFixedSize = false)
         bottomSheetTitle.text = getString(R.string.active_widgets_title)
         bottomSheetTitle.textSize = 20f

@@ -1,7 +1,4 @@
 /*
- * Copyright 2014 OpenMarket Ltd
- * Copyright 2017 Vector Creations Ltd
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +28,7 @@ data class DeviceInfo(
          * The owner user id (not documented and useless but the homeserver sent it. You should not need it)
          */
         @Json(name = "user_id")
-        val user_id: String? = null,
+        val userId: String? = null,
 
         /**
          * The device id

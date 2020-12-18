@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 
 @JsonClass(generateAdapter = true)
@@ -54,6 +54,6 @@ data class MessageImageContent(
          */
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
 ) : MessageImageInfoContent {
-        override val mimeType: String?
-                get() = encryptedFileInfo?.mimetype ?: info?.mimeType ?: "image/*"
+    override val mimeType: String?
+        get() = encryptedFileInfo?.mimetype ?: info?.mimeType ?: MimeTypes.Images
 }

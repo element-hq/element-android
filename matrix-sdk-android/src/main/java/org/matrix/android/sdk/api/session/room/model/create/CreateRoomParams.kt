@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.model.create
 
+import android.net.Uri
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
@@ -51,6 +51,11 @@ class CreateRoomParams {
      * See Room Events for more information on m.room.topic.
      */
     var topic: String? = null
+
+    /**
+     * If this is not null, the image uri will be sent to the media server and will be set as a room avatar.
+     */
+    var avatarUri: Uri? = null
 
     /**
      * A list of user IDs to invite to the room.
@@ -89,7 +94,22 @@ class CreateRoomParams {
      * The server will clobber the following keys: creator.
      * Future versions of the specification may allow the server to clobber other keys.
      */
-    var creationContent: Any? = null
+    val creationContent = mutableMapOf<String, Any>()
+
+    /**
+     * Set to true to disable federation of this room.
+     * Default: false
+     */
+    var disableFederation = false
+        set(value) {
+            field = value
+            if (value) {
+                creationContent[CREATION_CONTENT_KEY_M_FEDERATE] = false
+            } else {
+                // This is the default value, we remove the field
+                creationContent.remove(CREATION_CONTENT_KEY_M_FEDERATE)
+            }
+        }
 
     /**
      * The power level content to override in the default power level event
@@ -114,5 +134,9 @@ class CreateRoomParams {
 
     fun enableEncryption() {
         algorithm = MXCRYPTO_ALGORITHM_MEGOLM
+    }
+
+    companion object {
+        private const val CREATION_CONTENT_KEY_M_FEDERATE = "m.federate"
     }
 }

@@ -25,10 +25,10 @@ import im.vector.app.R
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
-import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.api.util.toMatrixItem
 import kotlinx.android.synthetic.main.vector_invite_view.view.*
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class VectorInviteView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
@@ -73,7 +73,7 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    fun render(sender: User, mode: Mode = Mode.LARGE, changeMembershipState: ChangeMembershipState) {
+    fun render(sender: RoomMemberSummary, mode: Mode = Mode.LARGE, changeMembershipState: ChangeMembershipState) {
         if (mode == Mode.LARGE) {
             updateLayoutParams { height = LayoutParams.MATCH_CONSTRAINT }
             avatarRenderer.render(sender.toMatrixItem(), inviteAvatarView)

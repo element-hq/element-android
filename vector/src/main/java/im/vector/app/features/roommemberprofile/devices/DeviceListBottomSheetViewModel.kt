@@ -44,24 +44,24 @@ data class DeviceListViewState(
 ) : MvRxState
 
 class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted private val initialState: DeviceListViewState,
-                                                                 @Assisted private val userId: String,
+                                                                 @Assisted private val args: DeviceListBottomSheet.Args,
                                                                  private val session: Session)
     : VectorViewModel<DeviceListViewState, DeviceListAction, DeviceListBottomSheetViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(initialState: DeviceListViewState, userId: String): DeviceListBottomSheetViewModel
+        fun create(initialState: DeviceListViewState, args: DeviceListBottomSheet.Args): DeviceListBottomSheetViewModel
     }
 
     init {
-        session.rx().liveUserCryptoDevices(userId)
+        session.rx().liveUserCryptoDevices(args.userId)
                 .execute {
                     copy(cryptoDevices = it).also {
                         refreshSelectedId()
                     }
                 }
 
-        session.rx().liveCrossSigningInfo(userId)
+        session.rx().liveCrossSigningInfo(args.userId)
                 .execute {
                     copy(memberCrossSigningKey = it.invoke()?.getOrNull())
                 }
@@ -88,6 +88,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
     }
 
     private fun selectDevice(action: DeviceListAction.SelectDevice) {
+        if (!args.allowDeviceAction) return
         setState {
             copy(selectedDevice = action.device)
         }
@@ -100,8 +101,9 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
     }
 
     private fun manuallyVerify(action: DeviceListAction.ManuallyVerify) {
-        session.cryptoService().verificationService().beginKeyVerification(VerificationMethod.SAS, userId, action.deviceId, null)?.let { txID ->
-            _viewEvents.post(DeviceListBottomSheetViewEvents.Verify(userId, txID))
+        if (!args.allowDeviceAction) return
+        session.cryptoService().verificationService().beginKeyVerification(VerificationMethod.SAS, args.userId, action.deviceId, null)?.let { txID ->
+            _viewEvents.post(DeviceListBottomSheetViewEvents.Verify(args.userId, txID))
         }
     }
 
@@ -109,12 +111,12 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: DeviceListViewState): DeviceListBottomSheetViewModel? {
             val fragment: DeviceListBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            val userId = viewModelContext.args<String>()
-            return fragment.viewModelFactory.create(state, userId)
+            val args = viewModelContext.args<DeviceListBottomSheet.Args>()
+            return fragment.viewModelFactory.create(state, args)
         }
 
         override fun initialState(viewModelContext: ViewModelContext): DeviceListViewState? {
-            val userId = viewModelContext.args<String>()
+            val userId = viewModelContext.args<DeviceListBottomSheet.Args>().userId
             val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getActiveSession()
             return session.getUser(userId)?.toMatrixItem()?.let {
                 DeviceListViewState(

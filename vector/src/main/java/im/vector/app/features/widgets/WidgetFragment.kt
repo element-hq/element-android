@@ -35,18 +35,17 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.api.session.terms.TermsService
 import im.vector.app.R
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInExternalBrowser
-import im.vector.app.features.home.room.detail.widget.WidgetRequestCodes
-import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.webview.WebViewEventListener
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_room_widget.*
+import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
 import java.net.URISyntaxException
 import javax.inject.Inject
@@ -86,19 +85,18 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
         viewModel.handle(WidgetAction.LoadFormattedUrl)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            ReviewTermsActivity.TERMS_REQUEST_CODE              -> {
-                Timber.v("On terms results")
-                if (resultCode == Activity.RESULT_OK) {
-                    viewModel.handle(WidgetAction.OnTermsReviewed)
-                } else {
-                    vectorBaseActivity.finish()
-                }
-            }
-            WidgetRequestCodes.INTEGRATION_MANAGER_REQUEST_CODE -> {
-                viewModel.handle(WidgetAction.LoadFormattedUrl)
-            }
+    private val termsActivityResultLauncher = registerStartForActivityResult {
+        Timber.v("On terms results")
+        if (it.resultCode == Activity.RESULT_OK) {
+            viewModel.handle(WidgetAction.OnTermsReviewed)
+        } else {
+            vectorBaseActivity.finish()
+        }
+    }
+
+    private val integrationManagerActivityResultLauncher = registerStartForActivityResult {
+        if (it.resultCode == Activity.RESULT_OK) {
+            viewModel.handle(WidgetAction.LoadFormattedUrl)
         }
     }
 
@@ -146,7 +144,12 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
     override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) { state ->
         when (item.itemId) {
             R.id.action_edit            -> {
-                navigator.openIntegrationManager(this, state.roomId, state.widgetId, state.widgetKind.screenId)
+                navigator.openIntegrationManager(
+                        requireContext(),
+                        integrationManagerActivityResultLauncher,
+                        state.roomId,
+                        state.widgetId,
+                        state.widgetKind.screenId)
                 return@withState true
             }
             R.id.action_delete          -> {
@@ -261,7 +264,8 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
 
     private fun displayTerms(displayTerms: WidgetViewEvents.DisplayTerms) {
         navigator.openTerms(
-                fragment = this,
+                context = requireContext(),
+                activityResultLauncher = termsActivityResultLauncher,
                 serviceType = TermsService.ServiceType.IntegrationManager,
                 baseUrl = displayTerms.url,
                 token = displayTerms.token
@@ -287,7 +291,8 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
 
     private fun displayIntegrationManager(event: WidgetViewEvents.DisplayIntegrationManager) {
         navigator.openIntegrationManager(
-                fragment = this,
+                context = requireContext(),
+                activityResultLauncher = integrationManagerActivityResultLauncher,
                 roomId = fragmentArgs.roomId,
                 integId = event.integId,
                 screen = event.integType

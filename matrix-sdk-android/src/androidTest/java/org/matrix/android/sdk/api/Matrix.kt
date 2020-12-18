@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,22 @@
 package org.matrix.android.sdk.api
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
-import org.matrix.android.sdk.common.DaggerTestMatrixComponent
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
+import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.common.DaggerTestMatrixComponent
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
-import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.network.UserAgentHolder
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.olm.OlmManager
-import java.io.InputStream
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -44,10 +45,14 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
     @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService
+    @Inject internal lateinit var rawService: RawService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
     @Inject internal lateinit var sessionManager: SessionManager
+    @Inject internal lateinit var homeServerHistoryService: HomeServerHistoryService
+
+    private val uiHandler = Handler(Looper.getMainLooper())
 
     init {
         Monarchy.init(context)
@@ -55,7 +60,9 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         if (context.applicationContext !is Configuration.Provider) {
             WorkManager.initialize(context, Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build())
         }
-        ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+        uiHandler.post {
+            ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
+        }
     }
 
     fun getUserAgent() = userAgentHolder.userAgent
@@ -63,6 +70,10 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     fun authenticationService(): AuthenticationService {
         return authenticationService
     }
+
+    fun rawService() = rawService
+
+    fun homeServerHistoryService() = homeServerHistoryService
 
     fun legacySessionImporter(): LegacySessionImporter {
         return legacySessionImporter
@@ -95,10 +106,6 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
         fun getSdkVersion(): String {
             return BuildConfig.VERSION_NAME + " (" + BuildConfig.GIT_SDK_REVISION + ")"
-        }
-
-        fun decryptStream(inputStream: InputStream?, elementToDecrypt: ElementToDecrypt): InputStream? {
-            return MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt)
         }
     }
 }

@@ -30,6 +30,8 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.settings.VectorPreferences
+import io.reactivex.Observable
+import io.reactivex.functions.Function3
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
@@ -39,8 +41,6 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
-import io.reactivex.Observable
-import io.reactivex.functions.Function3
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.util.concurrent.TimeUnit

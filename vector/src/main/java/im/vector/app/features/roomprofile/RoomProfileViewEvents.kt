@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile
 
+import androidx.core.content.pm.ShortcutInfoCompat
 import im.vector.app.core.platform.VectorViewEvents
 
 /**
@@ -25,6 +26,6 @@ sealed class RoomProfileViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : RoomProfileViewEvents()
     data class Failure(val throwable: Throwable) : RoomProfileViewEvents()
 
-    object OnChangeAvatarSuccess : RoomProfileViewEvents()
     data class ShareRoomProfile(val permalink: String) : RoomProfileViewEvents()
+    data class OnShortcutReady(val shortcutInfo: ShortcutInfoCompat) : RoomProfileViewEvents()
 }

@@ -20,17 +20,18 @@ import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.R
+import im.vector.app.features.roomprofile.RoomProfileArgs
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import im.vector.app.R
-import im.vector.app.features.roomprofile.RoomProfileArgs
 
 data class RoomMemberListViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized,
+        val filter: String = "",
         val threePidInvites: Async<List<Event>> = Uninitialized,
         val trustLevelMap: Async<Map<String, RoomEncryptionTrustLevel?>> = Uninitialized,
         val actionsPermissions: ActionPermissions = ActionPermissions()

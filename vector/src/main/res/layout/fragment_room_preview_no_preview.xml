@@ -54,6 +54,14 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+        <ProgressBar
+            android:id="@+id/roomPreviewPeekingProgress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="14dp"
+            android:layout_gravity="center"
+            android:background="?riotx_header_panel_background"
+            android:indeterminate="true" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -71,7 +79,7 @@
                     android:id="@+id/roomPreviewNoPreviewAvatar"
                     android:layout_width="128dp"
                     android:layout_height="128dp"
-                    android:layout_marginTop="123dp"
+                    android:layout_marginTop="60dp"
                     tools:src="@tools:sample/avatars" />
 
                 <TextView

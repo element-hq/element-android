@@ -16,18 +16,17 @@
 
 package im.vector.app.features.settings
 
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.preference.Preference
-import org.matrix.android.sdk.api.Matrix
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.displayInWebView
+import im.vector.app.core.utils.openAppSettingsPage
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.version.VersionProvider
 import im.vector.app.openOssLicensesMenuActivity
+import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 
 class VectorSettingsHelpAboutFragment @Inject constructor(
@@ -41,24 +40,19 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         // preference to start the App info screen, to facilitate App permissions access
         findPreference<VectorPreference>(APP_INFO_LINK_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity?.let {
-                val intent = Intent().apply {
-                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-                    val uri = Uri.fromParts("package", requireContext().packageName, null)
-
-                    data = uri
-                }
-                it.applicationContext.startActivity(intent)
-            }
-
+            activity?.let { openAppSettingsPage(it) }
             true
         }
 
         // application version
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_VERSION_PREFERENCE_KEY)!!.let {
-            it.summary = versionProvider.getVersion(longFormat = false, useBuildNumber = true)
+            it.summary = buildString {
+                append(versionProvider.getVersion(longFormat = false, useBuildNumber = true))
+                if (BuildConfig.DEBUG) {
+                    append(" ")
+                    append(BuildConfig.GIT_BRANCH_NAME)
+                }
+            }
 
             it.setOnPreferenceClickListener { pref ->
                 copyToClipboard(requireContext(), pref.summary)

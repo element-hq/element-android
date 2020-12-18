@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +34,11 @@ interface UserService {
      * @return a user with userId or null
      */
     fun getUser(userId: String): User?
+
+    /**
+     * Try to resolve user from known users, or using profile api
+     */
+    fun resolveUser(userId: String, callback: MatrixCallback<User>)
 
     /**
      * Search list of users on server directory.

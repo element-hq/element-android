@@ -16,6 +16,8 @@
 
 package im.vector.app.features.home.room.detail
 
+import android.net.Uri
+import android.view.View
 import im.vector.app.core.platform.VectorViewModelAction
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -24,6 +26,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachme
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.util.MatrixItem
 
 sealed class RoomDetailAction : VectorViewModelAction {
     data class UserIsTyping(val isTyping: Boolean) : RoomDetailAction()
@@ -40,7 +43,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class UpdateQuickReactAction(val targetEventId: String, val selectedReaction: String, val add: Boolean) : RoomDetailAction()
     data class NavigateToEvent(val eventId: String, val highlight: Boolean) : RoomDetailAction()
     object MarkAllAsRead : RoomDetailAction()
-    data class DownloadOrOpen(val eventId: String, val messageFileContent: MessageWithAttachmentContent) : RoomDetailAction()
+    data class DownloadOrOpen(val eventId: String, val senderId: String?, val messageFileContent: MessageWithAttachmentContent) : RoomDetailAction()
     data class HandleTombstoneEvent(val event: Event) : RoomDetailAction()
     object AcceptInvite : RoomDetailAction()
     object RejectInvite : RoomDetailAction()
@@ -51,10 +54,11 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class EnterEditMode(val eventId: String, val text: String) : RoomDetailAction()
     data class EnterQuoteMode(val eventId: String, val text: String) : RoomDetailAction()
     data class EnterReplyMode(val eventId: String, val text: String) : RoomDetailAction()
-    data class ExitSpecialMode(val text: String) : RoomDetailAction()
+    data class EnterRegularMode(val text: String, val fromSharing: Boolean) : RoomDetailAction()
 
     data class ResendMessage(val eventId: String) : RoomDetailAction()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
+    data class CancelSend(val eventId: String) : RoomDetailAction()
 
     data class ReplyToOptions(val eventId: String, val optionIndex: Int, val optionValue: String) : RoomDetailAction()
 
@@ -67,7 +71,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     data class IgnoreUser(val userId: String?) : RoomDetailAction()
 
-    object ClearSendQueue : RoomDetailAction()
     object ResendAll : RoomDetailAction()
     data class StartCall(val isVideo: Boolean) : RoomDetailAction()
     object EndCall : RoomDetailAction()
@@ -80,11 +83,22 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class ReRequestKeys(val eventId: String) : RoomDetailAction()
 
     object SelectStickerAttachment : RoomDetailAction()
-    object OpenIntegrationManager: RoomDetailAction()
-    object ManageIntegrations: RoomDetailAction()
-    data class AddJitsiWidget(val withVideo: Boolean): RoomDetailAction()
-    data class RemoveWidget(val widgetId: String): RoomDetailAction()
+    object OpenIntegrationManager : RoomDetailAction()
+    object ManageIntegrations : RoomDetailAction()
+    data class AddJitsiWidget(val withVideo: Boolean) : RoomDetailAction()
+    data class RemoveWidget(val widgetId: String) : RoomDetailAction()
     data class EnsureNativeWidgetAllowed(val widget: Widget,
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
+
+    data class OpenOrCreateDm(val userId: String) : RoomDetailAction()
+    data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
+    object QuickActionInvitePeople : RoomDetailAction()
+    object QuickActionSetAvatar : RoomDetailAction()
+    data class SetAvatarAction(val newAvatarUri: Uri, val newAvatarFileName: String) : RoomDetailAction()
+    object QuickActionSetTopic : RoomDetailAction()
+    data class ShowRoomAvatarFullScreen(val matrixItem: MatrixItem?, val transitionView: View?) : RoomDetailAction()
+
+    // Preview URL
+    data class DoNotShowPreviewUrlFor(val eventId: String, val url: String) : RoomDetailAction()
 }

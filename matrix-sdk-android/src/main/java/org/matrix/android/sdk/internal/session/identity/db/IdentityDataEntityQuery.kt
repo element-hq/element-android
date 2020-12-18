@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +49,13 @@ internal fun IdentityDataEntity.Companion.setToken(realm: Realm,
                                                    newToken: String?) {
     get(realm)?.apply {
         token = newToken
+    }
+}
+
+internal fun IdentityDataEntity.Companion.setUserConsent(realm: Realm,
+                                                         newConsent: Boolean) {
+    get(realm)?.apply {
+        userConsent = newConsent
     }
 }
 

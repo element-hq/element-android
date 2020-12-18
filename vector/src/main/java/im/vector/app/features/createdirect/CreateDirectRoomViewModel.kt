@@ -16,21 +16,29 @@
 
 package im.vector.app.features.createdirect
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.userdirectory.PendingInvitee
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.rx.rx
 
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
-                                                            private val session: Session)
+                                                            private val rawService: RawService,
+                                                            val session: Session)
     : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -49,27 +57,48 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> createRoomAndInviteSelectedUsers(action.invitees)
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action)
+        }.exhaustive
+    }
+
+    /**
+     * If users already have a DM room then navigate to it instead of creating a new room.
+     */
+    private fun onSubmitInvitees(action: CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers) {
+        if (action.existingDmRoomId != null) {
+            // Do not create a new DM, just tell that the creation is successful by passing the existing roomId
+            setState {
+                copy(createAndInviteState = Success(action.existingDmRoomId))
+            }
+        } else {
+            // Create the DM
+            createRoomAndInviteSelectedUsers(action.invitees)
         }
     }
 
     private fun createRoomAndInviteSelectedUsers(invitees: Set<PendingInvitee>) {
-        val roomParams = CreateRoomParams()
-                .apply {
-                    invitees.forEach {
-                        when (it) {
-                            is PendingInvitee.UserPendingInvitee     -> invitedUserIds.add(it.user.userId)
-                            is PendingInvitee.ThreePidPendingInvitee -> invite3pids.add(it.threePid)
-                        }.exhaustive
-                    }
-                    setDirectMessage()
-                    enableEncryptionIfInvitedUsersSupportIt = session.getHomeServerCapabilities().adminE2EByDefault
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            val adminE2EByDefault = rawService.getElementWellknown(session.myUserId)
+                    ?.isE2EByDefault()
+                    ?: true
 
-        session.rx()
-                .createRoom(roomParams)
-                .execute {
-                    copy(createAndInviteState = it)
-                }
+            val roomParams = CreateRoomParams()
+                    .apply {
+                        invitees.forEach {
+                            when (it) {
+                                is PendingInvitee.UserPendingInvitee     -> invitedUserIds.add(it.user.userId)
+                                is PendingInvitee.ThreePidPendingInvitee -> invite3pids.add(it.threePid)
+                            }.exhaustive
+                        }
+                        setDirectMessage()
+                        enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
+                    }
+
+            session.rx()
+                    .createRoom(roomParams)
+                    .execute {
+                        copy(createAndInviteState = it)
+                    }
+        }
     }
 }

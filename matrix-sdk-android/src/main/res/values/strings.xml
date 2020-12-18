@@ -10,13 +10,19 @@
     <string name="notice_room_invite_no_invitee_by_you">Your invitation</string>
     <string name="notice_room_created">%1$s created the room</string>
     <string name="notice_room_created_by_you">You created the room</string>
+    <string name="notice_direct_room_created">%1$s created the discussion</string>
+    <string name="notice_direct_room_created_by_you">You created the discussion</string>
     <string name="notice_room_invite">%1$s invited %2$s</string>
     <string name="notice_room_invite_by_you">You invited %1$s</string>
     <string name="notice_room_invite_you">%1$s invited you</string>
     <string name="notice_room_join">%1$s joined the room</string>
     <string name="notice_room_join_by_you">You joined the room</string>
+    <string name="notice_direct_room_join">%1$s joined</string>
+    <string name="notice_direct_room_join_by_you">You joined</string>
     <string name="notice_room_leave">%1$s left the room</string>
     <string name="notice_room_leave_by_you">You left the room</string>
+    <string name="notice_direct_room_leave">%1$s left the room</string>
+    <string name="notice_direct_room_leave_by_you">You left the room</string>
     <string name="notice_room_reject">%1$s rejected the invitation</string>
     <string name="notice_room_reject_by_you">You rejected the invitation</string>
     <string name="notice_room_kick">%1$s kicked %2$s</string>
@@ -53,6 +59,8 @@
     <string name="notice_ended_call_by_you">You ended the call.</string>
     <string name="notice_made_future_room_visibility">%1$s made future room history visible to %2$s</string>
     <string name="notice_made_future_room_visibility_by_you">You made future room history visible to %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s made future messages visible to %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">You made future messages visible to %1$s</string>
     <string name="notice_room_visibility_invited">all room members, from the point they are invited.</string>
     <string name="notice_room_visibility_joined">all room members, from the point they joined.</string>
     <string name="notice_room_visibility_shared">all room members.</string>
@@ -62,6 +70,25 @@
     <string name="notice_end_to_end_by_you">You turned on end-to-end encryption (%1$s)</string>
     <string name="notice_room_update">%s upgraded this room.</string>
     <string name="notice_room_update_by_you">You upgraded this room.</string>
+    <string name="notice_direct_room_update">%s upgraded here.</string>
+    <string name="notice_direct_room_update_by_you">You upgraded here.</string>
+    <string name="notice_room_server_acl_set_title">%s set the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_set_title_by_you">You set the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_set_banned">• Server matching %s are banned.</string>
+    <string name="notice_room_server_acl_set_allowed">• Server matching %s are allowed.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Server matching IP literals are allowed.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Server matching IP literals are banned.</string>
+
+    <string name="notice_room_server_acl_updated_title">%s changed the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">You changed the server ACLs for this room.</string>
+    <string name="notice_room_server_acl_updated_banned">• Server matching %s are now banned.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Server matching %s were removed from the ban list.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Server matching %s are now allowed.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Server matching %s were removed from the allowed list.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Server matching IP literals are now allowed.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Server matching IP literals are now banned.</string>
+    <string name="notice_room_server_acl_updated_no_change">No change.</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 All servers are banned from participating! This room can no longer be used.</string>
 
     <string name="notice_requested_voip_conference">%1$s requested a VoIP conference</string>
     <string name="notice_requested_voip_conference_by_you">You requested a VoIP conference</string>
@@ -83,8 +110,12 @@
     <string name="notice_profile_change_redacted_by_you">You updated your profile %1$s</string>
     <string name="notice_room_third_party_invite">%1$s sent an invitation to %2$s to join the room</string>
     <string name="notice_room_third_party_invite_by_you">You sent an invitation to %1$s to join the room</string>
+    <string name="notice_direct_room_third_party_invite">%1$s invited %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">You invited %1$s</string>
     <string name="notice_room_third_party_revoked_invite">%1$s revoked the invitation for %2$s to join the room</string>
     <string name="notice_room_third_party_revoked_invite_by_you">You revoked the invitation for %1$s to join the room</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s revoked the invitation for %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">You revoked the invitation for %1$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s accepted the invitation for %2$s</string>
     <string name="notice_room_third_party_registered_invite_by_you">You accepted the invitation for %1$s</string>
 
@@ -144,145 +175,23 @@
 
     <!-- The 2 parameters will be members' name -->
     <string name="room_displayname_two_members">%1$s and %2$s</string>
-
+    <!-- The 3 parameters will be members' name -->
+    <string name="room_displayname_3_members">%1$s, %2$s and %3$s</string>
+    <!-- The 4 parameters will be members' name -->
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s and %4$s</string>
+    <!-- The 3 first parameters will be members' name -->
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s and %4$d other</item>
+        <item quantity="other">%1$s, %2$s, %3$s and %4$d others</item>
+    </plurals>
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s and 1 other</item>
         <item quantity="other">%1$s and %2$d others</item>
     </plurals>
 
     <string name="room_displayname_empty_room">Empty room</string>
+    <string name="room_displayname_empty_room_was">Empty room (was %s)</string>
 
-
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_dog">Dog</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_cat">Cat</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_lion">Lion</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_horse">Horse</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_unicorn">Unicorn</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_pig">Pig</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_elephant">Elephant</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_rabbit">Rabbit</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_panda">Panda</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_rooster">Rooster</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_penguin">Penguin</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_turtle">Turtle</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_fish">Fish</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_octopus">Octopus</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_butterfly">Butterfly</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_flower">Flower</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_tree">Tree</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_cactus">Cactus</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_mushroom">Mushroom</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_globe">Globe</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_moon">Moon</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_cloud">Cloud</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_fire">Fire</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_banana">Banana</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_apple">Apple</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_strawberry">Strawberry</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_corn">Corn</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_pizza">Pizza</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_cake">Cake</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_heart">Heart</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_smiley">Smiley</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_robot">Robot</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_hat">Hat</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_glasses">Glasses</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_wrench">Wrench</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_santa">Santa</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_thumbsup">Thumbs Up</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_umbrella">Umbrella</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_hourglass">Hourglass</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_clock">Clock</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_gift">Gift</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_lightbulb">Light Bulb</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_book">Book</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_pencil">Pencil</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_paperclip">Paperclip</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_scissors">Scissors</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_lock">Lock</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_key">Key</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_hammer">Hammer</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_telephone">Telephone</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_flag">Flag</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_train">Train</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_bicycle">Bicycle</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_airplane">Airplane</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_rocket">Rocket</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_trophy">Trophy</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_ball">Ball</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_guitar">Guitar</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_trumpet">Trumpet</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_bell">Bell</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_anchor">Anchor</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_headphone">Headphones</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_folder">Folder</string>
-    <!-- All translations should be the same across all Riot clients, please use the same translation than RiotWeb -->
-    <string name="verification_emoji_pin">Pin</string>
-
-    <!-- Strings for RiotX -->
     <string name="initial_sync_start_importing_account">Initial Sync:\nImporting account…</string>
     <string name="initial_sync_start_importing_account_crypto">Initial Sync:\nImporting crypto</string>
     <string name="initial_sync_start_importing_account_rooms">Initial Sync:\nImporting Rooms</string>
@@ -302,8 +211,12 @@
     <string name="notice_room_invite_you_with_reason">%1$s invited you. Reason: %2$s</string>
     <string name="notice_room_join_with_reason">%1$s joined the room. Reason: %2$s</string>
     <string name="notice_room_join_with_reason_by_you">You joined the room. Reason: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s joined. Reason: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">You joined. Reason: %1$s</string>
     <string name="notice_room_leave_with_reason">%1$s left the room. Reason: %2$s</string>
     <string name="notice_room_leave_with_reason_by_you">You left the room. Reason: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s left. Reason: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">You left. Reason: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s rejected the invitation. Reason: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">You rejected the invitation. Reason: %1$s</string>
     <string name="notice_room_kick_with_reason">%1$s kicked %2$s. Reason: %3$s</string>
@@ -333,12 +246,12 @@
 
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s removed %2$s as an address for this room.</item>
-        <item quantity="other">%1$s removed %3$s as addresses for this room.</item>
+        <item quantity="other">%1$s removed %2$s as addresses for this room.</item>
     </plurals>
 
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">You removed %1$s as an address for this room.</item>
-        <item quantity="other">You removed %2$s as addresses for this room.</item>
+        <item quantity="other">You removed %1$s as addresses for this room.</item>
     </plurals>
 
     <string name="notice_room_aliases_added_and_removed">%1$s added %2$s and removed %3$s as addresses for this room.</string>
@@ -349,10 +262,41 @@
     <string name="notice_room_canonical_alias_unset">"%1$s removed the main address for this room."</string>
     <string name="notice_room_canonical_alias_unset_by_you">"You removed the main address for this room."</string>
 
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s added the alternative address %2$s for this room.</item>
+        <item quantity="other">%1$s added the alternative addresses %2$s for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">You added the alternative address %1$s for this room.</item>
+        <item quantity="other">You added the alternative addresses %1$s for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s removed the alternative address %2$s for this room.</item>
+        <item quantity="other">%1$s removed the alternative addresses %2$s for this room.</item>
+    </plurals>
+
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">You removed the alternative address %1$s for this room.</item>
+        <item quantity="other">You removed the alternative addresses %1$s for this room.</item>
+    </plurals>
+
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s changed the alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">You changed the alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s changed the main and alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">You changed the main and alternative addresses for this room.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s changed the addresses for this room.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">You changed the addresses for this room.</string>
+
     <string name="notice_room_guest_access_can_join">"%1$s has allowed guests to join the room."</string>
     <string name="notice_room_guest_access_can_join_by_you">"You have allowed guests to join the room."</string>
+    <string name="notice_direct_room_guest_access_can_join">"%1$s has allowed guests to join here."</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">"You have allowed guests to join here."</string>
     <string name="notice_room_guest_access_forbidden">"%1$s has prevented guests from joining the room."</string>
     <string name="notice_room_guest_access_forbidden_by_you">"You have prevented guests from joining the room."</string>
+    <string name="notice_direct_room_guest_access_forbidden">"%1$s has prevented guests from joining the room."</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">"You have prevented guests from joining the room."</string>
 
     <string name="notice_end_to_end_ok">%1$s turned on end-to-end encryption.</string>
     <string name="notice_end_to_end_ok_by_you">You turned on end-to-end encryption.</string>
@@ -360,9 +304,5 @@
     <string name="notice_end_to_end_unknown_algorithm_by_you">You turned on end-to-end encryption (unrecognised algorithm %1$s).</string>
 
     <string name="key_verification_request_fallback_message">%s is requesting to verify your key, but your client does not support in-chat key verification. You will need to use legacy key verification to verify keys.</string>
-
-    <string name="call_notification_answer">Accept</string>
-    <string name="call_notification_reject">Decline</string>
-    <string name="call_notification_hangup">Hang Up</string>
 
 </resources>

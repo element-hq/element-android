@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,8 +43,8 @@ class DeactivateAccountTest : InstrumentedTest {
         val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
 
         // Deactivate the account
-        commonTestHelper.doSync<Unit> {
-            session.deactivateAccount(TestConstants.PASSWORD, false, it)
+        commonTestHelper.runBlockingTest {
+            session.deactivateAccount(TestConstants.PASSWORD, false)
         }
 
         // Try to login on the previous account, it will fail (M_USER_DEACTIVATED)

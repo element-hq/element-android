@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,9 +74,7 @@ internal class DefaultNetworkConnectivityChecker @Inject constructor(private val
 
     override fun register(listener: NetworkConnectivityChecker.Listener) {
         if (listeners.isEmpty()) {
-            if (backgroundDetectionObserver.isInBackground) {
-                unbind()
-            } else {
+            if (!backgroundDetectionObserver.isInBackground) {
                 bind()
             }
             backgroundDetectionObserver.register(backgroundDetectionObserverListener)

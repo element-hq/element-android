@@ -27,6 +27,7 @@
     <issue id="DisableBaselineAlignment" severity="error" />
     <issue id="ScrollViewSize" severity="error" />
     <issue id="NegativeMargin" severity="error" />
+    <issue id="UseCompatTextViewDrawableXml" severity="error" />
 
     <!-- RTL -->
     <issue id="RtlEnabled" severity="error" />
@@ -37,8 +38,10 @@
     <issue id="SetTextI18n" severity="error" />
     <issue id="ViewConstructor" severity="error" />
     <issue id="UseValueOf" severity="error" />
+    <issue id="ObsoleteSdkInt" severity="error" />
     <issue id="Recycle" severity="error" />
     <issue id="KotlinPropertyAccess" severity="error" />
+    <issue id="DefaultLocale" severity="error" />
 
     <issue id="InvalidPackage">
         <!-- Ignore error from HtmlCompressor lib -->
@@ -49,6 +52,9 @@
 
     <!-- Manifest -->
     <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
+
+    <!-- Dependencies -->
+    <issue id="KtxExtensionAvailable" severity="error" />
 
     <!-- Timber -->
     <!--    This rule is failing on CI because it's marked as unknwown rule id :/-->

@@ -4,6 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
+        android:id="@+id/timeline_setting"
+        android:icon="@drawable/ic_settings_x"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/search"
+        android:title="@string/search"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/invite"
+        android:title="@string/invite"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/video_call"
         android:icon="@drawable/ic_video"
         android:title="@string/action_video_call"
@@ -49,13 +65,6 @@
         android:icon="@drawable/ic_trash"
         android:title="@string/room_prompt_cancel"
         android:visible="false"
-        app:showAsAction="never"
-        tools:visible="true" />
-
-    <item
-        android:id="@+id/clear_message_queue"
-        android:title="@string/clear_timeline_send_queue"
-        android:visible="@bool/debug_mode"
         app:showAsAction="never"
         tools:visible="true" />
 

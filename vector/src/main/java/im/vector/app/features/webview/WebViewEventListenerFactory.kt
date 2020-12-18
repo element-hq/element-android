@@ -16,8 +16,8 @@
 
 package im.vector.app.features.webview
 
-import org.matrix.android.sdk.api.session.Session
 import im.vector.app.core.platform.VectorBaseActivity
+import org.matrix.android.sdk.api.session.Session
 
 interface WebViewEventListenerFactory {
 

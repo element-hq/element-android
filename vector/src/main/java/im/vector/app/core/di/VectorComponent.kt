@@ -36,6 +36,8 @@ import im.vector.app.features.crypto.verification.IncomingVerificationRequestHan
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.HomeRoomListDataSource
+import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.login.ReAuthHelper
@@ -57,6 +59,8 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.UiStateRepository
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Singleton
 
@@ -69,6 +73,8 @@ interface VectorComponent {
     fun inject(vectorApplication: VectorApplication)
 
     fun matrix(): Matrix
+
+    fun matrixItemColorProvider(): MatrixItemColorProvider
 
     fun sessionListener(): SessionListener
 
@@ -110,6 +116,8 @@ interface VectorComponent {
 
     fun selectedGroupStore(): SelectedGroupDataSource
 
+    fun roomDetailPendingActionStore(): RoomDetailPendingActionStore
+
     fun activeSessionObservableStore(): ActiveSessionDataSource
 
     fun incomingVerificationRequestHandler(): IncomingVerificationRequestHandler
@@ -117,6 +125,10 @@ interface VectorComponent {
     fun incomingKeyRequestHandler(): KeyRequestHandler
 
     fun authenticationService(): AuthenticationService
+
+    fun rawService(): RawService
+
+    fun homeServerHistoryService(): HomeServerHistoryService
 
     fun bugReporter(): BugReporter
 

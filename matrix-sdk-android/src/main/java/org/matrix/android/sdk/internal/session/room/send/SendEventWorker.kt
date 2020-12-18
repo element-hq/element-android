@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,23 +17,22 @@
 package org.matrix.android.sdk.internal.session.room.send
 
 import android.content.Context
-import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.failure.shouldBeRetried
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.internal.database.mapper.ContentMapper
-import org.matrix.android.sdk.internal.network.executeRequest
-import org.matrix.android.sdk.internal.session.room.RoomAPI
-import org.matrix.android.sdk.internal.worker.SessionWorkerParams
-import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.getSessionComponent
+import io.realm.RealmConfiguration
 import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.api.failure.shouldBeRetried
+import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.crypto.tasks.SendEventTask
+import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.session.SessionComponent
+import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
+import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val MAX_NUMBER_OF_RETRY_BEFORE_FAILING = 3
+// private const val MAX_NUMBER_OF_RETRY_BEFORE_FAILING = 3
 
 /**
  * Possible previous worker: [EncryptEventWorker] or first worker
@@ -42,74 +40,68 @@ private const val MAX_NUMBER_OF_RETRY_BEFORE_FAILING = 3
  */
 internal class SendEventWorker(context: Context,
                                params: WorkerParameters)
-    : CoroutineWorker(context, params) {
+    : SessionSafeCoroutineWorker<SendEventWorker.Params>(context, params, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
             override val sessionId: String,
-            // TODO remove after some time, it's used for compat
-            val event: Event? = null,
-            val eventId: String? = null,
-            val roomId: String? = null,
-            val type: String? = null,
-            val contentStr: String? = null,
-            override val lastFailureMessage: String? = null
-    ) : SessionWorkerParams {
-
-        constructor(sessionId: String, event: Event, lastFailureMessage: String? = null) : this(
-                sessionId = sessionId,
-                eventId = event.eventId,
-                roomId = event.roomId,
-                type = event.type,
-                contentStr = ContentMapper.map(event.content),
-                lastFailureMessage = lastFailureMessage
-        )
-    }
+            override val lastFailureMessage: String? = null,
+            val eventId: String,
+            // use this as an override if you want to send in clear in encrypted room
+            val isEncrypted: Boolean? = null
+    ) : SessionWorkerParams
 
     @Inject lateinit var localEchoRepository: LocalEchoRepository
-    @Inject lateinit var roomAPI: RoomAPI
+    @Inject lateinit var sendEventTask: SendEventTask
+    @Inject lateinit var cryptoService: CryptoService
     @Inject lateinit var eventBus: EventBus
+    @Inject lateinit var cancelSendTracker: CancelSendTracker
+    @SessionDatabase @Inject lateinit var realmConfiguration: RealmConfiguration
 
-    override suspend fun doWork(): Result {
-        val params = WorkerParamsFactory.fromData<Params>(inputData)
-                ?: return Result.success()
-                        .also { Timber.e("Unable to parse work parameters") }
+    override fun injectWith(injector: SessionComponent) {
+        injector.inject(this)
+    }
 
-        val sessionComponent = getSessionComponent(params.sessionId) ?: return Result.success()
-        sessionComponent.inject(this)
-        if (params.eventId == null || params.roomId == null || params.type == null) {
-            // compat with old params, make it fail if any
-            if (params.event?.eventId != null) {
-                localEchoRepository.updateSendState(params.event.eventId, SendState.UNDELIVERED)
-            }
+    override suspend fun doSafeWork(params: Params): Result {
+        val event = localEchoRepository.getUpToDateEcho(params.eventId)
+        if (event?.eventId == null || event.roomId == null) {
+            localEchoRepository.updateSendState(params.eventId, event?.roomId, SendState.UNDELIVERED)
             return Result.success()
+                    .also { Timber.e("Work cancelled due to bad input data") }
         }
+
+        if (cancelSendTracker.isCancelRequestedFor(params.eventId, event.roomId)) {
+            return Result.success()
+                    .also {
+                        cancelSendTracker.markCancelled(event.eventId, event.roomId)
+                        Timber.e("## SendEvent: Event sending has been cancelled ${params.eventId}")
+                    }
+        }
+
         if (params.lastFailureMessage != null) {
-            localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
+            localEchoRepository.updateSendState(event.eventId, event.roomId, SendState.UNDELIVERED)
             // Transmit the error
             return Result.success(inputData)
                     .also { Timber.e("Work cancelled due to input error from parent") }
         }
+
+        Timber.v("## SendEvent: [${System.currentTimeMillis()}] Send event ${params.eventId}")
         return try {
-            sendEvent(params.eventId, params.roomId, params.type, params.contentStr)
+            sendEventTask.execute(SendEventTask.Params(event, params.isEncrypted ?: cryptoService.isRoomEncrypted(event.roomId)))
             Result.success()
         } catch (exception: Throwable) {
-            // It does start from 0, we want it to stop if it fails the third time
-            val currentAttemptCount = runAttemptCount + 1
-            if (currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING || !exception.shouldBeRetried()) {
-                localEchoRepository.updateSendState(params.eventId, SendState.UNDELIVERED)
+            if (/*currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING ||**/ !exception.shouldBeRetried()) {
+                Timber.e("## SendEvent: [${System.currentTimeMillis()}]  Send event Failed cannot retry ${params.eventId} > ${exception.localizedMessage}")
+                localEchoRepository.updateSendState(event.eventId, event.roomId, SendState.UNDELIVERED)
                 return Result.success()
             } else {
+                Timber.e("## SendEvent: [${System.currentTimeMillis()}]  Send event Failed schedule retry ${params.eventId} > ${exception.localizedMessage}")
                 Result.retry()
             }
         }
     }
 
-    private suspend fun sendEvent(eventId: String, roomId: String, type: String, contentStr: String?) {
-        localEchoRepository.updateSendState(eventId, SendState.SENDING)
-        executeRequest<SendResponse>(eventBus) {
-            apiCall = roomAPI.send(eventId, roomId, type, contentStr)
-        }
-        localEchoRepository.updateSendState(eventId, SendState.SENT)
+    override fun buildErrorParams(params: Params, message: String): Params {
+        return params.copy(lastFailureMessage = params.lastFailureMessage ?: message)
     }
 }

@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,14 +22,14 @@ import retrofit2.Retrofit
 import java.lang.reflect.Type
 
 object UnitConverterFactory : Converter.Factory() {
-  override fun responseBodyConverter(type: Type, annotations: Array<out Annotation>,
-                                     retrofit: Retrofit): Converter<ResponseBody, *>? {
-    return if (type == Unit::class.java) UnitConverter else null
-  }
-
-  private object UnitConverter : Converter<ResponseBody, Unit> {
-    override fun convert(value: ResponseBody) {
-      value.close()
+    override fun responseBodyConverter(type: Type, annotations: Array<out Annotation>,
+                                       retrofit: Retrofit): Converter<ResponseBody, *>? {
+        return if (type == Unit::class.java) UnitConverter else null
     }
-  }
+
+    private object UnitConverter : Converter<ResponseBody, Unit> {
+        override fun convert(value: ResponseBody) {
+            value.close()
+        }
+    }
 }

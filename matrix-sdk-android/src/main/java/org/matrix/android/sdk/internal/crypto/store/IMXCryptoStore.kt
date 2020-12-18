@@ -1,7 +1,4 @@
-
 /*
- * Copyright 2016 OpenMarket Ltd
- * Copyright 2018 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.store
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Optional
@@ -129,7 +127,10 @@ internal interface IMXCryptoStore {
     fun getPendingIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
 
     fun getPendingIncomingGossipingRequests(): List<IncomingShareRequestCommon>
+
     fun storeIncomingGossipingRequest(request: IncomingShareRequestCommon, ageLocalTS: Long?)
+
+    fun storeIncomingGossipingRequests(requests: List<IncomingShareRequestCommon>)
 //    fun getPendingIncomingSecretShareRequests(): List<IncomingSecretShareRequest>
 
     /**
@@ -215,11 +216,12 @@ internal interface IMXCryptoStore {
     // TODO temp
     fun getLiveDeviceList(): LiveData<List<CryptoDeviceInfo>>
 
-    fun getMyDevicesInfo() : List<DeviceInfo>
+    fun getMyDevicesInfo(): List<DeviceInfo>
 
-    fun getLiveMyDevicesInfo() : LiveData<List<DeviceInfo>>
+    fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>>
 
     fun saveMyDevicesInfo(info: List<DeviceInfo>)
+
     /**
      * Store the crypto algorithm for a room.
      *
@@ -366,8 +368,21 @@ internal interface IMXCryptoStore {
     fun getOrAddOutgoingSecretShareRequest(secretName: String, recipients: Map<String, List<String>>): OutgoingSecretRequest?
 
     fun saveGossipingEvent(event: Event)
+    fun saveGossipingEvents(events: List<Event>)
 
-    fun updateGossipingRequestState(request: IncomingShareRequestCommon, state: GossipingRequestState)
+    fun updateGossipingRequestState(request: IncomingShareRequestCommon, state: GossipingRequestState) {
+        updateGossipingRequestState(
+                requestUserId = request.userId,
+                requestDeviceId = request.deviceId,
+                requestId = request.requestId,
+                state = state
+        )
+    }
+
+    fun updateGossipingRequestState(requestUserId: String?,
+                                    requestDeviceId: String?,
+                                    requestId: String?,
+                                    state: GossipingRequestState)
 
     /**
      * Search an IncomingRoomKeyRequest
@@ -411,7 +426,7 @@ internal interface IMXCryptoStore {
     fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>>
 
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
-    fun getKeyBackupRecoveryKeyInfo() : SavedKeyBackupKeyInfo?
+    fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo?
 
     fun setUserKeysAsTrusted(userId: String, trusted: Boolean = true)
     fun setDeviceTrust(userId: String, deviceId: String, crossSignedVerified: Boolean, locallyVerified: Boolean?)
@@ -421,20 +436,26 @@ internal interface IMXCryptoStore {
     fun updateUsersTrust(check: (String) -> Boolean)
 
     fun addWithHeldMegolmSession(withHeldContent: RoomKeyWithHeldContent)
-    fun getWithHeldMegolmSession(roomId: String, sessionId: String) : RoomKeyWithHeldContent?
+    fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 
     fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String, chainIndex: Int)
-    fun wasSessionSharedWithUser(roomId: String?, sessionId: String, userId: String, deviceId: String) : SharedSessionResult
+    fun wasSessionSharedWithUser(roomId: String?, sessionId: String, userId: String, deviceId: String): SharedSessionResult
     data class SharedSessionResult(val found: Boolean, val chainIndex: Int?)
-    fun getSharedWithInfo(roomId: String?, sessionId: String) : MXUsersDevicesMap<Int>
+
+    fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int>
     // Dev tools
 
     fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest>
+    fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingRoomKeyRequest>>
     fun getOutgoingSecretKeyRequests(): List<OutgoingSecretRequest>
     fun getOutgoingSecretRequest(secretName: String): OutgoingSecretRequest?
     fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
-    fun getGossipingEventsTrail(): List<Event>
+    fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>>
+    fun getGossipingEventsTrail(): LiveData<PagedList<Event>>
+    fun getGossipingEvents(): List<Event>
 
     fun setDeviceKeysUploaded(uploaded: Boolean)
     fun getDeviceKeysUploaded(): Boolean
+    fun tidyUpDataBase()
+    fun logDbUsageInfo()
 }

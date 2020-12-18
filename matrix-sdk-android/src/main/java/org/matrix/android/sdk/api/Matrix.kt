@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,15 +23,14 @@ import androidx.work.WorkManager
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
-import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.di.DaggerMatrixComponent
 import org.matrix.android.sdk.internal.network.UserAgentHolder
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.olm.OlmManager
-import java.io.InputStream
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -45,10 +43,12 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
     @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService
+    @Inject internal lateinit var rawService: RawService
     @Inject internal lateinit var userAgentHolder: UserAgentHolder
     @Inject internal lateinit var backgroundDetectionObserver: BackgroundDetectionObserver
     @Inject internal lateinit var olmManager: OlmManager
     @Inject internal lateinit var sessionManager: SessionManager
+    @Inject internal lateinit var homeServerHistoryService: HomeServerHistoryService
 
     init {
         Monarchy.init(context)
@@ -64,6 +64,10 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     fun authenticationService(): AuthenticationService {
         return authenticationService
     }
+
+    fun rawService() = rawService
+
+    fun homeServerHistoryService() = homeServerHistoryService
 
     fun legacySessionImporter(): LegacySessionImporter {
         return legacySessionImporter
@@ -96,10 +100,6 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
         fun getSdkVersion(): String {
             return BuildConfig.VERSION_NAME + " (" + BuildConfig.GIT_SDK_REVISION + ")"
-        }
-
-        fun decryptStream(inputStream: InputStream?, elementToDecrypt: ElementToDecrypt): InputStream? {
-            return MXEncryptedAttachments.decryptAttachment(inputStream, elementToDecrypt)
         }
     }
 }

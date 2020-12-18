@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings.devtools
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxState
@@ -24,11 +25,13 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import im.vector.app.core.platform.EmptyAction
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 
 data class AccountDataViewState(
@@ -37,7 +40,7 @@ data class AccountDataViewState(
 
 class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: AccountDataViewState,
                                                        private val session: Session)
-    : VectorViewModel<AccountDataViewState, EmptyAction, EmptyViewEvents>(initialState) {
+    : VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
 
     init {
         session.rx().liveAccountData(emptySet())
@@ -46,7 +49,19 @@ class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: A
                 }
     }
 
-    override fun handle(action: EmptyAction) {}
+    override fun handle(action: AccountDataAction) {
+        when (action) {
+            is AccountDataAction.DeleteAccountData -> handleDeleteAccountData(action)
+        }.exhaustive
+    }
+
+    private fun handleDeleteAccountData(action: AccountDataAction.DeleteAccountData) {
+        viewModelScope.launch {
+            awaitCallback {
+                session.updateAccountData(action.type, emptyMap(), it)
+            }
+        }
+    }
 
     @AssistedInject.Factory
     interface Factory {

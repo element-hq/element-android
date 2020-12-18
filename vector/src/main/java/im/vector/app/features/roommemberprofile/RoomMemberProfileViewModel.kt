@@ -27,8 +27,16 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.R
+import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.permalinks.PermalinkFactory
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -47,15 +55,6 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
-import im.vector.app.R
-import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomMemberProfileViewState,
                                                              private val stringProvider: StringProvider,
@@ -86,7 +85,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         setState {
             copy(
                     isMine = session.myUserId == this.userId,
-                    userMatrixItem = room?.getRoomMember(initialState.userId)?.toMatrixItem()?.let { Success(it) } ?: Uninitialized
+                    userMatrixItem = room?.getRoomMember(initialState.userId)?.toMatrixItem()?.let { Success(it) } ?: Uninitialized,
+                    hasReadReceipt = room?.getUserReadReceipt(initialState.userId) != null
             )
         }
         observeIgnoredState()
@@ -166,9 +166,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             viewModelScope.launch {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
                 try {
-                    awaitCallback<Unit> {
-                        room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent(), it)
-                    }
+                    room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent())
                     _viewEvents.post(RoomMemberProfileViewEvents.OnSetPowerLevelSuccess)
                 } catch (failure: Throwable) {
                     _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
@@ -337,7 +335,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
     }
 
     private fun handleShareRoomMemberProfile() {
-        PermalinkFactory.createPermalink(initialState.userId)?.let { permalink ->
+        session.permalinkService().createPermalink(initialState.userId)?.let { permalink ->
             _viewEvents.post(RoomMemberProfileViewEvents.ShareRoomMemberProfile(permalink))
         }
     }

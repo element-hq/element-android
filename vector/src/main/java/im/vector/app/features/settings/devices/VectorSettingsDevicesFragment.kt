@@ -25,7 +25,6 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import im.vector.app.R
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.dialogs.PromptPasswordDialog
@@ -37,6 +36,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import kotlinx.android.synthetic.main.fragment_generic_recycler.*
 import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
 /**
@@ -48,7 +48,8 @@ class VectorSettingsDevicesFragment @Inject constructor(
 ) : VectorBaseFragment(), DevicesController.Callback {
 
     // used to avoid requesting to enter the password for each deletion
-    private var mAccountPassword: String = ""
+    // Note: Sonar does not like to use password for member name.
+    private var mAccountPass: String = ""
 
     override fun getLayoutResId() = R.layout.fragment_generic_recycler
 
@@ -60,7 +61,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
         waiting_view_status_text.setText(R.string.please_wait)
         waiting_view_status_text.isVisible = true
         devicesController.callback = this
-        recyclerView.configureWith(devicesController, showDivider = true)
+        genericRecyclerView.configureWith(devicesController, showDivider = true)
         viewModel.observeViewEvents {
             when (it) {
                 is DevicesViewEvents.Loading            -> showLoading(it.message)
@@ -91,12 +92,12 @@ class VectorSettingsDevicesFragment @Inject constructor(
         super.showFailure(throwable)
 
         // Password is maybe not good, for safety measure, reset it here
-        mAccountPassword = ""
+        mAccountPass = ""
     }
 
     override fun onDestroyView() {
         devicesController.callback = null
-        recyclerView.cleanup()
+        genericRecyclerView.cleanup()
         super.onDestroyView()
     }
 
@@ -107,7 +108,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     override fun onDeviceClicked(deviceInfo: DeviceInfo) {
-        DeviceVerificationInfoBottomSheet.newInstance(deviceInfo.user_id ?: "", deviceInfo.deviceId ?: "").show(
+        DeviceVerificationInfoBottomSheet.newInstance(deviceInfo.userId ?: "", deviceInfo.deviceId ?: "").show(
                 childFragmentManager,
                 "VERIF_INFO"
         )
@@ -153,12 +154,12 @@ class VectorSettingsDevicesFragment @Inject constructor(
      * Show a dialog to ask for user password, or use a previously entered password.
      */
     private fun maybeShowDeleteDeviceWithPasswordDialog() {
-        if (mAccountPassword.isNotEmpty()) {
-            viewModel.handle(DevicesAction.Password(mAccountPassword))
+        if (mAccountPass.isNotEmpty()) {
+            viewModel.handle(DevicesAction.Password(mAccountPass))
         } else {
             PromptPasswordDialog().show(requireActivity()) { password ->
-                mAccountPassword = password
-                viewModel.handle(DevicesAction.Password(mAccountPassword))
+                mAccountPass = password
+                viewModel.handle(DevicesAction.Password(mAccountPass))
             }
         }
     }

@@ -1,5 +1,4 @@
 /*
- * Copyright 2020 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +17,8 @@
 package org.matrix.android.sdk.internal.session.room.send
 
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.session.events.model.Content
+import io.realm.Realm
+import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -26,9 +26,9 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
+import org.matrix.android.sdk.internal.database.asyncTransaction
 import org.matrix.android.sdk.internal.database.helper.nextId
-import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
@@ -43,13 +43,14 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultTimeline
+import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class LocalEchoRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
+                                                       private val taskExecutor: TaskExecutor,
+                                                       private val realmSessionProvider: RealmSessionProvider,
                                                        private val roomSummaryUpdater: RoomSummaryUpdater,
                                                        private val eventBus: EventBus,
                                                        private val timelineEventMapper: TimelineEventMapper) {
@@ -60,7 +61,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         if (event.eventId == null) {
             throw IllegalStateException("You should have set an eventId for your event")
         }
-        val timelineEventEntity = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+        val timelineEventEntity = realmSessionProvider.withRealm { realm ->
             val eventEntity = event.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
             val myUser = roomMemberHelper.getLastRoomMember(senderId)
@@ -76,47 +77,71 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         }
         val timelineEvent = timelineEventMapper.map(timelineEventEntity)
         eventBus.post(DefaultTimeline.OnLocalEchoCreated(roomId = roomId, timelineEvent = timelineEvent))
-        monarchy.writeAsync { realm ->
+        taskExecutor.executorScope.asyncTransaction(monarchy) { realm ->
             val eventInsertEntity = EventInsertEntity(event.eventId, event.type).apply {
                 this.insertType = EventInsertType.LOCAL_ECHO
             }
             realm.insert(eventInsertEntity)
-            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@writeAsync
+            val roomEntity = RoomEntity.where(realm, roomId = roomId).findFirst() ?: return@asyncTransaction
             roomEntity.sendingTimelineEvents.add(0, timelineEventEntity)
             roomSummaryUpdater.updateSendingInformation(realm, roomId)
         }
     }
 
-    fun updateSendState(eventId: String, sendState: SendState) {
-        Timber.v("Update local state of $eventId to ${sendState.name}")
-        monarchy.writeAsync { realm ->
+    fun updateSendState(eventId: String, roomId: String?, sendState: SendState) {
+        Timber.v("## SendEvent: [${System.currentTimeMillis()}] Update local state of $eventId to ${sendState.name}")
+        eventBus.post(DefaultTimeline.OnLocalEchoUpdated(roomId ?: "", eventId, sendState))
+        updateEchoAsync(eventId) { realm, sendingEventEntity ->
+            if (sendState == SendState.SENT && sendingEventEntity.sendState == SendState.SYNCED) {
+                // If already synced, do not put as sent
+            } else {
+                sendingEventEntity.sendState = sendState
+            }
+            roomSummaryUpdater.updateSendingInformation(realm, sendingEventEntity.roomId)
+        }
+    }
+
+    suspend fun updateEcho(eventId: String, block: (realm: Realm, eventEntity: EventEntity) -> Unit) {
+        monarchy.awaitTransaction { realm ->
             val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
             if (sendingEventEntity != null) {
-                if (sendState == SendState.SENT && sendingEventEntity.sendState == SendState.SYNCED) {
-                    // If already synced, do not put as sent
-                } else {
-                    sendingEventEntity.sendState = sendState
-                }
-                roomSummaryUpdater.updateSendingInformation(realm, sendingEventEntity.roomId)
+                block(realm, sendingEventEntity)
             }
         }
     }
 
-    fun updateEncryptedEcho(eventId: String, encryptedContent: Content, mxEventDecryptionResult: MXEventDecryptionResult) {
-        monarchy.writeAsync { realm ->
+    fun updateEchoAsync(eventId: String, block: (realm: Realm, eventEntity: EventEntity) -> Unit) {
+        taskExecutor.executorScope.asyncTransaction(monarchy) { realm ->
             val sendingEventEntity = EventEntity.where(realm, eventId).findFirst()
             if (sendingEventEntity != null) {
-                sendingEventEntity.type = EventType.ENCRYPTED
-                sendingEventEntity.content = ContentMapper.map(encryptedContent)
-                sendingEventEntity.setDecryptionResult(mxEventDecryptionResult)
+                block(realm, sendingEventEntity)
             }
+        }
+    }
+
+    suspend fun getUpToDateEcho(eventId: String): Event? {
+        // We are using awaitTransaction here to make sure this executes after other transactions
+        return monarchy.awaitTransaction { realm ->
+            EventEntity.where(realm, eventId).findFirst()?.asDomain(castJsonNumbers = true)
         }
     }
 
     suspend fun deleteFailedEcho(roomId: String, localEcho: TimelineEvent) {
+        deleteFailedEcho(roomId, localEcho.eventId)
+    }
+
+    suspend fun deleteFailedEcho(roomId: String, eventId: String?) {
         monarchy.awaitTransaction { realm ->
-            TimelineEventEntity.where(realm, roomId = roomId, eventId = localEcho.root.eventId ?: "").findFirst()?.deleteFromRealm()
-            EventEntity.where(realm, eventId = localEcho.root.eventId ?: "").findFirst()?.deleteFromRealm()
+            TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
+            EventEntity.where(realm, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
+            roomSummaryUpdater.updateSendingInformation(realm, roomId)
+        }
+    }
+
+     fun deleteFailedEchoAsync(roomId: String, eventId: String?) {
+        monarchy.runTransactionSync { realm ->
+            TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
+            EventEntity.where(realm, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
             roomSummaryUpdater.updateSendingInformation(realm, roomId)
         }
     }
@@ -142,45 +167,47 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         }
     }
 
-    fun getAllFailedEventsToResend(roomId: String): List<Event> {
-        return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
+    fun getAllFailedEventsToResend(roomId: String): List<TimelineEvent> {
+        return getAllEventsWithStates(roomId, SendState.HAS_FAILED_STATES)
+    }
+
+    fun getAllEventsWithStates(roomId: String, states: List<SendState>): List<TimelineEvent> {
+        return realmSessionProvider.withRealm { realm ->
             TimelineEventEntity
-                    .findAllInRoomWithSendStates(realm, roomId, SendState.HAS_FAILED_STATES)
+                    .findAllInRoomWithSendStates(realm, roomId, states)
                     .sortedByDescending { it.displayIndex }
-                    .mapNotNull { it.root?.asDomain() }
+                    .mapNotNull { it?.let { timelineEventMapper.map(it) } }
                     .filter { event ->
-                        when (event.getClearType()) {
+                        when (event.root.getClearType()) {
                             EventType.MESSAGE,
                             EventType.REDACTION,
                             EventType.REACTION -> {
-                                val content = event.getClearContent().toModel<MessageContent>()
+                                val content = event.root.getClearContent().toModel<MessageContent>()
                                 if (content != null) {
                                     when (content.msgType) {
                                         MessageType.MSGTYPE_EMOTE,
                                         MessageType.MSGTYPE_NOTICE,
                                         MessageType.MSGTYPE_LOCATION,
-                                        MessageType.MSGTYPE_TEXT  -> {
-                                            true
-                                        }
+                                        MessageType.MSGTYPE_TEXT,
                                         MessageType.MSGTYPE_FILE,
                                         MessageType.MSGTYPE_VIDEO,
                                         MessageType.MSGTYPE_IMAGE,
                                         MessageType.MSGTYPE_AUDIO -> {
                                             // need to resend the attachment
-                                            false
+                                            true
                                         }
                                         else                      -> {
-                                            Timber.e("Cannot resend message ${event.type} / ${content.msgType}")
+                                            Timber.e("Cannot resend message ${event.root.getClearType()} / ${content.msgType}")
                                             false
                                         }
                                     }
                                 } else {
-                                    Timber.e("Unsupported message to resend ${event.type}")
+                                    Timber.e("Unsupported message to resend ${event.root.getClearType()}")
                                     false
                                 }
                             }
                             else               -> {
-                                Timber.e("Unsupported message to resend ${event.type}")
+                                Timber.e("Unsupported message to resend ${event.root.getClearType()}")
                                 false
                             }
                         }

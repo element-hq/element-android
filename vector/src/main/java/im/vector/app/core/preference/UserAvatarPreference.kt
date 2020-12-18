@@ -25,17 +25,17 @@ import androidx.preference.PreferenceViewHolder
 import im.vector.app.R
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 
-open class UserAvatarPreference : Preference {
-
-    internal var mAvatarView: ImageView? = null
-    internal var mSession: Session? = null
+class UserAvatarPreference : Preference {
+    private var mAvatarView: ImageView? = null
     private var mLoadingProgressBar: ProgressBar? = null
 
     private var avatarRenderer: AvatarRenderer = context.vectorComponent().avatarRenderer()
+
+    private var userItem: MatrixItem.UserItem? = null
 
     constructor(context: Context) : super(context)
 
@@ -51,24 +51,18 @@ open class UserAvatarPreference : Preference {
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-
         mAvatarView = holder.itemView.findViewById(R.id.settings_avatar)
         mLoadingProgressBar = holder.itemView.findViewById(R.id.avatar_update_progress_bar)
-        refreshAvatar()
+        refreshUi()
     }
 
-    open fun refreshAvatar() {
-        val session = mSession ?: return
-        val view = mAvatarView ?: return
-        session.getUser(session.myUserId)?.let {
-            avatarRenderer.render(it.toMatrixItem(), view)
-        } ?: run {
-            avatarRenderer.render(MatrixItem.UserItem(session.myUserId), view)
-        }
+    fun refreshAvatar(user: User) {
+        userItem = user.toMatrixItem()
+        refreshUi()
     }
 
-    fun setSession(session: Session) {
-        mSession = session
-        refreshAvatar()
+    private fun refreshUi() {
+        val safeUserItem = userItem ?: return
+        mAvatarView?.let { avatarRenderer.render(safeUserItem, it) }
     }
 }

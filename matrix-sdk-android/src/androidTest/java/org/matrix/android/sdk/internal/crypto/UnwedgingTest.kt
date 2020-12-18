@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.crypto
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.extensions.tryThis
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -212,7 +212,7 @@ class UnwedgingTest : InstrumentedTest {
         mTestHelper.waitWithLatch {
             mTestHelper.retryPeriodicallyWithLatch(it) {
                 // we should get back the key and be able to decrypt
-                val result = tryThis {
+                val result = tryOrNull {
                     bobSession.cryptoService().decryptEvent(messagesReceivedByBob[0].root, "")
                 }
                 Timber.i("## CRYPTO | testUnwedging: decrypt result  ${result?.clearEvent}")

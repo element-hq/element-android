@@ -1,5 +1,4 @@
 /*
- * Copyright 2019 New Vector Ltd
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.membership
 
+import io.realm.Realm
+import io.realm.RealmQuery
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
@@ -26,8 +27,6 @@ import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFie
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
-import io.realm.Realm
-import io.realm.RealmQuery
 
 /**
  * This class is an helper around STATE_ROOM_MEMBER events.

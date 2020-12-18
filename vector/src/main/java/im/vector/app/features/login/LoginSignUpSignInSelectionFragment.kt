@@ -18,6 +18,7 @@ package im.vector.app.features.login
 
 import androidx.core.view.isVisible
 import butterknife.OnClick
+import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
@@ -26,11 +27,11 @@ import javax.inject.Inject
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver
  */
-open class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLoginFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_login_signup_signin_selection
 
-    protected fun setupUi(state: LoginViewState) {
+    private fun setupUi(state: LoginViewState) {
         when (state.serverType) {
             ServerType.MatrixOrg -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
@@ -38,29 +39,61 @@ open class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLo
                 loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
                 loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
-            ServerType.EMS       -> {
+            ServerType.EMS -> {
                 loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                 loginSignupSigninServerIcon.isVisible = true
                 loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
                 loginSignupSigninText.text = state.homeServerUrl.toReducedUrl()
             }
-            ServerType.Other     -> {
+            ServerType.Other -> {
                 loginSignupSigninServerIcon.isVisible = false
                 loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
                 loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
             }
-            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.Unknown -> Unit /* Should not happen */
+        }
+
+        when (state.loginMode) {
+            is LoginMode.SsoAndPassword -> {
+                loginSignupSigninSignInSocialLoginContainer.isVisible = true
+                loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()
+                loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
+                    override fun onProviderSelected(id: String?) {
+                        val url = withState(loginViewModel) { it.getSsoUrl(id) }
+                        openInCustomTab(url)
+                    }
+                }
+            }
+            else                        -> {
+                // SSO only is managed without container as well as No sso
+                loginSignupSigninSignInSocialLoginContainer.isVisible = false
+                loginSignupSigninSocialLoginButtons.ssoIdentityProviders = null
+            }
         }
     }
 
-    private fun setupButtons() {
-        loginSignupSigninSubmit.text = getString(R.string.login_signup)
-        loginSignupSigninSignIn.isVisible = true
+    private fun setupButtons(state: LoginViewState) {
+        when (state.loginMode) {
+            is LoginMode.Sso -> {
+                // change to only one button that is sign in with sso
+                loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
+                loginSignupSigninSignIn.isVisible = false
+            }
+            else             -> {
+                loginSignupSigninSubmit.text = getString(R.string.login_signup)
+                loginSignupSigninSignIn.isVisible = true
+            }
+        }
     }
 
     @OnClick(R.id.loginSignupSigninSubmit)
-    open fun submit() {
-        loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
+    fun submit() = withState(loginViewModel) { state ->
+        if (state.loginMode is LoginMode.Sso) {
+            openInCustomTab(state.getSsoUrl(null))
+        } else {
+            loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
+        }
+        Unit
     }
 
     @OnClick(R.id.loginSignupSigninSignIn)
@@ -74,6 +107,6 @@ open class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLo
 
     override fun updateWithState(state: LoginViewState) {
         setupUi(state)
-        setupButtons()
+        setupButtons(state)
     }
 }

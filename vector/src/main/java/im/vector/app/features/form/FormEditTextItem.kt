@@ -17,6 +17,8 @@
 package im.vector.app.features.form
 
 import android.text.Editable
+import android.view.View
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.textfield.TextInputEditText
@@ -24,6 +26,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.extensions.setTextSafe
 import im.vector.app.core.platform.SimpleTextWatcher
 
 @EpoxyModelClass(layout = R.layout.item_form_text_input)
@@ -36,7 +39,16 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     var value: String? = null
 
     @EpoxyAttribute
+    var showBottomSeparator: Boolean = true
+
+    @EpoxyAttribute
+    var errorMessage: String? = null
+
+    @EpoxyAttribute
     var enabled: Boolean = true
+
+    @EpoxyAttribute
+    var inputType: Int? = null
 
     @EpoxyAttribute
     var onTextChange: ((String) -> Unit)? = null
@@ -51,14 +63,15 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         super.bind(holder)
         holder.textInputLayout.isEnabled = enabled
         holder.textInputLayout.hint = hint
+        holder.textInputLayout.error = errorMessage
 
-        // Update only if text is different
-        if (holder.textInputEditText.text.toString() != value) {
-            holder.textInputEditText.setText(value)
-        }
+        // Update only if text is different and value is not null
+        holder.textInputEditText.setTextSafe(value)
         holder.textInputEditText.isEnabled = enabled
+        inputType?.let { holder.textInputEditText.inputType = it }
 
         holder.textInputEditText.addTextChangedListener(onTextChangeListener)
+        holder.bottomSeparator.isVisible = showBottomSeparator
     }
 
     override fun shouldSaveViewState(): Boolean {
@@ -73,5 +86,6 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     class Holder : VectorEpoxyHolder() {
         val textInputLayout by bind<TextInputLayout>(R.id.formTextInputTextInputLayout)
         val textInputEditText by bind<TextInputEditText>(R.id.formTextInputTextInputEditText)
+        val bottomSeparator by bind<View>(R.id.formTextInputDivider)
     }
 }

@@ -16,15 +16,39 @@
 
 package im.vector.app.features.roomdirectory.createroom
 
+import android.net.Uri
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import org.matrix.android.sdk.api.extensions.orTrue
 
 data class CreateRoomViewState(
+        val avatarUri: Uri? = null,
         val roomName: String = "",
-        val isPublic: Boolean = false,
-        val isInRoomDirectory: Boolean = false,
+        val roomTopic: String = "",
+        val roomType: RoomType = RoomType.Private,
         val isEncrypted: Boolean = false,
+        val showAdvanced: Boolean = false,
+        val disableFederation: Boolean = false,
+        val homeServerName: String = "",
         val hsAdminHasDisabledE2E: Boolean = false,
         val asyncCreateRoomRequest: Async<String> = Uninitialized
-) : MvRxState
+) : MvRxState {
+
+    constructor(args: CreateRoomArgs) : this(
+            roomName = args.initialName
+    )
+
+    /**
+     * Return true if there is not important input from user
+     */
+    fun isEmpty() = avatarUri == null
+            && roomName.isEmpty()
+            && roomTopic.isEmpty()
+            && (roomType as? RoomType.Public)?.aliasLocalPart?.isEmpty().orTrue()
+
+    sealed class RoomType {
+        object Private : RoomType()
+        data class Public(val aliasLocalPart: String) : RoomType()
+    }
+}
