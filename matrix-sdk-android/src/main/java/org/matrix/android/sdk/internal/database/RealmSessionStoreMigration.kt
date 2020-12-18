@@ -21,6 +21,7 @@ import io.realm.RealmMigration
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import timber.log.Timber
@@ -111,7 +112,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
     private fun migrateTo7(realm: DynamicRealm) {
         Timber.d("Step 6 -> 7")
         realm.schema.get("RoomEntity")
-                ?.addField("membersLoadStatusStr", String::class.java)
+                ?.addField(RoomEntityFields.MEMBERS_LOAD_STATUS_STR, String::class.java)
                 ?.transform { obj ->
                     if (obj.getBoolean("areAllMembersLoaded")) {
                         obj.setString("membersLoadStatusStr", RoomMembersLoadStatusType.LOADED.name)
