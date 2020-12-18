@@ -16,31 +16,35 @@
 
 package im.vector.app.features.qrcode
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import com.google.zxing.Result
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_qr_code_scanner.*
+import im.vector.app.databinding.FragmentQrCodeScannerBinding
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import javax.inject.Inject
 
 class QrCodeScannerFragment @Inject constructor()
-    : VectorBaseFragment(),
+    : VectorBaseFragment<FragmentQrCodeScannerBinding>(),
         ZXingScannerView.ResultHandler {
 
-    override fun getLayoutResId() = R.layout.fragment_qr_code_scanner
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentQrCodeScannerBinding {
+        return FragmentQrCodeScannerBinding.inflate(inflater, container, false)
+    }
 
     override fun onResume() {
         super.onResume()
         // Register ourselves as a handler for scan results.
-        scannerView.setResultHandler(this)
+        views.scannerView.setResultHandler(this)
         // Start camera on resume
-        scannerView.startCamera()
+        views.scannerView.startCamera()
     }
 
     override fun onPause() {
         super.onPause()
         // Stop camera on pause
-        scannerView.stopCamera()
+        views.scannerView.stopCamera()
     }
 
     override fun handleResult(rawResult: Result?) {

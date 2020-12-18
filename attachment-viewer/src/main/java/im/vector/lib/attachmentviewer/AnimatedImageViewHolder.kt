@@ -17,19 +17,17 @@
 package im.vector.lib.attachmentviewer
 
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
+import im.vector.lib.attachmentviewer.databinding.ItemAnimatedImageAttachmentBinding
 
 class AnimatedImageViewHolder constructor(itemView: View) :
         BaseViewHolder(itemView) {
 
-    val touchImageView: ImageView = itemView.findViewById(R.id.imageView)
-    val imageLoaderProgress: ProgressBar = itemView.findViewById(R.id.imageLoaderProgress)
+    val views = ItemAnimatedImageAttachmentBinding.bind(itemView)
 
-    internal val target = DefaultImageLoaderTarget(this, this.touchImageView)
+    internal val target = DefaultImageLoaderTarget(this, views.imageView)
 
     override fun onRecycled() {
         super.onRecycled()
-        touchImageView.setImageDrawable(null)
+        views.imageView.setImageDrawable(null)
     }
 }

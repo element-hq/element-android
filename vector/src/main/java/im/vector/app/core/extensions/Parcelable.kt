@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.userdirectory
+package im.vector.app.core.extensions
 
+import android.os.Bundle
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.airbnb.mvrx.MvRx
 
-@Parcelize
-data class UserListFragmentArgs(
-        val title: String,
-        val menuResId: Int,
-        val excludedUserIds: Set<String>? = null,
-        val existingRoomId: String? = null
-) : Parcelable
+fun Parcelable?.toMvRxBundle(): Bundle? {
+    return this?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
+}

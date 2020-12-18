@@ -18,7 +18,9 @@ package im.vector.app.features.roomprofile.alias
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
@@ -32,13 +34,13 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.shareText
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheet
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetSharedAction
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheetSharedActionViewModel
-import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -49,7 +51,7 @@ class RoomAliasFragment @Inject constructor(
         private val controller: RoomAliasController,
         private val avatarRenderer: AvatarRenderer
 ) :
-        VectorBaseFragment(),
+        VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomAliasController.Callback {
 
     private val viewModel: RoomAliasViewModel by fragmentViewModel()
@@ -57,17 +59,19 @@ class RoomAliasFragment @Inject constructor(
 
     private val roomProfileArgs: RoomProfileArgs by args()
 
-    override fun getLayoutResId() = R.layout.fragment_room_setting_generic
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomSettingGenericBinding {
+        return FragmentRoomSettingGenericBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomAliasBottomSheetSharedActionViewModel::class.java)
 
         controller.callback = this
-        setupToolbar(roomSettingsToolbar)
-        roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
-        waiting_view_status_text.setText(R.string.please_wait)
-        waiting_view_status_text.isVisible = true
+        setupToolbar(views.roomSettingsToolbar)
+        views.roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
+        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.isVisible = true
 
         viewModel.observeViewEvents {
             when (it) {
@@ -110,20 +114,20 @@ class RoomAliasFragment @Inject constructor(
 
     override fun onDestroyView() {
         controller.callback = null
-        roomSettingsRecyclerView.cleanup()
+        views.roomSettingsRecyclerView.cleanup()
         super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        waiting_view.isVisible = state.isLoading
+        views.waitingView.root.isVisible = state.isLoading
         controller.setData(state)
         renderRoomSummary(state)
     }
 
     private fun renderRoomSummary(state: RoomAliasViewState) {
         state.roomSummary()?.let {
-            roomSettingsToolbarTitleView.text = it.displayName
-            avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
+            views.roomSettingsToolbarTitleView.text = it.displayName
+            avatarRenderer.render(it.toMatrixItem(), views.roomSettingsToolbarAvatarImageView)
         }
     }
 

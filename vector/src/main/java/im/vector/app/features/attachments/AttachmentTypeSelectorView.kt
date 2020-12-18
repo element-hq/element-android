@@ -30,7 +30,6 @@ import android.view.animation.AnimationSet
 import android.view.animation.OvershootInterpolator
 import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
-import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.PopupWindow
@@ -42,6 +41,7 @@ import im.vector.app.core.extensions.getMeasurements
 import im.vector.app.core.utils.PERMISSIONS_EMPTY
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
+import im.vector.app.databinding.ViewAttachmentTypeSelectorBinding
 import im.vector.app.features.attachments.AttachmentTypeSelectorView.Callback
 import kotlin.math.max
 
@@ -62,25 +62,19 @@ class AttachmentTypeSelectorView(context: Context,
 
     private val iconColorGenerator = ColorGenerator.MATERIAL
 
-    private var galleryButton: ImageButton
-    private var cameraButton: ImageButton
-    private var fileButton: ImageButton
-    private var stickersButton: ImageButton
-    private var audioButton: ImageButton
-    private var contactButton: ImageButton
+    private val views: ViewAttachmentTypeSelectorBinding
 
     private var anchor: View? = null
 
     init {
-        val root = FrameLayout(context)
-        val layout = inflater.inflate(R.layout.view_attachment_type_selector, root, true)
-        galleryButton = layout.findViewById<ImageButton>(R.id.attachmentGalleryButton).configure(Type.GALLERY)
-        cameraButton = layout.findViewById<ImageButton>(R.id.attachmentCameraButton).configure(Type.CAMERA)
-        fileButton = layout.findViewById<ImageButton>(R.id.attachmentFileButton).configure(Type.FILE)
-        stickersButton = layout.findViewById<ImageButton>(R.id.attachmentStickersButton).configure(Type.STICKER)
-        audioButton = layout.findViewById<ImageButton>(R.id.attachmentAudioButton).configure(Type.AUDIO)
-        contactButton = layout.findViewById<ImageButton>(R.id.attachmentContactButton).configure(Type.CONTACT)
-        contentView = root
+        contentView = inflater.inflate(R.layout.view_attachment_type_selector, null, false)
+        views = ViewAttachmentTypeSelectorBinding.bind(contentView)
+        views.attachmentGalleryButton.configure(Type.GALLERY)
+        views.attachmentCameraButton.configure(Type.CAMERA)
+        views.attachmentFileButton.configure(Type.FILE)
+        views.attachmentStickersButton.configure(Type.STICKER)
+        views.attachmentAudioButton.configure(Type.AUDIO)
+        views.attachmentContactButton.configure(Type.CONTACT)
         width = LinearLayout.LayoutParams.MATCH_PARENT
         height = LinearLayout.LayoutParams.WRAP_CONTENT
         animationStyle = 0
@@ -108,12 +102,12 @@ class AttachmentTypeSelectorView(context: Context,
         contentView.doOnNextLayout {
             animateWindowInCircular(anchor, contentView)
         }
-        animateButtonIn(galleryButton, ANIMATION_DURATION / 2)
-        animateButtonIn(cameraButton, ANIMATION_DURATION / 2)
-        animateButtonIn(fileButton, ANIMATION_DURATION / 4)
-        animateButtonIn(audioButton, ANIMATION_DURATION / 2)
-        animateButtonIn(contactButton, ANIMATION_DURATION / 4)
-        animateButtonIn(stickersButton, 0)
+        animateButtonIn(views.attachmentGalleryButton, ANIMATION_DURATION / 2)
+        animateButtonIn(views.attachmentCameraButton, ANIMATION_DURATION / 2)
+        animateButtonIn(views.attachmentFileButton, ANIMATION_DURATION / 4)
+        animateButtonIn(views.attachmentAudioButton, ANIMATION_DURATION / 2)
+        animateButtonIn(views.attachmentContactButton, ANIMATION_DURATION / 4)
+        animateButtonIn(views.attachmentStickersButton, 0)
     }
 
     override fun dismiss() {

@@ -19,16 +19,14 @@ package im.vector.app.features.home.room.detail.timeline.url
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import butterknife.BindView
-import butterknife.ButterKnife
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.databinding.UrlPreviewBinding
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.media.ImageContentRenderer
+
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 
@@ -41,20 +39,7 @@ class PreviewUrlView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
 
-    @BindView(R.id.url_preview_title)
-    lateinit var titleView: TextView
-
-    @BindView(R.id.url_preview_image)
-    lateinit var imageView: ImageView
-
-    @BindView(R.id.url_preview_description)
-    lateinit var descriptionView: TextView
-
-    @BindView(R.id.url_preview_site)
-    lateinit var siteView: TextView
-
-    @BindView(R.id.url_preview_close)
-    lateinit var closeView: View
+    private lateinit var views: UrlPreviewBinding
 
     var delegate: TimelineEventController.PreviewUrlCallback? = null
 
@@ -106,10 +91,10 @@ class PreviewUrlView @JvmOverloads constructor(
 
     private fun setupView() {
         inflate(context, R.layout.url_preview, this)
-        ButterKnife.bind(this)
+        views = UrlPreviewBinding.bind(this)
 
         setOnClickListener(this)
-        closeView.setOnClickListener { onCloseClick() }
+        views.urlPreviewClose.setOnClickListener { onCloseClick() }
     }
 
     private fun renderHidden() {
@@ -123,19 +108,19 @@ class PreviewUrlView @JvmOverloads constructor(
 
     private fun renderData(previewUrlData: PreviewUrlData, imageContentRenderer: ImageContentRenderer) {
         isVisible = true
-        titleView.setTextOrHide(previewUrlData.title)
-        imageView.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, imageView) }.orFalse()
-        descriptionView.setTextOrHide(previewUrlData.description)
-        siteView.setTextOrHide(previewUrlData.siteName.takeIf { it != previewUrlData.title })
+        views.urlPreviewTitle.setTextOrHide(previewUrlData.title)
+        views.urlPreviewImage.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, views.urlPreviewImage) }.orFalse()
+        views.urlPreviewDescription.setTextOrHide(previewUrlData.description)
+        views.urlPreviewSite.setTextOrHide(previewUrlData.siteName.takeIf { it != previewUrlData.title })
     }
 
     /**
      * Hide all views that are not visible in all state
      */
     private fun hideAll() {
-        titleView.isVisible = false
-        imageView.isVisible = false
-        descriptionView.isVisible = false
-        siteView.isVisible = false
+        views.urlPreviewTitle.isVisible = false
+        views.urlPreviewImage.isVisible = false
+        views.urlPreviewDescription.isVisible = false
+        views.urlPreviewSite.isVisible = false
     }
 }

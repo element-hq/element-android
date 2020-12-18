@@ -16,12 +16,11 @@
 package im.vector.app.core.dialogs
 
 import android.app.Activity
-import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.databinding.DialogSslFingerprintBinding
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 import timber.log.Timber
 import java.util.HashMap
@@ -95,30 +94,27 @@ class UnrecognizedCertificateDialog @Inject constructor(
 
         val builder = AlertDialog.Builder(activity)
         val inflater = activity.layoutInflater
-        val layout: View = inflater.inflate(R.layout.dialog_ssl_fingerprint, null)
-        val sslFingerprintTitle = layout.findViewById<TextView>(R.id.ssl_fingerprint_title)
-        sslFingerprintTitle.text = stringProvider.getString(R.string.ssl_fingerprint_hash, unrecognizedFingerprint.hashType.toString())
-        val sslFingerprint = layout.findViewById<TextView>(R.id.ssl_fingerprint)
-        sslFingerprint.text = unrecognizedFingerprint.displayableHexRepr
-        val sslUserId = layout.findViewById<TextView>(R.id.ssl_user_id)
+        val layout = inflater.inflate(R.layout.dialog_ssl_fingerprint, null)
+        val views = DialogSslFingerprintBinding.bind(layout)
+        views.sslFingerprintTitle.text = stringProvider.getString(R.string.ssl_fingerprint_hash, unrecognizedFingerprint.hashType.toString())
+        views.sslFingerprint.text = unrecognizedFingerprint.displayableHexRepr
         if (userId != null) {
-            sslUserId.text = stringProvider.getString(R.string.generic_label_and_value,
+            views.sslUserId.text = stringProvider.getString(R.string.generic_label_and_value,
                     stringProvider.getString(R.string.username),
                     userId)
         } else {
-            sslUserId.text = stringProvider.getString(R.string.generic_label_and_value,
+            views.sslUserId.text = stringProvider.getString(R.string.generic_label_and_value,
                     stringProvider.getString(R.string.hs_url),
                     homeServerUrl)
         }
-        val sslExpl = layout.findViewById<TextView>(R.id.ssl_explanation)
         if (existing) {
             if (homeServerConnectionConfigHasFingerprints) {
-                sslExpl.text = stringProvider.getString(R.string.ssl_expected_existing_expl)
+                views.sslExplanation.text = stringProvider.getString(R.string.ssl_expected_existing_expl)
             } else {
-                sslExpl.text = stringProvider.getString(R.string.ssl_unexpected_existing_expl)
+                views.sslExplanation.text = stringProvider.getString(R.string.ssl_unexpected_existing_expl)
             }
         } else {
-            sslExpl.text = stringProvider.getString(R.string.ssl_cert_new_account_expl)
+            views.sslExplanation.text = stringProvider.getString(R.string.ssl_cert_new_account_expl)
         }
         builder.setView(layout)
         builder.setTitle(R.string.ssl_could_not_verify)

@@ -17,7 +17,9 @@
 package im.vector.app.features.home
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.airbnb.mvrx.activityViewModel
@@ -26,6 +28,7 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.badge.BadgeDrawable
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
+import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -33,6 +36,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.ui.views.ActiveCallView
 import im.vector.app.core.ui.views.ActiveCallViewHolder
 import im.vector.app.core.ui.views.KeysBackupBanner
+import im.vector.app.databinding.FragmentHomeDetailBinding
 import im.vector.app.features.call.SharedActiveCallViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.WebRtcPeerConnectionManager
@@ -46,7 +50,7 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
-import kotlinx.android.synthetic.main.fragment_home_detail.*
+
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
@@ -64,7 +68,10 @@ class HomeDetailFragment @Inject constructor(
         private val alertManager: PopupAlertManager,
         private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
         private val vectorPreferences: VectorPreferences
-) : VectorBaseFragment(), KeysBackupBanner.Delegate, ActiveCallView.Callback, ServerBackupStatusViewModel.Factory {
+) : VectorBaseFragment<FragmentHomeDetailBinding>(),
+        KeysBackupBanner.Delegate,
+        ActiveCallView.Callback,
+        ServerBackupStatusViewModel.Factory {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -73,7 +80,9 @@ class HomeDetailFragment @Inject constructor(
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private lateinit var sharedCallActionViewModel: SharedActiveCallViewModel
 
-    override fun getLayoutResId() = R.layout.fragment_home_detail
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
+        return FragmentHomeDetailBinding.inflate(inflater, container, false)
+    }
 
     private val activeCallViewHolder = ActiveCallViewHolder()
 
@@ -89,7 +98,7 @@ class HomeDetailFragment @Inject constructor(
 
         withState(viewModel) {
             // Update the navigation view if needed (for when we restore the tabs)
-            bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
+            views.bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
         }
 
         viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
@@ -132,8 +141,8 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun checkNotificationTabStatus() {
-        val wasVisible = bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible
-        bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
+        val wasVisible = views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible
+        views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
         if (wasVisible && !vectorPreferences.labAddNotificationTab()) {
             // As we hide it check if it's not the current item!
             withState(viewModel) {
@@ -156,7 +165,7 @@ class HomeDetailFragment @Inject constructor(
                 ).apply {
                     colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
                     contentAction = Runnable {
-                        (weakCurrentActivity?.get() as? VectorBaseActivity)
+                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)
                                 ?.navigator
                                 ?.requestSessionVerification(requireContext(), newest.deviceId ?: "")
                         unknownDeviceDetectorSharedViewModel.handle(
@@ -184,7 +193,7 @@ class HomeDetailFragment @Inject constructor(
                 ).apply {
                     colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
                     contentAction = Runnable {
-                        (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             // mark as ignored to avoid showing it again
                             unknownDeviceDetectorSharedViewModel.handle(
                                     UnknownDeviceDetectorSharedViewModel.Action.IgnoreDevice(oldUnverified.mapNotNull { it.deviceId })
@@ -204,7 +213,7 @@ class HomeDetailFragment @Inject constructor(
     private fun onGroupChange(groupSummary: GroupSummary?) {
         groupSummary?.let {
             // Use GlideApp with activity context to avoid the glideRequests to be paused
-            avatarRenderer.render(it.toMatrixItem(), groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
+            avatarRenderer.render(it.toMatrixItem(), views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
         }
     }
 
@@ -212,20 +221,20 @@ class HomeDetailFragment @Inject constructor(
         serverBackupStatusViewModel
                 .subscribe(this) {
                     when (val banState = it.bannerState.invoke()) {
-                        is BannerState.Setup  -> homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
-                        BannerState.BackingUp -> homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
+                        is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                        BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
                         null,
-                        BannerState.Hidden    -> homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                        BannerState.Hidden    -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
                     }
                 }
-        homeKeysBackupBanner.delegate = this
+        views.homeKeysBackupBanner.delegate = this
     }
 
     private fun setupActiveCallView() {
         activeCallViewHolder.bind(
-                activeCallPiP,
-                activeCallView,
-                activeCallPiPWrap,
+                views.activeCallPiP,
+                views.activeCallView,
+                views.activeCallPiPWrap,
                 this
         )
     }
@@ -233,17 +242,17 @@ class HomeDetailFragment @Inject constructor(
     private fun setupToolbar() {
         val parentActivity = vectorBaseActivity
         if (parentActivity is ToolbarConfigurable) {
-            parentActivity.configure(groupToolbar)
+            parentActivity.configure(views.groupToolbar)
         }
-        groupToolbar.title = ""
-        groupToolbarAvatarImageView.debouncedClicks {
+        views.groupToolbar.title = ""
+        views.groupToolbarAvatarImageView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.OpenDrawer)
         }
     }
 
     private fun setupBottomNavigationView() {
-        bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
-        bottomNavigationView.setOnNavigationItemSelectedListener {
+        views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
+        views.bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
                 R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
@@ -266,7 +275,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun switchDisplayMode(displayMode: RoomListDisplayMode) {
-        groupToolbarTitleView.setText(displayMode.titleRes)
+        views.groupToolbarTitleView.setText(displayMode.titleRes)
         updateSelectedFragment(displayMode)
     }
 
@@ -302,10 +311,10 @@ class HomeDetailFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) {
         Timber.v(it.toString())
-        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
-        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
-        bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
-        syncStateView.render(it.syncState)
+        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
+        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
+        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
+        views.syncStateView.render(it.syncState)
     }
 
     private fun BadgeDrawable.render(count: Int, highlight: Boolean) {

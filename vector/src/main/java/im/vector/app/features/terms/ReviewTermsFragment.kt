@@ -16,7 +16,10 @@
 package im.vector.app.features.terms
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -27,20 +30,23 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInChromeCustomTab
-import kotlinx.android.synthetic.main.fragment_review_terms.*
+import im.vector.app.databinding.FragmentReviewTermsBinding
+
 import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
 class ReviewTermsFragment @Inject constructor(
         private val termsController: TermsController
-) : VectorBaseFragment(), TermsController.Listener {
+) : VectorBaseFragment<FragmentReviewTermsBinding>(),
+        TermsController.Listener {
 
     private val reviewTermsViewModel: ReviewTermsViewModel by activityViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_review_terms
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentReviewTermsBinding {
+        return FragmentReviewTermsBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,10 +57,10 @@ class ReviewTermsFragment @Inject constructor(
         }
 
         termsController.listener = this
-        reviewTermsRecyclerView.configureWith(termsController)
+        views.reviewTermsRecyclerView.configureWith(termsController)
 
-        reviewTermsAccept.onClick { reviewTermsViewModel.handle(ReviewTermsAction.Accept) }
-        reviewTermsDecline.onClick { activity?.finish() }
+        views.reviewTermsAccept.onClick { reviewTermsViewModel.handle(ReviewTermsAction.Accept) }
+        views.reviewTermsDecline.onClick { activity?.finish() }
 
         reviewTermsViewModel.observeViewEvents {
             when (it) {
@@ -72,14 +78,14 @@ class ReviewTermsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        reviewTermsRecyclerView.cleanup()
+        views.reviewTermsRecyclerView.cleanup()
         termsController.listener = null
         super.onDestroyView()
     }
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.terms_of_service)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.terms_of_service)
     }
 
     override fun invalidate() = withState(reviewTermsViewModel) { state ->
@@ -87,11 +93,11 @@ class ReviewTermsFragment @Inject constructor(
 
         when (state.termsList) {
             is Loading -> {
-                reviewTermsBottomBar.isVisible = false
+                views.reviewTermsBottomBar.isVisible = false
             }
             is Success -> {
-                reviewTermsBottomBar.isVisible = true
-                reviewTermsAccept.isEnabled = state.termsList.invoke().all { it.accepted }
+                views.reviewTermsBottomBar.isVisible = true
+                views.reviewTermsAccept.isEnabled = state.termsList.invoke().all { it.accepted }
             }
             else       -> Unit
         }

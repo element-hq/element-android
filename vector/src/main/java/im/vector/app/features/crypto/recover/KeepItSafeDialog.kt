@@ -19,10 +19,10 @@ package im.vector.app.features.crypto.recover
 import android.app.Activity
 import android.content.DialogInterface
 import android.view.KeyEvent
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import im.vector.app.R
+import im.vector.app.databinding.DialogRecoveryKeySavedInfoBinding
 import me.gujun.android.span.image
 import me.gujun.android.span.span
 
@@ -30,10 +30,9 @@ class KeepItSafeDialog {
 
     fun show(activity: Activity) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_recovery_key_saved_info, null)
+        val views = DialogRecoveryKeySavedInfoBinding.bind(dialogLayout)
 
-        val descriptionText = dialogLayout.findViewById<TextView>(R.id.keepItSafeText)
-
-        descriptionText.text = span {
+        views.keepItSafeText.text = span {
             span {
                 image(ContextCompat.getDrawable(activity, R.drawable.ic_check_on)!!)
                 +" "

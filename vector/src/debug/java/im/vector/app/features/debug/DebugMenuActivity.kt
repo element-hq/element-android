@@ -24,7 +24,6 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.content.getSystemService
-import butterknife.OnClick
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -35,16 +34,17 @@ import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.ActivityDebugMenuBinding
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
 import im.vector.app.features.qrcode.QrCodeScannerActivity
 import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
-import kotlinx.android.synthetic.debug.activity_debug_menu.*
+
 import timber.log.Timber
 import javax.inject.Inject
 
-class DebugMenuActivity : VectorBaseActivity() {
+class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
-    override fun getLayoutRes() = R.layout.activity_debug_menu
+    override fun getBinding() = ActivityDebugMenuBinding.inflate(layoutInflater)
 
     @Inject
     lateinit var activeSessionHolder: ActiveSessionHolder
@@ -66,24 +66,32 @@ class DebugMenuActivity : VectorBaseActivity() {
         val string = buffer.toString(Charsets.ISO_8859_1)
 
         renderQrCode(string)
+        setupViews()
+    }
+
+    private fun setupViews() {
+        views.debugTestTextViewLink.setOnClickListener { testTextViewLink() }
+        views.debugShowSasEmoji.setOnClickListener { showSasEmoji() }
+        views.debugTestNotification.setOnClickListener { testNotification() }
+        views.debugTestMaterialThemeLight.setOnClickListener { testMaterialThemeLight() }
+        views.debugTestMaterialThemeDark.setOnClickListener { testMaterialThemeDark() }
+        views.debugTestCrash.setOnClickListener { testCrash() }
+        views.debugScanQrCode.setOnClickListener { scanQRCode() }
     }
 
     private fun renderQrCode(text: String) {
-        debug_qr_code.setData(text)
+        views.debugQrCode.setData(text)
     }
 
-    @OnClick(R.id.debug_test_text_view_link)
-    fun testTextViewLink() {
+    private fun testTextViewLink() {
         startActivity(Intent(this, TestLinkifyActivity::class.java))
     }
 
-    @OnClick(R.id.debug_show_sas_emoji)
-    fun showSasEmoji() {
+    private fun showSasEmoji() {
         startActivity(Intent(this, DebugSasEmojiActivity::class.java))
     }
 
-    @OnClick(R.id.debug_test_notification)
-    fun testNotification() {
+    private fun testNotification() {
         val notificationManager = getSystemService<NotificationManager>()!!
 
         // Create channel first
@@ -166,23 +174,19 @@ class DebugMenuActivity : VectorBaseActivity() {
         )
     }
 
-    @OnClick(R.id.debug_test_material_theme_light)
-    fun testMaterialThemeLight() {
+    private fun testMaterialThemeLight() {
         startActivity(Intent(this, DebugMaterialThemeLightActivity::class.java))
     }
 
-    @OnClick(R.id.debug_test_material_theme_dark)
-    fun testMaterialThemeDark() {
+    private fun testMaterialThemeDark() {
         startActivity(Intent(this, DebugMaterialThemeDarkActivity::class.java))
     }
 
-    @OnClick(R.id.debug_test_crash)
-    fun testCrash() {
+    private fun testCrash() {
         throw RuntimeException("Application crashed from user demand")
     }
 
-    @OnClick(R.id.debug_scan_qr_code)
-    fun scanQRCode() {
+    private fun scanQRCode() {
         if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
             doScanQRCode()
         }

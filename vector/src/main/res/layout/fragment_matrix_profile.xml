@@ -2,7 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/vector_coordinator_layout"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?riotx_header_panel_background">
@@ -104,6 +104,8 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_profile_action" />
 
-    <include layout="@layout/merge_overlay_waiting_view" />
+    <include
+        android:id="@+id/waiting_view"
+        layout="@layout/merge_overlay_waiting_view" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

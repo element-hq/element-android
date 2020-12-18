@@ -33,7 +33,8 @@ import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
-import kotlinx.android.synthetic.main.activity_attachment_viewer.*
+import im.vector.lib.attachmentviewer.databinding.ActivityAttachmentViewerBinding
+
 import java.lang.ref.WeakReference
 import kotlin.math.abs
 
@@ -50,11 +51,13 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     private var overlayView: View? = null
         set(value) {
             if (value == overlayView) return
-            overlayView?.let { rootContainer.removeView(it) }
-            rootContainer.addView(value)
+            overlayView?.let { views.rootContainer.removeView(it) }
+            views.rootContainer.addView(value)
             value?.updatePadding(top = topInset, bottom = bottomInset)
             field = value
         }
+
+    private lateinit var views: ActivityAttachmentViewerBinding
 
     private lateinit var swipeDismissHandler: SwipeToDismissHandler
     private lateinit var directionDetector: SwipeDirectionDetector
@@ -95,17 +98,17 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
 
-        setContentView(R.layout.activity_attachment_viewer)
-        attachmentPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        views = ActivityAttachmentViewerBinding.inflate(layoutInflater)
+        setContentView(views.root)
+        views.attachmentPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         attachmentsAdapter = AttachmentsAdapter()
-        attachmentPager.adapter = attachmentsAdapter
-        imageTransitionView = transitionImageView
-        transitionImageContainer = findViewById(R.id.transitionImageContainer)
-        pager2 = attachmentPager
+        views.attachmentPager.adapter = attachmentsAdapter
+        imageTransitionView = views.transitionImageView
+        pager2 = views.attachmentPager
         directionDetector = createSwipeDirectionDetector()
         gestureDetector = createGestureDetector()
 
-        attachmentPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        views.attachmentPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
                 isImagePagerIdle = state == ViewPager2.SCROLL_STATE_IDLE
             }
@@ -116,12 +119,12 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         })
 
         swipeDismissHandler = createSwipeToDismissHandler()
-        rootContainer.setOnTouchListener(swipeDismissHandler)
-        rootContainer.viewTreeObserver.addOnGlobalLayoutListener { swipeDismissHandler.translationLimit = dismissContainer.height / 4 }
+        views.rootContainer.setOnTouchListener(swipeDismissHandler)
+        views.rootContainer.viewTreeObserver.addOnGlobalLayoutListener { swipeDismissHandler.translationLimit = views.dismissContainer.height / 4 }
 
         scaleDetector = createScaleGestureDetector()
 
-        ViewCompat.setOnApplyWindowInsetsListener(rootContainer) { _, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(views.rootContainer) { _, insets ->
             overlayView?.updatePadding(top = insets.systemWindowInsetTop, bottom = insets.systemWindowInsetBottom)
             topInset = insets.systemWindowInsetTop
             bottomInset = insets.systemWindowInsetBottom
@@ -170,7 +173,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         if (swipeDirection == null && (scaleDetector.isInProgress || ev.pointerCount > 1 || wasScaled)) {
             wasScaled = true
 //            Log.v("ATTACHEMENTS", "dispatch to pager")
-            return attachmentPager.dispatchTouchEvent(ev)
+            return views.attachmentPager.dispatchTouchEvent(ev)
         }
 
         // Log.v("ATTACHEMENTS", "is current item scaled ${isScaled()}")
@@ -196,16 +199,16 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     private fun handleEventActionDown(event: MotionEvent) {
         swipeDirection = null
         wasScaled = false
-        attachmentPager.dispatchTouchEvent(event)
+        views.attachmentPager.dispatchTouchEvent(event)
 
-        swipeDismissHandler.onTouch(rootContainer, event)
+        swipeDismissHandler.onTouch(views.rootContainer, event)
         isOverlayWasClicked = dispatchOverlayTouch(event)
     }
 
     private fun handleEventActionUp(event: MotionEvent) {
 //        wasDoubleTapped = false
-        swipeDismissHandler.onTouch(rootContainer, event)
-        attachmentPager.dispatchTouchEvent(event)
+        swipeDismissHandler.onTouch(views.rootContainer, event)
+        views.attachmentPager.dispatchTouchEvent(event)
         isOverlayWasClicked = dispatchOverlayTouch(event)
     }
 
@@ -220,12 +223,12 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     private fun toggleOverlayViewVisibility() {
         if (systemUiVisibility) {
             // we hide
-            TransitionManager.beginDelayedTransition(rootContainer)
+            TransitionManager.beginDelayedTransition(views.rootContainer)
             hideSystemUI()
             overlayView?.isVisible = false
         } else {
             // we show
-            TransitionManager.beginDelayedTransition(rootContainer)
+            TransitionManager.beginDelayedTransition(views.rootContainer)
             showSystemUI()
             overlayView?.isVisible = true
         }
@@ -238,11 +241,11 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         return when (swipeDirection) {
             SwipeDirection.Up, SwipeDirection.Down    -> {
                 if (isSwipeToDismissAllowed && !wasScaled && isImagePagerIdle) {
-                    swipeDismissHandler.onTouch(rootContainer, event)
+                    swipeDismissHandler.onTouch(views.rootContainer, event)
                 } else true
             }
             SwipeDirection.Left, SwipeDirection.Right -> {
-                attachmentPager.dispatchTouchEvent(event)
+                views.attachmentPager.dispatchTouchEvent(event)
             }
             else                                      -> true
         }
@@ -250,8 +253,8 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
 
     private fun handleSwipeViewMove(translationY: Float, translationLimit: Int) {
         val alpha = calculateTranslationAlpha(translationY, translationLimit)
-        backgroundView.alpha = alpha
-        dismissContainer.alpha = alpha
+        views.backgroundView.alpha = alpha
+        views.dismissContainer.alpha = alpha
         overlayView?.alpha = alpha
     }
 
@@ -265,7 +268,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
 
     private fun createSwipeToDismissHandler()
             : SwipeToDismissHandler = SwipeToDismissHandler(
-            swipeView = dismissContainer,
+            swipeView = views.dismissContainer,
             shouldAnimateDismiss = { shouldAnimateDismiss() },
             onDismiss = { animateClose() },
             onSwipeViewMove = ::handleSwipeViewMove)

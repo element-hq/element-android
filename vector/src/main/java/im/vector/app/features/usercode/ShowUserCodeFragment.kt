@@ -17,25 +17,29 @@
 package im.vector.app.features.usercode
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.FragmentUserCodeShowBinding
 import im.vector.app.features.home.AvatarRenderer
-import kotlinx.android.synthetic.main.fragment_user_code_show.*
+
 import javax.inject.Inject
 
 class ShowUserCodeFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentUserCodeShowBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_user_code_show
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentUserCodeShowBinding {
+        return FragmentUserCodeShowBinding.inflate(inflater, container, false)
+    }
 
     val sharedViewModel: UserCodeSharedViewModel by activityViewModel()
 
@@ -49,15 +53,15 @@ class ShowUserCodeFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showUserCodeClose.debouncedClicks {
+        views.showUserCodeClose.debouncedClicks {
             sharedViewModel.handle(UserCodeActions.DismissAction)
         }
-        showUserCodeScanButton.debouncedClicks {
+        views.showUserCodeScanButton.debouncedClicks {
             if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
                 doOpenQRCodeScanner()
             }
         }
-        showUserCodeShareButton.debouncedClicks {
+        views.showUserCodeShareButton.debouncedClicks {
             sharedViewModel.handle(UserCodeActions.ShareByText)
         }
 
@@ -79,9 +83,9 @@ class ShowUserCodeFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(sharedViewModel) { state ->
-        state.matrixItem?.let { avatarRenderer.render(it, showUserCodeAvatar) }
-        state.shareLink?.let { showUserCodeQRImage.setData(it) }
-        showUserCodeCardNameText.setTextOrHide(state.matrixItem?.displayName)
-        showUserCodeCardUserIdText.setTextOrHide(state.matrixItem?.id)
+        state.matrixItem?.let { avatarRenderer.render(it, views.showUserCodeAvatar) }
+        state.shareLink?.let { views.showUserCodeQRImage.setData(it) }
+        views.showUserCodeCardNameText.setTextOrHide(state.matrixItem?.displayName)
+        views.showUserCodeCardUserIdText.setTextOrHide(state.matrixItem?.id)
     }
 }

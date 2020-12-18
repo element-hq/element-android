@@ -15,37 +15,25 @@
  */
 package im.vector.app.core.platform
 
-import android.view.View
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.annotation.CallSuper
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import butterknife.BindView
-import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.hideKeyboard
-import kotlinx.android.synthetic.main.activity.*
+import im.vector.app.databinding.ActivityBinding
+
 import org.matrix.android.sdk.api.session.Session
-import javax.inject.Inject
 
 /**
  * Simple activity with a toolbar, a waiting overlay, and a fragment container and a session.
  */
-abstract class SimpleFragmentActivity : VectorBaseActivity() {
+abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
 
-    override fun getLayoutRes() = R.layout.activity
+    final override fun getBinding() = ActivityBinding.inflate(layoutInflater)
 
-    @BindView(R.id.waiting_view_status_circular_progress)
-    lateinit var waitingCircularProgress: View
+    final override fun getCoordinatorLayout() = views.coordinatorLayout
 
-    @BindView(R.id.waiting_view_status_text)
-    lateinit var waitingStatusText: TextView
-
-    @BindView(R.id.waiting_view_status_horizontal_progress)
-    lateinit var waitingHorizontalProgress: ProgressBar
-
-    @Inject lateinit var session: Session
+    lateinit var session: Session
 
     @CallSuper
     override fun injectWith(injector: ScreenComponent) {
@@ -53,8 +41,8 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
     }
 
     override fun initUiAndData() {
-        configureToolbar(toolbar)
-        waitingView = findViewById(R.id.waiting_view)
+        configureToolbar(views.toolbar)
+        waitingView = views.waitingView.waitingView
     }
 
     /**
@@ -63,21 +51,21 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
      */
     fun updateWaitingView(data: WaitingViewData?) {
         data?.let {
-            waitingStatusText.text = data.message
+            views.waitingView.waitingStatusText.text = data.message
 
             if (data.progress != null && data.progressTotal != null) {
-                waitingHorizontalProgress.isIndeterminate = false
-                waitingHorizontalProgress.progress = data.progress
-                waitingHorizontalProgress.max = data.progressTotal
-                waitingHorizontalProgress.isVisible = true
-                waitingCircularProgress.isVisible = false
+                views.waitingView.waitingHorizontalProgress.isIndeterminate = false
+                views.waitingView.waitingHorizontalProgress.progress = data.progress
+                views.waitingView.waitingHorizontalProgress.max = data.progressTotal
+                views.waitingView.waitingHorizontalProgress.isVisible = true
+                views.waitingView.waitingCircularProgress.isVisible = false
             } else if (data.isIndeterminate) {
-                waitingHorizontalProgress.isIndeterminate = true
-                waitingHorizontalProgress.isVisible = true
-                waitingCircularProgress.isVisible = false
+                views.waitingView.waitingHorizontalProgress.isIndeterminate = true
+                views.waitingView.waitingHorizontalProgress.isVisible = true
+                views.waitingView.waitingCircularProgress.isVisible = false
             } else {
-                waitingHorizontalProgress.isVisible = false
-                waitingCircularProgress.isVisible = true
+                views.waitingView.waitingHorizontalProgress.isVisible = false
+                views.waitingView.waitingCircularProgress.isVisible = true
             }
 
             showWaitingView()
@@ -86,17 +74,17 @@ abstract class SimpleFragmentActivity : VectorBaseActivity() {
         }
     }
 
-    override fun showWaitingView() {
+    override fun showWaitingView(text: String?) {
         hideKeyboard()
-        waitingStatusText.isGone = waitingStatusText.text.isNullOrBlank()
-        super.showWaitingView()
+        views.waitingView.waitingStatusText.isGone = views.waitingView.waitingStatusText.text.isNullOrBlank()
+        super.showWaitingView(text)
     }
 
     override fun hideWaitingView() {
-        waitingStatusText.text = null
-        waitingStatusText.isGone = true
-        waitingHorizontalProgress.progress = 0
-        waitingHorizontalProgress.isVisible = false
+        views.waitingView.waitingStatusText.text = null
+        views.waitingView.waitingStatusText.isGone = true
+        views.waitingView.waitingHorizontalProgress.progress = 0
+        views.waitingView.waitingHorizontalProgress.isVisible = false
         super.hideWaitingView()
     }
 

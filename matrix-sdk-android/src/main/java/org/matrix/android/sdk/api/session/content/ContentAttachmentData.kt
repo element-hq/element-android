@@ -20,7 +20,7 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.exifinterface.media.ExifInterface
 import com.squareup.moshi.JsonClass
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.util.MimeTypes.normalizeMimeType
 
 @Parcelize

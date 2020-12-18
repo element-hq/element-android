@@ -20,7 +20,9 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
@@ -30,7 +32,8 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.core.utils.toast
-import kotlinx.android.synthetic.main.fragment_bootstrap_save_key.*
+import im.vector.app.databinding.FragmentBootstrapSaveKeyBinding
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -38,18 +41,20 @@ import javax.inject.Inject
 
 class BootstrapSaveRecoveryKeyFragment @Inject constructor(
         private val colorProvider: ColorProvider
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentBootstrapSaveKeyBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_bootstrap_save_key
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapSaveKeyBinding {
+        return FragmentBootstrapSaveKeyBinding.inflate(inflater, container, false)
+    }
 
     val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recoverySave.clickableView.debouncedClicks { downloadRecoveryKey() }
-        recoveryCopy.clickableView.debouncedClicks { shareRecoveryKey() }
-        recoveryContinue.clickableView.debouncedClicks {
+        views.recoverySave.views.itemVerificationClickableZone.debouncedClicks { downloadRecoveryKey() }
+        views.recoveryCopy.views.itemVerificationClickableZone.debouncedClicks { shareRecoveryKey() }
+        views.recoveryContinue.views.itemVerificationClickableZone.debouncedClicks {
             // We do not display the final Fragment anymore
             // TODO Do some cleanup
             // sharedViewModel.handle(BootstrapActions.GoToCompleted)
@@ -112,7 +117,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
         val step = state.step
         if (step !is BootstrapStep.SaveRecoveryKey) return@withState
 
-        recoveryContinue.isVisible = step.isSaved
-        bootstrapRecoveryKeyText.text = state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey()
+        views.recoveryContinue.isVisible = step.isSaved
+        views.bootstrapRecoveryKeyText.text = state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey()
     }
 }

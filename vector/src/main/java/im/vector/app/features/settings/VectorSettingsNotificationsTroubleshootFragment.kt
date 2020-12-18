@@ -21,26 +21,25 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
-import butterknife.BindView
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentSettingsNotificationsTroubleshootBinding
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.rageshake.BugReporter
 import im.vector.app.features.settings.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import im.vector.app.push.fcm.NotificationTroubleshootTestManagerFactory
+
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
@@ -48,27 +47,14 @@ import javax.inject.Inject
 class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         private val bugReporter: BugReporter,
         private val testManagerFactory: NotificationTroubleshootTestManagerFactory
-) : VectorBaseFragment() {
-
-    @BindView(R.id.troubleshoot_test_recycler_view)
-    lateinit var mRecyclerView: RecyclerView
-
-    @BindView(R.id.troubleshoot_bottom_view)
-    lateinit var mBottomView: ViewGroup
-
-    @BindView(R.id.toubleshoot_summ_description)
-    lateinit var mSummaryDescription: TextView
-
-    @BindView(R.id.troubleshoot_summ_button)
-    lateinit var mSummaryButton: Button
-
-    @BindView(R.id.troubleshoot_run_button)
-    lateinit var mRunButton: Button
+) : VectorBaseFragment<FragmentSettingsNotificationsTroubleshootBinding>() {
 
     private var testManager: NotificationTroubleshootTestManager? = null
     // members
 
-    override fun getLayoutResId() = R.layout.fragment_settings_notifications_troubleshoot
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSettingsNotificationsTroubleshootBinding {
+        return FragmentSettingsNotificationsTroubleshootBinding.inflate(inflater, container, false)
+    }
 
     private var interactionListener: VectorSettingsFragmentInteractionListener? = null
 
@@ -76,71 +62,70 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         val layoutManager = LinearLayoutManager(context)
-        mRecyclerView.layoutManager = layoutManager
+        views.troubleshootTestRecyclerView.layoutManager = layoutManager
 
-        val dividerItemDecoration = DividerItemDecoration(mRecyclerView.context,
-                layoutManager.orientation)
-        mRecyclerView.addItemDecoration(dividerItemDecoration)
+        val dividerItemDecoration = DividerItemDecoration(view.context, layoutManager.orientation)
+        views.troubleshootTestRecyclerView.addItemDecoration(dividerItemDecoration)
 
-        mSummaryButton.debouncedClicks {
+        views.troubleshootSummButton.debouncedClicks {
             bugReporter.openBugReportScreen(requireActivity())
         }
 
-        mRunButton.debouncedClicks {
+        views.troubleshootRunButton.debouncedClicks {
             testManager?.retry(testStartForActivityResult)
         }
         startUI()
     }
 
     private fun startUI() {
-        mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status, 0, 0)
+        views.toubleshootSummDescription.text = getString(R.string.settings_troubleshoot_diagnostic_running_status, 0, 0)
         testManager = testManagerFactory.create(this)
         testManager?.statusListener = { troubleshootTestManager ->
             if (isAdded) {
-                TransitionManager.beginDelayedTransition(mBottomView)
+                TransitionManager.beginDelayedTransition(views.troubleshootBottomView)
                 when (troubleshootTestManager.diagStatus) {
                     TroubleshootTest.TestStatus.NOT_STARTED      -> {
-                        mSummaryDescription.text = ""
-                        mSummaryButton.visibility = View.GONE
-                        mRunButton.visibility = View.VISIBLE
+                        views.toubleshootSummDescription.text = ""
+                        views.troubleshootSummButton.visibility = View.GONE
+                        views.troubleshootRunButton.visibility = View.VISIBLE
                     }
                     TroubleshootTest.TestStatus.RUNNING,
                     TroubleshootTest.TestStatus.WAITING_FOR_USER -> {
                         val size = troubleshootTestManager.testListSize
                         val currentTestIndex = troubleshootTestManager.currentTestIndex
-                        mSummaryDescription.text = getString(
+                        views.toubleshootSummDescription.text = getString(
                                 R.string.settings_troubleshoot_diagnostic_running_status,
                                 currentTestIndex,
                                 size
                         )
-                        mSummaryButton.visibility = View.GONE
-                        mRunButton.visibility = View.GONE
+                        views.troubleshootSummButton.visibility = View.GONE
+                        views.troubleshootRunButton.visibility = View.GONE
                     }
                     TroubleshootTest.TestStatus.FAILED           -> {
                         // check if there are quick fixes
                         val hasQuickFix = testManager?.hasQuickFix().orFalse()
                         if (hasQuickFix) {
-                            mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_with_quickfix)
+                            views.toubleshootSummDescription.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_with_quickfix)
                         } else {
-                            mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_no_quickfix)
+                            views.toubleshootSummDescription.text = getString(R.string.settings_troubleshoot_diagnostic_failure_status_no_quickfix)
                         }
-                        mSummaryButton.visibility = View.VISIBLE
-                        mRunButton.visibility = View.VISIBLE
+                        views.troubleshootSummButton.visibility = View.VISIBLE
+                        views.troubleshootRunButton.visibility = View.VISIBLE
                     }
                     TroubleshootTest.TestStatus.SUCCESS          -> {
-                        mSummaryDescription.text = getString(R.string.settings_troubleshoot_diagnostic_success_status)
-                        mSummaryButton.visibility = View.VISIBLE
-                        mRunButton.visibility = View.VISIBLE
+                        views.toubleshootSummDescription.text = getString(R.string.settings_troubleshoot_diagnostic_success_status)
+                        views.troubleshootSummButton.visibility = View.VISIBLE
+                        views.troubleshootRunButton.visibility = View.VISIBLE
                     }
                 }
             }
         }
-        mRecyclerView.adapter = testManager?.adapter
+        views.troubleshootTestRecyclerView.adapter = testManager?.adapter
         testManager?.runDiagnostic(testStartForActivityResult)
     }
 
     override fun onDestroyView() {
-        mRecyclerView.cleanup()
+        views.troubleshootTestRecyclerView.cleanup()
         super.onDestroyView()
     }
 
@@ -162,7 +147,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_notification_troubleshoot)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_notification_troubleshoot)
 
         tryOrNull("Unable to register the receiver") {
             LocalBroadcastManager.getInstance(requireContext())

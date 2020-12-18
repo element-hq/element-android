@@ -28,13 +28,14 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
 import im.vector.app.features.room.RequireActiveMembershipViewState
 import javax.inject.Inject
 
 class RoomMemberProfileActivity :
-        VectorBaseActivity(),
+        VectorBaseActivity<ActivitySimpleBinding>(),
         ToolbarConfigurable,
         RequireActiveMembershipViewModel.Factory {
 
@@ -60,7 +61,9 @@ class RoomMemberProfileActivity :
         injector.inject(this)
     }
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding(): ActivitySimpleBinding {
+        return ActivitySimpleBinding.inflate(layoutInflater)
+    }
 
     override fun initUiAndData() {
         if (isFirstCreation()) {

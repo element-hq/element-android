@@ -17,9 +17,9 @@
 package im.vector.app.core.dialogs
 
 import android.app.Activity
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import im.vector.app.R
+import im.vector.app.databinding.DialogDeviceVerifyBinding
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 
@@ -27,6 +27,7 @@ object ManuallyVerifyDialog {
 
     fun show(activity: Activity, cryptoDeviceInfo: CryptoDeviceInfo, onVerified: (() -> Unit)) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_device_verify, null)
+        val views = DialogDeviceVerifyBinding.bind(dialogLayout)
         val builder = AlertDialog.Builder(activity)
                 .setTitle(R.string.cross_signing_verify_by_text)
                 .setView(dialogLayout)
@@ -35,17 +36,9 @@ object ManuallyVerifyDialog {
                 }
                 .setNegativeButton(R.string.cancel, null)
 
-        dialogLayout.findViewById<TextView>(R.id.encrypted_device_info_device_name)?.let {
-            it.text = cryptoDeviceInfo.displayName()
-        }
-
-        dialogLayout.findViewById<TextView>(R.id.encrypted_device_info_device_id)?.let {
-            it.text = cryptoDeviceInfo.deviceId
-        }
-
-        dialogLayout.findViewById<TextView>(R.id.encrypted_device_info_device_key)?.let {
-            it.text = cryptoDeviceInfo.getFingerprintHumanReadable()
-        }
+        views.encryptedDeviceInfoDeviceName.text = cryptoDeviceInfo.displayName()
+        views.encryptedDeviceInfoDeviceId.text = cryptoDeviceInfo.deviceId
+        views.encryptedDeviceInfoDeviceKey.text = cryptoDeviceInfo.getFingerprintHumanReadable()
 
         builder.show()
     }

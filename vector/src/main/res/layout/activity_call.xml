@@ -10,14 +10,14 @@
     tools:ignore="MergeRootFrame">
 
     <org.webrtc.SurfaceViewRenderer
-        android:id="@+id/fullscreen_video_view"
+        android:id="@+id/fullscreenRenderer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <org.webrtc.SurfaceViewRenderer
-        android:id="@+id/pip_video_view"
+        android:id="@+id/pipRenderer"
         android:layout_width="wrap_content"
         android:layout_height="144dp"
         android:layout_gravity="bottom|end"
@@ -109,11 +109,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="pip_video_view, fullscreen_video_view"
+        app:constraint_referenced_ids="pipRenderer, fullscreenRenderer"
         tools:visibility="invisible" />
 
     <im.vector.app.features.call.CallControlsView
-        android:id="@+id/callControls"
+        android:id="@+id/callControlsView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent" />
