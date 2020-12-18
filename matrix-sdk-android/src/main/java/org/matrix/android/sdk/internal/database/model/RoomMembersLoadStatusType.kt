@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.database.model;
+package org.matrix.android.sdk.internal.database.model
 
-public enum RoomMembersLoadStatusType {
+internal enum class RoomMembersLoadStatusType {
     NONE,
     LOADING,
     LOADED
