@@ -93,7 +93,7 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         } catch (failure: Throwable) {
             // Catch invalid hash pepper and retry
             if (canRetry && failure is Failure.ServerError && failure.error.code == MatrixError.M_INVALID_PEPPER) {
-                // This is not documented, by the error can contain the new pepper!
+                // This is not documented, but the error can contain the new pepper!
                 if (!failure.error.newLookupPepper.isNullOrEmpty()) {
                     // Store it and use it right now
                     hashDetailResponse.copy(pepper = failure.error.newLookupPepper)
