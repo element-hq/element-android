@@ -35,7 +35,9 @@ import kotlin.test.fail
 @FixMethodOrder(MethodSorters.JVM)
 class TimelineWithManyMembersTest : InstrumentedTest {
 
-    private val NUMBER_OF_MEMBERS = 6
+    companion object {
+        private const val NUMBER_OF_MEMBERS = 6
+    }
 
     private val commonTestHelper = CommonTestHelper(context())
     private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
