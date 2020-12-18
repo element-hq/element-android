@@ -177,7 +177,7 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         when (callState) {
             is CallState.Idle,
             is CallState.CreateOffer,
-            is CallState.Dialing     -> {
+            is CallState.Dialing -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_ring)
@@ -191,14 +191,14 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                 configureCallInfo(state)
             }
 
-            is CallState.Answering    -> {
+            is CallState.Answering -> {
                 callVideoGroup.isInvisible = true
                 callInfoGroup.isVisible = true
                 callStatusText.setText(R.string.call_connecting)
                 callConnectingProgress.isVisible = true
                 configureCallInfo(state)
             }
-            is CallState.Connected    -> {
+            is CallState.Connected -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold || state.isRemoteOnHold) {
                         smallIsHeldIcon.isVisible = true
@@ -238,10 +238,10 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
                     callConnectingProgress.isVisible = true
                 }
             }
-            is CallState.Terminated   -> {
+            is CallState.Terminated -> {
                 finish()
             }
-            null                      -> {
+            null -> {
             }
         }
     }
@@ -330,6 +330,9 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             }
             is VectorCallViewEvents.ConnectionTimeout -> {
                 onErrorTimoutConnect(event.turn)
+            }
+            is VectorCallViewEvents.ShowCallTransferScreen -> {
+                navigator.openCallTransfer(this, callArgs.callId)
             }
             null -> {
             }

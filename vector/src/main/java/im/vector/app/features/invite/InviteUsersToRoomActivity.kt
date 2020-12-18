@@ -96,7 +96,6 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
                 }
                 .disposeOnDestroy()
         if (isFirstCreation()) {
-            val args: InviteUsersToRoomArgs? = intent.extras?.getParcelable(MvRx.KEY_ARG)
             addFragment(
                     R.id.container,
                     UserListFragment::class.java,
@@ -104,7 +103,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
                             title = getString(R.string.invite_users_to_room_title),
                             menuResId = R.menu.vector_invite_users_to_room,
                             excludedUserIds = viewModel.getUserIdsOfRoomMembers(),
-                            existingRoomId = args?.roomId
+                            showInviteActions = false
                     )
             )
         }
@@ -114,7 +113,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
 
     private fun onMenuItemSelected(action: UserListSharedAction.OnMenuItemSelected) {
         if (action.itemId == R.id.action_invite_users_to_room_invite) {
-            viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.invitees))
+            viewModel.handle(InviteUsersToRoomAction.InviteSelectedUsers(action.selections))
         }
     }
 

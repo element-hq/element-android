@@ -46,6 +46,7 @@ import butterknife.Unbinder
 import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
+import com.jakewharton.rxbinding3.view.clicks
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -86,6 +87,7 @@ import io.reactivex.disposables.Disposable
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
 
 abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
@@ -117,6 +119,19 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
                 }
                 .disposeOnDestroy()
     }
+
+    /* ==========================================================================================
+     * Views
+     * ========================================================================================== */
+
+    protected fun View.debouncedClicks(onClicked: () -> Unit) {
+        clicks()
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { onClicked() }
+                .disposeOnDestroy()
+    }
+
 
     /* ==========================================================================================
      * DATA

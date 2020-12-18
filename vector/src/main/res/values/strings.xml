@@ -2782,5 +2782,9 @@
     <string name="call_active_and_multiple_paused">1 active call (%1$s) · %2$d paused calls</string>
     <string name="call_only_multiple_paused">%1$d paused calls</string>
 
+    <string name="call_transfer_consult_first">Consult first</string>
+    <string name="call_transfer_connect_action">Connect</string>
+    <string name="call_transfer_title">Transfer</string>
+
 
 </resources>

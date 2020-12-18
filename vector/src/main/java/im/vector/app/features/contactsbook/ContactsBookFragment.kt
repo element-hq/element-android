@@ -29,7 +29,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.features.userdirectory.PendingInvitee
+import im.vector.app.features.userdirectory.PendingSelection
 import im.vector.app.features.userdirectory.UserListAction
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
@@ -126,13 +126,13 @@ class ContactsBookFragment @Inject constructor(
 
     override fun onMatrixIdClick(matrixId: String) {
         view?.hideKeyboard()
-        viewModel.handle(UserListAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(User(matrixId))))
+        viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.UserPendingSelection(User(matrixId))))
         sharedActionViewModel.post(UserListSharedAction.GoBack)
     }
 
     override fun onThreePidClick(threePid: ThreePid) {
         view?.hideKeyboard()
-        viewModel.handle(UserListAction.SelectPendingInvitee(PendingInvitee.ThreePidPendingInvitee(threePid)))
+        viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(threePid)))
         sharedActionViewModel.post(UserListSharedAction.GoBack)
     }
 }

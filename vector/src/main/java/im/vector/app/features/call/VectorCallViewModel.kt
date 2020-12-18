@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
+import org.matrix.android.sdk.api.session.room.model.call.supportCallTransfer
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.Timer
@@ -114,7 +115,8 @@ class VectorCallViewModel @AssistedInject constructor(
             }
             setState {
                 copy(
-                        callState = Success(callState)
+                        callState = Success(callState),
+                        canOpponentBeTransferred = call.capabilities.supportCallTransfer()
                 )
             }
         }
@@ -188,7 +190,8 @@ class VectorCallViewModel @AssistedInject constructor(
                         isFrontCamera = webRtcCall.currentCameraType() == CameraType.FRONT,
                         canSwitchCamera = webRtcCall.canSwitchCamera(),
                         formattedDuration = webRtcCall.formattedDuration(),
-                        isHD = webRtcCall.mxCall.isVideoCall && webRtcCall.currentCaptureFormat() is CaptureFormat.HD
+                        isHD = webRtcCall.mxCall.isVideoCall && webRtcCall.currentCaptureFormat() is CaptureFormat.HD,
+                        canOpponentBeTransferred = webRtcCall.mxCall.capabilities.supportCallTransfer()
                 )
             }
             updateOtherKnownCall(webRtcCall)
@@ -268,6 +271,11 @@ class VectorCallViewModel @AssistedInject constructor(
             VectorCallViewActions.ToggleHDSD -> {
                 if (!state.isVideoCall) return@withState
                 call?.setCaptureFormat(if (state.isHD) CaptureFormat.SD else CaptureFormat.HD)
+            }
+            VectorCallViewActions.InitiateCallTransfer -> {
+                _viewEvents.post(
+                        VectorCallViewEvents.ShowCallTransferScreen
+                )
             }
         }.exhaustive
     }

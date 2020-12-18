@@ -26,7 +26,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
-import im.vector.app.features.userdirectory.PendingInvitee
+import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.android.synthetic.main.fragment_qr_code_scanner.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
@@ -102,7 +102,7 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
                 val qrInvitee = if (viewModel.session.getUser(mxid) != null) viewModel.session.getUser(mxid)!! else User(mxid, null, null)
 
                 viewModel.handle(
-                        CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingInvitee.UserPendingInvitee(qrInvitee)), existingDm)
+                        CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingSelection.UserPendingSelection(qrInvitee)), existingDm)
                 )
             }
         }

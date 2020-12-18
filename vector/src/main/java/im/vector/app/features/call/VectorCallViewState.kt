@@ -39,7 +39,8 @@ data class VectorCallViewState(
         val callState: Async<CallState> = Uninitialized,
         val otherKnownCallInfo: CallInfo? = null,
         val callInfo: CallInfo = CallInfo(callId),
-        val formattedDuration: String = ""
+        val formattedDuration: String = "",
+        val canOpponentBeTransferred: Boolean = false
 ) : MvRxState {
 
     data class CallInfo(

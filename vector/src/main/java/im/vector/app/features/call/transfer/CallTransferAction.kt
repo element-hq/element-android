@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.userdirectory
+package im.vector.app.features.call.transfer
 
-import android.os.Parcelable
-import android.widget.Toolbar
-import kotlinx.android.parcel.Parcelize
+import im.vector.app.core.platform.VectorViewModelAction
 
-@Parcelize
-data class UserListFragmentArgs(
-        val title: String,
-        val menuResId: Int,
-        val excludedUserIds: Set<String>? = null,
-        val singleSelection: Boolean = false,
-        val showInviteActions: Boolean = true,
-        val showToolbar: Boolean = true
-) : Parcelable
+sealed class CallTransferAction : VectorViewModelAction {
+    data class Connect(val consultFirst: Boolean, val selectedUserId: String) : CallTransferAction()
+}

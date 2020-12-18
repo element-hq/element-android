@@ -44,4 +44,13 @@
         app:tint="?attr/riotx_text_primary"
         tools:actionDescription="" />
 
+    <im.vector.app.core.ui.views.BottomSheetActionButton
+        android:id="@+id/callControlsTransfer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/call_transfer_title"
+        app:leftIcon="@drawable/ic_call_transfer"
+        app:tint="?attr/riotx_text_primary"
+        tools:actionDescription="" />
+
 </LinearLayout>
