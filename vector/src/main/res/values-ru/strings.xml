@@ -198,7 +198,7 @@
     <string name="yesterday">Вчера</string>
     <string name="today">Сегодня</string>
     <!-- room info dialog Screen -->
-    <string name="room_info_room_name">Название Комнаты</string>
+    <string name="room_info_room_name">Название комнаты</string>
     <string name="room_info_room_topic">Тема комнаты</string>
     <!-- call string -->
     <string name="call_connected">Вызов соединён</string>
@@ -416,7 +416,7 @@
     <string name="settings_devices_list">Сессии</string>
     <string name="devices_details_dialog_title">Информация о сессии</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_name_title">Общеизвестное имя</string>
+    <string name="devices_details_name_title">Публичное имя</string>
     <string name="devices_details_device_name">Обновить публичное имя</string>
     <string name="devices_details_last_seen_title">Последнее подключение</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
@@ -1295,7 +1295,7 @@
     <string name="create_room_title">Новая комната</string>
     <string name="create_room_action_create">СОЗДАТЬ</string>
     <string name="create_room_name_hint">Имя</string>
-    <string name="create_room_public_title">Публичные</string>
+    <string name="create_room_public_title">Публичная</string>
     <string name="create_room_public_description">Любой сможет присоединиться к этой комнате</string>
     <string name="create_room_directory_title">Каталог номеров</string>
     <string name="create_room_directory_description">Опубликовать эту комнату в каталоге номеров</string>
@@ -1612,7 +1612,7 @@
     <string name="settings">Настройки</string>
     <string name="devices_current_device">Текущая сессия</string>
     <string name="devices_other_devices">Другие сессии</string>
-    <string name="create_room_encryption_title">Включено шифрование</string>
+    <string name="create_room_encryption_title">Включить шифрование</string>
     <string name="verification_conclusion_warning">Недоверенный вход</string>
     <string name="room_profile_section_more_uploads">Вложения</string>
     <string name="cross_signing_verify_by_emoji">Интерактивная проверка со смайлами</string>
@@ -2300,7 +2300,7 @@
     <string name="room_list_quick_actions_low_priority_add">Добавить к низкому приоритету</string>
     <string name="attachment_type_dialog_title">Добавить изображение из</string>
     <string name="create_room_topic_hint">Тема</string>
-    <string name="create_room_name_section">Название Комнаты</string>
+    <string name="create_room_name_section">Название комнаты</string>
     <string name="settings_discovery_consent_notice_on">Вы дали свое согласие на отправку электронных писем и телефонных номеров на этот сервер идентификации для обнаружения других пользователей из ваших контактов.</string>
     <string name="add_by_qr_code">Добавить по QR-коду</string>
     <string name="user_directory_search_hint">Поиск по имени или идентификатору</string>
