@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.content.Context
 import android.text.TextUtils
 import android.text.method.MovementMethod
+import android.widget.LinearLayout
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
@@ -59,7 +60,11 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     private val previewUrlViewUpdater = PreviewUrlViewUpdater()
 
     override fun bind(holder: Holder) {
+        // Revert potential MATCH_PARENT setting for url preview, before binding previewUrlRetriever
+        //holder.messageLayout.layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
+
         // Preview URL
+        previewUrlViewUpdater.holder = holder
         previewUrlViewUpdater.previewUrlView = holder.previewUrlView
         previewUrlViewUpdater.imageContentRenderer = imageContentRenderer
         previewUrlRetriever?.addListener(attributes.informationData.eventId, previewUrlViewUpdater)
@@ -109,17 +114,43 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     override fun getViewType() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
+        val messageLayout by bind<LinearLayout>(R.id.messageTextLayout) // TODO match_parent if url preview, else wrap_content
         val messageView by bind<FooteredTextView>(R.id.messageTextView)
         val previewUrlView by bind<PreviewUrlView>(R.id.messageUrlPreview)
     }
 
     inner class PreviewUrlViewUpdater : PreviewUrlRetriever.PreviewUrlRetrieverListener {
         var previewUrlView: PreviewUrlView? = null
+        var holder: Holder? = null
         var imageContentRenderer: ImageContentRenderer? = null
 
         override fun onStateUpdated(state: PreviewUrlUiState) {
             val safeImageContentRenderer = imageContentRenderer ?: return
             previewUrlView?.render(state, safeImageContentRenderer)
+
+            // Don't reserve footer space in message view, but preview view | TODO
+            /*
+            previewUrlView?.footerWidth = holder?.messageView?.footerWidth ?: 0
+            previewUrlView?.footerHeight = holder?.messageView?.footerHeight ?: 0
+            holder?.messageView?.footerWidth = 0
+            holder?.messageView?.footerHeight = 0
+             */
+            // Reserve more space for URL previews
+            //holder?.messageLayout?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
+            // Also increase width for the viewStubContainer, as set in AbsMessageItem (using getViewStubMinimumWidth)
+            // We can use an unrealistic high number here, because we reduce bubble width by margins
+            // TODO dis not working reliably...
+            /*
+            holder?.viewStubContainer?.minimumWidth = 1000000
+            holder?.viewStubContainer?.parent?.requestLayout()
+            holder?.viewStubContainer?.forceLayout()
+            holder?.viewStubContainer?.requestLayout()
+            holder?.messageLayout?.forceLayout()
+            holder?.messageLayout?.requestLayout()
+            holder?.messageView?.forceLayout()
+            holder?.previewUrlView?.forceLayout()
+             */
+            //holder?.viewStubContainer?.layoutParams = holder?.viewStubContainer?.layoutParams
         }
     }
     companion object {

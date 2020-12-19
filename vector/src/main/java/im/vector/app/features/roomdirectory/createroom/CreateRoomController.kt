@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 class CreateRoomController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val roomAliasErrorFormatter: RoomAliasErrorFormatter
+        private val roomAliasErrorFormatter: RoomAliasErrorFormatter,
         private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<CreateRoomViewState>() {
 

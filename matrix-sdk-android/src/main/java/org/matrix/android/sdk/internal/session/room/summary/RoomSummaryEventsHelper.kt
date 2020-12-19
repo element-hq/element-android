@@ -36,7 +36,7 @@ internal object RoomSummaryEventsHelper {
     // SC addition
     private val previewFiltersScAll = TimelineEventFilters(
             filterTypes = true,
-            allowedTypes = RoomSummaryConstants.PREVIEWABLE_TYPES_ALL,
+            allowedTypes = RoomSummaryConstants.PREVIEWABLE_TYPES_ALL.map { EventTypeFilter(eventType = it, stateKey = null) },
             filterUseless = true,
             filterRedacted = false,
             filterEdits = true
@@ -45,7 +45,7 @@ internal object RoomSummaryEventsHelper {
     // SC addition
     private val previewFiltersScOriginalContent = TimelineEventFilters(
             filterTypes = true,
-            allowedTypes = RoomSummaryConstants.PREVIEWABLE_ORIGINAL_CONTENT_TYPES,
+            allowedTypes = RoomSummaryConstants.PREVIEWABLE_ORIGINAL_CONTENT_TYPES.map { EventTypeFilter(eventType = it, stateKey = null) },
             filterUseless = true,
             filterRedacted = true,
             filterEdits = true

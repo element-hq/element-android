@@ -112,7 +112,7 @@ object ThemeUtils {
     fun isLightTheme(context: Context): Boolean {
         return when (getApplicationTheme(context)) {
             THEME_LIGHT_VALUE,
-            THEME_SC_LIGHT_VALUE,
+            THEME_SC_LIGHT_VALUE -> true
             else               -> false
         }
     }
@@ -138,7 +138,7 @@ object ThemeUtils {
         val currentTheme = this.currentLightTheme.get()
         return if (currentTheme == null) {
             val prefs = DefaultSharedPreferences.getInstance(context)
-            val themeFromPref = prefs.getString(APPLICATION_THEME_KEY, THEME_SC_LIGHT_VALUE) ?: THEME_SC_LIGHT_VALUE
+            var themeFromPref = prefs.getString(APPLICATION_THEME_KEY, THEME_SC_LIGHT_VALUE) ?: THEME_SC_LIGHT_VALUE
             if (themeFromPref == "status") {
                 // Migrate to light theme, which is the closest theme
                 themeFromPref = THEME_LIGHT_VALUE
@@ -162,7 +162,7 @@ object ThemeUtils {
         val currentTheme = this.currentDarkTheme.get()
         return if (currentTheme == null) {
             val prefs = DefaultSharedPreferences.getInstance(context)
-            val themeFromPref = prefs.getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_VALUE) ?: THEME_SC_DARK_VALUE
+            var themeFromPref = prefs.getString(APPLICATION_DARK_THEME_KEY, THEME_SC_DARK_VALUE) ?: THEME_SC_DARK_VALUE
             if (themeFromPref == "status") {
                 // Migrate to light theme, which is the closest theme
                 themeFromPref = THEME_LIGHT_VALUE
