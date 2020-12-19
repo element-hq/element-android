@@ -186,6 +186,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_UNIMPORTANT_COUNTER_BADGE = "SETTINGS_UNIMPORTANT_COUNTER_BADGE"
         private const val SETTINGS_SIMPLIFIED_MODE = "SETTINGS_SIMPLIFIED_MODE"
         private const val SETTINGS_LABS_ALLOW_MARK_UNREAD = "SETTINGS_LABS_ALLOW_MARK_UNREAD"
+        private const val SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY = "SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
@@ -799,6 +800,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun showUrlPreviews(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SHOW_URL_PREVIEW_KEY, true)
+    }
+
+    /**
+     * Tells if the user wants to see URL previews in encrypted rooms as well
+     *
+     * @return true if the user wants to see URL previews in encrypted rooms
+     */
+    fun allowUrlPreviewsInEncryptedRooms(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY, false)
     }
 
     /**

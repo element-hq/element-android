@@ -46,6 +46,8 @@
 
     <string name="labs_mark_rooms_unread">Chats als ungelesen markieren</string>
     <string name="labs_mark_rooms_unread_summary">Erlaube, Chats als ungelesen zu markieren. Andere Matrix-Clients unterstützen diese Funktionalität möglicherweise noch nicht.</string>
+    <string name="url_previews_in_encrypted_rooms">URL-Vorschau in verschlüsselten Chats</string>
+    <string name="url_previews_in_encrypted_rooms_summary">Dies offenbart in Nachrichten enthaltene URLs gegenüber dem Homeserver!</string>
 
     <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="bottom_action_all">Übersicht</string>

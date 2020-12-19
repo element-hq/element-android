@@ -1395,7 +1395,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (vectorPreferences.showUrlPreviews()) {
             withState { state ->
                 snapshot
-                        .takeIf { state.asyncRoomSummary.invoke()?.isEncrypted == false }
+                        .takeIf { state.asyncRoomSummary.invoke()?.isEncrypted == false || vectorPreferences.allowUrlPreviewsInEncryptedRooms() }
                         ?.forEach {
                             previewUrlRetriever.getPreviewUrl(it.root, viewModelScope)
                         }

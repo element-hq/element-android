@@ -46,6 +46,8 @@
 
     <string name="labs_mark_rooms_unread">Mark chats as unread</string>
     <string name="labs_mark_rooms_unread_summary">Allow to mark chats as unread. Other matrix clients might not support this functionality yet.</string>
+    <string name="url_previews_in_encrypted_rooms">URL previews in encrypted chats</string>
+    <string name="url_previews_in_encrypted_rooms_summary">This will leak URLs from your messages to your homeserver!</string>
 
     <string name="login_mobile_device_sc">SchildiChat Android</string>
     <string name="bottom_action_all">Overview</string>
