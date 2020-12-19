@@ -45,7 +45,7 @@
     <string name="resend">Saada uuesti</string>
     <string name="redact">Eemalda</string>
     <string name="quote">Tsiteeri</string>
-    <string name="download">Lae alla</string>
+    <string name="download">Laadi alla</string>
     <string name="share">Jaga</string>
     <string name="speak">Räägi</string>
     <string name="clear">Eemalda</string>
@@ -334,7 +334,7 @@
 \nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused.</string>
     <string name="permissions_action_not_performed_missing_permissions">Vabandust. Kuna vastavaid õigusi ei olnud, siis toimingut ei saanud teha</string>
     <string name="media_slider_saved">Salvestatud</string>
-    <string name="media_slider_saved_message">Kas salvestame allalaetud failide kausta\?</string>
+    <string name="media_slider_saved_message">Kas salvestame allalaaditud failide kausta\?</string>
     <string name="yes">JAH</string>
     <string name="no">EI</string>
     <string name="_continue">Jätka</string>
@@ -1413,7 +1413,7 @@
     <string name="network_error_please_check_and_retry">Võrguühenduse viga: palun kontrolli, kas võrguühendus on olemas ja proovi uuesti.</string>
     <string name="keys_backup_restoring_waiting_message">Taastan võtmed varundusest:</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Arvutan taastevõtit…</string>
-    <string name="keys_backup_restoring_downloading_backup_waiting_message">Laen alla krüptovõtmeid…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">Laadin alla krüptovõtmeid…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Impordin krüptovõtmeid…</string>
     <string name="keys_backup_recovery_code_error_decrypt">Selle taastevõtmega ei õnnestunud varundust dekrüptida: palun kontrolli, kas sa kasutad õiget taastevõtit.</string>
     <string name="keys_backup_restore_success_title">Varukoopiast taastatud %s!</string>
@@ -1535,8 +1535,8 @@
     <string name="send_file_step_sending_thumbnail">Saadan pisipilti (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_file">Krüptin faili…</string>
     <string name="send_file_step_sending_file">Saadan faili (%1$s / %2$s)</string>
-    <string name="downloading_file">Laen alla faili %1$s…</string>
-    <string name="downloaded_file">%1$s on alla laetud!</string>
+    <string name="downloading_file">Laadin alla faili %1$s…</string>
+    <string name="downloaded_file">%1$s on alla laaditud!</string>
     <string name="edited_suffix">(muudetud)</string>
     <string name="message_edits">Sõnumite muutmised</string>
     <string name="no_message_edits_found">Muutmisi ei leidunud</string>
@@ -1713,7 +1713,7 @@
     <string name="invite_users_to_room_failure">Meil ei õnnestunud neile kasutajatele kutset saata. Palun kontrolli, keda soovid kutsuda ning proovi uuesti.</string>
     <string name="choose_locale_current_locale_title">Hetkel kasutatav keel</string>
     <string name="choose_locale_other_locales_title">Muud saadaval olevad keeled</string>
-    <string name="choose_locale_loading_locales">Laen saadaval olevaid keeli…</string>
+    <string name="choose_locale_loading_locales">Laadin saadaval olevaid keeli…</string>
     <string name="open_terms_of">Ava %s kasutustingimused</string>
     <string name="disconnect_identity_server_dialog_content">Kas katkestame ühenduse isikutuvastusserveriga %s\?</string>
     <string name="identity_server_error_no_identity_server_configured">Palun esmalt seadista isikutuvastusserver.</string>
@@ -1952,7 +1952,7 @@
         <item quantity="one">Üks inimene</item>
         <item quantity="other">%1$d inimest</item>
     </plurals>
-    <string name="room_profile_section_more_uploads">Üleslaetud failid</string>
+    <string name="room_profile_section_more_uploads">Üleslaaditud failid</string>
     <string name="room_profile_section_more_leave">Lahku jututoast</string>
     <string name="room_profile_leaving_room">Lahkun jututoast…</string>
     <string name="room_member_power_level_admins">Haldajad</string>
