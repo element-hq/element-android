@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Url previews sometimes attached to wrong message (#2561)
 
 Translations 🗣:
  -
