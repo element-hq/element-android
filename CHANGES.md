@@ -2,7 +2,7 @@ Changes in Element 1.0.14 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Enable url previews for notices (#2562)
 
 Improvements 🙌:
  -

@@ -512,6 +512,9 @@ class MessageItemFactory @Inject constructor(
 
         return MessageTextItem_()
                 .leftGuideline(avatarSizeProvider.leftGuideline)
+                .previewUrlRetriever(callback?.getPreviewUrlRetriever())
+                .imageContentRenderer(imageContentRenderer)
+                .previewUrlCallback(callback)
                 .attributes(attributes)
                 .message(message)
                 .highlighted(highlight)
