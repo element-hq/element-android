@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.text.method.MovementMethod
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -60,7 +61,12 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         // Preview URL
         previewUrlViewUpdater.previewUrlView = holder.previewUrlView
         previewUrlViewUpdater.imageContentRenderer = imageContentRenderer
-        previewUrlRetriever?.addListener(attributes.informationData.eventId, previewUrlViewUpdater)
+        val safePreviewUrlRetriever = previewUrlRetriever
+        if (safePreviewUrlRetriever == null) {
+            holder.previewUrlView.isVisible = false
+        } else {
+            safePreviewUrlRetriever.addListener(attributes.informationData.eventId, previewUrlViewUpdater)
+        }
         holder.previewUrlView.delegate = previewUrlCallback
 
         if (useBigFont) {
@@ -106,7 +112,11 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         var imageContentRenderer: ImageContentRenderer? = null
 
         override fun onStateUpdated(state: PreviewUrlUiState) {
-            val safeImageContentRenderer = imageContentRenderer ?: return
+            val safeImageContentRenderer = imageContentRenderer
+            if (safeImageContentRenderer == null) {
+                previewUrlView?.isVisible = false
+                return
+            }
             previewUrlView?.render(state, safeImageContentRenderer)
         }
     }
