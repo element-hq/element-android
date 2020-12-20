@@ -1211,7 +1211,7 @@
     <string name="room_list_catchup_welcome_title">Willkommen zu Hause!</string>
     <string name="room_list_people_empty_title">Unterhaltungen</string>
     <string name="room_list_rooms_empty_title">Räume</string>
-    <string name="room_list_rooms_empty_body">Deine Räume werden hier angezeigt</string>
+    <string name="room_list_rooms_empty_body">Deine Räume werden hier angezeigt. Drück auf das + unten rechts, um bestehende zu durchstöbern oder neue zu eröffnen.</string>
     <string name="title_activity_emoji_reaction_picker">Reaktionen</string>
     <string name="reactions_agree">Zustimmen</string>
     <string name="reactions_like">Mag ich</string>
@@ -1255,7 +1255,7 @@
     <string name="sas_error_m_key_mismatch">Schlüssel-Ungleichheit</string>
     <string name="sas_error_m_user_error">Benutzer-Ungleichheit</string>
     <string name="room_list_catchup_welcome_body">Informiere dich hier über ungelesene Nachrichten</string>
-    <string name="room_list_people_empty_body">Deine direkten Konversationen werden hier angezeigt</string>
+    <string name="room_list_people_empty_body">Deine direkten Konversationen werden hier angezeigt. Drück auf das + unten rechts, um eine zu beginnen.</string>
     <string name="malformed_message">Fehlerhaftes Ereignis, kann nicht angezeigt werden</string>
     <string name="keys_backup_unable_to_get_trust_info">Beim Abrufen der Vertrauensinformationen ist ein Fehler aufgetreten</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Beim Abrufen der Schlüsselsicherungsdaten ist ein Fehler aufgetreten</string>
@@ -1705,7 +1705,7 @@
     <string name="command_description_rainbow_emote">Sendet das angegebene Emote in Regenbogenfarben</string>
     <string name="settings_category_timeline">Zeitleiste</string>
     <string name="settings_category_composer">Nachrichteneditor</string>
-    <string name="room_settings_enable_encryption">Aktivieren Ende-zu-Ende-Verschlüsselung</string>
+    <string name="room_settings_enable_encryption">Ende-zu-Ende-Verschlüsselung aktivieren…</string>
     <string name="room_settings_enable_encryption_warning">Einmal aktiviert kann die Verschlüsselung nicht rückgängig gemacht werden.</string>
     <string name="room_settings_enable_encryption_dialog_title">Verschlüsselung aktivieren\?</string>
     <string name="room_settings_enable_encryption_dialog_content">Nach der Aktivierung kann die Verschlüsselung für einen Raum nicht deaktiviert werden. In einem verschlüsselten Raum gesendete Nachrichten können vom Server nicht gesehen werden, nur von den Teilnehmenden des Raums. Durch die Verschlüsselung funktionieren viele Bots und Bridges möglicherweise nicht ordnungsgemäß.</string>
@@ -2265,4 +2265,12 @@
     <string name="user_directory_search_hint">Nach Name oder ID suchen</string>
     <string name="permissions_denied_add_contact">Gib die Erlaubnis, um auf die Kamera zu zugreifen.</string>
     <string name="permissions_denied_qr_code">Um den QR-Code zu scannen, muss der Zugriff auf die Kamera erlaubt werden.</string>
+    <string name="room_alias_published_alias_title">Veröffentlichte Adressen</string>
+    <string name="room_alias_title">Raumadressen</string>
+    <string name="room_settings_alias_subtitle">Raumadressen und Sichtbarkeit im Raumverzeichnis ansehen und bearbeiten.</string>
+    <string name="room_settings_alias_title">Raumadresse</string>
+    <string name="room_settings_room_access_title">Raumzugang</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">Änderungen daran, wer die Chronik lesen kann, gellten nur für kommende Nachrichten in diesem Raum. Die Sichtbarkeit der bestehenden Chronik bleibt unverändert.</string>
+    <string name="action_unpublish">Zurückziehen</string>
+    <string name="action_add">Hinzufügen</string>
 </resources>
