@@ -6,7 +6,7 @@
         android:right="10dp"
         android:top="10dp">
         <shape android:shape="oval">
-            <solid android:color="@color/riotx_accent" />
+            <solid android:color="@android:color/transparent" />
         </shape>
     </item>
     <item android:drawable="?attr/selectableItemBackground" />
