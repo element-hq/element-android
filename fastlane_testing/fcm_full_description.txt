@@ -1,0 +1,1 @@
+SchildiChat test release, Google variant with proprietary push notifications

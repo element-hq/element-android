@@ -1,0 +1,1 @@
+SchildiChat test release, F-Droid variant without proprietary push notifications

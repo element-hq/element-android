@@ -80,5 +80,14 @@ sed -i "s|SchildiChat|SchildiChat.$name_add|g" "$build_gradle"
 sed -i "s|de.spiritcroc.riotx|de.spiritcroc.riotx.$package_add|g" "$build_gradle" `find "$src_dir" -name google-services.json`
 sed -i "s|SchildiChat|SchildiChat.$name_add|g" `find "$fastlane_dir/metadata/android" -name "title.txt"`
 
+
+if [ "$package_add" = "testing.foss" ]; then
+    find "$fastlane_dir" -name full_description.txt -exec cp "$fastlane_dir/../fastlane_testing/foss_full_description.txt" '{}' \;
+    find "$fastlane_dir" -name short_description.txt -exec cp "$fastlane_dir/../fastlane_testing/foss_short_description.txt" '{}' \;
+elif [ "$package_add" = "testing.fcm" ]; then
+    find "$fastlane_dir" -name full_description.txt -exec cp "$fastlane_dir/../fastlane_testing/fcm_full_description.txt" '{}' \;
+    find "$fastlane_dir" -name short_description.txt -exec cp "$fastlane_dir/../fastlane_testing/fcm_short_description.txt" '{}' \;
+fi
+
 git add -A
 git commit -m "Switch to alternative $name_add ($package_add)"
