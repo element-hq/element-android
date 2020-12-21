@@ -2785,6 +2785,7 @@
     <string name="call_transfer_consult_first">Consult first</string>
     <string name="call_transfer_connect_action">Connect</string>
     <string name="call_transfer_title">Transfer</string>
+    <string name="call_transfer_failure">An error occured while transfering call</string>
 
 
 </resources>

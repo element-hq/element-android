@@ -16,7 +16,6 @@
 
 package im.vector.app.features.contactsbook
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -31,9 +30,6 @@ import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.createdirect.CreateDirectRoomActivity
-import im.vector.app.features.invite.InviteUsersToRoomActivity
-import im.vector.app.features.userdirectory.UserListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback

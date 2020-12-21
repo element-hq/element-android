@@ -17,7 +17,6 @@
 package im.vector.app.features.userdirectory
 
 import android.os.Parcelable
-import android.widget.Toolbar
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

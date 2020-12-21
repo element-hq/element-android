@@ -61,12 +61,12 @@ class UserListFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)
-        if(args.showToolbar) {
+        if (args.showToolbar) {
             userListTitle.text = args.title
             vectorBaseActivity.setSupportActionBar(userListToolbar)
             setupCloseView()
             userListToolbar.isVisible = true
-        }else{
+        } else {
             userListToolbar.isVisible = false
         }
         setupRecyclerView()
@@ -185,7 +185,7 @@ class UserListFragment @Inject constructor(
         }
     }
 
-    fun getCurrentState() = withState(viewModel){ it }
+    fun getCurrentState() = withState(viewModel) { it }
 
     override fun onInviteFriendClick() {
         viewModel.handle(UserListAction.ComputeMatrixToLinkForSharing)

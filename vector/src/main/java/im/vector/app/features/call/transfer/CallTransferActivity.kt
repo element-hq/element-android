@@ -44,6 +44,7 @@ import im.vector.app.features.userdirectory.UserListViewModel
 import im.vector.app.features.userdirectory.UserListViewState
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_call_transfer.*
+import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
 import javax.inject.Inject
 
 @Parcelize
@@ -82,6 +83,7 @@ class CallTransferActivity : VectorBaseActivity(), CallTransferViewModel.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        waitingView = waiting_view
         sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
         sharedActionViewModel
                 .observe()
@@ -111,9 +113,12 @@ class CallTransferActivity : VectorBaseActivity(), CallTransferViewModel.Factory
         callTransferViewModel.observeViewEvents {
             when (it) {
                 is CallTransferViewEvents.Dismiss -> finish()
+                CallTransferViewEvents.Loading    -> showWaitingView()
+                is CallTransferViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
             }
         }
         configureToolbar(callTransferToolbar)
+        callTransferToolbar.title = getString(R.string.call_transfer_title)
         setupConnectAction()
     }
 
@@ -150,7 +155,7 @@ class CallTransferActivity : VectorBaseActivity(), CallTransferViewModel.Factory
     }
 
     companion object {
-        
+
         fun newIntent(context: Context, callId: String): Intent {
             return Intent(context, CallTransferActivity::class.java).also {
                 it.putExtra(MvRx.KEY_ARG, CallTransferArgs(callId))

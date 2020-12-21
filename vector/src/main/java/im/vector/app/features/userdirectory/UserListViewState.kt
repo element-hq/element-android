@@ -49,7 +49,6 @@ data class UserListViewState(
                     }
                 }
     }
-    
-    fun showInviteActions() = showInviteActions && pendingSelections.isEmpty()
 
+    fun showInviteActions() = showInviteActions && pendingSelections.isEmpty()
 }

@@ -17,7 +17,10 @@
 package im.vector.app.features.call.transfer
 
 import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.features.roommemberprofile.RoomMemberProfileViewEvents
 
 sealed class CallTransferViewEvents : VectorViewEvents {
     object Dismiss : CallTransferViewEvents()
+    object Loading: CallTransferViewEvents()
+    object FailToTransfer : CallTransferViewEvents()
 }
