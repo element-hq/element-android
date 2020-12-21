@@ -316,7 +316,7 @@
     <string name="ssl_could_not_verify">Не вдалося перевірити сертифікат сервера.</string>
     <string name="ssl_cert_not_trust">Це може означати, що хтось зі злими намірами намагається перехопити ваш трафік або ваш телефон не довіряє сертифікату, наданому віддаленим сервером.</string>
     <string name="ssl_cert_new_account_expl">Якщо адміністратор сервера сказав цього чекати, переконайтесь, що відбиток нижче збігається з відбитком, наданим ним.</string>
-    <string name="ssl_unexpected_existing_expl">Сертифікат почав відрізнятися від того, якому довіряв ваш телефон. Це ДУЖЕ НЕЗВИЧАЙНО. Наполегливо радимо НЕ ПРИЙМАТИ цей новий сертифікат.</string>
+    <string name="ssl_unexpected_existing_expl">Сертифікат почав відрізнятися від того, якому довіряв ваш телефон. Це ДУЖЕ НЕЗВИЧНО. Наполегливо радимо НЕ ПРИЙМАТИ цей новий сертифікат.</string>
     <string name="ssl_expected_existing_expl">Сертифікат змінився з довіреного на недовірений. Сервер міг оновити свій сертифікат. Зв\'яжіться з адміністратором сервера, щоб отримати дійсний відбиток.</string>
     <string name="ssl_only_accept">Приймайте сертифікат лише у випадку збігу відбитку вище з відбитком, оприлюдненим адміністратором сервера.</string>
     <!-- Room Details -->
@@ -1139,4 +1139,20 @@
     <string name="action_add">Додати</string>
     <string name="audio_video_meeting_description">Наради використовують політику безпеки та дозволів Jitsi. Усі люди, які зараз перебувають у кімнаті, побачать запрошення приєднатися під час вашої зустрічі.</string>
     <string name="start_chatting">Почати спілкування</string>
+    <string name="labs_show_unread_notifications_as_tab">Додати спеціальну вкладку для непрочитаних сповіщень на головному екрані.</string>
+    <string name="settings_labs_show_complete_history_in_encrypted_room">Показувати повну історію зашифрованих кімнат</string>
+    <string name="settings_account_data">Дані облікового запису</string>
+    <string name="settings_dev_tools">Інструменти розробника</string>
+    <string name="settings_security_prevent_screenshots_title">Запобігати знімкам екрана застосунку</string>
+    <string name="upgrade_security">Доступне оновлення шифрування</string>
+    <string name="complete_security">Довершити налаштування безпеки</string>
+    <string name="login_server_other_title">Інше</string>
+    <string name="login_server_modular_learn_more">Дізнатись більше</string>
+    <string name="room_profile_section_security">Безпека</string>
+    <string name="settings_security_and_privacy">Безпека та приватність</string>
+    <string name="element_disclaimer_content">Ми раді повідомити, що змінили назву! Ваш застосунок оновлено й ви ввійшли у свій обліковий запис.</string>
+    <string name="login_reset_password_cancel_confirmation_content">Зміну параля ще не завершено.
+\n
+\nЗупинити змінювання пароля\?</string>
+    <string name="room_settings_save_success">Ви успішно змінили налаштування кімнати</string>
 </resources>
