@@ -9,7 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
 - Fix Canvas: trying to draw too large bitmap (#1951)
- - Url previews sometimes attached to wrong message (#2561)
+- Url previews sometimes attached to wrong message (#2561)
 
 Translations 🗣:
  -
