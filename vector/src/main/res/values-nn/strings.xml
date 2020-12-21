@@ -93,7 +93,7 @@
     <string name="no_room_placeholder">Ingen rom</string>
     <string name="no_public_room_placeholder">Ingen offentelege rom er tilgjengelege</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">Ein brukar</item>
+        <item quantity="one">%d brukar</item>
         <item quantity="other">%d brukarar</item>
     </plurals>
     <string name="groups_invite_header">Inviter</string>
@@ -204,7 +204,7 @@
     <string name="read_receipts_list">Les kvitteringsliste</string>
     <string name="groups_list">Gruppeliste</string>
     <plurals name="membership_changes">
-        <item quantity="one">1 endring i medlemskap</item>
+        <item quantity="one">%d endring i medlemskap</item>
         <item quantity="other">%d endringar i medlemskap</item>
     </plurals>
     <string name="compression_options">Send som</string>
@@ -277,11 +277,11 @@
     <string name="room_creation_title">Ny samtale</string>
     <string name="room_creation_add_member">Legg til medlem</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 aktiv medlem</item>
+        <item quantity="one">%d aktiv medlem</item>
         <item quantity="other">%d aktive medlem</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">1 medlem</item>
+        <item quantity="one">%d medlem</item>
         <item quantity="other">%d medlem</item>
     </plurals>
     <string name="room_title_one_member">1 medlem</string>
@@ -296,7 +296,7 @@
     <string name="room_participants_ago">%1$s %2$s sidan</string>
     <string name="room_participants_header_admin_tools">ADMINISTRATORVERKTY</string>
     <string name="room_participants_header_call">RØYSTSAMTALA</string>
-    <string name="room_participants_header_direct_chats">DIREKTESAMTALE</string>
+    <string name="room_participants_header_direct_chats">Folk</string>
     <string name="room_participants_header_devices">SESJONAR</string>
     <string name="room_participants_action_invite">Inviter</string>
     <string name="room_participants_action_leave">Forlat dette rommet</string>
@@ -340,7 +340,7 @@
     <string name="room_message_file_not_found">Fila vart ikkje funne</string>
     <string name="room_do_not_have_permission_to_post">Du har ikkje løyve til å senda meldingar i dette rommet</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">1 ny melding</item>
+        <item quantity="one">%d ny melding</item>
         <item quantity="other">%d nye meldingar</item>
     </plurals>
     <string name="ssl_trust">Stol på</string>
@@ -387,7 +387,7 @@
     <string name="room_recents_join_room_prompt">Skriv inn ein rom-ID eller eit romalias</string>
     <string name="directory_search_results_title">Bla gjennom katalog</string>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 rom</item>
+        <item quantity="one">%d rom</item>
         <item quantity="other">%d rom</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
@@ -404,7 +404,7 @@
     <string name="room_settings_direct_chat">Direktesamtale</string>
     <string name="room_settings_leave_conversation">Forlat samtale</string>
     <string name="room_settings_forget">Gløym</string>
-    <string name="room_settings_add_homescreen_shortcut">Lag snarveg på heimskjermen</string>
+    <string name="room_settings_add_homescreen_shortcut">Legg til på heimskjermen</string>
     <string name="room_sliding_menu_messages">Meldingar</string>
     <string name="room_sliding_menu_settings">Innstillingar</string>
     <string name="room_sliding_menu_version">Versjon</string>
@@ -577,14 +577,14 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' er ikkje ei gangbar form for eit alias</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Du vil ikkje ha spesifisert ei hovudadresse for dette rommet.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Hovudadresse-åtvaringar</string>
-    <string name="room_settings_set_main_address">Set som Hovudadresse</string>
-    <string name="room_settings_unset_main_address">Fjern som Hovudadresse</string>
+    <string name="room_settings_set_main_address">Set som hovudadresse</string>
+    <string name="room_settings_unset_main_address">Fjern som hovudadresse</string>
     <string name="room_settings_copy_room_id">Kopier Rom-IDen</string>
     <string name="room_settings_copy_room_address">Kopier Romadressa</string>
     <string name="room_settings_addresses_e2e_enabled">Kryptering er skrudd på i dette rommet.</string>
     <string name="room_settings_addresses_e2e_disabled">Kryptering er skrudd av i dette rommet.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Skru kryptering på
-(åtvaring: kan ikkje skruast av att!)</string>
+\n(åtvaring: kan ikkje skruast av att!)</string>
     <string name="directory_title">Utval</string>
     <string name="settings_theme">Preg</string>
     <string name="failed_to_load_timeline_position">%s prøvde å lasta eit spesifikt punkt i rommet sin historikk men klarte ikkje å finna det.</string>
@@ -599,7 +599,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="encryption_information_sender_device_information">Avsendar-sesjonsinformasjon</string>
     <string name="encryption_information_device_name">Offentleg namn</string>
     <string name="encryption_information_name">Offentleg namn</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">Økt-ID</string>
     <string name="encryption_information_device_key">Sesjonsnøkkel</string>
     <string name="encryption_information_verification">Verifikasjon</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-fingeravtrykk</string>
@@ -640,15 +640,15 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="directory_server_all_rooms_on_server">Alle rom på %s-tenaren</string>
     <string name="lock_screen_hint">Skriv her…</string>
     <plurals name="notification_unread_notified_messages">
-        <item quantity="one">1 ulest varsla melding</item>
+        <item quantity="one">%d ulest varsla melding</item>
         <item quantity="other">%d uleste varsla meldingar</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="one">1 ulest varsla melding</item>
+        <item quantity="one">%d ulest varsla melding</item>
         <item quantity="other">%d uleste varsla meldingar</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="one">1 rom</item>
+        <item quantity="one">%d rom</item>
         <item quantity="other">%d rom</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s i %2$s</string>
@@ -666,8 +666,8 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="settings_labs_create_conference_with_jitsi">Lag konferansesamtalar med Jitsi</string>
     <string name="widget_delete_message_confirmation">Er du sikker på at du vil slette widgeten frå dette rommet\?</string>
     <plurals name="active_widgets">
-        <item quantity="one">1 verkande widget</item>
-        <item quantity="other">%d verkande widgetar</item>
+        <item quantity="one">%d widget på</item>
+        <item quantity="other">%d widgetar på</item>
     </plurals>
     <string name="widget_integration_unable_to_create">Klarte ikkje å laga widget.</string>
     <string name="widget_integration_failed_to_send_request">Fekk ikkje til å senda førespurnad.</string>
@@ -751,34 +751,34 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="room_tombstone_predecessor_link">Klikk her for å sjå gamle meldingar</string>
     <string name="system_alerts_header">Systemvarsel</string>
     <plurals name="format_time_s">
-        <item quantity="one">1s</item>
+        <item quantity="one">%ds</item>
         <item quantity="other">%ds</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1m</item>
+        <item quantity="one">%dm</item>
         <item quantity="other">%dm</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1t</item>
+        <item quantity="one">%dt</item>
         <item quantity="other">%dt</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1d</item>
+        <item quantity="one">%dd</item>
         <item quantity="other">%dd</item>
     </plurals>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_join_names_and">%1$s, og %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
     <plurals name="room_details_selected">
-        <item quantity="one">1 valt</item>
+        <item quantity="one">%d valt</item>
         <item quantity="other">%d valde</item>
     </plurals>
     <plurals name="group_members">
-        <item quantity="one">1 medlem</item>
-        <item quantity="other">%d medlemer</item>
+        <item quantity="one">%d medlem</item>
+        <item quantity="other">%d medlem</item>
     </plurals>
     <plurals name="group_rooms">
-        <item quantity="one">1 rom</item>
+        <item quantity="one">%d rom</item>
         <item quantity="other">%d rom</item>
     </plurals>
     <string name="resource_limit_contact_action">Kontakt Administratoren</string>
@@ -898,7 +898,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="settings_sdk_version">Matrix SDK versjon</string>
     <string name="settings_preferences">Innstillingar</string>
     <string name="settings_security_and_privacy">Sikkerheit og personvern</string>
-    <string name="preference_voice_and_video">Tale &amp; Video</string>
+    <string name="preference_voice_and_video">Tale og video</string>
     <string name="preference_root_help_about">Hjelp og om</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Vis skjulte hendelsar i historikken</string>
     <string name="labs_swipe_to_reply_in_timeline">Aktiver swipe-for-å-svare i historikken</string>
@@ -932,4 +932,32 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="settings_advanced_settings">Avanserte innstillingar</string>
     <string name="login_server_other_text">Avanserte og tilpassa innstillingar</string>
     <string name="settings_general_title">Generelt</string>
+    <string name="play_video">Spel av</string>
+    <string name="auth_msisdn_already_defined">Dette telefonnummeret er allereie definert.</string>
+    <string name="call_format_turn_hd_off">Skru HD av</string>
+    <string name="call_camera_front">Front</string>
+    <string name="sound_device_wireless_headset">Trådlaus hovudtelefon</string>
+    <string name="sound_device_speaker">Høgtalar</string>
+    <string name="call_select_sound_device">Vel eining for lyd</string>
+    <string name="call_failed_no_connection">Element-samtalen feila</string>
+    <string name="no_more_results">Ingen fleire resultat</string>
+    <string name="dialog_title_success">Suksess</string>
+    <string name="action_add">Legg til</string>
+    <string name="call_notification_hangup">Legg på</string>
+    <string name="call_notification_answer">Aksepter</string>
+    <string name="cannot_call_yourself_with_invite">Du kan ikkje starta ein talesamtale med deg sjølv, vent til at andre deltakarar aksepterer invitasjonen</string>
+    <string name="cannot_call_yourself">Du kan ikkje starta ein talesamtale med deg sjølv</string>
+    <string name="audio_video_meeting_description">Møter nyttar Jitsi sine sikkerheit- og tilgangsreglar. Alle medlemmar av rommet vil sjå ei invitasjonslenkje så lenge møtet pågår.</string>
+    <string name="audio_meeting">Start møte med lyd</string>
+    <string name="video_meeting">Start møte med video</string>
+    <string name="conference_call_in_progress">Ein konferansesamtale er i gong allereie!</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du har ikkje lov til å starta ein samtale</string>
+    <string name="no_permissions_to_start_webrtc_call">Du har ikkje lov til å starta ein samtale i dette rommet</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Du har ikkje lov til å starta ein konferansesamtale</string>
+    <string name="no_permissions_to_start_conf_call">Du har ikkje lov til å starta ein konferansesamtale i dette rommet</string>
+    <string name="start_chatting">Start samtale</string>
+    <string name="reset">Nullstill</string>
+    <string name="pause_video">Pause</string>
+    <string name="bottom_action_people_x">Folk</string>
+    <string name="fab_menu_create_chat">Folk</string>
 </resources>
