@@ -23,6 +23,9 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.MSC2858_SSO_REDIRECT_PATH
+import org.matrix.android.sdk.api.auth.SSO_REDIRECT_PATH
+import org.matrix.android.sdk.api.auth.SSO_REDIRECT_URL_PARAM
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
@@ -34,6 +37,7 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.NoOpCancellable
+import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.auth.data.LoginFlowResponse
 import org.matrix.android.sdk.internal.auth.data.RiotConfig
@@ -96,6 +100,28 @@ internal class DefaultAuthenticationService @Inject constructor(
             NoOpCancellable
         } else {
             getLoginFlow(homeServerConnectionConfig, callback)
+        }
+    }
+
+    override fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String? {
+        return pendingSessionData?.let { safePendingSessionData ->
+            val homeServerUrl = safePendingSessionData.homeServerConnectionConfig.homeServerUri.toString()
+
+            buildString {
+                append(homeServerUrl.trim { it == '/' })
+                if (providerId != null) {
+                    append(MSC2858_SSO_REDIRECT_PATH)
+                    append("/$providerId")
+                } else {
+                    append(SSO_REDIRECT_PATH)
+                }
+                // Set a redirect url we will intercept later
+                appendParamToUrl(SSO_REDIRECT_URL_PARAM, redirectUrl)
+                deviceId?.takeIf { it.isNotBlank() }?.let {
+                    // But https://github.com/matrix-org/synapse/issues/5755
+                    appendParamToUrl("device_id", it)
+                }
+            }
         }
     }
 

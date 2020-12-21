@@ -33,7 +33,6 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
-import im.vector.app.core.extensions.appendParamToUrl
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginWebBinding
 import im.vector.app.features.signout.soft.SoftLogoutAction
@@ -42,6 +41,7 @@ import im.vector.app.features.signout.soft.SoftLogoutViewModel
 import org.matrix.android.sdk.api.auth.LOGIN_FALLBACK_PATH
 import org.matrix.android.sdk.api.auth.REGISTER_FALLBACK_PATH
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
 import java.net.URLDecoder

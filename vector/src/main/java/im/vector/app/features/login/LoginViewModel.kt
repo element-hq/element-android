@@ -818,4 +818,8 @@ class LoginViewModel @AssistedInject constructor(
     fun getInitialHomeServerUrl(): String? {
         return loginConfig?.homeServerUrl
     }
+
+    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String? {
+        return authenticationService.getSsoUrl(redirectUrl, deviceId, providerId)
+    }
 }

@@ -42,6 +42,11 @@ interface AuthenticationService {
     fun getLoginFlowOfSession(sessionId: String, callback: MatrixCallback<LoginFlowResult>): Cancelable
 
     /**
+     * Get a SSO url
+     */
+    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String?
+
+    /**
      * Return a LoginWizard, to login to the homeserver. The login flow has to be retrieved first.
      */
     fun getLoginWizard(): LoginWizard
