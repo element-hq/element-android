@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.auth
+package org.matrix.android.sdk.internal.auth
 
 /**
  * Path to use when the client does not supported any or all login flows

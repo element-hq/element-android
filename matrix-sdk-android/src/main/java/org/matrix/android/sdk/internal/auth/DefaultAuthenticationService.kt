@@ -23,11 +23,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.AuthenticationService
-import org.matrix.android.sdk.api.auth.LOGIN_FALLBACK_PATH
-import org.matrix.android.sdk.api.auth.MSC2858_SSO_REDIRECT_PATH
-import org.matrix.android.sdk.api.auth.REGISTER_FALLBACK_PATH
-import org.matrix.android.sdk.api.auth.SSO_REDIRECT_PATH
-import org.matrix.android.sdk.api.auth.SSO_REDIRECT_URL_PARAM
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
