@@ -47,6 +47,11 @@ interface AuthenticationService {
     fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String?
 
     /**
+     * Get the sign in or sign up fallback URL
+     */
+    fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String?
+
+    /**
      * Return a LoginWizard, to login to the homeserver. The login flow has to be retrieved first.
      */
     fun getLoginWizard(): LoginWizard

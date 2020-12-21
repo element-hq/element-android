@@ -23,7 +23,9 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.LOGIN_FALLBACK_PATH
 import org.matrix.android.sdk.api.auth.MSC2858_SSO_REDIRECT_PATH
+import org.matrix.android.sdk.api.auth.REGISTER_FALLBACK_PATH
 import org.matrix.android.sdk.api.auth.SSO_REDIRECT_PATH
 import org.matrix.android.sdk.api.auth.SSO_REDIRECT_URL_PARAM
 import org.matrix.android.sdk.api.auth.data.Credentials
@@ -104,25 +106,49 @@ internal class DefaultAuthenticationService @Inject constructor(
     }
 
     override fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String? {
-        return pendingSessionData?.let { safePendingSessionData ->
-            val homeServerUrl = safePendingSessionData.homeServerConnectionConfig.homeServerUri.toString()
+        val homeServerUrlBase = getHomeServerUrlBase() ?: return null
 
-            buildString {
-                append(homeServerUrl.trim { it == '/' })
-                if (providerId != null) {
-                    append(MSC2858_SSO_REDIRECT_PATH)
-                    append("/$providerId")
-                } else {
-                    append(SSO_REDIRECT_PATH)
-                }
-                // Set a redirect url we will intercept later
-                appendParamToUrl(SSO_REDIRECT_URL_PARAM, redirectUrl)
+        return buildString {
+            append(homeServerUrlBase)
+            if (providerId != null) {
+                append(MSC2858_SSO_REDIRECT_PATH)
+                append("/$providerId")
+            } else {
+                append(SSO_REDIRECT_PATH)
+            }
+            // Set the redirect url
+            appendParamToUrl(SSO_REDIRECT_URL_PARAM, redirectUrl)
+            deviceId?.takeIf { it.isNotBlank() }?.let {
+                // But https://github.com/matrix-org/synapse/issues/5755
+                appendParamToUrl("device_id", it)
+            }
+        }
+    }
+
+    override fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {
+        val homeServerUrlBase = getHomeServerUrlBase() ?: return null
+
+        return buildString {
+            append(homeServerUrlBase)
+            if (forSignIn) {
+                append(LOGIN_FALLBACK_PATH)
                 deviceId?.takeIf { it.isNotBlank() }?.let {
                     // But https://github.com/matrix-org/synapse/issues/5755
                     appendParamToUrl("device_id", it)
                 }
+            } else {
+                // For sign up
+                append(REGISTER_FALLBACK_PATH)
             }
         }
+    }
+
+    private fun getHomeServerUrlBase(): String? {
+        return pendingSessionData
+                ?.homeServerConnectionConfig
+                ?.homeServerUri
+                ?.toString()
+                ?.trim { it == '/' }
     }
 
     override fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResult>): Cancelable {
