@@ -123,6 +123,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
     abstract class Holder(@IdRes stubId: Int) : BaseEventItem.BaseHolder(stubId) {
         val reactionsContainer by bind<ViewGroup>(R.id.reactionsContainer)
+        val informationBottom by bind<ViewGroup>(R.id.informationBottom)
         val e2EDecorationView by bind<ImageView>(R.id.messageE2EDecoration)
     }
 
