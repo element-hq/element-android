@@ -8,7 +8,7 @@
     tools:context=".features.crypto.keysbackup.setup.KeysBackupSetupStep1Fragment">
 
     <ImageView
-        android:id="@+id/keys_backup_setup_image"
+        android:id="@+id/keys_backup_setup_step1_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -33,7 +33,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/keys_backup_setup_step1_description"
-        app:layout_constraintTop_toBottomOf="@+id/keys_backup_setup_image"
+        app:layout_constraintTop_toBottomOf="@+id/keys_backup_setup_step1_image"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_description" />
 
     <TextView
-        android:id="@+id/keys_backup_setup_step1_advanced"
+        android:id="@+id/keys_backup_setup_step1_advanced_option_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -79,7 +79,7 @@
         tools:visibility="visible" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/keys_backup_setup_step1_manualExport"
+        android:id="@+id/keys_backup_setup_step1_manual_export_button"
         style="@style/VectorButtonStyleText"
         android:layout_margin="16dp"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -91,9 +91,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_advanced"
+        app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step1_advanced_option_text"
         app:layout_constraintVertical_bias="0"
         tools:visibility="visible" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,6 +30,7 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivityRoomDetailBinding
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.room.RequireActiveMembershipAction
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
@@ -37,17 +38,18 @@ import im.vector.app.features.room.RequireActiveMembershipViewModel
 import im.vector.app.features.room.RequireActiveMembershipViewState
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
-import kotlinx.android.synthetic.main.activity_room_detail.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+
 import javax.inject.Inject
 
 class RoomDetailActivity :
-        VectorBaseActivity(),
+        VectorBaseActivity<ActivityRoomDetailBinding>(),
         ToolbarConfigurable,
         RequireActiveMembershipViewModel.Factory,
         RoomWidgetPermissionViewModel.Factory {
 
-    override fun getLayoutRes() = R.layout.activity_room_detail
+    override fun getBinding(): ActivityRoomDetailBinding {
+        return ActivityRoomDetailBinding.inflate(layoutInflater)
+    }
 
     private lateinit var sharedActionViewModel: RoomDetailSharedActionViewModel
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
@@ -76,7 +78,7 @@ class RoomDetailActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        waitingView = waiting_view
+        waitingView = views.waitingView.waitingView
         val roomDetailArgs: RoomDetailArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
             RoomDetailArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
         } else {
@@ -106,7 +108,7 @@ class RoomDetailActivity :
                 is RequireActiveMembershipViewEvents.RoomLeft -> handleRoomLeft(it)
             }
         }
-        drawerLayout.addDrawerListener(drawerListener)
+        views.drawerLayout.addDrawerListener(drawerListener)
     }
 
     private fun handleRoomLeft(roomLeft: RequireActiveMembershipViewEvents.RoomLeft) {
@@ -117,7 +119,7 @@ class RoomDetailActivity :
     }
 
     private fun switchToRoom(switchToRoom: RoomDetailSharedAction.SwitchToRoom) {
-        drawerLayout.closeDrawer(GravityCompat.START)
+        views.drawerLayout.closeDrawer(GravityCompat.START)
         // Do not replace the Fragment if it's the same roomId
         if (currentRoomId != switchToRoom.roomId) {
             currentRoomId = switchToRoom.roomId
@@ -127,7 +129,7 @@ class RoomDetailActivity :
     }
 
     override fun onDestroy() {
-        drawerLayout.removeDrawerListener(drawerListener)
+        views.drawerLayout.removeDrawerListener(drawerListener)
         super.onDestroy()
     }
 
@@ -139,7 +141,7 @@ class RoomDetailActivity :
         override fun onDrawerStateChanged(newState: Int) {
             hideKeyboard()
 
-            if (!drawerLayout.isDrawerOpen(GravityCompat.START) && newState == DrawerLayout.STATE_DRAGGING) {
+            if (!views.drawerLayout.isDrawerOpen(GravityCompat.START) && newState == DrawerLayout.STATE_DRAGGING) {
                 // User is starting to open the drawer, scroll the list to top
                 scrollBreadcrumbsToTop()
             }
@@ -152,8 +154,8 @@ class RoomDetailActivity :
     }
 
     override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
+        if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }

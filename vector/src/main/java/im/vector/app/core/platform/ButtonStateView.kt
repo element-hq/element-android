@@ -18,14 +18,13 @@ package im.vector.app.core.platform
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import im.vector.app.R
-import kotlinx.android.synthetic.main.view_button_state.view.*
+import im.vector.app.databinding.ViewButtonStateBinding
 
 class ButtonStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : FrameLayout(context, attrs, defStyle) {
@@ -47,11 +46,15 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
     // Big or Flat button
     var button: Button
 
+    private val views: ViewButtonStateBinding
+
     init {
-        View.inflate(context, R.layout.view_button_state, this)
+        inflate(context, R.layout.view_button_state, this)
+        views = ViewButtonStateBinding.bind(this)
+
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
-        buttonStateRetry.setOnClickListener {
+        views.buttonStateRetry.setOnClickListener {
             callback?.onRetryClicked()
         }
 
@@ -63,15 +66,15 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
                 .apply {
                     try {
                         if (getBoolean(R.styleable.ButtonStateView_bsv_use_flat_button, true)) {
-                            button = buttonStateButtonFlat
-                            buttonStateButtonBig.isVisible = false
+                            button = views.buttonStateButtonFlat
+                            views.buttonStateButtonBig.isVisible = false
                         } else {
-                            button = buttonStateButtonBig
-                            buttonStateButtonFlat.isVisible = false
+                            button = views.buttonStateButtonBig
+                            views.buttonStateButtonFlat.isVisible = false
                         }
 
                         button.text = getString(R.styleable.ButtonStateView_bsv_button_text)
-                        buttonStateLoaded.setImageDrawable(getDrawable(R.styleable.ButtonStateView_bsv_loaded_image_src))
+                        views.buttonStateLoaded.setImageDrawable(getDrawable(R.styleable.ButtonStateView_bsv_loaded_image_src))
                     } finally {
                         recycle()
                     }
@@ -90,8 +93,8 @@ class ButtonStateView @JvmOverloads constructor(context: Context, attrs: Attribu
             button.isInvisible = true
         }
 
-        buttonStateLoading.isVisible = newState == State.Loading
-        buttonStateLoaded.isVisible = newState == State.Loaded
-        buttonStateRetry.isVisible = newState == State.Error
+        views.buttonStateLoading.isVisible = newState == State.Loading
+        views.buttonStateLoaded.isVisible = newState == State.Loaded
+        views.buttonStateRetry.isVisible = newState == State.Error
     }
 }

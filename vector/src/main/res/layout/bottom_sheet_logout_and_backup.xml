@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_layout"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?riotx_bottom_sheet_background"
@@ -32,7 +32,7 @@
         tools:text="@string/sign_out_bottom_sheet_warning_no_backup" />
 
     <LinearLayout
-        android:id="@+id/bottom_sheet_signout_backingup_status_group"
+        android:id="@+id/backingUpStatusGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
@@ -44,7 +44,7 @@
         tools:visibility="visible">
 
         <ImageView
-            android:id="@+id/bottom_sheet_signout_icon"
+            android:id="@+id/backupCompleteImage"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:visibility="gone"
@@ -52,7 +52,7 @@
             tools:visibility="visible" />
 
         <ProgressBar
-            android:id="@+id/bottom_sheet_signout_icon_progress_bar"
+            android:id="@+id/backupProgress"
             style="?android:attr/progressBarStyle"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -60,7 +60,7 @@
             tools:visibility="gone" />
 
         <TextView
-            android:id="@+id/bottom_sheet_backup_status_text"
+            android:id="@+id/backupStatusText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -85,45 +85,54 @@
         android:id="@+id/setupRecoveryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:actionTitle="@string/secure_backup_setup"
         app:iconTint="?riotx_text_primary"
         app:leftIcon="@drawable/ic_secure_backup"
-        app:textColor="?riotx_text_secondary" />
-
+        app:textColor="?riotx_text_secondary"
+        tools:visibility="visible" />
 
     <im.vector.app.features.workers.signout.SignOutBottomSheetActionButton
         android:id="@+id/setupMegolmBackupButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:actionTitle="@string/keys_backup_setup"
         app:iconTint="?riotx_text_primary"
         app:leftIcon="@drawable/backup_keys"
-        app:textColor="?riotx_text_secondary" />
+        app:textColor="?riotx_text_secondary"
+        tools:visibility="visible" />
 
     <im.vector.app.features.workers.signout.SignOutBottomSheetActionButton
         android:id="@+id/exportManuallyButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:actionTitle="@string/keys_backup_setup_step1_manual_export"
         app:iconTint="?riotx_text_primary"
         app:leftIcon="@drawable/ic_download"
-        app:textColor="?riotx_text_secondary" />
+        app:textColor="?riotx_text_secondary"
+        tools:visibility="visible" />
 
     <im.vector.app.features.workers.signout.SignOutBottomSheetActionButton
         android:id="@+id/exitAnywayButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:actionTitle="@string/sign_out_bottom_sheet_dont_want_secure_messages"
         app:iconTint="@color/riotx_destructive_accent"
         app:leftIcon="@drawable/ic_material_leave"
-        app:textColor="@color/riotx_destructive_accent" />
+        app:textColor="@color/riotx_destructive_accent"
+        tools:visibility="visible" />
 
     <im.vector.app.features.workers.signout.SignOutBottomSheetActionButton
         android:id="@+id/signOutButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:actionTitle="@string/action_sign_out"
         app:iconTint="@color/riotx_notice"
         app:leftIcon="@drawable/ic_material_exit_to_app"
-        app:textColor="@color/riotx_notice" />
+        app:textColor="@color/riotx_notice"
+        tools:visibility="visible" />
 </LinearLayout>

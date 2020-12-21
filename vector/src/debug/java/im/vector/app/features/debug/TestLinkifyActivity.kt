@@ -19,28 +19,18 @@ package im.vector.app.features.debug
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import butterknife.BindView
-import butterknife.ButterKnife
 import im.vector.app.R
+import im.vector.app.databinding.ActivityTestLinkifyBinding
+import im.vector.app.databinding.ItemTestLinkifyBinding
 
 class TestLinkifyActivity : AppCompatActivity() {
 
-    @BindView(R.id.test_linkify_content_view)
-    lateinit var scrollContent: LinearLayout
-
-    @BindView(R.id.test_linkify_coordinator)
-    lateinit var coordinatorLayout: CoordinatorLayout
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test_linkify)
-        ButterKnife.bind(this)
-
-        scrollContent.removeAllViews()
+        val views = ActivityTestLinkifyBinding.inflate(layoutInflater)
+        setContentView(views.root)
+        views.testLinkifyContentView.removeAllViews()
 
         listOf(
                 "https://www.html5rocks.com/en/tutorials/webrtc/basics/ |",
@@ -89,43 +79,42 @@ class TestLinkifyActivity : AppCompatActivity() {
         )
                 .forEach { textContent ->
                     val item = LayoutInflater.from(this)
-                            .inflate(R.layout.item_test_linkify, scrollContent, false)
-
-                    item.findViewById<TextView>(R.id.test_linkify_auto_text)
-                            ?.apply {
-                                text = textContent
-                                /* TODO Use BetterLinkMovementMethod when the other PR is merged
-                                movementMethod = MatrixLinkMovementMethod(object : MockMessageAdapterActionListener() {
-                                    override fun onURLClick(uri: Uri?) {
-                                        Snackbar.make(coordinatorLayout, "URI Clicked: $uri", Snackbar.LENGTH_LONG)
-                                                .setAction("open") {
-                                                    openUrlInExternalBrowser(this@TestLinkifyActivity, uri)
-                                                }
-                                                .show()
-                                    }
-                                })
-                                */
+                            .inflate(R.layout.item_test_linkify, views.testLinkifyContentView, false)
+                    val subViews = ItemTestLinkifyBinding.bind(item)
+                    subViews.testLinkifyAutoText.apply {
+                        text = textContent
+                        /* TODO Use BetterLinkMovementMethod when the other PR is merged
+                        movementMethod = MatrixLinkMovementMethod(object : MockMessageAdapterActionListener() {
+                            override fun onURLClick(uri: Uri?) {
+                                Snackbar.make(coordinatorLayout, "URI Clicked: $uri", Snackbar.LENGTH_LONG)
+                                        .setAction("open") {
+                                            openUrlInExternalBrowser(this@TestLinkifyActivity, uri)
+                                        }
+                                        .show()
                             }
+                        })
+                        */
+                    }
 
-                    item.findViewById<TextView>(R.id.test_linkify_custom_text)
-                            ?.apply {
-                                text = textContent
-                                /* TODO Use BetterLinkMovementMethod when the other PR is merged
-                                movementMethod = MatrixLinkMovementMethod(object : MockMessageAdapterActionListener() {
-                                    override fun onURLClick(uri: Uri?) {
-                                        Snackbar.make(coordinatorLayout, "URI Clicked: $uri", Snackbar.LENGTH_LONG)
-                                                .setAction("open") {
-                                                    openUrlInExternalBrowser(this@TestLinkifyActivity, uri)
-                                                }
-                                                .show()
-                                    }
-                                })
-                                */
-
-                                // TODO Call VectorLinkify.addLinks(text)
+                    subViews.testLinkifyCustomText.apply {
+                        text = textContent
+                        /* TODO Use BetterLinkMovementMethod when the other PR is merged
+                        movementMethod = MatrixLinkMovementMethod(object : MockMessageAdapterActionListener() {
+                            override fun onURLClick(uri: Uri?) {
+                                Snackbar.make(coordinatorLayout, "URI Clicked: $uri", Snackbar.LENGTH_LONG)
+                                        .setAction("open") {
+                                            openUrlInExternalBrowser(this@TestLinkifyActivity, uri)
+                                        }
+                                        .show()
                             }
+                        })
+                        */
 
-                    scrollContent.addView(item, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+                        // TODO Call VectorLinkify.addLinks(text)
+                    }
+
+                    views.testLinkifyContentView
+                            .addView(item, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
                 }
     }
 }

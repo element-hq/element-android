@@ -76,7 +76,7 @@
             tools:ignore="MissingPrefix" />
 
         <TextView
-            android:id="@+id/keys_backup_passphrase_help_with_link"
+            android:id="@+id/helperTextWithLink"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -97,7 +97,7 @@
             android:text="@string/keys_backup_unlock_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keys_backup_passphrase_help_with_link" />
+            app:layout_constraintTop_toBottomOf="@+id/helperTextWithLink" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

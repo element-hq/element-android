@@ -19,13 +19,14 @@ package im.vector.app.features.settings
 import android.app.Activity
 import android.content.Context
 import android.widget.CheckedTextView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.children
 import androidx.preference.Preference
 import im.vector.app.R
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.preference.VectorListPreference
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.databinding.DialogSelectTextSizeBinding
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
@@ -142,8 +143,8 @@ class VectorSettingsPreferencesFragment @Inject constructor(
     }
 
     private fun displayTextSizeSelection(activity: Activity) {
-        val inflater = activity.layoutInflater
-        val layout = inflater.inflate(R.layout.dialog_select_text_size, null)
+        val layout = layoutInflater.inflate(R.layout.dialog_select_text_size, null)
+        val views = DialogSelectTextSizeBinding.bind(layout)
 
         val dialog = AlertDialog.Builder(activity)
                 .setTitle(R.string.font_size)
@@ -152,25 +153,19 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 .setNegativeButton(R.string.cancel, null)
                 .show()
 
-        val linearLayout = layout.findViewById<LinearLayout>(R.id.text_selection_group_view)
-
-        val childCount = linearLayout.childCount
-
         val index = FontScale.getFontScaleValue(activity).index
 
-        for (i in 0 until childCount) {
-            val v = linearLayout.getChildAt(i)
+        views.textSelectionGroupView.children
+                .filterIsInstance(CheckedTextView::class.java)
+                .forEachIndexed { i, v ->
+                    v.isChecked = i == index
 
-            if (v is CheckedTextView) {
-                v.isChecked = i == index
-
-                v.setOnClickListener {
-                    dialog.dismiss()
-                    FontScale.updateFontScale(activity, i)
-                    vectorConfiguration.applyToApplicationContext()
-                    activity.restart()
+                    v.setOnClickListener {
+                        dialog.dismiss()
+                        FontScale.updateFontScale(activity, i)
+                        vectorConfiguration.applyToApplicationContext()
+                        activity.restart()
+                    }
                 }
-            }
-        }
     }
 }

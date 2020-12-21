@@ -16,6 +16,8 @@
 
 package im.vector.app.features.createdirect
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.Toast
 import com.airbnb.mvrx.activityViewModel
 import com.google.zxing.Result
@@ -26,19 +28,22 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.databinding.FragmentQrCodeScannerBinding
 import im.vector.app.features.userdirectory.PendingInvitee
-import kotlinx.android.synthetic.main.fragment_qr_code_scanner.*
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
 
-class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragment(), ZXingScannerView.ResultHandler {
+class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragment<FragmentQrCodeScannerBinding>(), ZXingScannerView.ResultHandler {
 
     private val viewModel: CreateDirectRoomViewModel by activityViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_qr_code_scanner
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentQrCodeScannerBinding {
+        return FragmentQrCodeScannerBinding.inflate(inflater, container, false)
+    }
 
     private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted ->
         if (allGranted) {
@@ -48,14 +53,14 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
 
     private fun startCamera() {
         // Start camera on resume
-        scannerView.startCamera()
+        views.scannerView.startCamera()
     }
 
     override fun onResume() {
         super.onResume()
         view?.hideKeyboard()
         // Register ourselves as a handler for scan results.
-        scannerView.setResultHandler(this)
+        views.scannerView.setResultHandler(this)
         // Start camera on resume
         if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
             startCamera()
@@ -65,9 +70,9 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
     override fun onPause() {
         super.onPause()
         // Unregister ourselves as a handler for scan results.
-        scannerView.setResultHandler(null)
+        views.scannerView.setResultHandler(null)
         // Stop camera on pause
-        scannerView.stopCamera()
+        views.scannerView.stopCamera()
     }
 
     // Copied from https://github.com/markusfisch/BinaryEye/blob/

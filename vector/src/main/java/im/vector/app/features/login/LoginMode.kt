@@ -17,7 +17,7 @@
 package im.vector.app.features.login
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 
 sealed class LoginMode : Parcelable

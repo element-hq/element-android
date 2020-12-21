@@ -18,8 +18,11 @@ package im.vector.app.features.settings.threepids
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -33,9 +36,9 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
 import im.vector.app.core.platform.OnBackPressed
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
 
@@ -43,18 +46,20 @@ class ThreePidsSettingsFragment @Inject constructor(
         private val viewModelFactory: ThreePidsSettingsViewModel.Factory,
         private val epoxyController: ThreePidsSettingsController
 ) :
-        VectorBaseFragment(),
+        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         OnBackPressed,
         ThreePidsSettingsViewModel.Factory by viewModelFactory,
         ThreePidsSettingsController.InteractionListener {
 
     private val viewModel: ThreePidsSettingsViewModel by fragmentViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        genericRecyclerView.configureWith(epoxyController)
+        views.genericRecyclerView.configureWith(epoxyController)
         epoxyController.interactionListener = this
 
         viewModel.observeViewEvents {
@@ -72,14 +77,14 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
-        genericRecyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         epoxyController.interactionListener = null
+        super.onDestroyView()
     }
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_emails_and_phone_numbers_title)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_emails_and_phone_numbers_title)
     }
 
     override fun invalidate() = withState(viewModel) { state ->

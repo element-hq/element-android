@@ -16,46 +16,32 @@
 package im.vector.app.features.crypto.keysbackup.restore
 
 import android.os.Bundle
-import android.text.Editable
 import android.text.SpannableString
 import android.text.style.ClickableSpan
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.text.set
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import butterknife.OnClick
-import butterknife.OnTextChanged
-import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentKeysBackupRestoreFromPassphraseBinding
+
 import javax.inject.Inject
 
-class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBaseFragment() {
+class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupRestoreFromPassphraseBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_keys_backup_restore_from_passphrase
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupRestoreFromPassphraseBinding {
+        return FragmentKeysBackupRestoreFromPassphraseBinding.inflate(inflater, container, false)
+    }
 
     private lateinit var viewModel: KeysBackupRestoreFromPassphraseViewModel
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
 
-    @BindView(R.id.keys_backup_passphrase_enter_til)
-    lateinit var mPassphraseInputLayout: TextInputLayout
-
-    @BindView(R.id.keys_backup_passphrase_enter_edittext)
-    lateinit var mPassphraseTextEdit: EditText
-
-    @BindView(R.id.keys_backup_view_show_password)
-    lateinit var mPassphraseReveal: ImageView
-
-    @BindView(R.id.keys_backup_passphrase_help_with_link)
-    lateinit var helperTextWithLink: TextView
-
-    @OnClick(R.id.keys_backup_view_show_password)
-    fun toggleVisibilityMode() {
+    private fun toggleVisibilityMode() {
         viewModel.showPasswordMode.value = !(viewModel.showPasswordMode.value ?: false)
     }
 
@@ -66,24 +52,29 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
         sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
 
         viewModel.passphraseErrorText.observe(viewLifecycleOwner, Observer { newValue ->
-            mPassphraseInputLayout.error = newValue
+            views.keysBackupPassphraseEnterTil.error = newValue
         })
 
-        helperTextWithLink.text = spannableStringForHelperText()
+        views.helperTextWithLink.text = spannableStringForHelperText()
 
         viewModel.showPasswordMode.observe(viewLifecycleOwner, Observer {
             val shouldBeVisible = it ?: false
-            mPassphraseTextEdit.showPassword(shouldBeVisible)
-            mPassphraseReveal.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+            views.keysBackupPassphraseEnterEdittext.showPassword(shouldBeVisible)
+            views.keysBackupViewShowPassword.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
         })
 
-        mPassphraseTextEdit.setOnEditorActionListener { _, actionId, _ ->
+        views.keysBackupPassphraseEnterEdittext.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 onRestoreBackup()
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
         }
+
+        views.keysBackupViewShowPassword.setOnClickListener { toggleVisibilityMode() }
+        views.helperTextWithLink.setOnClickListener { onUseRecoveryKey() }
+        views.keysBackupRestoreWithPassphraseSubmit.setOnClickListener { onRestoreBackup() }
+        views.keysBackupPassphraseEnterEdittext.doOnTextChanged { text, _, _, _ -> onPassphraseTextEditChange(text) }
     }
 
     private fun spannableStringForHelperText(): SpannableString {
@@ -102,18 +93,15 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
         return spanString
     }
 
-    @OnTextChanged(R.id.keys_backup_passphrase_enter_edittext)
-    fun onPassphraseTextEditChange(s: Editable?) {
+    private fun onPassphraseTextEditChange(s: CharSequence?) {
         s?.toString()?.let { viewModel.updatePassphrase(it) }
     }
 
-    @OnClick(R.id.keys_backup_passphrase_help_with_link)
-    fun onUseRecoveryKey() {
+    private fun onUseRecoveryKey() {
         sharedViewModel.moveToRecoverWithKey()
     }
 
-    @OnClick(R.id.keys_backup_restore_with_passphrase_submit)
-    fun onRestoreBackup() {
+    private fun onRestoreBackup() {
         val value = viewModel.passphrase.value
         if (value.isNullOrBlank()) {
             viewModel.passphraseErrorText.value = getString(R.string.passphrase_empty_error_message)

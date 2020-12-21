@@ -18,7 +18,9 @@ package im.vector.app.features.matrixto
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -28,16 +30,16 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.databinding.BottomSheetMatrixToCardBinding
 import im.vector.app.features.home.AvatarRenderer
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.bottom_sheet_matrix_to_card.*
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
-class MatrixToBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class MatrixToBottomSheet :
+        VectorBaseBottomSheetDialogFragment<BottomSheetMatrixToCardBinding>() {
 
     @Parcelize
     data class MatrixToArgs(
@@ -55,7 +57,9 @@ class MatrixToBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
     private var interactionListener: InteractionListener? = null
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_matrix_to_card
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetMatrixToCardBinding {
+        return BottomSheetMatrixToCardBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel by fragmentViewModel(MatrixToBottomSheetViewModel::class)
 
@@ -67,19 +71,19 @@ class MatrixToBottomSheet : VectorBaseBottomSheetDialogFragment() {
         super.invalidate()
         when (val item = state.matrixItem) {
             Uninitialized -> {
-                matrixToCardContentLoading.isVisible = false
-                matrixToCardUserContentVisibility.isVisible = false
+                views.matrixToCardContentLoading.isVisible = false
+                views.matrixToCardUserContentVisibility.isVisible = false
             }
             is Loading -> {
-                matrixToCardContentLoading.isVisible = true
-                matrixToCardUserContentVisibility.isVisible = false
+                views.matrixToCardContentLoading.isVisible = true
+                views.matrixToCardUserContentVisibility.isVisible = false
             }
             is Success -> {
-                matrixToCardContentLoading.isVisible = false
-                matrixToCardUserContentVisibility.isVisible = true
-                matrixToCardNameText.setTextOrHide(item.invoke().displayName)
-                matrixToCardUserIdText.setTextOrHide(item.invoke().id)
-                avatarRenderer.render(item.invoke(), matrixToCardAvatar)
+                views.matrixToCardContentLoading.isVisible = false
+                views.matrixToCardUserContentVisibility.isVisible = true
+                views.matrixToCardNameText.setTextOrHide(item.invoke().displayName)
+                views.matrixToCardUserIdText.setTextOrHide(item.invoke().id)
+                avatarRenderer.render(item.invoke(), views.matrixToCardAvatar)
             }
             is Fail -> {
                 // TODO display some error copy?
@@ -89,29 +93,29 @@ class MatrixToBottomSheet : VectorBaseBottomSheetDialogFragment() {
 
         when (state.startChattingState) {
             Uninitialized -> {
-                matrixToCardButtonLoading.isVisible = false
-                matrixToCardSendMessageButton.isVisible = false
+                views.matrixToCardButtonLoading.isVisible = false
+                views.matrixToCardSendMessageButton.isVisible = false
             }
             is Success -> {
-                matrixToCardButtonLoading.isVisible = false
-                matrixToCardSendMessageButton.isVisible = true
+                views.matrixToCardButtonLoading.isVisible = false
+                views.matrixToCardSendMessageButton.isVisible = true
             }
             is Fail -> {
-                matrixToCardButtonLoading.isVisible = false
-                matrixToCardSendMessageButton.isVisible = true
+                views.matrixToCardButtonLoading.isVisible = false
+                views.matrixToCardSendMessageButton.isVisible = true
                 // TODO display some error copy?
                 dismiss()
             }
             is Loading -> {
-                matrixToCardButtonLoading.isVisible = true
-                matrixToCardSendMessageButton.isInvisible = true
+                views.matrixToCardButtonLoading.isVisible = true
+                views.matrixToCardSendMessageButton.isInvisible = true
             }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        matrixToCardSendMessageButton.debouncedClicks {
+        views.matrixToCardSendMessageButton.debouncedClicks {
             withState(viewModel) {
                 it.matrixItem.invoke()?.let { item ->
                     viewModel.handle(MatrixToAction.StartChattingWithUser(item))

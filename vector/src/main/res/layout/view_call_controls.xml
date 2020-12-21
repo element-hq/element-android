@@ -14,7 +14,7 @@
         tools:visibility="visible">
 
         <ImageView
-            android:id="@+id/iv_icr_accept_call"
+            android:id="@+id/ringingControlAccept"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@drawable/oval_positive"
@@ -27,7 +27,7 @@
             app:tint="@color/white" />
 
         <ImageView
-            android:id="@+id/iv_icr_end_call"
+            android:id="@+id/ringingControlDecline"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@drawable/oval_destructive"
@@ -42,7 +42,7 @@
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="iv_icr_end_call, iv_icr_accept_call"
+            app:constraint_referenced_ids="ringingControlDecline, ringingControlAccept"
             tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -73,7 +73,7 @@
             app:tint="?attr/riotx_text_primary" />
 
         <ImageView
-            android:id="@+id/iv_mute_toggle"
+            android:id="@+id/muteIcon"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@drawable/oval_positive"
@@ -101,7 +101,7 @@
             app:tint="@color/white" />
 
         <ImageView
-            android:id="@+id/iv_video_toggle"
+            android:id="@+id/videoToggleIcon"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@drawable/oval_positive"
@@ -131,7 +131,7 @@
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="iv_leftMiniControl, iv_mute_toggle, iv_end_call,iv_video_toggle,iv_more"
+            app:constraint_referenced_ids="iv_leftMiniControl, muteIcon, iv_end_call,videoToggleIcon,iv_more"
             tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

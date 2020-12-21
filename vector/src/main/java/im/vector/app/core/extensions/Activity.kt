@@ -23,15 +23,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import im.vector.app.core.platform.VectorBaseActivity
 
 fun ComponentActivity.registerStartForActivityResult(onResult: (ActivityResult) -> Unit): ActivityResultLauncher<Intent> {
     return registerForActivityResult(ActivityResultContracts.StartActivityForResult(), onResult)
 }
 
-fun VectorBaseActivity.addFragment(
+fun AppCompatActivity.addFragment(
         frameId: Int,
         fragment: Fragment,
         allowStateLoss: Boolean = false
@@ -39,7 +39,7 @@ fun VectorBaseActivity.addFragment(
     supportFragmentManager.commitTransaction(allowStateLoss) { add(frameId, fragment) }
 }
 
-fun <T : Fragment> VectorBaseActivity.addFragment(
+fun <T : Fragment> AppCompatActivity.addFragment(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -51,7 +51,7 @@ fun <T : Fragment> VectorBaseActivity.addFragment(
     }
 }
 
-fun VectorBaseActivity.replaceFragment(
+fun AppCompatActivity.replaceFragment(
         frameId: Int,
         fragment: Fragment,
         tag: String? = null,
@@ -60,7 +60,7 @@ fun VectorBaseActivity.replaceFragment(
     supportFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment, tag) }
 }
 
-fun <T : Fragment> VectorBaseActivity.replaceFragment(
+fun <T : Fragment> AppCompatActivity.replaceFragment(
         frameId: Int,
         fragmentClass: Class<T>,
         params: Parcelable? = null,
@@ -72,7 +72,7 @@ fun <T : Fragment> VectorBaseActivity.replaceFragment(
     }
 }
 
-fun VectorBaseActivity.addFragmentToBackstack(
+fun AppCompatActivity.addFragmentToBackstack(
         frameId: Int,
         fragment: Fragment,
         tag: String? = null,
@@ -81,19 +81,20 @@ fun VectorBaseActivity.addFragmentToBackstack(
     supportFragmentManager.commitTransaction(allowStateLoss) { replace(frameId, fragment).addToBackStack(tag) }
 }
 
-fun <T : Fragment> VectorBaseActivity.addFragmentToBackstack(frameId: Int,
-                                                             fragmentClass: Class<T>,
-                                                             params: Parcelable? = null,
-                                                             tag: String? = null,
-                                                             allowStateLoss: Boolean = false,
-                                                             option: ((FragmentTransaction) -> Unit)? = null) {
+fun <T : Fragment> AppCompatActivity.addFragmentToBackstack(
+        frameId: Int,
+        fragmentClass: Class<T>,
+        params: Parcelable? = null,
+        tag: String? = null,
+        allowStateLoss: Boolean = false,
+        option: ((FragmentTransaction) -> Unit)? = null) {
     supportFragmentManager.commitTransaction(allowStateLoss) {
         option?.invoke(this)
         replace(frameId, fragmentClass, params.toMvRxBundle(), tag).addToBackStack(tag)
     }
 }
 
-fun VectorBaseActivity.hideKeyboard() {
+fun AppCompatActivity.hideKeyboard() {
     currentFocus?.hideKeyboard()
 }
 

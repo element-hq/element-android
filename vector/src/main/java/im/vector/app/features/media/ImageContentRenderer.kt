@@ -40,7 +40,7 @@ import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.ui.model.Size
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.isLocalFile
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt

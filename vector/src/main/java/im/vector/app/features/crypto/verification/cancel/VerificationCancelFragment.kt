@@ -17,24 +17,29 @@
 package im.vector.app.features.crypto.verification.cancel
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
-import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
+
 import javax.inject.Inject
 
 class VerificationCancelFragment @Inject constructor(
         val controller: VerificationCancelController
-) : VectorBaseFragment(), VerificationCancelController.Listener {
+) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
+        VerificationCancelController.Listener {
 
     private val viewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_verification_child_fragment
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetVerificationChildFragmentBinding {
+        return BottomSheetVerificationChildFragmentBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,13 +47,13 @@ class VerificationCancelFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        bottomSheetVerificationRecyclerView.cleanup()
+        views.bottomSheetVerificationRecyclerView.cleanup()
         controller.listener = null
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
-        bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
+        views.bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
         controller.listener = this
     }
 

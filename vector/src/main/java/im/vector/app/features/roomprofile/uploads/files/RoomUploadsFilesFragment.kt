@@ -17,7 +17,9 @@
 package im.vector.app.features.roomprofile.uploads.files
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -30,37 +32,40 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentGenericStateViewRecyclerBinding
 import im.vector.app.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
-import kotlinx.android.synthetic.main.fragment_generic_state_view_recycler.*
+
 import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import javax.inject.Inject
 
 class RoomUploadsFilesFragment @Inject constructor(
         private val controller: UploadsFileController
-) : VectorBaseFragment(),
+) : VectorBaseFragment<FragmentGenericStateViewRecyclerBinding>(),
         UploadsFileController.Listener,
         StateView.EventCallback {
 
     private val uploadsViewModel by parentFragmentViewModel(RoomUploadsViewModel::class)
 
-    override fun getLayoutResId() = R.layout.fragment_generic_state_view_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericStateViewRecyclerBinding {
+        return FragmentGenericStateViewRecyclerBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        genericStateViewListStateView.contentView = genericStateViewListRecycler
-        genericStateViewListStateView.eventCallback = this
+        views.genericStateViewListStateView.contentView = views.genericStateViewListRecycler
+        views.genericStateViewListStateView.eventCallback = this
 
-        genericStateViewListRecycler.trackItemsVisibilityChange()
-        genericStateViewListRecycler.configureWith(controller, showDivider = true)
+        views.genericStateViewListRecycler.trackItemsVisibilityChange()
+        views.genericStateViewListRecycler.configureWith(controller, showDivider = true)
         controller.listener = this
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
-        genericStateViewListRecycler.cleanup()
+        views.genericStateViewListRecycler.cleanup()
         controller.listener = null
+        super.onDestroyView()
     }
 
     override fun onOpenClicked(uploadEvent: UploadEvent) {
@@ -88,17 +93,17 @@ class RoomUploadsFilesFragment @Inject constructor(
         if (state.fileEvents.isEmpty()) {
             when (state.asyncEventsRequest) {
                 is Loading -> {
-                    genericStateViewListStateView.state = StateView.State.Loading
+                    views.genericStateViewListStateView.state = StateView.State.Loading
                 }
                 is Fail    -> {
-                    genericStateViewListStateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
+                    views.genericStateViewListStateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
                 }
                 is Success -> {
                     if (state.hasMore) {
                         // We need to load more items
                         loadMore()
                     } else {
-                        genericStateViewListStateView.state = StateView.State.Empty(
+                        views.genericStateViewListStateView.state = StateView.State.Empty(
                                 title = getString(R.string.uploads_files_no_result),
                                 image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_file)
                         )
@@ -106,7 +111,7 @@ class RoomUploadsFilesFragment @Inject constructor(
                 }
             }
         } else {
-            genericStateViewListStateView.state = StateView.State.Content
+            views.genericStateViewListStateView.state = StateView.State.Content
             controller.setData(state)
         }
     }

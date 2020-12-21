@@ -16,7 +16,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/verificationRequestAvatar"
+            android:id="@+id/otherUserAvatarImageView"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
@@ -29,18 +29,18 @@
             tools:src="@tools:sample/avatars" />
 
         <ImageView
-            android:id="@+id/verificationRequestShield"
+            android:id="@+id/otherUserShield"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_shield_trusted"
-            app:layout_constraintCircle="@+id/verificationRequestAvatar"
+            app:layout_constraintCircle="@+id/otherUserAvatarImageView"
             app:layout_constraintCircleAngle="135"
             app:layout_constraintCircleRadius="16dp"
             tools:ignore="MissingConstraints" />
 
         <TextView
-            android:id="@+id/verificationRequestName"
+            android:id="@+id/otherUserNameText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -51,8 +51,8 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/verificationRequestAvatar"
-            app:layout_constraintTop_toTopOf="@+id/verificationRequestAvatar"
+            app:layout_constraintStart_toEndOf="@+id/otherUserAvatarImageView"
+            app:layout_constraintTop_toTopOf="@+id/otherUserAvatarImageView"
             tools:text="@string/verification_verify_user" />
 
         <FrameLayout
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/verificationRequestAvatar" />
+            app:layout_constraintTop_toBottomOf="@+id/otherUserAvatarImageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

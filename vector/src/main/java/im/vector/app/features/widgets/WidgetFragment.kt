@@ -21,9 +21,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -40,11 +42,11 @@ import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInExternalBrowser
+import im.vector.app.databinding.FragmentRoomWidgetBinding
 import im.vector.app.features.webview.WebViewEventListener
 import im.vector.app.features.widgets.webview.clearAfterWidget
 import im.vector.app.features.widgets.webview.setupForWidget
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_room_widget.*
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.terms.TermsService
 import timber.log.Timber
 import java.net.URISyntaxException
@@ -59,19 +61,24 @@ data class WidgetArgs(
         val urlParams: Map<String, String> = emptyMap()
 ) : Parcelable
 
-class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventListener, OnBackPressed {
+class WidgetFragment @Inject constructor() :
+        VectorBaseFragment<FragmentRoomWidgetBinding>(),
+        WebViewEventListener,
+        OnBackPressed {
 
     private val fragmentArgs: WidgetArgs by args()
     private val viewModel: WidgetViewModel by activityViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_room_widget
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomWidgetBinding {
+        return FragmentRoomWidgetBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        widgetWebView.setupForWidget(this)
+        views.widgetWebView.setupForWidget(this)
         if (fragmentArgs.kind.isAdmin()) {
-            viewModel.getPostAPIMediator().setWebView(widgetWebView)
+            viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
         }
         viewModel.observeViewEvents {
             Timber.v("Observed view events: $it")
@@ -101,16 +108,16 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         if (fragmentArgs.kind.isAdmin()) {
             viewModel.getPostAPIMediator().clearWebView()
         }
-        widgetWebView.clearAfterWidget()
+        views.widgetWebView.clearAfterWidget()
+        super.onDestroyView()
     }
 
     override fun onResume() {
         super.onResume()
-        widgetWebView?.let {
+        views.widgetWebView.let {
             it.resumeTimers()
             it.onResume()
         }
@@ -118,7 +125,7 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
 
     override fun onPause() {
         super.onPause()
-        widgetWebView?.let {
+        views.widgetWebView.let {
             it.pauseTimers()
             it.onPause()
         }
@@ -157,7 +164,7 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
                 return@withState true
             }
             R.id.action_refresh         -> if (state.formattedURL.complete) {
-                widgetWebView.reload()
+                views.widgetWebView.reload()
                 return@withState true
             }
             R.id.action_widget_open_ext -> if (state.formattedURL.complete) {
@@ -174,8 +181,8 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean = withState(viewModel) { state ->
         if (state.formattedURL.complete) {
-            if (widgetWebView.canGoBack()) {
-                widgetWebView.goBack()
+            if (views.widgetWebView.canGoBack()) {
+                views.widgetWebView.goBack()
                 return@withState true
             }
         }
@@ -187,37 +194,37 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
         when (state.formattedURL) {
             is Incomplete -> {
                 setStateError(null)
-                widgetWebView.isInvisible = true
-                widgetProgressBar.isIndeterminate = true
-                widgetProgressBar.isVisible = true
+                views.widgetWebView.isInvisible = true
+                views.widgetProgressBar.isIndeterminate = true
+                views.widgetProgressBar.isVisible = true
             }
             is Success    -> {
                 setStateError(null)
                 when (state.webviewLoadedUrl) {
                     Uninitialized -> {
-                        widgetWebView.isInvisible = true
+                        views.widgetWebView.isInvisible = true
                     }
                     is Loading    -> {
                         setStateError(null)
-                        widgetWebView.isInvisible = false
-                        widgetProgressBar.isIndeterminate = true
-                        widgetProgressBar.isVisible = true
+                        views.widgetWebView.isInvisible = false
+                        views.widgetProgressBar.isIndeterminate = true
+                        views.widgetProgressBar.isVisible = true
                     }
                     is Success    -> {
-                        widgetWebView.isInvisible = false
-                        widgetProgressBar.isVisible = false
+                        views.widgetWebView.isInvisible = false
+                        views.widgetProgressBar.isVisible = false
                         setStateError(null)
                     }
                     is Fail       -> {
-                        widgetProgressBar.isInvisible = true
+                        views.widgetProgressBar.isInvisible = true
                         setStateError(state.webviewLoadedUrl.error.message)
                     }
                 }
             }
             is Fail       -> {
                 // we need to show Error
-                widgetWebView.isInvisible = true
-                widgetProgressBar.isVisible = false
+                views.widgetWebView.isInvisible = true
+                views.widgetProgressBar.isVisible = false
                 setStateError(state.formattedURL.error.message)
             }
         }
@@ -273,19 +280,19 @@ class WidgetFragment @Inject constructor() : VectorBaseFragment(), WebViewEventL
     }
 
     private fun loadFormattedUrl(event: WidgetViewEvents.OnURLFormatted) {
-        widgetWebView.clearHistory()
-        widgetWebView.loadUrl(event.formattedURL)
+        views.widgetWebView.clearHistory()
+        views.widgetWebView.loadUrl(event.formattedURL)
     }
 
     private fun setStateError(message: String?) {
         if (message == null) {
-            widgetErrorLayout.isVisible = false
-            widgetErrorText.text = null
+            views.widgetErrorLayout.isVisible = false
+            views.widgetErrorText.text = null
         } else {
-            widgetProgressBar.isVisible = false
-            widgetErrorLayout.isVisible = true
-            widgetWebView.isInvisible = true
-            widgetErrorText.text = getString(R.string.room_widget_failed_to_load, message)
+            views.widgetProgressBar.isVisible = false
+            views.widgetErrorLayout.isVisible = true
+            views.widgetWebView.isInvisible = true
+            views.widgetErrorText.text = getString(R.string.room_widget_failed_to_load, message)
         }
     }
 

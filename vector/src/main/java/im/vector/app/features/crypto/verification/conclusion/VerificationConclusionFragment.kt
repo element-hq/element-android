@@ -17,23 +17,25 @@ package im.vector.app.features.crypto.verification.conclusion
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 class VerificationConclusionFragment @Inject constructor(
         val controller: VerificationConclusionController
-) : VectorBaseFragment(), VerificationConclusionController.Listener {
+) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
+        VerificationConclusionController.Listener {
 
     @Parcelize
     data class Args(
@@ -46,7 +48,9 @@ class VerificationConclusionFragment @Inject constructor(
 
     private val viewModel by fragmentViewModel(VerificationConclusionViewModel::class)
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_verification_child_fragment
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetVerificationChildFragmentBinding {
+        return BottomSheetVerificationChildFragmentBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,13 +59,13 @@ class VerificationConclusionFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        bottomSheetVerificationRecyclerView.cleanup()
+        views.bottomSheetVerificationRecyclerView.cleanup()
         controller.listener = null
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
-        bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
+        views.bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
         controller.listener = this
     }
 

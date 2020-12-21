@@ -23,6 +23,8 @@ import android.net.http.SslError
 import android.os.Build
 import android.os.Parcelable
 import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.webkit.SslErrorHandler
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -33,8 +35,8 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_login_captcha.*
+import im.vector.app.databinding.FragmentLoginCaptchaBinding
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
 import java.net.URLDecoder
@@ -51,9 +53,11 @@ data class LoginCaptchaFragmentArgument(
  */
 class LoginCaptchaFragment @Inject constructor(
         private val assetReader: AssetReader
-) : AbstractLoginFragment() {
+) : AbstractLoginFragment<FragmentLoginCaptchaBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_login_captcha
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginCaptchaBinding {
+        return FragmentLoginCaptchaBinding.inflate(inflater, container, false)
+    }
 
     private val params: LoginCaptchaFragmentArgument by args()
 
@@ -61,7 +65,7 @@ class LoginCaptchaFragment @Inject constructor(
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView(state: LoginViewState) {
-        loginCaptchaWevView.settings.javaScriptEnabled = true
+        views.loginCaptchaWevView.settings.javaScriptEnabled = true
 
         val reCaptchaPage = assetReader.readAssetFile("reCaptchaPage.html") ?: error("missing asset reCaptchaPage.html")
 
@@ -70,10 +74,10 @@ class LoginCaptchaFragment @Inject constructor(
         val encoding = "utf-8"
 
         val homeServerUrl = state.homeServerUrl ?: error("missing url of homeserver")
-        loginCaptchaWevView.loadDataWithBaseURL(homeServerUrl, html, mime, encoding, null)
-        loginCaptchaWevView.requestLayout()
+        views.loginCaptchaWevView.loadDataWithBaseURL(homeServerUrl, html, mime, encoding, null)
+        views.loginCaptchaWevView.requestLayout()
 
-        loginCaptchaWevView.webViewClient = object : WebViewClient() {
+        views.loginCaptchaWevView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
@@ -82,7 +86,7 @@ class LoginCaptchaFragment @Inject constructor(
                 }
 
                 // Show loader
-                loginCaptchaProgress.isVisible = true
+                views.loginCaptchaProgress.isVisible = true
             }
 
             override fun onPageFinished(view: WebView, url: String) {
@@ -93,7 +97,7 @@ class LoginCaptchaFragment @Inject constructor(
                 }
 
                 // Hide loader
-                loginCaptchaProgress.isVisible = false
+                views.loginCaptchaProgress.isVisible = false
             }
 
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {

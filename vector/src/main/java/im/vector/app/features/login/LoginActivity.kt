@@ -39,12 +39,13 @@ import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.login.terms.toLocalizedLoginTerms
 import im.vector.app.features.pin.UnlockedActivity
-import kotlinx.android.synthetic.main.activity_login.*
+
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -53,7 +54,7 @@ import javax.inject.Inject
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View
  */
-open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedActivity {
+open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
 
     private val loginViewModel: LoginViewModel by viewModel()
 
@@ -84,7 +85,9 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
         ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
     }
 
-    final override fun getLayoutRes() = R.layout.activity_login
+    final override fun getBinding() = ActivityLoginBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
@@ -211,7 +214,7 @@ open class LoginActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedAc
         }
 
         // Loading
-        loginLoading.isVisible = loginViewState.isLoading()
+        views.loginLoading.isVisible = loginViewState.isLoading()
     }
 
     private fun onWebLoginError(onWebLoginError: LoginViewEvents.OnWebLoginError) {

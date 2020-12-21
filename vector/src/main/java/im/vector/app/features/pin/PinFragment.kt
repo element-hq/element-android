@@ -19,7 +19,9 @@ package im.vector.app.features.pin
 import android.app.Activity
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
@@ -30,10 +32,11 @@ import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.FragmentPinBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.settings.VectorPreferences
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -45,11 +48,13 @@ data class PinArgs(
 class PinFragment @Inject constructor(
         private val pinCodeStore: PinCodeStore,
         private val vectorPreferences: VectorPreferences
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentPinBinding>() {
 
     private val fragmentArgs: PinArgs by args()
 
-    override fun getLayoutResId() = R.layout.fragment_pin
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentPinBinding {
+        return FragmentPinBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

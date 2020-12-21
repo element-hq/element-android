@@ -27,10 +27,13 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 
-class QrCodeScannerActivity : VectorBaseActivity() {
+class QrCodeScannerActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)

@@ -24,7 +24,8 @@ import androidx.annotation.CallSuper
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
-import kotlinx.android.synthetic.main.activity_vector_web_view.*
+import im.vector.app.databinding.ActivityVectorWebViewBinding
+
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
@@ -34,9 +35,9 @@ import javax.inject.Inject
  * It relies on the VectorWebViewClient
  * This class shouldn't be extended. To add new behaviors, you might create a new WebViewMode and a new WebViewEventListener
  */
-class VectorWebViewActivity : VectorBaseActivity() {
+class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>() {
 
-    override fun getLayoutRes() = R.layout.activity_vector_web_view
+    override fun getBinding() = ActivityVectorWebViewBinding.inflate(layoutInflater)
 
     @Inject lateinit var session: Session
 
@@ -46,10 +47,10 @@ class VectorWebViewActivity : VectorBaseActivity() {
     }
 
     override fun initUiAndData() {
-        configureToolbar(webview_toolbar)
+        configureToolbar(views.webviewToolbar)
         waitingView = findViewById(R.id.simple_webview_loader)
 
-        simple_webview.settings.apply {
+        views.simpleWebview.settings.apply {
             // Enable Javascript
             javaScriptEnabled = true
 
@@ -70,7 +71,7 @@ class VectorWebViewActivity : VectorBaseActivity() {
         }
 
         val cookieManager = android.webkit.CookieManager.getInstance()
-        cookieManager.setAcceptThirdPartyCookies(simple_webview, true)
+        cookieManager.setAcceptThirdPartyCookies(views.simpleWebview, true)
 
         val url = intent.extras?.getString(EXTRA_URL)
         val title = intent.extras?.getString(EXTRA_TITLE, USE_TITLE_FROM_WEB_PAGE)
@@ -80,15 +81,15 @@ class VectorWebViewActivity : VectorBaseActivity() {
 
         val webViewMode = intent.extras?.getSerializable(EXTRA_MODE) as WebViewMode
         val eventListener = webViewMode.eventListener(this, session)
-        simple_webview.webViewClient = VectorWebViewClient(eventListener)
-        simple_webview.webChromeClient = object : WebChromeClient() {
+        views.simpleWebview.webViewClient = VectorWebViewClient(eventListener)
+        views.simpleWebview.webChromeClient = object : WebChromeClient() {
             override fun onReceivedTitle(view: WebView, title: String) {
                 if (title == USE_TITLE_FROM_WEB_PAGE) {
                     setTitle(title)
                 }
             }
         }
-        simple_webview.loadUrl(url)
+        views.simpleWebview.loadUrl(url)
     }
 
     /* ==========================================================================================
@@ -96,8 +97,8 @@ class VectorWebViewActivity : VectorBaseActivity() {
      * ========================================================================================== */
 
     override fun onBackPressed() {
-        if (simple_webview.canGoBack()) {
-            simple_webview.goBack()
+        if (views.simpleWebview.canGoBack()) {
+            views.simpleWebview.goBack()
         } else {
             super.onBackPressed()
         }

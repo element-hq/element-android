@@ -285,7 +285,7 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
     return isPermissionGranted
 }
 
-fun VectorBaseActivity.onPermissionDeniedSnackbar(@StringRes rationaleMessage: Int) {
+fun VectorBaseActivity<*>.onPermissionDeniedSnackbar(@StringRes rationaleMessage: Int) {
     showSnackbar(getString(rationaleMessage), R.string.settings) {
         openAppSettingsPage(this)
     }

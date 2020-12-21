@@ -18,7 +18,9 @@ package im.vector.app.features.crypto.quads
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import com.airbnb.mvrx.activityViewModel
 import com.jakewharton.rxbinding3.widget.editorActionEvents
@@ -27,23 +29,26 @@ import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
+import im.vector.app.databinding.FragmentSsssAccessFromKeyBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_ssss_access_from_key.*
+
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment() {
+class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment<FragmentSsssAccessFromKeyBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_ssss_access_from_key
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSsssAccessFromKeyBinding {
+        return FragmentSsssAccessFromKeyBinding.inflate(inflater, container, false)
+    }
 
     val sharedViewModel: SharedSecureStorageViewModel by activityViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ssss_restore_with_key_text.text = getString(R.string.enter_secret_storage_input_key)
+        views.ssssRestoreWithKeyText.text = getString(R.string.enter_secret_storage_input_key)
 
-        ssss_key_enter_edittext.editorActionEvents()
+        views.ssssKeyEnterEdittext.editorActionEvents()
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -53,35 +58,35 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
                 }
                 .disposeOnDestroyView()
 
-        ssss_key_enter_edittext.textChanges()
+        views.ssssKeyEnterEdittext.textChanges()
                 .skipInitialValue()
                 .subscribe {
-                    ssss_key_enter_til.error = null
-                    ssss_key_submit.isEnabled = it.isNotBlank()
+                    views.ssssKeyEnterTil.error = null
+                    views.ssssKeySubmit.isEnabled = it.isNotBlank()
                 }
                 .disposeOnDestroyView()
 
-        ssss_key_use_file.debouncedClicks { startImportTextFromFileIntent(requireContext(), importFileStartForActivityResult) }
+        views.ssssKeyUseFile.debouncedClicks { startImportTextFromFileIntent(requireContext(), importFileStartForActivityResult) }
 
-        ssss_key_reset.clickableView.debouncedClicks {
+        views.ssssKeyReset.views.itemVerificationClickableZone.debouncedClicks {
             sharedViewModel.handle(SharedSecureStorageAction.ForgotResetAll)
         }
 
         sharedViewModel.observeViewEvents {
             when (it) {
                 is SharedSecureStorageViewEvent.KeyInlineError -> {
-                    ssss_key_enter_til.error = it.message
+                    views.ssssKeyEnterTil.error = it.message
                 }
             }
         }
 
-        ssss_key_submit.debouncedClicks { submit() }
+        views.ssssKeySubmit.debouncedClicks { submit() }
     }
 
     fun submit() {
-        val text = ssss_key_enter_edittext.text.toString()
+        val text = views.ssssKeyEnterEdittext.text.toString()
         if (text.isBlank()) return // Should not reach this point as button disabled
-        ssss_key_submit.isEnabled = false
+        views.ssssKeySubmit.isEnabled = false
         sharedViewModel.handle(SharedSecureStorageAction.SubmitKey(text))
     }
 
@@ -93,7 +98,7 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
                             ?.bufferedReader()
                             ?.use { it.readText() }
                             ?.let {
-                                ssss_key_enter_edittext.setText(it)
+                                views.ssssKeyEnterEdittext.setText(it)
                             }
                 }
             }

@@ -36,67 +36,67 @@
         app:layout_constraintStart_toStartOf="@+id/related_message_background" />
 
     <ImageView
-        android:id="@+id/composer_related_message_avatar_view"
+        android:id="@+id/composerRelatedMessageAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@id/composer_related_message_action_image"
-        app:layout_constraintEnd_toStartOf="@+id/composer_related_message_sender"
+        app:layout_constraintBottom_toTopOf="@id/composerRelatedMessageActionIcon"
+        app:layout_constraintEnd_toStartOf="@+id/composerRelatedMessageTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/composer_related_message_sender"
+        app:layout_constraintTop_toTopOf="@id/composerRelatedMessageTitle"
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/composer_related_message_sender"
+        android:id="@+id/composerRelatedMessageTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/composer_related_message_close"
-        app:layout_constraintStart_toEndOf="@id/composer_related_message_avatar_view"
+        app:layout_constraintEnd_toStartOf="@id/composerRelatedMessageCloseButton"
+        app:layout_constraintStart_toEndOf="@id/composerRelatedMessageAvatar"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/first_names" />
 
     <TextView
-        android:id="@+id/composer_related_message_preview"
+        android:id="@+id/composerRelatedMessageContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="?vctr_message_text_color"
         app:layout_constrainedHeight="true"
-        app:layout_constraintEnd_toEndOf="@id/composer_related_message_sender"
-        app:layout_constraintStart_toStartOf="@id/composer_related_message_sender"
-        app:layout_constraintTop_toBottomOf="@id/composer_related_message_sender"
+        app:layout_constraintEnd_toEndOf="@id/composerRelatedMessageTitle"
+        app:layout_constraintStart_toStartOf="@id/composerRelatedMessageTitle"
+        app:layout_constraintTop_toBottomOf="@id/composerRelatedMessageTitle"
         tools:text="@tools:sample/lorem/random" />
 
     <ImageView
-        android:id="@+id/composer_related_message_action_image"
+        android:id="@+id/composerRelatedMessageActionIcon"
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="38dp"
         android:alpha="1"
         android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@id/composer_related_message_avatar_view"
-        app:layout_constraintStart_toStartOf="@id/composer_related_message_avatar_view"
-        app:layout_constraintTop_toBottomOf="@id/composer_related_message_avatar_view"
+        app:layout_constraintEnd_toEndOf="@id/composerRelatedMessageAvatar"
+        app:layout_constraintStart_toStartOf="@id/composerRelatedMessageAvatar"
+        app:layout_constraintTop_toBottomOf="@id/composerRelatedMessageAvatar"
         app:tint="?riotx_text_primary"
         tools:ignore="MissingPrefix"
         tools:src="@drawable/ic_edit" />
 
 
     <ImageButton
-        android:id="@+id/composer_related_message_close"
+        android:id="@+id/composerRelatedMessageCloseButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_close_round"
-        app:layout_constraintBottom_toBottomOf="@id/composer_related_message_preview"
+        app:layout_constraintBottom_toBottomOf="@id/composerRelatedMessageContent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/composer_related_message_preview"
+        app:layout_constraintTop_toTopOf="@id/composerRelatedMessageContent"
         app:tint="@color/riotx_notice"
         tools:ignore="MissingPrefix" />
 
@@ -106,7 +106,7 @@
         android:layout_height="0dp"
         app:barrierDirection="bottom"
         app:barrierMargin="8dp"
-        app:constraint_referenced_ids="composer_related_message_preview,composer_related_message_action_image"
+        app:constraint_referenced_ids="composerRelatedMessageContent,composerRelatedMessageActionIcon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -123,7 +123,7 @@
         tools:ignore="MissingPrefix" />
 
     <ImageView
-        android:id="@+id/composer_shield"
+        android:id="@+id/composerShieldImageView"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginStart="8dp"
@@ -141,13 +141,13 @@
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/composer_emoji"
-        app:layout_constraintStart_toEndOf="@+id/composer_shield"
+        app:layout_constraintEnd_toStartOf="@+id/composerEmojiButton"
+        app:layout_constraintStart_toEndOf="@+id/composerShieldImageView"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
         tools:text="@tools:sample/lorem/random" />
 
     <ImageButton
-        android:id="@+id/composer_emoji"
+        android:id="@+id/composerEmojiButton"
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:layout_margin="1dp"

@@ -24,7 +24,7 @@ import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.updateConstraintSet
-import kotlinx.android.synthetic.main.view_state.view.*
+import im.vector.app.databinding.ViewStateBinding
 
 class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : FrameLayout(context, attrs, defStyle) {
@@ -42,6 +42,8 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         data class Error(val message: CharSequence? = null) : State()
     }
 
+    private val views: ViewStateBinding
+
     var eventCallback: EventCallback? = null
 
     var contentView: View? = null
@@ -58,33 +60,34 @@ class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
 
     init {
-        View.inflate(context, R.layout.view_state, this)
+        inflate(context, R.layout.view_state, this)
+        views = ViewStateBinding.bind(this)
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-        errorRetryView.setOnClickListener {
+        views.errorRetryView.setOnClickListener {
             eventCallback?.onRetryClicked()
         }
         state = State.Content
     }
 
     private fun update(newState: State) {
-        progressBar.isVisible = newState is State.Loading
-        errorView.isVisible = newState is State.Error
-        emptyView.isVisible = newState is State.Empty
+        views.progressBar.isVisible = newState is State.Loading
+        views.errorView.isVisible = newState is State.Error
+        views.emptyView.isVisible = newState is State.Empty
         contentView?.isVisible = newState is State.Content
 
         when (newState) {
             is State.Content -> Unit
             is State.Loading -> Unit
             is State.Empty   -> {
-                emptyImageView.setImageDrawable(newState.image)
-                emptyView.updateConstraintSet {
+                views.emptyImageView.setImageDrawable(newState.image)
+                views.emptyView.updateConstraintSet {
                     it.constrainPercentHeight(R.id.emptyImageView, if (newState.isBigImage) 0.5f else 0.1f)
                 }
-                emptyMessageView.text = newState.message
-                emptyTitleView.text = newState.title
+                views.emptyMessageView.text = newState.message
+                views.emptyTitleView.text = newState.title
             }
             is State.Error   -> {
-                errorMessageView.text = newState.message
+                views.errorMessageView.text = newState.message
             }
         }
     }

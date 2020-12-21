@@ -18,14 +18,11 @@ package im.vector.app.core.dialogs
 
 import android.app.Activity
 import android.text.Editable
-import android.widget.Button
-import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.SimpleTextWatcher
+import im.vector.app.databinding.DialogExportE2eKeysBinding
 
 class ExportKeysDialog {
 
@@ -33,48 +30,44 @@ class ExportKeysDialog {
 
     fun show(activity: Activity, exportKeyDialogListener: ExportKeyDialogListener) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_export_e2e_keys, null)
+        val views = DialogExportE2eKeysBinding.bind(dialogLayout)
         val builder = AlertDialog.Builder(activity)
                 .setTitle(R.string.encryption_export_room_keys)
                 .setView(dialogLayout)
 
-        val passPhrase1EditText = dialogLayout.findViewById<TextInputEditText>(R.id.exportDialogEt)
-        val passPhrase2EditText = dialogLayout.findViewById<TextInputEditText>(R.id.exportDialogEtConfirm)
-        val passPhrase2Til = dialogLayout.findViewById<TextInputLayout>(R.id.exportDialogTilConfirm)
-        val exportButton = dialogLayout.findViewById<Button>(R.id.exportDialogSubmit)
         val textWatcher = object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
                 when {
-                    passPhrase1EditText.text.isNullOrEmpty()                                   -> {
-                        exportButton.isEnabled = false
-                        passPhrase2Til.error = null
+                    views.exportDialogEt.text.isNullOrEmpty()                                   -> {
+                        views.exportDialogSubmit.isEnabled = false
+                        views.exportDialogTilConfirm.error = null
                     }
-                    passPhrase1EditText.text.toString() == passPhrase2EditText.text.toString() -> {
-                        exportButton.isEnabled = true
-                        passPhrase2Til.error = null
+                    views.exportDialogEt.text.toString() == views.exportDialogEtConfirm.text.toString() -> {
+                        views.exportDialogSubmit.isEnabled = true
+                        views.exportDialogTilConfirm.error = null
                     }
                     else                                                                       -> {
-                        exportButton.isEnabled = false
-                        passPhrase2Til.error = activity.getString(R.string.passphrase_passphrase_does_not_match)
+                        views.exportDialogSubmit.isEnabled = false
+                        views.exportDialogTilConfirm.error = activity.getString(R.string.passphrase_passphrase_does_not_match)
                     }
                 }
             }
         }
 
-        passPhrase1EditText.addTextChangedListener(textWatcher)
-        passPhrase2EditText.addTextChangedListener(textWatcher)
+        views.exportDialogEt.addTextChangedListener(textWatcher)
+        views.exportDialogEtConfirm.addTextChangedListener(textWatcher)
 
-        val showPassword = dialogLayout.findViewById<ImageView>(R.id.exportDialogShowPassword)
-        showPassword.setOnClickListener {
+        views.exportDialogShowPassword.setOnClickListener {
             passwordVisible = !passwordVisible
-            passPhrase1EditText.showPassword(passwordVisible)
-            passPhrase2EditText.showPassword(passwordVisible)
-            showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+            views.exportDialogEt.showPassword(passwordVisible)
+            views.exportDialogEtConfirm.showPassword(passwordVisible)
+            views.exportDialogShowPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
         }
 
         val exportDialog = builder.show()
 
-        exportButton.setOnClickListener {
-            exportKeyDialogListener.onPassphrase(passPhrase1EditText.text.toString())
+        views.exportDialogSubmit.setOnClickListener {
+            exportKeyDialogListener.onPassphrase(views.exportDialogEt.text.toString())
 
             exportDialog.dismiss()
         }

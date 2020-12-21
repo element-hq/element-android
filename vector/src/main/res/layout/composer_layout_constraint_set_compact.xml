@@ -39,7 +39,7 @@
 
 
     <ImageView
-        android:id="@+id/composer_related_message_avatar_view"
+        android:id="@+id/composerRelatedMessageAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:visibility="invisible"
@@ -48,18 +48,18 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/composer_related_message_sender"
+        android:id="@+id/composerRelatedMessageTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/composer_related_message_preview"
+        app:layout_constraintBottom_toTopOf="@id/composerRelatedMessageContent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="@tools:sample/first_names" />
 
     <TextView
-        android:id="@+id/composer_related_message_preview"
+        android:id="@+id/composerRelatedMessageContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="invisible"
@@ -69,7 +69,7 @@
         tools:text="@tools:sample/lorem/random" />
 
     <ImageView
-        android:id="@+id/composer_related_message_action_image"
+        android:id="@+id/composerRelatedMessageActionIcon"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginTop="8dp"
@@ -83,7 +83,7 @@
 
 
     <ImageButton
-        android:id="@+id/composer_related_message_close"
+        android:id="@+id/composerRelatedMessageCloseButton"
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:background="?android:attr/selectableItemBackground"
@@ -101,7 +101,7 @@
         android:layout_height="0dp"
         app:barrierDirection="bottom"
         app:barrierMargin="8dp"
-        app:constraint_referenced_ids="composer_related_message_preview,composer_related_message_action_image"
+        app:constraint_referenced_ids="composerRelatedMessageContent,composerRelatedMessageActionIcon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -113,13 +113,13 @@
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_attachment"
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
-        app:layout_constraintEnd_toStartOf="@+id/composer_shield"
+        app:layout_constraintEnd_toStartOf="@+id/composerShieldImageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/sendButton"
         tools:ignore="MissingPrefix" />
 
     <ImageView
-        android:id="@+id/composer_shield"
+        android:id="@+id/composerShieldImageView"
         android:layout_width="16dp"
         android:layout_height="16dp"
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
@@ -138,13 +138,13 @@
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/composer_emoji"
-        app:layout_constraintStart_toEndOf="@+id/composer_shield"
+        app:layout_constraintEnd_toStartOf="@+id/composerEmojiButton"
+        app:layout_constraintStart_toEndOf="@+id/composerShieldImageView"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem/random" />
 
     <ImageButton
-        android:id="@+id/composer_emoji"
+        android:id="@+id/composerEmojiButton"
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:layout_margin="1dp"
@@ -166,7 +166,7 @@
         android:src="@drawable/ic_send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/composer_emoji"
+        app:layout_constraintStart_toEndOf="@id/composerEmojiButton"
         tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

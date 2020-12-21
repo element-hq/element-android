@@ -17,8 +17,10 @@
 package im.vector.app.features.roomdirectory
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.snackbar.Snackbar
@@ -30,10 +32,11 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.FragmentPublicRoomsBinding
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.android.synthetic.main.fragment_public_rooms.*
+
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import timber.log.Timber
@@ -48,19 +51,22 @@ class PublicRoomsFragment @Inject constructor(
         private val publicRoomsController: PublicRoomsController,
         private val permalinkHandler: PermalinkHandler,
         private val session: Session
-) : VectorBaseFragment(), PublicRoomsController.Callback {
+) : VectorBaseFragment<FragmentPublicRoomsBinding>(),
+        PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
-    override fun getLayoutResId() = R.layout.fragment_public_rooms
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentPublicRoomsBinding {
+        return FragmentPublicRoomsBinding.inflate(inflater, container, false)
+    }
 
     override fun getMenuRes() = R.menu.menu_room_directory
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vectorBaseActivity.setSupportActionBar(publicRoomsToolbar)
+        vectorBaseActivity.setSupportActionBar(views.publicRoomsToolbar)
 
         vectorBaseActivity.supportActionBar?.let {
             it.setDisplayShowHomeEnabled(true)
@@ -70,14 +76,14 @@ class PublicRoomsFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
 
-        publicRoomsFilter.queryTextChanges()
+        views.publicRoomsFilter.queryTextChanges()
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeBy {
                     viewModel.handle(RoomDirectoryAction.FilterWith(it.toString()))
                 }
                 .disposeOnDestroyView()
 
-        publicRoomsCreateNewRoom.debouncedClicks {
+        views.publicRoomsCreateNewRoom.debouncedClicks {
             sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)
         }
 
@@ -89,7 +95,7 @@ class PublicRoomsFragment @Inject constructor(
     private fun handleViewEvents(viewEvents: RoomDirectoryViewEvents) {
         when (viewEvents) {
             is RoomDirectoryViewEvents.Failure -> {
-                Snackbar.make(publicRoomsCoordinator, errorFormatter.toHumanReadable(viewEvents.throwable), Snackbar.LENGTH_SHORT)
+                Snackbar.make(views.coordinatorLayout, errorFormatter.toHumanReadable(viewEvents.throwable), Snackbar.LENGTH_SHORT)
                         .show()
             }
         }.exhaustive
@@ -97,7 +103,7 @@ class PublicRoomsFragment @Inject constructor(
 
     override fun onDestroyView() {
         publicRoomsController.callback = null
-        publicRoomsList.cleanup()
+        views.publicRoomsList.cleanup()
         super.onDestroyView()
     }
 
@@ -113,8 +119,8 @@ class PublicRoomsFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        publicRoomsList.trackItemsVisibilityChange()
-        publicRoomsList.configureWith(publicRoomsController)
+        views.publicRoomsList.trackItemsVisibilityChange()
+        views.publicRoomsList.configureWith(publicRoomsController)
         publicRoomsController.callback = this
     }
 
@@ -164,9 +170,9 @@ class PublicRoomsFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { state ->
         if (!initialValueSet) {
             initialValueSet = true
-            if (publicRoomsFilter.query.toString() != state.currentFilter) {
+            if (views.publicRoomsFilter.query.toString() != state.currentFilter) {
                 // For initial filter
-                publicRoomsFilter.setQuery(state.currentFilter, false)
+                views.publicRoomsFilter.setQuery(state.currentFilter, false)
             }
         }
 

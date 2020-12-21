@@ -17,9 +17,11 @@
 package im.vector.app.features.settings.devices
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
@@ -31,11 +33,11 @@ import im.vector.app.core.dialogs.PromptPasswordDialog
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.DialogBaseEditTextBinding
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
@@ -45,23 +47,26 @@ import javax.inject.Inject
 class VectorSettingsDevicesFragment @Inject constructor(
         val devicesViewModelFactory: DevicesViewModel.Factory,
         private val devicesController: DevicesController
-) : VectorBaseFragment(), DevicesController.Callback {
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+        DevicesController.Callback {
 
     // used to avoid requesting to enter the password for each deletion
     // Note: Sonar does not like to use password for member name.
     private var mAccountPass: String = ""
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: DevicesViewModel by fragmentViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        waiting_view_status_text.setText(R.string.please_wait)
-        waiting_view_status_text.isVisible = true
+        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.isVisible = true
         devicesController.callback = this
-        genericRecyclerView.configureWith(devicesController, showDivider = true)
+        views.genericRecyclerView.configureWith(devicesController, showDivider = true)
         viewModel.observeViewEvents {
             when (it) {
                 is DevicesViewEvents.Loading            -> showLoading(it.message)
@@ -97,13 +102,13 @@ class VectorSettingsDevicesFragment @Inject constructor(
 
     override fun onDestroyView() {
         devicesController.callback = null
-        genericRecyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         super.onDestroyView()
     }
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_active_sessions_manage)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_active_sessions_manage)
         viewModel.handle(DevicesAction.Refresh)
     }
 
@@ -134,15 +139,14 @@ class VectorSettingsDevicesFragment @Inject constructor(
     private fun displayDeviceRenameDialog(deviceInfo: DeviceInfo) {
         val inflater = requireActivity().layoutInflater
         val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
-
-        val input = layout.findViewById<EditText>(R.id.editText)
-        input.setText(deviceInfo.displayName)
+        val views = DialogBaseEditTextBinding.bind(layout)
+        views.editText.setText(deviceInfo.displayName)
 
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.devices_details_device_name)
                 .setView(layout)
                 .setPositiveButton(R.string.ok) { _, _ ->
-                    val newName = input.text.toString()
+                    val newName = views.editText.text.toString()
 
                     viewModel.handle(DevicesAction.Rename(deviceInfo.deviceId!!, newName))
                 }
@@ -171,9 +175,9 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     private fun handleRequestStatus(unIgnoreRequest: Async<Unit>) {
-        when (unIgnoreRequest) {
-            is Loading -> waiting_view.isVisible = true
-            else       -> waiting_view.isVisible = false
+        views.waitingView.root.isVisible = when (unIgnoreRequest) {
+            is Loading -> true
+            else       -> false
         }
     }
 }

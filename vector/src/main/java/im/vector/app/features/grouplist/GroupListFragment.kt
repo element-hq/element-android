@@ -18,39 +18,44 @@
 package im.vector.app.features.grouplist
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentGroupListBinding
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
-import kotlinx.android.synthetic.main.fragment_group_list.*
+
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import javax.inject.Inject
 
 class GroupListFragment @Inject constructor(
         val groupListViewModelFactory: GroupListViewModel.Factory,
         private val groupController: GroupSummaryController
-) : VectorBaseFragment(), GroupSummaryController.Callback {
+) : VectorBaseFragment<FragmentGroupListBinding>(),
+        GroupSummaryController.Callback {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
     private val viewModel: GroupListViewModel by fragmentViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_group_list
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGroupListBinding {
+        return FragmentGroupListBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         groupController.callback = this
-        stateView.contentView = groupListView
-        groupListView.configureWith(groupController)
+        views.stateView.contentView = views.groupListView
+        views.groupListView.configureWith(groupController)
         viewModel.observeViewEvents {
             when (it) {
                 is GroupListViewEvents.OpenGroupSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
@@ -60,14 +65,14 @@ class GroupListFragment @Inject constructor(
 
     override fun onDestroyView() {
         groupController.callback = null
-        groupListView.cleanup()
+        views.groupListView.cleanup()
         super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         when (state.asyncGroups) {
-            is Incomplete -> stateView.state = StateView.State.Loading
-            is Success    -> stateView.state = StateView.State.Content
+            is Incomplete -> views.stateView.state = StateView.State.Loading
+            is Success    -> views.stateView.state = StateView.State.Content
         }
         groupController.update(state)
     }

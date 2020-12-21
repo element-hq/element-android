@@ -38,7 +38,7 @@
             app:layout_constraintTop_toBottomOf="@+id/keys_backup_shield" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/keys_backup_key_enter_til"
+            android:id="@+id/key_input_layout"
             style="@style/VectorTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@+id/keys_restore_with_key">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/keys_restore_key_enter_edittext"
+                android:id="@+id/key_text_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/keys_backup_restore_key_enter_hint"
@@ -70,8 +70,8 @@
             android:scaleType="center"
             android:src="@drawable/ic_import_black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/keys_backup_key_enter_til"
-            app:layout_constraintTop_toTopOf="@id/keys_backup_key_enter_til"
+            app:layout_constraintStart_toEndOf="@id/key_input_layout"
+            app:layout_constraintTop_toTopOf="@id/key_input_layout"
             app:tint="?attr/colorAccent"
             tools:ignore="MissingPrefix" />
 
@@ -85,7 +85,7 @@
             android:textColor="?riotx_text_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keys_backup_key_enter_til" />
+            app:layout_constraintTop_toBottomOf="@+id/key_input_layout" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/keys_restore_button"

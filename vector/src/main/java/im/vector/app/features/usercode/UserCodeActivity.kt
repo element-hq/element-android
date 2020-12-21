@@ -33,14 +33,15 @@ import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
+import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.matrixto.MatrixToBottomSheet
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.activity_simple.*
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-class UserCodeActivity
-    : VectorBaseActivity(), UserCodeSharedViewModel.Factory, MatrixToBottomSheet.InteractionListener {
+class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
+        UserCodeSharedViewModel.Factory,
+        MatrixToBottomSheet.InteractionListener {
 
     @Inject lateinit var viewModelFactory: UserCodeSharedViewModel.Factory
 
@@ -51,7 +52,9 @@ class UserCodeActivity
             val userId: String
     ) : Parcelable
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -79,8 +82,8 @@ class UserCodeActivity
         sharedViewModel.observeViewEvents {
             when (it) {
                 UserCodeShareViewEvents.Dismiss                    -> ActivityCompat.finishAfterTransition(this)
-                UserCodeShareViewEvents.ShowWaitingScreen          -> simpleActivityWaitingView.isVisible = true
-                UserCodeShareViewEvents.HideWaitingScreen          -> simpleActivityWaitingView.isVisible = false
+                UserCodeShareViewEvents.ShowWaitingScreen          -> views.simpleActivityWaitingView.isVisible = true
+                UserCodeShareViewEvents.HideWaitingScreen          -> views.simpleActivityWaitingView.isVisible = false
                 is UserCodeShareViewEvents.ToastMessage            -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                 is UserCodeShareViewEvents.NavigateToRoom          -> navigator.openRoom(this, it.roomId)
                 UserCodeShareViewEvents.CameraPermissionNotGranted -> onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)

@@ -32,7 +32,11 @@ internal class UrlsExtractor @Inject constructor() {
         return event.takeIf { it.getClearType() == EventType.MESSAGE }
                 ?.getClearContent()
                 ?.toModel<MessageContent>()
-                ?.takeIf { it.msgType == MessageType.MSGTYPE_TEXT || it.msgType == MessageType.MSGTYPE_EMOTE }
+                ?.takeIf {
+                    it.msgType == MessageType.MSGTYPE_TEXT
+                            || it.msgType == MessageType.MSGTYPE_NOTICE
+                            || it.msgType == MessageType.MSGTYPE_EMOTE
+                }
                 ?.body
                 ?.let { urlRegex.findAll(it) }
                 ?.map { it.value }

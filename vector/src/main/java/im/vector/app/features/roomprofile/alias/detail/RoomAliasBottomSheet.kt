@@ -18,17 +18,18 @@ package im.vector.app.features.roomprofile.alias.detail
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import kotlinx.android.parcel.Parcelize
+import im.vector.app.databinding.BottomSheetGenericListBinding
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 @Parcelize
@@ -43,7 +44,9 @@ data class RoomAliasBottomSheetArgs(
 /**
  * Bottom sheet fragment that shows room alias information with list of contextual actions
  */
-class RoomAliasBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomAliasBottomSheetController.Listener {
+class RoomAliasBottomSheet :
+        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
+        RoomAliasBottomSheetController.Listener {
 
     private lateinit var sharedActionViewModel: RoomAliasBottomSheetSharedActionViewModel
     @Inject lateinit var sharedViewPool: RecyclerView.RecycledViewPool
@@ -52,26 +55,25 @@ class RoomAliasBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomAliasBot
 
     private val viewModel: RoomAliasBottomSheetViewModel by fragmentViewModel(RoomAliasBottomSheetViewModel::class)
 
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
-
     override val showExpanded = true
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_generic_list
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListBinding {
+        return BottomSheetGenericListBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomAliasBottomSheetSharedActionViewModel::class.java)
-        recyclerView.configureWith(controller, viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
+        views.bottomSheetRecyclerView.configureWith(controller, viewPool = sharedViewPool, hasFixedSize = false, disableItemAnimation = true)
         controller.listener = this
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        views.bottomSheetRecyclerView.cleanup()
         controller.listener = null
         super.onDestroyView()
     }

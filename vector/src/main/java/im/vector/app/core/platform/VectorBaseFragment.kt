@@ -28,15 +28,12 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import butterknife.ButterKnife
-import butterknife.Unbinder
+import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.BaseMvRxFragment
-import com.airbnb.mvrx.MvRx
 import com.bumptech.glide.util.Util.assertMainThread
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
@@ -46,20 +43,19 @@ import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.features.navigation.Navigator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
+abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScreenInjector {
 
-    // Butterknife unbinder
-    private var mUnBinder: Unbinder? = null
-
-    protected val vectorBaseActivity: VectorBaseActivity by lazy {
-        activity as VectorBaseActivity
+    protected val vectorBaseActivity: VectorBaseActivity<*> by lazy {
+        activity as VectorBaseActivity<*>
     }
 
     /* ==========================================================================================
@@ -87,6 +83,16 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         get() = ViewModelProvider(this, viewModelFactory)
 
     /* ==========================================================================================
+     * Views
+     * ========================================================================================== */
+
+    private var _binding: VB? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    protected val views: VB
+        get() = _binding!!
+
+    /* ==========================================================================================
      * Life cycle
      * ========================================================================================== */
 
@@ -110,11 +116,11 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Timber.i("onCreateView Fragment ${javaClass.simpleName}")
-        return inflater.inflate(getLayoutResId(), container, false)
+        _binding = getBinding(inflater, container)
+        return views.root
     }
 
-    @LayoutRes
-    abstract fun getLayoutResId(): Int
+    abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?): VB
 
     @CallSuper
     override fun onResume() {
@@ -125,7 +131,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mUnBinder = ButterKnife.bind(this, view)
+        Timber.i("onViewCreated Fragment ${javaClass.simpleName}")
     }
 
     open fun showLoading(message: CharSequence?) {
@@ -138,11 +144,10 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
 
     @CallSuper
     override fun onDestroyView() {
-        super.onDestroyView()
         Timber.i("onDestroyView Fragment ${javaClass.simpleName}")
-        mUnBinder?.unbind()
-        mUnBinder = null
         uiDisposables.clear()
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onDestroy() {
@@ -180,10 +185,6 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
         arguments = args.toMvRxBundle()
     }
 
-    fun Parcelable?.toMvRxBundle(): Bundle? {
-        return this?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
-    }
-
     @MainThread
     protected fun <T : Restorable> T.register(): T {
         assertMainThread()
@@ -192,7 +193,7 @@ abstract class VectorBaseFragment : BaseMvRxFragment(), HasScreenInjector {
     }
 
     protected fun showErrorInSnackbar(throwable: Throwable) {
-        vectorBaseActivity.coordinatorLayout?.let {
+        vectorBaseActivity.getCoordinatorLayout()?.let {
             Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
                     .show()
         }

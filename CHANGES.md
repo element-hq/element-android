@@ -2,13 +2,14 @@ Changes in Element 1.0.14 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Enable url previews for notices (#2562)
 
 Improvements 🙌:
  -
 
 Bugfix 🐛:
 - Fix Canvas: trying to draw too large bitmap (#1951)
+ - Url previews sometimes attached to wrong message (#2561)
 
 Translations 🗣:
  -
@@ -23,7 +24,7 @@ Test:
  -
 
 Other changes:
- -
+ - Migrate to ViewBindings (#1072)
 
 Changes in Element 1.0.13 (2020-12-18)
 ===================================================

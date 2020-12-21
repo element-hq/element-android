@@ -18,12 +18,13 @@ package im.vector.app.features.login
 
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
-import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -33,11 +34,11 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.databinding.FragmentLoginBinding
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
+
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
@@ -51,7 +52,7 @@ import javax.inject.Inject
  * In signup mode:
  * - the user is asked for login and password
  */
-class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
+class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLoginBinding>() {
 
     private var passwordShown = false
     private var isSignupMode = false
@@ -60,15 +61,18 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
     // waiting for https://github.com/matrix-org/synapse/issues/7576
     private var isNumericOnlyUserIdForbidden = false
 
-    override fun getLayoutResId() = R.layout.fragment_login
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginBinding {
+        return FragmentLoginBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupSubmitButton()
+        setupForgottenPasswordButton()
         setupPasswordReveal()
 
-        passwordField.setOnEditorActionListener { _, actionId, _ ->
+        views.passwordField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 submit()
                 return@setOnEditorActionListener true
@@ -77,44 +81,55 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
         }
     }
 
+    private fun setupForgottenPasswordButton() {
+        views.forgetPasswordButton.setOnClickListener { forgetPasswordClicked() }
+    }
+
     private fun setupAutoFill(state: LoginViewState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             when (state.signMode) {
                 SignMode.Unknown            -> error("developer error")
                 SignMode.SignUp             -> {
-                    loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
-                    passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
-                    loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_UP
+                    views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
+                    views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
+                    views.loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_UP
                 }
                 SignMode.SignIn,
                 SignMode.SignInWithMatrixId -> {
-                    loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
-                    passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
-                    loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_IN
+                    views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
+                    views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
+                    views.loginSocialLoginButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_IN
                 }
             }.exhaustive
         }
     }
 
-    @OnClick(R.id.loginSubmit)
-    fun submit() {
+    private fun submit() {
         cleanupUi()
 
-        val login = loginField.text.toString()
-        val password = passwordField.text.toString()
+        val login = views.loginField.text.toString()
+        val password = views.passwordField.text.toString()
 
         // This can be called by the IME action, so deal with empty cases
         var error = 0
         if (login.isEmpty()) {
-            loginFieldTil.error = getString(if (isSignupMode) R.string.error_empty_field_choose_user_name else R.string.error_empty_field_enter_user_name)
+            views.loginFieldTil.error = getString(if (isSignupMode) {
+                R.string.error_empty_field_choose_user_name
+            } else {
+                R.string.error_empty_field_enter_user_name
+            })
             error++
         }
         if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
-            loginFieldTil.error = "The homeserver does not accept username with only digits."
+            views.loginFieldTil.error = "The homeserver does not accept username with only digits."
             error++
         }
         if (password.isEmpty()) {
-            passwordFieldTil.error = getString(if (isSignupMode) R.string.error_empty_field_choose_password else R.string.error_empty_field_your_password)
+            views.passwordFieldTil.error = getString(if (isSignupMode) {
+                R.string.error_empty_field_choose_password
+            } else {
+                R.string.error_empty_field_your_password
+            })
             error++
         }
 
@@ -124,13 +139,13 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
     }
 
     private fun cleanupUi() {
-        loginSubmit.hideKeyboard()
-        loginFieldTil.error = null
-        passwordFieldTil.error = null
+        views.loginSubmit.hideKeyboard()
+        views.loginFieldTil.error = null
+        views.passwordFieldTil.error = null
     }
 
     private fun setupUi(state: LoginViewState) {
-        loginFieldTil.hint = getString(when (state.signMode) {
+        views.loginFieldTil.hint = getString(when (state.signMode) {
             SignMode.Unknown            -> error("developer error")
             SignMode.SignUp             -> R.string.login_signup_username_hint
             SignMode.SignIn             -> R.string.login_signin_username_hint
@@ -139,10 +154,10 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
 
         // Handle direct signin first
         if (state.signMode == SignMode.SignInWithMatrixId) {
-            loginServerIcon.isVisible = false
-            loginTitle.text = getString(R.string.login_signin_matrix_id_title)
-            loginNotice.text = getString(R.string.login_signin_matrix_id_notice)
-            loginPasswordNotice.isVisible = true
+            views.loginServerIcon.isVisible = false
+            views.loginTitle.text = getString(R.string.login_signin_matrix_id_title)
+            views.loginNotice.text = getString(R.string.login_signin_matrix_id_notice)
+            views.loginPasswordNotice.isVisible = true
         } else {
             val resId = when (state.signMode) {
                 SignMode.Unknown            -> error("developer error")
@@ -153,45 +168,45 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
 
             when (state.serverType) {
                 ServerType.MatrixOrg -> {
-                    loginServerIcon.isVisible = true
-                    loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                    loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
-                    loginNotice.text = getString(R.string.login_server_matrix_org_text)
+                    views.loginServerIcon.isVisible = true
+                    views.loginServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
+                    views.loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
+                    views.loginNotice.text = getString(R.string.login_server_matrix_org_text)
                 }
                 ServerType.EMS       -> {
-                    loginServerIcon.isVisible = true
-                    loginServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
-                    loginTitle.text = getString(resId, "Element Matrix Services")
-                    loginNotice.text = getString(R.string.login_server_modular_text)
+                    views.loginServerIcon.isVisible = true
+                    views.loginServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
+                    views.loginTitle.text = getString(resId, "Element Matrix Services")
+                    views.loginNotice.text = getString(R.string.login_server_modular_text)
                 }
                 ServerType.Other     -> {
-                    loginServerIcon.isVisible = false
-                    loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
-                    loginNotice.text = getString(R.string.login_server_other_text)
+                    views.loginServerIcon.isVisible = false
+                    views.loginTitle.text = getString(resId, state.homeServerUrl.toReducedUrl())
+                    views.loginNotice.text = getString(R.string.login_server_other_text)
                 }
                 ServerType.Unknown   -> Unit /* Should not happen */
             }
-            loginPasswordNotice.isVisible = false
+            views.loginPasswordNotice.isVisible = false
 
             if (state.loginMode is LoginMode.SsoAndPassword) {
-                loginSocialLoginContainer.isVisible = true
-                loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders
-                loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
+                views.loginSocialLoginContainer.isVisible = true
+                views.loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders
+                views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
                         openInCustomTab(state.getSsoUrl(id))
                     }
                 }
             } else {
-                loginSocialLoginContainer.isVisible = false
-                loginSocialLoginButtons.ssoIdentityProviders = null
+                views.loginSocialLoginContainer.isVisible = false
+                views.loginSocialLoginButtons.ssoIdentityProviders = null
             }
         }
     }
 
     private fun setupButtons(state: LoginViewState) {
-        forgetPasswordButton.isVisible = state.signMode == SignMode.SignIn
+        views.forgetPasswordButton.isVisible = state.signMode == SignMode.SignIn
 
-        loginSubmit.text = getString(when (state.signMode) {
+        views.loginSubmit.text = getString(when (state.signMode) {
             SignMode.Unknown            -> error("developer error")
             SignMode.SignUp             -> R.string.login_signup_submit
             SignMode.SignIn,
@@ -200,31 +215,31 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
     }
 
     private fun setupSubmitButton() {
+        views.loginSubmit.setOnClickListener { submit() }
         Observable
                 .combineLatest(
-                        loginField.textChanges().map { it.trim().isNotEmpty() },
-                        passwordField.textChanges().map { it.isNotEmpty() },
+                        views.loginField.textChanges().map { it.trim().isNotEmpty() },
+                        views.passwordField.textChanges().map { it.isNotEmpty() },
                         BiFunction<Boolean, Boolean, Boolean> { isLoginNotEmpty, isPasswordNotEmpty ->
                             isLoginNotEmpty && isPasswordNotEmpty
                         }
                 )
                 .subscribeBy {
-                    loginFieldTil.error = null
-                    passwordFieldTil.error = null
-                    loginSubmit.isEnabled = it
+                    views.loginFieldTil.error = null
+                    views.passwordFieldTil.error = null
+                    views.loginSubmit.isEnabled = it
                 }
                 .disposeOnDestroyView()
     }
 
-    @OnClick(R.id.forgetPasswordButton)
-    fun forgetPasswordClicked() {
+    private fun forgetPasswordClicked() {
         loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnForgetPasswordClicked))
     }
 
     private fun setupPasswordReveal() {
         passwordShown = false
 
-        passwordReveal.setOnClickListener {
+        views.passwordReveal.setOnClickListener {
             passwordShown = !passwordShown
 
             renderPasswordField()
@@ -234,14 +249,14 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
     }
 
     private fun renderPasswordField() {
-        passwordField.showPassword(passwordShown)
+        views.passwordField.showPassword(passwordShown)
 
         if (passwordShown) {
-            passwordReveal.setImageResource(R.drawable.ic_eye_closed)
-            passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
+            views.passwordReveal.setImageResource(R.drawable.ic_eye_closed)
+            views.passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
         } else {
-            passwordReveal.setImageResource(R.drawable.ic_eye)
-            passwordReveal.contentDescription = getString(R.string.a11y_show_password)
+            views.passwordReveal.setImageResource(R.drawable.ic_eye)
+            views.passwordReveal.contentDescription = getString(R.string.a11y_show_password)
         }
     }
 
@@ -253,9 +268,9 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
         // Show M_WEAK_PASSWORD error in the password field
         if (throwable is Failure.ServerError
                 && throwable.error.code == MatrixError.M_WEAK_PASSWORD) {
-            passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
+            views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
         } else {
-            loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
+            views.loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
         }
     }
 
@@ -279,14 +294,14 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
                         && error.error.code == MatrixError.M_FORBIDDEN
                         && error.error.message.isEmpty()) {
                     // Login with email, but email unknown
-                    loginFieldTil.error = getString(R.string.login_login_with_email_error)
+                    views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
                 } else {
                     // Trick to display the error without text.
-                    loginFieldTil.error = " "
+                    views.loginFieldTil.error = " "
                     if (error.isInvalidPassword() && spaceInPassword()) {
-                        passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
+                        views.passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
                     } else {
-                        passwordFieldTil.error = errorFormatter.toHumanReadable(error)
+                        views.passwordFieldTil.error = errorFormatter.toHumanReadable(error)
                     }
                 }
             }
@@ -308,5 +323,5 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment() {
     /**
      * Detect if password ends or starts with spaces
      */
-    private fun spaceInPassword() = passwordField.text.toString().let { it.trim() != it }
+    private fun spaceInPassword() = views.passwordField.text.toString().let { it.trim() != it }
 }

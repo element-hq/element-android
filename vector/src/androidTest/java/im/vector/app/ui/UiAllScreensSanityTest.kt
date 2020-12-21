@@ -76,7 +76,9 @@ class UiAllScreensSanityTest {
 
     private val uiTestBase = UiTestBase()
 
-    // Last passing: 2020-11-09
+    // Last passing:
+    // 2020-11-09
+    // 2020-12-16 After ViewBinding huge change
     @Test
     fun allScreensTest() {
         // Create an account

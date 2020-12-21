@@ -47,19 +47,19 @@
             app:layout_constraintTop_toBottomOf="@+id/keys_backup_setup_step2_text_title" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/keys_backup_passphrase_enter_til"
+            android:id="@+id/keys_backup_setup_step2_passphrase_enter_til"
             style="@style/VectorTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             app:errorEnabled="true"
-            app:layout_constraintEnd_toStartOf="@id/keys_backup_view_show_password"
+            app:layout_constraintEnd_toStartOf="@id/keys_backup_setup_step2_show_password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step2_text_description">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/keys_backup_passphrase_enter_edittext"
+                android:id="@+id/keys_backup_setup_step2_passphrase_enter_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/passphrase_create_passphrase"
@@ -69,7 +69,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
-            android:id="@+id/keys_backup_view_show_password"
+            android:id="@+id/keys_backup_setup_step2_show_password"
             android:layout_width="@dimen/layout_touch_size"
             android:layout_height="@dimen/layout_touch_size"
             android:layout_marginTop="8dp"
@@ -77,22 +77,22 @@
             android:scaleType="center"
             android:src="@drawable/ic_eye"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/keys_backup_passphrase_enter_til"
-            app:layout_constraintTop_toTopOf="@id/keys_backup_passphrase_enter_til"
+            app:layout_constraintStart_toEndOf="@id/keys_backup_setup_step2_passphrase_enter_til"
+            app:layout_constraintTop_toTopOf="@id/keys_backup_setup_step2_passphrase_enter_til"
             app:tint="?attr/colorAccent"
             tools:ignore="MissingPrefix" />
 
         <im.vector.app.core.ui.views.PasswordStrengthBar
-            android:id="@+id/keys_backup_passphrase_security_progress"
+            android:id="@+id/keys_backup_setup_step2_passphrase_strength_level"
             android:layout_width="0dp"
             android:layout_height="4dp"
-            app:layout_constraintEnd_toEndOf="@id/keys_backup_passphrase_enter_til"
-            app:layout_constraintStart_toStartOf="@id/keys_backup_passphrase_enter_til"
-            app:layout_constraintTop_toBottomOf="@id/keys_backup_passphrase_enter_til" />
+            app:layout_constraintEnd_toEndOf="@id/keys_backup_setup_step2_passphrase_enter_til"
+            app:layout_constraintStart_toStartOf="@id/keys_backup_setup_step2_passphrase_enter_til"
+            app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step2_passphrase_enter_til" />
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/keys_backup_passphrase_confirm_til"
+            android:id="@+id/keys_backup_setup_step2_passphrase_confirm_til"
             style="@style/VectorTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -100,12 +100,12 @@
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             app:errorEnabled="true"
-            app:layout_constraintEnd_toStartOf="@id/keys_backup_view_show_password"
+            app:layout_constraintEnd_toStartOf="@id/keys_backup_setup_step2_show_password"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/keys_backup_passphrase_security_progress">
+            app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step2_passphrase_strength_level">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/keys_backup_passphrase_confirm_edittext"
+                android:id="@+id/keys_backup_setup_step2_passphrase_confirm_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/passphrase_confirm_passphrase"
@@ -122,11 +122,11 @@
             android:text="@string/keys_backup_setup_step2_button_title"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/keys_backup_passphrase_confirm_til" />
+            app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step2_passphrase_confirm_til" />
 
 
         <TextView
-            android:id="@+id/keys_backup_setup_recovery_key_alternative"
+            android:id="@+id/keys_backup_setup_step2_recovery_key_alternative"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -149,7 +149,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_recovery_key_alternative" />
+            app:layout_constraintTop_toBottomOf="@id/keys_backup_setup_step2_recovery_key_alternative" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

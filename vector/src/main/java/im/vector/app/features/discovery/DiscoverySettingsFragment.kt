@@ -17,8 +17,11 @@ package im.vector.app.features.discovery
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -27,12 +30,12 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.ensureProtocol
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
 import im.vector.app.features.settings.VectorSettingsActivity
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -41,9 +44,12 @@ import javax.inject.Inject
 class DiscoverySettingsFragment @Inject constructor(
         private val controller: DiscoverySettingsController,
         val viewModelFactory: DiscoverySettingsViewModel.Factory
-) : VectorBaseFragment(), DiscoverySettingsController.Listener {
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+        DiscoverySettingsController.Listener {
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel by fragmentViewModel(DiscoverySettingsViewModel::class)
 
@@ -55,7 +61,7 @@ class DiscoverySettingsFragment @Inject constructor(
         sharedViewModel = activityViewModelProvider.get(DiscoverySharedViewModel::class.java)
 
         controller.listener = this
-        genericRecyclerView.configureWith(controller)
+        views.genericRecyclerView.configureWith(controller)
 
         sharedViewModel.navigateEvent.observeEvent(this) {
             when (it) {
@@ -74,7 +80,7 @@ class DiscoverySettingsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        genericRecyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         controller.listener = null
         super.onDestroyView()
     }
@@ -85,7 +91,7 @@ class DiscoverySettingsFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_discovery_category)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_discovery_category)
 
         // If some 3pids are pending, we can try to check if they have been verified here
         viewModel.handle(DiscoverySettingsAction.Refresh)
