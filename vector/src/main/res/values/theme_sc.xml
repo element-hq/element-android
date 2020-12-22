@@ -15,6 +15,7 @@
         <item name="riotx_header_panel_text_secondary">@color/text_color_secondary_sc</item>
         <item name="riotx_text_primary">@color/text_color_primary_sc</item>
         <item name="riotx_text_secondary">@color/text_color_secondary_sc</item>
+        <item name="riotx_text_tertiary">@color/text_color_tertiary_sc</item>
         <item name="riotx_text_primary_body_contrast">@color/text_color_primary_sc</item>
         <item name="riotx_android_secondary">@color/text_color_secondary_sc</item>
         <item name="riotx_search_placeholder">@color/text_color_disabled_sc</item>
