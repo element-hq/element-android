@@ -114,8 +114,8 @@
         android:src="@drawable/ic_attachment"
         android:tint="?android:textColorHint"
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
-        app:layout_constraintEnd_toStartOf="@+id/composer_shield"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sendButton"
+        app:layout_constraintStart_toEndOf="@id/composerEditText"
         app:layout_constraintTop_toTopOf="@id/sendButton"
         tools:ignore="MissingPrefix" />
 
@@ -125,7 +125,7 @@
         android:layout_height="16dp"
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
         app:layout_constraintEnd_toStartOf="@+id/composerEditText"
-        app:layout_constraintStart_toEndOf="@+id/attachmentButton"
+        app:layout_constraintStart_toEndOf="@+id/composer_emoji"
         app:layout_constraintTop_toTopOf="@id/sendButton"
         tools:src="@drawable/ic_shield_black"
         tools:visibility="visible" />
@@ -139,7 +139,7 @@
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/composer_emoji"
+        app:layout_constraintEnd_toStartOf="@+id/attachmentButton"
         app:layout_constraintStart_toEndOf="@+id/composer_shield"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem/random" />
@@ -153,10 +153,9 @@
         android:src="@drawable/ic_insert_emoji"
         android:tint="?android:textColorHint"
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
-        app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintStart_toEndOf="@id/composerEditText"
-        app:layout_constraintTop_toTopOf="@id/sendButton"
-        app:layout_goneMarginEnd="8dp" />
+        app:layout_constraintEnd_toStartOf="@+id/composer_shield"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sendButton" />
 
     <ImageButton
         android:id="@+id/sendButton"
@@ -167,7 +166,7 @@
         android:src="@drawable/ic_send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/composer_emoji"
+        app:layout_constraintStart_toEndOf="@id/attachmentButton"
         tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
