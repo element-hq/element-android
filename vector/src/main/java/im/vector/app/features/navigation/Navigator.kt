@@ -113,4 +113,6 @@ interface Navigator {
                         options: ((MutableList<Pair<View, String>>) -> Unit)?)
 
     fun openSearch(context: Context, roomId: String)
+
+    fun openCallTransfer(context: Context, callId: String)
 }

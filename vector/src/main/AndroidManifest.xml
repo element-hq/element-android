@@ -243,6 +243,7 @@
         <activity android:name=".features.pin.PinActivity" />
         <activity android:name=".features.home.room.detail.search.SearchActivity" />
         <activity android:name=".features.usercode.UserCodeActivity" />
+        <activity android:name=".features.call.transfer.CallTransferActivity" />
 
         <!-- Services -->
 

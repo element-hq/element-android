@@ -33,6 +33,7 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
+import im.vector.app.features.userdirectory.UserListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
@@ -56,17 +57,11 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
     companion object : MvRxViewModelFactory<ContactsBookViewModel, ContactsBookViewState> {
 
         override fun create(viewModelContext: ViewModelContext, state: ContactsBookViewState): ContactsBookViewModel? {
-            return when (viewModelContext) {
-                is FragmentViewModelContext -> (viewModelContext.fragment() as ContactsBookFragment).contactsBookViewModelFactory.create(state)
-                is ActivityViewModelContext -> {
-                    when (viewModelContext.activity<FragmentActivity>()) {
-                        is CreateDirectRoomActivity  -> viewModelContext.activity<CreateDirectRoomActivity>().contactsBookViewModelFactory.create(state)
-                        is InviteUsersToRoomActivity -> viewModelContext.activity<InviteUsersToRoomActivity>().contactsBookViewModelFactory.create(state)
-                        else                         -> error("Wrong activity or fragment")
-                    }
-                }
-                else                        -> error("Wrong activity or fragment")
+            val factory = when (viewModelContext) {
+                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
+                is ActivityViewModelContext -> viewModelContext.activity as? Factory
             }
+            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 
