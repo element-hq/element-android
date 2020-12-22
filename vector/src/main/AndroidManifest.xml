@@ -93,8 +93,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="element" />
-                <data android:host="element" />
+                <data
+                    android:host="connect"
+                    android:scheme="element" />
             </intent-filter>
         </activity>
 
