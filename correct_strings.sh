@@ -66,6 +66,7 @@ sed -i 's|Bitte den/die Administratorwolpertinger|Bitte den Administrator|g' "$s
 sed -i 's|Bitte den/die Administratorschlumpfwesen|Bitte den Administrator|g' "$strings_de"
 sed -i 's|keine weiteren Inhalte dieses/r Nutzersschlumpfwesen sehen|keine weiteren Inhalte dieses Nutzers sehen|g' "$strings_de"
 sed -i 's|gelöscht von Benutzerschlumpfwesen,|gelöscht vom Benutzer,|g' "$strings_de"
+sed -i 's|Aktivieren Ende-zu-Ende-Verschlüsselung|Ende-zu-Ende-Verschlüsselung aktivieren|g' "$strings_de"
 echo "Check for unresolved strings in $strings_de..."
 if grep "wolpertinger\|schlumpfwesen" "$strings_de"; then
     echo -e "\033[1;33m""Script outdated, please update manually!""\033[0m"
