@@ -26,20 +26,4 @@ restore_sc .github
 git add -A
 git commit -m "Automatic upstream merge postprocessing"
 
-revert_last 'Automatic revert to unchanged upstream strings, pt.1' || \
-    read -p "Please resolve conflicts and commit, then press enter"
-
-"$mydir"/correct_strings.sh
-
-
-while grep -q "wolpertinger\|schlumpfwesen" "$mydir/vector/src/main/res/values-de/strings.xml"; do
-    read -p "Please resolve remaining language, then press enter!"
-done
-
-uncommitted=`git status --porcelain`
-if [ -z "$uncommitted" ]; then
-    echo "Seems like no new language conflicts appeared :)"
-else
-    git add -A
-    git commit -m 'Resolve required manual intervention in german strings'
-fi
+$mydir"/correct_strings.sh
