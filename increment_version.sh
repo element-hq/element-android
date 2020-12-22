@@ -103,7 +103,6 @@ set_prop "versionName" "\"$version\""
 changelog_dir=fastlane/metadata/android/en-US/changelogs
 changelog_file="$changelog_dir/$versionCode.txt"
 mkdir -p "$changelog_dir"
-echo "Automatic changelog from commit history:" > "$changelog_file"
 git log --reverse --pretty=format:"- %s" "$last_tag".. --committer="$(git config user.name)" \
     | grep -v 'Automatic revert to unchanged upstream strings' \
     | grep -v 'Automatic upstream merge preparation' \
@@ -112,7 +111,7 @@ git log --reverse --pretty=format:"- %s" "$last_tag".. --committer="$(git config
     | grep -v "Automatic upstream merge postprocessing" \
     | grep -v "Automatic SchildiChat string correction" \
     | grep -v 'merge_helpers\|README\|increment_version' \
-    >> "$changelog_file"
+    > "$changelog_file"
 if [ "$release_type" != "test" ]; then
     $EDITOR "$changelog_file" || true
     read -p "Press enter when changelog is done"
