@@ -107,7 +107,7 @@
 
     <ImageButton
         android:id="@+id/attachmentButton"
-        android:layout_width="48dp"
+        android:layout_width="42dp"
         android:layout_height="48dp"
         android:layout_margin="1dp"
         android:background="?android:attr/selectableItemBackground"
@@ -146,7 +146,7 @@
 
     <ImageButton
         android:id="@+id/composer_emoji"
-        android:layout_width="48dp"
+        android:layout_width="42dp"
         android:layout_height="48dp"
         android:layout_margin="1dp"
         android:background="?android:attr/selectableItemBackground"
