@@ -297,11 +297,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setLights(accentColor, 500, 500)
                 .setOngoing(true)
 
-        // Compat: Display the incoming call notification on the lock screen
-        builder.priority = NotificationCompat.PRIORITY_HIGH
-
-        //
-//        val pendingIntent = stackBuilder.getPendingIntent(requestId, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val contentIntent = VectorCallActivity.newIntent(
                 context = context,
@@ -340,9 +335,11 @@ class NotificationUtils @Inject constructor(private val context: Context,
                         answerCallPendingIntent
                 )
         )
-
-        builder.setFullScreenIntent(contentPendingIntent, true)
-
+        if (fromBg) {
+            // Compat: Display the incoming call notification on the lock screen
+            builder.priority = NotificationCompat.PRIORITY_HIGH
+            builder.setFullScreenIntent(contentPendingIntent, true)
+        }
         return builder.build()
     }
 

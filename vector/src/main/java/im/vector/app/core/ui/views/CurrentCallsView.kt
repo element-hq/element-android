@@ -52,7 +52,7 @@ class CurrentCallsView @JvmOverloads constructor(
             it.mxCall.state is CallState.Connected
         }
         val heldCalls = connectedCalls.filter {
-            it.isLocalOnHold() || it.remoteOnHold
+            it.isLocalOnHold || it.remoteOnHold
         }
         if (connectedCalls.size == 1) {
             if (heldCalls.size == 1) {

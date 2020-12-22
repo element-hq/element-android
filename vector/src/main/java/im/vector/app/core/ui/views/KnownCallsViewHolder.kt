@@ -42,6 +42,9 @@ class KnownCallsViewHolder {
     }
 
     fun updateCall(currentCall: WebRtcCall?, calls: List<WebRtcCall>) {
+        activeCallPiP?.let {
+            this.currentCall?.detachRenderers(listOf(it))
+        }
         this.currentCall?.removeListener(tickListener)
         this.currentCall = currentCall
         this.currentCall?.addListener(tickListener)

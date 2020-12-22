@@ -50,7 +50,6 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
-import okhttp3.internal.concurrent.formatDuration
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCallDetail
@@ -166,7 +165,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         views.smallIsHeldIcon.isVisible = false
         when (callState) {
             is CallState.Idle,
-            is CallState.Dialing -> {
+            is CallState.CreateOffer,
+            is CallState.Dialing     -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
                 views.callStatusText.setText(R.string.call_ring)
@@ -187,9 +187,9 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 views.callConnectingProgress.isVisible = true
                 configureCallInfo(state)
             }
-            is CallState.Connected -> {
+            is CallState.Connected    -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
-                    if (state.isLocalOnHold) {
+                    if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
                         views.callVideoGroup.isInvisible = true
                         views.callInfoGroup.isVisible = true
@@ -226,13 +226,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callStatusText.setText(R.string.call_connecting)
                     views.callConnectingProgress.isVisible = true
                 }
-                // ensure all attached?
-                callManager.getCallById(callArgs.callId)?.attachViewRenderers(views.pipRenderer, views.fullscreenRenderer, null)
             }
-            is CallState.Terminated -> {
+            is CallState.Terminated   -> {
                 finish()
             }
-            null -> {
+            null                      -> {
             }
         }
     }
@@ -255,7 +253,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
             avatarRenderer.renderBlur(state.otherKnownCallInfo.otherUserItem, views.otherKnownCallAvatarView, sampling = 20, rounded = false, colorFilter = colorFilter)
             views.otherKnownCallLayout.isVisible = true
-            views.otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold() || it.remoteOnHold }.orFalse()
+            views.otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold || it.remoteOnHold }.orFalse()
         }
     }
 
