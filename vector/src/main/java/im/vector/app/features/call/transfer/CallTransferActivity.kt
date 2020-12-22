@@ -20,19 +20,20 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.View
 import android.widget.Toast
 import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.viewModel
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.platform.SimpleFragmentActivity
+import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
 import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
 import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.databinding.ActivityCallTransferBinding
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.contactsbook.ContactsBookViewState
@@ -48,13 +49,19 @@ import javax.inject.Inject
 @Parcelize
 data class CallTransferArgs(val callId: String) : Parcelable
 
-class CallTransferActivity : SimpleFragmentActivity(), CallTransferViewModel.Factory, UserListViewModel.Factory, ContactsBookViewModel.Factory {
+private const val USER_LIST_FRAGMENT_TAG = "USER_LIST_FRAGMENT_TAG"
+
+class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(), CallTransferViewModel.Factory, UserListViewModel.Factory, ContactsBookViewModel.Factory {
 
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
     @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory
     @Inject lateinit var callTransferViewModelFactory: CallTransferViewModel.Factory
     @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
+
+    private val callTransferViewModel: CallTransferViewModel by viewModel()
+
+    override fun getBinding() = ActivityCallTransferBinding.inflate(layoutInflater)
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
@@ -75,32 +82,49 @@ class CallTransferActivity : SimpleFragmentActivity(), CallTransferViewModel.Fac
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        views.toolbar.visibility = View.GONE
-
         sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
         sharedActionViewModel
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        UserListSharedAction.Close                 -> finish()
-                        UserListSharedAction.GoBack                -> onBackPressed()
-                        UserListSharedAction.OpenPhoneBook         -> openPhoneBook()
+                        UserListSharedAction.OpenPhoneBook -> openPhoneBook()
                         // not exhaustive because it's a sharedAction
-                        else                                       -> {
+                        else                               -> {
                         }
                     }
                 }
                 .disposeOnDestroy()
         if (isFirstCreation()) {
             addFragment(
-                    R.id.container,
+                    R.id.callTransferFragmentContainer,
                     UserListFragment::class.java,
                     UserListFragmentArgs(
-                            title = "Call transfer",
-                            menuResId = -1
-                    )
+                            title = "",
+                            menuResId = -1,
+                            singleSelection = true,
+                            showInviteActions = false,
+                            showToolbar = false
+                    ),
+                    USER_LIST_FRAGMENT_TAG
             )
+        }
+        callTransferViewModel.observeViewEvents {
+            when (it) {
+                is CallTransferViewEvents.Dismiss -> finish()
+            }
+        }
+        configureToolbar(views.callTransferToolbar)
+        setupConnectAction()
+    }
+
+    private fun setupConnectAction() {
+        views.callTransferConnectAction.debouncedClicks {
+            val userListFragment = supportFragmentManager.findFragmentByTag(USER_LIST_FRAGMENT_TAG) as? UserListFragment
+            val selectedUser = userListFragment?.getCurrentState()?.getSelectedMatrixId()?.firstOrNull()
+            if (selectedUser != null) {
+                val action = CallTransferAction.Connect(views.callTransferConsultCheckBox.isChecked, selectedUser)
+                callTransferViewModel.handle(action)
+            }
         }
     }
 
@@ -110,7 +134,7 @@ class CallTransferActivity : SimpleFragmentActivity(), CallTransferViewModel.Fac
                         this,
                         PERMISSION_REQUEST_CODE_READ_CONTACTS,
                         0)) {
-            addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+            addFragmentToBackstack(R.id.callTransferFragmentContainer, ContactsBookFragment::class.java)
         }
     }
 
@@ -118,7 +142,7 @@ class CallTransferActivity : SimpleFragmentActivity(), CallTransferViewModel.Fac
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (allGranted(grantResults)) {
             if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
+                doOnPostResume { addFragmentToBackstack(R.id.callTransferFragmentContainer, ContactsBookFragment::class.java) }
             }
         } else {
             Toast.makeText(baseContext, R.string.missing_permissions_error, Toast.LENGTH_SHORT).show()
@@ -126,7 +150,7 @@ class CallTransferActivity : SimpleFragmentActivity(), CallTransferViewModel.Fac
     }
 
     companion object {
-
+        
         fun newIntent(context: Context, callId: String): Intent {
             return Intent(context, CallTransferActivity::class.java).also {
                 it.putExtra(MvRx.KEY_ARG, CallTransferArgs(callId))

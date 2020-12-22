@@ -146,7 +146,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
     private fun onMenuItemSelected(action: UserListSharedAction.OnMenuItemSelected) {
         if (action.itemId == R.id.action_create_direct_room) {
             viewModel.handle(CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(
-                    action.invitees,
+                    action.selections,
                     null
             ))
         }

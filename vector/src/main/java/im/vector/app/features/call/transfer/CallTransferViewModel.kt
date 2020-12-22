@@ -16,20 +16,23 @@
 
 package im.vector.app.features.call.transfer
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import im.vector.app.core.platform.EmptyAction
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.resources.StringProvider
-import org.matrix.android.sdk.api.session.Session
+import im.vector.app.features.call.webrtc.WebRtcCall
+import im.vector.app.features.call.webrtc.WebRtcCallManager
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.call.CallState
+import org.matrix.android.sdk.api.session.call.MxCall
 import timber.log.Timber
 
-class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: CallTransferViewState)
-    : VectorViewModel<CallTransferViewState, EmptyAction, EmptyViewEvents>(initialState) {
+class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: CallTransferViewState,
+                                                        private val callManager: WebRtcCallManager)
+    : VectorViewModel<CallTransferViewState, CallTransferAction, CallTransferViewEvents>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
@@ -45,6 +48,43 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
         }
     }
 
-    override fun handle(action: EmptyAction) {}
+    private var call: WebRtcCall? = null
+    private val callListener = object : WebRtcCall.Listener {
+        override fun onStateUpdate(call: MxCall) {
+            if (call.state == CallState.Terminated) {
+                _viewEvents.post(CallTransferViewEvents.Dismiss)
+            }
+        }
+    }
 
+    init {
+        val webRtcCall = callManager.getCallById(initialState.callId)
+        if (webRtcCall == null) {
+            _viewEvents.post(CallTransferViewEvents.Dismiss)
+        } else {
+            call = webRtcCall
+            webRtcCall.addListener(callListener)
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        call?.removeListener(callListener)
+    }
+
+    override fun handle(action: CallTransferAction) {
+        when (action) {
+            is CallTransferAction.Connect -> transferCall(action)
+        }
+    }
+
+    private fun transferCall(action: CallTransferAction.Connect) {
+        viewModelScope.launch {
+            try {
+                call?.mxCall?.transfer(action.selectedUserId, null)
+            } catch (failure: Throwable) {
+                Timber.v("Fail to transfer call: $failure")
+            }
+        }
+    }
 }

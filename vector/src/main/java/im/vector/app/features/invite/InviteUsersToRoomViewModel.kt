@@ -25,8 +25,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.contactsbook.ContactsBookViewModel
-import im.vector.app.features.userdirectory.PendingInvitee
+import im.vector.app.features.userdirectory.PendingSelection
 import io.reactivex.Observable
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.rx.rx
@@ -58,30 +57,30 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
 
     override fun handle(action: InviteUsersToRoomAction) {
         when (action) {
-            is InviteUsersToRoomAction.InviteSelectedUsers -> inviteUsersToRoom(action.invitees)
+            is InviteUsersToRoomAction.InviteSelectedUsers -> inviteUsersToRoom(action.selections)
         }
     }
 
-    private fun inviteUsersToRoom(invitees: Set<PendingInvitee>) {
+    private fun inviteUsersToRoom(selections: Set<PendingSelection>) {
         _viewEvents.post(InviteUsersToRoomViewEvents.Loading)
 
-        Observable.fromIterable(invitees).flatMapCompletable { user ->
+        Observable.fromIterable(selections).flatMapCompletable { user ->
             when (user) {
-                is PendingInvitee.UserPendingInvitee     -> room.rx().invite(user.user.userId, null)
-                is PendingInvitee.ThreePidPendingInvitee -> room.rx().invite3pid(user.threePid)
+                is PendingSelection.UserPendingSelection     -> room.rx().invite(user.user.userId, null)
+                is PendingSelection.ThreePidPendingSelection -> room.rx().invite3pid(user.threePid)
             }
         }.subscribe(
                 {
-                    val successMessage = when (invitees.size) {
+                    val successMessage = when (selections.size) {
                         1    -> stringProvider.getString(R.string.invitation_sent_to_one_user,
-                                invitees.first().getBestName())
+                                selections.first().getBestName())
                         2    -> stringProvider.getString(R.string.invitations_sent_to_two_users,
-                                invitees.first().getBestName(),
-                                invitees.last().getBestName())
+                                selections.first().getBestName(),
+                                selections.last().getBestName())
                         else -> stringProvider.getQuantityString(R.plurals.invitations_sent_to_one_and_more_users,
-                                invitees.size - 1,
-                                invitees.first().getBestName(),
-                                invitees.size - 1)
+                                selections.size - 1,
+                                selections.first().getBestName(),
+                                selections.size - 1)
                     }
                     _viewEvents.post(InviteUsersToRoomViewEvents.Success(successMessage))
                 },

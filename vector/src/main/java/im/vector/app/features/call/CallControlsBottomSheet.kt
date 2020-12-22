@@ -63,6 +63,11 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             dismiss()
         }
 
+        views.callControlsTransfer.views.itemVerificationClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.InitiateCallTransfer)
+            dismiss()
+        }
+
         callViewModel.observeViewEvents {
             when (it) {
                 is VectorCallViewEvents.ShowSoundDeviceChooser -> {
@@ -153,5 +158,6 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             views.callControlsToggleHoldResume.subTitle = null
             views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_hold_action)
         }
+        views.callControlsTransfer.isVisible = state.canOpponentBeTransferred
     }
 }

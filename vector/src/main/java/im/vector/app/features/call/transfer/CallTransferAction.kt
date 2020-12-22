@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.userdirectory
+package im.vector.app.features.call.transfer
 
 import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class UserListAction : VectorViewModelAction {
-    data class SearchUsers(val value: String) : UserListAction()
-    object ClearSearchUsers : UserListAction()
-    data class AddPendingSelection(val pendingSelection: PendingSelection) : UserListAction()
-    data class RemovePendingSelection(val pendingSelection: PendingSelection) : UserListAction()
-    object ComputeMatrixToLinkForSharing : UserListAction()
+sealed class CallTransferAction : VectorViewModelAction {
+    data class Connect(val consultFirst: Boolean, val selectedUserId: String) : CallTransferAction()
 }

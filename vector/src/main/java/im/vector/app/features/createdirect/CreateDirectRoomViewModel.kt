@@ -26,10 +26,9 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
-import im.vector.app.features.userdirectory.PendingInvitee
+import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.raw.RawService
@@ -77,11 +76,11 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
             }
         } else {
             // Create the DM
-            createRoomAndInviteSelectedUsers(action.invitees)
+            createRoomAndInviteSelectedUsers(action.selections)
         }
     }
 
-    private fun createRoomAndInviteSelectedUsers(invitees: Set<PendingInvitee>) {
+    private fun createRoomAndInviteSelectedUsers(selections: Set<PendingSelection>) {
         viewModelScope.launch(Dispatchers.IO) {
             val adminE2EByDefault = rawService.getElementWellknown(session.myUserId)
                     ?.isE2EByDefault()
@@ -89,10 +88,10 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
             val roomParams = CreateRoomParams()
                     .apply {
-                        invitees.forEach {
+                        selections.forEach {
                             when (it) {
-                                is PendingInvitee.UserPendingInvitee     -> invitedUserIds.add(it.user.userId)
-                                is PendingInvitee.ThreePidPendingInvitee -> invite3pids.add(it.threePid)
+                                is PendingSelection.UserPendingSelection     -> invitedUserIds.add(it.user.userId)
+                                is PendingSelection.ThreePidPendingSelection -> invite3pids.add(it.threePid)
                             }.exhaustive
                         }
                         setDirectMessage()
