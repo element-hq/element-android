@@ -101,7 +101,7 @@
     <string name="user_directory_header">Kullanıcı sözlüğü</string>
     <string name="matrix_only_filter">Sadece Matrix kullanıcıları</string>
     <string name="no_conversation_placeholder">Konuşma yok</string>
-    <string name="no_contact_access_placeholder">SchildiChat\'in yerel rehbere erişmesine izin vermediniz</string>
+    <string name="no_contact_access_placeholder">Element\'in yerel rehbere erişmesine izin vermediniz</string>
     <string name="no_result_placeholder">Sonuç yok</string>
 
     <string name="rooms_header">Odalar</string>
@@ -291,7 +291,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="e2e_re_request_encryption_key_sent">Anahtar isteği gönderildi.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">İstek gönderildi</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">SchildiChat\'i mesajları çözebilen farklı bir cihazda açarsanız ordan anahtarları bu oturuma gönderebilirsiniz.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Element\'i mesajları çözebilen farklı bir cihazda açarsanız ordan anahtarları bu oturuma gönderebilirsiniz.</string>
 
     <string name="read_receipts_list">Makbuz Listesini Oku</string>
 
@@ -320,7 +320,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="room_info_room_topic">Oda konusu</string>
 
     <string name="settings_call_category">Aramalar</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Gelen aramalar için varsayılan SchildiChat zil sesini kullan</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Gelen aramalar için varsayılan Element zil sesini kullan</string>
     <string name="settings_call_ringtone_title">Gelen arama zil sesi</string>
     <string name="settings_call_ringtone_dialog_title">Aramalar için zil sesi seç:</string>
 
@@ -344,22 +344,22 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="media_picker_cannot_record_video">Video kaydedilemiyor</string>
 
     <string name="permissions_rationale_popup_title">Bilgilendirme</string>
-    <string name="permissions_rationale_msg_storage">SchildiChat\'in ekleri göndermek ya da kaydetmek için galeriye erişmeye ihtiyacı var.
+    <string name="permissions_rationale_msg_storage">Element\'in ekleri göndermek ya da kaydetmek için galeriye erişmeye ihtiyacı var.
 \n
 \nLütfen çıkacak ekranda telefonunuzdan dosya gönderebilmesine izin verin.</string>
-    <string name="permissions_rationale_msg_camera">SchildiChat\'in resim ya da video çekmek için kameraya erişmeye ihtiyacı var.</string>
+    <string name="permissions_rationale_msg_camera">Element\'in resim ya da video çekmek için kameraya erişmeye ihtiyacı var.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nLütfen çıkacak ekranda kameraya erişebilmesine izin verin."</string>
-    <string name="permissions_rationale_msg_record_audio">SchildiChat\'in sesli arama yapması için mikrofonunuza erişmeye ihtiyacı var.</string>
+    <string name="permissions_rationale_msg_record_audio">Element\'in sesli arama yapması için mikrofonunuza erişmeye ihtiyacı var.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nLütfen çıkacak ekranda mikrofona erişebilmesine izin verin."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat\'in görüntülü arama yapması için kameranıza ve mikrofonunuza erişmeye ihtiyacı var.
+    <string name="permissions_rationale_msg_camera_and_audio">Element\'in görüntülü arama yapması için kameranıza ve mikrofonunuza erişmeye ihtiyacı var.
 \n
 \nLütfen çıkacak ekranda kamera ve mikrofona erişebilmesine izin verin.</string>
-    <string name="permissions_rationale_msg_contacts">SchildiChat eposta ve telefon numaralarına göre diğer Matrix kullanıcılarını bulmak için rehberinizi kontrol edebilir. Eğer bu nedenle rehberinizi paylaşmak istiyorsanız, lütfen açılan ekranda erişime izin verin.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat\'in eposta ve telefon numaralarına göre diğer Matrix kullanıcılarını bulmak için rehberinizi kontrol edebilir.
+    <string name="permissions_rationale_msg_contacts">Element eposta ve telefon numaralarına göre diğer Matrix kullanıcılarını bulmak için rehberinizi kontrol edebilir. Eğer bu nedenle rehberinizi paylaşmak istiyorsanız, lütfen açılan ekranda erişime izin verin.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Element\'in eposta ve telefon numaralarına göre diğer Matrix kullanıcılarını bulmak için rehberinizi kontrol edebilir.
 \n 
 \nRehberinizi bu sebeple paylaşmayı kabul ediyor musunuz\?</string>
 
@@ -606,7 +606,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="settings_troubleshoot_test_device_settings_title">Oturum Ayarları.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Bildirimler bu oturum için etkinleştirilmiş.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Bildirimler bu oturum için etkin değil. 
-\nLütfen SchildiChat ayarlarını gözden geçirin.</string>
+\nLütfen Element ayarlarını gözden geçirin.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Etkinleştir</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Özel Ayarlar.</string>
@@ -617,7 +617,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
 
     <string name="settings_troubleshoot_test_play_services_title">Play Hizmetlerini Gözden Geçir</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Hizmetleri APK\'sı kullanılabilir ve güncel.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat bildirimleri göndermek için Google Play Hizmetleri kullanır, ancak düzgün ayarlanmış görünmüyor:
+    <string name="settings_troubleshoot_test_play_services_failed">Element bildirimleri göndermek için Google Play Hizmetleri kullanır, ancak düzgün ayarlanmış görünmüyor:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Google Play Hizmetlerini Düzelt</string>
 
@@ -627,11 +627,11 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="settings_troubleshoot_test_fcm_failed">FCM belirtecini alırken hata meydana geldi:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nBu hata SchildiChat\'in kontrolü dışında Google\'a bağlı ve cihazın çok fazla FCM ile kayıtlı uygulaması olduğunu belirtiyor. Bu hata sadece çok fazla uygulama kullanıldığı zaman olur ve genelde ortalama kullanıcıyı etkilemez.</string>
+\nBu hata Element\'in kontrolü dışında Google\'a bağlı ve cihazın çok fazla FCM ile kayıtlı uygulaması olduğunu belirtiyor. Bu hata sadece çok fazla uygulama kullanıldığı zaman olur ve genelde ortalama kullanıcıyı etkilemez.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nBu hata SchildiChat\'in kontrolü dışında ve birçok nedene bağlı olabilir. Belki sonra denediğin zaman çalışır. Ayrıca Google Play Hizmetlerinin veri kullanımı konusunda sistem ayarlarında kısıtlanmamış ya da cihaz saatinin doğru olduğundan emin olun, bu hata özel ROM\'larda meydana gelebiliyor.</string>
+\nBu hata Element\'in kontrolü dışında ve birçok nedene bağlı olabilir. Belki sonra denediğin zaman çalışır. Ayrıca Google Play Hizmetlerinin veri kullanımı konusunda sistem ayarlarında kısıtlanmamış ya da cihaz saatinin doğru olduğundan emin olun, bu hata özel ROM\'larda meydana gelebiliyor.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nBu hata SchildiChat\'in kontrolü dışında. Telefonda hiç Google hesabı yok. Lütfen hesap yöneticisini açın ve bir tane Google hesabı ekleyin.</string>
+\nBu hata Element\'in kontrolü dışında. Telefonda hiç Google hesabı yok. Lütfen hesap yöneticisini açın ve bir tane Google hesabı ekleyin.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Hesap ekle</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Belirteç Kayıtı</string>
@@ -651,19 +651,19 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
 
     <string name="settings_troubleshoot_test_service_boot_title">Açılışta başlat</string>
     <string name="settings_troubleshoot_test_service_boot_success">Hizmet cihaz yeniden başlatıldığında çalıştırılacak.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Hizmet cihaz yeniden başlatılınca çalıştırılmayacak, SchildiChat\'i açana kadar bildirimleri almakyacaksın.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Hizmet cihaz yeniden başlatılınca çalıştırılmayacak, Element\'i açana kadar bildirimleri almakyacaksın.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Açılışta başlatı etkinleştir</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Arkaplan kısıtlamalarını gözden geçir</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Arkaplan kısıtlamaları SchildiChat için devre dışı. Bu test mobil veri kullanacak (WIFI değil).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Arkaplan kısıtlamaları Element için devre dışı. Bu test mobil veri kullanacak (WIFI değil).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Arkaplan kısıtlamaları SchildiChat için etkinleştirilmiş.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Arkaplan kısıtlamaları Element için etkinleştirilmiş.
 \nUygulamanın arkaplanda iken yapmaya çalıştığı şeyler agresif bir biçimde kısıtlanacak ve bu bildirimleri de etkileyebilir.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Kısıtlamaları devre dışı bırak</string>
 
     <string name="settings_troubleshoot_test_battery_title">Pil Optimizasyonu</string>
-    <string name="settings_troubleshoot_test_battery_success">SchildiChat Pil Optimizasyonundan etkilenmedi.</string>
+    <string name="settings_troubleshoot_test_battery_success">Element Pil Optimizasyonundan etkilenmedi.</string>
     <string name="settings_troubleshoot_test_battery_failed">Eğer kullanıcı cihazını prize bağlanmamış sabit ve ekranı kapalı bir şekilde bir süre bırakırsa cihaz Derin uyku moduna geçer. Bu uygulamaların internete erişmesini engeller ve yapılacak işlerini, senkronizasyolarını, alarmını erteler.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Optimizasyonu Göz ardı et</string>
 
@@ -746,19 +746,19 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="settings_deactivate_my_account">Hesabımı devre dışı bırak</string>
 
     <string name="startup_notification_privacy_title">Bildirim Gizliliği</string>
-    <string name="startup_notification_privacy_message">SchildiChat bildirimlerinizi güvenli ve gizli bir şekilde yönetmek için arkaplanda çalışır. Bu pil kullanımını etkileyebilir.</string>
+    <string name="startup_notification_privacy_message">Element bildirimlerinizi güvenli ve gizli bir şekilde yönetmek için arkaplanda çalışır. Bu pil kullanımını etkileyebilir.</string>
     <string name="startup_notification_privacy_button_grant">İzin ver</string>
     <string name="startup_notification_privacy_button_other">Farklı bir seçenek seç</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Arkaplan Bağlantısı</string>
-    <string name="startup_notification_fdroid_battery_optim_message">SchildiChat güvenilir bildirimlere sahip olmak için düşük arkaplan bağlatısı yapmaya ihtiyaç duyar.
-\nÇıkacak ekranda SchildiChat\'in arkaplanda sürekli çalışması için izin istenecek, lütfen kabul edin.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Element güvenilir bildirimlere sahip olmak için düşük arkaplan bağlatısı yapmaya ihtiyaç duyar.
+\nÇıkacak ekranda Element\'in arkaplanda sürekli çalışması için izin istenecek, lütfen kabul edin.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">İzin ver</string>
 
     <string name="settings_analytics">Analiz</string>
     <string name="settings_opt_in_of_analytics">Analiz verilerini gönder</string>
-    <string name="settings_opt_in_of_analytics_summary">SchildiChat uygulamayı geliştirmemiz için anonim analitik veriler toplar.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Lütfen SchildiChat\'i geliştirebilmemiz için analizleri etkinleştirin.</string>
+    <string name="settings_opt_in_of_analytics_summary">Element uygulamayı geliştirmemiz için anonim analitik veriler toplar.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Lütfen Element\'i geliştirebilmemiz için analizleri etkinleştirin.</string>
     <string name="settings_opt_in_of_analytics_ok">Evet, Yardım etmek istiyorum!</string>
 
     <string name="settings_data_save_mode">Veri kaydetme modu</string>
@@ -1155,7 +1155,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="passphrase_empty_error_message">Lütfen bir parola girin</string>
     <string name="passphrase_passphrase_too_weak">Parola çok zayıf</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">Eğer SchildiChat\'in kurtarma anahtarı oluşturmasını istiyorsanız lütfen parolayı silin.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Eğer Element\'in kurtarma anahtarı oluşturmasını istiyorsanız lütfen parolayı silin.</string>
     <string name="keys_backup_no_session_error">Matrix oturumu müsait değil</string>
 
     <string name="keys_backup_setup_step1_title">Şifrelenmiş mesajları asla kaybetme</string>
@@ -1297,11 +1297,11 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="settings_call_ringtone_use_default_stun_sum">Anasunucunuz çağrı yardımcı sunucusu vermez ise %s çağrı yardımcı sunucusu olarak kullanılacaktır (Çağrıda IP adresiniz paylaşılacaktır)</string>
     <string name="invite_no_identity_server_error">Bu eylemi gerçekleştirebilmek için ayarlarınızdan bir kimlik sunucusu ekleyin.</string>
     <string name="settings_add_3pid_confirm_password_title">Şifreni doğrula</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat, cihazın sınırlı kaynaklarını (pil) koruyacak şekilde arka planda senkronize olur.
+    <string name="settings_background_fdroid_sync_mode_battery_description">Element, cihazın sınırlı kaynaklarını (pil) koruyacak şekilde arka planda senkronize olur.
 \nCihazınızın kaynak durumuna bağlı olarak, senkronizasyon işletim sistemi tarafından ertelenebilir.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Gerçek zamanlı için optimize</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat periyodik olarak belirli bir zamanda (ayarlanabilir) arka planda senkronize olur.
-\nBu pil ve radyo kullanımını etkileyecek ve SchildiChat\'in olayları dinlediğini belirten kalıcı bir bildirim gösterecektir.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Element periyodik olarak belirli bir zamanda (ayarlanabilir) arka planda senkronize olur.
+\nBu pil ve radyo kullanımını etkileyecek ve Element\'in olayları dinlediğini belirten kalıcı bir bildirim gösterecektir.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Arka plan senkronizasyonu yok</string>
     <string name="settings_set_workmanager_delay">Tercih Edilen Senkronize Aralığı</string>
     <string name="settings_set_workmanager_delay_summary">%s
@@ -1395,7 +1395,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="keys_backup_settings_checking_backup_state">Yedek durumu kontrol ediliyor</string>
     <string name="autodiscover_invalid_response">Geçersiz anasunucu keşif cevabı</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Sunucu Ayarlarını Otomatik Doldur</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">SchildiChat userld alan adı için özel sunucu yapılandırması buldu \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">Element userld alan adı için özel sunucu yapılandırması buldu \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Yapılandırmayı kullan</string>
 
@@ -1489,7 +1489,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="group_all_communities">Tüm Topluluklar</string>
 
     <string name="room_preview_no_preview">Bu oda önizlenemez</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">SchildiChat henüz herkese-açık odaları önizlemeyi desteklemiyor</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Element henüz herkese-açık odaları önizlemeyi desteklemiyor</string>
 
     <string name="fab_menu_create_room">Odalar</string>
     <string name="fab_menu_create_chat">Doğrudan Mesajlar</string>
@@ -1507,7 +1507,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
 
     <string name="login_error_no_homeserver_found">Bu geçerli bir Matrix sunucu adresi değil</string>
     <string name="login_error_homeserver_not_found">Bu URL ile ev-sunucusuna erişilemiyor, lütfen kontrol edin</string>
-    <string name="settings_add_3pid_flow_not_supported">Bunu SchildiChat mobil ile yapamazsınız</string>
+    <string name="settings_add_3pid_flow_not_supported">Bunu Element mobil ile yapamazsınız</string>
     <string name="settings_add_3pid_authentication_needed">Kimlik doğrulama gereklidir</string>
 
 
@@ -1526,7 +1526,7 @@ Eğer yeni kurtarma yöntemini siz ayarlamadıysanız, bir saldırgan hesabını
     <string name="dialog_title_success">Başarılı</string>
 
     <string name="bottom_action_notification">Bildirimler</string>
-    <string name="call_failed_no_connection">SchildiChat Araması Başarısız Oldu</string>
+    <string name="call_failed_no_connection">Element Araması Başarısız Oldu</string>
     <string name="call_failed_no_connection_description">Eş zamanlı bağlantı kurulamadı.
 \nAramaların hatasız çalışması için snucunuzun yöneticisinden TURN sunucusu ayarlamasını rica edin.</string>
 
