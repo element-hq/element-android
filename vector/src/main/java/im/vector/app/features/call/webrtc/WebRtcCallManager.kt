@@ -206,6 +206,10 @@ class WebRtcCallManager @Inject constructor(
 
     fun startOutgoingCall(signalingRoomId: String, otherUserId: String, isVideoCall: Boolean) {
         Timber.v("## VOIP startOutgoingCall in room $signalingRoomId to $otherUserId isVideo $isVideoCall")
+        if (getCallsByRoomId(signalingRoomId).isNotEmpty()) {
+            Timber.w("## VOIP you already have a call in this room")
+            return
+        }
         if (currentCall.get() != null && currentCall.get()?.mxCall?.state !is CallState.Connected || getCalls().size >= 2) {
             Timber.w("## VOIP cannot start outgoing call")
             // Just ignore, maybe we could answer from other session?
@@ -276,7 +280,11 @@ class WebRtcCallManager @Inject constructor(
 
     override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
         Timber.v("## VOIP onCallInviteReceived callId ${mxCall.callId}")
-        if (currentCall.get() != null && currentCall.get()?.mxCall?.state !is CallState.Connected || getCalls().size >= 2) {
+        if (getCallsByRoomId(mxCall.roomId).isNotEmpty()) {
+            Timber.w("## VOIP you already have a call in this room")
+            return
+        }
+        if ((currentCall.get() != null && currentCall.get()?.mxCall?.state !is CallState.Connected) || getCalls().size >= 2) {
             Timber.w("## VOIP receiving incoming call but cannot handle it")
             // Just ignore, maybe we could answer from other session?
             return

@@ -16,9 +16,7 @@
 
 package im.vector.app.core.utils
 
-import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
@@ -37,7 +35,7 @@ class CountUpTimer(private val intervalInMs: Long) {
 
     var tickListener: TickListener? = null
 
-    fun elapsedTime(): Long{
+    fun elapsedTime(): Long {
         return elapsedTime.get()
     }
 
@@ -56,5 +54,4 @@ class CountUpTimer(private val intervalInMs: Long) {
     interface TickListener {
         fun onTick(milliseconds: Long)
     }
-
 }

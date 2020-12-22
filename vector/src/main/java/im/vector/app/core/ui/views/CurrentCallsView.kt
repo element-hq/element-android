@@ -18,10 +18,8 @@ package im.vector.app.core.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import im.vector.app.R
-import im.vector.app.databinding.ViewCallControlsBinding
 import im.vector.app.databinding.ViewCurrentCallsBinding
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.themes.ThemeUtils
@@ -62,7 +60,7 @@ class CurrentCallsView @JvmOverloads constructor(
             }
         } else {
             if (heldCalls.size > 1) {
-                views.currentCallsInfo.text = resources.getString(R.string.call_only_multiple_paused , heldCalls.size)
+                views.currentCallsInfo.text = resources.getString(R.string.call_only_multiple_paused, heldCalls.size)
             } else if (heldCalls.size == 1) {
                 views.currentCallsInfo.text = resources.getString(R.string.call_active_and_single_paused, formattedDuration)
             } else {

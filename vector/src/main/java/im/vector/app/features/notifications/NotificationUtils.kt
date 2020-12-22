@@ -297,7 +297,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setLights(accentColor, 500, 500)
                 .setOngoing(true)
 
-
         val contentIntent = VectorCallActivity.newIntent(
                 context = context,
                 mxCall = mxCall,
@@ -391,7 +390,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
     @SuppressLint("NewApi")
     fun buildPendingCallNotification(mxCall: MxCall,
                                      title: String): Notification {
-
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {

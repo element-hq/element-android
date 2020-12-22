@@ -251,7 +251,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         } else {
             val otherCall = callManager.getCallById(state.otherKnownCallInfo.callId)
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
-            avatarRenderer.renderBlur(state.otherKnownCallInfo.otherUserItem, views.otherKnownCallAvatarView, sampling = 20, rounded = false, colorFilter = colorFilter)
+            avatarRenderer.renderBlur(
+                    matrixItem = state.otherKnownCallInfo.otherUserItem,
+                    imageView = views.otherKnownCallAvatarView,
+                    sampling = 20,
+                    rounded = false,
+                    colorFilter = colorFilter
+            )
             views.otherKnownCallLayout.isVisible = true
             views.otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold || it.remoteOnHold }.orFalse()
         }
