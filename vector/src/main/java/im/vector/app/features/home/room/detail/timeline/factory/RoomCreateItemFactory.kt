@@ -33,7 +33,6 @@ import javax.inject.Inject
 class RoomCreateItemFactory @Inject constructor(private val stringProvider: StringProvider,
                                                 private val userPreferencesProvider: UserPreferencesProvider,
                                                 private val session: Session,
-                                                private val roomSummaryHolder: RoomSummaryHolder,
                                                 private val noticeItemFactory: NoticeItemFactory) {
 
     fun create(event: TimelineEvent, callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
@@ -54,7 +53,7 @@ class RoomCreateItemFactory @Inject constructor(private val stringProvider: Stri
 
     private fun defaultRendering(event: TimelineEvent, callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
         return if (userPreferencesProvider.shouldShowHiddenEvents()) {
-            noticeItemFactory.create(event, false, roomSummaryHolder.roomSummary, callback)
+            noticeItemFactory.create(event, false, callback)
         } else {
             null
         }

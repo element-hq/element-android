@@ -38,6 +38,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.HomeRoomListDataSource
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.login.ReAuthHelper
@@ -157,6 +158,8 @@ interface VectorComponent {
     fun pinLocker(): PinLocker
 
     fun webRtcCallManager(): WebRtcCallManager
+
+    fun roomSummaryHolder(): RoomSummaryHolder
 
     @Component.Factory
     interface Factory {

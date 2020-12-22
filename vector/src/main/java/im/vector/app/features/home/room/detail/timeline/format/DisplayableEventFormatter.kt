@@ -23,7 +23,6 @@ import im.vector.app.core.resources.StringProvider
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
@@ -41,7 +40,7 @@ class DisplayableEventFormatter @Inject constructor(
         private val noticeEventFormatter: NoticeEventFormatter
 ) {
 
-    fun format(timelineEvent: TimelineEvent, appendAuthor: Boolean, roomSummary: RoomSummary?): CharSequence {
+    fun format(timelineEvent: TimelineEvent, appendAuthor: Boolean): CharSequence {
         if (timelineEvent.root.isRedacted()) {
             return noticeEventFormatter.formatRedactedEvent(timelineEvent.root)
         }
@@ -131,7 +130,7 @@ class DisplayableEventFormatter @Inject constructor(
             }
             else                            -> {
                 return span {
-                    text = noticeEventFormatter.format(timelineEvent, roomSummary) ?: ""
+                    text = noticeEventFormatter.format(timelineEvent) ?: ""
                     textStyle = "italic"
                 }
             }

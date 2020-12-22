@@ -19,22 +19,26 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import im.vector.app.core.di.ScreenScope
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /*
-    This holds an instance of the current room summary.
-    You should use this in the context of the timeline.
+    You can use this to share room summary instances within the app.
+    You should probably use this only in the context of the timeline
  */
-@ScreenScope
+@Singleton
 class RoomSummaryHolder @Inject constructor() {
 
-    var roomSummary: RoomSummary? = null
-        private set
+    private var roomSummaries = HashMap<String, RoomSummary>()
 
     fun set(roomSummary: RoomSummary) {
-        this.roomSummary = roomSummary
+        roomSummaries[roomSummary.roomId] = roomSummary
     }
 
+    fun get(roomId: String) = roomSummaries[roomId]
+
+    fun remove(roomId: String)= roomSummaries.remove(roomId)
+
     fun clear() {
-        roomSummary = null
+        roomSummaries.clear()
     }
 }

@@ -52,6 +52,8 @@ data class TimelineEvent(
         }
     }
 
+    val roomId = root.roomId ?: ""
+
     val metadata = HashMap<String, Any>()
 
     /**
