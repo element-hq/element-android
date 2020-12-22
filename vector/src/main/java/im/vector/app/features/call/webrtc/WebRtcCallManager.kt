@@ -46,7 +46,9 @@ import org.webrtc.DefaultVideoEncoderFactory
 import org.webrtc.PeerConnectionFactory
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -68,7 +70,7 @@ class WebRtcCallManager @Inject constructor(
         fun onAudioDevicesChange() {}
     }
 
-    private val currentCallsListeners = emptyList<CurrentCallListener>().toMutableList()
+    private val currentCallsListeners = CopyOnWriteArrayList<CurrentCallListener>()
     fun addCurrentCallListener(listener: CurrentCallListener) {
         currentCallsListeners.add(listener)
     }
@@ -101,13 +103,17 @@ class WebRtcCallManager @Inject constructor(
         isInBackground = true
     }
 
-    var currentCall: WebRtcCall? = null
-        private set(value) {
-            field = value
-            currentCallsListeners.forEach {
-                tryOrNull { it.onCurrentCallChange(value) }
-            }
+    /**
+     * The current call is the call we interacted with whatever his state (connected,resumed, held...)
+     * As soon as we interact with an other call, it replaces this one and put it on held if not already.
+     */
+    var currentCall: AtomicReference<WebRtcCall?> = AtomicReference(null)
+    private fun AtomicReference<WebRtcCall?>.setAndNotify(newValue: WebRtcCall?) {
+        set(newValue)
+        currentCallsListeners.forEach {
+            tryOrNull { it.onCurrentCallChange(newValue) }
         }
+    }
 
     private val callsByCallId = ConcurrentHashMap<String, WebRtcCall>()
     private val callsByRoomId = ConcurrentHashMap<String, MutableList<WebRtcCall>>()
@@ -120,13 +126,17 @@ class WebRtcCallManager @Inject constructor(
         return callsByRoomId[roomId] ?: emptyList()
     }
 
+    fun getCurrentCall(): WebRtcCall? {
+        return currentCall.get()
+    }
+
     fun getCalls(): List<WebRtcCall> {
         return callsByCallId.values.toList()
     }
 
     fun headSetButtonTapped() {
         Timber.v("## VOIP headSetButtonTapped")
-        val call = currentCall ?: return
+        val call = currentCall.get() ?: return
         if (call.mxCall.state is CallState.LocalRinging) {
             // accept call
             call.acceptIncomingCall()
@@ -168,10 +178,9 @@ class WebRtcCallManager @Inject constructor(
 
     private fun onCallActive(call: WebRtcCall) {
         Timber.v("## VOIP WebRtcPeerConnectionManager onCall active: ${call.mxCall.callId}")
-        if (currentCall != call) {
-            currentCall?.updateRemoteOnHold(onHold = true)
-            currentCall = call
-        }
+        val currentCall = currentCall.get().takeIf { it != call }
+        currentCall?.updateRemoteOnHold(onHold = true)
+        this.currentCall.setAndNotify(call)
     }
 
     private fun onCallEnded(call: WebRtcCall) {
@@ -180,12 +189,13 @@ class WebRtcCallManager @Inject constructor(
         callAudioManager.stop()
         callsByCallId.remove(call.mxCall.callId)
         callsByRoomId[call.mxCall.roomId]?.remove(call)
-        if (currentCall == call) {
-            currentCall = getCalls().lastOrNull()
+        if (currentCall.get() == call) {
+            val otherCall = getCalls().lastOrNull()
+            currentCall.setAndNotify(otherCall)
         }
         // This must be done in this thread
         executor.execute {
-            if (currentCall == null) {
+            if (currentCall.get() == null) {
                 Timber.v("## VOIP Dispose peerConnectionFactory as there is no need to keep one")
                 peerConnectionFactory?.dispose()
                 peerConnectionFactory = null
@@ -196,7 +206,7 @@ class WebRtcCallManager @Inject constructor(
 
     fun startOutgoingCall(signalingRoomId: String, otherUserId: String, isVideoCall: Boolean) {
         Timber.v("## VOIP startOutgoingCall in room $signalingRoomId to $otherUserId isVideo $isVideoCall")
-        if (currentCall != null && currentCall?.mxCall?.state !is CallState.Connected || getCalls().size >= 2) {
+        if (currentCall.get() != null && currentCall.get()?.mxCall?.state !is CallState.Connected || getCalls().size >= 2) {
             Timber.w("## VOIP cannot start outgoing call")
             // Just ignore, maybe we could answer from other session?
             return
@@ -204,9 +214,10 @@ class WebRtcCallManager @Inject constructor(
         executor.execute {
             createPeerConnectionFactoryIfNeeded()
         }
-        currentCall?.updateRemoteOnHold(onHold = true)
+        currentCall.get()?.updateRemoteOnHold(onHold = true)
         val mxCall = currentSession?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
-        currentCall = createWebRtcCall(mxCall)
+        val webRtcCall = createWebRtcCall(mxCall)
+        currentCall.setAndNotify(webRtcCall)
         callAudioManager.startForCall(mxCall)
 
         CallService.onOutgoingCallRinging(
@@ -253,7 +264,7 @@ class WebRtcCallManager @Inject constructor(
 
     fun onWiredDeviceEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
         Timber.v("## VOIP onWiredDeviceEvent $event")
-        currentCall ?: return
+        currentCall.get() ?: return
         // sometimes we received un-wanted unplugged...
         callAudioManager.wiredStateChange(event)
     }
@@ -265,7 +276,7 @@ class WebRtcCallManager @Inject constructor(
 
     override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
         Timber.v("## VOIP onCallInviteReceived callId ${mxCall.callId}")
-        if (currentCall != null && currentCall?.mxCall?.state !is CallState.Connected || getCalls().size >= 2) {
+        if (currentCall.get() != null && currentCall.get()?.mxCall?.state !is CallState.Connected || getCalls().size >= 2) {
             Timber.w("## VOIP receiving incoming call but cannot handle it")
             // Just ignore, maybe we could answer from other session?
             return

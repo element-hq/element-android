@@ -28,7 +28,7 @@ import org.webrtc.SurfaceViewRenderer
 class ActiveCallViewHolder {
 
     private var activeCallPiP: SurfaceViewRenderer? = null
-    private var activeCallView: ActiveCallView? = null
+    private var activeCallView: CurrentCallsView? = null
     private var pipWrapper: CardView? = null
     private var activeCall: WebRtcCall? = null
 
@@ -70,7 +70,7 @@ class ActiveCallViewHolder {
         }
     }
 
-    fun bind(activeCallPiP: SurfaceViewRenderer, activeCallView: ActiveCallView, pipWrapper: CardView, interactionListener: ActiveCallView.Callback) {
+    fun bind(activeCallPiP: SurfaceViewRenderer, activeCallView: CurrentCallsView, pipWrapper: CardView, interactionListener: CurrentCallsView.Callback) {
         this.activeCallPiP = activeCallPiP
         this.activeCallView = activeCallView
         this.pipWrapper = pipWrapper

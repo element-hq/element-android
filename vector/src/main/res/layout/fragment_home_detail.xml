@@ -65,7 +65,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/syncStateView" />
 
-    <im.vector.app.core.ui.views.ActiveCallView
+    <im.vector.app.core.ui.views.CurrentCallsView
         android:id="@+id/activeCallView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

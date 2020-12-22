@@ -22,7 +22,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import im.vector.app.core.platform.ConfigurationViewModel
-import im.vector.app.features.call.SharedCurrentCallViewModel
+import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreFromKeyViewModel
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreFromPassphraseViewModel
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreSharedViewModel
@@ -85,8 +85,8 @@ interface ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(SharedCurrentCallViewModel::class)
-    fun bindSharedActiveCallViewModel(viewModel: SharedCurrentCallViewModel): ViewModel
+    @ViewModelKey(SharedKnownCallsViewModel::class)
+    fun bindSharedActiveCallViewModel(viewModel: SharedKnownCallsViewModel): ViewModel
 
     @Binds
     @IntoMap

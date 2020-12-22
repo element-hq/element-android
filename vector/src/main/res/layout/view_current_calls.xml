@@ -9,11 +9,10 @@
     tools:parentTag="android.widget.RelativeLayout">
 
     <TextView
-        android:id="@+id/activeCallInfo"
+        android:id="@+id/currentCallsInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/returnToCallButton"
-        android:background="?attr/selectableItemBackground"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
@@ -21,7 +20,7 @@
         android:paddingEnd="16dp"
         android:paddingBottom="12dp"
         android:textSize="14sp"
-        android:text="@string/call_one_active_one_paused_call"
+        android:text="@string/call_active_and_single_paused"
         android:textColor="@color/white"
         app:drawableTint="@color/white"
         app:drawableStartCompat="@drawable/ic_call_answer" />
@@ -31,8 +30,8 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/activeCallInfo"
-        android:layout_alignBottom="@+id/activeCallInfo"
+        android:layout_alignTop="@+id/currentCallsInfo"
+        android:layout_alignBottom="@+id/currentCallsInfo"
         android:layout_alignParentEnd="true"
         android:clickable="false"
         android:focusable="false"

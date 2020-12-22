@@ -20,7 +20,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -117,6 +116,10 @@ class VectorCallViewModel @AssistedInject constructor(
 
     private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
 
+        override fun onCurrentCallChange(call: WebRtcCall?) {
+            updateOtherKnownCall(call)
+        }
+
         override fun onAudioDevicesChange() {
             val currentSoundDevice = callManager.callAudioManager.getCurrentSoundDevice()
             if (currentSoundDevice == CallAudioManager.SoundDevice.PHONE) {
@@ -130,6 +133,21 @@ class VectorCallViewModel @AssistedInject constructor(
                         availableSoundDevices = callManager.callAudioManager.getAvailableSoundDevices(),
                         soundDevice = currentSoundDevice
                 )
+            }
+        }
+    }
+
+    private fun updateOtherKnownCall(currentCall: WebRtcCall?) {
+        if (currentCall == null) return
+        val otherCall = callManager.getCalls().firstOrNull {
+            it.callId != currentCall.callId && it.mxCall.state is CallState.Connected
+        }
+        setState {
+            if (otherCall == null) {
+                copy(otherKnownCallInfo = null)
+            } else {
+                val otherUserItem: MatrixItem? = session.getUser(otherCall.mxCall.opponentUserId)?.toMatrixItem()
+                copy(otherKnownCallInfo = VectorCallViewState.CallInfo(otherCall.callId, otherUserItem))
             }
         }
     }
@@ -153,7 +171,7 @@ class VectorCallViewModel @AssistedInject constructor(
                 copy(
                         isVideoCall = webRtcCall.mxCall.isVideoCall,
                         callState = Success(webRtcCall.mxCall.state),
-                        otherUserMatrixItem = item?.let { Success(it) } ?: Uninitialized,
+                        callInfo = VectorCallViewState.CallInfo(callId, item),
                         soundDevice = currentSoundDevice,
                         isLocalOnHold = webRtcCall.isLocalOnHold(),
                         isRemoteOnHold = webRtcCall.remoteOnHold,
@@ -163,6 +181,7 @@ class VectorCallViewModel @AssistedInject constructor(
                         isHD = webRtcCall.mxCall.isVideoCall && webRtcCall.currentCaptureFormat() is CaptureFormat.HD
                 )
             }
+            updateOtherKnownCall(webRtcCall)
         }
     }
 

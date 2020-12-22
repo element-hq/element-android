@@ -21,6 +21,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import im.vector.app.R
+import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -50,7 +51,7 @@ class IncomingCallAlert(uid: String,
             view.findViewById<TextView>(R.id.incomingCallKindView).setText(callKind)
             view.findViewById<TextView>(R.id.incomingCallNameView).text = matrixItem?.getBestName()
             view.findViewById<ImageView>(R.id.incomingCallAvatar)?.let { imageView ->
-                matrixItem?.let { avatarRenderer.render(it, imageView) }
+                matrixItem?.let { avatarRenderer.render(it, imageView, GlideApp.with(view.context.applicationContext)) }
             }
             view.findViewById<ImageView>(R.id.incomingCallAcceptView).setOnClickListener {
                 onAccept()
