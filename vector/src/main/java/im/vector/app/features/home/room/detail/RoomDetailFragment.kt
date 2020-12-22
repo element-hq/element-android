@@ -90,7 +90,7 @@ import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
-import im.vector.app.core.ui.views.ActiveCallViewHolder
+import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.core.ui.views.ActiveConferenceView
 import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.NotificationAreaView
@@ -295,7 +295,7 @@ class RoomDetailFragment @Inject constructor(
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
-    private val activeCallViewHolder = ActiveCallViewHolder()
+    private val activeCallViewHolder = KnownCallsViewHolder()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -33,7 +33,7 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.ui.views.CurrentCallsView
-import im.vector.app.core.ui.views.ActiveCallViewHolder
+import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentHomeDetailBinding
 import im.vector.app.features.call.SharedKnownCallsViewModel
@@ -83,7 +83,7 @@ class HomeDetailFragment @Inject constructor(
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
     }
 
-    private val activeCallViewHolder = ActiveCallViewHolder()
+    private val activeCallViewHolder = KnownCallsViewHolder()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

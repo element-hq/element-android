@@ -50,6 +50,7 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
+import okhttp3.internal.concurrent.formatDuration
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCallDetail
@@ -205,7 +206,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                             }
                         }
                     } else {
-                        views.callStatusText.text = null
+                        views.callStatusText.text = state.formattedDuration
                         if (callArgs.isVideoCall) {
                             views.callVideoGroup.isVisible = true
                             views.callInfoGroup.isVisible = false

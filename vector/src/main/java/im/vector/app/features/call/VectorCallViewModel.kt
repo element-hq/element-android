@@ -79,6 +79,12 @@ class VectorCallViewModel @AssistedInject constructor(
             }
         }
 
+        override fun onTick(formattedDuration: String) {
+            setState {
+                copy(formattedDuration = formattedDuration)
+            }
+        }
+
         override fun onStateUpdate(call: MxCall) {
             val callState = call.state
             if (callState is CallState.Connected && callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
@@ -176,8 +182,9 @@ class VectorCallViewModel @AssistedInject constructor(
                         isLocalOnHold = webRtcCall.isLocalOnHold(),
                         isRemoteOnHold = webRtcCall.remoteOnHold,
                         availableSoundDevices = callManager.callAudioManager.getAvailableSoundDevices(),
-                        isFrontCamera = call?.currentCameraType() == CameraType.FRONT,
-                        canSwitchCamera = call?.canSwitchCamera() ?: false,
+                        isFrontCamera = webRtcCall.currentCameraType() == CameraType.FRONT,
+                        canSwitchCamera = webRtcCall.canSwitchCamera(),
+                        formattedDuration = webRtcCall.formattedDuration(),
                         isHD = webRtcCall.mxCall.isVideoCall && webRtcCall.currentCaptureFormat() is CaptureFormat.HD
                 )
             }
