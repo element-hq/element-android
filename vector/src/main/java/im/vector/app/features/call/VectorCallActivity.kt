@@ -106,7 +106,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
         } else {
             Timber.e("## VOIP missing callArgs for VectorCall Activity")
-            CallService.onNoActiveCall(this)
             finish()
         }
 
@@ -153,8 +152,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun renderState(state: VectorCallViewState) {
         Timber.v("## VOIP renderState call $state")
         if (state.callState is Fail) {
-            // be sure to clear notification
-            CallService.onNoActiveCall(this)
             finish()
             return
         }
@@ -295,7 +292,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         Timber.v("## VOIP handleViewEvents $event")
         when (event) {
             VectorCallViewEvents.DismissNoCall -> {
-                CallService.onNoActiveCall(this)
                 finish()
             }
             is VectorCallViewEvents.ConnectionTimeout -> {

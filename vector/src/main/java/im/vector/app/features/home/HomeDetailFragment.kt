@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -37,7 +36,7 @@ import im.vector.app.core.ui.views.ActiveCallView
 import im.vector.app.core.ui.views.ActiveCallViewHolder
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentHomeDetailBinding
-import im.vector.app.features.call.SharedActiveCallViewModel
+import im.vector.app.features.call.SharedCurrentCallViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.RoomListFragment
@@ -78,7 +77,7 @@ class HomeDetailFragment @Inject constructor(
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
-    private lateinit var sharedCallActionViewModel: SharedActiveCallViewModel
+    private lateinit var sharedCallActionViewModel: SharedCurrentCallViewModel
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
@@ -89,7 +88,7 @@ class HomeDetailFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
-        sharedCallActionViewModel = activityViewModelProvider.get(SharedActiveCallViewModel::class.java)
+        sharedCallActionViewModel = activityViewModelProvider.get(SharedCurrentCallViewModel::class.java)
 
         setupBottomNavigationView()
         setupToolbar()
@@ -127,9 +126,9 @@ class HomeDetailFragment @Inject constructor(
         }
 
         sharedCallActionViewModel
-                .activeCall
-                .observe(viewLifecycleOwner, Observer {
-                    activeCallViewHolder.updateCall(it)
+                .currentCall
+                .observe(viewLifecycleOwner, {
+                    activeCallViewHolder.updateCall(it, callManager.getCalls())
                     invalidateOptionsMenu()
                 })
     }
@@ -336,7 +335,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     override fun onTapToReturnToCall() {
-        sharedCallActionViewModel.activeCall.value?.let { call ->
+        sharedCallActionViewModel.currentCall.value?.let { call ->
             VectorCallActivity.newIntent(
                     context = requireContext(),
                     callId = call.callId,

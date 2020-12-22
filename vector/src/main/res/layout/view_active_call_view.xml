@@ -20,10 +20,11 @@
         android:paddingTop="12dp"
         android:paddingEnd="16dp"
         android:paddingBottom="12dp"
-        android:text="@string/active_call"
+        android:textSize="14sp"
+        android:text="@string/call_one_active_one_paused_call"
         android:textColor="@color/white"
         app:drawableTint="@color/white"
-        app:drawableStartCompat="@drawable/ic_call" />
+        app:drawableStartCompat="@drawable/ic_call_answer" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/returnToCallButton"
@@ -38,9 +39,9 @@
         android:gravity="center"
         android:paddingStart="8dp"
         android:paddingEnd="16dp"
-        android:text="@string/return_to_call"
+        android:text="@string/action_return"
         android:textColor="@color/white"
-        android:textSize="15sp"
+        android:textSize="14sp"
         android:textStyle="bold" />
 
 </merge>

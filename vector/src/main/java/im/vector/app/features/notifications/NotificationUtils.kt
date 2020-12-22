@@ -450,6 +450,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
     fun buildCallEndedNotification(): Notification {
         return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(stringProvider.getString(R.string.call_ended))
+                .setTimeoutAfter(2000)
                 .setSmallIcon(R.drawable.ic_material_call_end_grey)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
                 .build()

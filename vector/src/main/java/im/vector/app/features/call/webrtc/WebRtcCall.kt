@@ -88,6 +88,7 @@ class WebRtcCall(val mxCall: MxCall,
                  private val dispatcher: CoroutineContext,
                  private val sessionProvider: Provider<Session?>,
                  private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
+                 private val onCallBecomeActive: (WebRtcCall) -> Unit,
                  private val onCallEnded: (WebRtcCall) -> Unit) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
@@ -130,8 +131,11 @@ class WebRtcCall(val mxCall: MxCall,
 
     // Mute status
     var micMuted = false
+        private set
     var videoMuted = false
+        private set
     var remoteOnHold = false
+        private set
 
     var offerSdp: CallInviteContent.Offer? = null
 
@@ -328,6 +332,9 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     private suspend fun internalAcceptIncomingCall() = withContext(dispatcher) {
+        tryOrNull {
+            onCallBecomeActive(this@WebRtcCall)
+        }
         val turnServerResponse = getTurnServer()
         // Update service state
         withContext(Dispatchers.Main) {
@@ -542,6 +549,9 @@ class WebRtcCall(val mxCall: MxCall,
     fun updateRemoteOnHold(onHold: Boolean) {
         if (remoteOnHold == onHold) return
         remoteOnHold = onHold
+        if (!onHold) {
+            onCallBecomeActive(this)
+        }
         val direction = if (onHold) {
             RtpTransceiver.RtpTransceiverDirection.INACTIVE
         } else {
