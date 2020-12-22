@@ -881,6 +881,8 @@
     <string name="settings_show_read_receipts">Show read receipts</string>
     <string name="settings_show_read_receipts_summary">Click on the read receipts for a detailed list.</string>
     <string name="settings_show_room_member_state_events">Show room member state events</string>
+    <string name="settings_chat_effects_title">Show chat effects</string>
+    <string name="settings_chat_effects_description">Use /confetti command or send a message containing ❄️ or 🎉</string>
     <string name="settings_show_room_member_state_events_summary">Includes invite/join/left/kick/ban events and avatar/display name changes.</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
     <string name="settings_show_join_leave_messages_summary">Invites, kicks, and bans are unaffected.</string>
@@ -1715,7 +1717,8 @@
 
     <string name="room_preview_no_preview">"This room can't be previewed"</string>
     <string name="room_preview_world_readable_room_not_supported_yet">"The preview of world-readable room is not supported yet in Element"</string>
-
+    <string name="room_preview_not_found">This room is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
+    <string name="room_preview_no_preview_join">"This room can't be previewed. Do you want to join it?"</string>
     <string name="fab_menu_create_room">"Rooms"</string>
     <string name="fab_menu_create_chat">"Direct Messages"</string>
 
@@ -1987,6 +1990,13 @@
     <string name="login_server_other_title">Other</string>
     <string name="login_server_other_text">Custom &amp; advanced settings</string>
 
+
+    <string name="login_social_continue">Or</string>
+    <string name="login_social_continue_with">Continue with %s</string>
+    <string name="login_social_signup_with">Sign up with %s</string>
+    <string name="login_social_signin_with">Sign in with %s</string>
+    <string name="login_social_sso">single sign-on</string>
+
     <string name="login_continue">Continue</string>
     <!-- Replaced string is the homeserver url -->
     <string name="login_connect_to">Connect to %1$s</string>
@@ -1997,6 +2007,7 @@
     <string name="login_signup">Sign Up</string>
     <string name="login_signin">Sign In</string>
     <string name="login_signin_sso">Continue with SSO</string>
+    <string name="login_clear_homeserver_history">Clear history</string>
 
     <string name="login_server_url_form_modular_hint">Element Matrix Services Address</string>
     <string name="login_server_url_form_other_hint">Address</string>
@@ -2562,6 +2573,13 @@
         <item quantity="one">Show the device you can verify with now</item>
         <item quantity="other">Show %d devices you can verify with now</item>
     </plurals>
+
+    <string name="command_confetti">Sends the given message with confetti</string>
+    <string name="command_snow">Sends the given message with snow</string>
+    <!-- Note to translator: please use the same emoji 🎉 in your translation -->
+    <string name="default_message_emote_confetti">sends confetti 🎉</string>
+    <!-- Note to translator: please use the same emoji ❄️ in your translation -->
+    <string name="default_message_emote_snow">sends snow ❄️</string>
 
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted_unverified">Encrypted by an unverified device</string>

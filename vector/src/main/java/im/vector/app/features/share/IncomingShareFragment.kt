@@ -20,7 +20,9 @@ import android.app.Activity
 import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
@@ -35,11 +37,12 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentIncomingShareBinding
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.login.LoginActivity
-import kotlinx.android.synthetic.main.fragment_incoming_share.*
+
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
@@ -52,12 +55,17 @@ class IncomingShareFragment @Inject constructor(
         val incomingShareViewModelFactory: IncomingShareViewModel.Factory,
         private val incomingShareController: IncomingShareController,
         private val sessionHolder: ActiveSessionHolder
-) : VectorBaseFragment(), AttachmentsHelper.Callback, IncomingShareController.Callback {
+) :
+        VectorBaseFragment<FragmentIncomingShareBinding>(),
+        AttachmentsHelper.Callback,
+        IncomingShareController.Callback {
 
     private lateinit var attachmentsHelper: AttachmentsHelper
     private val viewModel: IncomingShareViewModel by fragmentViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_incoming_share
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentIncomingShareBinding {
+        return FragmentIncomingShareBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // If we are not logged in, stop the sharing process and open login screen.
@@ -68,7 +76,7 @@ class IncomingShareFragment @Inject constructor(
         }
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        setupToolbar(incomingShareToolbar)
+        setupToolbar(views.incomingShareToolbar)
         attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
 
         viewModel.observeViewEvents {
@@ -103,7 +111,7 @@ class IncomingShareFragment @Inject constructor(
             cannotManageShare(R.string.error_handling_incoming_share)
         }
 
-        incomingShareSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        views.incomingShareSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return true
             }
@@ -113,7 +121,7 @@ class IncomingShareFragment @Inject constructor(
                 return true
             }
         })
-        sendShareButton.setOnClickListener { _ ->
+        views.sendShareButton.setOnClickListener { _ ->
             handleSendShare()
         }
     }
@@ -154,12 +162,12 @@ class IncomingShareFragment @Inject constructor(
 
     override fun onDestroyView() {
         incomingShareController.callback = null
-        incomingShareRoomList.cleanup()
+        views.incomingShareRoomList.cleanup()
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
-        incomingShareRoomList.configureWith(incomingShareController, hasFixedSize = true)
+        views.incomingShareRoomList.configureWith(incomingShareController, hasFixedSize = true)
         incomingShareController.callback = this
     }
 
@@ -210,7 +218,7 @@ class IncomingShareFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) {
-        sendShareButton.isVisible = it.isInMultiSelectionMode
+        views.sendShareButton.isVisible = it.isInMultiSelectionMode
         incomingShareController.setData(it)
     }
 

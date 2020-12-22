@@ -17,18 +17,24 @@
 package im.vector.app.features.crypto.recover
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_bootstrap_setup_recovery.*
+import im.vector.app.databinding.FragmentBootstrapSetupRecoveryBinding
+
 import javax.inject.Inject
 
-class BootstrapSetupRecoveryKeyFragment @Inject constructor() : VectorBaseFragment() {
+class BootstrapSetupRecoveryKeyFragment @Inject constructor()
+    : VectorBaseFragment<FragmentBootstrapSetupRecoveryBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_bootstrap_setup_recovery
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapSetupRecoveryBinding {
+        return FragmentBootstrapSetupRecoveryBinding.inflate(inflater, container, false)
+    }
 
     val sharedViewModel: BootstrapSharedViewModel by parentFragmentViewModel()
 
@@ -36,15 +42,15 @@ class BootstrapSetupRecoveryKeyFragment @Inject constructor() : VectorBaseFragme
         super.onViewCreated(view, savedInstanceState)
 
         // Actions when a key backup exist
-        bootstrapSetupSecureSubmit.clickableView.debouncedClicks {
+        views.bootstrapSetupSecureSubmit.views.itemVerificationClickableZone.debouncedClicks {
             sharedViewModel.handle(BootstrapActions.StartKeyBackupMigration)
         }
 
         // Actions when there is no key backup
-        bootstrapSetupSecureUseSecurityKey.clickableView.debouncedClicks {
+        views.bootstrapSetupSecureUseSecurityKey.views.itemVerificationClickableZone.debouncedClicks {
             sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = false))
         }
-        bootstrapSetupSecureUseSecurityPassphrase.clickableView.debouncedClicks {
+        views.bootstrapSetupSecureUseSecurityPassphrase.views.itemVerificationClickableZone.debouncedClicks {
             sharedViewModel.handle(BootstrapActions.Start(userWantsToEnterPassphrase = true))
         }
     }
@@ -53,23 +59,23 @@ class BootstrapSetupRecoveryKeyFragment @Inject constructor() : VectorBaseFragme
         if (state.step is BootstrapStep.FirstForm) {
             if (state.step.keyBackUpExist) {
                 // Display the set up action
-                bootstrapSetupSecureSubmit.isVisible = true
-                bootstrapSetupSecureUseSecurityKey.isVisible = false
-                bootstrapSetupSecureUseSecurityPassphrase.isVisible = false
-                bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = false
+                views.bootstrapSetupSecureSubmit.isVisible = true
+                views.bootstrapSetupSecureUseSecurityKey.isVisible = false
+                views.bootstrapSetupSecureUseSecurityPassphrase.isVisible = false
+                views.bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = false
             } else {
                 if (state.step.reset) {
-                    bootstrapSetupSecureText.text = getString(R.string.reset_secure_backup_title)
-                    bootstrapSetupWarningTextView.isVisible = true
+                    views.bootstrapSetupSecureText.text = getString(R.string.reset_secure_backup_title)
+                    views.bootstrapSetupWarningTextView.isVisible = true
                 } else {
-                    bootstrapSetupSecureText.text = getString(R.string.bottom_sheet_setup_secure_backup_subtitle)
-                    bootstrapSetupWarningTextView.isVisible = false
+                    views.bootstrapSetupSecureText.text = getString(R.string.bottom_sheet_setup_secure_backup_subtitle)
+                    views.bootstrapSetupWarningTextView.isVisible = false
                 }
                 // Choose between create a passphrase or use a recovery key
-                bootstrapSetupSecureSubmit.isVisible = false
-                bootstrapSetupSecureUseSecurityKey.isVisible = true
-                bootstrapSetupSecureUseSecurityPassphrase.isVisible = true
-                bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = true
+                views.bootstrapSetupSecureSubmit.isVisible = false
+                views.bootstrapSetupSecureUseSecurityKey.isVisible = true
+                views.bootstrapSetupSecureUseSecurityPassphrase.isVisible = true
+                views.bootstrapSetupSecureUseSecurityPassphraseSeparator.isVisible = true
             }
         }
     }

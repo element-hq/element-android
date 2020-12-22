@@ -70,7 +70,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         context.getString(R.string.sas_incoming_request_notif_content, name),
                         R.drawable.ic_shield_black,
                         shouldBeDisplayedIn = { activity ->
-                            if (activity is VectorBaseActivity) {
+                            if (activity is VectorBaseActivity<*>) {
                                 // TODO a bit too ugly :/
                                 activity.supportFragmentManager.findFragmentByTag(VerificationBottomSheet.WAITING_SELF_VERIF_TAG)?.let {
                                     false.also {
@@ -83,7 +83,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         .apply {
                             viewBinder = VerificationVectorAlert.ViewBinder(user?.toMatrixItem(), avatarRenderer.get())
                             contentAction = Runnable {
-                                (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                                (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                     it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
                                 }
                             }
@@ -99,7 +99,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                             addButton(
                                     context.getString(R.string.action_open),
                                     Runnable {
-                                        (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                             it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
                                         }
                                     }
@@ -140,7 +140,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                     .apply {
                         viewBinder = VerificationVectorAlert.ViewBinder(user?.toMatrixItem(), avatarRenderer.get())
                         contentAction = Runnable {
-                            (weakCurrentActivity?.get() as? VectorBaseActivity)?.let {
+                            (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                 val roomId = pr.roomId
                                 if (roomId.isNullOrBlank()) {
                                     it.navigator.waitSessionVerification(it)

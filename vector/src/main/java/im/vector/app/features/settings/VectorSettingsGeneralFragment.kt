@@ -23,7 +23,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -34,8 +33,6 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.cache.DiskCache
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.hideKeyboard
@@ -49,6 +46,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.workers.signout.SignOutUiWorker
@@ -352,25 +350,18 @@ class VectorSettingsGeneralFragment @Inject constructor(
     private fun onPasswordUpdateClick() {
         activity?.let { activity ->
             val view: ViewGroup = activity.layoutInflater.inflate(R.layout.dialog_change_password, null) as ViewGroup
-
-            val showPassword: ImageView = view.findViewById(R.id.change_password_show_passwords)
-            val oldPasswordTil: TextInputLayout = view.findViewById(R.id.change_password_old_pwd_til)
-            val oldPasswordText: TextInputEditText = view.findViewById(R.id.change_password_old_pwd_text)
-            val newPasswordText: TextInputEditText = view.findViewById(R.id.change_password_new_pwd_text)
-            val confirmNewPasswordTil: TextInputLayout = view.findViewById(R.id.change_password_confirm_new_pwd_til)
-            val confirmNewPasswordText: TextInputEditText = view.findViewById(R.id.change_password_confirm_new_pwd_text)
-            val changePasswordLoader: View = view.findViewById(R.id.change_password_loader)
+            val views = DialogChangePasswordBinding.bind(view)
 
             var passwordShown = false
 
-            showPassword.setOnClickListener {
+            views.changePasswordShowPasswords.setOnClickListener {
                 passwordShown = !passwordShown
 
-                oldPasswordText.showPassword(passwordShown)
-                newPasswordText.showPassword(passwordShown)
-                confirmNewPasswordText.showPassword(passwordShown)
+                views.changePasswordOldPwdText.showPassword(passwordShown)
+                views.changePasswordNewPwdText.showPassword(passwordShown)
+                views.changePasswordConfirmNewPwdText.showPassword(passwordShown)
 
-                showPassword.setImageResource(if (passwordShown) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+                views.changePasswordShowPasswords.setImageResource(if (passwordShown) R.drawable.ic_eye_closed else R.drawable.ic_eye)
             }
 
             val dialog = AlertDialog.Builder(activity)
@@ -389,53 +380,53 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 updateButton.isEnabled = false
 
                 fun updateUi() {
-                    val oldPwd = oldPasswordText.text.toString()
-                    val newPwd = newPasswordText.text.toString()
-                    val newConfirmPwd = confirmNewPasswordText.text.toString()
+                    val oldPwd = views.changePasswordOldPwdText.text.toString()
+                    val newPwd = views.changePasswordNewPwdText.text.toString()
+                    val newConfirmPwd = views.changePasswordConfirmNewPwdText.text.toString()
 
                     updateButton.isEnabled = oldPwd.isNotEmpty() && newPwd.isNotEmpty() && newPwd == newConfirmPwd
 
                     if (newPwd.isNotEmpty() && newConfirmPwd.isNotEmpty() && newPwd != newConfirmPwd) {
-                        confirmNewPasswordTil.error = getString(R.string.passwords_do_not_match)
+                        views.changePasswordConfirmNewPwdTil.error = getString(R.string.passwords_do_not_match)
                     }
                 }
 
-                oldPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
+                views.changePasswordOldPwdText.addTextChangedListener(object : SimpleTextWatcher() {
                     override fun afterTextChanged(s: Editable) {
-                        oldPasswordTil.error = null
+                        views.changePasswordOldPwdTil.error = null
                         updateUi()
                     }
                 })
 
-                newPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
+                views.changePasswordNewPwdText.addTextChangedListener(object : SimpleTextWatcher() {
                     override fun afterTextChanged(s: Editable) {
-                        confirmNewPasswordTil.error = null
+                        views.changePasswordConfirmNewPwdTil.error = null
                         updateUi()
                     }
                 })
 
-                confirmNewPasswordText.addTextChangedListener(object : SimpleTextWatcher() {
+                views.changePasswordConfirmNewPwdText.addTextChangedListener(object : SimpleTextWatcher() {
                     override fun afterTextChanged(s: Editable) {
-                        confirmNewPasswordTil.error = null
+                        views.changePasswordConfirmNewPwdTil.error = null
                         updateUi()
                     }
                 })
 
                 fun showPasswordLoadingView(toShow: Boolean) {
                     if (toShow) {
-                        showPassword.isEnabled = false
-                        oldPasswordText.isEnabled = false
-                        newPasswordText.isEnabled = false
-                        confirmNewPasswordText.isEnabled = false
-                        changePasswordLoader.isVisible = true
+                        views.changePasswordShowPasswords.isEnabled = false
+                        views.changePasswordOldPwdText.isEnabled = false
+                        views.changePasswordNewPwdText.isEnabled = false
+                        views.changePasswordConfirmNewPwdText.isEnabled = false
+                        views.changePasswordLoader.isVisible = true
                         updateButton.isEnabled = false
                         cancelButton.isEnabled = false
                     } else {
-                        showPassword.isEnabled = true
-                        oldPasswordText.isEnabled = true
-                        newPasswordText.isEnabled = true
-                        confirmNewPasswordText.isEnabled = true
-                        changePasswordLoader.isVisible = false
+                        views.changePasswordShowPasswords.isEnabled = true
+                        views.changePasswordOldPwdText.isEnabled = true
+                        views.changePasswordNewPwdText.isEnabled = true
+                        views.changePasswordConfirmNewPwdText.isEnabled = true
+                        views.changePasswordLoader.isVisible = false
                         updateButton.isEnabled = true
                         cancelButton.isEnabled = true
                     }
@@ -444,13 +435,13 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 updateButton.setOnClickListener {
                     if (passwordShown) {
                         // Hide passwords during processing
-                        showPassword.performClick()
+                        views.changePasswordShowPasswords.performClick()
                     }
 
                     view.hideKeyboard()
 
-                    val oldPwd = oldPasswordText.text.toString()
-                    val newPwd = newPasswordText.text.toString()
+                    val oldPwd = views.changePasswordOldPwdText.text.toString()
+                    val newPwd = views.changePasswordNewPwdText.text.toString()
 
                     showPasswordLoadingView(true)
                     lifecycleScope.launch {
@@ -466,9 +457,9 @@ class VectorSettingsGeneralFragment @Inject constructor(
                             activity.toast(R.string.settings_password_updated)
                         }, { failure ->
                             if (failure.isInvalidPassword()) {
-                                oldPasswordTil.error = getString(R.string.settings_fail_to_update_password_invalid_current_password)
+                                views.changePasswordOldPwdTil.error = getString(R.string.settings_fail_to_update_password_invalid_current_password)
                             } else {
-                                oldPasswordTil.error = getString(R.string.settings_fail_to_update_password)
+                                views.changePasswordOldPwdTil.error = getString(R.string.settings_fail_to_update_password)
                             }
                         })
                     }

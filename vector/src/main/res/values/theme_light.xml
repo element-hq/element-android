@@ -16,6 +16,7 @@
         <item name="riotx_header_panel_text_secondary">@color/riotx_header_panel_text_secondary_light</item>
         <item name="riotx_text_primary">@color/riotx_text_primary_light</item>
         <item name="riotx_text_secondary">@color/riotx_text_secondary_light</item>
+        <item name="riotx_text_tertiary">@color/riotx_text_tertiary_light</item>
         <item name="riotx_text_primary_body_contrast">@color/riotx_text_primary_body_contrast_light</item>
         <item name="riotx_android_secondary">@color/riotx_android_secondary_light</item>
         <item name="riotx_search_placeholder">@color/riotx_search_placeholder_light</item>
@@ -195,6 +196,15 @@
         <!-- specify shared element enter and exit transitions -->
         <item name="android:windowSharedElementEnterTransition">@transition/image_preview_transition</item>
         <item name="android:windowSharedElementExitTransition">@transition/image_preview_transition</item>
+
+        <item name="vctr_social_login_button_google_style">@style/WidgetButtonSocialLogin.Google.Light</item>
+        <item name="vctr_social_login_button_github_style">@style/WidgetButtonSocialLogin.Github.Light</item>
+        <item name="vctr_social_login_button_facebook_style">@style/WidgetButtonSocialLogin.Facebook.Light</item>
+        <item name="vctr_social_login_button_twitter_style">@style/WidgetButtonSocialLogin.Twitter.Light</item>
+        <item name="vctr_social_login_button_apple_style">@style/WidgetButtonSocialLogin.Apple.Light</item>
+
+        <!-- chat effect -->
+        <item name="vctr_chat_effect_snow_background">@color/black_alpha</item>
     </style>
 
     <style name="AppTheme.Light" parent="AppTheme.Base.Light" />

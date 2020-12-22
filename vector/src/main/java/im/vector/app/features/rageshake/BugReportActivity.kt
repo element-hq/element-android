@@ -20,36 +20,37 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.view.isVisible
-import butterknife.OnCheckedChanged
-import butterknife.OnTextChanged
+import androidx.core.widget.doOnTextChanged
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
-import kotlinx.android.synthetic.main.activity_bug_report.*
+import im.vector.app.databinding.ActivityBugReportBinding
+
 import timber.log.Timber
 
 /**
  * Form to send a bug report
  */
-class BugReportActivity : VectorBaseActivity() {
+class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
 
-    override fun getLayoutRes() = R.layout.activity_bug_report
+    override fun getBinding() = ActivityBugReportBinding.inflate(layoutInflater)
 
     private var forSuggestion: Boolean = false
 
     override fun initUiAndData() {
-        configureToolbar(bugReportToolbar)
+        configureToolbar(views.bugReportToolbar)
+        setupViews()
 
         if (bugReporter.screenshot != null) {
-            bug_report_screenshot_preview.setImageBitmap(bugReporter.screenshot)
+            views.bugReportScreenshotPreview.setImageBitmap(bugReporter.screenshot)
         } else {
-            bug_report_screenshot_preview.isVisible = false
-            bug_report_button_include_screenshot.isChecked = false
-            bug_report_button_include_screenshot.isEnabled = false
+            views.bugReportScreenshotPreview.isVisible = false
+            views.bugReportButtonIncludeScreenshot.isChecked = false
+            views.bugReportButtonIncludeScreenshot.isEnabled = false
         }
 
         forSuggestion = intent.getBooleanExtra("FOR_SUGGESTION", false)
@@ -58,19 +59,19 @@ class BugReportActivity : VectorBaseActivity() {
         if (forSuggestion) {
             supportActionBar?.setTitle(R.string.send_suggestion)
 
-            bug_report_first_text.setText(R.string.send_suggestion_content)
-            bug_report_text_input_layout.hint = getString(R.string.send_suggestion_report_placeholder)
+            views.bugReportFirstText.setText(R.string.send_suggestion_content)
+            views.bugReportTextInputLayout.hint = getString(R.string.send_suggestion_report_placeholder)
 
-            bug_report_logs_description.isVisible = false
+            views.bugReportLogsDescription.isVisible = false
 
-            bug_report_button_include_logs.isChecked = false
-            bug_report_button_include_logs.isVisible = false
+            views.bugReportButtonIncludeLogs.isChecked = false
+            views.bugReportButtonIncludeLogs.isVisible = false
 
-            bug_report_button_include_crash_logs.isChecked = false
-            bug_report_button_include_crash_logs.isVisible = false
+            views.bugReportButtonIncludeCrashLogs.isChecked = false
+            views.bugReportButtonIncludeCrashLogs.isVisible = false
 
-            bug_report_button_include_key_share_history.isChecked = false
-            bug_report_button_include_key_share_history.isVisible = false
+            views.bugReportButtonIncludeKeyShareHistory.isChecked = false
+            views.bugReportButtonIncludeKeyShareHistory.isVisible = false
 
             // Keep the screenshot
         } else {
@@ -78,11 +79,16 @@ class BugReportActivity : VectorBaseActivity() {
         }
     }
 
+    private fun setupViews() {
+        views.bugReportEditText.doOnTextChanged { _, _, _, _ -> textChanged() }
+        views.bugReportButtonIncludeScreenshot.setOnCheckedChangeListener { _, _ -> onSendScreenshotChanged() }
+    }
+
     override fun getMenuRes() = R.menu.bug_report
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         menu.findItem(R.id.ic_action_send_bug_report)?.let {
-            val isValid = !bug_report_mask_view.isVisible
+            val isValid = !views.bugReportMaskView.isVisible
 
             it.isEnabled = isValid
             it.icon.alpha = if (isValid) 255 else 100
@@ -94,10 +100,10 @@ class BugReportActivity : VectorBaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.ic_action_send_bug_report -> {
-                if (bug_report_edit_text.text.toString().trim().length >= 10) {
+                if (views.bugReportEditText.text.toString().trim().length >= 10) {
                     sendBugReport()
                 } else {
-                    bug_report_text_input_layout.error = getString(R.string.bug_report_error_too_short)
+                    views.bugReportTextInputLayout.error = getString(R.string.bug_report_error_too_short)
                 }
                 return true
             }
@@ -109,24 +115,24 @@ class BugReportActivity : VectorBaseActivity() {
      * Send the bug report
      */
     private fun sendBugReport() {
-        bug_report_scrollview.alpha = 0.3f
-        bug_report_mask_view.isVisible = true
+        views.bugReportScrollview.alpha = 0.3f
+        views.bugReportMaskView.isVisible = true
 
         invalidateOptionsMenu()
 
-        bug_report_progress_text_view.isVisible = true
-        bug_report_progress_text_view.text = getString(R.string.send_bug_report_progress, "0")
+        views.bugReportProgressTextView.isVisible = true
+        views.bugReportProgressTextView.text = getString(R.string.send_bug_report_progress, "0")
 
-        bug_report_progress_view.isVisible = true
-        bug_report_progress_view.progress = 0
+        views.bugReportProgressView.isVisible = true
+        views.bugReportProgressView.progress = 0
 
         bugReporter.sendBugReport(this,
                 forSuggestion,
-                bug_report_button_include_logs.isChecked,
-                bug_report_button_include_crash_logs.isChecked,
-                bug_report_button_include_key_share_history.isChecked,
-                bug_report_button_include_screenshot.isChecked,
-                bug_report_edit_text.text.toString(),
+                views.bugReportButtonIncludeLogs.isChecked,
+                views.bugReportButtonIncludeCrashLogs.isChecked,
+                views.bugReportButtonIncludeKeyShareHistory.isChecked,
+                views.bugReportButtonIncludeScreenshot.isChecked,
+                views.bugReportEditText.text.toString(),
                 object : BugReporter.IMXBugReportListener {
                     override fun onUploadFailed(reason: String?) {
                         try {
@@ -143,10 +149,10 @@ class BugReportActivity : VectorBaseActivity() {
                             Timber.e(e, "## onUploadFailed() : failed to display the toast")
                         }
 
-                        bug_report_mask_view.isVisible = false
-                        bug_report_progress_view.isVisible = false
-                        bug_report_progress_text_view.isVisible = false
-                        bug_report_scrollview.alpha = 1.0f
+                        views.bugReportMaskView.isVisible = false
+                        views.bugReportProgressView.isVisible = false
+                        views.bugReportProgressTextView.isVisible = false
+                        views.bugReportScrollview.alpha = 1.0f
 
                         invalidateOptionsMenu()
                     }
@@ -158,8 +164,8 @@ class BugReportActivity : VectorBaseActivity() {
                     override fun onProgress(progress: Int) {
                         val myProgress = progress.coerceIn(0, 100)
 
-                        bug_report_progress_view.progress = myProgress
-                        bug_report_progress_text_view.text = getString(R.string.send_bug_report_progress, myProgress.toString())
+                        views.bugReportProgressView.progress = myProgress
+                        views.bugReportProgressTextView.text = getString(R.string.send_bug_report_progress, myProgress.toString())
                     }
 
                     override fun onUploadSucceed() {
@@ -186,14 +192,12 @@ class BugReportActivity : VectorBaseActivity() {
      * UI Event
      * ========================================================================================== */
 
-    @OnTextChanged(R.id.bug_report_edit_text)
-    internal fun textChanged() {
-        bug_report_text_input_layout.error = null
+    private fun textChanged() {
+        views.bugReportTextInputLayout.error = null
     }
 
-    @OnCheckedChanged(R.id.bug_report_button_include_screenshot)
-    internal fun onSendScreenshotChanged() {
-        bug_report_screenshot_preview.isVisible = bug_report_button_include_screenshot.isChecked && bugReporter.screenshot != null
+    private fun onSendScreenshotChanged() {
+        views.bugReportScreenshotPreview.isVisible = views.bugReportButtonIncludeScreenshot.isChecked && bugReporter.screenshot != null
     }
 
     override fun onBackPressed() {

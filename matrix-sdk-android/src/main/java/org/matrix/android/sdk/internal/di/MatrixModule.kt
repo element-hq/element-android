@@ -59,13 +59,6 @@ internal object MatrixModule {
 
     @JvmStatic
     @Provides
-    @ExternalFilesDirectory
-    fun providesExternalFilesDir(context: Context): File? {
-        return context.getExternalFilesDir(null)
-    }
-
-    @JvmStatic
-    @Provides
     @MatrixScope
     fun providesOlmManager(): OlmManager {
         return OlmManager()

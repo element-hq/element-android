@@ -19,7 +19,9 @@ package im.vector.app.features.roomdirectory.createroom
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Loading
@@ -35,11 +37,11 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.databinding.FragmentCreateRoomBinding
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_create_room.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import kotlinx.parcelize.Parcelize
+
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import javax.inject.Inject
 
@@ -52,7 +54,7 @@ class CreateRoomFragment @Inject constructor(
         private val createRoomController: CreateRoomController,
         val createRoomViewModelFactory: CreateRoomViewModel.Factory,
         colorProvider: ColorProvider
-) : VectorBaseFragment(),
+) : VectorBaseFragment<FragmentCreateRoomBinding>(),
         CreateRoomController.Listener,
         GalleryOrCameraDialogHelper.Listener,
         OnBackPressed {
@@ -63,15 +65,17 @@ class CreateRoomFragment @Inject constructor(
 
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
-    override fun getLayoutResId() = R.layout.fragment_create_room
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCreateRoomBinding {
+        return FragmentCreateRoomBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vectorBaseActivity.setSupportActionBar(createRoomToolbar)
+        vectorBaseActivity.setSupportActionBar(views.createRoomToolbar)
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupWaitingView()
         setupRecyclerView()
-        createRoomClose.debouncedClicks {
+        views.createRoomClose.debouncedClicks {
             sharedActionViewModel.post(RoomDirectorySharedAction.Back)
         }
         viewModel.observeViewEvents {
@@ -90,18 +94,18 @@ class CreateRoomFragment @Inject constructor(
     }
 
     private fun setupWaitingView() {
-        waiting_view_status_text.isVisible = true
-        waiting_view_status_text.setText(R.string.create_room_in_progress)
+        views.waitingView.waitingStatusText.isVisible = true
+        views.waitingView.waitingStatusText.setText(R.string.create_room_in_progress)
     }
 
     override fun onDestroyView() {
-        createRoomForm.cleanup()
+        views.createRoomForm.cleanup()
         createRoomController.listener = null
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
-        createRoomForm.configureWith(createRoomController)
+        views.createRoomForm.configureWith(createRoomController)
         createRoomController.listener = this
     }
 
@@ -169,7 +173,7 @@ class CreateRoomFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) { state ->
         val async = state.asyncCreateRoomRequest
-        waiting_view.isVisible = async is Loading
+        views.waitingView.root.isVisible = async is Loading
         if (async is Success) {
             // Navigate to freshly created room
             navigator.openRoom(requireActivity(), async())

@@ -208,4 +208,26 @@
     <string name="notice_direct_room_join">%1$s 已加入</string>
     <string name="notice_direct_room_created_by_you">您已建立此討論</string>
     <string name="notice_direct_room_created">%1$s 已建立此討論</string>
+    <string name="room_displayname_empty_room_was">空的聊天室（曾為 %s）</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="other">%1$s, %2$s, %3$s 與 %4$d 個其他</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s 與 %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s 與 %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 禁止所有伺服器參與！無法再使用此聊天室。</string>
+    <string name="notice_room_server_acl_updated_no_change">無變更。</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• 禁止伺服器符合 IP 文字。</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• 允許伺服器符合 IP 文字。</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• 伺服器符合 %s 已從允許清單中移除。</string>
+    <string name="notice_room_server_acl_updated_allowed">• 允許伺服器符合 %s。</string>
+    <string name="notice_room_server_acl_updated_was_banned">• 伺服器符合 %s 已從禁止清單中移除。</string>
+    <string name="notice_room_server_acl_updated_banned">• 現在禁止伺服器符合 %s。</string>
+    <string name="notice_room_server_acl_updated_title_by_you">您為此聊天室變更了伺服器 ACL。</string>
+    <string name="notice_room_server_acl_updated_title">%s 為此聊天是變更了伺服器 ACL。</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• 禁止伺服器符合 IP 文字。</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• 允許伺服器符合 IP 文字。</string>
+    <string name="notice_room_server_acl_set_allowed">• 已允許伺服器符合 %s。</string>
+    <string name="notice_room_server_acl_set_banned">• 已禁止伺服器符合 %s。</string>
+    <string name="notice_room_server_acl_set_title_by_you">您為此聊天是設定了伺服器 ACL。</string>
+    <string name="notice_room_server_acl_set_title">%s 為此聊天是設定了伺服器 ACL。</string>
 </resources>

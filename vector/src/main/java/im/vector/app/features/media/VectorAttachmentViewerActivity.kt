@@ -42,7 +42,7 @@ import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.attachmentviewer.AttachmentCommands
 import im.vector.lib.attachmentviewer.AttachmentViewerActivity
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis

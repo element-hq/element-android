@@ -24,5 +24,5 @@ interface WebViewEventListenerFactory {
     /**
      * @return an instance of WebViewEventListener
      */
-    fun eventListener(activity: VectorBaseActivity, session: Session): WebViewEventListener
+    fun eventListener(activity: VectorBaseActivity<*>, session: Session): WebViewEventListener
 }

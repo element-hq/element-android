@@ -299,7 +299,7 @@
     <string name="auth_add_email_message_2">رایانامه‌ای برای بازیابی تنظیم کرده تا بتوانید در صورت نیاز، از طریقش به دست افرادی که می‌شناسید، قابل کشف باشید.</string>
     <string name="auth_add_phone_message_2">ثبت شماره تلفن (بعدا در صورت دلخواه می توانید از آن برای شناسایی دوستان خود استفاده کنید).</string>
     <string name="auth_reset_password_message">نشانی رایانامهٔ پیوسته به حسابتان را برای بازنشانی گذواژه‌تان وارد کنید:</string>
-    <string name="resources_script">Latn</string>
+    <string name="resources_script">Arab</string>
     <string name="room_participants_invite_search_another_user">شناسهٔ کاربری، نام یا رایانامه</string>
     <string name="room_message_placeholder_reply_to_encrypted">فرستادن پاسخی رمزشده…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">فرستادن یک پاسخ (رمزنشده)…</string>
@@ -321,7 +321,7 @@
     <string name="room_sliding_menu_third_party_notices">تذکّرهای سوم‌شخص</string>
     <string name="room_sliding_menu_copyright">حق رونوشت</string>
     <string name="room_sliding_menu_privacy_policy">سیاست محرمانگی</string>
-    <string name="settings_profile_picture">عکس نمایه</string>
+    <string name="settings_profile_picture">عکس پروفایل</string>
     <string name="settings_display_name">نام نمایشی</string>
     <string name="settings_email_address">رایانامه</string>
     <string name="settings_add_email_address">افزودن نشانی رایانامه</string>
@@ -506,7 +506,7 @@
     <string name="send_file_step_sending_file">فرستادن پرونده (%1$s / %2$s)</string>
     <string name="downloading_file">بارگری پرونده %1$s…</string>
     <string name="downloaded_file">پرونده %1$s بارگیری شد!</string>
-    <string name="edited_suffix">(ویراسته)</string>
+    <string name="edited_suffix">(ویرایش شده)</string>
     <string name="room_filtering_filter_hint">پالایش گفت‌وگوها…</string>
     <string name="room_filtering_footer_create_new_room">ایجاد اتاقی جدید</string>
     <string name="room_filtering_footer_create_new_direct_message">فرستادن یک پیام مستقیم جدید</string>
@@ -999,7 +999,7 @@
     <string name="settings_lazy_loading_description">افزایش کارایی با فقط بار کردن اعضای اتاق در نمای نخست.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">کارساز خانگیتان هنوز از بار کردن تنبلانهٔ اعضای اتاق پشتیبانی نمی‌کند. بعداً تلاش کنید.</string>
     <string name="keys_backup_setup_step1_title">هرگز پیام‌های رمزشده را از دست ندهید</string>
-    <string name="keys_backup_setup">شروع با استفاده از پشتیبان کلید</string>
+    <string name="keys_backup_setup">شروع به استفاده از پشتیبانِ کلید</string>
     <string name="keys_backup_setup_step1_manual_export">برون‌ریزی دستی کلیدها</string>
     <string name="keys_backup_setup_step2_text_title">امن کردن پشتیبانتان با یک عبارت عبور.</string>
     <string name="keys_backup_setup_step2_button_title">تنظیم عبارت عبور</string>
@@ -1024,7 +1024,7 @@
     <string name="keys_backup_recovery_code_empty_error_message">لطفاً یک کلید بازیابی وارد کنید</string>
     <string name="new_recovery_method_popup_was_me">من بودم</string>
     <string name="keys_backup_banner_setup_line1">هرگز پیام‌های رمزشده را از دست ندهید</string>
-    <string name="keys_backup_banner_setup_line2">شروع با استفاده از پشتیبان کلید</string>
+    <string name="keys_backup_banner_setup_line2">شروع به استفاده از پشتیبانِ کلید</string>
     <string name="secure_backup_banner_setup_line1">پشتیبان امن</string>
     <string name="secure_backup_banner_setup_line2">سپرامنیتی در برابر از دست دادن دسترسی به داده‌ها و پیام‌های رمزشده</string>
     <string name="keys_backup_banner_recover_line1">هرگز پیام‌های رمزشده را از دست ندهید</string>
@@ -1062,7 +1062,7 @@
     <string name="attachment_type_contact">مخاطب</string>
     <string name="attachment_type_camera">دوربین</string>
     <string name="attachment_type_audio">صدا</string>
-    <string name="attachment_type_gallery">جُنگ</string>
+    <string name="attachment_type_gallery">گالری</string>
     <string name="attachment_type_sticker">برچسب</string>
     <string name="uploads_media_title">رسانه</string>
     <string name="uploads_media_no_result">هیچ رسانه‌ای در این اتاق نیست</string>
@@ -1525,7 +1525,7 @@
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nاین خطا از کنترل المنت خارج است و به چند دلیل ممکن است رخ داده باشد. امکان دارد در صورت تلاش مجدد مشکل رفع شود، همچنین می‌توانید بررسی کنید که سرویس Google Play در استفاده از اینترنت در تنظیمات گوشی محدودیتی نداشته باشد یا ساعت دستگاه شما درست باشد. همچنین ممکن است به علت استفاده از ROM سفارشی‌شده این خطا رخ داده باشد.</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nاین خطا از کنترل هیوا خارج است و طبق گفته گوگل ، این خطا نشان می دهد که دستگاه بیش از حد مجاز، برنامه های ثبت شده در FCM دارد. این خطا فقط در مواردی رخ می دهد که تعداد زیادی برنامه وجود دارد، بنابراین نباید بر کاربر عادی رخ دهد.</string>
+\nاین خطا از کنترل المنت خارج است و طبق گفته گوگل ، این خطا نشان می دهد که دستگاه بیش از حد مجاز، برنامه های ثبت شده در FCM دارد. این خطا فقط در مواردی رخ می دهد که تعداد زیادی برنامه وجود دارد، بنابراین نباید بر کاربر عادی رخ دهد.</string>
     <string name="settings_troubleshoot_test_fcm_failed">بازیابی توکن FCM با مشکل مواجه شد:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_success">توکن FCM با موفقیت بازیابی شد:
@@ -1588,21 +1588,21 @@
     <string name="room_preview_unlinked_email_warning">این دعوت به %s ارسال شده که ارتباطی با این حساب ندارد.
 \nممکن است بخواهید با حسابی دیگر وارد شده یا این رایانامه را به حسابتان بیفزایید.</string>
     <string name="permissions_action_not_performed_missing_permissions">متاسفانه به دلیل عدم دسترسی، درخواست شما امکان پذیر نمی باشد</string>
-    <string name="permissions_msg_contacts_warning_other_androids">هیوا می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر هیوا را بر اساس ایمبل و شماره تلفنشان پیدا کند. 
+    <string name="permissions_msg_contacts_warning_other_androids">المنت می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر ماتریکس را بر اساس ایمبل و شماره تلفنشان پیدا کند.
 \n
 \nآیا موافق با اشتراک‌گذاری دفترچه تلفنتان به این منظور هستید؟</string>
-    <string name="permissions_rationale_msg_contacts">هیوا می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر هیوا را بر اساس ایمبل و شماره تلفنشان پیدا کند. اگر مایل به اشتراک گذاری دفترچه تلفنتان به این منظور هستید لطفا در پنجره‌ی بعد اجازه‌ی این کار را بدهید.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">هیوا برای برقراری تماس تصویری نیازمند دسترسی به میکروفون و دوربین است.
+    <string name="permissions_rationale_msg_contacts">المنت می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر ماتریکس را بر اساس ایمبل و شماره تلفنشان پیدا کند. اگر مایل به اشتراک گذاری دفترچه تلفنتان به این منظور هستید لطفا در پنجره‌ی بعد اجازه‌ی این کار را بدهید.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">المنت برای برقراری تماس تصویری نیازمند دسترسی به میکروفون و دوربین است.
 \n
 \nلطفا در پنجره های بعدی دسترسی های لازم را بدهید.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nلطفا برای برقراری تماس در پنجره بعدی دسترسی لازم را بدهید."</string>
-    <string name="permissions_rationale_msg_record_audio">هیوا برای برقراری تماس صوتی نیازمند دسترسی به میکروفون است.</string>
+    <string name="permissions_rationale_msg_record_audio">المنت برای برقراری تماس صوتی نیازمند دسترسی به میکروفون است.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nلطفا برای برقراری تماس در پنجره بعدی دسترسی لازم را بدهید."</string>
-    <string name="permissions_rationale_msg_storage">هیوا برای ارسال و ذخیره‌ی فایل‌ها نیاز به دسترسی به گالری شما را دارد.
+    <string name="permissions_rationale_msg_storage">المنت برای ارسال و ذخیره‌ی فایل‌ها نیاز به دسترسی به گالری شما را دارد.
 \n
 \nلطفا در پنجره‌ای که باز می‌شود این دسترسی را بدهید.</string>
     <string name="settings_call_ringtone_use_default_stun_sum">هنگامی که سرور شما قابلیت تماس ندارد، از سرور %s استفاده کن</string>
@@ -1699,7 +1699,7 @@
     <string name="verification_request_notice">برای امنیت بیشتر، %s را با بررسی یک کد یکبارمصرف تایید کنید.</string>
     <string name="room_settings_enable_encryption_dialog_content">پس از فعال‌شدن ، نمی‌توان رمزگذاری برای یک اتاق را غیرفعال کرد. پیام های ارسالی در یک اتاق رمزگذاری شده توسط سرور قابل مشاهده نیست و فقط توسط اعضای اتاق قابل مشاهده است. فعال کردن رمزنگاری ممکن است از کارکرد بسیاری از ربات ها و پل ها جلوگیری کند.</string>
     <string name="room_settings_enable_encryption_dialog_title">رمزگذاری فعال شود؟</string>
-    <string name="room_settings_enable_encryption">فعال‌سازی رمزنگاری سرتاسر</string>
+    <string name="room_settings_enable_encryption">به کار انداختن رمزنگاری سرتاسری…</string>
     <string name="command_description_rainbow_emote">شکلک را با رنگ‌بندی رنگین گمان ارسال می کند</string>
     <string name="command_description_rainbow">پیام را با رنگ‌بندی رنگین کمان ارسال می کند</string>
     <string name="verify_cannot_cross_sign">این نشست نمی‌تواند تائید را با نشست‌های دیگر شما به اشتراک بگذارد.
@@ -2044,7 +2044,7 @@
     <string name="dialog_user_consent_content">برای ادامه استفاده از سرور %1$s باید شرایط و ضوابط را خوانده و موافقت کنید.</string>
     <string name="markdown_has_been_disabled">Markdown غیرفعال شده است.</string>
     <string name="markdown_has_been_enabled">Markdown فعال شده است.</string>
-    <string name="command_description_clear_scalar_token">جهت رفع مشکلات مدیریت برنامه‌های هیوا</string>
+    <string name="command_description_clear_scalar_token">جهت رفع مشکلات مدیریت برنامه‌های ماتریکس</string>
     <string name="command_description_markdown">فعال و غیرفعال کردن markdown</string>
     <string name="command_description_nick">نام مستعار شما را تغییر می‌دهد</string>
     <string name="command_description_kick_user">اخراج کاربر با شناسه داده شده</string>
@@ -2159,4 +2159,91 @@
     <string name="room_member_open_or_create_dm">پیام مستقیم</string>
     <string name="send_bug_report_include_key_share_history">ارسال تاریخچهٔ درخواست‌های هم‌رسانی کلید</string>
     <string name="no_more_results">نتایج بیش‌تری نیست</string>
+    <string name="save_your_security_key_notice">کلید امنیتیتان را در جایی امن، مانند مدیر گذرواژه یا گاوصندوق نگه دارید.</string>
+    <string name="set_a_security_phrase_notice">عبارت امنیتی‌ای را که تنها خودتان می‌دانید، برای امن کردن رمزها روی کارسازتان وارد کنید.</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">کلید امنیتیتان را در جایی امن، مانند مدیر گذرواژه یا گاوصندوق نگه دارید.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">عبارت رمزی که فقط خودتان می‌دانید را وارد کرده و کلیدی برای پشتیبان تولید کنید.</string>
+    <string name="identity_server_set_alternative_notice">به هنوتم جایگزین، می‌توانید نشامی هر کارساز هویت دیگری را وارد کنید</string>
+    <string name="identity_server_set_default_notice">کارساز خانگیتان (%1$s) پیشنهاد استفاده از %2$s برای کارساز هویتتان را می‌دهد</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">برای محرمانگیتان، المنت تنها از فرستادن شماره تلفن و رایانامه‌های کاربری در هم ریخته پشتیبانی می‌کند.</string>
+    <string name="identity_server_error_outdated_home_server">این عملیات ممکن نیست. کارساز خانگی منقضی شده است.</string>
+    <string name="invite_users_to_room_failure">نتوانستیم کاربران را دعوت کنیم. لطفاً کاربرانی که می‌خواهید دعوت کنید را بررسی کرده و دوباره تلاش کنید.</string>
+    <string name="create_room_dm_failure">نتوانستیم پیامتان را ایجاد کنیم. لطفاً کاربرانی که می‌خواهید دعوت کنید را بررسی کرده و دوباره تلاش کنید.</string>
+    <string name="create_room_disable_federation_title">انسداد هرکسی خارج از %s از پیوستن به این اتاق</string>
+    <string name="matrix_to_card_title">پیوند ماتریکس</string>
+    <string name="warning_unsaved_change_discard">دور ریختن تغییرات</string>
+    <string name="warning_unsaved_change">تغییرات ذخیره‌نشده‌ای وجود دارد. دور ریختن تغییرات؟</string>
+    <string name="warning_room_not_created_yet">اتاق هنوز ایجاد نشده است. لغو ایجاد اتاق؟</string>
+    <string name="qr_code_not_scanned">رمز QR پویش نشد!</string>
+    <string name="invalid_qr_code_uri">رمز QR نامعتبر (نشانی نامعتبر)!</string>
+    <string name="cannot_dm_self">نمی‌توانید به خودتان پیام دهید!</string>
+    <string name="share_by_text">هم‌رسانی با متن</string>
+    <string name="phone_book_perform_lookup">جست‌وجوی مخاطبان در ماتریکس</string>
+    <string name="room_settings_set_avatar">تنظیم آواتار</string>
+    <string name="save_your_security_key_title">ذخیرهٔ کلید امنیتیتان</string>
+    <string name="set_a_security_phrase_again_notice">برای تأیید عبارت امنیتیتان، دوباره واردش کنید.</string>
+    <string name="set_a_security_phrase_hint">عبارت امنیتی</string>
+    <string name="set_a_security_phrase_title">تنظیم یک عبارت امنیتی</string>
+    <string name="bottom_sheet_save_your_recovery_key_title">ذخیرهٔ کلید امنیتیتان</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">استفاده از یک عبارت امنیتی</string>
+    <string name="identity_server_set_alternative_notice_no_default">نشانی کارساز هویتی را وارد کنید</string>
+    <string name="identity_server_user_consent_not_provided">رضایت کاربر فراهم نشده است.</string>
+    <string name="identity_server_error_terms_not_signed">لطفاً نخست شرایط کارساز هویت را در تنظیمات بپذیرید.</string>
+    <string name="identity_server_error_no_identity_server_configured">لطفاً نخست کارساز هویتی را پیکربندی کنید.</string>
+    <string name="identity_server_error_outdated_identity_server">کارساز هویت منقضی شده اسن. المنت تنها نگارش ۲ از API را پشتیبانی می‌کند.</string>
+    <string name="user_code_info_text">این رمز را افراد هم‌رسانی کرده تا بتوانند برای افزودنتان و شروع گپ، بپویندش.</string>
+    <string name="user_code_my_code">رمزم</string>
+    <string name="user_code_share">هم‌رسانی رمزم</string>
+    <string name="user_code_scan">پویش یک رمز QR</string>
+    <string name="not_a_valid_qr_code">این یک رمز QR ماتریکس معتبر نیست</string>
+    <string name="invite_friends_rich_title">🔐️ پیوستن به من روی المنت</string>
+    <string name="invite_friends_text">سلام. روی المنت باهام حرف بزن: %s</string>
+    <string name="invite_friends">دعوت دوستان</string>
+    <string name="add_people">افزودن افراد</string>
+    <string name="topic_prefix">"موضوع: "</string>
+    <string name="add_a_topic_link_text">افزودن موضوع</string>
+    <string name="room_created_summary_no_topic_creation_text">%s برای دادن اجازهٔ دانستن موضوع این اتاق به افراد.</string>
+    <string name="this_is_the_beginning_of_dm">این، آغاز تاریخچهٔ پیام مستقیمتان با %s است.</string>
+    <string name="this_is_the_beginning_of_room">این، آغاز %s است.</string>
+    <string name="this_is_the_beginning_of_room_no_name">این، آغاز گفت‌وگوست.</string>
+    <string name="room_settings_enable_encryption_no_permission">اجازهٔ به کار انداختن رمزنگاری در این اتاق را ندارید.</string>
+    <string name="create_room_in_progress">ایجاد کردن اتاق…</string>
+    <string name="create_room_alias_invalid">برخی نویسه‌ها مجاز نیستند</string>
+    <string name="create_room_alias_empty">لطفاً نام اتاقی را وارد کنید</string>
+    <string name="create_room_alias_already_in_use">این نشانی در حال استفاده است</string>
+    <string name="create_room_alias_hint">نشانی اتاق</string>
+    <string name="hide_advanced">نهفتن پیشرفته</string>
+    <string name="show_advanced">نمایش پیشرفته</string>
+    <string name="attachment_viewer_item_x_of_y">%1$d از %2$d</string>
+    <string name="a11y_create_direct_message_by_qr_code">ایجاد گفت‌وگوی مسنقیمی جدید با پویش یک رمز QR</string>
+    <string name="a11y_create_direct_message_by_mxid">ایجاد گفت‌وگوی مستقیمی جدید با شناسهٔ ماتریکس</string>
+    <string name="identity_server_consent_dialog_title">فرستادن رایانامه‌ها و شماره تلفن‌ها</string>
+    <string name="settings_discovery_consent_action_give_consent">رضایت دادن</string>
+    <string name="settings_discovery_consent_action_revoke">ابطال رضایتم</string>
+    <string name="settings_discovery_consent_title">فرستادن رایانامه‌ها و شماره تلفن‌ها</string>
+    <string name="direct_room_user_list_suggestions_title">پیشنهادها</string>
+    <string name="direct_room_user_list_contacts_title">مخاطبان</string>
+    <string name="direct_room_user_list_known_title">کاربران شناخته</string>
+    <string name="direct_room_user_list_recent_title">اخیر</string>
+    <string name="qr_code">رمز QR</string>
+    <string name="add_by_qr_code">افزودن با رمز QR</string>
+    <string name="user_directory_search_hint">جست‌وجو با نام یا شناسه</string>
+    <string name="permissions_denied_add_contact">دسترسی به مخاطبانتان را مجاز کنید.</string>
+    <string name="permissions_denied_qr_code">برای پویش یک رمز QR نیاز است دسترسی به دوربین را مجاز کنید.</string>
+    <string name="start_chatting">آغاز به گپ</string>
+    <string name="settings_export_trail">خروجی گرفتن</string>
+    <string name="create_room_disable_federation_description">اگر اتاق فقط برای تعامل با افراد داخل سرور خانه شما می‌باشد، این قابلیت را فعال کنید. این تنظیم را بعدا نمی‌توانید تغییر دهید.</string>
+    <string name="identity_server_consent_dialog_content">آیا می‌خواهید جهت کشف مخاطبینی که می شناسید، داده های مخاطب خود را (شماره تلفن و ایمیل) به سرور هویت‌سنجی(%1$s) ارسال کنید؟
+\n
+\nبرای حفظ حریم خصوصی بیشتر، داده‌ها قبل از ارسال هش می‌شوند.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">یک کلید امنیتی ایجاد کنید تا در مکانی امن مانند سامانه مدیریت رمز عبور یا گاوصندوق آن را ذخیره کنید.</string>
+    <string name="identity_server_error_no_current_binding_error">در حال حاضر هیچ ارتباطی با این شناسه وجود ندارد.</string>
+    <string name="confirm_your_identity_quad_s">هویت خود را تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
+    <string name="confirm_your_identity">هویت خود را با تأیید این ورود به سیستم از یکی دیگر از نشست‌های خود، تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده</item>
+        <item quantity="other">%d دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده</item>
+    </plurals>
+    <string name="settings_discovery_consent_notice_off">شما عدم رضایت خود را برای ارسال ایمیل و شماره تلفن به این سرور اعلام کرده‌اید در نتیجه نمی‌توانید کاربران دیگر را با استفاده از مخاطبین خود پیدا کنید.</string>
+    <string name="settings_discovery_consent_notice_on">شما رضایت خود را برای ارسال ایمیل و شماره تلفن به این سرور اعلام کرده‌اید تا بتوانید کاربران دیگر را مخاطبین خود پیدا کنید.</string>
 </resources>

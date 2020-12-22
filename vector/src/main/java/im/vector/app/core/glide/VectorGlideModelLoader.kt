@@ -28,7 +28,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.media.ImageContentRenderer
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.session.file.FileService
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -110,11 +109,9 @@ class VectorGlideDataFetcher(private val activeSessionHolder: ActiveSessionHolde
         }
         // Use the file vector service, will avoid flickering and redownload after upload
         fileService.downloadFile(
-                downloadMode = FileService.DownloadMode.FOR_INTERNAL_USE,
-                mimeType = data.mimeType,
-                id = data.eventId,
-                url = data.url,
                 fileName = data.filename,
+                mimeType = data.mimeType,
+                url = data.url,
                 elementToDecrypt = data.elementToDecrypt,
                 callback = object : MatrixCallback<File> {
                     override fun onSuccess(data: File) {

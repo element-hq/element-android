@@ -20,18 +20,20 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.net.toUri
-import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
-import kotlinx.android.synthetic.main.activity_big_image_viewer.*
+import im.vector.app.databinding.ActivityBigImageViewerBinding
+
 import javax.inject.Inject
 
 /**
  * Simple Activity to display an avatar in fullscreen
  */
-class BigImageViewerActivity : VectorBaseActivity() {
+class BigImageViewerActivity : VectorBaseActivity<ActivityBigImageViewerBinding>() {
     @Inject lateinit var sessionHolder: ActiveSessionHolder
+
+    override fun getBinding() = ActivityBigImageViewerBinding.inflate(layoutInflater)
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -39,9 +41,8 @@ class BigImageViewerActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_big_image_viewer)
 
-        setSupportActionBar(bigImageViewerToolbar)
+        setSupportActionBar(views.bigImageViewerToolbar)
         supportActionBar?.apply {
             title = intent.getStringExtra(EXTRA_TITLE)
             setHomeButtonEnabled(true)
@@ -56,7 +57,7 @@ class BigImageViewerActivity : VectorBaseActivity() {
         if (uri == null) {
             finish()
         } else {
-            bigImageViewerImageView.showImage(uri)
+            views.bigImageViewerImageView.showImage(uri)
         }
     }
 

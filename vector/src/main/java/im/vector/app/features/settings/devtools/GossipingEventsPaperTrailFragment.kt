@@ -17,16 +17,18 @@
 package im.vector.app.features.settings.devtools
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.matrix.android.sdk.api.session.events.model.Event
 import javax.inject.Inject
@@ -35,9 +37,12 @@ class GossipingEventsPaperTrailFragment @Inject constructor(
         val viewModelFactory: GossipingEventsPaperTrailViewModel.Factory,
         private val epoxyController: GossipingTrailPagedEpoxyController,
         private val colorProvider: ColorProvider
-) : VectorBaseFragment(), GossipingTrailPagedEpoxyController.InteractionListener {
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+        GossipingTrailPagedEpoxyController.InteractionListener {
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: GossipingEventsPaperTrailViewModel by fragmentViewModel(GossipingEventsPaperTrailViewModel::class)
 
@@ -50,14 +55,14 @@ class GossipingEventsPaperTrailFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        genericRecyclerView.configureWith(epoxyController, showDivider = true)
+        views.genericRecyclerView.configureWith(epoxyController, showDivider = true)
         epoxyController.interactionListener = this
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
-        genericRecyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         epoxyController.interactionListener = null
+        super.onDestroyView()
     }
 
     override fun didTap(event: Event) {

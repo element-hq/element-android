@@ -133,7 +133,11 @@ class PopupAlertManager @Inject constructor() {
     }
 
     private fun displayNextIfPossible() {
-        val currentActivity = weakCurrentActivity?.get() ?: return
+        val currentActivity = weakCurrentActivity?.get()
+        if (Alerter.isShowing || currentActivity == null || currentActivity.isDestroyed) {
+            // will retry later
+            return
+        }
         val next: VectorAlert?
         synchronized(alertQueue) {
             next = alertQueue.maxByOrNull { it.priority }
@@ -284,7 +288,7 @@ class PopupAlertManager @Inject constructor() {
     private fun shouldBeDisplayedIn(alert: VectorAlert?, activity: Activity): Boolean {
         return alert != null
                 && activity !is PinActivity
-                && activity is VectorBaseActivity
+                && activity is VectorBaseActivity<*>
                 && alert.shouldBeDisplayedIn.invoke(activity)
     }
 }

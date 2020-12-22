@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.send.queue
 
 import android.content.Context
-import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.send.SendState

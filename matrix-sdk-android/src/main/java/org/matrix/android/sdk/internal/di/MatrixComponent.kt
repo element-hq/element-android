@@ -25,6 +25,7 @@ import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.auth.AuthModule
@@ -62,6 +63,8 @@ internal interface MatrixComponent {
 
     fun rawService(): RawService
 
+    fun homeServerHistoryService(): HomeServerHistoryService
+
     fun context(): Context
 
     fun matrixConfiguration(): MatrixConfiguration
@@ -70,9 +73,6 @@ internal interface MatrixComponent {
 
     @CacheDirectory
     fun cacheDir(): File
-
-    @ExternalFilesDirectory
-    fun externalFilesDir(): File?
 
     fun olmManager(): OlmManager
 

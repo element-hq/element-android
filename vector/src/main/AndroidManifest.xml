@@ -81,8 +81,9 @@
                 android:resource="@xml/shortcuts" />
         </activity-alias>
 
-        <activity android:name=".features.home.HomeActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".features.home.HomeActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".features.login.LoginActivity"
             android:launchMode="singleTask"
@@ -94,8 +95,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="element" />
-                <data android:host="element" />
+                <data
+                    android:host="connect"
+                    android:scheme="element" />
             </intent-filter>
         </activity>
 
@@ -190,15 +192,25 @@
         <activity
             android:name=".features.signout.soft.SoftLogoutActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".features.permalink.PermalinkHandlerActivity" android:launchMode="singleTask">
+        <activity
+            android:name=".features.permalink.PermalinkHandlerActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="matrix.to" />
+                <data
+                    android:host="user"
+                    android:scheme="element" />
+                <data
+                    android:host="room"
+                    android:scheme="element" />
+
             </intent-filter>
         </activity>
 

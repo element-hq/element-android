@@ -16,55 +16,102 @@
 
 package im.vector.app.features.login
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
-import butterknife.OnClick
+import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
-import kotlinx.android.synthetic.main.fragment_login_signup_signin_selection.*
+import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
+
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked to sign up or to sign in to the homeserver
  */
-open class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLoginSignupSigninSelectionBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_login_signup_signin_selection
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSignupSigninSelectionBinding {
+        return FragmentLoginSignupSigninSelectionBinding.inflate(inflater, container, false)
+    }
 
-    protected fun setupUi(state: LoginViewState) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupViews()
+    }
+
+    private fun setupViews() {
+        views.loginSignupSigninSubmit.setOnClickListener { submit() }
+        views.loginSignupSigninSignIn.setOnClickListener { signIn() }
+    }
+
+    private fun setupUi(state: LoginViewState) {
         when (state.serverType) {
             ServerType.MatrixOrg -> {
-                loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                loginSignupSigninServerIcon.isVisible = true
-                loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
-                loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
+                views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
+                views.loginSignupSigninServerIcon.isVisible = true
+                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
+                views.loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.EMS       -> {
-                loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
-                loginSignupSigninServerIcon.isVisible = true
-                loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
-                loginSignupSigninText.text = state.homeServerUrl.toReducedUrl()
+                views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
+                views.loginSignupSigninServerIcon.isVisible = true
+                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
+                views.loginSignupSigninText.text = state.homeServerUrl.toReducedUrl()
             }
             ServerType.Other     -> {
-                loginSignupSigninServerIcon.isVisible = false
-                loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
-                loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
+                views.loginSignupSigninServerIcon.isVisible = false
+                views.loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
+                views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.homeServerUrl.toReducedUrl())
             }
             ServerType.Unknown   -> Unit /* Should not happen */
         }
+
+        when (state.loginMode) {
+            is LoginMode.SsoAndPassword -> {
+                views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
+                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()
+                views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
+                    override fun onProviderSelected(id: String?) {
+                        val url = withState(loginViewModel) { it.getSsoUrl(id) }
+                        openInCustomTab(url)
+                    }
+                }
+            }
+            else                        -> {
+                // SSO only is managed without container as well as No sso
+                views.loginSignupSigninSignInSocialLoginContainer.isVisible = false
+                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = null
+            }
+        }
     }
 
-    private fun setupButtons() {
-        loginSignupSigninSubmit.text = getString(R.string.login_signup)
-        loginSignupSigninSignIn.isVisible = true
+    private fun setupButtons(state: LoginViewState) {
+        when (state.loginMode) {
+            is LoginMode.Sso -> {
+                // change to only one button that is sign in with sso
+                views.loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
+                views.loginSignupSigninSignIn.isVisible = false
+            }
+            else             -> {
+                views.loginSignupSigninSubmit.text = getString(R.string.login_signup)
+                views.loginSignupSigninSignIn.isVisible = true
+            }
+        }
     }
 
-    @OnClick(R.id.loginSignupSigninSubmit)
-    open fun submit() {
-        loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
+    private fun submit() = withState(loginViewModel) { state ->
+        if (state.loginMode is LoginMode.Sso) {
+            openInCustomTab(state.getSsoUrl(null))
+        } else {
+            loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
+        }
     }
 
-    @OnClick(R.id.loginSignupSigninSignIn)
-    fun signIn() {
+    private fun signIn() {
         loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignIn))
     }
 
@@ -74,6 +121,6 @@ open class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractLo
 
     override fun updateWithState(state: LoginViewState) {
         setupUi(state)
-        setupButtons()
+        setupButtons(state)
     }
 }

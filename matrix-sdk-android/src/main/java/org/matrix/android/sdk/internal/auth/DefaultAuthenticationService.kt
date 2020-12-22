@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
@@ -278,6 +279,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
         return LoginFlowResult.Success(
                 loginFlowResponse.flows.orEmpty().mapNotNull { it.type },
+                loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
                 versions.isLoginAndRegistrationSupportedBySdk(),
                 homeServerUrl,
                 !versions.isSupportedBySdk()

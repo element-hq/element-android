@@ -213,4 +213,23 @@
     <string name="notice_direct_room_join">%1$s erdhi</string>
     <string name="notice_direct_room_created_by_you">Krijuat diskutimin</string>
     <string name="notice_direct_room_created">%1$s krijoi diskutimin</string>
+    <string name="room_displayname_empty_room_was">Dhomë e zbrazët (was %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s dhe %4$d tjetër</item>
+        <item quantity="other">%1$s, %2$s, %3$s dhe %4$d të tjerë</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s dhe %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s dhe %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 U është penguar pjesëmarrja krejt shërbyesve! Kjo dhomë s’mund të përdoret më.</string>
+    <string name="notice_room_server_acl_updated_no_change">Pa ndryshim.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Ndryshuat ACL-ra shërbyesi për këtë dhomë.</string>
+    <string name="notice_room_server_acl_updated_title">%s ndryshoi ACL-ra shërbyesi për këtë dhomë.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Ujdisët ACL-ra shërbyesi për këtë dhomë.</string>
+    <string name="notice_room_server_acl_set_title">%s ujdisi ACL-ra shërbyesi për këtë dhomë.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Shërbyes që kanë përputhje me %s u hoqën nga lista e të lejuarve.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Shërbyesit që kanë përputhje me %s tani janë të lejuar.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Shërbyesit që kanë përputhje me %s u hoqën nga lista e ndalimeve.</string>
+    <string name="notice_room_server_acl_updated_banned">• Shërbyesit që kanë përputhje me %s tani janë të ndaluar.</string>
+    <string name="notice_room_server_acl_set_allowed">• Shërbyesit që kanë përputhje me %s janë të ndaluar.</string>
+    <string name="notice_room_server_acl_set_banned">• Shërbyesit që kanë përputhje me %s janë të ndaluar.</string>
 </resources>

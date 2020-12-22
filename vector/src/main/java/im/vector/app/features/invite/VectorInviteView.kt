@@ -24,8 +24,9 @@ import androidx.core.view.updateLayoutParams
 import im.vector.app.R
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.ButtonStateView
+import im.vector.app.databinding.VectorInviteViewBinding
 import im.vector.app.features.home.AvatarRenderer
-import kotlinx.android.synthetic.main.vector_invite_view.view.*
+
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -44,6 +45,8 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
         SMALL
     }
 
+    private val views: VectorInviteViewBinding
+
     @Inject lateinit var avatarRenderer: AvatarRenderer
     var callback: Callback? = null
 
@@ -51,8 +54,9 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
         if (context is HasScreenInjector) {
             context.injector().inject(this)
         }
-        View.inflate(context, R.layout.vector_invite_view, this)
-        inviteAcceptView.callback = object : ButtonStateView.Callback {
+        inflate(context, R.layout.vector_invite_view, this)
+        views = VectorInviteViewBinding.bind(this)
+        views.inviteAcceptView.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
                 callback?.onAcceptInvite()
             }
@@ -62,7 +66,7 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         }
 
-        inviteRejectView.callback = object : ButtonStateView.Callback {
+        views.inviteRejectView.callback = object : ButtonStateView.Callback {
             override fun onButtonClicked() {
                 callback?.onRejectInvite()
             }
@@ -76,17 +80,17 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
     fun render(sender: RoomMemberSummary, mode: Mode = Mode.LARGE, changeMembershipState: ChangeMembershipState) {
         if (mode == Mode.LARGE) {
             updateLayoutParams { height = LayoutParams.MATCH_CONSTRAINT }
-            avatarRenderer.render(sender.toMatrixItem(), inviteAvatarView)
-            inviteIdentifierView.text = sender.userId
-            inviteNameView.text = sender.displayName
-            inviteLabelView.text = context.getString(R.string.send_you_invite)
+            avatarRenderer.render(sender.toMatrixItem(), views.inviteAvatarView)
+            views.inviteIdentifierView.text = sender.userId
+            views.inviteNameView.text = sender.displayName
+            views.inviteLabelView.text = context.getString(R.string.send_you_invite)
         } else {
             updateLayoutParams { height = LayoutParams.WRAP_CONTENT }
-            inviteAvatarView.visibility = View.GONE
-            inviteIdentifierView.visibility = View.GONE
-            inviteNameView.visibility = View.GONE
-            inviteLabelView.text = context.getString(R.string.invited_by, sender.userId)
+            views.inviteAvatarView.visibility = View.GONE
+            views.inviteIdentifierView.visibility = View.GONE
+            views.inviteNameView.visibility = View.GONE
+            views.inviteLabelView.text = context.getString(R.string.invited_by, sender.userId)
         }
-        InviteButtonStateBinder.bind(inviteAcceptView, inviteRejectView, changeMembershipState)
+        InviteButtonStateBinder.bind(views.inviteAcceptView, views.inviteRejectView, changeMembershipState)
     }
 }

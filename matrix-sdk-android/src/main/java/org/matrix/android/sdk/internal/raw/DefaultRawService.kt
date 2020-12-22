@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.raw
 
-import org.matrix.android.sdk.api.raw.RawCacheStrategy
+import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.api.raw.RawService
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -25,15 +25,15 @@ internal class DefaultRawService @Inject constructor(
         private val getUrlTask: GetUrlTask,
         private val cleanRawCacheTask: CleanRawCacheTask
 ) : RawService {
-    override suspend fun getUrl(url: String, rawCacheStrategy: RawCacheStrategy): String {
-        return getUrlTask.execute(GetUrlTask.Params(url, rawCacheStrategy))
+    override suspend fun getUrl(url: String, cacheStrategy: CacheStrategy): String {
+        return getUrlTask.execute(GetUrlTask.Params(url, cacheStrategy))
     }
 
     override suspend fun getWellknown(userId: String): String {
         val homeServerDomain = userId.substringAfter(":")
         return getUrl(
                 "https://$homeServerDomain/.well-known/matrix/client",
-                RawCacheStrategy.TtlCache(TimeUnit.HOURS.toMillis(8), false)
+                CacheStrategy.TtlCache(TimeUnit.HOURS.toMillis(8), false)
         )
     }
 

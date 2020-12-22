@@ -749,7 +749,7 @@
     <string name="room_member_power_level_moderators">Moderatorer</string>
     <string name="verify_cannot_cross_sign">Den här sessionen kan inte dela den här verifikationen med dina andra sessioner.
 \nVerifikationen kommer att sparas lokalt och delas i en framtida version av appen.</string>
-    <string name="room_settings_enable_encryption">Aktivera totalsträckskryptering</string>
+    <string name="room_settings_enable_encryption">Aktivera totalsträckskryptering…</string>
     <string name="room_settings_enable_encryption_warning">Efter aktivering så kan kryptering inte avaktiveras.</string>
     <string name="room_settings_enable_encryption_dialog_content">Efter aktivering så kan kryptering inte avaktiveras. Meddelanden som skickas i ett krypterat rum kan inte läsas av servern, bara av deltagarna i rummet. Att aktivera kryptering kan göra att många bottar och bryggor inte funkar ordentligt.</string>
     <string name="verification_conclusion_ok_notice">Meddelanden mellan dig och den här användaren är totalsträckskrypterade och kan inte läsas av tredje parter.</string>

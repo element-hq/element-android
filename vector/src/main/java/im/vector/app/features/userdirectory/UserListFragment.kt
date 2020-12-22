@@ -17,9 +17,11 @@
 package im.vector.app.features.userdirectory
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ScrollView
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
@@ -37,8 +39,9 @@ import im.vector.app.core.extensions.setupAsSearch
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
-import kotlinx.android.synthetic.main.fragment_user_list.*
+
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import javax.inject.Inject
@@ -47,29 +50,32 @@ class UserListFragment @Inject constructor(
         private val userListController: UserListController,
         private val dimensionConverter: DimensionConverter,
         val homeServerCapabilitiesViewModelFactory: HomeServerCapabilitiesViewModel.Factory
-) : VectorBaseFragment(), UserListController.Callback {
+) : VectorBaseFragment<FragmentUserListBinding>(),
+        UserListController.Callback {
 
     private val args: UserListFragmentArgs by args()
     private val viewModel: UserListViewModel by activityViewModel()
     private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
 
-    override fun getLayoutResId() = R.layout.fragment_user_list
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentUserListBinding {
+        return FragmentUserListBinding.inflate(inflater, container, false)
+    }
 
     override fun getMenuRes() = args.menuResId
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)
-        userListTitle.text = args.title
-        vectorBaseActivity.setSupportActionBar(userListToolbar)
+        views.userListTitle.text = args.title
+        vectorBaseActivity.setSupportActionBar(views.userListToolbar)
 
         setupRecyclerView()
         setupSearchView()
         setupCloseView()
 
         homeServerCapabilitiesViewModel.subscribe {
-            userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
+            views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 
         viewModel.selectSubscribe(this, UserListViewState::pendingInvitees) {
@@ -93,7 +99,7 @@ class UserListFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        userListRecyclerView.cleanup()
+        views.userListRecyclerView.cleanup()
         super.onDestroyView()
     }
 
@@ -115,16 +121,16 @@ class UserListFragment @Inject constructor(
     private fun setupRecyclerView() {
         userListController.callback = this
         // Don't activate animation as we might have way to much item animation when filtering
-        userListRecyclerView.configureWith(userListController, disableItemAnimation = true)
+        views.userListRecyclerView.configureWith(userListController, disableItemAnimation = true)
     }
 
     private fun setupSearchView() {
         withState(viewModel) {
-            userListSearch.hint = getString(R.string.user_directory_search_hint)
+            views.userListSearch.hint = getString(R.string.user_directory_search_hint)
         }
-        userListSearch
+        views.userListSearch
                 .textChanges()
-                .startWith(userListSearch.text)
+                .startWith(views.userListSearch.text)
                 .subscribe { text ->
                     val searchValue = text.trim()
                     val action = if (searchValue.isBlank()) {
@@ -136,12 +142,12 @@ class UserListFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        userListSearch.setupAsSearch()
-        userListSearch.requestFocus()
+        views.userListSearch.setupAsSearch()
+        views.userListSearch.requestFocus()
     }
 
     private fun setupCloseView() {
-        userListClose.debouncedClicks {
+        views.userListClose.debouncedClicks {
             requireActivity().finish()
         }
     }
@@ -153,16 +159,16 @@ class UserListFragment @Inject constructor(
     private fun renderSelectedUsers(invitees: Set<PendingInvitee>) {
         invalidateOptionsMenu()
 
-        val currentNumberOfChips = chipGroup.childCount
+        val currentNumberOfChips = views.chipGroup.childCount
         val newNumberOfChips = invitees.size
 
-        chipGroup.removeAllViews()
+        views.chipGroup.removeAllViews()
         invitees.forEach { addChipToGroup(it) }
 
         // Scroll to the bottom when adding chips. When removing chips, do not scroll
         if (newNumberOfChips >= currentNumberOfChips) {
-            chipGroupScrollView.post {
-                chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
+            views.chipGroupScrollView.post {
+                views.chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
             }
         }
     }
@@ -175,7 +181,7 @@ class UserListFragment @Inject constructor(
         chip.isClickable = true
         chip.isCheckable = false
         chip.isCloseIconVisible = true
-        chipGroup.addView(chip)
+        views.chipGroup.addView(chip)
         chip.setOnCloseIconClickListener {
             viewModel.handle(UserListAction.RemovePendingInvitee(pendingInvitee))
         }

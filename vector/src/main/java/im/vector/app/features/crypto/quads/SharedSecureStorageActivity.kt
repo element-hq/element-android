@@ -35,8 +35,7 @@ import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.crypto.recover.SetupMode
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.activity.*
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -65,7 +64,7 @@ class SharedSecureStorageActivity :
         super.onCreate(savedInstanceState)
         supportFragmentManager.addFragmentOnAttachListener(this)
 
-        toolbar.visibility = View.GONE
+        views.toolbar.visibility = View.GONE
 
         viewModel.observeViewEvents { observeViewEvents(it) }
 
@@ -132,7 +131,7 @@ class SharedSecureStorageActivity :
     }
 
     override fun onAttachFragment(fragmentManager: FragmentManager, fragment: Fragment) {
-        if (fragment is VectorBaseBottomSheetDialogFragment) {
+        if (fragment is VectorBaseBottomSheetDialogFragment<*>) {
             fragment.resultListener = this
         }
     }

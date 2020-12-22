@@ -29,6 +29,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
@@ -41,7 +42,7 @@ import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import javax.inject.Inject
 
 class RoomProfileActivity :
-        VectorBaseActivity(),
+        VectorBaseActivity<ActivitySimpleBinding>(),
         ToolbarConfigurable,
         RequireActiveMembershipViewModel.Factory {
 
@@ -81,7 +82,9 @@ class RoomProfileActivity :
         injector.inject(this)
     }
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding(): ActivitySimpleBinding {
+        return ActivitySimpleBinding.inflate(layoutInflater)
+    }
 
     override fun initUiAndData() {
         sharedActionViewModel = viewModelProvider.get(RoomProfileSharedActionViewModel::class.java)

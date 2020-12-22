@@ -20,6 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 
 @JsonClass(generateAdapter = true)
@@ -54,5 +55,5 @@ data class MessageImageContent(
         @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
 ) : MessageImageInfoContent {
     override val mimeType: String?
-        get() = encryptedFileInfo?.mimetype ?: info?.mimeType ?: "image/*"
+        get() = encryptedFileInfo?.mimetype ?: info?.mimeType ?: MimeTypes.Images
 }

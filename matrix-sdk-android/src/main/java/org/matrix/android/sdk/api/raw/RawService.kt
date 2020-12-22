@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.raw
 
+import org.matrix.android.sdk.api.cache.CacheStrategy
+
 /**
  * Useful methods to fetch raw data from the server. The access token will not be used to fetched the data
  */
@@ -23,7 +25,7 @@ interface RawService {
     /**
      * Get a URL, either from cache or from the remote server, depending on the cache strategy
      */
-    suspend fun getUrl(url: String, rawCacheStrategy: RawCacheStrategy): String
+    suspend fun getUrl(url: String, cacheStrategy: CacheStrategy): String
 
     /**
      * Specific case for the well-known file. Cache validity is 8 hours

@@ -48,6 +48,10 @@ import okio.buffer
 import okio.sink
 import okio.source
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.util.MimeTypes
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeAudio
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeImage
+import org.matrix.android.sdk.api.util.MimeTypes.isMimeTypeVideo
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -138,7 +142,7 @@ fun openFileSelection(activity: Activity,
     fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultipleSelection)
 
     fileIntent.addCategory(Intent.CATEGORY_OPENABLE)
-    fileIntent.type = "*/*"
+    fileIntent.type = MimeTypes.Any
 
     try {
         activityResultLauncher
@@ -182,7 +186,7 @@ fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): Strin
     // The Galaxy S not only requires the name of the file to output the image to, but will also not
     // set the mime type of the picture it just took (!!!). We assume that the Galaxy S takes image/jpegs
     // so the attachment uploader doesn't freak out about there being no mimetype in the content database.
-    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+    values.put(MediaStore.Images.Media.MIME_TYPE, MimeTypes.Jpeg)
     var dummyUri: Uri? = null
     try {
         dummyUri = activity.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
@@ -344,10 +348,10 @@ fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String
             put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
         }
         val externalContentUri = when {
-            mediaMimeType?.startsWith("image/") == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            mediaMimeType?.startsWith("video/") == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-            mediaMimeType?.startsWith("audio/") == true -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-            else                                        -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+            mediaMimeType?.isMimeTypeImage() == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            mediaMimeType?.isMimeTypeVideo() == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            mediaMimeType?.isMimeTypeAudio() == true -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            else                                     -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
         }
 
         val uri = context.contentResolver.insert(externalContentUri, values)
@@ -365,7 +369,7 @@ fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String
             notificationUtils.buildDownloadFileNotification(
                     uri,
                     filename,
-                    mediaMimeType ?: "application/octet-stream"
+                    mediaMimeType ?: MimeTypes.OctetStream
             ).let { notification ->
                 notificationUtils.showNotificationMessage("DL", uri.hashCode(), notification)
             }
@@ -385,10 +389,10 @@ private fun saveMediaLegacy(context: Context, mediaMimeType: String?, title: Str
 
     GlobalScope.launch(Dispatchers.IO) {
         val dest = when {
-            mediaMimeType?.startsWith("image/") == true -> Environment.DIRECTORY_PICTURES
-            mediaMimeType?.startsWith("video/") == true -> Environment.DIRECTORY_MOVIES
-            mediaMimeType?.startsWith("audio/") == true -> Environment.DIRECTORY_MUSIC
-            else                                        -> Environment.DIRECTORY_DOWNLOADS
+            mediaMimeType?.isMimeTypeImage() == true -> Environment.DIRECTORY_PICTURES
+            mediaMimeType?.isMimeTypeVideo() == true -> Environment.DIRECTORY_MOVIES
+            mediaMimeType?.isMimeTypeAudio() == true -> Environment.DIRECTORY_MUSIC
+            else                                     -> Environment.DIRECTORY_DOWNLOADS
         }
         val downloadDir = Environment.getExternalStoragePublicDirectory(dest)
         try {
@@ -405,7 +409,7 @@ private fun saveMediaLegacy(context: Context, mediaMimeType: String?, title: Str
                         savedFile.name,
                         title,
                         true,
-                        mediaMimeType ?: "application/octet-stream",
+                        mediaMimeType ?: MimeTypes.OctetStream,
                         savedFile.absolutePath,
                         savedFile.length(),
                         true)

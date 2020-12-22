@@ -13,6 +13,8 @@
         app:itemSpacing="1dp"
         tools:listitem="@layout/item_pushgateway" />
 
-    <include layout="@layout/merge_overlay_waiting_view" />
+    <include
+        android:id="@+id/waiting_view"
+        layout="@layout/merge_overlay_waiting_view" />
 
 </FrameLayout>

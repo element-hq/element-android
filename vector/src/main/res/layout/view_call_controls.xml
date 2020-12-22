@@ -15,7 +15,7 @@
         tools:visibility="visible">
 
         <ImageView
-            android:id="@+id/iv_icr_accept_call"
+            android:id="@+id/ringingControlAccept"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/oval_positive"
@@ -28,7 +28,7 @@
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
-            android:id="@+id/iv_icr_end_call"
+            android:id="@+id/ringingControlDecline"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/oval_destructive"
@@ -43,7 +43,7 @@
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="iv_icr_end_call, iv_icr_accept_call"
+            app:constraint_referenced_ids="ringingControlDecline, ringingControlAccept"
             tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -62,7 +62,7 @@
         tools:visibility="visible">
 
         <ImageView
-            android:id="@+id/iv_leftMiniControl"
+            android:id="@+id/openChatIcon"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:clickable="true"
@@ -74,7 +74,7 @@
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
-            android:id="@+id/iv_mute_toggle"
+            android:id="@+id/muteIcon"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/oval_positive"
@@ -89,7 +89,7 @@
             tools:src="@drawable/ic_microphone_on" />
 
         <ImageView
-            android:id="@+id/iv_end_call"
+            android:id="@+id/endCallIcon"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/oval_destructive"
@@ -102,9 +102,9 @@
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
-            android:id="@+id/iv_video_toggle"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:id="@+id/videoToggleIcon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:background="@drawable/oval_positive"
             android:clickable="true"
             android:focusable="true"
@@ -116,7 +116,7 @@
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
-            android:id="@+id/iv_more"
+            android:id="@+id/moreIcon"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:clickable="true"
@@ -130,75 +130,9 @@
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="iv_leftMiniControl, iv_mute_toggle, iv_end_call,iv_video_toggle,iv_more"
+            app:constraint_referenced_ids="openChatIcon, muteIcon, endCallIcon,videoToggleIcon,moreIcon"
             tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_call_speaker"-->
-    <!--        android:layout_width="32dp"-->
-    <!--        android:layout_height="32dp"-->
-    <!--        android:layout_marginStart="32dp"-->
-    <!--        android:clickable="true"-->
-    <!--        android:focusable="true"-->
-    <!--        android:src="@drawable/ic_call_speaker_default"-->
-    <!--        android:tint="?colorPrimary"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_call_flip_camera"-->
-    <!--        android:layout_width="32dp"-->
-    <!--        android:layout_height="32dp"-->
-    <!--        android:layout_marginStart="32dp"-->
-    <!--        android:clickable="true"-->
-    <!--        android:focusable="true"-->
-    <!--        android:src="@drawable/ic_call_flip_camera_default"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_end_call"-->
-    <!--        android:layout_width="56dp"-->
-    <!--        android:layout_height="56dp"-->
-    <!--        android:layout_marginBottom="32dp"-->
-    <!--        android:background="@drawable/oval_destructive"-->
-    <!--        android:clickable="true"-->
-    <!--        android:focusable="true"-->
-    <!--        android:padding="8dp"-->
-    <!--        android:src="@drawable/ic_call_end"-->
-    <!--        android:tint="@color/white"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintBottom_toTopOf="@+id/layout_call_actions"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent" />-->
-
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_call_videocam_off"-->
-    <!--        android:layout_width="32dp"-->
-    <!--        android:layout_height="32dp"-->
-    <!--        android:clickable="true"-->
-    <!--        android:focusable="true"-->
-    <!--        android:src="@drawable/ic_call_videocam_off_default"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_call_mute"-->
-    <!--        android:layout_width="32dp"-->
-    <!--        android:layout_height="32dp"-->
-    <!--        android:layout_marginEnd="32dp"-->
-    <!--        android:clickable="true"-->
-    <!--        android:focusable="true"-->
-    <!--        android:src="@drawable/ic_call_mute_default"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 </merge>

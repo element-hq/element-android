@@ -21,7 +21,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import im.vector.app.R
-import kotlinx.android.synthetic.main.dialog_confirmation_with_reason.view.*
+import im.vector.app.databinding.DialogConfirmationWithReasonBinding
 
 object ConfirmationDialogBuilder {
 
@@ -33,25 +33,26 @@ object ConfirmationDialogBuilder {
              @StringRes reasonHintRes: Int,
              confirmation: (String?) -> Unit) {
         val layout = activity.layoutInflater.inflate(R.layout.dialog_confirmation_with_reason, null)
-        layout.dialogConfirmationText.setText(confirmationRes)
+        val views = DialogConfirmationWithReasonBinding.bind(layout)
+        views.dialogConfirmationText.setText(confirmationRes)
 
-        layout.dialogReasonCheck.isVisible = askForReason
-        layout.dialogReasonTextInputLayout.isVisible = askForReason
+        views.dialogReasonCheck.isVisible = askForReason
+        views.dialogReasonTextInputLayout.isVisible = askForReason
 
-        layout.dialogReasonCheck.setOnCheckedChangeListener { _, isChecked ->
-            layout.dialogReasonTextInputLayout.isEnabled = isChecked
+        views.dialogReasonCheck.setOnCheckedChangeListener { _, isChecked ->
+            views.dialogReasonTextInputLayout.isEnabled = isChecked
         }
         if (askForReason && reasonHintRes != 0) {
-            layout.dialogReasonInput.setHint(reasonHintRes)
+            views.dialogReasonInput.setHint(reasonHintRes)
         }
 
         AlertDialog.Builder(activity)
                 .setTitle(titleRes)
                 .setView(layout)
                 .setPositiveButton(positiveRes) { _, _ ->
-                    val reason = layout.dialogReasonInput.text.toString()
+                    val reason = views.dialogReasonInput.text.toString()
                             .takeIf { askForReason }
-                            ?.takeIf { layout.dialogReasonCheck.isChecked }
+                            ?.takeIf { views.dialogReasonCheck.isChecked }
                             ?.takeIf { it.isNotBlank() }
                     confirmation(reason)
                 }

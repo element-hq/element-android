@@ -24,7 +24,7 @@ import com.airbnb.mvrx.withState
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.ui.bottomsheet.BottomSheetGeneric
 import im.vector.app.core.ui.bottomsheet.BottomSheetGenericController
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject

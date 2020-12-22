@@ -31,7 +31,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import butterknife.BindView
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
@@ -43,21 +42,20 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
+import im.vector.app.databinding.ActivityCallBinding
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.activity_call.*
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCallDetail
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.webrtc.EglBase
 import org.webrtc.RendererCommon
-import org.webrtc.SurfaceViewRenderer
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -70,9 +68,9 @@ data class CallArgs(
         val isVideoCall: Boolean
 ) : Parcelable
 
-class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionListener {
+class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallControlsView.InteractionListener {
 
-    override fun getLayoutRes() = R.layout.activity_call
+    override fun getBinding() = ActivityCallBinding.inflate(layoutInflater)
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
@@ -87,15 +85,6 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     @Inject lateinit var callManager: WebRtcCallManager
 
     @Inject lateinit var viewModelFactory: VectorCallViewModel.Factory
-
-    @BindView(R.id.pip_video_view)
-    lateinit var pipRenderer: SurfaceViewRenderer
-
-    @BindView(R.id.fullscreen_video_view)
-    lateinit var fullscreenRenderer: SurfaceViewRenderer
-
-    @BindView(R.id.callControls)
-    lateinit var callControlsView: CallControlsView
 
     private var rootEglBase: EglBase? = null
 
@@ -152,10 +141,10 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     }
 
     override fun onDestroy() {
-        callManager.getCallById(callArgs.callId)?.detachRenderers(listOf(pipRenderer, fullscreenRenderer))
+        callManager.getCallById(callArgs.callId)?.detachRenderers(listOf(views.pipRenderer, views.fullscreenRenderer))
         if (surfaceRenderersAreInitialized) {
-            pipRenderer.release()
-            fullscreenRenderer.release()
+            views.pipRenderer.release()
+            views.fullscreenRenderer.release()
         }
         turnScreenOffAndKeyguardOn()
         super.onDestroy()
@@ -170,75 +159,75 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
             return
         }
 
-        callControlsView.updateForState(state)
+        views.callControlsView.updateForState(state)
         val callState = state.callState.invoke()
-        callConnectingProgress.isVisible = false
-        callActionText.setOnClickListener(null)
-        callActionText.isVisible = false
-        smallIsHeldIcon.isVisible = false
+        views.callConnectingProgress.isVisible = false
+        views.callActionText.setOnClickListener(null)
+        views.callActionText.isVisible = false
+        views.smallIsHeldIcon.isVisible = false
         when (callState) {
             is CallState.Idle,
             is CallState.Dialing -> {
-                callVideoGroup.isInvisible = true
-                callInfoGroup.isVisible = true
-                callStatusText.setText(R.string.call_ring)
+                views.callVideoGroup.isInvisible = true
+                views.callInfoGroup.isVisible = true
+                views.callStatusText.setText(R.string.call_ring)
                 configureCallInfo(state)
             }
 
             is CallState.LocalRinging -> {
-                callVideoGroup.isInvisible = true
-                callInfoGroup.isVisible = true
-                callStatusText.text = null
+                views.callVideoGroup.isInvisible = true
+                views.callInfoGroup.isVisible = true
+                views.callStatusText.text = null
                 configureCallInfo(state)
             }
 
             is CallState.Answering -> {
-                callVideoGroup.isInvisible = true
-                callInfoGroup.isVisible = true
-                callStatusText.setText(R.string.call_connecting)
-                callConnectingProgress.isVisible = true
+                views.callVideoGroup.isInvisible = true
+                views.callInfoGroup.isVisible = true
+                views.callStatusText.setText(R.string.call_connecting)
+                views.callConnectingProgress.isVisible = true
                 configureCallInfo(state)
             }
             is CallState.Connected -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold) {
-                        smallIsHeldIcon.isVisible = true
-                        callVideoGroup.isInvisible = true
-                        callInfoGroup.isVisible = true
+                        views.smallIsHeldIcon.isVisible = true
+                        views.callVideoGroup.isInvisible = true
+                        views.callInfoGroup.isVisible = true
                         configureCallInfo(state, blurAvatar = true)
                         if (state.isRemoteOnHold) {
-                            callActionText.setText(R.string.call_resume_action)
-                            callActionText.isVisible = true
-                            callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.ToggleHoldResume) }
-                            callStatusText.setText(R.string.call_held_by_you)
+                            views.callActionText.setText(R.string.call_resume_action)
+                            views.callActionText.isVisible = true
+                            views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.ToggleHoldResume) }
+                            views.callStatusText.setText(R.string.call_held_by_you)
                         } else {
-                            callActionText.isInvisible = true
+                            views.callActionText.isInvisible = true
                             state.otherUserMatrixItem.invoke()?.let {
-                                callStatusText.text = getString(R.string.call_held_by_user, it.getBestName())
+                                views.callStatusText.text = getString(R.string.call_held_by_user, it.getBestName())
                             }
                         }
                     } else {
-                        callStatusText.text = null
+                        views.callStatusText.text = null
                         if (callArgs.isVideoCall) {
-                            callVideoGroup.isVisible = true
-                            callInfoGroup.isVisible = false
-                            pip_video_view.isVisible = !state.isVideoCaptureInError
+                            views.callVideoGroup.isVisible = true
+                            views.callInfoGroup.isVisible = false
+                            //views.pip_video_view.isVisible = !state.isVideoCaptureInError
                         } else {
-                            callVideoGroup.isInvisible = true
-                            callInfoGroup.isVisible = true
+                            views.callVideoGroup.isInvisible = true
+                            views.callInfoGroup.isVisible = true
                             configureCallInfo(state)
                         }
                     }
                 } else {
                     // This state is not final, if you change network, new candidates will be sent
-                    callVideoGroup.isInvisible = true
-                    callInfoGroup.isVisible = true
+                    views.callVideoGroup.isInvisible = true
+                    views.callInfoGroup.isVisible = true
                     configureCallInfo(state)
-                    callStatusText.setText(R.string.call_connecting)
-                    callConnectingProgress.isVisible = true
+                    views.callStatusText.setText(R.string.call_connecting)
+                    views.callConnectingProgress.isVisible = true
                 }
                 // ensure all attached?
-                callManager.getCallById(callArgs.callId)?.attachViewRenderers(pipRenderer, fullscreenRenderer, null)
+                callManager.getCallById(callArgs.callId)?.attachViewRenderers(views.pipRenderer, views.fullscreenRenderer, null)
             }
             is CallState.Terminated -> {
                 finish()
@@ -251,18 +240,18 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
     private fun configureCallInfo(state: VectorCallViewState, blurAvatar: Boolean = false) {
         state.otherUserMatrixItem.invoke()?.let {
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
-            avatarRenderer.renderBlur(it, bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter)
-            participantNameText.text = it.getBestName()
+            avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter)
+            views.participantNameText.text = it.getBestName()
             if (blurAvatar) {
-                avatarRenderer.renderBlur(it, otherMemberAvatar, sampling = 2, rounded = true, colorFilter = colorFilter)
+                avatarRenderer.renderBlur(it, views.otherMemberAvatar, sampling = 2, rounded = true, colorFilter = colorFilter)
             } else {
-                avatarRenderer.render(it, otherMemberAvatar)
+                avatarRenderer.render(it, views.otherMemberAvatar)
             }
         }
     }
 
     private fun configureCallViews() {
-        callControlsView.interactionListener = this
+        views.callControlsView.interactionListener = this
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -282,21 +271,21 @@ class VectorCallActivity : VectorBaseActivity(), CallControlsView.InteractionLis
         }
 
         // Init Picture in Picture renderer
-        pipRenderer.init(rootEglBase!!.eglBaseContext, null)
-        pipRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
+        views.pipRenderer.init(rootEglBase!!.eglBaseContext, null)
+        views.pipRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
 
         // Init Full Screen renderer
-        fullscreenRenderer.init(rootEglBase!!.eglBaseContext, null)
-        fullscreenRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL)
+        views.fullscreenRenderer.init(rootEglBase!!.eglBaseContext, null)
+        views.fullscreenRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL)
 
-        pipRenderer.setZOrderMediaOverlay(true)
-        pipRenderer.setEnableHardwareScaler(true /* enabled */)
-        fullscreenRenderer.setEnableHardwareScaler(true /* enabled */)
+        views.pipRenderer.setZOrderMediaOverlay(true)
+        views.pipRenderer.setEnableHardwareScaler(true /* enabled */)
+        views.fullscreenRenderer.setEnableHardwareScaler(true /* enabled */)
 
-        callManager.getCallById(callArgs.callId)?.attachViewRenderers(pipRenderer, fullscreenRenderer,
+        callManager.getCallById(callArgs.callId)?.attachViewRenderers(views.pipRenderer, views.fullscreenRenderer,
                 intent.getStringExtra(EXTRA_MODE)?.takeIf { isFirstCreation() })
 
-        pipRenderer.setOnClickListener {
+        views.pipRenderer.setOnClickListener {
             callViewModel.handle(VectorCallViewActions.ToggleCamera)
         }
         surfaceRenderersAreInitialized = true

@@ -25,6 +25,7 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.ActivityProgressBinding
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.permalink.PermalinkHandler
@@ -38,7 +39,7 @@ import javax.inject.Inject
 /**
  * Dummy activity used to dispatch the vector URL links.
  */
-class LinkHandlerActivity : VectorBaseActivity() {
+class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
 
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
@@ -48,7 +49,7 @@ class LinkHandlerActivity : VectorBaseActivity() {
         injector.inject(this)
     }
 
-    override fun getLayoutRes() = R.layout.activity_progress
+    override fun getBinding() = ActivityProgressBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {
         val uri = intent.data

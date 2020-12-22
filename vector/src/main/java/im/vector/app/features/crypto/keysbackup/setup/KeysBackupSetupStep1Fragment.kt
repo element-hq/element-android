@@ -17,28 +17,23 @@
 package im.vector.app.features.crypto.keysbackup.setup
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import butterknife.BindView
-import butterknife.OnClick
-import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
+import im.vector.app.databinding.FragmentKeysBackupSetupStep1Binding
+
 import javax.inject.Inject
 
-class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment() {
+class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupSetupStep1Binding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_keys_backup_setup_step1
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSetupStep1Binding {
+        return FragmentKeysBackupSetupStep1Binding.inflate(inflater, container, false)
+    }
 
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
-
-    @BindView(R.id.keys_backup_setup_step1_advanced)
-    lateinit var advancedOptionText: TextView
-
-    @BindView(R.id.keys_backup_setup_step1_manualExport)
-    lateinit var manualExportButton: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,18 +43,19 @@ class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment() 
         viewModel.showManualExport.observe(viewLifecycleOwner, Observer {
             val showOption = it ?: false
             // Can't use isVisible because the kotlin compiler will crash with  Back-end (JVM) Internal error: wrong code generated
-            advancedOptionText.visibility = if (showOption) View.VISIBLE else View.GONE
-            manualExportButton.visibility = if (showOption) View.VISIBLE else View.GONE
+            views.keysBackupSetupStep1AdvancedOptionText.visibility = if (showOption) View.VISIBLE else View.GONE
+            views.keysBackupSetupStep1ManualExportButton.visibility = if (showOption) View.VISIBLE else View.GONE
         })
+
+        views.keysBackupSetupStep1Button.setOnClickListener { onButtonClick() }
+        views.keysBackupSetupStep1ManualExportButton.setOnClickListener { onManualExportClick() }
     }
 
-    @OnClick(R.id.keys_backup_setup_step1_button)
-    fun onButtonClick() {
+    private fun onButtonClick() {
         viewModel.navigateEvent.value = LiveEvent(KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2)
     }
 
-    @OnClick(R.id.keys_backup_setup_step1_manualExport)
-    fun onManualExportClick() {
+    private fun onManualExportClick() {
         viewModel.navigateEvent.value = LiveEvent(KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT)
     }
 }

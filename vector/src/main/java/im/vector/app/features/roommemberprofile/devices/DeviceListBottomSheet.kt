@@ -20,7 +20,9 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
@@ -30,14 +32,18 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.databinding.BottomSheetWithFragmentsBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-class DeviceListBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class DeviceListBottomSheet :
+        VectorBaseBottomSheetDialogFragment<BottomSheetWithFragmentsBinding>() {
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_with_fragments
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetWithFragmentsBinding {
+        return BottomSheetWithFragmentsBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: DeviceListBottomSheetViewModel by fragmentViewModel(DeviceListBottomSheetViewModel::class)
 

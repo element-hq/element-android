@@ -218,4 +218,28 @@
     <string name="notice_direct_room_join">%1$s vstoupili</string>
     <string name="notice_direct_room_created_by_you">Založili jste diskusi</string>
     <string name="notice_direct_room_created">%1$s založil diskusi</string>
+    <string name="room_displayname_empty_room_was">Prázdná místnost (byla %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s a %4$d další</item>
+        <item quantity="few">%1$s, %2$s, %3$s a %4$d další</item>
+        <item quantity="other">%1$s, %2$s, %3$s a %4$d dalších</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s a %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s a %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Účast všech serverů je zakázána! Tuto místnost již nelze použít.</string>
+    <string name="notice_room_server_acl_updated_no_change">Beze změny.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servery shodující se doslovně s IP jsou nyní zakázány.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servery shodující se doslovně s IP jsou nyní povoleny.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Servery shodující se s %s byly odstraněny ze seznamu povolených.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Servery shodující se s %s jsou nyní povoleny.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Servery shodující se s %s byly odstraněny ze seznamu zakázaných.</string>
+    <string name="notice_room_server_acl_updated_banned">• Servery shodující se s %s jsou nyní zakázány.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Změnili jste ACL serveru pro tuto místnost.</string>
+    <string name="notice_room_server_acl_updated_title">%s změnili ACL serveru pro tuto místnost.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Server shodující se doslovně s IP je povolen.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Server shodující se doslovně s IP je zakázán.</string>
+    <string name="notice_room_server_acl_set_allowed">• Server shodující se s %s je povolen.</string>
+    <string name="notice_room_server_acl_set_banned">• Server shodující se s %s je zakázán.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Nastavili jste ACL serveru pro tuto místnost.</string>
+    <string name="notice_room_server_acl_set_title">%s nastavili ACL serveru pro tuto místnost.</string>
 </resources>

@@ -1,17 +1,14 @@
-Changes in Element 1.0.12 (2020-XX-XX)
+Changes in Element 1.0.14 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
- - Room setting: update join rules and guest access (#2442)
+ - Enable url previews for notices (#2562)
 
 Improvements 🙌:
- - Add Setting Item to Change PIN (#2462)
- - Improve room history visibility setting UX (#1579)
+ -
 
 Bugfix 🐛:
- - Double bottomsheet effect after verify with passphrase
- - EditText cursor jumps to the start while typing fast (#2469)
+ - Url previews sometimes attached to wrong message (#2561)
 
 Translations 🗣:
  -
@@ -20,14 +17,60 @@ SDK API changes ⚠️:
  -
 
 Build 🧱:
- - Upgrade some dependencies and Kotlin version
- - Use fragment-ktx and preference-ktx dependencies (fix lint issue KtxExtensionAvailable)
+ -
 
 Test:
  -
 
 Other changes:
+ - Migrate to ViewBindings (#1072)
+
+Changes in Element 1.0.13 (2020-12-18)
+===================================================
+
+Bugfix 🐛:
+ - Fix MSC2858 implementation details (#2540)
+
+Changes in Element 1.0.12 (2020-12-15)
+===================================================
+
+Features ✨:
+ - Add room aliases management, and room directory visibility management in a dedicated screen (#1579, #2428)
+ - Room setting: update join rules and guest access (#2442)
+ - Url preview (#481)
+ - Store encrypted file in cache and cleanup decrypted file at each app start (#2512)
+ - Emoji Keyboard (#2520)
+ - Social login (#2452)
+ - Support for chat effects in timeline (confetti, snow) (#2535)
+
+Improvements 🙌:
+ - Add Setting Item to Change PIN (#2462)
+ - Improve room history visibility setting UX (#1579)
+ - Matrix.to deeplink custom scheme support
+ - Homeserver history (#1933)
+
+Bugfix 🐛:
+ - Fix cancellation of sending event (#2438)
+ - Double bottomsheet effect after verify with passphrase
+ - EditText cursor jumps to the start while typing fast (#2469)
+ - UTD for events before invitation if member state events are hidden (#2486)
+ - No known servers error is given when joining rooms on new Gitter bridge (#2516)
+ - Show preview when sending attachment from the keyboard (#2440)
+ - Do not compress GIFs (#1616, #1254)
+
+SDK API changes ⚠️:
+ - StateService now exposes suspendable function instead of using MatrixCallback.
+ - RawCacheStrategy has been moved and renamed to CacheStrategy
+ - FileService: remove useless FileService.DownloadMode
+
+Build 🧱:
+ - Upgrade some dependencies and Kotlin version
+ - Use fragment-ktx and preference-ktx dependencies (fix lint issue KtxExtensionAvailable)
+ - Upgrade Realm dependency to 10.1.2
+
+Other changes:
  - Remove "Status.im" theme #2424
+ - Log HTTP requests and responses in production (level BASIC, i.e. without any private data)
 
 Changes in Element 1.0.11 (2020-11-27)
 ===================================================

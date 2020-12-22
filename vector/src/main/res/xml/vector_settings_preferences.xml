@@ -57,8 +57,7 @@
             android:defaultValue="true"
             android:key="SETTINGS_SHOW_URL_PREVIEW_KEY"
             android:summary="@string/settings_inline_url_preview_summary"
-            android:title="@string/settings_inline_url_preview"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
+            android:title="@string/settings_inline_url_preview" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:key="SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY"
@@ -86,6 +85,12 @@
             android:key="SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY"
             android:summary="@string/settings_show_room_member_state_events_summary"
             android:title="@string/settings_show_room_member_state_events" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_ENABLE_CHAT_EFFECTS"
+            android:summary="@string/settings_chat_effects_description"
+            android:title="@string/settings_chat_effects_title" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"

@@ -29,7 +29,7 @@ import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
-internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Optional<String>> {
+internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Optional<RoomAliasDescription>> {
     data class Params(
             val roomAlias: String,
             val searchOnServer: Boolean
@@ -42,21 +42,21 @@ internal class DefaultGetRoomIdByAliasTask @Inject constructor(
         private val eventBus: EventBus
 ) : GetRoomIdByAliasTask {
 
-    override suspend fun execute(params: GetRoomIdByAliasTask.Params): Optional<String> {
-        var roomId = Realm.getInstance(monarchy.realmConfiguration).use {
+    override suspend fun execute(params: GetRoomIdByAliasTask.Params): Optional<RoomAliasDescription> {
+        val roomId = Realm.getInstance(monarchy.realmConfiguration).use {
             RoomSummaryEntity.findByAlias(it, params.roomAlias)?.roomId
         }
         return if (roomId != null) {
-            Optional.from(roomId)
+            Optional.from(RoomAliasDescription(roomId))
         } else if (!params.searchOnServer) {
-            Optional.from<String>(null)
+            Optional.from(null)
         } else {
-            roomId = tryOrNull("## Failed to get roomId from alias") {
+            val description  = tryOrNull("## Failed to get roomId from alias") {
                 executeRequest<RoomAliasDescription>(eventBus) {
                     apiCall = directoryAPI.getRoomIdByAlias(params.roomAlias)
                 }
-            }?.roomId
-            Optional.from(roomId)
+            }
+            Optional.from(description)
         }
     }
 }

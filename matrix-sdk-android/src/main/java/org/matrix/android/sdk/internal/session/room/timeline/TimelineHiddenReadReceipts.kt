@@ -151,8 +151,25 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         beginGroup()
         var needOr = false
         if (settings.filters.filterTypes) {
-            val allowedTypes = settings.filters.allowedTypes.toTypedArray()
-            not().`in`("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", allowedTypes)
+            beginGroup()
+            // Events: A, B, C, D, (E and S1), F, G, (H and S1), I
+            // Allowed: A, B, C, (E and S1), G, (H and S2)
+            // Result: D, F, H, I
+            settings.filters.allowedTypes.forEachIndexed { index, filter ->
+                if (filter.stateKey == null) {
+                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", filter.eventType)
+                } else {
+                    beginGroup()
+                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", filter.eventType)
+                    or()
+                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.STATE_KEY}", filter.stateKey)
+                    endGroup()
+                }
+                if (index != settings.filters.allowedTypes.size - 1) {
+                    and()
+                }
+            }
+            endGroup()
             needOr = true
         }
         if (settings.filters.filterUseless) {

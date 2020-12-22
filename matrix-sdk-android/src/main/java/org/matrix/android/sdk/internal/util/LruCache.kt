@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.homeserver
+package org.matrix.android.sdk.internal.util
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import androidx.collection.LruCache
 
-@JsonClass(generateAdapter = true)
-internal data class GetUploadCapabilitiesResult(
-        /**
-         * The maximum size an upload can be in bytes. Clients SHOULD use this as a guide when uploading content.
-         * If not listed or null, the size limit should be treated as unknown.
-         */
-        @Json(name = "m.upload.size")
-        val maxUploadSize: Long? = null
-)
+@Suppress("NULLABLE_TYPE_PARAMETER_AGAINST_NOT_NULL_TYPE_PARAMETER")
+internal inline fun <K, V> LruCache<K, V>.getOrPut(key: K, defaultValue: () -> V): V {
+    return get(key) ?: defaultValue().also { put(key, it) }
+}

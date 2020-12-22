@@ -71,10 +71,16 @@ class HomeActivityViewModel @AssistedInject constructor(
     private var onceTrusted = false
 
     init {
+        cleanupFiles()
         observeInitialSync()
         mayBeInitializeCrossSigning()
         checkSessionPushIsOn()
         observeCrossSigningReset()
+    }
+
+    private fun cleanupFiles() {
+        // Mitigation: delete all cached decrypted files each time the application is started.
+        activeSessionHolder.getSafeActiveSession()?.fileService()?.clearDecryptedCache()
     }
 
     private fun observeCrossSigningReset() {

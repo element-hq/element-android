@@ -18,11 +18,8 @@ package im.vector.lib.attachmentviewer
 
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.VideoView
 import androidx.core.view.isVisible
+import im.vector.lib.attachmentviewer.databinding.ItemVideoAttachmentBinding
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -44,13 +41,9 @@ class VideoViewHolder constructor(itemView: View) :
 
     var eventListener: WeakReference<AttachmentEventListener>? = null
 
-    val thumbnailImage: ImageView = itemView.findViewById(R.id.videoThumbnailImage)
-    val videoView: VideoView = itemView.findViewById(R.id.videoView)
-    val loaderProgressBar: ProgressBar = itemView.findViewById(R.id.videoLoaderProgress)
-    val videoControlIcon: ImageView = itemView.findViewById(R.id.videoControlIcon)
-    val errorTextView: TextView = itemView.findViewById(R.id.videoMediaViewerErrorView)
+    val views = ItemVideoAttachmentBinding.bind(itemView)
 
-    internal val target = DefaultVideoLoaderTarget(this, thumbnailImage)
+    internal val target = DefaultVideoLoaderTarget(this, views.videoThumbnailImage)
 
     override fun onRecycled() {
         super.onRecycled()
@@ -77,12 +70,12 @@ class VideoViewHolder constructor(itemView: View) :
     }
 
     override fun entersBackground() {
-        if (videoView.isPlaying) {
-            progress = videoView.currentPosition
+        if (views.videoView.isPlaying) {
+            progress = views.videoView.currentPosition
             progressDisposable?.dispose()
             progressDisposable = null
-            videoView.stopPlayback()
-            videoView.pause()
+            views.videoView.stopPlayback()
+            views.videoView.pause()
         }
     }
 
@@ -92,9 +85,9 @@ class VideoViewHolder constructor(itemView: View) :
 
     override fun onSelected(selected: Boolean) {
         if (!selected) {
-            if (videoView.isPlaying) {
-                progress = videoView.currentPosition
-                videoView.stopPlayback()
+            if (views.videoView.isPlaying) {
+                progress = views.videoView.currentPosition
+                views.videoView.stopPlayback()
             } else {
                 progress = 0
             }
@@ -109,34 +102,34 @@ class VideoViewHolder constructor(itemView: View) :
     }
 
     private fun startPlaying() {
-        thumbnailImage.isVisible = false
-        loaderProgressBar.isVisible = false
-        videoView.isVisible = true
+        views.videoThumbnailImage.isVisible = false
+        views.videoLoaderProgress.isVisible = false
+        views.videoView.isVisible = true
 
-        videoView.setOnPreparedListener {
+        views.videoView.setOnPreparedListener {
             progressDisposable?.dispose()
             progressDisposable = Observable.interval(100, TimeUnit.MILLISECONDS)
                     .timeInterval()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
-                        val duration = videoView.duration
-                        val progress = videoView.currentPosition
-                        val isPlaying = videoView.isPlaying
+                        val duration = views.videoView.duration
+                        val progress = views.videoView.currentPosition
+                        val isPlaying = views.videoView.isPlaying
 //                        Log.v("FOO", "isPlaying $isPlaying $progress/$duration")
                         eventListener?.get()?.onEvent(AttachmentEvents.VideoEvent(isPlaying, progress, duration))
                     }
         }
         try {
-            videoView.setVideoPath(mVideoPath)
+            views.videoView.setVideoPath(mVideoPath)
         } catch (failure: Throwable) {
             // Couldn't open
             Log.v(VideoViewHolder::class.java.name, "Failed to start video")
         }
 
         if (!wasPaused) {
-            videoView.start()
+            views.videoView.start()
             if (progress > 0) {
-                videoView.seekTo(progress)
+                views.videoView.seekTo(progress)
             }
         }
     }
@@ -146,17 +139,17 @@ class VideoViewHolder constructor(itemView: View) :
         when (commands) {
             AttachmentCommands.StartVideo -> {
                 wasPaused = false
-                videoView.start()
+                views.videoView.start()
             }
             AttachmentCommands.PauseVideo -> {
                 wasPaused = true
-                videoView.pause()
+                views.videoView.pause()
             }
             is AttachmentCommands.SeekTo  -> {
-                val duration = videoView.duration
+                val duration = views.videoView.duration
                 if (duration > 0) {
                     val seekDuration = duration * (commands.percentProgress / 100f)
-                    videoView.seekTo(seekDuration.toInt())
+                    views.videoView.seekTo(seekDuration.toInt())
                 }
             }
         }

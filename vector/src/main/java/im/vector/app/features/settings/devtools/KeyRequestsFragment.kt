@@ -18,8 +18,11 @@ package im.vector.app.features.settings.devtools
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -32,21 +35,23 @@ import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.selectTxtFileToWrite
-import kotlinx.android.synthetic.main.fragment_devtool_keyrequests.*
+import im.vector.app.databinding.FragmentDevtoolKeyrequestsBinding
+
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
 class KeyRequestsFragment @Inject constructor(
-        val viewModelFactory: KeyRequestViewModel.Factory) : VectorBaseFragment() {
+        val viewModelFactory: KeyRequestViewModel.Factory) : VectorBaseFragment<FragmentDevtoolKeyrequestsBinding>() {
 
-    override fun getLayoutResId(): Int = R.layout.fragment_devtool_keyrequests
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentDevtoolKeyrequestsBinding {
+        return FragmentDevtoolKeyrequestsBinding.inflate(inflater, container, false)
+    }
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.key_share_request)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.key_share_request)
     }
 
     private var mPagerAdapter: KeyReqPagerAdapter? = null
@@ -70,8 +75,8 @@ class KeyRequestsFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) {
         when (it.exporting) {
-            is Loading -> exportWaitingView.isVisible = true
-            else       -> exportWaitingView.isVisible = false
+            is Loading -> views.exportWaitingView.isVisible = true
+            else       -> views.exportWaitingView.isVisible = false
         }
     }
 
@@ -83,10 +88,10 @@ class KeyRequestsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mPagerAdapter = KeyReqPagerAdapter(this)
-        devToolKeyRequestPager.adapter = mPagerAdapter
-        devToolKeyRequestPager.registerOnPageChangeCallback(pageAdapterListener)
+        views.devToolKeyRequestPager.adapter = mPagerAdapter
+        views.devToolKeyRequestPager.registerOnPageChangeCallback(pageAdapterListener)
 
-        TabLayoutMediator(devToolKeyRequestTabs, devToolKeyRequestPager) { tab, position ->
+        TabLayoutMediator(views.devToolKeyRequestTabs, views.devToolKeyRequestPager) { tab, position ->
             when (position) {
                 0 -> {
                     tab.text = "Outgoing"
@@ -113,7 +118,7 @@ class KeyRequestsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        devToolKeyRequestPager.unregisterOnPageChangeCallback(pageAdapterListener)
+        views.devToolKeyRequestPager.unregisterOnPageChangeCallback(pageAdapterListener)
         mPagerAdapter = null
         super.onDestroyView()
     }
