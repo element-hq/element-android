@@ -65,6 +65,8 @@ class PreviewUrlRetriever(session: Session) {
                                 // Blocked after the request has been sent?
                                 if (urlToRetrieve in blockedUrl) {
                                     updateState(eventId, PreviewUrlUiState.NoUrl)
+                                } else if (!it.isPreviewable()) { // Nothing to show
+                                    updateState(eventId, PreviewUrlUiState.NoUrl)
                                 } else {
                                     updateState(eventId, PreviewUrlUiState.Data(eventId, urlToRetrieve, it))
                                 }
