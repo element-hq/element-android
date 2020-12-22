@@ -32,7 +32,6 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
-import kotlin.math.round
 
 /**
  * A View to display a PreviewUrl and some other state
@@ -58,8 +57,8 @@ class PreviewUrlView @JvmOverloads constructor(
     @BindView(R.id.url_preview_close)
     lateinit var closeView: View
 
-    var footerHeight: Int = 0
     var footerWidth: Int = 0
+    var footerHeight: Int = 0
 
     var delegate: TimelineEventController.PreviewUrlCallback? = null
 
@@ -149,23 +148,24 @@ class PreviewUrlView @JvmOverloads constructor(
     }
 
     private fun renderData(previewUrlData: PreviewUrlData, imageContentRenderer: ImageContentRenderer) {
-        isVisible = true
-        titleView.setTextOrHide(previewUrlData.title)
-        imageView.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, imageView) }.orFalse()
-        descriptionView.setTextOrHide(previewUrlData.description)
-        siteView.setTextOrHide(previewUrlData.siteName.takeIf { it != previewUrlData.title })
-        /*
-        if (siteView.isVisible) {
-            // TODO does this work
+        // Set footer sizes before setText() calls so they are available onMeasure
+        val siteText = previewUrlData.siteName.takeIf { it != previewUrlData.title }
+        val siteViewHidden = siteText == null || siteText.isBlank() // identical to setTextOrHide
+        if (siteViewHidden) {
+            descriptionView.footerWidth = footerWidth
+            descriptionView.footerHeight = footerHeight
+        } else {
             siteView.footerWidth = footerWidth
             siteView.footerHeight = footerHeight
             descriptionView.footerWidth = 0
             descriptionView.footerHeight = 0
-        } else {
-            descriptionView.footerWidth = footerWidth
-            descriptionView.footerHeight = footerHeight
         }
-         */
+
+        isVisible = true
+        titleView.setTextOrHide(previewUrlData.title)
+        imageView.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, imageView) }.orFalse()
+        descriptionView.setTextOrHide(previewUrlData.description)
+        siteView.setTextOrHide(siteText)
     }
 
     /**

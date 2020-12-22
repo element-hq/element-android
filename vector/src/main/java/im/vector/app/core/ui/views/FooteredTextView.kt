@@ -24,9 +24,10 @@ class FooteredTextView @JvmOverloads constructor(
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
         // Get max available width
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        //val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        val widthLimit = if (widthMode == MeasureSpec.AT_MOST) { widthSize.toFloat() } else { Float.MAX_VALUE }
+        //val widthLimit = if (widthMode == MeasureSpec.AT_MOST) { widthSize.toFloat() } else { Float.MAX_VALUE }
+        val widthLimit = widthSize.toFloat()
         /*
         // Sometimes, widthLimit is not the actual limit, so remember it... ?
         if (this.widthLimit > widthLimit) {

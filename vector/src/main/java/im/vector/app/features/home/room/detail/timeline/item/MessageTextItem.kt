@@ -60,10 +60,11 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     private val previewUrlViewUpdater = PreviewUrlViewUpdater()
 
-    override fun bind(holder: Holder) {
-        // Revert potential MATCH_PARENT setting for url preview, before binding previewUrlRetriever
-        //holder.messageLayout.layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
+    // Remember footer measures for URL updates
+    private var footerWidth: Int = 0
+    private var footerHeight: Int = 0
 
+    override fun bind(holder: Holder) {
         // Preview URL
         previewUrlViewUpdater.holder = holder
         previewUrlViewUpdater.previewUrlView = holder.previewUrlView
@@ -120,7 +121,6 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     override fun getViewType() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val messageLayout by bind<LinearLayout>(R.id.messageTextLayout) // TODO match_parent if url preview, else wrap_content
         val messageView by bind<FooteredTextView>(R.id.messageTextView)
         val previewUrlView by bind<PreviewUrlView>(R.id.messageUrlPreview)
     }
@@ -138,29 +138,19 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             }
             previewUrlView?.render(state, safeImageContentRenderer)
 
-            // Don't reserve footer space in message view, but preview view | TODO
-            /*
-            previewUrlView?.footerWidth = holder?.messageView?.footerWidth ?: 0
-            previewUrlView?.footerHeight = holder?.messageView?.footerHeight ?: 0
-            holder?.messageView?.footerWidth = 0
-            holder?.messageView?.footerHeight = 0
-             */
-            // Reserve more space for URL previews
-            //holder?.messageLayout?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
-            // Also increase width for the viewStubContainer, as set in AbsMessageItem (using getViewStubMinimumWidth)
-            // We can use an unrealistic high number here, because we reduce bubble width by margins
-            // TODO dis not working reliably...
-            /*
-            holder?.viewStubContainer?.minimumWidth = 1000000
-            holder?.viewStubContainer?.parent?.requestLayout()
-            holder?.viewStubContainer?.forceLayout()
-            holder?.viewStubContainer?.requestLayout()
-            holder?.messageLayout?.forceLayout()
-            holder?.messageLayout?.requestLayout()
-            holder?.messageView?.forceLayout()
-            holder?.previewUrlView?.forceLayout()
-             */
-            //holder?.viewStubContainer?.layoutParams = holder?.viewStubContainer?.layoutParams
+            ///* // disabled for now: just set all in reserveFooterSpace to ensure space in all scenarios
+            // Currently, all states except data imply hidden preview
+            if (state is PreviewUrlUiState.Data) {
+                // Don't reserve footer space in message view, but preview view
+                holder?.messageView?.footerWidth = 0
+                holder?.messageView?.footerHeight = 0
+            } else {
+                holder?.messageView?.footerWidth = footerWidth
+                holder?.messageView?.footerHeight = footerHeight
+            }
+            //holder?.messageView?.invalidate()
+            holder?.messageView?.requestLayout()
+            //*/
         }
     }
     companion object {
@@ -180,7 +170,18 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     }
 
     override fun reserveFooterSpace(holder: Holder, width: Int, height: Int) {
-        holder.messageView.footerWidth = width
-        holder.messageView.footerHeight = height
+        // Remember for PreviewUrlViewUpdater.onStateUpdated
+        footerWidth = width
+        footerHeight = height
+        // Reserve both in preview and in message
+        // User might close preview, so we still need place in the message
+        // if we don't want to change this afterwards
+        // This might be a race condition, but the UI-isssue if evaluated wrongly is negligible
+        if (!holder.previewUrlView.isVisible) {
+            holder.messageView.footerWidth = width
+            holder.messageView.footerHeight = height
+        } // else: will be handled in onStateUpdated
+        holder.previewUrlView.footerWidth = height
+        holder.previewUrlView.footerHeight = height
     }
 }
