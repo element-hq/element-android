@@ -53,7 +53,7 @@ data class CallInviteContent(
         /**
          * Capability advertisement.
          */
-        @Json(name= "capabilities") val capabilities: CallCapabilities? = null
+        @Json(name = "capabilities") val capabilities: CallCapabilities? = null
 
 ): CallSignallingContent  {
     @JsonClass(generateAdapter = true)

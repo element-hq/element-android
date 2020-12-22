@@ -82,6 +82,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(), 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        waitingView = views.waitingView.waitingView
         sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
         sharedActionViewModel
                 .observe()
@@ -111,9 +112,12 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(), 
         callTransferViewModel.observeViewEvents {
             when (it) {
                 is CallTransferViewEvents.Dismiss -> finish()
+                CallTransferViewEvents.Loading    -> showWaitingView()
+                is CallTransferViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
             }
         }
         configureToolbar(views.callTransferToolbar)
+        views.callTransferToolbar.title = getString(R.string.call_transfer_title)
         setupConnectAction()
     }
 
@@ -150,7 +154,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(), 
     }
 
     companion object {
-        
+
         fun newIntent(context: Context, callId: String): Intent {
             return Intent(context, CallTransferActivity::class.java).also {
                 it.putExtra(MvRx.KEY_ARG, CallTransferArgs(callId))

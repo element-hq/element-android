@@ -191,7 +191,7 @@ class UserListFragment @Inject constructor(
         }
     }
 
-    fun getCurrentState() = withState(viewModel){ it }
+    fun getCurrentState() = withState(viewModel) { it }
 
     override fun onInviteFriendClick() {
         viewModel.handle(UserListAction.ComputeMatrixToLinkForSharing)

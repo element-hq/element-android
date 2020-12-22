@@ -38,7 +38,8 @@ data class CallReplacesContent(
          */
         @Json(name = "replacement_id") val replacementId: String? = null,
         /**
-         *  Optional. If specified, the transferee client waits for an invite to this room and joins it (possibly waiting for user confirmation) and then continues the transfer in this room.
+         *  Optional. If specified, the transferee client waits for an invite to this room and joins it
+         *  (possibly waiting for user confirmation) and then continues the transfer in this room.
          *  If absent, the transferee contacts the Matrix User ID given in the target_user field in a room of its choosing.
          */
         @Json(name = "target_room") val targerRoomId: String? = null,

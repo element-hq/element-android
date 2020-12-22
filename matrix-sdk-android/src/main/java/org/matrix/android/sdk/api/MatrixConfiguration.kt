@@ -39,7 +39,7 @@ data class MatrixConfiguration(
         /**
          * True to advertise support for call transfers to other parties on Matrix calls.
          */
-        val supportsCallTransfer: Boolean = true
+        val supportsCallTransfer: Boolean = false
 ) {
 
     /**

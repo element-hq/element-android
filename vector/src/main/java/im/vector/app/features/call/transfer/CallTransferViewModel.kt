@@ -18,6 +18,7 @@ package im.vector.app.features.call.transfer
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
@@ -81,9 +82,11 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
     private fun transferCall(action: CallTransferAction.Connect) {
         viewModelScope.launch {
             try {
+                _viewEvents.post(CallTransferViewEvents.Loading)
                 call?.mxCall?.transfer(action.selectedUserId, null)
+                _viewEvents.post(CallTransferViewEvents.Dismiss)
             } catch (failure: Throwable) {
-                Timber.v("Fail to transfer call: $failure")
+                _viewEvents.post(CallTransferViewEvents.FailToTransfer)
             }
         }
     }
