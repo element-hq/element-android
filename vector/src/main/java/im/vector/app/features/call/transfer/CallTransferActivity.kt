@@ -51,7 +51,10 @@ data class CallTransferArgs(val callId: String) : Parcelable
 
 private const val USER_LIST_FRAGMENT_TAG = "USER_LIST_FRAGMENT_TAG"
 
-class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(), CallTransferViewModel.Factory, UserListViewModel.Factory, ContactsBookViewModel.Factory {
+class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
+        CallTransferViewModel.Factory,
+        UserListViewModel.Factory,
+        ContactsBookViewModel.Factory {
 
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
     @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory

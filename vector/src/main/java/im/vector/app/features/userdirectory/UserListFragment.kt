@@ -67,12 +67,12 @@ class UserListFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)
-        if(args.showToolbar) {
+        if (args.showToolbar) {
             views.userListTitle.text = args.title
             vectorBaseActivity.setSupportActionBar(views.userListToolbar)
             setupCloseView()
             views.userListToolbar.isVisible = true
-        }else{
+        } else {
             views.userListToolbar.isVisible = false
         }
         setupRecyclerView()

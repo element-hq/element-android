@@ -711,7 +711,6 @@ class WebRtcCall(val mxCall: MxCall,
         if (mxCall.state == CallState.Terminated) {
             return
         }
-        mxCall.state = CallState.Terminated
         // Close tracks ASAP
         localVideoTrack?.setEnabled(false)
         localVideoTrack?.setEnabled(false)
@@ -724,11 +723,13 @@ class WebRtcCall(val mxCall: MxCall,
         }
         onCallEnded(this)
         if (originatedByMe) {
-            if (mxCall.state is CallState.Connected || mxCall.isOutgoing) {
-                mxCall.hangUp(reason)
-            } else {
+            if (mxCall.state is CallState.LocalRinging) {
                 mxCall.reject()
+            } else {
+                mxCall.hangUp(reason)
             }
+        } else {
+            mxCall.state = CallState.Terminated
         }
     }
 

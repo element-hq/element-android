@@ -18,7 +18,6 @@ package im.vector.app.features.call.transfer
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
@@ -29,7 +28,6 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
-import timber.log.Timber
 
 class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: CallTransferViewState,
                                                         private val callManager: WebRtcCallManager)
