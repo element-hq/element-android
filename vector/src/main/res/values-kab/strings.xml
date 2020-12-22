@@ -63,16 +63,16 @@
     <string name="bottom_action_notification">Ilɣa</string>
     <string name="bottom_action_favourites">Ismenyifen</string>
     <string name="bottom_action_people">Imdanen</string>
-    <string name="bottom_action_rooms">Timɣiwent</string>
-    <string name="bottom_action_groups">Timɣiwnin</string>
+    <string name="bottom_action_rooms">Tixxamin</string>
+    <string name="bottom_action_groups">Tamɣiwnin</string>
     <string name="invitations_header">Inced-d</string>
     <string name="low_priority_header">Tazwart taddayt</string>
     <string name="system_alerts_header">Ilɣa n unagraw</string>
     <string name="no_result_placeholder">Ulac igmad</string>
-    <string name="rooms_header">Timɣiwent</string>
+    <string name="rooms_header">Tixxamin</string>
     <string name="rooms_directory_header">Akaram n texxamt</string>
     <string name="groups_invite_header">Nced</string>
-    <string name="groups_header">Timɣiwnin</string>
+    <string name="groups_header">Tamɣiwnin</string>
     <string name="send_bug_report_include_logs">Azen iɣmisen</string>
     <string name="join_room">Rnu ɣer texxamt</string>
     <string name="username">Isem n useqdac</string>
@@ -270,8 +270,8 @@
     <string name="community_id_hint">amedya</string>
     <string name="group_details_home">Agejdan</string>
     <string name="group_details_people">Imdanen</string>
-    <string name="group_details_rooms">Timɣiwent</string>
-    <string name="rooms">Timɣiwent</string>
+    <string name="group_details_rooms">Tixxamin</string>
+    <string name="rooms">Tixxamin</string>
     <string name="invited">Yettwancad</string>
     <string name="forget_room">Tettuḍ taxxamt</string>
     <string name="deactivate_account_title">Sens amiḍan</string>
@@ -303,11 +303,11 @@
     <string name="edit">Ẓreg</string>
     <string name="reply">Err</string>
     <string name="global_retry">Ɛreḍ tikkelt-nniḍen</string>
-    <string name="room_list_rooms_empty_title">Timɣiwent</string>
+    <string name="room_list_rooms_empty_title">Tixxamin</string>
     <string name="event_redacted">Izen yettwakksen</string>
     <string name="settings_show_redacted_summary">Sken-d iznan yettwakksen</string>
     <string name="action_change">Beddel</string>
-    <string name="fab_menu_create_room">Timɣiwent</string>
+    <string name="fab_menu_create_room">Tixxamin</string>
     <string name="fab_menu_create_chat">Iznan usligen</string>
     <string name="create_room_directory_title">Akaram n texxamt</string>
     <string name="settings_general_title">Amatu</string>
@@ -606,29 +606,29 @@
     <string name="room_creation_title">Adiwenni amaynut</string>
     <string name="room_creation_add_member">Rnu aɛeggal</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 uɛeggal urmid</item>
+        <item quantity="one">%d yiɛeggalen urmiden</item>
         <item quantity="other">%d yiɛeggalen urmiden</item>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">1 uɛeggal</item>
-        <item quantity="other">%d yiɛeggalen</item>
+        <item quantity="other">%d yiɛaggalen</item>
     </plurals>
     <string name="room_title_one_member">1 uɛeggal</string>
     <plurals name="format_time_s">
-        <item quantity="one">1tasint</item>
+        <item quantity="one">%dtsinin</item>
         <item quantity="other">%dtsinin</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1tesdidt</item>
+        <item quantity="one">%dtesdidin</item>
         <item quantity="other">%dtesdidin</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1usrag</item>
+        <item quantity="one">%dyisragen</item>
         <item quantity="other">%dyisragen</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1wass</item>
-        <item quantity="other">%dwussan</item>
+        <item quantity="one">%dd</item>
+        <item quantity="other">%dd</item>
     </plurals>
     <string name="room_participants_now">%1$s tura</string>
     <string name="room_participants_ago">Seg %1$s %2$s</string>
@@ -669,7 +669,7 @@
     <string name="room_delete_unsent_messages">Kkes iznan ur yettwaznen ara</string>
     <string name="room_message_file_not_found">Ur yettwaf ara ufaylu</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">1 yizen amaynut</item>
+        <item quantity="one">%d Izen amaynut</item>
         <item quantity="other">%d yiznan imaynuten</item>
     </plurals>
     <string name="ssl_do_not_trust">Ur ttkal ara</string>
@@ -791,7 +791,7 @@
     <string name="create_pin_confirm_failure">Asentem n tebzimt ur yeddi ara, ttxil-k·m aru yiwet.</string>
     <string name="auth_pin_title">Sekcem PIN inek·inem</string>
     <string name="auth_pin_forgot">Ttu PIN\?</string>
-    <string name="auth_pin_reset_title">Wennez tabzimt</string>
+    <string name="auth_pin_reset_title">Wennez PIN</string>
     <string name="auth_pin_new_pin_action">Tabzimt tamaynut n</string>
     <string name="auth_pin_reset_content">I uwennez n PIN-inek·inem, tesriḍ ad talseḍ anekcum syen rnu yiwen.</string>
     <string name="settings_security_pin_code_title">Rmed PIN</string>
@@ -821,8 +821,8 @@
     <string name="room_participants_unban_title">Asefsex n useqdac</string>
     <string name="room_details_title">Talqayt n texxamt</string>
     <plurals name="room_details_selected">
-        <item quantity="one">1 i yettufernen</item>
-        <item quantity="other">%d i yettufernen</item>
+        <item quantity="one">%d i yettwafernen</item>
+        <item quantity="other">%d i yettwafernen</item>
     </plurals>
     <string name="room_event_action_cancel_upload">Sefsex Asali</string>
     <string name="room_event_action_cancel_download">Sefsex Asider</string>
@@ -885,7 +885,7 @@
     <string name="group_all_communities">Meṛṛa timɣiwnin</string>
     <string name="create_room_title">Taxxamt tamaynut</string>
     <string name="create_room_action_create">RNU</string>
-    <string name="create_room_name_hint">Isem n texxamt</string>
+    <string name="create_room_name_hint">Isem</string>
     <string name="create_room_public_description">Yal yiwen yezmer ad yernu ɣer texxamt-a</string>
     <string name="settings_sdk_version">Lqem SDK n Matrix</string>
     <string name="settings_expert">Amussnaw</string>
@@ -1371,7 +1371,8 @@
     <string name="settings_labs_enable_send_voice_summary">Taxtiṛit-a tesra asnas n wis tlata i usekles n yiznan.</string>
     <string name="widget_integration_review_terms">I wakken ad tkemmleḍ tesriḍ ad tqebleḍ tiwtilin n umeẓlu-a.</string>
     <string name="you_added_a_new_device">Terniḍ tiɣimit tamaynut \'%s\', i yessuturen tisura n uwgelhen.</string>
-    <string name="you_added_a_new_device_with_info">Tiɣimit tamaynut tessutur tisura n uwgelhen. Isem n tɣimit: %1$s
+    <string name="you_added_a_new_device_with_info">Tiɣimit tamaynut tessutur tisura n uwgelhen. 
+\nIsem n tɣimit: %1$s
 \nTimeẓriwt taneggarut: %2$s
 \nMa yella ur tekcimeḍ ara ɣer tɣimit-nniḍen, ttu asuter-a.</string>
     <string name="your_unverified_device_requesting">Tiɣimit-inek·inem ur tettwasenqed ara \'%s\', tessutur tisura n uwgelhen.</string>
@@ -2131,4 +2132,96 @@
     <string name="no_permissions_to_start_conf_call_in_direct_room">Ur tesεiḍ ara azref ad tebduḍ asarag s tilifun</string>
     <string name="start_chatting">Bdu asqerdec</string>
     <string name="reset">Wennez</string>
+    <string name="settings_security_pin_code_use_biometrics_title">Rmed abyumitri</string>
+    <string name="settings_security_application_protection_screen_title">Swel ammesten</string>
+    <string name="settings_security_application_protection_summary">Mmesten anekcum s useqdec n PIN d ubyumtri.</string>
+    <string name="warning_room_not_created_yet">Mazal ur tettwarna ara texxamt ar tura. Sefsex timerna n texxamt\?</string>
+    <string name="invalid_qr_code_uri">Tangalt QR d tarameɣtut (URI d arameɣtu)!</string>
+    <string name="settings_security_pin_code_change_pin_summary">Senfel PIN inek·inem amiran</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Tangalt PIN tettusra yal mi ara teldiḍ Element.</string>
+    <string name="warning_unsaved_change">Llan yisenfal ur nettusekles ara. Sefsex isenfal\?</string>
+    <string name="room_settings_set_avatar">Sbadu avaṭar</string>
+    <string name="matrix_to_card_title">Aseɣwen n Matrix</string>
+    <string name="topic_prefix">Asentel:</string>
+    <string name="direct_room_created_summary_item_by_you">Terniḍ.</string>
+    <string name="attachment_type_dialog_title">Rnu tugna seg</string>
+    <string name="settings_security_pin_code_grace_period_title">PIN yettusra seld 2 tesdatin</string>
+    <string name="phone_book_perform_lookup">Nadi inermisen deg Matrix</string>
+    <string name="room_alias_action_publish">Suffeɣ-d tansa-a</string>
+    <string name="room_alias_unpublish_confirmation">Suffeɣ-d tansa \"%1$s\"\?</string>
+    <string name="room_alias_published_alias_add_manually">Suffeɣ-d tansa tamaynut s ufus</string>
+    <string name="room_alias_published_alias_main">Tagi d tansa tagejdant</string>
+    <string name="room_settings_alias_title">Tansiwin n texxamt</string>
+    <string name="room_settings_room_access_title">Anekcum n texxamt</string>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">Ulɣu yettwasit fell-as!</string>
+    <string name="settings_troubleshoot_test_notification_title">Askan n wulɣu</string>
+    <string name="settings_troubleshoot_test_push_notification_content">Twalaḍ alɣu! Sit-iyi fell-as!</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Tella tuccḍa deg urmas n push. Tifrat i iwulmen d allus n usebded n usnas.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">Asnas irmes-d PUSH</string>
+    <string name="sent_a_poll">Assenqed</string>
+    <string name="room_alias_title">Tansiwin n texxamt</string>
+    <string name="attachment_viewer_item_x_of_y">%1$d ɣef %2$d</string>
+    <string name="room_alias_published_alias_add_manually_submit">Publier</string>
+    <string name="create_room_topic_hint">Asentel</string>
+    <string name="direct_room_user_list_recent_title">Melmi kan</string>
+    <string name="warning_unsaved_change_discard">Sefsex ibeddilen</string>
+    <string name="create_room_alias_empty">Ttxil-k·m mudd-d tansa n texxamt</string>
+    <string name="room_alias_local_address_empty">Taxxamt-a ur tesɛi ara tansiwin tidiganin</string>
+    <string name="show_advanced">Sken talqayt</string>
+    <string name="qr_code">Tangalt QR</string>
+    <string name="create_room_settings_section">Iɣewwaṛen n texxamt</string>
+    <string name="create_room_alias_hint">Tansa n texxamt</string>
+    <string name="settings_security_application_protection_title">Mmesten anekcum</string>
+    <string name="user_code_scan">Smiḍen tangalt QR</string>
+    <string name="room_alias_address_hint">Tansa tamynut i d-yettusuffɣen (am. #alias:server)</string>
+    <string name="direct_room_user_list_suggestions_title">Isumar</string>
+    <string name="invite_friends_rich_title">🔐️ Rnu-d ɣur-i ɣer element</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">Tangalt PIN d nettat kan i d ttawil s wayes ara teldiḍ Element.</string>
+    <string name="add_a_topic_link_text">Rnu asentel</string>
+    <string name="invite_friends">Snubget-d imeddukkal</string>
+    <string name="user_code_my_code">Tangalt-inu</string>
+    <string name="secure_backup_reset_if_you_reset_all">Ma yella twennzeḍ kullec</string>
+    <string name="cannot_dm_self">Ur tezmireḍ ara DM iman-ik·im!</string>
+    <string name="room_alias_action_unpublish">Ur d-suffuɣ ara tansa-a</string>
+    <string name="notification_unread_notified_messages_and_invitation">%1$s aked %2$s</string>
+    <string name="settings_security_pin_code_notifications_title">Sken agbur deg yilɣa</string>
+    <string name="share_by_text">Bḍu s uḍris</string>
+    <string name="room_alias_published_alias_title">Tansiwin tizuyaz</string>
+    <string name="room_alias_local_address_title">Tansiwin tidiganin</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">Isnifal n unekcum ɣer umazray ad ddun deg yiznan i d-iteddun deg texxamt-a. Timeẓriwt n umazray yellan ur yettbeddil ara.</string>
+    <string name="create_room_alias_already_in_use">Tansa-a ha-tt-an yakan deg useqdec</string>
+    <string name="add_people">Rnu imdanen</string>
+    <string name="direct_room_profile_section_more_leave">Ffeɣ</string>
+    <string name="room_alias_published_alias_subtitle">Tansiwin i d-yettusuffɣen ur yezmir ula d yiwen ad tent-isseqdec ɣef yiqeddacen akk i wakken ad yekcem ɣer texxamt-ik·im. I wakken ad tsuffɣeḍ tansa, ilaq ad tettusbadu deg tazwara d tansa tadigant.</string>
+    <string name="create_room_name_section">Isem n texxamt</string>
+    <string name="hide_advanced">Ffer talqayt</string>
+    <string name="create_room_in_progress">Timerna n texamt…</string>
+    <string name="direct_room_profile_section_more_settings">Iɣewwaren</string>
+    <string name="settings_security_pin_code_change_pin_title">Snifel Pin</string>
+    <string name="room_member_open_or_create_dm">Izen uslig</string>
+    <string name="direct_room_user_list_contacts_title">Inermisen</string>
+    <string name="direct_room_join_rules_invite_by_you">Tgiḍ aya i tinubga kan.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Iznan deg texxamt-a ttwawgelhen seg yixef ɣer yixef.</string>
+    <string name="secure_backup_reset_all">Wennez kullec</string>
+    <string name="add_by_qr_code">Yettwarna s tengalt QR</string>
+    <string name="room_alias_local_address_add">Rnu tansa tadigant</string>
+    <string name="create_room_disable_federation_description">Ilaq ad tesremdeḍ aya ma yella taxxamt ad tettwaseqdec kan i uttekki d trebbaɛ tigensanin ɣef uqeddac-ik·im agejdan. Ayagi ur yettubeddal ara ɣer sdat.</string>
+    <plurals name="notification_invitations">
+        <item quantity="one">%d tinubga</item>
+        <item quantity="other">%d n tnubgiwin</item>
+    </plurals>
+    <string name="settings_security_pin_code_grace_period_summary_on">Tangalt PIN tettusra seld 2 tesdatin n war aseqdec n Element.</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">Iznan dagi ur ttwawgelhen ara seg yixef ɣer yixef</string>
+    <string name="qr_code_not_scanned">Tangalt QR ur tettusmiḍen ara!</string>
+    <string name="user_code_share">Bḍu tangalt-inu</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Asnas yettṛaǧu PUSH</string>
+    <string name="room_alias_delete_confirmation">Kkes tansa \"%1$s\"\?</string>
+    <string name="room_alias_published_other">Tansiwin-nniḍen i d-yeffɣen:</string>
+    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s deg %2$s d %3$s</string>
+    <string name="room_alias_main_address_hint">Tansa tagejdant</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">Sken ibenkani swayes i tzemreḍ ad tesneqdeḍ tura</item>
+        <item quantity="other">Sken %d ibenkani swayes i tzemreḍ ad tesneqdeḍ tura</item>
+    </plurals>
+    <string name="a11y_create_direct_message_by_mxid">Rnu adiwenni usrid amaynut s usulay n Matrix</string>
 </resources>
