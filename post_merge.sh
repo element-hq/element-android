@@ -8,20 +8,6 @@ source "$mydir/merge_helpers.sh"
 # Require clean git state
 require_clean_git
 
-# Oposite of restore_upstream in post_merge.sh
-restore_sc() {
-    local f="$(basename "$1")"
-    local path="$(dirname "$1")"
-    local sc_f="tmp_sc_$f"
-    local upstream_f="upstream_$f"
-    if [ -e "$path/$f" ]; then
-        mv "$path/$f" "$path/$upstream_f"
-    fi
-    if [ -e "$path/$sc_f" ]; then
-        mv "$path/$sc_f" "$path/$f"
-    fi
-}
-
 # Color corrections | TODO more?
 sed -i 's|@color/riotx_accent|?colorAccent|g' vector/src/main/res/layout/*
 uncommitted=`git status --porcelain`

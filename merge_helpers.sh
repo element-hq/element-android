@@ -58,3 +58,30 @@ downstream_upstream_diff() {
     local downstream_tag=`downstream_latest_tag`
     git diff "$previous_tag".."$downstream_latest_tag" "$@"
 }
+
+
+# Opposite to restore_sc
+restore_upstream() {
+    local f="$(basename "$1")"
+    local path="$(dirname "$1")"
+    local sc_f="tmp_sc_$f"
+    local upstream_f="upstream_$f"
+    mv "$path/$f" "$path/$sc_f"
+    if [ -e "$path/$upstream_f" ]; then
+        mv "$path/$upstream_f" "$path/$f"
+    fi
+}
+
+# Oposite to restore_upstream
+restore_sc() {
+    local f="$(basename "$1")"
+    local path="$(dirname "$1")"
+    local sc_f="tmp_sc_$f"
+    local upstream_f="upstream_$f"
+    if [ -e "$path/$f" ]; then
+        mv "$path/$f" "$path/$upstream_f"
+    fi
+    if [ -e "$path/$sc_f" ]; then
+        mv "$path/$sc_f" "$path/$f"
+    fi
+}
