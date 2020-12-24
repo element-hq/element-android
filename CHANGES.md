@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Url previews sometimes attached to wrong message (#2561)
+ - White screen on app launch (#2528)
 
 Translations 🗣:
  -

@@ -407,6 +407,7 @@ class HomeActivity :
             return Intent(context, HomeActivity::class.java)
                     .apply {
                         putExtra(MvRx.KEY_ARG, args)
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     }
         }
 
