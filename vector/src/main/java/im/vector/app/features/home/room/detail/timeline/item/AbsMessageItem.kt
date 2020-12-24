@@ -329,8 +329,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 // Padding for bubble content: long for side with tail, short for other sides
                 val longPadding: Int
                 val shortPadding: Int
-                // Padding for other views that align with the bubble (should be roughly the bubble tail width
-                var alignPadding: Int
                 if (BubbleThemeUtils.drawsActualBubbles(bubbleStyle)) {
                     if (attributes.informationData.showInformation) {
                         bubbleView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble_outgoing else R.drawable.msg_bubble_incoming)
@@ -346,11 +344,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                     bubbleView.backgroundTintList = tintColor
                     longPadding = 20
                     shortPadding = 8
-                    alignPadding = 12
                 } else {
                     longPadding = 10
                     shortPadding = 0//if (attributes.informationData.showInformation && !hideSenderInformation()) { 8 } else { 0 }
-                    alignPadding = 0
                 }
                 val density = bubbleView.resources.displayMetrics.density
                 if (reverseBubble) {
@@ -367,7 +363,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                  */
                 val shortPaddingDp = round(shortPadding * density).toInt()
                 val longPaddingDp = round(longPadding * density).toInt()
-                val alignPaddingDp = round(alignPadding * density).toInt()
                 if (reverseBubble) {
                     bubbleView.setPaddingRelative(
                             shortPaddingDp,
@@ -375,26 +370,12 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                             longPaddingDp,
                             shortPaddingDp
                     )
-                    // Align reactions container to bubble
-                    holder.informationBottom.setPaddingRelative(
-                            0,
-                            0,
-                            alignPaddingDp,
-                            0
-                    )
                 } else {
                     bubbleView.setPaddingRelative(
                             longPaddingDp,
                             shortPaddingDp,
                             shortPaddingDp,
                             shortPaddingDp
-                    )
-                    // Align reactions container to bubble
-                    holder.informationBottom.setPaddingRelative(
-                            alignPaddingDp,
-                            0,
-                            0,
-                            0
                     )
                 }
 
@@ -472,7 +453,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 (bubbleView.layoutParams as RelativeLayout.LayoutParams).bottomMargin = 0
                  */
                 bubbleView.setPadding(0, 0, 0, 0)
-                holder.informationBottom.setPadding(0, 0, 0, 0)
             }
         }
 

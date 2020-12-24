@@ -28,7 +28,9 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.reactions.widget.ReactionButton
+import im.vector.app.features.themes.BubbleThemeUtils
 import org.matrix.android.sdk.api.session.room.send.SendState
+import kotlin.math.round
 
 /**
  * Base timeline item with reactions and read receipts.
@@ -119,6 +121,44 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
         val state = if (baseAttributes.informationData.hasPendingEdits) SendState.UNSENT else baseAttributes.informationData.sendState
         textView?.setTextColor(baseAttributes.messageColorProvider.getMessageTextColor(state))
         failureIndicator?.isVisible = baseAttributes.informationData.sendState.hasFailed()
+    }
+
+    override fun setBubbleLayout(holder: H, bubbleStyle: String, bubbleStyleSetting: String, reverseBubble: Boolean) {
+        super.setBubbleLayout(holder, bubbleStyle, bubbleStyleSetting, reverseBubble)
+
+        // ATTENTION: we go over the bubbleStyleSetting here: this might differ from the effective bubbleStyle
+        // for this view class! We want to use the setting to do some uniform alignments for all views though.
+        when (bubbleStyleSetting) {
+            BubbleThemeUtils.BUBBLE_STYLE_START,
+            BubbleThemeUtils.BUBBLE_STYLE_BOTH,
+            BubbleThemeUtils.BUBBLE_STYLE_BOTH_HIDDEN,
+            BubbleThemeUtils.BUBBLE_STYLE_START_HIDDEN -> {
+                val density = holder.informationBottom.resources.displayMetrics.density
+                // Padding for views that align with the bubble (should be roughly the bubble tail width)
+                val bubbleStartAlignWidth = round(12 * density).toInt()
+                if (reverseBubble) {
+                    // Align reactions container to bubble
+                    holder.informationBottom.setPaddingRelative(
+                            0,
+                            0,
+                            bubbleStartAlignWidth,
+                            0
+                    )
+                } else {
+                    // Align reactions container to bubble
+                    holder.informationBottom.setPaddingRelative(
+                            bubbleStartAlignWidth,
+                            0,
+                            0,
+                            0
+                    )
+                }
+            }
+            else -> {
+                // No alignment padding for reactions required
+                holder.informationBottom.setPaddingRelative(0, 0, 0, 0)
+        }
+        }
     }
 
     abstract class Holder(@IdRes stubId: Int) : BaseEventItem.BaseHolder(stubId) {
