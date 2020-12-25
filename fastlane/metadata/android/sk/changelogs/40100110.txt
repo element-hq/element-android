@@ -1,0 +1,2 @@
+Táto verzia obsahuje najmä vylepšenia používateľského rozhrania. Pozývať priateľov alebo vytvárať priame konverzácie môžete veľmi rýchlo naskenovaním QR kódov.
+Kompletný zoznam zmien: https://github.com/vector-im/element-android/releases/tag/v1.0.11
