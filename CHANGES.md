@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Url previews sometimes attached to wrong message (#2561)
+ - Fix the "Show room member state events" setting (#2581)
 
 Translations 🗣:
  -

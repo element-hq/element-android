@@ -54,11 +54,15 @@ class TimelineSettingsFactory @Inject constructor(
     }
 
     private fun List<String>.createAllowedEventTypeFilters(): List<EventTypeFilter> {
-        return map {
+        var result = map {
             EventTypeFilter(
                     eventType = it,
-                    stateKey = if (it == EventType.STATE_ROOM_MEMBER && userPreferencesProvider.shouldShowRoomMemberStateEvents()) session.myUserId else null
+                    stateKey = null
             )
         }
+        if (!userPreferencesProvider.shouldShowRoomMemberStateEvents()) {
+            result = result.filter { it.eventType != EventType.STATE_ROOM_MEMBER }
+        }
+        return result
     }
 }
