@@ -262,4 +262,8 @@
         <item quantity="one">%1$s adicionou o endereço alternativo %2$s para esta sala.</item>
         <item quantity="other">%1$s adicionou os endereços alternativos %2$s para esta sala.</item>
     </plurals>
+    <string name="notice_room_canonical_alias_no_change_by_you">Você alterou os endereços desta sala.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s alterou os endereços desta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Você alterou os endereços principal e alternativos desta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s alterou os endereços principal e alternativos desta sala.</string>
 </resources>
