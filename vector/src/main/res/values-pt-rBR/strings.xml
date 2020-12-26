@@ -1375,9 +1375,9 @@
     <string name="room_list_catchup_welcome_title">Boas-vindas!</string>
     <string name="room_list_catchup_welcome_body">Leia mensagens não lidas aqui</string>
     <string name="room_list_people_empty_title">Conversas</string>
-    <string name="room_list_people_empty_body">Suas conversas serão exibidas aqui</string>
+    <string name="room_list_people_empty_body">Suas conversas serão exibidas aqui. Toque no botão + abaixo para conversar com alguém.</string>
     <string name="room_list_rooms_empty_title">Salas</string>
-    <string name="room_list_rooms_empty_body">Seus salas serão exibidas aqui</string>
+    <string name="room_list_rooms_empty_body">Seus salas serão exibidas aqui. Toque no botão + abaixo para pesquisar as salas existentes ou criar novas.</string>
     <string name="title_activity_emoji_reaction_picker">Reações</string>
     <string name="reactions_agree">Concordo</string>
     <string name="reactions_like">Curtir</string>
@@ -2325,4 +2325,21 @@
     <string name="room_settings_alias_subtitle">Veja e gerencie os endereços desta sala e a visibilidade dela na lista de salas.</string>
     <string name="room_settings_alias_title">Endereços da sala</string>
     <string name="action_add">Adicionar</string>
+    <string name="settings_security_pin_code_change_pin_summary">Alterar o seu PIN atual</string>
+    <string name="settings_security_pin_code_change_pin_title">Alterar o PIN</string>
+    <string name="room_preview_no_preview_join">Esta sala não pode ser visualizada. Você quer entrar nela\?</string>
+    <string name="room_preview_not_found">Esta sala não está acessível no momento.
+\nTente novamente mais tarde, ou peça ao administrador da sala para verificar se você tem acesso.</string>
+    <string name="room_alias_publish_to_directory_error">Não foi possível saber a visibilidade atual da sala na lista de salas (%1$s).</string>
+    <string name="room_alias_publish_to_directory">Publicar esta sala na lista pública de salas de %1$s\?</string>
+    <string name="room_alias_action_unpublish">Remover este endereço</string>
+    <string name="room_alias_local_address_subtitle">Defina endereços para esta sala, tendo em vista que as pessoas possam encontrá-la por meio do servidor local (%1$s)</string>
+    <string name="room_alias_address_hint">Novo endereço publicado (por exemplo, #apelido:servidor)</string>
+    <string name="room_alias_address_empty">Nenhum outro endereço publicado ainda.</string>
+    <string name="room_alias_address_empty_can_add">Nenhum outro endereço publicado ainda, adicione um abaixo.</string>
+    <string name="room_alias_publish">Tornar pública esta sala na lista de salas de %1$s\?</string>
+    <string name="room_alias_unpublish_confirmation">Remover o endereço \"%1$s\"\?</string>
+    <string name="room_settings_room_access_title">Acesso à sala</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">Alterar quem pode ler o histórico só se aplicará às futuras mensagens nesta sala. A visibilidade do histórico existente não será alterada.</string>
+    <string name="action_unpublish">Remover</string>
 </resources>
