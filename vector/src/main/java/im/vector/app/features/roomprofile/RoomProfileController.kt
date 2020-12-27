@@ -189,7 +189,7 @@ class RoomProfileController @Inject constructor(
                         title = stringProvider.getString(R.string.room_settings_enable_encryption),
                         dividerColor = dividerColor,
                         icon = R.drawable.ic_shield_black,
-                        divider = false,
+                        divider = true,
                         editable = false,
                         action = { callback?.onEnableEncryptionClicked() }
                 )
