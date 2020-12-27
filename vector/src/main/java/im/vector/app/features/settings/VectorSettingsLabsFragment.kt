@@ -58,5 +58,7 @@ class VectorSettingsLabsFragment @Inject constructor(
             }
         }
          */
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY)?.isEnabled = vectorPreferences.showUrlPreviews()
     }
 }
