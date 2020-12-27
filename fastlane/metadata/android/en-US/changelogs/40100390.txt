@@ -1,0 +1,7 @@
+- Experimental "mark rooms as unread" functionality (MSC2867) in labs
+- Fix sometimes too wide message bubbles
+- Update codebase to Element v1.0.13
+- Some improvements and fixes for URL-previews compared to upstream
+- Lab option to also show url previews in encrypted rooms
+- Better alignment of reactions to message bubbles
+- Various minor fixes and improvements
