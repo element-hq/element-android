@@ -28,7 +28,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.databinding.ItemVerificationActionBinding
+import im.vector.app.databinding.ViewBottomSheetActionButtonBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class BottomSheetActionButton @JvmOverloads constructor(
@@ -36,7 +36,7 @@ class BottomSheetActionButton @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-    val views : ItemVerificationActionBinding
+    val views: ViewBottomSheetActionButtonBinding
 
     var title: String? = null
         set(value) {
@@ -97,8 +97,8 @@ class BottomSheetActionButton @JvmOverloads constructor(
         }
 
     init {
-        inflate(context, R.layout.item_verification_action, this)
-        views = ItemVerificationActionBinding.bind(this)
+        inflate(context, R.layout.view_bottom_sheet_action_button, this)
+        views = ViewBottomSheetActionButtonBinding.bind(this)
 
         context.withStyledAttributes(attrs, R.styleable.BottomSheetActionButton) {
             title = getString(R.styleable.BottomSheetActionButton_actionTitle) ?: ""

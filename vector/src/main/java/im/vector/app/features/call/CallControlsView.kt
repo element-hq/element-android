@@ -18,7 +18,7 @@ package im.vector.app.features.call
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.databinding.ViewCallControlsBinding
@@ -28,7 +28,7 @@ import org.webrtc.PeerConnection
 
 class CallControlsView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val views: ViewCallControlsBinding
 
