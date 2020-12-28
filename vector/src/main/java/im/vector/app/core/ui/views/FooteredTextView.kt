@@ -37,6 +37,18 @@ class FooteredTextView @JvmOverloads constructor(
         }
          */
 
+        val lastLine = layout.lineCount - 1
+
+        // Let's check if the last line's text has the same RTL behaviour as the layout direction.
+        val viewIsRtl = layoutDirection == LAYOUT_DIRECTION_RTL
+        val lastVisibleCharacter = layout.getLineVisibleEnd(lastLine) - 1
+        val looksLikeRtl = layout.isRtlCharAt(lastVisibleCharacter)
+        if (looksLikeRtl != viewIsRtl) {
+            // Our footer would overlap text even if there is space in the last line, so reserve space in y-direction
+            setMeasuredDimension(max(measuredWidth, footerWidth), measuredHeight + footerHeight)
+            return
+        }
+
         // Get required width for all lines
         var maxLineWidth = 0f
         for (i in 0 until layout.lineCount) {
@@ -48,7 +60,7 @@ class FooteredTextView @JvmOverloads constructor(
         var newWidth = ceil(maxLineWidth).toInt()
         var newHeight = measuredHeight
 
-        val widthLastLine = layout.getLineWidth(layout.lineCount-1)
+        val widthLastLine = layout.getLineWidth(lastLine)
 
         // Required width if putting footer in the same line as the last line
         val widthWithHorizontalFooter = widthLastLine + footerWidth
