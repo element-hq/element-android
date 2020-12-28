@@ -91,7 +91,7 @@ data class RoomSummary constructor(
         return when(preferenceProvider.getUnreadKind(isDirect)) {
             UNREAD_KIND_ORIGINAL_CONTENT -> hasUnreadOriginalContentMessages
             UNREAD_KIND_CONTENT -> hasUnreadContentMessages
-            // UNREAD_KIND_DEFAULT
+            // UNREAD_KIND_FULL
             else -> hasUnreadMessages
         }
     }
@@ -112,7 +112,7 @@ data class RoomSummary constructor(
     companion object {
         const val NOT_IN_BREADCRUMBS = -1
         // SC addition
-        const val UNREAD_KIND_DEFAULT = 0
+        const val UNREAD_KIND_FULL = 0
         const val UNREAD_KIND_CONTENT = 1
         const val UNREAD_KIND_ORIGINAL_CONTENT = 2
     }
