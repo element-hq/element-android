@@ -88,7 +88,7 @@ data class RoomSummary constructor(
             // Fallback to default
             return hasUnreadMessages
         }
-        return when(preferenceProvider.getUnreadKind()) {
+        return when(preferenceProvider.getUnreadKind(isDirect)) {
             UNREAD_KIND_ORIGINAL_CONTENT -> hasUnreadOriginalContentMessages
             UNREAD_KIND_CONTENT -> hasUnreadContentMessages
             // UNREAD_KIND_DEFAULT
@@ -101,7 +101,7 @@ data class RoomSummary constructor(
             // Fallback to default
             return latestPreviewableEvent
         }
-        return when(preferenceProvider.getUnreadKind()) {
+        return when(preferenceProvider.getUnreadKind(isDirect)) {
             UNREAD_KIND_ORIGINAL_CONTENT -> latestPreviewableOriginalContentEvent
             UNREAD_KIND_CONTENT -> latestPreviewableContentEvent
             // UNREAD_KIND_DEFAULT
@@ -119,6 +119,6 @@ data class RoomSummary constructor(
 
     // SC addition
     interface RoomSummaryPreferenceProvider {
-        fun getUnreadKind(): Int
+        fun getUnreadKind(isDirect: Boolean): Int
     }
 }

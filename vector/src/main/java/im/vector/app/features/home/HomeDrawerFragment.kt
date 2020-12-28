@@ -117,6 +117,9 @@ class HomeDrawerFragment @Inject constructor(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // SC: settings migration
+        vectorPreferences.scPreferenceUpdate()
+        // SC-Easy mode prompt
         PromptSimplifiedModeActivity.showIfRequired(requireContext(), vectorPreferences)
     }
 }

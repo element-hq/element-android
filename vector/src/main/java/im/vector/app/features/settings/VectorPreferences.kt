@@ -27,6 +27,7 @@ import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
+import io.realm.annotations.Ignore
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import timber.log.Timber
@@ -182,7 +183,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         // SC additions
         private const val SETTINGS_SINGLE_OVERVIEW = "SETTINGS_SINGLE_OVERVIEW"
+        @Deprecated("Please append _DM or _GROUP")
         private const val SETTINGS_ROOM_UNREAD_KIND = "SETTINGS_ROOM_UNREAD_KIND"
+        private const val SETTINGS_ROOM_UNREAD_KIND_DM = "SETTINGS_ROOM_UNREAD_KIND_DM"
+        private const val SETTINGS_ROOM_UNREAD_KIND_GROUP = "SETTINGS_ROOM_UNREAD_KIND_GROUP"
         private const val SETTINGS_UNIMPORTANT_COUNTER_BADGE = "SETTINGS_UNIMPORTANT_COUNTER_BADGE"
         private const val SETTINGS_SIMPLIFIED_MODE = "SETTINGS_SIMPLIFIED_MODE"
         private const val SETTINGS_LABS_ALLOW_MARK_UNREAD = "SETTINGS_LABS_ALLOW_MARK_UNREAD"
@@ -878,13 +882,27 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     // SC addition
-    fun roomUnreadKind(): Int {
-        val kind = defaultPrefs.getString(SETTINGS_ROOM_UNREAD_KIND, RoomSummary.UNREAD_KIND_CONTENT.toString())
+    private fun roomUnreadKind(key: String): Int {
+        val default = RoomSummary.UNREAD_KIND_CONTENT
+        val kind = defaultPrefs.getString(key, default.toString())
         return try {
             Integer.parseInt(kind!!)
         } catch (e: Exception) {
-            RoomSummary.UNREAD_KIND_CONTENT
+            default
         }
+    }
+    fun roomUnreadKind(isDirect: Boolean): Int {
+        return if (isDirect) {
+            roomUnreadKindDm()
+        } else {
+            roomUnreadKindGroup()
+        }
+    }
+    fun roomUnreadKindDm(): Int {
+        return roomUnreadKind(SETTINGS_ROOM_UNREAD_KIND_DM)
+    }
+    fun roomUnreadKindGroup(): Int {
+        return roomUnreadKind(SETTINGS_ROOM_UNREAD_KIND_GROUP)
     }
 
     // SC addition
@@ -909,6 +927,21 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     // SC addition
     fun labAllowMarkUnread(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_ALLOW_MARK_UNREAD, false)
+    }
+
+    // SC addition
+    @Suppress("DEPRECATION")
+    fun scPreferenceUpdate() {
+        if (defaultPrefs.contains(SETTINGS_ROOM_UNREAD_KIND)) {
+            // Migrate to split setting for DMs and groups
+            val unreadKindSetting = roomUnreadKind(SETTINGS_ROOM_UNREAD_KIND).toString()
+            defaultPrefs
+                    .edit()
+                    .putString(SETTINGS_ROOM_UNREAD_KIND_DM, unreadKindSetting)
+                    .putString(SETTINGS_ROOM_UNREAD_KIND_GROUP, unreadKindSetting)
+                    .remove(SETTINGS_ROOM_UNREAD_KIND)
+                    .apply()
+        }
     }
 
     /**

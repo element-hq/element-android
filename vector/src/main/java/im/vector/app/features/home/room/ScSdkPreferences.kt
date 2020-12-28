@@ -9,7 +9,7 @@ class ScSdkPreferences @Inject constructor(private val vectorPreferences: Vector
 
     constructor(context: Context?) : this(vectorPreferences = context?.let { VectorPreferences(it) })
 
-    override fun getUnreadKind(): Int {
-        return vectorPreferences?.roomUnreadKind() ?: RoomSummary.UNREAD_KIND_DEFAULT
+    override fun getUnreadKind(isDirect: Boolean): Int {
+        return vectorPreferences?.roomUnreadKind(isDirect) ?: RoomSummary.UNREAD_KIND_DEFAULT
     }
 }

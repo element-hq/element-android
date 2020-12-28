@@ -8,7 +8,8 @@
     <string name="settings_single_overview">Combined chat overview</string>
     <string name="settings_single_overview_summary">View both direct messages and rooms on one page</string>
 
-    <string name="settings_room_unread_kind">Chat preview content</string>
+    <string name="settings_room_unread_kind_dm">Direct chat preview content</string>
+    <string name="settings_room_unread_kind_group">Group chat preview content</string>
     <string name="settings_room_unread_kind_default">Show all events</string>
     <string name="settings_room_unread_kind_content">Hide member changes</string>
     <string name="settings_room_unread_kind_original_content">Hide member changes and reactions</string>

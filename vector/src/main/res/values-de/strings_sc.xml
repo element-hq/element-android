@@ -8,7 +8,8 @@
     <string name="settings_single_overview">Vereinte Chat-Übersicht</string>
     <string name="settings_single_overview_summary">Zeige sowohl Direktnachrichten als auch Gruppenchats in einer gemeinsamen Übersicht</string>
 
-    <string name="settings_room_unread_kind">Chat-Vorschau</string>
+    <string name="settings_room_unread_kind_dm">Direktchat-Vorschau</string>
+    <string name="settings_room_unread_kind_group">Gruppenchat-Vorschau</string>
     <string name="settings_room_unread_kind_default">Alle Ereignisse</string>
     <string name="settings_room_unread_kind_content">Verstecke Teilnehmerveränderungen</string>
     <string name="settings_room_unread_kind_original_content">Verstecke Teilnehmerveränderungen und Reaktionen</string>

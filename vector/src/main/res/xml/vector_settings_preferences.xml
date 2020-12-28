@@ -77,9 +77,17 @@
             android:defaultValue="1"
             android:entries="@array/room_unread_kind_entries"
             android:entryValues="@array/room_unread_kind_values"
-            android:key="SETTINGS_ROOM_UNREAD_KIND"
+            android:key="SETTINGS_ROOM_UNREAD_KIND_DM"
             android:summary="%s"
-            android:title="@string/settings_room_unread_kind" />
+            android:title="@string/settings_room_unread_kind_dm" />
+
+        <im.vector.app.core.preference.VectorListPreference
+            android:defaultValue="1"
+            android:entries="@array/room_unread_kind_entries"
+            android:entryValues="@array/room_unread_kind_values"
+            android:key="SETTINGS_ROOM_UNREAD_KIND_GROUP"
+            android:summary="%s"
+            android:title="@string/settings_room_unread_kind_group" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
