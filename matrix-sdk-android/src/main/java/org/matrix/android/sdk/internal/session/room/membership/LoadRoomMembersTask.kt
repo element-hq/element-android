@@ -82,16 +82,19 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
     }
 
     private suspend fun doRequest(params: LoadRoomMembersTask.Params) {
-        monarchy.awaitTransaction { realm ->
-            val roomEntity = RoomEntity.where(realm, params.roomId).findFirst()
-                    ?: realm.createObject(params.roomId)
-            roomEntity.membersLoadStatus = RoomMembersLoadStatusType.LOADING
-        }
+        setRoomMembersLoadStatus(params.roomId, RoomMembersLoadStatusType.LOADING)
 
         val lastToken = syncTokenStore.getLastToken()
-        val response = executeRequest<RoomMembersResponse>(eventBus) {
-            apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
+        val response = try {
+            executeRequest<RoomMembersResponse>(eventBus) {
+                apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
+            }
+        } catch (throwable: Throwable) {
+            // Revert status to NONE
+            setRoomMembersLoadStatus(params.roomId, RoomMembersLoadStatusType.NONE)
+            throw throwable
         }
+        // This will also set the status to LOADED
         insertInDb(response, params.roomId)
     }
 
@@ -124,5 +127,12 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
             result = RoomEntity.where(it, roomId).findFirst()?.membersLoadStatus
         }
         return result ?: RoomMembersLoadStatusType.NONE
+    }
+
+    private suspend fun setRoomMembersLoadStatus(roomId: String, status: RoomMembersLoadStatusType) {
+        monarchy.awaitTransaction { realm ->
+            val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
+            roomEntity.membersLoadStatus = status
+        }
     }
 }
