@@ -1,6 +1,7 @@
 package im.vector.app.core.ui.views
 
 import android.content.Context
+import android.graphics.Canvas
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import kotlin.math.ceil
@@ -19,9 +20,15 @@ class FooteredTextView @JvmOverloads constructor(
     var footerWidth: Int = 0
     //var widthLimit: Float = 0f
 
+    // Workaround to RTL languages with non-RTL content messages aligning left instead of start
+    private var requiredHorizontalCanvasMove = 0f
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         // First, let super measure the content for our normal TextView use
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        // Default case
+        requiredHorizontalCanvasMove = 0f
 
         // Get max available width
         //val widthMode = MeasureSpec.getMode(widthMeasureSpec)
@@ -70,6 +77,10 @@ class FooteredTextView @JvmOverloads constructor(
             // Reserve extra horizontal footer space if necessary
             if (widthWithHorizontalFooter > newWidth) {
                 newWidth = ceil(widthWithHorizontalFooter).toInt()
+
+                if (viewIsRtl) {
+                    requiredHorizontalCanvasMove = widthWithHorizontalFooter - measuredWidth
+                }
             }
         } else {
             // Reserve vertical footer space
@@ -77,5 +88,14 @@ class FooteredTextView @JvmOverloads constructor(
         }
 
         setMeasuredDimension(newWidth, newHeight)
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        // Workaround to RTL languages with non-RTL content messages aligning left instead of start
+        if (requiredHorizontalCanvasMove > 0f) {
+            canvas?.translate(requiredHorizontalCanvasMove, 0f)
+        }
+
+        super.onDraw(canvas)
     }
 }
