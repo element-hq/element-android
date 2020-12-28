@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,24 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.extensions
+package org.matrix.android.sdk.api.util
+
+import java.net.URLEncoder
 
 /**
- * Ex: "https://matrix.org/" -> "matrix.org"
+ * Append param and value to a Url, using "?" or "&". Value parameter will be encoded
+ * Return this for chaining purpose
  */
-fun String?.toReducedUrl(): String {
-    return (this ?: "")
-            .substringAfter("://")
-            .trim { it == '/' }
+fun StringBuilder.appendParamToUrl(param: String, value: String): StringBuilder {
+    if (contains("?")) {
+        append("&")
+    } else {
+        append("?")
+    }
+
+    append(param)
+    append("=")
+    append(URLEncoder.encode(value, "utf-8"))
+
+    return this
 }

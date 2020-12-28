@@ -193,7 +193,12 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 views.loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders
                 views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
-                        openInCustomTab(state.getSsoUrl(id))
+                        loginViewModel.getSsoUrl(
+                                redirectUrl = LoginActivity.VECTOR_REDIRECT_URL,
+                                deviceId = state.deviceId,
+                                providerId = id
+                        )
+                                ?.let { openInCustomTab(it) }
                     }
                 }
             } else {

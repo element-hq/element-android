@@ -76,8 +76,12 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
                 views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()
                 views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
-                        val url = withState(loginViewModel) { it.getSsoUrl(id) }
-                        openInCustomTab(url)
+                        loginViewModel.getSsoUrl(
+                                redirectUrl = LoginActivity.VECTOR_REDIRECT_URL,
+                                deviceId = state.deviceId,
+                                providerId = id
+                        )
+                                ?.let { openInCustomTab(it) }
                     }
                 }
             }
@@ -105,7 +109,12 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
 
     private fun submit() = withState(loginViewModel) { state ->
         if (state.loginMode is LoginMode.Sso) {
-            openInCustomTab(state.getSsoUrl(null))
+            loginViewModel.getSsoUrl(
+                    redirectUrl = LoginActivity.VECTOR_REDIRECT_URL,
+                    deviceId = state.deviceId,
+                    providerId = null
+            )
+                    ?.let { openInCustomTab(it) }
         } else {
             loginViewModel.handle(LoginAction.UpdateSignMode(SignMode.SignUp))
         }

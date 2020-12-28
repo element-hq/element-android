@@ -360,6 +360,9 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
 
         private const val EXTRA_CONFIG = "EXTRA_CONFIG"
 
+        // Note that the domain can be displayed to the user for confirmation that he trusts it. So use a human readable string
+        const val VECTOR_REDIRECT_URL = "element://connect"
+
         fun newIntent(context: Context, loginConfig: LoginConfig?): Intent {
             return Intent(context, LoginActivity::class.java).apply {
                 putExtra(EXTRA_CONFIG, loginConfig)
