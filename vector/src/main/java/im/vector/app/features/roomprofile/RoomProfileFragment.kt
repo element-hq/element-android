@@ -261,6 +261,10 @@ class RoomProfileFragment @Inject constructor(
         copyToClipboard(requireContext(), roomProfileArgs.roomId)
     }
 
+    override fun onUrlInTopicLongClicked(url: String) {
+        copyToClipboard(requireContext(), url, true)
+    }
+
     private fun onShareRoomProfile(permalink: String) {
         startSharePlainTextIntent(
                 fragment = this,

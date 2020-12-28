@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Url previews sometimes attached to wrong message (#2561)
+ - Room Topic not displayed correctly after visiting a link (#2551)
 
 Translations 🗣:
  -

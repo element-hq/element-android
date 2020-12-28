@@ -18,6 +18,7 @@ package im.vector.app.core.epoxy
 
 import android.animation.ObjectAnimator
 import android.text.TextUtils
+import android.text.method.MovementMethod
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.doOnPreDraw
@@ -25,7 +26,6 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
-import im.vector.app.core.extensions.copyOnLongClick
 
 @EpoxyModelClass(layout = R.layout.item_expandable_textview)
 abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>() {
@@ -36,13 +36,16 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
     @EpoxyAttribute
     var maxLines: Int = 3
 
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var movementMethod: MovementMethod? = null
+
     private var isExpanded = false
     private var expandedLines = 0
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.content.text = content
-        holder.content.copyOnLongClick()
+        holder.content.movementMethod = movementMethod
 
         holder.content.doOnPreDraw {
             if (holder.content.lineCount > maxLines) {
