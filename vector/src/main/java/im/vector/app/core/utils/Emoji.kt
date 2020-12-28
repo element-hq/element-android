@@ -40,7 +40,8 @@ private val emojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]" +
         "|[\u2122\u2139]\uFE0F?" +
         "|\uD83C\uDC04\uFE0F?" +
         "|\uD83C\uDCCF\uFE0F?" +
-        "|[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?))")
+        "|[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?" +
+        "| ?))")
 
 /*
 // A hashset from all supported emoji
