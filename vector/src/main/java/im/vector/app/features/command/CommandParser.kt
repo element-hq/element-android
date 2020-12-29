@@ -300,6 +300,18 @@ object CommandParser {
                     val message = textMessage.substring(Command.SNOW.command.length).trim()
                     ParsedCommand.SendChatEffect(ChatEffect.SNOW, message)
                 }
+                Command.CREATE_SPACE.command           -> {
+                    val rawCommand = textMessage.substring(Command.CREATE_SPACE.command.length).trim()
+                    val split = rawCommand.split(" ").map { it.trim() }
+                    if (split.isEmpty()) {
+                        ParsedCommand.ErrorSyntax(Command.CREATE_SPACE)
+                    } else {
+                        ParsedCommand.CreateSpace(
+                                split[0],
+                                split.subList(1, split.size)
+                        )
+                    }
+                }
                 else                                   -> {
                     // Unknown command
                     ParsedCommand.ErrorUnknownSlashCommand(slashCommand)
