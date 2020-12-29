@@ -9,5 +9,5 @@ SchildiChat - это клиент для протокола Matrix, основа
 - Соответствие системным настройкам для темного/светлого режима
 - Дальнейшие небольшие улучшения удобства использования
 
-SchildiChat имеет открытый исходный код: https://github.com/SpiritCroc/SchildiChat-android
+SchildiChat имеет открытый исходный код: https://github.com/SchildiChat/SchildiChat-android
 Подробнее о протоколе Matrix: https://matrix.org/

@@ -9,5 +9,5 @@ Compared to the Element app, SchildiChat features following changes:
 - Follows the system setting for dark/light mode
 - Further small usability improvements
 
-SchildiChat is open source: https://github.com/SpiritCroc/SchildiChat-android
+SchildiChat is open source: https://github.com/SchildiChat/SchildiChat-android
 More information about the Matrix protocol: https://matrix.org/

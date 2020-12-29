@@ -9,5 +9,5 @@ Verglichen mit der Element-Referenzanwendung bietet SchildiChat folgende Änderu
 - Folgt der Systempräferenz bezüglich hellem bzw. dunklem Design
 - Weitere kleinere Verbesserungen zur Benutzerfreundlichkeit
 
-SchildiChat ist quelloffen: https://github.com/SpiritCroc/SchildiChat-android
+SchildiChat ist quelloffen: https://github.com/SchildiChat/SchildiChat-android
 Mehr Informationen zum Matrix-Protokoll: https://matrix.org/
