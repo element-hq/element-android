@@ -46,6 +46,9 @@ object ThemeUtils {
     private const val THEME_LIGHT_VALUE = "light"
     private const val THEME_BLACK_VALUE = "black"
 
+    // The default theme
+    private const val DEFAULT_THEME = SYSTEM_THEME_VALUE
+
     private var currentTheme = AtomicReference<String>(null)
 
     private val mColorByAttr = HashMap<Int, Int>()
@@ -57,11 +60,12 @@ object ThemeUtils {
     }
 
     /**
-     * @return true if current theme is Light/Status or current theme is System and system theme is light
+     * @return true if current theme is Light or current theme is System and system theme is light
      */
     fun isLightTheme(context: Context): Boolean {
         val theme = getApplicationTheme(context)
-        return theme == THEME_LIGHT_VALUE || (theme == SYSTEM_THEME_VALUE && !isSystemDarkTheme(context.resources))
+        return theme == THEME_LIGHT_VALUE
+                || (theme == SYSTEM_THEME_VALUE && !isSystemDarkTheme(context.resources))
     }
 
     /**
@@ -74,11 +78,11 @@ object ThemeUtils {
         val currentTheme = this.currentTheme.get()
         return if (currentTheme == null) {
             val prefs = DefaultSharedPreferences.getInstance(context)
-            var themeFromPref = prefs.getString(APPLICATION_THEME_KEY, SYSTEM_THEME_VALUE) ?: SYSTEM_THEME_VALUE
+            var themeFromPref = prefs.getString(APPLICATION_THEME_KEY, DEFAULT_THEME) ?: DEFAULT_THEME
             if (themeFromPref == "status") {
-                // Migrate to light theme, which is the closest theme
-                themeFromPref = SYSTEM_THEME_VALUE
-                prefs.edit { putString(APPLICATION_THEME_KEY, SYSTEM_THEME_VALUE) }
+                // Migrate to the default theme
+                themeFromPref = DEFAULT_THEME
+                prefs.edit { putString(APPLICATION_THEME_KEY, DEFAULT_THEME) }
             }
             this.currentTheme.set(themeFromPref)
             themeFromPref
@@ -101,12 +105,14 @@ object ThemeUtils {
      */
     fun setApplicationTheme(context: Context, aTheme: String) {
         currentTheme.set(aTheme)
-        when (aTheme) {
-            SYSTEM_THEME_VALUE -> context.setTheme(if (isSystemDarkTheme(context.resources)) R.style.AppTheme_Dark else R.style.AppTheme_Light)
-            THEME_DARK_VALUE   -> context.setTheme(R.style.AppTheme_Dark)
-            THEME_BLACK_VALUE  -> context.setTheme(R.style.AppTheme_Black)
-            else               -> context.setTheme(R.style.AppTheme_Light)
-        }
+        context.setTheme(
+                when (aTheme) {
+                    SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(context.resources)) R.style.AppTheme_Dark else R.style.AppTheme_Light
+                    THEME_DARK_VALUE   -> R.style.AppTheme_Dark
+                    THEME_BLACK_VALUE  -> R.style.AppTheme_Black
+                    else               -> R.style.AppTheme_Light
+                }
+        )
 
         // Clear the cache
         mColorByAttr.clear()
@@ -126,40 +132,6 @@ object ThemeUtils {
 
         mColorByAttr.clear()
     }
-
-    /**
-     * Set the TabLayout colors.
-     * It seems that there is no proper way to manage it with the manifest file.
-     *
-     * @param activity the activity
-     * @param layout   the layout
-     */
-    /*
-    fun setTabLayoutTheme(activity: Activity, layout: TabLayout) {
-        if (activity is VectorGroupDetailsActivity) {
-            val textColor: Int
-            val underlineColor: Int
-            val backgroundColor: Int
-
-            if (TextUtils.equals(getApplicationTheme(activity), THEME_LIGHT_VALUE)) {
-                textColor = ContextCompat.getColor(activity, android.R.color.white)
-                underlineColor = textColor
-                backgroundColor = ContextCompat.getColor(activity, R.color.tab_groups)
-            } else if (TextUtils.equals(getApplicationTheme(activity), THEME_STATUS_VALUE)) {
-                textColor = ContextCompat.getColor(activity, android.R.color.white)
-                underlineColor = textColor
-                backgroundColor = getColor(activity, R.attr.colorPrimary)
-            } else {
-                textColor = ContextCompat.getColor(activity, R.color.tab_groups)
-                underlineColor = textColor
-                backgroundColor = getColor(activity, R.attr.colorPrimary)
-            }
-
-            layout.setTabTextColors(textColor, textColor)
-            layout.setSelectedTabIndicatorColor(underlineColor)
-            layout.setBackgroundColor(backgroundColor)
-        }
-    }    */
 
     /**
      * Translates color attributes to colors
