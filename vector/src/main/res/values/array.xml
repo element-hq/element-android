@@ -92,12 +92,14 @@
 
     <!-- Theme -->
     <string-array name="theme_entries">
+        <item>@string/system_theme</item>
         <item>@string/light_theme</item>
         <item>@string/dark_theme</item>
         <item>@string/black_them</item>
     </string-array>
 
     <string-array name="theme_values">
+        <item>system</item>
         <item>light</item>
         <item>dark</item>
         <item>black</item>
