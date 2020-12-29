@@ -46,7 +46,8 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     PLAIN("/plain", "<message>", R.string.command_description_plain),
     DISCARD_SESSION("/discardsession", "", R.string.command_description_discard_session),
     CONFETTI("/confetti", "<message>", R.string.command_confetti),
-    SNOW("/snow", "<message>", R.string.command_snow);
+    SNOW("/snow", "<message>", R.string.command_snow),
+    CREATE_SPACE("/createspace", "<name> <invitee>*", R.string.command_description_create_space);
 
     val length
         get() = command.length + 1
