@@ -8,6 +8,7 @@ Improvements 🙌:
   - Add System theme option and set as default (#904) (#2387)
 
 Bugfix 🐛:
+ - Unspecced msgType field in m.sticker (#2580)
  - Wait for all room members to be known before sending a message to a e2e room (#2518)
  - Url previews sometimes attached to wrong message (#2561)
 
