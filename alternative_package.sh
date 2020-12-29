@@ -45,6 +45,11 @@ logo_alternative() {
     "$mydir/graphics/icon_gen.sh"
 }
 
+logo_beta() {
+    cp "$mydir/graphics/beta/"* "$mydir/graphics/"
+    "$mydir/graphics/icon_gen.sh"
+}
+
 case "$package_add" in
 "a")
     # blue
@@ -84,9 +89,11 @@ sed -i "s|SchildiChat|SchildiChat.$name_add|g" `find "$fastlane_dir/metadata/and
 if [ "$package_add" = "testing.foss" ]; then
     find "$fastlane_dir" -name full_description.txt -exec cp "$fastlane_dir/../fastlane_testing/foss_full_description.txt" '{}' \;
     find "$fastlane_dir" -name short_description.txt -exec cp "$fastlane_dir/../fastlane_testing/foss_short_description.txt" '{}' \;
+    logo_beta
 elif [ "$package_add" = "testing.fcm" ]; then
     find "$fastlane_dir" -name full_description.txt -exec cp "$fastlane_dir/../fastlane_testing/fcm_full_description.txt" '{}' \;
     find "$fastlane_dir" -name short_description.txt -exec cp "$fastlane_dir/../fastlane_testing/fcm_short_description.txt" '{}' \;
+    logo_beta
 fi
 
 git add -A
