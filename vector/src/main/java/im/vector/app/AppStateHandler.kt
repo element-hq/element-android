@@ -22,6 +22,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import arrow.core.Option
 import im.vector.app.features.grouplist.ALL_COMMUNITIES_GROUP_ID
 import im.vector.app.features.grouplist.SelectedGroupDataSource
+import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import im.vector.app.features.home.HomeRoomListDataSource
 import im.vector.app.features.home.room.list.ChronologicalRoomComparator
 import io.reactivex.Observable
@@ -46,6 +47,7 @@ class AppStateHandler @Inject constructor(
         private val sessionDataSource: ActiveSessionDataSource,
         private val homeRoomListDataSource: HomeRoomListDataSource,
         private val selectedGroupDataSource: SelectedGroupDataSource,
+        private val selectedSpaceDataSource: SelectedSpaceDataSource,
         private val chronologicalRoomComparator: ChronologicalRoomComparator) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()

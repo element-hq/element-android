@@ -20,7 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -45,12 +48,14 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS
+import im.vector.app.features.spaces.ALL_COMMUNITIES_GROUP_ID
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.session.space.SpaceSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import timber.log.Timber
@@ -103,6 +108,11 @@ class HomeDetailFragment @Inject constructor(
         viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
             onGroupChange(groupSummary.orNull())
         }
+
+        viewModel.selectSubscribe(this, HomeDetailViewState::spaceSummary) { spaceSummary ->
+            onSpaceChange(spaceSummary.orNull())
+        }
+
         viewModel.selectSubscribe(this, HomeDetailViewState::displayMode) { displayMode ->
             switchDisplayMode(displayMode)
         }
@@ -213,6 +223,24 @@ class HomeDetailFragment @Inject constructor(
         groupSummary?.let {
             // Use GlideApp with activity context to avoid the glideRequests to be paused
             avatarRenderer.render(it.toMatrixItem(), views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
+        }
+    }
+
+    private fun onSpaceChange(spaceSummary: SpaceSummary?) {
+        spaceSummary?.let {
+            // Use GlideApp with activity context to avoid the glideRequests to be paused
+            if (spaceSummary.spaceId == ALL_COMMUNITIES_GROUP_ID) {
+                // Special case
+                views.groupToolbarAvatarImageView.background = ContextCompat.getDrawable(requireContext(), R.drawable.space_home_background)
+                views.groupToolbarAvatarImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
+                views.groupToolbarAvatarImageView.setImageResource(R.drawable.ic_space_home)
+                views.groupToolbarSpaceTitleView.isVisible = false
+            } else {
+                views.groupToolbarAvatarImageView.background = null
+                avatarRenderer.renderSpace(it.toMatrixItem(), views.groupToolbarAvatarImageView, GlideApp.with(requireActivity()))
+                views.groupToolbarSpaceTitleView.isVisible = true
+                views.groupToolbarSpaceTitleView.text = spaceSummary.displayName
+            }
         }
     }
 
