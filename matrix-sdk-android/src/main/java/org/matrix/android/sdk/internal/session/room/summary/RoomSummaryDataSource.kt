@@ -189,6 +189,10 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                 query.equalTo(RoomSummaryEntityFields.IS_SERVER_NOTICE, sn)
             }
         }
+
+        queryParams.excludeType.forEach {
+            query.notEqualTo(RoomSummaryEntityFields.ROOM_TYPE, it)
+        }
         return query
     }
 }

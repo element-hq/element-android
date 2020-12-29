@@ -21,10 +21,11 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
 // TODO Give a way to include other initial states
-class CreateRoomParams {
+open class CreateRoomParams {
     /**
      * A public visibility indicates that the room will be shown in the published room list.
      * A private visibility will hide the room from the published room list.
@@ -111,6 +112,17 @@ class CreateRoomParams {
             }
         }
 
+    var roomType: String? = RoomType.MESSAGING
+        set(value) {
+            field = value
+            if (value != null) {
+                creationContent[CREATION_CONTENT_KEY_ROOM_TYPE] = value
+            } else {
+                // This is the default value, we remove the field
+                creationContent.remove(CREATION_CONTENT_KEY_ROOM_TYPE)
+            }
+        }
+
     /**
      * The power level content to override in the default power level event
      */
@@ -138,5 +150,6 @@ class CreateRoomParams {
 
     companion object {
         private const val CREATION_CONTENT_KEY_M_FEDERATE = "m.federate"
+        private const val CREATION_CONTENT_KEY_ROOM_TYPE = "type"
     }
 }

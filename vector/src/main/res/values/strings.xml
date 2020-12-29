@@ -2183,6 +2183,8 @@
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
     <string name="labs_show_unread_notifications_as_tab">Add a dedicated tab for unread notifications on main screen.</string>
 
+    <string name="labs_experimental_spaces">Enable Spaces (formerly known as ‘groups as rooms’) to allow users to organise rooms into more useful groups.</string>
+
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 
     <string name="add_by_matrix_id">Add by matrix ID</string>
@@ -3241,6 +3243,8 @@
     <string name="dev_tools_success_event">Event sent!</string>
     <string name="dev_tools_success_state_event">State event sent!</string>
     <string name="dev_tools_event_content_hint">Event content</string>
+
+    <string name="command_description_create_space">Create a community</string>
 
     <string name="event_status_a11y_sending">Sending</string>
     <string name="event_status_a11y_sent">Sent</string>

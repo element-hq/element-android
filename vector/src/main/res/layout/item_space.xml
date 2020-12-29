@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<im.vector.app.core.platform.CheckableConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemGroupLayout"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="@drawable/bg_space_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/groupAvatarImageView"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:duplicateParentState="true"
+        app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/groupNameView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?riotx_text_primary"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
+        app:layout_constraintEnd_toStartOf="@+id/groupAvatarChevron"
+        app:layout_constraintStart_toEndOf="@+id/groupAvatarImageView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/lorem/random" />
+
+    <ImageView
+        android:id="@+id/groupAvatarChevron"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="21dp"
+        android:src="@drawable/ic_arrow_right"
+        app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingPrefix" />
+
+    <View
+        android:id="@+id/groupBottomSeparator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?riotx_header_panel_border_mobile"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</im.vector.app.core.platform.CheckableConstraintLayout>
