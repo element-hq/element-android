@@ -77,7 +77,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
             setState {
                 copy(
-                        isEncrypted = roomType is CreateRoomViewState.RoomType.Private && adminE2EByDefault,
+                        isEncrypted = roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Private && adminE2EByDefault,
                         hsAdminHasDisabledE2E = !adminE2EByDefault
                 )
             }
@@ -148,14 +148,14 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
     private fun setIsPublic(action: CreateRoomAction.SetIsPublic) = setState {
         if (action.isPublic) {
             copy(
-                    roomType = CreateRoomViewState.RoomType.Public(""),
+                    roomVisibilityType = CreateRoomViewState.RoomVisibilityType.Public(""),
                     // Reset any error in the form about alias
                     asyncCreateRoomRequest = Uninitialized,
                     isEncrypted = false
             )
         } else {
             copy(
-                    roomType = CreateRoomViewState.RoomType.Private,
+                    roomVisibilityType = CreateRoomViewState.RoomVisibilityType.Private,
                     isEncrypted = adminE2EByDefault
             )
         }
@@ -163,10 +163,10 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
 
     private fun setRoomAliasLocalPart(action: CreateRoomAction.SetRoomAliasLocalPart) {
         withState { state ->
-            if (state.roomType is CreateRoomViewState.RoomType.Public) {
+            if (state.roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Public) {
                 setState {
                     copy(
-                            roomType = CreateRoomViewState.RoomType.Public(action.aliasLocalPart),
+                            roomVisibilityType = CreateRoomViewState.RoomVisibilityType.Public(action.aliasLocalPart),
                             // Reset any error in the form about alias
                             asyncCreateRoomRequest = Uninitialized
                     )
@@ -192,15 +192,15 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted initialState: Cr
                     name = state.roomName.takeIf { it.isNotBlank() }
                     topic = state.roomTopic.takeIf { it.isNotBlank() }
                     avatarUri = state.avatarUri
-                    when (state.roomType) {
-                        is CreateRoomViewState.RoomType.Public  -> {
+                    when (state.roomVisibilityType) {
+                        is CreateRoomViewState.RoomVisibilityType.Public  -> {
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PUBLIC
                             // Preset
                             preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                            roomAliasName = state.roomType.aliasLocalPart
+                            roomAliasName = state.roomVisibilityType.aliasLocalPart
                         }
-                        is CreateRoomViewState.RoomType.Private -> {
+                        is CreateRoomViewState.RoomVisibilityType.Private -> {
                             // Directory visibility
                             visibility = RoomDirectoryVisibility.PRIVATE
                             // Preset

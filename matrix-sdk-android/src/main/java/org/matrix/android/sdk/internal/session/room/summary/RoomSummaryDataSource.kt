@@ -105,6 +105,9 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         query.process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
         query.process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
         query.notEqualTo(RoomSummaryEntityFields.VERSIONING_STATE_STR, VersioningState.UPGRADED_ROOM_JOINED.name)
+        queryParams.excludeType.forEach {
+            query.notEqualTo(RoomSummaryEntityFields.ROOM_TYPE, it)
+        }
         return query
     }
 }

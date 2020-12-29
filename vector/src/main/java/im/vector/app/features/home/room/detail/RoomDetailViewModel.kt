@@ -97,6 +97,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
+import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.appendParamToUrl
@@ -813,6 +814,22 @@ class RoomDetailViewModel @AssistedInject constructor(
                                                 .ShowMessage(stringProvider.getString(R.string.command_description_discard_session_not_handled))
                                 )
                             }
+                        }
+                        is ParsedCommand.CreateSpace              -> {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                try {
+                                    val params = CreateSpaceParams().apply {
+                                        name = slashCommandResult.name
+                                        invitedUserIds.addAll(slashCommandResult.invitees)
+                                    }
+                                    val spaceId = session.spaceService().createSpace(params)
+                                    session.spaceService().getSpace(spaceId)?.addRoom(state.roomId)
+                                } catch (failure: Throwable) {
+                                    _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+                                }
+                            }
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
                         }
                     }.exhaustive
                 }
