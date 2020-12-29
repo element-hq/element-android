@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:parentTag="android.widget.FrameLayout">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ringingControls"
@@ -23,8 +24,8 @@
             android:focusable="true"
             android:padding="16dp"
             android:src="@drawable/ic_call"
-            tools:ignore="MissingConstraints,MissingPrefix"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
             android:id="@+id/ringingControlDecline"
@@ -36,8 +37,8 @@
             android:focusable="true"
             android:padding="16dp"
             android:src="@drawable/ic_call_end"
-            tools:ignore="MissingConstraints,MissingPrefix"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            tools:ignore="MissingConstraints,MissingPrefix" />
 
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
@@ -69,8 +70,8 @@
             android:padding="10dp"
             android:src="@drawable/ic_home_bottom_chat"
             app:backgroundTint="?attr/riotx_background"
-            tools:ignore="MissingConstraints,MissingPrefix"
-            app:tint="?attr/riotx_text_primary" />
+            app:tint="?attr/riotx_text_primary"
+            tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
             android:id="@+id/muteIcon"
@@ -82,10 +83,10 @@
             android:padding="16dp"
             android:src="@drawable/ic_microphone_off"
             app:backgroundTint="?attr/riotx_background"
+            app:tint="?attr/riotx_text_primary"
             tools:contentDescription="@string/a11y_mute_microphone"
             tools:ignore="MissingConstraints,MissingPrefix"
-            tools:src="@drawable/ic_microphone_on"
-            app:tint="?attr/riotx_text_primary" />
+            tools:src="@drawable/ic_microphone_on" />
 
         <ImageView
             android:id="@+id/iv_end_call"
@@ -97,8 +98,8 @@
             android:focusable="true"
             android:padding="16dp"
             android:src="@drawable/ic_call_end"
-            tools:ignore="MissingConstraints,MissingPrefix"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
             android:id="@+id/videoToggleIcon"
@@ -110,9 +111,9 @@
             android:padding="16dp"
             android:src="@drawable/ic_call_videocam_off_default"
             app:backgroundTint="?attr/riotx_background"
+            app:tint="?attr/riotx_text_primary"
             tools:contentDescription="@string/a11y_stop_camera"
-            tools:ignore="MissingConstraints,MissingPrefix"
-            app:tint="?attr/riotx_text_primary" />
+            tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
             android:id="@+id/iv_more"
@@ -125,8 +126,8 @@
             android:padding="8dp"
             android:src="@drawable/ic_more_vertical"
             app:backgroundTint="?attr/riotx_background"
-            tools:ignore="MissingConstraints,MissingPrefix"
-            app:tint="?attr/riotx_text_primary" />
+            app:tint="?attr/riotx_text_primary"
+            tools:ignore="MissingConstraints,MissingPrefix" />
 
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
@@ -202,4 +203,4 @@
     <!--        app:layout_constraintEnd_toEndOf="parent"-->
     <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-</FrameLayout>
+</merge>

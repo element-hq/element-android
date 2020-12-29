@@ -23,7 +23,7 @@ import android.widget.LinearLayout
 import androidx.core.content.withStyledAttributes
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.databinding.ItemTimelineEventPollResultItemBinding
+import im.vector.app.databinding.ViewPollResultLineBinding
 
 class PollResultLineView @JvmOverloads constructor(
         context: Context,
@@ -31,7 +31,7 @@ class PollResultLineView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val views: ItemTimelineEventPollResultItemBinding
+    private val views: ViewPollResultLineBinding
 
     var label: String? = null
         set(value) {
@@ -60,8 +60,8 @@ class PollResultLineView @JvmOverloads constructor(
         }
 
     init {
-        inflate(context, R.layout.item_timeline_event_poll_result_item, this)
-        views = ItemTimelineEventPollResultItemBinding.bind(this)
+        inflate(context, R.layout.view_poll_result_line, this)
+        views = ViewPollResultLineBinding.bind(this)
         orientation = HORIZONTAL
 
         context.withStyledAttributes(attrs, R.styleable.PollResultLineView) {
