@@ -52,7 +52,8 @@ internal open class RoomSummaryEntity(
         var encryptionEventTs: Long? = 0,
         var roomEncryptionTrustLevelStr: String? = null,
         var inviterId: String? = null,
-        var hasFailedSending: Boolean = false
+        var hasFailedSending: Boolean = false,
+        var roomType: String? = null
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name

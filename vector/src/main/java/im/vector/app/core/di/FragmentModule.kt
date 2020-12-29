@@ -52,6 +52,7 @@ import im.vector.app.features.devtools.RoomDevToolStateEventListFragment
 import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
 import im.vector.app.features.grouplist.GroupListFragment
+import im.vector.app.features.grouplist.SpaceListFragment
 import im.vector.app.features.home.HomeDetailFragment
 import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
@@ -144,6 +145,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(GroupListFragment::class)
     fun bindGroupListFragment(fragment: GroupListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceListFragment::class)
+    fun bindSpaceListFragment(fragment: SpaceListFragment): Fragment
 
     @Binds
     @IntoMap

@@ -89,19 +89,19 @@ class CreateRoomController @Inject constructor(
             enabled(enableFormElement)
             title(stringProvider.getString(R.string.create_room_public_title))
             summary(stringProvider.getString(R.string.create_room_public_description))
-            switchChecked(viewState.roomType is CreateRoomViewState.RoomType.Public)
-            showDivider(viewState.roomType !is CreateRoomViewState.RoomType.Public)
+            switchChecked(viewState.roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Public)
+            showDivider(viewState.roomVisibilityType !is CreateRoomViewState.RoomVisibilityType.Public)
 
             listener { value ->
                 listener?.setIsPublic(value)
             }
         }
-        if (viewState.roomType is CreateRoomViewState.RoomType.Public) {
+        if (viewState.roomVisibilityType is CreateRoomViewState.RoomVisibilityType.Public) {
             // Room alias for public room
             roomAliasEditItem {
                 id("alias")
                 enabled(enableFormElement)
-                value(viewState.roomType.aliasLocalPart)
+                value(viewState.roomVisibilityType.aliasLocalPart)
                 homeServer(":" + viewState.homeServerName)
                 errorMessage(
                         roomAliasErrorFormatter.format(
