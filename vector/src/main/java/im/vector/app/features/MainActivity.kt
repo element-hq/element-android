@@ -79,8 +79,6 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
 
             intent.putExtra(EXTRA_ARGS, args)
             activity.startActivity(intent)
-            // Ensure all the Activities are destroyed, it seems that the intent flags are not enough now.
-            activity.finishAffinity()
         }
     }
 
