@@ -5,7 +5,7 @@ Features ✨:
  - Enable url previews for notices (#2562)
 
 Improvements 🙌:
- -
+  - Add System theme option and set as default (#904) (#2387)
 
 Bugfix 🐛:
  - Url previews sometimes attached to wrong message (#2561)

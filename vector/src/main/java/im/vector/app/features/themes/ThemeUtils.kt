@@ -18,6 +18,8 @@ package im.vector.app.features.themes
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.Menu
@@ -39,6 +41,7 @@ object ThemeUtils {
     const val APPLICATION_THEME_KEY = "APPLICATION_THEME_KEY"
 
     // the theme possible values
+    private const val SYSTEM_THEME_VALUE = "system"
     private const val THEME_DARK_VALUE = "dark"
     private const val THEME_LIGHT_VALUE = "light"
     private const val THEME_BLACK_VALUE = "black"
@@ -54,13 +57,11 @@ object ThemeUtils {
     }
 
     /**
-     * @return true if current theme is Light or Status
+     * @return true if current theme is Light/Status or current theme is System and system theme is light
      */
     fun isLightTheme(context: Context): Boolean {
-        return when (getApplicationTheme(context)) {
-            THEME_LIGHT_VALUE -> true
-            else              -> false
-        }
+        val theme = getApplicationTheme(context)
+        return theme == THEME_LIGHT_VALUE || (theme == SYSTEM_THEME_VALUE && !isSystemDarkTheme(context.resources))
     }
 
     /**
@@ -73,17 +74,24 @@ object ThemeUtils {
         val currentTheme = this.currentTheme.get()
         return if (currentTheme == null) {
             val prefs = DefaultSharedPreferences.getInstance(context)
-            var themeFromPref = prefs.getString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE) ?: THEME_LIGHT_VALUE
+            var themeFromPref = prefs.getString(APPLICATION_THEME_KEY, SYSTEM_THEME_VALUE) ?: SYSTEM_THEME_VALUE
             if (themeFromPref == "status") {
                 // Migrate to light theme, which is the closest theme
-                themeFromPref = THEME_LIGHT_VALUE
-                prefs.edit { putString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE) }
+                themeFromPref = SYSTEM_THEME_VALUE
+                prefs.edit { putString(APPLICATION_THEME_KEY, SYSTEM_THEME_VALUE) }
             }
             this.currentTheme.set(themeFromPref)
             themeFromPref
         } else {
             currentTheme
         }
+    }
+
+    /**
+     * @return true if system theme is dark
+     */
+    private fun isSystemDarkTheme(resources: Resources): Boolean {
+        return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
     }
 
     /**
@@ -94,6 +102,7 @@ object ThemeUtils {
     fun setApplicationTheme(context: Context, aTheme: String) {
         currentTheme.set(aTheme)
         when (aTheme) {
+            SYSTEM_THEME_VALUE -> context.setTheme(if(isSystemDarkTheme(context.resources)) R.style.AppTheme_Dark else R.style.AppTheme_Light)
             THEME_DARK_VALUE   -> context.setTheme(R.style.AppTheme_Dark)
             THEME_BLACK_VALUE  -> context.setTheme(R.style.AppTheme_Black)
             else               -> context.setTheme(R.style.AppTheme_Light)
@@ -110,6 +119,7 @@ object ThemeUtils {
      */
     fun setActivityTheme(activity: Activity, otherThemes: ActivityOtherThemes) {
         when (getApplicationTheme(activity)) {
+            SYSTEM_THEME_VALUE -> if(isSystemDarkTheme(activity.resources)) activity.setTheme(otherThemes.dark)
             THEME_DARK_VALUE   -> activity.setTheme(otherThemes.dark)
             THEME_BLACK_VALUE  -> activity.setTheme(otherThemes.black)
         }
