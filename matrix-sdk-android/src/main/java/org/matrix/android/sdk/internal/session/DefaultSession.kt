@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.search.SearchService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
+import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
@@ -121,7 +122,8 @@ internal class DefaultSession @Inject constructor(
         private val callSignalingService: Lazy<CallSignalingService>,
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
-        private val eventSenderProcessor: EventSenderProcessor
+        private val eventSenderProcessor: EventSenderProcessor,
+        private val spaceService: Lazy<SpaceService>
 ) : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
@@ -265,6 +267,8 @@ internal class DefaultSession @Inject constructor(
     override fun federationService(): FederationService = federationService.get()
 
     override fun thirdPartyService(): ThirdPartyService = thirdPartyService.get()
+
+    override fun spaceService(): SpaceService = spaceService.get()
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()

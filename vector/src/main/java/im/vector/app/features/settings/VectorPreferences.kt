@@ -153,6 +153,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
 
+        const val SETTINGS_LABS_USE_SPACES = "SETTINGS_LABS_USE_SPACES"
+
         // SETTINGS_LABS_HIDE_TECHNICAL_E2E_ERRORS
         private const val SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM = "SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM"
         const val SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB = "SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB"
@@ -301,6 +303,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labAddNotificationTab(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB, false)
+    }
+
+    fun labSpaces(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_USE_SPACES, false)
     }
 
     fun failFast(): Boolean {

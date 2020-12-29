@@ -22,24 +22,49 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:layout_gravity="center_vertical"
                 android:id="@+id/groupToolbarAvatarImageView"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:contentDescription="@string/a11y_open_drawer"
                 tools:src="@tools:sample/avatars" />
 
-            <TextView
-                android:id="@+id/groupToolbarTitleView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="?riotx_text_primary"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="@tools:sample/lorem/random" />
+                android:layout_weight="1"
+                android:gravity="start"
+                android:orientation="vertical"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <TextView
+                    android:id="@+id/groupToolbarTitleView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:textColor="?riotx_text_primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="@tools:sample/lorem/random" />
+
+                <TextView
+                    android:id="@+id/groupToolbarSpaceTitleView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:visibility="visible"
+                    android:visibility="gone"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:textColor="?riotx_text_primary"
+                    android:textSize="14sp"
+                    tools:text="@tools:sample/lorem/random" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -60,10 +85,10 @@
         android:background="?riotx_keys_backup_banner_accent_color"
         android:minHeight="67dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/syncStateView" />
+        app:layout_constraintTop_toBottomOf="@id/syncStateView"
+        tools:visibility="visible" />
 
     <im.vector.app.core.ui.views.CurrentCallsView
         android:id="@+id/activeCallView"
