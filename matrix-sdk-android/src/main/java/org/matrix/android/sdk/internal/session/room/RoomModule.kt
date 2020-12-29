@@ -24,6 +24,7 @@ import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
+import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.internal.session.DefaultFileService
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
@@ -89,6 +90,7 @@ import org.matrix.android.sdk.internal.session.room.typing.DefaultSendTypingTask
 import org.matrix.android.sdk.internal.session.room.typing.SendTypingTask
 import org.matrix.android.sdk.internal.session.room.uploads.DefaultGetUploadsTask
 import org.matrix.android.sdk.internal.session.room.uploads.GetUploadsTask
+import org.matrix.android.sdk.internal.session.space.DefaultSpaceService
 import retrofit2.Retrofit
 
 @Module
@@ -134,6 +136,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindRoomService(service: DefaultRoomService): RoomService
+
+    @Binds
+    abstract fun bindSpaceService(service: DefaultSpaceService): SpaceService
 
     @Binds
     abstract fun bindRoomDirectoryService(service: DefaultRoomDirectoryService): RoomDirectoryService

@@ -39,6 +39,8 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.space.SpaceSummary
+import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -63,6 +65,13 @@ class RxSession(private val session: Session) {
         return session.getGroupSummariesLive(queryParams).asObservable()
                 .startWithCallable {
                     session.getGroupSummaries(queryParams)
+                }
+    }
+
+    fun liveSpaceSummaries(queryParams: SpaceSummaryQueryParams): Observable<List<SpaceSummary>> {
+        return session.spaceService().getSpaceSummariesLive(queryParams).asObservable()
+                .startWithCallable {
+                    session.spaceService().getSpaceSummaries(queryParams)
                 }
     }
 

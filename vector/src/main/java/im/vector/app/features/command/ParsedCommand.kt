@@ -57,4 +57,5 @@ sealed class ParsedCommand {
     class SendPoll(val question: String, val options: List<String>) : ParsedCommand()
     object DiscardSession : ParsedCommand()
     class SendChatEffect(val chatEffect: ChatEffect, val message: String) : ParsedCommand()
+    class CreateSpace(val name: String, val invitees: List<String>) : ParsedCommand()
 }

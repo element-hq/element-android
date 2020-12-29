@@ -31,6 +31,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentHomeDrawerBinding
 import im.vector.app.features.grouplist.GroupListFragment
+import im.vector.app.features.grouplist.SpaceListFragment
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.usercode.UserCodeActivity
@@ -58,7 +59,11 @@ class HomeDrawerFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
 
         if (savedInstanceState == null) {
-            replaceChildFragment(R.id.homeDrawerGroupListContainer, GroupListFragment::class.java)
+            if (vectorPreferences.labSpaces()) {
+                replaceChildFragment(R.id.homeDrawerGroupListContainer, SpaceListFragment::class.java)
+            } else {
+                replaceChildFragment(R.id.homeDrawerGroupListContainer, GroupListFragment::class.java)
+            }
         }
         session.getUserLive(session.myUserId).observeK(viewLifecycleOwner) { optionalUser ->
             val user = optionalUser?.getOrNull()

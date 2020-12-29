@@ -30,6 +30,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import io.reactivex.Observable
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.group.groupSummaryQueryParams
@@ -96,8 +97,10 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
     private fun handleSelectGroup(action: GroupListAction.SelectGroup) = withState { state ->
         if (state.selectedGroup?.groupId != action.groupSummary.groupId) {
             // We take care of refreshing group data when selecting to be sure we get all the rooms and users
-            viewModelScope.launch {
-                session.getGroup(action.groupSummary.groupId)?.fetchGroupData()
+            tryOrNull {
+                viewModelScope.launch {
+                    session.getGroup(action.groupSummary.groupId)?.fetchGroupData()
+                }
             }
             setState { copy(selectedGroup = action.groupSummary) }
         }
