@@ -28,6 +28,7 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.SelectedGroupDataSource
+import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -76,6 +77,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     init {
         observeSyncState()
         observeSelectedGroupStore()
+        observeSelectedSpaceStore()
         observeRoomSummaries()
     }
 
@@ -135,6 +137,17 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                 .subscribe {
                     setState {
                         copy(groupSummary = it)
+                    }
+                }
+                .disposeOnClear()
+    }
+
+    private fun observeSelectedSpaceStore() {
+        selectedSpaceStore
+                .observe()
+                .subscribe {
+                    setState {
+                        copy(spaceSummary = it)
                     }
                 }
                 .disposeOnClear()

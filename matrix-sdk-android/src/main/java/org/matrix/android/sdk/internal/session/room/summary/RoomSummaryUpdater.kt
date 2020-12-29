@@ -25,6 +25,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomAliasesContent
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomNameContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
+import org.matrix.android.sdk.api.session.room.model.RoomType
+import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
@@ -36,6 +38,7 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.SpaceSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendStates
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -46,6 +49,7 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomAvatarResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
+import org.matrix.android.sdk.internal.session.room.relationship.RoomRelationshipHelper
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncUnreadNotifications
 import timber.log.Timber
@@ -89,6 +93,10 @@ internal class RoomSummaryUpdater @Inject constructor(
         val lastTopicEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_TOPIC, stateKey = "")?.root
         val lastCanonicalAliasEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CANONICAL_ALIAS, stateKey = "")?.root
         val lastAliasesEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ALIASES, stateKey = "")?.root
+        val roomCreateEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_CREATE, stateKey = "")?.root
+
+        val roomType = ContentMapper.map(roomCreateEvent?.content).toModel<RoomCreateContent>()?.type
+        roomSummaryEntity.roomType = roomType
 
         // Don't use current state for this one as we are only interested in having MXCRYPTO_ALGORITHM_MEGOLM event in the room
         val encryptionEvent = EventEntity.whereType(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
@@ -151,6 +159,16 @@ internal class RoomSummaryUpdater @Inject constructor(
                 // mmm maybe we could only refresh shield instead of checking trust also?
                 crossSigningService.onUsersDeviceUpdate(otherRoomMembers)
             }
+        }
+
+        if (roomType == RoomType.SPACE) {
+            val spaceSummaryEntity = SpaceSummaryEntity.getOrCreate(realm, roomId)
+            spaceSummaryEntity.roomSummaryEntity = roomSummaryEntity
+            spaceSummaryEntity.children.clear()
+            spaceSummaryEntity.children.addAll(
+                    RoomRelationshipHelper(realm, roomId).getDirectChildrenDescriptions()
+                            .map { RoomSummaryEntity.getOrCreate(realm, roomId) }
+            )
         }
     }
 
