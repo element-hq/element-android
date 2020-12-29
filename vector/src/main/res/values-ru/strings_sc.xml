@@ -8,7 +8,6 @@
     <string name="settings_single_overview">Комбинированный обзор чатов</string>
     <string name="settings_single_overview_summary">Просмотр личных сообщений и комнат на одной странице</string>
 
-    <string name="settings_room_unread_kind">Предварительный просмотр содержимого чата</string>
     <string name="settings_room_unread_kind_default">Показать все события</string>
     <string name="settings_room_unread_kind_content">Скрыть изменения участников</string>
     <string name="settings_room_unread_kind_original_content">Скрыть изменения и реакции участников</string>
