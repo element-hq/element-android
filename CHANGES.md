@@ -10,6 +10,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Wait for all room members to be known before sending a message to a e2e room (#2518)
  - Url previews sometimes attached to wrong message (#2561)
+ - Fix member state filter (#2581)
 
 Translations 🗣:
  -
