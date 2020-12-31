@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -39,10 +40,12 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
@@ -52,6 +55,7 @@ import im.vector.app.features.home.room.detail.RoomDetailPendingAction
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -67,7 +71,8 @@ class RoomMemberProfileFragment @Inject constructor(
         val viewModelFactory: RoomMemberProfileViewModel.Factory,
         private val roomMemberProfileController: RoomMemberProfileController,
         private val avatarRenderer: AvatarRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore
+        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
+        private val vectorPreferences: VectorPreferences
 ) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomMemberProfileController.Callback {
 
@@ -199,6 +204,10 @@ class RoomMemberProfileFragment @Inject constructor(
                 headerViews.memberProfileIdView.text = userMatrixItem.id
                 val bestName = userMatrixItem.getBestName()
                 headerViews.memberProfileNameView.text = bestName
+                val overrideColor = vectorPreferences.overrideColor(userMatrixItem.id, 0)
+                if (overrideColor != 0) {
+                    headerViews.memberProfileNameView.setTextColor(overrideColor)
+                }
                 views.matrixProfileToolbarTitleView.text = bestName
                 avatarRenderer.render(userMatrixItem, headerViews.memberProfileAvatarView)
                 avatarRenderer.render(userMatrixItem, views.matrixProfileToolbarAvatarImageView)
@@ -236,6 +245,9 @@ class RoomMemberProfileFragment @Inject constructor(
 
                 headerViews.memberProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
+                }
+                headerViews.memberProfileNameView.setOnClickListener { _ ->
+                    onProfileNameClicked(userMatrixItem)
                 }
                 views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
@@ -321,6 +333,54 @@ class RoomMemberProfileFragment @Inject constructor(
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
         navigator.openBigImageViewer(requireActivity(), view, userMatrixItem)
+    }
+
+    private fun onProfileNameClicked(userMatrixItem: MatrixItem) {
+        val inflater = requireActivity().layoutInflater
+        val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
+        val views = DialogBaseEditTextBinding.bind(layout)
+        val overrideColor = vectorPreferences.overrideColor(userMatrixItem.id, 0) and 0xffFFff
+        val overrideColorText = colorToText(overrideColor)
+        views.editText.setText(overrideColorText)
+        views.editText.hint = "#000000"
+
+        AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.room_member_override_color)
+                .setView(layout)
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    val newOverrideColorText = views.editText.text.toString()
+                    val newOverrideColor = textToColor(newOverrideColorText)
+                    val origOverrideColor = vectorPreferences.overrideColor(userMatrixItem.id, 0)
+                    if (newOverrideColor != origOverrideColor) {
+                        vectorPreferences.setOverrideColor(userMatrixItem.id, newOverrideColor)
+                        activity?.restart()
+                    }
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
+    private fun colorToText(@ColorInt color: Int): String {
+        if (color == 0) {
+            return ""
+        }
+        val unsignedColor = color.toLong() and 0xffFFffL
+        return String.format("#%06x", unsignedColor)
+    }
+
+    @ColorInt
+    private fun textToColor(colorText: String): Int {
+        if (colorText.isBlank()) {
+            return 0
+        }
+        if (colorText.first() == '#') {
+            try {
+                return (colorText.substring(1).toLong(radix = 16) or 0xff000000L).toInt()
+            } catch (e: Throwable) {
+                // ignored
+            }
+        }
+        return 0
     }
 
     override fun onEditPowerLevel(currentRole: Role) {

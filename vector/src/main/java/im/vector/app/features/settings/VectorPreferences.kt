@@ -19,6 +19,7 @@ import android.content.Context
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.annotation.ColorInt
 import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.BuildConfig
@@ -179,6 +180,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY = "DID_ASK_TO_USE_ANALYTICS_TRACKING_KEY"
         private const val SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY"
 
+        private const val SETTINGS_OVERRIDE_COLOR = "SETTINGS_OVERRIDE_COLOR"
+
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
 
         private const val MEDIA_SAVING_3_DAYS = 0
@@ -237,6 +240,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
+    private val colorOverridePrefs = context.getSharedPreferences(SETTINGS_OVERRIDE_COLOR, Context.MODE_PRIVATE)
 
     /**
      * Clear the preferences.
@@ -929,5 +933,24 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         } catch (e: Throwable) {
             BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
         }
+    }
+
+    fun setOverrideColor(id: String, @ColorInt color: Int) {
+        if (color != 0) {
+            colorOverridePrefs
+                    .edit()
+                    .putInt(id, color)
+                    .apply()
+        } else {
+            colorOverridePrefs
+                    .edit()
+                    .remove(id)
+                    .apply()
+        }
+    }
+
+    @ColorInt
+    fun overrideColor(id: String, @ColorInt defColor: Int): Int {
+        return colorOverridePrefs.getInt(id, defColor)
     }
 }

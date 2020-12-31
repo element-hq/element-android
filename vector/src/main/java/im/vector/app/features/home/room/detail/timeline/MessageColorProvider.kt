@@ -32,7 +32,7 @@ class MessageColorProvider @Inject constructor(
 
     @ColorInt
     fun getMemberNameTextColor(matrixItem: MatrixItem): Int {
-        return matrixItemColorProvider.getColor(matrixItem)
+        return vectorPreferences.overrideColor(matrixItem.id, matrixItemColorProvider.getColor(matrixItem))
     }
 
     @ColorInt
