@@ -45,7 +45,7 @@
     <string name="dialog_title_success">Thành công</string>
     <string name="dialog_title_error">Lỗi</string>
     <string name="dialog_title_warning">Cảnh báo</string>
-    <string name="copied_to_clipboard">Sao chép</string>
+    <string name="copied_to_clipboard">Sao chép vào bộ nhớ tạm</string>
     <string name="action_add">Thêm</string>
     <string name="resources_country_code">VN</string>
     <string name="resources_language">vi</string>
@@ -95,7 +95,7 @@
     <string name="ongoing_conference_call_video">Video</string>
     <string name="ongoing_conference_call_voice">Giọng nói</string>
     <string name="ongoing_conference_call">Có cuộc gọi đến.
-\nTham gia bằng %1$s hoặc %2$s</string>
+\nTham gia với tư cách %1$s hoặc %2$s</string>
     <string name="start_chatting">Bắt đầu trò chuyện</string>
     <string name="reset">Cài lại</string>
     <string name="dismiss">Bỏ</string>
@@ -151,7 +151,7 @@
     <string name="title_activity_home">Tin nhắn</string>
     <string name="notification_noisy_notifications">Thông báo có âm thanh</string>
     <string name="notification_silent_notifications">Thông báo yên lặng</string>
-    <string name="notification_listening_for_events">Nghe sự kiện</string>
+    <string name="notification_listening_for_events">Theo dõi sự kiện</string>
     <string name="notification_sync_in_progress">Đang đồng bộ hóa…</string>
     <string name="notification_sync_init">Đang khởi tạo dịch vụ</string>
     <string name="black_them">Nền đen</string>
@@ -212,9 +212,9 @@
     <string name="call_failed_no_connection">Cuộc gọi Element thất bại</string>
     <string name="call_failed_dont_ask_again">Đừng hỏi lại tôi</string>
     <string name="call_failed_no_ice_use_alt">Hãy thử dùng %s</string>
-    <string name="call_failed_no_ice_description">Vui lòng yêu cầu quản trị viên của máy chủ nhà của bạn (%1$s) thiếp làm một máy chủ TURN để các cuộc gọi có thể hoạt động [...].
+    <string name="call_failed_no_ice_description">Vui lòng yêu cầu quản trị viên của máy chủ nhà của bạn (%1$s) thiết lập một máy chủ TURN để các cuộc gọi có thể hoạt động [...].
 \n
-\nBạn cũng có thể thử dùng máy chủ công cộng ở %2$s, nhưng cách này sẽ không [...] bằng, và địa chỉ IP của bạn cũng sẽ được chia sẻ đến server đó. Bạn có thể quản lý việc này trong Cài đặt.</string>
+\nBạn cũng có thể thử dùng máy chủ công cộng ở %2$s, nhưng cách này sẽ không [...] bằng, và địa chỉ IP của bạn cũng sẽ được chia sẻ đến server đó. Bạn có thể quản lý việc này trong mục Cài đặt.</string>
     <string name="call_failed_no_ice_title">Cuộc gọi thất bại do thiết lập máy chủ sai</string>
     <string name="start_video_call_prompt_msg">Bạn có chắc bạn muốn bắt đầu một cuộc gọi video\?</string>
     <string name="start_voice_call_prompt_msg">Bạn có chắc bạn muốn bắt đầu một cuộc gọi bằng giọng nói\?</string>
@@ -233,4 +233,46 @@
     <string name="read_receipt">Đã đọc</string>
     <string name="send_bug_report_failed">Gửi báo cáo lỗi thất bại (%s)</string>
     <string name="send_bug_report_sent">Bản báo cáo lỗi đã được gửi thành công</string>
+    <string name="login_error_user_in_use">Tên người dùng này đã được người khác sử dụng</string>
+    <string name="login_error_bad_json">JSON không hợp lệ</string>
+    <string name="login_error_forbidden">Tên/mật khẩu sai</string>
+    <string name="login_error_ssl_handshake">Thiết bị của bạn đang dùng một giao thức TLS lỗi thời, dễ bị tấn công, vì lý do bảo mật, bạn sẽ không thể kết nối</string>
+    <string name="login_error_ssl_other">Lỗi SSL.</string>
+    <string name="login_error_ssl_peer_unverified">Lỗi SSL: danh tính của đối tác chưa được kiểm chứng.</string>
+    <string name="login_error_no_homeserver_found">Đây không phải là một địa chỉ máy chủ Matrix hợp lệ</string>
+    <string name="login_error_unknown_host">Không kết nối được với địa chỉ này, vui lòng kiểm tra lại</string>
+    <string name="login_error_unable_register">Không thể tạo tài khoản mới</string>
+    <string name="login_error_registration_network_error">Không thể tạo tài khoản mới: Lỗi mạng</string>
+    <string name="login_error_unable_login">Không thể đăng nhập</string>
+    <string name="login_error_network_error">Không thể đăng nhập: Lỗi mạng</string>
+    <string name="login_error_must_start_http">URL phải bắt đầu với http[s]://</string>
+    <string name="auth_reset_password_next_step_button">Tôi đã xác nhận địa chỉ email này</string>
+    <string name="auth_identity_server">Máy chủ định danh:</string>
+    <string name="auth_home_server">Máy chủ chính:</string>
+    <string name="call_failed_no_connection_description">Thiết lập kết nối thời gian thực thất bại.
+\nXin vui lòng yêu cầu quản trị viên máy chủ nhà của bạn thiết lập máy chủ TURN để có thể gọi điện bình thường.</string>
+    <string name="bottom_action_home">Trang đầu</string>
+    <string name="call_connecting">Cuộc gọi đang được kết nối…</string>
+    <string name="call_connected">Cuộc gọi đã được kết nối</string>
+    <string name="call">Gọi</string>
+    <string name="settings_call_ringtone_dialog_title">Chọn nhạc chuông:</string>
+    <string name="settings_call_ringtone_title">Nhạc chuông cho cuộc gọi đến</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Dùng nhạc chuông mặc định cho cuộc gọi đến</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Yêu cầu xác nhận trước khi gọi</string>
+    <string name="settings_call_show_confirmation_dialog_title">Tránh gọi nhầm</string>
+    <string name="room_info_room_topic">Chủ đề của phòng</string>
+    <string name="room_info_room_name">Tên phòng</string>
+    <string name="today">Hôm nay</string>
+    <string name="conference_call_warning_title">Chú ý!</string>
+    <string name="ignore_request_short_label">Kệ</string>
+    <string name="ignore_request">Bỏ qua đề xuất này</string>
+    <string name="share_without_verifying_short_label">Chia sẻ</string>
+    <string name="share_without_verifying">Chia sẻ, không kiểm chứng</string>
+    <string name="start_verification_short_label">Kiểm chứng</string>
+    <string name="start_verification">Bắt đầu kiểm chứng</string>
+    <string name="people_no_identity_server">Máy chủ định danh chưa được cài đặt.</string>
+    <string name="send_bug_report_app_crashed">Chương trình đã gặp sự cố lần trước. Bạn có muốn mở trang tường thuật sự cố không\?</string>
+    <string name="send_bug_report_progress">Tiến độ (%s%%)</string>
+    <string name="send_bug_report_include_crash_logs">Gửi bản tường thuật sự cố</string>
+    <string name="send_bug_report_include_logs">Gửi bản tường thuật</string>
 </resources>
