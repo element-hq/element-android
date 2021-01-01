@@ -275,4 +275,5 @@
     <string name="send_bug_report_progress">Tiến độ (%s%%)</string>
     <string name="send_bug_report_include_crash_logs">Gửi bản tường thuật sự cố</string>
     <string name="send_bug_report_include_logs">Gửi bản tường thuật</string>
+    <string name="auth_submit">Gửi</string>
 </resources>
