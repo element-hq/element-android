@@ -2275,4 +2275,8 @@
     <string name="room_alias_published_alias_subtitle">نشانی‌های منتشرشده را می‌توان در هر کارساز برای پیوستن به اتاق شما استفاده کرد. برای انتشار نشانی، نخست باید به عنوان نشانی محلی تنظیم شود.</string>
     <string name="room_settings_alias_subtitle">نشانی‌های این اتاق و قابلیت مشاهده آن را در فهرست اتاق مشاهده و مدیریت کنید.</string>
     <string name="room_settings_room_read_history_dialog_subtitle">تغییرات برای افرادی که می توانند تاریخچه را بخوانند فقط برای پیام های بعدی این اتاق اعمال می شود. پدیداری تاریخچه موجود بدون تغییر خواهد بود.</string>
+    <string name="room_alias_publish_to_directory_error">ناتوان در گرفتن نمایانی شاخهٔ اتاق کنونی (%1$s).</string>
+    <string name="room_alias_publish_to_directory">انتشار این اتاق برای عموم در شاخهٔ اتاق %1$s؟</string>
+    <string name="room_alias_local_address_subtitle">تنظیم نشانی‌ها برای این اتاق تا کاربران بتوانند از طریق کارساز خانگیتان (%1$s) بیابندش</string>
+    <string name="room_alias_publish">انتشار این اتاق برای عموم در شاخهٔ اتاق %1$s؟</string>
 </resources>
