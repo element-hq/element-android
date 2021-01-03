@@ -23,12 +23,15 @@ import arrow.core.Option
 import im.vector.app.features.grouplist.ALL_COMMUNITIES_GROUP_ID
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.home.HomeRoomListDataSource
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.home.room.list.ChronologicalRoomComparator
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.addTo
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -46,13 +49,15 @@ class AppStateHandler @Inject constructor(
         private val sessionDataSource: ActiveSessionDataSource,
         private val homeRoomListDataSource: HomeRoomListDataSource,
         private val selectedGroupDataSource: SelectedGroupDataSource,
-        private val chronologicalRoomComparator: ChronologicalRoomComparator) : LifecycleObserver {
+        private val chronologicalRoomComparator: ChronologicalRoomComparator,
+        private val matrixItemColorProvider: MatrixItemColorProvider) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
         observeRoomsAndGroup()
+        observeUserAccountData()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -90,6 +95,21 @@ class AppStateHandler @Inject constructor(
                 )
                 .subscribe {
                     homeRoomListDataSource.post(it)
+                }
+                .addTo(compositeDisposable)
+    }
+
+    private fun observeUserAccountData() {
+        sessionDataSource.observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .switchMap {
+                    it.orNull()?.rx()?.liveAccountData(setOf(UserAccountDataTypes.TYPE_OVERRIDE_COLORS))
+                            ?: Observable.just(emptyList())
+                }
+                .distinctUntilChanged()
+                .subscribe {
+                    val overrideColorSpecs = it?.first()?.content?.toModel<Map<String, String>>()
+                    matrixItemColorProvider.setOverrideColors(overrideColorSpecs)
                 }
                 .addTo(compositeDisposable)
     }

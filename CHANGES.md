@@ -2,6 +2,7 @@ Changes in Element 1.0.14 (2020-XX-XX)
 ===================================================
 
 Features ✨:
+ - Allow changing nick colors (#2610)
  - Enable url previews for notices (#2562)
 
 Improvements 🙌:
