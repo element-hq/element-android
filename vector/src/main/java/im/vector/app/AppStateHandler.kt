@@ -108,7 +108,7 @@ class AppStateHandler @Inject constructor(
                 }
                 .distinctUntilChanged()
                 .subscribe {
-                    val overrideColorSpecs = it?.first()?.content?.toModel<Map<String, String>>()
+                    val overrideColorSpecs = it?.firstOrNull()?.content?.toModel<Map<String, String>>()
                     matrixItemColorProvider.setOverrideColors(overrideColorSpecs)
                 }
                 .addTo(compositeDisposable)
