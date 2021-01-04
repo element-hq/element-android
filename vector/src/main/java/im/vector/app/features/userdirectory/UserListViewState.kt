@@ -30,12 +30,12 @@ data class UserListViewState(
         val filteredMappedContacts: List<MappedContact> = emptyList(),
         val pendingSelections: Set<PendingSelection> = emptySet(),
         val searchTerm: String = "",
-        val myUserId: String = "",
         val singleSelection: Boolean,
         private val showInviteActions: Boolean
 ) : MvRxState {
 
     constructor(args: UserListFragmentArgs) : this(
+            excludedUserIds = args.excludedUserIds,
             singleSelection = args.singleSelection,
             showInviteActions = args.showInviteActions
     )

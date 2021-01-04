@@ -25,7 +25,7 @@ import javax.inject.Singleton
     You should probably use this only in the context of the timeline
  */
 @Singleton
-class RoomSummaryHolder @Inject constructor() {
+class RoomSummariesHolder @Inject constructor() {
 
     private var roomSummaries = HashMap<String, RoomSummary>()
 

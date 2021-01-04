@@ -52,19 +52,14 @@ class CurrentCallsView @JvmOverloads constructor(
         val heldCalls = connectedCalls.filter {
             it.isLocalOnHold || it.remoteOnHold
         }
-        if (connectedCalls.size == 1) {
-            if (heldCalls.size == 1) {
-                views.currentCallsInfo.setText(R.string.call_only_paused)
-            } else {
-                views.currentCallsInfo.text = resources.getString(R.string.call_only_active, formattedDuration)
-            }
+        if (connectedCalls.isEmpty()) return
+        views.currentCallsInfo.text = if (connectedCalls.size == heldCalls.size) {
+            resources.getQuantityString(R.plurals.call_only_paused, heldCalls.size, heldCalls.size)
         } else {
-            if (heldCalls.size > 1) {
-                views.currentCallsInfo.text = resources.getString(R.string.call_only_multiple_paused, heldCalls.size)
-            } else if (heldCalls.size == 1) {
-                views.currentCallsInfo.text = resources.getString(R.string.call_active_and_single_paused, formattedDuration)
+            if (heldCalls.isEmpty()) {
+                resources.getString(R.string.call_only_active, formattedDuration)
             } else {
-                views.currentCallsInfo.text = resources.getString(R.string.call_active_and_multiple_paused, formattedDuration, heldCalls.size)
+                resources.getQuantityString(R.plurals.call_one_active_and_other_paused, heldCalls.size, formattedDuration, heldCalls.size)
             }
         }
     }

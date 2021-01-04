@@ -718,18 +718,18 @@ class WebRtcCall(val mxCall: MxCall,
             val cameraManager = context.getSystemService<CameraManager>()!!
             cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
         }
+        val wasRinging = mxCall.state is CallState.LocalRinging
+        mxCall.state = CallState.Terminated
         GlobalScope.launch(dispatcher) {
             release()
         }
         onCallEnded(this)
         if (originatedByMe) {
-            if (mxCall.state is CallState.LocalRinging) {
+            if (wasRinging) {
                 mxCall.reject()
             } else {
                 mxCall.hangUp(reason)
             }
-        } else {
-            mxCall.state = CallState.Terminated
         }
     }
 

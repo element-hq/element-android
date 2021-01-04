@@ -38,7 +38,7 @@ import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineSettingsFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
@@ -111,7 +111,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val rawService: RawService,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
-        private val roomSummaryHolder: RoomSummaryHolder,
+        private val roomSummariesHolder: RoomSummariesHolder,
         private val typingHelper: TypingHelper,
         private val callManager: WebRtcCallManager,
         private val chatEffectManager: ChatEffectManager,
@@ -1376,7 +1376,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
-            roomSummaryHolder.set(summary)
+            roomSummariesHolder.set(summary)
             setState {
                 val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
                 copy(typingMessage = typingMessage)
@@ -1421,7 +1421,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        roomSummaryHolder.remove(room.roomId)
+        roomSummariesHolder.remove(room.roomId)
         timeline.dispose()
         timeline.removeAllListeners()
         if (vectorPreferences.sendTypingNotifs()) {

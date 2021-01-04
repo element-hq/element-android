@@ -22,6 +22,7 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -30,7 +31,7 @@ import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 
 class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: CallTransferViewState,
-                                                        private val callManager: WebRtcCallManager)
+                                                        callManager: WebRtcCallManager)
     : VectorViewModel<CallTransferViewState, CallTransferAction, CallTransferViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -47,7 +48,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
         }
     }
 
-    private var call: WebRtcCall? = null
+    private val call = callManager.getCallById(initialState.callId)
     private val callListener = object : WebRtcCall.Listener {
         override fun onStateUpdate(call: MxCall) {
             if (call.state == CallState.Terminated) {
@@ -57,12 +58,10 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     init {
-        val webRtcCall = callManager.getCallById(initialState.callId)
-        if (webRtcCall == null) {
+        if (call == null) {
             _viewEvents.post(CallTransferViewEvents.Dismiss)
         } else {
-            call = webRtcCall
-            webRtcCall.addListener(callListener)
+            call.addListener(callListener)
         }
     }
 
@@ -74,7 +73,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
     override fun handle(action: CallTransferAction) {
         when (action) {
             is CallTransferAction.Connect -> transferCall(action)
-        }
+        }.exhaustive
     }
 
     private fun transferCall(action: CallTransferAction.Connect) {

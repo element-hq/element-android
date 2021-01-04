@@ -20,7 +20,7 @@
         android:paddingEnd="16dp"
         android:paddingBottom="12dp"
         android:textSize="14sp"
-        android:text="@string/call_active_and_single_paused"
+        android:text="@string/call_only_active"
         android:textColor="@color/white"
         app:drawableTint="@color/white"
         app:drawableStartCompat="@drawable/ic_call_answer" />

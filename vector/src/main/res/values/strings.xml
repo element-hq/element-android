@@ -2777,10 +2777,15 @@
 
 
     <string name="call_only_active">Active call (%1$s)</string>
-    <string name="call_only_paused">Paused call</string>
-    <string name="call_active_and_single_paused">1 active call (%1$s) · 1 paused call</string>
-    <string name="call_active_and_multiple_paused">1 active call (%1$s) · %2$d paused calls</string>
-    <string name="call_only_multiple_paused">%1$d paused calls</string>
+    <plurals name="call_only_paused">
+        <item quantity="one">Paused call</item>
+        <item quantity="other">%1$d paused calls</item>
+    </plurals>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">1 active call (%1$s) · 1 paused call</item>
+        <item quantity="other">1 active call (%1$s) · %2$d paused calls</item>
+    </plurals>
+
 
     <string name="call_transfer_consult_first">Consult first</string>
     <string name="call_transfer_connect_action">Connect</string>

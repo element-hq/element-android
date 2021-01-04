@@ -20,7 +20,7 @@ import im.vector.app.core.epoxy.EmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
@@ -32,7 +32,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val defaultItemFactory: DefaultItemFactory,
                                               private val encryptionItemFactory: EncryptionItemFactory,
                                               private val roomCreateItemFactory: RoomCreateItemFactory,
-                                              private val roomSummaryHolder: RoomSummaryHolder,
+                                              private val roomSummariesHolder: RoomSummariesHolder,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
                                               private val callItemFactory: CallItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {

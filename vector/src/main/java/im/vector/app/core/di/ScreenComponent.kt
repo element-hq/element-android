@@ -147,7 +147,7 @@ interface ScreenComponent {
     fun inject(activity: VectorJitsiActivity)
     fun inject(activity: SearchActivity)
     fun inject(activity: UserCodeActivity)
-    fun inject(callTransferActivity: CallTransferActivity)
+    fun inject(activity: CallTransferActivity)
 
     /* ==========================================================================================
      * BottomSheets

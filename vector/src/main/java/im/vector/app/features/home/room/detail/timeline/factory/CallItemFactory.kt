@@ -22,7 +22,7 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
@@ -43,7 +43,7 @@ class CallItemFactory @Inject constructor(
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
-        private val roomSummaryHolder: RoomSummaryHolder,
+        private val roomSummariesHolder: RoomSummariesHolder,
         private val callManager: WebRtcCallManager
 ) {
 
@@ -135,7 +135,7 @@ class CallItemFactory @Inject constructor(
             isStillActive: Boolean,
             callback: TimelineEventController.Callback?
     ): CallTileTimelineItem? {
-        val userOfInterest = roomSummaryHolder.get(roomId)?.toMatrixItem() ?: return null
+        val userOfInterest = roomSummariesHolder.get(roomId)?.toMatrixItem() ?: return null
         val attributes = messageItemAttributesFactory.create(null, informationData, callback).let {
             CallTileTimelineItem.Attributes(
                     callId = callId,
