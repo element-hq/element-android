@@ -165,8 +165,8 @@ class HomeActivity :
     private fun handleIntent(intent: Intent?) {
         intent?.dataString?.let { deepLink ->
             val resolvedLink = when {
-                deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)               -> deepLink
-                deepLink.startsWith(PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> {
+                deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> deepLink
+                deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)    -> {
                     // This is a bit ugly, but for now just convert to matrix.to link for compatibility
                     when {
                         deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)
@@ -176,7 +176,7 @@ class HomeActivity :
                         activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(it)
                     }
                 }
-                else                                                                   -> null
+                else                                                     -> null
             }
 
             permalinkHandler.launch(
@@ -413,7 +413,8 @@ class HomeActivity :
                     }
         }
 
-        private const val ROOM_LINK_PREFIX = "${PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
-        private const val USER_LINK_PREFIX = "${PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
+        private const val MATRIX_TO_CUSTOM_SCHEME_URL_BASE = "element://"
+        private const val ROOM_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
+        private const val USER_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
     }
 }
