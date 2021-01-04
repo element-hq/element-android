@@ -153,8 +153,13 @@ class AttachmentsPreviewFragment @Inject constructor(
         )
     }
 
+    @Suppress("DEPRECATION")
     private fun applyInsets() {
-        view?.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            activity?.window?.setDecorFitsSystemWindows(false)
+        } else {
+            view?.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        }
         ViewCompat.setOnApplyWindowInsetsListener(views.attachmentPreviewerBottomContainer) { v, insets ->
             v.updatePadding(bottom = insets.systemWindowInsetBottom)
             insets

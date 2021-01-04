@@ -15,10 +15,10 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - Increase targetSdkVersion to 30 (#2600)
 
 Build 🧱:
- -
+ - Compile with Android SDK 30 (Android 11)
 
 Test:
  -
