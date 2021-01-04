@@ -40,13 +40,16 @@ import kotlin.math.abs
 
 abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventListener {
 
-    lateinit var pager2: ViewPager2
-    lateinit var imageTransitionView: ImageView
-    lateinit var transitionImageContainer: ViewGroup
+    protected val pager2: ViewPager2
+        get() = views.attachmentPager
+    protected val imageTransitionView: ImageView
+        get() = views.transitionImageView
+    protected val transitionImageContainer: ViewGroup
+        get() = views.transitionImageContainer
 
-    var topInset = 0
-    var bottomInset = 0
-    var systemUiVisibility = true
+    private var topInset = 0
+    private var bottomInset = 0
+    private var systemUiVisibility = true
 
     private var overlayView: View? = null
         set(value) {
@@ -65,14 +68,16 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     private lateinit var gestureDetector: GestureDetectorCompat
 
     var currentPosition = 0
+        private set
 
     private var swipeDirection: SwipeDirection? = null
 
     private fun isScaled() = attachmentsAdapter.isScaled(currentPosition)
 
+    private val attachmentsAdapter = AttachmentsAdapter()
+
     private var wasScaled: Boolean = false
     private var isSwipeToDismissAllowed: Boolean = true
-    private lateinit var attachmentsAdapter: AttachmentsAdapter
     private var isOverlayWasClicked = false
 
 //    private val shouldDismissToBottom: Boolean
@@ -101,10 +106,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         views = ActivityAttachmentViewerBinding.inflate(layoutInflater)
         setContentView(views.root)
         views.attachmentPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        attachmentsAdapter = AttachmentsAdapter()
         views.attachmentPager.adapter = attachmentsAdapter
-        imageTransitionView = views.transitionImageView
-        pager2 = views.attachmentPager
         directionDetector = createSwipeDirectionDetector()
         gestureDetector = createGestureDetector()
 
