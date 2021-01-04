@@ -39,7 +39,6 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
-import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -190,7 +189,11 @@ class HomeActivity :
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { isHandled ->
                         if (!isHandled) {
-                            toast(R.string.permalink_malformed)
+                            AlertDialog.Builder(this)
+                                    .setTitle(R.string.dialog_title_error)
+                                    .setMessage(R.string.permalink_malformed)
+                                    .setPositiveButton(R.string.ok, null)
+                                    .show()
                         }
                     }
                     .disposeOnDestroy()
