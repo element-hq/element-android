@@ -176,7 +176,7 @@ class HomeActivity :
                         activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(it)
                     }
                 }
-                else                                                     -> null
+                else                                                     -> return@let
             }
 
             permalinkHandler.launch(
