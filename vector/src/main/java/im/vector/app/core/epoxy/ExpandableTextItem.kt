@@ -26,6 +26,7 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.extensions.copyOnLongClick
 
 @EpoxyModelClass(layout = R.layout.item_expandable_textview)
 abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>() {
@@ -45,6 +46,7 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.content.text = content
+        holder.content.copyOnLongClick()
         holder.content.movementMethod = movementMethod
 
         holder.content.doOnPreDraw {
