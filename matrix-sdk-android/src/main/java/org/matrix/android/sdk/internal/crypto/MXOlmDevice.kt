@@ -19,6 +19,8 @@ package org.matrix.android.sdk.internal.crypto
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXOutboundSessionInfo
+import org.matrix.android.sdk.internal.crypto.algorithms.megolm.SharedWithHelper
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
@@ -46,7 +48,7 @@ internal class MXOlmDevice @Inject constructor(
          */
         private val store: IMXCryptoStore,
         private val inboundGroupSessionStore: InboundGroupSessionStore
-        ) {
+) {
 
     /**
      * @return the Curve25519 key for the account.
@@ -135,6 +137,10 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun release() {
         olmUtility?.releaseUtility()
+        outboundGroupSessionStore.values.forEach {
+            it.releaseSession()
+        }
+        outboundGroupSessionStore.clear()
     }
 
     /**
@@ -406,11 +412,12 @@ internal class MXOlmDevice @Inject constructor(
      *
      * @return the session id for the outbound session.
      */
-    fun createOutboundGroupSession(): String? {
+    fun createOutboundGroupSessionForRoom(roomId: String): String? {
         var session: OlmOutboundGroupSession? = null
         try {
             session = OlmOutboundGroupSession()
             outboundGroupSessionStore[session.sessionIdentifier()] = session
+            store.storeCurrentOutboundGroupSessionForRoom(roomId, session)
             return session.sessionIdentifier()
         } catch (e: Exception) {
             Timber.e(e, "createOutboundGroupSession")
@@ -421,6 +428,34 @@ internal class MXOlmDevice @Inject constructor(
         return null
     }
 
+    fun storeOutboundGroupSessionForRoom(roomId: String, sessionId: String) {
+        outboundGroupSessionStore[sessionId]?.let {
+            store.storeCurrentOutboundGroupSessionForRoom(roomId, it)
+        }
+    }
+
+    fun restoreOutboundGroupSessionForRoom(roomId: String):  MXOutboundSessionInfo? {
+        val restoredOutboundGroupSession = store.getCurrentOutboundGroupSessionForRoom(roomId)
+        if (restoredOutboundGroupSession != null) {
+            val sessionId = restoredOutboundGroupSession.outboundGroupSession.sessionIdentifier()
+            if (!outboundGroupSessionStore.containsKey(sessionId)) {
+                outboundGroupSessionStore[sessionId] = restoredOutboundGroupSession.outboundGroupSession
+                return MXOutboundSessionInfo(
+                        sessionId = sessionId,
+                        sharedWithHelper = SharedWithHelper(roomId, sessionId, store),
+                        restoredOutboundGroupSession.creationTime
+                )
+            } else {
+                restoredOutboundGroupSession.outboundGroupSession.releaseSession()
+            }
+        }
+        return null
+    }
+
+    fun discardOutboundGroupSessionForRoom(roomId: String) {
+        outboundGroupSessionStore.remove(roomId)?.releaseSession()
+        store.storeCurrentOutboundGroupSessionForRoom(roomId, null)
+    }
     /**
      * Get the current session key of  an outbound group session.
      *
@@ -747,7 +782,7 @@ internal class MXOlmDevice @Inject constructor(
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_SENDER_KEY, MXCryptoError.ERROR_MISSING_PROPERTY_REASON)
         }
 
-        val session =  inboundGroupSessionStore.getInboundGroupSession(sessionId, senderKey)
+        val session = inboundGroupSessionStore.getInboundGroupSession(sessionId, senderKey)
 
         if (session != null) {
             // Check that the room id matches the original one for the session. This stops

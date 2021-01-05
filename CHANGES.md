@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
   - Add System theme option and set as default (#904) (#2387)
+  - Store megolm outbound session to improve send time of first message after app launch.
 
 Bugfix 🐛:
  - Unspecced msgType field in m.sticker (#2580)
