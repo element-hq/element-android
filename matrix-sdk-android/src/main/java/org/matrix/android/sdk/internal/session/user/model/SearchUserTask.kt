@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.internal.session.user.model
 
 import org.matrix.android.sdk.api.session.user.model.User
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.user.SearchUserAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface SearchUserTask : Task<SearchUserTask.Params, List<User>> {
@@ -34,11 +34,11 @@ internal interface SearchUserTask : Task<SearchUserTask.Params, List<User>> {
 
 internal class DefaultSearchUserTask @Inject constructor(
         private val searchUserAPI: SearchUserAPI,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SearchUserTask {
 
     override suspend fun execute(params: SearchUserTask.Params): List<User> {
-        val response = executeRequest<SearchUsersResponse>(eventBus) {
+        val response = executeRequest<SearchUsersResponse>(globalErrorReceiver) {
             apiCall = searchUserAPI.searchUsers(SearchUsersParams(params.search, params.limit))
         }
         return response.users.map {

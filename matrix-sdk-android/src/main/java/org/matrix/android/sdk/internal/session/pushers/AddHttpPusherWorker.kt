@@ -19,13 +19,13 @@ import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import com.zhuinden.monarchy.Monarchy
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.pushers.PusherState
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.PusherEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.util.awaitTransaction
@@ -45,7 +45,7 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
 
     @Inject lateinit var pushersAPI: PushersAPI
     @Inject @SessionDatabase lateinit var monarchy: Monarchy
-    @Inject lateinit var eventBus: EventBus
+    @Inject lateinit var globalErrorReceiver: GlobalErrorReceiver
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)
@@ -81,7 +81,7 @@ internal class AddHttpPusherWorker(context: Context, params: WorkerParameters)
     }
 
     private suspend fun setPusher(pusher: JsonPusher) {
-        executeRequest<Unit>(eventBus) {
+        executeRequest<Unit>(globalErrorReceiver) {
             apiCall = pushersAPI.setPusher(pusher)
         }
         monarchy.awaitTransaction { realm ->

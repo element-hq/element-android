@@ -24,8 +24,8 @@ import org.matrix.android.sdk.internal.session.sync.model.accountdata.AcceptedTe
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.BreadcrumbsContent
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.IdentityServerContent
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Params, Unit> {
@@ -100,11 +100,11 @@ internal interface UpdateUserAccountDataTask : Task<UpdateUserAccountDataTask.Pa
 internal class DefaultUpdateUserAccountDataTask @Inject constructor(
         private val accountDataApi: AccountDataAPI,
         @UserId private val userId: String,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : UpdateUserAccountDataTask {
 
     override suspend fun execute(params: UpdateUserAccountDataTask.Params) {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = accountDataApi.setAccountData(userId, params.type, params.getData())
         }
     }

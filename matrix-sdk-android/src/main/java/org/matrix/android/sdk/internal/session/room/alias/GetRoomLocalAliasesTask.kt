@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.alias
 
-import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
@@ -30,12 +30,12 @@ internal interface GetRoomLocalAliasesTask : Task<GetRoomLocalAliasesTask.Params
 
 internal class DefaultGetRoomLocalAliasesTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetRoomLocalAliasesTask {
 
     override suspend fun execute(params: GetRoomLocalAliasesTask.Params): List<String> {
         // We do not check for "org.matrix.msc2432", so the API may be missing
-        val response = executeRequest<GetAliasesResponse>(eventBus) {
+        val response = executeRequest<GetAliasesResponse>(globalErrorReceiver) {
             apiCall = roomAPI.getAliases(roomId = params.roomId)
         }
 
