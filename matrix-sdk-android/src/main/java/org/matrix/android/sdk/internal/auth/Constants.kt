@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.auth
+package org.matrix.android.sdk.internal.auth
 
 /**
  * Path to use when the client does not supported any or all login flows
  * Ref: https://matrix.org/docs/spec/client_server/latest#login-fallback
  */
-const val LOGIN_FALLBACK_PATH = "/_matrix/static/client/login/"
+internal const val LOGIN_FALLBACK_PATH = "/_matrix/static/client/login/"
 
 /**
  * Path to use when the client does not supported any or all registration flows
  * Not documented
  */
-const val REGISTER_FALLBACK_PATH = "/_matrix/static/client/register/"
+internal const val REGISTER_FALLBACK_PATH = "/_matrix/static/client/register/"
 
 /**
  * Path to use when the client want to connect using SSO
  * Ref: https://matrix.org/docs/spec/client_server/latest#sso-client-login
  */
-const val SSO_REDIRECT_PATH = "/_matrix/client/r0/login/sso/redirect"
-const val MSC2858_SSO_REDIRECT_PATH = "/_matrix/client/unstable/org.matrix.msc2858/login/sso/redirect"
+internal const val SSO_REDIRECT_PATH = "/_matrix/client/r0/login/sso/redirect"
+internal const val MSC2858_SSO_REDIRECT_PATH = "/_matrix/client/unstable/org.matrix.msc2858/login/sso/redirect"
 
-const val SSO_REDIRECT_URL_PARAM = "redirectUrl"
+internal const val SSO_REDIRECT_URL_PARAM = "redirectUrl"

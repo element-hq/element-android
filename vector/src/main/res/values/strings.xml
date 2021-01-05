@@ -8,6 +8,7 @@
     <string name="resources_script">Latn</string>
 
     <!-- theme -->
+    <string name="system_theme">System Default</string>
     <string name="light_theme">Light Theme</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="black_them">Black Theme</string>

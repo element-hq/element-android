@@ -27,6 +27,7 @@ data class MessageStickerContent(
         /**
          * Set in local, not from server
          */
+        @Transient
         override val msgType: String = MessageType.MSGTYPE_STICKER_LOCAL,
 
         /**
