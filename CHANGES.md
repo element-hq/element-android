@@ -5,7 +5,8 @@ Features ✨:
  - Enable url previews for notices (#2562)
 
 Improvements 🙌:
-  - Add System theme option and set as default (#904) (#2387)
+ - Add System theme option and set as default (#904, #2387)
+ - Warn user when he is leaving a not public room (#1460)
 
 Bugfix 🐛:
  - Unspecced msgType field in m.sticker (#2580)
