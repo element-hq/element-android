@@ -28,7 +28,6 @@ data class RoomPermissionsViewState(
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val actionPermissions: ActionPermissions = ActionPermissions(),
         val currentPowerLevelsContent: Async<PowerLevelsContent> = Uninitialized,
-        val newPowerLevelsContent: PowerLevelsContent? = null,
         val isLoading: Boolean = false
 ) : MvRxState {
 
