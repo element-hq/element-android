@@ -111,7 +111,7 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
             postLoading(true)
             viewModelScope.launch {
                 try {
-                    val newPowerLevelsContent = when(action.editablePermission) {
+                    val newPowerLevelsContent = when (action.editablePermission) {
                         is EditablePermission.EventTypeEditablePermission -> currentPowerLevel.copy(
                                 events = currentPowerLevel.events.toMutableMap().apply {
                                     put(action.editablePermission.eventType, action.powerLevel)
