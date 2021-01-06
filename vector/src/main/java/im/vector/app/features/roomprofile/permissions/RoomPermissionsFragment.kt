@@ -99,4 +99,8 @@ class RoomPermissionsFragment @Inject constructor(
             viewModel.handle(RoomPermissionsAction.UpdatePermission(editablePermission, newPowerLevel))
         }
     }
+
+    override fun toggleShowAllPermissions() {
+        viewModel.handle(RoomPermissionsAction.ToggleShowAllPermissions)
+    }
 }

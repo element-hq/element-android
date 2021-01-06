@@ -25,6 +25,7 @@ import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsInfoItem
+import im.vector.app.features.form.formAdvancedToggleItem
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import javax.inject.Inject
@@ -36,6 +37,7 @@ class RoomPermissionsController @Inject constructor(
 
     interface Callback {
         fun onEditPermission(editablePermission: EditablePermission, currentRole: Role)
+        fun toggleShowAllPermissions()
     }
 
     var callback: Callback? = null
@@ -43,25 +45,34 @@ class RoomPermissionsController @Inject constructor(
     private val dividerColor = colorProvider.getColorFromAttribute(R.attr.vctr_list_divider_color)
 
     // Order is the order applied in the UI
-    private val allEditablePermissions = listOf(
+    // Element Web order is not really nice, try to put the settings which are more likely to be updated first
+    // And a second section, hidden by default
+    private val usefulEditablePermissions = listOf(
+            EditablePermission.ChangeRoomAvatar(),
+            EditablePermission.ChangeRoomName(),
+            EditablePermission.ChangeTopic()
+    )
+
+    private val advancedEditablePermissions = listOf(
+            EditablePermission.ChangeMainAddressForTheRoom(),
+
             EditablePermission.DefaultRole(),
-            EditablePermission.SendMessages(),
             EditablePermission.InviteUsers(),
-            EditablePermission.ChangeSettings(),
             EditablePermission.KickUsers(),
             EditablePermission.BanUsers(),
+
+            EditablePermission.SendMessages(),
+
             EditablePermission.RemoveMessagesSentByOthers(),
             EditablePermission.NotifyEveryone(),
+
+            EditablePermission.ChangeSettings(),
             EditablePermission.ModifyWidgets(),
-            EditablePermission.ChangeRoomAvatar(),
-            EditablePermission.ChangeMainAddressForTheRoom(),
-            EditablePermission.EnableRoomEncryption(),
             EditablePermission.ChangeHistoryVisibility(),
-            EditablePermission.ChangeRoomName(),
             EditablePermission.ChangePermissions(),
             EditablePermission.SendRoomServerAclEvents(),
-            EditablePermission.UpgradeTheRoom(),
-            EditablePermission.ChangeTopic()
+            EditablePermission.EnableRoomEncryption(),
+            EditablePermission.UpgradeTheRoom()
     )
 
     init {
@@ -91,22 +102,38 @@ class RoomPermissionsController @Inject constructor(
             helperText(stringProvider.getString(if (editable) R.string.room_permissions_notice else R.string.room_permissions_notice_read_only))
         }
 
-        allEditablePermissions.forEach { editablePermission ->
-            val currentRole = getCurrentRole(editablePermission, content)
-            buildProfileAction(
-                    id = editablePermission.labelResId.toString(),
-                    title = stringProvider.getString(editablePermission.labelResId),
-                    subtitle = getSubtitle(currentRole),
-                    dividerColor = dividerColor,
-                    divider = true,
-                    editable = data.actionPermissions.canChangePowerLevels,
-                    action = {
-                        callback
-                                ?.takeIf { editable }
-                                ?.onEditPermission(editablePermission, currentRole)
-                    }
-            )
+        // Useful permissions
+        usefulEditablePermissions.forEach { buildPermission(it, content, editable) }
+
+        // Toggle
+        formAdvancedToggleItem {
+            id("showAdvanced")
+            title(stringProvider.getString(if (data.showAdvancedPermissions) R.string.hide_advanced else R.string.show_advanced))
+            expanded(!data.showAdvancedPermissions)
+            listener { callback?.toggleShowAllPermissions() }
         }
+
+        // Advanced permissions
+        if (data.showAdvancedPermissions) {
+            advancedEditablePermissions.forEach { buildPermission(it, content, editable) }
+        }
+    }
+
+    private fun buildPermission(editablePermission: EditablePermission, content: PowerLevelsContent, editable: Boolean) {
+        val currentRole = getCurrentRole(editablePermission, content)
+        buildProfileAction(
+                id = editablePermission.labelResId.toString(),
+                title = stringProvider.getString(editablePermission.labelResId),
+                subtitle = getSubtitle(currentRole),
+                dividerColor = dividerColor,
+                divider = true,
+                editable = editable,
+                action = {
+                    callback
+                            ?.takeIf { editable }
+                            ?.onEditPermission(editablePermission, currentRole)
+                }
+        )
     }
 
     private fun getSubtitle(currentRole: Role): String {

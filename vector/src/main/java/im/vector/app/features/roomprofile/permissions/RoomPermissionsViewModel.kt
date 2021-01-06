@@ -94,8 +94,15 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
 
     override fun handle(action: RoomPermissionsAction) {
         when (action) {
-            is RoomPermissionsAction.UpdatePermission -> updatePermission(action)
+            is RoomPermissionsAction.UpdatePermission      -> updatePermission(action)
+            RoomPermissionsAction.ToggleShowAllPermissions -> toggleShowAllPermissions()
         }.exhaustive
+    }
+
+    private fun toggleShowAllPermissions() {
+        setState {
+            copy(showAdvancedPermissions = !showAdvancedPermissions)
+        }
     }
 
     private fun updatePermission(action: RoomPermissionsAction.UpdatePermission) {
