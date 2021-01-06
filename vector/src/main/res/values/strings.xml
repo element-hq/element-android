@@ -615,6 +615,7 @@
 
     <string name="room_permissions_title">"Permissions"</string>
     <string name="room_permissions_notice">"Select the roles required to change various parts of the room"</string>
+    <string name="room_permissions_notice_read_only">"You don't have permission to update the roles required to change various parts of the room"</string>
 
     <string name="room_permissions_default_role">Default role</string>
     <string name="room_permissions_send_messages">Send messages</string>

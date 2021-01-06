@@ -73,11 +73,6 @@ class RoomPermissionsController @Inject constructor(
                 stringProvider.getString(R.string.room_permissions_title)
         )
 
-        settingsInfoItem {
-            id("notice")
-            helperText(stringProvider.getString(R.string.room_permissions_notice))
-        }
-
         when (val content = data?.currentPowerLevelsContent) {
             is Success -> buildPermissions(data, content())
             else       -> {
@@ -90,6 +85,12 @@ class RoomPermissionsController @Inject constructor(
     }
 
     private fun buildPermissions(data: RoomPermissionsViewState, content: PowerLevelsContent) {
+        val editable = data.actionPermissions.canChangePowerLevels
+        settingsInfoItem {
+            id("notice")
+            helperText(stringProvider.getString(if (editable) R.string.room_permissions_notice else R.string.room_permissions_notice_read_only))
+        }
+
         allEditablePermissions.forEach { editablePermission ->
             val currentRole = getCurrentRole(editablePermission, content)
             buildProfileAction(
@@ -99,7 +100,11 @@ class RoomPermissionsController @Inject constructor(
                     dividerColor = dividerColor,
                     divider = true,
                     editable = data.actionPermissions.canChangePowerLevels,
-                    action = { callback?.onEditPermission(editablePermission, currentRole) }
+                    action = {
+                        callback
+                                ?.takeIf { editable }
+                                ?.onEditPermission(editablePermission, currentRole)
+                    }
             )
         }
     }
