@@ -48,7 +48,7 @@ class CallAudioManager(
 
     private var savedIsSpeakerPhoneOn = false
     private var savedIsMicrophoneMute = false
-    private var savedAudioMode = AudioManager.MODE_INVALID
+    private var savedAudioMode = AudioManager.MODE_NORMAL
 
     private var connectedBlueToothHeadset: BluetoothProfile? = null
     private var wantsBluetoothConnection = false
