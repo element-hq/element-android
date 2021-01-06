@@ -19,6 +19,7 @@ package im.vector.app.core.platform
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -414,11 +415,15 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
      */
     @Suppress("DEPRECATION")
     private fun setFullScreen() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(false) // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
-            window.statusBarColor = ContextCompat.getColor(this, im.vector.lib.attachmentviewer.R.color.half_transparent_status_bar) // New API instead of FLAG_TRANSLUCENT_STATUS
-            window.navigationBarColor = ContextCompat.getColor(this, im.vector.lib.attachmentviewer.R.color.half_transparent_status_bar) // new API instead of FLAG_TRANSLUCENT_NAVIGATION
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            window.setDecorFitsSystemWindows(false)
+            // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
+            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_SWIPE
+            // New API instead of FLAG_TRANSLUCENT_STATUS
+            window.statusBarColor = ContextCompat.getColor(this, im.vector.lib.attachmentviewer.R.color.half_transparent_status_bar)
+            // New API instead of FLAG_TRANSLUCENT_NAVIGATION
+            window.navigationBarColor = ContextCompat.getColor(this, im.vector.lib.attachmentviewer.R.color.half_transparent_status_bar)
         } else {
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

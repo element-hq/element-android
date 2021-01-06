@@ -19,6 +19,7 @@ package im.vector.app.features.attachments.preview
 
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -155,7 +156,7 @@ class AttachmentsPreviewFragment @Inject constructor(
 
     @Suppress("DEPRECATION")
     private fun applyInsets() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             activity?.window?.setDecorFitsSystemWindows(false)
         } else {
             view?.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
