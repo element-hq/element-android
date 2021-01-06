@@ -53,4 +53,23 @@ data class PowerLevelsContent(
                 }
         )
     }
+
+    /**
+     * Get the notification level for a dedicated key.
+     *
+     * @param key the notification key
+     * @return the level, default to Moderator if the key is not found
+     */
+    fun notificationLevel(key: String): Int {
+        return when (val value = notifications[key]) {
+            // the first implementation was a string value
+            is String -> value.toInt()
+            is Int    -> value
+            else      -> Role.Moderator.value
+        }
+    }
+
+    companion object {
+        const val NOTIFICATIONS_ROOM_KEY = "room"
+    }
 }

@@ -123,7 +123,7 @@ class RoomPermissionsController @Inject constructor(
             is EditablePermission.KickUsers                   -> content.kick
             is EditablePermission.BanUsers                    -> content.ban
             is EditablePermission.RemoveMessagesSentByOthers  -> content.redact
-            is EditablePermission.NotifyEveryone              -> (content.notifications["room"] as? Int) ?: Role.Moderator.value
+            is EditablePermission.NotifyEveryone              -> content.notificationLevel(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY)
         }
 
         return Role.fromValue(

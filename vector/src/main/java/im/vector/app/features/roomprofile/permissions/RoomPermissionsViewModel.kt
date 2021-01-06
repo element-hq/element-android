@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
@@ -118,7 +119,7 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
                         is EditablePermission.RemoveMessagesSentByOthers  -> currentPowerLevel.copy(redact = action.powerLevel)
                         is EditablePermission.NotifyEveryone              -> currentPowerLevel.copy(
                                 notifications = currentPowerLevel.notifications.toMutableMap().apply {
-                                    put("room", action.powerLevel)
+                                    put(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY, action.powerLevel)
                                 }
                         )
                     }
