@@ -57,7 +57,7 @@ class TimelineSettingsFactory @Inject constructor(
         return map {
             EventTypeFilter(
                     eventType = it,
-                    stateKey = if (it == EventType.STATE_ROOM_MEMBER && userPreferencesProvider.shouldShowRoomMemberStateEvents()) session.myUserId else null
+                    stateKey = if (it == EventType.STATE_ROOM_MEMBER && !userPreferencesProvider.shouldShowRoomMemberStateEvents()) session.myUserId else null
             )
         }
     }

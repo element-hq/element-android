@@ -24,10 +24,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_share"
-        tools:visibility="visible"
         app:tint="?riotx_text_primary"
-        tools:ignore="MissingPrefix" />
+        tools:ignore="MissingPrefix"
+        tools:src="@drawable/ic_share"
+        tools:visibility="visible" />
 
 
     <TextView
@@ -70,8 +70,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_arrow_right"
         app:tint="?riotx_text_primary"
-        tools:ignore="MissingPrefix" />
+        tools:ignore="MissingPrefix"
+        tools:src="@drawable/ic_arrow_right" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
