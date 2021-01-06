@@ -30,23 +30,27 @@ data class PowerLevelsContent(
         @Json(name = "invite") val invite: Int = Role.Moderator.value,
         @Json(name = "redact") val redact: Int = Role.Moderator.value,
         @Json(name = "events_default") val eventsDefault: Int = Role.Default.value,
-        @Json(name = "events") val events: MutableMap<String, Int> = HashMap(),
+        @Json(name = "events") val events: Map<String, Int> = emptyMap(),
         @Json(name = "users_default") val usersDefault: Int = Role.Default.value,
-        @Json(name = "users") val users: MutableMap<String, Int> = HashMap(),
+        @Json(name = "users") val users: Map<String, Int> = emptyMap(),
         @Json(name = "state_default") val stateDefault: Int = Role.Moderator.value,
-        @Json(name = "notifications") val notifications: Map<String, Any> = HashMap()
+        @Json(name = "notifications") val notifications: Map<String, Any> = emptyMap()
 ) {
     /**
-     * Alter this content with a new power level for the specified user
+     * Return a copy of this content with a new power level for the specified user
      *
      * @param userId the userId to alter the power level of
      * @param powerLevel the new power level, or null to set the default value.
      */
-    fun setUserPowerLevel(userId: String, powerLevel: Int?) {
-        if (powerLevel == null || powerLevel == usersDefault) {
-            users.remove(userId)
-        } else {
-            users[userId] = powerLevel
-        }
+    fun setUserPowerLevel(userId: String, powerLevel: Int?): PowerLevelsContent {
+        return copy(
+                users = users.toMutableMap().apply {
+                    if (powerLevel == null || powerLevel == usersDefault) {
+                        remove(userId)
+                    } else {
+                        put(userId, powerLevel)
+                    }
+                }
+        )
     }
 }
