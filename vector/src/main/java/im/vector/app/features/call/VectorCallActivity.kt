@@ -121,7 +121,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         if (intent.getStringExtra(EXTRA_MODE) == INCOMING_RINGING) {
             turnScreenOnAndKeyguardOff()
         }
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             (supportFragmentManager.findFragmentByTag(FRAGMENT_DIAL_PAD_TAG) as? CallDialPadBottomSheet)?.callback = dialPadCallback
         }
         configureCallViews()
@@ -220,7 +220,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                         if (callArgs.isVideoCall) {
                             views.callVideoGroup.isVisible = true
                             views.callInfoGroup.isVisible = false
-                            //views.pip_video_view.isVisible = !state.isVideoCaptureInError
+                            // views.pip_video_view.isVisible = !state.isVideoCaptureInError
                         } else {
                             views.callVideoGroup.isInvisible = true
                             views.callInfoGroup.isVisible = true

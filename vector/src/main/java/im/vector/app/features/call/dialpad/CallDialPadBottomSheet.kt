@@ -70,6 +70,9 @@ class CallDialPadBottomSheet private constructor() : VectorBaseBottomSheetDialog
         } else {
             setCallbackToFragment(callback)
         }
+        views.callDialPadClose.setOnClickListener {
+            dismiss()
+        }
     }
 
     override fun onDestroyView() {

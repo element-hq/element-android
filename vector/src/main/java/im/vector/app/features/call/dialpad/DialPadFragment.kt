@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.android.dialer.dialpadview.DialpadView
 import com.android.dialer.dialpadview.DigitsEditText
@@ -120,7 +119,6 @@ class DialPadFragment : Fragment() {
         return view
     }
 
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EXTRA_REGION_CODE, regionCode)
@@ -133,7 +131,7 @@ class DialPadFragment : Fragment() {
         outState.putBoolean(EXTRA_CURSOR_VISIBLE, cursorVisible)
     }
 
-    private fun initArgs(savedInstanceState: Bundle?){
+    private fun initArgs(savedInstanceState: Bundle?) {
         val args = savedInstanceState ?: arguments
         if (args != null) {
             regionCode = args.getString(EXTRA_REGION_CODE, DEFAULT_REGION_CODE)
