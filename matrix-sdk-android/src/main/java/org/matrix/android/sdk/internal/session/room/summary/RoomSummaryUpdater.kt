@@ -167,7 +167,7 @@ internal class RoomSummaryUpdater @Inject constructor(
             spaceSummaryEntity.children.clear()
             spaceSummaryEntity.children.addAll(
                     RoomRelationshipHelper(realm, roomId).getDirectChildrenDescriptions()
-                            .map { RoomSummaryEntity.getOrCreate(realm, roomId) }
+                            .map { RoomSummaryEntity.getOrCreate(realm, it) }
             )
         }
     }

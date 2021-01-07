@@ -35,4 +35,12 @@ class DefaultSpace(private val room: Room) : Space {
                 body = SpaceChildContent(present = true).toContent()
         )
     }
+
+//    override fun getChildren(): List<IRoomSummary> {
+// //        asRoom().getStateEvents(setOf(EventType.STATE_SPACE_CHILD)).mapNotNull {
+// //            // statekeys are the roomIds
+// //
+// //        }
+//        return emptyList<IRoomSummary>()
+//    }
 }
