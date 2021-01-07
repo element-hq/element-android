@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.space
+package im.vector.app.features.spaces.preview
 
-import org.matrix.android.sdk.api.session.room.Room
+import im.vector.app.core.platform.VectorViewEvents
 
-interface Space {
-
-    fun asRoom() : Room
-
-    suspend fun addRoom(roomId: String)
-
-//    fun getChildren() : List<IRoomSummary>
+sealed class SpacePreviewViewEvents : VectorViewEvents {
+    object Dismiss: SpacePreviewViewEvents()
+    object StartJoining: SpacePreviewViewEvents()
+    object JoinSuccess: SpacePreviewViewEvents()
+    data class JoinFailure(val message: String?): SpacePreviewViewEvents()
 }

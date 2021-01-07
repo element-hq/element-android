@@ -18,9 +18,13 @@
 package im.vector.app.features.grouplist
 
 import com.airbnb.epoxy.EpoxyController
+import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.spaces.SpaceListViewState
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.space.SpaceSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -50,24 +54,57 @@ class SpaceSummaryController @Inject constructor(
         if (summaries.isNullOrEmpty()) {
             return
         }
-        summaries.forEach { groupSummary ->
-            val isSelected = groupSummary.spaceId == selected?.spaceId
-            if (groupSummary.spaceId == ALL_COMMUNITIES_GROUP_ID) {
-                homeSpaceSummaryItem {
-                    id(groupSummary.spaceId)
-                    selected(isSelected)
-                    listener { callback?.onSpaceSelected(groupSummary) }
+        // show invites on top
+
+        summaries.filter { it.roomSummary.membership == Membership.INVITE }
+                .let { invites ->
+                    if (invites.isNotEmpty()) {
+                        genericItemHeader {
+                            id("invites")
+                            text(stringProvider.getString(R.string.spaces_invited_header))
+                        }
+                        invites.forEach {
+                            spaceSummaryItem {
+                                avatarRenderer(avatarRenderer)
+                                id(it.spaceId)
+                                matrixItem(it.toMatrixItem())
+                                selected(false)
+                                listener { callback?.onSpaceSelected(it) }
+                            }
+                        }
+                        genericFooterItem {
+                            id("invite_space")
+                            text("")
+                        }
+                    }
                 }
-            } else {
-                spaceSummaryItem {
-                    avatarRenderer(avatarRenderer)
-                    id(groupSummary.spaceId)
-                    matrixItem(groupSummary.toMatrixItem())
-                    selected(isSelected)
-                    listener { callback?.onSpaceSelected(groupSummary) }
-                }
-            }
+
+        genericItemHeader {
+            id("spaces")
+            text(stringProvider.getString(R.string.spaces_header))
         }
+
+        summaries
+                .filter { it.roomSummary.membership == Membership.JOIN }
+                .forEach { groupSummary ->
+
+                    val isSelected = groupSummary.spaceId == selected?.spaceId
+                    if (groupSummary.spaceId == ALL_COMMUNITIES_GROUP_ID) {
+                        homeSpaceSummaryItem {
+                            id(groupSummary.spaceId)
+                            selected(isSelected)
+                            listener { callback?.onSpaceSelected(groupSummary) }
+                        }
+                    } else {
+                        spaceSummaryItem {
+                            avatarRenderer(avatarRenderer)
+                            id(groupSummary.spaceId)
+                            matrixItem(groupSummary.toMatrixItem())
+                            selected(isSelected)
+                            listener { callback?.onSpaceSelected(groupSummary) }
+                        }
+                    }
+                }
     }
 
     interface Callback {

@@ -54,6 +54,7 @@ import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
+import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
@@ -140,6 +141,9 @@ class HomeActivity :
                         is HomeActivitySharedAction.OpenGroup -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+                        }
+                        is HomeActivitySharedAction.OpenSpacePreview -> {
+                            startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
                         }
                     }.exhaustive
                 }
