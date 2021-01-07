@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.space
+package im.vector.app.features.spaces.preview
 
-import org.matrix.android.sdk.api.session.room.Room
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
+import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
 
-interface Space {
-
-    fun asRoom() : Room
-
-    suspend fun addRoom(roomId: String)
-
-//    fun getChildren() : List<IRoomSummary>
+data class SpacePreviewState(
+        val idOrAlias: String,
+        val name: String?  = null,
+        val avatarUrl: String? = null,
+        val peekResult: Async<SpacePeekResult> = Uninitialized
+) : MvRxState {
+    constructor(args: SpacePreviewArgs) : this(idOrAlias = args.idOrAlias)
 }
