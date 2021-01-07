@@ -35,6 +35,7 @@ data class SpaceChildContent(
         @Json(name = "via") val via: List<String>? = null,
         /**
          * present: true key is included to distinguish from a deleted state event
+         * Children where present is not present or is not set to true are ignored.
          */
         @Json(name = "present") val present: Boolean? = false,
         /**
