@@ -63,6 +63,11 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             dismiss()
         }
 
+        views.callControlsOpenDialPad.views.itemVerificationClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.OpenDialPad)
+            dismiss()
+        }
+
         callViewModel.observeViewEvents {
             when (it) {
                 is VectorCallViewEvents.ShowSoundDeviceChooser -> {

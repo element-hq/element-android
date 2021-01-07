@@ -27,6 +27,15 @@
         tools:actionDescription="Front" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
+        android:id="@+id/callControlsOpenDialPad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/call_dial_pad_title"
+        app:leftIcon="@drawable/ic_call_dial_pad"
+        app:tint="?attr/riotx_text_primary"
+        tools:actionDescription="" />
+
+    <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/callControlsToggleSDHD"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,5 +52,7 @@
         app:leftIcon="@drawable/ic_call_hold_action"
         app:tint="?attr/riotx_text_primary"
         tools:actionDescription="" />
+
+
 
 </LinearLayout>
