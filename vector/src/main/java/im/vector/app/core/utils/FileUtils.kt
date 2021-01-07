@@ -17,14 +17,28 @@
 package im.vector.app.core.utils
 
 import android.content.Context
+import android.net.Uri
+import androidx.documentfile.provider.DocumentFile
+import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 import java.io.File
+import java.io.InputStream
 import java.util.Locale
 
 // Implementation should return true in case of success
 typealias ActionOnFile = (file: File) -> Boolean
 
-internal fun String?.isLocalFile() = this != null && File(this).exists()
+internal fun String?.isLocalFile(context: Context): Boolean {
+    return this?.let {
+        DocumentFile.fromSingleUri(context, Uri.parse(it))?.exists()
+    }.orFalse()
+}
+
+internal fun String?.openInputStream(context: Context): InputStream? {
+    return if (isLocalFile(context)) {
+        context.contentResolver.openInputStream(Uri.parse(this))
+    } else null
+}
 
 /* ==========================================================================================
  * Delete

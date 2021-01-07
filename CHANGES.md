@@ -13,6 +13,7 @@ Bugfix 🐛:
  - Url previews sometimes attached to wrong message (#2561)
  - Hiding membership events works the exact opposite (#2603)
  - Tapping drawer having more than 1 room in notifications gives "malformed link" error (#2605)
+ - Sent image not displayed when opened immediately after sending (#409)
 
 Translations 🗣:
  -

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.media
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
@@ -59,7 +60,8 @@ interface AttachmentData : Parcelable {
     val allowNonMxcUrls: Boolean
 }
 
-class ImageContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
+class ImageContentRenderer @Inject constructor(private val context: Context,
+                                               private val activeSessionHolder: ActiveSessionHolder,
                                                private val dimensionConverter: DimensionConverter) {
 
     @Parcelize
@@ -73,7 +75,6 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
             val maxHeight: Int,
             val width: Int?,
             val maxWidth: Int,
-            val isLocalFile: Boolean = url.isLocalFile(),
             // If true will load non mxc url, be careful to set it only for images sent by you
             override val allowNonMxcUrls: Boolean = false
     ) : AttachmentData
@@ -291,7 +292,7 @@ class ImageContentRenderer @Inject constructor(private val activeSessionHolder: 
 
     private fun resolveUrl(data: Data) =
             (activeSessionHolder.getActiveSession().contentUrlResolver().resolveFullSize(data.url)
-                    ?: data.url?.takeIf { data.isLocalFile && data.allowNonMxcUrls })
+                    ?: data.url?.takeIf { data.url.isLocalFile(context) && data.allowNonMxcUrls })
 
     private fun processSize(data: Data, mode: Mode): Size {
         val maxImageWidth = data.maxWidth

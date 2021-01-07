@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import android.content.Context
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
@@ -94,6 +95,7 @@ import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
+        private val context: Context,
         private val colorProvider: ColorProvider,
         private val dimensionConverter: DimensionConverter,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
@@ -205,7 +207,7 @@ class MessageItemFactory @Inject constructor(
         } ?: ""
         return MessageFileItem_()
                 .attributes(attributes)
-                .izLocalFile(fileUrl.isLocalFile())
+                .izLocalFile(fileUrl.isLocalFile(context))
                 .izDownloaded(session.fileService().isFileInCache(
                         fileUrl,
                         messageContent.getFileName(),
@@ -270,7 +272,7 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .izLocalFile(messageContent.getFileUrl().isLocalFile())
+                .izLocalFile(messageContent.getFileUrl().isLocalFile(context))
                 .izDownloaded(session.fileService().isFileInCache(messageContent))
                 .mxcUrl(mxcUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
@@ -305,7 +307,8 @@ class MessageItemFactory @Inject constructor(
                 height = messageContent.info?.height,
                 maxHeight = maxHeight,
                 width = messageContent.info?.width,
-                maxWidth = maxWidth
+                maxWidth = maxWidth,
+                allowNonMxcUrls = informationData.sendState.isSending()
         )
         return MessageImageVideoItem_()
                 .attributes(attributes)
@@ -343,7 +346,8 @@ class MessageItemFactory @Inject constructor(
                 height = messageContent.videoInfo?.height,
                 maxHeight = maxHeight,
                 width = messageContent.videoInfo?.width,
-                maxWidth = maxWidth
+                maxWidth = maxWidth,
+                allowNonMxcUrls = informationData.sendState.isSending()
         )
 
         val videoData = VideoContentRenderer.Data(

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.media
 
+import android.content.Context
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -33,7 +34,8 @@ import java.io.File
 import java.net.URLEncoder
 import javax.inject.Inject
 
-class VideoContentRenderer @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
+class VideoContentRenderer @Inject constructor(private val context: Context,
+                                               private val activeSessionHolder: ActiveSessionHolder,
                                                private val errorFormatter: ErrorFormatter) {
 
     @Parcelize
@@ -63,7 +65,7 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
                 loadingView.isVisible = false
                 errorView.isVisible = true
                 errorView.setText(R.string.unknown_error)
-            } else if (data.url.isLocalFile() && data.allowNonMxcUrls) {
+            } else if (data.url.isLocalFile(context) && data.allowNonMxcUrls) {
                 thumbnailView.isVisible = false
                 loadingView.isVisible = false
                 videoView.isVisible = true
@@ -98,7 +100,7 @@ class VideoContentRenderer @Inject constructor(private val activeSessionHolder: 
             }
         } else {
             val resolvedUrl = contentUrlResolver.resolveFullSize(data.url)
-                    ?: data.url?.takeIf { data.url.isLocalFile() && data.allowNonMxcUrls }
+                    ?: data.url?.takeIf { data.url.isLocalFile(context) && data.allowNonMxcUrls }
 
             if (resolvedUrl == null) {
                 thumbnailView.isVisible = false
