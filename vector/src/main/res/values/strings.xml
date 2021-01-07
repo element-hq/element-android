@@ -192,6 +192,9 @@
     <string name="groups_header">Communities</string>
     <string name="no_group_placeholder">No groups</string>
 
+    <string name="spaces_invited_header">Invites</string>
+    <string name="spaces_header">Spaces</string>
+
     <string name="send_bug_report_include_logs">Send logs</string>
     <string name="send_bug_report_include_crash_logs">Send crash logs</string>
     <string name="send_bug_report_include_key_share_history">Send key share requests history</string>
