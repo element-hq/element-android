@@ -44,7 +44,7 @@ internal class RoomRelationshipHelper(private val realm: Realm,
                 .filter { ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()?.present == true }
                 .mapNotNull {
                     // ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()
-                    it.roomId
+                    it.stateKey
                 }
     }
 }

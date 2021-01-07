@@ -836,6 +836,17 @@ class RoomDetailViewModel @AssistedInject constructor(
                             _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
                             popDraft()
                         }
+                        is ParsedCommand.AddToSpace            -> {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                try {
+                                    session.spaceService().getSpace(slashCommandResult.spaceId)?.addRoom(room.roomId)
+                                } catch (failure: Throwable) {
+                                    _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+                                }
+                            }
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
                     }.exhaustive
                 }
                 is SendMode.EDIT -> {

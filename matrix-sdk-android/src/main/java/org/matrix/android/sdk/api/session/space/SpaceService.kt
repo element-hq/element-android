@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.space
 
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
 
 typealias SpaceSummaryQueryParams = RoomSummaryQueryParams
 
@@ -36,10 +37,36 @@ interface SpaceService {
     fun getSpace(spaceId: String): Space?
 
     /**
+     * Try to resolve (peek) rooms and subspace in this space.
+     * Use this call get preview of children of this space, particularly useful to get a
+     * preview of rooms that you did not join yet.
+     */
+    suspend fun peekSpace(spaceId: String) : SpacePeekResult
+
+    /**
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of List[SpaceSummary]
      */
     fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams): LiveData<List<SpaceSummary>>
 
     fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams): List<SpaceSummary>
+
+    data class ChildAutoJoinInfo(
+            val roomIdOrAlias: String,
+            val viaServers: List<String> = emptyList()
+    )
+
+    sealed class JoinSpaceResult {
+        object Success: JoinSpaceResult()
+        data class Fail(val error: Throwable?): JoinSpaceResult()
+        /** Success fully joined the space, but failed to join all or some of it's rooms */
+        data class PartialSuccess(val failedRooms: Map<String, Throwable>) : JoinSpaceResult()
+
+        fun isSuccess() = this is Success || this is PartialSuccess
+    }
+
+    suspend fun joinSpace(spaceIdOrAlias: String,
+                          reason: String? = null,
+                          viaServers: List<String> = emptyList(),
+                          autoJoinChild: List<ChildAutoJoinInfo>) : JoinSpaceResult
 }
