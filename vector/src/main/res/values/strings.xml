@@ -2773,4 +2773,5 @@
     <string name="call_tile_other_declined">%1$s declined this call</string>
     <string name="call_tile_ended">This call has ended</string>
     <string name="call_tile_call_back">Call back</string>
+    <string name="call_dial_pad_title">Dial pad</string>
 </resources>
