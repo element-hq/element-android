@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
-    <TextView
+    <im.vector.app.core.ui.views.NonScrollingTextView
         android:id="@+id/expandableContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
