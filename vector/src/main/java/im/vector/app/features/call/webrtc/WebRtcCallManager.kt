@@ -28,7 +28,10 @@ import im.vector.app.features.call.CallAudioManager
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.push.fcm.FcmHelper
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallListener
@@ -67,6 +70,19 @@ class WebRtcCallManager @Inject constructor(
         fun onAudioDevicesChange() {}
     }
 
+    interface PSTNSupportListener {
+        fun onPSTNSupportUpdated()
+    }
+
+    private val pstnSupportListeners = emptyList<PSTNSupportListener>().toMutableList()
+    fun addPstnSupportListener(listener: PSTNSupportListener) {
+        pstnSupportListeners.add(listener)
+    }
+
+    fun removePstnSupportListener(listener: PSTNSupportListener) {
+        pstnSupportListeners.remove(listener)
+    }
+
     private val currentCallsListeners = emptyList<CurrentCallListener>().toMutableList()
     fun addCurrentCallListener(listener: CurrentCallListener) {
         currentCallsListeners.add(listener)
@@ -85,10 +101,21 @@ class WebRtcCallManager @Inject constructor(
     private var peerConnectionFactory: PeerConnectionFactory? = null
     private val executor = Executors.newSingleThreadExecutor()
     private val dispatcher = executor.asCoroutineDispatcher()
+    var supportsPSTNProtocol: Boolean = false
+        private set
 
     private val rootEglBase by lazy { EglUtils.rootEglBase }
 
     private var isInBackground: Boolean = true
+
+    init {
+        GlobalScope.launch {
+            supportsPSTNProtocol = currentSession?.supportPSTN(3).orFalse()
+            if (supportsPSTNProtocol) {
+                pstnSupportListeners.forEach { it.onPSTNSupportUpdated() }
+            }
+        }
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
