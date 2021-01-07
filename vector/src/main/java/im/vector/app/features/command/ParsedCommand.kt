@@ -58,4 +58,5 @@ sealed class ParsedCommand {
     object DiscardSession : ParsedCommand()
     class SendChatEffect(val chatEffect: ChatEffect, val message: String) : ParsedCommand()
     class CreateSpace(val name: String, val invitees: List<String>) : ParsedCommand()
+    class AddToSpace(val spaceId: String) : ParsedCommand()
 }
