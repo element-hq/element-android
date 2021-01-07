@@ -490,9 +490,9 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
     private fun migrateTo12(realm: DynamicRealm) {
         Timber.d("Step 11 -> 12")
         val outboundEntitySchema = realm.schema.create("OutboundGroupSessionInfoEntity")
-                ?.addField(OutboundGroupSessionInfoEntityFields.SERIALIZED_OUTBOUND_SESSION_DATA, String::class.java)
-                ?.addField(OutboundGroupSessionInfoEntityFields.CREATION_TIME, Long::class.java)
-                ?.setNullable(OutboundGroupSessionInfoEntityFields.CREATION_TIME, true)
+                .addField(OutboundGroupSessionInfoEntityFields.SERIALIZED_OUTBOUND_SESSION_DATA, String::class.java)
+                .addField(OutboundGroupSessionInfoEntityFields.CREATION_TIME, Long::class.java)
+                .setNullable(OutboundGroupSessionInfoEntityFields.CREATION_TIME, true)
 
         realm.schema.get("CryptoRoomEntity")
                 ?.addRealmObjectField(CryptoRoomEntityFields.OUTBOUND_SESSION_INFO.`$`, outboundEntitySchema)
