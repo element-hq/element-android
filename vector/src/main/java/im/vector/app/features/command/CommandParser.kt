@@ -296,7 +296,7 @@ object CommandParser {
                     val message = textMessage.substring(Command.CONFETTI.command.length).trim()
                     ParsedCommand.SendChatEffect(ChatEffect.CONFETTI, message)
                 }
-                Command.SNOW.command               -> {
+                Command.SNOW.command                   -> {
                     val message = textMessage.substring(Command.SNOW.command.length).trim()
                     ParsedCommand.SendChatEffect(ChatEffect.SNOW, message)
                 }
@@ -311,6 +311,12 @@ object CommandParser {
                                 split.subList(1, split.size)
                         )
                     }
+                }
+                Command.ADD_TO_SPACE.command        -> {
+                    val rawCommand = textMessage.substring(Command.ADD_TO_SPACE.command.length).trim()
+                    ParsedCommand.AddToSpace(
+                            rawCommand
+                    )
                 }
                 else                                   -> {
                     // Unknown command

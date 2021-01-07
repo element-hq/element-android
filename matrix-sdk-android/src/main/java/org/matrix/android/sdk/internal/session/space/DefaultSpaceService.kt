@@ -32,6 +32,8 @@ import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
+import org.matrix.android.sdk.internal.session.space.peeking.PeekSpaceTask
+import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateBreadcrumbsTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
@@ -46,6 +48,7 @@ internal class DefaultSpaceService @Inject constructor(
         private val deleteRoomAliasTask: DeleteRoomAliasTask,
         private val roomGetter: RoomGetter,
         private val spaceSummaryDataSource: SpaceSummaryDataSource,
+        private val peekSpaceTask: PeekSpaceTask,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
         private val taskExecutor: TaskExecutor
 ) : SpaceService {
@@ -66,5 +69,32 @@ internal class DefaultSpaceService @Inject constructor(
 
     override fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams): List<SpaceSummary> {
         return spaceSummaryDataSource.getSpaceSummaries(spaceSummaryQueryParams)
+    }
+
+    override suspend fun peekSpace(spaceId: String): SpacePeekResult {
+        return peekSpaceTask.execute(PeekSpaceTask.Params(spaceId))
+    }
+
+    override suspend fun joinSpace(spaceIdOrAlias: String, reason: String?, viaServers: List<String>, autoJoinChild: List<SpaceService.ChildAutoJoinInfo>): SpaceService.JoinSpaceResult {
+        try {
+            joinRoomTask.execute(JoinRoomTask.Params(spaceIdOrAlias, reason, viaServers))
+            val childJoinFailures = mutableMapOf<String, Throwable>()
+            autoJoinChild.forEach { info ->
+                // TODO what if the child is it self a subspace with some default children?
+                try {
+                    joinRoomTask.execute(JoinRoomTask.Params(info.roomIdOrAlias, null, info.viaServers))
+                } catch (failure: Throwable) {
+                    // TODO, i could already be a member of this room, handle that as it should not be an error in this context
+                    childJoinFailures[info.roomIdOrAlias] = failure
+                }
+            }
+            return if (childJoinFailures.isEmpty()) {
+                SpaceService.JoinSpaceResult.Success
+            } else {
+                SpaceService.JoinSpaceResult.PartialSuccess(childJoinFailures)
+            }
+        } catch (throwable: Throwable) {
+            return SpaceService.JoinSpaceResult.Fail(throwable)
+        }
     }
 }

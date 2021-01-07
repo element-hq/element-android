@@ -59,7 +59,8 @@ class SpaceListFragment @Inject constructor(
         views.groupListView.configureWith(spaceController)
         viewModel.observeViewEvents {
             when (it) {
-                is SpaceListViewEvents.OpenSpaceSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
+                is SpaceListViewEvents.OpenSpaceSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpacePreview(it.id))
+                is SpaceListViewEvents.OpenSpace -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
             }.exhaustive
         }
     }

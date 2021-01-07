@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package im.vector.app.features.spaces
 
 import im.vector.app.core.platform.VectorSharedAction
+import im.vector.app.core.platform.VectorSharedActionViewModel
+import javax.inject.Inject
 
-/**
- * Supported navigation actions for [HomeActivity]
- */
-sealed class HomeActivitySharedAction : VectorSharedAction {
-    object OpenDrawer : HomeActivitySharedAction()
-    object CloseDrawer : HomeActivitySharedAction()
-    object OpenGroup : HomeActivitySharedAction()
-    data class OpenSpacePreview(val spaceId: String) : HomeActivitySharedAction()
+sealed class SpacePreviewSharedAction : VectorSharedAction {
+    object DismissAction : SpacePreviewSharedAction()
+    object ShowModalLoading : SpacePreviewSharedAction()
+    object HideModalLoading : SpacePreviewSharedAction()
+    data class ShowErrorMessage(val error: String? = null) : SpacePreviewSharedAction()
 }
+
+class SpacePreviewSharedActionViewModel @Inject constructor() : VectorSharedActionViewModel<SpacePreviewSharedAction>()

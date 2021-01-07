@@ -118,6 +118,7 @@ import im.vector.app.features.settings.push.PushRulesFragment
 import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
 import im.vector.app.features.share.IncomingShareFragment
 import im.vector.app.features.signout.soft.SoftLogoutFragment
+import im.vector.app.features.spaces.preview.SpacePreviewFragment
 import im.vector.app.features.terms.ReviewTermsFragment
 import im.vector.app.features.usercode.ShowUserCodeFragment
 import im.vector.app.features.userdirectory.UserListFragment
@@ -630,4 +631,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomDevToolSendFormFragment::class)
     fun bindRoomDevToolSendFormFragment(fragment: RoomDevToolSendFormFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpacePreviewFragment::class)
+    fun bindSpacePreviewFragment(fragment: SpacePreviewFragment): Fragment
 }

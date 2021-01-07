@@ -271,7 +271,8 @@
             <!--            </intent-filter>-->
         </activity>
 
-        <activity android:name=".features.devtools.RoomDevToolActivity" />
+        <activity android:name=".features.devtools.RoomDevToolActivity"/>
+        <activity android:name=".features.spaces.SpacePreviewActivity"/>
         <!-- Services -->
 
         <service

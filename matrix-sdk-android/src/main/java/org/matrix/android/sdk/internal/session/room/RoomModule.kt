@@ -91,6 +91,8 @@ import org.matrix.android.sdk.internal.session.room.typing.SendTypingTask
 import org.matrix.android.sdk.internal.session.room.uploads.DefaultGetUploadsTask
 import org.matrix.android.sdk.internal.session.room.uploads.GetUploadsTask
 import org.matrix.android.sdk.internal.session.space.DefaultSpaceService
+import org.matrix.android.sdk.internal.session.space.peeking.DefaultPeekSpaceTask
+import org.matrix.android.sdk.internal.session.space.peeking.PeekSpaceTask
 import retrofit2.Retrofit
 
 @Module
@@ -235,6 +237,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindPeekRoomTask(task: DefaultPeekRoomTask): PeekRoomTask
+
+    @Binds
+    abstract fun bindPeekSpaceTask(task: DefaultPeekSpaceTask): PeekSpaceTask
 
     @Binds
     abstract fun bindGetEventTask(task: DefaultGetEventTask): GetEventTask

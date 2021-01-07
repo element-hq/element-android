@@ -34,4 +34,6 @@ sealed class PeekResult {
     ) : PeekResult()
 
     object UnknownAlias : PeekResult()
+
+    fun isSuccess() = this is Success
 }

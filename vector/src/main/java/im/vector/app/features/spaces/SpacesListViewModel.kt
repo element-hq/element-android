@@ -53,7 +53,8 @@ sealed class SpaceListAction : VectorViewModelAction {
  * Transient events for group list screen
  */
 sealed class SpaceListViewEvents : VectorViewEvents {
-    object OpenSpaceSummary : SpaceListViewEvents()
+    object OpenSpace : SpaceListViewEvents()
+    data class OpenSpaceSummary(val id: String) : SpaceListViewEvents()
 }
 
 data class SpaceListViewState(
@@ -94,7 +95,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 // We only want to open group if the updated selectedGroup is a different one.
                 if (currentGroupId != spaceSummary.spaceId) {
                     currentGroupId = spaceSummary.spaceId
-                    _viewEvents.post(SpaceListViewEvents.OpenSpaceSummary)
+                    _viewEvents.post(SpaceListViewEvents.OpenSpace)
                 }
                 val optionGroup = Option.just(spaceSummary)
                 selectedSpaceDataSource.post(optionGroup)
@@ -116,20 +117,27 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
-        if (state.selectedSpace?.spaceId != action.spaceSummary.spaceId) {
-            // We take care of refreshing group data when selecting to be sure we get all the rooms and users
-//            tryOrNull {
-//                viewModelScope.launch {
-//                    session.getGroup(action.spaceSummary.groupId)?.fetchGroupData()
+
+        if (state.selectedSpace?.roomSummary?.membership == Membership.INVITE) {
+            _viewEvents.post(SpaceListViewEvents.OpenSpaceSummary(state.selectedSpace.roomSummary.roomId))
+//            viewModelScope.launch(Dispatchers.IO) {
+//                tryOrNull { session.spaceService().peekSpace(action.spaceSummary.spaceId) }.let {
+//                    Timber.d("PEEK RESULT/ $it")
 //                }
 //            }
-            setState { copy(selectedSpace = action.spaceSummary) }
+        } else {
+            if (state.selectedSpace?.spaceId != action.spaceSummary.spaceId) {
+//                state.selectedSpace?.let {
+//                    selectedSpaceDataSource.post(Option.just(state.selectedSpace))
+//                }
+                setState { copy(selectedSpace = action.spaceSummary) }
+            }
         }
     }
 
     private fun observeGroupSummaries() {
         val roomSummaryQueryParams = roomSummaryQueryParams() {
-            memberships = listOf(Membership.JOIN)
+            memberships = listOf(Membership.JOIN, Membership.INVITE)
             displayName = QueryStringValue.IsNotEmpty
             excludeType = listOf(RoomType.MESSAGING, null)
         }
