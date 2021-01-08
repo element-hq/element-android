@@ -15,7 +15,7 @@ Bugfix 🐛:
  - Room Topic not displayed correctly after visiting a link (#2551)
  - Hiding membership events works the exact opposite (#2603)
  - Tapping drawer having more than 1 room in notifications gives "malformed link" error (#2605)
-
+ - Initial sync is not retried correctly when there is some network error. (#2632)
 Translations 🗣:
  -
 
