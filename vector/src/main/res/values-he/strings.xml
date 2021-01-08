@@ -389,4 +389,10 @@
     <string name="e2e_re_request_encryption_key_dialog_title">הבקשה נשלחה</string>
     <string name="e2e_re_request_encryption_key_sent">בקשת המפתח נשלחה.</string>
     <string name="e2e_re_request_encryption_key">בקש מחדש מפתחות הצפנה מהפעלות האחרות שלך.</string>
+    <string name="room_prompt_cancel">בטל הכל</string>
+    <string name="room_prompt_resend">שלח מחדש הכל</string>
+    <string name="room_unknown_devices_messages_notification">הודעות לא נשלחו בגלל הימצאות פעילויות לא ידועות. %1$s או %2$s עכשיו\?</string>
+    <string name="room_unsent_messages_notification">הודעות לא נשלחו. %1$s או %2$s עכשיו\?</string>
+    <string name="room_offline_notification">הקישוריות לשרת אבדה.</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">שלח תשובה (לא מוצפן) …</string>
 </resources>
