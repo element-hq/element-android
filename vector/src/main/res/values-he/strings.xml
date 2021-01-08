@@ -295,4 +295,98 @@
     <string name="call_failed_no_ice_title">השיחה נכשלה עקב שרת שהוגדר כהלכה</string>
     <string name="start_video_call_prompt_msg">האם אתה בטוח שברצונך להתחיל שיחת וידאו\?</string>
     <string name="start_voice_call_prompt_msg">האם אתה בטוח שברצונך להתחיל שיחה קולית\?</string>
+    <string name="room_creation_title">צ\'ט חדש</string>
+    <string name="invite_no_identity_server_error">הוסף שרת זהות בהגדרות שלך כדי לבצע פעולה זו.</string>
+    <string name="room_preview_room_interactions_disabled">זו תצוגה מקדימה של החדר הזה. אינטראקציות בחדר הושבתו.</string>
+    <string name="room_preview_try_join_an_unknown_room_default">חדר</string>
+    <string name="room_preview_try_join_an_unknown_room">אתה מנסה לגשת ל-% s. האם תרצה להצטרף על מנת להשתתף בדיון\?</string>
+    <string name="room_preview_unlinked_email_warning">הזמנה זו נשלחה אל% s, שאינה משויכת לחשבון זה.
+\nייתכן שתרצה להתחבר עם חשבון אחר, או להוסיף דוא\"ל זה לחשבונך.</string>
+    <string name="room_preview_invitation_format">הוזמנת להצטרף לחדר זה על ידי% s</string>
+    <string name="room_jump_to_first_unread">קפיצה להודעה הראשונה שלא נקראה.</string>
+    <string name="room_sync_in_progress">מסנכרן…</string>
+    <string name="open_chat_header">פתח כותרת</string>
+    <string name="list_members">חברי רשימה</string>
+    <string name="reject">דחייה</string>
+    <string name="preview">תצוגה מקדימה</string>
+    <string name="join">הצטרף</string>
+    <string name="remove">הסר</string>
+    <string name="_continue">המשך</string>
+    <string name="no">לא!!</string>
+    <string name="yes">כן!</string>
+    <string name="media_slider_saved_message">שמור להורדות\?</string>
+    <string name="media_slider_saved">נשמר</string>
+    <string name="permissions_denied_add_contact">אפשר הרשאה לגשת לאנשי הקשר שלך.</string>
+    <string name="permissions_denied_qr_code">כדי לסרוק קוד QR, עליך לאפשר גישה למצלמה.</string>
+    <string name="permissions_action_not_performed_missing_permissions">מצטער. הפעולה לא בוצעה בגלל הרשאות חסרות</string>
+    <string name="permissions_msg_contacts_warning_other_androids">אלמנט יכול לבדוק את פנקס הכתובות שלך כדי למצוא משתמשי מטריקס אחרים על סמך מספרי הדוא\"ל והטלפון שלהם.
+\n
+\nהאם אתה מסכים לשתף את פנקס הכתובות שלך למטרה זו\?</string>
+    <string name="permissions_rationale_msg_contacts">אלמנט יכול לבדוק את פנקס הכתובות שלך כדי למצוא משתמשי מטריקס אחרים על סמך מספרי הדוא\"ל והטלפון שלהם. אם אתה מסכים לשתף את פנקס הכתובות שלך למטרה זו, אנא הגש גישה בחלון הקופץ הבא.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">אלמנט זקוק להרשאה כדי לגשת למצלמה ולמיקרופון שלך כדי לבצע שיחות וידאו.
+\n
+\nאנא אפשר גישה בחלונות הקופצים הבאים כדי להיות מסוגל לבצע את השיחה.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nאנא אפשר גישה בחלון הקופץ הבא כדי שתוכל לבצע את השיחה."</string>
+    <string name="permissions_rationale_msg_record_audio">אלמנט זקוק להרשאה כדי לגשת למיקרופון שלך כדי לבצע שיחות שמע.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nאנא אפשר גישה בחלון הקופץ הבא כדי שתוכל לבצע את השיחה."</string>
+    <string name="permissions_rationale_msg_camera">אלמנט זקוק להרשאה כדי לגשת למצלמה שלך כדי לצלם תמונות ושיחות וידאו.</string>
+    <string name="permissions_rationale_msg_storage">אלמנט זקוק להרשאה כדי לגשת לספריית התמונות והווידיאו שלך כדי לשלוח ולשמור קבצים מצורפים.
+\n
+\nאנא אפשר גישה בחלון הקופץ הבא כדי שתוכל לשלוח קבצים מהטלפון שלך.</string>
+    <string name="permissions_rationale_popup_title">מידע</string>
+    <string name="media_picker_cannot_record_video">לא ניתן להקליט וידאו</string>
+    <string name="media_picker_both_capture_title">צלם תמונה או סרטון</string>
+    <string name="call_error_answered_elsewhere">השיחה נענתה במקום אחר</string>
+    <string name="call_error_camera_init_failed">לא ניתן לאתחל את המצלמה</string>
+    <string name="call_error_ice_failed">חיבור המדיה נכשל</string>
+    <string name="call_error_user_not_responding">הצד המרוחק לא הצליח להרים.</string>
+    <string name="return_to_call">חזור לשיחה</string>
+    <string name="active_call_with_duration">שיחה פעילה (% s)</string>
+    <string name="video_call_in_progress">שיחת וידאו מתבצעת …</string>
+    <string name="call_in_progress">במהלך התקשרות…</string>
+    <string name="incoming_voice_call">שיחה קולית נכנסת</string>
+    <string name="incoming_video_call">שיחת וידאו נכנסת</string>
+    <string name="incoming_call">שיחה נכנסת</string>
+    <string name="call_ring">מתקשר…</string>
+    <string name="call_ended">שיחה הסתיימה</string>
+    <string name="call_connecting">שיחה מתחברת …</string>
+    <string name="call_connected">שיחה מחוברת</string>
+    <string name="call">שִׂיחָה</string>
+    <string name="settings_call_ringtone_dialog_title">בחר רינגטון לשיחות:</string>
+    <string name="settings_call_ringtone_title">רינגטון שיחה נכנסת</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">ישתמש ב-% s כסיוע כאשר השרת הביתי שלך אינו מציע כזה (כתובת ה- IP שלך תשותף במהלך שיחה)</string>
+    <string name="settings_call_ringtone_use_default_stun">אפשר שרת עזרה לשיחות</string>
+    <string name="settings_call_ringtone_use_app_ringtone">השתמש ברינגטון ברירת המחדל של אלמנט לשיחות נכנסות</string>
+    <string name="settings_call_show_confirmation_dialog_summary">בקש אישור לפני שמתחילים בשיחה</string>
+    <string name="settings_call_show_confirmation_dialog_title">מנע שיחה מקרית</string>
+    <string name="settings_call_category">שיחות</string>
+    <string name="room_info_room_topic">נושא החדר</string>
+    <string name="room_info_room_name">שם חדר</string>
+    <string name="today">היום</string>
+    <string name="yesterday">אתמול</string>
+    <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
+    <string name="attachment_remaining_time_seconds">% d s</string>
+    <string name="attachment_cancel_upload">האם לבטל את ההעלאה\?</string>
+    <string name="attachment_cancel_download">האם לבטל את ההורדה\?</string>
+    <string name="compression_opt_list_small">קטן</string>
+    <string name="compression_opt_list_medium">בינוני</string>
+    <string name="compression_opt_list_large">גדול</string>
+    <string name="compression_opt_list_original">מקורי</string>
+    <string name="compression_options">שלח כ:</string>
+    <plurals name="membership_changes">
+        <item quantity="one">שינוי בפרט חברות</item>
+        <item quantity="two">שינוי בפרטי חברות</item>
+        <item quantity="many">שינוי בפרטי חברות</item>
+        <item quantity="other">שינוי בפרטי חברות</item>
+    </plurals>
+    <string name="groups_list">רשימת קבוצות</string>
+    <string name="read_receipts_list">קרא את רשימת הקבלות</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">הפעל את Element במכשיר אחר שיכול לפענח את ההודעה כדי שיוכל לשלוח את המפתחות להפעלה זו.</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">הבקשה נשלחה</string>
+    <string name="e2e_re_request_encryption_key_sent">בקשת המפתח נשלחה.</string>
+    <string name="e2e_re_request_encryption_key">בקש מחדש מפתחות הצפנה מהפעלות האחרות שלך.</string>
 </resources>
