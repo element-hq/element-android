@@ -85,7 +85,7 @@ class AppStateHandler @Inject constructor(
                                     if (selectedSpace == null || selectedSpace.spaceId == ALL_COMMUNITIES_GROUP_ID) {
                                         true
                                     } else if (it.isDirect) {
-                                        it.otherMemberIds
+                                         it.otherMemberIds
                                                 .intersect(selectedSpace.roomSummary.otherMemberIds)
                                                 .isNotEmpty()
                                     } else {
