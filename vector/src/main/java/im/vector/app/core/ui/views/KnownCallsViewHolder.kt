@@ -16,7 +16,6 @@
 
 package im.vector.app.core.ui.views
 
-import android.view.View
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import im.vector.app.core.utils.DebouncedClickListener
@@ -26,33 +25,47 @@ import im.vector.app.features.call.webrtc.WebRtcCall
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
 
-class ActiveCallViewHolder {
+class KnownCallsViewHolder {
 
     private var activeCallPiP: SurfaceViewRenderer? = null
-    private var activeCallView: ActiveCallView? = null
+    private var currentCallsView: CurrentCallsView? = null
     private var pipWrapper: CardView? = null
-    private var activeCall: WebRtcCall? = null
+    private var currentCall: WebRtcCall? = null
+    private var calls: List<WebRtcCall> = emptyList()
 
     private var activeCallPipInitialized = false
 
-    fun updateCall(activeCall: WebRtcCall?) {
-        this.activeCall = activeCall
-        val hasActiveCall = activeCall?.mxCall?.state is CallState.Connected
+    private val tickListener = object : WebRtcCall.Listener {
+        override fun onTick(formattedDuration: String) {
+            currentCallsView?.render(calls, formattedDuration)
+        }
+    }
+
+    fun updateCall(currentCall: WebRtcCall?, calls: List<WebRtcCall>) {
+        activeCallPiP?.let {
+            this.currentCall?.detachRenderers(listOf(it))
+        }
+        this.currentCall?.removeListener(tickListener)
+        this.currentCall = currentCall
+        this.currentCall?.addListener(tickListener)
+        this.calls = calls
+        val hasActiveCall = currentCall?.mxCall?.state is CallState.Connected
         if (hasActiveCall) {
-            val isVideoCall = activeCall?.mxCall?.isVideoCall == true
+            val isVideoCall = currentCall?.mxCall?.isVideoCall == true
             if (isVideoCall) initIfNeeded()
-            activeCallView?.isVisible = !isVideoCall
+            currentCallsView?.isVisible = !isVideoCall
+            currentCallsView?.render(calls, currentCall?.formattedDuration() ?: "")
             pipWrapper?.isVisible = isVideoCall
             activeCallPiP?.isVisible = isVideoCall
             activeCallPiP?.let {
-                activeCall?.attachViewRenderers(null, it, null)
+                currentCall?.attachViewRenderers(null, it, null)
             }
         } else {
-            activeCallView?.isVisible = false
+            currentCallsView?.isVisible = false
             activeCallPiP?.isVisible = false
             pipWrapper?.isVisible = false
             activeCallPiP?.let {
-                activeCall?.detachRenderers(listOf(it))
+                currentCall?.detachRenderers(listOf(it))
             }
         }
     }
@@ -70,30 +83,31 @@ class ActiveCallViewHolder {
         }
     }
 
-    fun bind(activeCallPiP: SurfaceViewRenderer, activeCallView: ActiveCallView, pipWrapper: CardView, interactionListener: ActiveCallView.Callback) {
+    fun bind(activeCallPiP: SurfaceViewRenderer, activeCallView: CurrentCallsView, pipWrapper: CardView, interactionListener: CurrentCallsView.Callback) {
         this.activeCallPiP = activeCallPiP
-        this.activeCallView = activeCallView
+        this.currentCallsView = activeCallView
         this.pipWrapper = pipWrapper
-
-        this.activeCallView?.callback = interactionListener
+        this.currentCallsView?.callback = interactionListener
         pipWrapper.setOnClickListener(
-                DebouncedClickListener(View.OnClickListener { _ ->
+                DebouncedClickListener({ _ ->
                     interactionListener.onTapToReturnToCall()
                 })
         )
+        this.currentCall?.addListener(tickListener)
     }
 
     fun unBind() {
         activeCallPiP?.let {
-            activeCall?.detachRenderers(listOf(it))
+            currentCall?.detachRenderers(listOf(it))
         }
         if (activeCallPipInitialized) {
             activeCallPiP?.release()
         }
-        this.activeCallView?.callback = null
+        this.currentCallsView?.callback = null
+        this.currentCall?.removeListener(tickListener)
         pipWrapper?.setOnClickListener(null)
         activeCallPiP = null
-        activeCallView = null
+        currentCallsView = null
         pipWrapper = null
     }
 }

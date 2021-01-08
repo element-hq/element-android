@@ -19,14 +19,14 @@ package im.vector.app.features.userdirectory
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 
-sealed class PendingInvitee {
-    data class UserPendingInvitee(val user: User) : PendingInvitee()
-    data class ThreePidPendingInvitee(val threePid: ThreePid) : PendingInvitee()
+sealed class PendingSelection {
+    data class UserPendingSelection(val user: User) : PendingSelection()
+    data class ThreePidPendingSelection(val threePid: ThreePid) : PendingSelection()
 
     fun getBestName(): String {
         return when (this) {
-            is UserPendingInvitee     -> user.getBestName()
-            is ThreePidPendingInvitee -> threePid.value
+            is UserPendingSelection     -> user.getBestName()
+            is ThreePidPendingSelection -> threePid.value
         }
     }
 }

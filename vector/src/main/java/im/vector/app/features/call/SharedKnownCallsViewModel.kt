@@ -23,37 +23,51 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import org.matrix.android.sdk.api.session.call.MxCall
 import javax.inject.Inject
 
-class SharedActiveCallViewModel @Inject constructor(
+class SharedKnownCallsViewModel @Inject constructor(
         private val callManager: WebRtcCallManager
 ) : ViewModel() {
 
-    val activeCall: MutableLiveData<WebRtcCall?> = MutableLiveData()
+    val liveKnownCalls: MutableLiveData<List<WebRtcCall>> = MutableLiveData()
 
-    val callStateListener = object : WebRtcCall.Listener {
+    val callListener = object : WebRtcCall.Listener {
 
         override fun onStateUpdate(call: MxCall) {
-            if (activeCall.value?.callId == call.callId) {
-                activeCall.postValue(callManager.getCallById(call.callId))
+            // post it-self
+            liveKnownCalls.postValue(liveKnownCalls.value)
+        }
+
+        override fun onHoldUnhold() {
+            super.onHoldUnhold()
+            // post it-self
+            liveKnownCalls.postValue(liveKnownCalls.value)
+        }
+    }
+
+    private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
+        override fun onCurrentCallChange(call: WebRtcCall?) {
+            val knownCalls = callManager.getCalls()
+            liveKnownCalls.postValue(knownCalls)
+            knownCalls.forEach {
+                it.removeListener(callListener)
+                it.addListener(callListener)
             }
         }
     }
 
-    private val listener = object : WebRtcCallManager.CurrentCallListener {
-        override fun onCurrentCallChange(call: WebRtcCall?) {
-            activeCall.value?.mxCall?.removeListener(callStateListener)
-            activeCall.postValue(call)
-            call?.addListener(callStateListener)
+    init {
+        val knownCalls = callManager.getCalls()
+        liveKnownCalls.postValue(knownCalls)
+        callManager.addCurrentCallListener(currentCallListener)
+        knownCalls.forEach {
+            it.addListener(callListener)
         }
     }
 
-    init {
-        activeCall.postValue(callManager.currentCall)
-        callManager.addCurrentCallListener(listener)
-    }
-
     override fun onCleared() {
-        activeCall.value?.removeListener(callStateListener)
-        callManager.removeCurrentCallListener(listener)
+        callManager.getCalls().forEach {
+            it.removeListener(callListener)
+        }
+        callManager.removeCurrentCallListener(currentCallListener)
         super.onCleared()
     }
 }

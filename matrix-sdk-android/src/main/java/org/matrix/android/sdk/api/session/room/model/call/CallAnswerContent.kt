@@ -39,7 +39,11 @@ data class CallAnswerContent(
         /**
          * Required. The version of the VoIP specification this messages adheres to.
          */
-        @Json(name = "version") override val version: String?
+        @Json(name = "version") override val version: String?,
+        /**
+         * Capability advertisement.
+         */
+        @Json(name = "capabilities") val capabilities: CallCapabilities? = null
 ): CallSignallingContent  {
 
     @JsonClass(generateAdapter = true)

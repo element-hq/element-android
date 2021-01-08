@@ -20,7 +20,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -34,6 +33,7 @@ import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
+import org.matrix.android.sdk.api.session.room.model.call.supportCallTransfer
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.Timer
@@ -56,7 +56,7 @@ class VectorCallViewModel @AssistedInject constructor(
         override fun onHoldUnhold() {
             setState {
                 copy(
-                        isLocalOnHold = call?.isLocalOnHold() ?: false,
+                        isLocalOnHold = call?.isLocalOnHold ?: false,
                         isRemoteOnHold = call?.remoteOnHold ?: false
                 )
             }
@@ -77,6 +77,12 @@ class VectorCallViewModel @AssistedInject constructor(
                         canSwitchCamera = call?.canSwitchCamera() ?: false,
                         isFrontCamera = call?.currentCameraType() == CameraType.FRONT
                 )
+            }
+        }
+
+        override fun onTick(formattedDuration: String) {
+            setState {
+                copy(formattedDuration = formattedDuration)
             }
         }
 
@@ -109,7 +115,8 @@ class VectorCallViewModel @AssistedInject constructor(
             }
             setState {
                 copy(
-                        callState = Success(callState)
+                        callState = Success(callState),
+                        canOpponentBeTransferred = call.capabilities.supportCallTransfer()
                 )
             }
         }
@@ -118,10 +125,10 @@ class VectorCallViewModel @AssistedInject constructor(
     private val currentCallListener = object : WebRtcCallManager.CurrentCallListener {
 
         override fun onCurrentCallChange(call: WebRtcCall?) {
-            // we need to check the state
             if (call == null) {
-                // we should dismiss, e.g handled by other session?
                 _viewEvents.post(VectorCallViewEvents.DismissNoCall)
+            } else {
+                updateOtherKnownCall(call)
             }
         }
 
@@ -138,6 +145,20 @@ class VectorCallViewModel @AssistedInject constructor(
                         availableSoundDevices = callManager.callAudioManager.getAvailableSoundDevices(),
                         soundDevice = currentSoundDevice
                 )
+            }
+        }
+    }
+
+    private fun updateOtherKnownCall(currentCall: WebRtcCall) {
+        val otherCall = callManager.getCalls().firstOrNull {
+            it.callId != currentCall.callId && it.mxCall.state is CallState.Connected
+        }
+        setState {
+            if (otherCall == null) {
+                copy(otherKnownCallInfo = null)
+            } else {
+                val otherUserItem: MatrixItem? = session.getUser(otherCall.mxCall.opponentUserId)?.toMatrixItem()
+                copy(otherKnownCallInfo = VectorCallViewState.CallInfo(otherCall.callId, otherUserItem))
             }
         }
     }
@@ -161,14 +182,19 @@ class VectorCallViewModel @AssistedInject constructor(
                 copy(
                         isVideoCall = webRtcCall.mxCall.isVideoCall,
                         callState = Success(webRtcCall.mxCall.state),
-                        otherUserMatrixItem = item?.let { Success(it) } ?: Uninitialized,
+                        callInfo = VectorCallViewState.CallInfo(callId, item),
                         soundDevice = currentSoundDevice,
+                        isLocalOnHold = webRtcCall.isLocalOnHold,
+                        isRemoteOnHold = webRtcCall.remoteOnHold,
                         availableSoundDevices = callManager.callAudioManager.getAvailableSoundDevices(),
-                        isFrontCamera = call?.currentCameraType() == CameraType.FRONT,
-                        canSwitchCamera = call?.canSwitchCamera() ?: false,
-                        isHD = webRtcCall.mxCall.isVideoCall && webRtcCall.currentCaptureFormat() is CaptureFormat.HD
+                        isFrontCamera = webRtcCall.currentCameraType() == CameraType.FRONT,
+                        canSwitchCamera = webRtcCall.canSwitchCamera(),
+                        formattedDuration = webRtcCall.formattedDuration(),
+                        isHD = webRtcCall.mxCall.isVideoCall && webRtcCall.currentCaptureFormat() is CaptureFormat.HD,
+                        canOpponentBeTransferred = webRtcCall.mxCall.capabilities.supportCallTransfer()
                 )
             }
+            updateOtherKnownCall(webRtcCall)
         }
     }
 
@@ -245,6 +271,11 @@ class VectorCallViewModel @AssistedInject constructor(
             VectorCallViewActions.ToggleHDSD -> {
                 if (!state.isVideoCall) return@withState
                 call?.setCaptureFormat(if (state.isHD) CaptureFormat.SD else CaptureFormat.HD)
+            }
+            VectorCallViewActions.InitiateCallTransfer -> {
+                _viewEvents.post(
+                        VectorCallViewEvents.ShowCallTransferScreen
+                )
             }
         }.exhaustive
     }

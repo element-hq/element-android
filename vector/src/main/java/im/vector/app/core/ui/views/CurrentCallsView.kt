@@ -20,9 +20,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.RelativeLayout
 import im.vector.app.R
+import im.vector.app.databinding.ViewCurrentCallsBinding
+import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.session.call.CallState
 
-class ActiveCallView @JvmOverloads constructor(
+class CurrentCallsView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
@@ -32,15 +35,32 @@ class ActiveCallView @JvmOverloads constructor(
         fun onTapToReturnToCall()
     }
 
+    val views: ViewCurrentCallsBinding
     var callback: Callback? = null
 
     init {
-        setupView()
-    }
-
-    private fun setupView() {
-        inflate(context, R.layout.view_active_call_view, this)
+        inflate(context, R.layout.view_current_calls, this)
+        views = ViewCurrentCallsBinding.bind(this)
         setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorPrimary))
         setOnClickListener { callback?.onTapToReturnToCall() }
+    }
+
+    fun render(calls: List<WebRtcCall>, formattedDuration: String) {
+        val connectedCalls = calls.filter {
+            it.mxCall.state is CallState.Connected
+        }
+        val heldCalls = connectedCalls.filter {
+            it.isLocalOnHold || it.remoteOnHold
+        }
+        if (connectedCalls.isEmpty()) return
+        views.currentCallsInfo.text = if (connectedCalls.size == heldCalls.size) {
+            resources.getQuantityString(R.plurals.call_only_paused, heldCalls.size, heldCalls.size)
+        } else {
+            if (heldCalls.isEmpty()) {
+                resources.getString(R.string.call_only_active, formattedDuration)
+            } else {
+                resources.getQuantityString(R.plurals.call_one_active_and_other_paused, heldCalls.size, formattedDuration, heldCalls.size)
+            }
+        }
     }
 }

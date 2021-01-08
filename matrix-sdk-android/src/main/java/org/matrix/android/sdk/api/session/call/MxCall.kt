@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.call
 
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidate
+import org.matrix.android.sdk.api.session.room.model.call.CallCapabilities
 import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.SdpType
 import org.matrix.android.sdk.api.util.Optional
@@ -41,6 +42,8 @@ interface MxCall : MxCallDetail {
     val ourPartyId: String
     var opponentPartyId: Optional<String>?
     var opponentVersion: Int
+
+    var capabilities: CallCapabilities?
 
     var state: CallState
 
@@ -85,6 +88,11 @@ interface MxCall : MxCallDetail {
      * Send removed ICE candidates to the other participant.
      */
     fun sendLocalIceCandidateRemovals(candidates: List<CallCandidate>)
+
+    /**
+     * Send a m.call.replaces event to initiate call transfer.
+     */
+    suspend fun transfer(targetUserId: String, targetRoomId: String?)
 
     fun addListener(listener: StateListener)
     fun removeListener(listener: StateListener)
