@@ -170,7 +170,7 @@
     <string name="login">כניסה</string>
     <string name="create_account">צור חשבון</string>
     <string name="username">שם משתמש</string>
-    <string name="join_room">הצתרף אל חדר</string>
+    <string name="join_room">הצטרף אל חדר</string>
     <string name="read_receipt">קרא</string>
     <string name="send_files_in">שלח פנימה</string>
     <string name="send_bug_report_progress">התקדמות (%%%)</string>
@@ -191,4 +191,107 @@
     <string name="no_group_placeholder">אין קבוצות</string>
     <string name="groups_header">קהילות</string>
     <string name="groups_invite_header">הזמנה</string>
+    <string name="login_error_user_in_use">שם משתמש זה כבר בשימוש</string>
+    <string name="login_error_limit_exceeded">יותר מדי בקשות נשלחו</string>
+    <string name="login_error_not_json">לא מכיל JSON חוקי</string>
+    <string name="login_error_bad_json">JSON פגום</string>
+    <string name="login_error_unknown_token">אסימון הגישה שצוין לא זוהה</string>
+    <string name="login_error_forbidden">שם משתמש / סיסמא שגויים</string>
+    <string name="login_error_ssl_handshake">המכשיר שלך משתמש בפרוטוקול אבטחה TLS מיושן, הפגיע להתקפה, למען ביטחונך לא תוכל להתחבר</string>
+    <string name="login_error_ssl_other">שגיאת SSL.</string>
+    <string name="login_error_ssl_peer_unverified">שגיאת SSL: זהות העמית לא אומתה.</string>
+    <string name="login_error_homeserver_not_found">לא ניתן להגיע לשרת בית בכתובת אתר זו, אנא בדוק זאת</string>
+    <string name="login_error_no_homeserver_found">זו אינה כתובת שרת מטריקס חוקית</string>
+    <string name="login_error_unknown_host">לא ניתן להגיע לכתובת אתר זו, אנא בדוק אותה</string>
+    <string name="login_error_invalid_home_server">אנא הכנס כתובת תקינה</string>
+    <string name="login_error_unable_register_mail_ownership">לא ניתן להירשם: כשל בבעלות על דוא\"ל</string>
+    <string name="login_error_unable_register">לא ניתן להירשם</string>
+    <string name="login_error_registration_network_error">לא ניתן להירשם: שגיאת רשת</string>
+    <string name="login_error_unable_login">לא מצליח להתחבר</string>
+    <string name="login_error_network_error">לא ניתן להתחבר: שגיאת רשת</string>
+    <string name="login_error_must_start_http">כתובת האתר חייבת להתחיל ב- http [s]: //</string>
+    <string name="auth_accept_policies">אנא עיין וקבל את המדיניות של שרת בית זה:</string>
+    <string name="auth_reset_password_success_message">הסיסמה שלך אופסה.
+\n
+\nהוצאת מכל ההפעלות ולא תקבל עוד התראות דחיפה. כדי להפעיל מחדש התראות, התחבר מחדש בכל מכשיר.</string>
+    <string name="auth_reset_password_error_unauthorized">אימות כתובת הדוא\"ל נכשל: ודא שלחצת על הקישור בדוא\"ל</string>
+    <string name="auth_reset_password_email_validation_message">דוא\"ל נשלח אל% s. לאחר שתעקוב אחר הקישור שהוא מכיל, לחץ למטה.</string>
+    <string name="auth_reset_password_missing_password">יש להזין סיסמה חדשה.</string>
+    <string name="auth_reset_password_missing_email">יש להזין את כתובת הדוא\"ל המקושרת לחשבונך.</string>
+    <string name="auth_reset_password_message">כדי לאפס את הסיסמה שלך, הזן את כתובת הדוא\"ל המקושרת לחשבונך:</string>
+    <string name="auth_reset_password_next_step_button">אימתתי את כתובת הדוא\"ל שלי</string>
+    <string name="auth_identity_server">שרת זיהוי:</string>
+    <string name="auth_home_server">שרת הבית</string>
+    <string name="auth_username_in_use">שם משתמש כבר נמצא בשימוש</string>
+    <string name="auth_recaptcha_message">שרת בית זה רוצה לוודא שאתה לא רובוט</string>
+    <string name="auth_threepid_warning_message">הרשמה באמצעות דוא\"ל ומספר טלפון בבת אחת עדיין אינה נתמכת עד להתקנת ה- API. רק מספר הטלפון ייקח בחשבון.
+\n
+\nתוכל להוסיף את הדוא\"ל שלך לפרופיל שלך בהגדרות.</string>
+    <string name="auth_email_validation_message">אנא בדוק את הדוא\"ל שלך כדי להמשיך בהרשמה</string>
+    <string name="auth_use_server_options">השתמש באפשרויות שרת מותאמות אישית (מתקדם)</string>
+    <string name="auth_forgot_password">שכחת סיסמה\?</string>
+    <string name="auth_password_dont_match">סיסמא אינה תואמת לקודמתה</string>
+    <string name="auth_invalid_token">מטבע אינו חוקי</string>
+    <string name="auth_missing_email_or_phone">כתובת דוא\"ל או מספר טלפון חסרים</string>
+    <string name="auth_missing_phone">מספר טלפון חסר</string>
+    <string name="auth_missing_email">כתובת דוא\"ל חסרה</string>
+    <string name="auth_msisdn_already_defined">מספר הטלפון הזה כבר קיים ומעודכן במערכת.</string>
+    <string name="auth_email_already_defined">כתובת הדוא\"ל הזו כבר קיימת ומוגדרת במערכת.</string>
+    <string name="auth_invalid_phone">זה אינו נראה כמספר טלפון חוקי</string>
+    <string name="auth_invalid_email">זה לא נראה כמו כתובת דוא\"ל חוקית</string>
+    <string name="auth_missing_password">סיסמה חסרה</string>
+    <string name="auth_invalid_password">סיסמה קצרה מדי (נדרש לפחות 6 תווים)</string>
+    <string name="auth_invalid_user_name">שמות משתמשים עשויים להכיל רק אותיות, מספרים, נקודות, מקפים וקו תחתון</string>
+    <string name="auth_invalid_login_param">שם משתמש ו/או סיסמה לא נכונים</string>
+    <string name="auth_repeat_new_password_placeholder">אשר את סיסמתך החדשה</string>
+    <string name="auth_repeat_password_placeholder">חזור על הסיסמה</string>
+    <string name="auth_opt_phone_number_placeholder">מספר טלפון (אופציונלי)</string>
+    <string name="auth_phone_number_placeholder">מספר טלפון</string>
+    <string name="auth_opt_email_placeholder">כתובת דוא\"ל (אופציונלי)</string>
+    <string name="auth_email_placeholder">כתובת דוא\"ל</string>
+    <string name="auth_add_email_and_phone_message_2">הגדר דוא\"ל לשחזור חשבון. השתמש באימייל או בטלפון מאוחרים יותר כדי שאפשר יהיה לגלות אותו על ידי אנשים שמכירים אותך.</string>
+    <string name="auth_add_email_phone_message_2">הגדר דוא\"ל לשחזור חשבון. השתמש באימייל או בטלפון מאוחרים יותר כדי שאפשר יהיה לגלות אותו על ידי אנשים שמכירים אותך.</string>
+    <string name="auth_add_phone_message_2">הגדר טלפון, ואחר כך יהיה ניתן לגלות אותו על ידי אנשים שמכירים אותך.</string>
+    <string name="auth_add_email_message_2">הגדר דוא\"ל לשחזור חשבון, ומאוחר יותר כך שניתן יהיה לגלות אותו על ידי אנשים שמכירים אותך.</string>
+    <string name="auth_user_name_placeholder">שם משתמש</string>
+    <string name="auth_new_password_placeholder">סיסמה חדשה</string>
+    <string name="auth_password_placeholder">סיסמה</string>
+    <string name="auth_user_id_placeholder">מייל או שם משתמש</string>
+    <string name="auth_return_to_login">חזור למסך כניסה</string>
+    <string name="auth_send_reset_email">שלח מייל איפוס</string>
+    <string name="auth_skip">דלג</string>
+    <string name="auth_submit">הגש</string>
+    <string name="auth_register">צור חשבון</string>
+    <string name="auth_login_sso">היכנס באמצעות כניסה יחידה</string>
+    <string name="auth_login">היכנס</string>
+    <string name="error_no_external_application_found">מצטערים, לא נמצאה יישום חיצוני להשלמת פעולה זו.</string>
+    <string name="go_on_with">המשך עם…</string>
+    <string name="no_sticker_application_dialog_content">כרגע אין לך חבילות מדבקה מופעלות.
+\n
+\nלהוסיף כמה עכשיו\?</string>
+    <string name="option_take_video">צלם סרטון</string>
+    <string name="option_take_photo">צלם תמונה</string>
+    <string name="option_take_photo_video">צלם תמונה או סרטון</string>
+    <string name="option_send_sticker">שלח סטיקר</string>
+    <string name="option_send_files">שלח קבצים</string>
+    <string name="call_format_turn_hd_on">הפעל מצב HD</string>
+    <string name="call_format_turn_hd_off">כבה מצב HD</string>
+    <string name="call_camera_back">אחורה</string>
+    <string name="call_camera_front">קדימה</string>
+    <string name="call_switch_camera">החלף בין מצלמה</string>
+    <string name="sound_device_wireless_headset">אוזניות אלחוטיות</string>
+    <string name="sound_device_headset">אוזניות</string>
+    <string name="sound_device_speaker">רמקול</string>
+    <string name="sound_device_phone">טלפון</string>
+    <string name="call_select_sound_device">בחר מכשיר סאונד</string>
+    <string name="call_failed_no_connection_description">נכשל החיבור בזמן אמת.
+\nאנא בקש ממנהל שרת הבית שלך להגדיר שרת TURN על מנת שהשיחות יעבדו בצורה אמינה.</string>
+    <string name="call_failed_no_connection">שיחת האלמנט נכשלה</string>
+    <string name="call_failed_dont_ask_again">אל תשאל אותי שוב</string>
+    <string name="call_failed_no_ice_use_alt">נסה להשתמש ב-% s</string>
+    <string name="call_failed_no_ice_description">אנא בקש ממנהל שרת הבית שלך (% 1 $ s) להגדיר שרת TURN כדי שהשיחות יעבדו בצורה אמינה.
+\n
+\nלחלופין, אתה יכול לנסות להשתמש בשרת הציבורי ב-% 2 $ s, אך זה לא יהיה אמין כל כך, והוא ישתף את כתובת ה- IP שלך עם השרת הזה. תוכל לנהל זאת גם בהגדרות.</string>
+    <string name="call_failed_no_ice_title">השיחה נכשלה עקב שרת שהוגדר כהלכה</string>
+    <string name="start_video_call_prompt_msg">האם אתה בטוח שברצונך להתחיל שיחת וידאו\?</string>
 </resources>
