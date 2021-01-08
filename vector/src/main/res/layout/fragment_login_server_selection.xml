@@ -11,6 +11,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout style="@style/LoginFormContainer">
 
             <ImageView
+                android:id="@+id/loginLogo"
                 style="@style/LoginLogo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
