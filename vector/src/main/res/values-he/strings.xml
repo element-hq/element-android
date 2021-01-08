@@ -140,4 +140,18 @@
     <string name="rooms_directory_header">רשימת חדרים</string>
     <string name="rooms_header">חדרים</string>
     <string name="no_conversation_placeholder">אין שיחות</string>
+    <string name="matrix_only_filter">אנשי קשר מטריקס בלבד</string>
+    <string name="user_directory_header">תיקיית האב של המשתמש</string>
+    <string name="local_address_book_header">פנקס כתובות מקומי</string>
+    <string name="direct_chats_header">שיחות</string>
+    <string name="system_alerts_header">התראות מערכת</string>
+    <string name="low_priority_header">בעדיפות נמוכה</string>
+    <string name="invitations_header">הזמנות</string>
+    <string name="home_filter_placeholder_groups">סנן שמות מבין רשימת הקהילות</string>
+    <string name="home_filter_placeholder_rooms">סנן מבין רשימת החדרים</string>
+    <string name="home_filter_placeholder_people">סנן מבין רשימת האנשים</string>
+    <string name="home_filter_placeholder_favorites">סנן מהמועדפים</string>
+    <string name="home_filter_placeholder_home">סנן שמות חדרים</string>
+    <string name="bottom_action_groups">קהילות</string>
+    <string name="bottom_action_rooms">חדרים</string>
 </resources>
