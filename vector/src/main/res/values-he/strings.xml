@@ -294,4 +294,5 @@
 \nלחלופין, אתה יכול לנסות להשתמש בשרת הציבורי ב-% 2 $ s, אך זה לא יהיה אמין כל כך, והוא ישתף את כתובת ה- IP שלך עם השרת הזה. תוכל לנהל זאת גם בהגדרות.</string>
     <string name="call_failed_no_ice_title">השיחה נכשלה עקב שרת שהוגדר כהלכה</string>
     <string name="start_video_call_prompt_msg">האם אתה בטוח שברצונך להתחיל שיחת וידאו\?</string>
+    <string name="start_voice_call_prompt_msg">האם אתה בטוח שברצונך להתחיל שיחה קולית\?</string>
 </resources>
