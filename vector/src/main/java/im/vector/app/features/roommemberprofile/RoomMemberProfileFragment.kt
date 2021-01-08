@@ -108,6 +108,21 @@ class RoomMemberProfileFragment @Inject constructor(
                 )
         )
         views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
+        headerViews.memberProfileActionAudio.actionTitle.setText(R.string.room_member_action_audio_call)
+        headerViews.memberProfileActionAudio.actionIcon.setImageResource(R.drawable.ic_room_member_action_audio)
+        headerViews.memberProfileActionAudio.actionIcon.setOnClickListener {
+            viewModel.handle(RoomMemberProfileAction.StartCall(false))
+        }
+        headerViews.memberProfileActionVideo.actionTitle.setText(R.string.room_member_action_video_call)
+        headerViews.memberProfileActionVideo.actionIcon.setImageResource(R.drawable.ic_room_member_profile_action_video)
+        headerViews.memberProfileActionVideo.actionIcon.setOnClickListener {
+            viewModel.handle(RoomMemberProfileAction.StartCall(true))
+        }
+        headerViews.memberProfileActionMessage.actionTitle.setText(R.string.room_member_action_message)
+        headerViews.memberProfileActionMessage.actionIcon.setImageResource(R.drawable.ic_room_member_profile_action_message)
+        headerViews.memberProfileActionMessage.actionIcon.setOnClickListener {
+            onOpenDmClicked()
+        }
         viewModel.observeViewEvents {
             when (it) {
                 is RoomMemberProfileViewEvents.Loading                     -> showLoading(it.message)
@@ -116,11 +131,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.ShareRoomMemberProfile      -> handleShareRoomMemberProfile(it.permalink)
                 is RoomMemberProfileViewEvents.ShowPowerLevelValidation    -> handleShowPowerLevelAdminWarning(it)
                 is RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning -> handleShowPowerLevelDemoteWarning(it)
-                is RoomMemberProfileViewEvents.OnKickActionSuccess         -> Unit
-                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess      -> Unit
-                is RoomMemberProfileViewEvents.OnBanActionSuccess          -> Unit
-                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess       -> Unit
-                is RoomMemberProfileViewEvents.OnInviteActionSuccess       -> Unit
+                is RoomMemberProfileViewEvents.OnActionSuccess             -> Unit
             }.exhaustive
         }
         setupLongClicks()
@@ -243,6 +254,9 @@ class RoomMemberProfileFragment @Inject constructor(
             }
         }
         headerViews.memberProfilePowerLevelView.setTextOrHide(state.userPowerLevelString())
+        headerViews.memberProfileActionMessage.root.isVisible = !state.isMine
+        headerViews.memberProfileActionVideo.root.isVisible = !state.isMine
+        headerViews.memberProfileActionAudio.root.isVisible = !state.isMine
         roomMemberProfileController.setData(state)
     }
 
@@ -287,11 +301,6 @@ class RoomMemberProfileFragment @Inject constructor(
         DeviceListBottomSheet.newInstance(it.userId).show(parentFragmentManager, "DEV_LIST")
     }
 
-    override fun onOpenDmClicked() {
-        roomDetailPendingActionStore.data = RoomDetailPendingAction.OpenOrCreateDm(fragmentArgs.userId)
-        vectorBaseActivity.finish()
-    }
-
     override fun onJumpToReadReceiptClicked() {
         roomDetailPendingActionStore.data = RoomDetailPendingAction.JumpToReadReceipt(fragmentArgs.userId)
         vectorBaseActivity.finish()
@@ -317,6 +326,11 @@ class RoomMemberProfileFragment @Inject constructor(
                         text = permalink
                 )
             }.show()
+    }
+
+    private fun onOpenDmClicked() {
+        roomDetailPendingActionStore.data = RoomDetailPendingAction.OpenOrCreateDm(fragmentArgs.userId)
+        vectorBaseActivity.finish()
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {

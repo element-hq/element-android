@@ -86,15 +86,51 @@
             android:id="@+id/memberProfileStatusView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:gravity="center"
             android:textSize="14sp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/memberProfilePowerLevelView"
             tools:text="Here is a profile status"
             tools:visibility="visible" />
+
+
+        <include
+            android:id="@+id/memberProfileActionAudio"
+            layout="@layout/include_room_member_profile_header_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/memberProfileActionVideo"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/memberProfileStatusView" />
+
+        <include
+            android:id="@+id/memberProfileActionVideo"
+            layout="@layout/include_room_member_profile_header_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/memberProfileActionMessage"
+            app:layout_constraintStart_toEndOf="@+id/memberProfileActionAudio"
+            app:layout_constraintTop_toBottomOf="@id/memberProfileStatusView" />
+
+        <include
+            android:id="@+id/memberProfileActionMessage"
+            layout="@layout/include_room_member_profile_header_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/memberProfileActionVideo"
+            app:layout_constraintTop_toBottomOf="@id/memberProfileStatusView" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

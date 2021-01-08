@@ -45,7 +45,6 @@ class RoomMemberProfileController @Inject constructor(
         fun onTapVerify()
         fun onShowDeviceList()
         fun onShowDeviceListNoCrossSigning()
-        fun onOpenDmClicked()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
         fun onEditPowerLevel(currentRole: Role)
@@ -79,17 +78,6 @@ class RoomMemberProfileController @Inject constructor(
                 divider = false,
                 action = { callback?.onIgnoreClicked() }
         )
-        if (!state.isMine) {
-            buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
-
-            buildProfileAction(
-                    id = "direct",
-                    editable = false,
-                    title = stringProvider.getString(R.string.room_member_open_or_create_dm),
-                    dividerColor = dividerColor,
-                    action = { callback?.onOpenDmClicked() }
-            )
-        }
     }
 
     private fun buildRoomMemberActions(state: RoomMemberProfileViewState) {
@@ -184,14 +172,6 @@ class RoomMemberProfileController @Inject constructor(
             val membership = state.asyncMembership() ?: return
 
             buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
-
-            buildProfileAction(
-                    id = "direct",
-                    editable = false,
-                    title = stringProvider.getString(R.string.room_member_open_or_create_dm),
-                    dividerColor = dividerColor,
-                    action = { callback?.onOpenDmClicked() }
-            )
 
             if (state.hasReadReceipt) {
                 buildProfileAction(

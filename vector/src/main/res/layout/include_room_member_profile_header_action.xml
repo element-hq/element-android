@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/action_icon"
+        android:layout_width="40dp"
+        tools:src="@drawable/ic_room_member_action_audio"
+        android:scaleType="center"
+        android:duplicateParentState="true"
+        android:background="@drawable/bg_room_member_profile_action"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/action_title"
+        android:layout_marginTop="8dp"
+        android:duplicateParentState="true"
+        android:layout_width="wrap_content"
+        tools:text="Audio"
+        android:textSize="12sp"
+        android:textColor="?colorPrimary"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

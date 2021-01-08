@@ -312,10 +312,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (existingDmRoomId == null) {
             // First create a direct room
             viewModelScope.launch(Dispatchers.IO) {
-                val roomId = awaitCallback<String> {
-                    session.createDirectRoom(action.userId, it)
+                try {
+                    val roomId = awaitCallback<String> {
+                        session.createDirectRoom(action.userId, it)
+                    }
+                    _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId))
+                }catch (failure: Throwable){
+                    _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
                 }
-                _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId))
             }
         } else {
             if (existingDmRoomId != initialState.roomId) {

@@ -2256,6 +2256,9 @@
 
     <string name="room_member_open_or_create_dm">Direct message</string>
     <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
+    <string name="room_member_action_audio_call">Audio</string>
+    <string name="room_member_action_video_call">Video</string>
+    <string name="room_member_action_message">Message</string>
 
     <string name="rendering_event_error_type_of_event_not_handled">"Element does not handle events of type '%1$s'"</string>
     <string name="rendering_event_error_type_of_message_not_handled">"Element does not handle message of type '%1$s'"</string>

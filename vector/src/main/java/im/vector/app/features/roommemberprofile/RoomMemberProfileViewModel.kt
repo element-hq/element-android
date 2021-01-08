@@ -30,6 +30,7 @@ import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.call.WebRtcPeerConnectionManager
 import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -57,6 +58,7 @@ import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
 class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomMemberProfileViewState,
+                                                             private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
                                                              private val stringProvider: StringProvider,
                                                              private val session: Session)
     : VectorViewModel<RoomMemberProfileViewState, RoomMemberProfileAction, RoomMemberProfileViewEvents>(initialState) {
@@ -140,14 +142,38 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
 
     override fun handle(action: RoomMemberProfileAction) {
         when (action) {
-            is RoomMemberProfileAction.RetryFetchingInfo      -> fetchProfileInfo()
-            is RoomMemberProfileAction.IgnoreUser             -> handleIgnoreAction()
-            is RoomMemberProfileAction.VerifyUser             -> prepareVerification()
+            is RoomMemberProfileAction.RetryFetchingInfo -> fetchProfileInfo()
+            is RoomMemberProfileAction.IgnoreUser -> handleIgnoreAction(action)
+            is RoomMemberProfileAction.VerifyUser -> prepareVerification()
             is RoomMemberProfileAction.ShareRoomMemberProfile -> handleShareRoomMemberProfile()
-            is RoomMemberProfileAction.SetPowerLevel          -> handleSetPowerLevel(action)
-            is RoomMemberProfileAction.BanOrUnbanUser         -> handleBanOrUnbanAction(action)
-            is RoomMemberProfileAction.KickUser               -> handleKickAction(action)
-            RoomMemberProfileAction.InviteUser                -> handleInviteAction()
+            is RoomMemberProfileAction.SetPowerLevel -> handleSetPowerLevel(action)
+            is RoomMemberProfileAction.BanOrUnbanUser -> handleBanOrUnbanAction(action)
+            is RoomMemberProfileAction.KickUser -> handleKickAction(action)
+            RoomMemberProfileAction.InviteUser -> handleInviteAction(action)
+            is RoomMemberProfileAction.StartCall -> handleStartCallAction(action)
+        }
+    }
+
+    private fun handleStartCallAction(action: RoomMemberProfileAction.StartCall) {
+        viewModelScope.launch {
+            val existingRoomId = session.getExistingDirectRoomWithUser(initialState.userId)
+            val roomIdForCall = if (existingRoomId == null) {
+                val createRoomStr = stringProvider.getString(R.string.create_room_in_progress)
+                _viewEvents.post(RoomMemberProfileViewEvents.Loading(createRoomStr))
+                try {
+                    val createdRoomId = awaitCallback<String> {
+                        session.createDirectRoom(initialState.userId, it)
+                    }
+                    _viewEvents.post(RoomMemberProfileViewEvents.OnActionSuccess(action))
+                    createdRoomId
+                } catch (failure: Throwable) {
+                    _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+                    return@launch
+                }
+            } else {
+                existingRoomId
+            }
+            webRtcPeerConnectionManager.startOutgoingCall(roomIdForCall, initialState.userId, action.isVideo)
         }
     }
 
@@ -167,7 +193,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
                 try {
                     room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent())
-                    _viewEvents.post(RoomMemberProfileViewEvents.OnSetPowerLevelSuccess)
+                    _viewEvents.post(RoomMemberProfileViewEvents.OnActionSuccess(action))
                 } catch (failure: Throwable) {
                     _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
                 }
@@ -188,7 +214,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
         }
     }
 
-    private fun handleInviteAction() {
+    private fun handleInviteAction(action: RoomMemberProfileAction) {
         if (room == null) {
             return
         }
@@ -198,7 +224,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 awaitCallback<Unit> {
                     room.invite(initialState.userId, callback = it)
                 }
-                _viewEvents.post(RoomMemberProfileViewEvents.OnInviteActionSuccess)
+                _viewEvents.post(RoomMemberProfileViewEvents.OnActionSuccess(action))
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
             }
@@ -215,7 +241,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 awaitCallback<Unit> {
                     room.kick(initialState.userId, action.reason, it)
                 }
-                _viewEvents.post(RoomMemberProfileViewEvents.OnKickActionSuccess)
+                _viewEvents.post(RoomMemberProfileViewEvents.OnActionSuccess(action))
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
             }
@@ -237,7 +263,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                         room.ban(initialState.userId, action.reason, it)
                     }
                 }
-                _viewEvents.post(RoomMemberProfileViewEvents.OnBanActionSuccess)
+                _viewEvents.post(RoomMemberProfileViewEvents.OnActionSuccess(action))
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
             }
@@ -253,12 +279,12 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 .unwrap()
                 .execute {
                     when (it) {
-                        is Loading       -> copy(userMatrixItem = Loading(), asyncMembership = Loading())
-                        is Success       -> copy(
+                        is Loading -> copy(userMatrixItem = Loading(), asyncMembership = Loading())
+                        is Success -> copy(
                                 userMatrixItem = Success(it().toMatrixItem()),
                                 asyncMembership = Success(it().membership)
                         )
-                        is Fail          -> copy(userMatrixItem = Fail(it.error), asyncMembership = Fail(it.error))
+                        is Fail -> copy(userMatrixItem = Fail(it.error), asyncMembership = Fail(it.error))
                         is Uninitialized -> this
                     }
                 }
@@ -315,12 +341,12 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 }
     }
 
-    private fun handleIgnoreAction() = withState { state ->
+    private fun handleIgnoreAction(action: RoomMemberProfileAction.IgnoreUser) = withState { state ->
         val isIgnored = state.isIgnored() ?: return@withState
         _viewEvents.post(RoomMemberProfileViewEvents.Loading())
         val ignoreActionCallback = object : MatrixCallback<Unit> {
             override fun onSuccess(data: Unit) {
-                _viewEvents.post(RoomMemberProfileViewEvents.OnIgnoreActionSuccess)
+                _viewEvents.post(RoomMemberProfileViewEvents.OnActionSuccess(action))
             }
 
             override fun onFailure(failure: Throwable) {
