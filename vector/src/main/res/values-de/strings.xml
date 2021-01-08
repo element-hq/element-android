@@ -475,7 +475,7 @@
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Wer kann den Chatverlauf lesen?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Wer kann auf diesen Raum zugreifen?</string>
     <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
-    <string name="room_settings_read_history_entry_anyone">Jeder</string>
+    <string name="room_settings_read_history_entry_anyone">Jede*r</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Nur Mitglieder (ab dem Zeitpunkt, an dem diese Option ausgewählt wurde)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Nur Mitglieder (ab dem Zeitpunkt, an dem sie eingeladen wurden)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Nur Mitglieder (ab dem Zeitpunkt, an dem sie beigetreten sind)</string>
@@ -2121,7 +2121,7 @@
     <string name="auth_pin_confirm_to_disable_title">Bestätige PIN um die PIN zu deaktivieren</string>
     <string name="settings_call_show_confirmation_dialog_title">Verhindere versehentliche Anrufe</string>
     <string name="settings_call_show_confirmation_dialog_summary">Bitte um Bestätigung, bevor du einen Anruf tätigst</string>
-    <string name="bottom_sheet_setup_secure_backup_submit">Konfiguration</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Einrichten</string>
     <string name="no_permissions_to_start_conf_call">Dir fehlt die Berechtigung in diesem Raum eine Konferenz zu starten</string>
     <string name="conference_call_in_progress">Es ist bereits eine Konferenz aktiv!</string>
     <string name="video_meeting">Starte eine Videokonferenz</string>
@@ -2265,7 +2265,7 @@
     <string name="user_directory_search_hint">Nach Name oder ID suchen</string>
     <string name="permissions_denied_add_contact">Gib die Erlaubnis, um auf die Kamera zu zugreifen.</string>
     <string name="permissions_denied_qr_code">Um den QR-Code zu scannen, muss der Zugriff auf die Kamera erlaubt werden.</string>
-    <string name="room_alias_published_alias_title">Veröffentlichte Adressen</string>
+    <string name="room_alias_published_alias_title">Öffentliche Adressen</string>
     <string name="room_alias_title">Raumadressen</string>
     <string name="room_settings_alias_subtitle">Raumadressen und Sichtbarkeit im Raumverzeichnis ansehen und bearbeiten.</string>
     <string name="room_settings_alias_title">Raumadresse</string>
@@ -2276,4 +2276,64 @@
     <string name="share_by_text">Mit Nachricht teilen</string>
     <string name="hide_advanced">Erweiterte Optionen ausblenden</string>
     <string name="show_advanced">Erweiterte Optionen anzeigen</string>
+    <string name="room_alias_publish_to_directory_error">Die Sichtbarkeit des Raums konnte nicht abgerufen werden (%1$s).</string>
+    <string name="matrix_to_card_title">Matrix-Link</string>
+    <string name="qr_code_not_scanned">QR-Code nicht gescannt!</string>
+    <string name="invalid_qr_code_uri">Inkorrekter QR code (invalide URL)!</string>
+    <string name="cannot_dm_self">Du kannst dir selbst keine Direktnachricht schicken!</string>
+    <string name="settings_security_pin_code_change_pin_summary">Ändere deine aktuelle PIN</string>
+    <string name="settings_security_pin_code_change_pin_title">PIN ändern</string>
+    <string name="phone_book_perform_lookup">Suche nach Kontakten auf Matrix</string>
+    <string name="room_settings_set_avatar">Avatar einrichten</string>
+    <string name="identity_server_user_consent_not_provided">Einverständnis wurde nicht abgegeben.</string>
+    <string name="user_code_info_text">Teile diesen Code mit Leuten, damit sie ihn scannen und mit dir chatten können.</string>
+    <string name="user_code_share">Meinen Code teilen</string>
+    <string name="user_code_my_code">Mein Code</string>
+    <string name="user_code_scan">Scanne einen QR code</string>
+    <string name="not_a_valid_qr_code">Das ist kein korrekter QR-Code von Matrix</string>
+    <string name="invite_friends_rich_title">🔐️ Komm mit zu Element</string>
+    <string name="invite_friends_text">Hey, schreibe mit mir auf Element: %s</string>
+    <string name="invite_friends">Freunde einladen</string>
+    <string name="add_people">Leute hinzufügen</string>
+    <string name="topic_prefix">"Thema "</string>
+    <string name="add_a_topic_link_text">Füge ein Thema hinzu</string>
+    <string name="room_created_summary_no_topic_creation_text">%s, um zu zeigen um was es in diesem Raum geht.</string>
+    <string name="this_is_the_beginning_of_dm">Das ist der Anfang deiner Direktnachrichten mit %s.</string>
+    <string name="this_is_the_beginning_of_room_no_name">Das ist der Anfang dieser Konversation.</string>
+    <string name="this_is_the_beginning_of_room">Das ist der Anfang von %s.</string>
+    <string name="room_settings_enable_encryption_no_permission">Du hast nicht die nötigen Berechtigungen, um die Verschlüsselung in diesem Raum zu aktivieren.</string>
+    <string name="create_room_in_progress">Erstelle Raum…</string>
+    <string name="create_room_alias_invalid">Manche Zeichen sind nicht zulässig</string>
+    <string name="create_room_alias_empty">Bitte gib eine Raumadresse an</string>
+    <string name="create_room_alias_already_in_use">Diese Adresse ist bereits vergeben</string>
+    <string name="create_room_alias_hint">Raumadresse</string>
+    <string name="create_room_disable_federation_description">Aktivieren, wenn der Raum nur von Mitgliedern deines Homeservers zur internen Kommunikation verwendet wird. Das kann später nicht mehr geändert werden.</string>
+    <string name="create_room_disable_federation_title">Begrenze Zugang zu diesem Raum (für immer!) auf Mitglieder von %s</string>
+    <string name="attachment_viewer_item_x_of_y">%1$d von %2$d</string>
+    <string name="a11y_create_direct_message_by_qr_code">QR-Code scannen, um eine neue Direktnachtricht schicken</string>
+    <string name="identity_server_consent_dialog_content">Um Matrix-Accounts deiner bestehenden Kontakte zu finden werden Daten aus deiner Kontaktliste (Telefonnummern und Emails) an den eingestellten Identitätsserver %1$s gesendet.
+\nDie Daten werden vor dem Senden gehasht, also nicht im Klartext verschickt.
+\nEinverstanden\?</string>
+    <string name="room_preview_no_preview_join">Keine Vorschau für diesen Raum verfügbar. Willst du direkt beitreten\?</string>
+    <string name="room_preview_not_found">Der Raum ist gerade nicht zugänglich.
+\nVersuche es später nochmal, oder bitte einen Raum-Admin um Hilfe.</string>
+    <string name="room_alias_published_alias_add_manually">Eine neue Adresse veröffentlichen</string>
+    <string name="room_alias_published_alias_subtitle">Mit einer öffentlichen Adresse kann jede*r mit jedem Server deinem Raum beitreten. Um eine Adresse zu veröffentlichen, muss sie zuerst als lokale Adresse gesetzt sein.</string>
+    <string name="room_alias_publish_to_directory">Diesen Raum im Verzeichnis von %1$s veröffentlichen\?</string>
+    <string name="room_alias_unpublish_confirmation">Die Adresse \"%1$s\" nicht mehr veröffentlichen\?</string>
+    <string name="room_alias_action_unpublish">Diese Adresse nicht mehr veröffentlichen</string>
+    <string name="room_alias_action_publish">Diese Adresse veröffentlichen</string>
+    <string name="room_alias_local_address_add">Lokale Adresse hinzufügen</string>
+    <string name="room_alias_local_address_empty">Dieser Raum hat keine lokalen Adressen</string>
+    <string name="room_alias_local_address_subtitle">Füge Adressen für diesen Raum hinzu, damit andere Nutzer ihn auf %1$s finden können</string>
+    <string name="room_alias_local_address_title">Lokale Adresse</string>
+    <string name="room_alias_address_hint">Neue öffentliche Adresse (z.B. #alias:server)</string>
+    <string name="room_alias_address_empty">Noch keine weiteren öffentlichen Adressen vorhanden.</string>
+    <string name="room_alias_address_empty_can_add">Noch keine weiteren öffentlichen Adressen vorhanden, füge unten eine hinzu.</string>
+    <string name="room_alias_publish">Diesen Raum im Verzeichnis von %1$s veröffentlichen\?</string>
+    <string name="room_alias_delete_confirmation">Die Adresse \"%1$s\" löschen\?</string>
+    <string name="room_alias_published_alias_add_manually_submit">Veröffentlichen</string>
+    <string name="room_alias_published_other">Andere öffentliche Adressen:</string>
+    <string name="room_alias_main_address_hint">Hauptadresse</string>
+    <string name="room_alias_published_alias_main">Das ist die Hauptadresse</string>
 </resources>
