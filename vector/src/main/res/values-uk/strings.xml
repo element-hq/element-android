@@ -1155,4 +1155,314 @@
 \n
 \nЗупинити змінювання пароля\?</string>
     <string name="room_settings_save_success">Ви успішно змінили налаштування кімнати</string>
+    <string name="keys_backup_setup_backup_started_message">Тепер ваші ключі шифрування резервно копіюються у фоновому режимі на домашній сервер. Початкове резервне копіювання може зайняти кілька хвилин.</string>
+    <string name="keys_backup_setup_backup_started_title">Резервне копіювання розпочато</string>
+    <string name="unexpected_error">Неочікувана помилка</string>
+    <string name="recovery_key">Ключ відновлення</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Створення ключа відновлення за допомогою парольної фрази, цей процес може зайняти кілька секунд.</string>
+    <string name="keys_backup_setup_step3_share_intent_chooser_title">Поділитися ключем відновлення з…</string>
+    <string name="keys_backup_setup_step3_please_make_copy">Будь ласка, зробіть копію</string>
+    <string name="keys_backup_setup_override_stop">Стій</string>
+    <string name="keys_backup_setup_override_replace">Замінити</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Схоже, у вас вже є резервне копіювання ключа налаштування з іншого сеансу. Ви хочете замінити його тим, який ви створюєте\?</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Резервна копія вже існує на вашому HomeServer</string>
+    <string name="recovery_key_export_saved">Ключ відновлення збережено.</string>
+    <string name="recovery_key_export_saved_as_warning">Ключ відновлення збережено у папці \"% s\".
+\n
+\nПопередження: цей файл може бути видалено, якщо програму видалено.</string>
+    <string name="keys_backup_setup_step3_save_button_title">Зберегти як файл</string>
+    <string name="keys_backup_setup_step3_share_recovery_file">Поділіться</string>
+    <string name="keys_backup_setup_step3_copy_button_title">Збережіть ключ відновлення</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Я зробив копію</string>
+    <string name="keys_backup_setup_step3_button_title">Готово</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">Тримайте ключ відновлення десь дуже надійно, наприклад, менеджер паролів (або сейф)</string>
+    <string name="keys_backup_setup_step3_text_line2">Ваш ключ відновлення - це мережа безпеки - ви можете використовувати його для відновлення доступу до ваших зашифрованих повідомлень, якщо ви забудете свою парольну фразу.
+\nТримайте ключ відновлення десь дуже надійно, наприклад, менеджер паролів (або сейф)</string>
+    <string name="keys_backup_setup_step3_text_line1">Ваші ключі резервно копіюються.</string>
+    <string name="keys_backup_setup_step3_success_title">Успіху!</string>
+    <string name="keys_backup_setup_step2_skip_button_title">(Додатково) Налаштування за допомогою ключа відновлення</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">Або захистіть свою резервну копію за допомогою ключа відновлення, зберігаючи її десь у безпеці.</string>
+    <string name="keys_backup_setup_creating_backup">Створення резервної копії</string>
+    <string name="keys_backup_setup_step2_button_title">Встановіть парольну фразу</string>
+    <string name="keys_backup_setup_step2_text_description">Ми збережемо зашифровану копію ваших ключів на вашому домашньому сервері. Захистіть свою резервну копію парольною фразою, щоб захистити її.
+\n
+\nДля максимальної безпеки він повинен відрізнятися від пароля вашого облікового запису.</string>
+    <string name="keys_backup_setup_step2_text_title">Захистіть свою резервну копію за допомогою парольної фрази.</string>
+    <string name="keys_backup_setup_step1_manual_export">Експорт ключів вручну</string>
+    <string name="keys_backup_setup">Почніть використовувати резервне копіювання ключів</string>
+    <string name="keys_backup_setup_step1_description">Повідомлення в зашифрованих кімнатах захищаються наскрізним шифруванням. Тільки ви та одержувач (и) маєте ключі для читання цих повідомлень.
+\n
+\nНадійно створіть резервну копію клавіш, щоб не втратити їх.</string>
+    <string name="keys_backup_setup_step1_title">Ніколи не втрачайте зашифровані повідомлення</string>
+    <string name="keys_backup_no_session_error">Немає сесії Matrix</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Видаліть парольну фразу, якщо хочете, щоб Element створив ключ відновлення.</string>
+    <string name="passphrase_passphrase_too_weak">Парольна фраза занадто слабка</string>
+    <string name="passphrase_empty_error_message">Введіть парольну фразу</string>
+    <string name="no_valid_google_play_services_apk">Не знайдено дійсного файлу .apk сервісів Google Play. Сповіщення можуть працювати неправильно.</string>
+    <string name="error_empty_field_enter_user_name">Введіть ім’я користувача.</string>
+    <string name="notification_silent">Безмовний</string>
+    <string name="ignore_request_short_label">Ігнорувати</string>
+    <string name="key_share_request">Запит на розподіл ключів</string>
+    <string name="share_without_verifying_short_label">Поділіться</string>
+    <string name="start_verification_short_label">Перевірити</string>
+    <string name="your_unverified_device_requesting_with_info">Неперевірений сеанс запитує ключі шифрування.
+\nНазва сесії:% 1 $ s
+\nВостаннє бачено:% 2 $ s
+\nЯкщо ви не ввійшли в інший сеанс, проігноруйте цей запит.</string>
+    <string name="you_added_a_new_device_with_info">Нова сесія вимагає ключів шифрування.
+\nНазва сесії:% 1 $ s
+\nВостаннє бачено:% 2 $ s
+\nЯкщо ви не ввійшли в інший сеанс, проігноруйте цей запит.</string>
+    <string name="widget_integration_review_terms">Для продовження потрібно прийняти Умови цієї послуги.</string>
+    <string name="room_no_active_widgets">Немає активних віджетів</string>
+    <string name="room_manage_integrations">Керуйте інтеграціями</string>
+    <string name="integration_manager_not_configured">Менеджер інтеграції не налаштовано.</string>
+    <string name="room_widget_webview_read_protected_media">Прочитайте захищені DRM засоби масової інформації</string>
+    <string name="room_widget_webview_access_microphone">Використовуйте мікрофон</string>
+    <string name="room_widget_webview_access_camera">Використовуйте камеру</string>
+    <string name="room_widget_resource_decline_permission">Заблокувати все</string>
+    <string name="room_widget_resource_grant_permission">Дозвольте</string>
+    <string name="room_widget_resource_permission_title">Цей віджет хоче використовувати такі ресурси:</string>
+    <string name="error_jitsi_not_supported_on_old_device">На жаль, конференц-дзвінки з Jitsi не підтримуються на старих пристроях (пристрої з ОС Android нижче 5.0)</string>
+    <string name="room_widget_permission_room_id">Ідентифікатор кімнати</string>
+    <string name="room_widget_permission_widget_id">Ідентифікатор віджета</string>
+    <string name="room_widget_permission_theme">Ваша тема</string>
+    <string name="room_widget_permission_user_id">Ваш ідентифікатор користувача</string>
+    <string name="room_widget_permission_avatar_url">URL-адреса вашого аватара</string>
+    <string name="room_widget_permission_display_name">Ваше відображуване ім\'я</string>
+    <string name="room_widget_revoke_access">Скасувати доступ для мене</string>
+    <string name="room_widget_open_in_browser">Відкрити в браузері</string>
+    <string name="room_widget_reload">Перезавантажте віджет</string>
+    <string name="room_widget_failed_to_load">Не вдалося завантажити віджет.
+\n% s</string>
+    <string name="room_widget_permission_shared_info_title">Його використання може обмінюватися даними з% s:</string>
+    <string name="room_widget_permission_webview_shared_info_title">За його допомогою можна встановити файли cookie та обмінюватися даними з% s:</string>
+    <string name="room_widget_permission_added_by">Цей віджет додав:</string>
+    <string name="room_widget_permission_title">Завантажити віджет</string>
+    <string name="room_widget_activity_title">Віджет</string>
+    <string name="active_widgets_title">Активні віджети</string>
+    <string name="active_widget_view_action">ПЕРЕГЛЯН</string>
+    <string name="notification_ticker_text_group">% 1 $ s:% 2 $ s% 3 $ s</string>
+    <string name="notification_ticker_text_dm">% 1 $ s:% 2 $ s</string>
+    <string name="notification_inline_reply_failed">** Не вдалося надіслати - відкрийте кімнату</string>
+    <string name="notification_sender_me">Я</string>
+    <string name="notification_new_invitation">Нове запрошення</string>
+    <string name="notification_new_messages">Нові повідомлення</string>
+    <string name="notification_unknown_room_name">Кімната</string>
+    <string name="notification_unknown_new_event">Нова подія</string>
+    <string name="notification_unread_notified_messages_and_invitation">% 1 $ s та% 2 $ s</string>
+    <string name="notification_unread_notified_messages_in_room_and_invitation">% 1 $ s у% 2 $ s та% 3 $ s</string>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">повідомлення</item>
+        <item quantity="few">повідомлення</item>
+        <item quantity="many">повідомлення</item>
+        <item quantity="other">повідомлення</item>
+    </plurals>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">повідомлення</item>
+        <item quantity="few">повідомлення</item>
+        <item quantity="many">повідомлення</item>
+        <item quantity="other">повідомлення</item>
+    </plurals>
+    <plurals name="notification_invitations">
+        <item quantity="one">запрошення</item>
+        <item quantity="few">запрошення</item>
+        <item quantity="many">запрошення</item>
+        <item quantity="other">запрошення</item>
+    </plurals>
+    <string name="encryption_information_unknown_ip">невідомий ip</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">Ключ% 1 $ d /% 2 $ d імпортовано з успіхом.</item>
+        <item quantity="few">ключі, імпортовані з успіхом.</item>
+        <item quantity="many">ключі, імпортовані з успіхом.</item>
+        <item quantity="other">ключі, імпортовані з успіхом.</item>
+    </plurals>
+    <string name="encryption_settings_manage_message_recovery_summary">Керування резервною копією ключів</string>
+    <string name="encryption_message_recovery">Відновлення зашифрованих повідомлень</string>
+    <string name="encryption_exported_successfully">Ключі успішно експортовані</string>
+    <string name="device_name_warning">Публічну назву сеансу бачать люди, з якими ви спілкуєтесь</string>
+    <string name="encryption_information_device_name_with_warning">Публічне ім’я (видиме людям, з якими спілкуєтесь)</string>
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="one">% d заборонений користувач</item>
+        <item quantity="few">% d заборонених користувачів</item>
+        <item quantity="many">% d заборонених користувачів</item>
+        <item quantity="other">% d заборонених користувачів</item>
+    </plurals>
+    <string name="room_alias_publish_to_directory_error">Не вдається отримати поточну видимість каталогу кімнат (% 1 $ s).</string>
+    <string name="room_alias_publish_to_directory">Опублікувати цю кімнату для всіх у каталозі кімнат% 1 $ s\?</string>
+    <string name="room_alias_action_unpublish">Скасувати публікацію цієї адреси</string>
+    <string name="room_alias_action_publish">Опублікуйте цю адресу</string>
+    <string name="room_alias_local_address_add">Додайте місцеву адресу</string>
+    <string name="room_alias_local_address_empty">У цій кімнаті немає місцевих адрес</string>
+    <string name="room_alias_local_address_subtitle">Встановіть адреси для цієї кімнати, щоб користувачі могли знаходити цю кімнату через ваш домашній сервер (% 1 $ s)</string>
+    <string name="room_alias_local_address_title">Місцеві адреси</string>
+    <string name="room_alias_address_hint">Нова опублікована адреса (наприклад, #alias: server)</string>
+    <string name="room_alias_address_empty">Інших опублікованих адрес поки що немає.</string>
+    <string name="room_alias_address_empty_can_add">Інших опублікованих адрес поки що немає, додайте одну нижче.</string>
+    <string name="room_alias_publish">Опублікувати цю кімнату для всіх у каталозі кімнат% 1 $ s\?</string>
+    <string name="room_alias_delete_confirmation">Видалити адресу \"% 1 $ s\"\?</string>
+    <string name="room_alias_unpublish_confirmation">Скасувати публікацію адреси \"% 1 $ s\"\?</string>
+    <string name="room_alias_published_alias_add_manually_submit">Опублікувати</string>
+    <string name="room_alias_published_alias_add_manually">Опублікуйте нову адресу вручну</string>
+    <string name="room_alias_published_other">Інші опубліковані адреси:</string>
+    <string name="room_alias_main_address_hint">Основна адреса</string>
+    <string name="room_alias_published_alias_main">Це основна адреса</string>
+    <string name="room_alias_published_alias_subtitle">Опубліковані адреси може використовувати будь-хто на будь-якому сервері для приєднання до вашої кімнати. Щоб опублікувати адресу, її потрібно спочатку встановити як локальну адресу.</string>
+    <string name="room_alias_published_alias_title">Опубліковані адреси</string>
+    <string name="room_alias_title">Адреси кімнат</string>
+    <string name="room_settings_alias_subtitle">Перегляньте адреси цієї кімнати та керовані ними, а також їх видимість у каталозі кімнати.</string>
+    <string name="room_settings_alias_title">Адреси номерів</string>
+    <string name="room_settings_room_access_title">Доступ до номера</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">Зміни щодо того, хто може читати історію, стосуватимуться лише майбутніх повідомлень у цій кімнаті. Видимість існуючої історії залишиться незмінною.</string>
+    <string name="settings_play_shutter_sound">Відтворити звук затвора</string>
+    <string name="media_source_choose">Вибирайте</string>
+    <string name="settings_default_media_source">Медіа-джерело за замовчуванням</string>
+    <string name="compression_opt_list_choose">Вибирайте</string>
+    <string name="settings_default_compression">Стиснення за замовчуванням</string>
+    <string name="settings_media">ЗМІ</string>
+    <string name="account_additional_info">Додаткова інформація:% s</string>
+    <string name="account_phone_number_error">Під час підтвердження номера телефону сталася помилка.</string>
+    <string name="passwords_do_not_match">Паролі не збігаються</string>
+    <string name="settings_fail_to_update_password_invalid_current_password">Пароль не дійсний</string>
+    <string name="settings_change_password_submit">Оновити пароль</string>
+    <string name="account_email_error">Під час підтвердження вашої адреси електронної пошти сталася помилка.</string>
+    <string name="disabled_integration_dialog_content">Увімкніть для цього параметр \"Дозволити інтеграцію\" у налаштуваннях.</string>
+    <string name="disabled_integration_dialog_title">Інтеграція вимкнена</string>
+    <string name="settings_integration_manager">Менеджер інтеграції</string>
+    <string name="settings_integration_allow">Дозволити інтеграції</string>
+    <string name="settings_data_save_mode_summary">Режим збереження даних застосовує певний фільтр, тому оновлення присутності та сповіщення про введення фільтруються.</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">Дайте дозвіл</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Для отримання надійних сповіщень елементу потрібно підтримувати з’єднання у фоновому режимі з незначним ударом.
+\nНа наступному екрані вам буде запропоновано дозволити Element завжди працювати у фоновому режимі, прийміть.</string>
+    <string name="startup_notification_fdroid_battery_optim_title">Фонове з’єднання</string>
+    <string name="reset_secure_backup_warning">Це замінить ваш поточний ключ або фразу.</string>
+    <string name="reset_secure_backup_title">Створіть новий ключ безпеки або встановіть нову фразу безпеки для існуючої резервної копії.</string>
+    <string name="settings_secure_backup_section_info">Захистіть від втрати доступу до зашифрованих повідомлень та даних, створивши резервну копію ключів шифрування на своєму сервері.</string>
+    <string name="settings_secure_backup_enter_to_setup">Налаштуйте на цьому пристрої</string>
+    <string name="settings_secure_backup_reset">Скиньте безпечне резервне копіювання</string>
+    <string name="settings_secure_backup_setup">Налаштуйте безпечне резервне копіювання</string>
+    <string name="settings_secure_backup_manage">Управління</string>
+    <string name="settings_secure_backup_section_title">Безпечне резервне копіювання</string>
+    <string name="settings_show_room_member_state_events_summary">Включає події запрошення / приєднання / зліва / удару / заборони та зміни аватара / відображуваного імені.</string>
+    <string name="settings_show_room_member_state_events">Показати події держав-членів</string>
+    <string name="settings_cryptography_manage_keys">Управління ключами криптографії</string>
+    <string name="settings_integrations_summary">Використовуйте Integration Manager для керування ботами, мостами, віджетами та пакетами наклейок.
+\nМенеджери інтеграції отримують дані конфігурації та можуть змінювати віджети, надсилати запрошення до кімнати та встановлювати рівні потужності від вашого імені.</string>
+    <string name="settings_integrations">Інтеграції</string>
+    <plurals name="seconds">
+        <item quantity="one">% d секунди</item>
+        <item quantity="few">% d секунди</item>
+        <item quantity="many">% d секунди</item>
+        <item quantity="other">% d секунди</item>
+    </plurals>
+    <string name="settings_set_workmanager_delay_summary">% s
+\nСинхронізація може бути відкладена залежно від ресурсів (акумулятор) або стану пристрою (сплячий режим).</string>
+    <string name="settings_set_workmanager_delay">Бажаний інтервал синхронізації</string>
+    <string name="settings_background_sync_update_error">Не вдалося оновити налаштування.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">Ви не отримуватимете сповіщення про вхідні повідомлення, коли програма перебуває у фоновому режимі.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">Немає фонової синхронізації</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">Елемент періодично синхронізуватиметься у фоновому режимі в певний час (налаштовується).
+\nЦе вплине на використання радіо та акумулятора, з’явиться постійне сповіщення про те, що Element прослуховує події.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">Оптимізовано для реального часу</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">Елемент синхронізується у фоновому режимі таким чином, щоб зберегти обмежені ресурси пристрою (акумулятор).
+\nЗалежно від стану ресурсу вашого пристрою, синхронізація може бути відкладена операційною системою.</string>
+    <string name="settings_background_fdroid_sync_mode_battery">Оптимізовано для батареї</string>
+    <string name="settings_background_fdroid_sync_mode">Режим фонової синхронізації</string>
+    <string name="settings_notification_privacy_no_background_sync">Додатки <b> не </b> потребують підключення до HomeServer у фоновому режимі, це має зменшити споживання батареї</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">Ігнорувати оптимізацію</string>
+    <string name="settings_troubleshoot_test_battery_failed">Якщо користувач залишає пристрій відключеним та нерухомим протягом певного періоду часу, при вимкненому екрані, пристрій переходить у режим дрімання. Це запобігає доступу програм до мережі та відкладає їх завдання, синхронізацію та стандартні сигнали тривоги.</string>
+    <string name="settings_troubleshoot_test_battery_success">Оптимізація акумулятора не впливає на елемент.</string>
+    <string name="settings_troubleshoot_test_battery_title">Оптимізація акумулятора</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">Вимкнути обмеження</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Фонові обмеження ввімкнено для елемента.
+\nРобота, яку намагається виконати програма, буде агресивно обмежена, поки вона перебуває у фоновому режимі, і це може вплинути на сповіщення.
+\n% 1 $ s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Фонові обмеження для елемента вимкнено. Цей тест слід проводити з використанням мобільних даних (без Wi-Fi).
+\n% 1 $ s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_title">Перевірте фонові обмеження</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Увімкніть Пуск під час завантаження</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Послуга не запуститься при перезавантаженні пристрою, ви не будете отримувати сповіщення, доки Element не буде відкрито один раз.</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Сервіс почнеться після перезапуску пристрою.</string>
+    <string name="settings_troubleshoot_test_service_boot_title">Почніть із завантаження</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Помилка перезапуску служби</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Сервіс був убитий і перезапущений автоматично.</string>
+    <string name="settings_troubleshoot_test_service_restart_title">Автоматичний перезапуск служби сповіщень</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Запустіть службу</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Служба сповіщень не працює.
+\nСпробуйте перезапустити програму.</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Служба сповіщень працює.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Служба сповіщень</string>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">Повідомлення натиснуто!</string>
+    <string name="settings_troubleshoot_test_notification_notice">Клацніть на сповіщення. Якщо ви не бачите сповіщення, перевірте налаштування системи.</string>
+    <string name="settings_troubleshoot_test_notification_title">Відображення сповіщень</string>
+    <string name="settings_troubleshoot_test_push_notification_content">Ви переглядаєте сповіщення! Клацніть на мене!</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Не вдалося отримати push. Рішенням може бути перевстановлення програми.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">Додаток отримує PUSH</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Додаток чекає PUSH</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Тестовий поштовх</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Не вдалося зареєструвати маркер FCM на HomeServer:
+\n% 1 $ s</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Токен FCM успішно зареєстрований на HomeServer.</string>
+    <string name="settings_troubleshoot_test_token_registration_title">Реєстрація токена</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Додати обліковий запис</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[% 1 $ s]
+\nЦя помилка вийшла з-під контролю Element. На телефоні немає облікового запису Google. Відкрийте менеджер облікових записів і додайте обліковий запис Google.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[% 1 $ s]
+\nЦя помилка вийшла з-під контролю Element. Це може статися з кількох причин. Можливо, це спрацює, якщо ви спробуєте пізніше, ви також можете перевірити, чи не обмежена служба Google Play щодо використання даних у налаштуваннях системи, чи правильний годинник вашого пристрою, або це може статися на користувацькому ПЗУ.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[% 1 $ s]
+\nЦя помилка вийшла з-під контролю Element, і за даними Google, ця помилка вказує на те, що на пристрої зареєстровано забагато програм у FCM. Помилка виникає лише у випадках, коли додатків надзвичайно багато, тому вона не повинна впливати на звичайного користувача.</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Не вдалося отримати маркер FCM:
+\n% 1 $ s</string>
+    <string name="settings_troubleshoot_test_fcm_success">Успішно отримано маркер FCM:
+\n% 1 $ s</string>
+    <string name="settings_troubleshoot_test_fcm_title">Токен Firebase</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Виправити послуги Play</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Element використовує сервіси Google Play для доставки push-повідомлень, але, схоже, він налаштований неправильно:
+\n% 1 $ s</string>
+    <string name="open_settings">Відкрийте Налаштування</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Сповіщення вимкнено в налаштуваннях системи.
+\nБудь ласка, перевірте налаштування системи.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Один або кілька тестів не пройшли, надішліть звіт про помилку, щоб допомогти нам розслідувати.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Одне або кілька тестів не вдалося, спробуйте запропоновані виправлення.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Основна діагностика в порядку. Якщо ви все ще не отримуєте сповіщення, надішліть звіт про помилку, щоб допомогти нам розслідувати.</string>
+    <string name="settings_notification_by_event">Важливість повідомлення за подією</string>
+    <string name="error_threepid_auth_failed">Переконайтеся, що ви натиснули посилання в електронному листі, який ми надіслали вам.</string>
+    <string name="settings_remove_three_pid_confirmation_content">Видалити% s\?</string>
+    <string name="settings_add_3pid_authentication_needed">Потрібна автентифікація</string>
+    <string name="settings_add_3pid_flow_not_supported">Це неможливо зробити за допомогою Element mobile</string>
+    <string name="settings_add_3pid_confirm_password_title">Підтвердити пароль</string>
+    <string name="search_banned_user_hint">Фільтрувати заборонених користувачів</string>
+    <string name="room_participants_unban_prompt_msg">Скасування заборони користувачеві дозволить їм знову приєднатися до кімнати.</string>
+    <string name="room_participants_unban_title">Розблокувати користувача</string>
+    <string name="room_participants_ban_reason">Причина заборони</string>
+    <string name="room_participants_ban_title">Заборонити користувача</string>
+    <string name="room_participants_kick_prompt_msg">нога користувач видалить їх з цієї кімнати.
+\n
+\nЩоб запобігти їх повторному приєднанню, замість цього слід заборонити їх.</string>
+    <string name="room_participants_kick_reason">Причина для удару</string>
+    <string name="room_participants_kick_title">Удар користувача</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Дійсно скасувати запрошення для цього користувача\?</string>
+    <string name="room_participants_action_cancel_invite_title">Скасувати запрошення</string>
+    <string name="room_participants_action_unignore_prompt_msg">Ігнорування цього користувача знову покаже всі повідомлення від нього.</string>
+    <string name="room_participants_action_unignore_title">Ігнорувати користувача</string>
+    <string name="room_participants_action_ignore_prompt_msg">Ігноруючи цього користувача, його повідомлення буде видалено з кімнат, якими ви ділитесь.
+\n
+\nВи можете будь-коли змінити цю дію в загальних налаштуваннях.</string>
+    <string name="room_participants_action_ignore_title">Ігнорувати користувача</string>
+    <string name="room_participants_power_level_demote">Знизити</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Ви не зможете скасувати цю зміну, оскільки знижуєтеся, якщо ви останній привілейований користувач у кімнаті, неможливо буде повернути собі привілеї.</string>
+    <string name="room_participants_power_level_demote_warning_title">Понизитися\?</string>
+    <string name="invite_no_identity_server_error">Додайте сервер ідентифікації у свої налаштування, щоб виконати цю дію.</string>
+    <string name="permissions_denied_add_contact">Дозвольте доступ до ваших контактів.</string>
+    <string name="permissions_denied_qr_code">Щоб відсканувати QR-код, потрібно дозволити доступ до камери.</string>
+    <string name="return_to_call">Повернутися до дзвінка</string>
+    <string name="video_call_in_progress">Триває відеодзвінок…</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Використовуватиме% s як допоміжний, коли ваш домашній сервер не пропонує такого (ваша IP-адреса буде надана під час дзвінка)</string>
+    <string name="settings_call_ringtone_use_default_stun">Дозволити сервер допоміжних викликів</string>
+    <string name="login_error_ssl_handshake">Ваш пристрій використовує застарілий протокол безпеки TLS, вразливий до атак, для вашої безпеки ви не зможете підключитися</string>
+    <string name="login_error_ssl_peer_unverified">Помилка SSL: особа однолітка не підтверджена.</string>
+    <string name="auth_add_email_and_phone_message_2">Встановіть електронну адресу для відновлення облікового запису. Використовуйте пізніше електронну пошту або телефон, щоб люди, які вас знають, могли їх відкрити.</string>
+    <string name="auth_add_email_phone_message_2">Встановіть електронну адресу для відновлення облікового запису. Використовуйте пізніше електронну пошту або телефон, щоб люди, які вас знають, могли їх відкрити.</string>
+    <string name="auth_add_phone_message_2">Встановіть телефон, а пізніше, щоб його могли побачити люди, які вас знають.</string>
+    <string name="auth_add_email_message_2">Встановіть електронну адресу для відновлення облікового запису, а пізніше, щоб вона була необов’язковою для пошуку людьми, які вас знають.</string>
 </resources>
