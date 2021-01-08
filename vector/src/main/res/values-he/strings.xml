@@ -221,7 +221,7 @@
     <string name="auth_reset_password_message">כדי לאפס את הסיסמה שלך, הזן את כתובת הדוא\"ל המקושרת לחשבונך:</string>
     <string name="auth_reset_password_next_step_button">אימתתי את כתובת הדוא\"ל שלי</string>
     <string name="auth_identity_server">שרת זיהוי:</string>
-    <string name="auth_home_server">שרת הבית</string>
+    <string name="auth_home_server">שרת הבית:</string>
     <string name="auth_username_in_use">שם משתמש כבר נמצא בשימוש</string>
     <string name="auth_recaptcha_message">שרת בית זה רוצה לוודא שאתה לא רובוט</string>
     <string name="auth_threepid_warning_message">הרשמה באמצעות דוא\"ל ומספר טלפון בבת אחת עדיין אינה נתמכת עד להתקנת ה- API. רק מספר הטלפון ייקח בחשבון.
