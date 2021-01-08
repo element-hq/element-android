@@ -23,7 +23,7 @@ SDK API changes ⚠️:
  -
 
 Build 🧱:
- -
+ - Remove dependency to org.greenrobot.eventbus library
 
 Test:
  -

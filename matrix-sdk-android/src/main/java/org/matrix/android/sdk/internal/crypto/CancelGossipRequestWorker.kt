@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.crypto
 import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -60,7 +59,6 @@ internal class CancelGossipRequestWorker(context: Context,
 
     @Inject lateinit var sendToDeviceTask: SendToDeviceTask
     @Inject lateinit var cryptoStore: IMXCryptoStore
-    @Inject lateinit var eventBus: EventBus
     @Inject lateinit var credentials: Credentials
 
     override fun injectWith(injector: SessionComponent) {

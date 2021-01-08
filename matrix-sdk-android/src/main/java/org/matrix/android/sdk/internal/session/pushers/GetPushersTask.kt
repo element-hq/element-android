@@ -20,10 +20,10 @@ import org.matrix.android.sdk.api.session.pushers.PusherState
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.PusherEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetPushersTask : Task<Unit, Unit>
@@ -31,11 +31,11 @@ internal interface GetPushersTask : Task<Unit, Unit>
 internal class DefaultGetPushersTask @Inject constructor(
         private val pushersAPI: PushersAPI,
         @SessionDatabase private val monarchy: Monarchy,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetPushersTask {
 
     override suspend fun execute(params: Unit) {
-        val response = executeRequest<GetPushersResponse>(eventBus) {
+        val response = executeRequest<GetPushersResponse>(globalErrorReceiver) {
             apiCall = pushersAPI.getPushers()
         }
         monarchy.awaitTransaction { realm ->
