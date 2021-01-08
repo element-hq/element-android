@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.TimeOutInterceptor
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
@@ -48,7 +48,7 @@ internal class DefaultSyncTask @Inject constructor(
         private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
         private val userStore: UserStore,
         private val syncTaskSequencer: SyncTaskSequencer,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SyncTask {
 
     override suspend fun execute(params: SyncTask.Params) = syncTaskSequencer.post {
@@ -81,7 +81,7 @@ internal class DefaultSyncTask @Inject constructor(
 
         val readTimeOut = (params.timeout + TIMEOUT_MARGIN).coerceAtLeast(TimeOutInterceptor.DEFAULT_LONG_TIMEOUT)
 
-        val syncResponse = executeRequest<SyncResponse>(eventBus) {
+        val syncResponse = executeRequest<SyncResponse>(globalErrorReceiver) {
             apiCall = syncAPI.sync(
                     params = requestParams,
                     readTimeOut = readTimeOut

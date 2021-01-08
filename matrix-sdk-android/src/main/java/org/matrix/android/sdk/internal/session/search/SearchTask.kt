@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.search
 
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.search.EventAndSender
 import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.search.request.SearchRequestBody
 import org.matrix.android.sdk.internal.session.search.request.SearchRequestCategories
@@ -47,11 +47,11 @@ internal interface SearchTask : Task<SearchTask.Params, SearchResult> {
 
 internal class DefaultSearchTask @Inject constructor(
         private val searchAPI: SearchAPI,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SearchTask {
 
     override suspend fun execute(params: SearchTask.Params): SearchResult {
-        return executeRequest<SearchResponse>(eventBus) {
+        return executeRequest<SearchResponse>(globalErrorReceiver) {
             val searchRequestBody = SearchRequestBody(
                     searchCategories = SearchRequestCategories(
                             roomEvents = SearchRequestRoomEvents(

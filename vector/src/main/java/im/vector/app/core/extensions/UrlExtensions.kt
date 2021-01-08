@@ -16,26 +16,6 @@
 
 package im.vector.app.core.extensions
 
-import java.net.URLEncoder
-
-/**
- * Append param and value to a Url, using "?" or "&". Value parameter will be encoded
- * Return this for chaining purpose
- */
-fun StringBuilder.appendParamToUrl(param: String, value: String): StringBuilder {
-    if (contains("?")) {
-        append("&")
-    } else {
-        append("?")
-    }
-
-    append(param)
-    append("=")
-    append(URLEncoder.encode(value, "utf-8"))
-
-    return this
-}
-
 /**
  * Ex: "https://matrix.org/" -> "matrix.org"
  */

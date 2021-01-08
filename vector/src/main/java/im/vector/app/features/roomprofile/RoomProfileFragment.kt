@@ -17,6 +17,7 @@
 
 package im.vector.app.features.roomprofile
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -34,6 +35,7 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
+import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
@@ -247,18 +249,35 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onLeaveRoomClicked() {
+        val isPublicRoom = roomProfileViewModel.isPublicRoom()
+        val message = buildString {
+            append(getString(R.string.room_participants_leave_prompt_msg))
+            if (!isPublicRoom) {
+                append("\n\n")
+                append(getString(R.string.room_participants_leave_private_warning))
+            }
+        }
         AlertDialog.Builder(requireContext())
                 .setTitle(R.string.room_participants_leave_prompt_title)
-                .setMessage(R.string.room_participants_leave_prompt_msg)
+                .setMessage(message)
                 .setPositiveButton(R.string.leave) { _, _ ->
                     roomProfileViewModel.handle(RoomProfileAction.LeaveRoom)
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
+                .apply {
+                    if (!isPublicRoom) {
+                        withColoredButton(DialogInterface.BUTTON_POSITIVE)
+                    }
+                }
     }
 
     override fun onRoomIdClicked() {
         copyToClipboard(requireContext(), roomProfileArgs.roomId)
+    }
+
+    override fun onUrlInTopicLongClicked(url: String) {
+        copyToClipboard(requireContext(), url, true)
     }
 
     private fun onShareRoomProfile(permalink: String) {

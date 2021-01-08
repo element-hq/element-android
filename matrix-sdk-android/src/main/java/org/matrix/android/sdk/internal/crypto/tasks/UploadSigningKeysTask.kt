@@ -25,9 +25,9 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSigningKeysBody
 import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.crypto.model.toRest
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, Unit> {
@@ -55,7 +55,7 @@ data class UploadSigningKeys(val failures: Map<String, Any>?) : Failure.FeatureF
 
 internal class DefaultUploadSigningKeysTask @Inject constructor(
         private val cryptoApi: CryptoApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : UploadSigningKeysTask {
 
     override suspend fun execute(params: UploadSigningKeysTask.Params) {
@@ -87,7 +87,7 @@ internal class DefaultUploadSigningKeysTask @Inject constructor(
     }
 
     private suspend fun doRequest(uploadQuery: UploadSigningKeysBody) {
-        val keysQueryResponse = executeRequest<KeysQueryResponse>(eventBus) {
+        val keysQueryResponse = executeRequest<KeysQueryResponse>(globalErrorReceiver) {
             apiCall = cryptoApi.uploadSigningKeys(uploadQuery)
         }
         if (keysQueryResponse.failures?.isNotEmpty() == true) {

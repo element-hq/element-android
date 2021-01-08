@@ -25,10 +25,10 @@ import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFie
 import org.matrix.android.sdk.internal.database.query.whereStateKey
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface CreateWidgetTask : Task<CreateWidgetTask.Params, Unit> {
@@ -43,10 +43,10 @@ internal interface CreateWidgetTask : Task<CreateWidgetTask.Params, Unit> {
 internal class DefaultCreateWidgetTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                            private val roomAPI: RoomAPI,
                                                            @UserId private val userId: String,
-                                                           private val eventBus: EventBus) : CreateWidgetTask {
+                                                           private val globalErrorReceiver: GlobalErrorReceiver) : CreateWidgetTask {
 
     override suspend fun execute(params: CreateWidgetTask.Params) {
-        executeRequest<Unit>(eventBus) {
+        executeRequest<Unit>(globalErrorReceiver) {
             apiCall = roomAPI.sendStateEvent(
                     roomId = params.roomId,
                     stateEventType = EventType.STATE_ROOM_WIDGET_LEGACY,

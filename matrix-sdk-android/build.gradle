@@ -167,9 +167,6 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
 
-    // Bus
-    implementation 'org.greenrobot:eventbus:3.1.1'
-
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
 

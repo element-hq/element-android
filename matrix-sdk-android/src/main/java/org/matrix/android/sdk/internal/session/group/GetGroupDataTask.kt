@@ -23,13 +23,13 @@ import org.matrix.android.sdk.internal.database.model.GroupSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.group.model.GroupRooms
 import org.matrix.android.sdk.internal.session.group.model.GroupSummaryResponse
 import org.matrix.android.sdk.internal.session.group.model.GroupUsers
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -43,7 +43,7 @@ internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
 internal class DefaultGetGroupDataTask @Inject constructor(
         private val groupAPI: GroupAPI,
         @SessionDatabase private val monarchy: Monarchy,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetGroupDataTask {
 
     private data class GroupData(
@@ -64,13 +64,13 @@ internal class DefaultGetGroupDataTask @Inject constructor(
         }
         Timber.v("Fetch data for group with ids: ${groupIds.joinToString(";")}")
         val data = groupIds.map { groupId ->
-            val groupSummary = executeRequest<GroupSummaryResponse>(eventBus) {
+            val groupSummary = executeRequest<GroupSummaryResponse>(globalErrorReceiver) {
                 apiCall = groupAPI.getSummary(groupId)
             }
-            val groupRooms = executeRequest<GroupRooms>(eventBus) {
+            val groupRooms = executeRequest<GroupRooms>(globalErrorReceiver) {
                 apiCall = groupAPI.getRooms(groupId)
             }
-            val groupUsers = executeRequest<GroupUsers>(eventBus) {
+            val groupUsers = executeRequest<GroupUsers>(globalErrorReceiver) {
                 apiCall = groupAPI.getUsers(groupId)
             }
             GroupData(groupId, groupSummary, groupRooms, groupUsers)

@@ -15,11 +15,12 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
+import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.task.Task
@@ -35,16 +36,24 @@ internal interface SendEventTask : Task<SendEventTask.Params, String> {
 internal class DefaultSendEventTask @Inject constructor(
         private val localEchoRepository: LocalEchoRepository,
         private val encryptEventTask: DefaultEncryptEventTask,
+        private val loadRoomMembersTask: LoadRoomMembersTask,
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus) : SendEventTask {
+        private val globalErrorReceiver: GlobalErrorReceiver) : SendEventTask {
 
     override suspend fun execute(params: SendEventTask.Params): String {
         try {
+            // Make sure to load all members in the room before sending the event.
+            params.event.roomId
+                    ?.takeIf { params.encrypt }
+                    ?.let { roomId ->
+                        loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+                    }
+
             val event = handleEncryption(params)
             val localId = event.eventId!!
 
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENDING)
-            val executeRequest = executeRequest<SendResponse>(eventBus) {
+            val executeRequest = executeRequest<SendResponse>(globalErrorReceiver) {
                 apiCall = roomAPI.send(
                         localId,
                         roomId = event.roomId ?: "",

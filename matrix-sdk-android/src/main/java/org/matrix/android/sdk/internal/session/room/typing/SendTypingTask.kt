@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
 import kotlinx.coroutines.delay
-import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import javax.inject.Inject
 
 internal interface SendTypingTask : Task<SendTypingTask.Params, Unit> {
@@ -38,13 +38,13 @@ internal interface SendTypingTask : Task<SendTypingTask.Params, Unit> {
 internal class DefaultSendTypingTask @Inject constructor(
         private val roomAPI: RoomAPI,
         @UserId private val userId: String,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SendTypingTask {
 
     override suspend fun execute(params: SendTypingTask.Params) {
         delay(params.delay ?: -1)
 
-        executeRequest<Unit>(eventBus) {
+        executeRequest<Unit>(globalErrorReceiver) {
             apiCall = roomAPI.sendTypingState(
                     params.roomId,
                     userId,

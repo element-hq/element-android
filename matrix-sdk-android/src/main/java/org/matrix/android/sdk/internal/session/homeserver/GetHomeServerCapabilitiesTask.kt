@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.homeserver
 
 import com.zhuinden.monarchy.Monarchy
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
@@ -27,6 +26,7 @@ import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEnti
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManagerConfigExtractor
 import org.matrix.android.sdk.internal.session.media.GetMediaConfigResult
@@ -44,7 +44,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val capabilitiesAPI: CapabilitiesAPI,
         private val mediaAPI: MediaAPI,
         @SessionDatabase private val monarchy: Monarchy,
-        private val eventBus: EventBus,
+        private val globalErrorReceiver: GlobalErrorReceiver,
         private val getWellknownTask: GetWellknownTask,
         private val configExtractor: IntegrationManagerConfigExtractor,
         private val homeServerConnectionConfig: HomeServerConnectionConfig,
@@ -65,13 +65,13 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         }
 
         val capabilities = runCatching {
-            executeRequest<GetCapabilitiesResult>(eventBus) {
+            executeRequest<GetCapabilitiesResult>(globalErrorReceiver) {
                 apiCall = capabilitiesAPI.getCapabilities()
             }
         }.getOrNull()
 
         val mediaConfig = runCatching {
-            executeRequest<GetMediaConfigResult>(eventBus) {
+            executeRequest<GetMediaConfigResult>(globalErrorReceiver) {
                 apiCall = mediaAPI.getMediaConfig()
             }
         }.getOrNull()
