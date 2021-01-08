@@ -375,8 +375,8 @@
     <string name="compression_opt_list_small">קטן</string>
     <string name="compression_opt_list_medium">בינוני</string>
     <string name="compression_opt_list_large">גדול</string>
-    <string name="compression_opt_list_original">מקורי</string>
-    <string name="compression_options">שלח כ:</string>
+    <string name="compression_opt_list_original">מקור</string>
+    <string name="compression_options">שלח כ</string>
     <plurals name="membership_changes">
         <item quantity="one">שינוי בפרט חברות</item>
         <item quantity="two">שינוי בפרטי חברות</item>
