@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import android.content.Context
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
@@ -27,12 +26,12 @@ import android.view.View
 import dagger.Lazy
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
-import im.vector.app.core.utils.isLocalFile
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
@@ -95,7 +94,7 @@ import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
-        private val context: Context,
+        private val localFilesHelper: LocalFilesHelper,
         private val colorProvider: ColorProvider,
         private val dimensionConverter: DimensionConverter,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
@@ -207,7 +206,7 @@ class MessageItemFactory @Inject constructor(
         } ?: ""
         return MessageFileItem_()
                 .attributes(attributes)
-                .izLocalFile(fileUrl.isLocalFile(context))
+                .izLocalFile(localFilesHelper.isLocalFile(fileUrl))
                 .izDownloaded(session.fileService().isFileInCache(
                         fileUrl,
                         messageContent.getFileName(),
@@ -272,7 +271,7 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .izLocalFile(messageContent.getFileUrl().isLocalFile(context))
+                .izLocalFile(localFilesHelper.isLocalFile(messageContent.getFileUrl()))
                 .izDownloaded(session.fileService().isFileInCache(messageContent))
                 .mxcUrl(mxcUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)

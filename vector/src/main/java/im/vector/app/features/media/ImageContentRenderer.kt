@@ -16,7 +16,6 @@
 
 package im.vector.app.features.media
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
@@ -34,12 +33,12 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView.ORIENTATION
 import com.github.piasy.biv.view.BigImageView
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequest
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.core.ui.model.Size
 import im.vector.app.core.utils.DimensionConverter
-import im.vector.app.core.utils.isLocalFile
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
@@ -60,7 +59,7 @@ interface AttachmentData : Parcelable {
     val allowNonMxcUrls: Boolean
 }
 
-class ImageContentRenderer @Inject constructor(private val context: Context,
+class ImageContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
                                                private val activeSessionHolder: ActiveSessionHolder,
                                                private val dimensionConverter: DimensionConverter) {
 
@@ -292,7 +291,7 @@ class ImageContentRenderer @Inject constructor(private val context: Context,
 
     private fun resolveUrl(data: Data) =
             (activeSessionHolder.getActiveSession().contentUrlResolver().resolveFullSize(data.url)
-                    ?: data.url?.takeIf { data.url.isLocalFile(context) && data.allowNonMxcUrls })
+                    ?: data.url?.takeIf { localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls })
 
     private fun processSize(data: Data, mode: Mode): Size {
         val maxImageWidth = data.maxWidth

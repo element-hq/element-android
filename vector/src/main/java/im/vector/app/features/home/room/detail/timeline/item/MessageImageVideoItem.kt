@@ -25,8 +25,8 @@ import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.glide.GlideApp
-import im.vector.app.core.utils.isLocalFile
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -56,7 +56,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         super.bind(holder)
         imageContentRenderer.render(mediaData, mode, holder.imageView)
         if (!attributes.informationData.sendState.hasFailed()) {
-            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, mediaData.url.isLocalFile(holder.view.context), holder.progressLayout)
+            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, LocalFilesHelper(holder.view.context).isLocalFile(mediaData.url), holder.progressLayout)
         } else {
             holder.progressLayout.isVisible = false
         }

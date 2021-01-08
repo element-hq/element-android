@@ -16,7 +16,6 @@
 
 package im.vector.app.features.media
 
-import android.content.Context
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -25,7 +24,7 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.utils.isLocalFile
+import im.vector.app.core.files.LocalFilesHelper
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
@@ -34,7 +33,7 @@ import java.io.File
 import java.net.URLEncoder
 import javax.inject.Inject
 
-class VideoContentRenderer @Inject constructor(private val context: Context,
+class VideoContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
                                                private val activeSessionHolder: ActiveSessionHolder,
                                                private val errorFormatter: ErrorFormatter) {
 
@@ -65,7 +64,7 @@ class VideoContentRenderer @Inject constructor(private val context: Context,
                 loadingView.isVisible = false
                 errorView.isVisible = true
                 errorView.setText(R.string.unknown_error)
-            } else if (data.url.isLocalFile(context) && data.allowNonMxcUrls) {
+            } else if (localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls) {
                 thumbnailView.isVisible = false
                 loadingView.isVisible = false
                 videoView.isVisible = true
@@ -100,7 +99,7 @@ class VideoContentRenderer @Inject constructor(private val context: Context,
             }
         } else {
             val resolvedUrl = contentUrlResolver.resolveFullSize(data.url)
-                    ?: data.url?.takeIf { data.url.isLocalFile(context) && data.allowNonMxcUrls }
+                    ?: data.url?.takeIf { localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls }
 
             if (resolvedUrl == null) {
                 thumbnailView.isVisible = false

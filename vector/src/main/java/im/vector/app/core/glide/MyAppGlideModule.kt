@@ -25,6 +25,7 @@ import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule
 import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.features.media.ImageContentRenderer
 import java.io.InputStream
 
@@ -38,6 +39,6 @@ class MyAppGlideModule : AppGlideModule() {
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         registry.append(ImageContentRenderer.Data::class.java,
                 InputStream::class.java,
-                VectorGlideModelLoaderFactory(context, context.vectorComponent().activeSessionHolder()))
+                VectorGlideModelLoaderFactory(LocalFilesHelper(context), context.vectorComponent().activeSessionHolder()))
     }
 }

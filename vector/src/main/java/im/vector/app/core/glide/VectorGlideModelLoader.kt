@@ -16,7 +16,6 @@
 
 package im.vector.app.core.glide
 
-import android.content.Context
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.Options
@@ -26,8 +25,7 @@ import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.utils.isLocalFile
-import im.vector.app.core.utils.openInputStream
+import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.features.media.ImageContentRenderer
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.MatrixCallback
@@ -36,12 +34,12 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 
-class VectorGlideModelLoaderFactory(private val context: Context,
+class VectorGlideModelLoaderFactory(private val localFilesHelper: LocalFilesHelper,
                                     private val activeSessionHolder: ActiveSessionHolder
 ) : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
 
     override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<ImageContentRenderer.Data, InputStream> {
-        return VectorGlideModelLoader(context, activeSessionHolder)
+        return VectorGlideModelLoader(localFilesHelper, activeSessionHolder)
     }
 
     override fun teardown() {
@@ -49,7 +47,8 @@ class VectorGlideModelLoaderFactory(private val context: Context,
     }
 }
 
-class VectorGlideModelLoader(private val context: Context, private val activeSessionHolder: ActiveSessionHolder)
+class VectorGlideModelLoader(private val localFilesHelper: LocalFilesHelper,
+                             private val activeSessionHolder: ActiveSessionHolder)
     : ModelLoader<ImageContentRenderer.Data, InputStream> {
     override fun handles(model: ImageContentRenderer.Data): Boolean {
         // Always handle
@@ -57,11 +56,11 @@ class VectorGlideModelLoader(private val context: Context, private val activeSes
     }
 
     override fun buildLoadData(model: ImageContentRenderer.Data, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
-        return ModelLoader.LoadData(ObjectKey(model), VectorGlideDataFetcher(context, activeSessionHolder, model, width, height))
+        return ModelLoader.LoadData(ObjectKey(model), VectorGlideDataFetcher(localFilesHelper, activeSessionHolder, model, width, height))
     }
 }
 
-class VectorGlideDataFetcher(private val context: Context,
+class VectorGlideDataFetcher(private val localFilesHelper: LocalFilesHelper,
                              private val activeSessionHolder: ActiveSessionHolder,
                              private val data: ImageContentRenderer.Data,
                              private val width: Int,
@@ -102,8 +101,8 @@ class VectorGlideDataFetcher(private val context: Context,
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in InputStream>) {
         Timber.v("Load data: $data")
-        if (data.url.isLocalFile(context)) {
-            data.url.openInputStream(context)?.use {
+        if (localFilesHelper.isLocalFile(data.url)) {
+            localFilesHelper.openInputStream(data.url)?.use {
                 callback.onDataReady(it)
             }
             return
