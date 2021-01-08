@@ -154,4 +154,8 @@
     <string name="home_filter_placeholder_home">סנן שמות חדרים</string>
     <string name="bottom_action_groups">קהילות</string>
     <string name="bottom_action_rooms">חדרים</string>
+    <string name="people_no_identity_server">לא הוגדר שרת זהות.</string>
+    <string name="no_more_results">אין תוצאות נוספות</string>
+    <string name="no_result_placeholder">אין תוצאות</string>
+    <string name="no_contact_access_placeholder">לא אפשרת לאלמנט לגשת לאנשי הקשר המקומיים שלך</string>
 </resources>
