@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="bottom_action_notification">התראות</string>
-    <string name="bottom_action_home">בית</string>
+    <string name="bottom_action_home">כפתורי ניווט תחתונים</string>
     <string name="dialog_title_success">הצלחה</string>
     <string name="dialog_title_error">שגיאה</string>
     <string name="dialog_title_warning">אזהרה</string>
@@ -129,4 +129,15 @@
     <string name="resources_script">לטינית</string>
     <string name="resources_country_code">ארה\"ב</string>
     <string name="resources_language">אנגלית</string>
+    <plurals name="public_room_nb_users">
+        <item quantity="one">משתמש %d</item>
+        <item quantity="two">%d משתמשים</item>
+        <item quantity="many">מעט</item>
+        <item quantity="other">אחר</item>
+    </plurals>
+    <string name="no_public_room_placeholder">אין חדרים ציבורים</string>
+    <string name="no_room_placeholder">אין חדרים</string>
+    <string name="rooms_directory_header">רשימת חדרים</string>
+    <string name="rooms_header">חדרים</string>
+    <string name="no_conversation_placeholder">אין שיחות</string>
 </resources>
