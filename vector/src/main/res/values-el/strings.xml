@@ -524,6 +524,7 @@
     <string name="reason_hint">Λόγος</string>
     <string name="ssl_could_not_verify">Δεν εξακριβώθηκε η ταυτότητα του εξωτερικού διακομιστή.</string>
     <string name="room_event_action_report_prompt_ignore_user">Απόκρυψη όλων των μηνυμάτων από αυτό το χρήστη;
+\n
 \nΑυτή η ενέργεια θα επανεκκινήσει την εφαρμογή και ίσως πάρει λίγο χρόνο.</string>
     <string name="room_event_action_report_prompt_reason">Λόγοι αναφοράς αυτού του περιεχομένου</string>
     <string name="room_details_settings">Ρυθμίσεις</string>
