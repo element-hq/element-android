@@ -49,8 +49,8 @@ object EventType {
     const val STATE_ROOM_JOIN_RULES = "m.room.join_rules"
     const val STATE_ROOM_GUEST_ACCESS = "m.room.guest_access"
     const val STATE_ROOM_POWER_LEVELS = "m.room.power_levels"
-    const val STATE_SPACE_CHILD = "m.space.child"
-//    const val STATE_SPACE_CHILD = "org.matrix.msc1772.space"
+//    const val STATE_SPACE_CHILD = "m.space.child"
+    const val STATE_SPACE_CHILD = "org.matrix.msc1772.space.child"
 
     /**
      * Note that this Event has been deprecated, see
