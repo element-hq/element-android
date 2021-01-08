@@ -498,4 +498,29 @@
     <string name="forget_room">Λησμόνηση δωματίου</string>
     <string name="room_tombstone_versioned_description">Αυτό το δωμάτιο έχει αντικατασταθεί και δεν είναι πια ενεργό</string>
     <string name="speak">Μιλήστε</string>
+    <string name="ssl_remain_offline">Παράβλεψη</string>
+    <string name="ssl_logout_account">Αποσύνδεση</string>
+    <string name="ssl_do_not_trust">Δεν εμπιστεύομαι</string>
+    <string name="room_do_not_have_permission_to_post">Δεν έχετε εξουσιοδότηση να δημοσιεύσετε σε αυτό το δωμάτιο</string>
+    <string name="room_message_file_not_found">Το αρχείο δεν βρέθηκε</string>
+    <string name="room_delete_unsent_messages">Διαγραφή μηνυμάτων που δεν στάληκαν</string>
+    <string name="room_resend_unsent_messages">Επαναποστολή μηνυμάτων που δεν στάληκαν</string>
+    <string name="room_prompt_cancel">Ακύρωση όλων</string>
+    <string name="room_prompt_resend">Επαναποστολή όλων</string>
+    <string name="room_offline_notification">Απώλεια σύνδεσης με το διακομιστή.</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Αποστολή απάντησης (κρυπτογραφημένη)…</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Αποστολή κρυπτογραφημένης απάντησης…</string>
+    <string name="room_message_placeholder_not_encrypted">Αποστολή μηνύματος (κρυπτογραφημένο)…</string>
+    <string name="room_message_placeholder_encrypted">Αποστολή κρυπτογραφημένου μηνύματος…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; άλλοι γράφουν…</string>
+    <string name="room_one_user_is_typing">% γράφει…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s γράφουν…</string>
+    <string name="room_menu_search">Συνομιλία</string>
+    <string name="people_search_invite_by_id_dialog_hint">Διεύθυνση ηλεκτρονικού ταχυδρομίου ή Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Πρόσκληση μέσω ID χρήστη</string>
+    <string name="people_search_filter_text">Μόνο χρήστες Matrix</string>
+    <string name="people_search_user_directory">Ευρετήριο χρηστών</string>
+    <string name="room_participants_invite_prompt_msg">Η μεταβλητή μπορεί να είναι ένα μόνο όνομα ή μια σειρά από ονόματα
+\n(\"Aliki,\"</string>
+    <string name="reason_hint">Λόγος</string>
 </resources>
