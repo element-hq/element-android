@@ -32,7 +32,7 @@
     <string name="ok">Εντάξει</string>
     <string name="dialog_title_warning">Προειδοποίηση</string>
     <string name="_continue">Συνέχεια</string>
-    <string name="notification_sync_in_progress">Γίνεται συγχρονισμός</string>
+    <string name="notification_sync_in_progress">Γίνεται συγχρονισμός…</string>
     <string name="notification_noisy_notifications">Ηχητικές ειδοποιήσεις</string>
     <string name="notification_silent_notifications">Αθόρυβες ειδοποιήσεις</string>
     <string name="title_activity_home">Μηνύματα</string>
@@ -379,16 +379,18 @@
     <string name="auth_login">Σύνδεση</string>
     <string name="room_participants_ban_reason">Λόγος οριστικής αποβολής</string>
     <string name="room_participants_ban_title">Οριστική αποβολή χρήστη</string>
-    <string name="room_participants_kick_prompt_msg">Αποβάλλοντας αυτό το χρήση θα τους αφαιρέσαι από το δωμάτιο. 
-\nΓια να τους</string>
+    <string name="room_participants_kick_prompt_msg">Αποβάλλοντας αυτό το χρήση θα τους αφαιρέσαι από το δωμάτιο.
+\n 
+\nΕάν θέλετε να τους αποτρέψετε να συμμετάσχουν ξανά, θα πρέπει να τους αποβάλλετε οριστικά.</string>
     <string name="room_participants_kick_reason">Λόγος αποβολής</string>
     <string name="room_participants_kick_title">Αποβολή χρήστη</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Είστε σίγουροι πως θέλετε να καταργήσετε την πρόσκληση προς αυτό τον χρήστη;</string>
     <string name="room_participants_action_cancel_invite_title">Ακύρωση πρόσκλησης</string>
     <string name="room_participants_action_unignore">Κατάργηση παράβλεψης</string>
-    <string name="room_participants_action_unignore_prompt_msg">Καταργώντας την παράβλεψη αυτού του χρήστη θα επανφανίσει όλα τα μηνύματα από αυτούς</string>
+    <string name="room_participants_action_unignore_prompt_msg">Καταργώντας την παράβλεψη αυτού του χρήστη θα επανφανίσει όλα τα μηνύματα από αυτούς.</string>
     <string name="room_participants_action_ignore_title">Παράβλεψη χρήστη</string>
-    <string name="room_participants_action_ignore_prompt_msg">Παραβλέποντας αυτό το χρήση θα αφαιρέσει τα μηνύματα τους από δωμάτια που μοιράζεστε. 
+    <string name="room_participants_action_ignore_prompt_msg">Παραβλέποντας αυτό το χρήση θα αφαιρέσει τα μηνύματα τους από δωμάτια που μοιράζεστε.
+\n 
 \nΜπορείτε να αντιστρέψετε αυτή την ενέργεια οποτεδήποτε στις γενικές ρυθμίσεις.</string>
     <string name="room_participants_action_ignore">Παράβλεψη</string>
     <string name="room_participants_action_unignore_title">Κατάργηση παράβλεψης χρήστη</string>
