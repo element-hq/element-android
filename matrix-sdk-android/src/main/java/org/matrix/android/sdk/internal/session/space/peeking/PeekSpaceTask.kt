@@ -119,15 +119,15 @@ internal class DefaultPeekSpaceTask @Inject constructor(
                                     peekChildren(childStateEvents, depth + 1, maxDepth)
                             )
                     )
-                } else if (type == RoomType.MESSAGING || type == null) {
+                } else
+                /** if (type == RoomType.MESSAGING || type == null)*/
+                {
                     Timber.v("## SPACE_PEEK: room child $entry")
                     spaceChildResults.add(
                             SpaceChildPeekResult(
                                     childId, childPeek, entry.second?.default, entry.second?.order
                             )
                     )
-                } else {
-                    // ignore for now?
                 }
 
                 // let's check child info
