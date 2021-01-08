@@ -16,6 +16,7 @@
 
 package im.vector.app.core.glide
 
+import android.content.Context
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.Options
@@ -24,7 +25,7 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.features.media.ImageContentRenderer
 import okhttp3.OkHttpClient
@@ -34,12 +35,10 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 
-class VectorGlideModelLoaderFactory(private val localFilesHelper: LocalFilesHelper,
-                                    private val activeSessionHolder: ActiveSessionHolder
-) : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
+class VectorGlideModelLoaderFactory(private val context: Context) : ModelLoaderFactory<ImageContentRenderer.Data, InputStream> {
 
     override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<ImageContentRenderer.Data, InputStream> {
-        return VectorGlideModelLoader(localFilesHelper, activeSessionHolder)
+        return VectorGlideModelLoader(context)
     }
 
     override fun teardown() {
@@ -47,8 +46,7 @@ class VectorGlideModelLoaderFactory(private val localFilesHelper: LocalFilesHelp
     }
 }
 
-class VectorGlideModelLoader(private val localFilesHelper: LocalFilesHelper,
-                             private val activeSessionHolder: ActiveSessionHolder)
+class VectorGlideModelLoader(private val context: Context)
     : ModelLoader<ImageContentRenderer.Data, InputStream> {
     override fun handles(model: ImageContentRenderer.Data): Boolean {
         // Always handle
@@ -56,16 +54,18 @@ class VectorGlideModelLoader(private val localFilesHelper: LocalFilesHelper,
     }
 
     override fun buildLoadData(model: ImageContentRenderer.Data, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
-        return ModelLoader.LoadData(ObjectKey(model), VectorGlideDataFetcher(localFilesHelper, activeSessionHolder, model, width, height))
+        return ModelLoader.LoadData(ObjectKey(model), VectorGlideDataFetcher(context, model, width, height))
     }
 }
 
-class VectorGlideDataFetcher(private val localFilesHelper: LocalFilesHelper,
-                             private val activeSessionHolder: ActiveSessionHolder,
+class VectorGlideDataFetcher(context: Context,
                              private val data: ImageContentRenderer.Data,
                              private val width: Int,
                              private val height: Int)
     : DataFetcher<InputStream> {
+
+    private val localFilesHelper = LocalFilesHelper(context)
+    private val activeSessionHolder = context.vectorComponent().activeSessionHolder()
 
     private val client = activeSessionHolder.getSafeActiveSession()?.getOkHttpClient() ?: OkHttpClient()
 
