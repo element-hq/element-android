@@ -520,8 +520,7 @@
     <string name="people_search_invite_by_id_dialog_title">Πρόσκληση μέσω ID χρήστη</string>
     <string name="people_search_filter_text">Μόνο χρήστες Matrix</string>
     <string name="people_search_user_directory">Ευρετήριο χρηστών</string>
-    <string name="room_participants_invite_prompt_msg">Η μεταβλητή μπορεί να είναι ένα μόνο όνομα ή μια σειρά από ονόματα
-\n(\"Aliki,\"</string>
+    <string name="room_participants_invite_prompt_msg">Είστε σίγουροι ότι θέλετε να προσκαλέσετε τους %s σε αυτή την συζήτηση;</string>
     <string name="reason_hint">Λόγος</string>
     <string name="ssl_could_not_verify">Δεν εξακριβώθηκε η ταυτότητα του εξωτερικού διακομιστή.</string>
     <string name="room_event_action_report_prompt_ignore_user">Απόκρυψη όλων των μηνυμάτων από αυτό το χρήστη;
