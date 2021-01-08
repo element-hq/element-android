@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.room.create
 import com.zhuinden.monarchy.Monarchy
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
@@ -32,6 +31,7 @@ import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasAvailabilityChecker
@@ -55,7 +55,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
         private val createRoomBodyBuilder: CreateRoomBodyBuilder,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
@@ -75,7 +75,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
         val createRoomBody = createRoomBodyBuilder.build(params)
 
         val createRoomResponse = try {
-            executeRequest<CreateRoomResponse>(eventBus) {
+            executeRequest<CreateRoomResponse>(globalErrorReceiver) {
                 apiCall = roomAPI.createRoom(createRoomBody)
             }
         } catch (throwable: Throwable) {

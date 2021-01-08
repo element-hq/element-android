@@ -17,9 +17,9 @@
 package org.matrix.android.sdk.internal.session.openid
 
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface GetOpenIdTokenTask : Task<Unit, RequestOpenIdTokenResponse>
@@ -27,10 +27,10 @@ internal interface GetOpenIdTokenTask : Task<Unit, RequestOpenIdTokenResponse>
 internal class DefaultGetOpenIdTokenTask @Inject constructor(
         @UserId private val userId: String,
         private val openIdAPI: OpenIdAPI,
-        private val eventBus: EventBus) : GetOpenIdTokenTask {
+        private val globalErrorReceiver: GlobalErrorReceiver) : GetOpenIdTokenTask {
 
     override suspend fun execute(params: Unit): RequestOpenIdTokenResponse {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = openIdAPI.openIdToken(userId)
         }
     }

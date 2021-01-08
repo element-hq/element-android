@@ -26,7 +26,7 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import javax.inject.Inject
 
 internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
@@ -37,7 +37,7 @@ internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
 internal class DefaultRemovePusherTask @Inject constructor(
         private val pushersAPI: PushersAPI,
         @SessionDatabase private val monarchy: Monarchy,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : RemovePusherTask {
 
     override suspend fun execute(params: RemovePusherTask.Params) {
@@ -62,7 +62,7 @@ internal class DefaultRemovePusherTask @Inject constructor(
                 data = JsonPusherData(existing.data.url, existing.data.format),
                 append = false
         )
-        executeRequest<Unit>(eventBus) {
+        executeRequest<Unit>(globalErrorReceiver) {
             apiCall = pushersAPI.setPusher(deleteBody)
         }
         monarchy.awaitTransaction {

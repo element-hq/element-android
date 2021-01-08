@@ -30,10 +30,10 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okio.BufferedSink
 import okio.source
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.internal.di.Authenticated
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
 import org.matrix.android.sdk.internal.network.awaitResponse
 import org.matrix.android.sdk.internal.network.toFailure
@@ -45,7 +45,7 @@ import javax.inject.Inject
 
 internal class FileUploader @Inject constructor(@Authenticated
                                                 private val okHttpClient: OkHttpClient,
-                                                private val eventBus: EventBus,
+                                                private val globalErrorReceiver: GlobalErrorReceiver,
                                                 private val context: Context,
                                                 contentUrlResolver: ContentUrlResolver,
                                                 moshi: Moshi) {
@@ -115,7 +115,7 @@ internal class FileUploader @Inject constructor(@Authenticated
 
         return okHttpClient.newCall(request).awaitResponse().use { response ->
             if (!response.isSuccessful) {
-                throw response.toFailure(eventBus)
+                throw response.toFailure(globalErrorReceiver)
             } else {
                 response.body?.source()?.let {
                     responseAdapter.fromJson(it)
