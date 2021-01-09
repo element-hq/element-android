@@ -6,7 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Add System theme option and set as default (#904, #2387)
- - Warn user when he is leaving a not public room (#1460)
+ - Warn user when they are leaving a not public room (#1460)
 
 Bugfix 🐛:
  - Unspecced msgType field in m.sticker (#2580)
