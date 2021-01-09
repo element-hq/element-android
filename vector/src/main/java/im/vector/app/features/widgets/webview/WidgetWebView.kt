@@ -36,10 +36,6 @@ fun WebView.setupForWidget(webViewEventListener: WebViewEventListener) {
     // clear caches
     clearHistory()
     clearFormData()
-    clearCache(true)
-
-    // does not cache the data
-    settings.cacheMode = WebSettings.LOAD_NO_CACHE
 
     // Enable Javascript
     settings.javaScriptEnabled = true
@@ -77,8 +73,6 @@ fun WebView.clearAfterWidget() {
     webChromeClient = null
     webViewClient = null
     clearHistory()
-    // NOTE: clears RAM cache, if you pass true, it will also clear the disk cache.
-    clearCache(true)
     // Loading a blank page is optional, but will ensure that the WebView isn't doing anything when you destroy it.
     loadUrl("about:blank")
     removeAllViews()
