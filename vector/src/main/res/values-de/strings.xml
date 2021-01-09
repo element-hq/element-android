@@ -2311,9 +2311,9 @@
     <string name="create_room_disable_federation_title">Begrenze Zugang zu diesem Raum (für immer!) auf Mitglieder von %s</string>
     <string name="attachment_viewer_item_x_of_y">%1$d von %2$d</string>
     <string name="a11y_create_direct_message_by_qr_code">QR-Code scannen, um eine neue Direktnachtricht schicken</string>
-    <string name="identity_server_consent_dialog_content">Um Matrix-Accounts deiner bestehenden Kontakte zu finden werden Daten aus deiner Kontaktliste (Telefonnummern und Emails) an den eingestellten Identitätsserver %1$s gesendet.
-\nDie Daten werden vor dem Senden gehasht, also nicht im Klartext verschickt.
-\nEinverstanden\?</string>
+    <string name="identity_server_consent_dialog_content">Um bestehende Kontakte zu finden, ist es notwendig, Ihre Kontaktdaten (Telefonnummern und/oder E-Mails) mit dem ausgewählten Identitätsserver (%1$s) zu teilen.
+\n
+\nFür mehr Datenschutz werden die gesendeten Daten vor dem Versenden gehasht.</string>
     <string name="room_preview_no_preview_join">Keine Vorschau für diesen Raum verfügbar. Willst du direkt beitreten\?</string>
     <string name="room_preview_not_found">Der Raum ist gerade nicht zugänglich.
 \nVersuche es später nochmal, oder bitte einen Raum-Admin um Hilfe.</string>
