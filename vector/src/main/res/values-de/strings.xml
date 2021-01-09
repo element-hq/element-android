@@ -2273,4 +2273,7 @@
     <string name="room_settings_room_read_history_dialog_subtitle">Änderungen daran, wer die Chronik lesen kann, gellten nur für kommende Nachrichten in diesem Raum. Die Sichtbarkeit der bestehenden Chronik bleibt unverändert.</string>
     <string name="action_unpublish">Zurückziehen</string>
     <string name="action_add">Hinzufügen</string>
+    <string name="share_by_text">Mit Nachricht teilen</string>
+    <string name="hide_advanced">Erweiterte Optionen ausblenden</string>
+    <string name="show_advanced">Erweiterte Optionen anzeigen</string>
 </resources>
