@@ -395,4 +395,370 @@
     <string name="room_unsent_messages_notification">הודעות לא נשלחו. %1$s או %2$s עכשיו\?</string>
     <string name="room_offline_notification">הקישוריות לשרת אבדה.</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">שלח תשובה (לא מוצפן) …</string>
+    <string name="settings_notifications_targets">יעדי התראות</string>
+    <string name="settings_cryptography_manage_keys">ניהול מפתחות קריפטוגרפיה</string>
+    <string name="settings_cryptography">קריפטוגרפיה</string>
+    <string name="settings_integrations_summary">השתמש במנהל שילוב לניהול בוטים, גשרים, ווידג\'טים וחבילות מדבקות.
+\nמנהלי אינטגרציה מקבלים נתוני תצורה ויכולים לשנות ווידג\'טים, לשלוח הזמנות לחדר ולהגדיר רמות כוח מטעמכם.</string>
+    <string name="settings_integrations">אינטגרציות</string>
+    <string name="settings_advanced">מתקדם</string>
+    <string name="settings_other">אחר</string>
+    <string name="settings_ignored_users">משתמשים שמתעלמים מהם</string>
+    <string name="settings_notifications">התראות</string>
+    <string name="settings_user_settings">הגדרות משתמש</string>
+    <string name="settings_clear_media_cache">נקה מטמון מדיה</string>
+    <string name="settings_clear_cache">נקה את זיכרון המטמון</string>
+    <string name="settings_keep_media">שמור על מדיה</string>
+    <string name="settings_privacy_policy">מדיניות הפרטיות</string>
+    <string name="settings_copyright">זכויות יוצרים</string>
+    <string name="settings_third_party_notices">התראות צד שלישי</string>
+    <string name="settings_app_term_conditions">תנאים והגבלות</string>
+    <string name="settings_olm_version">גרסת olm</string>
+    <string name="settings_version">גִרְסָה</string>
+    <plurals name="seconds">
+        <item quantity="one">% d שנייה</item>
+        <item quantity="two">% d שניות</item>
+        <item quantity="many">% d שניות</item>
+        <item quantity="other">% d שניות</item>
+    </plurals>
+    <string name="settings_set_sync_delay">עיכוב בין כל סינכרון</string>
+    <string name="settings_set_workmanager_delay_summary">% s
+\nהסנכרון עשוי להידחות בהתאם למשאבים (סוללה) או מצב ההתקן (שינה).</string>
+    <string name="settings_set_workmanager_delay">מרווח סינכרון מועדף</string>
+    <string name="settings_set_sync_timeout">פסק-זמן לבקשה לסנכרון</string>
+    <string name="settings_enable_background_sync">אפשר סנכרון רקע</string>
+    <string name="settings_start_on_boot">החל באתחול</string>
+    <string name="settings_background_sync_update_error">עדכון ההגדרות נכשל.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled_description">לא תקבל הודעה על הודעות נכנסות כאשר האפליקציה ברקע.</string>
+    <string name="settings_background_fdroid_sync_mode_disabled">אין סנכרון רקע</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">אלמנט יסונכרן ברקע מעת לעת בזמן מדויק (ניתן להגדרה).
+\nזה ישפיע על השימוש ברדיו ובסוללה, תוצג הודעה קבועה לפיה אלמנט מאזין לאירועים.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time">מותאם לזמן אמת</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">אלמנט יסונכרן ברקע באופן שישמור על המשאבים המוגבלים של המכשיר (סוללה).
+\nבהתאם למצב משאבי המכשיר שלך, ייתכן שהסנכרון יידחה על ידי מערכת ההפעלה.</string>
+    <string name="settings_background_fdroid_sync_mode_battery">מותאם לסוללה</string>
+    <string name="settings_background_fdroid_sync_mode">מצב סנכרון רקע</string>
+    <string name="settings_background_sync">סנכרון רקע</string>
+    <string name="settings_messages_sent_by_bot">הודעות שנשלחו על ידי בוט</string>
+    <string name="settings_call_invitations">הזמנות לשיחות</string>
+    <string name="settings_invited_to_room">כשאני מוזמן לחדר</string>
+    <string name="settings_messages_in_group_chat">הודעות בצ\'אטים קבוצתיים</string>
+    <string name="settings_messages_in_one_to_one">הודעות בצ\'אטים אחד-על-אחד</string>
+    <string name="settings_containing_my_user_name">הודעות שמכילות את שם המשתמש שלי</string>
+    <string name="settings_containing_my_display_name">הודעות שמכילות את שם התצוגה שלי</string>
+    <string name="settings_system_preferences_summary">בחר צבע LED, רטט, צליל …</string>
+    <string name="settings_silent_notifications_preferences">הגדר התראות שקטות</string>
+    <string name="settings_call_notifications_preferences">הגדר התראות על שיחות</string>
+    <string name="settings_noisy_notifications_preferences">הגדר תצורה של התראות רועשות</string>
+    <string name="settings_turn_screen_on">הדלק את המסך למשך 3 שניות</string>
+    <string name="settings_enable_this_device">אפשר התראות עבור מושב זה</string>
+    <string name="settings_enable_all_notif">אפשר התראות עבור חשבון זה</string>
+    <string name="settings_notification_ringtone">צליל התראה</string>
+    <string name="settings_notification_privacy_message_content_not_shown">• התראות &lt;b&gt; לא יציגו את תוכן ההודעה &lt;/ b&gt;<b>not show message content</b></string>
+    <string name="settings_notification_privacy_nosecure_message_content">• התראות מכילות &lt;b&gt; נתוני ליבה והודעות &lt;/ b&gt;<b>meta and message data</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• תוכן ההודעה של ההודעה &lt;b&gt; ממוקם בצורה מאובטחת ישירות משרת הבית של מטריקס &lt;/ b&gt;<b>located securely direct from the Matrix homeserver</b></string>
+    <string name="settings_notification_privacy_metadata">• התראות מכילות רק נתוני ליבה</string>
+    <string name="settings_notification_privacy_fcm">• התראות נשלחות באמצעות Firebase Cloud Messaging</string>
+    <string name="settings_notification_privacy_no_background_sync">היישומים &lt;b&gt; לא &lt;/ b&gt; צריכים להתחבר ל- HomeServer ברקע, זה אמור להפחית את השימוש בסוללה<b>not</b> need to connect to the HomeServer in the background, it should reduce battery usage</string>
+    <string name="settings_notification_privacy_need_permission">האפליקציה זקוקה לאישורך כדי לפעול ברקע</string>
+    <string name="settings_notification_privacy_reduced">פרטיות מצומצמת</string>
+    <string name="settings_notification_privacy_normal">רגיל</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">התעלם מאופטימיזציה</string>
+    <string name="settings_troubleshoot_test_battery_failed">אם משתמש משאיר מכשיר מחובר לחשמל ויציב לתקופה מסוימת, כשהמסך כבוי, המכשיר עובר למצב Doze. זה מונע מאפליקציות גישה לרשת ומגדיר את העבודות, הסנכרונים וההתראות הסטנדרטיות שלהם.</string>
+    <string name="settings_troubleshoot_test_battery_success">אלמנט אינו מושפע מתהליך מיטוב הסוללה.</string>
+    <string name="settings_troubleshoot_test_battery_title">אופטימיזציה של הסוללה</string>
+    <string name="settings_troubleshoot_test_bg_restricted_quickfix">השבת הגבלות</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">מגבלות רקע מופעלות עבור Element.
+\nהעבודה שהאפליקציה מנסה לעשות תוגבל באגרסיביות בזמן שהיא ברקע, וזה עלול להשפיע על ההודעות.
+\n% 1 $ s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">מגבלות רקע מושבתות עבור Element. יש להריץ בדיקה זו באמצעות נתונים ניידים (ללא WIFI).
+\n% 1 $ s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_title">בדוק מגבלות רקע</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">הפעל את התחלה לאחר אתחול</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">השירות לא יופעל עם הפעלת המכשיר מחדש, לא תקבל התראות עד שאלמנט ייפתח לפחות פעם אחת.</string>
+    <string name="settings_troubleshoot_test_service_boot_success">השירות יתחיל עם הפעלת המכשיר מחדש.</string>
+    <string name="settings_troubleshoot_test_service_boot_title">הפעל לאחר אתחול</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">השירות נכשל מלעלות מחדש</string>
+    <string name="settings_troubleshoot_test_service_restart_success">השירות נסגר והופעל מחדש אוטומטית.</string>
+    <string name="settings_troubleshoot_test_service_restart_title">הפעלה מחדש אוטומטית לשירות ההתראות</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">החל שירות</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">שירות ההתראות אינו פועל.
+\nנסה להפעיל מחדש את היישום.</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">שירות ההתראות פועל.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_title">שירות התראות</string>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">ההודעה נלחצה!</string>
+    <string name="settings_troubleshoot_test_notification_notice">אנא לחץ על ההודעה. אם אינך רואה את ההודעה, אנא בדוק את הגדרות המערכת.</string>
+    <string name="settings_troubleshoot_test_notification_title">תצוגת התראות</string>
+    <string name="settings_troubleshoot_test_push_notification_content">אתה צופה בהודעה! לחץ עלי!</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">קבלת הדחיפה נכשלה. הפתרון יכול להיות התקנה מחדש של היישום.</string>
+    <string name="settings_troubleshoot_test_push_loop_title">בדיקת שליחה בדחיפה (PUSH)</string>
+    <string name="settings_troubleshoot_test_push_loop_success">היישום מקבל PUSH</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">היישום ממתין ל- PUSH</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">נכשל רישום אסימון FCM ל- HomeServer:
+\n% 1 $ s</string>
+    <string name="settings_troubleshoot_test_token_registration_success">אסימון FCM נרשם בהצלחה ל- HomeServer.</string>
+    <string name="settings_troubleshoot_test_token_registration_title">רישום אסימונים</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">הוסף חשבון</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[% 1 $ s]
+\nשגיאה זו אינה בשליטה על אלמנט. אין חשבון Google בטלפון. אנא פתח את מנהל החשבון והוסף חשבון Google.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[% 1 $ s]
+\nשגיאה זו אינה בשליטה על אלמנט. זה יכול להתרחש מכמה סיבות. אולי זה יעבוד אם תנסה שוב מאוחר יותר, תוכל גם לבדוק ששירות Google Play אינו מוגבל בשימוש נתונים בהגדרות המערכת, או ששעון המכשיר שלך תקין, או שזה יכול לקרות ב- ROM מותאם אישית.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[% 1 $ s]
+\nשגיאה זו איננה בשליטה על Element ולפי גוגל, שגיאה זו מצביעה על כך שלמכשיר יש יותר מדי אפליקציות הרשומות ב- FCM. השגיאה מתרחשת רק במקרים שבהם ישנם מספרים קיצוניים של אפליקציות, כך שהיא לא אמורה להשפיע על המשתמש הממוצע.</string>
+    <string name="settings_troubleshoot_test_fcm_failed">נכשל באחזור אסימון FCM:
+\n% 1 $ s</string>
+    <string name="settings_troubleshoot_test_fcm_success">אסימון FCM אוחזר בהצלחה:
+\n% 1 $ s</string>
+    <string name="settings_troubleshoot_test_fcm_title">אסימון Firebase</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">תקן שירותי Google Play</string>
+    <string name="settings_troubleshoot_test_play_services_failed">אלמנט משתמש בשירותי Google Play כדי להעביר הודעות פוש אך נראה שהוא אינו מוגדר כהלכה:
+\n% 1 $ s</string>
+    <string name="settings_troubleshoot_test_play_services_success">ה- APK של שירותי Google Play זמין ומעודכן.</string>
+    <string name="settings_troubleshoot_test_play_services_title">בדיקת שירותי הפעלה</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">בדוק בהגדרות</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">טעינת הכללים המותאמים אישית נכשלה, אנא נסה שוב.</string>
+    <string name="tab_title_search_rooms">חדרים</string>
+    <string name="search_no_results">אין תוצאות</string>
+    <string name="search_banned_user_hint">סנן משתמשים מודרים</string>
+    <string name="search_members_hint">סנן חברים מהחדר</string>
+    <string name="search_hint">חפש</string>
+    <string name="room_event_action_cancel_download">בטל הורדה</string>
+    <string name="room_event_action_cancel_upload">בטל העלאה</string>
+    <string name="room_event_action_report_prompt_ignore_user">האם ברצונך להסתיר את כל ההודעות ממשתמש זה\?
+\nשים לב שפעולה זו תפעיל מחדש את האפליקציה והיא עשויה להימשך זמן מה.</string>
+    <string name="room_event_action_report_prompt_reason">סיבה לדיווח על תוכן זה</string>
+    <string name="room_details_people_present_group_name">הצטרף</string>
+    <string name="room_details_people_invited_group_name">מוזמן</string>
+    <string name="malformed_id">תעודת זהות שגויה. צריכה להיות כתובת דוא\"ל או מזהה מטריצה כמו \'@localpart: domain\'</string>
+    <plurals name="room_details_selected">
+        <item quantity="one">% d נבחר</item>
+        <item quantity="two">% d נבחרים</item>
+        <item quantity="many">% d נבחרים</item>
+        <item quantity="other">% d נבחרים</item>
+    </plurals>
+    <string name="room_details_settings">הגדרות</string>
+    <string name="room_details_files">קבצים</string>
+    <string name="room_details_people">אנשים</string>
+    <string name="room_details_title">פרטי החדר</string>
+    <string name="ssl_only_accept">קבל את האישור רק אם מנהל השרת פרסם טביעת אצבע התואמת את זו שלמעלה.</string>
+    <string name="ssl_expected_existing_expl">האישור השתנה מאישור מהימן בעבר לאיש מהימן. ייתכן שהשרת חידש את האישור שלו. פנה למנהל השרת לקבלת טביעת האצבע הצפויה.</string>
+    <string name="ssl_unexpected_existing_expl">האישור השתנה מאישור שהטלפון שלך אמין עליו. זה מאוד לא שגרתי. מומלץ לא לקבל את האישור החדש הזה.</string>
+    <string name="ssl_cert_new_account_expl">אם מנהל השרת אמר שזה צפוי, ודא שטביעת האצבע שלמטה תואמת את טביעת האצבע שמספקת אותם.</string>
+    <string name="ssl_cert_not_trust">יכול להיות שמישהו מיירט את התעבורה שלך בזדון, או שהטלפון שלך לא סומך על האישור שמספק השרת המרוחק.</string>
+    <string name="ssl_could_not_verify">לא ניתן לאמת את זהות השרת המרוחק.</string>
+    <string name="ssl_fingerprint_hash">טביעת אצבע (s%):</string>
+    <string name="ssl_remain_offline">התעלם</string>
+    <string name="ssl_logout_account">יציאה</string>
+    <string name="ssl_do_not_trust">אל תתן אמון</string>
+    <string name="ssl_trust">אמון</string>
+    <plurals name="room_new_messages_notification">
+        <item quantity="one">הודעה חדשה</item>
+        <item quantity="two">הודעות חדשות</item>
+        <item quantity="many">הודעות חדשות</item>
+        <item quantity="other">הודעות חדשות</item>
+    </plurals>
+    <string name="room_do_not_have_permission_to_post">אין לך הרשאה לפרסם בחדר זה</string>
+    <string name="room_message_file_not_found">הקובץ לא נמצא</string>
+    <string name="room_delete_unsent_messages">מחק הודעות שלא נשלחו</string>
+    <string name="room_resend_unsent_messages">שלח שוב הודעות שלא נשלחו</string>
+    <string name="room_message_placeholder_reply_to_encrypted">שלח תשובה מוצפנת …</string>
+    <string name="room_message_placeholder_not_encrypted">שלח הודעה (לא מוצפן) …</string>
+    <string name="room_message_placeholder_encrypted">שלח הודעה מוצפנת …</string>
+    <string name="room_many_users_are_typing">% 1 $ s &amp;% 2 $ s ואחרים מקלידים …</string>
+    <string name="room_two_users_are_typing">% 1 $ s &amp;% 2 $ s מקלידים …</string>
+    <string name="room_one_user_is_typing">% s מקליד …</string>
+    <string name="room_menu_search">חפש</string>
+    <string name="people_search_invite_by_id_dialog_hint">אימייל או מזהה מטריקס</string>
+    <string name="people_search_invite_by_id_dialog_description">אנא הזן כתובת דוא\"ל אחת או יותר או מזהה מטריקס</string>
+    <string name="people_search_invite_by_id_dialog_title">הזמן משתמש לפי מזהה</string>
+    <string name="people_search_filter_text">משתמשי מטריקס בלבד</string>
+    <string name="people_search_user_directory">תיקיית משתמש (s%)</string>
+    <string name="people_search_local_contacts">אנשי קשר מקומיים (% d)</string>
+    <string name="people_search_invite_by_id">&lt;u&gt; הזמן לפי מזהה &lt;/ u&gt;<u>Invite by ID</u></string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+    <string name="room_participants_invite_join_names_and">%1$s and %2$s</string>
+    <string name="room_participants_invite_join_names">"%1$s, "</string>
+    <string name="room_participants_invite_prompt_msg">האם אתה בטוח שברצונך להזמין את% s לצ\'אט זה\?</string>
+    <string name="reason_hint">סיבה</string>
+    <string name="room_participants_unban_prompt_msg">הסרת נידוי ממשתמש יאפשר לו להצטרף שוב לחדר.</string>
+    <string name="room_participants_ban_prompt_msg">איסור על המשתמש יבעט בהם מחדר זה וימנע מהם להצטרף שוב.</string>
+    <string name="room_participants_unban_title">הסר נידוי ממשתמש</string>
+    <string name="room_participants_ban_reason">סיבות לנידוי</string>
+    <string name="room_participants_ban_title">נדה משתמש</string>
+    <string name="room_participants_kick_prompt_msg">משתמש מעיף יסיר אותם מחדר זה.
+\n
+\nכדי למנוע מהם להצטרף שוב, עליך לאסור אותם במקום זאת.</string>
+    <string name="room_participants_kick_reason">סיבות להעפה</string>
+    <string name="room_participants_kick_title">העף משתמש</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">האם אתה בטוח שברצונך לבטל את ההזמנה עבור משתמש זה\?</string>
+    <string name="room_participants_action_cancel_invite_title">בטל הזמנה</string>
+    <string name="room_participants_action_unignore">הסרת התעלמות</string>
+    <string name="room_participants_action_unignore_prompt_msg">ביטול חתימת משתמש זה יציג את כל ההודעות מהם שוב.</string>
+    <string name="room_participants_action_unignore_title">הסרת התעלמות ממשתמש</string>
+    <string name="room_participants_action_ignore">התעלם</string>
+    <string name="room_participants_action_ignore_prompt_msg">התעלמות ממשתמש זה תסיר את ההודעות שלו מחדרים שאתה משתף.
+\n
+\nאתה יכול להפוך פעולה זו בכל עת בהגדרות הכלליות.</string>
+    <string name="room_participants_action_ignore_title">התעלם ממשתמש</string>
+    <string name="room_participants_power_level_demote">לְהוֹרִיד בְּדַרגָה</string>
+    <string name="room_participants_power_level_demote_warning_prompt">לא תוכל לבטל את השינוי הזה מכיוון שאתה מוריד את עצמך בדרגה, אם אתה המשתמש המיועד האחרון בחדר, אי אפשר יהיה להחזיר לו הרשאות.</string>
+    <string name="room_participants_power_level_demote_warning_title">להוריד את עצמך\?</string>
+    <string name="room_participants_power_level_prompt">לא תוכל לבטל את השינוי הזה מכיוון שאתה מקדם את המשתמש לאותה רמת כוח כמוך.
+\nהאם אתה בטוח\?</string>
+    <string name="room_participants_action_devices_list">הצג רשימת מושבים</string>
+    <string name="room_participants_action_mention">אזכר</string>
+    <string name="room_participants_invite_search_another_user">מזהה משתמש, שם או דוא\"ל</string>
+    <string name="room_participants_action_set_admin">הפוך למנהל</string>
+    <string name="room_participants_action_set_moderator">הפוך למנחה</string>
+    <string name="room_participants_action_set_default_power_level">אפס למשתמש רגיל</string>
+    <string name="room_participants_action_kick">העף</string>
+    <string name="room_participants_action_unban">הסרת התעלמות</string>
+    <string name="room_participants_action_ban">התעלם</string>
+    <string name="room_participants_action_remove">הסר מחדר זה</string>
+    <string name="room_participants_action_leave">עזוב חדר זה</string>
+    <string name="room_participants_action_cancel_invite">בטל הזמנה</string>
+    <string name="room_participants_action_invite">הזמן</string>
+    <string name="room_participants_header_devices">מושבים</string>
+    <string name="room_participants_header_direct_chats">הודעות ישירות</string>
+    <string name="room_participants_header_call">שיחה</string>
+    <string name="room_participants_header_admin_tools">כלי אדמיניסטרציה</string>
+    <string name="room_participants_ago">לפני% 1 $ s% 2 $ s</string>
+    <string name="room_participants_now">% 1 $ s עכשיו</string>
+    <string name="room_participants_idle">זמין</string>
+    <string name="room_participants_offline">אופליין</string>
+    <string name="room_participants_online">אונליין</string>
+    <string name="room_participants_create">צור</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">חלק מההתראות מושבתות בהגדרות המותאמות אישית שלך.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">שים לב שחלק מסוגי ההודעות מוגדרים כשתיקים (יפיקו התראה ללא צליל).</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">הגדרות מותאמות אישית.</string>
+    <string name="settings_troubleshoot_test_device_settings_quickfix">אפשר</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">התראות אינן מופעלות עבור הפעלה זו.
+\nאנא בדוק את הגדרות האלמנט.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">התראות מופעלות להפעלה זו.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">הגדרות מושב.</string>
+    <string name="settings_troubleshoot_test_account_settings_quickfix">אפשר</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">התראות מושבתות עבור חשבונך.
+\nאנא בדוק את הגדרות החשבון.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">התראות מופעלות עבור חשבונך.</string>
+    <string name="settings_troubleshoot_test_account_settings_title">הגדרות חשבון.</string>
+    <string name="open_settings">פתח את ההגדרות</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">התראות מושבתות בהגדרות המערכת.
+\nאנא בדוק את הגדרות המערכת.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">התראות מופעלות בהגדרות המערכת.</string>
+    <string name="settings_troubleshoot_test_system_settings_title">הגדרות מערכת.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">בדיקה אחת או יותר נכשלו, אנא שלח דו\"ח שגיאה שיעזור לנו לחקור זאת.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">בדיקה אחת או יותר נכשלו, נסה הצעה/ות אלו לתיקון.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">אבחון בסיסי תקין. אם עדיין אינך מקבל התראות, אנא שלח דו\"ח שגיאה שיעזור לנו לחקור זאת.</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">פועל ... (% 1 $ d מתוך% 2 $ d)</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">הרץ מבדקים</string>
+    <string name="settings_troubleshoot_diagnostic">אבחון לפתרון בעיות</string>
+    <string name="settings_notification_troubleshoot">פותר בעיות התראות</string>
+    <string name="settings_notification_privacy">פרטיות הודעות</string>
+    <string name="settings_notification_by_event">חשיבות ההודעה לפי אירוע</string>
+    <string name="settings_notification_advanced">הגדרות התראה מתקדמות</string>
+    <string name="error_threepid_auth_failed">וודא שלחצת על הקישור בהודעת הדוא\"ל ששלחנו אליך.</string>
+    <string name="settings_remove_three_pid_confirmation_content">להסיר את% s\?</string>
+    <string name="settings_phone_numbers">מספרי טלפון</string>
+    <string name="settings_emails_empty">לא הוספה כתובת דוא\"ל לחשבונך</string>
+    <string name="settings_emails">כתובות דוא\"ל</string>
+    <string name="settings_add_3pid_authentication_needed">נדרש אימות</string>
+    <string name="settings_add_3pid_flow_not_supported">אינך יכול לעשות זאת ממכשיר נייד</string>
+    <string name="settings_add_3pid_confirm_password_title">אשר את סיסמתך</string>
+    <string name="settings_app_info_link_summary">הצג את פרטי היישום בהגדרות המערכת.</string>
+    <string name="settings_app_info_link_title">מידע על האפליקציה</string>
+    <string name="settings_add_phone_number">הוסף מספר טלפון</string>
+    <string name="settings_phone_number_empty">לא הוסף מספר טלפון לחשבונך</string>
+    <string name="settings_phone_number">מספר טלפון</string>
+    <string name="settings_add_email_address">הוסף כתובת דוא\"ל</string>
+    <string name="settings_email_address">כתובת דוא\"ל</string>
+    <string name="settings_display_name">שם תצוגה</string>
+    <string name="settings_profile_picture">תמונת פרופיל</string>
+    <string name="room_sliding_menu_privacy_policy">מדיניות הפרטיות</string>
+    <string name="room_sliding_menu_copyright">זכויות יוצרים</string>
+    <string name="room_sliding_menu_third_party_notices">התראות צד שלישי</string>
+    <string name="room_sliding_menu_term_and_conditions">תנאים והגבלות</string>
+    <string name="room_sliding_menu_version_x">גרסה s%</string>
+    <string name="room_sliding_menu_version">גרסה</string>
+    <string name="room_sliding_menu_settings">הגדרות</string>
+    <string name="room_sliding_menu_messages">הודעות</string>
+    <string name="room_settings_add_homescreen_shortcut">הוסף למסך הבית</string>
+    <string name="room_settings_forget">שכח</string>
+    <string name="room_settings_leave_conversation">עזוב את השיחה</string>
+    <string name="room_settings_direct_chat">צ\'אט ישיר</string>
+    <string name="room_settings_de_prioritize">בטל עדיפות</string>
+    <string name="room_settings_favourite">מועדף</string>
+    <string name="room_settings_mute">השתק</string>
+    <string name="room_settings_mention_only">אזכורים בלבד</string>
+    <string name="room_settings_all_messages">כל ההודעות</string>
+    <string name="room_settings_all_messages_noisy">כל ההודעות (קוליות)</string>
+    <string name="directory_searching_title">מחפש בתיקייה…</string>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="one">נמצא% 1 $ s חדר עבור% 2 $ s</item>
+        <item quantity="two">נמצא% 1 $ s חדר עבור% 2 $ s</item>
+        <item quantity="many">נמצא% 1 $ s חדר עבור% 2 $ s</item>
+        <item quantity="other">נמצא% 1 $ s חדר עבור% 2 $ s</item>
+    </plurals>
+    <plurals name="directory_search_rooms">
+        <item quantity="one">d% חדר</item>
+        <item quantity="two">d% חדרים</item>
+        <item quantity="many">d% חדרים</item>
+        <item quantity="other">d% חדרים</item>
+    </plurals>
+    <string name="directory_search_results_title">חפש בתיקיות</string>
+    <string name="room_recents_join_room_prompt">הקלד מזהה חדר או כינוי לחדר</string>
+    <string name="room_recents_join_room_title">הצטרף לחדר</string>
+    <string name="room_recents_join_room">הצטרף לחדר</string>
+    <string name="room_recents_create_room">צור חדר</string>
+    <string name="room_recents_start_chat">התחלת שיחת צ\'אט</string>
+    <string name="room_recents_invites">הזמנות</string>
+    <string name="room_recents_low_priority">עדיפות נמוכה</string>
+    <string name="room_recents_conversations">חדרים</string>
+    <string name="room_recents_favourites">מועדפים</string>
+    <string name="room_recents_directory">תיקייה ראשית</string>
+    <string name="room_recents_join">הצטרף</string>
+    <string name="search_is_not_supported_in_e2e_room">עדיין אין תמיכה בחיפוש בחדרים מוצפנים.</string>
+    <string name="tab_title_search_files">קבצים</string>
+    <string name="tab_title_search_people">אנשים</string>
+    <string name="tab_title_search_messages">הודעות</string>
+    <string name="room_participants_remove_prompt_msg">האם אתה בטוח שברצונך להסיר את% s מהצ\'אט הזה\?</string>
+    <string name="room_participants_leave_prompt_msg">האם ברצונך לעזוב את החדר\?</string>
+    <string name="room_participants_leave_prompt_title">עזוב חדר</string>
+    <plurals name="format_time_d">
+        <item quantity="one">%dd</item>
+        <item quantity="two">%dd</item>
+        <item quantity="many">%dd</item>
+        <item quantity="other">%dd</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">%dh</item>
+        <item quantity="two">%dh</item>
+        <item quantity="many">%dh</item>
+        <item quantity="other">%dh</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">%dm</item>
+        <item quantity="two">%dm</item>
+        <item quantity="many">%dm</item>
+        <item quantity="other">%dm</item>
+    </plurals>
+    <plurals name="format_time_s">
+        <item quantity="one">%ds</item>
+        <item quantity="two">%ds</item>
+        <item quantity="many">%ds</item>
+        <item quantity="other">%ds</item>
+    </plurals>
+    <string name="room_title_one_member">חבר אחד</string>
+    <plurals name="room_title_members">
+        <item quantity="one">חבר</item>
+        <item quantity="two">חברים</item>
+        <item quantity="many">חברים</item>
+        <item quantity="other">חברים</item>
+    </plurals>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">חבר פעיל</item>
+        <item quantity="two">חברים פעילים</item>
+        <item quantity="many">חברים פעילים</item>
+        <item quantity="other">חברים פעילים</item>
+    </plurals>
+    <string name="room_creation_add_member">הוסף חבר</string>
 </resources>
