@@ -49,8 +49,8 @@ internal class RoomAvatarResolver @Inject constructor(@UserId private val userId
         val members = roomMembers.queryActiveRoomMembersEvent().findAll()
         // detect if it is a room with no more than 2 members (i.e. an alone or a 1:1 chat)
         val isDirectRoom =  RoomSummaryEntity.where(realm, roomId).findFirst()?.isDirect ?: false
-        if (isDirectRoom) {
-            if (members.size == 1) {
+        if (/*isDirectRoom*/ true) {
+            if (isDirectRoom && members.size == 1) {
                 res = members.firstOrNull()?.avatarUrl
             } else if (members.size == 2) {
                 val firstOtherMember = members.where().notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId).findFirst()
