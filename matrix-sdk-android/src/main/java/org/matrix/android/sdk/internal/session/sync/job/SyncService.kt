@@ -166,15 +166,17 @@ abstract class SyncService : Service() {
             }
             if (throwable is Failure.NetworkConnection) {
                 // Timeout is not critical, so retry as soon as possible.
-                val retryDelay = if (isInitialSync || throwable.cause is SocketTimeoutException) {
-                    0
-                } else {
-                    syncDelaySeconds
+                if (isInitialSync || throwable.cause is SocketTimeoutException) {
+                    // For big accounts, computing init sync response can take time, but Synapse will cache the
+                    // result for the next request. So keep retrying in loop
+                    Timber.w("Timeout during initial sync, retry in loop")
+                    doSync()
+                    return
                 }
                 // Network might be off, no need to reschedule endless alarms :/
                 preventReschedule = true
                 // Instead start a work to restart background sync when network is on
-                onNetworkError(sessionId ?: "", isInitialSync, syncTimeoutSeconds, retryDelay)
+                onNetworkError(sessionId ?: "", isInitialSync, syncTimeoutSeconds, syncDelaySeconds)
             }
             // JobCancellation could be caught here when onDestroy cancels the coroutine context
             if (isRunning.get()) stopMe()
