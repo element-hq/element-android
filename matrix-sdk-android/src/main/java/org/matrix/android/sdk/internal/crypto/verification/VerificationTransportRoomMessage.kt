@@ -368,7 +368,7 @@ internal class VerificationTransportRoomMessage(
     private fun createEventAndLocalEcho(localId: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
         return Event(
                 roomId = roomId,
-                originServerTs = System.currentTimeMillis(),
+                originServerTs = localEchoEventFactory.dummyOriginServerTs(roomId),
                 senderId = userId,
                 eventId = localId,
                 type = type,

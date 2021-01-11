@@ -55,10 +55,12 @@ import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.isReply
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
+import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryEventsHelper
 import org.matrix.android.sdk.internal.util.StringProvider
 import javax.inject.Inject
 
@@ -78,7 +80,8 @@ internal class LocalEchoEventFactory @Inject constructor(
         private val markdownParser: MarkdownParser,
         private val textPillsUtils: TextPillsUtils,
         private val localEchoRepository: LocalEchoRepository,
-        private val permalinkFactory: PermalinkFactory
+        private val permalinkFactory: PermalinkFactory,
+        private val realmSessionProvider: RealmSessionProvider
 ) {
     fun createTextEvent(roomId: String, msgType: String, text: CharSequence, autoMarkdown: Boolean): Event {
         if (msgType == MessageType.MSGTYPE_TEXT || msgType == MessageType.MSGTYPE_EMOTE) {
@@ -203,7 +206,7 @@ internal class LocalEchoEventFactory @Inject constructor(
             ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment)
             ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment)
             ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment)
-            ContentAttachmentData.Type.FILE  -> createFileEvent(roomId, attachment)
+            ContentAttachmentData.Type.FILE -> createFileEvent(roomId, attachment)
         }
     }
 
@@ -218,7 +221,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
-                originServerTs = dummyOriginServerTs(),
+                originServerTs = dummyOriginServerTs(roomId),
                 senderId = userId,
                 eventId = localId,
                 type = EventType.REACTION,
@@ -325,7 +328,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
-                originServerTs = dummyOriginServerTs(),
+                originServerTs = dummyOriginServerTs(roomId),
                 senderId = userId,
                 eventId = localId,
                 type = type,
@@ -338,7 +341,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
-                originServerTs = dummyOriginServerTs(),
+                originServerTs = dummyOriginServerTs(roomId),
                 senderId = userId,
                 eventId = localId,
                 type = EventType.MESSAGE,
@@ -353,8 +356,10 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    private fun dummyOriginServerTs(): Long {
-        return System.currentTimeMillis()
+    fun dummyOriginServerTs(roomId: String): Long {
+        return realmSessionProvider.withRealm { realm ->
+            (RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)?.root?.originServerTs ?: System.currentTimeMillis()) + 1
+        }
     }
 
     fun createReplyTextEvent(roomId: String,
@@ -459,7 +464,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
-                originServerTs = dummyOriginServerTs(),
+                originServerTs = dummyOriginServerTs(roomId),
                 senderId = userId,
                 eventId = localId,
                 type = EventType.REDACTION,
