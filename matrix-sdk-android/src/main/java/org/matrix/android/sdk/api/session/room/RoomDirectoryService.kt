@@ -36,12 +36,6 @@ interface RoomDirectoryService {
                        callback: MatrixCallback<PublicRoomsResponse>): Cancelable
 
     /**
-     * Fetches the overall metadata about protocols supported by the homeserver.
-     * Includes both the available protocols and all fields required for queries against each protocol.
-     */
-    fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>): Cancelable
-
-    /**
      * Get the visibility of a room in the directory
      */
     suspend fun getRoomDirectoryVisibility(roomId: String): RoomDirectoryVisibility

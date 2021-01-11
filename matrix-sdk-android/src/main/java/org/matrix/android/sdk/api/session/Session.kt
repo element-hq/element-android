@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.terms.TermsService
+import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
@@ -72,7 +73,8 @@ interface Session :
         HomeServerCapabilitiesService,
         SecureStorageService,
         AccountDataService,
-        AccountService {
+        AccountService,
+        ThirdPartyService {
 
     /**
      * The params associated to the session

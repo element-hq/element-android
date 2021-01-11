@@ -19,24 +19,26 @@ package im.vector.app.features.call.webrtc
 import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
-import org.matrix.android.sdk.internal.util.awaitCallback
 
 private const val PSTN_VECTOR_KEY = "im.vector.protocol.pstn"
 private const val PSTN_MATRIX_KEY = "m.protocol.pstn"
 
-suspend fun Session.supportPSTN(maxTries: Int): Boolean {
+suspend fun Session.getSupportedPSTN(maxTries: Int): String? {
     val thirdPartyProtocols: Map<String, ThirdPartyProtocol> = try {
-        awaitCallback {
-            getThirdPartyProtocol(it)
-        }
+        getThirdPartyProtocols()
     } catch (failure: Throwable) {
         if (maxTries == 1) {
-            return false
+            return null
         } else {
             // Wait for 10s before trying again
             delay(10_000L)
-            return supportPSTN(maxTries - 1)
+            return getSupportedPSTN(maxTries - 1)
         }
-    } ?: return false
-    return thirdPartyProtocols.containsKey(PSTN_VECTOR_KEY) || thirdPartyProtocols.containsKey(PSTN_MATRIX_KEY)
+    }
+    return when {
+        thirdPartyProtocols.containsKey(PSTN_VECTOR_KEY) -> PSTN_VECTOR_KEY
+        thirdPartyProtocols.containsKey(PSTN_MATRIX_KEY) -> PSTN_MATRIX_KEY
+        else                                             -> null
+    }
 }
+

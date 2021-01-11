@@ -55,6 +55,7 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.terms.TermsService
+import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
@@ -120,6 +121,7 @@ internal class DefaultSession @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val defaultIdentityService: DefaultIdentityService,
         private val integrationManagerService: IntegrationManagerService,
+        private val thirdPartyService: ThirdPartyService,
         private val taskExecutor: TaskExecutor,
         private val callSignalingService: Lazy<CallSignalingService>,
         @UnauthenticatedWithCertificate
@@ -140,7 +142,8 @@ internal class DefaultSession @Inject constructor(
         HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
         ProfileService by profileService.get(),
         AccountDataService by accountDataService.get(),
-        AccountService by accountService.get() {
+        AccountService by accountService.get(),
+        ThirdPartyService by thirdPartyService{
 
     override val sharedSecretStorageService: SharedSecretStorageService
         get() = _sharedSecretStorageService.get()

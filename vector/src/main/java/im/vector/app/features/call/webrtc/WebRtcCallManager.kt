@@ -31,7 +31,6 @@ import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallListener
@@ -110,7 +109,7 @@ class WebRtcCallManager @Inject constructor(
 
     init {
         GlobalScope.launch {
-            supportsPSTNProtocol = currentSession?.supportPSTN(3).orFalse()
+            supportsPSTNProtocol = currentSession?.getSupportedPSTN(3) != null
             if (supportsPSTNProtocol) {
                 pstnSupportListeners.forEach { it.onPSTNSupportUpdated() }
             }

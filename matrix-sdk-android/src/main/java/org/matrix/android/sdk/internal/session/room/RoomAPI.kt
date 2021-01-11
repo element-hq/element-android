@@ -51,14 +51,6 @@ import retrofit2.http.Query
 internal interface RoomAPI {
 
     /**
-     * Get the third party server protocols.
-     *
-     * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#get-matrix-client-r0-thirdparty-protocols
-     */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "thirdparty/protocols")
-    fun thirdPartyProtocols(): Call<Map<String, ThirdPartyProtocol>>
-
-    /**
      * Lists the public rooms on the server, with optional filter.
      * This API returns paginated responses. The rooms are ordered by the number of joined members, with the largest rooms first.
      *
