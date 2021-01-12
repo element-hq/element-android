@@ -120,7 +120,7 @@ abstract class SyncService : Service() {
         serviceScope.coroutineContext.cancelChildren()
         if (!preventReschedule && periodic && sessionId != null && backgroundDetectionObserver.isInBackground) {
             Timber.d("## Sync: Reschedule service in $syncDelaySeconds sec")
-            onRescheduleAsked(sessionId ?: "", false, syncTimeoutSeconds, syncDelaySeconds)
+            onRescheduleAsked(sessionId ?: "", syncTimeoutSeconds, syncDelaySeconds)
         }
         super.onDestroy()
     }
@@ -177,7 +177,7 @@ abstract class SyncService : Service() {
                 // Network might be off, no need to reschedule endless alarms :/
                 preventReschedule = true
                 // Instead start a work to restart background sync when network is on
-                onNetworkError(sessionId ?: "", isInitialSync, syncTimeoutSeconds, syncDelaySeconds)
+                onNetworkError(sessionId ?: "", syncTimeoutSeconds, syncDelaySeconds)
             }
             // JobCancellation could be caught here when onDestroy cancels the coroutine context
             if (isRunning.get()) stopMe()
@@ -217,9 +217,9 @@ abstract class SyncService : Service() {
 
     abstract fun onStart(isInitialSync: Boolean)
 
-    abstract fun onRescheduleAsked(sessionId: String, isInitialSync: Boolean, timeout: Int, delay: Int)
+    abstract fun onRescheduleAsked(sessionId: String, timeout: Int, delay: Int)
 
-    abstract fun onNetworkError(sessionId: String, isInitialSync: Boolean, timeout: Int, delay: Int)
+    abstract fun onNetworkError(sessionId: String, timeout: Int, delay: Int)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null

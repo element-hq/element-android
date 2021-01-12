@@ -92,11 +92,11 @@ class VectorSyncService : SyncService() {
         startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
     }
 
-    override fun onRescheduleAsked(sessionId: String, isInitialSync: Boolean, timeout: Int, delay: Int) {
+    override fun onRescheduleAsked(sessionId: String, timeout: Int, delay: Int) {
         rescheduleSyncService(sessionId, timeout, delay, false)
     }
 
-    override fun onNetworkError(sessionId: String, isInitialSync: Boolean, timeout: Int, delay: Int) {
+    override fun onNetworkError(sessionId: String, timeout: Int, delay: Int) {
         Timber.d("## Sync: A network error occurred during sync")
         val rescheduleSyncWorkRequest: WorkRequest =
                 OneTimeWorkRequestBuilder<RestartWhenNetworkOn>()
