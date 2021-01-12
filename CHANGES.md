@@ -3,6 +3,7 @@ Changes in Element 1.0.14 (2020-XX-XX)
 
 Features ✨:
  - Enable url previews for notices (#2562)
+ - Edit room permissions (#2471)
 
 Improvements 🙌:
  - Add System theme option and set as default (#904, #2387)

@@ -178,6 +178,10 @@ class RoomSettingsFragment @Inject constructor(
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
     }
 
+    override fun onRoomPermissionsClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPermissionsSettings)
+    }
+
     override fun onJoinRuleClicked()  = withState(viewModel) { state ->
         val currentJoinRule = state.newRoomJoinRules.newJoinRules ?: state.currentRoomJoinRules
         val currentGuestAccess = state.newRoomJoinRules.newGuestAccess ?: state.currentGuestAccess

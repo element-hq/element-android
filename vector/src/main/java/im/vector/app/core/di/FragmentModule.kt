@@ -84,6 +84,7 @@ import im.vector.app.features.roomprofile.banned.RoomBannedMemberListFragment
 import im.vector.app.features.roomprofile.members.RoomMemberListFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
 import im.vector.app.features.roomprofile.alias.RoomAliasFragment
+import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
@@ -363,6 +364,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(RoomAliasFragment::class)
     fun bindRoomAliasFragment(fragment: RoomAliasFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomPermissionsFragment::class)
+    fun bindRoomPermissionsFragment(fragment: RoomPermissionsFragment): Fragment
 
     @Binds
     @IntoMap
