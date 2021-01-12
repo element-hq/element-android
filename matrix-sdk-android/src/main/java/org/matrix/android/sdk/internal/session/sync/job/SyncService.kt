@@ -50,8 +50,9 @@ abstract class SyncService : Service() {
     private var sessionId: String? = null
     private var mIsSelfDestroyed: Boolean = false
 
-    private var syncTimeoutSeconds: Int = 6
-    private var syncDelaySeconds: Int = 60
+    private var syncTimeoutSeconds: Int = getDefaultSyncTimeoutSeconds()
+    private var syncDelaySeconds: Int = getDefaultSyncDelaySeconds()
+
     private var periodic: Boolean = false
     private var preventReschedule: Boolean = false
 
@@ -190,8 +191,8 @@ abstract class SyncService : Service() {
         }
         val matrix = Matrix.getInstance(applicationContext)
         val safeSessionId = intent.getStringExtra(EXTRA_SESSION_ID) ?: return false
-        syncTimeoutSeconds = intent.getIntExtra(EXTRA_TIMEOUT_SECONDS, 6)
-        syncDelaySeconds = intent.getIntExtra(EXTRA_DELAY_SECONDS, 60)
+        syncTimeoutSeconds = intent.getIntExtra(EXTRA_TIMEOUT_SECONDS, getDefaultSyncTimeoutSeconds())
+        syncDelaySeconds = intent.getIntExtra(EXTRA_DELAY_SECONDS, getDefaultSyncDelaySeconds())
         try {
             val sessionComponent = matrix.sessionManager.getSessionComponent(safeSessionId)
                     ?: throw IllegalStateException("## Sync: You should have a session to make it work")
@@ -209,6 +210,10 @@ abstract class SyncService : Service() {
             return false
         }
     }
+
+    abstract fun getDefaultSyncTimeoutSeconds(): Int
+
+    abstract fun getDefaultSyncDelaySeconds(): Int
 
     abstract fun onStart(isInitialSync: Boolean)
 

@@ -33,6 +33,7 @@ import androidx.work.WorkerParameters
 import im.vector.app.R
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.features.settings.BackgroundSyncMode
 import org.matrix.android.sdk.internal.session.sync.job.SyncService
 import timber.log.Timber
 
@@ -77,6 +78,10 @@ class VectorSyncService : SyncService() {
         super.onCreate()
         notificationUtils = vectorComponent().notificationUtils()
     }
+
+    override fun getDefaultSyncDelaySeconds() = BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS
+
+    override fun getDefaultSyncTimeoutSeconds() = BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS
 
     override fun onStart(isInitialSync: Boolean) {
         val notificationSubtitleRes = if (isInitialSync) {
@@ -125,8 +130,8 @@ class VectorSyncService : SyncService() {
         override fun doWork(): Result {
             Timber.d("## Sync: RestartWhenNetworkOn.doWork()")
             val sessionId = inputData.getString(KEY_SESSION_ID) ?: return Result.failure()
-            val timeout = inputData.getInt(KEY_TIMEOUT, 6)
-            val delay = inputData.getInt(KEY_DELAY, 60)
+            val timeout = inputData.getInt(KEY_TIMEOUT, BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS)
+            val delay = inputData.getInt(KEY_DELAY, BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS)
             applicationContext.rescheduleSyncService(sessionId, timeout, delay, true)
             // Indicate whether the work finished successfully with the Result
             return Result.success()
@@ -152,6 +157,7 @@ private fun Context.rescheduleSyncService(sessionId: String,
                                           timeout: Int,
                                           delay: Int,
                                           isNetworkBack: Boolean) {
+    Timber.d("## Sync: rescheduleSyncService")
     val periodicIntent = VectorSyncService.newPeriodicIntent(this, sessionId, timeout, delay, isNetworkBack)
     val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         PendingIntent.getForegroundService(this, 0, periodicIntent, 0)
