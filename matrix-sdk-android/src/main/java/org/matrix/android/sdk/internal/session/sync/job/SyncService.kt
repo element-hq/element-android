@@ -184,7 +184,8 @@ abstract class SyncService : Service() {
                 onNetworkError(
                         sessionId = sessionId ?: "",
                         syncTimeoutSeconds = syncTimeoutSeconds,
-                        syncDelaySeconds = syncDelaySeconds
+                        syncDelaySeconds = syncDelaySeconds,
+                        isPeriodic = periodic
                 )
             }
             // JobCancellation could be caught here when onDestroy cancels the coroutine context
@@ -227,7 +228,7 @@ abstract class SyncService : Service() {
 
     abstract fun onRescheduleAsked(sessionId: String, syncTimeoutSeconds: Int, syncDelaySeconds: Int)
 
-    abstract fun onNetworkError(sessionId: String, syncTimeoutSeconds: Int, syncDelaySeconds: Int)
+    abstract fun onNetworkError(sessionId: String, syncTimeoutSeconds: Int, syncDelaySeconds: Int, isPeriodic: Boolean)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
