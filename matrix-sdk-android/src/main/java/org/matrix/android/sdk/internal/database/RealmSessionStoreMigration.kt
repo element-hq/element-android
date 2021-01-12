@@ -25,6 +25,7 @@ import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityField
 import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.SpaceChildInfoEntityFields
 import org.matrix.android.sdk.internal.database.model.SpaceSummaryEntityFields
 import timber.log.Timber
 import javax.inject.Inject
@@ -135,9 +136,16 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                     obj.setString(RoomSummaryEntityFields.ROOM_TYPE, null)
                 }
 
+        val spaceChildInfoSchema = realm.schema.create("SpaceChildInfoEntity")
+                ?.addField(SpaceChildInfoEntityFields.ORDER,  String::class.java)
+                ?.addField(SpaceChildInfoEntityFields.PRESENT, Boolean::class.java)
+                ?.setNullable(SpaceChildInfoEntityFields.PRESENT, true)
+                ?.addRealmListField(SpaceChildInfoEntityFields.VIA_SERVERS.`$`, String::class.java)
+                ?.addRealmObjectField(SpaceChildInfoEntityFields.ROOM_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
+
         realm.schema.create("SpaceSummaryEntity")
                 ?.addField(SpaceSummaryEntityFields.SPACE_ID, String::class.java, FieldAttribute.PRIMARY_KEY)
                 ?.addRealmObjectField(SpaceSummaryEntityFields.ROOM_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
-                ?.addRealmListField(SpaceSummaryEntityFields.CHILDREN.`$`, realm.schema.get("RoomSummaryEntity")!!)
+                ?.addRealmListField(SpaceSummaryEntityFields.CHILDREN.`$`, spaceChildInfoSchema!!)
     }
 }

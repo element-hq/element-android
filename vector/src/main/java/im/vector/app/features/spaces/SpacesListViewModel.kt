@@ -31,14 +31,12 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.SelectedSpaceDataSource
-import im.vector.app.features.grouplist.SpaceListFragment
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.SpaceSummary
 import org.matrix.android.sdk.rx.rx
@@ -117,9 +115,11 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
-
-        if (state.selectedSpace?.roomSummary?.membership == Membership.INVITE) {
-            _viewEvents.post(SpaceListViewEvents.OpenSpaceSummary(state.selectedSpace.roomSummary.roomId))
+        // get uptodate version of the space
+        val summary = session.spaceService().getSpaceSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Equals(action.spaceSummary.spaceId) })
+                .firstOrNull()
+        if (summary?.roomSummary?.membership == Membership.INVITE) {
+            _viewEvents.post(SpaceListViewEvents.OpenSpaceSummary(summary.roomSummary.roomId))
 //            viewModelScope.launch(Dispatchers.IO) {
 //                tryOrNull { session.spaceService().peekSpace(action.spaceSummary.spaceId) }.let {
 //                    Timber.d("PEEK RESULT/ $it")
@@ -139,7 +139,8 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
         val roomSummaryQueryParams = roomSummaryQueryParams() {
             memberships = listOf(Membership.JOIN, Membership.INVITE)
             displayName = QueryStringValue.IsNotEmpty
-            excludeType = listOf(RoomType.MESSAGING, null)
+            excludeType = listOf(/**RoomType.MESSAGING,$*/
+                    null)
         }
         Observable.combineLatest<SpaceSummary, List<SpaceSummary>, List<SpaceSummary>>(
                 session

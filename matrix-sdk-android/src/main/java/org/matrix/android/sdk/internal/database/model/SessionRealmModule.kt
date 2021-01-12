@@ -61,6 +61,7 @@ import io.realm.annotations.RealmModule
             UserAccountDataEntity::class,
             ScalarTokenEntity::class,
             WellknownIntegrationManagerConfigEntity::class,
-            SpaceSummaryEntity::class
+            SpaceSummaryEntity::class,
+            SpaceChildInfoEntity::class
         ])
 internal class SessionRealmModule
