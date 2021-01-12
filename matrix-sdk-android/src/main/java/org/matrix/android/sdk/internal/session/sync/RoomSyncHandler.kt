@@ -461,7 +461,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
     }
 
     private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {
-        for (event in accountData.events) {
+        accountData.events?.forEach { event ->
             val eventType = event.getClearType()
             if (eventType == EventType.TAG) {
                 val content = event.getClearContent().toModel<RoomTagContent>()
