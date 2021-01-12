@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.space
 
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
@@ -46,8 +45,7 @@ internal class DefaultJoinSpaceTask @Inject constructor(
         private val joinRoomTask: JoinRoomTask,
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
-        private val spaceSummaryDataSource: SpaceSummaryDataSource,
-        private val eventBus: EventBus
+        private val spaceSummaryDataSource: SpaceSummaryDataSource
 ) : JoinSpaceTask {
 
     override suspend fun execute(params: JoinSpaceTask.Params) {
