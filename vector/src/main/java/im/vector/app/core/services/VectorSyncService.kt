@@ -159,16 +159,22 @@ private fun Context.rescheduleSyncService(sessionId: String,
                                           isNetworkBack: Boolean) {
     Timber.d("## Sync: rescheduleSyncService")
     val periodicIntent = VectorSyncService.newPeriodicIntent(this, sessionId, timeout, delay, isNetworkBack)
-    val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        PendingIntent.getForegroundService(this, 0, periodicIntent, 0)
+
+    if (isNetworkBack || delay == 0) {
+        // Do not wait, do the sync now (more reactivity if network back is due to user action)
+        startService(periodicIntent)
     } else {
-        PendingIntent.getService(this, 0, periodicIntent, 0)
-    }
-    val firstMillis = System.currentTimeMillis() + delay * 1000L
-    val alarmMgr = getSystemService<AlarmManager>()!!
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)
-    } else {
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            PendingIntent.getForegroundService(this, 0, periodicIntent, 0)
+        } else {
+            PendingIntent.getService(this, 0, periodicIntent, 0)
+        }
+        val firstMillis = System.currentTimeMillis() + delay * 1000L
+        val alarmMgr = getSystemService<AlarmManager>()!!
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)
+        } else {
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)
+        }
     }
 }
