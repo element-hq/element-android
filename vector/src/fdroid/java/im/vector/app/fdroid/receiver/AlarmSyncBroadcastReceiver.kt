@@ -40,15 +40,22 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
                 ?: return Unit.also { Timber.v("No active session, so don't launch sync service.") }
 
         val sessionId = intent.getStringExtra(SyncService.EXTRA_SESSION_ID) ?: return
-        VectorSyncService.newPeriodicIntent(context, sessionId, vectorPreferences.backgroundSyncTimeOut(), vectorPreferences.backgroundSyncDelay()).let {
-            try {
-                ContextCompat.startForegroundService(context, it)
-            } catch (ex: Throwable) {
-                Timber.i("## Sync: Failed to start service, Alarm scheduled to restart service")
-                scheduleAlarm(context, sessionId, vectorPreferences.backgroundSyncDelay())
-                Timber.e(ex)
-            }
-        }
+        VectorSyncService.newPeriodicIntent(
+                context = context,
+                sessionId = sessionId,
+                syncTimeoutSeconds = vectorPreferences.backgroundSyncTimeOut(),
+                syncDelaySeconds = vectorPreferences.backgroundSyncDelay(),
+                isNetworkBack = false
+        )
+                .let {
+                    try {
+                        ContextCompat.startForegroundService(context, it)
+                    } catch (ex: Throwable) {
+                        Timber.i("## Sync: Failed to start service, Alarm scheduled to restart service")
+                        scheduleAlarm(context, sessionId, vectorPreferences.backgroundSyncDelay())
+                        Timber.e(ex)
+                    }
+                }
     }
 
     companion object {

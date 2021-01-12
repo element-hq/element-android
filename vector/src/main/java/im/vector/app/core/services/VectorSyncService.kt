@@ -41,27 +41,27 @@ class VectorSyncService : SyncService() {
 
     companion object {
 
-        fun newOneShotIntent(context: Context, sessionId: String, timeoutSeconds: Int): Intent {
+        fun newOneShotIntent(context: Context,
+                             sessionId: String,
+                             syncTimeoutSeconds: Int): Intent {
             return Intent(context, VectorSyncService::class.java).also {
                 it.putExtra(EXTRA_SESSION_ID, sessionId)
-                it.putExtra(EXTRA_TIMEOUT_SECONDS, timeoutSeconds)
+                it.putExtra(EXTRA_TIMEOUT_SECONDS, syncTimeoutSeconds)
                 it.putExtra(EXTRA_PERIODIC, false)
             }
         }
 
-        fun newPeriodicIntent(
-                context: Context,
-                sessionId: String,
-                timeoutSeconds: Int,
-                delayInSeconds: Int,
-                networkBack: Boolean = false
-        ): Intent {
+        fun newPeriodicIntent(context: Context,
+                              sessionId: String,
+                              syncTimeoutSeconds: Int,
+                              syncDelaySeconds: Int,
+                              isNetworkBack: Boolean): Intent {
             return Intent(context, VectorSyncService::class.java).also {
                 it.putExtra(EXTRA_SESSION_ID, sessionId)
-                it.putExtra(EXTRA_TIMEOUT_SECONDS, timeoutSeconds)
+                it.putExtra(EXTRA_TIMEOUT_SECONDS, syncTimeoutSeconds)
                 it.putExtra(EXTRA_PERIODIC, true)
-                it.putExtra(EXTRA_DELAY_SECONDS, delayInSeconds)
-                it.putExtra(EXTRA_NETWORK_BACK_RESTART, networkBack)
+                it.putExtra(EXTRA_DELAY_SECONDS, syncDelaySeconds)
+                it.putExtra(EXTRA_NETWORK_BACK_RESTART, isNetworkBack)
             }
         }
 
@@ -154,13 +154,19 @@ class VectorSyncService : SyncService() {
 }
 
 private fun Context.rescheduleSyncService(sessionId: String,
-                                          timeout: Int,
-                                          delay: Int,
+                                          syncTimeoutSeconds: Int,
+                                          syncDelaySeconds: Int,
                                           isNetworkBack: Boolean) {
     Timber.d("## Sync: rescheduleSyncService")
-    val periodicIntent = VectorSyncService.newPeriodicIntent(this, sessionId, timeout, delay, isNetworkBack)
+    val periodicIntent = VectorSyncService.newPeriodicIntent(
+            context = this,
+            sessionId = sessionId,
+            syncTimeoutSeconds = syncTimeoutSeconds,
+            syncDelaySeconds = syncDelaySeconds,
+            isNetworkBack = isNetworkBack
+    )
 
-    if (isNetworkBack || delay == 0) {
+    if (isNetworkBack || syncDelaySeconds == 0) {
         // Do not wait, do the sync now (more reactivity if network back is due to user action)
         startService(periodicIntent)
     } else {
@@ -169,7 +175,7 @@ private fun Context.rescheduleSyncService(sessionId: String,
         } else {
             PendingIntent.getService(this, 0, periodicIntent, 0)
         }
-        val firstMillis = System.currentTimeMillis() + delay * 1000L
+        val firstMillis = System.currentTimeMillis() + syncDelaySeconds * 1000L
         val alarmMgr = getSystemService<AlarmManager>()!!
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)
