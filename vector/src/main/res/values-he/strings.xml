@@ -1217,7 +1217,7 @@
     <string name="settings_show_room_member_state_events_summary">כולל אירועי הזמנה / הצטרפות / שמאל / בעיטה / איסור ושינוי שם אווטאר / תצוגה.</string>
     <string name="settings_show_room_member_state_events">הצג אירועים של מדינת החברים בחדר</string>
     <string name="settings_show_read_receipts_summary">לחץ על אישורי הקריאה לרשימה מפורטת.</string>
-    <string name="settings_show_read_receipts">הצג קבלות קריאה</string>
+    <string name="settings_show_read_receipts">הצג קבלות הצג קבלות קריאה</string>
     <string name="settings_12_24_timestamps">הצג חותמות זמן בפורמט של 12 שעות</string>
     <string name="settings_always_show_timestamps">הצג חותמות זמן לכל ההודעות</string>
     <string name="settings_send_markdown_summary">עצב הודעות באמצעות תחביר הסימון לפני שהן נשלחות. זה מאפשר עיצוב מתקדם כגון שימוש בכוכביות להצגת טקסט נטוי.</string>
