@@ -166,10 +166,10 @@ abstract class SyncService : Service() {
             }
             if (throwable is Failure.NetworkConnection) {
                 // Timeout is not critical, so retry as soon as possible.
-                if (isInitialSync || throwable.cause is SocketTimeoutException) {
-                    // For big accounts, computing init sync response can take time, but Synapse will cache the
+                if (throwable.cause is SocketTimeoutException) {
+                    // For big accounts, computing sync response can take time, but Synapse will cache the
                     // result for the next request. So keep retrying in loop
-                    Timber.w("Timeout during initial sync, retry in loop")
+                    Timber.w("Timeout during sync, retry in loop")
                     doSync()
                     return
                 }
