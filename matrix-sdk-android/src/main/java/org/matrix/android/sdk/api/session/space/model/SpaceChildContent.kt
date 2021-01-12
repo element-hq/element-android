@@ -49,5 +49,5 @@ data class SpaceChildContent(
          * The default flag on a child listing allows a space admin to list the "default" sub-spaces and rooms in that space.
          * This means that when a user joins the parent space, they will automatically be joined to those default children.
          */
-        @Json(name = "default") val default: Boolean? = true
+        @Json(name = "default") val default: Boolean? = false
 )

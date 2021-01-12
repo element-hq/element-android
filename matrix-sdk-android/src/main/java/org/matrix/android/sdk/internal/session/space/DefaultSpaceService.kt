@@ -42,6 +42,7 @@ internal class DefaultSpaceService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val createRoomTask: CreateRoomTask,
         private val joinRoomTask: JoinRoomTask,
+        private val joinSpaceTask: JoinSpaceTask,
         private val markAllRoomsReadTask: MarkAllRoomsReadTask,
         private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
         private val roomIdByAliasTask: GetRoomIdByAliasTask,
@@ -77,22 +78,24 @@ internal class DefaultSpaceService @Inject constructor(
 
     override suspend fun joinSpace(spaceIdOrAlias: String, reason: String?, viaServers: List<String>, autoJoinChild: List<SpaceService.ChildAutoJoinInfo>): SpaceService.JoinSpaceResult {
         try {
-            joinRoomTask.execute(JoinRoomTask.Params(spaceIdOrAlias, reason, viaServers))
-            val childJoinFailures = mutableMapOf<String, Throwable>()
-            autoJoinChild.forEach { info ->
-                // TODO what if the child is it self a subspace with some default children?
-                try {
-                    joinRoomTask.execute(JoinRoomTask.Params(info.roomIdOrAlias, null, info.viaServers))
-                } catch (failure: Throwable) {
-                    // TODO, i could already be a member of this room, handle that as it should not be an error in this context
-                    childJoinFailures[info.roomIdOrAlias] = failure
-                }
-            }
-            return if (childJoinFailures.isEmpty()) {
-                SpaceService.JoinSpaceResult.Success
-            } else {
-                SpaceService.JoinSpaceResult.PartialSuccess(childJoinFailures)
-            }
+            joinSpaceTask.execute(JoinSpaceTask.Params(spaceIdOrAlias, reason, viaServers))
+            // TODO partial success
+            return SpaceService.JoinSpaceResult.Success
+//            val childJoinFailures = mutableMapOf<String, Throwable>()
+//            autoJoinChild.forEach { info ->
+//                // TODO what if the child is it self a subspace with some default children?
+//                try {
+//                    joinRoomTask.execute(JoinRoomTask.Params(info.roomIdOrAlias, null, info.viaServers))
+//                } catch (failure: Throwable) {
+//                    // TODO, i could already be a member of this room, handle that as it should not be an error in this context
+//                    childJoinFailures[info.roomIdOrAlias] = failure
+//                }
+//            }
+//            return if (childJoinFailures.isEmpty()) {
+//                SpaceService.JoinSpaceResult.Success
+//            } else {
+//                SpaceService.JoinSpaceResult.PartialSuccess(childJoinFailures)
+//            }
         } catch (throwable: Throwable) {
             return SpaceService.JoinSpaceResult.Fail(throwable)
         }
