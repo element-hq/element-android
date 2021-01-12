@@ -380,7 +380,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                 ephemeral: RoomSyncEphemeral,
                                 isInitialSync: Boolean): EphemeralResult {
         var result = EphemeralResult()
-        for (event in ephemeral.events) {
+        ephemeral.events?.forEach { event ->
             when (event.type) {
                 EventType.RECEIPT -> {
                     @Suppress("UNCHECKED_CAST")
@@ -401,7 +401,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
     }
 
     private fun handleRoomAccountDataEvents(realm: Realm, roomId: String, accountData: RoomSyncAccountData) {
-        for (event in accountData.events) {
+        accountData.events?.forEach { event ->
             val eventType = event.getClearType()
             if (eventType == EventType.TAG) {
                 val content = event.getClearContent().toModel<RoomTagContent>()
