@@ -42,11 +42,10 @@ class VectorSyncService : SyncService() {
     companion object {
 
         fun newOneShotIntent(context: Context,
-                             sessionId: String,
-                             syncTimeoutSeconds: Int): Intent {
+                             sessionId: String): Intent {
             return Intent(context, VectorSyncService::class.java).also {
                 it.putExtra(EXTRA_SESSION_ID, sessionId)
-                it.putExtra(EXTRA_TIMEOUT_SECONDS, syncTimeoutSeconds)
+                it.putExtra(EXTRA_TIMEOUT_SECONDS, 0)
                 it.putExtra(EXTRA_PERIODIC, false)
             }
         }

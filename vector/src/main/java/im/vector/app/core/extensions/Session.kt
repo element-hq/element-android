@@ -40,8 +40,7 @@ fun Session.startSyncing(context: Context) {
         // initial sync is done as a service so it can continue below app lifecycle
         VectorSyncService.newOneShotIntent(
                 context = applicationContext,
-                sessionId = sessionId,
-                syncTimeoutSeconds = 0
+                sessionId = sessionId
         )
                 .let {
                     try {
