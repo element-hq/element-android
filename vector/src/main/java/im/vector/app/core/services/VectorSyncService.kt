@@ -96,12 +96,7 @@ class VectorSyncService : SyncService() {
         Timber.d("## Sync: A network error occurred during sync")
         val rescheduleSyncWorkRequest: WorkRequest =
                 OneTimeWorkRequestBuilder<RestartWhenNetworkOn>()
-                        .setInputData(Data.Builder()
-                                .putString("sessionId", sessionId)
-                                .putInt("timeout", timeout)
-                                .putInt("delay", delay)
-                                .build()
-                        )
+                        .setInputData(RestartWhenNetworkOn.createInputData(sessionId, timeout, delay))
                         .setConstraints(Constraints.Builder()
                                 .setRequiredNetworkType(NetworkType.CONNECTED)
                                 .build()
@@ -124,15 +119,31 @@ class VectorSyncService : SyncService() {
         notificationManager.cancel(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE)
     }
 
+    // I do not move or rename this class, since I'm not sure about the side effect regarding the WorkManager
     class RestartWhenNetworkOn(appContext: Context, workerParams: WorkerParameters) :
             Worker(appContext, workerParams) {
         override fun doWork(): Result {
-            val sessionId = inputData.getString("sessionId") ?: return Result.failure()
-            val timeout = inputData.getInt("timeout", 6)
-            val delay = inputData.getInt("delay", 60)
+            Timber.d("## Sync: RestartWhenNetworkOn.doWork()")
+            val sessionId = inputData.getString(KEY_SESSION_ID) ?: return Result.failure()
+            val timeout = inputData.getInt(KEY_TIMEOUT, 6)
+            val delay = inputData.getInt(KEY_DELAY, 60)
             applicationContext.rescheduleSyncService(sessionId, timeout, delay, true)
             // Indicate whether the work finished successfully with the Result
             return Result.success()
+        }
+
+        companion object {
+            fun createInputData(sessionId: String, timeout: Int, delay: Int): Data {
+                return Data.Builder()
+                        .putString(KEY_SESSION_ID, sessionId)
+                        .putInt(KEY_TIMEOUT, timeout)
+                        .putInt(KEY_DELAY, delay)
+                        .build()
+            }
+
+            private const val KEY_SESSION_ID = "sessionId"
+            private const val KEY_TIMEOUT = "timeout"
+            private const val KEY_DELAY = "delay"
         }
     }
 }
