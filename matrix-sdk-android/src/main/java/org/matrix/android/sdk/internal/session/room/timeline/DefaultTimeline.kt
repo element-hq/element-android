@@ -408,7 +408,7 @@ internal class DefaultTimeline(
     }
 
     private fun createSnapshot(): List<TimelineEvent> {
-        return buildSendingEvents() + builtEvents.toList()
+        return (buildSendingEvents() + builtEvents.toList()).sortedByDescending { it.root.originServerTs }
     }
 
     private fun buildSendingEvents(): List<TimelineEvent> {

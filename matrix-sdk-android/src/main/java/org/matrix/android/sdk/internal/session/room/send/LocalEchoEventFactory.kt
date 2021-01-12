@@ -358,7 +358,7 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     fun dummyOriginServerTs(roomId: String): Long {
         return realmSessionProvider.withRealm { realm ->
-            (RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)?.root?.originServerTs ?: System.currentTimeMillis()) + 1
+            (RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId, false)?.root?.originServerTs ?: System.currentTimeMillis()) + 1
         }
     }
 

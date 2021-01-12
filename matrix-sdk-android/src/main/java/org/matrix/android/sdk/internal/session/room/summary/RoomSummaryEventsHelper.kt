@@ -33,11 +33,11 @@ internal object RoomSummaryEventsHelper {
             filterEdits = true
     )
 
-    fun getLatestPreviewableEvent(realm: Realm, roomId: String): TimelineEventEntity? {
+    fun getLatestPreviewableEvent(realm: Realm, roomId: String, includeSending: Boolean = true): TimelineEventEntity? {
         return TimelineEventEntity.latestEvent(
                 realm = realm,
                 roomId = roomId,
-                includesSending = true,
+                includesSending = includeSending,
                 filters = previewFilters
         )
     }
