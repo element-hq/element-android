@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
+import org.matrix.android.sdk.api.session.thirdparty.model.ThirdPartyUser
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.session.room.alias.GetAliasesResponse
@@ -47,15 +48,28 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 internal interface ThirdPartyAPI {
 
     /**
      * Get the third party server protocols.
      *
-     * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#get-matrix-client-r0-thirdparty-protocols
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1.html#get-matrix-client-r0-thirdparty-protocols
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "thirdparty/protocols")
     fun thirdPartyProtocols(): Call<Map<String, ThirdPartyProtocol>>
+
+
+    /**
+     * Retrieve a Matrix User ID linked to a user on the third party service, given a set of user parameters.
+     *
+     * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-thirdparty-user-protocol
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "thirdparty/protocols/user/{protocol}")
+    fun getThirdPartyUser(@Path("protocol") protocol: String, @QueryMap params: Map<String, String>?): Call<List<ThirdPartyUser>>
+
+
+
 
 }

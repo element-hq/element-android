@@ -30,6 +30,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +49,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: MatrixToBottomSheetState,
         private val session: Session,
         private val stringProvider: StringProvider,
+        private val directRoomHelper: DirectRoomHelper,
         private val rawService: RawService) : VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
 
     @AssistedInject.Factory
@@ -125,42 +127,23 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     }
 
     private fun handleStartChatting(action: MatrixToAction.StartChattingWithUser) {
-        val mxId = action.matrixItem.id
-        val existing = session.getExistingDirectRoomWithUser(mxId)
-        if (existing != null) {
-            // navigate to this room
-            _viewEvents.post(MatrixToViewEvents.NavigateToRoom(existing))
-        } else {
+        viewModelScope.launch {
             setState {
                 copy(startChattingState = Loading())
             }
-            // we should create the room then navigate
-            viewModelScope.launch(Dispatchers.IO) {
-                val adminE2EByDefault = rawService.getElementWellknown(session.myUserId)
-                        ?.isE2EByDefault()
-                        ?: true
-
-                val roomParams = CreateRoomParams()
-                        .apply {
-                            invitedUserIds.add(mxId)
-                            setDirectMessage()
-                            enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
-                        }
-
-                val roomId = try {
-                    awaitCallback<String> { session.createRoom(roomParams, it) }
-                } catch (failure: Throwable) {
-                    setState {
-                        copy(startChattingState = Fail(Exception(stringProvider.getString(R.string.invite_users_to_room_failure))))
-                    }
-                    return@launch
-                }
+            val roomId = try {
+                directRoomHelper.ensureDMExists(action.matrixItem.id)
+            } catch (failure: Throwable) {
                 setState {
-                    // we can hide this button has we will navigate out
-                    copy(startChattingState = Uninitialized)
+                    copy(startChattingState = Fail(Exception(stringProvider.getString(R.string.invite_users_to_room_failure))))
                 }
-                _viewEvents.post(MatrixToViewEvents.NavigateToRoom(roomId))
+                return@launch
             }
+            setState {
+                // we can hide this button has we will navigate out
+                copy(startChattingState = Uninitialized)
+            }
+            _viewEvents.post(MatrixToViewEvents.NavigateToRoom(roomId))
         }
     }
 }

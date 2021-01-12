@@ -100,8 +100,11 @@ class WebRtcCallManager @Inject constructor(
     private var peerConnectionFactory: PeerConnectionFactory? = null
     private val executor = Executors.newSingleThreadExecutor()
     private val dispatcher = executor.asCoroutineDispatcher()
-    var supportsPSTNProtocol: Boolean = false
+    var supportedPSTNProtocol: String? = null
         private set
+
+    val supportsPSTNProtocol: Boolean
+        get() = supportedPSTNProtocol != null
 
     private val rootEglBase by lazy { EglUtils.rootEglBase }
 
@@ -109,8 +112,8 @@ class WebRtcCallManager @Inject constructor(
 
     init {
         GlobalScope.launch {
-            supportsPSTNProtocol = currentSession?.getSupportedPSTN(3) != null
-            if (supportsPSTNProtocol) {
+            supportedPSTNProtocol = currentSession?.getSupportedPSTN(3)
+            if (supportedPSTNProtocol != null) {
                 pstnSupportListeners.forEach { it.onPSTNSupportUpdated() }
             }
         }

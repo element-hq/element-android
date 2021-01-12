@@ -32,9 +32,11 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.subscribeLogError
+import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
+import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
@@ -115,6 +117,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val typingHelper: TypingHelper,
         private val callManager: WebRtcCallManager,
         private val chatEffectManager: ChatEffectManager,
+        private val directRoomHelper: DirectRoomHelper,
         timelineSettingsFactory: TimelineSettingsFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener, ChatEffectManager.Delegate {
 
@@ -264,6 +267,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.TapOnFailedToDecrypt             -> handleTapOnFailedToDecrypt(action)
             is RoomDetailAction.SelectStickerAttachment          -> handleSelectStickerAttachment()
             is RoomDetailAction.OpenIntegrationManager           -> handleOpenIntegrationManager()
+            is RoomDetailAction.StartCallWithPhoneNumber         -> handleStartCallWithPhoneNumber(action)
             is RoomDetailAction.StartCall                        -> handleStartCall(action)
             is RoomDetailAction.AcceptCall                       -> handleAcceptCall(action)
             is RoomDetailAction.EndCall                          -> handleEndCall()
@@ -285,6 +289,17 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
             is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
         }.exhaustive
+    }
+
+    private fun handleStartCallWithPhoneNumber(action: RoomDetailAction.StartCallWithPhoneNumber) {
+        viewModelScope.launch {
+            try {
+                val result = DialPadLookup(session, directRoomHelper, callManager).lookupPhoneNumber(action.phoneNumber) ?: return@launch
+                callManager.startOutgoingCall(result.roomId, result.userId, action.videoCall)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
+            }
+        }
     }
 
     private fun handleAcceptCall(action: RoomDetailAction.AcceptCall) {
@@ -317,18 +332,15 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleOpenOrCreateDm(action: RoomDetailAction.OpenOrCreateDm) {
-        val existingDmRoomId = session.getExistingDirectRoomWithUser(action.userId)
-        if (existingDmRoomId == null) {
-            // First create a direct room
-            viewModelScope.launch(Dispatchers.IO) {
-                val roomId = awaitCallback<String> {
-                    session.createDirectRoom(action.userId, it)
-                }
-                _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId))
+        viewModelScope.launch {
+            val roomId = try {
+                directRoomHelper.ensureDMExists(action.userId)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
+                return@launch
             }
-        } else {
-            if (existingDmRoomId != initialState.roomId) {
-                _viewEvents.post(RoomDetailViewEvents.OpenRoom(existingDmRoomId))
+            if (roomId != initialState.roomId) {
+                _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId = roomId))
             }
         }
     }

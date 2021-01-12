@@ -42,4 +42,7 @@ internal abstract class ThirdPartyModule {
     @Binds
     abstract fun bindGetThirdPartyProtocolsTask(task: DefaultGetThirdPartyProtocolsTask): GetThirdPartyProtocolsTask
 
+    @Binds
+    abstract fun bindGetThirdPartyUserTask(task: DefaultGetThirdPartyUserTask): GetThirdPartyUserTask
+
 }

@@ -63,7 +63,7 @@ class CallDialPadBottomSheet private constructor() : VectorBaseBottomSheetDialog
                     putBoolean(DialPadFragment.EXTRA_ENABLE_OK, showActions)
                     putString(DialPadFragment.EXTRA_REGION_CODE, VectorLocale.applicationLocale.country)
                 }
-                callback = this@CallDialPadBottomSheet.callback
+                callback = DialPadFragmentCallbackWrapper(this@CallDialPadBottomSheet.callback)
             }.also {
                 addChildFragment(R.id.callDialPadFragmentContainer, it)
             }
@@ -83,6 +83,24 @@ class CallDialPadBottomSheet private constructor() : VectorBaseBottomSheetDialog
     private fun setCallbackToFragment(callback: DialPadFragment.Callback?) {
         if (!isAdded) return
         val dialPadFragment = childFragmentManager.findFragmentById(R.id.callDialPadFragmentContainer) as? DialPadFragment
-        dialPadFragment?.callback = callback
+        dialPadFragment?.callback = DialPadFragmentCallbackWrapper(callback)
     }
+
+    private inner class DialPadFragmentCallbackWrapper(val callback: DialPadFragment.Callback?): DialPadFragment.Callback{
+
+        override fun onDigitAppended(digit: String) {
+            callback?.onDigitAppended(digit)
+        }
+
+        override fun onOkClicked(formatted: String?, raw: String?) {
+            callback?.onOkClicked(formatted, raw)
+            dismiss()
+        }
+
+
+    }
+
 }
+
+
+
