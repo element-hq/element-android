@@ -21,7 +21,6 @@ import android.view.ViewGroup
 import android.webkit.CookieManager
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
-import android.webkit.WebSettings
 import android.webkit.WebView
 import im.vector.app.R
 import im.vector.app.features.themes.ThemeUtils
