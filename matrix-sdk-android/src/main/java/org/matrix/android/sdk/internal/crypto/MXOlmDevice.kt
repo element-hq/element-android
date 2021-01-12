@@ -65,10 +65,15 @@ internal class MXOlmDevice @Inject constructor(
     // The OLM lib utility instance.
     private var olmUtility: OlmUtility? = null
 
+    private data class GroupSessionCacheItem(
+            val groupId: String,
+            val groupSession: OlmOutboundGroupSession
+    )
+
     // The outbound group session.
     // Caches active outbound session to avoid to sync with DB before read
-    // The key is the session id, the value the outbound group session.
-    private val outboundGroupSessionCache: MutableMap<String, OlmOutboundGroupSession> = HashMap()
+    // The key is the session id, the value the <roomID,outbound group session>.
+    private val outboundGroupSessionCache: MutableMap<String, GroupSessionCacheItem> = HashMap()
 
     // Store a set of decrypted message indexes for each group session.
     // This partially mitigates a replay attack where a MITM resends a group
@@ -137,7 +142,7 @@ internal class MXOlmDevice @Inject constructor(
     fun release() {
         olmUtility?.releaseUtility()
         outboundGroupSessionCache.values.forEach {
-            it.releaseSession()
+            it.groupSession.releaseSession()
         }
         outboundGroupSessionCache.clear()
     }
@@ -415,7 +420,7 @@ internal class MXOlmDevice @Inject constructor(
         var session: OlmOutboundGroupSession? = null
         try {
             session = OlmOutboundGroupSession()
-            outboundGroupSessionCache[session.sessionIdentifier()] = session
+            outboundGroupSessionCache[session.sessionIdentifier()] = GroupSessionCacheItem(roomId, session)
             store.storeCurrentOutboundGroupSessionForRoom(roomId, session)
             return session.sessionIdentifier()
         } catch (e: Exception) {
@@ -429,7 +434,7 @@ internal class MXOlmDevice @Inject constructor(
 
     fun storeOutboundGroupSessionForRoom(roomId: String, sessionId: String) {
         outboundGroupSessionCache[sessionId]?.let {
-            store.storeCurrentOutboundGroupSessionForRoom(roomId, it)
+            store.storeCurrentOutboundGroupSessionForRoom(roomId, it.groupSession)
         }
     }
 
@@ -438,7 +443,7 @@ internal class MXOlmDevice @Inject constructor(
         if (restoredOutboundGroupSession != null) {
             val sessionId = restoredOutboundGroupSession.outboundGroupSession.sessionIdentifier()
             // cache it
-            outboundGroupSessionCache[sessionId] = restoredOutboundGroupSession.outboundGroupSession
+            outboundGroupSessionCache[sessionId] = GroupSessionCacheItem(roomId, restoredOutboundGroupSession.outboundGroupSession)
 
             return MXOutboundSessionInfo(
                     sessionId = sessionId,
@@ -450,8 +455,12 @@ internal class MXOlmDevice @Inject constructor(
     }
 
     fun discardOutboundGroupSessionForRoom(roomId: String) {
-        store.getCurrentOutboundGroupSessionForRoom(roomId)?.outboundGroupSession?.sessionIdentifier()?.let { sessionId ->
-            outboundGroupSessionCache.remove(sessionId)?.releaseSession()
+        val toDiscard = outboundGroupSessionCache.filter {
+            it.value.groupId == roomId
+        }
+        toDiscard.forEach { (sessionId, cacheItem) ->
+            cacheItem.groupSession.releaseSession()
+            outboundGroupSessionCache.remove(sessionId)
         }
         store.storeCurrentOutboundGroupSessionForRoom(roomId, null)
     }
@@ -465,7 +474,7 @@ internal class MXOlmDevice @Inject constructor(
     fun getSessionKey(sessionId: String): String? {
         if (sessionId.isNotEmpty()) {
             try {
-                return outboundGroupSessionCache[sessionId]!!.sessionKey()
+                return outboundGroupSessionCache[sessionId]!!.groupSession.sessionKey()
             } catch (e: Exception) {
                 Timber.e(e, "## getSessionKey() : failed")
             }
@@ -481,7 +490,7 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun getMessageIndex(sessionId: String): Int {
         return if (sessionId.isNotEmpty()) {
-            outboundGroupSessionCache[sessionId]!!.messageIndex()
+            outboundGroupSessionCache[sessionId]!!.groupSession.messageIndex()
         } else 0
     }
 
@@ -495,7 +504,7 @@ internal class MXOlmDevice @Inject constructor(
     fun encryptGroupMessage(sessionId: String, payloadString: String): String? {
         if (sessionId.isNotEmpty() && payloadString.isNotEmpty()) {
             try {
-                return outboundGroupSessionCache[sessionId]!!.encryptMessage(payloadString)
+                return outboundGroupSessionCache[sessionId]!!.groupSession.encryptMessage(payloadString)
             } catch (e: Exception) {
                 Timber.e(e, "## encryptGroupMessage() : failed")
             }
