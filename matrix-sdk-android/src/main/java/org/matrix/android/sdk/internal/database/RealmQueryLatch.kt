@@ -26,6 +26,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import timber.log.Timber
 
 internal suspend fun <T> awaitNotEmptyResult(realmConfiguration: RealmConfiguration,
                                              timeoutMillis: Long,
@@ -40,6 +41,7 @@ internal suspend fun <T> awaitNotEmptyResult(realmConfiguration: RealmConfigurat
 
                 val listener = object : RealmChangeListener<RealmResults<T>> {
                     override fun onChange(it: RealmResults<T>) {
+                        Timber.v("## Space: $it")
                         if (it.isNotEmpty()) {
                             result.removeChangeListener(this)
                             latch.complete(Unit)

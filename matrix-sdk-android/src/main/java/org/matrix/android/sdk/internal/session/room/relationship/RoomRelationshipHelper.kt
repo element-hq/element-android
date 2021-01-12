@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.query.whereType
+import timber.log.Timber
 
 /**
  * Relationship between rooms and spaces
@@ -38,13 +39,30 @@ internal class RoomRelationshipHelper(private val realm: Realm,
                                       private val roomId: String
 ) {
 
-    fun getDirectChildrenDescriptions(): List<String> {
+    data class SpaceChildInfo(
+            val roomId: String,
+            val present: Boolean,
+            val order: String?,
+            val autoJoin: Boolean,
+            val viaServers: List<String>
+    )
+
+    fun getDirectChildrenDescriptions(): List<SpaceChildInfo> {
         return CurrentStateEventEntity.whereType(realm, roomId, EventType.STATE_SPACE_CHILD)
                 .findAll()
-                .filter { ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()?.present == true }
+//                .filter { ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()?.present == true }
                 .mapNotNull {
                     // ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()
-                    it.stateKey
+                    ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()?.let { scc ->
+                        Timber.d("## Space child desc state event $scc")
+                        SpaceChildInfo(
+                                roomId = it.stateKey,
+                                present = scc.present ?: false,
+                                order = scc.order,
+                                autoJoin = scc.default ?: false,
+                                viaServers = scc.via ?: emptyList()
+                        )
+                    }
                 }
     }
 }

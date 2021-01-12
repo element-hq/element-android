@@ -21,7 +21,6 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
-import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
 // TODO Give a way to include other initial states
@@ -112,7 +111,7 @@ open class CreateRoomParams {
             }
         }
 
-    var roomType: String? = RoomType.MESSAGING
+    var roomType: String? = null // RoomType.MESSAGING
         set(value) {
             field = value
             if (value != null) {

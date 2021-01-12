@@ -15,7 +15,7 @@
  *
  */
 
-package im.vector.app.features.grouplist
+package im.vector.app.features.spaces
 
 import android.widget.ImageView
 import android.widget.TextView
