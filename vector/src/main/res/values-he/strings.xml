@@ -1230,4 +1230,7 @@
     <string name="settings_pin_unread_messages">הצמד חדרים עם הודעות שלא נקראו</string>
     <string name="settings_pin_missed_notifications">הצמד חדרים עם התראות שלא נענו</string>
     <string name="settings_contacts_phonebook_country">ארץ ספר הטלפונים</string>
+    <string name="settings_home_display">מסך ראשי</string>
+    <string name="settings_contacts_app_permission">הרשאת אנשי קשר</string>
+    <string name="settings_contact">אנשי קשר מקומיים</string>
 </resources>
