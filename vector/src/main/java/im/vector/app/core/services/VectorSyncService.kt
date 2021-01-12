@@ -140,13 +140,13 @@ class VectorSyncService : SyncService() {
         override fun doWork(): Result {
             Timber.d("## Sync: RestartWhenNetworkOn.doWork()")
             val sessionId = inputData.getString(KEY_SESSION_ID) ?: return Result.failure()
-            val timeout = inputData.getInt(KEY_TIMEOUT, BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS)
-            val delay = inputData.getInt(KEY_DELAY, BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS)
+            val syncTimeoutSeconds = inputData.getInt(KEY_SYNC_TIMEOUT_SECONDS, BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS)
+            val syncDelaySeconds = inputData.getInt(KEY_SYNC_DELAY_SECONDS, BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS)
             val isPeriodic = inputData.getBoolean(KEY_IS_PERIODIC, false)
             applicationContext.rescheduleSyncService(
                     sessionId = sessionId,
-                    syncTimeoutSeconds = timeout,
-                    syncDelaySeconds = delay,
+                    syncTimeoutSeconds = syncTimeoutSeconds,
+                    syncDelaySeconds = syncDelaySeconds,
                     isPeriodic = isPeriodic,
                     isNetworkBack = true
             )
@@ -156,21 +156,21 @@ class VectorSyncService : SyncService() {
 
         companion object {
             fun createInputData(sessionId: String,
-                                timeout: Int,
-                                delay: Int,
+                                syncTimeoutSeconds: Int,
+                                syncDelaySeconds: Int,
                                 isPeriodic: Boolean
             ): Data {
                 return Data.Builder()
                         .putString(KEY_SESSION_ID, sessionId)
-                        .putInt(KEY_TIMEOUT, timeout)
-                        .putInt(KEY_DELAY, delay)
+                        .putInt(KEY_SYNC_TIMEOUT_SECONDS, syncTimeoutSeconds)
+                        .putInt(KEY_SYNC_DELAY_SECONDS, syncDelaySeconds)
                         .putBoolean(KEY_IS_PERIODIC, isPeriodic)
                         .build()
             }
 
             private const val KEY_SESSION_ID = "sessionId"
-            private const val KEY_TIMEOUT = "timeout"
-            private const val KEY_DELAY = "delay"
+            private const val KEY_SYNC_TIMEOUT_SECONDS = "timeout"
+            private const val KEY_SYNC_DELAY_SECONDS = "delay"
             private const val KEY_IS_PERIODIC = "isPeriodic"
         }
     }
