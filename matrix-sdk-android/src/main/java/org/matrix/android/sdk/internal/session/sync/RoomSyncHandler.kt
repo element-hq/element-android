@@ -218,6 +218,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
                 val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
+                    Timber.v("## Space state event: $eventEntity")
                     eventId = event.eventId
                     root = eventEntity
                 }

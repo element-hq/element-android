@@ -22,7 +22,7 @@ import io.realm.annotations.PrimaryKey
 
 internal open class SpaceSummaryEntity(@PrimaryKey var spaceId: String = "",
                                        var roomSummaryEntity: RoomSummaryEntity? = null,
-                                       var children: RealmList<RoomSummaryEntity> = RealmList()
+                                       var children: RealmList<SpaceChildInfoEntity> = RealmList()
                                         // TODO public / private .. and more
 ) : RealmObject() {
 

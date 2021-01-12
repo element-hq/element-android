@@ -89,7 +89,7 @@ class AppStateHandler @Inject constructor(
                                                 .intersect(selectedSpace.roomSummary.otherMemberIds)
                                                 .isNotEmpty()
                                     } else {
-                                        selectedSpace.children.indexOfFirst { child -> child.roomId == it.roomId } != -1
+                                        selectedSpace.children.indexOfFirst { child -> child.roomSummary?.roomId == it.roomId } != -1
 //                                        selectedGroup.roomIds.contains(it.roomId)
                                     }
                                 }
