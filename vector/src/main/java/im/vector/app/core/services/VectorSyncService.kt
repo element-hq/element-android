@@ -89,11 +89,11 @@ class VectorSyncService : SyncService() {
     }
 
     override fun onRescheduleAsked(sessionId: String, isInitialSync: Boolean, timeout: Int, delay: Int) {
-        rescheduleSyncService(sessionId, timeout, delay)
+        rescheduleSyncService(sessionId, timeout, delay, false)
     }
 
     override fun onNetworkError(sessionId: String, isInitialSync: Boolean, timeout: Int, delay: Int) {
-        Timber.d("## Sync: A network error occured during sync")
+        Timber.d("## Sync: A network error occurred during sync")
         val rescheduleSyncWorkRequest: WorkRequest =
                 OneTimeWorkRequestBuilder<RestartWhenNetworkOn>()
                         .setInputData(Data.Builder()
@@ -137,8 +137,11 @@ class VectorSyncService : SyncService() {
     }
 }
 
-private fun Context.rescheduleSyncService(sessionId: String, timeout: Int, delay: Int, networkBack: Boolean = false) {
-    val periodicIntent = VectorSyncService.newPeriodicIntent(this, sessionId, timeout, delay, networkBack)
+private fun Context.rescheduleSyncService(sessionId: String,
+                                          timeout: Int,
+                                          delay: Int,
+                                          isNetworkBack: Boolean) {
+    val periodicIntent = VectorSyncService.newPeriodicIntent(this, sessionId, timeout, delay, isNetworkBack)
     val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         PendingIntent.getForegroundService(this, 0, periodicIntent, 0)
     } else {
