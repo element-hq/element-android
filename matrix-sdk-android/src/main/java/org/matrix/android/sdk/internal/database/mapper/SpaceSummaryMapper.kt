@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.space.SpaceSummary
 import org.matrix.android.sdk.internal.database.model.SpaceSummaryEntity
 import javax.inject.Inject
@@ -27,7 +28,13 @@ internal class SpaceSummaryMapper @Inject constructor(private val roomSummaryMap
                 spaceId = spaceSummaryEntity.spaceId,
                 roomSummary = roomSummaryMapper.map(spaceSummaryEntity.roomSummaryEntity!!),
                 children = spaceSummaryEntity.children.map {
-                    roomSummaryMapper.map(it)
+                    SpaceChildInfo(
+                            roomSummary = it.roomSummaryEntity?.let { rs -> roomSummaryMapper.map(rs) },
+                            autoJoin = it.autoJoin ?: false,
+                            present = it.present ?: false,
+                            viaServers = it.viaServers.map { it },
+                            order = it.order
+                    )
                 }
         )
     }

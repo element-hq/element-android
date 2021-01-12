@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -38,6 +39,7 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.SpaceChildInfoEntity
 import org.matrix.android.sdk.internal.database.model.SpaceSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendStates
@@ -159,13 +161,26 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
 
         if (roomType == RoomType.SPACE) {
-            val spaceSummaryEntity = SpaceSummaryEntity.getOrCreate(realm, roomId)
+            Timber.v("## Space: Updating summary for Space $roomId membership: ${roomSummaryEntity.membership}")
+            val spaceSummaryEntity = SpaceSummaryEntity()
+            spaceSummaryEntity.spaceId = roomId
             spaceSummaryEntity.roomSummaryEntity = roomSummaryEntity
             spaceSummaryEntity.children.clear()
             spaceSummaryEntity.children.addAll(
                     RoomRelationshipHelper(realm, roomId).getDirectChildrenDescriptions()
-                            .map { RoomSummaryEntity.getOrCreate(realm, it) }
+                            .map {
+                                Timber.v("## Space: Updating summary for room $roomId with info $it")
+                                realm.createObject<SpaceChildInfoEntity>().apply {
+                                    this.roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, it.roomId)
+                                    this.order = it.order
+                                    this.present = it.present
+                                    this.autoJoin = it.autoJoin
+                                }.also {
+                                    Timber.v("## Space: Updating summary for room $roomId with children $it")
+                                }
+                            }
             )
+            realm.insertOrUpdate(spaceSummaryEntity)
         }
     }
 
