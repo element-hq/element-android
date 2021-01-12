@@ -780,20 +780,18 @@ internal class RealmCryptoStore @Inject constructor(
         // this is called for each sent message (so not high frequency), thus we can use basic realm async without
         // risk of reaching max async operation limit?
         doRealmTransactionAsync(realmConfiguration) { realm ->
-            realm.where<CryptoRoomEntity>()
-                    .equalTo(CryptoRoomEntityFields.ROOM_ID, roomId)
-                    .findFirst()?.let { entity ->
-                        // we should delete existing outbound session info if any
-                        entity.outboundSessionInfo?.deleteFromRealm()
+            CryptoRoomEntity.getById(realm, roomId)?.let { entity ->
+                // we should delete existing outbound session info if any
+                entity.outboundSessionInfo?.deleteFromRealm()
 
-                        if (outboundGroupSession != null) {
-                            val info = realm.createObject(OutboundGroupSessionInfoEntity::class.java).apply {
-                                creationTime = System.currentTimeMillis()
-                                putOutboundGroupSession(outboundGroupSession)
-                            }
-                            entity.outboundSessionInfo = info
-                        }
+                if (outboundGroupSession != null) {
+                    val info = realm.createObject(OutboundGroupSessionInfoEntity::class.java).apply {
+                        creationTime = System.currentTimeMillis()
+                        putOutboundGroupSession(outboundGroupSession)
                     }
+                    entity.outboundSessionInfo = info
+                }
+            }
         }
     }
 

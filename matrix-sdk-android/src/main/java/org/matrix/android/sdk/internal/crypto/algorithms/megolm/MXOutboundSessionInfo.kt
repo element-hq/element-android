@@ -24,6 +24,7 @@ internal class MXOutboundSessionInfo(
         // The id of the session
         val sessionId: String,
         val sharedWithHelper: SharedWithHelper,
+        // When the session was created
         private val creationTime: Long = System.currentTimeMillis()) {
 
     // Number of times this session has been used

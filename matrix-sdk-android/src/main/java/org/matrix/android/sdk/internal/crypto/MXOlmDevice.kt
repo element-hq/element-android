@@ -66,10 +66,9 @@ internal class MXOlmDevice @Inject constructor(
     private var olmUtility: OlmUtility? = null
 
     // The outbound group session.
-    // They are not stored in 'store' to avoid to remember to which devices we sent the session key.
-    // Plus, in cryptography, it is good to refresh sessions from time to time.
+    // Caches active outbound session to avoid to sync with DB before read
     // The key is the session id, the value the outbound group session.
-    private val outboundGroupSessionStore: MutableMap<String, OlmOutboundGroupSession> = HashMap()
+    private val outboundGroupSessionCache: MutableMap<String, OlmOutboundGroupSession> = HashMap()
 
     // Store a set of decrypted message indexes for each group session.
     // This partially mitigates a replay attack where a MITM resends a group
@@ -137,10 +136,10 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun release() {
         olmUtility?.releaseUtility()
-        outboundGroupSessionStore.values.forEach {
+        outboundGroupSessionCache.values.forEach {
             it.releaseSession()
         }
-        outboundGroupSessionStore.clear()
+        outboundGroupSessionCache.clear()
     }
 
     /**
@@ -416,7 +415,7 @@ internal class MXOlmDevice @Inject constructor(
         var session: OlmOutboundGroupSession? = null
         try {
             session = OlmOutboundGroupSession()
-            outboundGroupSessionStore[session.sessionIdentifier()] = session
+            outboundGroupSessionCache[session.sessionIdentifier()] = session
             store.storeCurrentOutboundGroupSessionForRoom(roomId, session)
             return session.sessionIdentifier()
         } catch (e: Exception) {
@@ -429,33 +428,34 @@ internal class MXOlmDevice @Inject constructor(
     }
 
     fun storeOutboundGroupSessionForRoom(roomId: String, sessionId: String) {
-        outboundGroupSessionStore[sessionId]?.let {
+        outboundGroupSessionCache[sessionId]?.let {
             store.storeCurrentOutboundGroupSessionForRoom(roomId, it)
         }
     }
 
-    fun restoreOutboundGroupSessionForRoom(roomId: String):  MXOutboundSessionInfo? {
+    fun restoreOutboundGroupSessionForRoom(roomId: String): MXOutboundSessionInfo? {
         val restoredOutboundGroupSession = store.getCurrentOutboundGroupSessionForRoom(roomId)
         if (restoredOutboundGroupSession != null) {
             val sessionId = restoredOutboundGroupSession.outboundGroupSession.sessionIdentifier()
-            if (!outboundGroupSessionStore.containsKey(sessionId)) {
-                outboundGroupSessionStore[sessionId] = restoredOutboundGroupSession.outboundGroupSession
-                return MXOutboundSessionInfo(
-                        sessionId = sessionId,
-                        sharedWithHelper = SharedWithHelper(roomId, sessionId, store),
-                        restoredOutboundGroupSession.creationTime
-                )
-            } else {
-                restoredOutboundGroupSession.outboundGroupSession.releaseSession()
-            }
+            // cache it
+            outboundGroupSessionCache[sessionId] = restoredOutboundGroupSession.outboundGroupSession
+
+            return MXOutboundSessionInfo(
+                    sessionId = sessionId,
+                    sharedWithHelper = SharedWithHelper(roomId, sessionId, store),
+                    restoredOutboundGroupSession.creationTime
+            )
         }
         return null
     }
 
     fun discardOutboundGroupSessionForRoom(roomId: String) {
-        outboundGroupSessionStore.remove(roomId)?.releaseSession()
+        store.getCurrentOutboundGroupSessionForRoom(roomId)?.outboundGroupSession?.sessionIdentifier()?.let { sessionId ->
+            outboundGroupSessionCache.remove(sessionId)?.releaseSession()
+        }
         store.storeCurrentOutboundGroupSessionForRoom(roomId, null)
     }
+
     /**
      * Get the current session key of  an outbound group session.
      *
@@ -465,7 +465,7 @@ internal class MXOlmDevice @Inject constructor(
     fun getSessionKey(sessionId: String): String? {
         if (sessionId.isNotEmpty()) {
             try {
-                return outboundGroupSessionStore[sessionId]!!.sessionKey()
+                return outboundGroupSessionCache[sessionId]!!.sessionKey()
             } catch (e: Exception) {
                 Timber.e(e, "## getSessionKey() : failed")
             }
@@ -481,7 +481,7 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun getMessageIndex(sessionId: String): Int {
         return if (sessionId.isNotEmpty()) {
-            outboundGroupSessionStore[sessionId]!!.messageIndex()
+            outboundGroupSessionCache[sessionId]!!.messageIndex()
         } else 0
     }
 
@@ -495,7 +495,7 @@ internal class MXOlmDevice @Inject constructor(
     fun encryptGroupMessage(sessionId: String, payloadString: String): String? {
         if (sessionId.isNotEmpty() && payloadString.isNotEmpty()) {
             try {
-                return outboundGroupSessionStore[sessionId]!!.encryptMessage(payloadString)
+                return outboundGroupSessionCache[sessionId]!!.encryptMessage(payloadString)
             } catch (e: Exception) {
                 Timber.e(e, "## encryptGroupMessage() : failed")
             }
