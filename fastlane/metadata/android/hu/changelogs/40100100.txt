@@ -1,0 +1,2 @@
+Ez az új verzió főképp hibajavításokat, és teljesítménybeli fejlesztéseket tartalmaz. Most már sokkal gyorsabb az üzenetek elküldése.
+A változtatások teljes listája itt található: https://github.com/vector-im/element-android/releases/tag/v1.0.10

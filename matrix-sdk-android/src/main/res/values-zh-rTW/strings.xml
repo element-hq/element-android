@@ -98,7 +98,7 @@
         <item quantity="other">%1$s 新增了 %2$s 為此聊天室的地址。</item>
     </plurals>
     <plurals name="notice_room_aliases_removed">
-        <item quantity="other">%1$s 移除了此聊天室的 %3$s 地址。</item>
+        <item quantity="other">%1$s 移除了此聊天室的 %2$s 地址。</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s 為此聊天室新增 %2$s 並移除 %3$s 地址。</string>
     <string name="notice_room_canonical_alias_set">%1$s 為此聊天室設定了 %2$s 為主地址。</string>
@@ -230,4 +230,22 @@
     <string name="notice_room_server_acl_set_banned">• 已禁止伺服器符合 %s。</string>
     <string name="notice_room_server_acl_set_title_by_you">您為此聊天是設定了伺服器 ACL。</string>
     <string name="notice_room_server_acl_set_title">%s 為此聊天是設定了伺服器 ACL。</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">您變更了此聊天室的地址。</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s 變更了此聊天室的地址。</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">您為此聊天室變更了主要及備用地址。</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s 為此聊天室變更了主要及備用地址。</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">您為此聊天室變更了備用地址。</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s 變更了此聊天室的備用地址。</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="other">您為此聊天室移除了備用地址 %1$s。</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="other">%1$s 已為此聊天室移除備用地址 %2$s。</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="other">您為此聊天室新增了備用地址 %1$s。</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="other">%1$s 已為此聊天室新增了備用地址 %2$s。</item>
+    </plurals>
 </resources>

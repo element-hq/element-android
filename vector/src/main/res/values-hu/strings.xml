@@ -426,7 +426,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="room_settings_category_access_visibility_title">Hozzáférés és láthatóság</string>
     <string name="room_settings_directory_visibility">Listázza ezt a szobát a szoba listában</string>
     <string name="room_settings_room_access_rules_pref_title">Szoba hozzáfárés</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Szoba előzmény olvashatósága</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Üzenet előzmények láthatósága</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Ki tud előzményt olvasni?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Ki tud hozzáférni a szobához?</string>
     <string name="room_settings_read_history_entry_anyone">Bárki</string>
@@ -914,8 +914,7 @@ Bármi amit a Element el akar végezni amíg a háttérben fut, agresszívan kor
     <string name="settings_troubleshoot_test_battery_failed">Ha a felhasználó töltés nélkül kikapcsolt képernyővel egy ideig magára hagyja az eszközt, az eszköz „Doze” módba kerül. Ez megakadályozza az alkalmazás számára, hogy hozzáférjen a hálózathoz, nem engedi elvégezni a feladatait, szinkronizációt és az alapértelmezett riasztásait.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Optimalizáció figyelmen kívül hagyása</string>
     <string name="startup_notification_fdroid_battery_optim_title">Háttér kapcsolat</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Elementnak szüksége van egy minimális háttér kapcsolat fenntartására ahhoz, hogy az értesítések biztonságban megérkezhessenek.
-A következő képernyőn el kell fogadnod, hogy a Element folyamatosan fusson a háttérben.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Az Elementnek szüksége van egy minimális háttér kapcsolat fenntartására ahhoz, hogy az értesítések megbízhatóan megérkezhessenek. A következő képernyőn el kell fogadnod, hogy a Element folyamatosan fusson a háttérben.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Jogosultság megadása</string>
     <string name="account_email_error">Az e-mail címed ellenőrzésekor hiba történt.</string>
     <string name="account_phone_number_error">A telefonszámod ellenőrzésekor hiba történt.</string>
@@ -951,7 +950,7 @@ Ez a hiba a Elementon kívül van. Nincs Google fiók az eszközön. Kérlek nyi
     <string name="passphrase_empty_error_message">Kérlek adj meg egy jelmondatot</string>
     <string name="passphrase_passphrase_too_weak">A jelmondat túl gyenge</string>
     <string name="keys_backup_passphrase_not_empty_error_message">Ha azt szeretnéd, hogy a Element Visszaállítási Kulcsot generáljon akkor kérlek töröld a jelmondatot.</string>
-    <string name="keys_backup_no_session_error">Jelenleg nincs Matrix kapcsolat</string>
+    <string name="keys_backup_no_session_error">Jelenleg nincs Matrix munkamenet</string>
     <string name="keys_backup_setup_step1_title">Soha ne veszíts el titkosított üzenetet</string>
     <string name="keys_backup_setup_step1_description">A titkosított szobákban az üzenetek végponttól-végpontig titkosítva vannak. Csak neked és a címzetteknek vannak meg az üzenet elolvasásához szükséges kulcsok.
 
@@ -996,7 +995,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
         <item quantity="other">%d új kulcs lett hozzáadva ehhez a munkamenet.</item>
     </plurals>
     <string name="keys_backup_get_version_error">"Nem sikerült beszerezni a legfrissebb verziójú visszaállítási  kulcsot (%s)."</string>
-    <string name="keys_backup_no_keysbackup_sdk_error">Kapcsolat titkosítás nincs enegedélyezve</string>
+    <string name="keys_backup_no_keysbackup_sdk_error">Munkamenet titkosítás nincs aktiválva</string>
     <string name="keys_backup_settings_restore_backup_button">Visszaállítás mentésből</string>
     <string name="keys_backup_settings_delete_backup_button">Mentés törlése</string>
     <string name="keys_backup_settings_status_ok">A Kulcs mentés megfelelően be van állítva ezen a munkameneten.</string>
@@ -1248,7 +1247,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_filtering_filter_hint">Beszélgetések szűrése…</string>
     <string name="room_filtering_footer_title">Nem találod amit keresel\?</string>
     <string name="room_filtering_footer_create_new_room">Új szoba készítése</string>
-    <string name="room_filtering_footer_create_new_direct_message">Új közvetlen üzenet küldése</string>
+    <string name="room_filtering_footer_create_new_direct_message">Új közvetlen beszélgetés indítása</string>
     <string name="room_filtering_footer_open_room_directory">Szoba lista megjelenítése</string>
     <string name="room_directory_search_hint">Név vagy azonosító (#pelda:matrix.org)</string>
     <string name="labs_swipe_to_reply_in_timeline">Válasz engedélyezése húzással az idővonalon</string>
@@ -1283,7 +1282,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="auth_add_email_message_2">Állíts be egy e-mail címet fiók visszaállításhoz, és hogy később megtalálhassanak akik ismernek.</string>
     <string name="auth_add_phone_message_2">Állíts be egy telefonszámot, hogy megtalálhassanak akik ismernek.</string>
     <string name="auth_add_email_phone_message_2">Állíts be egy e-mail címet fiók visszaállításhoz. E-mail vagy telefonszám alapján megtalálhatnak akik ismernek.</string>
-    <string name="auth_add_email_and_phone_message_2">Állíts be egy e-mail címet fiók visszaállításhoz. Később e-mail vagy telefonszám alapján megtalálhatnak akik ismernek.</string>
+    <string name="auth_add_email_and_phone_message_2">Állíts be egy e-mail címet fiók visszaállításhoz. Később e-mail vagy telefonszám alapján megtalálhatnak az ismerőseid.</string>
     <string name="login_error_homeserver_not_found">Nem érhető el Matrix-kiszolgáló ezen a címen, ellenőrizd</string>
     <string name="settings_call_ringtone_use_default_stun">Tartalék hívássegítő kiszolgáló engedélyezése</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Segítőként a(z) %s lesz használatban ha a Matrix-kiszolgálója nem biztosít egyet (a hívás ideje alatt az IP-címed megosztásra kerül)</string>
@@ -1333,7 +1332,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="labs_allow_extended_logging">Kibővített naplózás engedélyezése.</string>
     <string name="labs_allow_extended_logging_summary">A kiterjesztett naplózás a fejlesztőknek nyújt több információt amikor hibajegyet küldesz. Még bekapcsolva sem naplóz üzenet tartalmat vagy más személyes adatot.</string>
     <string name="error_terms_not_accepted">Kérlek ismételd meg miután elfogadtad a matrix szervered felhasználási feltételeit.</string>
-    <string name="error_network_timeout">Úgy tűnik a szerver sokáig nem válaszol, ennek a bizonytalan kapcsolat vagy egy hiba a szerverünkben lehet az oka. Kicsit később próbáld újra.</string>
+    <string name="error_network_timeout">Úgy tűnik a szerver sokáig nem válaszol, ennek a gyenge kapcsolat vagy szerverhiba lehet az oka. Próbáld újra később!</string>
     <string name="send_attachment">Csatolmány küldése</string>
     <string name="a11y_open_drawer">Navigációs panel megnyitása</string>
     <string name="a11y_create_menu_open">Szoba készítés menü megnyitása</string>
@@ -1354,7 +1353,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="error_file_too_big">\'%1$s\' (%2$s) fájl túl nagy a feltöltéshez. A korlát: %3$s.</string>
     <string name="error_attachment">A csatolmány letöltésénél hiba történt.</string>
     <string name="attachment_type_file">Fájl</string>
-    <string name="attachment_type_contact">Kapcsolat</string>
+    <string name="attachment_type_contact">Névjegy</string>
     <string name="attachment_type_camera">Kamera</string>
     <string name="attachment_type_audio">Hang</string>
     <string name="attachment_type_gallery">Galéria</string>
@@ -1801,7 +1800,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="encryption_not_enabled">Titkosítás nincs engedélyezve</string>
     <string name="encryption_unknown_algorithm_tile_description">A szobában használt titkosítás nem támogatott</string>
     <string name="room_created_summary_item">%s elkészítette és beállította a szobát.</string>
-    <string name="qr_code_scanned_self_verif_notice">Majdnem kész! A többi eszközöd is ugyanazt a pajzsot mutatja\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Majdnem kész! A másik eszközöd is ugyanazt a pajzsot mutatja\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Majdnem kész! Várakozás a megerősítésre…</string>
     <string name="qr_code_scanned_verif_waiting">Várakozás erre: %s…</string>
     <string name="error_failed_to_import_keys">A kulcsok betöltése sikertelen</string>
@@ -1865,7 +1864,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="error_empty_field_choose_user_name">Kérlek válasz felhasználói nevet.</string>
     <string name="error_empty_field_choose_password">Kérlek válassz jelszót.</string>
     <string name="external_link_confirmation_title">Ezt a hivatkozást ellenőrizd le még egyszer</string>
-    <string name="create_room_dm_failure">A közvetlen üzenetedet nem sikerült elkészíteni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
+    <string name="create_room_dm_failure">A közvetlen beszélgetést nem sikerült létrehozni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.</string>
     <string name="use_other_session_content_description">"Használd a legújabb Elementet a többi eszközödön, azaz az Element Webet, az Element Desktopot, az Element for Androidot vagy más eszközök közötti hitelesítést támogató  Matrix-klienst"</string>
     <string name="confirm_your_identity">Erősítsd meg ebben a bejelentkezésben a személyazonosságodat egy másik munkamenetből, hogy hozzáférhess a titkosított üzenetekhez.</string>
     <string name="external_link_confirmation_message">%1$s hivatkozás egy másik oldalra visz: %2$s.
@@ -2115,4 +2114,40 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_emails">Email címek</string>
     <string name="settings_phone_number_empty">Még nem adtál hozzá telefonszámot a fiókodhoz</string>
     <string name="direct_room_encryption_enabled_tile_description">Az üzenetek ebben a szobában végpontok közötti titkosítással védettek.</string>
+    <string name="attachment_type_dialog_title">Kép hozzáadása</string>
+    <string name="add_a_topic_link_text">Adj meg egy témát</string>
+    <string name="room_created_summary_no_topic_creation_text">%s, hogy a többiek tudják, miről van szó ebben a szobában!</string>
+    <string name="add_people">Felhasználók meghívása</string>
+    <string name="this_is_the_beginning_of_dm">Ez a közvetlen beszélgetés kezdete %s felhasználóval.</string>
+    <string name="this_is_the_beginning_of_room_no_name">Itt kezdődik ez a beszélgetés.</string>
+    <string name="this_is_the_beginning_of_room">Ez a %s szoba kezdete.</string>
+    <string name="direct_room_user_list_known_title">Ismert felhasználók</string>
+    <string name="user_directory_search_hint">Keresés névvel, vagy Matrix ID-vel</string>
+    <string name="sent_a_reaction">Reakció: %s</string>
+    <string name="action_add">Hozzáadás</string>
+    <string name="call_notification_hangup">Befejezés</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Nincs jogosultságod hívást indítani</string>
+    <string name="no_permissions_to_start_webrtc_call">Nincs jogosultságod hívást indítani ebben a szobában</string>
+    <string name="user_code_info_text">Mutasd meg ezt a kódot az ismerőseidnek, hogy be tudják olvasni, és elkezdődhessen a csevegés!</string>
+    <string name="invite_friends_rich_title">🔐️ Csatlakozz hozzám Element-en</string>
+    <string name="invite_friends_text">Hey, beszélgessünk Element-en: %s</string>
+    <string name="invite_friends">Ismerősök meghívása</string>
+    <string name="user_code_my_code">Saját kódom</string>
+    <string name="user_code_share">Saját kód megosztása</string>
+    <string name="not_a_valid_qr_code">Ez nem egy érvényes Matrix QR kód</string>
+    <string name="qr_code_not_scanned">QR kód nem lett beolvasva!</string>
+    <string name="invalid_qr_code_uri">Érvénytelen QR kód (Érvénytelen URI)!</string>
+    <string name="user_code_scan">QR kód beolvasása</string>
+    <string name="a11y_create_direct_message_by_qr_code">Új privát beszélgetés létrehozása QR kód beolvasásával</string>
+    <string name="qr_code">QR kód</string>
+    <string name="add_by_qr_code">Meghívás QR kóddal</string>
+    <string name="permissions_denied_qr_code">A QR kód beolvasásához szükség van kamera hozzáférésre.</string>
+    <string name="identity_server_consent_dialog_content">Engedélyezi, hogy elküldjük az névjegyek adatait (telefonszámok és/vagy e-mail címek) a beállított Azonosítási Szervernek (%1$s)\?
+\n
+\nAz adatvédelem érdekében az elküldés előtt egyirányú titkosítással (hasheléssel) lesz védve az elküldött adat.</string>
+    <string name="call_notification_reject">Elutasítás</string>
+    <string name="call_notification_answer">Fogadás</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Nincsen jogosultságod konferenciahívás indításához</string>
+    <string name="start_chatting">Csevegés indítása</string>
+    <string name="reset">Visszaállítás</string>
 </resources>

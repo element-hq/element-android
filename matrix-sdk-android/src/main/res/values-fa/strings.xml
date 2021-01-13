@@ -218,4 +218,5 @@
         <item quantity="other">%1$s، %2$s، %3$s و %4$d نفر دیگر</item>
     </plurals>
     <string name="room_displayname_3_members">%1$s، %2$s و %3$s</string>
+    <string name="room_displayname_4_members">%1$s، %2$s، %3$s و %4$s</string>
 </resources>
