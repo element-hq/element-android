@@ -24,6 +24,6 @@ import org.matrix.android.sdk.api.session.events.model.Event
 internal data class PaginationResponse(
         @Json(name = "start") override val start: String? = null,
         @Json(name = "end") override val end: String? = null,
-        @Json(name = "chunk") override val events: List<Event> = emptyList(),
-        @Json(name = "state") override val stateEvents: List<Event> = emptyList()
+        @Json(name = "chunk") override val events: List<Event>? = emptyList(),
+        @Json(name = "state") override val stateEvents: List<Event>? = emptyList()
 ) : TokenChunkEvent

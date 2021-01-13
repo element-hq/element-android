@@ -124,7 +124,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                            direction: PaginationDirection): Result {
         monarchy
                 .awaitTransaction { realm ->
-                    Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
+                    Timber.v("Start persisting ${receivedChunk.events?.size} events in $roomId towards $direction")
 
                     val nextToken: String?
                     val prevToken: String?
@@ -149,13 +149,13 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                     }
                             ?: ChunkEntity.create(realm, prevToken, nextToken)
 
-                    if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
+                    if (receivedChunk.events.isNullOrEmpty() && !receivedChunk.hasMore()) {
                         handleReachEnd(realm, roomId, direction, currentChunk)
                     } else {
                         handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
                     }
                 }
-        return if (receivedChunk.events.isEmpty()) {
+        return if (receivedChunk.events.isNullOrEmpty()) {
             if (receivedChunk.start != receivedChunk.end) {
                 Result.SHOULD_FETCH_MORE
             } else {
@@ -189,14 +189,14 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             receivedChunk: TokenChunkEvent,
             currentChunk: ChunkEntity
     ) {
-        Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
+        Timber.v("Add ${receivedChunk.events?.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
         val eventList = receivedChunk.events
         val stateEvents = receivedChunk.stateEvents
 
         val now = System.currentTimeMillis()
 
-        for (stateEvent in stateEvents) {
+        stateEvents?.forEach { stateEvent ->
             val ageLocalTs = stateEvent.unsignedData?.age?.let { now - it }
             val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
             currentChunk.addStateEvent(roomId, stateEventEntity, direction)
@@ -204,10 +204,10 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 roomMemberContentsByUser[stateEvent.stateKey] = stateEvent.content.toModel<RoomMemberContent>()
             }
         }
-        val eventIds = ArrayList<String>(eventList.size)
-        for (event in eventList) {
+        val eventIds = ArrayList<String>(eventList?.size ?: 0)
+        eventList?.forEach { event ->
             if (event.eventId == null || event.senderId == null) {
-                continue
+                return@forEach
             }
             val ageLocalTs = event.unsignedData?.age?.let { now - it }
             eventIds.add(event.eventId)

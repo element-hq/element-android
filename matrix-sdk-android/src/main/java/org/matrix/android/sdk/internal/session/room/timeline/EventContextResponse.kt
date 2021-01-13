@@ -24,13 +24,17 @@ import org.matrix.android.sdk.api.session.events.model.Event
 data class EventContextResponse(
         @Json(name = "event") val event: Event,
         @Json(name = "start") override val start: String? = null,
-        @Json(name = "events_before") val eventsBefore: List<Event> = emptyList(),
-        @Json(name = "events_after") val eventsAfter: List<Event> = emptyList(),
+        @Json(name = "events_before") val eventsBefore: List<Event>? = emptyList(),
+        @Json(name = "events_after") val eventsAfter: List<Event>? = emptyList(),
         @Json(name = "end") override val end: String? = null,
-        @Json(name = "state") override val stateEvents: List<Event> = emptyList()
+        @Json(name = "state") override val stateEvents: List<Event>? = emptyList()
 ) : TokenChunkEvent {
 
     override val events: List<Event> by lazy {
-        eventsAfter.reversed() + listOf(event) + eventsBefore
+        mutableListOf<Event>().apply {
+            eventsAfter?.let { addAll(it.reversed()) }
+            add(event)
+            eventsBefore?.let { addAll(it) }
+        }
     }
 }
