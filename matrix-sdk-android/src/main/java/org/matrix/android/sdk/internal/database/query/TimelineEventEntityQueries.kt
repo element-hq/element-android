@@ -60,14 +60,18 @@ internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
     val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return null
     val sendingTimelineEvents = roomEntity.sendingTimelineEvents.where().filterEvents(filters)
     val liveEvents = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)?.timelineEvents?.where()?.filterEvents(filters)
-    val query = if (includesSending && sendingTimelineEvents.findAll().isNotEmpty()) {
-        sendingTimelineEvents
+
+    val latestLiveEvent = liveEvents?.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)?.findFirst()
+
+    return if (includesSending) {
+        sendingTimelineEvents.findAll().toMutableList().maxByOrNull { it.root?.originServerTs ?: 0 }?.let {
+            maxOf(latestLiveEvent, it, {a, b -> ((a?.root?.originServerTs ?: 0) - (b?.root?.originServerTs ?: 0)).toInt() })
+        } ?: run {
+            latestLiveEvent
+        }
     } else {
-        liveEvents
+        latestLiveEvent
     }
-    return query
-            ?.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-            ?.findFirst()
 }
 
 internal fun RealmQuery<TimelineEventEntity>.filterEvents(filters: TimelineEventFilters): RealmQuery<TimelineEventEntity> {
