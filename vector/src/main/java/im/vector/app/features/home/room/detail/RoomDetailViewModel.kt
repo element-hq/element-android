@@ -119,7 +119,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val chatEffectManager: ChatEffectManager,
         private val directRoomHelper: DirectRoomHelper,
         timelineSettingsFactory: TimelineSettingsFactory
-) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState), Timeline.Listener, ChatEffectManager.Delegate {
+) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
+        Timeline.Listener, ChatEffectManager.Delegate, WebRtcCallManager.PSTNSupportListener {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
@@ -169,11 +170,13 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeMyRoomMember()
         observeActiveRoomWidgets()
         observePowerLevel()
+        updateShowDialerOptionState()
         room.getRoomSummaryLive()
         room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
         room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
+        callManager.addPstnSupportListener(this)
         chatEffectManager.delegate = this
     }
 
@@ -294,7 +297,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleStartCallWithPhoneNumber(action: RoomDetailAction.StartCallWithPhoneNumber) {
         viewModelScope.launch {
             try {
-                val result = DialPadLookup(session, directRoomHelper, callManager).lookupPhoneNumber(action.phoneNumber) ?: return@launch
+                val result = DialPadLookup(session, directRoomHelper, callManager).lookupPhoneNumber(action.phoneNumber)
                 callManager.startOutgoingCall(result.roomId, result.userId, action.videoCall)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
@@ -1431,6 +1434,16 @@ class RoomDetailViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.OnNewTimelineEvents(eventIds))
     }
 
+    override fun onPSTNSupportUpdated() {
+       updateShowDialerOptionState()
+    }
+
+    private fun updateShowDialerOptionState(){
+        setState {
+            copy(showDialerOption = callManager.supportsPSTNProtocol)
+        }
+    }
+
     override fun onCleared() {
         roomSummaryHolder.clear()
         timeline.dispose()
@@ -1440,6 +1453,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
         chatEffectManager.delegate = null
         chatEffectManager.dispose()
+        callManager.removePstnSupportListener(this)
         super.onCleared()
     }
 }

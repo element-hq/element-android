@@ -29,8 +29,8 @@ class DialPadLookup(val session: Session,
     class Failure : Throwable()
     data class Result(val userId: String, val roomId: String)
 
-    suspend fun lookupPhoneNumber(phoneNumber: String): Result? {
-        val supportedProtocolKey = callManager.supportedPSTNProtocol ?: return null
+    suspend fun lookupPhoneNumber(phoneNumber: String): Result {
+        val supportedProtocolKey = callManager.supportedPSTNProtocol ?: throw Failure()
         val thirdPartyUser = tryOrNull {
             session.getThirdPartyUser(supportedProtocolKey, fields = mapOf(
                     "m.id.phone" to phoneNumber
