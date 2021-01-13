@@ -17,6 +17,7 @@ Bugfix 🐛:
  - Tapping drawer having more than 1 room in notifications gives "malformed link" error (#2605)
  - Sent image not displayed when opened immediately after sending (#409)
  - Initial sync is not retried correctly when there is some network error. (#2632)
+ - Order of sent messages are not always respected (#729)
 
 Translations 🗣:
  -
