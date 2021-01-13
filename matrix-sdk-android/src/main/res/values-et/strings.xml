@@ -47,7 +47,7 @@
     <string name="notice_crypto_error_unkwown_inbound_session_id">Sõnumi saatja seade ei ole selle sõnumi jaoks saatnud dekrüptimisvõtmeid.</string>
     <string name="could_not_redact">Ei saanud muuta sõnumit</string>
     <string name="unable_to_send_message">Sõnumi saatmine ei õnnestunud</string>
-    <string name="message_failed_to_upload">Faili üles laadimine ei õnnestunud</string>
+    <string name="message_failed_to_upload">Pildi üleslaadimine ei õnnestunud</string>
     <string name="network_error">Võrguühenduse viga</string>
     <string name="matrix_error">Matrix\'i viga</string>
     <string name="room_error_join_failed_empty_room">Hetkel ei ole võimalik uuesti liituda tühja jututoaga.</string>
@@ -236,4 +236,26 @@
     <string name="notice_room_server_acl_set_ip_literals_allowed">• Lubatud on serverid, mille ip-aadress vastab mustrile.</string>
     <string name="notice_room_server_acl_set_allowed">• Lubatud on serverid, mille nimes leidub %s.</string>
     <string name="notice_room_server_acl_set_banned">• Keelatud on serverid, mille nimes leidub %s.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s muutis selle jututoa aadresse.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Sa muutsid selle jututoa põhiaadressi ja täiendavaid aadresse.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s muutis selle jututoa täiendavaid aadresse.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Sa muutsid selle jututoa täiendavaid aadresse.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s muutis selle jututoa põhiaadressi ja täiendavaid aadresse.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Sa eemaldasid selle jututoa täiendava aadressi %1$s.</item>
+        <item quantity="other">Sa eemaldasid selle jututoa täiendavad aadressid %1$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s eemaldas selle jututoa täiendava aadressi %2$s.</item>
+        <item quantity="other">%1$s eemaldas selle jututoa täiendavad aadressid %2$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Sa lisasid sellele jututoale täiendava aadressi %1$s.</item>
+        <item quantity="other">Sa lisasid sellele jututoale täiendavad aadressid %1$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s lisas sellele jututoale täiendava aadressi %2$s.</item>
+        <item quantity="other">%1$s lisas sellele jututoale täiendavad aadressid %2$s.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_no_change_by_you">Sa muutsid selle jututoa aadresse.</string>
 </resources>

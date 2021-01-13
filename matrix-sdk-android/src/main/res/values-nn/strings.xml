@@ -1,12 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="encrypted_message">Kryptert melding</string>
-
-
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s sende eit bilæte.</string>
     <string name="summary_user_sent_sticker">%1$s sende eit klistremerke.</string>
-
     <string name="notice_room_invite_no_invitee">%s si innbjoding</string>
     <string name="notice_room_invite">%1$s inviterte %2$s</string>
     <string name="notice_room_invite_you">%1$s inviterte deg</string>
@@ -34,53 +31,38 @@
     <string name="notice_room_visibility_world_readable">kven som heldst.</string>
     <string name="notice_room_visibility_unknown">uvisst (%s).</string>
     <string name="notice_end_to_end">%1$s skrudde ende-til-ende-kryptering på (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s bad um ei VoIP-gruppasamtala</string>
     <string name="notice_voip_started">VoIP-gruppasamtala er starta</string>
     <string name="notice_voip_finished">VoIP-gruppasamtala er ferdug</string>
-
     <string name="notice_avatar_changed_too">(avataren vart au byta)</string>
     <string name="notice_room_name_removed">%1$s tok burt romnamnet</string>
     <string name="notice_room_topic_removed">%1$s tok burt romemnet</string>
     <string name="notice_profile_change_redacted">%1$s gjorde um på skildringi si %2$s</string>
     <string name="notice_room_third_party_invite">%1$s inviterte %2$s til rommet</string>
     <string name="notice_room_third_party_registered_invite">%1$s sa ja til innbjodingi til %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Fekk ikkje til å dekryptera: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Avsendareiningi hev ikkje sendt oss nyklane fyr denna meldingi.</string>
-
     <string name="could_not_redact">Kunde ikkje gjera um</string>
-    <string name="unable_to_send_message">Fekk ikkje å senda meldingi</string>
-
+    <string name="unable_to_send_message">Fekk ikkje til å senda meldingi</string>
     <string name="message_failed_to_upload">Fekk ikkje til å lasta biletet upp</string>
-
     <string name="network_error">Noko gjekk gale med netverket</string>
     <string name="matrix_error">Noko gjekk gale med Matrix</string>
-
     <string name="room_error_join_failed_empty_room">Det lèt seg fyrebils ikkje gjera å fara inn att i eit tomt rom.</string>
-
     <string name="medium_email">Epostadresse</string>
     <string name="medium_phone_number">Telefonnummer</string>
-
     <string name="room_displayname_invite_from">Innbjoding frå %s</string>
     <string name="room_displayname_room_invite">Rominnbjoding</string>
     <string name="room_displayname_two_members">%1$s og %2$s</string>
-
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s og 1 til</item>
         <item quantity="other">%1$s og %2$d til</item>
     </plurals>
-
     <string name="room_displayname_empty_room">Tomt rom</string>
-
     <string name="notice_event_redacted">Ei melding vart stroki</string>
     <string name="notice_event_redacted_by">%1$s strauk meldingi</string>
     <string name="notice_event_redacted_with_reason">Meldingi vart stroki [av di: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">%1$s strauk meldingi [av di: %2$s]</string>
-
     <string name="notice_room_update">%s oppgraderte rommet.</string>
-
     <string name="clear_timeline_send_queue">Nullstill sendingskø</string>
-
     <string name="notice_room_leave_with_reason">%1$s forlot rommet. Grunn: %2$s</string>
 </resources>

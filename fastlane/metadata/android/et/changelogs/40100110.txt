@@ -1,0 +1,2 @@
+Uues versioonis leidub põhiliselt kasutajaliidese ning kasutajakogemuse parandusi. Nüüd saad sõpradele kutseid saata ning otsevestlusi alustada QR-koodi lugemise abil.
+Kõik muudatused: https://github.com/vector-im/element-android/releases/tag/v1.0.11
