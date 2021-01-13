@@ -8,6 +8,7 @@ Features ✨:
 Improvements 🙌:
  - Add System theme option and set as default (#904, #2387)
  - Warn user when they are leaving a not public room (#1460)
+ - Option to disable emoji keyboard (#2563)
 
 Bugfix 🐛:
  - Unspecced msgType field in m.sticker (#2580)

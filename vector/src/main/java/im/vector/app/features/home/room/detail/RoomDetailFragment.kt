@@ -1164,6 +1164,8 @@ class RoomDetailFragment @Inject constructor(
             } else false
         }
 
+        views.composerLayout.views.composerEmojiButton.isVisible = vectorPreferences.showEmojiKeyboard()
+
         views.composerLayout.callback = object : TextComposerView.Callback {
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {

@@ -917,6 +917,8 @@
     <string name="settings_preview_media_before_sending">Preview media before sending</string>
     <string name="settings_send_message_with_enter">Send message with enter</string>
     <string name="settings_send_message_with_enter_summary">Enter button of the soft keyboard will send message instead of adding a line break</string>
+    <string name="settings_show_emoji_keyboard">Show emoji keyboard</string>
+    <string name="settings_show_emoji_keyboard_summary">Add a button on message composer to open emoji keyboard</string>
 
     <string name="settings_secure_backup_section_title">Secure Backup</string>
     <string name="settings_secure_backup_manage">Manage</string>
