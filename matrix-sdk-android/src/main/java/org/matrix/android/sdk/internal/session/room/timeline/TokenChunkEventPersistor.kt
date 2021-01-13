@@ -124,7 +124,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                            direction: PaginationDirection): Result {
         monarchy
                 .awaitTransaction { realm ->
-                    Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
+                    Timber.v("Start persisting ${receivedChunk.events?.size} events in $roomId towards $direction")
 
                     val nextToken: String?
                     val prevToken: String?
@@ -149,7 +149,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                     }
                             ?: ChunkEntity.create(realm, prevToken, nextToken)
 
-                    if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
+                    if (receivedChunk.events.isNullOrEmpty() && !receivedChunk.hasMore()) {
                         handleReachEnd(realm, roomId, direction, currentChunk)
                     } else {
                         handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
@@ -189,7 +189,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             receivedChunk: TokenChunkEvent,
             currentChunk: ChunkEntity
     ) {
-        Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
+        Timber.v("Add ${receivedChunk.events?.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
         val eventList = receivedChunk.events
         val stateEvents = receivedChunk.stateEvents
