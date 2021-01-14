@@ -98,6 +98,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_VIBRATE_ON_MENTION_KEY = "SETTINGS_VIBRATE_ON_MENTION_KEY"
         private const val SETTINGS_SEND_MESSAGE_WITH_ENTER = "SETTINGS_SEND_MESSAGE_WITH_ENTER"
         private const val SETTINGS_ENABLE_CHAT_EFFECTS = "SETTINGS_ENABLE_CHAT_EFFECTS"
+        private const val SETTINGS_SHOW_EMOJI_KEYBOARD = "SETTINGS_SHOW_EMOJI_KEYBOARD"
 
         // Help
         private const val SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY = "SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY"
@@ -207,6 +208,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY,
                 SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY,
                 SETTINGS_SEND_MESSAGE_WITH_ENTER,
+                SETTINGS_SHOW_EMOJI_KEYBOARD,
 
                 SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
                 SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
@@ -820,6 +822,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun sendMessageWithEnter(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SEND_MESSAGE_WITH_ENTER, false)
+    }
+
+    /**
+     * Tells if the emoji keyboard button should be visible or not.
+     *
+     * @return true to show emoji keyboard button.
+     */
+    fun showEmojiKeyboard(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_EMOJI_KEYBOARD, true)
     }
 
     /**

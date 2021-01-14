@@ -610,6 +610,33 @@
     <string name="ssl_expected_existing_expl">The certificate has changed from a previously trusted one to one that is not trusted. The server may have renewed its certificate. Contact the server administrator for the expected fingerprint.</string>
     <string name="ssl_only_accept">Only accept the certificate if the server administrator has published a fingerprint that matches the one above.</string>
 
+    <!-- Room Permissions -->
+    <string name="room_settings_permissions_title">Room permissions</string>
+    <string name="room_settings_permissions_subtitle">View and update the roles required to change various parts of the room.</string>
+
+    <string name="room_permissions_title">"Permissions"</string>
+    <string name="room_permissions_notice">"Select the roles required to change various parts of the room"</string>
+    <string name="room_permissions_notice_read_only">"You don't have permission to update the roles required to change various parts of the room"</string>
+
+    <string name="room_permissions_default_role">Default role</string>
+    <string name="room_permissions_send_messages">Send messages</string>
+    <string name="room_permissions_invite_users">Invite users</string>
+    <string name="room_permissions_change_settings">Change settings</string>
+    <string name="room_permissions_kick_users">Kick users</string>
+    <string name="room_permissions_ban_users">Ban users</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Remove messages sent by others</string>
+    <string name="room_permissions_notify_everyone">Notify everyone</string>
+    <string name="room_permissions_modify_widgets">Modify widgets</string>
+    <string name="room_permissions_change_room_avatar">Change room avatar</string>
+    <string name="room_permissions_change_main_address_for_the_room">Change main address for the room</string>
+    <string name="room_permissions_enable_room_encryption">Enable room encryption</string>
+    <string name="room_permissions_change_history_visibility">Change history visibility</string>
+    <string name="room_permissions_change_room_name">Change room name</string>
+    <string name="room_permissions_change_permissions">Change permissions</string>
+    <string name="room_permissions_send_m_room_server_acl_events">Send m.room.server_acl events</string>
+    <string name="room_permissions_upgrade_the_room">Upgrade the room</string>
+    <string name="room_permissions_change_topic">Change topic</string>
+
     <!-- Room Details -->
     <string name="room_details_title">Room Details</string>
     <string name="room_details_people">People</string>
@@ -890,6 +917,8 @@
     <string name="settings_preview_media_before_sending">Preview media before sending</string>
     <string name="settings_send_message_with_enter">Send message with enter</string>
     <string name="settings_send_message_with_enter_summary">Enter button of the soft keyboard will send message instead of adding a line break</string>
+    <string name="settings_show_emoji_keyboard">Show emoji keyboard</string>
+    <string name="settings_show_emoji_keyboard_summary">Add a button on message composer to open emoji keyboard</string>
 
     <string name="settings_secure_backup_section_title">Secure Backup</string>
     <string name="settings_secure_backup_manage">Manage</string>

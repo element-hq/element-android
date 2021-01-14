@@ -1333,8 +1333,8 @@
     <string name="room_list_catchup_empty_title">您已经跟上了！</string>
     <string name="room_list_catchup_empty_body">您没有未读消息</string>
     <string name="room_list_catchup_welcome_body">从这里跟上未读消息</string>
-    <string name="room_list_people_empty_body">您的私聊消息将在此处显示</string>
-    <string name="room_list_rooms_empty_body">您的聊天室将在此显示</string>
+    <string name="room_list_people_empty_body">您的私聊消息将显示在此处。点击右下角的 + 开始一些对话。</string>
+    <string name="room_list_rooms_empty_body">您的聊天室将显示在此处。点击右下角的 + 来找到现有的聊天室或者创建你自己的聊天室。</string>
     <string name="event_redacted">消息已删除</string>
     <string name="settings_show_redacted">显示已移除消息</string>
     <string name="settings_show_redacted_summary">对已移除消息显示占位符</string>
@@ -1919,7 +1919,7 @@
     <string name="error_adding_media_file_to_gallery">无法添加媒体文件到相册</string>
     <string name="error_saving_media_file">无法保存媒体文件</string>
     <string name="change_password_summary">选择新的账户密码…</string>
-    <string name="use_other_session_content_description">在您的其他设备上使用最新的 Element、Element Web、Element Desktop、Element iOS、Element for Android，或其他能够交叉签名的 Matrix 客户端</string>
+    <string name="use_other_session_content_description">在你的其他设备上使用最新的Element 网页版、Element 桌面版、Element iOS 版、Element 安卓版，或其他能够交叉签名的 Matrix 客户端</string>
     <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
     <string name="app_ios_android">Element iOS
@@ -2152,4 +2152,21 @@
     <string name="permissions_denied_qr_code">如需扫描二维码，您须允许相机访问权限。</string>
     <string name="no_more_results">没有更多结果</string>
     <string name="start_chatting">开始畅聊</string>
+    <string name="room_alias_delete_confirmation">删除地址 \"%1$s\"？</string>
+    <string name="room_alias_unpublish_confirmation">取消发布地址 \"%1$s\"？</string>
+    <string name="room_alias_published_alias_add_manually_submit">发布</string>
+    <string name="room_alias_published_alias_add_manually">手动发布新地址</string>
+    <string name="room_alias_published_other">其它发布的地址：</string>
+    <string name="room_alias_main_address_hint">主地址</string>
+    <string name="room_alias_published_alias_main">这是主地址</string>
+    <string name="room_alias_published_alias_subtitle">发布的地址可以被任何服务器上的任何人用来加入您的聊天室。要发布一个地址，它必须先被设为一个本地地址。</string>
+    <string name="room_alias_published_alias_title">发布的地址</string>
+    <string name="room_alias_title">聊天室地址</string>
+    <string name="room_settings_alias_subtitle">查看和管理此聊天室的地址，以及它在聊天室目录中的可见性。</string>
+    <string name="room_settings_alias_title">聊天室地址</string>
+    <string name="room_settings_room_access_title">聊天室访问</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">改成谁都可以阅读历史只会应用于此聊天室未来的消息。已经存在的历史消息的可见性将不会改变。</string>
+    <string name="send_bug_report_include_key_share_history">发送密钥共享请求历史记录</string>
+    <string name="action_unpublish">取消发布</string>
+    <string name="action_add">添加</string>
 </resources>

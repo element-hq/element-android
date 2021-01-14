@@ -55,7 +55,11 @@ internal class DefaultJoinRoomTask @Inject constructor(
         roomChangeMembershipStateDataSource.updateState(params.roomIdOrAlias, ChangeMembershipState.Joining)
         val joinRoomResponse = try {
             executeRequest<JoinRoomResponse>(globalErrorReceiver) {
-                apiCall = roomAPI.join(params.roomIdOrAlias, params.viaServers, mapOf("reason" to params.reason))
+                apiCall = roomAPI.join(
+                        roomIdOrAlias = params.roomIdOrAlias,
+                        viaServers = params.viaServers.take(3),
+                        params = mapOf("reason" to params.reason)
+                )
             }
         } catch (failure: Throwable) {
             roomChangeMembershipStateDataSource.updateState(params.roomIdOrAlias, ChangeMembershipState.FailedJoining(failure))

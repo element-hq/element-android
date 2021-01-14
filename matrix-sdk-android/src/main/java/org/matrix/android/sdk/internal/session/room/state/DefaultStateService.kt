@@ -35,13 +35,11 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
-import org.matrix.android.sdk.internal.session.room.alias.AddRoomAliasTask
 
 internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                private val stateEventDataSource: StateEventDataSource,
                                                                private val sendStateTask: SendStateTask,
-                                                               private val fileUploader: FileUploader,
-                                                               private val addRoomAliasTask: AddRoomAliasTask
+                                                               private val fileUploader: FileUploader
 ) : StateService {
 
     @AssistedInject.Factory
@@ -74,9 +72,17 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 roomId = roomId,
                 stateKey = stateKey,
                 eventType = eventType,
-                body = body
+                body = body.toSafeJson(eventType)
         )
         sendStateTask.execute(params)
+    }
+
+    private fun JsonDict.toSafeJson(eventType: String): JsonDict {
+        // Safe treatment for PowerLevelContent
+        return when (eventType) {
+            EventType.STATE_ROOM_POWER_LEVELS -> toSafePowerLevelsContentDict()
+            else                              -> this
+        }
     }
 
     override suspend fun updateTopic(topic: String) {

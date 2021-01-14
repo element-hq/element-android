@@ -3,10 +3,12 @@ Changes in Element 1.0.14 (2020-XX-XX)
 
 Features ✨:
  - Enable url previews for notices (#2562)
+ - Edit room permissions (#2471)
 
 Improvements 🙌:
  - Add System theme option and set as default (#904, #2387)
- - Warn user when he is leaving a not public room (#1460)
+ - Warn user when they are leaving a not public room (#1460)
+ - Option to disable emoji keyboard (#2563)
 
 Bugfix 🐛:
  - Unspecced msgType field in m.sticker (#2580)
@@ -15,8 +17,10 @@ Bugfix 🐛:
  - Room Topic not displayed correctly after visiting a link (#2551)
  - Hiding membership events works the exact opposite (#2603)
  - Tapping drawer having more than 1 room in notifications gives "malformed link" error (#2605)
+ - Sent image not displayed when opened immediately after sending (#409)
  - Initial sync is not retried correctly when there is some network error. (#2632)
  - Fix switch theme issue, and white field issue (#2599, #2528)
+ - Fix request too large Uri error when joining a room
 
 Translations 🗣:
  -

@@ -887,13 +887,15 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleSetUserPowerLevel(setUserPowerLevel: ParsedCommand.SetUserPowerLevel) {
-        val currentPowerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        val newPowerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
                 ?.content
-                ?.toModel<PowerLevelsContent>() ?: return
+                ?.toModel<PowerLevelsContent>()
+                ?.setUserPowerLevel(setUserPowerLevel.userId, setUserPowerLevel.powerLevel)
+                ?.toContent()
+                ?: return
 
         launchSlashCommandFlowSuspendable {
-            currentPowerLevelsContent.setUserPowerLevel(setUserPowerLevel.userId, setUserPowerLevel.powerLevel)
-            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent())
+            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, newPowerLevelsContent)
         }
     }
 

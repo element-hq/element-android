@@ -241,7 +241,7 @@
     <string name="stay">ماندن</string>
     <string name="redact">حذف</string>
     <string name="download">بارگیری</string>
-    <string name="ongoing_conference_call">کنفرانس در حال برگزاری است.
+    <string name="ongoing_conference_call">کنفرانس در حال برگذاری است.
 \nبه صورت %1$s یا %2$s به آن بپیوندید</string>
     <string name="missing_permissions_warning">به خاطر نداشتن مجوز دسترسی، برخی امکانات ممکن است در دسترس نباشند…</string>
     <string name="missing_permissions_error">به خاطر نداشتن مجوز دسترسی، این اقدام ممکن نیست.</string>
@@ -250,7 +250,7 @@
     <string name="skip">رد شدن</string>
     <string name="done">انجام شد</string>
     <string name="abort">انصراف</string>
-    <string name="ignore">چشم‌پوشی</string>
+    <string name="ignore">نادیده‌گرفتن</string>
     <string name="action_sign_out_confirmation_simple">آیا می‌خواهید از حساب کاربری خود خارج شوید؟</string>
     <string name="action_mark_room_read">علامت‌گذاری به عنوان خوانده شده</string>
     <string name="auth_login_sso">ورود با سامانه‌های احراز هویت مرکزی</string>
@@ -366,7 +366,7 @@
     <string name="settings_clear_media_cache">پاک‌سازی انبارهٔ رسانه</string>
     <string name="settings_user_settings">تنظیمات کاربر</string>
     <string name="settings_notifications">آگاهی‌ها</string>
-    <string name="settings_ignored_users">کاربران چشم‌پوشیده</string>
+    <string name="settings_ignored_users">کاربران نادیده‌گرفته شده</string>
     <string name="settings_other">دیگر</string>
     <string name="settings_advanced">پیش‌رفته</string>
     <string name="settings_integrations">یک‌پارچگی‌ها</string>
@@ -456,9 +456,9 @@
     <string name="room_list_catchup_welcome_title">به خانه خوش آمدید!</string>
     <string name="room_list_catchup_welcome_body">این‌جا به پیام‌های نخوانده برسید</string>
     <string name="room_list_people_empty_title">گفت‌وگوها</string>
-    <string name="room_list_people_empty_body">گفت‌گوهای پیام مستقیمتان این‌جا نشان داده خواهند شد</string>
+    <string name="room_list_people_empty_body">گفت‌گوهای پیام مستقیمتان این‌جا نشان داده خواهند شد. برای آغاز روی + در پایین سمت راست بزنید.</string>
     <string name="room_list_rooms_empty_title">اتاق‌ها</string>
-    <string name="room_list_rooms_empty_body">اتاق‌هایتان این‌جا نشان داده خواهند شد</string>
+    <string name="room_list_rooms_empty_body">اتاق‌هایتان این‌جا نشان داده خواهند شد. برای یافتن موارد موجود یا ایجاد خودتان روی + در پایین سمت راست بزنید.</string>
     <string name="title_activity_emoji_reaction_picker">بازخودها</string>
     <string name="reactions_agree">موافقت</string>
     <string name="reactions_like">پسند</string>
@@ -492,8 +492,8 @@
     <string name="settings_security_and_privacy">امنیت و محرمانگی</string>
     <string name="preference_voice_and_video">صدا و تصویر</string>
     <string name="preference_root_help_about">راهنما و درباره</string>
-    <string name="send_suggestion">ارایهٔ پیشنهاد</string>
-    <string name="send_suggestion_content">لطفاً پیشنهادتان را در زیر بنویسید.</string>
+    <string name="send_suggestion">پیشنهاد دهید</string>
+    <string name="send_suggestion_content">لطفا پیشنهادتان را در زیر بنویسید.</string>
     <string name="send_suggestion_report_placeholder">پیشنهادتان را این‌جا شرح دهید</string>
     <string name="send_suggestion_sent">ممنون. پیشنهاد با موفّقیت فرستاده شد</string>
     <string name="send_suggestion_failed">فرستادن پیشنهاد شکست خورد (%s)</string>
@@ -523,13 +523,13 @@
     <string name="report_content_custom_title">گزارش این محتوا</string>
     <string name="report_content_custom_hint">دلیل گزارش این محتوا</string>
     <string name="report_content_custom_submit">گزارش</string>
-    <string name="block_user">چشم‌پوشی از کاربر</string>
+    <string name="block_user">نادیده‌گرفتن کاربر</string>
     <string name="content_reported_title">محتوا گزارش شد</string>
     <string name="content_reported_as_spam_title">به عنوان هرزنامه گزارش شد</string>
     <string name="content_reported_as_inappropriate_title">به عنوان نامناسب گزارش شد</string>
-    <string name="message_ignore_user">چشم‌پوشی از کاربر</string>
+    <string name="message_ignore_user">نادیده‌گرفتن کاربر</string>
     <string name="login_server_other_text">تنظیمات پیش‌رفته و سفارشی</string>
-    <string name="settings_show_devices_list">دیدن تمام نشست‌هایم</string>
+    <string name="settings_show_devices_list">دیدن همه نشست‌هایم</string>
     <string name="settings_advanced_settings">تنظیمات پیش‌رفته</string>
     <string name="settings_developer_mode">حالت توسعه‌دهنده</string>
     <string name="settings_rageshake">تکان دادن</string>
@@ -541,7 +541,7 @@
     <string name="settings_category_timeline">خط زمانی</string>
     <string name="settings_category_composer">ویرایشگر پیام</string>
     <string name="settings_active_sessions_list">نشست‌های فعّال</string>
-    <string name="settings_active_sessions_show_all">نمایش تمامی نشست‌ها</string>
+    <string name="settings_active_sessions_show_all">نمایش همه نشست‌ها</string>
     <string name="settings_active_sessions_manage">مدیریت نشست‌ها</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="one">۱ نشست فعّال</item>
@@ -604,8 +604,8 @@
     <string name="room_participants_action_set_default_power_level">بازنشانی به کاربر عادی</string>
     <string name="room_participants_action_set_moderator">ناظر کردن</string>
     <string name="room_participants_action_set_admin">مدیر کردن</string>
-    <string name="room_participants_action_ignore">چشم‌پوشی</string>
-    <string name="room_participants_action_unignore">نمایش همه پیام‌ها از این کاربر</string>
+    <string name="room_participants_action_ignore">نادیده‌گرفتن</string>
+    <string name="room_participants_action_unignore">لغو نادیده‌گیری</string>
     <string name="room_participants_action_mention">اشاره</string>
     <string name="room_participants_action_devices_list">نمایش فهرست نشست</string>
     <string name="room_participants_ban_prompt_msg">انسداد کاربر، او را از این اتاق اخراج کرده و از پیوستن دوباره‌اش جلوگیری می‌کند.</string>
@@ -677,8 +677,8 @@
     <string name="room_preview_room_interactions_disabled">این پیش‌نمایی از اتاق است. برهم‌کنش‌های اتاق از کار افتاده‌اند.</string>
     <string name="invite_no_identity_server_error">برای انجام این عمل، کارساز هویتی را به تنظیماتتان بیفزایید.</string>
     <string name="room_participants_action_cancel_invite">لغو دعوت</string>
-    <string name="room_participants_action_ignore_title">چشم‌پوشی از کاربر</string>
-    <string name="room_participants_action_unignore_title">نادیده نگرفتن کاربر</string>
+    <string name="room_participants_action_ignore_title">نادیده گرفتن کاربر</string>
+    <string name="room_participants_action_unignore_title">لغو نادیده‌گیری کاربر</string>
     <string name="room_participants_action_cancel_invite_title">لغو دعوت</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">مطمئنید که می‌خواهید دعوت این کاربر را لغو کنید؟</string>
     <string name="room_participants_kick_title">اخراج کاربر</string>
@@ -720,7 +720,7 @@
     <string name="ssl_trust">اعتماد کردن</string>
     <string name="ssl_do_not_trust">اعتماد نکردن</string>
     <string name="ssl_logout_account">خروج</string>
-    <string name="ssl_remain_offline">چشم‌پوشی</string>
+    <string name="ssl_remain_offline">نادیده‌گرفتن</string>
     <string name="ssl_fingerprint_hash">اثرانگشت (%s):</string>
     <string name="ssl_could_not_verify">نمی‌توان هویت کارساز دوردست را تأیید کرد.</string>
     <string name="search_hint">جست‌وجو</string>
@@ -773,7 +773,7 @@
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">از کار انداختن محدودیت‌ها</string>
     <string name="settings_troubleshoot_test_battery_title">بهینه‌سازی باتری</string>
     <string name="settings_troubleshoot_test_battery_success">المنت تحت تأثیر بهینه‌سازی باتری نیست.</string>
-    <string name="settings_troubleshoot_test_battery_quickfix">چشم‌پوشی از بهینه‌سازی</string>
+    <string name="settings_troubleshoot_test_battery_quickfix">نادیده‌گرفتن بهینه‌سازی</string>
     <string name="settings_notification_privacy_normal">عادی</string>
     <string name="settings_notification_privacy_reduced">محرمانگی کاهش‌یافته</string>
     <string name="settings_notification_privacy_need_permission">کاره برای اجرا در پس‌زمینه نیاز به اجازه دارد</string>
@@ -814,7 +814,7 @@
     <string name="settings_secure_backup_enter_to_setup">برپایی روی این افزاره</string>
     <string name="settings_secure_backup_section_info">سپرامنیتی در برابر از دست دادن دسترسی به داده‌ها و پیام‌های رمزشده با پشتیبان گیری از کلیدها روی کارسازتان.</string>
     <string name="settings_deactivate_account_section">غیرفعّال‌سازی حساب</string>
-    <string name="settings_deactivate_my_account">غیرفعّال‌سازی حسابم</string>
+    <string name="settings_deactivate_my_account">حسابم را غیرفعال کن</string>
     <string name="settings_discovery_category">کشف</string>
     <string name="settings_discovery_manage">مدیریت تنظیمات کشفتان.</string>
     <string name="startup_notification_privacy_title">محرمانگی آگاهی</string>
@@ -976,8 +976,8 @@
     <string name="share_without_verifying">هم‌رسانی بدون تأیید</string>
     <string name="share_without_verifying_short_label">هم‌رسانی</string>
     <string name="key_share_request">درخواست هم‌رسانی کلید</string>
-    <string name="ignore_request">چشم‌پوشی از درخواست</string>
-    <string name="ignore_request_short_label">چشم‌پوشی</string>
+    <string name="ignore_request">نادیده‌گرفتن درخواست</string>
+    <string name="ignore_request_short_label">نادیده‌گرفتن</string>
     <string name="conference_call_warning_title">هشدار!</string>
     <string name="notification_off">خاموش</string>
     <string name="notification_silent">خموش</string>
@@ -1079,7 +1079,7 @@
     <string name="notice_member_no_changes">%1$s تغییری ایجاد نکرد</string>
     <string name="notice_member_no_changes_by_you">تغییری ایجاد نکردید</string>
     <string name="reaction_search_type_hint">برای یافتن واکنش، کلیدواژگان را بنویسید.</string>
-    <string name="no_ignored_users">از هیچ کاربری چشم نمی‌پوشید</string>
+    <string name="no_ignored_users">شما هیچ کاربری را نادیده نمی‌گیرید</string>
     <string name="login_server_modular_text">میزبانی حرفه‌ای برای سازمان‌ها</string>
     <string name="login_server_modular_learn_more">بیش‌تر بدانید</string>
     <string name="login_server_other_title">دیگر</string>
@@ -1203,7 +1203,7 @@
     <string name="room_member_power_level_default_in">پیش گزیده در %1$s</string>
     <string name="room_member_power_level_custom_in">سفارشی (%1$d) در %2$s</string>
     <string name="room_member_jump_to_read_receipt">پرش به رسیدِ خواندن</string>
-    <string name="unignore">چشم‌ناپوشی</string>
+    <string name="unignore">لغو نادیده‌گرفتن</string>
     <string name="room_settings_enable_encryption_warning">پس از به کار افتادن، رمزنگاری قابل از کار انداختن نیست.</string>
     <string name="room_settings_enable_encryption_dialog_submit">به کار انداختن رمزنگاری</string>
     <string name="encryption_information_cross_signing_state">ورود چندگانه</string>
@@ -1256,7 +1256,7 @@
     </plurals>
     <string name="delete_event_dialog_title">تأیید برداشت</string>
     <string name="delete_event_dialog_reason_checkbox">آوردن دلیل</string>
-    <string name="login_default_session_public_name">المنت اندروید</string>
+    <string name="login_default_session_public_name">Element Android</string>
     <string name="settings_key_requests">درخواست‌های کلید</string>
     <string name="e2e_use_keybackup">قفل‌گشایی از تاریخچهٔ پیام‌های رمزشده</string>
     <string name="refresh">نوسازی</string>
@@ -1339,7 +1339,7 @@
     <string name="room_settings_addresses_e2e_disabled">رمزنگاری در این اتاق از کار افتاده است.</string>
     <string name="room_settings_copy_room_address">رونوشت از نشانی اتاق</string>
     <string name="room_settings_copy_room_id">رونوشت از شناسهٔ اتاق</string>
-    <string name="room_settings_unset_main_address">ناتنظیم به عنوان نشانی اصلی</string>
+    <string name="room_settings_unset_main_address">بازنشاندن از نشانی اصلی</string>
     <string name="room_settings_addresses_e2e_enabled">رمزنگاری در این اتاق به کار افتاده است.</string>
     <string name="resource_limit_contact_admin">ارتباط با مدیر خدمتتان</string>
     <string name="resource_limit_contact_action">ارتباط با مدیر</string>
@@ -1449,7 +1449,7 @@
     <string name="settings_security_pin_code_notifications_title">نمایش محتوا در آگاهی‌ها</string>
     <string name="settings_security_pin_code_use_biometrics_summary_off">کد پین، تنها راه قفل‌گشایی المنت است.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">به کار انداختن زیست‌سنجی‌های مختص افزاره، مانند اثرانگشت‌ها و تشخیص چهره.</string>
-    <string name="settings_security_pin_code_use_biometrics_title">به کرا انداختن زیست‌سنجی‌ها</string>
+    <string name="settings_security_pin_code_use_biometrics_title">به کار انداختن زیست‌سنجی‌ها</string>
     <string name="settings_security_pin_code_summary">اگر می‌خواهید پینتان را بازنشانی کنید، فراموشی پین را برای خروج و بازنشانی بزنید.</string>
     <string name="settings_security_pin_code_title">به کار انداختن پین</string>
     <string name="settings_security_application_protection_screen_title">پیکربندی محافظت</string>
@@ -1553,9 +1553,9 @@
     <string name="search_banned_user_hint">فیلترکردن کاربران مسدود شده</string>
     <string name="room_event_action_cancel_download">لغو دانلود</string>
     <string name="room_event_action_cancel_upload">لغو آپلود</string>
-    <string name="room_event_action_report_prompt_ignore_user">آیا مطمئن هستید که تمام پیام‌های ارسالی از طرف این کاربر پنهان شود؟
+    <string name="room_event_action_report_prompt_ignore_user">آیا می‌خواهید که همه پیام‌های ارسالی از طرف این کاربر پنهان شود؟
 \n
-\nاین کار برنامه را مجدداً باز می‌کند و ممکن است کمی به طول انجامد.</string>
+\nاین کنش کاره را دوباره راه‌اندازی می‌کند و ممکن است زمان ببرد.</string>
     <string name="room_event_action_report_prompt_reason">دلیل گزارش این محتوا</string>
     <string name="room_details_people_present_group_name">عضو شد</string>
     <string name="room_details_people_invited_group_name">دعوت‌شدگان</string>
@@ -1575,10 +1575,10 @@
     <string name="room_unknown_devices_messages_notification">پیام به دلیل حضور یک دستگاه ناشناس ارسال نشد. %1$s یا %2$s؟</string>
     <string name="room_unsent_messages_notification">پیام ارسال نشد. %1$s یا %2$s؟</string>
     <string name="room_participants_unban_prompt_msg">با لغو مسدودیت، کاربر می‌تواند مجددا به اتاق اضافه شود.</string>
-    <string name="room_participants_action_unignore_prompt_msg">حذف کاربر از لیست سیاه سبب می‌شود مجددا تمام پیام‌های او نمایش داده شود.</string>
-    <string name="room_participants_action_ignore_prompt_msg">افزودن کاربر به لیست سیاه سبب می‌شود پیام های او از اتاق‌هایی که به اشتراک می گذارید حذف شود.
-\n
-\nهر زمان که خواستید، می‌توانید در تنظیمات کاربر را از لیست سیاه حذف کنید.</string>
+    <string name="room_participants_action_unignore_prompt_msg">لغو نادیده‌گیری کاربر سبب می‌شود دوباره همه پیام‌های او نمایش داده شود.</string>
+    <string name="room_participants_action_ignore_prompt_msg">نادیده‌گرفتن این کاربر پیام‌هایش را از اتاق‌های مشترکتان حذف خواهد کرد.
+\n 
+\nهرگاه که بخواهید می‌توانید این کنش را در تنظیمات کلی لغو کنید.</string>
     <string name="room_participants_power_level_demote">تنزل بده</string>
     <string name="room_participants_power_level_demote_warning_prompt">شما نمی‌توانید این تغییر را بازگردانید زیرا در حال تنزل نقش خود در اتاق هستید، اگر آخرین کاربر ممتاز در اتاق باشید، امکان دستیابی مجدد به دسترسی‌های سطح بالای اتاق غیرممکن است.</string>
     <string name="room_participants_power_level_demote_warning_title">تنزل نقش شما در اتاق؟</string>
@@ -1817,13 +1817,13 @@
 \nلطفاً در پنجره بعدی اجازه دسترسی دهید تا بتوانید کلیدهای خود را به صورت دستی ذخیره کنید.</string>
     <string name="content_reported_as_inappropriate_content">این محتوا به عنوان محتوای نامناسب گزارش شده‌است.
 \n
-\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید ، می توانید او را در لیست سیاه قرار دهید تا پیام‌های او را مشاهده نکنید.</string>
+\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید ، می توانید او را نادیده بگیرید تا پیام‌های او را مشاهده نکنید.</string>
     <string name="content_reported_as_spam_content">این محتوا به عنوان هرز‌نامه گزارش شده‌است.
 \n
-\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید ، می توانید او را در لیست سیاه قرار دهید تا پیام‌های او را مشاهده نکنید.</string>
+\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید ، می توانید او را نادیده بگیرید تا پیام‌های او را مشاهده نکنید.</string>
     <string name="content_reported_content">این محتوا گزارش شده‌است.
 \n
-\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید، می توانید او را در لیست سیاه قرار دهید تا پیام‌های او را مشاهده نکنید.</string>
+\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید، می توانید او را نادیده بگیرید تا پیام‌های او را مشاهده نکنید.</string>
     <string name="error_handling_incoming_share">امکان به اشتراک‌گذاری این محتوا وجود ندارد</string>
     <string name="rotate_and_crop_screen_title">چرخش و برش</string>
     <string name="attachment_type_dialog_title">اضافه کردن تصویر از</string>
@@ -2246,4 +2246,37 @@
     </plurals>
     <string name="settings_discovery_consent_notice_off">شما عدم رضایت خود را برای ارسال ایمیل و شماره تلفن به این سرور اعلام کرده‌اید در نتیجه نمی‌توانید کاربران دیگر را با استفاده از مخاطبین خود پیدا کنید.</string>
     <string name="settings_discovery_consent_notice_on">شما رضایت خود را برای ارسال ایمیل و شماره تلفن به این سرور اعلام کرده‌اید تا بتوانید کاربران دیگر را مخاطبین خود پیدا کنید.</string>
+    <string name="room_preview_not_found">در حال حاضر این اتاق قابل دسترسی نیست.
+\nبعدا دوباره تلاش کنید، یا از مدیر اتاق بخواهید بررسی کند که آیا دسترسی دارید.</string>
+    <string name="room_alias_action_publish">انتشار این نشانی</string>
+    <string name="room_alias_published_alias_add_manually_submit">منتشر کردن</string>
+    <string name="room_alias_published_alias_add_manually">منتشر کردن دستی یک نشانی جدید</string>
+    <string name="room_alias_published_other">نشانی‌های منتشر شده دیگر:</string>
+    <string name="room_alias_published_alias_title">نشانی‌های منتشر شده</string>
+    <string name="action_unpublish">لغو انتشار</string>
+    <string name="room_alias_local_address_add">افزودن نشانی محلی</string>
+    <string name="room_alias_local_address_empty">این اتاق هیچ نشانی محلی ندارد</string>
+    <string name="room_alias_local_address_title">نشانی‌های محلی</string>
+    <string name="room_alias_delete_confirmation">نشانی \"%1$s\" حذف شود؟</string>
+    <string name="room_alias_main_address_hint">نشانی اصلی</string>
+    <string name="room_alias_published_alias_main">این نشانی اصلی است</string>
+    <string name="room_alias_title">نشانی‌های اتاق</string>
+    <string name="room_settings_alias_title">نشانی‌های اتاق</string>
+    <string name="room_settings_room_access_title">دسترسی اتاق</string>
+    <string name="action_add">افزودن</string>
+    <string name="settings_security_pin_code_change_pin_summary">پین کنونی خود را تغییر دهید</string>
+    <string name="settings_security_pin_code_change_pin_title">تغییر پین</string>
+    <string name="room_preview_no_preview_join">اتاق قابل پیش‌نمایش نیست. آیا می‌خواهید به آن بپیوندید؟</string>
+    <string name="room_alias_action_unpublish">لغو انتشار این نشانی</string>
+    <string name="room_alias_address_hint">نشانی جدید منتشر شده (ب.ن. #نام:کارساز)</string>
+    <string name="room_alias_address_empty">هنوز نشانی دیگری منتشر نشده است.</string>
+    <string name="room_alias_address_empty_can_add">هنوز نشانی دیگری منتشر نشده است، یکی را در زیر بیفزایید.</string>
+    <string name="room_alias_unpublish_confirmation">انتشار نشانی \"%1$s\" لغو شود؟</string>
+    <string name="room_alias_published_alias_subtitle">نشانی‌های منتشرشده را می‌توان در هر کارساز برای پیوستن به اتاق شما استفاده کرد. برای انتشار نشانی، نخست باید به عنوان نشانی محلی تنظیم شود.</string>
+    <string name="room_settings_alias_subtitle">نشانی‌های این اتاق و قابلیت مشاهده آن را در فهرست اتاق مشاهده و مدیریت کنید.</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">تغییرات برای افرادی که می توانند تاریخچه را بخوانند فقط برای پیام های بعدی این اتاق اعمال می شود. پدیداری تاریخچه موجود بدون تغییر خواهد بود.</string>
+    <string name="room_alias_publish_to_directory_error">ناتوان در گرفتن نمایانی شاخهٔ اتاق کنونی (%1$s).</string>
+    <string name="room_alias_publish_to_directory">انتشار این اتاق برای عموم در شاخهٔ اتاق %1$s؟</string>
+    <string name="room_alias_local_address_subtitle">تنظیم نشانی‌ها برای این اتاق تا کاربران بتوانند از طریق کارساز خانگیتان (%1$s) بیابندش</string>
+    <string name="room_alias_publish">انتشار این اتاق برای عموم در شاخهٔ اتاق %1$s؟</string>
 </resources>

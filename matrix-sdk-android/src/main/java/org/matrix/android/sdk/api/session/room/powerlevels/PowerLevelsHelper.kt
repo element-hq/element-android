@@ -108,19 +108,4 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
         val powerLevel = getUserPowerLevelValue(userId)
         return powerLevel >= powerLevelsContent.redact
     }
-
-    /**
-     * Get the notification level for a dedicated key.
-     *
-     * @param key the notification key
-     * @return the level
-     */
-    fun notificationLevel(key: String): Int {
-        return when (val value = powerLevelsContent.notifications[key]) {
-            // the first implementation was a string value
-            is String -> value.toInt()
-            is Int    -> value
-            else      -> Role.Moderator.value
-        }
-    }
 }
