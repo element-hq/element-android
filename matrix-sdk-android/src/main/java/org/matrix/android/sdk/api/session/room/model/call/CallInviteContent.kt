@@ -49,7 +49,11 @@ data class CallInviteContent(
         /**
          * The field should be added for all invites where the target is a specific user
          */
-        @Json(name = "invitee") val invitee: String? = null
+        @Json(name = "invitee") val invitee: String? = null,
+        /**
+         * Capability advertisement.
+         */
+        @Json(name = "capabilities") val capabilities: CallCapabilities? = null
 
 ): CallSignallingContent  {
     @JsonClass(generateAdapter = true)

@@ -34,10 +34,10 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.allGranted
@@ -52,6 +52,7 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCallDetail
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
@@ -113,7 +114,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             callArgs = intent.getParcelableExtra(MvRx.KEY_ARG)!!
         } else {
             Timber.e("## VOIP missing callArgs for VectorCall Activity")
-            CallService.onNoActiveCall(this)
             finish()
         }
 
@@ -162,8 +162,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun renderState(state: VectorCallViewState) {
         Timber.v("## VOIP renderState call $state")
         if (state.callState is Fail) {
-            // be sure to clear notification
-            CallService.onNoActiveCall(this)
             finish()
             return
         }
@@ -176,7 +174,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         views.smallIsHeldIcon.isVisible = false
         when (callState) {
             is CallState.Idle,
-            is CallState.Dialing -> {
+            is CallState.CreateOffer,
+            is CallState.Dialing     -> {
                 views.callVideoGroup.isInvisible = true
                 views.callInfoGroup.isVisible = true
                 views.callStatusText.setText(R.string.call_ring)
@@ -199,7 +198,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             }
             is CallState.Connected -> {
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
-                    if (state.isLocalOnHold) {
+                    if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
                         views.callVideoGroup.isInvisible = true
                         views.callInfoGroup.isVisible = true
@@ -211,20 +210,20 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                             views.callStatusText.setText(R.string.call_held_by_you)
                         } else {
                             views.callActionText.isInvisible = true
-                            state.otherUserMatrixItem.invoke()?.let {
+                            state.callInfo.otherUserItem?.let {
                                 views.callStatusText.text = getString(R.string.call_held_by_user, it.getBestName())
                             }
                         }
                     } else {
-                        views.callStatusText.text = null
+                        views.callStatusText.text = state.formattedDuration
+                        configureCallInfo(state)
                         if (callArgs.isVideoCall) {
                             views.callVideoGroup.isVisible = true
                             views.callInfoGroup.isVisible = false
-                            // views.pip_video_view.isVisible = !state.isVideoCaptureInError
+                            views.pipRenderer.isVisible =  !state.isVideoCaptureInError && state.otherKnownCallInfo == null
                         } else {
                             views.callVideoGroup.isInvisible = true
                             views.callInfoGroup.isVisible = true
-                            configureCallInfo(state)
                         }
                     }
                 } else {
@@ -235,8 +234,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callStatusText.setText(R.string.call_connecting)
                     views.callConnectingProgress.isVisible = true
                 }
-                // ensure all attached?
-                callManager.getCallById(callArgs.callId)?.attachViewRenderers(views.pipRenderer, views.fullscreenRenderer, null)
             }
             is CallState.Terminated -> {
                 finish()
@@ -247,7 +244,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private fun configureCallInfo(state: VectorCallViewState, blurAvatar: Boolean = false) {
-        state.otherUserMatrixItem.invoke()?.let {
+        state.callInfo.otherUserItem?.let {
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
             avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter)
             views.participantNameText.text = it.getBestName()
@@ -257,10 +254,32 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 avatarRenderer.render(it, views.otherMemberAvatar)
             }
         }
+        if (state.otherKnownCallInfo?.otherUserItem == null) {
+            views.otherKnownCallLayout.isVisible = false
+        } else {
+            val otherCall = callManager.getCallById(state.otherKnownCallInfo.callId)
+            val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen)
+            avatarRenderer.renderBlur(
+                    matrixItem = state.otherKnownCallInfo.otherUserItem,
+                    imageView = views.otherKnownCallAvatarView,
+                    sampling = 20,
+                    rounded = false,
+                    colorFilter = colorFilter
+            )
+            views.otherKnownCallLayout.isVisible = true
+            views.otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold || it.remoteOnHold }.orFalse()
+        }
     }
 
     private fun configureCallViews() {
         views.callControlsView.interactionListener = this
+        views.otherKnownCallAvatarView.setOnClickListener {
+            withState(callViewModel) {
+                val otherCall = callManager.getCallById(it.otherKnownCallInfo?.callId ?: "") ?: return@withState
+                startActivity(newIntent(this, otherCall.mxCall, null))
+                finish()
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -304,7 +323,6 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         Timber.v("## VOIP handleViewEvents $event")
         when (event) {
             VectorCallViewEvents.DismissNoCall -> {
-                CallService.onNoActiveCall(this)
                 finish()
             }
             is VectorCallViewEvents.ConnectionTimeout -> {
@@ -314,6 +332,9 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 CallDialPadBottomSheet.newInstance(false).apply {
                     callback = dialPadCallback
                 }.show(supportFragmentManager, FRAGMENT_DIAL_PAD_TAG)
+            }
+            is VectorCallViewEvents.ShowCallTransferScreen -> {
+                navigator.openCallTransfer(this, callArgs.callId)
             }
             null -> {
             }

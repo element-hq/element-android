@@ -23,7 +23,6 @@ import com.squareup.inject.assisted.AssistedInject
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Sort
 import io.realm.kotlin.where
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -39,19 +38,21 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 
 internal class DefaultTimelineService @AssistedInject constructor(@Assisted private val roomId: String,
                                                                   @SessionDatabase private val monarchy: Monarchy,
                                                                   private val realmSessionProvider: RealmSessionProvider,
-                                                                  private val eventBus: EventBus,
+                                                                  private val timelineInput: TimelineInput,
                                                                   private val taskExecutor: TaskExecutor,
                                                                   private val contextOfEventTask: GetContextOfEventTask,
                                                                   private val eventDecryptor: TimelineEventDecryptor,
                                                                   private val paginationTask: PaginationTask,
                                                                   private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
                                                                   private val timelineEventMapper: TimelineEventMapper,
-                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper
+                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
+                                                                  private val loadRoomMembersTask: LoadRoomMembersTask
 ) : TimelineService {
 
     @AssistedInject.Factory
@@ -70,10 +71,11 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                 timelineEventMapper = timelineEventMapper,
                 settings = settings,
                 hiddenReadReceipts = TimelineHiddenReadReceipts(readReceiptsSummaryMapper, roomId, settings),
-                eventBus = eventBus,
+                timelineInput = timelineInput,
                 eventDecryptor = eventDecryptor,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
-                realmSessionProvider = realmSessionProvider
+                realmSessionProvider = realmSessionProvider,
+                loadRoomMembersTask = loadRoomMembersTask
         )
     }
 

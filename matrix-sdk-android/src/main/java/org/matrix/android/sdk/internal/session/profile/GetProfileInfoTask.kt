@@ -18,9 +18,9 @@
 package org.matrix.android.sdk.internal.session.profile
 
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal abstract class GetProfileInfoTask : Task<GetProfileInfoTask.Params, JsonDict> {
@@ -30,10 +30,10 @@ internal abstract class GetProfileInfoTask : Task<GetProfileInfoTask.Params, Jso
 }
 
 internal class DefaultGetProfileInfoTask @Inject constructor(private val profileAPI: ProfileAPI,
-                                                             private val eventBus: EventBus) : GetProfileInfoTask() {
+                                                             private val globalErrorReceiver: GlobalErrorReceiver) : GetProfileInfoTask() {
 
     override suspend fun execute(params: Params): JsonDict {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = profileAPI.getProfile(params.userId)
         }
     }

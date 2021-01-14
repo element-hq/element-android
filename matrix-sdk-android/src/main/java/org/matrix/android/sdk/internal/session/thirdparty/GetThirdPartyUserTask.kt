@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.thirdparty
 
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.thirdparty.model.ThirdPartyUser
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
@@ -32,11 +32,11 @@ internal interface GetThirdPartyUserTask : Task<GetThirdPartyUserTask.Params, Li
 
 internal class DefaultGetThirdPartyUserTask @Inject constructor(
         private val thirdPartyAPI: ThirdPartyAPI,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetThirdPartyUserTask {
 
     override suspend fun execute(params: GetThirdPartyUserTask.Params): List<ThirdPartyUser> {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = thirdPartyAPI.getThirdPartyUser(params.protocol, params.fields)
         }
     }

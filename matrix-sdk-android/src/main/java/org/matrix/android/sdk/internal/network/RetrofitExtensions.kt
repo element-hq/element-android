@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.ResponseBody
-import org.greenrobot.eventbus.EventBus
 import retrofit2.Response
 import timber.log.Timber
 import java.io.IOException
@@ -54,18 +53,18 @@ internal suspend fun okhttp3.Call.awaitResponse(): okhttp3.Response {
 /**
  * Convert a retrofit Response to a Failure, and eventually parse errorBody to convert it to a MatrixError
  */
-internal fun <T> Response<T>.toFailure(eventBus: EventBus?): Failure {
-    return toFailure(errorBody(), code(), eventBus)
+internal fun <T> Response<T>.toFailure(globalErrorReceiver: GlobalErrorReceiver?): Failure {
+    return toFailure(errorBody(), code(), globalErrorReceiver)
 }
 
 /**
  * Convert a okhttp3 Response to a Failure, and eventually parse errorBody to convert it to a MatrixError
  */
-internal fun okhttp3.Response.toFailure(eventBus: EventBus?): Failure {
-    return toFailure(body, code, eventBus)
+internal fun okhttp3.Response.toFailure(globalErrorReceiver: GlobalErrorReceiver?): Failure {
+    return toFailure(body, code, globalErrorReceiver)
 }
 
-private fun toFailure(errorBody: ResponseBody?, httpCode: Int, eventBus: EventBus?): Failure {
+private fun toFailure(errorBody: ResponseBody?, httpCode: Int, globalErrorReceiver: GlobalErrorReceiver?): Failure {
     if (errorBody == null) {
         return Failure.Unknown(RuntimeException("errorBody should not be null"))
     }
@@ -79,12 +78,12 @@ private fun toFailure(errorBody: ResponseBody?, httpCode: Int, eventBus: EventBu
 
         if (matrixError != null) {
             if (matrixError.code == MatrixError.M_CONSENT_NOT_GIVEN && !matrixError.consentUri.isNullOrBlank()) {
-                // Also send this error to the bus, for a global management
-                eventBus?.post(GlobalError.ConsentNotGivenError(matrixError.consentUri))
+                // Also send this error to the globalErrorReceiver, for a global management
+                globalErrorReceiver?.handleGlobalError(GlobalError.ConsentNotGivenError(matrixError.consentUri))
             } else if (httpCode == HttpURLConnection.HTTP_UNAUTHORIZED /* 401 */
                     && matrixError.code == MatrixError.M_UNKNOWN_TOKEN) {
-                // Also send this error to the bus, for a global management
-                eventBus?.post(GlobalError.InvalidToken(matrixError.isSoftLogout))
+                // Also send this error to the globalErrorReceiver, for a global management
+                globalErrorReceiver?.handleGlobalError(GlobalError.InvalidToken(matrixError.isSoftLogout))
             }
 
             return Failure.ServerError(matrixError, httpCode)

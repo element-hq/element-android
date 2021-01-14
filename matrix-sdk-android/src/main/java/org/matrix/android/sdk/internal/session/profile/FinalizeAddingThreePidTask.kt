@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.profile
 
 import com.zhuinden.monarchy.Monarchy
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -26,6 +25,7 @@ import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
@@ -45,7 +45,7 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val pendingThreePidMapper: PendingThreePidMapper,
         @UserId private val userId: String,
-        private val eventBus: EventBus) : FinalizeAddingThreePidTask() {
+        private val globalErrorReceiver: GlobalErrorReceiver) : FinalizeAddingThreePidTask() {
 
     override suspend fun execute(params: Params) {
         if (params.userWantsToCancel.not()) {
@@ -58,7 +58,7 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
                     ?: throw IllegalArgumentException("unknown threepid")
 
             try {
-                executeRequest<Unit>(eventBus) {
+                executeRequest<Unit>(globalErrorReceiver) {
                     val body = FinalizeAddThreePidBody(
                             clientSecret = pendingThreePids.clientSecret,
                             sid = pendingThreePids.sid,

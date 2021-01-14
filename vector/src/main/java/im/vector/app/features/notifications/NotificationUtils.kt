@@ -297,12 +297,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setLights(accentColor, 500, 500)
                 .setOngoing(true)
 
-        // Compat: Display the incoming call notification on the lock screen
-        builder.priority = NotificationCompat.PRIORITY_HIGH
-
-        //
-//        val pendingIntent = stackBuilder.getPendingIntent(requestId, PendingIntent.FLAG_UPDATE_CURRENT)
-
         val contentIntent = VectorCallActivity.newIntent(
                 context = context,
                 mxCall = mxCall,
@@ -340,9 +334,11 @@ class NotificationUtils @Inject constructor(private val context: Context,
                         answerCallPendingIntent
                 )
         )
-
-        builder.setFullScreenIntent(contentPendingIntent, true)
-
+        if (fromBg) {
+            // Compat: Display the incoming call notification on the lock screen
+            builder.priority = NotificationCompat.PRIORITY_HIGH
+            builder.setFullScreenIntent(contentPendingIntent, true)
+        }
         return builder.build()
     }
 
@@ -393,9 +389,8 @@ class NotificationUtils @Inject constructor(private val context: Context,
      */
     @SuppressLint("NewApi")
     fun buildPendingCallNotification(mxCall: MxCall,
-                                     title: String,
-                                     fromBg: Boolean = false): Notification {
-        val builder = NotificationCompat.Builder(context, if (fromBg) CALL_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID)
+                                     title: String): Notification {
+        val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {
                     if (mxCall.isVideoCall) {
@@ -406,11 +401,6 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 }
                 .setSmallIcon(R.drawable.incoming_call_notification_transparent)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
-
-        if (fromBg) {
-            builder.priority = NotificationCompat.PRIORITY_LOW
-            builder.setOngoing(true)
-        }
 
         val rejectCallPendingIntent = buildRejectCallPendingIntent(mxCall.callId)
 
@@ -450,6 +440,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
     fun buildCallEndedNotification(): Notification {
         return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(stringProvider.getString(R.string.call_ended))
+                .setTimeoutAfter(2000)
                 .setSmallIcon(R.drawable.ic_material_call_end_grey)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
                 .build()

@@ -14,27 +14,13 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.detail.timeline.helper
+package im.vector.app.features.call.transfer
 
-import im.vector.app.core.di.ScreenScope
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import javax.inject.Inject
+import com.airbnb.mvrx.MvRxState
 
-/*
-    This holds an instance of the current room summary.
-    You should use this in the context of the timeline.
- */
-@ScreenScope
-class RoomSummaryHolder @Inject constructor() {
+data class CallTransferViewState(
+        val callId: String
+) : MvRxState {
 
-    var roomSummary: RoomSummary? = null
-        private set
-
-    fun set(roomSummary: RoomSummary) {
-        this.roomSummary = roomSummary
-    }
-
-    fun clear() {
-        roomSummary = null
-    }
+    constructor(args: CallTransferArgs) : this(callId = args.callId)
 }

@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.format
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -55,6 +56,7 @@ class NoticeEventFormatter @Inject constructor(
         private val activeSessionDataSource: ActiveSessionDataSource,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
         private val vectorPreferences: VectorPreferences,
+        private val roomSummariesHolder: RoomSummariesHolder,
         private val sp: StringProvider
 ) {
 
@@ -65,7 +67,8 @@ class NoticeEventFormatter @Inject constructor(
 
     private fun RoomSummary?.isDm() = this?.isDirect.orFalse()
 
-    fun format(timelineEvent: TimelineEvent, rs: RoomSummary?): CharSequence? {
+    fun format(timelineEvent: TimelineEvent): CharSequence? {
+        val rs = roomSummariesHolder.get(timelineEvent.roomId)
         return when (val type = timelineEvent.root.getClearType()) {
             EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, rs)
             EventType.STATE_ROOM_CREATE             -> formatRoomCreateEvent(timelineEvent.root, rs)

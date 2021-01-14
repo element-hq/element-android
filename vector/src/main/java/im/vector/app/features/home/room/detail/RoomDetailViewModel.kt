@@ -31,7 +31,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.subscribeLogError
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.CommandParser
@@ -40,7 +39,7 @@ import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineSettingsFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
@@ -113,7 +112,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val rawService: RawService,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
         private val stickerPickerActionHandler: StickerPickerActionHandler,
-        private val roomSummaryHolder: RoomSummaryHolder,
+        private val roomSummariesHolder: RoomSummariesHolder,
         private val typingHelper: TypingHelper,
         private val callManager: WebRtcCallManager,
         private val chatEffectManager: ChatEffectManager,
@@ -173,7 +172,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         updateShowDialerOptionState()
         room.getRoomSummaryLive()
         room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
-        room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
         callManager.addPstnSupportListener(this)
@@ -364,7 +362,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleEndCall() {
-        callManager.endCall()
+        callManager.endCallForRoom(initialState.roomId)
     }
 
     private fun handleSelectStickerAttachment() {
@@ -1338,6 +1336,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     }
                 }
                 .subscribe {
+                    Timber.v("Unread state: $it")
                     setState { copy(unreadState = it) }
                 }
                 .disposeOnClear()
@@ -1390,7 +1389,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun observeSummaryState() {
         asyncSubscribe(RoomDetailViewState::asyncRoomSummary) { summary ->
-            roomSummaryHolder.set(summary)
+            roomSummariesHolder.set(summary)
             setState {
                 val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
                 copy(typingMessage = typingMessage)
@@ -1445,7 +1444,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        roomSummaryHolder.clear()
+        roomSummariesHolder.remove(room.roomId)
         timeline.dispose()
         timeline.removeAllListeners()
         if (vectorPreferences.sendTypingNotifs()) {

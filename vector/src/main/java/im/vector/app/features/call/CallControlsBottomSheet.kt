@@ -44,27 +44,31 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             renderState(it)
         }
 
-        views.callControlsSoundDevice.views.itemVerificationClickableZone.debouncedClicks {
+        views.callControlsSoundDevice.views.bottomSheetActionClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.SwitchSoundDevice)
         }
 
-        views.callControlsSwitchCamera.views.itemVerificationClickableZone.debouncedClicks {
+        views.callControlsSwitchCamera.views.bottomSheetActionClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleCamera)
             dismiss()
         }
 
-        views.callControlsToggleSDHD.views.itemVerificationClickableZone.debouncedClicks {
+        views.callControlsToggleSDHD.views.bottomSheetActionClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleHDSD)
             dismiss()
         }
 
-        views.callControlsToggleHoldResume.views.itemVerificationClickableZone.debouncedClicks {
+        views.callControlsToggleHoldResume.views.bottomSheetActionClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleHoldResume)
             dismiss()
         }
 
-        views.callControlsOpenDialPad.views.itemVerificationClickableZone.debouncedClicks {
+        views.callControlsOpenDialPad.views.bottomSheetActionClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.OpenDialPad)
+        }
+
+        views.callControlsTransfer.views.bottomSheetActionClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.InitiateCallTransfer)
             dismiss()
         }
 
@@ -158,5 +162,6 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             views.callControlsToggleHoldResume.subTitle = null
             views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_hold_action)
         }
+        views.callControlsTransfer.isVisible = state.canOpponentBeTransferred
     }
 }

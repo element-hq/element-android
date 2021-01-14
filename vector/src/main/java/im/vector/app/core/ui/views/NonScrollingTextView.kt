@@ -18,29 +18,14 @@ package im.vector.app.core.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.RelativeLayout
-import im.vector.app.R
-import im.vector.app.features.themes.ThemeUtils
+import androidx.appcompat.widget.AppCompatTextView
 
-class ActiveCallView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr) {
+class NonScrollingTextView : AppCompatTextView {
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    interface Callback {
-        fun onTapToReturnToCall()
-    }
-
-    var callback: Callback? = null
-
-    init {
-        setupView()
-    }
-
-    private fun setupView() {
-        inflate(context, R.layout.view_active_call_view, this)
-        setBackgroundColor(ThemeUtils.getColor(context, R.attr.colorPrimary))
-        setOnClickListener { callback?.onTapToReturnToCall() }
+    override fun scrollTo(x: Int, y: Int) {
+        // NOOP
     }
 }

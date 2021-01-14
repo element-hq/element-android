@@ -27,9 +27,9 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.call.DialerChoiceBottomSheet
-import im.vector.app.features.call.SharedActiveCallViewModel
 import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 
@@ -39,9 +39,9 @@ private const val DIAL_PAD_TAG = "DIAL_PAD_TAG"
 class StartCallActionsHandler(
         private val roomId: String,
         private val fragment: Fragment,
+        private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences,
         private val roomDetailViewModel: RoomDetailViewModel,
-        private val sharedActiveCallViewModel: SharedActiveCallViewModel,
         private val startCallActivityResultLauncher: ActivityResultLauncher<Array<String>>,
         private val showDialogWithMessage: (String) -> Unit,
         private val onTapToReturnToCall: () -> Unit): Restorable {
@@ -100,10 +100,10 @@ class StartCallActionsHandler(
                 }
             }
             2 -> {
-                val activeCall = sharedActiveCallViewModel.activeCall.value
-                if (activeCall != null) {
+                val currentCall = callManager.getCurrentCall()
+                if (currentCall != null) {
                     // resume existing if same room, if not prompt to kill and then restart new call?
-                    if (activeCall.roomId == roomId) {
+                    if (currentCall.roomId == roomId) {
                         onTapToReturnToCall()
                     }
                     //                        else {

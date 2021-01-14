@@ -39,7 +39,6 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
-import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -167,8 +166,8 @@ class HomeActivity :
     private fun handleIntent(intent: Intent?) {
         intent?.dataString?.let { deepLink ->
             val resolvedLink = when {
-                deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE)               -> deepLink
-                deepLink.startsWith(PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> {
+                deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> deepLink
+                deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)    -> {
                     // This is a bit ugly, but for now just convert to matrix.to link for compatibility
                     when {
                         deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)
@@ -178,7 +177,7 @@ class HomeActivity :
                         activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(it)
                     }
                 }
-                else                                                                   -> null
+                else                                                     -> return@let
             }
 
             permalinkHandler.launch(
@@ -191,7 +190,11 @@ class HomeActivity :
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { isHandled ->
                         if (!isHandled) {
-                            toast(R.string.permalink_malformed)
+                            AlertDialog.Builder(this)
+                                    .setTitle(R.string.dialog_title_error)
+                                    .setMessage(R.string.permalink_malformed)
+                                    .setPositiveButton(R.string.ok, null)
+                                    .show()
                         }
                     }
                     .disposeOnDestroy()
@@ -411,7 +414,8 @@ class HomeActivity :
                     }
         }
 
-        private const val ROOM_LINK_PREFIX = "${PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
-        private const val USER_LINK_PREFIX = "${PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
+        private const val MATRIX_TO_CUSTOM_SCHEME_URL_BASE = "element://"
+        private const val ROOM_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
+        private const val USER_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
     }
 }

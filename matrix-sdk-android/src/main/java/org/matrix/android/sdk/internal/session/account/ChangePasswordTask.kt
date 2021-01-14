@@ -18,9 +18,9 @@ package org.matrix.android.sdk.internal.session.account
 
 import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface ChangePasswordTask : Task<ChangePasswordTask.Params, Unit> {
@@ -32,14 +32,14 @@ internal interface ChangePasswordTask : Task<ChangePasswordTask.Params, Unit> {
 
 internal class DefaultChangePasswordTask @Inject constructor(
         private val accountAPI: AccountAPI,
-        private val eventBus: EventBus,
+        private val globalErrorReceiver: GlobalErrorReceiver,
         @UserId private val userId: String
 ) : ChangePasswordTask {
 
     override suspend fun execute(params: ChangePasswordTask.Params) {
         val changePasswordParams = ChangePasswordParams.create(userId, params.password, params.newPassword)
         try {
-            executeRequest<Unit>(eventBus) {
+            executeRequest<Unit>(globalErrorReceiver) {
                 apiCall = accountAPI.changePassword(changePasswordParams)
             }
         } catch (throwable: Throwable) {
@@ -49,7 +49,7 @@ internal class DefaultChangePasswordTask @Inject constructor(
                     /* Avoid infinite loop */
                     && changePasswordParams.auth?.session == null) {
                 // Retry with authentication
-                executeRequest<Unit>(eventBus) {
+                executeRequest<Unit>(globalErrorReceiver) {
                     apiCall = accountAPI.changePassword(
                             changePasswordParams.copy(auth = changePasswordParams.auth?.copy(session = registrationFlowResponse.session))
                     )

@@ -89,8 +89,8 @@ import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.ui.views.ActiveCallView
-import im.vector.app.core.ui.views.ActiveCallViewHolder
+import im.vector.app.core.ui.views.CurrentCallsView
+import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.core.ui.views.ActiveConferenceView
 import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.NotificationAreaView
@@ -118,9 +118,10 @@ import im.vector.app.features.attachments.ContactAttachment
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import im.vector.app.features.attachments.toGroupedContentAttachmentData
-import im.vector.app.features.call.SharedActiveCallViewModel
+import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.conference.JitsiCallViewModel
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.util.toImageRes
@@ -224,7 +225,8 @@ class RoomDetailFragment @Inject constructor(
         private val matrixItemColorProvider: MatrixItemColorProvider,
         private val imageContentRenderer: ImageContentRenderer,
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-        private val pillsPostProcessorFactory: PillsPostProcessor.Factory
+        private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
+        private val callManager: WebRtcCallManager
 ) :
         VectorBaseFragment<FragmentRoomDetailBinding>(),
         TimelineEventController.Callback,
@@ -233,7 +235,7 @@ class RoomDetailFragment @Inject constructor(
         AttachmentTypeSelectorView.Callback,
         AttachmentsHelper.Callback,
         GalleryOrCameraDialogHelper.Listener,
-        ActiveCallView.Callback {
+        CurrentCallsView.Callback {
 
     companion object {
         /**
@@ -279,7 +281,7 @@ class RoomDetailFragment @Inject constructor(
     override fun getMenuRes() = R.menu.menu_timeline
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
-    private lateinit var sharedCallActionViewModel: SharedActiveCallViewModel
+    private lateinit var knownCallsViewModel: SharedKnownCallsViewModel
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var jumpToBottomViewVisibilityManager: JumpToBottomViewVisibilityManager
@@ -292,19 +294,19 @@ class RoomDetailFragment @Inject constructor(
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
-    private val activeCallViewHolder = ActiveCallViewHolder()
+    private val knownCallsViewHolder = KnownCallsViewHolder()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
-        sharedCallActionViewModel = activityViewModelProvider.get(SharedActiveCallViewModel::class.java)
+        knownCallsViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
         attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
         callActionsHandler = StartCallActionsHandler(
                 roomId = roomDetailArgs.roomId,
                 fragment = this,
                 vectorPreferences = vectorPreferences,
                 roomDetailViewModel = roomDetailViewModel,
-                sharedActiveCallViewModel = sharedCallActionViewModel,
+                callManager = callManager,
                 startCallActivityResultLauncher = startCallActivityResultLauncher,
                 showDialogWithMessage = ::showDialogWithMessage,
                 onTapToReturnToCall = ::onTapToReturnToCall
@@ -332,10 +334,10 @@ class RoomDetailFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        sharedCallActionViewModel
-                .activeCall
+        knownCallsViewModel
+                .liveKnownCalls
                 .observe(viewLifecycleOwner, {
-                    activeCallViewHolder.updateCall(it)
+                    knownCallsViewHolder.updateCall(callManager.getCurrentCall(), it)
                     invalidateOptionsMenu()
                 })
 
@@ -613,7 +615,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroy() {
-        activeCallViewHolder.unBind()
+        knownCallsViewHolder.unBind()
         roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
         super.onDestroy()
     }
@@ -644,7 +646,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupActiveCallView() {
-        activeCallViewHolder.bind(
+        knownCallsViewHolder.bind(
                 views.activeCallPiP,
                 views.activeCallView,
                 views.activeCallPiPWrap,
@@ -1920,7 +1922,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onTapToReturnToCall() {
-        sharedCallActionViewModel.activeCall.value?.let { call ->
+        callManager.getCurrentCall()?.let { call ->
             VectorCallActivity.newIntent(
                     context = requireContext(),
                     callId = call.callId,

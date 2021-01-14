@@ -33,4 +33,5 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object HeadSetButtonPressed : VectorCallViewActions()
     object ToggleCamera : VectorCallViewActions()
     object ToggleHDSD : VectorCallViewActions()
+    object InitiateCallTransfer : VectorCallViewActions()
 }

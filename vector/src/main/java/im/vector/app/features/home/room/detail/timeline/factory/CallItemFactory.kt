@@ -22,7 +22,7 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
@@ -43,7 +43,7 @@ class CallItemFactory @Inject constructor(
         private val messageInformationDataFactory: MessageInformationDataFactory,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
-        private val roomSummaryHolder: RoomSummaryHolder,
+        private val roomSummariesHolder: RoomSummariesHolder,
         private val callManager: WebRtcCallManager
 ) {
 
@@ -52,6 +52,7 @@ class CallItemFactory @Inject constructor(
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
         if (event.root.eventId == null) return null
+        val roomId = event.roomId
         val informationData = messageInformationDataFactory.create(event, null)
         val callSignalingContent = event.getCallSignallingContent() ?: return null
         val callId = callSignalingContent.callId ?: return null
@@ -64,6 +65,7 @@ class CallItemFactory @Inject constructor(
         return when (event.root.getClearType()) {
             EventType.CALL_ANSWER -> {
                 createCallTileTimelineItem(
+                        roomId = roomId,
                         callId = callId,
                         callStatus = CallTileTimelineItem.CallStatus.IN_CALL,
                         callKind = callKind,
@@ -75,6 +77,7 @@ class CallItemFactory @Inject constructor(
             }
             EventType.CALL_INVITE -> {
                 createCallTileTimelineItem(
+                        roomId = roomId,
                         callId = callId,
                         callStatus = CallTileTimelineItem.CallStatus.INVITED,
                         callKind = callKind,
@@ -86,6 +89,7 @@ class CallItemFactory @Inject constructor(
             }
             EventType.CALL_REJECT -> {
                 createCallTileTimelineItem(
+                        roomId = roomId,
                         callId = callId,
                         callStatus = CallTileTimelineItem.CallStatus.REJECTED,
                         callKind = callKind,
@@ -97,6 +101,7 @@ class CallItemFactory @Inject constructor(
             }
             EventType.CALL_HANGUP -> {
                 createCallTileTimelineItem(
+                        roomId = roomId,
                         callId = callId,
                         callStatus = CallTileTimelineItem.CallStatus.ENDED,
                         callKind = callKind,
@@ -121,6 +126,7 @@ class CallItemFactory @Inject constructor(
     }
 
     private fun createCallTileTimelineItem(
+            roomId: String,
             callId: String,
             callKind: CallTileTimelineItem.CallKind,
             callStatus: CallTileTimelineItem.CallStatus,
@@ -129,7 +135,7 @@ class CallItemFactory @Inject constructor(
             isStillActive: Boolean,
             callback: TimelineEventController.Callback?
     ): CallTileTimelineItem? {
-        val userOfInterest = roomSummaryHolder.roomSummary?.toMatrixItem() ?: return null
+        val userOfInterest = roomSummariesHolder.get(roomId)?.toMatrixItem() ?: return null
         val attributes = messageItemAttributesFactory.create(null, informationData, callback).let {
             CallTileTimelineItem.Attributes(
                     callId = callId,

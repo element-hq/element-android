@@ -33,14 +33,11 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
-import im.vector.app.core.extensions.appendParamToUrl
 import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginWebBinding
 import im.vector.app.features.signout.soft.SoftLogoutAction
 import im.vector.app.features.signout.soft.SoftLogoutViewModel
 
-import org.matrix.android.sdk.api.auth.LOGIN_FALLBACK_PATH
-import org.matrix.android.sdk.api.auth.REGISTER_FALLBACK_PATH
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
@@ -119,19 +116,7 @@ class LoginWebFragment @Inject constructor(
     }
 
     private fun launchWebView(state: LoginViewState) {
-        val url = buildString {
-            append(state.homeServerUrl?.trim { it == '/' })
-            if (state.signMode == SignMode.SignIn) {
-                append(LOGIN_FALLBACK_PATH)
-                state.deviceId?.takeIf { it.isNotBlank() }?.let {
-                    // But https://github.com/matrix-org/synapse/issues/5755
-                    appendParamToUrl("device_id", it)
-                }
-            } else {
-                // MODE_REGISTER
-                append(REGISTER_FALLBACK_PATH)
-            }
-        }
+        val url = loginViewModel.getFallbackUrl(state.signMode == SignMode.SignIn, state.deviceId) ?: return
 
         views.loginWebWebView.loadUrl(url)
 

@@ -19,9 +19,9 @@ package org.matrix.android.sdk.internal.crypto.tasks
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.SendToDeviceBody
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -38,7 +38,7 @@ internal interface SendToDeviceTask : Task<SendToDeviceTask.Params, Unit> {
 
 internal class DefaultSendToDeviceTask @Inject constructor(
         private val cryptoApi: CryptoApi,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SendToDeviceTask {
 
     override suspend fun execute(params: SendToDeviceTask.Params) {
@@ -46,7 +46,7 @@ internal class DefaultSendToDeviceTask @Inject constructor(
                 messages = params.contentMap.map
         )
 
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = cryptoApi.sendToDevice(
                     params.eventType,
                     params.transactionId ?: Random.nextInt(Integer.MAX_VALUE).toString(),

@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.internal.session.room.tags
 
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface AddTagToRoomTask : Task<AddTagToRoomTask.Params, Unit> {
@@ -35,11 +35,11 @@ internal interface AddTagToRoomTask : Task<AddTagToRoomTask.Params, Unit> {
 internal class DefaultAddTagToRoomTask @Inject constructor(
         private val roomAPI: RoomAPI,
         @UserId private val userId: String,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : AddTagToRoomTask {
 
     override suspend fun execute(params: AddTagToRoomTask.Params) {
-        executeRequest<Unit>(eventBus) {
+        executeRequest<Unit>(globalErrorReceiver) {
             apiCall = roomAPI.putTag(
                     userId = userId,
                     roomId = params.roomId,

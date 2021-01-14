@@ -86,7 +86,7 @@ class CommonTestHelper(context: Context) {
      *
      * @param session    the session to sync
      */
-    fun syncSession(session: Session) {
+    fun syncSession(session: Session, timeout: Long = TestConstants.timeOutMillis) {
         val lock = CountDownLatch(1)
 
         val job = GlobalScope.launch(Dispatchers.Main) {
@@ -109,7 +109,7 @@ class CommonTestHelper(context: Context) {
         }
         GlobalScope.launch(Dispatchers.Main) { syncLiveData.observeForever(syncObserver) }
 
-        await(lock)
+        await(lock, timeout)
     }
 
     /**
@@ -119,7 +119,7 @@ class CommonTestHelper(context: Context) {
      * @param message      the message to send
      * @param nbOfMessages the number of time the message will be sent
      */
-    fun sendTextMessage(room: Room, message: String, nbOfMessages: Int): List<TimelineEvent> {
+    fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
         val timeline = room.createTimeline(null, TimelineSettings(10))
         val sentEvents = ArrayList<TimelineEvent>(nbOfMessages)
         val latch = CountDownLatch(1)
@@ -151,7 +151,7 @@ class CommonTestHelper(context: Context) {
             room.sendTextMessage(message + " #" + (i + 1))
         }
         // Wait 3 second more per message
-        await(latch, timeout = TestConstants.timeOutMillis + 3_000L * nbOfMessages)
+        await(latch, timeout = timeout + 3_000L * nbOfMessages)
         timeline.dispose()
 
         // Check that all events has been created
@@ -215,14 +215,14 @@ class CommonTestHelper(context: Context) {
                     .getLoginFlow(hs, it)
         }
 
-        doSync<RegistrationResult> {
+        doSync<RegistrationResult>(timeout = 60_000) {
             matrix.authenticationService
                     .getRegistrationWizard()
                     .createAccount(userName, password, null, it)
         }
 
         // Perform dummy step
-        val registrationResult = doSync<RegistrationResult> {
+        val registrationResult = doSync<RegistrationResult>(timeout = 60_000) {
             matrix.authenticationService
                     .getRegistrationWizard()
                     .dummy(it)
@@ -231,7 +231,7 @@ class CommonTestHelper(context: Context) {
         assertTrue(registrationResult is RegistrationResult.Success)
         val session = (registrationResult as RegistrationResult.Success).session
         if (sessionTestParams.withInitialSync) {
-            syncSession(session)
+            syncSession(session, 60_000)
         }
 
         return session

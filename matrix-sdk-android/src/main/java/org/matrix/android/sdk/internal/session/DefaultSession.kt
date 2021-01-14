@@ -19,12 +19,7 @@ package org.matrix.android.sdk.internal.session
 import androidx.annotation.MainThread
 import dagger.Lazy
 import io.realm.RealmConfiguration
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
@@ -66,13 +61,12 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
+import org.matrix.android.sdk.internal.network.GlobalErrorHandler
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.createUIHandler
 import timber.log.Timber
 import javax.inject.Inject
@@ -82,7 +76,7 @@ import javax.inject.Provider
 internal class DefaultSession @Inject constructor(
         override val sessionParams: SessionParams,
         private val workManagerProvider: WorkManagerProvider,
-        private val eventBus: EventBus,
+        private val globalErrorHandler: GlobalErrorHandler,
         @SessionId
         override val sessionId: String,
         @SessionDatabase private val realmConfiguration: RealmConfiguration,
@@ -118,11 +112,9 @@ internal class DefaultSession @Inject constructor(
         private val accountDataService: Lazy<AccountDataService>,
         private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val defaultIdentityService: DefaultIdentityService,
         private val integrationManagerService: IntegrationManagerService,
         private val thirdPartyService: ThirdPartyService,
-        private val taskExecutor: TaskExecutor,
         private val callSignalingService: Lazy<CallSignalingService>,
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
@@ -143,7 +135,8 @@ internal class DefaultSession @Inject constructor(
         ProfileService by profileService.get(),
         AccountDataService by accountDataService.get(),
         AccountService by accountService.get(),
-        ThirdPartyService by thirdPartyService {
+        ThirdPartyService by thirdPartyService,
+        GlobalErrorHandler.Listener {
 
     override val sharedSecretStorageService: SharedSecretStorageService
         get() = _sharedSecretStorageService.get()
@@ -165,7 +158,7 @@ internal class DefaultSession @Inject constructor(
         uiHandler.post {
             lifecycleObservers.forEach { it.onStart() }
         }
-        eventBus.register(this)
+        globalErrorHandler.listener = this
         eventSenderProcessor.start()
     }
 
@@ -209,7 +202,7 @@ internal class DefaultSession @Inject constructor(
         }
         cryptoService.get().close()
         isOpen = false
-        eventBus.unregister(this)
+        globalErrorHandler.listener = null
         eventSenderProcessor.interrupt()
     }
 
@@ -237,16 +230,7 @@ internal class DefaultSession @Inject constructor(
         workManagerProvider.cancelAllWorks()
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onGlobalError(globalError: GlobalError) {
-        if (globalError is GlobalError.InvalidToken
-                && globalError.softLogout) {
-            // Mark the token has invalid
-            taskExecutor.executorScope.launch(Dispatchers.IO) {
-                sessionParamsStore.setTokenInvalid(sessionId)
-            }
-        }
-
+    override fun onGlobalError(globalError: GlobalError) {
         sessionListeners.dispatchGlobalError(globalError)
     }
 

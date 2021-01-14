@@ -33,19 +33,14 @@ class DialerChoiceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.dialerChoiceDialPad.views.itemVerificationClickableZone.debouncedClicks {
+        views.dialerChoiceDialPad.views.bottomSheetActionClickableZone.debouncedClicks {
             onDialPadClicked?.invoke()
             dismiss()
         }
 
-        views.dialerChoiceVoiceCall.views.itemVerificationClickableZone.debouncedClicks {
+        views.dialerChoiceVoiceCall.views.bottomSheetActionClickableZone.debouncedClicks {
             onVoiceCallClicked?.invoke()
             dismiss()
         }
-    }
-
-    interface Callback {
-        fun onDialPadClicked()
-        fun onVoiceCallClicked()
     }
 }

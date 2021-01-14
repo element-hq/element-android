@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
@@ -29,7 +28,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.databinding.ItemVerificationActionBinding
+import im.vector.app.databinding.ViewBottomSheetActionButtonBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class BottomSheetActionButton @JvmOverloads constructor(
@@ -37,18 +36,18 @@ class BottomSheetActionButton @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-    val views: ItemVerificationActionBinding
+    val views: ViewBottomSheetActionButtonBinding
 
     var title: String? = null
         set(value) {
             field = value
-            views.itemVerificationActionTitle.setTextOrHide(value)
+            views.bottomSheetActionTitle.setTextOrHide(value)
         }
 
     var subTitle: String? = null
         set(value) {
             field = value
-            views.itemVerificationActionSubTitle.setTextOrHide(value)
+            views.bottomSheetActionSubTitle.setTextOrHide(value)
         }
 
     var forceStartPadding: Boolean? = null
@@ -56,9 +55,9 @@ class BottomSheetActionButton @JvmOverloads constructor(
             field = value
             if (leftIcon == null) {
                 if (forceStartPadding == true) {
-                    views.itemVerificationLeftIcon.isInvisible = true
+                    views.bottomSheetActionLeftIcon.isInvisible = true
                 } else {
-                    views.itemVerificationLeftIcon.isGone = true
+                    views.bottomSheetActionLeftIcon.isGone = true
                 }
             }
         }
@@ -68,37 +67,38 @@ class BottomSheetActionButton @JvmOverloads constructor(
             field = value
             if (value == null) {
                 if (forceStartPadding == true) {
-                    views.itemVerificationLeftIcon.isInvisible = true
+                    views.bottomSheetActionLeftIcon.isInvisible = true
                 } else {
-                    views.itemVerificationLeftIcon.isGone = true
+                    views.bottomSheetActionLeftIcon.isGone = true
                 }
-                views.itemVerificationLeftIcon.setImageDrawable(null)
+                views.bottomSheetActionLeftIcon.setImageDrawable(null)
             } else {
-                views.itemVerificationLeftIcon.isVisible = true
-                views.itemVerificationLeftIcon.setImageDrawable(value)
+                views.bottomSheetActionLeftIcon.isVisible = true
+                views.bottomSheetActionLeftIcon.setImageDrawable(value)
             }
         }
 
     var rightIcon: Drawable? = null
         set(value) {
             field = value
-            views.itemVerificationActionIcon.setImageDrawable(value)
+            views.bottomSheetActionIcon.setImageDrawable(value)
         }
 
     var tint: Int? = null
         set(value) {
             field = value
-            views.itemVerificationLeftIcon.imageTintList = value?.let { ColorStateList.valueOf(value) }
+            views.bottomSheetActionLeftIcon.imageTintList = value?.let { ColorStateList.valueOf(value) }
         }
 
     var titleTextColor: Int? = null
         set(value) {
             field = value
-            value?.let { views.itemVerificationActionTitle.setTextColor(it) }
+            value?.let { views.bottomSheetActionTitle.setTextColor(it) }
         }
 
     init {
-        views = ItemVerificationActionBinding.inflate(LayoutInflater.from(context), this, true)
+        inflate(context, R.layout.view_bottom_sheet_action_button, this)
+        views = ViewBottomSheetActionButtonBinding.bind(this)
 
         context.withStyledAttributes(attrs, R.styleable.BottomSheetActionButton) {
             title = getString(R.styleable.BottomSheetActionButton_actionTitle) ?: ""

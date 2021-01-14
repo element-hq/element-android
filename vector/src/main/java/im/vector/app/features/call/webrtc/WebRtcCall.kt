@@ -20,6 +20,7 @@ import android.content.Context
 import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
 import im.vector.app.core.services.CallService
+import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.features.call.CallAudioManager
 import im.vector.app.features.call.CameraEventsHandlerAdapter
 import im.vector.app.features.call.CameraProxy
@@ -45,6 +46,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
+import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
 import org.matrix.android.sdk.api.session.room.model.call.CallCandidatesContent
@@ -53,6 +55,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.SdpType
 import org.matrix.android.sdk.internal.util.awaitCallback
+import org.threeten.bp.Duration
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
 import org.webrtc.Camera1Enumerator
@@ -72,6 +75,7 @@ import org.webrtc.VideoSource
 import org.webrtc.VideoTrack
 import timber.log.Timber
 import java.lang.ref.WeakReference
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 import javax.inject.Provider
 import kotlin.coroutines.CoroutineContext
@@ -88,15 +92,18 @@ class WebRtcCall(val mxCall: MxCall,
                  private val dispatcher: CoroutineContext,
                  private val sessionProvider: Provider<Session?>,
                  private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
+                 private val onCallBecomeActive: (WebRtcCall) -> Unit,
                  private val onCallEnded: (WebRtcCall) -> Unit) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
         fun onCaptureStateChanged() {}
         fun onCameraChanged() {}
         fun onHoldUnhold() {}
+        fun onTick(formattedDuration: String) {}
+        override fun onStateUpdate(call: MxCall) {}
     }
 
-    private val listeners = ArrayList<Listener>()
+    private val listeners = CopyOnWriteArrayList<Listener>()
 
     fun addListener(listener: Listener) {
         listeners.add(listener)
@@ -128,10 +135,29 @@ class WebRtcCall(val mxCall: MxCall,
     private var currentCaptureFormat: CaptureFormat = CaptureFormat.HD
     private var cameraAvailabilityCallback: CameraManager.AvailabilityCallback? = null
 
+    private val timer = CountUpTimer(Duration.ofSeconds(1).toMillis()).apply {
+        tickListener = object : CountUpTimer.TickListener {
+            override fun onTick(milliseconds: Long) {
+                val formattedDuration = formatDuration(Duration.ofMillis(milliseconds))
+                listeners.forEach {
+                    tryOrNull { it.onTick(formattedDuration) }
+                }
+            }
+        }
+    }
+
     // Mute status
     var micMuted = false
+        private set
     var videoMuted = false
+        private set
     var remoteOnHold = false
+        private set
+    var isLocalOnHold = false
+        private set
+
+    // This value is used to track localOnHold when changing remoteOnHold value
+    private var wasLocalOnHold = false
 
     var offerSdp: CallInviteContent.Offer? = null
 
@@ -204,6 +230,12 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
+    fun formattedDuration(): String {
+        return formatDuration(
+                Duration.ofMillis(timer.elapsedTime())
+        )
+    }
+
     private fun createPeerConnection(turnServerResponse: TurnServerResponse?) {
         val peerConnectionFactory = peerConnectionFactoryProvider.get() ?: return
         val iceServers = mutableListOf<PeerConnection.IceServer>().apply {
@@ -229,20 +261,8 @@ class WebRtcCall(val mxCall: MxCall,
 
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer?, remoteViewRenderer: SurfaceViewRenderer, mode: String?) {
         Timber.v("## VOIP attachViewRenderers localRendeder $localViewRenderer / $remoteViewRenderer")
-//        this.localSurfaceRenderer =  WeakReference(localViewRenderer)
-//        this.remoteSurfaceRenderer = WeakReference(remoteViewRenderer)
         localSurfaceRenderers.addIfNeeded(localViewRenderer)
         remoteSurfaceRenderers.addIfNeeded(remoteViewRenderer)
-
-        // The call is going to resume from background, we can reduce notif
-        mxCall
-                .takeIf { it.state is CallState.Connected }
-                ?.let { mxCall ->
-                    // Start background service with notification
-                    CallService.onPendingCall(
-                            context = context,
-                            callId = mxCall.callId)
-                }
 
         GlobalScope.launch(dispatcher) {
             when (mode) {
@@ -292,7 +312,6 @@ class WebRtcCall(val mxCall: MxCall,
 
     fun detachRenderers(renderers: List<SurfaceViewRenderer>?) {
         Timber.v("## VOIP detachRenderers")
-        // currentCall?.localMediaStream?.let { currentCall?.peerConnection?.removeStream(it) }
         if (renderers.isNullOrEmpty()) {
             // remove all sinks
             localSurfaceRenderers.forEach {
@@ -311,18 +330,6 @@ class WebRtcCall(val mxCall: MxCall,
                 localVideoTrack?.removeSink(it)
                 remoteVideoTrack?.removeSink(it)
             }
-        }
-        if (remoteSurfaceRenderers.isEmpty()) {
-            // The call is going to continue in background, so ensure notification is visible
-            mxCall
-                    .takeIf { it.state is CallState.Connected }
-                    ?.let { mxCall ->
-                        // Start background service with notification
-                        CallService.onOnGoingCallBackground(
-                                context = context,
-                                callId = mxCall.callId
-                        )
-                    }
         }
     }
 
@@ -345,6 +352,9 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     private suspend fun internalAcceptIncomingCall() = withContext(dispatcher) {
+        tryOrNull {
+            onCallBecomeActive(this@WebRtcCall)
+        }
         val turnServerResponse = getTurnServer()
         // Update service state
         withContext(Dispatchers.Main) {
@@ -543,7 +553,7 @@ class WebRtcCall(val mxCall: MxCall,
      * rather than 'sendonly')
      * @returns true if the other party has put us on hold
      */
-    fun isLocalOnHold(): Boolean {
+    private fun computeIsLocalOnHold(): Boolean {
         if (mxCall.state !is CallState.Connected) return false
         var callOnHold = true
         // We consider a call to be on hold only if *all* the tracks are on hold
@@ -557,17 +567,32 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     fun updateRemoteOnHold(onHold: Boolean) {
-        if (remoteOnHold == onHold) return
-        remoteOnHold = onHold
-        val direction = if (onHold) {
-            RtpTransceiver.RtpTransceiverDirection.INACTIVE
-        } else {
-            RtpTransceiver.RtpTransceiverDirection.SEND_RECV
+        GlobalScope.launch(dispatcher) {
+            if (remoteOnHold == onHold) return@launch
+            val direction: RtpTransceiver.RtpTransceiverDirection
+            if (onHold) {
+                wasLocalOnHold = isLocalOnHold
+                remoteOnHold = true
+                isLocalOnHold = true
+                direction = RtpTransceiver.RtpTransceiverDirection.INACTIVE
+                timer.pause()
+            } else {
+                remoteOnHold = false
+                isLocalOnHold = wasLocalOnHold
+                onCallBecomeActive(this@WebRtcCall)
+                direction = RtpTransceiver.RtpTransceiverDirection.SEND_RECV
+                if (!isLocalOnHold) {
+                    timer.resume()
+                }
+            }
+            for (transceiver in peerConnection?.transceivers ?: emptyList()) {
+                transceiver.direction = direction
+            }
+            updateMuteStatus()
+            listeners.forEach {
+                tryOrNull { it.onHoldUnhold() }
+            }
         }
-        for (transceiver in peerConnection?.transceivers ?: emptyList()) {
-            transceiver.direction = direction
-        }
-        updateMuteStatus()
     }
 
     fun muteCall(muted: Boolean) {
@@ -645,7 +670,10 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     private fun release() {
+        listeners.clear()
         mxCall.removeListener(this)
+        timer.stop()
+        timer.tickListener = null
         videoCapturer?.stopCapture()
         videoCapturer?.dispose()
         videoCapturer = null
@@ -700,7 +728,6 @@ class WebRtcCall(val mxCall: MxCall,
         if (mxCall.state == CallState.Terminated) {
             return
         }
-        mxCall.state = CallState.Terminated
         // Close tracks ASAP
         localVideoTrack?.setEnabled(false)
         localVideoTrack?.setEnabled(false)
@@ -708,14 +735,17 @@ class WebRtcCall(val mxCall: MxCall,
             val cameraManager = context.getSystemService<CameraManager>()!!
             cameraManager.unregisterAvailabilityCallback(cameraAvailabilityCallback)
         }
-        release()
+        val wasRinging = mxCall.state is CallState.LocalRinging
+        mxCall.state = CallState.Terminated
+        GlobalScope.launch(dispatcher) {
+            release()
+        }
         onCallEnded(this)
         if (originatedByMe) {
-            // send hang up event
-            if (mxCall.state is CallState.Connected) {
-                mxCall.hangUp(reason)
-            } else {
+            if (wasRinging) {
                 mxCall.reject()
+            } else {
+                mxCall.hangUp(reason)
             }
         }
     }
@@ -775,7 +805,7 @@ class WebRtcCall(val mxCall: MxCall,
                 Timber.i("Ignoring colliding negotiate event because we're impolite")
                 return@launch
             }
-            val prevOnHold = isLocalOnHold()
+            val prevOnHold = computeIsLocalOnHold()
             try {
                 val sdp = SessionDescription(type.asWebRTC(), sdpText)
                 peerConnection.awaitSetRemoteDescription(sdp)
@@ -787,8 +817,15 @@ class WebRtcCall(val mxCall: MxCall,
             } catch (failure: Throwable) {
                 Timber.e(failure, "Failed to complete negotiation")
             }
-            val nowOnHold = isLocalOnHold()
+            val nowOnHold = computeIsLocalOnHold()
+            wasLocalOnHold = nowOnHold
             if (prevOnHold != nowOnHold) {
+                isLocalOnHold = nowOnHold
+                if (nowOnHold) {
+                    timer.pause()
+                } else {
+                    timer.resume()
+                }
                 listeners.forEach {
                     tryOrNull { it.onHoldUnhold() }
                 }
@@ -796,9 +833,26 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
+    private fun formatDuration(duration: Duration): String {
+        val hours = duration.seconds / 3600
+        val minutes = (duration.seconds % 3600) / 60
+        val seconds = duration.seconds % 60
+        return if (hours > 0) {
+            String.format("%d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            String.format("%02d:%02d", minutes, seconds)
+        }
+    }
+
     // MxCall.StateListener
 
     override fun onStateUpdate(call: MxCall) {
+        val state = call.state
+        if (state is CallState.Connected && state.iceConnectionState == MxPeerConnectionState.CONNECTED) {
+            timer.resume()
+        } else {
+            timer.pause()
+        }
         listeners.forEach {
             tryOrNull { it.onStateUpdate(call) }
         }

@@ -73,7 +73,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
             }
         }
 
-        return CryptoTestData(aliceSession, roomId)
+        return CryptoTestData(roomId, listOf(aliceSession))
     }
 
     /**
@@ -139,7 +139,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
 //        assertNotNull(roomFromBobPOV.powerLevels)
 //        assertTrue(roomFromBobPOV.powerLevels.maySendMessage(bobSession.myUserId))
 
-        return CryptoTestData(aliceSession, aliceRoomId, bobSession)
+        return CryptoTestData(aliceRoomId, listOf(aliceSession, bobSession))
     }
 
     /**
@@ -157,7 +157,7 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
         // wait the initial sync
         SystemClock.sleep(1000)
 
-        return CryptoTestData(aliceSession, aliceRoomId, cryptoTestData.secondSession, samSession)
+        return CryptoTestData(aliceRoomId, listOf(aliceSession, cryptoTestData.secondSession!!, samSession))
     }
 
     /**
@@ -380,5 +380,31 @@ class CryptoTestHelper(private val mTestHelper: CommonTestHelper) {
                 alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
             }
         }
+    }
+
+    fun doE2ETestWithManyMembers(numberOfMembers: Int): CryptoTestData {
+        val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
+        aliceSession.cryptoService().setWarnOnUnknownDevices(false)
+
+        val roomId = mTestHelper.doSync<String> {
+            aliceSession.createRoom(CreateRoomParams().apply { name = "MyRoom" }, it)
+        }
+        val room = aliceSession.getRoom(roomId)!!
+
+        mTestHelper.runBlockingTest {
+            room.enableEncryption()
+        }
+
+        val sessions = mutableListOf(aliceSession)
+        for (index in 1 until numberOfMembers) {
+            val session = mTestHelper.createAccount("User_$index", defaultSessionParams)
+            mTestHelper.doSync<Unit>(timeout = 600_000) { room.invite(session.myUserId, null, it) }
+            println("TEST -> " + session.myUserId + " invited")
+            mTestHelper.doSync<Unit> { session.joinRoom(room.roomId, null, emptyList(), it) }
+            println("TEST -> " + session.myUserId + " joined")
+            sessions.add(session)
+        }
+
+        return CryptoTestData(roomId, sessions)
     }
 }
