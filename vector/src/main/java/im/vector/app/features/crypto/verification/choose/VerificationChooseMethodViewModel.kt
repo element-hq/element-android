@@ -89,8 +89,8 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        super.onCleared()
         session.cryptoService().verificationService().removeListener(this)
+        super.onCleared()
     }
 
     companion object : MvRxViewModelFactory<VerificationChooseMethodViewModel, VerificationChooseMethodViewState> {

@@ -27,7 +27,6 @@ $ source env/bin/activate
 Every time you want to launch these test homeservers, type:
 
 ```shell script
-$ virtualenv -p python3 env
 $ source env/bin/activate
 (env) $ demo/start.sh --no-rate-limit
 ```

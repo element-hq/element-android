@@ -197,4 +197,16 @@
     <string name="notice_end_to_end_unknown_algorithm">%1$s povolil/a E2E šifrovanie (Nerozpoznaný algorytmus %2$s).</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Povolili ste E2E šifrovanie (Nerozpoznaný algorytmus %1$s).</string>
     <string name="key_verification_request_fallback_message">%s požaduje overenie vašich šifrovacích kľúčov, ale váš klient nepodporuje overenie kľúčov v konverzácii. Budete musieť použiť zastaralú metódu overenia.</string>
+    <string name="notice_room_server_acl_set_title_by_you">nastavili ste na servery pravidlá ACL tejto miestnosti.</string>
+    <string name="notice_room_server_acl_set_title">%s nastavil(a) na servery pravidlá ACL tejto miestnosti.</string>
+    <string name="notice_direct_room_update_by_you">Aktualizovali ste sem.</string>
+    <string name="notice_direct_room_update">%s aktualizoval(a) sem.</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s sprístupnil(a) budúce správy %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Sprístupnili ste budúce správy %1$s</string>
+    <string name="notice_direct_room_leave_by_you">Opustili ste miestnosť</string>
+    <string name="notice_direct_room_leave">%1$s opustil(a) miestnosť</string>
+    <string name="notice_direct_room_join_by_you">Vstúpili ste</string>
+    <string name="notice_direct_room_join">%1$s vstúpil(a)</string>
+    <string name="notice_direct_room_created_by_you">Vytvorili ste konverzáciu</string>
+    <string name="notice_direct_room_created">%1$s vytvoril(a) konverzáciu</string>
 </resources>

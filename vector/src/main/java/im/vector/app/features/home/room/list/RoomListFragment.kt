@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.list
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -36,6 +37,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.exhaustive
@@ -246,17 +248,33 @@ class RoomListFragment @Inject constructor(
                 roomListViewModel.handle(RoomListAction.ToggleTag(quickAction.roomId, RoomTag.ROOM_TAG_LOW_PRIORITY))
             }
             is RoomListQuickActionsSharedAction.Leave                     -> {
-                AlertDialog.Builder(requireContext())
-                        .setTitle(R.string.room_participants_leave_prompt_title)
-                        .setMessage(R.string.room_participants_leave_prompt_msg)
-                        .setPositiveButton(R.string.leave) { _, _ ->
-                            roomListViewModel.handle(RoomListAction.LeaveRoom(quickAction.roomId))
-                        }
-                        .setNegativeButton(R.string.cancel, null)
-                        .show()
-                Unit
+                promptLeaveRoom(quickAction.roomId)
             }
         }.exhaustive
+    }
+
+    private fun promptLeaveRoom(roomId: String) {
+        val isPublicRoom = roomListViewModel.isPublicRoom(roomId)
+        val message = buildString {
+            append(getString(R.string.room_participants_leave_prompt_msg))
+            if (!isPublicRoom) {
+                append("\n\n")
+                append(getString(R.string.room_participants_leave_private_warning))
+            }
+        }
+        AlertDialog.Builder(requireContext())
+                .setTitle(R.string.room_participants_leave_prompt_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.leave) { _, _ ->
+                    roomListViewModel.handle(RoomListAction.LeaveRoom(roomId))
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+                .apply {
+                    if (!isPublicRoom) {
+                        withColoredButton(DialogInterface.BUTTON_POSITIVE)
+                    }
+                }
     }
 
     override fun invalidate() = withState(roomListViewModel) { state ->

@@ -1,0 +1,2 @@
+Phiên bản mới này chủ yếu bao gồm các cải thiện về giao diện và trải nghiệm người dùng. Bây giờ bạn có thể mời bạn bè và bắt đầu nói chuyện nhanh chóng bằng cách quét mã QR.
+Danh sách đầy đủ các thay đổi: https://github.com/vector-im/element-android/releases/tag/v1.0.11

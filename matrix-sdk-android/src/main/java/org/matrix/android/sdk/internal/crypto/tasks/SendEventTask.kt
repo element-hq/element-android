@@ -15,9 +15,9 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
@@ -38,7 +38,7 @@ internal class DefaultSendEventTask @Inject constructor(
         private val encryptEventTask: DefaultEncryptEventTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus) : SendEventTask {
+        private val globalErrorReceiver: GlobalErrorReceiver) : SendEventTask {
 
     override suspend fun execute(params: SendEventTask.Params): String {
         try {
@@ -53,7 +53,7 @@ internal class DefaultSendEventTask @Inject constructor(
             val localId = event.eventId!!
 
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENDING)
-            val executeRequest = executeRequest<SendResponse>(eventBus) {
+            val executeRequest = executeRequest<SendResponse>(globalErrorReceiver) {
                 apiCall = roomAPI.send(
                         localId,
                         roomId = event.roomId ?: "",

@@ -20,7 +20,6 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.TimeoutCancellationException
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
@@ -34,6 +33,7 @@ import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
@@ -57,7 +57,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
@@ -86,7 +86,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
 
         val lastToken = syncTokenStore.getLastToken()
         val response = try {
-            executeRequest<RoomMembersResponse>(eventBus) {
+            executeRequest<RoomMembersResponse>(globalErrorReceiver) {
                 apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
             }
         } catch (throwable: Throwable) {

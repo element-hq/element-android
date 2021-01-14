@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.network
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.internal.network.ssl.CertUtil
@@ -27,10 +26,10 @@ import retrofit2.awaitResponse
 import timber.log.Timber
 import java.io.IOException
 
-internal suspend inline fun <DATA : Any> executeRequest(eventBus: EventBus?,
-                                                        block: Request<DATA>.() -> Unit) = Request<DATA>(eventBus).apply(block).execute()
+internal suspend inline fun <DATA : Any> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
+                                                        block: Request<DATA>.() -> Unit) = Request<DATA>(globalErrorReceiver).apply(block).execute()
 
-internal class Request<DATA : Any>(private val eventBus: EventBus?) {
+internal class Request<DATA : Any>(private val globalErrorReceiver: GlobalErrorReceiver?) {
 
     var isRetryable = false
     var initialDelay: Long = 100L
@@ -47,7 +46,7 @@ internal class Request<DATA : Any>(private val eventBus: EventBus?) {
                 response.body()
                         ?: throw IllegalStateException("The request returned a null body")
             } else {
-                throw response.toFailure(eventBus)
+                throw response.toFailure(globalErrorReceiver)
             }
         } catch (exception: Throwable) {
             // Log some details about the request which has failed

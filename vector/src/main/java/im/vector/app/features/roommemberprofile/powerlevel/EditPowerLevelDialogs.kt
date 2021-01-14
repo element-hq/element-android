@@ -19,6 +19,7 @@ package im.vector.app.features.roommemberprofile.powerlevel
 import android.app.Activity
 import android.content.DialogInterface
 import android.view.KeyEvent
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import im.vector.app.R
@@ -29,7 +30,10 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
 
 object EditPowerLevelDialogs {
 
-    fun showChoice(activity: Activity, currentRole: Role, listener: (Int) -> Unit) {
+    fun showChoice(activity: Activity,
+                   @StringRes titleRes: Int,
+                   currentRole: Role,
+                   listener: (Int) -> Unit) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_edit_power_level, null)
         val views = DialogEditPowerLevelBinding.bind(dialogLayout)
         views.powerLevelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -45,7 +49,7 @@ object EditPowerLevelDialogs {
         }
 
         AlertDialog.Builder(activity)
-                .setTitle(R.string.power_level_edit_title)
+                .setTitle(titleRes)
                 .setView(dialogLayout)
                 .setPositiveButton(R.string.edit) { _, _ ->
                     val newValue = when (views.powerLevelRadioGroup.checkedRadioButtonId) {

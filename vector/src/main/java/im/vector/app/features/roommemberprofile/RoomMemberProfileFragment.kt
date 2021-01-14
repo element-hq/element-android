@@ -324,7 +324,7 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onEditPowerLevel(currentRole: Role) {
-        EditPowerLevelDialogs.showChoice(requireActivity(), currentRole) { newPowerLevel ->
+        EditPowerLevelDialogs.showChoice(requireActivity(), R.string.power_level_edit_title, currentRole) { newPowerLevel ->
             viewModel.handle(RoomMemberProfileAction.SetPowerLevel(currentRole.value, newPowerLevel, true))
         }
     }

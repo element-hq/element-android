@@ -1,0 +1,2 @@
+Phiên bản mới này chủ yếu bao gồm sửa lỗi và một số cải thiện. Gửi tin nhắn trở nên nhanh chóng hơn trước.
+Danh sách đầy đủ các thay đổi: https://github.com/vector-im/element-android/releases/tag/v1.0.10

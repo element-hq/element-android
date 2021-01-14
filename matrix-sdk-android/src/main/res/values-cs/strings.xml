@@ -242,4 +242,30 @@
     <string name="notice_room_server_acl_set_banned">• Server shodující se s %s je zakázán.</string>
     <string name="notice_room_server_acl_set_title_by_you">Nastavili jste ACL serveru pro tuto místnost.</string>
     <string name="notice_room_server_acl_set_title">%s nastavili ACL serveru pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Změnili jste adresy pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s změnili adresy pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Změnili jste hlavní a alternativní adresu pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s změnili hlavní a alternativní adresu pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Změnili jste alternativní adresu pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s změnili alternativní adresu pro tuto místnost.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Odstranili jste alternativní adresu %1$s pro tuto místnost.</item>
+        <item quantity="few">Odstranili jste alternativní adresy %1$s pro tuto místnost.</item>
+        <item quantity="other">Odstranili jste alternativní adresy %1$s pro tuto místnost.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s odstranili alternativní adresu %2$s pro tuto místnost.</item>
+        <item quantity="few">%1$s odstranili alternativní adresy %2$s pro tuto místnost.</item>
+        <item quantity="other">%1$s odstranili alternativní adresy %2$s pro tuto místnost.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Přidali jste alternativní adresu %1$s pro tuto místnost.</item>
+        <item quantity="few">Přidali jste alternativní adresy %1$s pro tuto místnost.</item>
+        <item quantity="other">Přidali jste alternativní adresy %1$s pro tuto místnost.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s přidali alternativní adresu %2$s pro tuto místnost.</item>
+        <item quantity="few">%1$s přidali alternativní adresy %2$s pro tuto místnost.</item>
+        <item quantity="other">%1$s přidali alternativní adresy %2$s pro tuto místnost.</item>
+    </plurals>
 </resources>

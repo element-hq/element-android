@@ -25,7 +25,6 @@ interface PermalinkService {
 
     companion object {
         const val MATRIX_TO_URL_BASE = "https://matrix.to/#/"
-        const val MATRIX_TO_CUSTOM_SCHEME_URL_BASE = "element://"
     }
 
     /**

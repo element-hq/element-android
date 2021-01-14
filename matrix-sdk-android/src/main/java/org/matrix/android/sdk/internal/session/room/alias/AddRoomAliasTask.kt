@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.alias
 
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasAvailabilityChecker.Companion.toFullLocalAlias
@@ -39,13 +39,13 @@ internal class DefaultAddRoomAliasTask @Inject constructor(
         @UserId private val userId: String,
         private val directoryAPI: DirectoryAPI,
         private val aliasAvailabilityChecker: RoomAliasAvailabilityChecker,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : AddRoomAliasTask {
 
     override suspend fun execute(params: AddRoomAliasTask.Params) {
         aliasAvailabilityChecker.check(params.aliasLocalPart)
 
-        executeRequest<Unit>(eventBus) {
+        executeRequest<Unit>(globalErrorReceiver) {
             apiCall = directoryAPI.addRoomAlias(
                     roomAlias = params.aliasLocalPart.toFullLocalAlias(userId),
                     body = AddRoomAliasBody(

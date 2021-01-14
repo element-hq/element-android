@@ -26,7 +26,6 @@ import dagger.Provides
 import dagger.multibindings.IntoSet
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -61,9 +60,10 @@ import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificateWithProgress
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.di.UserMd5
-import org.matrix.android.sdk.internal.eventbus.EventBusTimberLogger
 import org.matrix.android.sdk.internal.network.DefaultNetworkConnectivityChecker
 import org.matrix.android.sdk.internal.network.FallbackNetworkCallbackStrategy
+import org.matrix.android.sdk.internal.network.GlobalErrorHandler
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.NetworkCallbackStrategy
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.network.PreferredNetworkCallbackStrategy
@@ -259,16 +259,6 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionScope
-        fun providesEventBus(): EventBus {
-            return EventBus
-                    .builder()
-                    .logger(EventBusTimberLogger())
-                    .build()
-        }
-
-        @JvmStatic
-        @Provides
-        @SessionScope
         fun providesNetworkCallbackStrategy(fallbackNetworkCallbackStrategy: Provider<FallbackNetworkCallbackStrategy>,
                                             preferredNetworkCallbackStrategy: Provider<PreferredNetworkCallbackStrategy>
         ): NetworkCallbackStrategy {
@@ -293,6 +283,9 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindSession(session: DefaultSession): Session
+
+    @Binds
+    abstract fun bindGlobalErrorReceiver(handler: GlobalErrorHandler): GlobalErrorReceiver
 
     @Binds
     abstract fun bindNetworkConnectivityChecker(checker: DefaultNetworkConnectivityChecker): NetworkConnectivityChecker

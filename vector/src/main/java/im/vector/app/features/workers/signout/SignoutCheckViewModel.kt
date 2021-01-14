@@ -107,8 +107,8 @@ class SignoutCheckViewModel @AssistedInject constructor(@Assisted initialState: 
     }
 
     override fun onCleared() {
-        super.onCleared()
         session.cryptoService().keysBackupService().removeListener(this)
+        super.onCleared()
     }
 
     override fun onStateChange(newState: KeysBackupState) {
