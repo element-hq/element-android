@@ -26,7 +26,7 @@ import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetCallDialPadBinding
 import im.vector.app.features.settings.VectorLocale
 
-class CallDialPadBottomSheet private constructor() : VectorBaseBottomSheetDialogFragment<BottomSheetCallDialPadBinding>() {
+class CallDialPadBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCallDialPadBinding>() {
 
     companion object {
 

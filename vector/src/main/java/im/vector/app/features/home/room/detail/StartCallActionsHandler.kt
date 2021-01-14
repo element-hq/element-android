@@ -16,16 +16,16 @@
 
 package im.vector.app.features.home.room.detail
 
-import androidx.activity.result.ActivityResult
+import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.withState
 import im.vector.app.R
+import im.vector.app.core.platform.Restorable
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.checkPermissions
-import im.vector.app.core.utils.registerForPermissionsResult
-import im.vector.app.core.utils.toast
 import im.vector.app.features.call.DialerChoiceBottomSheet
 import im.vector.app.features.call.SharedActiveCallViewModel
 import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
@@ -33,15 +33,18 @@ import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 
+private const val DIALER_OPTION_TAG = "DIALER_OPTION_TAG"
+private const val DIAL_PAD_TAG = "DIAL_PAD_TAG"
+
 class StartCallActionsHandler(
         private val roomId: String,
-        private val fragment: RoomDetailFragment,
+        private val fragment: Fragment,
         private val vectorPreferences: VectorPreferences,
         private val roomDetailViewModel: RoomDetailViewModel,
         private val sharedActiveCallViewModel: SharedActiveCallViewModel,
         private val startCallActivityResultLauncher: ActivityResultLauncher<Array<String>>,
         private val showDialogWithMessage: (String) -> Unit,
-        private val onTapToReturnToCall: () -> Unit) {
+        private val onTapToReturnToCall: () -> Unit): Restorable {
 
     fun onVideoCallClicked() {
         handleCallRequest(true)
@@ -55,22 +58,32 @@ class StartCallActionsHandler(
         }
     }
 
+    private fun DialerChoiceBottomSheet.applyListeners(): DialerChoiceBottomSheet {
+        onDialPadClicked = ::displayDialPadBottomSheet
+        onVoiceCallClicked = { handleCallRequest(false) }
+        return this
+    }
+
+    private fun CallDialPadBottomSheet.applyCallback(): CallDialPadBottomSheet {
+        callback = object : DialPadFragment.Callback {
+            override fun onOkClicked(formatted: String?, raw: String?) {
+                if (raw.isNullOrEmpty()) return
+                roomDetailViewModel.handle(RoomDetailAction.StartCallWithPhoneNumber(raw, false))
+            }
+        }
+        return this
+    }
+
     private fun displayDialerChoiceBottomSheet() {
-        DialerChoiceBottomSheet().apply {
-            onDialPadClicked = ::displayDialPadBottomSheet
-            onVoiceCallClicked = { handleCallRequest(false) }
-        }.show(fragment.parentFragmentManager, "DIALER_OPTION")
+        DialerChoiceBottomSheet()
+                .applyListeners()
+                .show(fragment.parentFragmentManager, DIALER_OPTION_TAG)
     }
 
     private fun displayDialPadBottomSheet() {
-        CallDialPadBottomSheet.newInstance(true).apply {
-            callback = object : DialPadFragment.Callback {
-                override fun onOkClicked(formatted: String?, raw: String?) {
-                    if (raw.isNullOrEmpty()) return
-                    roomDetailViewModel.handle(RoomDetailAction.StartCallWithPhoneNumber(raw, false))
-                }
-            }
-        }.show(fragment.parentFragmentManager, "DIAL_PAD")
+        CallDialPadBottomSheet.newInstance(true)
+                .applyCallback()
+                .show(fragment.parentFragmentManager, DIAL_PAD_TAG)
     }
 
     private fun handleCallRequest(isVideoCall: Boolean) = withState(roomDetailViewModel) { state ->
@@ -178,4 +191,12 @@ class StartCallActionsHandler(
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) = Unit
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        if(savedInstanceState != null){
+            (fragment.parentFragmentManager.findFragmentByTag(DIALER_OPTION_TAG) as? DialerChoiceBottomSheet)?.applyListeners()
+            (fragment.parentFragmentManager.findFragmentByTag(DIAL_PAD_TAG) as? CallDialPadBottomSheet)?.applyCallback()
+        }
+    }
 }

@@ -265,19 +265,6 @@ class RoomDetailFragment @Inject constructor(
         pillsPostProcessorFactory.create(roomDetailArgs.roomId)
     }
 
-    private val callActionsHandler by lazy {
-        StartCallActionsHandler(
-                roomId = roomDetailArgs.roomId,
-                fragment = this,
-                vectorPreferences = vectorPreferences,
-                roomDetailViewModel = roomDetailViewModel,
-                sharedActiveCallViewModel = sharedCallActionViewModel,
-                startCallActivityResultLauncher = startCallActivityResultLauncher,
-                showDialogWithMessage = ::showDialogWithMessage,
-                onTapToReturnToCall = ::onTapToReturnToCall
-        )
-    }
-
     private val autoCompleter: AutoCompleter by lazy {
         autoCompleterFactory.create(roomDetailArgs.roomId)
     }
@@ -302,6 +289,7 @@ class RoomDetailFragment @Inject constructor(
 
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var keyboardStateUtils: KeyboardStateUtils
+    private lateinit var callActionsHandler : StartCallActionsHandler
 
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
@@ -313,6 +301,16 @@ class RoomDetailFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         sharedCallActionViewModel = activityViewModelProvider.get(SharedActiveCallViewModel::class.java)
         attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
+        callActionsHandler = StartCallActionsHandler(
+                roomId = roomDetailArgs.roomId,
+                fragment = this,
+                vectorPreferences = vectorPreferences,
+                roomDetailViewModel = roomDetailViewModel,
+                sharedActiveCallViewModel = sharedCallActionViewModel,
+                startCallActivityResultLauncher = startCallActivityResultLauncher,
+                showDialogWithMessage = ::showDialogWithMessage,
+                onTapToReturnToCall = ::onTapToReturnToCall
+        ).register()
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(views.roomToolbar)
         setupRecyclerView()
