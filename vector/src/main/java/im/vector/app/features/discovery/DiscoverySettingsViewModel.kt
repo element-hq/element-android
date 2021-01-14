@@ -93,8 +93,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        super.onCleared()
         stopListenToIdentityManager()
+        super.onCleared()
     }
 
     override fun handle(action: DiscoverySettingsAction) {

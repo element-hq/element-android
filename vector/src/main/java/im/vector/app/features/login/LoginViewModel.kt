@@ -810,9 +810,8 @@ class LoginViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        super.onCleared()
-
         currentTask?.cancel()
+        super.onCleared()
     }
 
     fun getInitialHomeServerUrl(): String? {
