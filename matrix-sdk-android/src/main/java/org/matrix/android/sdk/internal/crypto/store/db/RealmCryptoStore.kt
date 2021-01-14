@@ -47,6 +47,7 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
+import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
@@ -73,6 +74,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSess
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingGossipingRequestEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntity
@@ -95,6 +97,7 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
+import org.matrix.olm.OlmOutboundGroupSession
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.collections.set
@@ -754,6 +757,42 @@ internal class RealmCryptoStore @Inject constructor(
         }
 
         return inboundGroupSessionToRelease[key]
+    }
+
+    override fun getCurrentOutboundGroupSessionForRoom(roomId: String): OutboundGroupSessionWrapper? {
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<CryptoRoomEntity>()
+                    .equalTo(CryptoRoomEntityFields.ROOM_ID, roomId)
+                    .findFirst()?.outboundSessionInfo?.let { entity ->
+                        entity.getOutboundGroupSession()?.let {
+                            OutboundGroupSessionWrapper(
+                                    it,
+                                    entity.creationTime ?: 0
+                            )
+                        }
+                    }
+        }
+    }
+
+    override fun storeCurrentOutboundGroupSessionForRoom(roomId: String, outboundGroupSession: OlmOutboundGroupSession?) {
+        // we can do this async, as it's just for restoring on next launch
+        // the olmdevice is caching the active instance
+        // this is called for each sent message (so not high frequency), thus we can use basic realm async without
+        // risk of reaching max async operation limit?
+        doRealmTransactionAsync(realmConfiguration) { realm ->
+            CryptoRoomEntity.getById(realm, roomId)?.let { entity ->
+                // we should delete existing outbound session info if any
+                entity.outboundSessionInfo?.deleteFromRealm()
+
+                if (outboundGroupSession != null) {
+                    val info = realm.createObject(OutboundGroupSessionInfoEntity::class.java).apply {
+                        creationTime = System.currentTimeMillis()
+                        putOutboundGroupSession(outboundGroupSession)
+                    }
+                    entity.outboundSessionInfo = info
+                }
+            }
+        }
     }
 
     /**
@@ -1645,7 +1684,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun wasSessionSharedWithUser(roomId: String?, sessionId: String, userId: String, deviceId: String): IMXCryptoStore.SharedSessionResult {
+    override fun getSharedSessionInfo(roomId: String?, sessionId: String, userId: String, deviceId: String): IMXCryptoStore.SharedSessionResult {
         return doWithRealm(realmConfiguration) { realm ->
             SharedSessionEntity.get(realm, roomId, sessionId, userId, deviceId)?.let {
                 IMXCryptoStore.SharedSessionResult(true, it.chainIndex)
