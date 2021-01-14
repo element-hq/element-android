@@ -49,6 +49,12 @@
             android:summary="@string/settings_send_message_with_enter_summary"
             android:title="@string/settings_send_message_with_enter" />
 
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_SHOW_EMOJI_KEYBOARD"
+            android:summary="@string/settings_show_emoji_keyboard_summary"
+            android:title="@string/settings_show_emoji_keyboard" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_timeline">
