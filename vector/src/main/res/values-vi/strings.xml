@@ -212,9 +212,9 @@
     <string name="call_failed_no_connection">Cuộc gọi Element thất bại</string>
     <string name="call_failed_dont_ask_again">Đừng hỏi lại tôi</string>
     <string name="call_failed_no_ice_use_alt">Hãy thử dùng %s</string>
-    <string name="call_failed_no_ice_description">Vui lòng yêu cầu quản trị viên của máy chủ nhà của bạn (%1$s) thiết lập một máy chủ TURN để các cuộc gọi có thể hoạt động [...].
+    <string name="call_failed_no_ice_description">Vui lòng yêu cầu quản trị viên của máy chủ nhà của bạn (%1$s) thiết lập một máy chủ TURN để các cuộc gọi có thể hoạt động […].
 \n
-\nBạn cũng có thể thử dùng máy chủ công cộng ở %2$s, nhưng cách này sẽ không [...] bằng, và địa chỉ IP của bạn cũng sẽ được chia sẻ đến server đó. Bạn có thể quản lý việc này trong mục Cài đặt.</string>
+\nBạn cũng có thể thử dùng máy chủ công cộng ở %2$s, nhưng cách này sẽ không […] bằng, và địa chỉ IP của bạn cũng sẽ được chia sẻ đến server đó. Bạn có thể quản lý việc này trong mục Cài đặt.</string>
     <string name="call_failed_no_ice_title">Cuộc gọi thất bại do thiết lập máy chủ sai</string>
     <string name="start_video_call_prompt_msg">Bạn có chắc bạn muốn bắt đầu một cuộc gọi video\?</string>
     <string name="start_voice_call_prompt_msg">Bạn có chắc bạn muốn bắt đầu một cuộc gọi bằng giọng nói\?</string>

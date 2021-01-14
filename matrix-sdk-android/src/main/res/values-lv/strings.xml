@@ -62,7 +62,7 @@
     <string name="notice_display_name_set_by_you">Tu nomainījis savu attēlojamo vārdu uz %1$s</string>
     <string name="notice_avatar_url_changed_by_you">Tu nomainīji savu avataru</string>
     <string name="notice_room_withdraw_by_you">Tu atsauci %1$s uzaicinājumu</string>
-    <string name="notice_room_ban_by_you">Tu nobanoji 1$s</string>
+    <string name="notice_room_ban_by_you">Tu nobanoji %1$s</string>
     <string name="notice_room_unban_by_you">Tu atbanoji %1$s</string>
     <string name="notice_room_kick_by_you">Tu izspēri %1$s</string>
     <string name="notice_room_reject_by_you">Tu noraidīji uzaicinājumu</string>
