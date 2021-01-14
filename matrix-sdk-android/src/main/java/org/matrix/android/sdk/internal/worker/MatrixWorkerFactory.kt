@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -32,6 +33,8 @@ class MatrixWorkerFactory @Inject constructor(
             workerClassName: String,
             workerParameters: WorkerParameters
     ): ListenableWorker? {
+        Timber.d("MatrixWorkerFactory.createWorker for $workerClassName")
+
         val foundEntry =
                 workerFactories.entries.find { Class.forName(workerClassName).isAssignableFrom(it.key) }
         val factoryProvider = foundEntry?.value
