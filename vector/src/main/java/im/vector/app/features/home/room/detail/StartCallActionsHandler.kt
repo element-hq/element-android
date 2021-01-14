@@ -194,7 +194,7 @@ class StartCallActionsHandler(
     override fun onSaveInstanceState(outState: Bundle) = Unit
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             (fragment.parentFragmentManager.findFragmentByTag(DIALER_OPTION_TAG) as? DialerChoiceBottomSheet)?.applyListeners()
             (fragment.parentFragmentManager.findFragmentByTag(DIAL_PAD_TAG) as? CallDialPadBottomSheet)?.applyCallback()
         }

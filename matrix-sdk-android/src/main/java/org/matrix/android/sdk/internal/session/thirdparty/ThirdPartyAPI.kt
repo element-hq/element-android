@@ -16,38 +16,12 @@
 
 package org.matrix.android.sdk.internal.session.thirdparty
 
-import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
-import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import org.matrix.android.sdk.api.session.thirdparty.model.ThirdPartyUser
-import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import org.matrix.android.sdk.internal.session.room.alias.GetAliasesResponse
-import org.matrix.android.sdk.internal.session.room.create.CreateRoomBody
-import org.matrix.android.sdk.internal.session.room.create.CreateRoomResponse
-import org.matrix.android.sdk.internal.session.room.create.JoinRoomResponse
-import org.matrix.android.sdk.internal.session.room.membership.RoomMembersResponse
-import org.matrix.android.sdk.internal.session.room.membership.admin.UserIdAndReason
-import org.matrix.android.sdk.internal.session.room.membership.joining.InviteBody
-import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePidInviteBody
-import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
-import org.matrix.android.sdk.internal.session.room.reporting.ReportContentBody
-import org.matrix.android.sdk.internal.session.room.send.SendResponse
-import org.matrix.android.sdk.internal.session.room.tags.TagBody
-import org.matrix.android.sdk.internal.session.room.timeline.EventContextResponse
-import org.matrix.android.sdk.internal.session.room.timeline.PaginationResponse
-import org.matrix.android.sdk.internal.session.room.typing.TypingBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Path
-import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
 internal interface ThirdPartyAPI {
@@ -60,7 +34,6 @@ internal interface ThirdPartyAPI {
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "thirdparty/protocols")
     fun thirdPartyProtocols(): Call<Map<String, ThirdPartyProtocol>>
 
-
     /**
      * Retrieve a Matrix User ID linked to a user on the third party service, given a set of user parameters.
      *
@@ -68,8 +41,4 @@ internal interface ThirdPartyAPI {
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "thirdparty/protocols/user/{protocol}")
     fun getThirdPartyUser(@Path("protocol") protocol: String, @QueryMap params: Map<String, String>?): Call<List<ThirdPartyUser>>
-
-
-
-
 }

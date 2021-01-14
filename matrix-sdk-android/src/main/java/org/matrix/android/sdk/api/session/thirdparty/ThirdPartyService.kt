@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2021 The Matrix.org Foundation C.I.C
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,8 @@
 
 package org.matrix.android.sdk.api.session.thirdparty
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import org.matrix.android.sdk.api.session.thirdparty.model.ThirdPartyUser
-import org.matrix.android.sdk.api.util.Cancelable
 
 interface ThirdPartyService {
 
@@ -31,9 +29,8 @@ interface ThirdPartyService {
 
     /**
      * Retrieve a Matrix User ID linked to a user on the third party service, given a set of user parameters.
-     * @param protocol 	Required. The name of the protocol.
+     * @param protocol Required. The name of the protocol.
      * @param fields One or more custom fields that are passed to the AS to help identify the user.
      */
     suspend fun getThirdPartyUser(protocol: String, fields: Map<String, String> = emptyMap()): List<ThirdPartyUser>
-
 }

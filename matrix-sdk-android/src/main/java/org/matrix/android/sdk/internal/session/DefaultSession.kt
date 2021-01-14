@@ -143,7 +143,7 @@ internal class DefaultSession @Inject constructor(
         ProfileService by profileService.get(),
         AccountDataService by accountDataService.get(),
         AccountService by accountService.get(),
-        ThirdPartyService by thirdPartyService{
+        ThirdPartyService by thirdPartyService {
 
     override val sharedSecretStorageService: SharedSecretStorageService
         get() = _sharedSecretStorageService.get()

@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.internal.util.awaitCallback
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class DirectRoomHelper @Inject constructor(
@@ -53,4 +52,3 @@ class DirectRoomHelper @Inject constructor(
         return roomId
     }
 }
-

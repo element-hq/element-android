@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.thirdparty
 
 import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import org.matrix.android.sdk.internal.network.executeRequest
-import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject

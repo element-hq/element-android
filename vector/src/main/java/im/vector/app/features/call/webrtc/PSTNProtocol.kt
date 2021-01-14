@@ -41,4 +41,3 @@ suspend fun Session.getSupportedPSTN(maxTries: Int): String? {
         else                                             -> null
     }
 }
-

@@ -104,7 +104,7 @@ class WebRtcCallManager @Inject constructor(
         private set
 
     val supportsPSTNProtocol: Boolean
-        get() = true//supportedPSTNProtocol != null
+        get() = supportedPSTNProtocol != null
 
     private val rootEglBase by lazy { EglUtils.rootEglBase }
 

@@ -1438,7 +1438,7 @@ class RoomDetailViewModel @AssistedInject constructor(
        updateShowDialerOptionState()
     }
 
-    private fun updateShowDialerOptionState(){
+    private fun updateShowDialerOptionState() {
         setState {
             copy(showDialerOption = callManager.supportsPSTNProtocol)
         }

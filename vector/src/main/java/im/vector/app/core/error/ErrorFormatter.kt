@@ -110,8 +110,10 @@ class DefaultErrorFormatter @Inject constructor(
                         throwable.localizedMessage
                 }
             }
-            is SsoFlowNotSupportedYet                                                       -> stringProvider.getString(R.string.error_sso_flow_not_supported_yet)
-            is DialPadLookup.Failure                                                        -> stringProvider.getString(R.string.call_dial_pad_lookup_error)
+            is SsoFlowNotSupportedYet                                                       ->
+                stringProvider.getString(R.string.error_sso_flow_not_supported_yet)
+            is DialPadLookup.Failure                                                        ->
+                stringProvider.getString(R.string.call_dial_pad_lookup_error)
             else                                                                            -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)

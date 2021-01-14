@@ -44,5 +44,4 @@ internal abstract class ThirdPartyModule {
 
     @Binds
     abstract fun bindGetThirdPartyUserTask(task: DefaultGetThirdPartyUserTask): GetThirdPartyUserTask
-
 }

@@ -28,8 +28,8 @@ class DialerChoiceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
         return BottomSheetCallDialerChoiceBinding.inflate(inflater, container, false)
     }
 
-    var onDialPadClicked: (() ->Unit)? = null
-    var onVoiceCallClicked: (() ->Unit)? = null
+    var onDialPadClicked: (() -> Unit)? = null
+    var onVoiceCallClicked: (() -> Unit)? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
