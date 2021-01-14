@@ -58,8 +58,6 @@
     <string name="cannot_start_call">לא יכול להתחיל את השיחה, נסה שוב מאוחר יותר</string>
     <string name="ongoing_conference_call_video">וידאו</string>
     <string name="ongoing_conference_call_voice">קול</string>
-    <string name="ongoing_conference_call">שיחת ועידה מתמשכת.
-\nהצטרף כ-% 1 $ s או% 2 $ s</string>
     <string name="start_chatting">התחל לצ\'וטט</string>
     <string name="reset">אתחול</string>
     <string name="pause_video">השהה</string>
@@ -173,7 +171,6 @@
     <string name="join_room">הצטרף אל חדר</string>
     <string name="read_receipt">קרא</string>
     <string name="send_files_in">שלח פנימה</string>
-    <string name="send_bug_report_progress">התקדמות (%%%)</string>
     <string name="send_bug_report_failed">לא ניתן היה לשלוח את דוח הבאג (%s)</string>
     <string name="send_bug_report_sent">דוח הבאג נשלח בהצלחה</string>
     <string name="send_bug_report_rage_shake">טלטול זעם כדי לדווח על באג</string>
@@ -215,7 +212,7 @@
 \n
 \nהוצאת מכל ההפעלות ולא תקבל עוד התראות דחיפה. כדי להפעיל מחדש התראות, התחבר מחדש בכל מכשיר.</string>
     <string name="auth_reset_password_error_unauthorized">אימות כתובת הדוא\"ל נכשל: ודא שלחצת על הקישור בדוא\"ל</string>
-    <string name="auth_reset_password_email_validation_message">דוא\"ל נשלח אל% s. לאחר שתעקוב אחר הקישור שהוא מכיל, לחץ למטה.</string>
+    <string name="auth_reset_password_email_validation_message">דוא\"ל נשלח אל%s. לאחר שתעקוב אחר הקישור שהוא מכיל, לחץ למטה.</string>
     <string name="auth_reset_password_missing_password">יש להזין סיסמה חדשה.</string>
     <string name="auth_reset_password_missing_email">יש להזין את כתובת הדוא\"ל המקושרת לחשבונך.</string>
     <string name="auth_reset_password_message">כדי לאפס את הסיסמה שלך, הזן את כתובת הדוא\"ל המקושרת לחשבונך:</string>
@@ -288,10 +285,7 @@
 \nאנא בקש ממנהל שרת הבית שלך להגדיר שרת TURN על מנת שהשיחות יעבדו בצורה אמינה.</string>
     <string name="call_failed_no_connection">שיחת האלמנט נכשלה</string>
     <string name="call_failed_dont_ask_again">אל תשאל אותי שוב</string>
-    <string name="call_failed_no_ice_use_alt">נסה להשתמש ב-% s</string>
-    <string name="call_failed_no_ice_description">אנא בקש ממנהל שרת הבית שלך (% 1 $ s) להגדיר שרת TURN כדי שהשיחות יעבדו בצורה אמינה.
-\n
-\nלחלופין, אתה יכול לנסות להשתמש בשרת הציבורי ב-% 2 $ s, אך זה לא יהיה אמין כל כך, והוא ישתף את כתובת ה- IP שלך עם השרת הזה. תוכל לנהל זאת גם בהגדרות.</string>
+    <string name="call_failed_no_ice_use_alt">נסה להשתמש ב-%s</string>
     <string name="call_failed_no_ice_title">השיחה נכשלה עקב שרת שהוגדר כהלכה</string>
     <string name="start_video_call_prompt_msg">האם אתה בטוח שברצונך להתחיל שיחת וידאו\?</string>
     <string name="start_voice_call_prompt_msg">האם אתה בטוח שברצונך להתחיל שיחה קולית\?</string>
@@ -299,10 +293,10 @@
     <string name="invite_no_identity_server_error">הוסף שרת זהות בהגדרות שלך כדי לבצע פעולה זו.</string>
     <string name="room_preview_room_interactions_disabled">זו תצוגה מקדימה של החדר הזה. אינטראקציות בחדר הושבתו.</string>
     <string name="room_preview_try_join_an_unknown_room_default">חדר</string>
-    <string name="room_preview_try_join_an_unknown_room">אתה מנסה לגשת ל-% s. האם תרצה להצטרף על מנת להשתתף בדיון\?</string>
-    <string name="room_preview_unlinked_email_warning">הזמנה זו נשלחה אל% s, שאינה משויכת לחשבון זה.
+    <string name="room_preview_try_join_an_unknown_room">אתה מנסה לגשת ל-%s. האם תרצה להצטרף על מנת להשתתף בדיון\?</string>
+    <string name="room_preview_unlinked_email_warning">הזמנה זו נשלחה אל%s, שאינה משויכת לחשבון זה.
 \nייתכן שתרצה להתחבר עם חשבון אחר, או להוסיף דוא\"ל זה לחשבונך.</string>
-    <string name="room_preview_invitation_format">הוזמנת להצטרף לחדר זה על ידי% s</string>
+    <string name="room_preview_invitation_format">הוזמנת להצטרף לחדר זה על ידי%s</string>
     <string name="room_jump_to_first_unread">קפיצה להודעה הראשונה שלא נקראה.</string>
     <string name="room_sync_in_progress">מסנכרן…</string>
     <string name="open_chat_header">פתח כותרת</string>
@@ -345,7 +339,7 @@
     <string name="call_error_ice_failed">חיבור המדיה נכשל</string>
     <string name="call_error_user_not_responding">הצד המרוחק לא הצליח להרים.</string>
     <string name="return_to_call">חזור לשיחה</string>
-    <string name="active_call_with_duration">שיחה פעילה (% s)</string>
+    <string name="active_call_with_duration">שיחה פעילה (%s)</string>
     <string name="video_call_in_progress">שיחת וידאו מתבצעת …</string>
     <string name="call_in_progress">במהלך התקשרות…</string>
     <string name="incoming_voice_call">שיחה קולית נכנסת</string>
@@ -358,7 +352,7 @@
     <string name="call">שִׂיחָה</string>
     <string name="settings_call_ringtone_dialog_title">בחר רינגטון לשיחות:</string>
     <string name="settings_call_ringtone_title">רינגטון שיחה נכנסת</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">ישתמש ב-% s כסיוע כאשר השרת הביתי שלך אינו מציע כזה (כתובת ה- IP שלך תשותף במהלך שיחה)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">ישתמש ב-%s כסיוע כאשר השרת הביתי שלך אינו מציע כזה (כתובת ה- IP שלך תשותף במהלך שיחה)</string>
     <string name="settings_call_ringtone_use_default_stun">אפשר שרת עזרה לשיחות</string>
     <string name="settings_call_ringtone_use_app_ringtone">השתמש ברינגטון ברירת המחדל של אלמנט לשיחות נכנסות</string>
     <string name="settings_call_show_confirmation_dialog_summary">בקש אישור לפני שמתחילים בשיחה</string>
@@ -422,7 +416,7 @@
         <item quantity="other">% d שניות</item>
     </plurals>
     <string name="settings_set_sync_delay">עיכוב בין כל סינכרון</string>
-    <string name="settings_set_workmanager_delay_summary">% s
+    <string name="settings_set_workmanager_delay_summary">%s
 \nהסנכרון עשוי להידחות בהתאם למשאבים (סוללה) או מצב ההתקן (שינה).</string>
     <string name="settings_set_workmanager_delay">מרווח סינכרון מועדף</string>
     <string name="settings_set_sync_timeout">פסק-זמן לבקשה לסנכרון</string>
@@ -470,9 +464,9 @@
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">השבת הגבלות</string>
     <string name="settings_troubleshoot_test_bg_restricted_failed">מגבלות רקע מופעלות עבור Element.
 \nהעבודה שהאפליקציה מנסה לעשות תוגבל באגרסיביות בזמן שהיא ברקע, וזה עלול להשפיע על ההודעות.
-\n% 1 $ s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">מגבלות רקע מושבתות עבור Element. יש להריץ בדיקה זו באמצעות נתונים ניידים (ללא WIFI).
-\n% 1 $ s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">בדוק מגבלות רקע</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">הפעל את התחלה לאחר אתחול</string>
     <string name="settings_troubleshoot_test_service_boot_failed">השירות לא יופעל עם הפעלת המכשיר מחדש, לא תקבל התראות עד שאלמנט ייפתח לפחות פעם אחת.</string>
@@ -495,24 +489,24 @@
     <string name="settings_troubleshoot_test_push_loop_success">היישום מקבל PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">היישום ממתין ל- PUSH</string>
     <string name="settings_troubleshoot_test_token_registration_failed">נכשל רישום אסימון FCM ל- HomeServer:
-\n% 1 $ s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_success">אסימון FCM נרשם בהצלחה ל- HomeServer.</string>
     <string name="settings_troubleshoot_test_token_registration_title">רישום אסימונים</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">הוסף חשבון</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[% 1 $ s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nשגיאה זו אינה בשליטה על אלמנט. אין חשבון Google בטלפון. אנא פתח את מנהל החשבון והוסף חשבון Google.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[% 1 $ s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nשגיאה זו אינה בשליטה על אלמנט. זה יכול להתרחש מכמה סיבות. אולי זה יעבוד אם תנסה שוב מאוחר יותר, תוכל גם לבדוק ששירות Google Play אינו מוגבל בשימוש נתונים בהגדרות המערכת, או ששעון המכשיר שלך תקין, או שזה יכול לקרות ב- ROM מותאם אישית.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[% 1 $ s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nשגיאה זו איננה בשליטה על Element ולפי גוגל, שגיאה זו מצביעה על כך שלמכשיר יש יותר מדי אפליקציות הרשומות ב- FCM. השגיאה מתרחשת רק במקרים שבהם ישנם מספרים קיצוניים של אפליקציות, כך שהיא לא אמורה להשפיע על המשתמש הממוצע.</string>
     <string name="settings_troubleshoot_test_fcm_failed">נכשל באחזור אסימון FCM:
-\n% 1 $ s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_success">אסימון FCM אוחזר בהצלחה:
-\n% 1 $ s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_title">אסימון Firebase</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">תקן שירותי Google Play</string>
     <string name="settings_troubleshoot_test_play_services_failed">אלמנט משתמש בשירותי Google Play כדי להעביר הודעות פוש אך נראה שהוא אינו מוגדר כהלכה:
-\n% 1 $ s</string>
+\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_success">ה- APK של שירותי Google Play זמין ומעודכן.</string>
     <string name="settings_troubleshoot_test_play_services_title">בדיקת שירותי הפעלה</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">בדוק בהגדרות</string>
@@ -546,7 +540,7 @@
     <string name="ssl_cert_new_account_expl">אם מנהל השרת אמר שזה צפוי, ודא שטביעת האצבע שלמטה תואמת את טביעת האצבע שמספקת אותם.</string>
     <string name="ssl_cert_not_trust">יכול להיות שמישהו מיירט את התעבורה שלך בזדון, או שהטלפון שלך לא סומך על האישור שמספק השרת המרוחק.</string>
     <string name="ssl_could_not_verify">לא ניתן לאמת את זהות השרת המרוחק.</string>
-    <string name="ssl_fingerprint_hash">טביעת אצבע (s%):</string>
+    <string name="ssl_fingerprint_hash">טביעת אצבע (%s):</string>
     <string name="ssl_remain_offline">התעלם</string>
     <string name="ssl_logout_account">יציאה</string>
     <string name="ssl_do_not_trust">אל תתן אמון</string>
@@ -564,21 +558,20 @@
     <string name="room_message_placeholder_reply_to_encrypted">שלח תשובה מוצפנת …</string>
     <string name="room_message_placeholder_not_encrypted">שלח הודעה (לא מוצפן) …</string>
     <string name="room_message_placeholder_encrypted">שלח הודעה מוצפנת …</string>
-    <string name="room_many_users_are_typing">% 1 $ s &amp;% 2 $ s ואחרים מקלידים …</string>
-    <string name="room_two_users_are_typing">% 1 $ s &amp;% 2 $ s מקלידים …</string>
-    <string name="room_one_user_is_typing">% s מקליד …</string>
+    <string name="room_many_users_are_typing">%1$s &amp;%2$s ואחרים מקלידים …</string>
+    <string name="room_two_users_are_typing">%1$s &amp;%2$s מקלידים …</string>
+    <string name="room_one_user_is_typing">%s מקליד …</string>
     <string name="room_menu_search">חפש</string>
     <string name="people_search_invite_by_id_dialog_hint">אימייל או מזהה מטריקס</string>
     <string name="people_search_invite_by_id_dialog_description">אנא הזן כתובת דוא\"ל אחת או יותר או מזהה מטריקס</string>
     <string name="people_search_invite_by_id_dialog_title">הזמן משתמש לפי מזהה</string>
     <string name="people_search_filter_text">משתמשי מטריקס בלבד</string>
-    <string name="people_search_user_directory">תיקיית משתמש (s%)</string>
-    <string name="people_search_local_contacts">אנשי קשר מקומיים (% d)</string>
+    <string name="people_search_local_contacts">אנשי קשר מקומיים (%d)</string>
     <string name="people_search_invite_by_id">&lt;u&gt; הזמן לפי מזהה &lt;/ u&gt;<u>Invite by ID</u></string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
     <string name="room_participants_invite_join_names_and">%1$s and %2$s</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
-    <string name="room_participants_invite_prompt_msg">האם אתה בטוח שברצונך להזמין את% s לצ\'אט זה\?</string>
+    <string name="room_participants_invite_prompt_msg">האם אתה בטוח שברצונך להזמין את%s לצ\'אט זה\?</string>
     <string name="reason_hint">סיבה</string>
     <string name="room_participants_unban_prompt_msg">הסרת נידוי ממשתמש יאפשר לו להצטרף שוב לחדר.</string>
     <string name="room_participants_ban_prompt_msg">איסור על המשתמש יבעט בהם מחדר זה וימנע מהם להצטרף שוב.</string>
@@ -622,8 +615,6 @@
     <string name="room_participants_header_direct_chats">הודעות ישירות</string>
     <string name="room_participants_header_call">שיחה</string>
     <string name="room_participants_header_admin_tools">כלי אדמיניסטרציה</string>
-    <string name="room_participants_ago">לפני% 1 $ s% 2 $ s</string>
-    <string name="room_participants_now">% 1 $ s עכשיו</string>
     <string name="room_participants_idle">זמין</string>
     <string name="room_participants_offline">אופליין</string>
     <string name="room_participants_online">אונליין</string>
@@ -649,7 +640,6 @@
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">בדיקה אחת או יותר נכשלו, אנא שלח דו\"ח שגיאה שיעזור לנו לחקור זאת.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">בדיקה אחת או יותר נכשלו, נסה הצעה/ות אלו לתיקון.</string>
     <string name="settings_troubleshoot_diagnostic_success_status">אבחון בסיסי תקין. אם עדיין אינך מקבל התראות, אנא שלח דו\"ח שגיאה שיעזור לנו לחקור זאת.</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">פועל ... (% 1 $ d מתוך% 2 $ d)</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">הרץ מבדקים</string>
     <string name="settings_troubleshoot_diagnostic">אבחון לפתרון בעיות</string>
     <string name="settings_notification_troubleshoot">פותר בעיות התראות</string>
@@ -657,7 +647,7 @@
     <string name="settings_notification_by_event">חשיבות ההודעה לפי אירוע</string>
     <string name="settings_notification_advanced">הגדרות התראה מתקדמות</string>
     <string name="error_threepid_auth_failed">וודא שלחצת על הקישור בהודעת הדוא\"ל ששלחנו אליך.</string>
-    <string name="settings_remove_three_pid_confirmation_content">להסיר את% s\?</string>
+    <string name="settings_remove_three_pid_confirmation_content">להסיר את%s\?</string>
     <string name="settings_phone_numbers">מספרי טלפון</string>
     <string name="settings_emails_empty">לא הוספה כתובת דוא\"ל לחשבונך</string>
     <string name="settings_emails">כתובות דוא\"ל</string>
@@ -677,7 +667,6 @@
     <string name="room_sliding_menu_copyright">זכויות יוצרים</string>
     <string name="room_sliding_menu_third_party_notices">התראות צד שלישי</string>
     <string name="room_sliding_menu_term_and_conditions">תנאים והגבלות</string>
-    <string name="room_sliding_menu_version_x">גרסה s%</string>
     <string name="room_sliding_menu_version">גרסה</string>
     <string name="room_sliding_menu_settings">הגדרות</string>
     <string name="room_sliding_menu_messages">הודעות</string>
@@ -692,12 +681,6 @@
     <string name="room_settings_all_messages">כל ההודעות</string>
     <string name="room_settings_all_messages_noisy">כל ההודעות (קוליות)</string>
     <string name="directory_searching_title">מחפש בתיקייה…</string>
-    <plurals name="directory_search_rooms_for">
-        <item quantity="one">נמצא% 1 $ s חדר עבור% 2 $ s</item>
-        <item quantity="two">נמצא% 1 $ s חדר עבור% 2 $ s</item>
-        <item quantity="many">נמצא% 1 $ s חדר עבור% 2 $ s</item>
-        <item quantity="other">נמצא% 1 $ s חדר עבור% 2 $ s</item>
-    </plurals>
     <plurals name="directory_search_rooms">
         <item quantity="one">d% חדר</item>
         <item quantity="two">d% חדרים</item>
@@ -720,7 +703,7 @@
     <string name="tab_title_search_files">קבצים</string>
     <string name="tab_title_search_people">אנשים</string>
     <string name="tab_title_search_messages">הודעות</string>
-    <string name="room_participants_remove_prompt_msg">האם אתה בטוח שברצונך להסיר את% s מהצ\'אט הזה\?</string>
+    <string name="room_participants_remove_prompt_msg">האם אתה בטוח שברצונך להסיר את%s מהצ\'אט הזה\?</string>
     <string name="room_participants_leave_prompt_msg">האם ברצונך לעזוב את החדר\?</string>
     <string name="room_participants_leave_prompt_title">עזוב חדר</string>
     <plurals name="format_time_d">

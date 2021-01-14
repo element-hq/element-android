@@ -513,13 +513,13 @@
     <string name="room_message_placeholder_not_encrypted">Αποστολή μηνύματος (κρυπτογραφημένο)…</string>
     <string name="room_message_placeholder_encrypted">Αποστολή κρυπτογραφημένου μηνύματος…</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; άλλοι γράφουν…</string>
-    <string name="room_one_user_is_typing">% γράφει…</string>
+    <string name="room_one_user_is_typing">%s γράφει…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s γράφουν…</string>
     <string name="room_menu_search">Συνομιλία</string>
     <string name="people_search_invite_by_id_dialog_hint">Διεύθυνση ηλεκτρονικού ταχυδρομίου ή Matrix ID</string>
     <string name="people_search_invite_by_id_dialog_title">Πρόσκληση μέσω ID χρήστη</string>
     <string name="people_search_filter_text">Μόνο χρήστες Matrix</string>
-    <string name="people_search_user_directory">Ευρετήριο χρηστών</string>
+    <string name="people_search_user_directory">Ευρετήριο χρηστών (%s)</string>
     <string name="room_participants_invite_prompt_msg">Είστε σίγουροι ότι θέλετε να προσκαλέσετε τους %s σε αυτή την συζήτηση;</string>
     <string name="reason_hint">Λόγος</string>
     <string name="ssl_could_not_verify">Δεν εξακριβώθηκε η ταυτότητα του εξωτερικού διακομιστή.</string>
