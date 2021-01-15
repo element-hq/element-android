@@ -24,16 +24,10 @@ Bugfix 🐛:
  - Fix request too large Uri error when joining a room
 
 Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
+ - New language supported: Hebrew
 
 Build 🧱:
  - Remove dependency to org.greenrobot.eventbus library
-
-Test:
- -
 
 Other changes:
  - Migrate to ViewBindings (#1072)

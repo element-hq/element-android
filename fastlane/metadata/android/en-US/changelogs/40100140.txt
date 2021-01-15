@@ -1,0 +1,2 @@
+Main changes in this version: Edit room permissions, automatic light/dark theme, and a bunch of bug fixes.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.0.14
