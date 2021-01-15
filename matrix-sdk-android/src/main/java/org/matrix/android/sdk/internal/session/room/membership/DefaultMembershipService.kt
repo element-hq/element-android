@@ -17,8 +17,9 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -58,9 +59,9 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val userId: String
 ) : MembershipService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): MembershipService
+        fun create(roomId: String): DefaultMembershipService
     }
 
     override fun loadRoomMembersIfNeeded(matrixCallback: MatrixCallback<Unit>): Cancelable {

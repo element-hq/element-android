@@ -18,8 +18,9 @@ package org.matrix.android.sdk.internal.session.room.state
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -42,9 +43,9 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                                                                private val fileUploader: FileUploader
 ) : StateService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): StateService
+        fun create(roomId: String): DefaultStateService
     }
 
     override fun getStateEvent(eventType: String, stateKey: QueryStringValue): Event? {

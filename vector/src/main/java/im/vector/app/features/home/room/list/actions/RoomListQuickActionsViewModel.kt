@@ -18,8 +18,9 @@ package im.vector.app.features.home.room.list.actions
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -31,7 +32,7 @@ class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initia
                                                                 private val session: Session
 ) : VectorViewModel<RoomListQuickActionsState, EmptyAction, EmptyViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: RoomListQuickActionsState): RoomListQuickActionsViewModel
     }

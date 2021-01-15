@@ -22,8 +22,9 @@ import arrow.core.Option
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -45,7 +46,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                                                      private val stringProvider: StringProvider
 ) : VectorViewModel<GroupListViewState, GroupListAction, GroupListViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: GroupListViewState): GroupListViewModel
     }

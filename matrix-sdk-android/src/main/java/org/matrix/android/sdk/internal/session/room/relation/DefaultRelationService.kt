@@ -17,8 +17,9 @@ package org.matrix.android.sdk.internal.session.room.relation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -56,9 +57,9 @@ internal class DefaultRelationService @AssistedInject constructor(
         private val taskExecutor: TaskExecutor)
     : RelationService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): RelationService
+        fun create(roomId: String): DefaultRelationService
     }
 
     override fun sendReaction(targetEventId: String, reaction: String): Cancelable {
