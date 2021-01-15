@@ -18,6 +18,8 @@ package org.matrix.android.sdk.api.session.space
 
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
 
 typealias SpaceSummaryQueryParams = RoomSummaryQueryParams
@@ -42,6 +44,11 @@ interface SpaceService {
      * preview of rooms that you did not join yet.
      */
     suspend fun peekSpace(spaceId: String) : SpacePeekResult
+
+    /**
+     * Get's information of a space by querying the server
+     */
+    suspend fun querySpaceChildren(spaceId: String) : Pair<RoomSummary, List<SpaceChildInfo>>
 
     /**
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.
@@ -69,4 +76,6 @@ interface SpaceService {
                           reason: String? = null,
                           viaServers: List<String> = emptyList(),
                           autoJoinChild: List<ChildAutoJoinInfo>) : JoinSpaceResult
+
+    suspend fun rejectInvite(spaceId: String, reason: String?)
 }

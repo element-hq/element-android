@@ -40,7 +40,6 @@ import im.vector.app.features.spaces.SpacePreviewSharedActionViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -99,7 +98,7 @@ class SpacePreviewFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) {
-        when (it.peekResult) {
+        when (it.spaceInfo) {
             is Uninitialized,
             is Loading -> {
                 views.spacePreviewPeekingProgress.isVisible = true
@@ -141,21 +140,23 @@ class SpacePreviewFragment @Inject constructor(
     }
 
     private fun updateToolbar(spacePreviewState: SpacePreviewState) {
-        when (val preview = spacePreviewState.peekResult.invoke()) {
-            is SpacePeekResult.Success -> {
-                val roomPeekResult = preview.summary.roomPeekResult
-                val mxItem = MatrixItem.RoomItem(roomPeekResult.roomId, roomPeekResult.name, roomPeekResult.avatarUrl)
-                avatarRenderer.renderSpace(mxItem, views.spacePreviewToolbarAvatar)
-                views.roomPreviewNoPreviewToolbarTitle.text = roomPeekResult.name
-            }
-            is SpacePeekResult.SpacePeekError,
-            null -> {
-                // what to do here?
-                val mxItem = MatrixItem.RoomItem(spacePreviewState.idOrAlias, spacePreviewState.name, spacePreviewState.avatarUrl)
-                avatarRenderer.renderSpace(mxItem, views.spacePreviewToolbarAvatar)
-                views.roomPreviewNoPreviewToolbarTitle.text = spacePreviewState.name
-            }
-        }
+//        when (val preview = spacePreviewState.peekResult.invoke()) {
+//            is SpacePeekResult.Success -> {
+//                val roomPeekResult = preview.summary.roomPeekResult
+        val spaceName = spacePreviewState.spaceInfo.invoke()?.name ?: spacePreviewState.name ?: ""
+        val spaceAvatarUrl = spacePreviewState.spaceInfo.invoke()?.avatarUrl ?: spacePreviewState.avatarUrl
+        val mxItem = MatrixItem.RoomItem(spacePreviewState.idOrAlias, spaceName, spaceAvatarUrl)
+        avatarRenderer.renderSpace(mxItem, views.spacePreviewToolbarAvatar)
+        views.roomPreviewNoPreviewToolbarTitle.text = spaceName
+//            }
+//            is SpacePeekResult.SpacePeekError,
+//            null -> {
+//                // what to do here?
+//                val mxItem = MatrixItem.RoomItem(spacePreviewState.idOrAlias, spacePreviewState.name, spacePreviewState.avatarUrl)
+//                avatarRenderer.renderSpace(mxItem, views.spacePreviewToolbarAvatar)
+//                views.roomPreviewNoPreviewToolbarTitle.text = spacePreviewState.name
+//            }
+//        }
     }
 
     override fun onStart() {

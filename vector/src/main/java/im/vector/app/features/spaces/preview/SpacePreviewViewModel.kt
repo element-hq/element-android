@@ -23,6 +23,7 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -30,9 +31,12 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
+import org.matrix.android.sdk.internal.session.space.peeking.SpaceSubChildPeekResult
+import timber.log.Timber
 
 class SpacePreviewViewModel @AssistedInject constructor(
         @Assisted private val initialState: SpacePreviewState,
@@ -73,31 +77,29 @@ class SpacePreviewViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleDismissInvite() {
-        TODO("Not yet implemented")
+    private fun handleDismissInvite() = withState { state ->
+        // Here we need to join the space himself as well as the default rooms in that space
+        // TODO modal loading
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                session.spaceService().rejectInvite(initialState.idOrAlias, null)
+            } catch (failure: Throwable) {
+                Timber.e(failure, "## Space: Failed to reject invite")
+            }
+        }
     }
 
     private fun handleAcceptInvite() = withState { state ->
         // Here we need to join the space himself as well as the default rooms in that space
-        val spaceInfo = state.peekResult.invoke() as? SpacePeekResult.Success
-
         // TODO if we have no summary, we cannot find auto join rooms...
         // So maybe we should trigger a retry on summary after the join?
-        val spaceVia = (spaceInfo?.summary?.roomPeekResult as? PeekResult.Success)?.viaServers ?: emptyList()
-        val autoJoinChildren = spaceInfo?.summary?.children
-                ?.filter { it.default == true }
-                ?.map {
-                    SpaceService.ChildAutoJoinInfo(
-                            it.id,
-                            // via servers
-                            (it.roomPeekResult as? PeekResult.Success)?.viaServers ?: emptyList()
-                    )
-                } ?: emptyList()
+        val spaceInfo = state.spaceInfo.invoke()
+        val spaceVia = spaceInfo?.viaServers ?: emptyList()
 
         // trigger modal loading
         _viewEvents.post(SpacePreviewViewEvents.StartJoining)
         viewModelScope.launch(Dispatchers.IO) {
-            val joinResult = session.spaceService().joinSpace(spaceInfo?.summary?.idOrAlias ?: initialState.idOrAlias, null, spaceVia, autoJoinChildren)
+            val joinResult = session.spaceService().joinSpace(initialState.idOrAlias, null, spaceVia, emptyList())
             when (joinResult) {
                 SpaceService.JoinSpaceResult.Success,
                 is SpaceService.JoinSpaceResult.PartialSuccess -> {
@@ -116,19 +118,109 @@ class SpacePreviewViewModel @AssistedInject constructor(
             initialized = true
             // peek for the room
             setState {
-                copy(peekResult = Loading())
+                copy(
+                        spaceInfo = Loading(),
+                        childInfoList = Loading()
+                )
             }
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    val result = session.spaceService().peekSpace(initialState.idOrAlias)
-                    setState {
-                        copy(peekResult = Success(result))
-                    }
+                    resolveSpaceInfo()
                 } catch (failure: Throwable) {
-                    setState {
-                        copy(peekResult = Fail(failure))
-                    }
+                    Timber.e(failure, "## Space: Failed to resolve space info. Fallback to picking")
+                    fallBackResolve()
                 }
+            }
+        }
+    }
+
+    private suspend fun resolveSpaceInfo() {
+        val resolveResult = session.spaceService().querySpaceChildren(initialState.idOrAlias)
+        setState {
+            copy(
+                    spaceInfo = Success(
+                            resolveResult.first.let {
+                                ChildInfo(
+                                        roomId = it.roomId,
+                                        avatarUrl = it.avatarUrl,
+                                        name = it.name,
+                                        topic = it.topic,
+                                        memberCount = it.joinedMembersCount,
+                                        isSubSpace = it.roomType == RoomType.SPACE,
+                                        children = Uninitialized,
+                                        viaServers = null
+                                )
+                            }
+                    ),
+                    childInfoList = Success(
+                            resolveResult.second.map {
+                                ChildInfo(
+                                        roomId = it.roomSummary?.roomId ?: "",
+                                        avatarUrl = it.roomSummary?.avatarUrl,
+                                        name = it.roomSummary?.name,
+                                        topic = it.roomSummary?.topic,
+                                        memberCount = it.roomSummary?.joinedMembersCount,
+                                        isSubSpace = it.roomSummary?.roomType == RoomType.SPACE,
+                                        children = Uninitialized,
+                                        viaServers = null
+                                )
+                            }
+                    )
+            )
+        }
+    }
+
+    private suspend fun fallBackResolve() {
+        try {
+            val resolveResult: SpacePeekResult = session.spaceService().peekSpace(initialState.idOrAlias)
+            val spaceInfo = (resolveResult as? SpacePeekResult.Success)?.summary?.roomPeekResult
+            setState {
+                copy(
+                        spaceInfo = Success(
+                                ChildInfo(
+                                        roomId = spaceInfo?.roomId ?: initialState.idOrAlias,
+                                        avatarUrl = spaceInfo?.avatarUrl,
+                                        name = spaceInfo?.name,
+                                        topic = spaceInfo?.topic,
+                                        memberCount = spaceInfo?.numJoinedMembers,
+                                        isSubSpace = true,
+                                        children = Uninitialized,
+                                        viaServers = spaceInfo?.viaServers
+
+                                )
+                        ),
+                        childInfoList = resolveResult.let {
+                            when (it) {
+                                is SpacePeekResult.Success -> {
+                                    (resolveResult as SpacePeekResult.Success).summary.children.mapNotNull { spaceChild ->
+                                        val roomPeekResult = spaceChild.roomPeekResult
+                                        if (roomPeekResult is PeekResult.Success) {
+                                            ChildInfo(
+                                                    roomId = spaceChild.id,
+                                                    avatarUrl = roomPeekResult.avatarUrl,
+                                                    name = roomPeekResult.name,
+                                                    topic = roomPeekResult.topic,
+                                                    memberCount = roomPeekResult.numJoinedMembers,
+                                                    isSubSpace = spaceChild is SpaceSubChildPeekResult,
+                                                    children = Uninitialized,
+                                                    viaServers = roomPeekResult.viaServers
+
+                                            )
+                                        } else {
+                                            null
+                                        }
+                                    }
+                                    Success(emptyList())
+                                }
+                                else                       -> {
+                                    Fail(Exception("Failed to get info"))
+                                }
+                            }
+                        })
+            }
+        } catch (failure: Throwable) {
+            setState {
+                copy(spaceInfo = Fail(failure), childInfoList = Fail(failure))
             }
         }
     }

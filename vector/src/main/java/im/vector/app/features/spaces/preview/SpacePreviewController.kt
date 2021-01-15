@@ -17,17 +17,14 @@
 package im.vector.app.features.spaces.preview
 
 import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
 import im.vector.app.R
+import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItemHeader
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.session.room.peeking.PeekResult
-import org.matrix.android.sdk.internal.session.space.peeking.ISpaceChild
-import org.matrix.android.sdk.internal.session.space.peeking.SpaceChildPeekResult
-import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
-import org.matrix.android.sdk.internal.session.space.peeking.SpaceSubChildPeekResult
 import javax.inject.Inject
 
 class SpacePreviewController @Inject constructor(
@@ -40,78 +37,100 @@ class SpacePreviewController @Inject constructor(
     var interactionListener: InteractionListener? = null
 
     override fun buildModels(data: SpacePreviewState?) {
-        val result: SpacePeekResult = data?.peekResult?.invoke() ?: return
+        val result = data?.childInfoList?.invoke() ?: return
 
-        when (result) {
-            is SpacePeekResult.SpacePeekError -> {
-                genericFooterItem {
-                    id("failed")
-                    // TODO
-                    text("Failed to resolve")
-                }
+        val memberCount = data.spaceInfo.invoke()?.memberCount ?: 0
+
+        spaceTopSummaryItem {
+            id("info")
+            formattedMemberCount(stringProvider.getQuantityString(R.plurals.room_title_members, memberCount, memberCount))
+            topic(data.spaceInfo.invoke()?.topic ?: data.topic ?: "")
+        }
+
+        if (result.isNotEmpty()) {
+            genericItemHeader {
+                id("header_rooms")
+                text(stringProvider.getString(R.string.rooms))
             }
-            is SpacePeekResult.Success -> {
-                // add summary info
-                val memberCount = result.summary.roomPeekResult.numJoinedMembers ?: 0
 
-                spaceTopSummaryItem {
-                    id("info")
-                    formattedMemberCount(stringProvider.getQuantityString(R.plurals.room_title_members, memberCount, memberCount))
-                    topic(result.summary.roomPeekResult.topic ?: "")
-                }
-
-                genericItemHeader {
-                    id("header_rooms")
-                    text(stringProvider.getString(R.string.rooms))
-                }
-
-                buildChildren(result.summary.children, 0)
-            }
+            buildChildren(result, 0)
         }
     }
 
-    private fun buildChildren(children: List<ISpaceChild>, depth: Int) {
+    private fun buildChildren(children: List<ChildInfo>, depth: Int) {
         children.forEach { child ->
-            when (child) {
-                is SpaceSubChildPeekResult -> {
-                    when (val roomPeekResult = child.roomPeekResult) {
-                        is PeekResult.Success -> {
-                            subSpaceItem {
-                                id(roomPeekResult.roomId)
-                                roomId(roomPeekResult.roomId)
-                                title(roomPeekResult.name)
-                                depth(depth)
-                                avatarUrl(roomPeekResult.avatarUrl)
-                                avatarRenderer(avatarRenderer)
-                            }
-                            buildChildren(child.children, depth + 1)
-                        }
-                        else -> {
-                            // ?? TODO
-                        }
+
+            if (child.isSubSpace == true) {
+                subSpaceItem {
+                    id(child.roomId)
+                    roomId(child.roomId)
+                    title(child.name)
+                    depth(depth)
+                    avatarUrl(child.avatarUrl)
+                    avatarRenderer(avatarRenderer)
+                }
+                when (child.children) {
+                    is Loading -> {
+                        loadingItem { id("loading_children_${child.roomId}") }
+                    }
+                    is Success -> {
+                        buildChildren(child.children.invoke(), depth + 1)
+                    }
+                    else       -> {
                     }
                 }
-                is SpaceChildPeekResult    -> {
-                    // We have to check if the peek result was success
-                    when (val roomPeekResult = child.roomPeekResult) {
-                        is PeekResult.Success -> {
-                            roomChildItem {
-                                id(child.id)
-                                depth(depth)
-                                roomId(roomPeekResult.roomId)
-                                title(roomPeekResult.name ?: "")
-                                topic(roomPeekResult.topic ?: "")
-                                avatarUrl(roomPeekResult.avatarUrl)
-                                memberCount(TextUtils.formatCountToShortDecimal(roomPeekResult.numJoinedMembers ?: 0))
-                                avatarRenderer(avatarRenderer)
-                            }
-                        }
-                        else                  -> {
-                            // What to do here?
-                        }
-                    }
+            } else {
+                roomChildItem {
+                    id(child.roomId)
+                    depth(depth)
+                    roomId(child.roomId)
+                    title(child.name ?: "")
+                    topic(child.topic ?: "")
+                    avatarUrl(child.avatarUrl)
+                    memberCount(TextUtils.formatCountToShortDecimal(child.memberCount ?: 0))
+                    avatarRenderer(avatarRenderer)
                 }
             }
+//            when (child) {
+//                is SpaceSubChildPeekResult -> {
+//                    when (val roomPeekResult = child.roomPeekResult) {
+//                        is PeekResult.Success -> {
+//                            subSpaceItem {
+//                                id(roomPeekResult.roomId)
+//                                roomId(roomPeekResult.roomId)
+//                                title(roomPeekResult.name)
+//                                depth(depth)
+//                                avatarUrl(roomPeekResult.avatarUrl)
+//                                avatarRenderer(avatarRenderer)
+//                            }
+//                            buildChildren(child.children, depth + 1)
+//                        }
+//                        else                  -> {
+//                            // ?? TODO
+//                        }
+//                    }
+//                }
+//                is SpaceChildPeekResult -> {
+//                    // We have to check if the peek result was success
+//                    when (val roomPeekResult = child.roomPeekResult) {
+//                        is PeekResult.Success -> {
+//                            roomChildItem {
+//                                id(child.id)
+//                                depth(depth)
+//                                roomId(roomPeekResult.roomId)
+//                                title(roomPeekResult.name ?: "")
+//                                topic(roomPeekResult.topic ?: "")
+//                                avatarUrl(roomPeekResult.avatarUrl)
+//                                memberCount(TextUtils.formatCountToShortDecimal(roomPeekResult.numJoinedMembers ?: 0))
+//                                avatarRenderer(avatarRenderer)
+//                            }
+//                        }
+//                        else                  -> {
+//                            // What to do here?
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

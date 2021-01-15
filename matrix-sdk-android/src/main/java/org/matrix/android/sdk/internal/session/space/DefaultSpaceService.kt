@@ -18,12 +18,17 @@ package org.matrix.android.sdk.internal.session.space
 
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.space.SpaceSummary
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
+import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.RoomGetter
 import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
@@ -31,6 +36,7 @@ import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
+import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
 import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.space.peeking.PeekSpaceTask
 import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
@@ -50,6 +56,8 @@ internal class DefaultSpaceService @Inject constructor(
         private val roomGetter: RoomGetter,
         private val spaceSummaryDataSource: SpaceSummaryDataSource,
         private val peekSpaceTask: PeekSpaceTask,
+        private val resolveSpaceInfoTask: ResolveSpaceInfoTask,
+        private val leaveRoomTask: LeaveRoomTask,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
         private val taskExecutor: TaskExecutor
 ) : SpaceService {
@@ -76,7 +84,55 @@ internal class DefaultSpaceService @Inject constructor(
         return peekSpaceTask.execute(PeekSpaceTask.Params(spaceId))
     }
 
-    override suspend fun joinSpace(spaceIdOrAlias: String, reason: String?, viaServers: List<String>, autoJoinChild: List<SpaceService.ChildAutoJoinInfo>): SpaceService.JoinSpaceResult {
+    override suspend fun querySpaceChildren(spaceId: String): Pair<RoomSummary, List<SpaceChildInfo>> {
+        return resolveSpaceInfoTask.execute(ResolveSpaceInfoTask.Params.withId(spaceId)).let { response ->
+            val spaceDesc = response.rooms?.firstOrNull { it.roomId == spaceId }
+            Pair(
+                    first = RoomSummary(
+                            roomId = spaceDesc?.roomId ?: spaceId,
+                            roomType = spaceDesc?.roomType,
+                            name = spaceDesc?.name ?: "",
+                            displayName = spaceDesc?.name ?: "",
+                            topic = spaceDesc?.topic ?: "",
+                            joinedMembersCount = spaceDesc?.numJoinedMembers,
+                            avatarUrl = spaceDesc?.avatarUrl ?: "",
+                            encryptionEventTs = null,
+                            typingUsers = emptyList(),
+                            isEncrypted = false
+                    ),
+                    second = response.rooms
+                            ?.filter { it.roomId != spaceId }
+                            ?.map { childSummary ->
+                                val childStateEv = response.events
+                                        ?.firstOrNull { it.stateKey == childSummary.roomId && it.type == EventType.STATE_SPACE_CHILD }
+                                        ?.content.toModel<SpaceChildContent>()
+                                SpaceChildInfo(
+                                        roomSummary = RoomSummary(
+                                                roomId = childSummary.roomId,
+                                                roomType = childSummary.roomType,
+                                                name = childSummary.name ?: "",
+                                                displayName = childSummary.name ?: "",
+                                                topic = childSummary.topic ?: "",
+                                                joinedMembersCount = childSummary.numJoinedMembers,
+                                                avatarUrl = childSummary.avatarUrl ?: "",
+                                                encryptionEventTs = null,
+                                                typingUsers = emptyList(),
+                                                isEncrypted = false
+                                        ),
+                                        order = childStateEv?.order,
+                                        present = childStateEv?.present ?: false,
+                                        autoJoin = childStateEv?.default ?: false,
+                                        viaServers = childStateEv?.via ?: emptyList()
+                                )
+                            } ?: emptyList()
+            )
+        }
+    }
+
+    override suspend fun joinSpace(spaceIdOrAlias: String,
+                                   reason: String?,
+                                   viaServers: List<String>,
+                                   autoJoinChild: List<SpaceService.ChildAutoJoinInfo>): SpaceService.JoinSpaceResult {
         try {
             joinSpaceTask.execute(JoinSpaceTask.Params(spaceIdOrAlias, reason, viaServers))
             // TODO partial success
@@ -99,5 +155,9 @@ internal class DefaultSpaceService @Inject constructor(
         } catch (throwable: Throwable) {
             return SpaceService.JoinSpaceResult.Fail(throwable)
         }
+    }
+
+    override suspend fun rejectInvite(spaceId: String, reason: String?) {
+        leaveRoomTask.execute(LeaveRoomTask.Params(spaceId, reason))
     }
 }
