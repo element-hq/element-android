@@ -23,7 +23,7 @@ Test:
  -
 
 Other changes:
- -
+ - Update Dagger to 2.31 version so we can use the embedded AssistedInject feature 
 
 Changes in Element 1.0.14 (2020-01-15)
 ===================================================

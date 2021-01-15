@@ -86,7 +86,6 @@ import im.vector.app.features.workers.signout.SignOutBottomSheetDialogFragment
             VectorComponent::class
         ],
         modules = [
-            AssistedInjectModule::class,
             ViewModelModule::class,
             FragmentModule::class,
             HomeModule::class,

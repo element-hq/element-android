@@ -18,8 +18,9 @@ package im.vector.app.features.settings.crosssigning
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -57,7 +58,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
                 }
     }
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: CrossSigningSettingsViewState): CrossSigningSettingsViewModel
     }

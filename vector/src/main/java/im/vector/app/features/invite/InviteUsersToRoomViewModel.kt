@@ -19,8 +19,9 @@ package im.vector.app.features.invite
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -37,7 +38,7 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
 
     private val room = session.getRoom(initialState.roomId)!!
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: InviteUsersToRoomViewState): InviteUsersToRoomViewModel
     }
