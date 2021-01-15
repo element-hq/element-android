@@ -1,0 +1,2 @@
+此新版本主要包含用户界面和用户体验方面的改进。现在，您可以邀请朋友，并通过扫描二维码快速创建私聊。
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.0.11
