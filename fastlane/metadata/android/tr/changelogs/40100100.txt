@@ -1,0 +1,2 @@
+Bu yeni sürüm başlıca hata düzeltmeleri ve iyileştirmeler içerir. Mesaj göndermek artık çok daha hızlı.
+Tam değişiklik günlüğü: https://github.com/vector-im/element-android/releases/tag/v1.0.10
