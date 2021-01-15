@@ -2336,4 +2336,23 @@
     <string name="room_alias_published_other">Andere öffentliche Adressen:</string>
     <string name="room_alias_main_address_hint">Hauptadresse</string>
     <string name="room_alias_published_alias_main">Das ist die Hauptadresse</string>
+    <string name="room_permissions_change_room_name">Raum-Name ändern</string>
+    <string name="room_permissions_change_history_visibility">Sichtbarkeit des Verlaufs ändern</string>
+    <string name="room_permissions_enable_room_encryption">Raum-Verschlüsselung aktivieren</string>
+    <string name="room_permissions_change_main_address_for_the_room">Haupt-Adresse des Raums ändern</string>
+    <string name="room_permissions_change_room_avatar">Raum-Bild ändern</string>
+    <string name="room_permissions_modify_widgets">Widgets verändern</string>
+    <string name="room_permissions_notify_everyone">Jede/n benachrichtigen</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Von anderen gesendete Nachrichten entfernen</string>
+    <string name="room_permissions_ban_users">Nutzer verbannen</string>
+    <string name="room_permissions_kick_users">Nutzer entfernen</string>
+    <string name="room_permissions_change_settings">Einstellungen ändern</string>
+    <string name="room_permissions_invite_users">Nutzer einladen</string>
+    <string name="room_permissions_send_messages">Nachrichten senden</string>
+    <string name="room_permissions_default_role">Standart Rolle</string>
+    <string name="room_permissions_title">Berechtigungen</string>
+    <string name="room_settings_permissions_title">Raum-Berechtigungen</string>
+    <string name="room_permissions_notice_read_only">Du hast nicht die Berechtigung zum Aktualisieren der Rollen, die zum Ändern verschiedener Teile des Raums erforderlich sind</string>
+    <string name="room_participants_leave_private_warning">Dieser Raum ist nicht öffentlich. Du wirst ihn ohne Einladung nicht wieder betreten können.</string>
+    <string name="system_theme">Standart Design</string>
 </resources>
