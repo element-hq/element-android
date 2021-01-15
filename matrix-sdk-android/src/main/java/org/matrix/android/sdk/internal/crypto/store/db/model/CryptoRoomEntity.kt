@@ -23,7 +23,12 @@ internal open class CryptoRoomEntity(
         @PrimaryKey var roomId: String? = null,
         var algorithm: String? = null,
         var shouldEncryptForInvitedMembers: Boolean? = null,
-        var blacklistUnverifiedDevices: Boolean = false)
+        var blacklistUnverifiedDevices: Boolean = false,
+        // Store the current outbound session for this room,
+        // to avoid re-create and re-share at each startup (if rotation not needed..)
+        // This is specific to megolm but not sure how to model it better
+        var outboundSessionInfo: OutboundGroupSessionInfoEntity? = null
+        )
     : RealmObject() {
 
     companion object

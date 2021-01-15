@@ -17,11 +17,12 @@ package im.vector.app.features.crypto.verification.choose
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -29,23 +30,27 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import im.vector.app.features.crypto.verification.VerificationAction
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
 import im.vector.app.features.qrcode.QrCodeScannerActivity
-import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
+
 import timber.log.Timber
 import javax.inject.Inject
 
 class VerificationChooseMethodFragment @Inject constructor(
         val verificationChooseMethodViewModelFactory: VerificationChooseMethodViewModel.Factory,
         val controller: VerificationChooseMethodController
-) : VectorBaseFragment(), VerificationChooseMethodController.Listener {
+) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
+        VerificationChooseMethodController.Listener {
 
     private val viewModel by fragmentViewModel(VerificationChooseMethodViewModel::class)
 
     private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_verification_child_fragment
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetVerificationChildFragmentBinding {
+        return BottomSheetVerificationChildFragmentBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,13 +59,13 @@ class VerificationChooseMethodFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        bottomSheetVerificationRecyclerView.cleanup()
+        views.bottomSheetVerificationRecyclerView.cleanup()
         controller.listener = null
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
-        bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
+        views.bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
         controller.listener = this
     }
 

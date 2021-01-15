@@ -17,7 +17,9 @@
 package im.vector.app.features.contactsbook
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
@@ -29,12 +31,13 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentContactsBookBinding
 import im.vector.app.features.userdirectory.PendingInvitee
 import im.vector.app.features.userdirectory.UserListAction
 import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
-import kotlinx.android.synthetic.main.fragment_contacts_book.*
+
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
 import java.util.concurrent.TimeUnit
@@ -43,9 +46,12 @@ import javax.inject.Inject
 class ContactsBookFragment @Inject constructor(
         val contactsBookViewModelFactory: ContactsBookViewModel.Factory,
         private val contactsBookController: ContactsBookController
-) : VectorBaseFragment(), ContactsBookController.Callback {
+) : VectorBaseFragment<FragmentContactsBookBinding>(), ContactsBookController.Callback {
 
-    override fun getLayoutResId() = R.layout.fragment_contacts_book
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentContactsBookBinding {
+        return FragmentContactsBookBinding.inflate(inflater, container, false)
+    }
+
     private val viewModel: UserListViewModel by activityViewModel()
 
     // Use activityViewModel to avoid loading several times the data
@@ -64,7 +70,7 @@ class ContactsBookFragment @Inject constructor(
     }
 
     private fun setupConsentView() {
-        phoneBookSearchForMatrixContacts.setOnClickListener {
+        views.phoneBookSearchForMatrixContacts.setOnClickListener {
             withState(contactsBookViewModel) { state ->
                 AlertDialog.Builder(requireActivity())
                         .setTitle(R.string.identity_server_consent_dialog_title)
@@ -79,7 +85,7 @@ class ContactsBookFragment @Inject constructor(
     }
 
     private fun setupOnlyBoundContactsView() {
-        phoneBookOnlyBoundContacts.checkedChanges()
+        views.phoneBookOnlyBoundContacts.checkedChanges()
                 .subscribe {
                     contactsBookViewModel.handle(ContactsBookAction.OnlyBoundContacts(it))
                 }
@@ -87,7 +93,7 @@ class ContactsBookFragment @Inject constructor(
     }
 
     private fun setupFilterView() {
-        phoneBookFilter
+        views.phoneBookFilter
                 .textChanges()
                 .skipInitialValue()
                 .debounce(300, TimeUnit.MILLISECONDS)
@@ -98,25 +104,25 @@ class ContactsBookFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        phoneBookRecyclerView.cleanup()
+        views.phoneBookRecyclerView.cleanup()
         contactsBookController.callback = null
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
         contactsBookController.callback = this
-        phoneBookRecyclerView.configureWith(contactsBookController)
+        views.phoneBookRecyclerView.configureWith(contactsBookController)
     }
 
     private fun setupCloseView() {
-        phoneBookClose.debouncedClicks {
+        views.phoneBookClose.debouncedClicks {
             sharedActionViewModel.post(UserListSharedAction.GoBack)
         }
     }
 
     override fun invalidate() = withState(contactsBookViewModel) { state ->
-        phoneBookSearchForMatrixContacts.isVisible = state.filteredMappedContacts.isNotEmpty() && state.identityServerUrl != null && !state.userConsent
-        phoneBookOnlyBoundContacts.isVisible = state.isBoundRetrieved
+        views.phoneBookSearchForMatrixContacts.isVisible = state.filteredMappedContacts.isNotEmpty() && state.identityServerUrl != null && !state.userConsent
+        views.phoneBookOnlyBoundContacts.isVisible = state.isBoundRetrieved
         contactsBookController.setData(state)
     }
 

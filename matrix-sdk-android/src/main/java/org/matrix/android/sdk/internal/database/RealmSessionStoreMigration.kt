@@ -21,6 +21,8 @@ import io.realm.RealmMigration
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import timber.log.Timber
 import javax.inject.Inject
@@ -33,7 +35,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         const val SESSION_STORE_SCHEMA_SC_VERSION = 1L
         const val SESSION_STORE_SCHEMA_SC_VERSION_OFFSET = (1L shl 12)
 
-        const val SESSION_STORE_SCHEMA_VERSION = 6L +
+        const val SESSION_STORE_SCHEMA_VERSION = 7L +
                 SESSION_STORE_SCHEMA_SC_VERSION * SESSION_STORE_SCHEMA_SC_VERSION_OFFSET
     }
 
@@ -49,6 +51,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 3) migrateTo4(realm)
         if (oldVersion <= 4) migrateTo5(realm)
         if (oldVersion <= 5) migrateTo6(realm)
+        if (oldVersion <= 6) migrateTo7(realm)
 
         if (oldScVersion <= 0) migrateToSc1(realm)
     }
@@ -124,5 +127,19 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 .addField(PreviewUrlCacheEntityFields.DESCRIPTION, String::class.java)
                 .addField(PreviewUrlCacheEntityFields.MXC_URL, String::class.java)
                 .addField(PreviewUrlCacheEntityFields.LAST_UPDATED_TIMESTAMP, Long::class.java)
+    }
+
+    private fun migrateTo7(realm: DynamicRealm) {
+        Timber.d("Step 6 -> 7")
+        realm.schema.get("RoomEntity")
+                ?.addField(RoomEntityFields.MEMBERS_LOAD_STATUS_STR, String::class.java)
+                ?.transform { obj ->
+                    if (obj.getBoolean("areAllMembersLoaded")) {
+                        obj.setString("membersLoadStatusStr", RoomMembersLoadStatusType.LOADED.name)
+                    } else {
+                        obj.setString("membersLoadStatusStr", RoomMembersLoadStatusType.NONE.name)
+                    }
+                }
+                ?.removeField("areAllMembersLoaded")
     }
 }

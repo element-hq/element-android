@@ -21,6 +21,7 @@ import android.view.View
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AlertDialog
 import androidx.transition.TransitionInflater
+import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -35,7 +36,7 @@ import javax.net.ssl.HttpsURLConnection
 /**
  * Parent Fragment for all the login/registration screens
  */
-abstract class AbstractLoginFragment : VectorBaseFragment(), OnBackPressed {
+abstract class AbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<VB>(), OnBackPressed {
 
     protected val loginViewModel: LoginViewModel by activityViewModel()
 

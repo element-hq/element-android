@@ -16,24 +16,34 @@
 
 package im.vector.app.features.login
 
-import butterknife.OnClick
-import im.vector.app.R
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentPromptSimplifiedModeBinding
 import im.vector.app.features.settings.VectorPreferences
 import javax.inject.Inject
 
-class PromptSimplifiedModeFragment @Inject constructor() : VectorBaseFragment() {
+class PromptSimplifiedModeFragment @Inject constructor() : VectorBaseFragment<FragmentPromptSimplifiedModeBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_prompt_simplified_mode
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentPromptSimplifiedModeBinding {
+        return FragmentPromptSimplifiedModeBinding.inflate(inflater, container, false)
+    }
 
-    @OnClick(R.id.promptSimplifiedModeOn)
-    fun simplifiedModeOn() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        views.promptSimplifiedModeOn.setOnClickListener { simplifiedModeOn() }
+        views.promptSimplifiedModeOff.setOnClickListener { simplifiedModeOff() }
+    }
+
+    private fun simplifiedModeOn() {
         VectorPreferences(requireContext()).setSimplifiedMode(true)
         activity?.finish()
     }
 
-    @OnClick(R.id.promptSimplifiedModeOff)
-    fun simplifiedModeOff() {
+    private fun simplifiedModeOff() {
         VectorPreferences(requireContext()).setSimplifiedMode(false)
         activity?.finish()
     }

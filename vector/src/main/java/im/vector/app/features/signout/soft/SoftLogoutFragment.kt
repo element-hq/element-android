@@ -18,7 +18,9 @@ package im.vector.app.features.signout.soft
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
@@ -27,11 +29,12 @@ import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.login.AbstractLoginFragment
 import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.LoginViewEvents
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+
 import javax.inject.Inject
 
 /**
@@ -41,11 +44,14 @@ import javax.inject.Inject
  */
 class SoftLogoutFragment @Inject constructor(
         private val softLogoutController: SoftLogoutController
-) : AbstractLoginFragment(), SoftLogoutController.Listener {
+) : AbstractLoginFragment<FragmentGenericRecyclerBinding>(),
+        SoftLogoutController.Listener {
 
     private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,12 +89,12 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        genericRecyclerView.configureWith(softLogoutController)
+        views.genericRecyclerView.configureWith(softLogoutController)
         softLogoutController.listener = this
     }
 
     override fun onDestroyView() {
-        genericRecyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         softLogoutController.listener = null
         super.onDestroyView()
     }
@@ -134,7 +140,7 @@ class SoftLogoutFragment @Inject constructor(
     }
 
     private fun cleanupUi() {
-        genericRecyclerView.hideKeyboard()
+        views.genericRecyclerView.hideKeyboard()
     }
 
     override fun forgetPasswordClicked() {

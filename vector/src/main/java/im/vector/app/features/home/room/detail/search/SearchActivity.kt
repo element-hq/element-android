@@ -25,16 +25,18 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
-import kotlinx.android.synthetic.main.activity_search.*
+import im.vector.app.databinding.ActivitySearchBinding
 
-class SearchActivity : VectorBaseActivity() {
+class SearchActivity : VectorBaseActivity<ActivitySearchBinding>() {
 
     private val searchFragment: SearchFragment?
         get() {
             return supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as? SearchFragment
         }
 
-    override fun getLayoutRes() = R.layout.activity_search
+    override fun getBinding() = ActivitySearchBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
@@ -43,7 +45,7 @@ class SearchActivity : VectorBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        configureToolbar(searchToolbar)
+        configureToolbar(views.searchToolbar)
     }
 
     override fun initUiAndData() {
@@ -51,7 +53,7 @@ class SearchActivity : VectorBaseActivity() {
             val fragmentArgs: SearchArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
             addFragment(R.id.searchFragmentContainer, SearchFragment::class.java, fragmentArgs, FRAGMENT_TAG)
         }
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        views.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 searchFragment?.search(query)
                 return true
@@ -62,7 +64,7 @@ class SearchActivity : VectorBaseActivity() {
             }
         })
         // Open the keyboard immediately
-        searchView.requestFocus()
+        views.searchView.requestFocus()
     }
 
     companion object {

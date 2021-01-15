@@ -17,8 +17,11 @@
 package im.vector.app.features.settings.ignored
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
@@ -28,28 +31,30 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+
 import javax.inject.Inject
 
 class VectorSettingsIgnoredUsersFragment @Inject constructor(
         val ignoredUsersViewModelFactory: IgnoredUsersViewModel.Factory,
         private val ignoredUsersController: IgnoredUsersController
-) : VectorBaseFragment(), IgnoredUsersController.Callback {
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+        IgnoredUsersController.Callback {
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: IgnoredUsersViewModel by fragmentViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        waiting_view_status_text.setText(R.string.please_wait)
-        waiting_view_status_text.isVisible = true
+        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.isVisible = true
         ignoredUsersController.callback = this
-        genericRecyclerView.configureWith(ignoredUsersController)
+        views.genericRecyclerView.configureWith(ignoredUsersController)
         viewModel.observeViewEvents {
             when (it) {
                 is IgnoredUsersViewEvents.Loading -> showLoading(it.message)
@@ -60,14 +65,14 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
 
     override fun onDestroyView() {
         ignoredUsersController.callback = null
-        genericRecyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         super.onDestroyView()
     }
 
     override fun onResume() {
         super.onResume()
 
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_ignored_users)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_ignored_users)
     }
 
     override fun onUserIdClicked(userId: String) {
@@ -91,9 +96,9 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
     }
 
     private fun handleUnIgnoreRequestStatus(unIgnoreRequest: Async<Unit>) {
-        when (unIgnoreRequest) {
-            is Loading -> waiting_view.isVisible = true
-            else       -> waiting_view.isVisible = false
+        views.waitingView.root.isVisible = when (unIgnoreRequest) {
+            is Loading -> true
+            else       -> false
         }
     }
 }

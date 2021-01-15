@@ -18,23 +18,33 @@ package im.vector.app.features.signout.hard
 
 import android.content.Context
 import android.content.Intent
-import butterknife.OnClick
-import im.vector.app.R
+import android.os.Bundle
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySignedOutBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 
 /**
  * In this screen, the user is viewing a message informing that he has been logged out
  */
-class SignedOutActivity : VectorBaseActivity() {
+class SignedOutActivity : VectorBaseActivity<ActivitySignedOutBinding>() {
 
-    override fun getLayoutRes() = R.layout.activity_signed_out
+    override fun getBinding() = ActivitySignedOutBinding.inflate(layoutInflater)
 
-    @OnClick(R.id.signedOutSubmit)
-    fun submit() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setupViews()
+    }
+
+    private fun setupViews() {
+        views.signedOutSubmit.setOnClickListener { submit() }
+    }
+
+    private fun submit() {
         // All is already cleared when we are here
         MainActivity.restartApp(this, MainActivityArgs())
     }

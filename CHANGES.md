@@ -1,3 +1,37 @@
+Changes in Element 1.0.14 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ - Enable url previews for notices (#2562)
+ - Edit room permissions (#2471)
+
+Improvements 🙌:
+ - Add System theme option and set as default (#904, #2387)
+ - Store megolm outbound session to improve send time of first message after app launch.
+ - Warn user when they are leaving a not public room (#1460)
+ - Option to disable emoji keyboard (#2563)
+
+Bugfix 🐛:
+ - Unspecced msgType field in m.sticker (#2580)
+ - Wait for all room members to be known before sending a message to a e2e room (#2518)
+ - Url previews sometimes attached to wrong message (#2561)
+ - Room Topic not displayed correctly after visiting a link (#2551)
+ - Hiding membership events works the exact opposite (#2603)
+ - Tapping drawer having more than 1 room in notifications gives "malformed link" error (#2605)
+ - Sent image not displayed when opened immediately after sending (#409)
+ - Initial sync is not retried correctly when there is some network error. (#2632)
+ - Fix switch theme issue, and white field issue (#2599, #2528)
+ - Fix request too large Uri error when joining a room
+
+Translations 🗣:
+ - New language supported: Hebrew
+
+Build 🧱:
+ - Remove dependency to org.greenrobot.eventbus library
+
+Other changes:
+ - Migrate to ViewBindings (#1072)
+
 Changes in Element 1.0.13 (2020-12-18)
 ===================================================
 

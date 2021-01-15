@@ -17,13 +17,13 @@
 package org.matrix.android.sdk.internal.session.profile
 
 import com.zhuinden.monarchy.Monarchy
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.internal.auth.registration.SuccessResult
 import org.matrix.android.sdk.internal.auth.registration.ValidationCodeBody
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
@@ -40,7 +40,7 @@ internal class DefaultValidateSmsCodeTask @Inject constructor(
         @SessionDatabase
         private val monarchy: Monarchy,
         private val pendingThreePidMapper: PendingThreePidMapper,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : ValidateSmsCodeTask {
 
     override suspend fun execute(params: ValidateSmsCodeTask.Params) {
@@ -58,7 +58,7 @@ internal class DefaultValidateSmsCodeTask @Inject constructor(
                 sid = pendingThreePids.sid,
                 code = params.code
         )
-        val result = executeRequest<SuccessResult>(eventBus) {
+        val result = executeRequest<SuccessResult>(globalErrorReceiver) {
             apiCall = profileAPI.validateMsisdn(url, body)
         }
 

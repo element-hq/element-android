@@ -1,163 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bg_attachment_type_selector"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:orientation="vertical"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_attachment_type_selector"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
-            <ImageButton
-                android:id="@+id/attachmentCameraButton"
-                style="@style/AttachmentTypeSelectorButton"
-                android:src="@drawable/ic_attachment_camera_white_24dp"
-                android:contentDescription="@string/attachment_type_camera"
-                tools:background="@color/colorAccent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <TextView
-                style="@style/AttachmentTypeSelectorLabel"
-                android:importantForAccessibility="no"
-                android:text="@string/attachment_type_camera" />
+                <ImageButton
+                    android:id="@+id/attachmentCameraButton"
+                    style="@style/AttachmentTypeSelectorButton"
+                    android:contentDescription="@string/attachment_type_camera"
+                    android:src="@drawable/ic_attachment_camera_white_24dp"
+                    tools:background="@color/colorAccent" />
+
+                <TextView
+                    style="@style/AttachmentTypeSelectorLabel"
+                    android:importantForAccessibility="no"
+                    android:text="@string/attachment_type_camera" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/attachmentGalleryButton"
+                    style="@style/AttachmentTypeSelectorButton"
+                    android:contentDescription="@string/attachment_type_gallery"
+                    android:src="@drawable/ic_attachment_gallery_white_24dp"
+                    tools:background="@color/colorAccent" />
+
+                <TextView
+                    style="@style/AttachmentTypeSelectorLabel"
+                    android:importantForAccessibility="no"
+                    android:text="@string/attachment_type_gallery" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/attachmentFileButton"
+                    style="@style/AttachmentTypeSelectorButton"
+                    android:contentDescription="@string/attachment_type_file"
+                    android:src="@drawable/ic_attachment_file_white_24dp"
+                    tools:background="@color/colorAccent" />
+
+                <TextView
+                    style="@style/AttachmentTypeSelectorLabel"
+                    android:importantForAccessibility="no"
+                    android:text="@string/attachment_type_file" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
-            <ImageButton
-                android:id="@+id/attachmentGalleryButton"
-                style="@style/AttachmentTypeSelectorButton"
-                android:src="@drawable/ic_attachment_gallery_white_24dp"
-                android:contentDescription="@string/attachment_type_gallery"
-                tools:background="@color/colorAccent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <TextView
-                style="@style/AttachmentTypeSelectorLabel"
-                android:importantForAccessibility="no"
-                android:text="@string/attachment_type_gallery" />
+                <ImageButton
+                    android:id="@+id/attachmentAudioButton"
+                    style="@style/AttachmentTypeSelectorButton"
+                    android:contentDescription="@string/attachment_type_audio"
+                    android:src="@drawable/ic_attachment_audio_white_24dp"
+                    tools:background="@color/colorAccent" />
 
-        </LinearLayout>
+                <TextView
+                    style="@style/AttachmentTypeSelectorLabel"
+                    android:importantForAccessibility="no"
+                    android:text="@string/attachment_type_audio" />
+
+            </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/attachmentFileButton"
-                style="@style/AttachmentTypeSelectorButton"
-                android:src="@drawable/ic_attachment_file_white_24dp"
-                android:contentDescription="@string/attachment_type_file"
-                tools:background="@color/colorAccent" />
+                <ImageButton
+                    android:id="@+id/attachmentContactButton"
+                    style="@style/AttachmentTypeSelectorButton"
+                    android:contentDescription="@string/attachment_type_contact"
+                    android:src="@drawable/ic_attachment_contact_white_24dp"
+                    tools:background="@color/colorAccent" />
 
-            <TextView
-                style="@style/AttachmentTypeSelectorLabel"
-                android:importantForAccessibility="no"
-                android:text="@string/attachment_type_file" />
+                <TextView
+                    style="@style/AttachmentTypeSelectorLabel"
+                    android:importantForAccessibility="no"
+                    android:text="@string/attachment_type_contact" />
 
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/attachmentStickersButton"
+                    style="@style/AttachmentTypeSelectorButton"
+                    android:contentDescription="@string/attachment_type_sticker"
+                    android:src="@drawable/ic_attachment_stickers_white_24dp"
+                    tools:background="@color/colorAccent" />
+
+                <TextView
+                    style="@style/AttachmentTypeSelectorLabel"
+                    android:importantForAccessibility="no"
+                    android:text="@string/attachment_type_sticker" />
+
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="3">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/attachmentAudioButton"
-                style="@style/AttachmentTypeSelectorButton"
-                android:src="@drawable/ic_attachment_audio_white_24dp"
-                android:contentDescription="@string/attachment_type_audio"
-                tools:background="@color/colorAccent" />
-
-            <TextView
-                style="@style/AttachmentTypeSelectorLabel"
-                android:importantForAccessibility="no"
-                android:text="@string/attachment_type_audio" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/attachmentContactButton"
-                style="@style/AttachmentTypeSelectorButton"
-                android:src="@drawable/ic_attachment_contact_white_24dp"
-                android:contentDescription="@string/attachment_type_contact"
-                tools:background="@color/colorAccent" />
-
-            <TextView
-                style="@style/AttachmentTypeSelectorLabel"
-                android:importantForAccessibility="no"
-                android:text="@string/attachment_type_contact" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/attachmentStickersButton"
-                style="@style/AttachmentTypeSelectorButton"
-                android:src="@drawable/ic_attachment_stickers_white_24dp"
-                android:contentDescription="@string/attachment_type_sticker"
-                tools:background="@color/colorAccent" />
-
-            <TextView
-                style="@style/AttachmentTypeSelectorLabel"
-                android:importantForAccessibility="no"
-                android:text="@string/attachment_type_sticker" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-
-</LinearLayout>
+</FrameLayout>

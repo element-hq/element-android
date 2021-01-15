@@ -18,19 +18,19 @@ package im.vector.app.features.login.terms
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
-import butterknife.OnClick
+import android.view.ViewGroup
 import com.airbnb.mvrx.args
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.utils.openUrlInChromeCustomTab
+import im.vector.app.databinding.FragmentLoginTermsBinding
 import im.vector.app.features.login.AbstractLoginFragment
 import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginViewState
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_login_terms.*
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 import javax.inject.Inject
 
@@ -44,18 +44,22 @@ data class LoginTermsFragmentArgument(
  */
 class LoginTermsFragment @Inject constructor(
         private val policyController: PolicyController
-) : AbstractLoginFragment(),
+) : AbstractLoginFragment<FragmentLoginTermsBinding>(),
         PolicyController.PolicyControllerListener {
 
     private val params: LoginTermsFragmentArgument by args()
 
-    override fun getLayoutResId() = R.layout.fragment_login_terms
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginTermsBinding {
+        return FragmentLoginTermsBinding.inflate(inflater, container, false)
+    }
 
     private var loginTermsViewState: LoginTermsViewState = LoginTermsViewState(emptyList())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loginTermsPolicyList.configureWith(policyController)
+
+        setupViews()
+        views.loginTermsPolicyList.configureWith(policyController)
         policyController.listener = this
 
         val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()
@@ -68,8 +72,12 @@ class LoginTermsFragment @Inject constructor(
         loginTermsViewState = LoginTermsViewState(list)
     }
 
+    private fun setupViews() {
+        views.loginTermsSubmit.setOnClickListener { submit() }
+    }
+
     override fun onDestroyView() {
-        loginTermsPolicyList.cleanup()
+        views.loginTermsPolicyList.cleanup()
         policyController.listener = null
         super.onDestroyView()
     }
@@ -78,7 +86,7 @@ class LoginTermsFragment @Inject constructor(
         policyController.setData(loginTermsViewState.localizedFlowDataLoginTermsChecked)
 
         // Button is enabled only if all checkboxes are checked
-        loginTermsSubmit.isEnabled = loginTermsViewState.allChecked()
+        views.loginTermsSubmit.isEnabled = loginTermsViewState.allChecked()
     }
 
     override fun setChecked(localizedFlowDataLoginTerms: LocalizedFlowDataLoginTerms, isChecked: Boolean) {
@@ -99,8 +107,7 @@ class LoginTermsFragment @Inject constructor(
                 }
     }
 
-    @OnClick(R.id.loginTermsSubmit)
-    internal fun submit() {
+    private fun submit() {
         loginViewModel.handle(LoginAction.AcceptTerms)
     }
 

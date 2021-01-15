@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.query.isMarkedUnread
 import org.matrix.android.sdk.internal.session.sync.RoomMarkedUnreadHandler
@@ -46,7 +46,7 @@ internal class DefaultSetMarkedUnreadTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val roomMarkedUnreadHandler: RoomMarkedUnreadHandler,
         @UserId private val userId: String,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : SetMarkedUnreadTask {
 
     override suspend fun execute(params: SetMarkedUnreadTask.Params) {
@@ -54,7 +54,7 @@ internal class DefaultSetMarkedUnreadTask @Inject constructor(
 
         if (isMarkedUnread(monarchy.realmConfiguration, params.roomId) != params.markedUnread) {
             updateDatabase(params.roomId, params.markedUnread)
-            executeRequest<Unit>(eventBus) {
+            executeRequest<Unit>(globalErrorReceiver) {
                 isRetryable = true
                 apiCall = accountDataApi.setRoomAccountData(userId, params.roomId, EventType.MARKED_UNREAD, params.markedUnreadContent)
             }

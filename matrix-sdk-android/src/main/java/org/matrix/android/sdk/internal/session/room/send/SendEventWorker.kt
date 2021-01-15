@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import io.realm.RealmConfiguration
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -54,7 +53,6 @@ internal class SendEventWorker(context: Context,
     @Inject lateinit var localEchoRepository: LocalEchoRepository
     @Inject lateinit var sendEventTask: SendEventTask
     @Inject lateinit var cryptoService: CryptoService
-    @Inject lateinit var eventBus: EventBus
     @Inject lateinit var cancelSendTracker: CancelSendTracker
     @SessionDatabase @Inject lateinit var realmConfiguration: RealmConfiguration
 

@@ -23,12 +23,13 @@ import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.pin.UnlockedActivity
 import im.vector.app.features.settings.VectorPreferences
 
-open class PromptSimplifiedModeActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedActivity {
+open class PromptSimplifiedModeActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
 
-    final override fun getLayoutRes() = R.layout.activity_login
+    override fun getBinding() = ActivityLoginBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {
         addFragment(R.id.loginFragmentContainer, PromptSimplifiedModeFragment::class.java)

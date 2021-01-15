@@ -19,6 +19,7 @@ package im.vector.app.features.themes
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.TypedValue
@@ -43,6 +44,7 @@ object ThemeUtils {
     const val SYSTEM_DARK_THEME_PRE_TEN = "SYSTEM_DARK_THEME_PRE_TEN"
 
     // the theme possible values
+    //private const val SYSTEM_THEME_VALUE = "system" // SC does not use this
     private const val THEME_DARK_VALUE = "dark"
     private const val THEME_LIGHT_VALUE = "light"
     private const val THEME_BLACK_VALUE = "black"
@@ -52,8 +54,14 @@ object ThemeUtils {
     private const val THEME_SC_COLORED_VALUE = "sc_colored"
     private const val THEME_SC_DARK_COLORED_VALUE = "sc_dark_colored"
 
+
     private var currentLightTheme = AtomicReference<String>(null)
     private var currentDarkTheme = AtomicReference<String>(null)
+
+    // The default theme // SC: from upstream, ignore
+    //private const val DEFAULT_THEME = SYSTEM_THEME_VALUE
+
+    private var currentTheme = AtomicReference<String>(null)
 
     private val mColorByAttr = HashMap<Int, Int>()
 
@@ -107,7 +115,7 @@ object ThemeUtils {
     }
 
     /**
-     * @return true if current theme is Light or Status
+     * @return true if current theme is Light or current theme is System and system theme is light
      */
     fun isLightTheme(context: Context): Boolean {
         return when (getApplicationTheme(context)) {
@@ -140,7 +148,7 @@ object ThemeUtils {
             val prefs = DefaultSharedPreferences.getInstance(context)
             var themeFromPref = prefs.getString(APPLICATION_THEME_KEY, THEME_SC_LIGHT_VALUE) ?: THEME_SC_LIGHT_VALUE
             if (themeFromPref == "status") {
-                // Migrate to light theme, which is the closest theme
+                // Migrate to the default theme
                 themeFromPref = THEME_LIGHT_VALUE
                 prefs.edit { putString(APPLICATION_THEME_KEY, THEME_LIGHT_VALUE) }
             }
@@ -196,6 +204,15 @@ object ThemeUtils {
     }
 
     /**
+     * @return true if system theme is dark
+     */
+    /* SC: this is from upstream, we do it differently
+    private fun isSystemDarkTheme(resources: Resources): Boolean {
+        return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+    }
+    */
+
+    /**
      * Update the application theme
      *
      * @param aTheme the new theme
@@ -204,17 +221,20 @@ object ThemeUtils {
         currentLightTheme.set(aLightTheme)
         currentDarkTheme.set(aDarkTheme)
         val aTheme = if (useDarkTheme(context)) aDarkTheme else aLightTheme
-        when (aTheme) {
-            THEME_LIGHT_VALUE  -> context.setTheme(R.style.AppTheme_Light)
-            THEME_DARK_VALUE   -> context.setTheme(R.style.AppTheme_Dark)
-            THEME_BLACK_VALUE  -> context.setTheme(R.style.AppTheme_Black)
-            THEME_SC_LIGHT_VALUE -> context.setTheme(R.style.AppTheme_SC_Light)
-            THEME_SC_VALUE     -> context.setTheme(R.style.AppTheme_SC)
-            THEME_SC_DARK_VALUE     -> context.setTheme(R.style.AppTheme_SC_Dark)
-            THEME_SC_COLORED_VALUE     -> context.setTheme(R.style.AppTheme_SC_Colored)
-            THEME_SC_DARK_COLORED_VALUE     -> context.setTheme(R.style.AppTheme_SC_Dark_Colored)
-            else               -> context.setTheme(R.style.AppTheme_Light)
-        }
+        context.setTheme(
+                when (aTheme) {
+                    //SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(context.resources)) R.style.AppTheme_Dark else R.style.AppTheme_Light
+                    THEME_LIGHT_VALUE  -> R.style.AppTheme_Light
+                    THEME_DARK_VALUE   -> R.style.AppTheme_Dark
+                    THEME_BLACK_VALUE  -> R.style.AppTheme_Black
+                    THEME_SC_LIGHT_VALUE -> R.style.AppTheme_SC_Light
+                    THEME_SC_VALUE     -> R.style.AppTheme_SC
+                    THEME_SC_DARK_VALUE -> R.style.AppTheme_SC_Dark
+                    THEME_SC_COLORED_VALUE -> R.style.AppTheme_SC_Colored
+                    THEME_SC_DARK_COLORED_VALUE -> R.style.AppTheme_SC_Dark_Colored
+                    else               -> R.style.AppTheme_Light
+                }
+        )
 
         // Clear the cache
         mColorByAttr.clear()
@@ -235,6 +255,7 @@ object ThemeUtils {
      */
     fun setActivityTheme(activity: Activity, otherThemes: ActivityOtherThemes) {
         when (getApplicationTheme(activity)) {
+            //SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(activity.resources)) activity.setTheme(otherThemes.dark)
             THEME_LIGHT_VALUE  -> activity.setTheme(otherThemes.light)
             THEME_DARK_VALUE   -> activity.setTheme(otherThemes.dark)
             THEME_BLACK_VALUE  -> activity.setTheme(otherThemes.black)
@@ -247,40 +268,6 @@ object ThemeUtils {
 
         mColorByAttr.clear()
     }
-
-    /**
-     * Set the TabLayout colors.
-     * It seems that there is no proper way to manage it with the manifest file.
-     *
-     * @param activity the activity
-     * @param layout   the layout
-     */
-    /*
-    fun setTabLayoutTheme(activity: Activity, layout: TabLayout) {
-        if (activity is VectorGroupDetailsActivity) {
-            val textColor: Int
-            val underlineColor: Int
-            val backgroundColor: Int
-
-            if (TextUtils.equals(getApplicationTheme(activity), THEME_LIGHT_VALUE)) {
-                textColor = ContextCompat.getColor(activity, android.R.color.white)
-                underlineColor = textColor
-                backgroundColor = ContextCompat.getColor(activity, R.color.tab_groups)
-            } else if (TextUtils.equals(getApplicationTheme(activity), THEME_STATUS_VALUE)) {
-                textColor = ContextCompat.getColor(activity, android.R.color.white)
-                underlineColor = textColor
-                backgroundColor = getColor(activity, R.attr.colorPrimary)
-            } else {
-                textColor = ContextCompat.getColor(activity, R.color.tab_groups)
-                underlineColor = textColor
-                backgroundColor = getColor(activity, R.attr.colorPrimary)
-            }
-
-            layout.setTabTextColors(textColor, textColor)
-            layout.setSelectedTabIndicatorColor(underlineColor)
-            layout.setBackgroundColor(backgroundColor)
-        }
-    }    */
 
     /**
      * Translates color attributes to colors

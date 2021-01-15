@@ -16,9 +16,9 @@
 package im.vector.app.features.home.room.detail.timeline.edithistory
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+import android.view.ViewGroup
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -27,24 +27,23 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.databinding.BottomSheetGenericListWithTitleBinding
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.html.EventHtmlRenderer
-import kotlinx.android.synthetic.main.bottom_sheet_generic_list_with_title.*
+
 import javax.inject.Inject
 
 /**
  * Bottom sheet displaying list of edits for a given event ordered by timestamp
  */
-class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class ViewEditHistoryBottomSheet :
+        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>() {
 
     private val viewModel: ViewEditHistoryViewModel by fragmentViewModel(ViewEditHistoryViewModel::class)
 
     @Inject lateinit var viewEditHistoryViewModelFactory: ViewEditHistoryViewModel.Factory
     @Inject lateinit var eventHtmlRenderer: EventHtmlRenderer
-
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
 
     private val epoxyController by lazy {
         ViewEditHistoryEpoxyController(requireContext(), viewModel.dateFormatter, eventHtmlRenderer)
@@ -54,19 +53,21 @@ class ViewEditHistoryBottomSheet : VectorBaseBottomSheetDialogFragment() {
         injector.inject(this)
     }
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_generic_list_with_title
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {
+        return BottomSheetGenericListWithTitleBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(
+        views.bottomSheetRecyclerView.configureWith(
                 epoxyController,
                 showDivider = true,
                 hasFixedSize = false)
-        bottomSheetTitle.text = context?.getString(R.string.message_edits)
+        views.bottomSheetTitle.text = context?.getString(R.string.message_edits)
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        views.bottomSheetRecyclerView.cleanup()
         super.onDestroyView()
     }
 

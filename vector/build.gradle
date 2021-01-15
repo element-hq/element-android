@@ -3,21 +3,17 @@ import com.android.build.OutputFile
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
 kapt {
     correctErrorTypes = true
 }
 
-androidExtensions {
-    experimental = true
-}
-
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 13
+ext.versionPatch = 14
 
 ext.scVersion = 26
 
@@ -284,6 +280,10 @@ android {
             java.srcDirs += "src/sharedTest/java"
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -389,10 +389,6 @@ dependencies {
     implementation 'com.tapadoo.android:alerter:5.1.2'
 
     implementation 'com.otaliastudios:autocomplete:1.1.0'
-
-    // Butterknife
-    implementation 'com.jakewharton:butterknife:10.2.0'
-    kapt 'com.jakewharton:butterknife-compiler:10.2.0'
 
     // Shake detection
     implementation 'com.squareup:seismic:1.0.2'

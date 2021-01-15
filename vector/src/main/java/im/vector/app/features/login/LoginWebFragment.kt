@@ -24,20 +24,20 @@ import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
-import im.vector.app.core.extensions.appendParamToUrl
 import im.vector.app.core.utils.AssetReader
+import im.vector.app.databinding.FragmentLoginWebBinding
 import im.vector.app.features.signout.soft.SoftLogoutAction
 import im.vector.app.features.signout.soft.SoftLogoutViewModel
-import kotlinx.android.synthetic.main.fragment_login_web.*
-import org.matrix.android.sdk.api.auth.LOGIN_FALLBACK_PATH
-import org.matrix.android.sdk.api.auth.REGISTER_FALLBACK_PATH
+
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
@@ -50,9 +50,11 @@ import javax.inject.Inject
  */
 class LoginWebFragment @Inject constructor(
         private val assetReader: AssetReader
-) : AbstractLoginFragment() {
+) : AbstractLoginFragment<FragmentLoginWebBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_login_web
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginWebBinding {
+        return FragmentLoginWebBinding.inflate(inflater, container, false)
+    }
 
     private var isWebViewLoaded = false
     private var isForSessionRecovery = false
@@ -60,7 +62,7 @@ class LoginWebFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupToolbar(loginWebToolbar)
+        setupToolbar(views.loginWebToolbar)
     }
 
     override fun updateWithState(state: LoginViewState) {
@@ -75,7 +77,7 @@ class LoginWebFragment @Inject constructor(
     }
 
     private fun setupTitle(state: LoginViewState) {
-        loginWebToolbar.title = when (state.signMode) {
+        views.loginWebToolbar.title = when (state.signMode) {
             SignMode.SignIn -> getString(R.string.login_signin)
             else            -> getString(R.string.login_signup)
         }
@@ -83,15 +85,15 @@ class LoginWebFragment @Inject constructor(
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView(state: LoginViewState) {
-        loginWebWebView.settings.javaScriptEnabled = true
+        views.loginWebWebView.settings.javaScriptEnabled = true
 
         // Enable local storage to support SSO with Firefox accounts
-        loginWebWebView.settings.domStorageEnabled = true
-        loginWebWebView.settings.databaseEnabled = true
+        views.loginWebWebView.settings.domStorageEnabled = true
+        views.loginWebWebView.settings.databaseEnabled = true
 
         // Due to https://developers.googleblog.com/2016/08/modernizing-oauth-interactions-in-native-apps.html, we hack
         // the user agent to bypass the limitation of Google, as a quick fix (a proper solution will be to use the SSO SDK)
-        loginWebWebView.settings.userAgentString = "Mozilla/5.0 Google"
+        views.loginWebWebView.settings.userAgentString = "Mozilla/5.0 Google"
 
         // AppRTC requires third party cookies to work
         val cookieManager = android.webkit.CookieManager.getInstance()
@@ -114,23 +116,11 @@ class LoginWebFragment @Inject constructor(
     }
 
     private fun launchWebView(state: LoginViewState) {
-        val url = buildString {
-            append(state.homeServerUrl?.trim { it == '/' })
-            if (state.signMode == SignMode.SignIn) {
-                append(LOGIN_FALLBACK_PATH)
-                state.deviceId?.takeIf { it.isNotBlank() }?.let {
-                    // But https://github.com/matrix-org/synapse/issues/5755
-                    appendParamToUrl("device_id", it)
-                }
-            } else {
-                // MODE_REGISTER
-                append(REGISTER_FALLBACK_PATH)
-            }
-        }
+        val url = loginViewModel.getFallbackUrl(state.signMode == SignMode.SignIn, state.deviceId) ?: return
 
-        loginWebWebView.loadUrl(url)
+        views.loginWebWebView.loadUrl(url)
 
-        loginWebWebView.webViewClient = object : WebViewClient() {
+        views.loginWebWebView.webViewClient = object : WebViewClient() {
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler,
                                             error: SslError) {
                 AlertDialog.Builder(requireActivity())
@@ -158,7 +148,7 @@ class LoginWebFragment @Inject constructor(
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
-                loginWebToolbar.subtitle = url
+                views.loginWebToolbar.subtitle = url
             }
 
             override fun onPageFinished(view: WebView, url: String) {
@@ -259,9 +249,9 @@ class LoginWebFragment @Inject constructor(
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {
-            toolbarButton               -> super.onBackPressed(toolbarButton)
-            loginWebWebView.canGoBack() -> loginWebWebView.goBack().run { true }
-            else                        -> super.onBackPressed(toolbarButton)
+            toolbarButton                     -> super.onBackPressed(toolbarButton)
+            views.loginWebWebView.canGoBack() -> views.loginWebWebView.goBack().run { true }
+            else                              -> super.onBackPressed(toolbarButton)
         }
     }
 }

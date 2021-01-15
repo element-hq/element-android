@@ -17,21 +17,24 @@
 package im.vector.app.features.roomdirectory.picker
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentRoomDirectoryPickerBinding
 import im.vector.app.features.roomdirectory.RoomDirectoryAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import im.vector.app.features.roomdirectory.RoomDirectoryViewModel
-import kotlinx.android.synthetic.main.fragment_room_directory_picker.*
+
 import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import timber.log.Timber
 import javax.inject.Inject
@@ -39,18 +42,21 @@ import javax.inject.Inject
 // TODO Menu to add custom room directory (not done in RiotWeb so far...)
 class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerViewModelFactory: RoomDirectoryPickerViewModel.Factory,
                                                       private val roomDirectoryPickerController: RoomDirectoryPickerController
-) : VectorBaseFragment(), RoomDirectoryPickerController.Callback {
+) : VectorBaseFragment<FragmentRoomDirectoryPickerBinding>(),
+        RoomDirectoryPickerController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val pickerViewModel: RoomDirectoryPickerViewModel by fragmentViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_room_directory_picker
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomDirectoryPickerBinding {
+        return FragmentRoomDirectoryPickerBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vectorBaseActivity.setSupportActionBar(toolbar)
+        vectorBaseActivity.setSupportActionBar(views.toolbar)
 
         vectorBaseActivity.supportActionBar?.let {
             it.setDisplayShowHomeEnabled(true)
@@ -62,7 +68,7 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
     }
 
     override fun onDestroyView() {
-        roomDirectoryPickerList.cleanup()
+        views.roomDirectoryPickerList.cleanup()
         roomDirectoryPickerController.callback = null
         super.onDestroyView()
     }
@@ -80,7 +86,7 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
     }
 
     private fun setupRecyclerView() {
-        roomDirectoryPickerList.configureWith(roomDirectoryPickerController)
+        views.roomDirectoryPickerList.configureWith(roomDirectoryPickerController)
         roomDirectoryPickerController.callback = this
     }
 
@@ -93,7 +99,7 @@ class RoomDirectoryPickerFragment @Inject constructor(val roomDirectoryPickerVie
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.select_room_directory)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.select_room_directory)
     }
 
     override fun retry() {

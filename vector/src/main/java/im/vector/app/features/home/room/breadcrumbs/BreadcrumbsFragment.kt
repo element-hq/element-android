@@ -17,27 +17,32 @@
 package im.vector.app.features.home.room.breadcrumbs
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentBreadcrumbsBinding
 import im.vector.app.features.home.room.detail.RoomDetailSharedAction
 import im.vector.app.features.home.room.detail.RoomDetailSharedActionViewModel
-import kotlinx.android.synthetic.main.fragment_breadcrumbs.*
+
 import javax.inject.Inject
 
 class BreadcrumbsFragment @Inject constructor(
         private val breadcrumbsController: BreadcrumbsController,
         val breadcrumbsViewModelFactory: BreadcrumbsViewModel.Factory
-) : VectorBaseFragment(), BreadcrumbsController.Listener {
+) : VectorBaseFragment<FragmentBreadcrumbsBinding>(),
+        BreadcrumbsController.Listener {
 
     private lateinit var sharedActionViewModel: RoomDetailSharedActionViewModel
     private val breadcrumbsViewModel: BreadcrumbsViewModel by fragmentViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_breadcrumbs
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBreadcrumbsBinding {
+        return FragmentBreadcrumbsBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,13 +51,13 @@ class BreadcrumbsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        breadcrumbsRecyclerView.cleanup()
+        views.breadcrumbsRecyclerView.cleanup()
         breadcrumbsController.listener = null
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
-        breadcrumbsRecyclerView.configureWith(breadcrumbsController, BreadcrumbsAnimator(), hasFixedSize = false)
+        views.breadcrumbsRecyclerView.configureWith(breadcrumbsController, BreadcrumbsAnimator(), hasFixedSize = false)
         breadcrumbsController.listener = this
     }
 
@@ -67,6 +72,6 @@ class BreadcrumbsFragment @Inject constructor(
     }
 
     fun scrollToTop() {
-        breadcrumbsRecyclerView.scrollToPosition(0)
+        views.breadcrumbsRecyclerView.scrollToPosition(0)
     }
 }

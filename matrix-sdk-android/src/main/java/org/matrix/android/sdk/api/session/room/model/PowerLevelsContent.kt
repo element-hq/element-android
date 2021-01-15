@@ -25,28 +25,85 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
  */
 @JsonClass(generateAdapter = true)
 data class PowerLevelsContent(
+        /**
+         * The level required to ban a user. Defaults to 50 if unspecified.
+         */
         @Json(name = "ban") val ban: Int = Role.Moderator.value,
+        /**
+         * The level required to kick a user. Defaults to 50 if unspecified.
+         */
         @Json(name = "kick") val kick: Int = Role.Moderator.value,
+        /**
+         * The level required to invite a user. Defaults to 50 if unspecified.
+         */
         @Json(name = "invite") val invite: Int = Role.Moderator.value,
+        /**
+         * The level required to redact an event. Defaults to 50 if unspecified.
+         */
         @Json(name = "redact") val redact: Int = Role.Moderator.value,
+        /**
+         * The default level required to send message events. Can be overridden by the events key. Defaults to 0 if unspecified.
+         */
         @Json(name = "events_default") val eventsDefault: Int = Role.Default.value,
-        @Json(name = "events") val events: MutableMap<String, Int> = HashMap(),
+        /**
+         * The level required to send specific event types. This is a mapping from event type to power level required.
+         */
+        @Json(name = "events") val events: Map<String, Int> = emptyMap(),
+        /**
+         * The default power level for every user in the room, unless their user_id is mentioned in the users key. Defaults to 0 if unspecified.
+         */
         @Json(name = "users_default") val usersDefault: Int = Role.Default.value,
-        @Json(name = "users") val users: MutableMap<String, Int> = HashMap(),
+        /**
+         * The power levels for specific users. This is a mapping from user_id to power level for that user.
+         */
+        @Json(name = "users") val users: Map<String, Int> = emptyMap(),
+        /**
+         * The default level required to send state events. Can be overridden by the events key. Defaults to 50 if unspecified.
+         */
         @Json(name = "state_default") val stateDefault: Int = Role.Moderator.value,
-        @Json(name = "notifications") val notifications: Map<String, Any> = HashMap()
+        /**
+         * The power level requirements for specific notification types. This is a mapping from key to power level for that notifications key.
+         */
+        @Json(name = "notifications") val notifications: Map<String, Any> = emptyMap()
 ) {
     /**
-     * Alter this content with a new power level for the specified user
+     * Return a copy of this content with a new power level for the specified user
      *
      * @param userId the userId to alter the power level of
      * @param powerLevel the new power level, or null to set the default value.
      */
-    fun setUserPowerLevel(userId: String, powerLevel: Int?) {
-        if (powerLevel == null || powerLevel == usersDefault) {
-            users.remove(userId)
-        } else {
-            users[userId] = powerLevel
+    fun setUserPowerLevel(userId: String, powerLevel: Int?): PowerLevelsContent {
+        return copy(
+                users = users.toMutableMap().apply {
+                    if (powerLevel == null || powerLevel == usersDefault) {
+                        remove(userId)
+                    } else {
+                        put(userId, powerLevel)
+                    }
+                }
+        )
+    }
+
+    /**
+     * Get the notification level for a dedicated key.
+     *
+     * @param key the notification key
+     * @return the level, default to Moderator if the key is not found
+     */
+    fun notificationLevel(key: String): Int {
+        return when (val value = notifications[key]) {
+            // the first implementation was a string value
+            is String -> value.toInt()
+            is Double -> value.toInt()
+            is Int    -> value
+            else      -> Role.Moderator.value
         }
+    }
+
+    companion object {
+        /**
+         * Key to use for content.notifications and get the level required to trigger an @room notification. Defaults to 50 if unspecified.
+         */
+        const val NOTIFICATIONS_ROOM_KEY = "room"
     }
 }

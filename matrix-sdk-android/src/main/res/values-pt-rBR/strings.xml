@@ -178,7 +178,7 @@
     </plurals>
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s removeu %2$s como um endereço desta sala.</item>
-        <item quantity="other">%1$s removeu %3$s como endereços desta sala.</item>
+        <item quantity="other">%1$s removeu %2$s como endereços desta sala.</item>
     </plurals>
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="one">Você removeu %1$s como um endereço desta sala.</item>
@@ -244,4 +244,26 @@
     <string name="notice_room_server_acl_set_banned">• Servidores correspondentes à %s estão banidos.</string>
     <string name="notice_room_server_acl_set_title_by_you">Você definiu a lista de controle de acesso (ACL) do servidor para esta sala.</string>
     <string name="notice_room_server_acl_set_title">%s definiu a lista de controle de acesso (ACL) do servidor para esta sala.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Você alterou os endereços alternativos desta sala.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s alterou os endereços alternativos desta sala.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Você removeu o endereço alternativo %1$s para esta sala.</item>
+        <item quantity="other">Você removeu os endereços alternativos %1$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s removeu o endereço alternativo %2$s para esta sala.</item>
+        <item quantity="other">%1$s removeu os endereços alternativos %2$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Você adicionou o endereço alternativo %1$s para esta sala.</item>
+        <item quantity="other">Você adicionou os endereços alternativos %1$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s adicionou o endereço alternativo %2$s para esta sala.</item>
+        <item quantity="other">%1$s adicionou os endereços alternativos %2$s para esta sala.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_no_change_by_you">Você alterou os endereços desta sala.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s alterou os endereços desta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Você alterou os endereços principal e alternativos desta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s alterou os endereços principal e alternativos desta sala.</string>
 </resources>

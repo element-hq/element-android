@@ -112,15 +112,15 @@
     <string name="reject">Avvis</string>
     <string name="room_sync_in_progress">Synkroniserer …</string>
     <plurals name="format_time_s">
-        <item quantity="one">1sek</item>
-        <item quantity="other">%dsek</item>
+        <item quantity="one">%ds</item>
+        <item quantity="other">%ds</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1m</item>
+        <item quantity="one">%dm</item>
         <item quantity="other">%dm</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1t</item>
+        <item quantity="one">%dt</item>
         <item quantity="other">%dt</item>
     </plurals>
     <plurals name="format_time_d">
@@ -394,7 +394,7 @@
     <string name="auth_identity_server">Identitetstjener:</string>
     <string name="settings_call_category">Samtaler</string>
     <plurals name="room_title_members">
-        <item quantity="one">1 medlem</item>
+        <item quantity="one">%d medlem</item>
         <item quantity="other">%d medlemmer</item>
     </plurals>
     <string name="room_title_one_member">1 medlem</string>
@@ -403,7 +403,7 @@
     <string name="search_hint">Søk</string>
     <string name="search_members_hint">Filtrer rommets medlemmer</string>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 rom</item>
+        <item quantity="one">%d rom</item>
         <item quantity="other">%d rom</item>
     </plurals>
     <string name="room_settings_all_messages">Alle meldinger</string>
@@ -671,7 +671,7 @@
     <string name="attachment_cancel_upload">Vil du avbryte opplastingen\?</string>
     <string name="room_info_room_name">Rommets navn</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 aktivt medlem</item>
+        <item quantity="one">%d aktivt medlem</item>
         <item quantity="other">%d aktive medlemmer</item>
     </plurals>
     <string name="room_participants_leave_prompt_title">Forlat rommet</string>
@@ -691,12 +691,12 @@
     <string name="room_many_users_are_typing">%1$s, %2$s og andre skriver …</string>
     <string name="room_prompt_cancel">Avbryt alle</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">1 ny melding</item>
+        <item quantity="one">%d ny melding</item>
         <item quantity="other">%d nye meldinger</item>
     </plurals>
     <string name="room_details_title">Romdetaljer</string>
     <plurals name="room_details_selected">
-        <item quantity="one">1 valgt</item>
+        <item quantity="one">%d valgt</item>
         <item quantity="other">%d valgte</item>
     </plurals>
     <string name="room_details_people_invited_group_name">INVITERT</string>
@@ -889,7 +889,7 @@
     <string name="login_error_registration_network_error">Klarte ikke registrere bruker: Nettverksfeil</string>
     <string name="login_error_unable_login">Klarte ikke logge inn</string>
     <string name="login_error_network_error">Klarte ikke logge inn: Nettverksfeil</string>
-    <string name="auth_accept_policies">Vennligst les og aksepter reglene for denne hjemmetjeneren:</string>
+    <string name="auth_accept_policies">Vennligst gjennomgå og godta retningslinjene til denne hjemmeserveren:</string>
     <string name="auth_reset_password_success_message">Passordet ditt har blitt tilbakestilt.
 \n
 \nAlle øktene dine har blitt logget ut og får ikke lenger push-notifikasjoner. For å skru på notifikasjoner igjen, logg inn på enhetene på nytt.</string>
@@ -908,9 +908,269 @@
     <string name="call_failed_no_ice_description">Vennligst be administratoren for hjemmetjeneren din (%1$s) til å sette opp en TURN tjener for at telefonsamtaler skal fungere ordentlig.
 \n
 \nAlternativt kan du prøve å bruke den offentlige tjeneren på %2$s, men dette vil ikke være like stabilt, og det vil dele IP-adressen din med den serveren. Du kan styre dette i instillinger.</string>
-    <string name="login_error_login_email_not_yet">e-postlenken har ikke blitt trykket på enda</string>
+    <string name="login_error_login_email_not_yet">E-postkoblingen som ikke er klikket på ennå</string>
     <string name="login_error_user_in_use">Dette brukernavnet er allerede brukt</string>
     <string name="login_error_not_json">Inneholdt ikke gyldig JSON</string>
     <string name="login_error_bad_json">Ugyldig JSON</string>
-    <string name="login_error_unknown_token">Biletten din ble ikke gjenkjent</string>
+    <string name="login_error_unknown_token">Angitt tilgangstoken ble ikke gjenkjent</string>
+    <string name="set_a_security_phrase_hint">Sikkerhetsfrase</string>
+    <string name="save_your_security_key_title">Lagre din sikkerhetsnøkkel</string>
+    <string name="save_your_security_key_notice">Oppbevar sikkerhetsnøkkelen din et trygt sted, for eksempel en passordbehandling eller en safe.</string>
+    <string name="room_settings_save_success">Du endret rominnstillingene</string>
+    <string name="room_settings_set_avatar">Sett avatar</string>
+    <string name="notice_crypto_unable_to_decrypt_final">Du får ikke tilgang til denne meldingen</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Venter på denne meldingen, dette kan ta en stund</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">På grunn av end-to-end-kryptering, kan det hende du må vente på at noens melding kommer, fordi krypteringsnøklene ikke ble sendt riktig til deg.</string>
+    <string name="crypto_error_withheld_blacklisted">Du får ikke tilgang til denne meldingen fordi du har blitt blokkert av avsenderen</string>
+    <string name="crypto_error_withheld_unverified">Du får ikke tilgang til denne meldingen fordi økten ikke er klarert av avsenderen</string>
+    <string name="crypto_error_withheld_generic">Du får ikke tilgang til denne meldingen fordi avsenderen med vilje ikke sendte nøklene</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Venter på krypteringshistorikk</string>
+    <string name="element_disclaimer_title">Riot er nå Element!</string>
+    <string name="element_disclaimer_content">Vi er glade for å kunngjøre at vi har byttet navn! Appen din er oppdatert, og du er logget på kontoen din.</string>
+    <string name="element_login_splash_brand">element</string>
+    <string name="save_recovery_key_chooser_hint">Lagre gjenopprettingsnøkkel i</string>
+    <string name="loading_contact_book">Henter kontaktene dine…</string>
+    <string name="empty_contact_book">Kontaktboken din er tom</string>
+    <string name="contacts_book_title">Kontaktbok</string>
+    <string name="phone_book_perform_lookup">Søk etter kontakter på Matrix</string>
+    <string name="alert_push_are_disabled_title">Push-varsler er deaktivert</string>
+    <string name="alert_push_are_disabled_description">Gjennomgå innstillingene dine for å aktivere push-varsler</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Feil kode, %d gjenværende forsøk</item>
+        <item quantity="other">Feil kode, %d gjenværende forsøk</item>
+    </plurals>
+    <string name="wrong_pin_message_last_remaining_attempt">Advarsel! Siste gjenværende forsøk før avlogging!</string>
+    <string name="too_many_pin_failures">For mange feil, du er logget ut</string>
+    <string name="create_pin_title">Velg en PIN-kode for sikkerhet</string>
+    <string name="create_pin_confirm_failure">Kunne ikke validere PIN-koden. Trykk på en ny.</string>
+    <string name="auth_pin_reset_title">Tilbakestill PIN</string>
+    <string name="auth_pin_new_pin_action">Ny PIN-kode</string>
+    <string name="auth_pin_reset_content">For å tilbakestille PIN-koden din, må du logge på igjen og opprette en ny.</string>
+    <string name="settings_security_application_protection_title">Beskytt tilgangen</string>
+    <string name="settings_security_application_protection_summary">Beskytt tilgangen ved hjelp av PIN og biometri.</string>
+    <string name="settings_security_application_protection_screen_title">Konfigurer beskyttelse</string>
+    <string name="settings_security_pin_code_summary">Hvis du vil tilbakestille PIN-koden, trykker du på Glemt PIN-kode for å logge av og tilbakestille.</string>
+    <string name="settings_security_pin_code_use_biometrics_title">Aktiver biometri</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">Aktiver enhetsspesifikk biometri, som fingeravtrykk og ansiktsgjenkjenning.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-kode er den eneste måten å låse opp Element.</string>
+    <string name="settings_security_pin_code_notifications_title">Vis innhold i varsler</string>
+    <string name="settings_security_pin_code_notifications_summary_on">Vis detaljer som romnavn og meldingsinnhold.</string>
+    <string name="settings_security_pin_code_notifications_summary_off">Vis bare antall uleste meldinger i et enkelt varsel.</string>
+    <string name="settings_security_pin_code_grace_period_title">Krev PIN etter 2 minutter</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-kode kreves etter 2 minutter uten bruk av Element.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN-kode kreves hver gang du åpner Element.</string>
+    <string name="settings_security_pin_code_change_pin_title">Endre PIN-kode</string>
+    <string name="settings_security_pin_code_change_pin_summary">Endre din nåværende PIN-kode</string>
+    <string name="auth_pin_confirm_to_disable_title">Bekreft PIN for å deaktivere PIN</string>
+    <string name="error_opening_banned_room">Kan ikke åpne et rom der du er utestengt.</string>
+    <string name="room_error_not_found">Finner ikke dette rommet. Forsikre deg om at den eksisterer.</string>
+    <string name="cannot_dm_self">Kan ikke DM deg selv!</string>
+    <string name="invalid_qr_code_uri">Ugyldig QR-kode (Ugyldig URI)!</string>
+    <string name="qr_code_not_scanned">QR-kode ikke skannet!</string>
+    <string name="warning_room_not_created_yet">Rommet er ennå ikke opprettet. Avbryte romopprettelsen\?</string>
+    <string name="warning_unsaved_change">Det er ikke lagrede endringer. Forkast endringene\?</string>
+    <string name="warning_unsaved_change_discard">Forkaste endringer</string>
+    <string name="read_receipts_list">Les kvitteringsliste</string>
+    <string name="e2e_re_request_encryption_key">Be om krypteringsnøkler fra andre økter.</string>
+    <string name="login_error_must_start_http">URL må starte med http[s]://</string>
+    <string name="settings_troubleshoot_test_push_notification_content">Du ser på varselet! Klikk på meg!</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Kunne ikke motta push. Løsningen kan være å installere applikasjonen på nytt.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Legg til konto</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nDenne feilen er utenfor kontroll av Element. Det er ingen Google-konto på telefonen. Åpne kontoadministratoren og legg til en Google-konto.</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Fiks Play Services</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Element bruker Google Play Services for å levere push-meldinger, men det ser ikke ut til å være konfigurert riktig:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK er tilgjengelig og oppdatert.</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Sjekk innstillinger</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Kunne ikke laste tilpassede regler, prøv på nytt.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Noen varsler er deaktivert i dine tilpassede innstillinger.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Legg merke til at enkelte meldinger er satt til å være lydløse (gir et varsel uten lyd).</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">Egendefinerte innstillinger.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Varsler er ikke aktivert for denne økten.
+\nKontroller Elementinnstillingene.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Varsler er aktivert for denne økten.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Sesjonsinnstillinger.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Varsler er deaktivert for kontoen din.
+\nKontroller kontoinnstillingene.</string>
+    <string name="settings_troubleshoot_test_account_settings_success">Varsler er aktivert for kontoen din.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Varsler er deaktivert i systeminnstillingene.
+\nKontroller systeminnstillingene.</string>
+    <string name="settings_troubleshoot_test_system_settings_success">Varsler er aktivert i systeminnstillingene.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">En eller flere tester mislyktes. Send inn en feilrapport for å hjelpe oss med å undersøke.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">En eller flere tester mislyktes, prøv foreslåtte løsninger.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Grunnleggende diagnostikk er OK. Hvis du fremdeles ikke mottar varsler, kan du sende inn en feilrapport for å hjelpe oss med å undersøke.</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Kjører… (%1$d of %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Kjør tester</string>
+    <string name="settings_troubleshoot_diagnostic">Feilsøking av diagnostikk</string>
+    <string name="settings_notification_troubleshoot">Feilsøk varsler</string>
+    <string name="settings_notification_privacy">Personvern om varsler</string>
+    <string name="settings_notification_by_event">Meldings betydning etter hendelse</string>
+    <string name="error_threepid_auth_failed">Forsikre deg om at du har klikket på lenken i e-posten vi har sendt deg.</string>
+    <string name="settings_remove_three_pid_confirmation_content">Fjern %s\?</string>
+    <string name="settings_phone_numbers">Telefonnummer</string>
+    <string name="settings_emails_empty">Ingen e-post er lagt til kontoen din</string>
+    <string name="settings_emails">E-post adresser</string>
+    <string name="settings_add_3pid_authentication_needed">Autentisering er påkrevd</string>
+    <string name="settings_add_3pid_flow_not_supported">Du kan ikke gjøre dette fra Element mobile</string>
+    <string name="settings_add_3pid_confirm_password_title">Bekreft passordet ditt</string>
+    <string name="settings_app_info_link_summary">Vis applikasjonsinformasjonen i systeminnstillingene.</string>
+    <string name="settings_app_info_link_title">App info</string>
+    <string name="settings_phone_number_empty">Ingen telefonnummer er lagt til kontoen din</string>
+    <string name="room_sliding_menu_third_party_notices">Tredjeparts varsler</string>
+    <string name="room_settings_add_homescreen_shortcut">Legg til på startskjerm</string>
+    <string name="room_settings_leave_conversation">Forlat samtalen</string>
+    <string name="room_settings_de_prioritize">Avprioritere</string>
+    <string name="room_settings_favourite">Favoritt</string>
+    <string name="room_settings_all_messages_noisy">Alle meldinger (støyende)</string>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="one">%1$s rom funnet for %2$s</item>
+        <item quantity="other">%1$s rom funnet for %2$s</item>
+    </plurals>
+    <string name="directory_search_results_title">Bla gjennom katalogen</string>
+    <string name="room_recents_join_room_prompt">Skriv inn et rom-ID eller et romalias</string>
+    <string name="room_recents_start_chat">Start chat</string>
+    <string name="room_recents_low_priority">LAV PRIORITET</string>
+    <string name="room_recents_favourites">FAVORITTER</string>
+    <string name="room_recents_directory">DIREKTIV</string>
+    <string name="room_recents_join">BLI MED</string>
+    <string name="search_is_not_supported_in_e2e_room">Søking i krypterte rom støttes ikke ennå.</string>
+    <string name="tab_title_search_people">FOLK</string>
+    <string name="room_event_action_report_prompt_reason">Årsak til å rapportere dette innholdet</string>
+    <string name="malformed_id">Misdannet ID. Bør være en e-postadresse eller en Matrix ID som \'@localpart: domain\'</string>
+    <string name="ssl_only_accept">Godta bare sertifikatet hvis serveradministratoren har publisert et fingeravtrykk som samsvarer med det over.</string>
+    <string name="ssl_expected_existing_expl">Sertifikatet er endret fra en tidligere klarert til en som ikke er klarert. Serveren kan ha fornyet sertifikatet. Kontakt serveradministratoren for forventet fingeravtrykk.</string>
+    <string name="ssl_unexpected_existing_expl">Sertifikatet har endret seg fra et som telefonen din klarerte. Dette er veldig uvanlig. Det anbefales at du IKKE godtar dette nye sertifikatet.</string>
+    <string name="ssl_cert_new_account_expl">Hvis serveradministratoren har sagt at dette forventes, må du forsikre deg om at fingeravtrykket nedenfor samsvarer med fingeravtrykket du har fått.</string>
+    <string name="ssl_cert_not_trust">Dette kan bety at noen ondskapsfullt avlytter trafikken din, eller at telefonen ikke stoler på sertifikatet fra den eksterne serveren.</string>
+    <string name="ssl_could_not_verify">Kunne ikke bekrefte identiteten til den eksterne serveren.</string>
+    <string name="ssl_fingerprint_hash">Fingeravtrykk (%s):</string>
+    <string name="ssl_do_not_trust">Ikke stol på</string>
+    <string name="room_do_not_have_permission_to_post">Du har ikke tillatelse til å legge ut innlegg i dette rommet</string>
+    <string name="room_delete_unsent_messages">Slett usendte meldinger</string>
+    <string name="room_resend_unsent_messages">Send usendte meldinger på nytt</string>
+    <string name="room_prompt_resend">Send alle på nytt</string>
+    <string name="room_unknown_devices_messages_notification">Meldinger ikke sendt på grunn av ukjente økter. %1$s eller %2$s nå\?</string>
+    <string name="room_unsent_messages_notification">Meldinger ikke sendt. %1$s eller %2$s nå\?</string>
+    <string name="room_offline_notification">Tilkoblingen til serveren har gått tapt.</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Send et svar (ukryptert)…</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Send et kryptert svar…</string>
+    <string name="room_message_placeholder_not_encrypted">Send en melding (ukryptert)…</string>
+    <string name="room_message_placeholder_encrypted">Send en kryptert melding…</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-post eller Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Vennligst skriv inn en eller flere e-postadresser eller Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Inviter bruker etter ID</string>
+    <string name="people_search_filter_text">Kun Matrix brukere</string>
+    <string name="people_search_local_contacts">LOKALE KONTAKTER (%d)</string>
+    <string name="people_search_invite_by_id"><u>Inviter etter ID</u></string>
+    <string name="reason_hint">Grunn</string>
+    <string name="room_participants_ban_prompt_msg">Å forby bruker vil sparke dem fra dette rommet og forhindre at de blir med igjen.</string>
+    <string name="room_participants_ban_reason">Grunn til å forby</string>
+    <string name="room_participants_kick_prompt_msg">sparke bruker vil fjerne dem fra dette rommet.
+\n
+\nFor å forhindre at de blir med igjen, bør du forby dem i stedet.</string>
+    <string name="room_participants_kick_reason">Grunn til å sparke</string>
+    <string name="room_participants_kick_title">Spark bruker</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Er du sikker på at du vil avbryte invitasjonen til denne brukeren\?</string>
+    <string name="room_participants_action_cancel_invite_title">Avbryt invitasjonen</string>
+    <string name="room_participants_action_unignore_prompt_msg">Oppheving av denne brukeren viser alle meldinger fra dem igjen.</string>
+    <string name="room_participants_action_unignore_title">Avignorer bruker</string>
+    <string name="room_participants_action_ignore_prompt_msg">Hvis du ignorerer denne brukeren, fjernes meldingene fra rommene du deler.
+\n
+\nDu kan når som helst reversere denne handlingen i de generelle innstillingene.</string>
+    <string name="room_participants_power_level_demote">Degradere</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Du vil ikke kunne angre denne endringen ettersom du degrerer deg selv. Hvis du er den siste privilegerte brukeren i rommet, vil det være umulig å få tilbake privilegiene.</string>
+    <string name="room_participants_power_level_demote_warning_title">Degradere deg selv\?</string>
+    <string name="room_participants_power_level_prompt">Du vil ikke kunne angre denne endringen ettersom du promoterer brukeren til å ha samme kraftnivå som deg selv.
+\nEr du sikker\?</string>
+    <string name="room_participants_action_devices_list">Vis øktliste</string>
+    <string name="room_participants_action_mention">Nevne</string>
+    <string name="room_participants_invite_search_another_user">Bruker-ID, navn eller e-post</string>
+    <string name="room_participants_action_set_default_power_level">Tilbakestill til normal bruker</string>
+    <string name="room_participants_action_cancel_invite">Avbryt invitasjonen</string>
+    <string name="room_participants_header_devices">SESSJONER</string>
+    <string name="room_participants_header_call">RING</string>
+    <string name="room_participants_header_admin_tools">ADMIN VERKTØY</string>
+    <string name="room_participants_remove_prompt_msg">Er du sikker på at du vil fjerne %s fra denne chatten\?</string>
+    <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlate rommet\?</string>
+    <string name="room_creation_add_member">Legg til medlem</string>
+    <string name="room_creation_title">Ny chat</string>
+    <string name="invite_no_identity_server_error">Legg til en identitetsserver i innstillingene dine for å utføre denne handlingen.</string>
+    <string name="room_preview_room_interactions_disabled">Dette er en forhåndsvisning av dette rommet. Rominteraksjoner er deaktivert.</string>
+    <string name="room_preview_try_join_an_unknown_room_default">et rom</string>
+    <string name="room_preview_try_join_an_unknown_room">Du prøver å få tilgang til %s. Vil du være med for å delta i diskusjonen\?</string>
+    <string name="room_preview_unlinked_email_warning">Denne invitasjonen ble sendt til %s, som ikke er tilknyttet denne kontoen.
+\nDet kan være lurt å logge på med en annen konto, eller legge til denne e-posten i kontoen din.</string>
+    <string name="room_preview_invitation_format">Du er invitert til å bli med i dette rommet av %s</string>
+    <string name="room_jump_to_first_unread">Gå til første uleste melding.</string>
+    <string name="open_chat_header">Åpne topptekst</string>
+    <string name="list_members">Liste medlemmer</string>
+    <string name="media_slider_saved_message">Lagre i nedlastinger\?</string>
+    <string name="permissions_denied_add_contact">Tillat tillatelse til å få tilgang til kontaktene dine.</string>
+    <string name="permissions_denied_qr_code">For å skanne en QR-kode, må du gi tilgang til kameraet.</string>
+    <string name="permissions_action_not_performed_missing_permissions">Beklager. Handlingen ble ikke utført på grunn av manglende tillatelser</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Element kan sjekke adresseboken din for å finne andre Matrix-brukere basert på e-post og telefonnummer.
+\n
+\nEr du enig i å dele adresseboken for dette formålet\?</string>
+    <string name="permissions_rationale_msg_contacts">Element kan sjekke adresseboken din for å finne andre Matrix-brukere basert på e-post og telefonnummer. Hvis du godtar å dele adresseboken din for dette formålet, vennligst gi tilgang til neste popup.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Element trenger tillatelse for å få tilgang til kameraet og mikrofonen for å utføre videosamtaler.
+\n
+\nTillat tilgang til de neste popup-vinduene for å kunne ringe.</string>
+    <string name="permissions_rationale_msg_record_audio_explanation">"
+\n
+\nTillat tilgang i neste popup for å kunne ringe."</string>
+    <string name="permissions_rationale_msg_record_audio">Element trenger tillatelse for å få tilgang til mikrofonen din for å utføre lydanrop.</string>
+    <string name="permissions_rationale_msg_camera_explanation">"
+\n
+\nTillat tilgang i neste popup for å kunne ringe."</string>
+    <string name="permissions_rationale_msg_camera">Element trenger tillatelse for å få tilgang til kameraet ditt for å ta bilder og videosamtaler.</string>
+    <string name="permissions_rationale_msg_storage">Element trenger tillatelse for å få tilgang til bilde- og videobiblioteket ditt for å sende og lagre vedlegg.
+\n
+\nTillat tilgang i neste popup for å kunne sende filer fra telefonen din.</string>
+    <string name="media_picker_cannot_record_video">Kan ikke ta opp video</string>
+    <string name="media_picker_both_capture_title">Ta et bilde eller en video</string>
+    <string name="call_error_answered_elsewhere">samtale besvart andre steder</string>
+    <string name="call_error_camera_init_failed">Kan ikke initialisere kameraet</string>
+    <string name="call_error_ice_failed">Medietilkobling mislyktes</string>
+    <string name="return_to_call">Gå tilbake til samtalen</string>
+    <string name="active_call_with_duration">Aktiv samtale (%s)</string>
+    <string name="incoming_voice_call">Innkommende taleanrop</string>
+    <string name="incoming_video_call">Innkommende videosamtale</string>
+    <string name="incoming_call">Innkommende anrop</string>
+    <string name="call_ring">Ringer…</string>
+    <string name="call_ended">Anrop avsluttet</string>
+    <string name="call_connecting">Anrop kobler til…</string>
+    <string name="call_connected">Samtalen er tilkoblet</string>
+    <string name="call">Ring</string>
+    <string name="settings_call_ringtone_dialog_title">Velg ringetone for samtaler:</string>
+    <string name="settings_call_ringtone_title">Ringetone for innkommende samtaler</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Vil bruke %s som assistanse når hjemmeserveren din ikke tilbyr en (IP-adressen din blir delt under en samtale)</string>
+    <string name="settings_call_ringtone_use_default_stun">Tillat reservehjelpsserver</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Bruk standard Element-ringetone for innkommende anrop</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Be om bekreftelse før du starter en samtale</string>
+    <string name="settings_call_show_confirmation_dialog_title">Forhindre utilsiktet samtale</string>
+    <string name="room_info_room_topic">Romemne</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
+    <plurals name="membership_changes">
+        <item quantity="one">%d medlemskapsendring</item>
+        <item quantity="other">%d medlemskapsendringer</item>
+    </plurals>
+    <string name="groups_list">Gruppeliste</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start Element på en annen enhet som kan dekryptere meldingen, slik at den kan sende nøklene til denne økten.</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">Forespørsel sendt</string>
+    <string name="e2e_re_request_encryption_key_sent">Nøkkelforespørsel sendt.</string>
+    <string name="login_error_ssl_peer_unverified">SSL-feil: identiteten til jevnaldrende er ikke bekreftet.</string>
+    <string name="login_error_homeserver_not_found">Kan ikke nå en hjemmeserver på denne URL-en, sjekk den</string>
+    <string name="login_error_no_homeserver_found">Dette er ikke en gyldig Matrix-serveradresse</string>
+    <string name="login_error_unknown_host">Denne URL-en er ikke tilgjengelig, sjekk den</string>
+    <string name="login_error_unable_register_mail_ownership">Kan ikke registrere: e-post eierskap feil</string>
+    <string name="action_unpublish">Fjern publiseringen</string>
+    <string name="action_add">Legg til</string>
+    <string name="start_chatting">Begynn å chatte</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nDenne feilen er utenfor kontroll av Element, og ifølge Google indikerer denne feilen at enheten har for mange apper registrert hos FCM. Feilen oppstår bare i tilfeller der det er ekstremt mange apper, så det bør ikke påvirke gjennomsnittsbrukeren.</string>
+    <string name="room_event_action_report_prompt_ignore_user">Vil du skjule alle meldinger fra denne brukeren\?
+\n
+\nMerk at denne handlingen starter appen på nytt, og det kan ta litt tid.</string>
+    <string name="room_participants_invite_prompt_msg">Er du sikker på at du vil invitere %s til denne chatten\?</string>
 </resources>

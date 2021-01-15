@@ -32,7 +32,7 @@
     <string name="ok">Εντάξει</string>
     <string name="dialog_title_warning">Προειδοποίηση</string>
     <string name="_continue">Συνέχεια</string>
-    <string name="notification_sync_in_progress">Γίνεται συγχρονισμός</string>
+    <string name="notification_sync_in_progress">Γίνεται συγχρονισμός…</string>
     <string name="notification_noisy_notifications">Ηχητικές ειδοποιήσεις</string>
     <string name="notification_silent_notifications">Αθόρυβες ειδοποιήσεις</string>
     <string name="title_activity_home">Μηνύματα</string>
@@ -96,7 +96,7 @@
     <string name="no_room_placeholder">Δεν υπάρχουν δωμάτια</string>
     <string name="no_public_room_placeholder">Δεν υπάρχουν δημόσια δωμάτια</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 χρήστης</item>
+        <item quantity="one">%d χρήστης</item>
         <item quantity="other">%d χρήστες</item>
     </plurals>
     <string name="groups_invite_header">Πρόσκληση</string>
@@ -333,4 +333,222 @@
     <string name="none">Κανένα</string>
     <string name="stay">Παραμείνατε</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">H δημιουργία αντιγράφων κλειδιού ασφαλείας θα πρέπει να είναι ενεργή σε όλες τις συνεδρίες σας για να αποφύγετε την απώλεια πρόσβασης στα κρυπτογραφημένα μηνύματά σας.</string>
+    <string name="room_widget_reload">Επαναφόρτωση γραφικού στοιχείου</string>
+    <string name="room_widget_failed_to_load">Αποτυχία φόρτωσης γραφικού στοιχείου
+\n%s</string>
+    <string name="room_widget_permission_webview_shared_info_title">Η χρήση του ενδέχεται να δημιουγίσει cookies και να κοινοποιήσει δεδομένα με %s:</string>
+    <string name="room_widget_permission_shared_info_title">Η χρήση του ενδέχεται να κοινοποιεί δεδομένα με %s:</string>
+    <string name="room_widget_permission_added_by">Αυτο το γραφικό στοιχείο προστέθηκε από:</string>
+    <string name="room_widget_permission_title">Φόρτωση Γραφικού στοιχείου</string>
+    <string name="room_widget_activity_title">Γραφικό στοιχείο</string>
+    <string name="active_widgets_title">Ενεργά γραφικά στοιχεία</string>
+    <string name="active_widget_view_action">Προβολή</string>
+    <string name="widget_delete_message_confirmation">Είστε βέβαιοι ότι θέλετε να διαγράψετε το γραφικό στοιχείο από αυτό το δωμάτιο;</string>
+    <string name="settings_labs_create_conference_with_jitsi">Δημιουργήστε κλήσεις συνδιάσκεψης με το jitsi</string>
+    <string name="widget_creation_failure">Η δημιουργία γραφικού στοιχείου απέτυχε</string>
+    <string name="widget_no_power_to_manage">Χρειάζεστε άδεια για να τροποποιήσετε τα γραφικά στοιχεία (widgets) σε αυτό το δωμάτιο</string>
+    <string name="largest">Εξαιρετικά Μεγάλο</string>
+    <string name="larger">Μεγαλύτερο</string>
+    <string name="historical_placeholder">Αναζήτηση ιστορικού</string>
+    <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
+    <string name="notification_ticker_text_dm">%1$s: %2$s</string>
+    <string name="notification_inline_reply_failed">** Αποτυχία αποστολής - Παρακαλώ ανοίξτε το δωμάτιο</string>
+    <string name="notification_sender_me">Εγώ</string>
+    <string name="notification_new_invitation">Καυνούργια Πρόσκληση</string>
+    <string name="notification_new_messages">Καινούργια Μηνύματα</string>
+    <string name="notification_unknown_room_name">Δωμάτιο</string>
+    <string name="notification_unknown_new_event">Καινούργιο Συμβάν</string>
+    <string name="notification_unread_notified_messages_and_invitation">%1$s και %2$s</string>
+    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s στο %2$s και %3$s</string>
+    <plurals name="notification_compat_summary_title">
+        <item quantity="one">%d ειδοποιήση</item>
+        <item quantity="other">%d ειδοποιήσεις</item>
+    </plurals>
+    <plurals name="notification_compat_summary_line_for_room">
+        <item quantity="one">%1$s: %2$d μήνυμα</item>
+        <item quantity="other">%1$s: %2$d μηνύματα</item>
+    </plurals>
+    <plurals name="notification_invitations">
+        <item quantity="one">%d πρόσκληση</item>
+        <item quantity="other">%d προσκλήσεις</item>
+    </plurals>
+    <plurals name="notification_unread_notified_messages_in_room_msgs">
+        <item quantity="one">1 μη αναγνωσμένη ειδοποίηση</item>
+        <item quantity="other">%d μη αναγνωσμένες ειδοποιήσεις</item>
+    </plurals>
+    <string name="auth_login">Σύνδεση</string>
+    <string name="room_participants_ban_reason">Λόγος οριστικής αποβολής</string>
+    <string name="room_participants_ban_title">Οριστική αποβολή χρήστη</string>
+    <string name="room_participants_kick_prompt_msg">Αποβάλλοντας αυτό το χρήση θα τους αφαιρέσαι από το δωμάτιο.
+\n 
+\nΕάν θέλετε να τους αποτρέψετε να συμμετάσχουν ξανά, θα πρέπει να τους αποβάλλετε οριστικά.</string>
+    <string name="room_participants_kick_reason">Λόγος αποβολής</string>
+    <string name="room_participants_kick_title">Αποβολή χρήστη</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Είστε σίγουροι πως θέλετε να καταργήσετε την πρόσκληση προς αυτό τον χρήστη;</string>
+    <string name="room_participants_action_cancel_invite_title">Ακύρωση πρόσκλησης</string>
+    <string name="room_participants_action_unignore">Κατάργηση παράβλεψης</string>
+    <string name="room_participants_action_unignore_prompt_msg">Καταργώντας την παράβλεψη αυτού του χρήστη θα επανφανίσει όλα τα μηνύματα από αυτούς.</string>
+    <string name="room_participants_action_ignore_title">Παράβλεψη χρήστη</string>
+    <string name="room_participants_action_ignore_prompt_msg">Παραβλέποντας αυτό το χρήση θα αφαιρέσει τα μηνύματα τους από δωμάτια που μοιράζεστε.
+\n 
+\nΜπορείτε να αντιστρέψετε αυτή την ενέργεια οποτεδήποτε στις γενικές ρυθμίσεις.</string>
+    <string name="room_participants_action_ignore">Παράβλεψη</string>
+    <string name="room_participants_action_unignore_title">Κατάργηση παράβλεψης χρήστη</string>
+    <string name="room_participants_power_level_demote">Υποβίβαση</string>
+    <string name="login_error_no_homeserver_found">Αυτή δεν είναι έγκυρη διεύθυνση διακομιστή Matrix</string>
+    <string name="login_error_unknown_host">Aυτή η διεύθυνση δεν είναι προσβάσιμη, παρακαλώ ελέγξτε</string>
+    <string name="login_error_invalid_home_server">Παρακαλω εισάξετε έγκυρη διεύθυνση</string>
+    <string name="auth_user_name_placeholder">Όνομα χρήστη</string>
+    <string name="auth_new_password_placeholder">Νέος κωδικός</string>
+    <string name="auth_password_placeholder">Κωδικός</string>
+    <string name="auth_user_id_placeholder">Ηλεκτρονική διεύθυνση ή όνομα χρήστη</string>
+    <string name="auth_return_to_login">Επιστροφή στην οθόνη σύνδεσης</string>
+    <string name="auth_submit">Υποβολή</string>
+    <string name="auth_register">Δημιουργία Λογαριασμού</string>
+    <string name="room_settings_addresses_no_local_addresses">Αυτό το δωμάτιο δεν έχει τοπικές διευθύνσεις</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Να μην αποστέλλονται κρυπτογραφημένα μηνύματα σε μή επαληθευμένες περιόδους σύνδεσης σε αυτό το δωμάτιο από αυτή την περίοδο σύνδεσης.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Κρυπτογράφηση μόνο επαληθευμένων περιόδους σύνδεσης</string>
+    <string name="room_settings_labs_end_to_end_warnings">Πρέπει να αποσυνδεθείτε για να μπορέσετε να ενεργοποιήσετε την κρυπτογράφηση.</string>
+    <string name="room_settings_labs_end_to_end_is_active">Ενεργή κρυπτογράφηση από άκρο σε άκρο</string>
+    <string name="room_settings_labs_end_to_end">Κρυπτογράφηση από άκρο σε άκρο</string>
+    <string name="room_settings_labs_warning_message">Αυτά είναι πειραματικά χαρακτηριστικά τα οποία μπορούν να παρουσιάσουν μη αναμενόμενα σφάλματα. Χρησιμοποιήστε με προσοχή.</string>
+    <string name="room_settings_labs_pref_title">Εργαστήρια</string>
+    <string name="room_settings_room_internal_id">Εσωτερικός κωδικός δωματίου</string>
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="one">%d απαγορευμένος χρήστης</item>
+        <item quantity="other">%d απαγορευμένοι χρήστες</item>
+    </plurals>
+    <string name="room_settings_banned_users_title">Απαγορευμένοι χρήστες</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Όποιος γνωρίζει τη διεύθυνση δωματίου, συμπεριλαμβανομένων των επισκεπτών</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Όποιος γνωρίζει τη διέθυνση δωματίου, εκτός από επισκέπτες</string>
+    <string name="room_settings_room_access_entry_only_invited">Μόνο όσοι έχουν προσκληθεί</string>
+    <string name="room_settings_room_access_warning">Για να δημιουργήσετε σύνδεση σε ένα δωμάτιο, πρέπει να έχει διεύθυνση.</string>
+    <string name="room_settings_read_history_entry_members_only_joined">Μέλη μόνο (από τη στιγμή που μπήκαν)</string>
+    <string name="room_settings_read_history_entry_members_only_invited">Μέλη μόνο (από τη στιγμή που καλέστηκαν)</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">Μέλη μόνο (από τη στιγμή επιλογής αυτής της ρύθμισης)</string>
+    <string name="room_alias_publish_to_directory">Δημοσίευση αυτού του δωματίου στο κοινό κατάλογο δωματίων του %1$s;</string>
+    <string name="room_alias_publish_to_directory_error">Δεν είναι δυνατή η ανάκτηση της τρέχουσας ορατότητας καταλόγου δωματίων (%1$s).</string>
+    <string name="room_alias_action_unpublish">Κατάργηση δημοσίευσης αυτής της διεύθυνσης</string>
+    <string name="error_no_external_application_found">Δεν βρέθηκαν εξωτερικές εφαρμογές για αυτή την πράξη.</string>
+    <string name="go_on_with">συνεχίστε με…</string>
+    <string name="no_sticker_application_dialog_content">Δεν έχετε ενεργοποιημένα πακέτα αυτοκόλλητων.
+\n
+\nΘέλετε να προσθέσετε μερικά τώρα;</string>
+    <string name="option_take_photo_video">Φωτογραφία ή βίντεο</string>
+    <string name="option_take_video">Βίντεο</string>
+    <string name="option_take_photo">Φωτογραφία</string>
+    <string name="option_send_sticker">Αποστολή αυτοκόλλητου</string>
+    <string name="call_format_turn_hd_on">Ενεργοποίηση Υψηλής Ανάλυσης</string>
+    <string name="call_format_turn_hd_off">Απενεργοποίηση Υψηλής Ανάλυσης</string>
+    <string name="call_camera_back">Πίσω</string>
+    <string name="call_camera_front">Μπροστινή</string>
+    <string name="call_switch_camera">Αλλαγή Κάμερας</string>
+    <string name="sound_device_wireless_headset">Ασύρματο Ακουστικό</string>
+    <string name="sound_device_headset">Ακουστικό</string>
+    <string name="sound_device_speaker">Ομιλητής</string>
+    <string name="sound_device_phone">Τηλέφωνο</string>
+    <string name="call_select_sound_device">Αλλαγή Συσκευής Ήχου</string>
+    <string name="call_failed_no_connection_description">Αποτυχία σύνδεσης σε πραγματικό χρόνο.
+\nΖητήστε από τον διαχειριστή του οικιακού σας διακομιστή να διαμορφώσει έναν διακομιστή TURN ώστε οι κλήσεις να λειτουργούν αξιόπιστα.</string>
+    <string name="call_failed_no_connection">Η Κλήση Element Aπέτυχε</string>
+    <string name="call_failed_dont_ask_again">Να μην ερωτηθώ ξανά</string>
+    <string name="call_failed_no_ice_use_alt">Προσπαθήστε να χρησιμοποιήσετε το %s</string>
+    <string name="call_failed_no_ice_description">Παρακαλώ ζητήστε απο τον διαχειριστή του ιδιέταιρου διακομιστή (%1$s) να ρυθμίσει ένα διακομιστή TURN ώστε οι κλήσεις να δουλέυουν αξιόπιστα.
+\n
+\nΑλλιώς, μπορείτε να δοκιμάσετε τον δημόσιο διακομιστή στο %2$s, αλλά αυτό δεν θα είναι τόσο αξιόπιστο, και η IP διέυθυνσή σας θα σταλεί σε αυτό το διακομιστή. Μπορείτε να διαχειριστείτε τη διαδικασία στις Ρυθμίσεις.</string>
+    <string name="call_failed_no_ice_title">Η κλήση απέτυχε λόγω λανθασμένα ρυθμισμένου διακομιστή</string>
+    <string name="start_video_call_prompt_msg">Είσαστε σίγουροι ότι θέλετε να κάνετε κλήση βίντεο;</string>
+    <string name="start_voice_call_prompt_msg">Είσαστε σίγουροι ότι θέλετε να κάνετε κλήση ήχου;</string>
+    <string name="start_new_chat_prompt_msg">Είσαστε σίγουροι οτι θέλετε να ξεκινήσετε μια νέα συζήτηση με τον/την %s;</string>
+    <string name="option_send_voice">Αποστολή φωνής</string>
+    <string name="start_video_call">Κλήση βίντεο</string>
+    <string name="start_voice_call">Κλήση ήχου</string>
+    <string name="start_new_chat">Νέα συζήτηση</string>
+    <string name="hs_url">Διέυθυνση URL Ιδιαίτερου Διακομιστή</string>
+    <string name="identity_url">Διεύθυνση URL Διακομιστή Ταυτότητας</string>
+    <string name="join_room">Είσοδος στο δωμάτιο</string>
+    <string name="send_files_in">Αποστολή εντός</string>
+    <string name="send_bug_report_app_crashed">Η εφαργμογή διακόπηκε απότομα προηγουμένως. Θα θέλατε να ανοίξετε την οθόνη αναφοράς σφάλματος;</string>
+    <string name="send_bug_report_include_screenshot">Αποστολή στιγμιότυπου οθόνης</string>
+    <string name="send_bug_report_include_key_share_history">Αποστολή ιστορικού αιτήσεων αποστολής κλειδιού</string>
+    <string name="people_no_identity_server">Δεν τέθηκε διακομιστής ταυτότητας.</string>
+    <string name="no_more_results">Δεν υπάρχουν άλλα αποτελέσματα</string>
+    <string name="local_address_book_header">Βιβλίο διευθύνσεων</string>
+    <string name="dialog_title_success">Επιτυχία</string>
+    <string name="action_unpublish">Κατάργηση δημοσίευσης</string>
+    <string name="action_copy">Αντιγραφή</string>
+    <string name="action_historical">Ιστορικά</string>
+    <string name="call_notification_hangup">Τέλος κλήσης</string>
+    <string name="ongoing_conference_call">Τρέχουσα κλήση συνδιάσκεψης.
+\nΣυνδεθείτε με %1$s ή %2$s</string>
+    <string name="no_contact_access_placeholder">Δεν επιτρέψατε στο Element την πρόσβαση στις επαφές σας</string>
+    <string name="bottom_action_notification">Ειδοποιήσεις</string>
+    <string name="copied_to_clipboard">Αντιγράφηκε στο πρόχειρο</string>
+    <string name="action_add">Πρόσθεση</string>
+    <string name="action_mark_room_read">Σημείωσε ως διαβασμένο</string>
+    <string name="action_sign_out_confirmation_simple">Είσαστε σίγουροι ότι θέλετε να αποσυνδεθείτε;</string>
+    <string name="start_chatting">Ξεκινήστε συζήτηση</string>
+    <string name="error_empty_field_enter_user_name">Παρακαλώ εισάγετε όνομα χρήστη.</string>
+    <string name="deactivate_account_delete_checkbox">Παρακαλώ ξεχάστε όλα τα μηνύματα τα οποία έχω στείλει μόλις απενεργοποιηθεί ο λογαριασμός μου (Προειδοποίηση: αυτό σημαίνει οτι μελλοντικοί χρήστες θα έχουν μία ατελή εικόνα των συζητήσεων)</string>
+    <string name="deactivate_account_content">Αυτό θα κάνει το λογαριασμό σας μόνιμα άχρηστο. Δε θα μπορέσετε να συνδεθείτε ξανα, και κανείς δεν θα μπορεί να εγγραφεί με το ίδιο όνομα χρήστη. Ο λογαριασμός σας θα αναχωρήσει από όλα τα δωμάτια στα οποία συμμετέχει, και οι πληροφορίες λογαριασμού θα αφαιρεθούν από το διακομιστή ταυτότητας. <b>Αυτή η πράξη είναι μη αναστρέψιμη</b>.
+\n
+\nΜε την απενεργοποίηση του λογαρισμού σας <b>δεν θα ξεχαστούν τα μηνύματά που έχετε στείλει</b>. Εάν θα θέλατε να ξεχαστούν, τότε δηλώστε το στο κουτί πιο κάτω.
+\n
+\nΗ ορατότητα μηνυμάτων δουλεύει σαν το ηλεκτρονικό ταχυδρομείο. Το να ξεχαστούν τα μηνύματα σημαίνει οτι μηνύματα τα οποία έχετε στείλει δεν θα σταλούν σε νέους ή μη-εγγεγραμμένους χρήστες, αλλα εγγεγραμμένοι χρήστες οι οποίοι έχουν ήδη πρόσβαση σε αυτά τα μηνύματα θα μπορούν ακόμα να τα δούν.</string>
+    <string name="forget_room">Λησμόνηση δωματίου</string>
+    <string name="room_tombstone_versioned_description">Αυτό το δωμάτιο έχει αντικατασταθεί και δεν είναι πια ενεργό</string>
+    <string name="speak">Μιλήστε</string>
+    <string name="ssl_remain_offline">Παράβλεψη</string>
+    <string name="ssl_logout_account">Αποσύνδεση</string>
+    <string name="ssl_do_not_trust">Δεν εμπιστεύομαι</string>
+    <string name="room_do_not_have_permission_to_post">Δεν έχετε εξουσιοδότηση να δημοσιεύσετε σε αυτό το δωμάτιο</string>
+    <string name="room_message_file_not_found">Το αρχείο δεν βρέθηκε</string>
+    <string name="room_delete_unsent_messages">Διαγραφή μηνυμάτων που δεν στάληκαν</string>
+    <string name="room_resend_unsent_messages">Επαναποστολή μηνυμάτων που δεν στάληκαν</string>
+    <string name="room_prompt_cancel">Ακύρωση όλων</string>
+    <string name="room_prompt_resend">Επαναποστολή όλων</string>
+    <string name="room_offline_notification">Απώλεια σύνδεσης με το διακομιστή.</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">Αποστολή απάντησης (κρυπτογραφημένη)…</string>
+    <string name="room_message_placeholder_reply_to_encrypted">Αποστολή κρυπτογραφημένης απάντησης…</string>
+    <string name="room_message_placeholder_not_encrypted">Αποστολή μηνύματος (κρυπτογραφημένο)…</string>
+    <string name="room_message_placeholder_encrypted">Αποστολή κρυπτογραφημένου μηνύματος…</string>
+    <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; άλλοι γράφουν…</string>
+    <string name="room_one_user_is_typing">%s γράφει…</string>
+    <string name="room_two_users_are_typing">%1$s &amp; %2$s γράφουν…</string>
+    <string name="room_menu_search">Συνομιλία</string>
+    <string name="people_search_invite_by_id_dialog_hint">Διεύθυνση ηλεκτρονικού ταχυδρομίου ή Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Πρόσκληση μέσω ID χρήστη</string>
+    <string name="people_search_filter_text">Μόνο χρήστες Matrix</string>
+    <string name="people_search_user_directory">Ευρετήριο χρηστών (%s)</string>
+    <string name="room_participants_invite_prompt_msg">Είστε σίγουροι ότι θέλετε να προσκαλέσετε τους %s σε αυτή την συζήτηση;</string>
+    <string name="reason_hint">Λόγος</string>
+    <string name="ssl_could_not_verify">Δεν εξακριβώθηκε η ταυτότητα του εξωτερικού διακομιστή.</string>
+    <string name="room_event_action_report_prompt_ignore_user">Απόκρυψη όλων των μηνυμάτων από αυτό το χρήστη;
+\n
+\nΑυτή η ενέργεια θα επανεκκινήσει την εφαρμογή και ίσως πάρει λίγο χρόνο.</string>
+    <string name="room_event_action_report_prompt_reason">Λόγοι αναφοράς αυτού του περιεχομένου</string>
+    <string name="room_details_settings">Ρυθμίσεις</string>
+    <string name="room_details_title">Λεπτομέρειες Δωματίου</string>
+    <string name="room_details_people_invited_group_name">ΚΑΛΕΣΜΕΝΟΣ/Η</string>
+    <string name="room_recents_join_room_prompt">Πληκτρολογείστε ταυτότητα (ID) δωματίου ή ψευδώνυμο δωματίου</string>
+    <string name="room_recents_join_room">Ένταξη στο δωμάτιο</string>
+    <string name="room_recents_create_room">Δημιουργία δωματίου</string>
+    <string name="room_recents_invites">ΠΡΟΣΚΛΗΣΕΙΣ</string>
+    <string name="room_recents_low_priority">ΧΑΜΗΛΗ ΠΡΟΤΕΡΑΙΟΤΗΤΑ</string>
+    <string name="room_recents_conversations">ΔΩΜΑΤΙΑ</string>
+    <string name="room_recents_join">ΣΥΜΜΕΤΟΧΗ</string>
+    <string name="search_is_not_supported_in_e2e_room">Η αναζήτηση σε κρυπτογραφημένα δωμάτια δεν υποστηρίζεται ακόμα.</string>
+    <string name="tab_title_search_files">ΑΡΧΕΙΑ</string>
+    <string name="tab_title_search_messages">ΜΗΝΥΜΑΤΑ</string>
+    <string name="tab_title_search_rooms">ΔΩΜΑΤΙΑ</string>
+    <string name="search_no_results">Κανένα αποτέλεσμα</string>
+    <string name="search_banned_user_hint">Φιλτράρισμα αποβεβλημένων χρηστών</string>
+    <string name="search_members_hint">Φιλτράρισμα μελών δωματίου</string>
+    <string name="search_hint">Εύρεση</string>
+    <string name="room_event_action_cancel_download">Ακύρωση Λήψης</string>
+    <string name="room_event_action_cancel_upload">Ακύρωση Αποστολής</string>
+    <string name="malformed_id">Παραποιημένη ταυτότητα (ID). Πρέπει να είναι διεύθυνση ηλ. ταχυδρομίου ή ταυτότητα (ID) τύπου Matrix, όπως @localpart:domain\'</string>
+    <string name="ssl_only_accept">Αποδεκτείτε το πιστοποιητικό εαν ο διαχειριστής του διακομιστή έχει εκδόσει ένα αποτύπωμα που ταιριάζει με το παρά πάνω.</string>
+    <string name="ssl_expected_existing_expl">Το πιστοποιτικό έχει αλλάξει από ένα προηγούμενο αξιόπιστο, σε ένα αναξιόπιστο. Ο διακομιστής ενδέχεται να έχει αλλάξει το πιστοποιητικό του. Επικοινωνείστε με το διαχειριστή του διακομιστή για το αναμενόμενο αποτύπωμα.</string>
+    <string name="ssl_unexpected_existing_expl">Το πιστοποιητικό έχει αλλάξει από αυτό που εμπιστεύθηκε προηγουμένως η συσκευή σας. Αυτό είναι ΑΚΡΩΣ ΑΣΥΝΗΘΙΣΤΟ. Προτείνεται να ΜΗΝ ΑΠΟΔΕΚΤΕΙΤΕ το νεο πιστοποιητικό.</string>
 </resources>

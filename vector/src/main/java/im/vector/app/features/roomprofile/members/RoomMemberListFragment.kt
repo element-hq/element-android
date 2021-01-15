@@ -17,7 +17,9 @@
 package im.vector.app.features.roomprofile.members
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -29,10 +31,10 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentRoomMemberListBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
-import kotlinx.android.synthetic.main.fragment_room_member_list.*
-import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
+
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
@@ -44,39 +46,42 @@ class RoomMemberListFragment @Inject constructor(
         val viewModelFactory: RoomMemberListViewModel.Factory,
         private val roomMemberListController: RoomMemberListController,
         private val avatarRenderer: AvatarRenderer
-) : VectorBaseFragment(), RoomMemberListController.Callback {
+) : VectorBaseFragment<FragmentRoomMemberListBinding>(),
+        RoomMemberListController.Callback {
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
 
-    override fun getLayoutResId() = R.layout.fragment_room_member_list
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomMemberListBinding {
+        return FragmentRoomMemberListBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
-        setupToolbar(roomSettingsToolbar)
+        setupToolbar(views.roomSettingGeneric.roomSettingsToolbar)
         setupSearchView()
         setupInviteUsersButton()
-        roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
+        views.roomSettingGeneric.roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
     }
 
     private fun setupInviteUsersButton() {
-        inviteUsersButton.debouncedClicks {
+        views.inviteUsersButton.debouncedClicks {
             navigator.openInviteUsersToRoom(requireContext(), roomProfileArgs.roomId)
         }
         // Hide FAB when list is scrolling
-        roomSettingsRecyclerView.addOnScrollListener(
+        views.roomSettingGeneric.roomSettingsRecyclerView.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         when (newState) {
                             RecyclerView.SCROLL_STATE_IDLE     -> {
                                 if (withState(viewModel) { it.actionsPermissions.canInvite }) {
-                                    inviteUsersButton.show()
+                                    views.inviteUsersButton.show()
                                 }
                             }
                             RecyclerView.SCROLL_STATE_DRAGGING,
                             RecyclerView.SCROLL_STATE_SETTLING -> {
-                                inviteUsersButton.hide()
+                                views.inviteUsersButton.hide()
                             }
                         }
                     }
@@ -85,8 +90,8 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     private fun setupSearchView() {
-        searchView.queryHint = getString(R.string.search_members_hint)
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        views.roomSettingGeneric.searchView.queryHint = getString(R.string.search_members_hint)
+        views.roomSettingGeneric.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return true
             }
@@ -99,16 +104,16 @@ class RoomMemberListFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        roomSettingsRecyclerView.cleanup()
+        views.roomSettingGeneric.roomSettingsRecyclerView.cleanup()
         super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { viewState ->
         roomMemberListController.setData(viewState)
         renderRoomSummary(viewState)
-        inviteUsersButton.isVisible = viewState.actionsPermissions.canInvite
+        views.inviteUsersButton.isVisible = viewState.actionsPermissions.canInvite
         // Display filter only if there are more than 2 members in this room
-        searchViewAppBarLayout.isVisible = viewState.roomSummary()?.otherMemberIds.orEmpty().size > 1
+        views.roomSettingGeneric.searchViewAppBarLayout.isVisible = viewState.roomSummary()?.otherMemberIds.orEmpty().size > 1
     }
 
     override fun onRoomMemberClicked(roomMember: RoomMemberSummary) {
@@ -133,8 +138,8 @@ class RoomMemberListFragment @Inject constructor(
 
     private fun renderRoomSummary(state: RoomMemberListViewState) {
         state.roomSummary()?.let {
-            roomSettingsToolbarTitleView.text = it.displayName
-            avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
+            views.roomSettingGeneric.roomSettingsToolbarTitleView.text = it.displayName
+            avatarRenderer.render(it.toMatrixItem(), views.roomSettingGeneric.roomSettingsToolbarAvatarImageView)
         }
     }
 }

@@ -24,26 +24,27 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import im.vector.app.R
 import im.vector.app.core.utils.toast
-import kotlinx.android.synthetic.debug.activity_test_material_theme.*
+import im.vector.app.databinding.ActivityTestMaterialThemeBinding
 
 // Rendering is not the same with VectorBaseActivity
 abstract class DebugMaterialThemeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test_material_theme)
+        val views = ActivityTestMaterialThemeBinding.inflate(layoutInflater)
+        setContentView(views.root)
 
-        debugShowSnackbar.setOnClickListener {
-            Snackbar.make(debugMaterialCoordinator, "Snackbar!", Snackbar.LENGTH_SHORT)
+        views.debugShowSnackbar.setOnClickListener {
+            Snackbar.make(views.coordinatorLayout, "Snackbar!", Snackbar.LENGTH_SHORT)
                     .setAction("Action") { }
                     .show()
         }
 
-        debugShowToast.setOnClickListener {
+        views.debugShowToast.setOnClickListener {
             toast("Toast")
         }
 
-        debugShowDialog.setOnClickListener {
+        views.debugShowDialog.setOnClickListener {
             AlertDialog.Builder(this)
                     .setMessage("Dialog content")
                     .setIcon(R.drawable.ic_settings_x)
@@ -53,7 +54,7 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
                     .show()
         }
 
-        debugShowBottomSheet.setOnClickListener {
+        views.debugShowBottomSheet.setOnClickListener {
             BottomSheetDialogFragment().show(supportFragmentManager, "TAG")
         }
     }

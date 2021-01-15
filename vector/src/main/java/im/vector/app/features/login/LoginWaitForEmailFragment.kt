@@ -18,11 +18,13 @@ package im.vector.app.features.login
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.args
 import im.vector.app.R
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_login_wait_for_email.*
+import im.vector.app.databinding.FragmentLoginWaitForEmailBinding
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
 
@@ -34,11 +36,13 @@ data class LoginWaitForEmailFragmentArgument(
 /**
  * In this screen, the user is asked to check his emails
  */
-class LoginWaitForEmailFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginWaitForEmailFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginWaitForEmailBinding>() {
 
     private val params: LoginWaitForEmailFragmentArgument by args()
 
-    override fun getLayoutResId() = R.layout.fragment_login_wait_for_email
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginWaitForEmailBinding {
+        return FragmentLoginWaitForEmailBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,7 +63,7 @@ class LoginWaitForEmailFragment @Inject constructor() : AbstractLoginFragment() 
     }
 
     private fun setupUi() {
-        loginWaitForEmailNotice.text = getString(R.string.login_wait_for_email_notice, params.email)
+        views.loginWaitForEmailNotice.text = getString(R.string.login_wait_for_email_notice, params.email)
     }
 
     override fun onError(throwable: Throwable) {

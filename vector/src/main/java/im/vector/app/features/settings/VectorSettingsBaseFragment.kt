@@ -35,8 +35,8 @@ import timber.log.Timber
 
 abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScreenInjector {
 
-    val vectorActivity: VectorBaseActivity by lazy {
-        activity as VectorBaseActivity
+    val vectorActivity: VectorBaseActivity<*> by lazy {
+        activity as VectorBaseActivity<*>
     }
 
     private var mLoadingView: View? = null
@@ -78,8 +78,8 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
 
     @CallSuper
     override fun onDestroyView() {
-        super.onDestroyView()
         uiDisposables.clear()
+        super.onDestroyView()
     }
 
     override fun onDestroy() {

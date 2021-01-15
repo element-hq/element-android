@@ -22,28 +22,31 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import im.vector.app.R
-import kotlinx.android.synthetic.main.motion_notifs_fab_menu_merge.view.*
+import im.vector.app.databinding.MotionNotifsFabMenuMergeBinding
 
 class NotifsFabMenuView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                                   defStyleAttr: Int = 0) : MotionLayout(context, attrs, defStyleAttr) {
+
+    private val views: MotionNotifsFabMenuMergeBinding
 
     var listener: Listener? = null
 
     init {
         inflate(context, R.layout.motion_notifs_fab_menu_merge, this)
+        views = MotionNotifsFabMenuMergeBinding.bind(this)
     }
 
     override fun onFinishInflate() {
         super.onFinishInflate()
 
-        listOf(createRoomItemChat, createRoomItemChatLabel)
+        listOf(views.createRoomItemChat, views.createRoomItemChatLabel)
                 .forEach {
                     it.setOnClickListener {
                         closeFabMenu()
                         listener?.createDirectChat()
                     }
                 }
-        listOf(createRoomItemGroup, createRoomItemGroupLabel)
+        listOf(views.createRoomItemGroup, views.createRoomItemGroupLabel)
                 .forEach {
                     it.setOnClickListener {
                         closeFabMenu()
@@ -51,7 +54,7 @@ class NotifsFabMenuView @JvmOverloads constructor(context: Context, attrs: Attri
                     }
                 }
 
-        createRoomTouchGuard.setOnClickListener {
+        views.createRoomTouchGuard.setOnClickListener {
             closeFabMenu()
         }
     }
@@ -59,22 +62,22 @@ class NotifsFabMenuView @JvmOverloads constructor(context: Context, attrs: Attri
     override fun transitionToEnd() {
         super.transitionToEnd()
 
-        createRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_close)
+        views.createRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_close)
     }
 
     override fun transitionToStart() {
         super.transitionToStart()
 
-        createRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_open)
+        views.createRoomButton.contentDescription = context.getString(R.string.a11y_create_menu_open)
     }
 
     fun show() {
         isVisible = true
-        createRoomButton.show()
+        views.createRoomButton.show()
     }
 
     fun hide() {
-        createRoomButton.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
+        views.createRoomButton.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
             override fun onHidden(fab: FloatingActionButton?) {
                 super.onHidden(fab)
                 isVisible = false

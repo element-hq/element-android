@@ -26,18 +26,21 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.roomdirectory.createroom.CreateRoomFragment
 import im.vector.app.features.roomdirectory.createroom.CreateRoomArgs
 import im.vector.app.features.roomdirectory.picker.RoomDirectoryPickerFragment
 import javax.inject.Inject
 
-class RoomDirectoryActivity : VectorBaseActivity() {
+class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     @Inject lateinit var roomDirectoryViewModelFactory: RoomDirectoryViewModel.Factory
     private val roomDirectoryViewModel: RoomDirectoryViewModel by viewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)

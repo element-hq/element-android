@@ -18,9 +18,11 @@ package im.vector.app.features.roomprofile.settings
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
@@ -36,6 +38,7 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.RoomProfileSharedAction
@@ -44,8 +47,7 @@ import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistory
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilityBottomSheet
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleBottomSheet
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
-import kotlinx.android.synthetic.main.fragment_room_setting_generic.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
+
 import org.matrix.android.sdk.api.util.toMatrixItem
 import java.util.UUID
 import javax.inject.Inject
@@ -56,7 +58,7 @@ class RoomSettingsFragment @Inject constructor(
         colorProvider: ColorProvider,
         private val avatarRenderer: AvatarRenderer
 ) :
-        VectorBaseFragment(),
+        VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomSettingsController.Callback,
         OnBackPressed,
         GalleryOrCameraDialogHelper.Listener {
@@ -69,7 +71,9 @@ class RoomSettingsFragment @Inject constructor(
     private val roomProfileArgs: RoomProfileArgs by args()
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 
-    override fun getLayoutResId() = R.layout.fragment_room_setting_generic
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomSettingGenericBinding {
+        return FragmentRoomSettingGenericBinding.inflate(inflater, container, false)
+    }
 
     override fun getMenuRes() = R.menu.vector_room_settings
 
@@ -79,10 +83,10 @@ class RoomSettingsFragment @Inject constructor(
         setupRoomHistoryVisibilitySharedActionViewModel()
         setupRoomJoinRuleSharedActionViewModel()
         controller.callback = this
-        setupToolbar(roomSettingsToolbar)
-        roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
-        waiting_view_status_text.setText(R.string.please_wait)
-        waiting_view_status_text.isVisible = true
+        setupToolbar(views.roomSettingsToolbar)
+        views.roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
+        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.isVisible = true
 
         viewModel.observeViewEvents {
             when (it) {
@@ -122,7 +126,7 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun onDestroyView() {
         controller.callback = null
-        roomSettingsRecyclerView.cleanup()
+        views.roomSettingsRecyclerView.cleanup()
         super.onDestroyView()
     }
 
@@ -146,11 +150,11 @@ class RoomSettingsFragment @Inject constructor(
     }
 
     private fun renderRoomSummary(state: RoomSettingsViewState) {
-        waiting_view.isVisible = state.isLoading
+        views.waitingView.root.isVisible = state.isLoading
 
         state.roomSummary()?.let {
-            roomSettingsToolbarTitleView.text = it.displayName
-            avatarRenderer.render(it.toMatrixItem(), roomSettingsToolbarAvatarImageView)
+            views.roomSettingsToolbarTitleView.text = it.displayName
+            avatarRenderer.render(it.toMatrixItem(), views.roomSettingsToolbarAvatarImageView)
         }
 
         invalidateOptionsMenu()
@@ -172,6 +176,10 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun onRoomAliasesClicked() {
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
+    }
+
+    override fun onRoomPermissionsClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPermissionsSettings)
     }
 
     override fun onJoinRuleClicked()  = withState(viewModel) { state ->

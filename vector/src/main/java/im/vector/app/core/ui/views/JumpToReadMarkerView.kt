@@ -22,7 +22,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import im.vector.app.R
-import kotlinx.android.synthetic.main.view_jump_to_read_marker.view.*
+import im.vector.app.databinding.ViewJumpToReadMarkerBinding
 
 class JumpToReadMarkerView @JvmOverloads constructor(
         context: Context,
@@ -43,11 +43,12 @@ class JumpToReadMarkerView @JvmOverloads constructor(
 
     private fun setupView() {
         inflate(context, R.layout.view_jump_to_read_marker, this)
+        val views = ViewJumpToReadMarkerBinding.bind(this)
         setBackgroundColor(ContextCompat.getColor(context, R.color.notification_accent_color))
-        jumpToReadMarkerLabelView.setOnClickListener {
+        views.jumpToReadMarkerLabelView.setOnClickListener {
             callback?.onJumpToReadMarkerClicked()
         }
-        closeJumpToReadMarkerView.setOnClickListener {
+        views.closeJumpToReadMarkerView.setOnClickListener {
             visibility = View.INVISIBLE
             callback?.onClearReadMarkerClicked()
         }

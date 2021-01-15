@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.eventbus
+package org.matrix.android.sdk.api.util
 
-import org.greenrobot.eventbus.Logger
-import timber.log.Timber
-import java.util.logging.Level
+import java.net.URLEncoder
 
-class EventBusTimberLogger : Logger {
-    override fun log(level: Level, msg: String) {
-        Timber.d(msg)
+/**
+ * Append param and value to a Url, using "?" or "&". Value parameter will be encoded
+ * Return this for chaining purpose
+ */
+fun StringBuilder.appendParamToUrl(param: String, value: String): StringBuilder {
+    if (contains("?")) {
+        append("&")
+    } else {
+        append("?")
     }
 
-    override fun log(level: Level, msg: String, th: Throwable) {
-        Timber.e(th, msg)
-    }
+    append(param)
+    append("=")
+    append(URLEncoder.encode(value, "utf-8"))
+
+    return this
 }

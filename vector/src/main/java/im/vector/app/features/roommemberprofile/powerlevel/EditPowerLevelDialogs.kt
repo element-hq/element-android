@@ -19,39 +19,45 @@ package im.vector.app.features.roommemberprofile.powerlevel
 import android.app.Activity
 import android.content.DialogInterface
 import android.view.KeyEvent
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
-import kotlinx.android.synthetic.main.dialog_edit_power_level.view.*
+import im.vector.app.databinding.DialogEditPowerLevelBinding
+
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 
 object EditPowerLevelDialogs {
 
-    fun showChoice(activity: Activity, currentRole: Role, listener: (Int) -> Unit) {
+    fun showChoice(activity: Activity,
+                   @StringRes titleRes: Int,
+                   currentRole: Role,
+                   listener: (Int) -> Unit) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_edit_power_level, null)
-        dialogLayout.powerLevelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-            dialogLayout.powerLevelCustomEditLayout.isVisible = checkedId == R.id.powerLevelCustomRadio
+        val views = DialogEditPowerLevelBinding.bind(dialogLayout)
+        views.powerLevelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+            views.powerLevelCustomEditLayout.isVisible = checkedId == R.id.powerLevelCustomRadio
         }
-        dialogLayout.powerLevelCustomEdit.setText(currentRole.value.toString())
+        views.powerLevelCustomEdit.setText(currentRole.value.toString())
 
         when (currentRole) {
-            Role.Admin     -> dialogLayout.powerLevelAdminRadio.isChecked = true
-            Role.Moderator -> dialogLayout.powerLevelModeratorRadio.isChecked = true
-            Role.Default   -> dialogLayout.powerLevelDefaultRadio.isChecked = true
-            else           -> dialogLayout.powerLevelCustomRadio.isChecked = true
+            Role.Admin     -> views.powerLevelAdminRadio.isChecked = true
+            Role.Moderator -> views.powerLevelModeratorRadio.isChecked = true
+            Role.Default   -> views.powerLevelDefaultRadio.isChecked = true
+            else           -> views.powerLevelCustomRadio.isChecked = true
         }
 
         AlertDialog.Builder(activity)
-                .setTitle(R.string.power_level_edit_title)
+                .setTitle(titleRes)
                 .setView(dialogLayout)
                 .setPositiveButton(R.string.edit) { _, _ ->
-                    val newValue = when (dialogLayout.powerLevelRadioGroup.checkedRadioButtonId) {
+                    val newValue = when (views.powerLevelRadioGroup.checkedRadioButtonId) {
                         R.id.powerLevelAdminRadio     -> Role.Admin.value
                         R.id.powerLevelModeratorRadio -> Role.Moderator.value
                         R.id.powerLevelDefaultRadio   -> Role.Default.value
                         else                          -> {
-                            dialogLayout.powerLevelCustomEdit.text?.toString()?.toInt() ?: currentRole.value
+                            views.powerLevelCustomEdit.text?.toString()?.toInt() ?: currentRole.value
                         }
                     }
                     listener(newValue)

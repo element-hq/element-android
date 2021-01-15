@@ -24,7 +24,8 @@ import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
-import kotlinx.android.parcel.Parcelize
+import im.vector.app.databinding.ActivitySimpleBinding
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryData
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -47,7 +48,7 @@ data class RoomPreviewData(
         get() = MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
 }
 
-class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
+class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     companion object {
         private const val ARG = "ARG"
@@ -72,7 +73,9 @@ class RoomPreviewActivity : VectorBaseActivity(), ToolbarConfigurable {
         }
     }
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar)

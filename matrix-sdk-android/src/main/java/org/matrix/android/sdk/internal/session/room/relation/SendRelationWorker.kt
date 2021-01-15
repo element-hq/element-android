@@ -18,12 +18,12 @@ package org.matrix.android.sdk.internal.session.room.relation
 import android.content.Context
 import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionInfo
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.room.RoomAPI
@@ -47,7 +47,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters)
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
-    @Inject lateinit var eventBus: EventBus
+    @Inject lateinit var globalErrorReceiver: GlobalErrorReceiver
     @Inject lateinit var localEchoRepository: LocalEchoRepository
 
     override fun injectWith(injector: SessionComponent) {
@@ -84,7 +84,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters)
     }
 
     private suspend fun sendRelation(roomId: String, relationType: String, relatedEventId: String, localEvent: Event) {
-        executeRequest<SendResponse>(eventBus) {
+        executeRequest<SendResponse>(globalErrorReceiver) {
             apiCall = roomAPI.sendRelation(
                     roomId = roomId,
                     parentId = relatedEventId,

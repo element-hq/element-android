@@ -17,10 +17,13 @@
 
 package im.vector.app.features.roomprofile
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -32,6 +35,7 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
+import im.vector.app.core.dialogs.withColoredButton
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
@@ -40,6 +44,8 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.FragmentMatrixProfileBinding
+import im.vector.app.databinding.ViewStubRoomProfileHeaderBinding
 import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
@@ -47,10 +53,7 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomS
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.media.BigImageViewerActivity
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_matrix_profile.*
-import kotlinx.android.synthetic.main.merge_overlay_waiting_view.*
-import kotlinx.android.synthetic.main.view_stub_room_profile_header.*
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -66,8 +69,11 @@ class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
         val roomProfileViewModelFactory: RoomProfileViewModel.Factory
-) : VectorBaseFragment(),
+) :
+        VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomProfileController.Callback {
+
+    private lateinit var headerViews: ViewStubRoomProfileHeaderBinding
 
     private val roomProfileArgs: RoomProfileArgs by args()
     private lateinit var roomListQuickActionsSharedActionViewModel: RoomListQuickActionsSharedActionViewModel
@@ -76,7 +82,9 @@ class RoomProfileFragment @Inject constructor(
 
     private var appBarStateChangeListener: AppBarStateChangeListener? = null
 
-    override fun getLayoutResId() = R.layout.fragment_matrix_profile
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentMatrixProfileBinding {
+        return FragmentMatrixProfileBinding.inflate(inflater, container, false)
+    }
 
     override fun getMenuRes() = R.menu.vector_room_profile
 
@@ -84,20 +92,21 @@ class RoomProfileFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomListQuickActionsSharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
-        val headerView = matrixProfileHeaderView.let {
+        val headerView = views.matrixProfileHeaderView.let {
             it.layoutResource = R.layout.view_stub_room_profile_header
             it.inflate()
         }
+        headerViews = ViewStubRoomProfileHeaderBinding.bind(headerView)
         setupWaitingView()
-        setupToolbar(matrixProfileToolbar)
+        setupToolbar(views.matrixProfileToolbar)
         setupRecyclerView()
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
                 headerView,
-                listOf(matrixProfileToolbarAvatarImageView,
-                        matrixProfileToolbarTitleView,
-                        matrixProfileDecorationToolbarAvatarImageView)
+                listOf(views.matrixProfileToolbarAvatarImageView,
+                       views.matrixProfileToolbarTitleView,
+                       views.matrixProfileDecorationToolbarAvatarImageView)
         )
-        matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
+        views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.observeViewEvents {
             when (it) {
                 is RoomProfileViewEvents.Loading          -> showLoading(it.message)
@@ -114,13 +123,13 @@ class RoomProfileFragment @Inject constructor(
     }
 
     private fun setupWaitingView() {
-        waiting_view_status_text.setText(R.string.please_wait)
-        waiting_view_status_text.isVisible = true
+        views.waitingView.waitingStatusText.setText(R.string.please_wait)
+        views.waitingView.waitingStatusText.isVisible = true
     }
 
     private fun setupLongClicks() {
-        roomProfileNameView.copyOnLongClick()
-        roomProfileAliasView.copyOnLongClick()
+        headerViews.roomProfileNameView.copyOnLongClick()
+        headerViews.roomProfileAliasView.copyOnLongClick()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -151,38 +160,38 @@ class RoomProfileFragment @Inject constructor(
 
     private fun setupRecyclerView() {
         roomProfileController.callback = this
-        matrixProfileRecyclerView.configureWith(roomProfileController, hasFixedSize = true, disableItemAnimation = true)
+        views.matrixProfileRecyclerView.configureWith(roomProfileController, hasFixedSize = true, disableItemAnimation = true)
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
-        matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
-        matrixProfileRecyclerView.cleanup()
+        views.matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
+        views.matrixProfileRecyclerView.cleanup()
         appBarStateChangeListener = null
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(roomProfileViewModel) { state ->
-        waiting_view.isVisible = state.isLoading
+        views.waitingView.root.isVisible = state.isLoading
 
         state.roomSummary()?.also {
             if (it.membership.isLeft()) {
                 Timber.w("The room has been left")
                 activity?.finish()
             } else {
-                roomProfileNameView.text = it.displayName
-                matrixProfileToolbarTitleView.text = it.displayName
-                roomProfileAliasView.setTextOrHide(it.canonicalAlias)
+                headerViews.roomProfileNameView.text = it.displayName
+                views.matrixProfileToolbarTitleView.text = it.displayName
+                headerViews.roomProfileAliasView.setTextOrHide(it.canonicalAlias)
                 val matrixItem = it.toMatrixItem()
-                avatarRenderer.render(matrixItem, roomProfileAvatarView)
-                avatarRenderer.render(matrixItem, matrixProfileToolbarAvatarImageView)
-                roomProfileDecorationImageView.isVisible = it.roomEncryptionTrustLevel != null
-                roomProfileDecorationImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
-                matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
+                avatarRenderer.render(matrixItem, headerViews.roomProfileAvatarView)
+                avatarRenderer.render(matrixItem, views.matrixProfileToolbarAvatarImageView)
+                headerViews.roomProfileDecorationImageView.isVisible = it.roomEncryptionTrustLevel != null
+                headerViews.roomProfileDecorationImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
+                views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
 
-                roomProfileAvatarView.setOnClickListener { view ->
+                headerViews.roomProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, matrixItem)
                 }
-                matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
+                views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
                     onAvatarClicked(view, matrixItem)
                 }
             }
@@ -240,18 +249,35 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onLeaveRoomClicked() {
+        val isPublicRoom = roomProfileViewModel.isPublicRoom()
+        val message = buildString {
+            append(getString(R.string.room_participants_leave_prompt_msg))
+            if (!isPublicRoom) {
+                append("\n\n")
+                append(getString(R.string.room_participants_leave_private_warning))
+            }
+        }
         AlertDialog.Builder(requireContext())
                 .setTitle(R.string.room_participants_leave_prompt_title)
-                .setMessage(R.string.room_participants_leave_prompt_msg)
+                .setMessage(message)
                 .setPositiveButton(R.string.leave) { _, _ ->
                     roomProfileViewModel.handle(RoomProfileAction.LeaveRoom)
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
+                .apply {
+                    if (!isPublicRoom) {
+                        withColoredButton(DialogInterface.BUTTON_POSITIVE)
+                    }
+                }
     }
 
     override fun onRoomIdClicked() {
         copyToClipboard(requireContext(), roomProfileArgs.roomId)
+    }
+
+    override fun onUrlInTopicLongClicked(url: String) {
+        copyToClipboard(requireContext(), url, true)
     }
 
     private fun onShareRoomProfile(permalink: String) {

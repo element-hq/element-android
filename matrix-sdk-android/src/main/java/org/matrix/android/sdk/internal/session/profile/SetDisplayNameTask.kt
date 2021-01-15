@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.profile
 
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal abstract class SetDisplayNameTask : Task<SetDisplayNameTask.Params, Unit> {
@@ -30,10 +30,10 @@ internal abstract class SetDisplayNameTask : Task<SetDisplayNameTask.Params, Uni
 
 internal class DefaultSetDisplayNameTask @Inject constructor(
         private val profileAPI: ProfileAPI,
-        private val eventBus: EventBus) : SetDisplayNameTask() {
+        private val globalErrorReceiver: GlobalErrorReceiver) : SetDisplayNameTask() {
 
     override suspend fun execute(params: Params) {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             val body = SetDisplayNameBody(
                     displayName = params.newDisplayName
             )

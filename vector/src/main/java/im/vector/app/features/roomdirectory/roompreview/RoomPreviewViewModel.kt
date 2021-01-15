@@ -84,22 +84,34 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
             when (peekResult) {
                 is PeekResult.Success           -> {
                     setState {
+                        // Do not override what we had from the permalink
+                        val newHomeServers = if (homeServers.isEmpty()) {
+                            peekResult.viaServers.take(3)
+                        } else {
+                            homeServers
+                        }
                         copy(
                                 roomId = peekResult.roomId,
                                 avatarUrl = peekResult.avatarUrl,
                                 roomAlias = peekResult.alias ?: initialState.roomAlias,
                                 roomTopic = peekResult.topic,
-                                homeServers = peekResult.viaServers,
+                                homeServers = newHomeServers,
                                 peekingState = Success(PeekingState.FOUND)
                         )
                     }
                 }
                 is PeekResult.PeekingNotAllowed -> {
                     setState {
+                        // Do not override what we had from the permalink
+                        val newHomeServers = if (homeServers.isEmpty()) {
+                            peekResult.viaServers.take(3)
+                        } else {
+                            homeServers
+                        }
                         copy(
                                 roomId = peekResult.roomId,
                                 roomAlias = peekResult.alias ?: initialState.roomAlias,
-                                homeServers = peekResult.viaServers,
+                                homeServers = newHomeServers,
                                 peekingState = Success(PeekingState.NO_ACCESS)
                         )
                     }

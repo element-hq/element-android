@@ -25,17 +25,20 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 
 /**
  * Simple container for [CreateRoomFragment]
  */
-class CreateRoomActivity : VectorBaseActivity(), ToolbarConfigurable {
+class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar)

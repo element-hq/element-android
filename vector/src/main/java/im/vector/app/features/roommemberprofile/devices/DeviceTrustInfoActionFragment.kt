@@ -17,35 +17,36 @@
 package im.vector.app.features.roommemberprofile.devices
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+import android.view.ViewGroup
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.databinding.BottomSheetGenericListBinding
+
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
 class DeviceTrustInfoActionFragment @Inject constructor(
         val dimensionConverter: DimensionConverter,
         val epoxyController: DeviceTrustInfoEpoxyController
-) : VectorBaseFragment(), DeviceTrustInfoEpoxyController.InteractionListener {
+) : VectorBaseFragment<BottomSheetGenericListBinding>(),
+        DeviceTrustInfoEpoxyController.InteractionListener {
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_generic_list
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListBinding {
+        return BottomSheetGenericListBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: DeviceListBottomSheetViewModel by parentFragmentViewModel(DeviceListBottomSheetViewModel::class)
 
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.setPadding(0, dimensionConverter.dpToPx(16), 0, dimensionConverter.dpToPx(16))
-        recyclerView.configureWith(
+        views.bottomSheetRecyclerView.setPadding(0, dimensionConverter.dpToPx(16), 0, dimensionConverter.dpToPx(16))
+        views.bottomSheetRecyclerView.configureWith(
                 epoxyController,
                 showDivider = false,
                 hasFixedSize = false)
@@ -53,7 +54,7 @@ class DeviceTrustInfoActionFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        views.bottomSheetRecyclerView.cleanup()
         super.onDestroyView()
     }
 

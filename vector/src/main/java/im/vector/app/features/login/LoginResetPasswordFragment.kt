@@ -17,9 +17,10 @@
 package im.vector.app.features.login
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import butterknife.OnClick
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
@@ -29,23 +30,26 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.databinding.FragmentLoginResetPasswordBinding
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.android.synthetic.main.fragment_login_reset_password.*
+
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked for email and new password to reset his password
  */
-class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment() {
+class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
 
     private var passwordShown = false
 
     // Show warning only once
     private var showWarning = true
 
-    override fun getLayoutResId() = R.layout.fragment_login_reset_password
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginResetPasswordBinding {
+        return FragmentLoginResetPasswordBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,28 +59,29 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment()
     }
 
     private fun setupUi(state: LoginViewState) {
-        resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrl.toReducedUrl())
+        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrl.toReducedUrl())
     }
 
     private fun setupSubmitButton() {
+        views.resetPasswordSubmit.setOnClickListener { submit() }
+
         Observable
                 .combineLatest(
-                        resetPasswordEmail.textChanges().map { it.isEmail() },
-                        passwordField.textChanges().map { it.isNotEmpty() },
+                        views.resetPasswordEmail.textChanges().map { it.isEmail() },
+                        views.passwordField.textChanges().map { it.isNotEmpty() },
                         BiFunction<Boolean, Boolean, Boolean> { isEmail, isPasswordNotEmpty ->
                             isEmail && isPasswordNotEmpty
                         }
                 )
                 .subscribeBy {
-                    resetPasswordEmailTil.error = null
-                    passwordFieldTil.error = null
-                    resetPasswordSubmit.isEnabled = it
+                    views.resetPasswordEmailTil.error = null
+                    views.passwordFieldTil.error = null
+                    views.resetPasswordSubmit.isEnabled = it
                 }
                 .disposeOnDestroyView()
     }
 
-    @OnClick(R.id.resetPasswordSubmit)
-    fun submit() {
+    private fun submit() {
         cleanupUi()
 
         if (showWarning) {
@@ -96,22 +101,22 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment()
     }
 
     private fun doSubmit() {
-        val email = resetPasswordEmail.text.toString()
-        val password = passwordField.text.toString()
+        val email = views.resetPasswordEmail.text.toString()
+        val password = views.passwordField.text.toString()
 
         loginViewModel.handle(LoginAction.ResetPassword(email, password))
     }
 
     private fun cleanupUi() {
-        resetPasswordSubmit.hideKeyboard()
-        resetPasswordEmailTil.error = null
-        passwordFieldTil.error = null
+        views.resetPasswordSubmit.hideKeyboard()
+        views.resetPasswordEmailTil.error = null
+        views.passwordFieldTil.error = null
     }
 
     private fun setupPasswordReveal() {
         passwordShown = false
 
-        passwordReveal.setOnClickListener {
+        views.passwordReveal.setOnClickListener {
             passwordShown = !passwordShown
 
             renderPasswordField()
@@ -121,14 +126,14 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment()
     }
 
     private fun renderPasswordField() {
-        passwordField.showPassword(passwordShown)
+        views.passwordField.showPassword(passwordShown)
 
         if (passwordShown) {
-            passwordReveal.setImageResource(R.drawable.ic_eye_closed)
-            passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
+            views.passwordReveal.setImageResource(R.drawable.ic_eye_closed)
+            views.passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
         } else {
-            passwordReveal.setImageResource(R.drawable.ic_eye)
-            passwordReveal.contentDescription = getString(R.string.a11y_show_password)
+            views.passwordReveal.setImageResource(R.drawable.ic_eye)
+            views.passwordReveal.contentDescription = getString(R.string.a11y_show_password)
         }
     }
 
@@ -146,7 +151,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment()
                 renderPasswordField()
             }
             is Fail    -> {
-                resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
+                views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
             is Success -> {
                 Unit

@@ -157,8 +157,8 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     override fun onCleared() {
-        super.onCleared()
         session.cryptoService().keysBackupService().removeListener(this)
+        super.onCleared()
     }
 
     override fun onStateChange(newState: KeysBackupState) {

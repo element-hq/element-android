@@ -17,17 +17,17 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 // TODO Add parent task
 
 internal class GetEventTask @Inject constructor(
         private val roomAPI: RoomAPI,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : Task<GetEventTask.Params, Event> {
 
     internal data class Params(
@@ -36,7 +36,7 @@ internal class GetEventTask @Inject constructor(
     )
 
     override suspend fun execute(params: Params): Event {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = roomAPI.getEvent(params.roomId, params.eventId)
         }
     }

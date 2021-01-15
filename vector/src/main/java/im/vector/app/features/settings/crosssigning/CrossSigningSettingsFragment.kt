@@ -16,17 +16,20 @@
 package im.vector.app.features.settings.crosssigning
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+
 import javax.inject.Inject
 
 /**
@@ -35,9 +38,12 @@ import javax.inject.Inject
 class CrossSigningSettingsFragment @Inject constructor(
         private val controller: CrossSigningSettingsController,
         val viewModelFactory: CrossSigningSettingsViewModel.Factory
-) : VectorBaseFragment(), CrossSigningSettingsController.InteractionListener {
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+        CrossSigningSettingsController.InteractionListener {
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: CrossSigningSettingsViewModel by fragmentViewModel()
 
@@ -60,7 +66,7 @@ class CrossSigningSettingsFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.encryption_information_cross_signing_state)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.encryption_information_cross_signing_state)
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -68,12 +74,12 @@ class CrossSigningSettingsFragment @Inject constructor(
     }
 
     private fun setupRecyclerView() {
-        genericRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
+        views.genericRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
         controller.interactionListener = this
     }
 
     override fun onDestroyView() {
-        genericRecyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         controller.interactionListener = null
         super.onDestroyView()
     }

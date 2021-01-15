@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -42,7 +41,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
-import org.matrix.android.sdk.internal.session.room.timeline.DefaultTimeline
+import org.matrix.android.sdk.internal.session.room.timeline.TimelineInput
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
@@ -52,7 +51,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
                                                        private val taskExecutor: TaskExecutor,
                                                        private val realmSessionProvider: RealmSessionProvider,
                                                        private val roomSummaryUpdater: RoomSummaryUpdater,
-                                                       private val eventBus: EventBus,
+                                                       private val timelineInput: TimelineInput,
                                                        private val timelineEventMapper: TimelineEventMapper) {
 
     fun createLocalEcho(event: Event) {
@@ -76,7 +75,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
             }
         }
         val timelineEvent = timelineEventMapper.map(timelineEventEntity)
-        eventBus.post(DefaultTimeline.OnLocalEchoCreated(roomId = roomId, timelineEvent = timelineEvent))
+        timelineInput.onLocalEchoCreated(roomId = roomId, timelineEvent = timelineEvent)
         taskExecutor.executorScope.asyncTransaction(monarchy) { realm ->
             val eventInsertEntity = EventInsertEntity(event.eventId, event.type).apply {
                 this.insertType = EventInsertType.LOCAL_ECHO
@@ -90,7 +89,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
 
     fun updateSendState(eventId: String, roomId: String?, sendState: SendState) {
         Timber.v("## SendEvent: [${System.currentTimeMillis()}] Update local state of $eventId to ${sendState.name}")
-        eventBus.post(DefaultTimeline.OnLocalEchoUpdated(roomId ?: "", eventId, sendState))
+        timelineInput.onLocalEchoUpdated(roomId = roomId ?: "", eventId = eventId, sendState = sendState)
         updateEchoAsync(eventId) { realm, sendingEventEntity ->
             if (sendState == SendState.SENT && sendingEventEntity.sendState == SendState.SYNCED) {
                 // If already synced, do not put as sent

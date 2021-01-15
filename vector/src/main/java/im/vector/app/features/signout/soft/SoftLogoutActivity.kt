@@ -30,7 +30,7 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.login.LoginActivity
-import kotlinx.android.synthetic.main.activity_login.*
+
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -101,7 +101,7 @@ class SoftLogoutActivity : LoginActivity() {
             MainActivity.restartApp(this, MainActivityArgs())
         }
 
-        loginLoading.isVisible = softLogoutViewState.isLoading()
+        views.loginLoading.isVisible = softLogoutViewState.isLoading()
     }
 
     companion object {

@@ -50,6 +50,8 @@ import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
@@ -295,5 +297,78 @@ class KeyShareTests : InstrumentedTest {
 
         mTestHelper.signOutAndClose(aliceSession1)
         mTestHelper.signOutAndClose(aliceSession2)
+    }
+
+    @Test
+    fun test_ImproperKeyShareBug() {
+        val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
+
+        mTestHelper.doSync<Unit> {
+            aliceSession.cryptoService().crossSigningService()
+                    .initializeCrossSigning(UserPasswordAuth(
+                            user = aliceSession.myUserId,
+                            password = TestConstants.PASSWORD
+                    ), it)
+        }
+
+        // Create an encrypted room and send a couple of messages
+        val roomId = mTestHelper.doSync<String> {
+            aliceSession.createRoom(
+                    CreateRoomParams().apply {
+                        visibility = RoomDirectoryVisibility.PRIVATE
+                        enableEncryption()
+                    },
+                    it
+            )
+        }
+        val roomAlicePov = aliceSession.getRoom(roomId)
+        assertNotNull(roomAlicePov)
+        Thread.sleep(1_000)
+        assertTrue(roomAlicePov?.isEncrypted() == true)
+        val secondEventId = mTestHelper.sendTextMessage(roomAlicePov!!, "Message", 3)[1].eventId
+
+        // Create bob session
+
+        val bobSession = mTestHelper.createAccount(TestConstants.USER_BOB, SessionTestParams(true))
+        mTestHelper.doSync<Unit> {
+            bobSession.cryptoService().crossSigningService()
+                    .initializeCrossSigning(UserPasswordAuth(
+                            user = bobSession.myUserId,
+                            password = TestConstants.PASSWORD
+                    ), it)
+        }
+
+        // Let alice invite bob
+        mTestHelper.doSync<Unit> {
+            roomAlicePov.invite(bobSession.myUserId, null, it)
+        }
+
+        mTestHelper.doSync<Unit> {
+            bobSession.joinRoom(roomAlicePov.roomId, null, emptyList(), it)
+        }
+
+        // we want to discard alice outbound session
+        aliceSession.cryptoService().discardOutboundSession(roomAlicePov.roomId)
+
+        // and now resend a new message to reset index to 0
+        mTestHelper.sendTextMessage(roomAlicePov, "After", 1)
+
+        val roomRoomBobPov = aliceSession.getRoom(roomId)
+        val beforeJoin = roomRoomBobPov!!.getTimeLineEvent(secondEventId)
+
+        var dRes = tryOrNull {  bobSession.cryptoService().decryptEvent(beforeJoin!!.root, "") }
+
+        assert(dRes == null)
+
+        // Try to re-ask the keys
+
+        bobSession.cryptoService().reRequestRoomKeyForEvent(beforeJoin!!.root)
+
+        Thread.sleep(3_000)
+
+        // With the bug the first session would have improperly reshare that key :/
+        dRes = tryOrNull {  bobSession.cryptoService().decryptEvent(beforeJoin.root, "") }
+        Log.d("#TEST", "KS: sgould not decrypt that ${beforeJoin.root.getClearContent().toModel<MessageContent>()?.body}")
+        assert(dRes?.clearEvent == null)
     }
 }

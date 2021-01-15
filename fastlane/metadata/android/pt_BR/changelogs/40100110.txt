@@ -1,0 +1,2 @@
+Esta nova versão contém principalmente melhorias na interface do usuário e na experiência do usuário. Agora você pode convidar amigos e criar conversas rapidamente, digitalizando códigos QR.
+Registro completo de alterações: https://github.com/vector-im/element-android/releases/tag/v1.0.11

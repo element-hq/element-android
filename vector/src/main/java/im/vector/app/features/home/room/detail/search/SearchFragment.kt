@@ -18,7 +18,9 @@ package im.vector.app.features.home.room.detail.search
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Fail
@@ -34,8 +36,8 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_search.*
+import im.vector.app.databinding.FragmentSearchBinding
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.events.model.Event
 import javax.inject.Inject
 
@@ -47,32 +49,36 @@ data class SearchArgs(
 class SearchFragment @Inject constructor(
         val viewModelFactory: SearchViewModel.Factory,
         private val controller: SearchResultController
-) : VectorBaseFragment(), StateView.EventCallback, SearchResultController.Listener {
+) : VectorBaseFragment<FragmentSearchBinding>(),
+        StateView.EventCallback,
+        SearchResultController.Listener {
 
     private val fragmentArgs: SearchArgs by args()
     private val searchViewModel: SearchViewModel by fragmentViewModel()
 
-    override fun getLayoutResId() = R.layout.fragment_search
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSearchBinding {
+        return FragmentSearchBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        stateView.contentView = searchResultRecycler
-        stateView.eventCallback = this
+        views.stateView.contentView = views.searchResultRecycler
+        views.stateView.eventCallback = this
 
         configureRecyclerView()
     }
 
     private fun configureRecyclerView() {
-        searchResultRecycler.trackItemsVisibilityChange()
-        searchResultRecycler.configureWith(controller, showDivider = false)
-        (searchResultRecycler.layoutManager as? LinearLayoutManager)?.stackFromEnd = true
+        views.searchResultRecycler.trackItemsVisibilityChange()
+        views.searchResultRecycler.configureWith(controller, showDivider = false)
+        (views.searchResultRecycler.layoutManager as? LinearLayoutManager)?.stackFromEnd = true
         controller.listener = this
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        searchResultRecycler?.cleanup()
+        views.searchResultRecycler.cleanup()
         controller.listener = null
     }
 
@@ -80,20 +86,20 @@ class SearchFragment @Inject constructor(
         if (state.searchResult.isNullOrEmpty()) {
             when (state.asyncSearchRequest) {
                 is Loading -> {
-                    stateView.state = StateView.State.Loading
+                    views.stateView.state = StateView.State.Loading
                 }
                 is Fail    -> {
-                    stateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncSearchRequest.error))
+                    views.stateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncSearchRequest.error))
                 }
                 is Success -> {
-                    stateView.state = StateView.State.Empty(
+                    views.stateView.state = StateView.State.Empty(
                             title = getString(R.string.search_no_results),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results))
                 }
             }
         } else {
             controller.setData(state)
-            stateView.state = StateView.State.Content
+            views.stateView.state = StateView.State.Content
         }
     }
 
