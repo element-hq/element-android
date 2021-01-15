@@ -23,10 +23,8 @@ import io.realm.RealmConfiguration
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -53,6 +51,7 @@ import org.matrix.android.sdk.internal.database.query.filterEvents
 import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendStates
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
+import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.Debouncer
@@ -79,14 +78,13 @@ internal class DefaultTimeline(
         private val timelineEventMapper: TimelineEventMapper,
         private val settings: TimelineSettings,
         private val hiddenReadReceipts: TimelineHiddenReadReceipts,
-        private val eventBus: EventBus,
+        private val timelineInput: TimelineInput,
         private val eventDecryptor: TimelineEventDecryptor,
-        private val realmSessionProvider: RealmSessionProvider
-) : Timeline, TimelineHiddenReadReceipts.Delegate {
-
-    data class OnNewTimelineEvents(val roomId: String, val eventIds: List<String>)
-    data class OnLocalEchoCreated(val roomId: String, val timelineEvent: TimelineEvent)
-    data class OnLocalEchoUpdated(val roomId: String, val eventId: String, val sendState: SendState)
+        private val realmSessionProvider: RealmSessionProvider,
+        private val loadRoomMembersTask: LoadRoomMembersTask
+) : Timeline,
+        TimelineHiddenReadReceipts.Delegate,
+        TimelineInput.Listener {
 
     companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
@@ -158,7 +156,7 @@ internal class DefaultTimeline(
     override fun start() {
         if (isStarted.compareAndSet(false, true)) {
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
-            eventBus.register(this)
+            timelineInput.listeners.add(this)
             BACKGROUND_HANDLER.post {
                 eventDecryptor.start()
                 val realm = Realm.getInstance(realmConfiguration)
@@ -184,6 +182,13 @@ internal class DefaultTimeline(
                 if (settings.shouldHandleHiddenReadReceipts()) {
                     hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)
                 }
+
+                loadRoomMembersTask
+                        .configureWith(LoadRoomMembersTask.Params(roomId)) {
+                            this.callback = NoOpMatrixCallback()
+                        }
+                        .executeBy(taskExecutor)
+
                 isReady.set(true)
             }
         }
@@ -196,7 +201,7 @@ internal class DefaultTimeline(
     override fun dispose() {
         if (isStarted.compareAndSet(true, false)) {
             isReady.set(false)
-            eventBus.unregister(this)
+            timelineInput.listeners.remove(this)
             Timber.v("Dispose timeline for roomId: $roomId and eventId: $initialEventId")
             cancelableBag.cancel()
             BACKGROUND_HANDLER.removeCallbacksAndMessages(null)
@@ -313,25 +318,22 @@ internal class DefaultTimeline(
         postSnapshot()
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onNewTimelineEvents(onNewTimelineEvents: OnNewTimelineEvents) {
-        if (isLive && onNewTimelineEvents.roomId == roomId) {
+    override fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
+        if (isLive && this.roomId == roomId) {
             listeners.forEach {
-                it.onNewTimelineEvents(onNewTimelineEvents.eventIds)
+                it.onNewTimelineEvents(eventIds)
             }
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLocalEchoCreated(onLocalEchoCreated: OnLocalEchoCreated) {
-        if (uiEchoManager.onLocalEchoCreated(onLocalEchoCreated)) {
+    override fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {
+        if (uiEchoManager.onLocalEchoCreated(roomId, timelineEvent)) {
             postSnapshot()
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLocalEchoUpdated(onLocalEchoUpdated: OnLocalEchoUpdated) {
-        if (uiEchoManager.onLocalEchoUpdated(onLocalEchoUpdated)) {
+    override fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState) {
+        if (uiEchoManager.onLocalEchoUpdated(roomId, eventId, sendState)) {
             postSnapshot()
         }
     }
@@ -848,11 +850,11 @@ internal class DefaultTimeline(
             }
         }
 
-        fun onLocalEchoUpdated(onLocalEchoUpdated: OnLocalEchoUpdated): Boolean {
-            if (isLive && onLocalEchoUpdated.roomId == roomId) {
-                val existingState = inMemorySendingStates[onLocalEchoUpdated.eventId]
-                inMemorySendingStates[onLocalEchoUpdated.eventId] = onLocalEchoUpdated.sendState
-                if (existingState != onLocalEchoUpdated.sendState) {
+        fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState): Boolean {
+            if (isLive && roomId == this@DefaultTimeline.roomId) {
+                val existingState = inMemorySendingStates[eventId]
+                inMemorySendingStates[eventId] = sendState
+                if (existingState != sendState) {
                     return true
                 }
             }
@@ -860,22 +862,22 @@ internal class DefaultTimeline(
         }
 
         // return true if should update
-        fun onLocalEchoCreated(onLocalEchoCreated: OnLocalEchoCreated): Boolean {
+        fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent): Boolean {
             var postSnapshot = false
-            if (isLive && onLocalEchoCreated.roomId == roomId) {
+            if (isLive && roomId == this@DefaultTimeline.roomId) {
                 // Manage some ui echos (do it before filter because actual event could be filtered out)
-                when (onLocalEchoCreated.timelineEvent.root.getClearType()) {
+                when (timelineEvent.root.getClearType()) {
                     EventType.REDACTION -> {
                     }
                     EventType.REACTION  -> {
-                        val content = onLocalEchoCreated.timelineEvent.root.content?.toModel<ReactionContent>()
+                        val content = timelineEvent.root.content?.toModel<ReactionContent>()
                         if (RelationType.ANNOTATION == content?.relatesTo?.type) {
                             val reaction = content.relatesTo.key
                             val relatedEventID = content.relatesTo.eventId
                             inMemoryReactions.getOrPut(relatedEventID) { mutableListOf() }
                                     .add(
                                             ReactionUiEchoData(
-                                                    localEchoId = onLocalEchoCreated.timelineEvent.eventId,
+                                                    localEchoId = timelineEvent.eventId,
                                                     reactedOnEventId = relatedEventID,
                                                     reaction = reaction
                                             )
@@ -888,12 +890,12 @@ internal class DefaultTimeline(
                 }
 
                 // do not add events that would have been filtered
-                if (listOf(onLocalEchoCreated.timelineEvent).filterEventsWithSettings().isNotEmpty()) {
+                if (listOf(timelineEvent).filterEventsWithSettings().isNotEmpty()) {
                     listeners.forEach {
-                        it.onNewTimelineEvents(listOf(onLocalEchoCreated.timelineEvent.eventId))
+                        it.onNewTimelineEvents(listOf(timelineEvent.eventId))
                     }
-                    Timber.v("On local echo created: ${onLocalEchoCreated.timelineEvent.eventId}")
-                    inMemorySendingEvents.add(0, onLocalEchoCreated.timelineEvent)
+                    Timber.v("On local echo created: ${timelineEvent.eventId}")
+                    inMemorySendingEvents.add(0, timelineEvent)
                     postSnapshot = true
                 }
             }

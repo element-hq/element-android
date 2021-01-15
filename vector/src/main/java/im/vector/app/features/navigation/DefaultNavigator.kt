@@ -22,6 +22,7 @@ import android.content.Intent
 import android.view.View
 import android.view.Window
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
@@ -99,7 +100,7 @@ class DefaultNavigator @Inject constructor(
         val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId)
                 ?: return
         (tx as? IncomingSasVerificationTransaction)?.performAccept()
-        if (context is VectorBaseActivity) {
+        if (context is AppCompatActivity) {
             VerificationBottomSheet.withArgs(
                     roomId = null,
                     otherUserId = otherUserId,
@@ -115,7 +116,7 @@ class DefaultNavigator @Inject constructor(
                 session.myUserId,
                 listOf(otherSessionId)
         )
-        if (context is VectorBaseActivity) {
+        if (context is AppCompatActivity) {
             VerificationBottomSheet.withArgs(
                     roomId = null,
                     otherUserId = session.myUserId,
@@ -130,7 +131,7 @@ class DefaultNavigator @Inject constructor(
                 .getCryptoDeviceInfo(session.myUserId)
                 .filter { it.deviceId != session.sessionParams.deviceId }
                 .map { it.deviceId }
-        if (context is VectorBaseActivity) {
+        if (context is AppCompatActivity) {
             if (otherSessions.isNotEmpty()) {
                 val pr = session.cryptoService().verificationService().requestKeyVerification(
                         supportedVerificationMethodsProvider.provide(),
@@ -147,14 +148,14 @@ class DefaultNavigator @Inject constructor(
 
     override fun waitSessionVerification(context: Context) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-        if (context is VectorBaseActivity) {
+        if (context is AppCompatActivity) {
             VerificationBottomSheet.forSelfVerification(session)
                     .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
         }
     }
 
     override fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean) {
-        if (context is VectorBaseActivity) {
+        if (context is AppCompatActivity) {
             BootstrapBottomSheet.show(
                     context.supportFragmentManager,
                     if (initCrossSigningOnly) SetupMode.CROSS_SIGNING_ONLY else SetupMode.NORMAL
@@ -163,7 +164,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean) {
-        if (context is VectorBaseActivity) {
+        if (context is VectorBaseActivity<*>) {
             context.notImplemented("Open group detail")
         } else {
             context.toast(R.string.not_implemented)
@@ -230,7 +231,7 @@ class DefaultNavigator @Inject constructor(
     override fun openKeysBackupSetup(context: Context, showManualExport: Boolean) {
         // if cross signing is enabled we should propose full 4S
         sessionHolder.getSafeActiveSession()?.let { session ->
-            if (session.cryptoService().crossSigningService().canCrossSign() && context is VectorBaseActivity) {
+            if (session.cryptoService().crossSigningService().canCrossSign() && context is AppCompatActivity) {
                 BootstrapBottomSheet.show(context.supportFragmentManager, SetupMode.NORMAL)
             } else {
                 context.startActivity(KeysBackupSetupActivity.intent(context, showManualExport))
@@ -239,7 +240,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun open4SSetup(context: Context, setupMode: SetupMode) {
-        if (context is VectorBaseActivity) {
+        if (context is AppCompatActivity) {
             BootstrapBottomSheet.show(context.supportFragmentManager, setupMode)
         }
     }

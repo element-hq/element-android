@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'realm-android'
 
 buildscript {
@@ -11,10 +11,6 @@ buildscript {
     dependencies {
         classpath "io.realm:realm-gradle-plugin:10.1.2"
     }
-}
-
-androidExtensions {
-    experimental = true
 }
 
 android {
@@ -170,9 +166,6 @@ dependencies {
     // Logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
-
-    // Bus
-    implementation 'org.greenrobot:eventbus:3.1.1'
 
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'

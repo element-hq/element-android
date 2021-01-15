@@ -24,8 +24,9 @@ import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivitySimpleBinding
 
-class PinActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedActivity {
+class PinActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable, UnlockedActivity {
 
     companion object {
         fun newIntent(context: Context, args: PinArgs): Intent {
@@ -35,7 +36,9 @@ class PinActivity : VectorBaseActivity(), ToolbarConfigurable, UnlockedActivity 
         }
     }
 
-    override fun getLayoutRes() = R.layout.activity_simple
+    override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun initUiAndData() {
         if (isFirstCreation()) {

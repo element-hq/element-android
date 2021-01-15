@@ -25,8 +25,9 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.databinding.ActivityVectorSettingsBinding
 import im.vector.app.features.settings.devices.VectorSettingsDevicesFragment
-import kotlinx.android.synthetic.main.activity_vector_settings.*
+
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
@@ -35,12 +36,14 @@ import javax.inject.Inject
 /**
  * Displays the client settings.
  */
-class VectorSettingsActivity : VectorBaseActivity(),
+class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>(),
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
         FragmentManager.OnBackStackChangedListener,
         VectorSettingsFragmentInteractionListener {
 
-    override fun getLayoutRes() = R.layout.activity_vector_settings
+    override fun getBinding() = ActivityVectorSettingsBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun getTitleRes() = R.string.title_activity_settings
 
@@ -55,7 +58,7 @@ class VectorSettingsActivity : VectorBaseActivity(),
     }
 
     override fun initUiAndData() {
-        configureToolbar(settingsToolbar)
+        configureToolbar(views.settingsToolbar)
 
         if (isFirstCreation()) {
             // display the fragment

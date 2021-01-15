@@ -18,132 +18,112 @@ package im.vector.app.features.call
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.FrameLayout
 import androidx.core.view.isVisible
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import im.vector.app.R
-import kotlinx.android.synthetic.main.view_call_controls.view.*
+import im.vector.app.databinding.ViewCallControlsBinding
+
 import org.matrix.android.sdk.api.session.call.CallState
 import org.webrtc.PeerConnection
 
 class CallControlsView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
+
+    private val views: ViewCallControlsBinding
 
     var interactionListener: InteractionListener? = null
 
-    @BindView(R.id.ringingControls)
-    lateinit var ringingControls: ViewGroup
-
-    @BindView(R.id.iv_icr_accept_call)
-    lateinit var ringingControlAccept: ImageView
-
-    @BindView(R.id.iv_icr_end_call)
-    lateinit var ringingControlDecline: ImageView
-
-    @BindView(R.id.connectedControls)
-    lateinit var connectedControls: ViewGroup
-
-    @BindView(R.id.iv_mute_toggle)
-    lateinit var muteIcon: ImageView
-
-    @BindView(R.id.iv_video_toggle)
-    lateinit var videoToggleIcon: ImageView
-
     init {
-        ConstraintLayout.inflate(context, R.layout.view_call_controls, this)
+        inflate(context, R.layout.view_call_controls, this)
         // layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        ButterKnife.bind(this)
+        views = ViewCallControlsBinding.bind(this)
+
+        views.ringingControlAccept.setOnClickListener { acceptIncomingCall() }
+        views.ringingControlDecline.setOnClickListener { declineIncomingCall() }
+        views.ivEndCall.setOnClickListener { endOngoingCall() }
+        views.muteIcon.setOnClickListener { toggleMute() }
+        views.videoToggleIcon.setOnClickListener { toggleVideo() }
+        views.ivLeftMiniControl.setOnClickListener { returnToChat() }
+        views.ivMore.setOnClickListener { moreControlOption() }
     }
 
-    @OnClick(R.id.iv_icr_accept_call)
-    fun acceptIncomingCall() {
+    private fun acceptIncomingCall() {
         interactionListener?.didAcceptIncomingCall()
     }
 
-    @OnClick(R.id.iv_icr_end_call)
-    fun declineIncomingCall() {
+    private fun declineIncomingCall() {
         interactionListener?.didDeclineIncomingCall()
     }
 
-    @OnClick(R.id.iv_end_call)
-    fun endOngoingCall() {
+    private fun endOngoingCall() {
         interactionListener?.didEndCall()
     }
 
-    @OnClick(R.id.iv_mute_toggle)
-    fun toggleMute() {
+    private fun toggleMute() {
         interactionListener?.didTapToggleMute()
     }
 
-    @OnClick(R.id.iv_video_toggle)
-    fun toggleVideo() {
+    private fun toggleVideo() {
         interactionListener?.didTapToggleVideo()
     }
 
-    @OnClick(R.id.iv_leftMiniControl)
-    fun returnToChat() {
+    private fun returnToChat() {
         interactionListener?.returnToChat()
     }
 
-    @OnClick(R.id.iv_more)
-    fun moreControlOption() {
+    private fun moreControlOption() {
         interactionListener?.didTapMore()
     }
 
     fun updateForState(state: VectorCallViewState) {
         val callState = state.callState.invoke()
         if (state.isAudioMuted) {
-            muteIcon.setImageResource(R.drawable.ic_microphone_off)
-            muteIcon.contentDescription = resources.getString(R.string.a11y_unmute_microphone)
+            views.muteIcon.setImageResource(R.drawable.ic_microphone_off)
+            views.muteIcon.contentDescription = resources.getString(R.string.a11y_unmute_microphone)
         } else {
-            muteIcon.setImageResource(R.drawable.ic_microphone_on)
-            muteIcon.contentDescription = resources.getString(R.string.a11y_mute_microphone)
+            views.muteIcon.setImageResource(R.drawable.ic_microphone_on)
+            views.muteIcon.contentDescription = resources.getString(R.string.a11y_mute_microphone)
         }
         if (state.isVideoEnabled) {
-            videoToggleIcon.setImageResource(R.drawable.ic_video)
-            videoToggleIcon.contentDescription = resources.getString(R.string.a11y_stop_camera)
+            views.videoToggleIcon.setImageResource(R.drawable.ic_video)
+            views.videoToggleIcon.contentDescription = resources.getString(R.string.a11y_stop_camera)
         } else {
-            videoToggleIcon.setImageResource(R.drawable.ic_video_off)
-            videoToggleIcon.contentDescription = resources.getString(R.string.a11y_start_camera)
+          views.videoToggleIcon.setImageResource(R.drawable.ic_video_off)
+            views.videoToggleIcon.contentDescription = resources.getString(R.string.a11y_start_camera)
         }
 
         when (callState) {
             is CallState.Idle,
             is CallState.Dialing,
             is CallState.Answering    -> {
-                ringingControls.isVisible = true
-                ringingControlAccept.isVisible = false
-                ringingControlDecline.isVisible = true
-                connectedControls.isVisible = false
+                views.ringingControls.isVisible = true
+                views.ringingControlAccept.isVisible = false
+                views.ringingControlDecline.isVisible = true
+                views.connectedControls.isVisible = false
             }
             is CallState.LocalRinging -> {
-                ringingControls.isVisible = true
-                ringingControlAccept.isVisible = true
-                ringingControlDecline.isVisible = true
-                connectedControls.isVisible = false
+                views.ringingControls.isVisible = true
+                views.ringingControlAccept.isVisible = true
+                views.ringingControlDecline.isVisible = true
+                views.connectedControls.isVisible = false
             }
             is CallState.Connected    -> {
                 if (callState.iceConnectionState == PeerConnection.PeerConnectionState.CONNECTED) {
-                    ringingControls.isVisible = false
-                    connectedControls.isVisible = true
-                    iv_video_toggle.isVisible = state.isVideoCall
+                    views.ringingControls.isVisible = false
+                    views.connectedControls.isVisible = true
+                    views.videoToggleIcon.isVisible = state.isVideoCall
                 } else {
-                    ringingControls.isVisible = true
-                    ringingControlAccept.isVisible = false
-                    ringingControlDecline.isVisible = true
-                    connectedControls.isVisible = false
+                    views.ringingControls.isVisible = true
+                    views.ringingControlAccept.isVisible = false
+                    views.ringingControlDecline.isVisible = true
+                    views.connectedControls.isVisible = false
                 }
             }
             is CallState.Terminated,
             null                      -> {
-                ringingControls.isVisible = false
-                connectedControls.isVisible = false
+                views.ringingControls.isVisible = false
+                views.connectedControls.isVisible = false
             }
         }
     }

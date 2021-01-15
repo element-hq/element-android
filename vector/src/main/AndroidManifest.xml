@@ -82,8 +82,7 @@
         </activity-alias>
 
         <activity
-            android:name=".features.home.HomeActivity"
-            android:launchMode="singleTask" />
+            android:name=".features.home.HomeActivity" />
         <activity
             android:name=".features.login.LoginActivity"
             android:launchMode="singleTask"

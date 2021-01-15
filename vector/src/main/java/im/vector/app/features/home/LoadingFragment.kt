@@ -18,20 +18,24 @@ package im.vector.app.features.home
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import im.vector.app.R
+import android.view.ViewGroup
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_loading.*
+import im.vector.app.databinding.FragmentLoadingBinding
+
 import javax.inject.Inject
 
-class LoadingFragment @Inject constructor() : VectorBaseFragment() {
+class LoadingFragment @Inject constructor() : VectorBaseFragment<FragmentLoadingBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_loading
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoadingBinding {
+        return FragmentLoadingBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val background = animatedLogoImageView.background
+        val background = views.animatedLogoImageView.background
         if (background is AnimationDrawable) {
             background.start()
         }

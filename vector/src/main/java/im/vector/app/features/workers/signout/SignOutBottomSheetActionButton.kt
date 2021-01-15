@@ -20,75 +20,64 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.FrameLayout
+import androidx.core.content.withStyledAttributes
 import androidx.core.view.isVisible
-import butterknife.BindView
-import butterknife.ButterKnife
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.databinding.ViewSignOutBottomSheetActionButtonBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class SignOutBottomSheetActionButton @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
-    @BindView(R.id.actionTitleText)
-    lateinit var actionTextView: TextView
-
-    @BindView(R.id.actionIconImageView)
-    lateinit var iconImageView: ImageView
-
-    @BindView(R.id.signedOutActionClickable)
-    lateinit var clickableZone: View
+    private val views: ViewSignOutBottomSheetActionButtonBinding
 
     var action: (() -> Unit)? = null
 
-    var title: String? = null
+    private var title: String? = null
         set(value) {
             field = value
-            actionTextView.setTextOrHide(value)
+            views.actionTitleText.setTextOrHide(value)
         }
 
-    var leftIcon: Drawable? = null
+    private var leftIcon: Drawable? = null
         set(value) {
             field = value
             if (value == null) {
-                iconImageView.isVisible = false
-                iconImageView.setImageDrawable(null)
+                views.actionIconImageView.isVisible = false
+                views.actionIconImageView.setImageDrawable(null)
             } else {
-                iconImageView.isVisible = true
-                iconImageView.setImageDrawable(value)
+                views.actionIconImageView.isVisible = true
+                views.actionIconImageView.setImageDrawable(value)
             }
         }
 
-    var tint: Int? = null
+    private var tint: Int? = null
         set(value) {
             field = value
-            iconImageView.imageTintList = value?.let { ColorStateList.valueOf(value) }
+            views.actionIconImageView.imageTintList = value?.let { ColorStateList.valueOf(value) }
         }
 
-    var textColor: Int? = null
+    private var textColor: Int? = null
         set(value) {
             field = value
-            textColor?.let { actionTextView.setTextColor(it) }
+            value?.let { views.actionTitleText.setTextColor(it) }
         }
 
     init {
-        inflate(context, R.layout.item_signout_action, this)
-        ButterKnife.bind(this)
+        inflate(context, R.layout.view_sign_out_bottom_sheet_action_button, this)
+        views = ViewSignOutBottomSheetActionButtonBinding.bind(this)
 
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SignOutBottomSheetActionButton, 0, 0)
-        title = typedArray.getString(R.styleable.SignOutBottomSheetActionButton_actionTitle) ?: ""
-        leftIcon = typedArray.getDrawable(R.styleable.SignOutBottomSheetActionButton_leftIcon)
-        tint = typedArray.getColor(R.styleable.SignOutBottomSheetActionButton_iconTint, ThemeUtils.getColor(context, android.R.attr.textColor))
-        textColor = typedArray.getColor(R.styleable.SignOutBottomSheetActionButton_textColor, ThemeUtils.getColor(context, android.R.attr.textColor))
+        context.withStyledAttributes(attrs, R.styleable.SignOutBottomSheetActionButton) {
+            title = getString(R.styleable.SignOutBottomSheetActionButton_actionTitle) ?: ""
+            leftIcon = getDrawable(R.styleable.SignOutBottomSheetActionButton_leftIcon)
+            tint = getColor(R.styleable.SignOutBottomSheetActionButton_iconTint, ThemeUtils.getColor(context, R.attr.riotx_text_primary))
+            textColor = getColor(R.styleable.SignOutBottomSheetActionButton_textColor, ThemeUtils.getColor(context, R.attr.riotx_text_primary))
+        }
 
-        typedArray.recycle()
-
-        clickableZone.setOnClickListener {
+        views.signedOutActionClickable.setOnClickListener {
             action?.invoke()
         }
     }

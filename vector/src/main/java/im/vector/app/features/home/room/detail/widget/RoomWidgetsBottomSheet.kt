@@ -17,9 +17,9 @@
 package im.vector.app.features.home.room.detail.widget
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+import android.view.ViewGroup
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -28,25 +28,25 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.databinding.BottomSheetGenericListWithTitleBinding
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewModel
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.navigation.Navigator
-import kotlinx.android.synthetic.main.bottom_sheet_generic_list_with_title.*
+
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
 /**
  * Bottom sheet displaying active widgets in a room
  */
-class RoomWidgetsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidgetsController.Listener {
+class RoomWidgetsBottomSheet :
+        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
+        RoomWidgetsController.Listener {
 
     @Inject lateinit var epoxyController: RoomWidgetsController
     @Inject lateinit var colorProvider: ColorProvider
     @Inject lateinit var navigator: Navigator
-
-    @BindView(R.id.bottomSheetRecyclerView)
-    lateinit var recyclerView: RecyclerView
 
     private val roomDetailViewModel: RoomDetailViewModel by parentFragmentViewModel()
 
@@ -54,14 +54,16 @@ class RoomWidgetsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidget
         injector.inject(this)
     }
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_generic_list_with_title
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {
+        return BottomSheetGenericListWithTitleBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.configureWith(epoxyController, hasFixedSize = false)
-        bottomSheetTitle.text = getString(R.string.active_widgets_title)
-        bottomSheetTitle.textSize = 20f
-        bottomSheetTitle.setTextColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
+        views.bottomSheetRecyclerView.configureWith(epoxyController, hasFixedSize = false)
+        views.bottomSheetTitle.text = getString(R.string.active_widgets_title)
+        views.bottomSheetTitle.textSize = 20f
+        views.bottomSheetTitle.setTextColor(colorProvider.getColorFromAttribute(R.attr.riotx_text_primary))
         epoxyController.listener = this
         roomDetailViewModel.asyncSubscribe(this, RoomDetailViewState::activeRoomWidgets) {
             epoxyController.setData(it)
@@ -69,7 +71,7 @@ class RoomWidgetsBottomSheet : VectorBaseBottomSheetDialogFragment(), RoomWidget
     }
 
     override fun onDestroyView() {
-        recyclerView.cleanup()
+        views.bottomSheetRecyclerView.cleanup()
         epoxyController.listener = null
         super.onDestroyView()
     }

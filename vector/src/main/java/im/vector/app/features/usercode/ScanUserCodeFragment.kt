@@ -20,7 +20,9 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.airbnb.mvrx.activityViewModel
@@ -32,18 +34,21 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.databinding.FragmentQrCodeScannerWithButtonBinding
 import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.utils.ImageUtils
-import kotlinx.android.synthetic.main.fragment_qr_code_scanner_with_button.*
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
 class ScanUserCodeFragment @Inject constructor()
-    : VectorBaseFragment(),
+    : VectorBaseFragment<FragmentQrCodeScannerWithButtonBinding>(),
         ZXingScannerView.ResultHandler {
 
-    override fun getLayoutResId() = R.layout.fragment_qr_code_scanner_with_button
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentQrCodeScannerWithButtonBinding {
+        return FragmentQrCodeScannerWithButtonBinding.inflate(inflater, container, false)
+    }
 
     val sharedViewModel: UserCodeSharedViewModel by activityViewModel()
 
@@ -51,11 +56,11 @@ class ScanUserCodeFragment @Inject constructor()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userCodeMyCodeButton.debouncedClicks {
+        views.userCodeMyCodeButton.debouncedClicks {
             sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
         }
 
-        userCodeOpenGalleryButton.debouncedClicks {
+        views.userCodeOpenGalleryButton.debouncedClicks {
             MultiPicker.get(MultiPicker.IMAGE).single().startWith(pickImageActivityResultLauncher)
         }
     }
@@ -88,11 +93,11 @@ class ScanUserCodeFragment @Inject constructor()
     }
 
     private fun startCamera() {
-        userCodeScannerView.startCamera()
-        userCodeScannerView.setAutoFocus(autoFocus)
-        userCodeScannerView.debouncedClicks {
+        views.userCodeScannerView.startCamera()
+        views.userCodeScannerView.setAutoFocus(autoFocus)
+        views.userCodeScannerView.debouncedClicks {
             this.autoFocus = !autoFocus
-            userCodeScannerView.setAutoFocus(autoFocus)
+            views.userCodeScannerView.setAutoFocus(autoFocus)
         }
     }
 
@@ -106,7 +111,7 @@ class ScanUserCodeFragment @Inject constructor()
     override fun onResume() {
         super.onResume()
         // Register ourselves as a handler for scan results.
-        userCodeScannerView.setResultHandler(this)
+        views.userCodeScannerView.setResultHandler(this)
         if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)) {
             startCamera()
         }
@@ -114,9 +119,9 @@ class ScanUserCodeFragment @Inject constructor()
 
     override fun onPause() {
         super.onPause()
-        userCodeScannerView.setResultHandler(null)
+        views.userCodeScannerView.setResultHandler(null)
         // Stop camera on pause
-        userCodeScannerView.stopCamera()
+        views.userCodeScannerView.stopCamera()
     }
 
     override fun handleResult(result: Result?) {

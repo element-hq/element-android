@@ -21,9 +21,9 @@ import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDeviceParams
 import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface DeleteDeviceWithUserPasswordTask : Task<DeleteDeviceWithUserPasswordTask.Params, Unit> {
@@ -37,11 +37,11 @@ internal interface DeleteDeviceWithUserPasswordTask : Task<DeleteDeviceWithUserP
 internal class DefaultDeleteDeviceWithUserPasswordTask @Inject constructor(
         private val cryptoApi: CryptoApi,
         @UserId private val userId: String,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : DeleteDeviceWithUserPasswordTask {
 
     override suspend fun execute(params: DeleteDeviceWithUserPasswordTask.Params) {
-        return executeRequest(eventBus) {
+        return executeRequest(globalErrorReceiver) {
             apiCall = cryptoApi.deleteDevice(params.deviceId,
                     DeleteDeviceParams(
                             userPasswordAuth = UserPasswordAuth(

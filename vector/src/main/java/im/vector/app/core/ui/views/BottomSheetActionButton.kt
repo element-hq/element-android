@@ -20,19 +20,15 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.View
 import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import butterknife.BindView
-import butterknife.ButterKnife
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.databinding.ViewBottomSheetActionButtonBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class BottomSheetActionButton @JvmOverloads constructor(
@@ -40,32 +36,18 @@ class BottomSheetActionButton @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-
-    @BindView(R.id.itemVerificationActionTitle)
-    lateinit var actionTextView: TextView
-
-    @BindView(R.id.itemVerificationActionSubTitle)
-    lateinit var descriptionTextView: TextView
-
-    @BindView(R.id.itemVerificationLeftIcon)
-    lateinit var leftIconImageView: ImageView
-
-    @BindView(R.id.itemVerificationActionIcon)
-    lateinit var rightIconImageView: ImageView
-
-    @BindView(R.id.itemVerificationClickableZone)
-    lateinit var clickableView: View
+    val views: ViewBottomSheetActionButtonBinding
 
     var title: String? = null
         set(value) {
             field = value
-            actionTextView.setTextOrHide(value)
+            views.itemVerificationActionTitle.setTextOrHide(value)
         }
 
     var subTitle: String? = null
         set(value) {
             field = value
-            descriptionTextView.setTextOrHide(value)
+            views.itemVerificationActionSubTitle.setTextOrHide(value)
         }
 
     var forceStartPadding: Boolean? = null
@@ -73,9 +55,9 @@ class BottomSheetActionButton @JvmOverloads constructor(
             field = value
             if (leftIcon == null) {
                 if (forceStartPadding == true) {
-                    leftIconImageView.isInvisible = true
+                    views.itemVerificationLeftIcon.isInvisible = true
                 } else {
-                    leftIconImageView.isGone = true
+                    views.itemVerificationLeftIcon.isGone = true
                 }
             }
         }
@@ -85,38 +67,38 @@ class BottomSheetActionButton @JvmOverloads constructor(
             field = value
             if (value == null) {
                 if (forceStartPadding == true) {
-                    leftIconImageView.isInvisible = true
+                    views.itemVerificationLeftIcon.isInvisible = true
                 } else {
-                    leftIconImageView.isGone = true
+                    views.itemVerificationLeftIcon.isGone = true
                 }
-                leftIconImageView.setImageDrawable(null)
+                views.itemVerificationLeftIcon.setImageDrawable(null)
             } else {
-                leftIconImageView.isVisible = true
-                leftIconImageView.setImageDrawable(value)
+                views.itemVerificationLeftIcon.isVisible = true
+                views.itemVerificationLeftIcon.setImageDrawable(value)
             }
         }
 
     var rightIcon: Drawable? = null
         set(value) {
             field = value
-            rightIconImageView.setImageDrawable(value)
+            views.itemVerificationActionIcon.setImageDrawable(value)
         }
 
     var tint: Int? = null
         set(value) {
             field = value
-            leftIconImageView.imageTintList = value?.let { ColorStateList.valueOf(value) }
+            views.itemVerificationLeftIcon.imageTintList = value?.let { ColorStateList.valueOf(value) }
         }
 
     var titleTextColor: Int? = null
         set(value) {
             field = value
-            value?.let { actionTextView.setTextColor(it) }
+            value?.let { views.itemVerificationActionTitle.setTextColor(it) }
         }
 
     init {
-        inflate(context, R.layout.item_verification_action, this)
-        ButterKnife.bind(this)
+        inflate(context, R.layout.view_bottom_sheet_action_button, this)
+        views = ViewBottomSheetActionButtonBinding.bind(this)
 
         context.withStyledAttributes(attrs, R.styleable.BottomSheetActionButton) {
             title = getString(R.styleable.BottomSheetActionButton_actionTitle) ?: ""

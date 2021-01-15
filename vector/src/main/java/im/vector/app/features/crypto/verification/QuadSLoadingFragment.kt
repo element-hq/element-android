@@ -16,10 +16,14 @@
 
 package im.vector.app.features.crypto.verification
 
-import im.vector.app.R
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.databinding.FragmentProgressBinding
 import javax.inject.Inject
 
-class QuadSLoadingFragment @Inject constructor() : VectorBaseFragment() {
-    override fun getLayoutResId() = R.layout.fragment_progress
+class QuadSLoadingFragment @Inject constructor() : VectorBaseFragment<FragmentProgressBinding>() {
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentProgressBinding {
+        return FragmentProgressBinding.inflate(inflater, container, false)
+    }
 }

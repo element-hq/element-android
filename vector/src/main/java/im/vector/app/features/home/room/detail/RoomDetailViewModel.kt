@@ -31,7 +31,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.subscribeLogError
 import im.vector.app.features.call.WebRtcPeerConnectionManager
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
@@ -168,7 +167,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         observePowerLevel()
         room.getRoomSummaryLive()
         room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
-        room.rx().loadRoomMembersIfNeeded().subscribeLogError().disposeOnClear()
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
         chatEffectManager.delegate = this
@@ -889,13 +887,15 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleSetUserPowerLevel(setUserPowerLevel: ParsedCommand.SetUserPowerLevel) {
-        val currentPowerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        val newPowerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
                 ?.content
-                ?.toModel<PowerLevelsContent>() ?: return
+                ?.toModel<PowerLevelsContent>()
+                ?.setUserPowerLevel(setUserPowerLevel.userId, setUserPowerLevel.powerLevel)
+                ?.toContent()
+                ?: return
 
         launchSlashCommandFlowSuspendable {
-            currentPowerLevelsContent.setUserPowerLevel(setUserPowerLevel.userId, setUserPowerLevel.powerLevel)
-            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, currentPowerLevelsContent.toContent())
+            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, newPowerLevelsContent)
         }
     }
 

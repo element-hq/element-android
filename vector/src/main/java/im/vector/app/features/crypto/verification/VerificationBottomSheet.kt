@@ -20,13 +20,12 @@ import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import butterknife.BindView
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -37,6 +36,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.databinding.BottomSheetVerificationBinding
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.crypto.verification.cancel.VerificationCancelFragment
 import im.vector.app.features.crypto.verification.cancel.VerificationNotMeFragment
@@ -48,7 +48,7 @@ import im.vector.app.features.crypto.verification.qrconfirmation.VerificationQrS
 import im.vector.app.features.crypto.verification.request.VerificationRequestFragment
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.settings.VectorSettingsActivity
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -60,7 +60,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
+class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetVerificationBinding>() {
 
     @Parcelize
     data class VerificationArgs(
@@ -86,16 +86,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         injector.inject(this)
     }
 
-    @BindView(R.id.verificationRequestName)
-    lateinit var otherUserNameText: TextView
-
-    @BindView(R.id.verificationRequestShield)
-    lateinit var otherUserShield: ImageView
-
-    @BindView(R.id.verificationRequestAvatar)
-    lateinit var otherUserAvatarImageView: ImageView
-
-    override fun getLayoutResId() = R.layout.bottom_sheet_verification
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetVerificationBinding {
+        return BottomSheetVerificationBinding.inflate(inflater, container, false)
+    }
 
     init {
         isCancelable = false
@@ -126,7 +119,9 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
                 }
                 VerificationBottomSheetViewEvents.GoToSettings         -> {
                     dismiss()
-                    (activity as? VectorBaseActivity)?.navigator?.openSettings(requireContext(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY)
+                    (activity as? VectorBaseActivity<*>)?.let { activity ->
+                        activity.navigator.openSettings(activity, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY)
+                    }
                 }
             }.exhaustive
         }
@@ -163,27 +158,27 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
     override fun invalidate() = withState(viewModel) { state ->
         state.otherUserMxItem?.let { matrixItem ->
             if (state.isMe) {
-                avatarRenderer.render(matrixItem, otherUserAvatarImageView)
+                avatarRenderer.render(matrixItem, views.otherUserAvatarImageView)
                 if (state.sasTransactionState == VerificationTxState.Verified
                         || state.qrTransactionState == VerificationTxState.Verified
                         || state.verifiedFromPrivateKeys) {
-                    otherUserShield.setImageResource(R.drawable.ic_shield_trusted)
+                    views.otherUserShield.setImageResource(R.drawable.ic_shield_trusted)
                 } else {
-                    otherUserShield.setImageResource(R.drawable.ic_shield_warning)
+                    views.otherUserShield.setImageResource(R.drawable.ic_shield_warning)
                 }
-                otherUserNameText.text = getString(
+                views.otherUserNameText.text = getString(
                         if (state.selfVerificationMode) R.string.crosssigning_verify_this_session else R.string.crosssigning_verify_session
                 )
-                otherUserShield.isVisible = true
+                views.otherUserShield.isVisible = true
             } else {
-                avatarRenderer.render(matrixItem, otherUserAvatarImageView)
+                avatarRenderer.render(matrixItem, views.otherUserAvatarImageView)
 
                 if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
-                    otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
-                    otherUserShield.isVisible = true
+                    views.otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
+                    views.otherUserShield.isVisible = true
                 } else {
-                    otherUserNameText.text = getString(R.string.verification_verify_user, matrixItem.getBestName())
-                    otherUserShield.isVisible = false
+                    views.otherUserNameText.text = getString(R.string.verification_verify_user, matrixItem.getBestName())
+                    views.otherUserShield.isVisible = false
                 }
             }
         }
@@ -200,13 +195,13 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         }
 
         if (state.userThinkItsNotHim) {
-            otherUserNameText.text = getString(R.string.dialog_title_warning)
+            views.otherUserNameText.text = getString(R.string.dialog_title_warning)
             showFragment(VerificationNotMeFragment::class, Bundle())
             return@withState
         }
 
         if (state.userWantsToCancel) {
-            otherUserNameText.text = getString(R.string.are_you_sure)
+            views.otherUserNameText.text = getString(R.string.are_you_sure)
             showFragment(VerificationCancelFragment::class, Bundle())
             return@withState
         }
@@ -298,7 +293,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment() {
         // Transaction has not yet started
         if (state.pendingRequest.invoke()?.cancelConclusion != null) {
             // The request has been declined, we should dismiss
-            otherUserNameText.text = getString(R.string.verification_cancelled)
+            views.otherUserNameText.text = getString(R.string.verification_cancelled)
             showFragment(VerificationConclusionFragment::class, Bundle().apply {
                 putParcelable(MvRx.KEY_ARG, VerificationConclusionFragment.Args(
                         false,

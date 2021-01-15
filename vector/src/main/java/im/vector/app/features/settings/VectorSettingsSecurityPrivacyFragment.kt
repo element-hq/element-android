@@ -23,9 +23,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -34,7 +31,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.textfield.TextInputEditText
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
@@ -50,6 +46,7 @@ import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
+import im.vector.app.databinding.DialogImportE2eKeysBinding
 import im.vector.app.features.crypto.keys.KeysExporter
 import im.vector.app.features.crypto.keys.KeysImporter
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
@@ -447,42 +444,37 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             val filename = getFilenameFromUri(appContext, uri)
 
             val dialogLayout = thisActivity.layoutInflater.inflate(R.layout.dialog_import_e2e_keys, null)
-
-            val textView = dialogLayout.findViewById<TextView>(R.id.dialog_e2e_keys_passphrase_filename)
+            val views = DialogImportE2eKeysBinding.bind(dialogLayout)
 
             if (filename.isNullOrBlank()) {
-                textView.isVisible = false
+                views.dialogE2eKeysPassphraseFilename.isVisible = false
             } else {
-                textView.isVisible = true
-                textView.text = getString(R.string.import_e2e_keys_from_file, filename)
+                views.dialogE2eKeysPassphraseFilename.isVisible = true
+                views.dialogE2eKeysPassphraseFilename.text = getString(R.string.import_e2e_keys_from_file, filename)
             }
 
             val builder = AlertDialog.Builder(thisActivity)
                     .setTitle(R.string.encryption_import_room_keys)
                     .setView(dialogLayout)
 
-            val passPhraseEditText = dialogLayout.findViewById<TextInputEditText>(R.id.dialog_e2e_keys_passphrase_edit_text)
-            val importButton = dialogLayout.findViewById<Button>(R.id.dialog_e2e_keys_import_button)
-
-            val showPassword = dialogLayout.findViewById<ImageView>(R.id.importDialogShowPassword)
             var passwordVisible = false
 
-            showPassword.setOnClickListener {
+            views.importDialogShowPassword.setOnClickListener {
                 passwordVisible = !passwordVisible
-                passPhraseEditText.showPassword(passwordVisible)
-                showPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+                views.dialogE2eKeysPassphraseEditText.showPassword(passwordVisible)
+                views.importDialogShowPassword.setImageResource(if (passwordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
             }
 
-            passPhraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
+            views.dialogE2eKeysPassphraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    importButton.isEnabled = !passPhraseEditText.text.isNullOrEmpty()
+                    views.dialogE2eKeysImportButton.isEnabled = !views.dialogE2eKeysPassphraseEditText.text.isNullOrEmpty()
                 }
             })
 
             val importDialog = builder.show()
 
-            importButton.setOnClickListener {
-                val password = passPhraseEditText.text.toString()
+            views.dialogE2eKeysImportButton.setOnClickListener {
+                val password = views.dialogE2eKeysPassphraseEditText.text.toString()
 
                 displayLoadingView()
 

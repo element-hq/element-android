@@ -30,7 +30,7 @@ import org.matrix.android.sdk.internal.session.room.read.SetReadMarkersTask
 import org.matrix.android.sdk.internal.task.Task
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
-import org.greenrobot.eventbus.EventBus
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -48,14 +48,18 @@ internal class DefaultJoinRoomTask @Inject constructor(
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : JoinRoomTask {
 
     override suspend fun execute(params: JoinRoomTask.Params) {
         roomChangeMembershipStateDataSource.updateState(params.roomIdOrAlias, ChangeMembershipState.Joining)
         val joinRoomResponse = try {
-            executeRequest<JoinRoomResponse>(eventBus) {
-                apiCall = roomAPI.join(params.roomIdOrAlias, params.viaServers, mapOf("reason" to params.reason))
+            executeRequest<JoinRoomResponse>(globalErrorReceiver) {
+                apiCall = roomAPI.join(
+                        roomIdOrAlias = params.roomIdOrAlias,
+                        viaServers = params.viaServers.take(3),
+                        params = mapOf("reason" to params.reason)
+                )
             }
         } catch (failure: Throwable) {
             roomChangeMembershipStateDataSource.updateState(params.roomIdOrAlias, ChangeMembershipState.FailedJoining(failure))

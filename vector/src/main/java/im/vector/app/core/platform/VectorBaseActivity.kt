@@ -20,16 +20,15 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.annotation.AttrRes
-import androidx.annotation.LayoutRes
+import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.annotation.MenuRes
-import androidx.annotation.Nullable
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -40,10 +39,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
-import com.airbnb.mvrx.MvRx
+import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
 import im.vector.app.BuildConfig
@@ -61,6 +57,7 @@ import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.observeNotNull
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
@@ -83,20 +80,18 @@ import im.vector.app.receivers.DebugReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
 
-abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
+abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScreenInjector {
     /* ==========================================================================================
-     * UI
+     * View
      * ========================================================================================== */
 
-    @Nullable
-    @JvmField
-    @BindView(R.id.vector_coordinator_layout)
-    var coordinatorLayout: CoordinatorLayout? = null
+    protected lateinit var views: VB
 
     /* ==========================================================================================
      * View model
@@ -138,8 +133,6 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     // Filter for multiple invalid token error
     private var mainActivityStarted = false
 
-    private var unBinder: Unbinder? = null
-
     private var savedInstanceState: Bundle? = null
 
     // For debug only
@@ -176,6 +169,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         uiDisposables.add(this)
     }
 
+    @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate Activity ${javaClass.simpleName}")
         val vectorComponent = getVectorComponent()
@@ -223,11 +217,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         // Hack for font size
         applyFontSize()
 
-        if (getLayoutRes() != -1) {
-            setContentView(getLayoutRes())
-        }
-
-        unBinder = ButterKnife.bind(this)
+        views = getBinding()
+        setContentView(views.root)
 
         this.savedInstanceState = savedInstanceState
 
@@ -306,8 +297,6 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     override fun onDestroy() {
         super.onDestroy()
         Timber.i("onDestroy Activity ${javaClass.simpleName}")
-        unBinder?.unbind()
-        unBinder = null
 
         uiDisposables.dispose()
     }
@@ -467,7 +456,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     }
 
     private fun recursivelyDispatchOnBackPressed(fm: FragmentManager, fromToolbar: Boolean): Boolean {
-        val reverseOrder = fm.fragments.filterIsInstance<VectorBaseFragment>().reversed()
+        val reverseOrder = fm.fragments.filterIsInstance<VectorBaseFragment<*>>().reversed()
         for (f in reverseOrder) {
             val handledByChildFragments = recursivelyDispatchOnBackPressed(f.childFragmentManager, fromToolbar)
             if (handledByChildFragments) {
@@ -513,10 +502,6 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
         }
     }
 
-    fun Parcelable?.toMvRxBundle(): Bundle? {
-        return this?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
-    }
-
     // ==============================================================================================
     // Handle loading view (also called waiting view or spinner view)
     // ==============================================================================================
@@ -537,10 +522,13 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
     fun isWaitingViewVisible() = waitingView?.isVisible == true
 
     /**
-     * Show the waiting view
+     * Show the waiting view, and set text if not null.
      */
-    open fun showWaitingView() {
+    open fun showWaitingView(text: String? = null) {
         waitingView?.isVisible = true
+        if (text != null) {
+            waitingView?.findViewById<TextView>(R.id.waitingStatusText)?.setTextOrHide(text)
+        }
     }
 
     /**
@@ -554,8 +542,7 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
      * OPEN METHODS
      * ========================================================================================== */
 
-    @LayoutRes
-    open fun getLayoutRes() = -1
+    abstract fun getBinding(): VB
 
     open fun displayInFullscreen() = false
 
@@ -582,13 +569,13 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
      * ========================================================================================== */
 
     fun showSnackbar(message: String) {
-        coordinatorLayout?.let {
+        getCoordinatorLayout()?.let {
             Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show()
         }
     }
 
     fun showSnackbar(message: String, @StringRes withActionTitle: Int?, action: (() -> Unit)?) {
-        coordinatorLayout?.let {
+        getCoordinatorLayout()?.let {
             Snackbar.make(it, message, Snackbar.LENGTH_LONG).apply {
                 withActionTitle?.let {
                     setAction(withActionTitle, { action?.invoke() })
@@ -596,6 +583,8 @@ abstract class VectorBaseActivity : AppCompatActivity(), HasScreenInjector {
             }.show()
         }
     }
+
+    open fun getCoordinatorLayout(): CoordinatorLayout? = null
 
     /* ==========================================================================================
      * User Consent

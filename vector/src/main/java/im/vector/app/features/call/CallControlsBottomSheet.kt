@@ -17,18 +17,23 @@
 package im.vector.app.features.call
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
-import kotlinx.android.synthetic.main.bottom_sheet_call_controls.*
+import im.vector.app.databinding.BottomSheetCallControlsBinding
+
 import me.gujun.android.span.span
 
-class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
-    override fun getLayoutResId() = R.layout.bottom_sheet_call_controls
+class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCallControlsBinding>() {
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetCallControlsBinding {
+        return BottomSheetCallControlsBinding.inflate(inflater, container, false)
+    }
 
     private val callViewModel: VectorCallViewModel by activityViewModel()
 
@@ -39,16 +44,16 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
             renderState(it)
         }
 
-        callControlsSoundDevice.clickableView.debouncedClicks {
+        views.callControlsSoundDevice.views.itemVerificationClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.SwitchSoundDevice)
         }
 
-        callControlsSwitchCamera.clickableView.debouncedClicks {
+        views.callControlsSwitchCamera.views.itemVerificationClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleCamera)
             dismiss()
         }
 
-        callControlsToggleSDHD.clickableView.debouncedClicks {
+        views.callControlsToggleSDHD.views.itemVerificationClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleHDSD)
             dismiss()
         }
@@ -109,30 +114,30 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment() {
     }
 
     private fun renderState(state: VectorCallViewState) {
-        callControlsSoundDevice.title = getString(R.string.call_select_sound_device)
-        callControlsSoundDevice.subTitle = when (state.soundDevice) {
+        views.callControlsSoundDevice.title = getString(R.string.call_select_sound_device)
+        views.callControlsSoundDevice.subTitle = when (state.soundDevice) {
             CallAudioManager.SoundDevice.PHONE            -> getString(R.string.sound_device_phone)
             CallAudioManager.SoundDevice.SPEAKER          -> getString(R.string.sound_device_speaker)
             CallAudioManager.SoundDevice.HEADSET          -> getString(R.string.sound_device_headset)
             CallAudioManager.SoundDevice.WIRELESS_HEADSET -> getString(R.string.sound_device_wireless_headset)
         }
 
-        callControlsSwitchCamera.isVisible = state.isVideoCall && state.canSwitchCamera
-        callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) R.string.call_camera_front else R.string.call_camera_back)
+        views.callControlsSwitchCamera.isVisible = state.isVideoCall && state.canSwitchCamera
+        views.callControlsSwitchCamera.subTitle = getString(if (state.isFrontCamera) R.string.call_camera_front else R.string.call_camera_back)
 
         if (state.isVideoCall) {
-            callControlsToggleSDHD.isVisible = true
+            views.callControlsToggleSDHD.isVisible = true
             if (state.isHD) {
-                callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_off)
-                callControlsToggleSDHD.subTitle = null
-                callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd_disabled)
+                views.callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_off)
+                views.callControlsToggleSDHD.subTitle = null
+                views.callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd_disabled)
             } else {
-                callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_on)
-                callControlsToggleSDHD.subTitle = null
-                callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd)
+                views.callControlsToggleSDHD.title = getString(R.string.call_format_turn_hd_on)
+                views.callControlsToggleSDHD.subTitle = null
+                views.callControlsToggleSDHD.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_hd)
             }
         } else {
-            callControlsToggleSDHD.isVisible = false
+            views.callControlsToggleSDHD.isVisible = false
         }
     }
 }

@@ -19,8 +19,10 @@ package im.vector.app.features.roommemberprofile
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
@@ -41,15 +43,16 @@ import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startSharePlainTextIntent
+import im.vector.app.databinding.DialogShareQrCodeBinding
+import im.vector.app.databinding.FragmentMatrixProfileBinding
+import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailPendingAction
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_matrix_profile.*
-import kotlinx.android.synthetic.main.view_stub_room_member_profile_header.*
+import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -65,40 +68,46 @@ class RoomMemberProfileFragment @Inject constructor(
         private val roomMemberProfileController: RoomMemberProfileController,
         private val avatarRenderer: AvatarRenderer,
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore
-) : VectorBaseFragment(), RoomMemberProfileController.Callback {
+) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
+        RoomMemberProfileController.Callback {
+
+    private lateinit var headerViews: ViewStubRoomMemberProfileHeaderBinding
 
     private val fragmentArgs: RoomMemberProfileArgs by args()
     private val viewModel: RoomMemberProfileViewModel by fragmentViewModel()
 
     private var appBarStateChangeListener: AppBarStateChangeListener? = null
 
-    override fun getLayoutResId() = R.layout.fragment_matrix_profile
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentMatrixProfileBinding {
+        return FragmentMatrixProfileBinding.inflate(inflater, container, false)
+    }
 
     override fun getMenuRes() = R.menu.vector_room_member_profile
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(matrixProfileToolbar)
-        val headerView = matrixProfileHeaderView.let {
+        setupToolbar(views.matrixProfileToolbar)
+        val headerView = views.matrixProfileHeaderView.let {
             it.layoutResource = R.layout.view_stub_room_member_profile_header
             it.inflate()
         }
-        memberProfileStateView.eventCallback = object : StateView.EventCallback {
+        headerViews = ViewStubRoomMemberProfileHeaderBinding.bind(headerView)
+        headerViews.memberProfileStateView.eventCallback = object : StateView.EventCallback {
             override fun onRetryClicked() {
                 viewModel.handle(RoomMemberProfileAction.RetryFetchingInfo)
             }
         }
-        memberProfileStateView.contentView = memberProfileInfoContainer
-        matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
+        headerViews.memberProfileStateView.contentView = headerViews.memberProfileInfoContainer
+        views.matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
         roomMemberProfileController.callback = this
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView,
                 listOf(
-                        matrixProfileToolbarAvatarImageView,
-                        matrixProfileToolbarTitleView,
-                        matrixProfileDecorationToolbarAvatarImageView
+                        views.matrixProfileToolbarAvatarImageView,
+                        views.matrixProfileToolbarTitleView,
+                        views.matrixProfileDecorationToolbarAvatarImageView
                 )
         )
-        matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
+        views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
                 is RoomMemberProfileViewEvents.Loading                     -> showLoading(it.message)
@@ -118,8 +127,8 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     private fun setupLongClicks() {
-        memberProfileNameView.copyOnLongClick()
-        memberProfileIdView.copyOnLongClick()
+        headerViews.memberProfileNameView.copyOnLongClick()
+        headerViews.memberProfileIdView.copyOnLongClick()
     }
 
     private fun handleShowPowerLevelDemoteWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning) {
@@ -164,38 +173,38 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
+        views.matrixProfileAppBarLayout.removeOnOffsetChangedListener(appBarStateChangeListener)
         roomMemberProfileController.callback = null
         appBarStateChangeListener = null
-        matrixProfileRecyclerView.cleanup()
+        views.matrixProfileRecyclerView.cleanup()
         super.onDestroyView()
     }
 
     override fun invalidate() = withState(viewModel) { state ->
         when (val asyncUserMatrixItem = state.userMatrixItem) {
             is Incomplete -> {
-                matrixProfileToolbarTitleView.text = state.userId
-                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), matrixProfileToolbarAvatarImageView)
-                memberProfileStateView.state = StateView.State.Loading
+                views.matrixProfileToolbarTitleView.text = state.userId
+                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
+                headerViews.memberProfileStateView.state = StateView.State.Loading
             }
             is Fail       -> {
-                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), matrixProfileToolbarAvatarImageView)
-                matrixProfileToolbarTitleView.text = state.userId
+                avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
+                views.matrixProfileToolbarTitleView.text = state.userId
                 val failureMessage = errorFormatter.toHumanReadable(asyncUserMatrixItem.error)
-                memberProfileStateView.state = StateView.State.Error(failureMessage)
+                headerViews.memberProfileStateView.state = StateView.State.Error(failureMessage)
             }
             is Success    -> {
                 val userMatrixItem = asyncUserMatrixItem()
-                memberProfileStateView.state = StateView.State.Content
-                memberProfileIdView.text = userMatrixItem.id
+                headerViews.memberProfileStateView.state = StateView.State.Content
+                headerViews.memberProfileIdView.text = userMatrixItem.id
                 val bestName = userMatrixItem.getBestName()
-                memberProfileNameView.text = bestName
-                matrixProfileToolbarTitleView.text = bestName
-                avatarRenderer.render(userMatrixItem, memberProfileAvatarView)
-                avatarRenderer.render(userMatrixItem, matrixProfileToolbarAvatarImageView)
+                headerViews.memberProfileNameView.text = bestName
+                views.matrixProfileToolbarTitleView.text = bestName
+                avatarRenderer.render(userMatrixItem, headerViews.memberProfileAvatarView)
+                avatarRenderer.render(userMatrixItem, views.matrixProfileToolbarAvatarImageView)
 
                 if (state.isRoomEncrypted) {
-                    memberProfileDecorationImageView.isVisible = true
+                    headerViews.memberProfileDecorationImageView.isVisible = true
                     if (state.userMXCrossSigningInfo != null) {
                         // Cross signing is enabled for this user
                         val icon = if (state.userMXCrossSigningInfo.isTrusted()) {
@@ -209,31 +218,31 @@ class RoomMemberProfileFragment @Inject constructor(
                             R.drawable.ic_shield_black
                         }
 
-                        memberProfileDecorationImageView.setImageResource(icon)
-                        matrixProfileDecorationToolbarAvatarImageView.setImageResource(icon)
+                        headerViews.memberProfileDecorationImageView.setImageResource(icon)
+                        views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(icon)
                     } else {
                         // Legacy
                         if (state.allDevicesAreTrusted) {
-                            memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_trusted)
-                            matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
+                            headerViews.memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_trusted)
+                            views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
                         } else {
-                            memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_warning)
-                            matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
+                            headerViews.memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_warning)
+                            views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
                         }
                     }
                 } else {
-                    memberProfileDecorationImageView.isVisible = false
+                    headerViews.memberProfileDecorationImageView.isVisible = false
                 }
 
-                memberProfileAvatarView.setOnClickListener { view ->
+                headerViews.memberProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
-                matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
+                views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
             }
         }
-        memberProfilePowerLevelView.setTextOrHide(state.userPowerLevelString())
+        headerViews.memberProfilePowerLevelView.setTextOrHide(state.userPowerLevelString())
         roomMemberProfileController.setData(state)
     }
 
@@ -295,8 +304,8 @@ class RoomMemberProfileFragment @Inject constructor(
 
     private fun handleShareRoomMemberProfile(permalink: String) {
         val view = layoutInflater.inflate(R.layout.dialog_share_qr_code, null)
-        val qrCode = view.findViewById<im.vector.app.core.ui.views.QrCodeImageView>(R.id.itemShareQrCodeImage)
-        qrCode.setData(permalink)
+        val views = DialogShareQrCodeBinding.bind(view)
+        views.itemShareQrCodeImage.setData(permalink)
         AlertDialog.Builder(requireContext())
             .setView(view)
             .setNeutralButton(R.string.ok, null)
@@ -315,7 +324,7 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onEditPowerLevel(currentRole: Role) {
-        EditPowerLevelDialogs.showChoice(requireActivity(), currentRole) { newPowerLevel ->
+        EditPowerLevelDialogs.showChoice(requireActivity(), R.string.power_level_edit_title, currentRole) { newPowerLevel ->
             viewModel.handle(RoomMemberProfileAction.SetPowerLevel(currentRole.value, newPowerLevel, true))
         }
     }

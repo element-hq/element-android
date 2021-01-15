@@ -810,12 +810,19 @@ class LoginViewModel @AssistedInject constructor(
     }
 
     override fun onCleared() {
-        super.onCleared()
-
         currentTask?.cancel()
+        super.onCleared()
     }
 
     fun getInitialHomeServerUrl(): String? {
         return loginConfig?.homeServerUrl
+    }
+
+    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String? {
+        return authenticationService.getSsoUrl(redirectUrl, deviceId, providerId)
+    }
+
+    fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {
+        return authenticationService.getFallbackUrl(forSignIn, deviceId)
     }
 }

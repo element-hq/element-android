@@ -18,19 +18,20 @@ package im.vector.app.features.crypto.verification.qrconfirmation
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.airbnb.mvrx.MvRx
-import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.bottom_sheet_verification_child_fragment.*
+import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 class VerificationQRWaitingFragment @Inject constructor(
         val controller: VerificationQRWaitingController
-) : VectorBaseFragment() {
+) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>() {
 
     @Parcelize
     data class Args(
@@ -38,7 +39,9 @@ class VerificationQRWaitingFragment @Inject constructor(
             val otherUserName: String
     ) : Parcelable
 
-    override fun getLayoutResId() = R.layout.bottom_sheet_verification_child_fragment
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetVerificationChildFragmentBinding {
+        return BottomSheetVerificationChildFragmentBinding.inflate(inflater, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,11 +52,11 @@ class VerificationQRWaitingFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        bottomSheetVerificationRecyclerView.cleanup()
+        views.bottomSheetVerificationRecyclerView.cleanup()
         super.onDestroyView()
     }
 
     private fun setupRecyclerView() {
-        bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
+        views.bottomSheetVerificationRecyclerView.configureWith(controller, hasFixedSize = false, disableItemAnimation = true)
     }
 }

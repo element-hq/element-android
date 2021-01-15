@@ -16,10 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.room.alias
 
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
 import javax.inject.Inject
@@ -27,7 +27,7 @@ import javax.inject.Inject
 internal class RoomAliasAvailabilityChecker @Inject constructor(
         @UserId private val userId: String,
         private val directoryAPI: DirectoryAPI,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) {
     /**
      * @param aliasLocalPart the local part of the alias.
@@ -41,7 +41,7 @@ internal class RoomAliasAvailabilityChecker @Inject constructor(
         // Check alias availability
         val fullAlias = aliasLocalPart.toFullLocalAlias(userId)
         try {
-            executeRequest<RoomAliasDescription>(eventBus) {
+            executeRequest<RoomAliasDescription>(globalErrorReceiver) {
                 apiCall = directoryAPI.getRoomIdByAlias(fullAlias)
             }
         } catch (throwable: Throwable) {

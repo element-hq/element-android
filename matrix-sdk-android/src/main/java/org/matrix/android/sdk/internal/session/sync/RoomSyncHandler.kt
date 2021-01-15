@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.sync
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -55,8 +54,8 @@ import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembers
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberEventHandler
 import org.matrix.android.sdk.internal.session.room.read.FullyReadContent
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
-import org.matrix.android.sdk.internal.session.room.timeline.DefaultTimeline
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
+import org.matrix.android.sdk.internal.session.room.timeline.TimelineInput
 import org.matrix.android.sdk.internal.session.room.typing.TypingEventContent
 import org.matrix.android.sdk.internal.session.sync.model.InvitedRoomSync
 import org.matrix.android.sdk.internal.session.sync.model.RoomSync
@@ -75,7 +74,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val roomTypingUsersHandler: RoomTypingUsersHandler,
                                                    private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
                                                    @UserId private val userId: String,
-                                                   private val eventBus: EventBus) {
+                                                   private val timelineInput: TimelineInput) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -348,7 +347,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
         }
         // posting new events to timeline if any is registered
-        eventBus.post(DefaultTimeline.OnNewTimelineEvents(roomId = roomId, eventIds = eventIds))
+        timelineInput.onNewTimelineEvents(roomId = roomId, eventIds = eventIds)
         return chunkEntity
     }
 

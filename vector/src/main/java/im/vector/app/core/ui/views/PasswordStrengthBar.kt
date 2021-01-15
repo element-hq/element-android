@@ -17,14 +17,11 @@ package im.vector.app.core.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.IntRange
-import butterknife.BindColor
-import butterknife.BindView
-import butterknife.ButterKnife
+import androidx.core.content.ContextCompat
 import im.vector.app.R
+import im.vector.app.databinding.ViewPasswordStrengthBarBinding
 
 /**
  * A password strength bar custom widget
@@ -41,37 +38,13 @@ class PasswordStrengthBar @JvmOverloads constructor(
         defStyleAttr: Int = 0)
     : LinearLayout(context, attrs, defStyleAttr) {
 
-    @BindView(R.id.password_strength_bar_1)
-    lateinit var bar1: View
+    private val views: ViewPasswordStrengthBarBinding
 
-    @BindView(R.id.password_strength_bar_2)
-    lateinit var bar2: View
-
-    @BindView(R.id.password_strength_bar_3)
-    lateinit var bar3: View
-
-    @BindView(R.id.password_strength_bar_4)
-    lateinit var bar4: View
-
-    @BindColor(R.color.password_strength_bar_undefined)
-    @JvmField
-    var colorBackground: Int = 0
-
-    @BindColor(R.color.password_strength_bar_weak)
-    @JvmField
-    var colorWeak: Int = 0
-
-    @BindColor(R.color.password_strength_bar_low)
-    @JvmField
-    var colorLow: Int = 0
-
-    @BindColor(R.color.password_strength_bar_ok)
-    @JvmField
-    var colorOk: Int = 0
-
-    @BindColor(R.color.password_strength_bar_strong)
-    @JvmField
-    var colorStrong: Int = 0
+    private val colorBackground = ContextCompat.getColor(context, R.color.password_strength_bar_undefined)
+    private val colorWeak = ContextCompat.getColor(context, R.color.password_strength_bar_weak)
+    private val colorLow = ContextCompat.getColor(context, R.color.password_strength_bar_low)
+    private val colorOk = ContextCompat.getColor(context, R.color.password_strength_bar_ok)
+    private val colorStrong = ContextCompat.getColor(context, R.color.password_strength_bar_strong)
 
     @IntRange(from = 0, to = 4)
     var strength = 0
@@ -80,43 +53,42 @@ class PasswordStrengthBar @JvmOverloads constructor(
 
             when (newValue) {
                 0 -> {
-                    bar1.setBackgroundColor(colorBackground)
-                    bar2.setBackgroundColor(colorBackground)
-                    bar3.setBackgroundColor(colorBackground)
-                    bar4.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar1.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar2.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar3.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar4.setBackgroundColor(colorBackground)
                 }
                 1 -> {
-                    bar1.setBackgroundColor(colorWeak)
-                    bar2.setBackgroundColor(colorBackground)
-                    bar3.setBackgroundColor(colorBackground)
-                    bar4.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar1.setBackgroundColor(colorWeak)
+                    views.passwordStrengthBar2.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar3.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar4.setBackgroundColor(colorBackground)
                 }
                 2 -> {
-                    bar1.setBackgroundColor(colorLow)
-                    bar2.setBackgroundColor(colorLow)
-                    bar3.setBackgroundColor(colorBackground)
-                    bar4.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar1.setBackgroundColor(colorLow)
+                    views.passwordStrengthBar2.setBackgroundColor(colorLow)
+                    views.passwordStrengthBar3.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar4.setBackgroundColor(colorBackground)
                 }
                 3 -> {
-                    bar1.setBackgroundColor(colorOk)
-                    bar2.setBackgroundColor(colorOk)
-                    bar3.setBackgroundColor(colorOk)
-                    bar4.setBackgroundColor(colorBackground)
+                    views.passwordStrengthBar1.setBackgroundColor(colorOk)
+                    views.passwordStrengthBar2.setBackgroundColor(colorOk)
+                    views.passwordStrengthBar3.setBackgroundColor(colorOk)
+                    views.passwordStrengthBar4.setBackgroundColor(colorBackground)
                 }
                 4 -> {
-                    bar1.setBackgroundColor(colorStrong)
-                    bar2.setBackgroundColor(colorStrong)
-                    bar3.setBackgroundColor(colorStrong)
-                    bar4.setBackgroundColor(colorStrong)
+                    views.passwordStrengthBar1.setBackgroundColor(colorStrong)
+                    views.passwordStrengthBar2.setBackgroundColor(colorStrong)
+                    views.passwordStrengthBar3.setBackgroundColor(colorStrong)
+                    views.passwordStrengthBar4.setBackgroundColor(colorStrong)
                 }
             }
         }
 
     init {
-        LayoutInflater.from(context)
-                .inflate(R.layout.view_password_strength_bar, this, true)
+        inflate(context, R.layout.view_password_strength_bar, this)
+        views = ViewPasswordStrengthBarBinding.bind(this)
         orientation = HORIZONTAL
-        ButterKnife.bind(this)
         strength = 0
     }
 }

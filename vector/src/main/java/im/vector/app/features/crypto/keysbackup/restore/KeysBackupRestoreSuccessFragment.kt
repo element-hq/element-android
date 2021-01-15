@@ -16,25 +16,22 @@
 package im.vector.app.features.crypto.keysbackup.restore
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
+import android.view.ViewGroup
 import androidx.core.view.isVisible
-import butterknife.BindView
-import butterknife.OnClick
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
+import im.vector.app.databinding.FragmentKeysBackupRestoreSuccessBinding
+
 import javax.inject.Inject
 
-class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragment() {
+class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupRestoreSuccessBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_keys_backup_restore_success
-
-    @BindView(R.id.keys_backup_restore_success)
-    lateinit var mSuccessText: TextView
-
-    @BindView(R.id.keys_backup_restore_success_info)
-    lateinit var mSuccessDetailsText: TextView
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupRestoreSuccessBinding {
+        return FragmentKeysBackupRestoreSuccessBinding.inflate(inflater, container, false)
+    }
 
     private lateinit var sharedViewModel: KeysBackupRestoreSharedViewModel
 
@@ -48,18 +45,18 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
                         it.totalNumberOfKeys, it.totalNumberOfKeys)
                 val part2 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part2,
                         it.successfullyNumberOfImportedKeys, it.successfullyNumberOfImportedKeys)
-                mSuccessDetailsText.text = String.format("%s\n%s", part1, part2)
+                views.successDetailsText.text = String.format("%s\n%s", part1, part2)
             }
             // We don't put emoji in string xml as it will crash on old devices
-            mSuccessText.text = context?.getString(R.string.keys_backup_restore_success_title, "🎉")
+            views.successText.text = context?.getString(R.string.keys_backup_restore_success_title, "🎉")
         } else {
-            mSuccessText.text = context?.getString(R.string.keys_backup_restore_success_title_already_up_to_date)
-            mSuccessDetailsText.isVisible = false
+            views.successText.text = context?.getString(R.string.keys_backup_restore_success_title_already_up_to_date)
+            views.successDetailsText.isVisible = false
         }
+        views.keysBackupSetupDoneButton.setOnClickListener { onDone() }
     }
 
-    @OnClick(R.id.keys_backup_setup_done_button)
-    fun onDone() {
+    private fun onDone() {
         sharedViewModel.importRoomKeysFinishWithResult.value = LiveEvent(sharedViewModel.importKeyResult!!)
     }
 }

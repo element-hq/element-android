@@ -17,25 +17,30 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
+import io.realm.kotlin.createObject
+import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
+import org.matrix.android.sdk.internal.database.model.RoomEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import io.realm.Realm
-import io.realm.kotlin.createObject
-import org.greenrobot.eventbus.EventBus
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> {
@@ -52,17 +57,44 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val roomSummaryUpdater: RoomSummaryUpdater,
         private val roomMemberEventHandler: RoomMemberEventHandler,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
-        if (areAllMembersAlreadyLoaded(params.roomId)) {
-            return
+        when (getRoomMembersLoadStatus(params.roomId)) {
+            RoomMembersLoadStatusType.NONE    -> doRequest(params)
+            RoomMembersLoadStatusType.LOADING -> waitPreviousRequestToFinish(params)
+            RoomMembersLoadStatusType.LOADED  -> Unit
         }
+    }
+
+    private suspend fun waitPreviousRequestToFinish(params: LoadRoomMembersTask.Params) {
+        try {
+            awaitNotEmptyResult(monarchy.realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
+                realm.where(RoomEntity::class.java)
+                        .equalTo(RoomEntityFields.ROOM_ID, params.roomId)
+                        .equalTo(RoomEntityFields.MEMBERS_LOAD_STATUS_STR, RoomMembersLoadStatusType.LOADED.name)
+            }
+        } catch (exception: TimeoutCancellationException) {
+            // Timeout, do the request anyway (?)
+            doRequest(params)
+        }
+    }
+
+    private suspend fun doRequest(params: LoadRoomMembersTask.Params) {
+        setRoomMembersLoadStatus(params.roomId, RoomMembersLoadStatusType.LOADING)
+
         val lastToken = syncTokenStore.getLastToken()
-        val response = executeRequest<RoomMembersResponse>(eventBus) {
-            apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
+        val response = try {
+            executeRequest<RoomMembersResponse>(globalErrorReceiver) {
+                apiCall = roomAPI.getMembers(params.roomId, lastToken, null, params.excludeMembership?.value)
+            }
+        } catch (throwable: Throwable) {
+            // Revert status to NONE
+            setRoomMembersLoadStatus(params.roomId, RoomMembersLoadStatusType.NONE)
+            throw throwable
         }
+        // This will also set the status to LOADED
         insertInDb(response, params.roomId)
     }
 
@@ -84,14 +116,23 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
                 }
                 roomMemberEventHandler.handle(realm, roomId, roomMemberEvent)
             }
-            roomEntity.areAllMembersLoaded = true
+            roomEntity.membersLoadStatus = RoomMembersLoadStatusType.LOADED
             roomSummaryUpdater.update(realm, roomId, updateMembers = true)
         }
     }
 
-    private fun areAllMembersAlreadyLoaded(roomId: String): Boolean {
-        return Realm.getInstance(monarchy.realmConfiguration).use {
-            RoomEntity.where(it, roomId).findFirst()?.areAllMembersLoaded ?: false
+    private fun getRoomMembersLoadStatus(roomId: String): RoomMembersLoadStatusType {
+        var result: RoomMembersLoadStatusType?
+        Realm.getInstance(monarchy.realmConfiguration).use {
+            result = RoomEntity.where(it, roomId).findFirst()?.membersLoadStatus
+        }
+        return result ?: RoomMembersLoadStatusType.NONE
+    }
+
+    private suspend fun setRoomMembersLoadStatus(roomId: String, status: RoomMembersLoadStatusType) {
+        monarchy.awaitTransaction { realm ->
+            val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
+            roomEntity.membersLoadStatus = status
         }
     }
 }

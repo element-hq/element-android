@@ -36,6 +36,7 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import timber.log.Timber
+import java.net.SocketTimeoutException
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -49,8 +50,9 @@ abstract class SyncService : Service() {
     private var sessionId: String? = null
     private var mIsSelfDestroyed: Boolean = false
 
-    private var syncTimeoutSeconds: Int = 6
-    private var syncDelaySeconds: Int = 60
+    private var syncTimeoutSeconds: Int = getDefaultSyncTimeoutSeconds()
+    private var syncDelaySeconds: Int = getDefaultSyncDelaySeconds()
+
     private var periodic: Boolean = false
     private var preventReschedule: Boolean = false
 
@@ -68,14 +70,12 @@ abstract class SyncService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.i("## Sync: onStartCommand [$this] $intent with action: ${intent?.action}")
-
-        // We should start we have to ensure we fulfill contract to show notification
-        // for foreground service (as per design for this service)
-        // TODO can we check if it's really in foreground
-        onStart(isInitialSync)
         when (intent?.action) {
             ACTION_STOP -> {
                 Timber.i("## Sync: stop command received")
+                // We should start we have to ensure we fulfill contract to show notification
+                // for foreground service (as per design for this service)
+                onStart(isInitialSync)
                 // If it was periodic we ensure that it will not reschedule itself
                 preventReschedule = true
                 // we don't want to cancel initial syncs, let it finish
@@ -85,11 +85,12 @@ abstract class SyncService : Service() {
             }
             else        -> {
                 val isInit = initialize(intent)
+                onStart(isInitialSync)
                 if (isInit) {
                     periodic = intent?.getBooleanExtra(EXTRA_PERIODIC, false) ?: false
                     val onNetworkBack = intent?.getBooleanExtra(EXTRA_NETWORK_BACK_RESTART, false) ?: false
                     Timber.d("## Sync: command received, periodic: $periodic  networkBack: $onNetworkBack")
-                    if (onNetworkBack && !backgroundDetectionObserver.isInBackground) {
+                    if (!isInitialSync && onNetworkBack && !backgroundDetectionObserver.isInBackground) {
                         // the restart after network occurs while the app is in foreground
                         // so just stop. It will be restarted when entering background
                         preventReschedule = true
@@ -119,7 +120,11 @@ abstract class SyncService : Service() {
         serviceScope.coroutineContext.cancelChildren()
         if (!preventReschedule && periodic && sessionId != null && backgroundDetectionObserver.isInBackground) {
             Timber.d("## Sync: Reschedule service in $syncDelaySeconds sec")
-            onRescheduleAsked(sessionId ?: "", false, syncTimeoutSeconds, syncDelaySeconds)
+            onRescheduleAsked(
+                    sessionId = sessionId ?: "",
+                    syncTimeoutSeconds = syncTimeoutSeconds,
+                    syncDelaySeconds = syncDelaySeconds
+            )
         }
         super.onDestroy()
     }
@@ -165,10 +170,23 @@ abstract class SyncService : Service() {
                 preventReschedule = true
             }
             if (throwable is Failure.NetworkConnection) {
-                // Network is off, no need to reschedule endless alarms :/
+                // Timeout is not critical, so retry as soon as possible.
+                if (throwable.cause is SocketTimeoutException) {
+                    // For big accounts, computing sync response can take time, but Synapse will cache the
+                    // result for the next request. So keep retrying in loop
+                    Timber.w("Timeout during sync, retry in loop")
+                    doSync()
+                    return
+                }
+                // Network might be off, no need to reschedule endless alarms :/
                 preventReschedule = true
-                // Instead start a work to restart background sync when network is back
-                onNetworkError(sessionId ?: "", isInitialSync, syncTimeoutSeconds, syncDelaySeconds)
+                // Instead start a work to restart background sync when network is on
+                onNetworkError(
+                        sessionId = sessionId ?: "",
+                        syncTimeoutSeconds = syncTimeoutSeconds,
+                        syncDelaySeconds = syncDelaySeconds,
+                        isPeriodic = periodic
+                )
             }
             // JobCancellation could be caught here when onDestroy cancels the coroutine context
             if (isRunning.get()) stopMe()
@@ -182,8 +200,8 @@ abstract class SyncService : Service() {
         }
         val matrix = Matrix.getInstance(applicationContext)
         val safeSessionId = intent.getStringExtra(EXTRA_SESSION_ID) ?: return false
-        syncTimeoutSeconds = intent.getIntExtra(EXTRA_TIMEOUT_SECONDS, 6)
-        syncDelaySeconds = intent.getIntExtra(EXTRA_DELAY_SECONDS, 60)
+        syncTimeoutSeconds = intent.getIntExtra(EXTRA_TIMEOUT_SECONDS, getDefaultSyncTimeoutSeconds())
+        syncDelaySeconds = intent.getIntExtra(EXTRA_DELAY_SECONDS, getDefaultSyncDelaySeconds())
         try {
             val sessionComponent = matrix.sessionManager.getSessionComponent(safeSessionId)
                     ?: throw IllegalStateException("## Sync: You should have a session to make it work")
@@ -202,11 +220,15 @@ abstract class SyncService : Service() {
         }
     }
 
+    abstract fun getDefaultSyncTimeoutSeconds(): Int
+
+    abstract fun getDefaultSyncDelaySeconds(): Int
+
     abstract fun onStart(isInitialSync: Boolean)
 
-    abstract fun onRescheduleAsked(sessionId: String, isInitialSync: Boolean, timeout: Int, delay: Int)
+    abstract fun onRescheduleAsked(sessionId: String, syncTimeoutSeconds: Int, syncDelaySeconds: Int)
 
-    abstract fun onNetworkError(sessionId: String, isInitialSync: Boolean, timeout: Int, delay: Int)
+    abstract fun onNetworkError(sessionId: String, syncTimeoutSeconds: Int, syncDelaySeconds: Int, isPeriodic: Boolean)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null

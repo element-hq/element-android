@@ -33,9 +33,9 @@ class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
     override fun onResume() {
         super.onResume()
 
-        rageshake = (activity as? VectorBaseActivity)?.rageShake
+        rageshake = (activity as? VectorBaseActivity<*>)?.rageShake
         rageshake?.interceptor = {
-            (activity as? VectorBaseActivity)?.showSnackbar(getString(R.string.rageshake_detected))
+            (activity as? VectorBaseActivity<*>)?.showSnackbar(getString(R.string.rageshake_detected))
         }
     }
 
@@ -63,7 +63,7 @@ class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
 
             findPreference<SeekBarPreference>(VectorPreferences.SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY)!!
                     .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                (activity as? VectorBaseActivity)?.let {
+                (activity as? VectorBaseActivity<*>)?.let {
                     val newValueAsInt = newValue as? Int ?: return@OnPreferenceChangeListener true
 
                     rageshake?.setSensitivity(newValueAsInt)

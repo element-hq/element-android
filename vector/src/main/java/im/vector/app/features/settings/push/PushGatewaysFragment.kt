@@ -17,25 +17,30 @@
 package im.vector.app.features.settings.push
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
-import kotlinx.android.synthetic.main.fragment_generic_recycler.*
+import im.vector.app.databinding.FragmentGenericRecyclerBinding
+
 import javax.inject.Inject
 
 // Referenced in vector_settings_notifications.xml
 class PushGatewaysFragment @Inject constructor(
         val pushGatewaysViewModelFactory: PushGatewaysViewModel.Factory,
         private val epoxyController: PushGateWayController
-) : VectorBaseFragment() {
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>() {
 
-    override fun getLayoutResId() = R.layout.fragment_generic_recycler
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
+        return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
+    }
 
     private val viewModel: PushGatewaysViewModel by fragmentViewModel(PushGatewaysViewModel::class)
 
@@ -54,16 +59,16 @@ class PushGatewaysFragment @Inject constructor(
 
     override fun onResume() {
         super.onResume()
-        (activity as? VectorBaseActivity)?.supportActionBar?.setTitle(R.string.settings_notifications_targets)
+        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.settings_notifications_targets)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        genericRecyclerView.configureWith(epoxyController, showDivider = true)
+        views.genericRecyclerView.configureWith(epoxyController, showDivider = true)
     }
 
     override fun onDestroyView() {
-        genericRecyclerView.cleanup()
+        views.genericRecyclerView.cleanup()
         super.onDestroyView()
     }
 

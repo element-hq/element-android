@@ -17,11 +17,11 @@
 package org.matrix.android.sdk.internal.session.user.accountdata
 
 import com.zhuinden.monarchy.Monarchy
-import org.greenrobot.eventbus.EventBus
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.internal.database.model.IgnoredUserEntity
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.IgnoredUsersContent
 import org.matrix.android.sdk.internal.task.Task
@@ -40,7 +40,7 @@ internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val saveIgnoredUsersTask: SaveIgnoredUsersTask,
         @UserId private val userId: String,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : UpdateIgnoredUserIdsTask {
 
     override suspend fun execute(params: UpdateIgnoredUserIdsTask.Params) {
@@ -63,7 +63,7 @@ internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(
         val list = ignoredUserIds.toList()
         val body = IgnoredUsersContent.createWithUserIds(list)
 
-        executeRequest<Unit>(eventBus) {
+        executeRequest<Unit>(globalErrorReceiver) {
             apiCall = accountDataApi.setAccountData(userId, UserAccountDataTypes.TYPE_IGNORED_USER_LIST, body)
         }
 

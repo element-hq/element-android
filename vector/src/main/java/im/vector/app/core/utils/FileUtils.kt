@@ -24,8 +24,6 @@ import java.util.Locale
 // Implementation should return true in case of success
 typealias ActionOnFile = (file: File) -> Boolean
 
-internal fun String?.isLocalFile() = this != null && File(this).exists()
-
 /* ==========================================================================================
  * Delete
  * ========================================================================================== */
