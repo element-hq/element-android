@@ -26,4 +26,4 @@ restore_sc .github
 git add -A
 git commit -m "Automatic upstream merge postprocessing"
 
-$mydir"/correct_strings.sh
+"$mydir"/correct_strings.sh
