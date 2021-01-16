@@ -294,7 +294,21 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         return when (bubbleStyle) {
             BubbleThemeUtils.BUBBLE_STYLE_START,
             BubbleThemeUtils.BUBBLE_STYLE_START_HIDDEN -> 0
-            else -> resources.getDimensionPixelSize(R.dimen.dual_bubble_other_side_margin)
+            // else: dual-side bubbles (getBubbleMargin should not get called for other bubbleStyles)
+            else -> {
+                when {
+                    // Direct chats usually have avatars hidden on both sides
+                    attributes.informationData.isDirect -> resources.getDimensionPixelSize(R.dimen.dual_bubble_both_sides_without_avatar_margin)
+                    // No direct chat, but sent by me: other side has an avatar
+                    attributes.informationData.sentByMe -> {
+                        resources.getDimensionPixelSize(R.dimen.dual_bubble_one_side_without_avatar_margin) +
+                                resources.getDimensionPixelSize(R.dimen.dual_bubble_one_side_avatar_offset) +
+                                attributes.avatarSize
+                    }
+                    // No direct chat, sent by other: my side has hidden avatar
+                    else -> resources.getDimensionPixelSize(R.dimen.dual_bubble_one_side_without_avatar_margin)
+                }
+            }
         }
     }
 
@@ -309,7 +323,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     open fun reserveFooterSpace(holder: H, width: Int, height: Int) {
     }
 
-    open fun canHideAvatars(): Boolean {
+    private fun canHideAvatars(): Boolean {
         return attributes.informationData.sentByMe ||
                 (attributes.informationData.isDirect && attributes.informationData.senderId == attributes.informationData.dmChatPartnerId)
     }

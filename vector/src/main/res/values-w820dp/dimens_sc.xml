@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="dual_bubble_other_side_margin">96dp</dimen>
+    <dimen name="dual_bubble_one_side_without_avatar_margin">80dp</dimen>
+    <dimen name="dual_bubble_both_sides_without_avatar_margin">96dp</dimen>
 
 </resources>

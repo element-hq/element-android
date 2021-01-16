@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="dual_bubble_other_side_margin">48dp</dimen>
+    <dimen name="dual_bubble_one_side_without_avatar_margin">32dp</dimen>
+    <dimen name="dual_bubble_both_sides_without_avatar_margin">48dp</dimen>
+    <!-- messageAvatarImageView.marginStart -->
+    <dimen name="dual_bubble_one_side_avatar_offset">8dp</dimen>
 
 </resources>
