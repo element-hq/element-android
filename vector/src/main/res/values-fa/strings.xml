@@ -1256,7 +1256,7 @@
     </plurals>
     <string name="delete_event_dialog_title">تأیید برداشت</string>
     <string name="delete_event_dialog_reason_checkbox">آوردن دلیل</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">SchildiChat Android</string>
     <string name="settings_key_requests">درخواست‌های کلید</string>
     <string name="e2e_use_keybackup">قفل‌گشایی از تاریخچهٔ پیام‌های رمزشده</string>
     <string name="refresh">نوسازی</string>
