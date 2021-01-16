@@ -113,6 +113,7 @@ class TextComposerView @JvmOverloads constructor(
             it.clone(context, currentConstraintSetId)
             // in case shield is hidden, we will have glitch without this
             it.getConstraint(R.id.composerShieldImageView).propertySet.visibility = views.composerShieldImageView.visibility
+            it.getConstraint(R.id.composerEmojiButton).propertySet.visibility = views.composerEmojiButton.visibility
             it.applyTo(this)
         }
     }
