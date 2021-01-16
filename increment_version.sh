@@ -128,15 +128,22 @@ set_prop "versionName" "\"$version\""
 changelog_dir=fastlane/metadata/android/en-US/changelogs
 changelog_file="$changelog_dir/$versionCode.txt"
 mkdir -p "$changelog_dir"
-git log --reverse --pretty=format:"- %s" "$last_tag".. --committer="$(git config user.name)" \
-    | grep -v 'Automatic revert to unchanged upstream strings' \
-    | grep -v 'Automatic upstream merge preparation' \
-    | sed "s|Merge tag '\\(.*\\)' into sc|Update codebase to Element \1|" \
-    | grep -v "Automatic color correction" \
-    | grep -v "Automatic upstream merge postprocessing" \
-    | grep -v "Automatic SchildiChat string correction" \
-    | grep -v 'merge_helpers\|README\|increment_version' \
-    > "$changelog_file"
+if [ "$release_type" = "test" ]; then
+    # Automated changelog is usually too long for F-Droid changelog
+    current_commit="$(git rev-parse HEAD)"
+    echo "Full changelog: https://github.com/SchildiChat/SchildiChat-android/commits/$current_commit" \
+        > "$changelog_file"
+else
+    git log --reverse --pretty=format:"- %s" "$last_tag".. --committer="$(git config user.name)" \
+        | grep -v 'Automatic revert to unchanged upstream strings' \
+        | grep -v 'Automatic upstream merge preparation' \
+        | sed "s|Merge tag '\\(.*\\)' into sc|Update codebase to Element \1|" \
+        | grep -v "Automatic color correction" \
+        | grep -v "Automatic upstream merge postprocessing" \
+        | grep -v "Automatic SchildiChat string correction" \
+        | grep -v 'merge_helpers\|README\|increment_version' \
+        > "$changelog_file"
+fi
 if [ "$release_type" != "test" ]; then
     $EDITOR "$changelog_file" || true
     read -p "Press enter when changelog is done"
