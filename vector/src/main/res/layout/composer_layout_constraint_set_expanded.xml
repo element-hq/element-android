@@ -128,7 +128,7 @@
         android:layout_height="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/sendButton"
         app:layout_constraintEnd_toStartOf="@+id/composerEditText"
-        app:layout_constraintStart_toEndOf="@+id/composer_emoji"
+        app:layout_constraintStart_toEndOf="@+id/composerEmojiButton"
         app:layout_constraintTop_toTopOf="@+id/sendButton"
         tools:src="@drawable/ic_shield_black" />
 
@@ -155,7 +155,7 @@
         android:tint="?android:textColorHint"
         app:layout_constraintTop_toTopOf="@+id/sendButton"
         app:layout_constraintBottom_toBottomOf="@+id/sendButton"
-        app:layout_constraintEnd_toStartOf="@+id/composer_shield"
+        app:layout_constraintEnd_toStartOf="@+id/composerShieldImageView"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
