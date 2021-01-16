@@ -47,9 +47,10 @@ set_prop() {
     sed -i "$not_equals""s|\($prop $equals\).*|\1$value|g" "$build_gradle"
 }
 
-calculate_version_code() {
-    echo "(($versionMajor * 10000 + $versionMinor * 100 + $versionPatch + $scVersion) + 4000000) * 10" | bc
-}
+# Legacy versioning, based on Element's version codes
+#calculate_version_code() {
+#    echo "(($versionMajor * 10000 + $versionMinor * 100 + $versionPatch + $scVersion) + 4000000) * 10" | bc
+#}
 
 
 #
@@ -62,24 +63,39 @@ versionPatch=`get_prop ext.versionPatch`
 scVersion=`get_prop ext.scVersion`
 
 previousVersionCode=`grep '^        versionCode ' "$build_gradle" | sed 's|^        versionCode ||'`
-versionCode=`calculate_version_code`
+# Legacy versioning, based on Element's version codes
+#versionCode=`calculate_version_code`
+#if [ "$release_type" = "test" ]; then
+#    if [ ! -z "$previousTestVersionCode" ]; then
+#        previousVersionCode=$((previousVersionCode > previousTestVersionCode ? previousVersionCode : previousTestVersionCode))
+#    fi
+#    versionCode=$((previousVersionCode + 1))
+#elif [ "$versionCode" = "$previousVersionCode" ]; then
+#    ((scVersion++))
+#    echo "Increase downstream version to $scVersion"
+#    versionCode=`calculate_version_code`
+#else
+#    echo "Upstream version upgrade, no need to change downstream version"
+#fi
+# New versioning: versionCode incremented independently of versionName, and always increment scVersion
+((scVersion++))
 if [ "$release_type" = "test" ]; then
     if [ ! -z "$previousTestVersionCode" ]; then
+        testVersionCount=$((previousVersionCode > previousTestVersionCode ? 1 : (previousTestVersionCode - previousVersionCode + 1)))
         previousVersionCode=$((previousVersionCode > previousTestVersionCode ? previousVersionCode : previousTestVersionCode))
+    else
+        testVersionCount=1
     fi
     versionCode=$((previousVersionCode + 1))
-elif [ "$versionCode" = "$previousVersionCode" ]; then
-    ((scVersion++))
-    echo "Increase downstream version to $scVersion"
-    versionCode=`calculate_version_code`
 else
-    echo "Upstream version upgrade, no need to change downstream version"
+    versionCode=$((previousVersionCode + 10))
 fi
 
-version="$versionMajor.$versionMinor.$versionPatch.sc.$scVersion"
+
+version="$versionMajor.$versionMinor.$versionPatch.sc$scVersion"
 
 if [ "$release_type" = "test" ]; then
-    version="$version-test"
+    version="$version-test$testVersionCount"
 fi
 
 new_tag="sc_v$version"
