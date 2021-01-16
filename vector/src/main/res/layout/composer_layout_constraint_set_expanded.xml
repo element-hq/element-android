@@ -130,6 +130,7 @@
         app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintStart_toEndOf="@+id/composerEmojiButton"
         app:layout_constraintTop_toTopOf="@+id/sendButton"
+        app:layout_goneMarginStart="12dp"
         tools:src="@drawable/ic_shield_black" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
@@ -143,6 +144,7 @@
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
         app:layout_constraintStart_toEndOf="@+id/composerShieldImageView"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
+        app:layout_goneMarginStart="8dp"
         tools:text="@tools:sample/lorem/random" />
 
     <ImageButton

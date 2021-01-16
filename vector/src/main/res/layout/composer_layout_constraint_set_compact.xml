@@ -127,6 +127,7 @@
         app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintStart_toEndOf="@+id/composerEmojiButton"
         app:layout_constraintTop_toTopOf="@id/sendButton"
+        app:layout_goneMarginStart="12dp"
         tools:src="@drawable/ic_shield_black"
         tools:visibility="visible" />
 
@@ -142,6 +143,7 @@
         app:layout_constraintEnd_toStartOf="@+id/attachmentButton"
         app:layout_constraintStart_toEndOf="@+id/composerShieldImageView"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginStart="8dp"
         tools:text="@tools:sample/lorem/random" />
 
     <ImageButton
