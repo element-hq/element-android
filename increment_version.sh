@@ -89,6 +89,15 @@ if [ "$release_type" = "test" ]; then
     versionCode=$((previousVersionCode + 1))
 else
     versionCode=$((previousVersionCode + 10))
+    # Ensure the new version code is higher than the one of the last test version
+    if [ -f "$HOME/fdroid/sm/data/metadata/de.spiritcroc.riotx.a.yml" ]; then
+        lastTestVersionCode="$(cat "$HOME/fdroid/sm/data/metadata/de.spiritcroc.riotx.a.yml"|grep versionCode|tail -n 1|sed 's|.*: ||')"
+    else
+        read -p "Enter versionCode of last test version: " lastTestVersionCode
+    fi
+    while [ "$lastTestVersionCode" -ge "$versionCode" ]; do
+        versionCode=$((versionCode + 10))
+    done
 fi
 
 
