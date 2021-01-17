@@ -1,2 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="notice_room_leave">%1$s напусти собу</string>
+    <string name="notice_direct_room_join_by_you">Ви се придружисте</string>
+    <string name="notice_direct_room_join">%1$s се придружи</string>
+    <string name="notice_room_join_by_you">Ви се придружисте</string>
+    <string name="notice_room_join">%1$s се придружи</string>
+    <string name="notice_room_invite_you">%1$s позва вас</string>
+    <string name="notice_room_invite_by_you">Ви позвасте корисника %1$s</string>
+    <string name="notice_room_invite">%1$s позва корисника %2$s</string>
+    <string name="notice_direct_room_created_by_you">Направили сте дискусију</string>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="initial_sync_start_importing_account">Почетна синхронизација:
+\nУвозим налог…</string>
+    <string name="room_displayname_empty_room_was">Празна соба (била је %s)</string>
+    <string name="room_displayname_empty_room">Празна соба</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s и још %2$d</item>
+        <item quantity="few">%1$s и још %2$d</item>
+        <item quantity="other">%1$s и још %2$d</item>
+    </plurals>
+    <string name="notice_direct_room_created">%1$s направи дискусију</string>
+    <string name="notice_room_created_by_you">Направили сте собу</string>
+    <string name="notice_room_created">%1$s направи собу</string>
+    <string name="notice_room_invite_no_invitee_by_you">Ваша позивница</string>
+    <string name="notice_room_invite_no_invitee">%s шаље позивницу</string>
+    <string name="summary_you_sent_sticker">Послали сте налепницу.</string>
+    <string name="summary_user_sent_sticker">%1$s посла налепницу.</string>
+    <string name="summary_you_sent_image">Послали сте слику.</string>
+    <string name="summary_user_sent_image">%1$s посла слику.</string>
+</resources>
