@@ -6,6 +6,9 @@ mydir="$(dirname "$(realpath "$0")")"
 
 source "$mydir/merge_helpers.sh"
 
+# https://f-droid.org/en/docs/All_About_Descriptions_Graphics_and_Screenshots/
+max_changelog_len=500
+
 if [ "$1" = "preview" ]; then
     preview=1
     shift
@@ -125,29 +128,50 @@ set_prop "versionName" "\"$version\""
 # Generate changelog
 #
 
-changelog_dir=fastlane/metadata/android/en-US/changelogs
-changelog_file="$changelog_dir/$versionCode.txt"
-mkdir -p "$changelog_dir"
-if [ "$release_type" = "test" ]; then
-    # Automated changelog is usually too long for F-Droid changelog
-    current_commit="$(git rev-parse HEAD)"
-    echo "Full changelog: https://github.com/SchildiChat/SchildiChat-android/commits/$current_commit" \
-        > "$changelog_file"
-else
-    git log --reverse --pretty=format:"- %s" "$last_tag".. --committer="$(git config user.name)" \
+git_changelog() {
+    git_args="$1"
+
+    git log $git_args --pretty=format:"- %s" "$last_tag".. --committer="$(git config user.name)" \
         | grep -v 'Automatic revert to unchanged upstream strings' \
         | grep -v 'Automatic upstream merge preparation' \
         | sed "s|Merge tag '\\(.*\\)' into sc|Update codebase to Element \1|" \
         | grep -v "Automatic color correction" \
         | grep -v "Automatic upstream merge postprocessing" \
         | grep -v "Automatic SchildiChat string correction" \
-        | grep -v 'merge_helpers\|README\|increment_version' \
-        > "$changelog_file"
+        | grep -v 'merge_helpers\|README\|increment_version'
+}
+
+changelog_dir=fastlane/metadata/android/en-US/changelogs
+changelog_file="$changelog_dir/$versionCode.txt"
+mkdir -p "$changelog_dir"
+if [ "$release_type" = "test" ]; then
+    git_changelog > "$changelog_file"
+    # Automated changelog is usually too long for F-Droid changelog
+    if [ "$(wc -m "$changelog_file"|sed 's| .*||')" -gt "$max_changelog_len" ]; then
+        current_commit="$(git rev-parse HEAD)"
+        changelog_add="$(echo -e "- ...\n\nAll changes: https://github.com/SchildiChat/SchildiChat-android/commits/$current_commit")"
+        addlen="$(expr length "$changelog_add")"
+        # - 3: probably not necessary, but I don't want to risk a broken link because of some miscalculation
+        allow_len=$((max_changelog_len - addlen - 3))
+        while [ "$(wc -m "$changelog_file"|sed 's| .*||')" -gt "$allow_len" ]; do
+            content_shortened="$(head -n -1 "$changelog_file")"
+            echo "$content_shortened" > "$changelog_file"
+        done
+        echo "$changelog_add" >> "$changelog_file"
+    fi
+else
+    git_changelog --reverse > "$changelog_file"
 fi
 if [ "$release_type" != "test" ]; then
     $EDITOR "$changelog_file" || true
     read -p "Press enter when changelog is done"
 fi
+
+while [ "$(wc -m "$changelog_file"|sed 's| .*||')" -gt "$max_changelog_len" ]; do
+    echo "Your changelog is too long, only $max_changelog_len characters allowed!"
+    echo "Currently: $(wc -m "$changelog_file")"
+    read -p "Press enter when changelog is done"
+done
 
 git add -A
 if [ "$release_type" = "test" ]; then
