@@ -1301,12 +1301,12 @@
 \n - שלך, או חיבור האינטרנט של המשתמשים האחרים
 \n - שלך, או המכשיר של המשתמשים האחרים</string>
     <string name="verification_conclusion_not_secure">לא מאובטח</string>
-    <string name="verification_green_shield">חפש את המגן הירוק כדי להבטיח שאמין למשתמש. סמכו על כל המשתמשים בחדר שיבטיחו שהחדר יהיה מאובטח.</string>
-    <string name="verify_user_sas_emoji_security_tip">ליתר ביטחון, השתמש באמצעי תקשורת מהימן אחר או עשה זאת באופן אישי.</string>
+    <string name="verification_green_shield">חפש את המגן הירוק כדי להבטיחשהמשתמש אמין. סמכו על כל המשתמשים בחדר שיבטיחו שהחדר יהיה מאובטח.</string>
+    <string name="verify_user_sas_emoji_security_tip">ליתר ביטחון, השתמש באמצעי תקשורת בטוח אחר או עשה זאת באופן אישי.</string>
     <string name="verify_user_sas_emoji_help_text">אמת משתמש זה על ידי אישור שהאימוג\'י הייחודי הבא מופיע על גבי המסך, באותו סדר.</string>
     <string name="verification_sas_do_not_match">הם לא תואמים</string>
     <string name="verification_sas_match">הם מתאימים</string>
-    <string name="verification_conclusion_warning">כניסה לא מהימנה</string>
+    <string name="verification_conclusion_warning">כניסה לא בטוחה</string>
     <string name="login_error_threepid_denied">דומיין הדוא\"ל שלך אינו מורשה להירשם בשרת זה</string>
     <string name="create_room_in_progress">יוצר חדר…</string>
     <string name="create_room_alias_invalid">תווים מסוימים אינם מורשים</string>
@@ -1314,17 +1314,17 @@
     <string name="create_room_alias_already_in_use">כתובת זו כבר בשימוש</string>
     <string name="create_room_alias_hint">כתובת חדר</string>
     <string name="create_room_disable_federation_description">ייתכן שתאפשר זאת אם החדר ישמש רק לשיתוף פעולה עם צוותים פנימיים בשרת הבית שלך. לא ניתן לשנות זאת מאוחר יותר.</string>
-    <string name="create_room_disable_federation_title">חסום ממישהו שאינו חלק מ- %s מלהצטרף אי פעם לחדר זה</string>
+    <string name="create_room_disable_federation_title">חסום כל אחד שאינו חלק מ- %s מלהצטרף אי פעם לחדר זה</string>
     <string name="hide_advanced">הסתר מתקדם</string>
     <string name="show_advanced">הצג מתקדם</string>
     <string name="create_room_encryption_description">לאחר הפעלתו, לא ניתן להשבית את ההצפנה.</string>
     <string name="create_room_encryption_title">אפשר הצפנה</string>
     <string name="command_description_shrug">הוסף לפני ¯ \\ _ (ツ) _ / ¯ להודעת טקסט רגיל</string>
     <string name="settings_developer_mode_fail_fast_summary">אלמנט עלול לקרוס לעיתים קרובות יותר כאשר מתרחשת שגיאה בלתי צפויה</string>
-    <string name="settings_developer_mode_fail_fast_title">כישלון מהיר</string>
+    <string name="settings_developer_mode_fail_fast_title">כישלון-מהיר</string>
     <string name="autocomplete_limited_results">מציג רק את התוצאות הראשונות, הקלד עוד אותיות …</string>
-    <string name="devices_other_devices">מושבים אחרים</string>
-    <string name="devices_current_device">מושב נוכחי</string>
+    <string name="devices_other_devices">פעולות אחרות</string>
+    <string name="devices_current_device">פעולה נוכחית</string>
     <string name="settings">הגדרות</string>
     <string name="rageshake_detected">טלטלה זוהתה!</string>
     <string name="settings_rageshake_detection_threshold_summary">טלטל את הטלפון שלך כדי לבדוק את סף הזיהוי</string>
@@ -1698,7 +1698,7 @@
     <string name="verification_scan_notice">סרוק את הקוד עם מכשיר המשתמש האחר כדי לאמת זה את זה בצורה מאובטחת</string>
     <string name="you">את\\ה</string>
     <string name="verification_verify_device_manually">אימות ידני</string>
-    <string name="verification_verify_device">אמת את המושב הזה</string>
+    <string name="verification_verify_device">אמת את הפעולה הזו</string>
     <string name="verification_request">בקשת אימות</string>
     <string name="verification_sent">אימות נשלח</string>
     <string name="verification_request_you_accepted">קבלתם</string>
@@ -1892,16 +1892,16 @@
     <string name="room_member_power_level_custom">מותאם אישית</string>
     <string name="room_member_power_level_moderators">מנחים</string>
     <plurals name="room_profile_section_more_member_list">
-        <item quantity="one">One person</item>
+        <item quantity="one">אדם אחד</item>
         <item quantity="two">% 1 $ d אנשים</item>
         <item quantity="many">% 1 $ d אנשים</item>
         <item quantity="other">% 1 $ d אנשים</item>
     </plurals>
     <plurals name="login_error_limit_exceeded_retry_after">
         <item quantity="one">יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד% 1 $ d שנייה …</item>
-        <item quantity="two">יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד% 1 $ d שניות …</item>
-        <item quantity="many">יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד% 1 $ d שניות …</item>
-        <item quantity="other">יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד% 1 $ d שניות …</item>
+        <item quantity="two">יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד% 1 $ d שניות …</item>
+        <item quantity="many">יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד% 1 $ d שניות …</item>
+        <item quantity="other">יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד% 1 $ d שניות …</item>
     </plurals>
     <string name="login_clear_homeserver_history">נקה היסטוריה</string>
     <string name="login_social_sso">כניסה יחידה</string>
@@ -1922,30 +1922,30 @@
         <item quantity="other">% 1 $ s,% 2 $ s ו-% 3 $ d אחרים קוראים</item>
     </plurals>
     <plurals name="keys_backup_info_keys_backing_up">
-        <item quantity="one">מגבה את מקש% d …</item>
-        <item quantity="two">מגבה% d מקשים …</item>
-        <item quantity="many">מגבה% d מקשים …</item>
-        <item quantity="other">מגבה% d מקשים …</item>
+        <item quantity="one">גיבוי המפתח% d …</item>
+        <item quantity="two">גיבוי% d המפתחות …</item>
+        <item quantity="many">מגבה% d המפתחות …</item>
+        <item quantity="other">מגבה% d המפתחות …</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">% d מפתח חדש נוסף להפעלה זו.</item>
-        <item quantity="two">% d מקשים חדשים נוספו להפעלה זו.</item>
-        <item quantity="many">% d מקשים חדשים נוספו להפעלה זו.</item>
-        <item quantity="other">% d מקשים חדשים נוספו להפעלה זו.</item>
+        <item quantity="two">% d מפתחות חדשים נוספו להפעלה זו.</item>
+        <item quantity="many">% d מפתחות חדשים נוספו להפעלה זו.</item>
+        <item quantity="other">% d מפתחות חדשים נוספו להפעלה זו.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part1">
-        <item quantity="one">שוחזרו גיבויים עם מקש% d.</item>
-        <item quantity="two">שוחזרו גיבויים עם מקש% d.</item>
-        <item quantity="many">שוחזרו גיבויים עם מקש% d.</item>
-        <item quantity="other">שוחזרו גיבויים עם מקש% d.</item>
+        <item quantity="one">שוחזרו גיבויים עם %d מפתח.</item>
+        <item quantity="two">שוחזרו גיבויים עם מפתחות% d.</item>
+        <item quantity="many">שוחזרו גיבויים עם מפתחות% d.</item>
+        <item quantity="other">שוחזרו גיבויים עם מפתחות% d.</item>
     </plurals>
     <string name="room_widget_failed_to_load">טעינת היישומון נכשלה.
 \n% s</string>
     <plurals name="room_settings_banned_users_count">
-        <item quantity="one">משתמש d נאסר</item>
-        <item quantity="two">משתמשים d נאסרו</item>
-        <item quantity="many">משתמשים d נאסרו</item>
-        <item quantity="other">משתמשים d נאסרו</item>
+        <item quantity="one">%b משתמש נחסם</item>
+        <item quantity="two">"%b משתמשים  נחסמו"</item>
+        <item quantity="many">"%b משתמשים  נחסמו"</item>
+        <item quantity="other">"%b משתמשים  נחסמו"</item>
     </plurals>
     <string name="account_email_error">אירעה שגיאה בעת אימות כתובת הדוא\"ל שלך.</string>
     <string name="account_phone_number_already_used_error">מספר הטלפון הזה כבר נמצא בשימוש.</string>
@@ -1977,7 +1977,7 @@
     <string name="settings_data_save_mode_summary">מצב שמירת נתונים מחיל מסנן ספציפי כך שמסוננים עדכוני נוכחות והודעות הקלדה.</string>
     <string name="settings_data_save_mode">מצב שמירת נתונים</string>
     <string name="settings_opt_in_of_analytics_ok">כן, אני רוצה לעזור!</string>
-    <string name="settings_opt_in_of_analytics_prompt">אנא אפשר ניתוח כדי לעזור לנו לשפר את Element.</string>
+    <string name="settings_opt_in_of_analytics_prompt">אנא אפשר ניתוח נתונים כדי לעזור לנו לשפר את Element.</string>
     <string name="settings_opt_in_of_analytics_summary">אלמנט אוסף ניתוח אנונימי כדי לאפשר לנו לשפר את היישום.</string>
     <string name="settings_opt_in_of_analytics">שלח נתוני ניתוח</string>
     <string name="settings_analytics">ניתוח נתונים</string>
@@ -1986,7 +1986,7 @@
 \nבמסך הבא תתבקש לאפשר לאלמנט לרוץ תמיד ברקע, אנא קבל.</string>
     <string name="startup_notification_fdroid_battery_optim_title">חיבור ברקע</string>
     <string name="startup_notification_privacy_button_other">בחר באפשרות אחרת</string>
-    <string name="startup_notification_privacy_button_grant">הענק הרשאה</string>
+    <string name="startup_notification_privacy_button_grant">מתן הרשאה</string>
     <string name="startup_notification_privacy_message">אלמנט יכול לרוץ ברקע כדי לנהל את ההתראות שלך בצורה מאובטחת ופרטית. זה עשוי להשפיע על השימוש בסוללה.</string>
     <string name="startup_notification_privacy_title">פרטיות הודעות</string>
     <string name="settings_discovery_manage">נהל את הגדרות הגילוי שלך.</string>
@@ -2123,4 +2123,5 @@
 \nהאימות יישמר באופן מקומי וישותף בגרסה עתידית של האפליקציה.</string>
     <string name="unignore">בטל התעלמות</string>
     <string name="rendering_event_error_exception">אלמנט נתקל בבעיה בעת הצגת תוכן האירוע עם המזהה \'% 1 $ s\'</string>
+    <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
 </resources>
