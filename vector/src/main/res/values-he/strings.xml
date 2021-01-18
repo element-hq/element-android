@@ -2017,7 +2017,7 @@
     <string name="delete_event_dialog_reason_hint">סיבה לניתוח מחדש</string>
     <string name="delete_event_dialog_reason_checkbox">כלול סיבה</string>
     <string name="delete_event_dialog_content">האם אתה בטוח שברצונך להסיר (למחוק) אירוע זה\? שים לב שאם תמחק שם של חדר או שינוי נושא, זה עלול לבטל את השינוי.</string>
-    <string name="delete_event_dialog_title">אשר הסרה</string>
+    <string name="delete_event_dialog_title">אשר הסרהאשר הסרה</string>
     <string name="share_confirm_room">האם אתה רוצה לשלוח את הקובץ המצורף ל- %1$s\?</string>
     <string name="message_action_item_redact">הסר…</string>
     <string name="enter_secret_storage_passphrase_warning_text">עליך לגשת לאחסון סודי רק ממכשיר מהימן</string>
