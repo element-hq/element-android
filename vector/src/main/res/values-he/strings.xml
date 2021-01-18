@@ -2380,4 +2380,12 @@
         <item quantity="many">הראה את המכשירים שאיתם תוכל לאמת כעת</item>
         <item quantity="other">הראה את המכשירים שאיתם תוכל לאמת כעת</item>
     </plurals>
+    <string name="cross_signing_verify_by_text">אמת ידנית באמצעות טקסט</string>
+    <string name="verify_this_session">אמת את הכניסה החדשה שניגשת לחשבונך: %1$s</string>
+    <string name="verify_other_sessions">אמת את כל ההפעלות שלך כדי להבטיח שהחשבון וההודעות שלך בטוחים</string>
+    <string name="review_logins">בדוק היכן נכנסת</string>
+    <string name="encrypted_unverified">מוצפן על ידי מכשיר לא מאומת</string>
+    <string name="unencrypted">לא מוצפן</string>
+    <string name="default_message_emote_snow">שולח שלג ❄️</string>
+    <string name="default_message_emote_confetti">שולח קונפטי 🎉</string>
 </resources>
