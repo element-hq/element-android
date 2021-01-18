@@ -2388,4 +2388,7 @@
     <string name="unencrypted">לא מוצפן</string>
     <string name="default_message_emote_snow">שולח שלג ❄️</string>
     <string name="default_message_emote_confetti">שולח קונפטי 🎉</string>
+    <string name="user_code_share">שתף את הקוד שלי</string>
+    <string name="add_members_to_room">הוסף משתמשים</string>
+    <string name="confirm_your_identity">אשר את זהותך על ידי אימות התחברות זו מאחד מהפגישות האחרות שלך, והעניק לה גישה להודעות מוצפנות.</string>
 </resources>
