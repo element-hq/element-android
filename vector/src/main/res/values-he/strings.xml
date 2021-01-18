@@ -2124,4 +2124,131 @@
     <string name="unignore">בטל התעלמות</string>
     <string name="rendering_event_error_exception">אלמנט נתקל בבעיה בעת הצגת תוכן האירוע עם המזהה \'% 1 $ s\'</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
+    <string name="command_confetti">שולח את ההודעה הנתונה עם קונפטי</string>
+    <string name="secure_backup_reset_no_history">תתחיל מחדש ללא היסטוריה, ללא הודעות, מכשירים מהימנים או משתמשים מהימנים</string>
+    <string name="secure_backup_reset_if_you_reset_all">אם תאפס הכל</string>
+    <string name="secure_backup_reset_all_no_other_devices">עשה זאת רק אם אין לך מכשיר אחר שאיתו תוכל לאמת מכשיר זה.</string>
+    <string name="secure_backup_reset_all">אפס הכל</string>
+    <string name="bad_passphrase_key_reset_all_action">שכחת או איבדת את כל אפשרויות ההתאוששות\? אפס הכל</string>
+    <string name="failed_to_access_secure_storage">הגישה לאחסון מאובטח נכשלה</string>
+    <string name="keys_backup_recovery_key_error_decrypt">לא ניתן היה לפענח את הגיבוי באמצעות מפתח השחזור הזה: ודא שהזנת את מפתח השחזור הנכון.</string>
+    <string name="enter_secret_storage_input_key">בחר במפתח השחזור שלך, או הזן אותו ידנית על ידי הקלדתו או הדבקתו מהלוח שלך</string>
+    <string name="use_recovery_key">השתמש במפתח השחזור</string>
+    <string name="enter_secret_storage_passphrase_or_key">השתמש ב- %1$s שלך או השתמש ב- %2$s שלך כדי להמשיך.</string>
+    <string name="command_description_discard_session_not_handled">נתמך רק בחדרים מוצפנים</string>
+    <string name="command_description_discard_session">מכריח את ההפעלה הקבוצתית החוצה הנוכחית בחדר מוצפן להיזרק</string>
+    <string name="use_latest_app">השתמש באלמנט האחרון במכשירים האחרים שלך:</string>
+    <string name="or_other_mx_capabale_client">או לקוח מטריקס אחר עם יכולת חתימה צולבת</string>
+    <string name="app_ios_android">אלמנט iOS
+\nאלמנט אנדרואיד</string>
+    <string name="app_desktop_web">רשת האינטרנט
+\nשולחן העבודה של אלמנט</string>
+    <string name="use_other_session_content_description">השתמש באלמנט העדכני ביותר במכשירים האחרים שלך, Element Web, Element Desktop, Element iOS, Element for Android, או לקוח מטריקס אחר עם יכולת חתימה צולבת</string>
+    <string name="change_password_summary">הגדר סיסמת חשבון חדשה …</string>
+    <string name="error_saving_media_file">לא ניתן היה לשמור את קובץ המדיה</string>
+    <string name="error_adding_media_file_to_gallery">לא ניתן היה להוסיף קובץ מדיה לגלריה</string>
+    <string name="media_file_added_to_gallery">קובץ מדיה נוסף לגלריה</string>
+    <string name="settings_security_prevent_screenshots_summary">הפעלת הגדרה זו מוסיפה את FLAG_SECURE לכל הפעילויות. הפעל מחדש את היישום כדי שהשינוי ייכנס לתוקף.</string>
+    <string name="settings_security_prevent_screenshots_title">מנע צילומי מסך של היישום</string>
+    <string name="bootstrap_migration_backup_recovery_key">מפתח שחזור גיבוי מפתח</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">אינך יודע את משפט הסיסמה לגיבוי מפתח שלך, אתה יכול %s.</string>
+    <string name="bootstrap_migration_use_recovery_key">השתמש במפתח השחזור של גיבוי המפתח שלך</string>
+    <string name="bootstrap_migration_enter_backup_password">הזן את משפט הסיסמה לגיבוי מפתח כדי להמשיך.</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+    <string name="bootstrap_progress_storing_in_sss">אחסון סוד הגיבוי המקשים ב- SSSS</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">יצירת מפתח SSSS ממפתח התאוששות</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">יוצר מפתח SSSS מביטוי סיסמה (%s)</string>
+    <string name="bootstrap_progress_generating_ssss">יצירת מפתח SSSS מביטוי סיסמה</string>
+    <string name="bootstrap_progress_compute_curve_key">קבלת מפתח עקומה</string>
+    <string name="bootstrap_progress_checking_backup_with_info">בודק מפתח גיבוי (%s)</string>
+    <string name="bootstrap_progress_checking_backup">Checking backup Key</string>
+    <string name="recovery_key_empty_error_message">אנא הכנס מפתח שחזור</string>
+    <string name="bootstrap_invalid_recovery_key">זה לא מפתח שחזור תקף</string>
+    <string name="backup_recovery_passphrase">ביטוי סיסמה לשחזור</string>
+    <string name="enter_backup_passphrase">הזן %s</string>
+    <string name="use_file">השתמש בקובץ</string>
+    <string name="bootstrap_enter_recovery">הזן את %s שלך כדי להמשיך</string>
+    <string name="security_prompt_text">אמת את עצמך ואחרים בכדי לשמור על הצ\'אטים שלך</string>
+    <string name="setup_cross_signing">אפשר חתימה צולבת</string>
+    <string name="upgrade_security">שדרוג הצפנה זמין</string>
+    <string name="room_message_placeholder">הודעה…</string>
+    <string name="auth_invalid_login_deactivated_account">חשבון זה הושבת.</string>
+    <string name="auth_invalid_login_param_space_in_password">שם משתמש ו / או סיסמה שגויים. הסיסמה שהוזנה מתחילה או מסתיימת ברווחים, אנא בדוק אותה.</string>
+    <string name="command_description_plain">שולח הודעה כטקסט רגיל, מבלי לפרש אותה כסימון</string>
+    <string name="settings_notification_advanced_summary">הגדר חשיבות התראה לפי אירוע</string>
+    <string name="settings_troubleshoot_title">פתרון בעיות</string>
+    <string name="settings_when_rooms_are_upgraded">כאשר משודרגים חדרים</string>
+    <string name="settings_messages_in_e2e_group_chat">הודעות מוצפנות בצ\'אטים קבוצתיים</string>
+    <string name="settings_messages_in_e2e_one_to_one">הודעות מוצפנות בצ\'אטים אחד לאחד</string>
+    <string name="settings_messages_at_room">הודעות המכילות @room</string>
+    <string name="settings_notification_configuration">תצורת התראות</string>
+    <string name="error_failed_to_import_keys">ייבוא המפתחות נכשל</string>
+    <string name="qr_code_scanned_verif_waiting">ממתין ל-%s …</string>
+    <string name="qr_code_scanned_verif_waiting_notice">כמעט שם! מחכה לאישור…</string>
+    <string name="qr_code_scanned_self_verif_notice">כמעט שם! האם המכשיר השני מציג את אותו מגן\?</string>
+    <string name="topic_prefix">"נושא: "</string>
+    <string name="add_a_topic_link_text">הוספת נושא</string>
+    <string name="room_created_summary_no_topic_creation_text">%s כדי להודיע לאנשים על מה החדר הזה.</string>
+    <string name="this_is_the_beginning_of_dm">זוהי ההתחלה של היסטוריית ההודעות הישירות שלך עם% s.</string>
+    <string name="this_is_the_beginning_of_room_no_name">זו תחילתה של השיחה הזו.</string>
+    <string name="this_is_the_beginning_of_room">זו ההתחלה ש ל% s.</string>
+    <string name="direct_room_created_summary_item_by_you">הצתרפתם.</string>
+    <string name="direct_room_created_summary_item">%s הצטרף.</string>
+    <string name="room_created_summary_item_by_you">יצרת ותגדרת את החדר.</string>
+    <string name="room_created_summary_item">%s יצר את החדר והגדיר אותו.</string>
+    <string name="encryption_unknown_algorithm_tile_description">ההצפנה בה משתמשים בחדר זה אינה נתמכת</string>
+    <string name="encryption_not_enabled">ההצפנה לא מופעלת</string>
+    <string name="direct_room_encryption_enabled_tile_description">ההודעות בחדר זה מוצפנות מקצה לקצה.</string>
+    <string name="encryption_enabled_tile_description">ההודעות בחדר זה מוצפנות מקצה לקצה. למידע נוסף ואמת משתמשים בפרופיל שלהם.</string>
+    <string name="encryption_enabled">ההצפנה מופעלת</string>
+    <string name="bootstrap_cancel_text">אם תבטל עכשיו, אתה עלול לאבד הודעות ונתונים מוצפנים אם תאבד את הגישה לכניסות שלך.
+\n
+\nאתה יכול גם להגדיר גיבוי מאובטח ולנהל את המפתחות שלך בהגדרות.</string>
+    <string name="bootstrap_skip_text_no_gen_key">הגדרת ביטוי סיסמה לשחזור מאפשרת לך לאבטח ולפתוח הודעות מוצפנות ואמון.</string>
+    <string name="bootstrap_skip_text">הגדרת ביטוי סיסמה לשחזור מאפשרת לך לאבטח ולפתוח הודעות מוצפנות ואמון.
+\n
+\nאם אינך רוצה להגדיר סיסמת הודעה, צור במקום זאת מפתח הודעה.</string>
+    <string name="auth_flow_not_supported">אינך יכול לעשות זאת מנייד</string>
+    <string name="bootstrap_crosssigning_save_cloud">העתק אותו לאחסון הענן האישי שלך</string>
+    <string name="bootstrap_crosssigning_save_usb">שמור אותו במפתח USB או בכונן גיבוי</string>
+    <string name="bootstrap_crosssigning_print_it">הדפיסו ואחסנו במקום בטוח</string>
+    <string name="bootstrap_cross_signing_success">%2$s ו %1$s מוגדרים כעת.
+\n
+\nתשמור עליהם! תזדקק להם בכדי לפתוח הודעות מוצפנות ומידע מאובטח אם תאבד את כל ההפעלות הפעילות שלך.</string>
+    <string name="bootstrap_crosssigning_progress_key_backup">הגדרת גיבוי מקשים</string>
+    <string name="bootstrap_crosssigning_progress_save_ssk">סנכרון מפתח חתימה עצמית</string>
+    <string name="bootstrap_crosssigning_progress_save_usk">סנכרון מפתח משתמש</string>
+    <string name="bootstrap_crosssigning_progress_save_msk">סנכרון מפתח ראשי</string>
+    <string name="bootstrap_crosssigning_progress_default_key">הגדרת מפתח ברירת מחדל של SSSS</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">יצירת מפתח מאובטח מביטוי סיסמה</string>
+    <string name="bootstrap_crosssigning_progress_initializing">פרסום מפתחות זהות שנוצרו</string>
+    <string name="bootstrap_save_key_description">השתמש ב- %1$s זה כרשת ביטחון למקרה שאתה שוכח את %2$s שלך.</string>
+    <string name="finish">סיום</string>
+    <string name="keep_it_safe">שמור על זה בטוח</string>
+    <string name="bootstrap_finish_title">סיימתם!</string>
+    <string name="your_recovery_key">מפתח ההתאוששות שלך</string>
+    <string name="bootstrap_loading_title">הגדרת התאוששות.</string>
+    <string name="bootstrap_loading_text">פעולה זו עשויה לארוך מספר שניות, אנא התאזר בסבלנות.</string>
+    <string name="bootstrap_info_text_2">הזן ביטוי אבטחה רק אתה מכיר, המשמש לאבטחת סודות בשרת שלך.</string>
+    <string name="bootstrap_dont_reuse_pwd">אל תשתמש בסיסמת חשבונך.</string>
+    <string name="bootstrap_info_confirm_text">הזן שוב את %s שלך כדי לאשר זאת.</string>
+    <string name="bootstrap_info_text">אבטח ופתח נעילת הודעות מוצפנות ואמון באמצעות %s.</string>
+    <string name="enter_account_password">הזן את ה- %s בכדי להמשיך.</string>
+    <string name="confirm_recovery_passphrase">אשר %s</string>
+    <string name="generate_message_key">צור מפתח הודעה</string>
+    <string name="set_recovery_passphrase">הגדר %s</string>
+    <string name="account_password">סיסמת חשבון</string>
+    <string name="message_key">מפתח הודעה</string>
+    <string name="recovery_passphrase">ביטוי סיסמה לשחזור</string>
+    <string name="verification_cancelled">האימות בוטל</string>
+    <string name="verify_cancelled_notice">אמת את המכשירים שלך מההגדרות.</string>
+    <string name="verify_not_me_self_verification">אחד מהדברים הבאים עלול להתפשר:
+\n
+\n- הסיסמה שלך
+\n- שרת הבית שלך
+\n- מכשיר זה, או המכשיר האחר
+\n- חיבור האינטרנט שמשני המכשירים משתמשים בו
+\n
+\nאנו ממליצים לך לשנות את הסיסמה ומפתח השחזור שלך בהגדרות באופן מיידי.</string>
+    <string name="verify_cancel_other">לא תאמת את %1$s (%2$s) אם תבטל עכשיו. התחל שוב בפרופיל המשתמש שלהם.</string>
 </resources>
