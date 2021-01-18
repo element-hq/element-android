@@ -1814,7 +1814,7 @@
     <string name="universal_link_malformed">הקישור היה לקוי</string>
     <string name="qr_code_not_scanned">קוד QR לא נסרק!</string>
     <string name="invalid_qr_code_uri">קוד QR לא חוקי (URI לא חוקי)!</string>
-    <string name="cannot_dm_self">לא יכול DM אתעצמך!</string>
+    <string name="cannot_dm_self">לא ניתן לשלוח הודעה ישירה לעצמך!</string>
     <string name="share_by_text">שתף לפי טקסט</string>
     <string name="room_error_not_found">לא יכול למצוא את החדר הזה. וודא שהוא קיים.</string>
     <string name="error_opening_banned_room">לא ניתן לפתוח חדר בו נחסמת.</string>
@@ -1834,8 +1834,8 @@
 \n%2$s חדר שנמצא עבור %1$s</item>
         <item quantity="two">רַבִּים
 \n%2$s חדר שנמצא עבור %1$s</item>
-        <item quantity="many"></item>
-        <item quantity="other"></item>
+        <item quantity="many"/>
+        <item quantity="other"/>
     </plurals>
     <string name="settings_secure_backup_manage">נהל</string>
     <string name="settings_secure_backup_section_title">גיבוי מאובטח</string>
@@ -1999,4 +1999,54 @@
     <string name="settings_secure_backup_enter_to_setup">הגדר במכשיר זה</string>
     <string name="settings_secure_backup_reset">אפס גיבוי מאובטח</string>
     <string name="settings_secure_backup_setup">הגדר גיבוי מאובטח</string>
+    <string name="verify_cancel_self_verification_from_trusted">אם תבטל, לא תוכל לקרוא הודעות מוצפנות במכשיר החדש שלך, ומשתמשים אחרים לא יסמכו עליו</string>
+    <string name="verify_cancel_self_verification_from_untrusted">אם תבטל, לא תוכל לקרוא הודעות מוצפנות במכשיר זה, ומשתמשים אחרים לא יסמכו על כך</string>
+    <string name="verify_new_session_compromized">ייתכן שחשבונך נפגע</string>
+    <string name="verify_new_session_was_not_me">זה לא אני</string>
+    <string name="verify_new_session_notice">השתמש בפגישה זו כדי לאמת את הפגישה החדשה שלך, והעניק לה גישה להודעות מוצפנות.</string>
+    <string name="new_session_review">הקש כדי לבדוק ולאמת</string>
+    <string name="new_session">כניסה חדשה. זה אתם\?</string>
+    <string name="refresh">ריענון</string>
+    <string name="e2e_use_keybackup">בטל את נעילת היסטוריית ההודעות המוצפנות</string>
+    <string name="settings_export_trail">ייצוא ביקורת</string>
+    <string name="settings_key_requests">בקשות מפתח</string>
+    <string name="login_default_session_public_name">אלמנט אנדרואיד</string>
+    <string name="keys_backup_restore_success_title_already_up_to_date">המפתחות כבר מעודכנים!</string>
+    <string name="event_redacted_by_admin_reason_with_reason">האירוע בהנחיית מנהל החדר, סיבה: %1$s</string>
+    <string name="event_redacted_by_user_reason_with_reason">האירוע נמחק על ידי המשתמש, הסיבה: %1$s</string>
+    <string name="delete_event_dialog_reason_hint">סיבה לניתוח מחדש</string>
+    <string name="delete_event_dialog_reason_checkbox">כלול סיבה</string>
+    <string name="delete_event_dialog_content">האם אתה בטוח שברצונך להסיר (למחוק) אירוע זה\? שים לב שאם תמחק שם של חדר או שינוי נושא, זה עלול לבטל את השינוי.</string>
+    <string name="delete_event_dialog_title">אשר הסרה</string>
+    <string name="share_confirm_room">האם אתה רוצה לשלוח את הקובץ המצורף ל- %1$s\?</string>
+    <string name="message_action_item_redact">הסר…</string>
+    <string name="enter_secret_storage_passphrase_warning_text">עליך לגשת לאחסון סודי רק ממכשיר מהימן</string>
+    <string name="enter_secret_storage_passphrase_warning">אזהרה:</string>
+    <string name="enter_secret_storage_passphrase">הזן ביטוי סיסמא לאחסון סודי</string>
+    <string name="enter_secret_storage_invalid">לא ניתן למצוא סודות באחסון</string>
+    <string name="new_signin">כניסה חדשה</string>
+    <string name="verification_use_passphrase">אם אינך יכול לגשת להפעלה קיימת</string>
+    <string name="verification_cannot_access_other_session">השתמש בביטוי סיסמה או מפתח שחזור</string>
+    <string name="command_description_poll">יוצר סקר פשוט</string>
+    <string name="poll_item_selected_aria">אפשרות נבחרת</string>
+    <string name="delete_account_data_warning">למחוק את נתוני החשבון מסוג %1$s\?
+\n
+\nהשתמש בזהירות, זה עלול להוביל להתנהגות בלתי צפויה.</string>
+    <string name="settings_account_data">נתוני חשבון</string>
+    <string name="settings_security_pin_code_use_biometrics_title">אפשר ביומטריה</string>
+    <string name="settings_security_pin_code_summary">אם ברצונך לאפס את הקוד שלך, הקש על שכחת קוד כדי לצאת ולאפס.</string>
+    <string name="settings_security_pin_code_title">אפשר PIN</string>
+    <string name="settings_security_application_protection_screen_title">הגדר הגנה</string>
+    <string name="settings_security_application_protection_summary">הגן על הגישה באמצעות קוד וביומטריה.</string>
+    <string name="settings_security_application_protection_title">הגן על הגישה</string>
+    <string name="auth_pin_reset_content">כדי לאפס את הקוד שלך, יהיה עליך להתחבר מחדש וליצור קוד חדש.</string>
+    <string name="auth_pin_new_pin_action">קוד חדש</string>
+    <string name="auth_pin_reset_title">אתחל קוד</string>
+    <string name="auth_pin_forgot">שכחתם קוד\?</string>
+    <string name="auth_pin_title">הכנס את הקוד שלך</string>
+    <string name="create_pin_confirm_failure">אימות ה- PIN נכשל, הקש על קוד חדש.</string>
+    <string name="create_pin_confirm_title">אשר PIN</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Use a Security Key</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">התקן</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">הגן מפני אובדן גישה להודעות ונתונים מוצפנים על ידי גיבוי של מפתחות הצפנה בשרת שלך.</string>
 </resources>
