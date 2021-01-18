@@ -2125,11 +2125,11 @@
     <string name="rendering_event_error_exception">אלמנט נתקל בבעיה בעת הצגת תוכן האירוע עם המזהה \'% 1 $ s\'</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="command_confetti">שולח את ההודעה הנתונה עם קונפטי</string>
-    <string name="secure_backup_reset_no_history">תתחיל מחדש ללא היסטוריה, ללא הודעות, מכשירים מהימנים או משתמשים מהימנים</string>
+    <string name="secure_backup_reset_no_history">תתחיל מחדש ללא היסטוריה, ללא הודעות, מכשירים מאומתים או משתמשים מאומתים</string>
     <string name="secure_backup_reset_if_you_reset_all">אם תאפס הכל</string>
     <string name="secure_backup_reset_all_no_other_devices">עשה זאת רק אם אין לך מכשיר אחר שאיתו תוכל לאמת מכשיר זה.</string>
     <string name="secure_backup_reset_all">אפס הכל</string>
-    <string name="bad_passphrase_key_reset_all_action">שכחת או איבדת את כל אפשרויות ההתאוששות\? אפס הכל</string>
+    <string name="bad_passphrase_key_reset_all_action">שכחת או איבדת את כל אפשרויות הגיבוי\? אפס הכל</string>
     <string name="failed_to_access_secure_storage">הגישה לאחסון מאובטח נכשלה</string>
     <string name="keys_backup_recovery_key_error_decrypt">לא ניתן היה לפענח את הגיבוי באמצעות מפתח השחזור הזה: ודא שהזנת את מפתח השחזור הנכון.</string>
     <string name="enter_secret_storage_input_key">בחר במפתח השחזור שלך, או הזן אותו ידנית על ידי הקלדתו או הדבקתו מהלוח שלך</string>
@@ -2374,4 +2374,10 @@
     <string name="confirm_your_identity_quad_s">אשר את זהותך על ידי אימות התחברות זו והעניק לו גישה להודעות מוצפנות.</string>
     <string name="cross_signing_verify_by_emoji">אימות אינטראקטיבי על ידי Emoji</string>
     <string name="crosssigning_verify_session">אמת כניסה</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">הראה את המכשיר שאיתו תוכל לאמת כעת</item>
+        <item quantity="two">הראה את המכשירים שאיתם תוכל לאמת כעת</item>
+        <item quantity="many">הראה את המכשירים שאיתם תוכל לאמת כעת</item>
+        <item quantity="other">הראה את המכשירים שאיתם תוכל לאמת כעת</item>
+    </plurals>
 </resources>
