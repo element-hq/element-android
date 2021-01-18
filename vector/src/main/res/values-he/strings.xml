@@ -1837,4 +1837,166 @@
         <item quantity="many"></item>
         <item quantity="other"></item>
     </plurals>
+    <string name="settings_secure_backup_manage">נהל</string>
+    <string name="settings_secure_backup_section_title">גיבוי מאובטח</string>
+    <string name="settings_show_emoji_keyboard_summary">הוסף לחצן במלחין ההודעות כדי לפתוח מקלדת אימוג\'י</string>
+    <string name="settings_show_emoji_keyboard">הצג מקלדת אימוג\'י</string>
+    <string name="settings_chat_effects_description">השתמש בפקודה / confetti או שלח הודעה המכילה ❄️ או 🎉</string>
+    <string name="settings_chat_effects_title">הצג אפקטים של צ\'אט</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">פועל ... (% 1 $ d מתוך% 2 $ d)</string>
+    <string name="room_sliding_menu_version_x">גרסה% s</string>
+    <string name="room_permissions_change_topic">שנה נושא שיחה</string>
+    <string name="room_permissions_upgrade_the_room">שדרג את החדר</string>
+    <string name="room_permissions_send_m_room_server_acl_events">שלח אירועים m.room.server_acl</string>
+    <string name="room_permissions_change_permissions">שנה הרשאות</string>
+    <string name="room_permissions_change_room_name">שנה את שם החדר</string>
+    <string name="room_permissions_change_history_visibility">שינוי נראות ההיסטוריה</string>
+    <string name="room_permissions_enable_room_encryption">אפשר הצפנת חדרים</string>
+    <string name="room_permissions_change_main_address_for_the_room">שנה את הכתובת הראשית של החדר</string>
+    <string name="room_permissions_change_room_avatar">שנה אוואטר חדר</string>
+    <string name="room_permissions_modify_widgets">שנה יישומונים</string>
+    <string name="room_permissions_notify_everyone">הודע לכולם</string>
+    <string name="room_permissions_remove_messages_sent_by_others">הסר הודעות שנשלחו על ידי אחרים</string>
+    <string name="room_permissions_ban_users">נדה משתמשים</string>
+    <string name="room_permissions_kick_users">בעט החוצה משתמשים</string>
+    <string name="room_permissions_change_settings">שנה הגדרות</string>
+    <string name="room_permissions_invite_users">הזמן משתמשם</string>
+    <string name="room_permissions_send_messages">שלח הודעות</string>
+    <string name="room_permissions_default_role">תפקיד ברירת מחדל</string>
+    <string name="room_permissions_notice_read_only">אין לך הרשאה לעדכן את התפקידים הנדרשים לשינוי חלקים שונים בחדר</string>
+    <string name="room_permissions_notice">בחר את התפקידים הנדרשים לשינוי חלקים שונים של החדר</string>
+    <string name="room_permissions_title">הרשאות</string>
+    <string name="room_settings_permissions_subtitle">צפה ועדכן את התפקידים הנדרשים לשינוי חלקים שונים בחדר.</string>
+    <string name="room_settings_permissions_title">הרשאות חדרים</string>
+    <string name="people_search_user_directory">מדריך למשתמש (% s)</string>
+    <string name="room_participants_ago">לפני% 1 $ s% 2 $ s</string>
+    <string name="room_participants_now">% 1 $ s עכשיו</string>
+    <string name="room_participants_leave_private_warning">חדר זה אינו ציבורי. לא תוכל להצטרף שוב ללא הזמנה.</string>
+    <string name="login_error_login_email_not_yet">קישור הדוא\"ל שעדיין לא נלחץ עליו</string>
+    <string name="call_failed_no_ice_description">אנא בקש ממנהל שרת הבית שלך (% 1 $ s) להגדיר שרת TURN כדי שהשיחות יעבדו בצורה אמינה.
+\n
+\nלחלופין, אתה יכול לנסות להשתמש בשרת הציבורי ב-% 2 $ s, אך זה לא יהיה אמין כל כך, והוא ישתף את כתובת ה- IP שלך עם השרת הזה. תוכל לנהל זאת גם בהגדרות.</string>
+    <string name="send_bug_report_progress">התקדמות</string>
+    <string name="bottom_action_people">אנשים</string>
+    <string name="bottom_action_favourites">מועדפים</string>
+    <string name="ongoing_conference_call">שיחת ועידה בעיצומה</string>
+    <string name="system_theme">ברירת מחדל מערכת</string>
+    <string name="room_member_jump_to_read_receipt">קפצו לקבלת קריאה</string>
+    <string name="room_member_open_or_create_dm">הודעה ישירה</string>
+    <string name="room_member_power_level_custom_in">מותאם אישית (% 1 $ d) ב-% 2 $ s</string>
+    <string name="room_member_power_level_default_in">ברירת מחדל ב-% 1 $ s</string>
+    <string name="room_member_power_level_moderator_in">מנחה ב-% 1 $ s</string>
+    <string name="room_member_power_level_admin_in">מנהל מערכת ב-% 1 $ s</string>
+    <string name="room_member_power_level_users">משתמשים</string>
+    <string name="room_member_power_level_invites">הזמנות</string>
+    <string name="room_member_power_level_custom">מותאם אישית</string>
+    <string name="room_member_power_level_moderators">מנחים</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">One person</item>
+        <item quantity="two">% 1 $ d אנשים</item>
+        <item quantity="many">% 1 $ d אנשים</item>
+        <item quantity="other">% 1 $ d אנשים</item>
+    </plurals>
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד% 1 $ d שנייה …</item>
+        <item quantity="two">יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד% 1 $ d שניות …</item>
+        <item quantity="many">יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד% 1 $ d שניות …</item>
+        <item quantity="other">יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד% 1 $ d שניות …</item>
+    </plurals>
+    <string name="login_clear_homeserver_history">נקה היסטוריה</string>
+    <string name="login_social_sso">כניסה יחידה</string>
+    <string name="login_social_signin_with">היכנס באמצעות% s</string>
+    <string name="login_social_signup_with">הירשם עם% s</string>
+    <string name="login_social_continue_with">המשך עם% s</string>
+    <string name="login_social_continue">או</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">משתמש d% קרא</item>
+        <item quantity="two">% d משתמשים קראו</item>
+        <item quantity="many">% d משתמשים קראו</item>
+        <item quantity="other">% d משתמשים קראו</item>
+    </plurals>
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">% 1 $ s,% 2 $ s ו-% 3 $ d אחרים קראו</item>
+        <item quantity="two">% 1 $ s,% 2 $ s ו-% 3 $ d אחרים קוראים</item>
+        <item quantity="many">% 1 $ s,% 2 $ s ו-% 3 $ d אחרים קוראים</item>
+        <item quantity="other">% 1 $ s,% 2 $ s ו-% 3 $ d אחרים קוראים</item>
+    </plurals>
+    <plurals name="keys_backup_info_keys_backing_up">
+        <item quantity="one">מגבה את מקש% d …</item>
+        <item quantity="two">מגבה% d מקשים …</item>
+        <item quantity="many">מגבה% d מקשים …</item>
+        <item quantity="other">מגבה% d מקשים …</item>
+    </plurals>
+    <plurals name="keys_backup_restore_success_description_part2">
+        <item quantity="one">% d מפתח חדש נוסף להפעלה זו.</item>
+        <item quantity="two">% d מקשים חדשים נוספו להפעלה זו.</item>
+        <item quantity="many">% d מקשים חדשים נוספו להפעלה זו.</item>
+        <item quantity="other">% d מקשים חדשים נוספו להפעלה זו.</item>
+    </plurals>
+    <plurals name="keys_backup_restore_success_description_part1">
+        <item quantity="one">שוחזרו גיבויים עם מקש% d.</item>
+        <item quantity="two">שוחזרו גיבויים עם מקש% d.</item>
+        <item quantity="many">שוחזרו גיבויים עם מקש% d.</item>
+        <item quantity="other">שוחזרו גיבויים עם מקש% d.</item>
+    </plurals>
+    <string name="room_widget_failed_to_load">טעינת היישומון נכשלה.
+\n% s</string>
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="one">משתמש d נאסר</item>
+        <item quantity="two">משתמשים d נאסרו</item>
+        <item quantity="many">משתמשים d נאסרו</item>
+        <item quantity="other">משתמשים d נאסרו</item>
+    </plurals>
+    <string name="account_email_error">אירעה שגיאה בעת אימות כתובת הדוא\"ל שלך.</string>
+    <string name="account_phone_number_already_used_error">מספר הטלפון הזה כבר נמצא בשימוש.</string>
+    <string name="account_email_not_found_error">כתובת דוא\"ל זו לא נמצאה.</string>
+    <string name="account_email_already_used_error">כתובת דוא\"ל זו כבר נמצאת בשימוש.</string>
+    <string name="account_email_validation_error">לא ניתן לאמת את כתובת הדוא\"ל. אנא בדוק את הדוא\"ל שלך ולחץ על הקישור שהוא מכיל. לאחר שתסיים, לחץ על המשך.</string>
+    <string name="account_email_validation_message">אנא בדוק את הדוא\"ל שלך ולחץ על הקישור שהוא מכיל. לאחר שתסיים, לחץ על המשך.</string>
+    <string name="account_email_validation_title">אימות בהמתנה</string>
+    <string name="settings_select_language">בחר שפה</string>
+    <string name="settings_interface_language">שפה</string>
+    <string name="settings_user_interface">ממשק משתמש</string>
+    <string name="disabled_integration_dialog_content">הפעל את \'אפשר שילובים\' בהגדרות כדי לעשות זאת.</string>
+    <string name="disabled_integration_dialog_title">שילובים מושבתים</string>
+    <string name="settings_integration_manager">מנהל אינטגרציה</string>
+    <string name="settings_integration_allow">אפשר שילובים</string>
+    <string name="settings_identity_server">שרת הזדהות</string>
+    <string name="settings_home_server">שרת ביתי</string>
+    <string name="settings_logged_in">מחובר כ</string>
+    <string name="devices_delete_submit_button_label">הגש</string>
+    <string name="devices_delete_pswd">סיסמה:</string>
+    <string name="devices_delete_dialog_title">הזדהות</string>
+    <string name="devices_delete_dialog_text">פעולה זו דורשת אימות נוסף.
+\nכדי להמשיך, הזן את הסיסמה שלך.</string>
+    <string name="devices_details_last_seen_title">נראה לאחרונה</string>
+    <string name="devices_details_device_name">עדכן שם ציבורי</string>
+    <string name="devices_details_name_title">שם ציבורי</string>
+    <string name="devices_details_id_title">תעודת זהות</string>
+    <string name="devices_details_dialog_title">מידע על מושב</string>
+    <string name="settings_data_save_mode_summary">מצב שמירת נתונים מחיל מסנן ספציפי כך שמסוננים עדכוני נוכחות והודעות הקלדה.</string>
+    <string name="settings_data_save_mode">מצב שמירת נתונים</string>
+    <string name="settings_opt_in_of_analytics_ok">כן, אני רוצה לעזור!</string>
+    <string name="settings_opt_in_of_analytics_prompt">אנא אפשר ניתוח כדי לעזור לנו לשפר את Element.</string>
+    <string name="settings_opt_in_of_analytics_summary">אלמנט אוסף ניתוח אנונימי כדי לאפשר לנו לשפר את היישום.</string>
+    <string name="settings_opt_in_of_analytics">שלח נתוני ניתוח</string>
+    <string name="settings_analytics">ניתוח נתונים</string>
+    <string name="startup_notification_fdroid_battery_optim_button_grant">הענק הרשאה</string>
+    <string name="startup_notification_fdroid_battery_optim_message">אלמנט צריך לשמור על חיבור רקע בעל השפעה נמוכה על מנת לקבל הודעות אמינות.
+\nבמסך הבא תתבקש לאפשר לאלמנט לרוץ תמיד ברקע, אנא קבל.</string>
+    <string name="startup_notification_fdroid_battery_optim_title">חיבור ברקע</string>
+    <string name="startup_notification_privacy_button_other">בחר באפשרות אחרת</string>
+    <string name="startup_notification_privacy_button_grant">הענק הרשאה</string>
+    <string name="startup_notification_privacy_message">אלמנט יכול לרוץ ברקע כדי לנהל את ההתראות שלך בצורה מאובטחת ופרטית. זה עשוי להשפיע על השימוש בסוללה.</string>
+    <string name="startup_notification_privacy_title">פרטיות הודעות</string>
+    <string name="settings_discovery_manage">נהל את הגדרות הגילוי שלך.</string>
+    <string name="settings_discovery_category">תַגלִית</string>
+    <string name="settings_deactivate_my_account">הפוך את המשתמש שלי ללא פעיל</string>
+    <string name="settings_deactivate_account_section">השבת את החשבון</string>
+    <string name="reset_secure_backup_warning">זה יחליף את המפתח או את הביטוי הנוכחי שלך.</string>
+    <string name="reset_secure_backup_title">צור מפתח אבטחה חדש או הגדר ביטוי אבטחה חדש לגיבוי הקיים שלך.</string>
+    <string name="settings_secure_backup_section_info">הגן מפני אובדן גישה להודעות ונתונים מוצפנים על ידי גיבוי של מפתחות הצפנה בשרת שלך.</string>
+    <string name="settings_secure_backup_enter_to_setup">הגדר במכשיר זה</string>
+    <string name="settings_secure_backup_reset">אפס גיבוי מאובטח</string>
+    <string name="settings_secure_backup_setup">הגדר גיבוי מאובטח</string>
 </resources>
