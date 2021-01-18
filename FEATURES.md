@@ -5,7 +5,7 @@ Here you can find some extra features and changes compared to Element Android (w
 - Branding (name, icon, links)
 - Optional unified chat list instead of dividing group chats and direct messages
 - Additional SchildiChat light, dark and black themes
-- Possibility to select custom themes for both light and dark system mode
+- Possibility to select themes for both light and dark system mode individually
 - Optional chat layouts with message bubbles
 - Message count passed to the notification badge (visible next to the launcher icon on recent Android versions)
 - More prominent unread counter for chats in the room overview (bigger, different placement, more noticeable color in SchildiChat designs)
