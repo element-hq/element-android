@@ -1808,4 +1808,33 @@
     <string name="keys_backup_banner_update_line2">נהל גיבוי מפתח</string>
     <string name="keys_backup_banner_update_line1">מקשי הודעות מאובטחים חדשים</string>
     <string name="keys_backup_banner_recover_line2">השתמש במפתח גיבוי</string>
+    <string name="warning_unsaved_change_discard">בטל שינויים</string>
+    <string name="warning_unsaved_change">יש שינויים שלא נשמרו. למחוק את השינויים\?</string>
+    <string name="warning_room_not_created_yet">החדר עדיין לא נוצר. לבטל את יצירת החדר\?</string>
+    <string name="universal_link_malformed">הקישור היה לקוי</string>
+    <string name="qr_code_not_scanned">קוד QR לא נסרק!</string>
+    <string name="invalid_qr_code_uri">קוד QR לא חוקי (URI לא חוקי)!</string>
+    <string name="cannot_dm_self">לא יכול DM אתעצמך!</string>
+    <string name="share_by_text">שתף לפי טקסט</string>
+    <string name="room_error_not_found">לא יכול למצוא את החדר הזה. וודא שהוא קיים.</string>
+    <string name="error_opening_banned_room">לא ניתן לפתוח חדר בו נחסמת.</string>
+    <string name="auth_pin_confirm_to_disable_title">אשר PIN כדי להשבית PIN</string>
+    <string name="settings_security_pin_code_change_pin_summary">שנה את קוד ה- PIN הנוכחי שלך</string>
+    <string name="settings_security_pin_code_change_pin_title">שנה PIN</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">קוד PIN נדרש בכל פעם שאתה פותח את Element.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">קוד PIN נדרש לאחר שתי דקות של אי שימוש ב- Element.</string>
+    <string name="settings_security_pin_code_grace_period_title">דרוש מספר PIN לאחר 2 דקות</string>
+    <string name="settings_security_pin_code_notifications_summary_off">הצג רק מספר הודעות שלא נקראו בהודעה פשוטה.</string>
+    <string name="settings_security_pin_code_notifications_summary_on">הצג פרטים כמו שמות החדרים ותוכן ההודעה.</string>
+    <string name="settings_security_pin_code_notifications_title">הצג תוכן בהתראות</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">קוד PIN הוא הדרך היחידה לפתוח את Element.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">אפשר ביומטריה ספציפית למכשירים, כמו טביעות אצבע וזיהוי פנים.</string>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="one">יָחִיד
+\n%2$s חדר שנמצא עבור %1$s</item>
+        <item quantity="two">רַבִּים
+\n%2$s חדר שנמצא עבור %1$s</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
 </resources>
