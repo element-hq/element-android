@@ -2,11 +2,13 @@
 
 SchildiChat for Android is a Matrix Client based on [Element Android](https://github.com/vector-im/element-android).
 
-Compared to Element, SchildiChat features following changes:
+Compared to Element, SchildiChat features following most important changes:
+
 - A unified chat list for both direct and group chats
 - Optional message bubbles
-- Follows the system setting for dark/light mode
 - Further small usability improvements
+
+A more thorough list of changes compared to Element can be found [here](FEATURES.md).
 
 <a href="https://f-droid.org/packages/de.spiritcroc.riotx/" alt="Get it on F-Droid" target="_blank"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="80"></a>
 
