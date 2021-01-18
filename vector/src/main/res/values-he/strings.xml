@@ -2049,4 +2049,78 @@
     <string name="bottom_sheet_setup_secure_backup_security_key_title">Use a Security Key</string>
     <string name="bottom_sheet_setup_secure_backup_submit">התקן</string>
     <string name="bottom_sheet_setup_secure_backup_subtitle">הגן מפני אובדן גישה להודעות ונתונים מוצפנים על ידי גיבוי של מפתחות הצפנה בשרת שלך.</string>
+    <plurals name="poll_info">
+        <item quantity="one">% d הצבעה</item>
+        <item quantity="two">% d הצבעות</item>
+        <item quantity="many">% d הצבעות</item>
+        <item quantity="other">% d הצבעות</item>
+    </plurals>
+    <string name="settings_dev_tools">כלי מפתחים</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">מצב טיסה פועל</string>
+    <string name="no_connectivity_to_the_server_indicator">הקישוריות לשרת אבדה</string>
+    <string name="qr_code_scanned_by_other_no">לא</string>
+    <string name="qr_code_scanned_by_other_yes">כן</string>
+    <string name="qr_code_scanned_by_other_notice">כמעט שם! האם% s מציג את אותו מגן\?</string>
+    <string name="a11y_qr_code_for_verification">קוד QR</string>
+    <string name="reset_cross_signing">אפס מקשים</string>
+    <string name="initialize_cross_signing">אתחל את CrossSigning</string>
+    <string name="verification_profile_device_untrust_info">עד שמשתמש זה בוטח בהפעלה זו, הודעות שנשלחות אליה וממנה מתויגות באזהרות. לחילופין, ניתן לאמת זאת ידנית.</string>
+    <string name="verification_profile_device_new_signing">% 1 $ s (% 2 $ s) נכנס באמצעות הפעלה חדשה:</string>
+    <string name="verification_profile_device_verified_because">הפעלה זו מהימנה להודעות מאובטחות מכיוון ש-% 1 $ s (% 2 $ s) אימת אותה:</string>
+    <string name="not_trusted">לא מהימן</string>
+    <string name="trusted">מהימן</string>
+    <string name="room_member_profile_sessions_section_title">מושבים</string>
+    <string name="room_member_profile_failed_to_get_devices">קבלת הפעלות נכשלה</string>
+    <string name="verification_profile_warning">אזהרה</string>
+    <string name="verification_profile_verified">מאומת</string>
+    <string name="verification_profile_verify">בצע אימות</string>
+    <string name="verification_open_other_to_verify">השתמש בפגישה קיימת כדי לאמת את זה, והעניק לו גישה להודעות מוצפנות.</string>
+    <string name="complete_security">אבטחה מלאה</string>
+    <string name="crosssigning_other_user_not_trust">משתמשים אחרים עשויים שלא לסמוך על כך</string>
+    <string name="crosssigning_verify_this_session">אמת כניסה זו</string>
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">% d מושב פעיל</item>
+        <item quantity="two">% d מושבים פעילים</item>
+        <item quantity="many">% d מושבים פעילים</item>
+        <item quantity="other">% d מושבים פעילים</item>
+    </plurals>
+    <string name="settings_active_sessions_unverified_device_desc">אמת את ההפעלה הזו כדי לסמן אותה כאמינה והענק לה גישה להודעות מוצפנות. אם לא נכנסת למפגש זה ייתכן שחשבונך נפגע:</string>
+    <string name="settings_active_sessions_verified_device_desc">הפגישה הזו מהימנה בהודעות מאובטחות מכיוון שאמתת אותה:</string>
+    <string name="settings_failed_to_get_crypto_device_info">אין מידע קריפטוגרפי זמין</string>
+    <string name="settings_active_sessions_signout_device">צא מפגישה זו</string>
+    <string name="settings_active_sessions_manage">נהל מושבים</string>
+    <string name="settings_active_sessions_show_all">הצג את כל הפעילויות באתר</string>
+    <string name="settings_active_sessions_list">מושבים אקטיביים</string>
+    <string name="settings_hs_admin_e2e_disabled">מנהל השרת שלך השבית הצפנה מקצה לקצה כברירת מחדל בחדרים פרטיים ובהודעות ישירות.</string>
+    <string name="encryption_information_dg_xsigning_disabled">חתימה צולבת אינה מופעלת</string>
+    <string name="encryption_information_dg_xsigning_not_trusted">חתימה צולבת מופעלת.
+\nלא סומכים על מקשים</string>
+    <string name="encryption_information_dg_xsigning_trusted">חתימה צולבת מופעלת
+\nמקשים מהימנים.
+\nמפתחות פרטיים אינם ידועים</string>
+    <string name="encryption_information_dg_xsigning_complete">חתימה צולבת מופעלת
+\nמפתחות פרטיים במכשיר.</string>
+    <string name="encryption_information_cross_signing_state">חתימה צולבת</string>
+    <string name="verification_conclusion_ok_self_notice">ההפעלה החדשה שלך אומתה. יש לו גישה להודעות המוצפנות שלך, ומשתמשים אחרים יראו בכך אמינים.</string>
+    <string name="verification_conclusion_ok_notice">הודעות עם משתמש זה מוצפנות מקצה לקצה ולא ניתן לקרוא על ידי צדדים שלישיים.</string>
+    <string name="verification_code_notice">השווה את הקוד לזה שמוצג על מסך המשתמש האחר.</string>
+    <string name="verification_emoji_notice">השווה את האימוג\'י הייחודי, וודא שהם מופיעים באותו סדר.</string>
+    <string name="verification_request_start_notice">כדי להיות בטוחים, עשו זאת באופן אישי או השתמשו בדרך אחרת לתקשר.</string>
+    <string name="verification_request_notice">כדי להיות בטוחים, אמת את% s על ידי בדיקת קוד חד פעמי.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">אפשר הצפנה</string>
+    <string name="room_settings_enable_encryption_dialog_content">לאחר הפעלתו, לא ניתן להשבית את ההצפנה לחדר. הודעות שנשלחות בחדר מוצפן אינן נראות על ידי השרת, רק על ידי משתתפי החדר. הפעלת הצפנה עשויה למנוע בוטים וגשרים רבים לעבוד כראוי.</string>
+    <string name="room_settings_enable_encryption_dialog_title">לאפשר הצפנה\?</string>
+    <string name="room_settings_enable_encryption_warning">לאחר הפעלתו, לא ניתן להשבית את ההצפנה.</string>
+    <string name="room_settings_enable_encryption_no_permission">אין לך הרשאה לאפשר הצפנה בחדר זה.</string>
+    <string name="room_settings_enable_encryption">אפשר הצפנה מקצה לקצה …</string>
+    <string name="settings_category_composer">עורך הודעה</string>
+    <string name="settings_category_timeline">ציר הזמן</string>
+    <string name="command_description_rainbow_emote">שולח את הטקסט הנתון בצבע קשת</string>
+    <string name="command_description_rainbow">שולח את ההודעה הנתונה בצבע קשת</string>
+    <string name="room_list_sharing_header_other_rooms">חדרים אחרים</string>
+    <string name="room_list_sharing_header_recent_rooms">חדרים אחרונים</string>
+    <string name="verify_cannot_cross_sign">הפעלה זו אינה יכולה לשתף את האימות הזה עם הפעלות אחרות שלך.
+\nהאימות יישמר באופן מקומי וישותף בגרסה עתידית של האפליקציה.</string>
+    <string name="unignore">בטל התעלמות</string>
+    <string name="rendering_event_error_exception">אלמנט נתקל בבעיה בעת הצגת תוכן האירוע עם המזהה \'% 1 $ s\'</string>
 </resources>
