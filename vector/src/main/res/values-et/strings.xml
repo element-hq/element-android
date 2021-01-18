@@ -2284,7 +2284,7 @@
     <string name="command_snow">Saadab antud sõnumi koos lumesajuga</string>
     <string name="command_confetti">Lisab sellele sõnumile serpentiine</string>
     <string name="login_clear_homeserver_history">Kustuta ajalugu</string>
-    <string name="login_social_sso">single sign-on</string>
+    <string name="login_social_sso">ühekordne sisselogimine</string>
     <string name="login_social_signin_with">Logi sisse kasutades %s teenust</string>
     <string name="login_social_signup_with">Loo konto kasutades %s teenust</string>
     <string name="login_social_continue_with">Jätka kasutades %s teenust</string>
