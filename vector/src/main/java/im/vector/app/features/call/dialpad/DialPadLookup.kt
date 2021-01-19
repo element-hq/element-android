@@ -20,10 +20,11 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import javax.inject.Inject
 
-class DialPadLookup(val session: Session,
-                    val directRoomHelper: DirectRoomHelper,
-                    val callManager: WebRtcCallManager
+class DialPadLookup @Inject constructor(val session: Session,
+                                        val directRoomHelper: DirectRoomHelper,
+                                        val callManager: WebRtcCallManager
 ) {
 
     class Failure : Throwable()

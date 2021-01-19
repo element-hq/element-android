@@ -2795,6 +2795,7 @@
     <string name="call_transfer_connect_action">Connect</string>
     <string name="call_transfer_title">Transfer</string>
     <string name="call_transfer_failure">An error occurred while transferring call</string>
+    <string name="call_transfer_users_tab_title">Users</string>
 
 
 </resources>

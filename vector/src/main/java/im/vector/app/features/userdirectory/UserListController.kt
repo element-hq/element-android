@@ -64,13 +64,15 @@ class UserListController @Inject constructor(private val session: Session,
                     })
                 }
             }
-            actionItem {
-                id(R.drawable.ic_baseline_perm_contact_calendar_24)
-                title(stringProvider.getString(R.string.contacts_book_title))
-                actionIconRes(R.drawable.ic_baseline_perm_contact_calendar_24)
-                clickAction(View.OnClickListener {
-                    callback?.onContactBookClick()
-                })
+            if(currentState.showContactBookAction) {
+                actionItem {
+                    id(R.drawable.ic_baseline_perm_contact_calendar_24)
+                    title(stringProvider.getString(R.string.contacts_book_title))
+                    actionIconRes(R.drawable.ic_baseline_perm_contact_calendar_24)
+                    clickAction(View.OnClickListener {
+                        callback?.onContactBookClick()
+                    })
+                }
             }
             if (currentState.showInviteActions()) {
                 actionItem {

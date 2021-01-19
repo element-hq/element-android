@@ -20,26 +20,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.addFragment
-import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.platform.VectorBaseActivity
-import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
-import im.vector.app.core.utils.PERMISSION_REQUEST_CODE_READ_CONTACTS
-import im.vector.app.core.utils.allGranted
-import im.vector.app.core.utils.checkPermissions
 import im.vector.app.databinding.ActivityCallTransferBinding
-import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.contactsbook.ContactsBookViewState
-import im.vector.app.features.userdirectory.UserListFragment
-import im.vector.app.features.userdirectory.UserListFragmentArgs
-import im.vector.app.features.userdirectory.UserListSharedAction
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
 import im.vector.app.features.userdirectory.UserListViewState
@@ -56,15 +47,18 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
         UserListViewModel.Factory,
         ContactsBookViewModel.Factory {
 
-    private lateinit var sharedActionViewModel: UserListSharedActionViewModel
     @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory
     @Inject lateinit var callTransferViewModelFactory: CallTransferViewModel.Factory
     @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
+    private lateinit var sectionsPagerAdapter: CallTransferPagerAdapter
+
     private val callTransferViewModel: CallTransferViewModel by viewModel()
 
     override fun getBinding() = ActivityCallTransferBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.vectorCoordinatorLayout
 
     override fun injectWith(injector: ScreenComponent) {
         super.injectWith(injector)
@@ -86,39 +80,28 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         waitingView = views.waitingView.waitingView
-        sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
-        sharedActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
-                    when (sharedAction) {
-                        UserListSharedAction.OpenPhoneBook -> openPhoneBook()
-                        // not exhaustive because it's a sharedAction
-                        else                               -> {
-                        }
-                    }
-                }
-                .disposeOnDestroy()
-        if (isFirstCreation()) {
-            addFragment(
-                    R.id.callTransferFragmentContainer,
-                    UserListFragment::class.java,
-                    UserListFragmentArgs(
-                            title = "",
-                            menuResId = -1,
-                            singleSelection = true,
-                            showInviteActions = false,
-                            showToolbar = false
-                    ),
-                    USER_LIST_FRAGMENT_TAG
-            )
-        }
+
         callTransferViewModel.observeViewEvents {
             when (it) {
                 is CallTransferViewEvents.Dismiss -> finish()
-                CallTransferViewEvents.Loading    -> showWaitingView()
+                CallTransferViewEvents.Loading -> showWaitingView()
                 is CallTransferViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
             }
         }
+
+        sectionsPagerAdapter = CallTransferPagerAdapter(this).register()
+        views.callTransferViewPager.adapter = sectionsPagerAdapter
+        sectionsPagerAdapter.onDialPadOkClicked = { phoneNumber ->
+            val action = CallTransferAction.ConnectWithPhoneNumber(views.callTransferConsultCheckBox.isChecked, phoneNumber)
+            callTransferViewModel.handle(action)
+        }
+
+        TabLayoutMediator(views.callTransferTabLayout, views.callTransferViewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = getString(R.string.call_transfer_users_tab_title)
+                1 -> tab.text = getString(R.string.call_dial_pad_title)
+            }
+        }.attach()
         configureToolbar(views.callTransferToolbar)
         views.callTransferToolbar.title = getString(R.string.call_transfer_title)
         setupConnectAction()
@@ -126,33 +109,11 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
 
     private fun setupConnectAction() {
         views.callTransferConnectAction.debouncedClicks {
-            val userListFragment = supportFragmentManager.findFragmentByTag(USER_LIST_FRAGMENT_TAG) as? UserListFragment
-            val selectedUser = userListFragment?.getCurrentState()?.getSelectedMatrixId()?.firstOrNull()
+            val selectedUser = sectionsPagerAdapter.userListFragment?.getCurrentState()?.getSelectedMatrixId()?.firstOrNull()
             if (selectedUser != null) {
-                val action = CallTransferAction.Connect(views.callTransferConsultCheckBox.isChecked, selectedUser)
+                val action = CallTransferAction.ConnectWithUserId(views.callTransferConsultCheckBox.isChecked, selectedUser)
                 callTransferViewModel.handle(action)
             }
-        }
-    }
-
-    private fun openPhoneBook() {
-        // Check permission first
-        if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH,
-                        this,
-                        PERMISSION_REQUEST_CODE_READ_CONTACTS,
-                        0)) {
-            addFragmentToBackstack(R.id.callTransferFragmentContainer, ContactsBookFragment::class.java)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (allGranted(grantResults)) {
-            if (requestCode == PERMISSION_REQUEST_CODE_READ_CONTACTS) {
-                doOnPostResume { addFragmentToBackstack(R.id.callTransferFragmentContainer, ContactsBookFragment::class.java) }
-            }
-        } else {
-            Toast.makeText(baseContext, R.string.missing_permissions_error, Toast.LENGTH_SHORT).show()
         }
     }
 
