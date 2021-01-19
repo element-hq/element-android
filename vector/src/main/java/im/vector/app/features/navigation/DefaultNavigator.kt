@@ -65,6 +65,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.terms.ReviewTermsActivity
+import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
@@ -279,7 +280,7 @@ class DefaultNavigator @Inject constructor(
                                    activityResultLauncher: ActivityResultLauncher<Intent>,
                                    roomId: String,
                                    widget: Widget) {
-        val widgetArgs = widgetArgsBuilder.buildStickerPickerArgs(roomId, widget)
+        val widgetArgs = widgetArgsBuilder.buildStickerPickerArgs(roomId, widget, ThemeUtils.getWidgetTheme(context))
         val intent = WidgetActivity.newIntent(context, widgetArgs)
         activityResultLauncher.launch(intent)
     }

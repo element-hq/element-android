@@ -32,6 +32,7 @@ Here you can find some extra features and changes compared to Element Android (w
 - Some different icons
 - Emoji-only messages with increased size: also for messages that have spaces between emojis
 - Also fallback to other user's avatar for 2-person-rooms not marked as DM
+- Pass theme to stickerpicker (tested with maunium-stickerpicker)
 - ...
 - Sometimes bug fixes for issues in Element, when found during internal testing
 - Sometimes additional bugs ;)

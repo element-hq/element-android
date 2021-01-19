@@ -126,6 +126,26 @@ object ThemeUtils {
     }
 
     /**
+     * @return true if current theme is black (darker than dark)
+     */
+    fun isBlackTheme(context: Context): Boolean {
+        return when (getApplicationTheme(context)) {
+            THEME_BLACK_VALUE,
+            THEME_SC_VALUE,
+            THEME_SC_COLORED_VALUE -> true
+            else                   -> false
+        }
+    }
+
+    fun getWidgetTheme(context: Context): String {
+        return when {
+            isLightTheme(context) -> "light"
+            isBlackTheme(context) -> "black"
+            else -> "dark"
+        }
+    }
+
+    /**
      * Provides the selected application theme
      *
      * @param context the context

@@ -44,7 +44,7 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun buildStickerPickerArgs(roomId: String, widget: Widget): WidgetArgs {
+    fun buildStickerPickerArgs(roomId: String, widget: Widget, theme: String): WidgetArgs {
         val widgetId = widget.widgetId
         val baseUrl = widget.computedUrl ?: throw IllegalStateException()
         return WidgetArgs(
@@ -54,7 +54,8 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
                 widgetId = widgetId,
                 urlParams = mapOf(
                         "widgetId" to widgetId,
-                        "room_id" to roomId
+                        "room_id" to roomId,
+                        "theme" to theme
                 ).filterNotNull()
         )
     }
