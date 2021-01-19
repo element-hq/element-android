@@ -124,9 +124,9 @@
     <string name="black_them">ערכת נושא שחורה</string>
     <string name="dark_theme">ערכת נושא כהה</string>
     <string name="light_theme">ערכת נושא בהירה</string>
-    <string name="resources_script">Hebr</string>
-    <string name="resources_country_code">IL</string>
-    <string name="resources_language">iw</string>
+    <string name="resources_script">Latn</string>
+    <string name="resources_country_code">US</string>
+    <string name="resources_language">en</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">משתמש %d</item>
         <item quantity="two">%d משתמשים</item>
@@ -306,8 +306,8 @@
     <string name="join">הצטרף</string>
     <string name="remove">הסר</string>
     <string name="_continue">המשך</string>
-    <string name="no">לא!!</string>
-    <string name="yes">כן!</string>
+    <string name="no">לא</string>
+    <string name="yes">כן</string>
     <string name="media_slider_saved_message">שמור להורדות\?</string>
     <string name="media_slider_saved">נשמר</string>
     <string name="permissions_denied_add_contact">אפשר הרשאה לגשת לאנשי הקשר שלך.</string>
@@ -569,7 +569,7 @@
     <string name="people_search_local_contacts">אנשי קשר מקומיים (%d)</string>
     <string name="people_search_invite_by_id">&lt;u&gt; הזמן לפי מזהה &lt;/ u&gt;<u>Invite by ID</u></string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
-    <string name="room_participants_invite_join_names_and">%1$s and %2$s</string>
+    <string name="room_participants_invite_join_names_and">%1$s ו %2$s</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_prompt_msg">האם אתה בטוח שברצונך להזמין את%s לצ\'אט זה\?</string>
     <string name="reason_hint">סיבה</string>
@@ -1830,12 +1830,10 @@
     <string name="settings_security_pin_code_use_biometrics_summary_off">קוד PIN הוא הדרך היחידה לפתוח את Element.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">אפשר ביומטריה ספציפית למכשירים, כמו טביעות אצבע וזיהוי פנים.</string>
     <plurals name="directory_search_rooms_for">
-        <item quantity="one">יָחִיד
-\n%2$s חדר שנמצא עבור %1$s</item>
-        <item quantity="two">רַבִּים
-\n%2$s חדר שנמצא עבור %1$s</item>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="one">%2$s חדר נמצא עבור %1$s</item>
+        <item quantity="two">%2$s חדרים נמצאו עבור %1$s</item>
+        <item quantity="many">%2$s חדרים נמצאו עבור %1$s</item>
+        <item quantity="other">%2$s חדרים נמצאו עבור %1$s</item>
     </plurals>
     <string name="settings_secure_backup_manage">נהל</string>
     <string name="settings_secure_backup_section_title">גיבוי מאובטח</string>
@@ -1879,7 +1877,8 @@
     <string name="send_bug_report_progress">התקדמות</string>
     <string name="bottom_action_people">אנשים</string>
     <string name="bottom_action_favourites">מועדפים</string>
-    <string name="ongoing_conference_call">שיחת ועידה בעיצומה</string>
+    <string name="ongoing_conference_call">שיחת ועידה מתמשכת.
+\nהצטרף כ- %1$s או %2$s</string>
     <string name="system_theme">ברירת מחדל מערכת</string>
     <string name="room_member_jump_to_read_receipt">קפצו לקבלת קריאה</string>
     <string name="room_member_open_or_create_dm">הודעה ישירה</string>
@@ -1943,9 +1942,9 @@
 \n% s</string>
     <plurals name="room_settings_banned_users_count">
         <item quantity="one">%b משתמש נחסם</item>
-        <item quantity="two">"%b משתמשים  נחסמו"</item>
-        <item quantity="many">"%b משתמשים  נחסמו"</item>
-        <item quantity="other">"%b משתמשים  נחסמו"</item>
+        <item quantity="two">%b משתמשים נחסמו</item>
+        <item quantity="many">%b משתמשים נחסמו</item>
+        <item quantity="other">%b משתמשים אחרים נחסמו</item>
     </plurals>
     <string name="account_email_error">אירעה שגיאה בעת אימות כתובת הדוא\"ל שלך.</string>
     <string name="account_phone_number_already_used_error">מספר הטלפון הזה כבר נמצא בשימוש.</string>
@@ -2046,7 +2045,7 @@
     <string name="auth_pin_title">הכנס את הקוד שלך</string>
     <string name="create_pin_confirm_failure">אימות ה- PIN נכשל, הקש על קוד חדש.</string>
     <string name="create_pin_confirm_title">אשר PIN</string>
-    <string name="bottom_sheet_setup_secure_backup_security_key_title">Use a Security Key</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">השתמש במפתח אבטחה</string>
     <string name="bottom_sheet_setup_secure_backup_submit">התקן</string>
     <string name="bottom_sheet_setup_secure_backup_subtitle">הגן מפני אובדן גישה להודעות ונתונים מוצפנים על ידי גיבוי של מפתחות הצפנה בשרת שלך.</string>
     <plurals name="poll_info">
@@ -2161,7 +2160,7 @@
     <string name="bootstrap_progress_generating_ssss">יצירת מפתח SSSS מביטוי סיסמה</string>
     <string name="bootstrap_progress_compute_curve_key">קבלת מפתח עקומה</string>
     <string name="bootstrap_progress_checking_backup_with_info">בודק מפתח גיבוי (%s)</string>
-    <string name="bootstrap_progress_checking_backup">Checking backup Key</string>
+    <string name="bootstrap_progress_checking_backup">בודק מפתח גיבוי</string>
     <string name="recovery_key_empty_error_message">אנא הכנס מפתח שחזור</string>
     <string name="bootstrap_invalid_recovery_key">זה לא מפתח שחזור תקף</string>
     <string name="backup_recovery_passphrase">ביטוי סיסמה לשחזור</string>
@@ -2344,7 +2343,7 @@
     <string name="choose_locale_current_locale_title">שפה נוכחית</string>
     <string name="user_code_info_text">שתף את הקוד הזה עם אנשים כדי שיוכלו לסרוק אותו כדי להוסיף אותך ולהתחיל לשוחח.</string>
     <string name="user_code_my_code">הקוד שלי</string>
-    <string name="user_code_scan">Scan a QR code</string>
+    <string name="user_code_scan">סרוק קוד QR</string>
     <string name="invite_users_to_room_failure">לא יכולנו להזמין משתמשים. אנא בדוק את המשתמשים שברצונך להזמין ונסה שוב.</string>
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="one">הזמנות נשלחו אל% 1 $ s ואחד נוסף</item>
