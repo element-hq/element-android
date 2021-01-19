@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Sidebar too large in horizontal orientation or tablets (#475)
 
 Translations 🗣:
  -
