@@ -217,13 +217,13 @@ internal class DefaultSession @Inject constructor(
         }
     }
 
-    override fun clearCache(callback: MatrixCallback<Unit>) {
+    override suspend fun clearCache() {
         stopSync()
         stopAnyBackgroundSync()
         uiHandler.post {
             lifecycleObservers.forEach { it.onClearCache() }
         }
-        cacheService.get().clearCache(callback)
+        cacheService.get().clearCache()
         workManagerProvider.cancelAllWorks()
     }
 

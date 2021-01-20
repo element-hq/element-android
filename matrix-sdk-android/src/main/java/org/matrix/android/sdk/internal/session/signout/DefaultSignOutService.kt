@@ -16,45 +16,25 @@
 
 package org.matrix.android.sdk.internal.session.signout
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.session.signout.SignOutService
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
-import org.matrix.android.sdk.internal.task.launchToCallback
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import javax.inject.Inject
 
 internal class DefaultSignOutService @Inject constructor(private val signOutTask: SignOutTask,
                                                          private val signInAgainTask: SignInAgainTask,
-                                                         private val sessionParamsStore: SessionParamsStore,
-                                                         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                         private val taskExecutor: TaskExecutor) : SignOutService {
+                                                         private val sessionParamsStore: SessionParamsStore
+) : SignOutService {
 
-    override fun signInAgain(password: String,
-                             callback: MatrixCallback<Unit>): Cancelable {
-        return signInAgainTask
-                .configureWith(SignInAgainTask.Params(password)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun signInAgain(password: String) {
+        signInAgainTask.execute(SignInAgainTask.Params(password))
     }
 
-    override fun updateCredentials(credentials: Credentials,
-                                   callback: MatrixCallback<Unit>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            sessionParamsStore.updateCredentials(credentials)
-        }
+    override suspend fun updateCredentials(credentials: Credentials) {
+        sessionParamsStore.updateCredentials(credentials)
     }
 
-    override fun signOut(signOutFromHomeserver: Boolean,
-                         callback: MatrixCallback<Unit>): Cancelable {
-        return signOutTask
-                .configureWith(SignOutTask.Params(signOutFromHomeserver)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun signOut(signOutFromHomeserver: Boolean) {
+        return signOutTask.execute(SignOutTask.Params(signOutFromHomeserver))
     }
 }

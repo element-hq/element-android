@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix clear cache issue: sometimes, after a clear cache, there is still a token, so the init sync service is not started.
 
 Translations 🗣:
  -

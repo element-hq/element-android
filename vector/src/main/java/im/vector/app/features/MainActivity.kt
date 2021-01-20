@@ -22,12 +22,15 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.viewModel
 import com.bumptech.glide.Glide
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
+import im.vector.app.core.platform.EmptyViewModel
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
 import im.vector.app.databinding.FragmentLoadingBinding
@@ -45,10 +48,8 @@ import im.vector.app.features.signout.soft.SoftLogoutActivity
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import javax.inject.Inject
@@ -81,6 +82,8 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
             activity.startActivity(intent)
         }
     }
+
+    private val emptyViewModel: EmptyViewModel by viewModel()
 
     override fun getBinding() = FragmentLoadingBinding.inflate(layoutInflater)
 
@@ -147,38 +150,41 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
         }
         when {
             args.isAccountDeactivated -> {
-                // Just do the local cleanup
-                Timber.w("Account deactivated, start app")
-                sessionHolder.clearActiveSession()
-                doLocalCleanup(clearPreferences = true)
-                startNextActivityAndFinish()
+                emptyViewModel.viewModelScope.launch {
+                    // Just do the local cleanup
+                    Timber.w("Account deactivated, start app")
+                    sessionHolder.clearActiveSession()
+                    doLocalCleanup(clearPreferences = true)
+                    startNextActivityAndFinish()
+                }
             }
-            args.clearCredentials     -> session.signOut(
-                    !args.isUserLoggedOut,
-                    object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            Timber.w("SIGN_OUT: success, start app")
-                            sessionHolder.clearActiveSession()
-                            doLocalCleanup(clearPreferences = true)
-                            startNextActivityAndFinish()
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            displayError(failure)
-                        }
-                    })
-            args.clearCache           -> session.clearCache(
-                    object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            doLocalCleanup(clearPreferences = false)
-                            session.startSyncing(applicationContext)
-                            startNextActivityAndFinish()
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            displayError(failure)
-                        }
-                    })
+            args.clearCredentials     -> {
+                emptyViewModel.viewModelScope.launch {
+                    try {
+                        session.signOut(!args.isUserLoggedOut)
+                        Timber.w("SIGN_OUT: success, start app")
+                        sessionHolder.clearActiveSession()
+                        doLocalCleanup(clearPreferences = true)
+                        startNextActivityAndFinish()
+                    } catch (failure: Throwable) {
+                        displayError(failure)
+                    }
+                }
+            }
+            args.clearCache           -> {
+                emptyViewModel.viewModelScope.launch {
+                    try {
+                        session.clearCache()
+                        Timber.e("CACHE success")
+                        doLocalCleanup(clearPreferences = false)
+                        session.startSyncing(applicationContext)
+                        startNextActivityAndFinish()
+                    } catch (failure: Throwable) {
+                        Timber.e("CACHE failure")
+                        displayError(failure)
+                    }
+                }
+            }
         }
     }
 
@@ -187,24 +193,22 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
         Timber.w("Ignoring invalid token global error")
     }
 
-    private fun doLocalCleanup(clearPreferences: Boolean) {
-        GlobalScope.launch(Dispatchers.Main) {
-            // On UI Thread
-            Glide.get(this@MainActivity).clearMemory()
+    private suspend fun doLocalCleanup(clearPreferences: Boolean) {
+        // On UI Thread
+        Glide.get(this@MainActivity).clearMemory()
 
-            if (clearPreferences) {
-                vectorPreferences.clearPreferences()
-                uiStateRepository.reset()
-                pinLocker.unlock()
-                pinCodeStore.deleteEncodedPin()
-            }
-            withContext(Dispatchers.IO) {
-                // On BG thread
-                Glide.get(this@MainActivity).clearDiskCache()
+        if (clearPreferences) {
+            vectorPreferences.clearPreferences()
+            uiStateRepository.reset()
+            pinLocker.unlock()
+            pinCodeStore.deleteEncodedPin()
+        }
+        withContext(Dispatchers.IO) {
+            // On BG thread
+            Glide.get(this@MainActivity).clearDiskCache()
 
-                // Also clear cache (Logs, etc...)
-                deleteAllFiles(this@MainActivity.cacheDir)
-            }
+            // Also clear cache (Logs, etc...)
+            deleteAllFiles(this@MainActivity.cacheDir)
         }
     }
 
