@@ -151,7 +151,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
 
     private fun safeSignout(uri: Uri) {
         val session = sessionHolder.getSafeActiveSession()
-        if(session == null) {
+        if (session == null) {
             // Should not happen
             startLoginActivity(uri)
         } else {

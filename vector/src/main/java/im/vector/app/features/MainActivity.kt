@@ -175,12 +175,10 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
                 emptyViewModel.viewModelScope.launch {
                     try {
                         session.clearCache()
-                        Timber.e("CACHE success")
                         doLocalCleanup(clearPreferences = false)
                         session.startSyncing(applicationContext)
                         startNextActivityAndFinish()
                     } catch (failure: Throwable) {
-                        Timber.e("CACHE failure")
                         displayError(failure)
                     }
                 }
