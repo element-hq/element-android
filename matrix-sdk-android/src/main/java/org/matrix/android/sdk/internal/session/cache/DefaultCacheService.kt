@@ -16,23 +16,18 @@
 
 package org.matrix.android.sdk.internal.session.cache
 
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.cache.CacheService
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import javax.inject.Inject
 
 internal class DefaultCacheService @Inject constructor(@SessionDatabase
                                                        private val clearCacheTask: ClearCacheTask,
-                                                       private val taskExecutor: TaskExecutor) : CacheService {
+                                                       private val taskExecutor: TaskExecutor
+) : CacheService {
 
-    override fun clearCache(callback: MatrixCallback<Unit>) {
+    override suspend fun clearCache() {
         taskExecutor.cancelAll()
-        clearCacheTask
-                .configureWith {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+        clearCacheTask.execute(Unit)
     }
 }
