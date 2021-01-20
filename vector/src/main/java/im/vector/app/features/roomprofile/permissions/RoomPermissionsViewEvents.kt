@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,13 +12,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package org.matrix.android.sdk.internal.di
+package im.vector.app.features.roomprofile.permissions
 
-import com.squareup.inject.assisted.dagger2.AssistedModule
-import dagger.Module
+import im.vector.app.core.platform.VectorViewEvents
 
-@AssistedModule
-@Module(includes = [AssistedInject_SessionAssistedInjectModule::class])
-interface SessionAssistedInjectModule
+/**
+ * Transient events for room settings screen
+ */
+sealed class RoomPermissionsViewEvents : VectorViewEvents {
+    data class Failure(val throwable: Throwable) : RoomPermissionsViewEvents()
+    object Success : RoomPermissionsViewEvents()
+}

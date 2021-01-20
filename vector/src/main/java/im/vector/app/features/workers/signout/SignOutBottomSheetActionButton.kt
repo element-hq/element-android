@@ -20,19 +20,19 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.databinding.ItemSignoutActionBinding
+import im.vector.app.databinding.ViewSignOutBottomSheetActionButtonBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class SignOutBottomSheetActionButton @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val views: ItemSignoutActionBinding
+    private val views: ViewSignOutBottomSheetActionButtonBinding
 
     var action: (() -> Unit)? = null
 
@@ -67,8 +67,8 @@ class SignOutBottomSheetActionButton @JvmOverloads constructor(
         }
 
     init {
-        inflate(context, R.layout.item_signout_action, this)
-        views = ItemSignoutActionBinding.bind(this)
+        inflate(context, R.layout.view_sign_out_bottom_sheet_action_button, this)
+        views = ViewSignOutBottomSheetActionButtonBinding.bind(this)
 
         context.withStyledAttributes(attrs, R.styleable.SignOutBottomSheetActionButton) {
             title = getString(R.styleable.SignOutBottomSheetActionButton_actionTitle) ?: ""

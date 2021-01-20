@@ -17,7 +17,7 @@ Az Element a te kezedbe adja az irányítást azáltal, hogy eldöntheted, ki t�
 2. A saját számítógépeden is futtathatsz szervert
 3. Előfizethetsz egy saját szerverre az Element Matrix Szolgáltatások platformon
 
-<b>Miért válaszd az Element-et?</b>
+<b>Miért jó az Element-et választani?</b>
 
 <b>ADATAID MEGVÉDÉSE</b>: Eldöntheted, hol tárold az adataid és üzeneteid. A te tulajdonodban van, nem valami megacégnél, ami bányássza az adataid, vagy továbbadja másoknak.
 

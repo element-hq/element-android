@@ -24,8 +24,9 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
@@ -61,7 +62,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
     private val room = session.getRoom(roomId)
             ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: ViewEditHistoryViewState): ViewEditHistoryViewModel
     }

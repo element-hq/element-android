@@ -4,8 +4,9 @@ import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 
@@ -21,7 +22,7 @@ class ${viewModelClass} @AssistedInject constructor(@Assisted initialState: ${vi
     : VectorViewModel<${viewStateClass}, ${actionClass}, EmptyViewEvents>(initialState) {
     </#if>
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: ${viewStateClass}): ${viewModelClass}
     }

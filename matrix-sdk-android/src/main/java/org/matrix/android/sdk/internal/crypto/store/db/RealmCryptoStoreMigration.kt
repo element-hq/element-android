@@ -44,6 +44,7 @@ import org.matrix.android.sdk.internal.di.SerializeNulls
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
 import io.realm.RealmObjectSchema
+import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessionInfoEntityFields
 import org.matrix.androidsdk.crypto.data.MXOlmInboundGroupSession2
 import timber.log.Timber
 import javax.inject.Inject
@@ -55,7 +56,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         // 0, 1, 2: legacy Riot-Android
         // 3: migrate to RiotX schema
         // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
-        const val CRYPTO_STORE_SCHEMA_VERSION = 11L
+        const val CRYPTO_STORE_SCHEMA_VERSION = 12L
     }
 
     private fun RealmObjectSchema.addFieldIfNotExists(fieldName: String, fieldType: Class<*>): RealmObjectSchema {
@@ -93,6 +94,7 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         if (oldVersion <= 8) migrateTo9(realm)
         if (oldVersion <= 9) migrateTo10(realm)
         if (oldVersion <= 10) migrateTo11(realm)
+        if (oldVersion <= 11) migrateTo12(realm)
     }
 
     private fun migrateTo1Legacy(realm: DynamicRealm) {
@@ -482,5 +484,17 @@ internal class RealmCryptoStoreMigration @Inject constructor(private val crossSi
         Timber.d("Step 10 -> 11")
         realm.schema.get("CryptoMetadataEntity")
                 ?.addField(CryptoMetadataEntityFields.DEVICE_KEYS_SENT_TO_SERVER, Boolean::class.java)
+    }
+
+    // Version 12L added outbound group session persistence
+    private fun migrateTo12(realm: DynamicRealm) {
+        Timber.d("Step 11 -> 12")
+        val outboundEntitySchema = realm.schema.create("OutboundGroupSessionInfoEntity")
+                .addField(OutboundGroupSessionInfoEntityFields.SERIALIZED_OUTBOUND_SESSION_DATA, String::class.java)
+                .addField(OutboundGroupSessionInfoEntityFields.CREATION_TIME, Long::class.java)
+                .setNullable(OutboundGroupSessionInfoEntityFields.CREATION_TIME, true)
+
+        realm.schema.get("CryptoRoomEntity")
+                ?.addRealmObjectField(CryptoRoomEntityFields.OUTBOUND_SESSION_INFO.`$`, outboundEntitySchema)
     }
 }

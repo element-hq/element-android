@@ -18,6 +18,7 @@ package im.vector.app.core.epoxy
 
 import android.animation.ObjectAnimator
 import android.text.TextUtils
+import android.text.method.MovementMethod
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.doOnPreDraw
@@ -36,6 +37,9 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
     @EpoxyAttribute
     var maxLines: Int = 3
 
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var movementMethod: MovementMethod? = null
+
     private var isExpanded = false
     private var expandedLines = 0
 
@@ -43,6 +47,7 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
         super.bind(holder)
         holder.content.text = content
         holder.content.copyOnLongClick()
+        holder.content.movementMethod = movementMethod
 
         holder.content.doOnPreDraw {
             if (holder.content.lineCount > maxLines) {

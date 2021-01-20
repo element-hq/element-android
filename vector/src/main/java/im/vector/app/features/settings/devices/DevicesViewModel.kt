@@ -26,8 +26,9 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.error.SsoFlowNotSupportedYet
 import im.vector.app.core.platform.VectorViewModel
 import io.reactivex.Observable
@@ -72,7 +73,7 @@ class DevicesViewModel @AssistedInject constructor(
         private val session: Session
 ) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: DevicesViewState): DevicesViewModel
     }

@@ -26,37 +26,36 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.services.VectorSyncService
-import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.internal.session.sync.job.SyncService
 import timber.log.Timber
 
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
 
-    lateinit var vectorPreferences: VectorPreferences
-
     override fun onReceive(context: Context, intent: Intent) {
-        val appContext = context.applicationContext
-        if (appContext is HasVectorInjector) {
-            val activeSession = appContext.injector().activeSessionHolder().getSafeActiveSession()
-            if (activeSession == null) {
-                Timber.v("No active session don't launch sync service.")
-                return
-            }
-            vectorPreferences = appContext.injector().vectorPreferences()
-        }
+        Timber.d("## Sync: AlarmSyncBroadcastReceiver received intent")
+        val vectorPreferences = (context.applicationContext as? HasVectorInjector)
+                ?.injector()
+                ?.takeIf { it.activeSessionHolder().getSafeActiveSession() != null }
+                ?.vectorPreferences()
+                ?: return Unit.also { Timber.v("No active session, so don't launch sync service.") }
 
         val sessionId = intent.getStringExtra(SyncService.EXTRA_SESSION_ID) ?: return
-        // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
-        Timber.d("RestartBroadcastReceiver received intent")
-        VectorSyncService.newPeriodicIntent(context, sessionId, vectorPreferences.backgroundSyncTimeOut(), vectorPreferences.backgroundSyncDelay()).let {
-            try {
-                ContextCompat.startForegroundService(context, it)
-            } catch (ex: Throwable) {
-                Timber.i("## Sync: Failed to start service, Alarm scheduled to restart service")
-                scheduleAlarm(context, sessionId, vectorPreferences.backgroundSyncDelay())
-                Timber.e(ex)
-            }
-        }
+        VectorSyncService.newPeriodicIntent(
+                context = context,
+                sessionId = sessionId,
+                syncTimeoutSeconds = vectorPreferences.backgroundSyncTimeOut(),
+                syncDelaySeconds = vectorPreferences.backgroundSyncDelay(),
+                isNetworkBack = false
+        )
+                .let {
+                    try {
+                        ContextCompat.startForegroundService(context, it)
+                    } catch (ex: Throwable) {
+                        Timber.i("## Sync: Failed to start service, Alarm scheduled to restart service")
+                        scheduleAlarm(context, sessionId, vectorPreferences.backgroundSyncDelay())
+                        Timber.e(ex)
+                    }
+                }
     }
 
     companion object {

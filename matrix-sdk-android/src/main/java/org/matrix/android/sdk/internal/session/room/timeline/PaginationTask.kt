@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.filter.FilterRepository
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
-import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 internal interface PaginationTask : Task<PaginationTask.Params, TokenChunkEventPersistor.Result> {
@@ -37,12 +37,12 @@ internal class DefaultPaginationTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val filterRepository: FilterRepository,
         private val tokenChunkEventPersistor: TokenChunkEventPersistor,
-        private val eventBus: EventBus
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : PaginationTask {
 
     override suspend fun execute(params: PaginationTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
-        val chunk = executeRequest<PaginationResponse>(eventBus) {
+        val chunk = executeRequest<PaginationResponse>(globalErrorReceiver) {
             isRetryable = true
             apiCall = roomAPI.getRoomMessagesFrom(params.roomId, params.from, params.direction.value, params.limit, filter)
         }

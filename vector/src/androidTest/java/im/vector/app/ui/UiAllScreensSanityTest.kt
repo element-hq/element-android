@@ -247,6 +247,7 @@ class UiAllScreensSanityTest {
 
         // Room settings
         clickListItem(R.id.matrixProfileRecyclerView, 3)
+        navigateToRoomParameters()
         pressBack()
 
         // Notifications
@@ -282,6 +283,31 @@ class UiAllScreensSanityTest {
         // clickMenu(R.id.roomProfileShareAction)
         // pressBack()
 
+        pressBack()
+    }
+
+    private fun navigateToRoomParameters() {
+        // Room addresses
+        clickListItem(R.id.roomSettingsRecyclerView, 4)
+        onView(isRoot()).perform(waitForView(withText(R.string.room_alias_published_alias_title)))
+        pressBack()
+
+        // Room permissions
+        clickListItem(R.id.roomSettingsRecyclerView, 6)
+        onView(isRoot()).perform(waitForView(withText(R.string.room_permissions_title)))
+        clickOn(R.string.room_permissions_change_room_avatar)
+        clickDialogNegativeButton()
+        // Toggle
+        clickOn(R.string.show_advanced)
+        clickOn(R.string.hide_advanced)
+        pressBack()
+
+        // Room history readability
+        clickListItem(R.id.roomSettingsRecyclerView, 8)
+        pressBack()
+
+        // Room access
+        clickListItem(R.id.roomSettingsRecyclerView, 10)
         pressBack()
     }
 

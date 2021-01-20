@@ -13,7 +13,7 @@
             app:fragment="im.vector.app.features.settings.locale.LocalePickerFragment" />
 
         <im.vector.app.core.preference.VectorListPreference
-            android:defaultValue="light"
+            android:defaultValue="system"
             android:entries="@array/theme_entries"
             android:entryValues="@array/theme_values"
             android:key="APPLICATION_THEME_KEY"
@@ -48,6 +48,12 @@
             android:key="SETTINGS_SEND_MESSAGE_WITH_ENTER"
             android:summary="@string/settings_send_message_with_enter_summary"
             android:title="@string/settings_send_message_with_enter" />
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_SHOW_EMOJI_KEYBOARD"
+            android:summary="@string/settings_show_emoji_keyboard_summary"
+            android:title="@string/settings_show_emoji_keyboard" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 

@@ -23,8 +23,7 @@ import io.realm.annotations.PrimaryKey
 
 internal open class RoomEntity(@PrimaryKey var roomId: String = "",
                                var chunks: RealmList<ChunkEntity> = RealmList(),
-                               var sendingTimelineEvents: RealmList<TimelineEventEntity> = RealmList(),
-                               var areAllMembersLoaded: Boolean = false
+                               var sendingTimelineEvents: RealmList<TimelineEventEntity> = RealmList()
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name
@@ -34,6 +33,15 @@ internal open class RoomEntity(@PrimaryKey var roomId: String = "",
         }
         set(value) {
             membershipStr = value.name
+        }
+
+    private var membersLoadStatusStr: String = RoomMembersLoadStatusType.NONE.name
+    var membersLoadStatus: RoomMembersLoadStatusType
+        get() {
+            return RoomMembersLoadStatusType.valueOf(membersLoadStatusStr)
+        }
+        set(value) {
+            membersLoadStatusStr = value.name
         }
 
     companion object
