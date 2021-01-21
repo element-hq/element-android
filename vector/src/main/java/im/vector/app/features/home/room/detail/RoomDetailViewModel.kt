@@ -1396,7 +1396,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 snapshot
                         .takeIf { state.asyncRoomSummary.invoke()?.isEncrypted == false }
                         ?.forEach {
-                            previewUrlRetriever.getPreviewUrl(it.root, viewModelScope)
+                            previewUrlRetriever.getPreviewUrl(it, viewModelScope)
                         }
             }
         }

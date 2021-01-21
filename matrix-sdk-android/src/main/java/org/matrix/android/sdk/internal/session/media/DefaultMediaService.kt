@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.util.getOrPut
 import javax.inject.Inject
@@ -34,8 +35,9 @@ internal class DefaultMediaService @Inject constructor(
     // Cache of extracted URLs
     private val extractedUrlsCache = LruCache<String, List<String>>(1_000)
 
-    override fun extractUrls(event: Event): List<String> {
-        return extractedUrlsCache.getOrPut(event.cacheKey()) { urlsExtractor.extract(event) }
+    override fun extractUrls(event: TimelineEvent, forceExtract: Boolean): List<String> {
+        if (forceExtract) extractedUrlsCache.remove(event.root.cacheKey())
+        return extractedUrlsCache.getOrPut(event.root.cacheKey()) { urlsExtractor.extract(event) }
     }
 
     private fun Event.cacheKey() = "${eventId ?: ""}-${roomId ?: ""}"

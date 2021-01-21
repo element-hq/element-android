@@ -16,37 +16,46 @@
 
 package im.vector.app.features.home.room.detail.timeline.url
 
+import android.os.Handler
+import android.os.Looper
 import im.vector.app.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 
 class PreviewUrlRetriever(session: Session) {
     private val mediaService = session.mediaService()
 
     private val data = mutableMapOf<String, PreviewUrlUiState>()
     private val listeners = mutableMapOf<String, MutableSet<PreviewUrlRetrieverListener>>()
+    private val uiHandler = Handler(Looper.getMainLooper())
 
     // In memory list
     private val blockedUrl = mutableSetOf<String>()
 
-    fun getPreviewUrl(event: Event, coroutineScope: CoroutineScope) {
-        val eventId = event.eventId ?: return
+    fun getPreviewUrl(event: TimelineEvent, coroutineScope: CoroutineScope) {
+        val eventId = event.root.eventId ?: return
 
         synchronized(data) {
-            if (data[eventId] == null) {
+            val isEditedEvent = event.hasBeenEdited()
+            if (data[eventId] == null || isEditedEvent) {
                 // Keep only the first URL for the moment
-                val url = mediaService.extractUrls(event)
+                val url = mediaService.extractUrls(event, forceExtract = isEditedEvent)
                         .firstOrNull()
                         ?.takeIf { it !in blockedUrl }
                 if (url == null) {
                     updateState(eventId, PreviewUrlUiState.NoUrl)
-                } else {
+                    url
+                } else if (url != (data[eventId] as? PreviewUrlUiState.Data)?.url) {
                     updateState(eventId, PreviewUrlUiState.Loading)
+                    url
+                } else {
+                    // Already handled
+                    null
                 }
-                url
             } else {
                 // Already handled
                 null
@@ -96,8 +105,10 @@ class PreviewUrlRetriever(session: Session) {
     private fun updateState(eventId: String, state: PreviewUrlUiState) {
         data[eventId] = state
         // Notify the listener
-        listeners[eventId].orEmpty().forEach {
-            it.onStateUpdated(state)
+        uiHandler.post {
+            listeners[eventId].orEmpty().forEach {
+                it.onStateUpdated(state)
+            }
         }
     }
 
