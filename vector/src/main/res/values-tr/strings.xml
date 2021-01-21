@@ -1624,4 +1624,92 @@
     <string name="settings_labs_show_hidden_events_in_timeline">Gizli etkinlikleri zaman tünelinde göster</string>
     <string name="room_preview_no_preview_join">Bu oda ön izlenemiyor. Katılmak ister misiniz\?</string>
     <string name="room_manage_integrations">Entegrasyonları Yönet</string>
+    <string name="autodiscover_well_known_error">Geçerli bir ana sunucu bulunamıyor. Lütfen tanımlayıcınızı kontrol edin</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">Bu geçerli bir kullanıcı tanımlayıcı değil. Beklenen biçim: \'@kullanıcı:anasunucu.org\'</string>
+    <string name="login_signin_matrix_id_password_notice">Şifrenizi bilmiyorsanız sıfırlamak için geri dönün.</string>
+    <string name="login_signin_matrix_id_notice">Bir ana sunucuda hesap oluşturursanız, aşağıdan Matrix Kimliğinizi-IDnizi (ör. @kullanıcı:alanadı.com) ve şifrenizi kullanın.</string>
+    <string name="login_signin_matrix_id_hint">Matrix ID</string>
+    <string name="login_signin_matrix_id_title">Matrix ID ile oturum açın</string>
+    <string name="login_connect_using_matrix_id_submit">Matrix ID ile oturum açın</string>
+    <string name="login_connect_using_matrix_id_notice">Alternatif olarak, zaten bir hesabınız varsa ve Matrix tanımlayıcınızı ve şifrenizi biliyorsanız, şu yöntemi kullanabilirsiniz:</string>
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">Çok fazla istek gönderildi. %1$d saniye sonra tekrar deneyebilirsiniz…</item>
+        <item quantity="other">Çok fazla istek gönderildi. %1$d saniye sonra tekrar deneyebilirsiniz…</item>
+    </plurals>
+    <string name="login_error_outdated_homeserver_warning_content">Bu ana sunucu eski bir sürümü çalıştırıyor. Ana sunucu yöneticinizden yükseltmesini isteyin. Devam edebilirsiniz, ancak bazı özellikler düzgün çalışmayabilir.</string>
+    <string name="login_error_outdated_homeserver_content">Bu ana sunucu, bağlanmak için çok eski bir sürüm çalıştırıyor. Ana sunucu yöneticinizden yükseltmesini isteyin.</string>
+    <string name="login_error_outdated_homeserver_title">Tarihi geçmiş sunucu</string>
+    <string name="login_validation_code_is_not_correct">Girilen kod doğru değil. Lütfen kontrol edin.</string>
+    <string name="login_wait_for_email_notice">%1$s adresine bir e-posta gönderdik.
+\nHesap oluşturmaya devam etmek için lütfen içerdiği bağlantıya tıklayın.</string>
+    <string name="login_wait_for_email_title">Lütfen e-postanızı kontrol edin</string>
+    <string name="login_terms_title">Devam etmek için koşulları kabul edin</string>
+    <string name="login_a11y_captcha_container">Lütfen aşağıdaki doğrulamayı tamamlayın</string>
+    <string name="login_a11y_choose_other">Özel bir ana sunucu seçin</string>
+    <string name="login_a11y_choose_modular">Element Matric Hizmetleri\'ni seç</string>
+    <string name="login_a11y_choose_matrix_org">Matrix.org sunucusunu seç</string>
+    <string name="login_signup_cancel_confirmation_content">Hesabınız henüz oluşturulmadı.
+\n
+\nKayıt işlemini durdurmak istiyor musunuz\?</string>
+    <string name="login_signup_cancel_confirmation_title">Uyarı</string>
+    <string name="login_signup_error_user_in_use">Bu kullanıcı adı alınmış</string>
+    <string name="login_signup_submit">İleri</string>
+    <string name="login_signup_password_hint">Parola</string>
+    <string name="login_signup_username_hint">Kullanıcı adı</string>
+    <string name="login_signin_username_hint">Kullanıcı adı veya e-posta</string>
+    <string name="login_signup_to">%1$s sunucusuna kayıt olun</string>
+    <string name="login_msisdn_error_other">Telefon numarası geçersiz. Lütfen kontrol edin</string>
+    <string name="login_msisdn_error_not_international">Uluslararası telefon numaraları \"+\" ile başlamalı</string>
+    <string name="login_msisdn_notice">Lütfen uluslararası biçimi kullanın (telefon numarası \"+\" ile başlamalı)</string>
+    <string name="login_msisdn_confirm_submit">İleri</string>
+    <string name="login_msisdn_confirm_send_again">Kodu tekrar gönder</string>
+    <string name="login_msisdn_confirm_hint">Kodu gir</string>
+    <string name="login_msisdn_confirm_notice">%1$s numarasına bir kod gönderdik. Siz olduğunuzu onaylamak için kodu aşağıya yazın.</string>
+    <string name="login_msisdn_confirm_title">Telefon numarasını onaylayın</string>
+    <string name="login_set_msisdn_submit">İleri</string>
+    <string name="login_set_msisdn_optional_hint">Telefon numarası (İsteğe bağlı)</string>
+    <string name="login_set_msisdn_mandatory_hint">Telefon numarası</string>
+    <string name="login_set_msisdn_notice2">Lütfen uluslararası biçimi kullanın.</string>
+    <string name="login_set_msisdn_notice">İsteğe bağlı olarak, tanıdığınız kişilerin sizi bulmasına izin vermek için telefon numarası ayarlayın.</string>
+    <string name="login_set_msisdn_title">Telefon numarası ayarlayın</string>
+    <string name="login_set_email_submit">İleri</string>
+    <string name="login_set_email_optional_hint">E-posta (isteğe bağlı)</string>
+    <string name="login_set_email_mandatory_hint">E-posta</string>
+    <string name="login_set_email_title">E-posta adresi ayarlayın</string>
+    <string name="login_reset_password_success_submit">Tekrar giriş yapın</string>
+    <string name="login_reset_password_success_notice">Parolanız sıfırlandı.</string>
+    <string name="login_reset_password_mail_confirmation_submit">E-posta adresimi onayladım</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">"Yeni parolanızı onaylamak için bağlantıya tıklayın.  İçerdiği bağlantıyı takip ettikten sonra aşağıyı tıklayın."</string>
+    <string name="login_reset_password_mail_confirmation_notice">%1$s adresine e-posta gönderildi.</string>
+    <string name="login_reset_password_mail_confirmation_title">Gelen kutunuzu kontrol edin</string>
+    <string name="login_reset_password_error_not_found">Bu e-posta herhangi bir hesapla ilişkili değil</string>
+    <string name="login_reset_password_password_hint">Yeni parola</string>
+    <string name="login_reset_password_notice">Yeni parolanızı ayarlamayı onaylamak için e-postanıza onaylama linki gelecek.</string>
+    <string name="login_reset_password_on">%1$s sunucusunda parolayı yenile</string>
+    <string name="login_registration_not_supported">Uygulama bu sunucuda yeni hesap oluşturamıyor.
+\n
+\nİnternet istemcisi ile kayıt olmak ister misiniz\?</string>
+    <string name="login_registration_disabled">Üzgünüm, bu sunucu artık yeni hesap kabul etmiyor.</string>
+    <string name="login_login_with_email_error">Bu e-posta herhangi bir hesapla ilişkili değil.</string>
+    <string name="login_server_url_form_modular_hint">Element Matrix Hizmetleri Adresi</string>
+    <string name="login_server_url_form_other_hint">Adres</string>
+    <string name="login_clear_homeserver_history">Geçmişi temizle</string>
+    <string name="login_signin">Giriş yap</string>
+    <string name="help_long_click_on_room_for_more_options">Daha fazla seçenek görmek için bir odaya uzun tıklayın</string>
+    <string name="no_ignored_users">Yok saydığınız bir kullanıcı yok</string>
+    <string name="block_user">KULLANICIYI YOKSAY</string>
+    <string name="settings_discovery_bad_identity_server">Kimlik sunucusuna bağlanılamadı</string>
+    <string name="settings_discovery_enter_identity_server">Kimlik sunucusu URLsi girin</string>
+    <string name="settings_discovery_consent_notice_on">Rehberinizden diğer kişileri keşfetmek için bu kimlik sunucusuna e-posta ve telefon numaralarını göndermeye izin verdiniz.</string>
+    <string name="settings_discovery_consent_notice_off">Rehberinizden diğer kişileri keşfetmek için bu kimlik sunucusuna e-posta ve telefon numaralarını göndermeye izin vermediniz.</string>
+    <string name="identity_server_consent_dialog_title">E-posta ve telefon numaralarını gönder</string>
+    <string name="settings_discovery_consent_action_revoke">İznimi iptal et</string>
+    <string name="settings_discovery_consent_action_give_consent">İzin ver</string>
+    <string name="settings_discovery_consent_title">E-postaları ve telefon numaralarını gönder</string>
+    <string name="settings_push_gateway_no_pushers">Kayıtlı push ağ geçidi yok</string>
+    <string name="notification_unread_notified_messages_and_invitation">%1$s ve %2$s</string>
+    <plurals name="encryption_import_room_keys_success">
+        <item quantity="one">%1$d/%2$d anahtar başarıyla içe aktarıldı.</item>
+        <item quantity="other">%1$d/%2$d anahtar başarıyla içe aktarıldı.</item>
+    </plurals>
 </resources>
