@@ -16,7 +16,7 @@
 
 package im.vector.app.features.call.webrtc
 
-import im.vector.app.features.call.CallAudioManager
+import im.vector.app.features.call.audio.CallAudioManager
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.webrtc.DataChannel
@@ -26,8 +26,7 @@ import org.webrtc.PeerConnection
 import org.webrtc.RtpReceiver
 import timber.log.Timber
 
-class PeerConnectionObserver(private val webRtcCall: WebRtcCall,
-                             private val callAudioManager: CallAudioManager) : PeerConnection.Observer {
+class PeerConnectionObserver(private val webRtcCall: WebRtcCall) : PeerConnection.Observer {
 
     override fun onConnectionChange(newState: PeerConnection.PeerConnectionState?) {
         Timber.v("## VOIP StreamObserver onConnectionChange: $newState")
@@ -38,7 +37,6 @@ class PeerConnectionObserver(private val webRtcCall: WebRtcCall,
              */
             PeerConnection.PeerConnectionState.CONNECTED -> {
                 webRtcCall.mxCall.state = CallState.Connected(MxPeerConnectionState.CONNECTED)
-                callAudioManager.onCallConnected(webRtcCall.mxCall)
             }
             /**
              * One or more of the ICE transports on the connection is in the "failed" state.

@@ -24,8 +24,8 @@ import im.vector.app.ActiveSessionDataSource
 import im.vector.app.core.services.BluetoothHeadsetReceiver
 import im.vector.app.core.services.CallService
 import im.vector.app.core.services.WiredHeadsetStateReceiver
-import im.vector.app.features.call.CallAudioManager
 import im.vector.app.features.call.VectorCallActivity
+import im.vector.app.features.call.audio.CallAudioManager
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -79,10 +79,12 @@ class WebRtcCallManager @Inject constructor(
         currentCallsListeners.remove(listener)
     }
 
-    val callAudioManager = CallAudioManager(context) {
+    val audioManager = CallAudioManager(context) {
         currentCallsListeners.forEach {
             tryOrNull { it.onAudioDevicesChange() }
         }
+    }.apply {
+        setMode(CallAudioManager.Mode.DEFAULT)
     }
 
     private var peerConnectionFactory: PeerConnectionFactory? = null
@@ -180,13 +182,13 @@ class WebRtcCallManager @Inject constructor(
         Timber.v("## VOIP WebRtcPeerConnectionManager onCall active: ${call.mxCall.callId}")
         val currentCall = getCurrentCall().takeIf { it != call }
         currentCall?.updateRemoteOnHold(onHold = true)
+        audioManager.setMode(if (call.mxCall.isVideoCall) CallAudioManager.Mode.VIDEO_CALL else CallAudioManager.Mode.AUDIO_CALL)
         this.currentCall.setAndNotify(call)
     }
 
     private fun onCallEnded(call: WebRtcCall) {
         Timber.v("## VOIP WebRtcPeerConnectionManager onCall ended: ${call.mxCall.callId}")
         CallService.onCallTerminated(context, call.callId)
-        callAudioManager.stop()
         callsByCallId.remove(call.mxCall.callId)
         callsByRoomId[call.mxCall.roomId]?.remove(call)
         if (getCurrentCall() == call) {
@@ -199,6 +201,7 @@ class WebRtcCallManager @Inject constructor(
                 Timber.v("## VOIP Dispose peerConnectionFactory as there is no need to keep one")
                 peerConnectionFactory?.dispose()
                 peerConnectionFactory = null
+                audioManager.setMode(CallAudioManager.Mode.DEFAULT)
             }
             Timber.v("## VOIP WebRtcPeerConnectionManager close() executor done")
         }
@@ -222,7 +225,7 @@ class WebRtcCallManager @Inject constructor(
         val mxCall = currentSession?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
         val webRtcCall = createWebRtcCall(mxCall)
         currentCall.setAndNotify(webRtcCall)
-        callAudioManager.startForCall(mxCall)
+        //callAudioManager.startForCall(mxCall)
 
         CallService.onOutgoingCallRinging(
                 context = context.applicationContext,
@@ -244,7 +247,6 @@ class WebRtcCallManager @Inject constructor(
     private fun createWebRtcCall(mxCall: MxCall): WebRtcCall {
         val webRtcCall = WebRtcCall(
                 mxCall = mxCall,
-                callAudioManager = callAudioManager,
                 rootEglBase = rootEglBase,
                 context = context,
                 dispatcher = dispatcher,
@@ -270,12 +272,12 @@ class WebRtcCallManager @Inject constructor(
         Timber.v("## VOIP onWiredDeviceEvent $event")
         getCurrentCall() ?: return
         // sometimes we received un-wanted unplugged...
-        callAudioManager.wiredStateChange(event)
+        //callAudioManager.wiredStateChange(event)
     }
 
     fun onWirelessDeviceEvent(event: BluetoothHeadsetReceiver.BTHeadsetPlugEvent) {
         Timber.v("## VOIP onWirelessDeviceEvent $event")
-        callAudioManager.bluetoothStateChange(event.plugged)
+        //callAudioManager.bluetoothStateChange(event.plugged)
     }
 
     override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
@@ -292,7 +294,7 @@ class WebRtcCallManager @Inject constructor(
         createWebRtcCall(mxCall).apply {
             offerSdp = callInviteContent.offer
         }
-        callAudioManager.startForCall(mxCall)
+        //callAudioManager.startForCall(mxCall)
         // Start background service with notification
         CallService.onIncomingCallRinging(
                 context = context,
