@@ -64,10 +64,10 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
             throw IdentityServiceError.BulkLookupSha256NotSupported
         }
 
-        val lookupResult = lookUpInternal(identityAPI, params.threePids, hashDetailResponse, true)
+        val lookUpData = lookUpInternal(identityAPI, params.threePids, hashDetailResponse, true)
 
         // Convert back to List<FoundThreePid>
-        return handleSuccess(params.threePids, lookupResult)
+        return handleSuccess(params.threePids, lookUpData)
     }
 
     data class LookUpData(
