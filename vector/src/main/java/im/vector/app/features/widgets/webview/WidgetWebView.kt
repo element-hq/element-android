@@ -54,7 +54,9 @@ fun WebView.setupForWidget(webViewEventListener: WebViewEventListener) {
     // Allow use of Local Storage
     settings.domStorageEnabled = true
 
+    @Suppress("DEPRECATION")
     settings.allowFileAccessFromFileURLs = true
+    @Suppress("DEPRECATION")
     settings.allowUniversalAccessFromFileURLs = true
 
     settings.displayZoomControls = false
@@ -75,7 +77,6 @@ fun WebView.clearAfterWidget() {
     // Make sure you remove the WebView from its parent view before doing anything.
     (parent as? ViewGroup)?.removeAllViews()
     webChromeClient = null
-    webViewClient = null
     clearHistory()
     // NOTE: clears RAM cache, if you pass true, it will also clear the disk cache.
     clearCache(true)
