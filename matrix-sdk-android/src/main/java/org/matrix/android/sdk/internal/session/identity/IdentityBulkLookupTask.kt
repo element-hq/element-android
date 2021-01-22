@@ -46,17 +46,6 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         @UserId private val userId: String
 ) : IdentityBulkLookupTask {
 
-    private fun getHashedAddresses(threePids: List<ThreePid>, pepper: String): List<String> {
-        return withOlmUtility { olmUtility ->
-            threePids.map { threePid ->
-                base64ToBase64Url(
-                        olmUtility.sha256(threePid.value.toLowerCase(Locale.ROOT)
-                                + " " + threePid.toMedium() + " " + pepper)
-                )
-            }
-        }
-    }
-
     override suspend fun execute(params: IdentityBulkLookupTask.Params): List<FoundThreePid> {
         val identityAPI = getIdentityApiAndEnsureTerms(identityApiProvider, userId)
         val identityData = identityStore.getIdentityData() ?: throw IdentityServiceError.NoIdentityServerConfigured
@@ -120,6 +109,17 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
             } else {
                 // Other error
                 throw failure
+            }
+        }
+    }
+
+    private fun getHashedAddresses(threePids: List<ThreePid>, pepper: String): List<String> {
+        return withOlmUtility { olmUtility ->
+            threePids.map { threePid ->
+                base64ToBase64Url(
+                        olmUtility.sha256(threePid.value.toLowerCase(Locale.ROOT)
+                                + " " + threePid.toMedium() + " " + pepper)
+                )
             }
         }
     }
