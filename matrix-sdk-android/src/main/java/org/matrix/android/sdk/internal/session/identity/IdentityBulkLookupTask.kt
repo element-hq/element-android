@@ -63,7 +63,8 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         val pepper = identityData.hashLookupPepper
         val hashDetailResponse = if (pepper == null) {
             // We need to fetch the hash details first
-            fetchAndStoreHashDetails(identityAPI)
+            fetchHashDetails(identityAPI)
+                    .also { identityStore.setHashDetails(it) }
         } else {
             IdentityHashDetailResponse(pepper, identityData.hashLookupAlgorithm)
         }
@@ -101,11 +102,11 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
                 val newHashDetailResponse = if (!failure.error.newLookupPepper.isNullOrEmpty()) {
                     // Store it and use it right now
                     hashDetailResponse.copy(pepper = failure.error.newLookupPepper)
-                            .also { identityStore.setHashDetails(it) }
                 } else {
                     // Retrieve the new hash details
-                    fetchAndStoreHashDetails(identityAPI)
+                    fetchHashDetails(identityAPI)
                 }
+                        .also { identityStore.setHashDetails(it) }
                 if (newHashDetailResponse.algorithms.contains(IdentityHashDetailResponse.ALGORITHM_SHA256).not()) {
                     // TODO We should ask the user if he is ok to send their 3Pid in clear, but for the moment we do not do it
                     throw IdentityServiceError.BulkLookupSha256NotSupported
@@ -118,11 +119,10 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         }
     }
 
-    private suspend fun fetchAndStoreHashDetails(identityAPI: IdentityAPI): IdentityHashDetailResponse {
-        return executeRequest<IdentityHashDetailResponse>(null) {
+    private suspend fun fetchHashDetails(identityAPI: IdentityAPI): IdentityHashDetailResponse {
+        return executeRequest(null) {
             apiCall = identityAPI.hashDetails()
         }
-                .also { identityStore.setHashDetails(it) }
     }
 
     private fun handleSuccess(threePids: List<ThreePid>, hashedAddresses: List<String>, identityLookUpResponse: IdentityLookUpResponse): List<FoundThreePid> {
