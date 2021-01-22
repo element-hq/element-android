@@ -10,6 +10,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Fix clear cache issue: sometimes, after a clear cache, there is still a token, so the init sync service is not started.
  - Sidebar too large in horizontal orientation or tablets (#475)
+ - When receiving a new pepper from identity server, use it on the next hash lookup (#2708)
  - Crashes reported by PlayStore (new in 1.0.14) (#2707)
 
 Translations 🗣:
