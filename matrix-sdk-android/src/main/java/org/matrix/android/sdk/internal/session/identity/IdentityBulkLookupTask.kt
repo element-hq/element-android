@@ -69,7 +69,7 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
             IdentityHashDetailResponse(pepper, identityData.hashLookupAlgorithm)
         }
 
-        if (hashDetailResponse.algorithms.contains("sha256").not()) {
+        if (hashDetailResponse.algorithms.contains(IdentityHashDetailResponse.ALGORITHM_SHA256).not()) {
             // TODO We should ask the user if he is ok to send their 3Pid in clear, but for the moment we do not do it
             // Also, what we have in cache could be outdated, the identity server maybe now supports sha256
             throw IdentityServiceError.BulkLookupSha256NotSupported
