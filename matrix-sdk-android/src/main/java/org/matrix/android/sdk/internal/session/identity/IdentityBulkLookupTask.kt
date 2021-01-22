@@ -98,22 +98,19 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
             // Catch invalid hash pepper and retry
             if (canRetry && failure is Failure.ServerError && failure.error.code == MatrixError.M_INVALID_PEPPER) {
                 // This is not documented, but the error can contain the new pepper!
-                if (!failure.error.newLookupPepper.isNullOrEmpty()) {
+                val newHashDetailResponse = if (!failure.error.newLookupPepper.isNullOrEmpty()) {
                     // Store it and use it right now
                     hashDetailResponse.copy(pepper = failure.error.newLookupPepper)
                             .also { identityStore.setHashDetails(it) }
-                            .let { lookUpInternal(identityAPI, threePids, it, false /* Avoid infinite loop */) }
                 } else {
                     // Retrieve the new hash details
-                    val newHashDetailResponse = fetchAndStoreHashDetails(identityAPI)
-
-                    if (newHashDetailResponse.algorithms.contains(IdentityHashDetailResponse.ALGORITHM_SHA256).not()) {
-                        // TODO We should ask the user if he is ok to send their 3Pid in clear, but for the moment we do not do it
-                        throw IdentityServiceError.BulkLookupSha256NotSupported
-                    }
-
-                    lookUpInternal(identityAPI, threePids, newHashDetailResponse, false /* Avoid infinite loop */)
+                    fetchAndStoreHashDetails(identityAPI)
                 }
+                if (newHashDetailResponse.algorithms.contains(IdentityHashDetailResponse.ALGORITHM_SHA256).not()) {
+                    // TODO We should ask the user if he is ok to send their 3Pid in clear, but for the moment we do not do it
+                    throw IdentityServiceError.BulkLookupSha256NotSupported
+                }
+                lookUpInternal(identityAPI, threePids, newHashDetailResponse, false /* Avoid infinite loop */)
             } else {
                 // Other error
                 throw failure
