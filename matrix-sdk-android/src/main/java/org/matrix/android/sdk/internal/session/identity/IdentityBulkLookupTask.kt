@@ -78,16 +78,21 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         val lookupResult = lookUpInternal(identityAPI, params.threePids, hashDetailResponse, true)
 
         // Convert back to List<FoundThreePid>
-        return handleSuccess(params.threePids, lookupResult.first, lookupResult.second)
+        return handleSuccess(params.threePids, lookupResult)
     }
+
+    data class LookUpData(
+            val hashedAddresses: List<String>,
+            val identityLookUpResponse: IdentityLookUpResponse
+    )
 
     private suspend fun lookUpInternal(identityAPI: IdentityAPI,
                                        threePids: List<ThreePid>,
                                        hashDetailResponse: IdentityHashDetailResponse,
-                                       canRetry: Boolean): Pair<List<String>, IdentityLookUpResponse> {
+                                       canRetry: Boolean): LookUpData {
         val hashedAddresses = getHashedAddresses(threePids, hashDetailResponse.pepper)
         return try {
-            Pair(hashedAddresses,
+            LookUpData(hashedAddresses,
                     executeRequest(null) {
                         apiCall = identityAPI.lookup(IdentityLookUpParams(
                                 hashedAddresses,
@@ -125,9 +130,12 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         }
     }
 
-    private fun handleSuccess(threePids: List<ThreePid>, hashedAddresses: List<String>, identityLookUpResponse: IdentityLookUpResponse): List<FoundThreePid> {
-        return identityLookUpResponse.mappings.keys.map { hashedAddress ->
-            FoundThreePid(threePids[hashedAddresses.indexOf(hashedAddress)], identityLookUpResponse.mappings[hashedAddress] ?: error(""))
+    private fun handleSuccess(threePids: List<ThreePid>, lookupData: LookUpData): List<FoundThreePid> {
+        return lookupData.identityLookUpResponse.mappings.keys.map { hashedAddress ->
+            FoundThreePid(
+                    threePids[lookupData.hashedAddresses.indexOf(hashedAddress)],
+                    lookupData.identityLookUpResponse.mappings[hashedAddress] ?: error("")
+            )
         }
     }
 }
