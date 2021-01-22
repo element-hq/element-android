@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.database.model;
+package org.matrix.android.sdk.internal.util
 
-public enum EventInsertType {
-    INITIAL_SYNC,
-    INCREMENTAL_SYNC,
-    PAGINATION,
-    LOCAL_ECHO
+import timber.log.Timber
+
+internal suspend fun <T> logDuration(message: String,
+                                     block: suspend () -> T): T {
+    Timber.v("$message -- BEGIN")
+    val start = System.currentTimeMillis()
+    val result = block()
+    val duration = System.currentTimeMillis() - start
+    Timber.v("$message -- END duration: $duration ms")
+    return result
 }

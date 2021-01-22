@@ -40,6 +40,8 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.databinding.ActivityHomeBinding
+import im.vector.app.features.MainActivity
+import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -60,6 +62,8 @@ import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -366,6 +370,20 @@ class HomeActivity :
             }
             R.id.menu_home_report_bug -> {
                 bugReporter.openBugReportScreen(this, false)
+                return true
+            }
+            R.id.menu_home_init_sync_legacy -> {
+                // Configure the SDK
+                initialSyncStrategy = InitialSyncStrategy.Legacy
+                // And clear cache
+                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+                return true
+            }
+            R.id.menu_home_init_sync_optimized -> {
+                // Configure the SDK
+                initialSyncStrategy = InitialSyncStrategy.Optimized()
+                // And clear cache
+                MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
                 return true
             }
             R.id.menu_home_filter -> {
