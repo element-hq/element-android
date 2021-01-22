@@ -2252,4 +2252,5 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_show_room_member_state_events_summary">Incluye invitar/unirse/expulsar/prohibir/mostrar cambios de nombre.</string>
     <string name="settings_show_room_member_state_events">Mostrar eventos de los miembros de la sala</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">¡La notificación ha sido cliqueada!</string>
+    <string name="system_theme">Tema del sistema</string>
 </resources>
