@@ -2355,4 +2355,24 @@
     <string name="room_permissions_notice_read_only">Du hast nicht die Berechtigung zum Aktualisieren der Rollen, die zum Ändern verschiedener Teile des Raums erforderlich sind</string>
     <string name="room_participants_leave_private_warning">Dieser Raum ist nicht öffentlich. Du wirst ihn ohne Einladung nicht wieder betreten können.</string>
     <string name="system_theme">Standart Design</string>
+    <string name="login_social_continue">Oder</string>
+    <string name="default_message_emote_snow">Sendet Schnee ❄️</string>
+    <string name="default_message_emote_confetti">Sendet Konfetti 🎉</string>
+    <string name="command_snow">Sendet die nachfolgende Nachricht mit Schnee</string>
+    <string name="command_confetti">Sendet die nachfolgende Nachricht mit Konfetti</string>
+    <string name="login_clear_homeserver_history">Nachrichtenverlauf bereinigen</string>
+    <string name="login_social_sso">Einmalanmeldung</string>
+    <string name="login_social_signin_with">Anmelden mit %s</string>
+    <string name="login_social_signup_with">Registrieren mit %s</string>
+    <string name="login_social_continue_with">Mit %s weitermachen</string>
+    <string name="settings_show_emoji_keyboard_summary">Knopf zum Nachrichteneditor hinzufügen, der die Emoji-Tastatur öffnet</string>
+    <string name="settings_show_emoji_keyboard">Emoji-Tastatur anzeigen</string>
+    <string name="settings_chat_effects_description">Nutze /confetti Kommando oder sende Nachrichten, die ❄️ oder 🎉 enthalten</string>
+    <string name="settings_chat_effects_title">Chat-Effekte zeigen</string>
+    <string name="room_permissions_change_topic">Thema ändern</string>
+    <string name="room_permissions_upgrade_the_room">Raum aktualisieren</string>
+    <string name="room_permissions_notice">Rollen, die zum Ändern verschiedener Teile des Raums erforderlich sind, auswählen</string>
+    <string name="room_settings_permissions_subtitle">Rollen, die zum Ändern verschiedener Teile des Raums erforderlich sind, anzeigen und aktualisieren.</string>
+    <string name="room_permissions_send_m_room_server_acl_events">m.room.server_acl-Ereignisse senden</string>
+    <string name="room_permissions_change_permissions">Berechtigungen ändern</string>
 </resources>
