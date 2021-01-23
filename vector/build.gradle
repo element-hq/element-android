@@ -15,7 +15,7 @@ ext.versionMajor = 1
 ext.versionMinor = 0
 ext.versionPatch = 14
 
-ext.scVersion = 26
+ext.scVersion = 27
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -118,10 +118,10 @@ android {
 
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
         // Other branches (master, features, etc.) will have version code based on application version.
-        versionCode 40100390
+        versionCode 40100410
 
         // Required for sonar analysis
-        versionName "1.0.13.sc.26"
+        versionName "1.0.14.sc27"
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_revision", "\"${gitRevision()}\""
@@ -237,7 +237,7 @@ android {
         gplay {
             dimension "store"
 
-            versionName "1.0.13.sc.26"
+            versionName "1.0.14.sc27"
 
             resValue "bool", "isGplay", "true"
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
@@ -248,7 +248,7 @@ android {
         fdroid {
             dimension "store"
 
-            versionName "1.0.13.sc.26"
+            versionName "1.0.14.sc27"
 
             resValue "bool", "isGplay", "false"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"

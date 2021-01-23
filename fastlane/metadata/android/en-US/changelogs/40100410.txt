@@ -1,0 +1,7 @@
+- Some fixes related to RTL languages
+- Big emoji-only messages: allow whitespace between emojis
+- Room summary preview setting depending on DMs vs groups
+- Also fallback to other user's avatar for 2-person-rooms not marked as DM
+- Update codebase to Element v1.0.14
+- Uniform bubble width in group chats
+- Sticker picker: pass dark/light theme
