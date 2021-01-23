@@ -1,0 +1,2 @@
+Aquesta principalment conté millores d'interfície experiència d'usuari. Ara pots convidar amics i crear xats personals ràpidament escanejant codis QR.
+Registre de canvis complet: https://github.com/vector-im/element-android/releases/tag/v1.0.11
