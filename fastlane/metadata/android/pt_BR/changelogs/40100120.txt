@@ -1,0 +1,2 @@
+Principais mudanças nessa versão: Prévia do endereço URL, novo teclado de Emojis, novos recursos de configuração da sala, e neve para o Natal!
+Registro de alterações completo: https://github.com/vector-im/element-android/releases/tag/v1.0.12
