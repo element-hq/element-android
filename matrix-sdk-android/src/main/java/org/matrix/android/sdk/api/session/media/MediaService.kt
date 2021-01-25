@@ -24,10 +24,9 @@ interface MediaService {
     /**
      * Extract URLs from a TimelineEvent.
      * @param event TimelineEvent to extract the URL from.
-     * @param forceExtract Should be used for edited events. If true, URL will be extracted again even it is already in the cache.
      * @return the list of URLs contains in the body of the TimelineEvent. It does not mean that URLs in this list have UrlPreview data
      */
-    fun extractUrls(event: TimelineEvent, forceExtract: Boolean = false): List<String>
+    fun extractUrls(event: TimelineEvent): List<String>
 
     /**
      * Get Raw Url Preview data from the homeserver. There is no cache management for this request
