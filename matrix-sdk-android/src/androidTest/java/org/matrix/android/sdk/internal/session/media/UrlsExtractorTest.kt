@@ -108,6 +108,7 @@ internal class UrlsExtractorTest : InstrumentedTest {
     }
 
     private fun createEvent(body: String): Event = Event(
+            eventId = "!fake",
             type = EventType.MESSAGE,
             content = MessageTextContent(
                     msgType = MessageType.MSGTYPE_TEXT,
@@ -119,7 +120,7 @@ internal class UrlsExtractorTest : InstrumentedTest {
         return TimelineEvent(
                 root = this,
                 localId = 0L,
-                eventId = "",
+                eventId = eventId!!,
                 displayIndex = 0,
                 senderInfo = SenderInfo(
                         userId = "",
