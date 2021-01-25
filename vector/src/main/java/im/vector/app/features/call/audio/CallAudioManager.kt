@@ -23,7 +23,7 @@ import timber.log.Timber
 import java.util.HashSet
 import java.util.concurrent.Executors
 
-class CallAudioManager(context: Context, val configChange: (() -> Unit)?) {
+class CallAudioManager(private val context: Context, val configChange: (() -> Unit)?) {
 
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private var audioDeviceDetector: AudioDeviceDetector? = null
@@ -57,11 +57,13 @@ class CallAudioManager(context: Context, val configChange: (() -> Unit)?) {
 
     private fun setup() {
         audioDeviceDetector?.stop()
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            audioDeviceDetector = API23AudioDeviceDetector(audioManager, this)
+        audioDeviceDetector = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            API23AudioDeviceDetector(audioManager, this)
+        } else {
+            API21AudioDeviceDetector(context, audioManager, this)
         }
-        audioDeviceRouter = DefaultAudioDeviceRouter(audioManager, this)
         audioDeviceDetector?.start()
+        audioDeviceRouter = DefaultAudioDeviceRouter(audioManager, this)
     }
 
     fun runInAudioThread(runnable: Runnable) {
@@ -190,8 +192,9 @@ class CallAudioManager(context: Context, val configChange: (() -> Unit)?) {
      *
      * @param devices The new devices list.
      */
-    fun replaceDevices(devices: MutableSet<Device>) {
-        _availableDevices = devices
+    fun replaceDevices(devices: Set<Device>) {
+        _availableDevices.clear()
+        _availableDevices.addAll(devices)
         resetSelectedDevice()
     }
 

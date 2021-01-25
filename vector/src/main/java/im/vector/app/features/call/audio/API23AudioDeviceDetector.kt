@@ -13,16 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
-
 package im.vector.app.features.call.audio
 
-import android.media.AudioAttributes
 import android.media.AudioDeviceCallback
 import android.media.AudioDeviceInfo
-import android.media.AudioFocusRequest
 import android.media.AudioManager
-import android.media.AudioManager.OnAudioFocusChangeListener
 import android.os.Build
 import androidx.annotation.RequiresApi
 import timber.log.Timber
@@ -31,7 +26,7 @@ import java.util.HashSet
 @RequiresApi(Build.VERSION_CODES.M)
 internal class API23AudioDeviceDetector(private val audioManager: AudioManager,
                                         private val callAudioManager: CallAudioManager
-) : CallAudioManager.AudioDeviceDetector{
+) : CallAudioManager.AudioDeviceDetector {
 
     private val onAudioDeviceChangeRunner = Runnable {
         val devices: MutableSet<CallAudioManager.Device> = HashSet()

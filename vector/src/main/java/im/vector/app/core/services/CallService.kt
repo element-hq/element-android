@@ -44,7 +44,7 @@ import timber.log.Timber
 /**
  * Foreground service to manage calls
  */
-class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListener, BluetoothHeadsetReceiver.EventListener {
+class CallService : VectorService() {
 
     private val connections = mutableMapOf<String, CallConnection>()
     private val knownCalls = mutableSetOf<String>()
@@ -57,9 +57,6 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
 
     private var callRingPlayerIncoming: CallRingPlayerIncoming? = null
     private var callRingPlayerOutgoing: CallRingPlayerOutgoing? = null
-
-    private var wiredHeadsetStateReceiver: WiredHeadsetStateReceiver? = null
-    private var bluetoothHeadsetStateReceiver: BluetoothHeadsetReceiver? = null
 
     // A media button receiver receives and helps translate hardware media playback buttons,
     // such as those found on wired and wireless headsets, into the appropriate callbacks in your app
@@ -84,18 +81,12 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         alertManager = vectorComponent().alertManager()
         callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext)
         callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext)
-        wiredHeadsetStateReceiver = WiredHeadsetStateReceiver.createAndRegister(this, this)
-        bluetoothHeadsetStateReceiver = BluetoothHeadsetReceiver.createAndRegister(this, this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         callRingPlayerIncoming?.stop()
         callRingPlayerOutgoing?.stop()
-        wiredHeadsetStateReceiver?.let { WiredHeadsetStateReceiver.unRegister(this, it) }
-        wiredHeadsetStateReceiver = null
-        bluetoothHeadsetStateReceiver?.let { BluetoothHeadsetReceiver.unRegister(this, it) }
-        bluetoothHeadsetStateReceiver = null
         mediaSession?.release()
         mediaSession = null
     }
@@ -345,15 +336,5 @@ class CallService : VectorService(), WiredHeadsetStateReceiver.HeadsetEventListe
         fun getCallService(): CallService {
             return this@CallService
         }
-    }
-
-    override fun onHeadsetEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
-        Timber.v("## VOIP: onHeadsetEvent $event")
-        callManager.onWiredDeviceEvent(event)
-    }
-
-    override fun onBTHeadsetEvent(event: BluetoothHeadsetReceiver.BTHeadsetPlugEvent) {
-        Timber.v("## VOIP: onBTHeadsetEvent $event")
-        callManager.onWirelessDeviceEvent(event)
     }
 }
