@@ -46,47 +46,42 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         @UserId private val userId: String
 ) : IdentityBulkLookupTask {
 
-    private fun getHashedAddresses(threePids: List<ThreePid>, pepper: String): List<String> {
-        return withOlmUtility { olmUtility ->
-            threePids.map { threePid ->
-                base64ToBase64Url(
-                        olmUtility.sha256(threePid.value.toLowerCase(Locale.ROOT)
-                                + " " + threePid.toMedium() + " " + pepper)
-                )
-            }
-        }
-    }
-
     override suspend fun execute(params: IdentityBulkLookupTask.Params): List<FoundThreePid> {
         val identityAPI = getIdentityApiAndEnsureTerms(identityApiProvider, userId)
         val identityData = identityStore.getIdentityData() ?: throw IdentityServiceError.NoIdentityServerConfigured
         val pepper = identityData.hashLookupPepper
         val hashDetailResponse = if (pepper == null) {
             // We need to fetch the hash details first
-            fetchAndStoreHashDetails(identityAPI)
+            fetchHashDetails(identityAPI)
+                    .also { identityStore.setHashDetails(it) }
         } else {
             IdentityHashDetailResponse(pepper, identityData.hashLookupAlgorithm)
         }
 
-        if (hashDetailResponse.algorithms.contains("sha256").not()) {
+        if (hashDetailResponse.algorithms.contains(IdentityHashDetailResponse.ALGORITHM_SHA256).not()) {
             // TODO We should ask the user if he is ok to send their 3Pid in clear, but for the moment we do not do it
             // Also, what we have in cache could be outdated, the identity server maybe now supports sha256
             throw IdentityServiceError.BulkLookupSha256NotSupported
         }
 
-        val lookupResult = lookUpInternal(identityAPI, params.threePids, hashDetailResponse, true)
+        val lookUpData = lookUpInternal(identityAPI, params.threePids, hashDetailResponse, true)
 
         // Convert back to List<FoundThreePid>
-        return handleSuccess(params.threePids, lookupResult.first, lookupResult.second)
+        return handleSuccess(params.threePids, lookUpData)
     }
+
+    data class LookUpData(
+            val hashedAddresses: List<String>,
+            val identityLookUpResponse: IdentityLookUpResponse
+    )
 
     private suspend fun lookUpInternal(identityAPI: IdentityAPI,
                                        threePids: List<ThreePid>,
                                        hashDetailResponse: IdentityHashDetailResponse,
-                                       canRetry: Boolean): Pair<List<String>, IdentityLookUpResponse> {
+                                       canRetry: Boolean): LookUpData {
         val hashedAddresses = getHashedAddresses(threePids, hashDetailResponse.pepper)
         return try {
-            Pair(hashedAddresses,
+            LookUpData(hashedAddresses,
                     executeRequest(null) {
                         apiCall = identityAPI.lookup(IdentityLookUpParams(
                                 hashedAddresses,
@@ -98,23 +93,19 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
             // Catch invalid hash pepper and retry
             if (canRetry && failure is Failure.ServerError && failure.error.code == MatrixError.M_INVALID_PEPPER) {
                 // This is not documented, but the error can contain the new pepper!
-                if (!failure.error.newLookupPepper.isNullOrEmpty()) {
+                val newHashDetailResponse = if (!failure.error.newLookupPepper.isNullOrEmpty()) {
                     // Store it and use it right now
                     hashDetailResponse.copy(pepper = failure.error.newLookupPepper)
-                            .also { identityStore.setHashDetails(it) }
-                            .let { lookUpInternal(identityAPI, threePids, it, false /* Avoid infinite loop */) }
                 } else {
                     // Retrieve the new hash details
-                    val newHashDetailResponse = fetchAndStoreHashDetails(identityAPI)
-
-                    if (hashDetailResponse.algorithms.contains(IdentityHashDetailResponse.ALGORITHM_SHA256).not()) {
-                        // TODO We should ask the user if he is ok to send their 3Pid in clear, but for the moment we do not do it
-                        // Also, what we have in cache is maybe outdated, the identity server maybe now support sha256
-                        throw IdentityServiceError.BulkLookupSha256NotSupported
-                    }
-
-                    lookUpInternal(identityAPI, threePids, newHashDetailResponse, false /* Avoid infinite loop */)
+                    fetchHashDetails(identityAPI)
                 }
+                        .also { identityStore.setHashDetails(it) }
+                if (newHashDetailResponse.algorithms.contains(IdentityHashDetailResponse.ALGORITHM_SHA256).not()) {
+                    // TODO We should ask the user if he is ok to send their 3Pid in clear, but for the moment we do not do it
+                    throw IdentityServiceError.BulkLookupSha256NotSupported
+                }
+                lookUpInternal(identityAPI, threePids, newHashDetailResponse, false /* Avoid infinite loop */)
             } else {
                 // Other error
                 throw failure
@@ -122,16 +113,29 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         }
     }
 
-    private suspend fun fetchAndStoreHashDetails(identityAPI: IdentityAPI): IdentityHashDetailResponse {
-        return executeRequest<IdentityHashDetailResponse>(null) {
-            apiCall = identityAPI.hashDetails()
+    private fun getHashedAddresses(threePids: List<ThreePid>, pepper: String): List<String> {
+        return withOlmUtility { olmUtility ->
+            threePids.map { threePid ->
+                base64ToBase64Url(
+                        olmUtility.sha256(threePid.value.toLowerCase(Locale.ROOT)
+                                + " " + threePid.toMedium() + " " + pepper)
+                )
+            }
         }
-                .also { identityStore.setHashDetails(it) }
     }
 
-    private fun handleSuccess(threePids: List<ThreePid>, hashedAddresses: List<String>, identityLookUpResponse: IdentityLookUpResponse): List<FoundThreePid> {
-        return identityLookUpResponse.mappings.keys.map { hashedAddress ->
-            FoundThreePid(threePids[hashedAddresses.indexOf(hashedAddress)], identityLookUpResponse.mappings[hashedAddress] ?: error(""))
+    private suspend fun fetchHashDetails(identityAPI: IdentityAPI): IdentityHashDetailResponse {
+        return executeRequest(null) {
+            apiCall = identityAPI.hashDetails()
+        }
+    }
+
+    private fun handleSuccess(threePids: List<ThreePid>, lookupData: LookUpData): List<FoundThreePid> {
+        return lookupData.identityLookUpResponse.mappings.keys.map { hashedAddress ->
+            FoundThreePid(
+                    threePids[lookupData.hashedAddresses.indexOf(hashedAddress)],
+                    lookupData.identityLookUpResponse.mappings[hashedAddress] ?: error("")
+            )
         }
     }
 }
