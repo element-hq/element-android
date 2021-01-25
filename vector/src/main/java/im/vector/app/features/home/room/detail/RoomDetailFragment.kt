@@ -297,6 +297,8 @@ class RoomDetailFragment @Inject constructor(
     private var lockSendButton = false
     private val activeCallViewHolder = ActiveCallViewHolder()
 
+    private lateinit var emojiPopup: EmojiPopup
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
@@ -512,7 +514,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupEmojiPopup() {
-        val emojiPopup = EmojiPopup
+        emojiPopup = EmojiPopup
                 .Builder
                 .fromRootView(views.rootConstraintLayout)
                 .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
@@ -591,6 +593,7 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.clear()
         debouncer.cancelAll()
         views.timelineRecyclerView.cleanup()
+        emojiPopup.dismiss()
 
         super.onDestroyView()
     }
