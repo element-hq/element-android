@@ -20,10 +20,18 @@ import timber.log.Timber
 
 internal suspend fun <T> logDuration(message: String,
                                      block: suspend () -> T): T {
+    val runtime = Runtime.getRuntime()
+    runtime.gc()
+    val usedMemInMBStart = (runtime.totalMemory() - runtime.freeMemory()) / 1048576L
+
     Timber.v("$message -- BEGIN")
     val start = System.currentTimeMillis()
     val result = block()
     val duration = System.currentTimeMillis() - start
-    Timber.v("$message -- END duration: $duration ms")
+    runtime.gc()
+    val usedMemInMBEnd = (runtime.totalMemory() - runtime.freeMemory()) / 1048576L
+    val usedMemInMBDiff = usedMemInMBEnd - usedMemInMBStart
+
+    Timber.v("$message -- END duration: $duration ms RAM usage: $usedMemInMBDiff MB")
     return result
 }
