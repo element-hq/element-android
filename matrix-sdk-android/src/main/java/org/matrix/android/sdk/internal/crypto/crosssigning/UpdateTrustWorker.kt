@@ -84,6 +84,12 @@ internal class UpdateTrustWorker(context: Context,
             // Get current other userIds for this room
             getOtherUserIds(roomId)
         }
+
+        if (userList.isEmpty()) {
+            // This should not happen, but let's avoid go further in case of empty list
+            return Result.success()
+        }
+
         // Unfortunately we don't have much info on what did exactly changed (is it the cross signing keys of that user,
         // or a new device?) So we check all again :/
 
