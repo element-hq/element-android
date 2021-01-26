@@ -126,7 +126,16 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
     private fun handleCallRejectEvent(event: Event) {
         val content = event.getClearContent().toModel<CallRejectContent>() ?: return
         val call = content.getCall() ?: return
+        if (call.ourPartyId == content.partyId) {
+            // Ignore remote echo
+            return
+        }
         activeCallHandler.removeCall(content.callId)
+        if (event.senderId == userId) {
+            // discard current call, it's rejected by another of my session
+            callListenersDispatcher.onCallManagedByOtherSession(content.callId)
+            return
+        }
         // No need to check party_id for reject because if we'd received either
         // an answer or reject, we wouldn't be in state InviteSent
         if (call.state != CallState.Dialing) {
@@ -177,6 +186,7 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
         }
         if (event.senderId == userId) {
             // discard current call, it's answered by another of my session
+            activeCallHandler.removeCall(call.callId)
             callListenersDispatcher.onCallManagedByOtherSession(content.callId)
         } else {
             if (call.opponentPartyId != null) {

@@ -21,7 +21,6 @@ import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
 import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.CountUpTimer
-import im.vector.app.features.call.audio.CallAudioManager
 import im.vector.app.features.call.CameraEventsHandlerAdapter
 import im.vector.app.features.call.CameraProxy
 import im.vector.app.features.call.CameraType
@@ -92,7 +91,7 @@ class WebRtcCall(val mxCall: MxCall,
                  private val sessionProvider: Provider<Session?>,
                  private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
                  private val onCallBecomeActive: (WebRtcCall) -> Unit,
-                 private val onCallEnded: (WebRtcCall) -> Unit) : MxCall.StateListener {
+                 private val onCallEnded: (String) -> Unit) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
         fun onCaptureStateChanged() {}
@@ -725,7 +724,7 @@ class WebRtcCall(val mxCall: MxCall,
         GlobalScope.launch(dispatcher) {
             release()
         }
-        onCallEnded(this)
+        onCallEnded(callId)
         if (originatedByMe) {
             if (wasRinging) {
                 mxCall.reject()

@@ -21,11 +21,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
 import android.content.Context
-import android.media.AudioDeviceCallback
-import android.media.AudioDeviceInfo
 import android.media.AudioManager
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import im.vector.app.core.services.BluetoothHeadsetReceiver
 import im.vector.app.core.services.WiredHeadsetStateReceiver
@@ -52,15 +48,14 @@ internal class API21AudioDeviceDetector(private val context: Context,
     private fun getAvailableSoundDevices(): Set<CallAudioManager.Device> {
         return HashSet<CallAudioManager.Device>().apply {
             if (isBluetoothHeadsetOn()) add(CallAudioManager.Device.WIRELESS_HEADSET)
-            if(isWiredHeadsetOn()){
+            if (isWiredHeadsetOn()) {
                 add(CallAudioManager.Device.HEADSET)
-            }else {
+            } else {
                 add(CallAudioManager.Device.PHONE)
             }
             add(CallAudioManager.Device.SPEAKER)
         }
     }
-
 
     private fun isWiredHeadsetOn(): Boolean {
         return audioManager.isWiredHeadsetOn
@@ -81,7 +76,6 @@ internal class API21AudioDeviceDetector(private val context: Context,
             return false
         }
     }
-
 
     /**
      * Helper method to trigger an audio route update when devices change. It
@@ -118,7 +112,6 @@ internal class API21AudioDeviceDetector(private val context: Context,
         }, BluetoothProfile.HEADSET)
         onAudioDeviceChange()
     }
-
 
     override fun stop() {
         Timber.i("Stop using $this as the audio device handler")

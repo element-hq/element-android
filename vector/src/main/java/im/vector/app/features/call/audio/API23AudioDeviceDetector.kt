@@ -30,7 +30,7 @@ internal class API23AudioDeviceDetector(private val audioManager: AudioManager,
 
     private val onAudioDeviceChangeRunner = Runnable {
         val devices: MutableSet<CallAudioManager.Device> = HashSet()
-        val deviceInfos = audioManager.getDevices(AudioManager.GET_DEVICES_ALL)
+        val deviceInfos = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
         for (info in deviceInfos) {
             when (info.type) {
                 AudioDeviceInfo.TYPE_BLUETOOTH_SCO -> devices.add(CallAudioManager.Device.WIRELESS_HEADSET)

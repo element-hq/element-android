@@ -79,7 +79,7 @@ class CallService : VectorService() {
         callManager = vectorComponent().webRtcCallManager()
         avatarRenderer = vectorComponent().avatarRenderer()
         alertManager = vectorComponent().alertManager()
-        callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext)
+        callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext, notificationUtils)
         callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext)
     }
 
@@ -98,21 +98,17 @@ class CallService : VectorService() {
                 setCallback(mediaSessionButtonCallback)
             }
         }
-        if (intent == null) {
-            // Service started again by the system.
-            // TODO What do we do here?
-            return START_STICKY
-        }
         mediaSession?.let {
             // This ensures that the correct callbacks to MediaSessionCompat.Callback
             // will be triggered based on the incoming KeyEvent.
             MediaButtonReceiver.handleIntent(it, intent)
         }
 
-        when (intent.action) {
+        when (intent?.action) {
             ACTION_INCOMING_RINGING_CALL -> {
                 mediaSession?.isActive = true
-                callRingPlayerIncoming?.start()
+                val fromBg = intent.getBooleanExtra(EXTRA_IS_IN_BG, false)
+                callRingPlayerIncoming?.start(fromBg)
                 displayIncomingCallNotification(intent)
             }
             ACTION_OUTGOING_RINGING_CALL -> {
@@ -136,15 +132,12 @@ class CallService : VectorService() {
                 handleCallTerminated(intent)
             }
             else                         -> {
-                // Should not happen
-                callRingPlayerIncoming?.stop()
-                callRingPlayerOutgoing?.stop()
-                myStopSelf()
+                handleUnexpectedState(null)
             }
         }
 
         // We want the system to restore the service if killed
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     // ================================================================================
@@ -158,10 +151,8 @@ class CallService : VectorService() {
     private fun displayIncomingCallNotification(intent: Intent) {
         Timber.v("## VOIP displayIncomingCallNotification $intent")
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
-        val call = callManager.getCallById(callId) ?: return
-        if (knownCalls.contains(callId)) {
-            Timber.v("Call already notified $callId$")
-            return
+        val call = callManager.getCallById(callId) ?: return Unit.also {
+            handleUnexpectedState(callId)
         }
         val isVideoCall = call.mxCall.isVideoCall
         val fromBg = intent.getBooleanExtra(EXTRA_IS_IN_BG, false)
@@ -202,13 +193,14 @@ class CallService : VectorService() {
 
     private fun handleCallTerminated(intent: Intent) {
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
+        alertManager.cancelAlert(callId)
         if (!knownCalls.remove(callId)) {
             Timber.v("Call terminated for unknown call $callId$")
+            handleUnexpectedState(callId)
             return
         }
         val notification = notificationUtils.buildCallEndedNotification()
         notificationManager.notify(callId.hashCode(), notification)
-        alertManager.cancelAlert(callId)
         if (knownCalls.isEmpty()) {
             mediaSession?.isActive = false
             myStopSelf()
@@ -225,11 +217,9 @@ class CallService : VectorService() {
     }
 
     private fun displayOutgoingRingingCallNotification(intent: Intent) {
-        val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: return
-        val call = callManager.getCallById(callId) ?: return
-        if (knownCalls.contains(callId)) {
-            Timber.v("Call already notified $callId$")
-            return
+        val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
+        val call = callManager.getCallById(callId) ?: return Unit.also {
+            handleUnexpectedState(callId)
         }
         val opponentMatrixItem = getOpponentMatrixItem(call)
         Timber.v("displayOutgoingCallNotification : display the dedicated notification")
@@ -251,10 +241,8 @@ class CallService : VectorService() {
     private fun displayCallInProgressNotification(intent: Intent) {
         Timber.v("## VOIP displayCallInProgressNotification")
         val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: ""
-        val call = callManager.getCallById(callId) ?: return
-        if (!knownCalls.contains(callId)) {
-            Timber.v("Call in progress for unknown call $callId$")
-            return
+        val call = callManager.getCallById(callId) ?: return Unit.also {
+            handleUnexpectedState(callId)
         }
         val opponentMatrixItem = getOpponentMatrixItem(call)
         alertManager.cancelAlert(callId)
@@ -262,7 +250,27 @@ class CallService : VectorService() {
                 mxCall = call.mxCall,
                 title = opponentMatrixItem?.getBestName() ?: call.mxCall.opponentUserId
         )
-        notificationManager.notify(callId.hashCode(), notification)
+        if (knownCalls.isEmpty()) {
+            startForeground(callId.hashCode(), notification)
+        } else {
+            notificationManager.notify(callId.hashCode(), notification)
+        }
+        knownCalls.add(callId)
+    }
+
+    private fun handleUnexpectedState(callId: String?) {
+        Timber.v("Fallback to clear everything")
+        callRingPlayerIncoming?.stop()
+        callRingPlayerOutgoing?.stop()
+        if (callId != null) {
+            notificationManager.cancel(callId.hashCode())
+        }
+        val notification = notificationUtils.buildCallEndedNotification()
+        startForeground(DEFAULT_NOTIFICATION_ID, notification)
+        if (knownCalls.isEmpty()) {
+            mediaSession?.isActive = false
+            myStopSelf()
+        }
     }
 
     fun addConnection(callConnection: CallConnection) {
@@ -274,7 +282,7 @@ class CallService : VectorService() {
     }
 
     companion object {
-        private const val NOTIFICATION_ID = 6480
+        private const val DEFAULT_NOTIFICATION_ID = 6480
 
         private const val ACTION_INCOMING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_INCOMING_RINGING_CALL"
         private const val ACTION_OUTGOING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_OUTGOING_RINGING_CALL"

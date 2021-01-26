@@ -18,6 +18,8 @@ package im.vector.app.features.call.audio
 
 import android.content.Context
 import android.media.AudioManager
+import android.os.Build
+import androidx.core.content.getSystemService
 import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 import java.util.HashSet
@@ -25,7 +27,7 @@ import java.util.concurrent.Executors
 
 class CallAudioManager(private val context: Context, val configChange: (() -> Unit)?) {
 
-    private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private val audioManager: AudioManager? = context.getSystemService()
     private var audioDeviceDetector: AudioDeviceDetector? = null
     private var audioDeviceRouter: AudioDeviceRouter? = null
 
@@ -56,8 +58,11 @@ class CallAudioManager(private val context: Context, val configChange: (() -> Un
     }
 
     private fun setup() {
+        if (audioManager == null) {
+            return
+        }
         audioDeviceDetector?.stop()
-        audioDeviceDetector = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        audioDeviceDetector = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             API23AudioDeviceDetector(audioManager, this)
         } else {
             API21AudioDeviceDetector(context, audioManager, this)

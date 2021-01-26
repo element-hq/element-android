@@ -16,7 +16,6 @@
 
 package im.vector.app.features.call.webrtc
 
-import im.vector.app.features.call.audio.CallAudioManager
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.webrtc.DataChannel
