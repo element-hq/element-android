@@ -55,7 +55,10 @@ internal class UpdateTrustWorker(context: Context,
     internal data class Params(
             override val sessionId: String,
             override val lastFailureMessage: String? = null,
-            val updatedUserIds: List<String>
+            val updatedUserIds: List<String> = emptyList(),
+            // Passing a long list of userId can break the Work Manager due to data size limitation.
+            // If RoomId is not null, the userIds will be fetched from database and updatedUserIds will be ignored
+            val roomId: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var crossSigningService: DefaultCrossSigningService
@@ -74,7 +77,13 @@ internal class UpdateTrustWorker(context: Context,
     }
 
     override suspend fun doSafeWork(params: Params): Result {
-        var userList = params.updatedUserIds
+        val roomId = params.roomId
+        var userList = if (roomId.isNullOrEmpty()) {
+            params.updatedUserIds
+        } else {
+            // Get current other userIds for this room
+            getOtherUserIds(roomId)
+        }
         // Unfortunately we don't have much info on what did exactly changed (is it the cross signing keys of that user,
         // or a new device?) So we check all again :/
 
@@ -214,6 +223,16 @@ internal class UpdateTrustWorker(context: Context,
         }
 
         return Result.success()
+    }
+
+    private fun getOtherUserIds(roomId: String): List<String> {
+        return Realm.getInstance(sessionRealmConfiguration).use { realm ->
+            RoomMemberHelper(realm, roomId)
+                    .queryActiveRoomMembersEvent()
+                    .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, myUserId)
+                    .findAll()
+                    .map { it.userId }
+        }
     }
 
     private fun updateCrossSigningKeysTrust(realm: Realm, userId: String, verified: Boolean) {
