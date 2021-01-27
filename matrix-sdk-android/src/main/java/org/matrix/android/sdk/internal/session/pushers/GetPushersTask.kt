@@ -41,7 +41,8 @@ internal class DefaultGetPushersTask @Inject constructor(
         monarchy.awaitTransaction { realm ->
             // clear existings?
             realm.where(PusherEntity::class.java)
-                    .findAll().deleteAllFromRealm()
+                    .findAll()
+                    .forEach { it.deleteOnCascade() }
             response.pushers?.forEach { jsonPusher ->
                 jsonPusher.toEntity().also {
                     it.state = PusherState.REGISTERED

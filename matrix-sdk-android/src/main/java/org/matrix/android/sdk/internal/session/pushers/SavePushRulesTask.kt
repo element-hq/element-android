@@ -40,7 +40,7 @@ internal class DefaultSavePushRulesTask @Inject constructor(@SessionDatabase pri
             // clear current push rules
             realm.where(PushRulesEntity::class.java)
                     .findAll()
-                    .deleteAllFromRealm()
+                    .forEach { it.deleteOnCascade() }
 
             // Save only global rules for the moment
             val globalRules = params.pushRules.global

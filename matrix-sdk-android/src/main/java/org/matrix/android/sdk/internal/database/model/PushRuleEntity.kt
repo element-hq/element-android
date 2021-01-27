@@ -39,4 +39,9 @@ internal open class PushRuleEntity(
     val parent: RealmResults<PushRulesEntity>? = null
 
     companion object
+
+    fun deleteOnCascade() {
+        conditions?.forEach { it.deleteFromRealm() }
+        deleteFromRealm()
+    }
 }
