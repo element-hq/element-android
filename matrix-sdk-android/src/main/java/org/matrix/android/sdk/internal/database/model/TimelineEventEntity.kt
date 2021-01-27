@@ -42,7 +42,7 @@ internal open class TimelineEventEntity(var localId: Long = 0,
 
     fun deleteOnCascade(canDeleteRoot: Boolean) {
         assertIsManaged()
-        if(canDeleteRoot) {
+        if (canDeleteRoot) {
             root?.deleteFromRealm()
         }
         annotations?.deleteOnCascade()

@@ -22,6 +22,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import java.io.File
 import java.util.UUID
+import javax.inject.Inject
 
 @JsonClass(generateAdapter = true)
 internal data class UpdateTrustWorkerData(
@@ -29,7 +30,7 @@ internal data class UpdateTrustWorkerData(
         val userIds: List<String>
 )
 
-internal class UpdateTrustWorkerDataRepository(
+internal class UpdateTrustWorkerDataRepository @Inject constructor(
         @SessionFilesDirectory parentDir: File
 ) {
     private val workingDirectory = File(parentDir, "tw")
