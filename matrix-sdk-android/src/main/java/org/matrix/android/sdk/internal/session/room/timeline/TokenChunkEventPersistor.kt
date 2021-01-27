@@ -22,10 +22,9 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.internal.database.helper.addOrUpdate
+import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addStateEvent
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
-import org.matrix.android.sdk.internal.database.helper.deleteOnCascade
 import org.matrix.android.sdk.internal.database.helper.merge
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -172,7 +171,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             val currentLastForwardChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)
             if (currentChunk != currentLastForwardChunk) {
                 currentChunk.isLastForward = true
-                currentLastForwardChunk?.deleteOnCascade()
+                currentLastForwardChunk?.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = false)
                 RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
                     latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
                 }
@@ -235,7 +234,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             }
         }
         chunksToDelete.forEach {
-            it.deleteOnCascade()
+            it.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = false)
         }
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
         val shouldUpdateSummary = roomSummaryEntity.latestPreviewableEvent == null
@@ -244,7 +243,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
         }
         if (currentChunk.isValid) {
-            RoomEntity.where(realm, roomId).findFirst()?.addOrUpdate(currentChunk)
+            RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)
         }
     }
 }

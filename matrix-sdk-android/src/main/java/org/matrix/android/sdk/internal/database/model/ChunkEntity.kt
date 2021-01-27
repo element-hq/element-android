@@ -21,7 +21,6 @@ import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
-import org.matrix.android.sdk.internal.database.helper.deleteOnCascade
 import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
 internal open class ChunkEntity(@Index var prevToken: String? = null,
@@ -45,10 +44,12 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
 
     companion object
 
-    fun deleteOnCascade() {
+    fun deleteOnCascade(deleteStateEvents: Boolean, canDeleteRoot: Boolean) {
         assertIsManaged()
-        stateEvents.deleteAllFromRealm()
-        timelineEvents.forEach { it.deleteOnCascade() }
+        if (deleteStateEvents) {
+            stateEvents.deleteAllFromRealm()
+        }
+        timelineEvents.forEach { it.deleteOnCascade(canDeleteRoot) }
         deleteFromRealm()
     }
 }

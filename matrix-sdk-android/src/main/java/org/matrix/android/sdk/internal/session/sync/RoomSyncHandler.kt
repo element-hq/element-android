@@ -32,7 +32,6 @@ import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
-import org.matrix.android.sdk.internal.database.helper.deleteOnCascade
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -263,7 +262,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val leftMember = RoomMemberSummaryEntity.where(realm, roomId, userId).findFirst()
         val membership = leftMember?.membership ?: Membership.LEAVE
         roomEntity.membership = membership
-        roomEntity.chunks.forEach { it.deleteOnCascade() }
+        roomEntity.chunks.forEach { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
         roomEntity.chunks.clear()
         roomTypingUsersHandler.handle(realm, roomId, null)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
@@ -341,7 +340,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                         }
                     }
                     // Finally delete the local echo
-                    sendingEventEntity.deleteOnCascade()
+                    sendingEventEntity.deleteOnCascade(true)
                 } else {
                     Timber.v("Can't find corresponding local echo for tx:$it")
                 }
