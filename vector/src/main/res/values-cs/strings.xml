@@ -2239,7 +2239,7 @@
     <string name="user_code_scan">Skenovat QR kód</string>
     <string name="not_a_valid_qr_code">To není platný matrixový QR kód</string>
     <string name="invite_friends_rich_title">🔐️ Přidej se ke mně v elementu</string>
-    <string name="invite_friends_text">Ahoj, mluv se mnou v Elementu: %s</string>
+    <string name="invite_friends_text">Ahoj, pojď si povídat v Elementu: %s</string>
     <string name="invite_friends">Pozvat přátele</string>
     <string name="add_people">Přidat lidi</string>
     <string name="topic_prefix">"Téma: "</string>
