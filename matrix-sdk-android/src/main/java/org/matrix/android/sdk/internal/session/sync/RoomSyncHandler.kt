@@ -30,7 +30,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
-import org.matrix.android.sdk.internal.database.helper.addOrUpdate
+import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.helper.deleteOnCascade
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -175,7 +175,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     syncLocalTimestampMillis,
                     isInitialSync
             )
-            roomEntity.addOrUpdate(chunkEntity)
+            roomEntity.addIfNecessary(chunkEntity)
         }
         val hasRoomMember = roomSync.state?.events?.firstOrNull {
             it.type == EventType.STATE_ROOM_MEMBER

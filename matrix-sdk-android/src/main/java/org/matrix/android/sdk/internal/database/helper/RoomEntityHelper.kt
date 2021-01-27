@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.database.helper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 
-internal fun RoomEntity.addOrUpdate(chunkEntity: ChunkEntity) {
+internal fun RoomEntity.addIfNecessary(chunkEntity: ChunkEntity) {
     if (!chunks.contains(chunkEntity)) {
         chunks.add(chunkEntity)
     }
