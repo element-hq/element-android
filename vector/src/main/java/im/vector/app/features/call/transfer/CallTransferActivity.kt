@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -31,7 +30,6 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityCallTransferBinding
 import im.vector.app.features.contactsbook.ContactsBookViewModel
 import im.vector.app.features.contactsbook.ContactsBookViewState
-import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListViewModel
 import im.vector.app.features.userdirectory.UserListViewState
 import kotlinx.parcelize.Parcelize

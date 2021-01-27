@@ -103,5 +103,4 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
             }
         }
     }
-
 }

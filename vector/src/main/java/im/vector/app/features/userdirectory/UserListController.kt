@@ -64,7 +64,7 @@ class UserListController @Inject constructor(private val session: Session,
                     })
                 }
             }
-            if(currentState.showContactBookAction) {
+            if (currentState.showContactBookAction) {
                 actionItem {
                     id(R.drawable.ic_baseline_perm_contact_calendar_24)
                     title(stringProvider.getString(R.string.contacts_book_title))

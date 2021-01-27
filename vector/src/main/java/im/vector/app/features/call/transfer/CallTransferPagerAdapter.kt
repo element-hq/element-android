@@ -29,7 +29,7 @@ import im.vector.app.features.userdirectory.UserListFragmentArgs
 
 class CallTransferPagerAdapter(
         private val fragmentActivity: FragmentActivity
-) : FragmentStateAdapter(fragmentActivity), Restorable{
+) : FragmentStateAdapter(fragmentActivity), Restorable {
 
     val userListFragment: UserListFragment?
         get() = findFragmentAtPosition(0) as? UserListFragment
@@ -76,7 +76,7 @@ class CallTransferPagerAdapter(
         dialPadFragment?.applyCallback()
     }
 
-    private fun DialPadFragment.applyCallback(): DialPadFragment{
+    private fun DialPadFragment.applyCallback(): DialPadFragment {
         callback = object : DialPadFragment.Callback {
             override fun onOkClicked(formatted: String?, raw: String?) {
                 if (raw.isNullOrEmpty()) return
@@ -85,6 +85,4 @@ class CallTransferPagerAdapter(
         }
         return this
     }
-
-
 }

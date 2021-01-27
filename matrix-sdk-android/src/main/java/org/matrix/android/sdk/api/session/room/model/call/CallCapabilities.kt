@@ -29,4 +29,4 @@ data class CallCapabilities(
         @Json(name = "m.call.transferee") val transferee: Boolean? = null
 )
 
-fun CallCapabilities?.supportCallTransfer() = true//this?.transferee.orFalse()
+fun CallCapabilities?.supportCallTransfer() = this?.transferee.orFalse()

@@ -48,7 +48,6 @@ class CallAudioManager(
 
     private var savedIsSpeakerPhoneOn = false
     private var savedIsMicrophoneMute = false
-    private var savedAudioMode = AudioManager.MODE_INVALID
 
     private var connectedBlueToothHeadset: BluetoothProfile? = null
     private var wantsBluetoothConnection = false
@@ -100,8 +99,6 @@ class CallAudioManager(
         val audioManager = audioManager ?: return
         savedIsSpeakerPhoneOn = audioManager.isSpeakerphoneOn
         savedIsMicrophoneMute = audioManager.isMicrophoneMute
-        savedAudioMode = audioManager.mode
-
         // Request audio playout focus (without ducking) and install listener for changes in focus.
 
         // Remove the deprecation forces us to use 2 different method depending on API level
@@ -171,8 +168,6 @@ class CallAudioManager(
             // Restore previously stored audio states.
             setSpeakerphoneOn(savedIsSpeakerPhoneOn)
             setMicrophoneMute(savedIsMicrophoneMute)
-            audioManager?.mode = savedAudioMode
-
             connectedBlueToothHeadset?.let {
                 if (audioManager != null && isBluetoothHeadsetConnected(audioManager!!)) {
                     audioManager?.stopBluetoothSco()
