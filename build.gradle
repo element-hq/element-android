@@ -25,6 +25,11 @@ buildscript {
 
 allprojects {
     repositories {
+        // For dendrite/gobind
+        flatDir {
+            dirs 'libs/'
+        }
+
         // For olm library. This has to be declared first, to ensure that Olm library is not downloaded from another repo
         maven {
             url 'https://jitpack.io'

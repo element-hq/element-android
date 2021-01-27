@@ -16,11 +16,20 @@
 
 package im.vector.app.features.login
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import im.vector.app.DendriteService
 import im.vector.app.databinding.FragmentLoginSplashBinding
+import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.internal.auth.DefaultSessionCreator_Factory
 
 import javax.inject.Inject
 
@@ -44,7 +53,8 @@ class LoginSplashFragment @Inject constructor() : AbstractLoginFragment<Fragment
     }
 
     private fun getStarted() {
-        loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OpenServerSelection))
+        //loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OpenServerSelection))
+        loginViewModel.handle(LoginAction.LoginWithDendrite("http://localhost:65432"))
     }
 
     override fun resetViewModel() {

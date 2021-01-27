@@ -18,12 +18,15 @@ package im.vector.app
 
 import android.app.Application
 import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.IBinder
 import android.os.StrictMode
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
@@ -116,6 +119,11 @@ class VectorApplication :
         vectorComponent.inject(this)
         vectorUncaughtExceptionHandler.activate(this)
         rxConfig.setupRxPlugin()
+
+
+        Intent(this, DendriteService::class.java).also { intent ->
+            startService(intent)
+        }
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())

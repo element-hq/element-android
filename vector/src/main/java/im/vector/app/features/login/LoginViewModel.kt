@@ -16,8 +16,12 @@
 
 package im.vector.app.features.login
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.net.Uri
+import android.os.IBinder
 import androidx.fragment.app.FragmentActivity
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
@@ -28,6 +32,7 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import im.vector.app.DendriteService
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
@@ -39,6 +44,7 @@ import im.vector.app.features.signout.soft.SoftLogoutActivity
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
+import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
@@ -126,6 +132,7 @@ class LoginViewModel @AssistedInject constructor(
             is LoginAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
             is LoginAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
             is LoginAction.LoginWithToken             -> handleLoginWithToken(action)
+            is LoginAction.LoginWithDendrite          -> handleLoginWithDendrite(action)
             is LoginAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is LoginAction.ResetPassword              -> handleResetPassword(action)
             is LoginAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
@@ -732,6 +739,40 @@ class LoginViewModel @AssistedInject constructor(
                     copy(asyncLoginAction = Fail(failure))
                 }
             })
+        }
+    }
+
+    private fun handleLoginWithDendrite(action: LoginAction.LoginWithDendrite) = withState { state ->
+        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(action.homeServerUrl)
+
+        val dendriteConnection = object : ServiceConnection {
+            override fun onServiceConnected(className: ComponentName, service: IBinder) {
+                val binder = service as DendriteService.DendriteLocalBinder
+                val dendrite = binder.getService()
+                val accessToken: String
+                try {
+                    accessToken = dendrite.registerUser("android", "dendrite!")
+                } catch (e: Exception) {
+                    return
+                }
+
+                val credentials: Credentials = Credentials("android", accessToken, "", action.homeServerUrl, state.deviceId)
+                authenticationService.createSessionFromSso(homeServerConnectionConfigFinal!!, credentials, object : MatrixCallback<Session> {
+                    override fun onSuccess(data: Session) {
+                        onSessionCreated(data)
+                    }
+
+                    override fun onFailure(failure: Throwable) = setState {
+                        copy(asyncLoginAction = Fail(failure))
+                    }
+                })
+            }
+            override fun onServiceDisconnected(className: ComponentName) {
+            }
+        }
+
+        Intent(applicationContext, DendriteService::class.java).also { intent ->
+            applicationContext.bindService(intent, dendriteConnection, Context.BIND_AUTO_CREATE)
         }
     }
 

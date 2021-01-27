@@ -283,7 +283,6 @@ android {
 }
 
 dependencies {
-
     def epoxy_version = '4.1.0'
     def fragment_version = '1.3.0-beta01'
     def arrow_version = "0.8.2"
@@ -467,6 +466,8 @@ dependencies {
     androidTestImplementation('com.schibsted.spain:barista:3.7.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
+
+    api(name: 'gobind', ext: 'aar')
 }
 
 if (getGradle().getStartParameter().getTaskRequests().toString().contains("Gplay")) {
