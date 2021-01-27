@@ -46,4 +46,9 @@ internal open class DeviceInfoEntity(
     val users: RealmResults<UserEntity>? = null
 
     companion object
+
+    fun deleteOnCascade() {
+        trustLevelEntity?.deleteFromRealm()
+        deleteFromRealm()
+    }
 }

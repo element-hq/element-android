@@ -293,7 +293,8 @@ internal class RealmCryptoStore @Inject constructor(
                                 realm.insertOrUpdate(entity)
                             }
                             // Ensure all other devices are deleted
-                            u.devices.deleteAllFromRealm()
+                            u.devices.forEach { it.deleteOnCascade() }
+                            u.devices.clear()
                             u.devices.addAll(new)
                         }
             }
@@ -309,7 +310,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .let { userEntity ->
                         if (masterKey == null || selfSigningKey == null) {
                             // The user has disabled cross signing?
-                            userEntity.crossSigningInfoEntity?.deleteFromRealm()
+                            userEntity.crossSigningInfoEntity?.deleteOnCascade()
                             userEntity.crossSigningInfoEntity = null
                         } else {
                             var shouldResetMyDevicesLocalTrust = false
@@ -1633,7 +1634,8 @@ internal class RealmCryptoStore @Inject constructor(
         } else {
             // Just override existing, caller should check and untrust id needed
             val existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
-            existing.crossSigningKeys.deleteAllFromRealm()
+            existing.crossSigningKeys.forEach { it.deleteOnCascade() }
+            existing.crossSigningKeys.clear()
             existing.crossSigningKeys.addAll(
                     info.crossSigningKeys.map {
                         crossSigningKeysMapper.map(it)
