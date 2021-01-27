@@ -108,7 +108,7 @@ android {
     ndkVersion "21.3.6528147"
 
     defaultConfig {
-        applicationId "im.vector.app"
+        applicationId "im.vector.app.p2p"
         // Set to API 21: see #405
         minSdkVersion 21
         targetSdkVersion 29
