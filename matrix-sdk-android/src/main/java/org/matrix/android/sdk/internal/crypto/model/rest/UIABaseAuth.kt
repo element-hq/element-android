@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.crosssigning
+package org.matrix.android.sdk.internal.crypto.model.rest
 
-import im.vector.app.core.platform.VectorViewModelAction
+interface UIABaseAuth {
+    /**
+     * This is a session identifier that the client must pass back to the homeserver,
+     * if one is provided, in subsequent attempts to authenticate in the same API call.
+     */
+    val session: String?
 
-sealed class CrossSigningSettingsAction : VectorViewModelAction {
-    object InitializeCrossSigning: CrossSigningSettingsAction()
-    object SsoAuthDone: CrossSigningSettingsAction()
-    data class PasswordAuthDone(val password: String): CrossSigningSettingsAction()
-    object ReAuthCancelled: CrossSigningSettingsAction()
+    fun hasAuthInfo(): Boolean
+
+    fun copyWithSession(session: String): UIABaseAuth
+
+    fun asMap() : Map<String, *>
 }

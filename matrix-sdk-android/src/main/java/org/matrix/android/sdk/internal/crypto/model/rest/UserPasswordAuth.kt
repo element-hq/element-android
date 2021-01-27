@@ -27,7 +27,7 @@ data class UserPasswordAuth(
 
         // device device session id
         @Json(name = "session")
-        val session: String? = null,
+        override val session: String? = null,
 
         // registration information
         @Json(name = "type")
@@ -38,4 +38,16 @@ data class UserPasswordAuth(
 
         @Json(name = "password")
         val password: String? = null
-)
+) : UIABaseAuth {
+
+    override fun hasAuthInfo() = password != null
+
+    override fun copyWithSession(session: String) = this.copy(session = session)
+
+    override fun asMap(): Map<String, *> = mapOf(
+            "session" to session,
+            "user" to user,
+            "password" to password,
+            "type" to type
+    )
+}

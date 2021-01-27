@@ -19,30 +19,30 @@ package org.matrix.android.sdk.internal.crypto.crosssigning
 import androidx.lifecycle.LiveData
 import androidx.work.BackoffPolicy
 import androidx.work.ExistingWorkPolicy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSignatureQueryBuilder
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.crypto.tasks.InitializeCrossSigningTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSignaturesTask
+import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.TaskThread
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.di.SessionId
-import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
@@ -147,11 +147,11 @@ internal class DefaultCrossSigningService @Inject constructor(
      *   - Sign the keys and upload them
      *   - Sign the current device with SSK and sign MSK with device key (migration) and upload signatures
      */
-    override fun initializeCrossSigning(authParams: UserPasswordAuth?, callback: MatrixCallback<Unit>) {
+    override fun initializeCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?, callback: MatrixCallback<Unit>) {
         Timber.d("## CrossSigning  initializeCrossSigning")
 
         val params = InitializeCrossSigningTask.Params(
-                authParams = authParams
+                interactiveAuthInterceptor = uiaInterceptor
         )
         initializeCrossSigningTask.configureWith(params) {
             this.callbackThread = TaskThread.CRYPTO

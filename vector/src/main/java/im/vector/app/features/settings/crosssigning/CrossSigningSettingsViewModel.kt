@@ -15,25 +15,45 @@
  */
 package im.vector.app.features.settings.crosssigning
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.R
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.login.ReAuthHelper
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.rest.UIABaseAuth
+import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
+import timber.log.Timber
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
-class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted private val initialState: CrossSigningSettingsViewState,
-                                                                private val session: Session)
-    : VectorViewModel<CrossSigningSettingsViewState, CrossSigningSettingsAction, CrossSigningSettingsViewEvents>(initialState) {
+class CrossSigningSettingsViewModel @AssistedInject constructor(
+        @Assisted private val initialState: CrossSigningSettingsViewState,
+        private val session: Session,
+        private val reAuthHelper: ReAuthHelper,
+        private val stringProvider: StringProvider
+) : VectorViewModel<CrossSigningSettingsViewState, CrossSigningSettingsAction, CrossSigningSettingsViewEvents>(initialState) {
 
     init {
         Observable.combineLatest<List<DeviceInfo>, Optional<MXCrossSigningInfo>, Pair<List<DeviceInfo>, Optional<MXCrossSigningInfo>>>(
@@ -58,15 +78,82 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(@Assisted privat
                 }
     }
 
+    var uiaContinuation: Continuation<UIABaseAuth>? = null
+    var pendingAuth: UIABaseAuth? = null
+
     @AssistedFactory
     interface Factory {
         fun create(initialState: CrossSigningSettingsViewState): CrossSigningSettingsViewModel
     }
 
-    override fun handle(action: CrossSigningSettingsAction) {
-        // No op for the moment
-        // when (action) {
-        // }.exhaustive
+    override fun handle(action: CrossSigningSettingsAction) = withState { state ->
+        when (action) {
+            CrossSigningSettingsAction.InitializeCrossSigning -> {
+                _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
+                viewModelScope.launch(Dispatchers.IO) {
+                    try {
+                        awaitCallback<Unit> {
+                            session.cryptoService().crossSigningService().initializeCrossSigning(
+                                    object : UserInteractiveAuthInterceptor {
+                                        override fun performStage(flow: RegistrationFlowResponse, promise: Continuation<UIABaseAuth>) {
+                                            Timber.d("## UIA : initializeCrossSigning UIA")
+                                            if (flow.flows?.any { it.type == LoginFlowTypes.PASSWORD } == true && reAuthHelper.data != null) {
+                                                UserPasswordAuth(
+                                                        session = null,
+                                                        user = session.myUserId,
+                                                        password = reAuthHelper.data
+                                                ).let { promise.resume(it) }
+                                            } else {
+                                                Timber.d("## UIA : initializeCrossSigning UIA > start reauth activity")
+                                                _viewEvents.post(CrossSigningSettingsViewEvents.RequestReAuth(flow))
+                                                pendingAuth = DefaultBaseAuth(session = flow.session)
+                                                uiaContinuation = promise
+                                            }
+                                        }
+                                    }, it)
+                        }
+                    } catch (failure: Throwable) {
+                        handleInitializeXSigningError(failure)
+                    } finally {
+                        _viewEvents.post(CrossSigningSettingsViewEvents.HideModalWaitingView)
+                    }
+                }
+                Unit
+            }
+            is CrossSigningSettingsAction.SsoAuthDone -> {
+                // we should use token based auth
+                // _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
+                // will release the interactive auth interceptor
+                Timber.d("## UIA - FallBack success $pendingAuth , continuation: $uiaContinuation")
+                if (pendingAuth != null) {
+                    uiaContinuation?.resume(pendingAuth!!)
+                } else {
+                    uiaContinuation?.resumeWith(Result.failure((IllegalArgumentException())))
+                }
+                Unit
+            }
+            is CrossSigningSettingsAction.PasswordAuthDone -> {
+                uiaContinuation?.resume(
+                        UserPasswordAuth(
+                                session = pendingAuth?.session,
+                                password = action.password,
+                                user = session.myUserId
+                        )
+                )
+            }
+            CrossSigningSettingsAction.ReAuthCancelled -> {
+                Timber.d("## UIA - Reauth cancelled")
+                _viewEvents.post(CrossSigningSettingsViewEvents.HideModalWaitingView)
+                uiaContinuation?.resumeWith(Result.failure((Exception())))
+                uiaContinuation = null
+                pendingAuth = null
+            }
+        }.exhaustive
+    }
+
+    private fun handleInitializeXSigningError(failure: Throwable) {
+        Timber.e(failure, "## CrossSigning - Failed to initialize cross signing")
+        _viewEvents.post(CrossSigningSettingsViewEvents.Failure(Exception(stringProvider.getString(R.string.failed_to_initialize_cross_signing))))
     }
 
     companion object : MvRxViewModelFactory<CrossSigningSettingsViewModel, CrossSigningSettingsViewState> {

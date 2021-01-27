@@ -44,12 +44,12 @@ internal class DefaultDeleteDeviceWithUserPasswordTask @Inject constructor(
         return executeRequest(globalErrorReceiver) {
             apiCall = cryptoApi.deleteDevice(params.deviceId,
                     DeleteDeviceParams(
-                            userPasswordAuth = UserPasswordAuth(
+                            auth = UserPasswordAuth(
                                     type = LoginFlowTypes.PASSWORD,
                                     session = params.authSession,
                                     user = userId,
                                     password = params.password
-                            )
+                            ).asMap()
                     )
             )
         }

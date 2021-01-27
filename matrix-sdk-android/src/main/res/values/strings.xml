@@ -305,4 +305,5 @@
 
     <string name="key_verification_request_fallback_message">%s is requesting to verify your key, but your client does not support in-chat key verification. You will need to use legacy key verification to verify keys.</string>
 
+    <string name="failed_to_initialize_cross_signing">Failed to set up Cross Signing</string>
 </resources>

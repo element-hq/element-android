@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.matrix.android.sdk.internal.crypto.model.rest
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+data class DefaultBaseAuth(
+        /**
+         * This is a session identifier that the client must pass back to the homeserver,
+         * if one is provided, in subsequent attempts to authenticate in the same API call.
+         */
+        override val session: String? = null
 
-/**
- * This class provides the parameter to delete a device
- */
-@JsonClass(generateAdapter = true)
-internal data class DeleteDeviceParams(
-        @Json(name = "auth")
-        val auth: Map<String, *>? = null
-)
+) : UIABaseAuth {
+    override fun hasAuthInfo() = true
+
+    override fun copyWithSession(session: String) = this.copy(session = session)
+
+    override fun asMap(): Map<String, *> = mapOf("session" to session)
+}

@@ -20,6 +20,7 @@ import im.vector.app.R
 import im.vector.app.core.platform.ViewModelTask
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
@@ -33,16 +34,21 @@ import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.session.securestorage.SsssKeySpec
+import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.internal.crypto.model.rest.UIABaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
+import java.lang.UnsupportedOperationException
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 sealed class BootstrapResult {
 
@@ -101,7 +107,21 @@ class BootstrapCrossSigningTask @Inject constructor(
 
             try {
                 awaitCallback<Unit> {
-                    crossSigningService.initializeCrossSigning(params.userPasswordAuth, it)
+                    crossSigningService.initializeCrossSigning(object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, promise: Continuation<UIABaseAuth>) {
+                            if (flowResponse.flows?.any { it.type == LoginFlowTypes.PASSWORD } == true) {
+                                val updatedAuth = params.userPasswordAuth?.copy(session = flowResponse.session)
+                                if (updatedAuth == null) {
+                                    promise.resumeWith(Result.failure(UnsupportedOperationException()))
+                                } else {
+                                    promise.resume(updatedAuth)
+                                }
+                            } else {
+                                promise.resumeWith(Result.failure(UnsupportedOperationException()))
+                            }
+                        }
+                    },
+                            it)
                 }
                 if (params.setupMode == SetupMode.CROSS_SIGNING_ONLY) {
                     return BootstrapResult.SuccessCrossSigningOnly

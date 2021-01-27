@@ -242,6 +242,27 @@
         <activity android:name=".features.home.room.detail.search.SearchActivity" />
         <activity android:name=".features.usercode.UserCodeActivity" />
 
+        <!-- Single instance is very important for the custom scheme callback-->
+        <activity android:name=".features.auth.ReAuthActivity"
+            android:launchMode="singleInstance"
+            android:exported="false">
+
+            <!-- XXX: UIA SSO has only web fallback, i.e no url redirect, so for now we comment this out
+            hopefully, we would use it when finalyy available
+            -->
+            <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+
+<!--                <data-->
+<!--                    android:host="reauth"-->
+<!--                    android:scheme="element" />-->
+<!--            </intent-filter>-->
+        </activity>
+
         <!-- Services -->
 
         <service

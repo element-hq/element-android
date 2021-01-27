@@ -273,6 +273,19 @@ internal class DefaultSession @Inject constructor(
         return "$myUserId - ${sessionParams.deviceId}"
     }
 
+    override fun getUIASsoFallbackUrl(authenticationSessionId: String): String {
+        val hsBas = sessionParams.homeServerConnectionConfig
+                .homeServerUri
+                .toString()
+                .trim { it == '/' }
+        return buildString {
+            append(hsBas)
+            append("/_matrix/client/r0/auth/m.login.sso/fallback/web")
+            append("?session=")
+            append(authenticationSessionId)
+        }
+    }
+
     override fun logDbUsageInfo() {
         RealmDebugTools(realmConfiguration).logInfo("Session")
     }

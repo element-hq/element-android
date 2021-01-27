@@ -21,8 +21,8 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -33,17 +33,23 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.internal.crypto.model.rest.UIABaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 class HomeActivityViewModel @AssistedInject constructor(
         @Assisted initialState: HomeActivityViewState,
@@ -122,7 +128,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                             // Schedule a check of the bootstrap when the init sync will be finished
                             checkBootstrap = true
                         }
-                        is InitialSyncProgressService.Status.Idle        -> {
+                        is InitialSyncProgressService.Status.Idle -> {
                             if (checkBootstrap) {
                                 checkBootstrap = false
                                 maybeBootstrapCrossSigning()
@@ -152,11 +158,19 @@ class HomeActivityViewModel @AssistedInject constructor(
             // We do not use the viewModel context because we do not want to cancel this action
             Timber.d("Initialize cross signing")
             session.cryptoService().crossSigningService().initializeCrossSigning(
-                    authParams = UserPasswordAuth(
-                            session = null,
-                            user = session.myUserId,
-                            password = password
-                    ),
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flow: RegistrationFlowResponse, promise: Continuation<UIABaseAuth>) {
+                            if (flow.flows?.any { it.type == LoginFlowTypes.PASSWORD } == true) {
+                                promise.resume(
+                                        UserPasswordAuth(
+                                                session = flow.session,
+                                                user = session.myUserId,
+                                                password = password
+                                        )
+                                )
+                            } else promise.resumeWith(Result.failure(UnsupportedOperationException()))
+                        }
+                    },
                     callback = NoOpMatrixCallback()
             )
         }
@@ -236,11 +250,17 @@ class HomeActivityViewModel @AssistedInject constructor(
                         // We do not use the viewModel context because we do not want to cancel this action
                         Timber.d("Initialize cross signing")
                         session.cryptoService().crossSigningService().initializeCrossSigning(
-                                authParams = UserPasswordAuth(
-                                        session = null,
-                                        user = session.myUserId,
-                                        password = password
-                                ),
+                                object : UserInteractiveAuthInterceptor {
+                                    override fun performStage(flow: RegistrationFlowResponse, promise: Continuation<UIABaseAuth>) {
+                                        if (flow.flows?.any { it.type == LoginFlowTypes.PASSWORD } == true) {
+                                            UserPasswordAuth(
+                                                    session = flow.session,
+                                                    user = session.myUserId,
+                                                    password = password
+                                            )
+                                        } else null
+                                    }
+                                },
                                 callback = NoOpMatrixCallback()
                         )
                     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings.crosssigning
+package im.vector.app.features.auth
 
-import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.platform.VectorViewEvents
 
-sealed class CrossSigningSettingsAction : VectorViewModelAction {
-    object InitializeCrossSigning: CrossSigningSettingsAction()
-    object SsoAuthDone: CrossSigningSettingsAction()
-    data class PasswordAuthDone(val password: String): CrossSigningSettingsAction()
-    object ReAuthCancelled: CrossSigningSettingsAction()
+sealed class ReAuthEvents : VectorViewEvents {
+    data class OpenSsoURl(val url: String) : ReAuthEvents()
+    object Dismiss : ReAuthEvents()
+    data class PasswordFinishSuccess(val password: String) : ReAuthEvents()
 }

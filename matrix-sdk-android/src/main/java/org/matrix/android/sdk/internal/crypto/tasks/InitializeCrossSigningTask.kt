@@ -17,24 +17,28 @@
 package org.matrix.android.sdk.internal.crypto.tasks
 
 import dagger.Lazy
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.MyDeviceInfoHolder
 import org.matrix.android.sdk.internal.crypto.crosssigning.canonicalSignable
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
 import org.matrix.android.sdk.internal.crypto.model.KeyUsage
+import org.matrix.android.sdk.internal.crypto.model.rest.UIABaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSignatureQueryBuilder
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.olm.OlmPkSigning
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.suspendCoroutine
 
 internal interface InitializeCrossSigningTask : Task<InitializeCrossSigningTask.Params, InitializeCrossSigningTask.Result> {
     data class Params(
-            val authParams: UserPasswordAuth?
+            val interactiveAuthInterceptor: UserInteractiveAuthInterceptor?
     )
 
     data class Result(
@@ -117,10 +121,18 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
                             .key(sskPublicKey)
                             .signature(userId, masterPublicKey, signedSSK)
                             .build(),
-                    userPasswordAuth = params.authParams
+                    userAuthParam = null
+//                    userAuthParam = params.authParams
             )
 
-            uploadSigningKeysTask.execute(uploadSigningKeysParams)
+            try {
+                uploadSigningKeysTask.execute(uploadSigningKeysParams)
+            } catch (failure: Throwable) {
+                if (params.interactiveAuthInterceptor == null || !handleUIA(failure, params, uploadSigningKeysParams)) {
+                    Timber.d("## UIA: propagate failure")
+                    throw  failure
+                }
+            }
 
             //  Sign the current device with SSK
             val uploadSignatureQueryBuilder = UploadSignatureQueryBuilder()
@@ -167,6 +179,44 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
             masterPkOlm?.releaseSigning()
             userSigningPkOlm?.releaseSigning()
             selfSigningPkOlm?.releaseSigning()
+        }
+    }
+
+    private suspend fun handleUIA(failure: Throwable,
+                                  params: InitializeCrossSigningTask.Params,
+                                  uploadSigningKeysParams: UploadSigningKeysTask.Params): Boolean {
+        Timber.d("## UIA: check error initialize xsigning ${failure.message}")
+        if (failure is Failure.OtherServerError && failure.httpCode == 401) {
+            Timber.d("## UIA: error can be passed to interceptor")
+            // give a chance to the reauth helper?
+            val flowResponse = failure.toRegistrationFlowResponse()
+                    ?: return false.also {
+                        Timber.d("## UIA: failed to parse flow response")
+                    }
+
+            Timber.d("## UIA: type = ${flowResponse.flows}")
+            Timber.d("## UIA: has interceptor = ${params.interactiveAuthInterceptor != null}")
+
+            Timber.d("## UIA: delegate to interceptor...")
+            val authUpdate = try {
+                suspendCoroutine<UIABaseAuth> { continuation ->
+                    params.interactiveAuthInterceptor!!.performStage(flowResponse, continuation)
+                }
+            } catch (failure: Throwable) {
+                Timber.w(failure, "## UIA: failed to participate")
+                return false
+            }
+
+            Timber.d("## UIA: initialize xsigning updated auth $authUpdate")
+            try {
+                uploadSigningKeysTask.execute(uploadSigningKeysParams.copy(userAuthParam = authUpdate))
+                return true
+            } catch (failure: Throwable) {
+                return handleUIA(failure, params, uploadSigningKeysParams)
+            }
+        } else {
+            Timber.d("## UIA: not a UIA error")
+            return false
         }
     }
 }
