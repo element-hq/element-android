@@ -36,7 +36,7 @@ internal open class PushRulesEntity(
     companion object
 
     fun deleteOnCascade() {
-        pushRules.forEach { it.deleteOnCascade() }
+        pushRules.toList().forEach { it.deleteOnCascade() }
         deleteFromRealm()
     }
 }

@@ -30,7 +30,7 @@ internal open class CrossSigningInfoEntity(
     companion object
 
     fun deleteOnCascade() {
-        crossSigningKeys.forEach { it.deleteOnCascade() }
+        crossSigningKeys.toList().forEach { it.deleteOnCascade() }
         deleteFromRealm()
     }
 

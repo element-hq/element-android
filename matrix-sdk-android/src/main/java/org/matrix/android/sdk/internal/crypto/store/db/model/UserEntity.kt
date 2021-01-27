@@ -30,7 +30,7 @@ internal open class UserEntity(
     companion object
 
     fun deleteOnCascade() {
-        devices.forEach { it.deleteOnCascade() }
+        devices.toList().forEach { it.deleteOnCascade() }
         crossSigningInfoEntity?.deleteOnCascade()
         deleteFromRealm()
     }

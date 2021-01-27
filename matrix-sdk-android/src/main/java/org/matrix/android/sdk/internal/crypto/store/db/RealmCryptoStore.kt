@@ -293,7 +293,7 @@ internal class RealmCryptoStore @Inject constructor(
                                 realm.insertOrUpdate(entity)
                             }
                             // Ensure all other devices are deleted
-                            u.devices.forEach { it.deleteOnCascade() }
+                            u.devices.toList().forEach { it.deleteOnCascade() }
                             u.devices.clear()
                             u.devices.addAll(new)
                         }
@@ -1634,7 +1634,7 @@ internal class RealmCryptoStore @Inject constructor(
         } else {
             // Just override existing, caller should check and untrust id needed
             val existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
-            existing.crossSigningKeys.forEach { it.deleteOnCascade() }
+            existing.crossSigningKeys.toList().forEach { it.deleteOnCascade() }
             existing.crossSigningKeys.clear()
             existing.crossSigningKeys.addAll(
                     info.crossSigningKeys.map {
