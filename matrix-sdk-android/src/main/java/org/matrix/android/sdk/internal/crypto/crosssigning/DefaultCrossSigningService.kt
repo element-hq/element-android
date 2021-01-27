@@ -61,7 +61,10 @@ internal class DefaultCrossSigningService @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val workManagerProvider: WorkManagerProvider) : CrossSigningService, DeviceListManager.UserDevicesUpdateListener {
+        private val workManagerProvider: WorkManagerProvider,
+        private val updateTrustWorkerDataRepository: UpdateTrustWorkerDataRepository
+) : CrossSigningService,
+        DeviceListManager.UserDevicesUpdateListener {
 
     private var olmUtility: OlmUtility? = null
 
@@ -746,22 +749,12 @@ internal class DefaultCrossSigningService @Inject constructor(
         }
     }
 
-    fun onUsersDeviceUpdateForRoom(roomId: String) {
-        Timber.d("## CrossSigning - onUsersDeviceUpdateForRoom for $roomId")
-        val workerParams = UpdateTrustWorker.Params(sessionId = sessionId, roomId = roomId)
-        runUpdateTrustWorker(workerParams)
-    }
-
-    /**
-     * Note: the list of userIds should have a limited size. Else consider using onUsersDeviceUpdateForRoom
-     */
     override fun onUsersDeviceUpdate(userIds: List<String>) {
-        Timber.d("## CrossSigning - onUsersDeviceUpdate for $userIds")
-        val workerParams = UpdateTrustWorker.Params(sessionId = sessionId, updatedUserIds = userIds)
-        runUpdateTrustWorker(workerParams)
-    }
-
-    private fun runUpdateTrustWorker(workerParams: UpdateTrustWorker.Params) {
+        Timber.d("## CrossSigning - onUsersDeviceUpdate for ${userIds.size} users: $userIds")
+        val workerParams = UpdateTrustWorker.Params(
+                sessionId = sessionId,
+                filename = updateTrustWorkerDataRepository.createParam(userIds)
+        )
         val workerData = WorkerParamsFactory.toData(workerParams)
 
         val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<UpdateTrustWorker>()

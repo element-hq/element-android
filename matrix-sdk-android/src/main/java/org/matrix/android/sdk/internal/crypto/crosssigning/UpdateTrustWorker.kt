@@ -55,10 +55,11 @@ internal class UpdateTrustWorker(context: Context,
     internal data class Params(
             override val sessionId: String,
             override val lastFailureMessage: String? = null,
+            // Kept for compatibility, but not used anymore (can be used for pending Worker)
             val updatedUserIds: List<String> = emptyList(),
             // Passing a long list of userId can break the Work Manager due to data size limitation.
-            // If RoomId is not null, the userIds will be fetched from database and updatedUserIds will be ignored
-            val roomId: String? = null
+            // so now we use a temporary file to store the data
+            val filename: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var crossSigningService: DefaultCrossSigningService
@@ -67,6 +68,7 @@ internal class UpdateTrustWorker(context: Context,
     @CryptoDatabase @Inject lateinit var realmConfiguration: RealmConfiguration
     @UserId @Inject lateinit var myUserId: String
     @Inject lateinit var crossSigningKeysMapper: CrossSigningKeysMapper
+    @Inject lateinit var updateTrustWorkerDataRepository: UpdateTrustWorkerDataRepository
     @SessionDatabase @Inject lateinit var sessionRealmConfiguration: RealmConfiguration
 
     //    @Inject lateinit var roomSummaryUpdater: RoomSummaryUpdater
@@ -77,16 +79,14 @@ internal class UpdateTrustWorker(context: Context,
     }
 
     override suspend fun doSafeWork(params: Params): Result {
-        val roomId = params.roomId
-        var userList = if (roomId.isNullOrEmpty()) {
-            params.updatedUserIds
-        } else {
-            // Get current other userIds for this room
-            getOtherUserIds(roomId)
-        }
+        var userList = params.filename
+                ?.let { updateTrustWorkerDataRepository.getParam(it) }
+                ?.userIds
+                ?: params.updatedUserIds
 
         if (userList.isEmpty()) {
             // This should not happen, but let's avoid go further in case of empty list
+            cleanup(params)
             return Result.success()
         }
 
@@ -228,17 +228,13 @@ internal class UpdateTrustWorker(context: Context,
             }
         }
 
+        cleanup(params)
         return Result.success()
     }
 
-    private fun getOtherUserIds(roomId: String): List<String> {
-        return Realm.getInstance(sessionRealmConfiguration).use { realm ->
-            RoomMemberHelper(realm, roomId)
-                    .queryActiveRoomMembersEvent()
-                    .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, myUserId)
-                    .findAll()
-                    .map { it.userId }
-        }
+    private fun cleanup(params: Params) {
+        params.filename
+                ?.let { updateTrustWorkerDataRepository.delete(it) }
     }
 
     private fun updateCrossSigningKeysTrust(realm: Realm, userId: String, verified: Boolean) {
