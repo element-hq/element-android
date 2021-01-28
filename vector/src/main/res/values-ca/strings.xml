@@ -179,7 +179,7 @@
     <string name="auth_reset_password_message">Introduïu el correu electrònic associat al compte per reiniciar la contrasenya:</string>
     <string name="auth_reset_password_missing_email">Heu d\'introduir el correu electrònic associat al vostre compte.</string>
     <string name="auth_reset_password_missing_password">S\'ha d\'introduir una contrasenya nova.</string>
-    <string name="auth_reset_password_email_validation_message">S\'ha enviat un correu electrònic a %s. Seguiu l\'enllaç que conté i feu clic a sota.</string>
+    <string name="auth_reset_password_email_validation_message">S\'ha enviat un correu electrònic a %s. Quan hagis anat a l\'enllaç que conté i fes clic a sota.</string>
     <string name="auth_reset_password_error_unauthorized">No s\'ha pogut verificar l\'adreça del correu electrònic: assegureu-vos que heu fet clic a l\'enllaç del correu electrònic</string>
     <string name="auth_reset_password_success_message">La contrasenya s\'ha reiniciat.
 \n
@@ -227,7 +227,7 @@
     <string name="call_ended">Trucada finalitzada</string>
     <string name="call_ring">Trucant…</string>
     <string name="incoming_call">Trucada d\'entrada</string>
-    <string name="incoming_video_call">Vídeotrucada d\'entrada</string>
+    <string name="incoming_video_call">Videotrucada d\'entrada</string>
     <string name="incoming_voice_call">Trucada entrant</string>
     <string name="call_in_progress">Trucada en curs…</string>
     <string name="call_error_user_not_responding">No s\'està responent a la trucada.</string>
@@ -494,7 +494,7 @@
     <string name="settings_phone_number_label">Número de telèfon</string>
     <string name="settings_phone_number_error">El número de telèfon no és vàlid per al país escollit</string>
     <string name="settings_phone_number_verification">Verificació del telèfon</string>
-    <string name="settings_phone_number_verification_instruction">S\'ha enviat un SMS amb un codi d\'activació. Introduïu-lo a continuació.</string>
+    <string name="settings_phone_number_verification_instruction">S\'ha enviat un SMS amb un codi d\'activació. Introdueix-lo a continuació.</string>
     <string name="settings_phone_number_verification_error_empty_code">Introduïu un codi d\'activació</string>
     <string name="settings_phone_number_verification_error">S\'ha produït un error mentre es validava el número de telèfon</string>
     <string name="settings_phone_number_code">Codi</string>
@@ -821,7 +821,7 @@
     <string name="settings_without_flair">Ara mateix no ets membre de cap comunitat.</string>
     <string name="encryption_export_notice">Crea una frase per xifrar les claus exportades. Hauràs d\'introduir la mateixa frase per poder importar les claus.</string>
     <string name="passphrase_create_passphrase">Crea frase de pas</string>
-    <string name="passphrase_passphrase_does_not_match">Les frases de pas han de coincidir</string>
+    <string name="passphrase_passphrase_does_not_match">La frase no coincideix</string>
     <string name="lock_screen_hint">Escriviu aquí…</string>
     <string name="widget_integration_missing_parameter">Falta un paràmetre necessari.</string>
     <string name="widget_integration_invalid_parameter">Un paràmetre no és vàlid.</string>
@@ -1038,7 +1038,7 @@
     <string name="settings_troubleshoot_test_bg_restricted_failed">Les restriccions en segon pla per a Element estan activades.
 \nLes tasques que l\'aplicació intenta fer en segon pla estaran força restringides, això pot afectar a les notificacions.
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_battery_failed">Si un usuari deixa un dispositiu sense endollar i immòbil durant un període de temps, amb la pantalla apagada, el dispositiu entra en el mode d\'estalvi d\'energia. Això impedeix les aplicacions d\'accedir a la xarxa i ajorna les seves tasques, sincronitzacions i alarmes estàndard.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Si un usuari deixa un dispositiu amb la pantalla apagada, desendollat i quiet durant un període de temps, el dispositiu entra en el mode repòs. Això impedeix que les aplicacions accedeixin a la xarxa i n\'ajorna les seves tasques, sincronitzacions i alarmes estàndard.</string>
     <string name="keys_backup_setup_step3_generating_key_status">Generant la clau de recuperació emprant la frase, aquest procés pot trigar uns segons.</string>
     <string name="keys_backup_setup_backup_started_message">Les vostres claus de xifratge s\'estan emmagatzemant al rerefons al vostre servidor base. La còpia inicial pot trigar alguns minuts.</string>
     <string name="keys_backup_passphrase_error_decrypt">No s\'ha pogut desxifrar la còpia de seguretat amb aquesta frase: comprova que la frase de recuperació introduïda és correcta.</string>
@@ -1117,9 +1117,9 @@
     <string name="new_recovery_method_popup_title">Nova còpia de seguretat de clau</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Per evitar la pèrdua d\'accés als teus missatges xifrats, hauries d\'activar la còpia de seguretat segura a totes les teves sessions.</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Perdràs l\'accés als teus missatges xifrats si no fas una còpia de seguretat de les teves claus abans de tancar la sessió.</string>
-    <string name="keys_backup_setup_step2_text_description">Es desarà una còpia encriptada de les vostres claus al vostre servidor base. Protegiu la vostra còpia de seguretat amb una contrasenya per tal de mantenir-la segura.
+    <string name="keys_backup_setup_step2_text_description">Es desarà una còpia xifrada de les teves claus al teu servidor local. Protegeix la còpia de seguretat amb una contrasenya per tal de mantenir-la segura.
 \n
-\nPer màxima seguretat, aquesta contrasenya hauria de ser diferent de la contrasenya del vostre compte.</string>
+\nPer la màxima seguretat, aquesta contrasenya hauria de ser diferent de la contrasenya del teu compte.</string>
     <string name="settings_data_save_mode_summary">El mode d\'estalvi de dades aplica un filtre específic que evita les actualitzacions de presència i les notificacions d\'escriptura.</string>
     <string name="keys_backup_setup_step3_text_line2">En cas que oblidis la teva contrasenya, la clau de recuperació és un recurs per recuperar l\'accés als teus missatges xifrats.
 \nDesa la clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes (o una caixa forta)</string>
@@ -1130,7 +1130,7 @@
     <string name="keys_backup_settings_untrusted_backup">Per utilitzar la còpia de seguretat de clau en aquesta sessió, recupera amb la frase o la clau de recuperació, ara.</string>
     <string name="new_recovery_method_popup_description">S\'ha detectat una nova còpia de seguretat de clau.
 \n
-\nSi no has configurat el nou mètode de recuperació, un atacant podria estar intentant accedir al teu compte. Canvieu la contrasenya del teu compte i configura un nou mètode de recuperació immediatament a la configuració.</string>
+\nSi no has configurat el nou mètode de recuperació, un atacant podria estar intentant accedir al teu compte. Canvia la contrasenya del teu compte i configura un nou mètode de recuperació a la configuració immediatament.</string>
     <string name="notification_sync_init">Inicialitzant servei</string>
     <string name="ignore">Ignora</string>
     <string name="auth_login_sso">Inicia sessió amb la inscripció única (SSO)</string>
@@ -1170,20 +1170,20 @@
     <string name="notification_inline_reply_failed">** No s\'ha pogut enviar - si us plau, obre la sala</string>
     <string name="error_jitsi_not_supported_on_old_device">Ho sentim, les videoconferències amb Jitsi no són compatibles amb dispositius antics (dispositius amb Android inferior a 5.0)</string>
     <string name="integration_manager_not_configured">No has configurat cap gestor d\'integracions.</string>
-    <string name="you_added_a_new_device_with_info">Un nou dispositiu està sol·licitant claus d\'encriptació. 
-\nNom del dispositiu: %1$s 
-\nVist per última vegada: %2$s 
-\nSi no heu iniciat sessió en un altre dispositiu, ignoreu la sol·licitud.</string>
-    <string name="your_unverified_device_requesting_with_info">Un dispositiu no verificat està sol·licitant claus d\'encriptació. 
-\nNom del dispositiu: %1$s 
-\nVist per última vegada: %2$s 
-\nSi no heu iniciat sessió en un altre dispositiu, ignoreu la sol·licitud.</string>
+    <string name="you_added_a_new_device_with_info">Una nova sessió està sol·licitant claus de xifrat.
+\nNom de la sessió: %1$s
+\nVist per última vegada: %2$s
+\nSi no has iniciat sessió en cap altre lloc, ignora la sol·licitud.</string>
+    <string name="your_unverified_device_requesting_with_info">Una sessió no verificada està sol·licitant claus de xifrat.
+\nNom de la sessió: %1$s
+\nVist per última vegada: %2$s
+\nSi no has iniciat sessió en cap altre lloc, ignora la sol·licitud.</string>
     <string name="start_verification_short_label">Verificar</string>
     <string name="share_without_verifying_short_label">Compartir</string>
-    <string name="key_share_request">Sol·licitud de compartició de clau</string>
+    <string name="key_share_request">Sol·licituds d\'intercanvi de claus</string>
     <string name="ignore_request_short_label">Ignorar</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">Ja existeix una còpia de seguretat al vostre HomeServer</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">Sembla que ja heu configurat una còpia de seguretat de claus des d\'un altre dispositiu. Voleu reemplaçar-la amb la que esteu creant\?</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Sembla que ja has configurat una còpia de seguretat de claus des d\'una altra sessió. Vols reemplaçar-la amb la que estàs creant\?</string>
     <string name="keys_backup_setup_override_replace">Reemplaçar</string>
     <string name="keys_backup_setup_override_stop">Aturar</string>
     <string name="keys_backup_settings_checking_backup_state">Comprovant l\'estat de la còpia de seguretat</string>
@@ -1220,7 +1220,7 @@
     <string name="sas_error_m_user">L\'usuari ha cancel·lat la verificació</string>
     <string name="sas_error_m_timeout">El marge de temps pel procés de verificació ha expirat</string>
     <string name="sas_error_m_unknown_transaction">El dispositiu no coneix la transacció</string>
-    <string name="sas_error_m_unknown_method">El dispositiu no pot acceptar un acord de claus amb mètodes hash, MAC o SAS</string>
+    <string name="sas_error_m_unknown_method">La sessió no pot acceptar un acord de claus, hash, MAC o amb mètode SAS</string>
     <string name="sas_error_m_mismatched_commitment">El compromís del hash no ha coincidit</string>
     <string name="sas_error_m_mismatched_sas">El SAS no ha coincidit</string>
     <string name="sas_error_m_unexpected_message">El dispositiu ha rebut un missatge inesperat</string>
@@ -1234,7 +1234,7 @@
     <string name="room_list_empty">Unir-se a una sala per començar usant l\'app.</string>
     <string name="send_you_invite">Se t\'ha enviat una invitació</string>
     <string name="invited_by">Convidat per %s</string>
-    <string name="room_list_catchup_empty_title">Esteu al dia!</string>
+    <string name="room_list_catchup_empty_title">Estàs al dia!</string>
     <string name="room_list_catchup_empty_body">No tens més missatges sense llegir</string>
     <string name="room_list_catchup_welcome_title">Benvingut a casa!</string>
     <string name="room_list_catchup_welcome_body">Posar-se al dia dels missatges sense llegir</string>
@@ -1906,9 +1906,207 @@
     <string name="login_error_no_homeserver_found">Aquesta no és una adreça de servidor Matrix vàlida</string>
     <string name="auth_msisdn_already_defined">Aquest número de telèfon ja està definit.</string>
     <string name="auth_add_email_message_2">Estableix un correu per a la recuperació del compte, posterior i opcionalment podràs fer que els usuaris que et coneguin el puguin trobar.</string>
-    <string name="auth_add_phone_message_2">Estableix un telèfon mòbil, posterior i opcionalment podràs fer que els usuaris que et coneguin el puguin trobar.</string>
+    <string name="auth_add_phone_message_2">Estableix un número de telèfon, posterior i opcionalment podràs fer que els usuaris que et coneguin el puguin trobar.</string>
     <string name="action_unpublish">Anul·la la publicació</string>
     <string name="action_add">Afegeix</string>
     <string name="start_chatting">Comença a xatejar</string>
     <string name="system_theme">Predeterminat pel sistema</string>
+    <string name="enter_secret_storage_passphrase_or_key">Utilitza la %1$s o la %2$s per a continuar.</string>
+    <string name="use_latest_app">Utilitza l\'última versió d\'Element als teus altres dispositius:</string>
+    <string name="soft_logout_signin_notice">L\'administrador del servidor local (%1$s) ha tancat la teva sessió del compte %2$s (%3$s).</string>
+    <plurals name="fallback_users_read">
+        <item quantity="one">%d usuari ho ha llegit</item>
+        <item quantity="other">%d usuaris ho han llegit</item>
+    </plurals>
+    <string name="one_user_read">%s ho ha llegit</string>
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s i %3$d altre ho han llegit</item>
+        <item quantity="other">%1$s, %2$s i %3$d altres ho han llegit</item>
+    </plurals>
+    <string name="three_users_read">%1$s, %2$s i %3$s ho han llegit</string>
+    <string name="two_users_read">%1$s i %2$s ho han llegit</string>
+    <string name="labs_allow_extended_logging_summary">Els registres detallats ajuden els desenvolupadors proporcionant més registres quan fas un sacseig amb ràbia. Fins i tot quan està activat, l\'aplicació no registra els teus missatges ni altres dades privades.</string>
+    <string name="no_connectivity_to_the_server_indicator_airplane">El mode avió està activat</string>
+    <string name="no_connectivity_to_the_server_indicator">S\'ha perdut la connexió amb el servidor</string>
+    <string name="qr_code_scanned_by_other_no">No</string>
+    <string name="qr_code_scanned_by_other_yes">Sí</string>
+    <string name="qr_code_scanned_by_other_notice">Quasi bé ja has acabat! %s mostra el mateix escut\?</string>
+    <string name="settings_key_requests">Sol·licituds de claus</string>
+    <string name="settings_developer_mode_fail_fast_title">Fallada ràpida</string>
+    <string name="settings_security_prevent_screenshots_summary">Si actives aquesta opció, s\'afegirà el FLAG_SECURE a totes les activitats de l\'aplicació. Reinicia l\'aplicació per aplicar els canvis.</string>
+    <string name="settings_security_prevent_screenshots_title">Bloqueja les captures de pantalla dins l\'aplicació</string>
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d sessió activa</item>
+        <item quantity="other">%d sessions actives</item>
+    </plurals>
+    <string name="settings_active_sessions_verified_device_desc">Aquesta sessió és de confiança per a xats segurs ja que l\'has verificada tu:</string>
+    <string name="settings_active_sessions_signout_device">Desconnecta aquesta sessió</string>
+    <string name="settings_active_sessions_manage">Gestió de sessions</string>
+    <string name="settings_active_sessions_show_all">Veure totes les sessions</string>
+    <string name="settings_active_sessions_list">Sessions actives</string>
+    <string name="settings_security_application_protection_screen_title">Configuració de protecció</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">Configura la biometria específica del dispositiu, com per exemple les empremtes o el reconeixement facial.</string>
+    <string name="settings_security_pin_code_use_biometrics_title">Activa la biometria</string>
+    <string name="settings_security_pin_code_summary">Si vols restablir el teu PIN, clica he oblidat el PIN per tancar la sessió i reiniciar.</string>
+    <string name="settings_security_pin_code_title">Activa el PIN</string>
+    <string name="settings_security_application_protection_summary">Protegeix l\'accés mitjançant PIN i/o biometria.</string>
+    <string name="settings_security_application_protection_title">Protecció d\'accés</string>
+    <string name="create_pin_title">Escull un PIN per protegir l\'accés</string>
+    <string name="create_pin_confirm_failure">No s\'ha pogut verificar el PIN, introdueix-ne un de nou.</string>
+    <string name="create_pin_confirm_title">Verifica el PIN</string>
+    <string name="too_many_pin_failures">Massa errors, la teva sessió s\'ha tancat</string>
+    <string name="enter_account_password">Introdueix la %s per a continuar.</string>
+    <string name="confirm_recovery_passphrase">Confirma la %s</string>
+    <string name="message_key">Clau de missatge</string>
+    <string name="generate_message_key">Genera una clau de missatge</string>
+    <string name="set_recovery_passphrase">Configura una %s</string>
+    <string name="recovery_passphrase">Frase de recuperació</string>
+    <string name="verification_cancelled">Verificació cancel·lada</string>
+    <string name="verify_cancelled_notice">Verifica els teus dispositius des de la configuració.</string>
+    <string name="verify_not_me_self_verification">Alguna de les següents coses pot haver estat compromesa:
+\n
+\n- La teva contrasenya
+\n- El servidor local
+\n- Aquest dispositiu o l\'altre dispositiu
+\n- La connexió a internet utilitzada per algun dels dispositius
+\n
+\nEt recomanem que canviïs la contrasenya i la clau de recuperació a configuració immediatament.</string>
+    <string name="verify_cancel_other">Si cancel·les ara, no verificaràs %1$s (%2$s). Torna a començar des del seu perfil d\'usuari.</string>
+    <string name="verify_cancel_self_verification_from_trusted">Si cancel·les, no podràs llegir els missatges xifrats en el teu nou dispositiu i altres usuaris no hi confiaran</string>
+    <string name="verify_cancel_self_verification_from_untrusted">Si cancel·les, no podràs llegir els missatges xifrats en aquest dispositiu i altres usuaris no hi confiaran</string>
+    <string name="verify_new_session_compromized">És possible que el teu compte estigui en perill</string>
+    <string name="verify_new_session_was_not_me">No he estat jo</string>
+    <string name="verify_new_session_notice">Utilitza aquesta sessió per a verificar-ne una de nova i poder-li donar accés als missatges xifrats.</string>
+    <string name="new_session_review">Clica per revisar i verificar</string>
+    <string name="new_session">Nou inici de sessió. Has estat tu\?</string>
+    <string name="refresh">Actualitza</string>
+    <string name="login_default_session_public_name">Element Android</string>
+    <string name="keys_backup_restore_success_title_already_up_to_date">Les claus ja estan actualitzades!</string>
+    <string name="event_redacted_by_user_reason_with_reason">Esdeveniment eliminat per un usuari, motiu: %1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">Esdeveniment moderat per un administrador de sala, motiu: %1$s</string>
+    <string name="delete_event_dialog_reason_checkbox">Afegeix un motiu</string>
+    <string name="delete_event_dialog_title">Confirma l\'eliminació</string>
+    <plurals name="send_images_with_original_size">
+        <item quantity="one">Envia la imatge a mida real</item>
+        <item quantity="other">Envia les imatges a mida real</item>
+    </plurals>
+    <string name="share_confirm_room">Vols enviar aquest fitxer adjunt a %1$s\?</string>
+    <string name="message_action_item_redact">Elimina…</string>
+    <string name="enter_secret_storage_passphrase_warning">Atenció:</string>
+    <string name="enter_secret_storage_invalid">No s\'han pogut trobar els secrets a la memòria</string>
+    <string name="new_signin">Nou inici de sessió</string>
+    <string name="verification_use_passphrase">Si no pots accedir a una sessió existent</string>
+    <string name="verification_cannot_access_other_session">Utilitza una frase de recuperació o una clau</string>
+    <string name="command_description_poll">Crea una enquesta simple</string>
+    <string name="poll_item_selected_aria">Opció seleccionada</string>
+    <plurals name="poll_info_final">
+        <item quantity="one">%d vot - Resultat final</item>
+        <item quantity="other">%d vots - Resultat final</item>
+    </plurals>
+    <plurals name="poll_info">
+        <item quantity="one">%d vot</item>
+        <item quantity="other">%d vots</item>
+    </plurals>
+    <string name="delete_account_data_warning">Vols eliminar les dades del compte de tipus %1$s\?
+\n
+\nVes en compte, pot ser que provoqui comportaments inesperats.</string>
+    <string name="settings_account_data">Dades del compte</string>
+    <string name="settings_dev_tools">Eines per a desenvolupadors</string>
+    <string name="verification_sas_do_not_match">No coincideixen</string>
+    <string name="verification_sas_match">Coincideixen</string>
+    <string name="verification_conclusion_warning">Inici de sessió no fiable</string>
+    <string name="login_error_threepid_denied">El domini del teu correu electrònic no està autoritzat a registrar-se en aquest servidor</string>
+    <string name="create_room_in_progress">Creant sala…</string>
+    <string name="create_room_alias_invalid">Alguns caràcters no estan permesos</string>
+    <string name="create_room_alias_empty">Proporciona una adreça per la sala</string>
+    <string name="create_room_alias_already_in_use">Aquesta adreça ja està en us</string>
+    <string name="create_room_alias_hint">Adreça de la sala</string>
+    <string name="create_room_encryption_title">Activa el xifrat</string>
+    <string name="command_description_shrug">Afegeix ¯\\_(ツ)_/¯ a l\'inici d\'un missatge de text pla</string>
+    <string name="settings_developer_mode_fail_fast_summary">Pot ser que Element falli més sovint quan es produeixi un error inesperat</string>
+    <string name="devices_other_devices">Altres sessions</string>
+    <string name="devices_current_device">Sessió actual</string>
+    <string name="settings">Configuració</string>
+    <string name="rageshake_detected">Sacseig detectat!</string>
+    <string name="settings_rageshake_detection_threshold_summary">Sacseja el teu mòbil per provar el llindar de detecció</string>
+    <string name="settings_rageshake_detection_threshold">Llindar de detecció</string>
+    <string name="settings_rageshake">Sacseig de ràbia</string>
+    <string name="settings_developer_mode_summary">El mode desenvolupador activa altres funcionalitats ocultes i també pot ser que faci l\'aplicació menys estable. Només per a desenvolupadors!</string>
+    <string name="settings_developer_mode">Mode desenvolupador</string>
+    <string name="settings_show_devices_list">Mostra totes les meves sessions</string>
+    <string name="notification_initial_sync">Sincronització inicial…</string>
+    <string name="permalink_malformed">L\'enllaç de matrix.to no s\'ha format correctament</string>
+    <string name="soft_logout_clear_data_dialog_submit">Esborra les dades</string>
+    <string name="soft_logout_clear_data_dialog_content">Vols esborrar totes les dades emmagatzemades en aquest dispositiu\?
+\nTorna a iniciar sessió per accedir a les dades i missatges del teu compte.</string>
+    <string name="soft_logout_clear_data_dialog_title">Esborra les dades</string>
+    <string name="soft_logout_clear_data_title">Esborra les dades personals</string>
+    <string name="soft_logout_clear_data_submit">Esborra totes les dades</string>
+    <string name="soft_logout_signin_password_hint">Contrasenya</string>
+    <string name="soft_logout_signin_submit">Inicia sessió</string>
+    <string name="soft_logout_signin_title">Inicia sessió</string>
+    <string name="soft_logout_title">No has iniciat sessió</string>
+    <string name="signed_out_submit">Torna a iniciar sessió</string>
+    <string name="signed_out_title">No has iniciat sessió</string>
+    <string name="seen_by">Vist per</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">Identificador d\'usuari invàlid. Format esperat: \'@usuari:servidorlocal.org\'</string>
+    <string name="login_signin_matrix_id_password_notice">Si no saps la teva contrasenya, vés enrere i restableix-la.</string>
+    <string name="login_signin_matrix_id_hint">ID de Matrix</string>
+    <string name="login_signin_matrix_id_title">Inicia sessió amb l\'ID de Matrix</string>
+    <string name="login_connect_using_matrix_id_submit">Inicia sessió amb l\'ID de Matrix</string>
+    <string name="login_signup_submit">Següent</string>
+    <string name="login_signup_password_hint">Contrasenya</string>
+    <string name="login_signup_username_hint">Nom d\'usuari</string>
+    <string name="login_signin_username_hint">Nom d\'usuari o correu electrònic</string>
+    <string name="login_signup_to">Registra\'t a %1$s</string>
+    <string name="login_msisdn_error_other">El número de telèfon sembla invàlid. Revisa\'l</string>
+    <string name="login_msisdn_error_not_international">Els números de telèfon internacionals han de començar amb \'+\'</string>
+    <string name="login_msisdn_notice">Has d\'utilitzar el format internacional (el número de telèfon ha de començar amb \'+\')</string>
+    <string name="login_msisdn_confirm_submit">Següent</string>
+    <string name="login_msisdn_confirm_send_again">Torna\'l a enviar</string>
+    <string name="login_msisdn_confirm_hint">Introdueix el codi</string>
+    <string name="login_msisdn_confirm_notice">Acabem d\'enviar un codi a %1$s. Introdueix-lo a continuació per verificar que ets tu.</string>
+    <string name="login_msisdn_confirm_title">Verifica el número de telèfon</string>
+    <string name="login_reset_password_notice">S\'enviarà un correu electrònic per confirmar la configuració de la nova contrasenya.</string>
+    <string name="a11y_close_keys_backup_banner">Tanca la pestanya de còpia de seguretat de claus</string>
+    <string name="a11y_open_drawer">Obre el menú de navegació</string>
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="one">S\'han enviat massa peticions. Ho pots tornar a intentar en %1$d segon…</item>
+        <item quantity="other">S\'han enviat massa peticions. Ho pots tornar a intentar en %1$d segons…</item>
+    </plurals>
+    <string name="login_error_outdated_homeserver_warning_content">Aquest servidor està funcionant amb una versió massa antiga per poder-s\'hi connectar. Pots continuar però pot ser que algunes funcions no vagin bé.</string>
+    <string name="login_error_outdated_homeserver_content">Aquest servidor està funcionant amb una versió massa antiga per poder-s\'hi connectar. Demana a l\'administrador que l\'actualitzi.</string>
+    <string name="login_error_outdated_homeserver_title">Versió del servidor local obsoleta</string>
+    <string name="login_validation_code_is_not_correct">El codi introduït no és correcte. Comprova\'l.</string>
+    <string name="login_wait_for_email_notice">Acabem d\'enviar un correu a %1$s.
+\nFes clic a l\'enllaç que conté per continuar amb la creació del compte.</string>
+    <string name="login_wait_for_email_title">Comprova el teu correu</string>
+    <string name="login_a11y_captcha_container">Resol el repte captcha</string>
+    <string name="login_a11y_choose_other">Selecciona un servidor local personalitzat</string>
+    <string name="login_a11y_choose_modular">Selecciona Serveis Matrix d\'Element</string>
+    <string name="login_a11y_choose_matrix_org">Selecciona matrix.org</string>
+    <string name="login_signup_cancel_confirmation_content">El teu compte encara s\'ha creat.
+\n
+\nVols aturar el procés de registre\?</string>
+    <string name="login_signup_cancel_confirmation_title">Atenció</string>
+    <string name="login_signup_error_user_in_use">Aquest nom d\'usuari ja està agafat</string>
+    <string name="login_set_msisdn_notice">Estableix un número de telèfon per, opcionalment, permetre que la gent que coneixes et pugui trobar.</string>
+    <string name="login_reset_password_cancel_confirmation_content">La contrasenya encara no s\'ha canviat.
+\n
+\nVols parar el procés de canvi de contrasenya\?</string>
+    <string name="login_reset_password_cancel_confirmation_title">Atenció</string>
+    <string name="login_reset_password_success_submit">Torna a l\'inici de sessió</string>
+    <string name="login_reset_password_success_notice">La teva contrasenya s\'ha restablert.</string>
+    <string name="login_reset_password_success_title">S\'ha realitzat amb èxit!</string>
+    <string name="login_reset_password_mail_confirmation_submit">He verificat la meva adreça de correu electrònic</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">Fes clic a l\'enllaç per confirmar la nova contrasenya. Quan hagis anat a l\'enllaç que conté, fes clic a sota.</string>
+    <string name="login_reset_password_mail_confirmation_notice">S\'ha enviat un correu de verificació a %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_title">Revisa la teva safata d\'entrada</string>
+    <string name="login_reset_password_error_not_found">Aquest correu no està vinculat amb cap compte</string>
+    <string name="login_reset_password_warning_submit">Continua</string>
+    <string name="login_reset_password_warning_title">Atenció!</string>
+    <string name="login_reset_password_password_hint">Nova contrasenya</string>
+    <string name="login_reset_password_email_hint">Correu electrònic</string>
+    <string name="login_reset_password_submit">Següent</string>
+    <string name="settings_troubleshoot_test_notification_title">Visualització de notificació</string>
 </resources>
