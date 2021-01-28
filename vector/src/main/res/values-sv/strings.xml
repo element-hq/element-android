@@ -51,8 +51,8 @@
     <string name="later">Senare</string>
     <string name="forward">Vidarebefordra</string>
     <string name="permalink">Permanent länk</string>
-    <string name="view_source">Visa källa</string>
-    <string name="view_decrypted_source">Visa avkrypterad källa</string>
+    <string name="view_source">Visa källkod</string>
+    <string name="view_decrypted_source">Visa avkrypterad källkod</string>
     <string name="delete">Radera</string>
     <string name="rename">Döp om</string>
     <string name="none">Ingen</string>
