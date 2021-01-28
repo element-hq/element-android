@@ -110,7 +110,7 @@ android {
     defaultConfig {
         applicationId "im.vector.app.p2p"
         // Set to API 21: see #405
-        minSdkVersion 21
+        minSdkVersion 29
         targetSdkVersion 29
         multiDexEnabled true
 

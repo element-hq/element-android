@@ -19,6 +19,7 @@ package im.vector.app
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothServerSocket
+import android.bluetooth.BluetoothSocket
 import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
@@ -29,9 +30,13 @@ import android.bluetooth.le.ScanSettings
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
+import android.os.Looper
 import android.os.ParcelUuid
 import android.widget.Toast
 import gobind.DendriteMonolith
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.nio.ByteBuffer
 import java.util.UUID
@@ -46,6 +51,7 @@ class DendriteService : Service() {
     private var scanner = adapter.bluetoothLeScanner
     private var server: BluetoothServerSocket = adapter.listenUsingInsecureL2capChannel()
     private var psm: ByteArray = intToBytes(server.psm)
+    private var connections: MutableMap<String, BluetoothSocket> = mutableMapOf<String, BluetoothSocket>()
 
     inner class DendriteLocalBinder : Binder() {
         fun getService() : DendriteService {
@@ -101,6 +107,29 @@ class DendriteService : Service() {
 
             advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
             scanner.startScan(scanFilters, scanSettings, scanCallback)
+
+            GlobalScope.launch {
+                while (true) {
+                    Timber.i("BLE: Waiting for connection on PSM ${server.psm}")
+                    try {
+                        var remote = server.accept() ?: continue
+                        val device = remote.remoteDevice.address.toString()
+
+                        var connection = connections[device]
+                        if (connection != null && connection.isConnected) {
+                            connection.close()
+                            connections.remove(device)
+                        }
+                        connections[device] = remote
+
+                        val rx = remote.maxReceivePacketSize
+                        val tx = remote.maxTransmitPacketSize
+                        Timber.i("BLE: Connected inbound $device PSM $psm (RX size $rx, TX size $tx)")
+                    } catch (e: Exception) {
+                        Timber.i("BLE: Accept exception: ${e.message}")
+                    }
+                }
+            }
         }
 
         super.onCreate()
@@ -156,11 +185,21 @@ class DendriteService : Service() {
             try {
                 val service = record.serviceData.getValue(serviceUUID) ?: return
                 val psm = bytesToInt(service)
+                var connection = connections[device]
+                if (connection != null && connection.isConnected) {
+                    return
+                }
 
-                Toast.makeText(applicationContext, "BLE: Found $device PSM $psm", Toast.LENGTH_SHORT).show()
+                Timber.i("BLE: Attempting connection to $device PSM $psm")
+                connection = result.device.createInsecureL2capChannel(psm)
+                connection.connect()
+                connections[device] = connection
 
-                //var socket = result.device.createInsecureL2capChannel(psm)
-                //socket.close()
+                GlobalScope.launch {
+                    val rx = connection.maxReceivePacketSize
+                    val tx = connection.maxTransmitPacketSize
+                    Timber.i("BLE: Connected outbound $device PSM $psm (RX size $rx, TX size $tx)")
+                }
             } catch (e: Exception) {
                 Timber.i("BLE: Device $device error %s", e.message)
             }
