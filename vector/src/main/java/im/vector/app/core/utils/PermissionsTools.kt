@@ -44,6 +44,7 @@ private const val PERMISSION_WRITE_EXTERNAL_STORAGE = 0x1 shl 1
 private const val PERMISSION_RECORD_AUDIO = 0x1 shl 2
 private const val PERMISSION_READ_CONTACTS = 0x1 shl 3
 private const val PERMISSION_READ_EXTERNAL_STORAGE = 0x1 shl 4
+private const val PERMISSION_P2P = 0x1 shl 5
 
 // Permissions sets
 const val PERMISSIONS_FOR_AUDIO_IP_CALL = PERMISSION_RECORD_AUDIO
@@ -56,6 +57,7 @@ const val PERMISSIONS_FOR_VIDEO_RECORDING = PERMISSION_CAMERA or PERMISSION_RECO
 const val PERMISSIONS_FOR_WRITING_FILES = PERMISSION_WRITE_EXTERNAL_STORAGE
 const val PERMISSIONS_FOR_READING_FILES = PERMISSION_READ_EXTERNAL_STORAGE
 const val PERMISSIONS_FOR_PICKING_CONTACT = PERMISSION_READ_CONTACTS
+const val PERMISSIONS_FOR_P2P_BLE = PERMISSION_P2P
 
 const val PERMISSIONS_EMPTY = PERMISSION_BYPASSED
 
@@ -71,6 +73,7 @@ const val PERMISSION_REQUEST_CODE_DOWNLOAD_FILE = 575
 const val PERMISSION_REQUEST_CODE_PICK_ATTACHMENT = 576
 const val PERMISSION_REQUEST_CODE_INCOMING_URI = 577
 const val PERMISSION_REQUEST_CODE_READ_CONTACTS = 579
+const val PERMISSION_REQUEST_CODE_P2P_BLE = 580
 
 /**
  * Log the used permissions statuses.
@@ -82,7 +85,8 @@ fun logPermissionStatuses(context: Context) {
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.READ_CONTACTS)
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
 
         Timber.v("## logPermissionStatuses() : log the permissions status used by the app")
 
@@ -168,7 +172,8 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
             && PERMISSIONS_FOR_ROOM_AVATAR != permissionsToBeGrantedBitMap
             && PERMISSIONS_FOR_VIDEO_RECORDING != permissionsToBeGrantedBitMap
             && PERMISSIONS_FOR_WRITING_FILES != permissionsToBeGrantedBitMap
-            && PERMISSIONS_FOR_READING_FILES != permissionsToBeGrantedBitMap) {
+            && PERMISSIONS_FOR_READING_FILES != permissionsToBeGrantedBitMap
+            && PERMISSIONS_FOR_P2P_BLE != permissionsToBeGrantedBitMap) {
         Timber.w("## checkPermissions(): permissions to be granted are not supported")
         isPermissionGranted = false
     } else {
@@ -199,6 +204,13 @@ private fun checkPermissions(permissionsToBeGrantedBitMap: Int,
             val permissionType = Manifest.permission.READ_EXTERNAL_STORAGE
             isRequestPermissionRequired = isRequestPermissionRequired or
                     updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, permissionType)
+        }
+
+        if (PERMISSION_P2P == permissionsToBeGrantedBitMap and PERMISSION_P2P) {
+            isRequestPermissionRequired = isRequestPermissionRequired or
+                    updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, Manifest.permission.ACCESS_COARSE_LOCATION)
+            isRequestPermissionRequired = isRequestPermissionRequired or
+                    updatePermissionsToBeGranted(activity, permissionListAlreadyDenied, permissionsListToBeGranted, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
         }
 
         // the contact book access is requested for any android platforms

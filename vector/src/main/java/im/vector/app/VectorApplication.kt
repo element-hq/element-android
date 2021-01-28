@@ -16,6 +16,7 @@
 
 package im.vector.app
 
+import android.Manifest
 import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.ComponentName
@@ -23,11 +24,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.IBinder
 import android.os.StrictMode
+import androidx.core.app.ActivityCompat
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
 import androidx.lifecycle.Lifecycle
@@ -119,7 +122,6 @@ class VectorApplication :
         vectorComponent.inject(this)
         vectorUncaughtExceptionHandler.activate(this)
         rxConfig.setupRxPlugin()
-
 
         Intent(this, DendriteService::class.java).also { intent ->
             startService(intent)
