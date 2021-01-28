@@ -41,6 +41,10 @@ class DendriteService : Service() {
         return monolith?.registerUser(userID, password) ?: ""
     }
 
+    fun registerDevice(userID: String): String {
+        return monolith?.registerDevice(userID, "P2P") ?: ""
+    }
+
     override fun onCreate() {
         if (monolith == null) {
             monolith = gobind.DendriteMonolith()

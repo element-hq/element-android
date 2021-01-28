@@ -22,6 +22,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.net.Uri
 import android.os.IBinder
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
@@ -749,14 +750,24 @@ class LoginViewModel @AssistedInject constructor(
             override fun onServiceConnected(className: ComponentName, service: IBinder) {
                 val binder = service as DendriteService.DendriteLocalBinder
                 val dendrite = binder.getService()
-                val accessToken: String
+                var accessToken: String = ""
+                var userID: String = ""
                 try {
-                    accessToken = dendrite.registerUser("android", "dendrite!")
+                    userID = dendrite.registerUser("android", "dendrite!")
                 } catch (e: Exception) {
+                    Toast.makeText(applicationContext, "Error: " + e.message, Toast.LENGTH_SHORT).show()
+                }
+                try {
+                    accessToken = dendrite.registerDevice("android")
+                } catch (e: Exception) {
+                    Toast.makeText(applicationContext, "Error: " + e.message, Toast.LENGTH_SHORT).show()
+                }
+                if (userID == "" || accessToken == "") {
+                    android.widget.Toast.makeText(applicationContext, "No user ID or access token", android.widget.Toast.LENGTH_SHORT).show()
                     return
                 }
 
-                val credentials: Credentials = Credentials("android", accessToken, "", action.homeServerUrl, state.deviceId)
+                val credentials: Credentials = Credentials(userID, accessToken, "", action.homeServerUrl, state.deviceId)
                 authenticationService.createSessionFromSso(homeServerConnectionConfigFinal!!, credentials, object : MatrixCallback<Session> {
                     override fun onSuccess(data: Session) {
                         onSessionCreated(data)
