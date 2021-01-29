@@ -21,7 +21,6 @@ import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
 import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.CountUpTimer
-import im.vector.app.features.call.CallAudioManager
 import im.vector.app.features.call.CameraEventsHandlerAdapter
 import im.vector.app.features.call.CameraProxy
 import im.vector.app.features.call.CameraType
@@ -86,14 +85,13 @@ private const val VIDEO_TRACK_ID = "ARDAMSv0"
 private val DEFAULT_AUDIO_CONSTRAINTS = MediaConstraints()
 
 class WebRtcCall(val mxCall: MxCall,
-                 private val callAudioManager: CallAudioManager,
                  private val rootEglBase: EglBase?,
                  private val context: Context,
                  private val dispatcher: CoroutineContext,
                  private val sessionProvider: Provider<Session?>,
                  private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
                  private val onCallBecomeActive: (WebRtcCall) -> Unit,
-                 private val onCallEnded: (WebRtcCall) -> Unit) : MxCall.StateListener {
+                 private val onCallEnded: (String) -> Unit) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
         fun onCaptureStateChanged() {}
@@ -256,7 +254,7 @@ class WebRtcCall(val mxCall: MxCall,
         val rtcConfig = PeerConnection.RTCConfiguration(iceServers).apply {
             sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
         }
-        peerConnection = peerConnectionFactory.createPeerConnection(rtcConfig, PeerConnectionObserver(this, callAudioManager))
+        peerConnection = peerConnectionFactory.createPeerConnection(rtcConfig, PeerConnectionObserver(this))
     }
 
     fun attachViewRenderers(localViewRenderer: SurfaceViewRenderer?, remoteViewRenderer: SurfaceViewRenderer, mode: String?) {
@@ -317,6 +315,9 @@ class WebRtcCall(val mxCall: MxCall,
     }
 
     private suspend fun setupOutgoingCall() = withContext(dispatcher) {
+        tryOrNull {
+            onCallBecomeActive(this@WebRtcCall)
+        }
         val turnServer = getTurnServer()
         mxCall.state = CallState.CreateOffer
         // 1. Create RTCPeerConnection
@@ -723,7 +724,7 @@ class WebRtcCall(val mxCall: MxCall,
         GlobalScope.launch(dispatcher) {
             release()
         }
-        onCallEnded(this)
+        onCallEnded(callId)
         if (originatedByMe) {
             if (wasRinging) {
                 mxCall.reject()

@@ -44,7 +44,7 @@
             android:textSize="16sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@+id/bottomSheetActionSubTitle"
-            app:layout_constraintEnd_toStartOf="@+id/itemVerificationActionIcon"
+            app:layout_constraintEnd_toStartOf="@+id/bottomSheetActionIcon"
             app:layout_constraintStart_toEndOf="@+id/bottomSheetActionLeftIcon"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"

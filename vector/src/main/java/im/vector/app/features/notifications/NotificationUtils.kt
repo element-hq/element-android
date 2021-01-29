@@ -208,6 +208,10 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 })
     }
 
+    fun getChannel(channelId: String): NotificationChannel? {
+        return notificationManager.getNotificationChannel(channelId)
+    }
+
     /**
      * Build a polling thread listener notification
      *
@@ -264,6 +268,11 @@ class NotificationUtils @Inject constructor(private val context: Context,
             }
         }
         return notification
+    }
+
+    fun getChannelForIncomingCall(fromBg: Boolean): NotificationChannel? {
+        val notificationChannel = if (fromBg) CALL_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
+        return getChannel(notificationChannel)
     }
 
     /**

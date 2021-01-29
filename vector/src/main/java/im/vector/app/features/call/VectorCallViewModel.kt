@@ -25,6 +25,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.call.audio.CallAudioManager
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import org.matrix.android.sdk.api.MatrixCallback
@@ -133,17 +134,16 @@ class VectorCallViewModel @AssistedInject constructor(
         }
 
         override fun onAudioDevicesChange() {
-            val currentSoundDevice = callManager.callAudioManager.getCurrentSoundDevice()
-            if (currentSoundDevice == CallAudioManager.SoundDevice.PHONE) {
+            val currentSoundDevice = callManager.audioManager.selectedDevice ?: return
+            if (currentSoundDevice == CallAudioManager.Device.PHONE) {
                 proximityManager.start()
             } else {
                 proximityManager.stop()
             }
-
             setState {
                 copy(
-                        availableSoundDevices = callManager.callAudioManager.getAvailableSoundDevices(),
-                        soundDevice = currentSoundDevice
+                        availableDevices = callManager.audioManager.availableDevices,
+                        device = currentSoundDevice
                 )
             }
         }
@@ -174,8 +174,8 @@ class VectorCallViewModel @AssistedInject constructor(
             callManager.addCurrentCallListener(currentCallListener)
             val item: MatrixItem? = session.getUser(webRtcCall.mxCall.opponentUserId)?.toMatrixItem()
             webRtcCall.addListener(callListener)
-            val currentSoundDevice = callManager.callAudioManager.getCurrentSoundDevice()
-            if (currentSoundDevice == CallAudioManager.SoundDevice.PHONE) {
+            val currentSoundDevice = callManager.audioManager.selectedDevice
+            if (currentSoundDevice == CallAudioManager.Device.PHONE) {
                 proximityManager.start()
             }
             setState {
@@ -183,10 +183,10 @@ class VectorCallViewModel @AssistedInject constructor(
                         isVideoCall = webRtcCall.mxCall.isVideoCall,
                         callState = Success(webRtcCall.mxCall.state),
                         callInfo = VectorCallViewState.CallInfo(callId, item),
-                        soundDevice = currentSoundDevice,
+                        device = currentSoundDevice ?: CallAudioManager.Device.PHONE,
                         isLocalOnHold = webRtcCall.isLocalOnHold,
                         isRemoteOnHold = webRtcCall.remoteOnHold,
-                        availableSoundDevices = callManager.callAudioManager.getAvailableSoundDevices(),
+                        availableDevices = callManager.audioManager.availableDevices,
                         isFrontCamera = webRtcCall.currentCameraType() == CameraType.FRONT,
                         canSwitchCamera = webRtcCall.canSwitchCamera(),
                         formattedDuration = webRtcCall.formattedDuration(),
@@ -242,16 +242,11 @@ class VectorCallViewModel @AssistedInject constructor(
                 call?.updateRemoteOnHold(!isRemoteOnHold)
             }
             is VectorCallViewActions.ChangeAudioDevice -> {
-                callManager.callAudioManager.setCurrentSoundDevice(action.device)
-                setState {
-                    copy(
-                            soundDevice = callManager.callAudioManager.getCurrentSoundDevice()
-                    )
-                }
+                callManager.audioManager.setAudioDevice(action.device)
             }
             VectorCallViewActions.SwitchSoundDevice -> {
                 _viewEvents.post(
-                        VectorCallViewEvents.ShowSoundDeviceChooser(state.availableSoundDevices, state.soundDevice)
+                        VectorCallViewEvents.ShowSoundDeviceChooser(state.availableDevices, state.device)
                 )
             }
             VectorCallViewActions.HeadSetButtonPressed -> {

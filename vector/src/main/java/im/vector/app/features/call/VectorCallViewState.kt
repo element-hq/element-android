@@ -19,6 +19,7 @@ package im.vector.app.features.call
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.features.call.audio.CallAudioManager
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -34,8 +35,8 @@ data class VectorCallViewState(
         val isHD: Boolean = false,
         val isFrontCamera: Boolean = true,
         val canSwitchCamera: Boolean = true,
-        val soundDevice: CallAudioManager.SoundDevice = CallAudioManager.SoundDevice.PHONE,
-        val availableSoundDevices: List<CallAudioManager.SoundDevice> = emptyList(),
+        val device: CallAudioManager.Device = CallAudioManager.Device.PHONE,
+        val availableDevices: Set<CallAudioManager.Device> = emptySet(),
         val callState: Async<CallState> = Uninitialized,
         val otherKnownCallInfo: CallInfo? = null,
         val callInfo: CallInfo = CallInfo(callId),

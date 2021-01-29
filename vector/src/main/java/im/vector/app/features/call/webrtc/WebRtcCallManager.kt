@@ -21,11 +21,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import im.vector.app.ActiveSessionDataSource
-import im.vector.app.core.services.BluetoothHeadsetReceiver
 import im.vector.app.core.services.CallService
-import im.vector.app.core.services.WiredHeadsetStateReceiver
-import im.vector.app.features.call.CallAudioManager
 import im.vector.app.features.call.VectorCallActivity
+import im.vector.app.features.call.audio.CallAudioManager
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -79,10 +77,12 @@ class WebRtcCallManager @Inject constructor(
         currentCallsListeners.remove(listener)
     }
 
-    val callAudioManager = CallAudioManager(context) {
+    val audioManager = CallAudioManager(context) {
         currentCallsListeners.forEach {
             tryOrNull { it.onAudioDevicesChange() }
         }
+    }.apply {
+        setMode(CallAudioManager.Mode.DEFAULT)
     }
 
     private var peerConnectionFactory: PeerConnectionFactory? = null
@@ -180,25 +180,38 @@ class WebRtcCallManager @Inject constructor(
         Timber.v("## VOIP WebRtcPeerConnectionManager onCall active: ${call.mxCall.callId}")
         val currentCall = getCurrentCall().takeIf { it != call }
         currentCall?.updateRemoteOnHold(onHold = true)
+        audioManager.setMode(if (call.mxCall.isVideoCall) CallAudioManager.Mode.VIDEO_CALL else CallAudioManager.Mode.AUDIO_CALL)
         this.currentCall.setAndNotify(call)
     }
 
-    private fun onCallEnded(call: WebRtcCall) {
-        Timber.v("## VOIP WebRtcPeerConnectionManager onCall ended: ${call.mxCall.callId}")
-        CallService.onCallTerminated(context, call.callId)
-        callAudioManager.stop()
-        callsByCallId.remove(call.mxCall.callId)
-        callsByRoomId[call.mxCall.roomId]?.remove(call)
-        if (getCurrentCall() == call) {
+    private fun onCallEnded(callId: String) {
+        Timber.v("## VOIP WebRtcPeerConnectionManager onCall ended: $callId")
+        val webRtcCall = callsByCallId.remove(callId) ?: return Unit.also {
+            Timber.v("On call ended for unknown call $callId")
+        }
+        CallService.onCallTerminated(context, callId)
+        callsByRoomId[webRtcCall.roomId]?.remove(webRtcCall)
+        if (getCurrentCall()?.callId == callId) {
             val otherCall = getCalls().lastOrNull()
             currentCall.setAndNotify(otherCall)
         }
         // This must be done in this thread
         executor.execute {
+            // There is no active calls
             if (getCurrentCall() == null) {
                 Timber.v("## VOIP Dispose peerConnectionFactory as there is no need to keep one")
                 peerConnectionFactory?.dispose()
                 peerConnectionFactory = null
+                audioManager.setMode(CallAudioManager.Mode.DEFAULT)
+                // did we start background sync? so we should stop it
+                if (isInBackground) {
+                    if (FcmHelper.isPushSupported()) {
+                        currentSession?.stopAnyBackgroundSync()
+                    } else {
+                        // for fdroid we should not stop, it should continue syncing
+                        // maybe we should restore default timeout/delay though?
+                    }
+                }
             }
             Timber.v("## VOIP WebRtcPeerConnectionManager close() executor done")
         }
@@ -222,7 +235,6 @@ class WebRtcCallManager @Inject constructor(
         val mxCall = currentSession?.callSignalingService()?.createOutgoingCall(signalingRoomId, otherUserId, isVideoCall) ?: return
         val webRtcCall = createWebRtcCall(mxCall)
         currentCall.setAndNotify(webRtcCall)
-        callAudioManager.startForCall(mxCall)
 
         CallService.onOutgoingCallRinging(
                 context = context.applicationContext,
@@ -244,7 +256,6 @@ class WebRtcCallManager @Inject constructor(
     private fun createWebRtcCall(mxCall: MxCall): WebRtcCall {
         val webRtcCall = WebRtcCall(
                 mxCall = mxCall,
-                callAudioManager = callAudioManager,
                 rootEglBase = rootEglBase,
                 context = context,
                 dispatcher = dispatcher,
@@ -259,23 +270,14 @@ class WebRtcCallManager @Inject constructor(
         callsByCallId[mxCall.callId] = webRtcCall
         callsByRoomId.getOrPut(mxCall.roomId) { ArrayList(1) }
                 .add(webRtcCall)
+        if (getCurrentCall() == null) {
+            currentCall.setAndNotify(webRtcCall)
+        }
         return webRtcCall
     }
 
     fun endCallForRoom(roomId: String, originatedByMe: Boolean = true) {
         callsByRoomId[roomId]?.forEach { it.endCall(originatedByMe) }
-    }
-
-    fun onWiredDeviceEvent(event: WiredHeadsetStateReceiver.HeadsetPlugEvent) {
-        Timber.v("## VOIP onWiredDeviceEvent $event")
-        getCurrentCall() ?: return
-        // sometimes we received un-wanted unplugged...
-        callAudioManager.wiredStateChange(event)
-    }
-
-    fun onWirelessDeviceEvent(event: BluetoothHeadsetReceiver.BTHeadsetPlugEvent) {
-        Timber.v("## VOIP onWirelessDeviceEvent $event")
-        callAudioManager.bluetoothStateChange(event.plugged)
     }
 
     override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) {
@@ -292,7 +294,6 @@ class WebRtcCallManager @Inject constructor(
         createWebRtcCall(mxCall).apply {
             offerSdp = callInviteContent.offer
         }
-        callAudioManager.startForCall(mxCall)
         // Start background service with notification
         CallService.onIncomingCallRinging(
                 context = context,
@@ -365,21 +366,6 @@ class WebRtcCallManager @Inject constructor(
 
     override fun onCallManagedByOtherSession(callId: String) {
         Timber.v("## VOIP onCallManagedByOtherSession: $callId")
-        val webRtcCall = callsByCallId.remove(callId)
-        if (webRtcCall != null) {
-            callsByRoomId[webRtcCall.mxCall.roomId]?.remove(webRtcCall)
-        }
-        // TODO: handle this properly
-        CallService.onCallTerminated(context, callId)
-
-        // did we start background sync? so we should stop it
-        if (isInBackground) {
-            if (FcmHelper.isPushSupported()) {
-                currentSession?.stopAnyBackgroundSync()
-            } else {
-                // for fdroid we should not stop, it should continue syncing
-                // maybe we should restore default timeout/delay though?
-            }
-        }
+        onCallEnded(callId)
     }
 }
