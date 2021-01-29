@@ -43,6 +43,8 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.allGranted
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.databinding.ActivityCallBinding
+import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
+import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.AvatarRenderer
@@ -84,8 +86,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private lateinit var callArgs: CallArgs
 
     @Inject lateinit var callManager: WebRtcCallManager
-
     @Inject lateinit var viewModelFactory: VectorCallViewModel.Factory
+
+    private val dialPadCallback = object : DialPadFragment.Callback {
+        override fun onDigitAppended(digit: String) {
+            callViewModel.handle(VectorCallViewActions.SendDtmfDigit(digit))
+        }
+    }
 
     private var rootEglBase: EglBase? = null
 
@@ -114,7 +121,9 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         if (intent.getStringExtra(EXTRA_MODE) == INCOMING_RINGING) {
             turnScreenOnAndKeyguardOff()
         }
-
+        if (savedInstanceState != null) {
+            (supportFragmentManager.findFragmentByTag(FRAGMENT_DIAL_PAD_TAG) as? CallDialPadBottomSheet)?.callback = dialPadCallback
+        }
         configureCallViews()
 
         callViewModel.subscribe(this) {
@@ -207,15 +216,14 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                         }
                     } else {
                         views.callStatusText.text = state.formattedDuration
+                        configureCallInfo(state)
                         if (callArgs.isVideoCall) {
                             views.callVideoGroup.isVisible = true
                             views.callInfoGroup.isVisible = false
                             views.pipRenderer.isVisible =  !state.isVideoCaptureInError && state.otherKnownCallInfo == null
-                            configureCallInfo(state)
                         } else {
                             views.callVideoGroup.isInvisible = true
                             views.callInfoGroup.isVisible = true
-                            configureCallInfo(state)
                         }
                     }
                 } else {
@@ -320,6 +328,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is VectorCallViewEvents.ConnectionTimeout -> {
                 onErrorTimoutConnect(event.turn)
             }
+            is VectorCallViewEvents.ShowDialPad -> {
+                CallDialPadBottomSheet.newInstance(false).apply {
+                    callback = dialPadCallback
+                }.show(supportFragmentManager, FRAGMENT_DIAL_PAD_TAG)
+            }
             is VectorCallViewEvents.ShowCallTransferScreen -> {
                 navigator.openCallTransfer(this, callArgs.callId)
             }
@@ -345,6 +358,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
         private const val CAPTURE_PERMISSION_REQUEST_CODE = 1
         private const val EXTRA_MODE = "EXTRA_MODE"
+        private const val FRAGMENT_DIAL_PAD_TAG = "FRAGMENT_DIAL_PAD_TAG"
 
         const val OUTGOING_CREATED = "OUTGOING_CREATED"
         const val INCOMING_RINGING = "INCOMING_RINGING"

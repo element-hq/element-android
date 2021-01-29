@@ -291,6 +291,23 @@ class WebRtcCall(val mxCall: MxCall,
         }
     }
 
+    /**
+     * Sends a DTMF digit to the other party
+     * @param digit The digit (nb. string - '#' and '*' are dtmf too)
+     */
+    fun sendDtmfDigit(digit: String) {
+        for (sender in peerConnection?.senders.orEmpty()) {
+            if (sender.track()?.kind() == "audio" && sender.dtmf()?.canInsertDtmf() == true) {
+                try {
+                    sender.dtmf()?.insertDtmf(digit, 100, 70)
+                    return
+                } catch (failure: Throwable) {
+                    Timber.v("Fail to send Dtmf digit")
+                }
+            }
+        }
+    }
+
     fun detachRenderers(renderers: List<SurfaceViewRenderer>?) {
         Timber.v("## VOIP detachRenderers")
         if (renderers.isNullOrEmpty()) {

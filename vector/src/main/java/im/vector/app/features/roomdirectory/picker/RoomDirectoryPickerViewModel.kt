@@ -16,8 +16,10 @@
 
 package im.vector.app.features.roomdirectory.picker
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
@@ -25,9 +27,8 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 
 class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initialState: RoomDirectoryPickerViewState,
                                                                private val session: Session)
@@ -52,19 +53,21 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initial
     }
 
     private fun load() {
-        session.getThirdPartyProtocol(object : MatrixCallback<Map<String, ThirdPartyProtocol>> {
-            override fun onSuccess(data: Map<String, ThirdPartyProtocol>) {
-                setState {
-                    copy(asyncThirdPartyRequest = Success(data))
-                }
+        viewModelScope.launch {
+            setState {
+                copy(asyncThirdPartyRequest = Loading())
             }
-
-            override fun onFailure(failure: Throwable) {
+            try {
+                val thirdPartyProtocols = session.thirdPartyService().getThirdPartyProtocols()
+                setState {
+                    copy(asyncThirdPartyRequest = Success(thirdPartyProtocols))
+                }
+            } catch (failure: Throwable) {
                 setState {
                     copy(asyncThirdPartyRequest = Fail(failure))
                 }
             }
-        })
+        }
     }
 
     override fun handle(action: RoomDirectoryPickerAction) {

@@ -26,5 +26,6 @@ data class UserListFragmentArgs(
         val excludedUserIds: Set<String>? = null,
         val singleSelection: Boolean = false,
         val showInviteActions: Boolean = true,
+        val showContactBookAction: Boolean = true,
         val showToolbar: Boolean = true
 ) : Parcelable

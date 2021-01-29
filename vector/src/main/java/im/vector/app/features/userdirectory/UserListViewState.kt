@@ -31,13 +31,15 @@ data class UserListViewState(
         val pendingSelections: Set<PendingSelection> = emptySet(),
         val searchTerm: String = "",
         val singleSelection: Boolean,
-        private val showInviteActions: Boolean
+        private val showInviteActions: Boolean,
+        val showContactBookAction: Boolean
 ) : MvRxState {
 
     constructor(args: UserListFragmentArgs) : this(
             excludedUserIds = args.excludedUserIds,
             singleSelection = args.singleSelection,
-            showInviteActions = args.showInviteActions
+            showInviteActions = args.showInviteActions,
+            showContactBookAction = args.showContactBookAction
     )
 
     fun getSelectedMatrixId(): List<String> {

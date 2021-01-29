@@ -267,6 +267,12 @@ class VectorCallViewModel @AssistedInject constructor(
                 if (!state.isVideoCall) return@withState
                 call?.setCaptureFormat(if (state.isHD) CaptureFormat.SD else CaptureFormat.HD)
             }
+            VectorCallViewActions.OpenDialPad -> {
+                _viewEvents.post(VectorCallViewEvents.ShowDialPad)
+            }
+            is VectorCallViewActions.SendDtmfDigit -> {
+                call?.sendDtmfDigit(action.digit)
+            }
             VectorCallViewActions.InitiateCallTransfer -> {
                 _viewEvents.post(
                         VectorCallViewEvents.ShowCallTransferScreen

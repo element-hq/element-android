@@ -28,6 +28,7 @@ sealed class VectorCallViewEvents : VectorViewEvents {
             val available: Set<CallAudioManager.Device>,
             val current: CallAudioManager.Device
     ) : VectorCallViewEvents()
+    object ShowDialPad: VectorCallViewEvents()
     object ShowCallTransferScreen: VectorCallViewEvents()
 //    data class CallAnswered(val content: CallAnswerContent) : VectorCallViewEvents()
 //    data class CallHangup(val content: CallHangupContent) : VectorCallViewEvents()

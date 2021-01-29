@@ -17,14 +17,24 @@
             android:elevation="4dp"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/callTransferFragmentContainer"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/callTransferTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/callTransferToolbar"
+            app:tabGravity="fill"
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/callTransferViewPager"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/callTransferActionsLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/callTransferToolbar" />
+            app:layout_constraintTop_toBottomOf="@id/callTransferTabLayout"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <RelativeLayout
             android:background="?riotx_header_panel_background"
@@ -66,7 +76,6 @@
                 android:layout_height="wrap_content"/>
 
         </RelativeLayout>
-
 
         <include
             android:id="@+id/waiting_view"

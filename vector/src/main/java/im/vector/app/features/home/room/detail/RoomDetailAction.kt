@@ -72,6 +72,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class IgnoreUser(val userId: String?) : RoomDetailAction()
 
     object ResendAll : RoomDetailAction()
+
+    data class StartCallWithPhoneNumber(val phoneNumber: String, val videoCall: Boolean): RoomDetailAction()
     data class StartCall(val isVideo: Boolean) : RoomDetailAction()
     data class AcceptCall(val callId: String): RoomDetailAction()
     object EndCall : RoomDetailAction()

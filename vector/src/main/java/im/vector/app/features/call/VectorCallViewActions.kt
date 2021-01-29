@@ -27,6 +27,8 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object ToggleVideo : VectorCallViewActions()
     object ToggleHoldResume: VectorCallViewActions()
     data class ChangeAudioDevice(val device: CallAudioManager.Device) : VectorCallViewActions()
+    object OpenDialPad: VectorCallViewActions()
+    data class SendDtmfDigit(val digit: String) : VectorCallViewActions()
     object SwitchSoundDevice : VectorCallViewActions()
     object HeadSetButtonPressed : VectorCallViewActions()
     object ToggleCamera : VectorCallViewActions()

@@ -19,5 +19,6 @@ package im.vector.app.features.call.transfer
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class CallTransferAction : VectorViewModelAction {
-    data class Connect(val consultFirst: Boolean, val selectedUserId: String) : CallTransferAction()
+    data class ConnectWithUserId(val consultFirst: Boolean, val selectedUserId: String) : CallTransferAction()
+    data class ConnectWithPhoneNumber(val consultFirst: Boolean, val phoneNumber: String) : CallTransferAction()
 }

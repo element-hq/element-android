@@ -24,6 +24,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import kotlinx.coroutines.launch
@@ -31,6 +32,7 @@ import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 
 class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: CallTransferViewState,
+                                                        private val dialPadLookup: DialPadLookup,
                                                         callManager: WebRtcCallManager)
     : VectorViewModel<CallTransferViewState, CallTransferAction, CallTransferViewEvents>(initialState) {
 
@@ -72,15 +74,29 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
 
     override fun handle(action: CallTransferAction) {
         when (action) {
-            is CallTransferAction.Connect -> transferCall(action)
+            is CallTransferAction.ConnectWithUserId -> connectWithUserId(action)
+            is CallTransferAction.ConnectWithPhoneNumber -> connectWithPhoneNumber(action)
         }.exhaustive
     }
 
-    private fun transferCall(action: CallTransferAction.Connect) {
+    private fun connectWithUserId(action: CallTransferAction.ConnectWithUserId) {
         viewModelScope.launch {
             try {
                 _viewEvents.post(CallTransferViewEvents.Loading)
                 call?.mxCall?.transfer(action.selectedUserId, null)
+                _viewEvents.post(CallTransferViewEvents.Dismiss)
+            } catch (failure: Throwable) {
+                _viewEvents.post(CallTransferViewEvents.FailToTransfer)
+            }
+        }
+    }
+
+    private fun connectWithPhoneNumber(action: CallTransferAction.ConnectWithPhoneNumber) {
+        viewModelScope.launch {
+            try {
+                _viewEvents.post(CallTransferViewEvents.Loading)
+                val result = dialPadLookup.lookupPhoneNumber(action.phoneNumber)
+                call?.mxCall?.transfer(result.userId, result.roomId)
                 _viewEvents.post(CallTransferViewEvents.Dismiss)
             } catch (failure: Throwable) {
                 _viewEvents.post(CallTransferViewEvents.FailToTransfer)

@@ -26,7 +26,9 @@ import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.audio.CallAudioManager
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.push.fcm.FcmHelper
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallListener
@@ -68,7 +70,21 @@ class WebRtcCallManager @Inject constructor(
         fun onAudioDevicesChange() {}
     }
 
+    interface PSTNSupportListener {
+        fun onPSTNSupportUpdated()
+    }
+
+    private val pstnSupportListeners = emptyList<PSTNSupportListener>().toMutableList()
+    fun addPstnSupportListener(listener: PSTNSupportListener) {
+        pstnSupportListeners.add(listener)
+    }
+
+    fun removePstnSupportListener(listener: PSTNSupportListener) {
+        pstnSupportListeners.remove(listener)
+    }
+
     private val currentCallsListeners = CopyOnWriteArrayList<CurrentCallListener>()
+
     fun addCurrentCallListener(listener: CurrentCallListener) {
         currentCallsListeners.add(listener)
     }
@@ -88,10 +104,26 @@ class WebRtcCallManager @Inject constructor(
     private var peerConnectionFactory: PeerConnectionFactory? = null
     private val executor = Executors.newSingleThreadExecutor()
     private val dispatcher = executor.asCoroutineDispatcher()
+    var supportedPSTNProtocol: String? = null
+        private set
+
+    val supportsPSTNProtocol: Boolean
+        get() = supportedPSTNProtocol != null
 
     private val rootEglBase by lazy { EglUtils.rootEglBase }
 
     private var isInBackground: Boolean = true
+
+    init {
+        GlobalScope.launch {
+            supportedPSTNProtocol = currentSession?.getSupportedPSTN(3)
+            if (supportedPSTNProtocol != null) {
+                pstnSupportListeners.forEach {
+                    tryOrNull { it.onPSTNSupportUpdated() }
+                }
+            }
+        }
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {

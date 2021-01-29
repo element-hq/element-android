@@ -18,6 +18,7 @@ package im.vector.app.core.error
 
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.call.dialpad.DialPadLookup
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
@@ -109,8 +110,11 @@ class DefaultErrorFormatter @Inject constructor(
                         throwable.localizedMessage
                 }
             }
-            is SsoFlowNotSupportedYet    -> stringProvider.getString(R.string.error_sso_flow_not_supported_yet)
-            else                         -> throwable.localizedMessage
+            is SsoFlowNotSupportedYet                                                       ->
+                stringProvider.getString(R.string.error_sso_flow_not_supported_yet)
+            is DialPadLookup.Failure                                                        ->
+                stringProvider.getString(R.string.call_dial_pad_lookup_error)
+            else                                                                            -> throwable.localizedMessage
         }
                 ?: stringProvider.getString(R.string.unknown_error)
     }

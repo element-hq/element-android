@@ -64,6 +64,10 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             dismiss()
         }
 
+        views.callControlsOpenDialPad.views.bottomSheetActionClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.OpenDialPad)
+        }
+
         views.callControlsTransfer.views.bottomSheetActionClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.InitiateCallTransfer)
             dismiss()

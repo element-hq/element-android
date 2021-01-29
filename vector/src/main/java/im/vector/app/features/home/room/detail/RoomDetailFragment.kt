@@ -96,8 +96,6 @@ import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.KeyboardStateUtils
-import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
-import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.checkPermissions
@@ -291,17 +289,28 @@ class RoomDetailFragment @Inject constructor(
 
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var keyboardStateUtils: KeyboardStateUtils
+    private lateinit var callActionsHandler : StartCallActionsHandler
 
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
 
     private var lockSendButton = false
-    private val activeCallViewHolder = KnownCallsViewHolder()
+    private val knownCallsViewHolder = KnownCallsViewHolder()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         knownCallsViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
         attachmentsHelper = AttachmentsHelper(requireContext(), this).register()
+        callActionsHandler = StartCallActionsHandler(
+                roomId = roomDetailArgs.roomId,
+                fragment = this,
+                vectorPreferences = vectorPreferences,
+                roomDetailViewModel = roomDetailViewModel,
+                callManager = callManager,
+                startCallActivityResultLauncher = startCallActivityResultLauncher,
+                showDialogWithMessage = ::showDialogWithMessage,
+                onTapToReturnToCall = ::onTapToReturnToCall
+        ).register()
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         setupToolbar(views.roomToolbar)
         setupRecyclerView()
@@ -328,7 +337,7 @@ class RoomDetailFragment @Inject constructor(
         knownCallsViewModel
                 .liveKnownCalls
                 .observe(viewLifecycleOwner, {
-                    activeCallViewHolder.updateCall(callManager.getCurrentCall(), it)
+                    knownCallsViewHolder.updateCall(callManager.getCurrentCall(), it)
                     invalidateOptionsMenu()
                 })
 
@@ -606,7 +615,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     override fun onDestroy() {
-        activeCallViewHolder.unBind()
+        knownCallsViewHolder.unBind()
         roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
         super.onDestroy()
     }
@@ -637,7 +646,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupActiveCallView() {
-        activeCallViewHolder.bind(
+        knownCallsViewHolder.bind(
                 views.activeCallPiP,
                 views.activeCallView,
                 views.activeCallPiPWrap,
@@ -761,9 +770,12 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.ManageIntegrations)
                 true
             }
-            R.id.voice_call,
+            R.id.voice_call -> {
+                callActionsHandler.onVoiceCallClicked()
+                true
+            }
             R.id.video_call       -> {
-                handleCallRequest(item)
+                callActionsHandler.onVideoCallClicked()
                 true
             }
             R.id.hangup_call      -> {
@@ -786,73 +798,6 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun handleCallRequest(item: MenuItem) = withState(roomDetailViewModel) { state ->
-        val roomSummary = state.asyncRoomSummary.invoke() ?: return@withState
-        val isVideoCall = item.itemId == R.id.video_call
-        when (roomSummary.joinedMembersCount) {
-            1    -> {
-                val pendingInvite = roomSummary.invitedMembersCount ?: 0 > 0
-                if (pendingInvite) {
-                    // wait for other to join
-                    showDialogWithMessage(getString(R.string.cannot_call_yourself_with_invite))
-                } else {
-                    // You cannot place a call with yourself.
-                    showDialogWithMessage(getString(R.string.cannot_call_yourself))
-                }
-            }
-            2 -> {
-                val currentCall = callManager.getCurrentCall()
-                if (currentCall != null) {
-                    // resume existing if same room, if not prompt to kill and then restart new call?
-                    if (currentCall.mxCall.roomId == roomDetailArgs.roomId) {
-                        onTapToReturnToCall()
-                    } else {
-                        safeStartCall(isVideoCall)
-                    }
-                } else if (!state.isAllowedToStartWebRTCCall) {
-                    showDialogWithMessage(getString(
-                            if (state.isDm()) {
-                                R.string.no_permissions_to_start_webrtc_call_in_direct_room
-                            } else {
-                                R.string.no_permissions_to_start_webrtc_call
-                            })
-                    )
-                } else {
-                    safeStartCall(isVideoCall)
-                }
-            }
-            else -> {
-                // it's jitsi call
-                // can you add widgets??
-                if (!state.isAllowedToManageWidgets) {
-                    // You do not have permission to start a conference call in this room
-                    showDialogWithMessage(getString(
-                            if (state.isDm()) {
-                                R.string.no_permissions_to_start_conf_call_in_direct_room
-                            } else {
-                                R.string.no_permissions_to_start_conf_call
-                            }
-                    ))
-                } else {
-                    if (state.activeRoomWidgets()?.filter { it.type == WidgetType.Jitsi }?.any() == true) {
-                        // A conference is already in progress!
-                        showDialogWithMessage(getString(R.string.conference_call_in_progress))
-                    } else {
-                        AlertDialog.Builder(requireContext())
-                                .setTitle(if (isVideoCall) R.string.video_meeting else R.string.audio_meeting)
-                                .setMessage(R.string.audio_video_meeting_description)
-                                .setPositiveButton(getString(R.string.create)) { _, _ ->
-                                    // create the widget, then navigate to it..
-                                    roomDetailViewModel.handle(RoomDetailAction.AddJitsiWidget(isVideoCall))
-                                }
-                                .setNegativeButton(getString(R.string.cancel), null)
-                                .show()
-                    }
-                }
-            }
-        }
-    }
-
     private fun displayDisabledIntegrationDialog() {
         AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.disabled_integration_dialog_title)
@@ -862,54 +807,6 @@ class RoomDetailFragment @Inject constructor(
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
-    }
-
-    private fun safeStartCall(isVideoCall: Boolean) {
-        if (vectorPreferences.preventAccidentalCall()) {
-            AlertDialog.Builder(requireActivity())
-                    .setMessage(if (isVideoCall) R.string.start_video_call_prompt_msg else R.string.start_voice_call_prompt_msg)
-                    .setPositiveButton(if (isVideoCall) R.string.start_video_call else R.string.start_voice_call) { _, _ ->
-                        safeStartCall2(isVideoCall)
-                    }
-                    .setNegativeButton(R.string.cancel, null)
-                    .show()
-        } else {
-            safeStartCall2(isVideoCall)
-        }
-    }
-
-    private val startCallActivityResultLauncher = registerForPermissionsResult { allGranted ->
-        if (allGranted) {
-            (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
-                roomDetailViewModel.pendingAction = null
-                roomDetailViewModel.handle(it)
-            }
-        } else {
-            context?.toast(R.string.permissions_action_not_performed_missing_permissions)
-            cleanUpAfterPermissionNotGranted()
-        }
-    }
-
-    private fun safeStartCall2(isVideoCall: Boolean) {
-        val startCallAction = RoomDetailAction.StartCall(isVideoCall)
-        roomDetailViewModel.pendingAction = startCallAction
-        if (isVideoCall) {
-            if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL,
-                            requireActivity(),
-                            startCallActivityResultLauncher,
-                            R.string.permissions_rationale_msg_camera_and_audio)) {
-                roomDetailViewModel.pendingAction = null
-                roomDetailViewModel.handle(startCallAction)
-            }
-        } else {
-            if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL,
-                            requireActivity(),
-                            startCallActivityResultLauncher,
-                            R.string.permissions_rationale_msg_record_audio)) {
-                roomDetailViewModel.pendingAction = null
-                roomDetailViewModel.handle(startCallAction)
-            }
-        }
     }
 
     private fun renderRegularMode(text: String) {
@@ -1048,6 +945,18 @@ class RoomDetailFragment @Inject constructor(
                     ?.let { content ->
                         roomDetailViewModel.handle(RoomDetailAction.SendSticker(content))
                     }
+        }
+    }
+
+    private val startCallActivityResultLauncher = registerForPermissionsResult { allGranted ->
+        if (allGranted) {
+            (roomDetailViewModel.pendingAction as? RoomDetailAction.StartCall)?.let {
+                roomDetailViewModel.pendingAction = null
+                roomDetailViewModel.handle(it)
+            }
+        } else {
+            context?.toast(R.string.permissions_action_not_performed_missing_permissions)
+            cleanUpAfterPermissionNotGranted()
         }
     }
 

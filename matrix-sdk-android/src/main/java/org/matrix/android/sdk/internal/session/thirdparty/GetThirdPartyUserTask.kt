@@ -14,25 +14,30 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.directory
+package org.matrix.android.sdk.internal.session.thirdparty
 
-import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
+import org.matrix.android.sdk.api.session.thirdparty.model.ThirdPartyUser
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
-import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
-internal interface GetThirdPartyProtocolsTask : Task<Unit, Map<String, ThirdPartyProtocol>>
+internal interface GetThirdPartyUserTask : Task<GetThirdPartyUserTask.Params, List<ThirdPartyUser>> {
 
-internal class DefaultGetThirdPartyProtocolsTask @Inject constructor(
-        private val roomAPI: RoomAPI,
+    data class Params(
+            val protocol: String,
+            val fields: Map<String, String> = emptyMap()
+    )
+}
+
+internal class DefaultGetThirdPartyUserTask @Inject constructor(
+        private val thirdPartyAPI: ThirdPartyAPI,
         private val globalErrorReceiver: GlobalErrorReceiver
-) : GetThirdPartyProtocolsTask {
+) : GetThirdPartyUserTask {
 
-    override suspend fun execute(params: Unit): Map<String, ThirdPartyProtocol> {
+    override suspend fun execute(params: GetThirdPartyUserTask.Params): List<ThirdPartyUser> {
         return executeRequest(globalErrorReceiver) {
-            apiCall = roomAPI.thirdPartyProtocols()
+            apiCall = thirdPartyAPI.getThirdPartyUser(params.protocol, params.fields)
         }
     }
 }
