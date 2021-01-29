@@ -25,7 +25,7 @@ private const val PSTN_MATRIX_KEY = "m.protocol.pstn"
 
 suspend fun Session.getSupportedPSTN(maxTries: Int): String? {
     val thirdPartyProtocols: Map<String, ThirdPartyProtocol> = try {
-        getThirdPartyProtocols()
+        thirdPartyService().getThirdPartyProtocols()
     } catch (failure: Throwable) {
         if (maxTries == 1) {
             return null

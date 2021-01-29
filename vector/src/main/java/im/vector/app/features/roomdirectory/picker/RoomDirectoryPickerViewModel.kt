@@ -19,6 +19,7 @@ package im.vector.app.features.roomdirectory.picker
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
@@ -53,8 +54,11 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(@Assisted initial
 
     private fun load() {
         viewModelScope.launch {
+            setState {
+                copy(asyncThirdPartyRequest = Loading())
+            }
             try {
-                val thirdPartyProtocols = session.getThirdPartyProtocols()
+                val thirdPartyProtocols = session.thirdPartyService().getThirdPartyProtocols()
                 setState {
                     copy(asyncThirdPartyRequest = Success(thirdPartyProtocols))
                 }

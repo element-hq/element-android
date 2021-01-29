@@ -114,7 +114,7 @@ internal class DefaultSession @Inject constructor(
         private val accountService: Lazy<AccountService>,
         private val defaultIdentityService: DefaultIdentityService,
         private val integrationManagerService: IntegrationManagerService,
-        private val thirdPartyService: ThirdPartyService,
+        private val thirdPartyService: Lazy<ThirdPartyService>,
         private val callSignalingService: Lazy<CallSignalingService>,
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
@@ -135,7 +135,6 @@ internal class DefaultSession @Inject constructor(
         ProfileService by profileService.get(),
         AccountDataService by accountDataService.get(),
         AccountService by accountService.get(),
-        ThirdPartyService by thirdPartyService,
         GlobalErrorHandler.Listener {
 
     override val sharedSecretStorageService: SharedSecretStorageService
@@ -259,6 +258,8 @@ internal class DefaultSession @Inject constructor(
     override fun callSignalingService(): CallSignalingService = callSignalingService.get()
 
     override fun searchService(): SearchService = searchService.get()
+
+    override fun thirdPartyService(): ThirdPartyService = thirdPartyService.get()
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()

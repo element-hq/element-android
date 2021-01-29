@@ -33,7 +33,7 @@ class DialPadLookup @Inject constructor(val session: Session,
     suspend fun lookupPhoneNumber(phoneNumber: String): Result {
         val supportedProtocolKey = callManager.supportedPSTNProtocol ?: throw Failure()
         val thirdPartyUser = tryOrNull {
-            session.getThirdPartyUser(supportedProtocolKey, fields = mapOf(
+            session.thirdPartyService().getThirdPartyUser(supportedProtocolKey, fields = mapOf(
                     "m.id.phone" to phoneNumber
             )).firstOrNull()
         } ?: throw Failure()

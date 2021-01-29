@@ -73,8 +73,7 @@ interface Session :
         HomeServerCapabilitiesService,
         SecureStorageService,
         AccountDataService,
-        AccountService,
-        ThirdPartyService {
+        AccountService {
 
     /**
      * The params associated to the session
@@ -213,6 +212,11 @@ interface Session :
      * Returns the search service associated with the session
      */
     fun searchService(): SearchService
+
+    /**
+     * Returns the third party service associated with the session
+     */
+    fun thirdPartyService(): ThirdPartyService
 
     /**
      * Add a listener to the session.

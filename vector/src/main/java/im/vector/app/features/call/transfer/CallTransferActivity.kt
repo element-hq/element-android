@@ -80,9 +80,9 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
         waitingView = views.waitingView.waitingView
 
         callTransferViewModel.observeViewEvents {
-            when (it) {
-                is CallTransferViewEvents.Dismiss -> finish()
-                CallTransferViewEvents.Loading -> showWaitingView()
+            when (it)  {
+                is CallTransferViewEvents.Dismiss        -> finish()
+                CallTransferViewEvents.Loading           -> showWaitingView()
                 is CallTransferViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
             }
         }

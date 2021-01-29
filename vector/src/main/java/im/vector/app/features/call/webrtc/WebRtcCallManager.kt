@@ -118,7 +118,9 @@ class WebRtcCallManager @Inject constructor(
         GlobalScope.launch {
             supportedPSTNProtocol = currentSession?.getSupportedPSTN(3)
             if (supportedPSTNProtocol != null) {
-                pstnSupportListeners.forEach { it.onPSTNSupportUpdated() }
+                pstnSupportListeners.forEach {
+                    tryOrNull { it.onPSTNSupportUpdated() }
+                }
             }
         }
     }

@@ -75,8 +75,8 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
             return
         }
 
-        when (permalinkData) {
-            is PermalinkData.UserLink -> {
+        when (permalinkData)  {
+            is PermalinkData.UserLink     -> {
                 val user = resolveUser(permalinkData.userId)
                 setState {
                     copy(
@@ -85,11 +85,11 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is PermalinkData.RoomLink -> {
+            is PermalinkData.RoomLink     -> {
                 // not yet supported
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
-            is PermalinkData.GroupLink -> {
+            is PermalinkData.GroupLink    -> {
                 // not yet supported
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
