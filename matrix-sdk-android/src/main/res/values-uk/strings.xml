@@ -13,7 +13,7 @@
     <string name="summary_user_sent_sticker">%1$s надіслав(ла) наліпку.</string>
     <string name="notice_room_invite_you">%1$s запросив(ла) Вас</string>
     <string name="notice_room_join">%1$s приєднується</string>
-    <string name="notice_room_leave">%1$s покинув(ла)</string>
+    <string name="notice_room_leave">%1$s покидає кімнату</string>
     <string name="notice_room_reject">%1$s відхилив(ла) запрошення</string>
     <string name="notice_room_kick">%1$s копнув(ла) %2$s</string>
     <string name="notice_room_unban">%1$s розблокував(ла) %2$s</string>
@@ -65,4 +65,23 @@
     <string name="notice_event_redacted">Повідомлення видалено</string>
     <string name="notice_event_redacted_by">%1$s видалили повідомлення</string>
     <string name="notice_event_redacted_with_reason">Повідомлення видалено [причина: %1$s]</string>
+    <string name="initial_sync_start_importing_account_data">Початкове налаштування:
+\nІмпортування даних облікового запису</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Ви покинули. Причина: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s покидає. Причина: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Ви покинули кімнату. Причина: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s покидає кімнату. Причина: %2$s</string>
+    <string name="notice_direct_room_leave">%1$s покидає кімнату</string>
+    <string name="notice_direct_room_leave_by_you">Ви покинули кімнату</string>
+    <string name="notice_room_leave_by_you">Ви покинули кімнату</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Ви змінили адреси цієї кімнати.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Ви змінили основну та альтернативну адреси цієї кімнати.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Ви змінили альтернативні адреси для цієї кімнати.</string>
+    <string name="notice_power_level_changed_by_you">Ви змінили рівень доступу на %1$s.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Ви змінили серверні списки контролю доступу для цієї кімнати.</string>
+    <string name="notice_room_name_changed_by_you">Ви змінили назву кімнати на: %1$s</string>
+    <string name="notice_room_avatar_changed_by_you">Ви змінили світлину кімнати</string>
+    <string name="notice_room_topic_changed_by_you">Ви змінили тему на: %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">Ви змінили показуване ім\'я з %1$s на %2$s</string>
+    <string name="notice_avatar_url_changed_by_you">Ви змінили світлину профілю</string>
 </resources>

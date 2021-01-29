@@ -19,10 +19,13 @@ package im.vector.app.features.link
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.viewModel
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.platform.EmptyViewModel
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityProgressBinding
@@ -30,7 +33,7 @@ import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.permalink.PermalinkHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -44,6 +47,8 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
     @Inject lateinit var permalinkHandler: PermalinkHandler
+
+    private val emptyViewModel: EmptyViewModel by viewModel()
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -139,21 +144,28 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
                 .setTitle(R.string.dialog_title_warning)
                 .setMessage(R.string.error_user_already_logged_in)
                 .setCancelable(false)
-                .setPositiveButton(R.string.logout) { _, _ ->
-                    sessionHolder.getSafeActiveSession()?.signOut(true, object : MatrixCallback<Unit> {
-                        override fun onFailure(failure: Throwable) {
-                            displayError(failure)
-                        }
-
-                        override fun onSuccess(data: Unit) {
-                            Timber.d("## displayAlreadyLoginPopup(): logout succeeded")
-                            sessionHolder.clearActiveSession()
-                            startLoginActivity(uri)
-                        }
-                    }) ?: finish()
-                }
+                .setPositiveButton(R.string.logout) { _, _ -> safeSignout(uri) }
                 .setNegativeButton(R.string.cancel) { _, _ -> finish() }
                 .show()
+    }
+
+    private fun safeSignout(uri: Uri) {
+        val session = sessionHolder.getSafeActiveSession()
+        if (session == null) {
+            // Should not happen
+            startLoginActivity(uri)
+        } else {
+            emptyViewModel.viewModelScope.launch {
+                try {
+                    session.signOut(true)
+                    Timber.d("## displayAlreadyLoginPopup(): logout succeeded")
+                    sessionHolder.clearActiveSession()
+                    startLoginActivity(uri)
+                } catch (failure: Throwable) {
+                    displayError(failure)
+                }
+            }
+        }
     }
 
     private fun displayError(failure: Throwable) {

@@ -20,7 +20,7 @@ import android.app.Activity
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.view.View
+import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import com.tapadoo.alerter.Alerter
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
@@ -179,9 +179,7 @@ class PopupAlertManager @Inject constructor() {
                 ?.takeIf { ThemeUtils.isLightTheme(it) }
                 ?.let { it.window?.decorView }
                 ?.let { view ->
-                    var flags = view.systemUiVisibility
-                    flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-                    view.systemUiVisibility = flags
+                    view.windowInsetsController?.setSystemBarsAppearance(0, APPEARANCE_LIGHT_STATUS_BARS)
                 }
     }
 
@@ -193,9 +191,7 @@ class PopupAlertManager @Inject constructor() {
                 ?.takeIf { ThemeUtils.isLightTheme(it) }
                 ?.let { it.window?.decorView }
                 ?.let { view ->
-                    var flags = view.systemUiVisibility
-                    flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                    view.systemUiVisibility = flags
+                    view.windowInsetsController?.setSystemBarsAppearance(APPEARANCE_LIGHT_STATUS_BARS, APPEARANCE_LIGHT_STATUS_BARS)
                 }
     }
 

@@ -18,8 +18,9 @@ package im.vector.app.features.autocomplete.member
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.RecyclerViewPresenter
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -44,7 +45,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         controller.listener = null
     }
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(roomId: String): AutocompleteMemberPresenter
     }

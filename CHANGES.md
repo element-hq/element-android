@@ -1,12 +1,46 @@
-Changes in Element 1.0.14 (2020-XX-XX)
+Changes in Element 1.0.15 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ - Fix clear cache issue: sometimes, after a clear cache, there is still a token, so the init sync service is not started.
+ - Sidebar too large in horizontal orientation or tablets (#475)
+ - UrlPreview should be updated when the url is edited and changed (#2678)
+ - When receiving a new pepper from identity server, use it on the next hash lookup (#2708)
+ - Crashes reported by PlayStore (new in 1.0.14) (#2707)
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - Increase targetSdkVersion to 30 (#2600)
+
+Build 🧱:
+ - Compile with Android SDK 30 (Android 11)
+
+Test:
+ -
+
+Other changes:
+ - Update Dagger to 2.31 version so we can use the embedded AssistedInject feature 
+
+Changes in Element 1.0.14 (2020-01-15)
 ===================================================
 
 Features ✨:
  - Enable url previews for notices (#2562)
+ - Edit room permissions (#2471)
 
 Improvements 🙌:
  - Add System theme option and set as default (#904, #2387)
- - Warn user when he is leaving a not public room (#1460)
+ - Store megolm outbound session to improve send time of first message after app launch.
+ - Warn user when they are leaving a not public room (#1460)
+ - Option to disable emoji keyboard (#2563)
 
 Bugfix 🐛:
  - Unspecced msgType field in m.sticker (#2580)
@@ -15,18 +49,16 @@ Bugfix 🐛:
  - Room Topic not displayed correctly after visiting a link (#2551)
  - Hiding membership events works the exact opposite (#2603)
  - Tapping drawer having more than 1 room in notifications gives "malformed link" error (#2605)
+ - Sent image not displayed when opened immediately after sending (#409)
  - Initial sync is not retried correctly when there is some network error. (#2632)
-Translations 🗣:
- -
+ - Fix switch theme issue, and white field issue (#2599, #2528)
+ - Fix request too large Uri error when joining a room
 
-SDK API changes ⚠️:
- -
+Translations 🗣:
+ - New language supported: Hebrew
 
 Build 🧱:
  - Remove dependency to org.greenrobot.eventbus library
-
-Test:
- -
 
 Other changes:
  - Migrate to ViewBindings (#1072)

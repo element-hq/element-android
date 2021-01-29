@@ -56,8 +56,8 @@ internal class DefaultGetUploadsTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val tokenStore: SyncTokenStore,
         @SessionDatabase private val monarchy: Monarchy,
-        private val globalErrorReceiver: GlobalErrorReceiver)
-    : GetUploadsTask {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : GetUploadsTask {
 
     override suspend fun execute(params: GetUploadsTask.Params): GetUploadsResult {
         val result: GetUploadsResult

@@ -102,7 +102,7 @@
     </plurals>
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s ha rimosso %2$s come indirizzo per questa stanza.</item>
-        <item quantity="other">%1$s ha rimosso %3$s come indirizzi per questa stanza.</item>
+        <item quantity="other">%1$s ha rimosso %2$s come indirizzi per questa stanza.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s ha aggiunto %2$s e rimosso %3$s come indirizzi per questa stanza.</string>
     <string name="notice_room_canonical_alias_set">%1$s ha impostato l\'indirizzo principale per questa stanza a %2$s.</string>
@@ -237,4 +237,26 @@
     <string name="notice_room_server_acl_set_banned">• I server che corrispondono a %s sono banditi.</string>
     <string name="notice_room_server_acl_set_title_by_you">Hai impostato le ACL del server per questa stanza.</string>
     <string name="notice_room_server_acl_set_title">%s ha impostato le ACL del server per questa stanza.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Hai cambiato gli indirizzi per questa stanza.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s ha cambiato gli indirizzi per questa stanza.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Hai cambiato gli indirizzi principali ed alternativi per questa stanza.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s ha cambiato gli indirizzi principali ed alternativi per questa stanza.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Hai cambiato gli indirizzi alternativi per questa stanza.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s ha cambiato gli indirizzi alternativi per questa stanza.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Hai rimosso l\'indirizzo alternativo %1$s per questa stanza.</item>
+        <item quantity="other">Hai rimosso gli indirizzi alternativi %1$s per questa stanza.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s ha rimosso l\'indirizzo alternativo %2$s per questa stanza.</item>
+        <item quantity="other">%1$s ha rimosso gli indirizzi alternativi %2$s per questa stanza.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Hai aggiunto l\'indirizzo alternativo %1$s per questa stanza.</item>
+        <item quantity="other">Hai aggiunto gli indirizzi alternativi %1$s per questa stanza.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s ha aggiunto l\'indirizzo alternativo %2$s per questa stanza.</item>
+        <item quantity="other">%1$s ha aggiunto gli indirizzi alternativi %2$s per questa stanza.</item>
+    </plurals>
 </resources>

@@ -18,8 +18,9 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Sort
 import io.realm.kotlin.where
@@ -55,9 +56,9 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                                                                   private val loadRoomMembersTask: LoadRoomMembersTask
 ) : TimelineService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): TimelineService
+        fun create(roomId: String): DefaultTimelineService
     }
 
     override fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline {

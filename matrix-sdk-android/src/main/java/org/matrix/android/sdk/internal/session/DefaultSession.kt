@@ -20,7 +20,6 @@ import androidx.annotation.MainThread
 import dagger.Lazy
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.pushrules.PushRuleService
@@ -219,13 +218,13 @@ internal class DefaultSession @Inject constructor(
         }
     }
 
-    override fun clearCache(callback: MatrixCallback<Unit>) {
+    override suspend fun clearCache() {
         stopSync()
         stopAnyBackgroundSync()
         uiHandler.post {
             lifecycleObservers.forEach { it.onClearCache() }
         }
-        cacheService.get().clearCache(callback)
+        cacheService.get().clearCache()
         workManagerProvider.cancelAllWorks()
     }
 

@@ -17,6 +17,7 @@
 package im.vector.app.features.crypto.recover
 
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.KeyEvent
@@ -102,7 +103,12 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = super.onCreateView(inflater, container, savedInstanceState)
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            dialog?.window?.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        }
         return rootView
     }
 

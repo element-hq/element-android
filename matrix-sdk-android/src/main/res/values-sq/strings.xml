@@ -101,7 +101,7 @@
     </plurals>
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s hoqi %2$s si adresë për këtë dhomë.</item>
-        <item quantity="other">%1$s hoqi %3$s si adresa për këtë dhomë.</item>
+        <item quantity="other">%1$s hoqi %2$s si adresa për këtë dhomë.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s shtoi %2$s dhe hoqi %3$s si adresa për këtë dhomë.</string>
     <string name="notice_room_canonical_alias_set">%1$s caktoi %2$s si adresë kryesore për këtë dhomë.</string>
@@ -232,4 +232,26 @@
     <string name="notice_room_server_acl_updated_banned">• Shërbyesit që kanë përputhje me %s tani janë të ndaluar.</string>
     <string name="notice_room_server_acl_set_allowed">• Shërbyesit që kanë përputhje me %s janë të ndaluar.</string>
     <string name="notice_room_server_acl_set_banned">• Shërbyesit që kanë përputhje me %s janë të ndaluar.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Ndryshuat adresat për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s ndryshoi adresat për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Ndryshuat adresat kryesore dhe alternative për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s ndryshoi adresat kryesore dhe alternative për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Ndryshuat adresat alternative për këtë dhomë.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s ndryshoi adresat alternative për këtë dhomë.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Hoqët adresën alternative %1$s për këtë dhomë.</item>
+        <item quantity="other">Hoqët adresat alternative %1$s për këtë dhomë.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s hoqët adresën alternative %2$s për këtë dhomë.</item>
+        <item quantity="other">%1$s hoqët adresat alternative %2$s për këtë dhomë.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Shtuat adresën alternative %1$s për këtë dhomë.</item>
+        <item quantity="other">Shtuat adresat alternative %1$s për këtë dhomë.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s shtoi adresën alternative %2$s për këtë dhomë.</item>
+        <item quantity="other">%1$s shtoi adresat alternative %2$s për këtë dhomë.</item>
+    </plurals>
 </resources>

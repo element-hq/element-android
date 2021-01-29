@@ -252,4 +252,34 @@
     <string name="notice_room_server_acl_updated_title">%s изменил права доступа сервера (ACL) для этой комнаты.</string>
     <string name="notice_room_server_acl_set_title_by_you">Вы настроили права доступа сервера (ACL) для этой комнаты.</string>
     <string name="notice_room_server_acl_set_title">%s устанавливает права доступа сервера (ACL) для этой комнаты.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Вы изменили адреса этой комнаты.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s изменил(а) адреса этой комнаты.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Вы изменили основной и альтернативный адреса этой комнаты.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s изменил(а) основной и альтернативный адреса этой комнаты.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Вы изменили альтернативные адреса для этой комнаты.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s изменил(а) альтернативные адреса для этой комнаты.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Вы удалили альтернативный адрес %1$s для этой комнаты.</item>
+        <item quantity="few">Вы удалили альтернативные адреса %1$s для этой комнаты.</item>
+        <item quantity="many">Вы удалили альтернативные адреса %1$s для этой комнаты.</item>
+        <item quantity="other">Вы удалили альтернативные адреса %1$s для этой комнаты.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s удалил(а) альтернативный адрес %2$s для этой комнаты.</item>
+        <item quantity="few">%1$s удалил(а) альтернативные адреса %2$s для этой комнаты.</item>
+        <item quantity="many">%1$s удалил(а) альтернативные адреса %2$s для этой комнаты.</item>
+        <item quantity="other">%1$s удалил(а) альтернативные адреса %2$s для этой комнаты.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Вы добавили альтернативный адрес %1$s для этой комнаты.</item>
+        <item quantity="few">Вы добавили альтернативные адреса %1$s для этой комнаты.</item>
+        <item quantity="many">Вы добавили альтернативные адреса %1$s для этой комнаты.</item>
+        <item quantity="other">Вы добавили альтернативные адреса %1$s для этой комнаты.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s добавил(а) альтернативный адрес %2$s для этой комнаты.</item>
+        <item quantity="few">%1$s добавил(а) альтернативные адреса %2$s для этой комнаты.</item>
+        <item quantity="many">%1$s добавил(а) альтернативные адреса %2$s для этой комнаты.</item>
+        <item quantity="other">%1$s добавил(а) альтернативные адреса %2$s для этой комнаты.</item>
+    </plurals>
 </resources>
