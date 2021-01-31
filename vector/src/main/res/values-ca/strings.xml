@@ -1054,7 +1054,7 @@
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">S\'ha afegit %d clau nova a aquest dispositiu.</item>
-        <item quantity="other">S\'ha afegit %d claus noves a aquest dispositiu.</item>
+        <item quantity="other">S\'han afegit %d claus noves a aquest dispositiu.</item>
     </plurals>
     <string name="keys_backup_get_version_error">No s\'ha pogut obtenir la versió de les claus de recuperació més recents (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">La criptografia de la sessió no és activa</string>
@@ -1102,7 +1102,7 @@
     <string name="keys_backup_banner_setup_line2">Comenceu a emprar la còpia de seguretat de les claus</string>
     <string name="keys_backup_banner_recover_line1">No perdeu mai els missatges xifrats</string>
     <string name="keys_backup_banner_recover_line2">Empra la còpia de seguretat de la clau</string>
-    <string name="keys_backup_banner_update_line1">Claus de missatges xifrats noves</string>
+    <string name="keys_backup_banner_update_line1">Noves claus de missatges segurs</string>
     <string name="keys_backup_banner_update_line2">Gestiona en la còpia de la clau</string>
     <string name="keys_backup_banner_in_progress">S\'està fent una còpia de seguretat de les claus…</string>
     <string name="keys_backup_info_keys_all_backup_up">S\'ha fet una còpia de seguretat de totes les claus</string>
@@ -1195,7 +1195,7 @@
     <string name="sas_security_advise">Per la màxima seguretat us recomanem fer això en persona o usar un altre medi de comunicació confiable.</string>
     <string name="sas_verify_start_button_title">Començar la verificació</string>
     <string name="sas_incoming_request_title">Sol·licitud de verificació entrant</string>
-    <string name="sas_incoming_request_description">Verificar aquest dispositiu per marcar-lo com a confiable. Confiar en dispositius d\'amistats us dona un alleujament addicional quan useu missatges encriptats end-to-end.</string>
+    <string name="sas_incoming_request_description">Verifica aquesta sessió per fer-la de confiança. Les sessions de confiança amb els contactes et donen un alleujament addicional quan utilitzes missatges xifrats d\'extrem a extrem.</string>
     <string name="sas_incoming_request_description_2">Verificant aquest dispositiu el marcareu com a confiable, i també marcareu el vostre dispositiu com a confiable pel vostre company.</string>
     <string name="sas_emoji_description">Verificar aquest dispositiu confirmant els següents emojis que apareguin a la pantalla del vostre company</string>
     <string name="sas_decimal_description">Verificar aquest dispositiu confirmant els següents números que sortiran a la pantalla del vostre company</string>
@@ -2009,7 +2009,7 @@
     </plurals>
     <string name="delete_account_data_warning">Vols eliminar les dades del compte de tipus %1$s\?
 \n
-\nVes en compte, pot ser que provoqui comportaments inesperats.</string>
+\nVés en compte, pot ser que provoqui comportaments inesperats.</string>
     <string name="settings_account_data">Dades del compte</string>
     <string name="settings_dev_tools">Eines per a desenvolupadors</string>
     <string name="verification_sas_do_not_match">No coincideixen</string>
@@ -2109,4 +2109,33 @@
     <string name="login_reset_password_email_hint">Correu electrònic</string>
     <string name="login_reset_password_submit">Següent</string>
     <string name="settings_troubleshoot_test_notification_title">Visualització de notificació</string>
+    <string name="this_is_the_beginning_of_room">Inici de %s.</string>
+    <string name="invite_friends">Convida amics</string>
+    <string name="invite_friends_text">Ei, parla amb mi des d\'Element: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Uneix-te a Element</string>
+    <string name="user_code_info_text">Comparteix aquest codi amb la gent perquè puguin escanejar-lo, afegir-te i començar a xatejar amb tu.</string>
+    <string name="identity_server_user_consent_not_provided">L\'usuari no s\'ha acceptat el consentiment.</string>
+    <string name="command_confetti">Envia el missatge proporcionat amb confetis</string>
+    <string name="command_snow">Envia el missatge proporcionat amb neu</string>
+    <string name="default_message_emote_confetti">envia confetis 🎉</string>
+    <string name="default_message_emote_snow">envia neu ❄️</string>
+    <string name="user_code_my_code">El meu codi</string>
+    <string name="user_code_share">Comparteix el meu codi</string>
+    <string name="user_code_scan">Escaneja un codi QR</string>
+    <string name="not_a_valid_qr_code">No és un codi QR de Matrix vàlid</string>
+    <string name="settings_failed_to_get_crypto_device_info">No hi ha informació criptogràfica disponible</string>
+    <string name="verification_conclusion_ok_self_notice">La nova sessió s\'ha verificat. Tindrà accés als teus missatges xifrats i es mostrarà de confiança per als altres usuaris.</string>
+    <string name="verification_conclusion_ok_notice">Els missatges amb aquest usuari estan xifrats d\'extrem a extrem i no podran ser llegits per tercers.</string>
+    <string name="verification_code_notice">Compara el codi amb el que es mostra a la pantalla de l\'altre usuari.</string>
+    <string name="verification_request_start_notice">Per estar segur, fes això en persona o utilitza una altra forma per a comunicar-te.</string>
+    <string name="verification_request_notice">Per estar segur, verifica %s comprovant un codi d\'un sol ús.</string>
+    <string name="room_settings_enable_encryption_dialog_submit">Activa el xifrat</string>
+    <string name="room_settings_enable_encryption_dialog_title">Activa el xifrat\?</string>
+    <string name="room_settings_enable_encryption_no_permission">No tens permís per activar el xifrat en aquesta sala.</string>
+    <string name="room_settings_enable_encryption">Activa el xifrat d\'extrem a extrem…</string>
+    <string name="settings_category_composer">Editor de missatges</string>
+    <string name="command_description_rainbow_emote">Envia l\'emoticona proporcionat pintat amb un arc de Sant Martí</string>
+    <string name="command_description_rainbow">Envia el missatge proporcionat pintat amb un arc de Sant Martí</string>
+    <string name="room_list_sharing_header_other_rooms">Altres sales</string>
+    <string name="room_list_sharing_header_recent_rooms">Sales recents</string>
 </resources>
