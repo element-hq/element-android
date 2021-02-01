@@ -135,9 +135,9 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
         if (isInEditMode) {
             ssoIdentityProviders = listOf(
                     SsoIdentityProvider("Google", "Google", null, SsoIdentityProvider.BRAND_GOOGLE),
-                    SsoIdentityProvider("Facebook", "Facebook",null, SsoIdentityProvider.BRAND_FACEBOOK),
-                    SsoIdentityProvider("Apple", "Apple",null, SsoIdentityProvider.BRAND_APPLE),
-                    SsoIdentityProvider("GitHub", "GitHub",null, SsoIdentityProvider.BRAND_GITHUB),
+                    SsoIdentityProvider("Facebook", "Facebook", null, SsoIdentityProvider.BRAND_FACEBOOK),
+                    SsoIdentityProvider("Apple", "Apple", null, SsoIdentityProvider.BRAND_APPLE),
+                    SsoIdentityProvider("GitHub", "GitHub", null, SsoIdentityProvider.BRAND_GITHUB),
                     SsoIdentityProvider("Twitter", "Twitter", null, SsoIdentityProvider.BRAND_TWITTER),
                     SsoIdentityProvider("Gitlab", "Gitlab", null, SsoIdentityProvider.BRAND_GITLAB),
                     SsoIdentityProvider("Custom_pro", "SSO", null, null)

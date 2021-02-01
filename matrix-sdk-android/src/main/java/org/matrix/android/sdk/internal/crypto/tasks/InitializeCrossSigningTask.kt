@@ -125,8 +125,8 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
             try {
                 uploadSigningKeysTask.execute(uploadSigningKeysParams)
             } catch (failure: Throwable) {
-                if (params.interactiveAuthInterceptor == null ||
-                        !handleUIA(failure, params.interactiveAuthInterceptor) { authUpdate ->
+                if (params.interactiveAuthInterceptor == null
+                        || !handleUIA(failure, params.interactiveAuthInterceptor) { authUpdate ->
                             uploadSigningKeysTask.execute(uploadSigningKeysParams.copy(userAuthParam = authUpdate))
                         }) {
                     Timber.d("## UIA: propagate failure")

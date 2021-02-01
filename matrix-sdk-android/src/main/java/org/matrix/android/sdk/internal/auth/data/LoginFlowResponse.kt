@@ -46,7 +46,7 @@ internal data class LoginFlow(
         val _devSsoIdentityProvider: List<SsoIdentityProvider>? = null,
 
         @Json(name = "identity_providers")
-        val _ssoIdentityProvider: List<SsoIdentityProvider>? = null,
+        val _ssoIdentityProvider: List<SsoIdentityProvider>? = null
 
 ) {
         val ssoIdentityProvider = _ssoIdentityProvider ?: _devSsoIdentityProvider
