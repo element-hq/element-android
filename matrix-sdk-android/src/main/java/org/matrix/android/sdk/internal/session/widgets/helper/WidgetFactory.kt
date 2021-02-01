@@ -53,7 +53,7 @@ internal class WidgetFactory @Inject constructor(private val userDataSource: Use
             }
         }
         val isAddedByMe = widgetEvent.senderId == userId
-        val computedUrl = widgetContent.computeURL(widgetEvent.roomId)
+        val computedUrl = widgetContent.computeURL(widgetEvent.roomId, widgetId)
         return Widget(
                 widgetContent = widgetContent,
                 event = widgetEvent,
@@ -65,13 +65,14 @@ internal class WidgetFactory @Inject constructor(private val userDataSource: Use
         )
     }
 
-    private fun WidgetContent.computeURL(roomId: String?): String? {
+    private fun WidgetContent.computeURL(roomId: String?, widgetId: String): String? {
         var computedUrl = url ?: return null
         val myUser = userDataSource.getUser(userId)
         computedUrl = computedUrl
                 .replace("\$matrix_user_id", userId)
                 .replace("\$matrix_display_name", myUser?.displayName ?: userId)
                 .replace("\$matrix_avatar_url", myUser?.avatarUrl ?: "")
+                .replace("\$matrix_widget_id", widgetId)
 
         if (roomId != null) {
             computedUrl = computedUrl.replace("\$matrix_room_id", roomId)

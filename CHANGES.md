@@ -13,6 +13,7 @@ Bugfix 🐛:
  - UrlPreview should be updated when the url is edited and changed (#2678)
  - When receiving a new pepper from identity server, use it on the next hash lookup (#2708)
  - Crashes reported by PlayStore (new in 1.0.14) (#2707)
+ - Widgets: Support $matrix_widget_id parameter (#2748)
 
 Translations 🗣:
  -
