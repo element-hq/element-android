@@ -43,5 +43,11 @@ internal data class LoginFlow(
          * See MSC #2858
          */
         @Json(name = "org.matrix.msc2858.identity_providers")
-        val ssoIdentityProvider: List<SsoIdentityProvider>?
-)
+        val _devSsoIdentityProvider: List<SsoIdentityProvider>? = null,
+
+        @Json(name = "identity_providers")
+        val _ssoIdentityProvider: List<SsoIdentityProvider>? = null,
+
+) {
+        val ssoIdentityProvider = _ssoIdentityProvider ?: _devSsoIdentityProvider
+}
