@@ -30,16 +30,18 @@ import android.bluetooth.le.ScanSettings
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import android.os.Looper
 import android.os.ParcelUuid
 import android.widget.Toast
+import gobind.Conduit
 import gobind.DendriteMonolith
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.InputStream
+import java.io.OutputStream
 import java.nio.ByteBuffer
 import java.util.UUID
+import kotlin.concurrent.thread
 
 class DendriteService : Service() {
     private val binder = DendriteLocalBinder()
@@ -51,11 +53,71 @@ class DendriteService : Service() {
     private var scanner = adapter.bluetoothLeScanner
     private var server: BluetoothServerSocket = adapter.listenUsingInsecureL2capChannel()
     private var psm: ByteArray = intToBytes(server.psm)
-    private var connections: MutableMap<String, BluetoothSocket> = mutableMapOf<String, BluetoothSocket>()
+    private var connections: MutableMap<String, DendriteBLEPeering> = mutableMapOf<String, DendriteBLEPeering>()
 
     inner class DendriteLocalBinder : Binder() {
         fun getService() : DendriteService {
             return this@DendriteService
+        }
+    }
+
+    inner class DendriteBLEPeering(conduit: Conduit, socket: BluetoothSocket) {
+        private var conduit: Conduit = conduit
+        private var socket: BluetoothSocket = socket
+
+        public val isConnected: Boolean
+            get() = socket.isConnected
+
+        private var bleInput: InputStream = socket.inputStream
+        private var bleOutput: OutputStream = socket.outputStream
+
+        public fun start() {
+            thread {
+                reader()
+            }
+            thread {
+                writer()
+            }
+        }
+
+        public fun close() {
+            socket.close()
+        }
+
+        private fun reader() {
+            var b = ByteArray(socket.maxReceivePacketSize)
+            while (isConnected) {
+                try {
+                    val rn = bleInput.read(b)
+                    if (rn < 0) {
+                        continue
+                    }
+                    val r = b.sliceArray(0 until rn).clone()
+                    conduit.write(r)
+                } catch (e: Exception) {
+                    Timber.e(e)
+                    break
+                }
+            }
+            close()
+        }
+
+        private fun writer() {
+            var b = ByteArray(socket.maxTransmitPacketSize)
+            while (isConnected) {
+                try {
+                    val rn = conduit.read(b).toInt()
+                    if (rn < 0) {
+                        continue
+                    }
+                    val w = b.sliceArray(0 until rn).clone()
+                    bleOutput.write(w)
+                } catch (e: Exception) {
+                    Timber.e(e)
+                    break
+                }
+            }
+            close()
         }
     }
 
@@ -120,11 +182,15 @@ class DendriteService : Service() {
                             connection.close()
                             connections.remove(device)
                         }
-                        connections[device] = remote
 
-                        val rx = remote.maxReceivePacketSize
-                        val tx = remote.maxTransmitPacketSize
-                        Timber.i("BLE: Connected inbound $device PSM $psm (RX size $rx, TX size $tx)")
+                        Timber.i("BLE: Connected inbound $device PSM $psm")
+
+                        Timber.i("Creating DendriteBLEPeering")
+                        connections[device] = DendriteBLEPeering(monolith!!.conduit("BLE"), remote)
+                        Timber.i("Starting DendriteBLEPeering")
+                        connections[device]!!.start()
+
+                        Timber.i("BLE: Created BLE peering with $device PSM $psm")
                     } catch (e: Exception) {
                         Timber.i("BLE: Accept exception: ${e.message}")
                     }
@@ -185,21 +251,30 @@ class DendriteService : Service() {
             try {
                 val service = record.serviceData.getValue(serviceUUID) ?: return
                 val psm = bytesToInt(service)
+
+                if (server.psm < psm) {
+                    // only connect in one direction, which stops both sides from
+                    // making and then closing/replacing connections
+                    return
+                }
+
                 var connection = connections[device]
                 if (connection != null && connection.isConnected) {
                     return
                 }
 
                 Timber.i("BLE: Attempting connection to $device PSM $psm")
-                connection = result.device.createInsecureL2capChannel(psm)
-                connection.connect()
-                connections[device] = connection
+                val remote = result.device.createInsecureL2capChannel(psm)
+                remote.connect()
 
-                GlobalScope.launch {
-                    val rx = connection.maxReceivePacketSize
-                    val tx = connection.maxTransmitPacketSize
-                    Timber.i("BLE: Connected outbound $device PSM $psm (RX size $rx, TX size $tx)")
-                }
+                Timber.i("BLE: Connected outbound $device PSM $psm")
+
+                Timber.i("Creating DendriteBLEPeering")
+                connections[device] = DendriteBLEPeering(monolith!!.conduit("BLE"), remote)
+                Timber.i("Starting DendriteBLEPeering")
+                connections[device]!!.start()
+
+                Timber.i("BLE: Created BLE peering with $device PSM $psm")
             } catch (e: Exception) {
                 Timber.i("BLE: Device $device error %s", e.message)
             }
