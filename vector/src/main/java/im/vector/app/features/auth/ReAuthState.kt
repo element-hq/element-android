@@ -23,12 +23,14 @@ data class ReAuthState(
         val session: String? = null,
         val flowType: String? = null,
         val ssoFallbackPageWasShown: Boolean = false,
-        val passwordVisible: Boolean = false
+        val passwordVisible: Boolean = false,
+        val lastErrorCode: String? = null
 ) : MvRxState {
     constructor(args: ReAuthActivity.Args) : this(
             args.title,
             args.session,
-            args.flowType
+            args.flowType,
+            lastErrorCode = args.lastErrorCode
     )
 
     constructor() : this(null, null)

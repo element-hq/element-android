@@ -41,6 +41,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.internal.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.UIABaseAuth
@@ -159,8 +160,8 @@ class HomeActivityViewModel @AssistedInject constructor(
             Timber.d("Initialize cross signing")
             session.cryptoService().crossSigningService().initializeCrossSigning(
                     object : UserInteractiveAuthInterceptor {
-                        override fun performStage(flow: RegistrationFlowResponse, promise: Continuation<UIABaseAuth>) {
-                            if (flow.flows?.any { it.type == LoginFlowTypes.PASSWORD } == true) {
+                        override fun performStage(flow: RegistrationFlowResponse, errorCode: String?,  promise: Continuation<UIABaseAuth>) {
+                            if (flow.nextUncompletedStage() == LoginFlowTypes.PASSWORD) {
                                 promise.resume(
                                         UserPasswordAuth(
                                                 session = flow.session,
@@ -251,8 +252,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                         Timber.d("Initialize cross signing")
                         session.cryptoService().crossSigningService().initializeCrossSigning(
                                 object : UserInteractiveAuthInterceptor {
-                                    override fun performStage(flow: RegistrationFlowResponse, promise: Continuation<UIABaseAuth>) {
-                                        if (flow.flows?.any { it.type == LoginFlowTypes.PASSWORD } == true) {
+                                    override fun performStage(flow: RegistrationFlowResponse, errorCode: String?, promise: Continuation<UIABaseAuth>) {
+                                        if (flow.nextUncompletedStage() == LoginFlowTypes.PASSWORD) {
                                             UserPasswordAuth(
                                                     session = flow.session,
                                                     user = session.myUserId,

@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowRespons
  */
 sealed class CrossSigningSettingsViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : CrossSigningSettingsViewEvents()
-    data class RequestReAuth(val registrationFlowResponse: RegistrationFlowResponse) : CrossSigningSettingsViewEvents()
+    data class RequestReAuth(val registrationFlowResponse: RegistrationFlowResponse, val lastErrorCode: String?) : CrossSigningSettingsViewEvents()
     data class ShowModalWaitingView(val status: String?) : CrossSigningSettingsViewEvents()
     object HideModalWaitingView : CrossSigningSettingsViewEvents()
 }

@@ -88,7 +88,10 @@ class CrossSigningSettingsFragment @Inject constructor(
                     Unit
                 }
                 is CrossSigningSettingsViewEvents.RequestReAuth -> {
-                    ReAuthActivity.newIntent(requireContext(), event.registrationFlowResponse, getString(R.string.initialize_cross_signing)).let { intent ->
+                    ReAuthActivity.newIntent(requireContext(),
+                            event.registrationFlowResponse,
+                            event.lastErrorCode,
+                            getString(R.string.initialize_cross_signing)).let { intent ->
                         reAuthActivityResultLauncher.launch(intent)
                     }
                 }

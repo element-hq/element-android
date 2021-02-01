@@ -51,19 +51,23 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
     }
 
     private fun onButtonClicked() = withState(viewModel) { state ->
-        if (state.flowType == LoginFlowTypes.SSO) {
-            viewModel.handle(ReAuthActions.StartSSOFallback)
-        } else if (state.flowType == LoginFlowTypes.PASSWORD) {
-            val password = views.passwordField.text.toString()
-            if (password.isBlank()) {
-                // Prompt to enter something
-                views.passwordFieldTil.error = getString(R.string.error_empty_field_your_password)
-            } else {
-                views.passwordFieldTil.error = null
-                viewModel.handle(ReAuthActions.ReAuthWithPass(password))
+        when (state.flowType) {
+            LoginFlowTypes.SSO      -> {
+                viewModel.handle(ReAuthActions.StartSSOFallback)
             }
-        } else {
-            // not supported
+            LoginFlowTypes.PASSWORD -> {
+                val password = views.passwordField.text.toString()
+                if (password.isBlank()) {
+                    // Prompt to enter something
+                    views.passwordFieldTil.error = getString(R.string.error_empty_field_your_password)
+                } else {
+                    views.passwordFieldTil.error = null
+                    viewModel.handle(ReAuthActions.ReAuthWithPass(password))
+                }
+            }
+            else                    -> {
+                // not supported
+            }
         }
     }
 
@@ -90,6 +94,24 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
         } else {
             views.passwordReveal.setImageResource(R.drawable.ic_eye)
             views.passwordReveal.contentDescription = getString(R.string.a11y_show_password)
+        }
+
+        if (it.lastErrorCode != null) {
+            when (it.flowType) {
+                LoginFlowTypes.SSO      -> {
+                    views.genericErrorText.isVisible = true
+                    views.genericErrorText.text = getString(R.string.authentication_error)
+                }
+                LoginFlowTypes.PASSWORD -> {
+                    views.passwordFieldTil.error = getString(R.string.authentication_error)
+                }
+                else                    -> {
+                    // nop
+                }
+            }
+        } else {
+            views.passwordFieldTil.error = null
+            views.genericErrorText.isVisible = false
         }
     }
 }

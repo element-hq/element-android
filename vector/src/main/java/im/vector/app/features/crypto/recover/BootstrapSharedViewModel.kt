@@ -26,8 +26,8 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.nulabinc.zxcvbn.Zxcvbn
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.exhaustive
@@ -37,14 +37,22 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
+import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.internal.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
+import org.matrix.android.sdk.internal.crypto.model.rest.UIABaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.util.awaitCallback
 import java.io.OutputStream
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 class BootstrapSharedViewModel @AssistedInject constructor(
         @Assisted initialState: BootstrapViewState,
@@ -66,14 +74,17 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         fun create(initialState: BootstrapViewState, args: BootstrapBottomSheet.Args): BootstrapSharedViewModel
     }
 
-    private var _pendingSession: String? = null
+//    private var _pendingSession: String? = null
+
+    var uiaContinuation: Continuation<UIABaseAuth>? = null
+    var pendingAuth: UIABaseAuth? = null
 
     init {
 
         when (args.setUpMode) {
             SetupMode.PASSPHRASE_RESET,
             SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET,
-            SetupMode.HARD_RESET         -> {
+            SetupMode.HARD_RESET -> {
                 setState {
                     copy(step = BootstrapStep.FirstForm(keyBackUpExist = false, reset = true))
                 }
@@ -81,10 +92,10 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             SetupMode.CROSS_SIGNING_ONLY -> {
                 // Go straight to account password
                 setState {
-                    copy(step = BootstrapStep.AccountPassword(false))
+                    copy(step = BootstrapStep.AccountReAuth())
                 }
             }
-            SetupMode.NORMAL             -> {
+            SetupMode.NORMAL -> {
                 // need to check if user have an existing keybackup
                 setState {
                     copy(step = BootstrapStep.CheckingMigration)
@@ -136,8 +147,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
     override fun handle(action: BootstrapActions) = withState { state ->
         when (action) {
-            is BootstrapActions.GoBack                           -> queryBack()
-            BootstrapActions.TogglePasswordVisibility            -> {
+            is BootstrapActions.GoBack -> queryBack()
+            BootstrapActions.TogglePasswordVisibility -> {
                 when (state.step) {
                     is BootstrapStep.SetupPassphrase                 -> {
                         setState {
@@ -149,10 +160,8 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             copy(step = state.step.copy(isPasswordVisible = !state.step.isPasswordVisible))
                         }
                     }
-                    is BootstrapStep.AccountPassword                 -> {
-                        setState {
-                            copy(step = state.step.copy(isPasswordVisible = !state.step.isPasswordVisible))
-                        }
+                    is BootstrapStep.AccountReAuth                   -> {
+                        // nop
                     }
                     is BootstrapStep.GetBackupSecretPassForMigration -> {
                         setState {
@@ -162,13 +171,13 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     else                                             -> Unit
                 }
             }
-            BootstrapActions.StartKeyBackupMigration             -> {
+            BootstrapActions.StartKeyBackupMigration -> {
                 handleStartMigratingKeyBackup()
             }
-            is BootstrapActions.Start                            -> {
+            is BootstrapActions.Start -> {
                 handleStart(action)
             }
-            is BootstrapActions.UpdateCandidatePassphrase        -> {
+            is BootstrapActions.UpdateCandidatePassphrase -> {
                 val strength = zxcvbn.measure(action.pass)
                 setState {
                     copy(
@@ -177,7 +186,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is BootstrapActions.GoToConfirmPassphrase            -> {
+            is BootstrapActions.GoToConfirmPassphrase -> {
                 setState {
                     copy(
                             passphrase = action.passphrase,
@@ -194,18 +203,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is BootstrapActions.DoInitialize                     -> {
+            is BootstrapActions.DoInitialize -> {
                 if (state.passphrase == state.passphraseRepeat) {
-                    val userPassword = reAuthHelper.data
-                    if (userPassword == null) {
-                        setState {
-                            copy(
-                                    step = BootstrapStep.AccountPassword(false)
-                            )
-                        }
-                    } else {
-                        startInitializeFlow(userPassword)
-                    }
+                    startInitializeFlow(state)
                 } else {
                     setState {
                         copy(
@@ -214,73 +214,73 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     }
                 }
             }
-            is BootstrapActions.DoInitializeGeneratedKey         -> {
-                val userPassword = reAuthHelper.data
-                if (userPassword == null) {
-                    setState {
-                        copy(
-                                passphrase = null,
-                                passphraseRepeat = null,
-                                step = BootstrapStep.AccountPassword(false)
-                        )
-                    }
-                } else {
-                    setState {
-                        copy(
-                                passphrase = null,
-                                passphraseRepeat = null
-                        )
-                    }
-                    startInitializeFlow(userPassword)
-                }
+            is BootstrapActions.DoInitializeGeneratedKey -> {
+                startInitializeFlow(state)
             }
-            BootstrapActions.RecoveryKeySaved                    -> {
+            BootstrapActions.RecoveryKeySaved -> {
                 _viewEvents.post(BootstrapViewEvents.RecoveryKeySaved)
                 setState {
                     copy(step = BootstrapStep.SaveRecoveryKey(true))
                 }
             }
-            BootstrapActions.Completed                           -> {
+            BootstrapActions.Completed -> {
                 _viewEvents.post(BootstrapViewEvents.Dismiss(true))
             }
-            BootstrapActions.GoToCompleted                       -> {
+            BootstrapActions.GoToCompleted -> {
                 setState {
                     copy(step = BootstrapStep.DoneSuccess)
                 }
             }
-            BootstrapActions.SaveReqQueryStarted                 -> {
+            BootstrapActions.SaveReqQueryStarted -> {
                 setState {
                     copy(recoverySaveFileProcess = Loading())
                 }
             }
-            is BootstrapActions.SaveKeyToUri                     -> {
+            is BootstrapActions.SaveKeyToUri -> {
                 saveRecoveryKeyToUri(action.os)
             }
-            BootstrapActions.SaveReqFailed                       -> {
+            BootstrapActions.SaveReqFailed -> {
                 setState {
                     copy(recoverySaveFileProcess = Uninitialized)
                 }
             }
-            BootstrapActions.GoToEnterAccountPassword            -> {
+            BootstrapActions.GoToEnterAccountPassword -> {
                 setState {
-                    copy(step = BootstrapStep.AccountPassword(false))
+                    copy(step = BootstrapStep.AccountReAuth())
                 }
             }
-            BootstrapActions.HandleForgotBackupPassphrase        -> {
+            BootstrapActions.HandleForgotBackupPassphrase -> {
                 if (state.step is BootstrapStep.GetBackupSecretPassForMigration) {
                     setState {
                         copy(step = BootstrapStep.GetBackupSecretPassForMigration(state.step.isPasswordVisible, true))
                     }
                 } else return@withState
             }
-            is BootstrapActions.ReAuth                           -> {
-                startInitializeFlow(action.pass)
-            }
-            is BootstrapActions.DoMigrateWithPassphrase          -> {
+//            is BootstrapActions.ReAuth                           -> {
+//                startInitializeFlow(action.pass)
+//            }
+            is BootstrapActions.DoMigrateWithPassphrase -> {
                 startMigrationFlow(state.step, action.passphrase, null)
             }
-            is BootstrapActions.DoMigrateWithRecoveryKey         -> {
+            is BootstrapActions.DoMigrateWithRecoveryKey -> {
                 startMigrationFlow(state.step, null, action.recoveryKey)
+            }
+            BootstrapActions.SsoAuthDone -> {
+                uiaContinuation?.resume(DefaultBaseAuth(session = pendingAuth?.session ?: ""))
+            }
+            is BootstrapActions.PasswordAuthDone -> {
+                uiaContinuation?.resume(
+                        UserPasswordAuth(
+                                session = pendingAuth?.session,
+                                password = action.password,
+                                user = session.myUserId
+                        )
+                )
+            }
+            BootstrapActions.ReAuthCancelled -> {
+                setState {
+                    copy(step = BootstrapStep.AccountReAuth(stringProvider.getString(R.string.authentication_error)))
+                }
             }
         }.exhaustive
     }
@@ -293,7 +293,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 )
             }
         } else {
-            startInitializeFlow(null)
+            startInitializeFlow(it)
         }
     }
 
@@ -346,16 +346,16 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                                     migrationRecoveryKey = recoveryKey
                             )
                         }
-                        val userPassword = reAuthHelper.data
-                        if (userPassword == null) {
-                            setState {
-                                copy(
-                                        step = BootstrapStep.AccountPassword(false)
-                                )
-                            }
-                        } else {
-                            startInitializeFlow(userPassword)
-                        }
+//                        val userPassword = reAuthHelper.data
+//                        if (userPassword == null) {
+//                            setState {
+//                                copy(
+//                                        step = BootstrapStep.AccountPassword(false)
+//                                )
+//                            }
+//                        } else {
+                        withState { startInitializeFlow(it) }
+//                        }
                     }
                     is BackupToQuadSMigrationTask.Result.Failure -> {
                         _viewEvents.post(
@@ -372,7 +372,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
         }
     }
 
-    private fun startInitializeFlow(userPassword: String?) = withState { state ->
+    private fun startInitializeFlow(state: BootstrapViewState) {
         val previousStep = state.step
 
         setState {
@@ -389,19 +389,45 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             }
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val userPasswordAuth = userPassword?.let {
-                UserPasswordAuth(
-                        // Note that _pendingSession may or may not be null, this is OK, it will be managed by the task
-                        session = _pendingSession,
-                        user = session.myUserId,
-                        password = it
-                )
+        val interceptor = object : UserInteractiveAuthInterceptor {
+            override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                when (flowResponse.nextUncompletedStage()) {
+                    LoginFlowTypes.PASSWORD -> {
+                        pendingAuth = UserPasswordAuth(
+                                // Note that _pendingSession may or may not be null, this is OK, it will be managed by the task
+                                session = flowResponse.session,
+                                user = session.myUserId,
+                                password = null
+                        )
+                        uiaContinuation = promise
+                        setState {
+                            copy(
+                                    step = BootstrapStep.AccountReAuth()
+                            )
+                        }
+                        _viewEvents.post(BootstrapViewEvents.RequestReAuth(flowResponse, errCode))
+                    }
+                    LoginFlowTypes.SSO -> {
+                        pendingAuth = DefaultBaseAuth(flowResponse.session)
+                        uiaContinuation = promise
+                        setState {
+                            copy(
+                                    step = BootstrapStep.AccountReAuth()
+                            )
+                        }
+                        _viewEvents.post(BootstrapViewEvents.RequestReAuth(flowResponse, errCode))
+                    }
+                    else                    -> {
+                        promise.resumeWith(Result.failure(UnsupportedOperationException()))
+                    }
+                }
             }
+        }
 
+        viewModelScope.launch(Dispatchers.IO) {
             bootstrapTask.invoke(this,
                     Params(
-                            userPasswordAuth = userPasswordAuth,
+                            userInteractiveAuthInterceptor = interceptor,
                             progressListener = progressListener,
                             passphrase = state.passphrase,
                             keySpec = state.migrationRecoveryKey?.let { extractCurveKeyFromRecoveryKey(it)?.let { RawBytesKeySpec(it) } },
@@ -410,10 +436,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
             ) { bootstrapResult ->
                 when (bootstrapResult) {
                     is BootstrapResult.SuccessCrossSigningOnly -> {
-                        // TPD
                         _viewEvents.post(BootstrapViewEvents.Dismiss(true))
                     }
-                    is BootstrapResult.Success                 -> {
+                    is BootstrapResult.Success -> {
                         setState {
                             copy(
                                     recoveryKeyCreationInfo = bootstrapResult.keyInfo,
@@ -424,30 +449,15 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             )
                         }
                     }
-                    is BootstrapResult.PasswordAuthFlowMissing -> {
-                        // Ask the password to the user
-                        _pendingSession = bootstrapResult.sessionId
+                    is BootstrapResult.InvalidPasswordError -> {
+                        // it's a bad password / auth
                         setState {
                             copy(
-                                    step = BootstrapStep.AccountPassword(false)
+                                    step = BootstrapStep.AccountReAuth(stringProvider.getString(R.string.auth_invalid_login_param))
                             )
                         }
                     }
-                    is BootstrapResult.UnsupportedAuthFlow     -> {
-                        _viewEvents.post(BootstrapViewEvents.ModalError(stringProvider.getString(R.string.auth_flow_not_supported)))
-                        _viewEvents.post(BootstrapViewEvents.Dismiss(false))
-                    }
-                    is BootstrapResult.InvalidPasswordError    -> {
-                        // it's a bad password
-                        // We clear the auth session, to avoid 'Requested operation has changed during the UI authentication session' error
-                        _pendingSession = null
-                        setState {
-                            copy(
-                                    step = BootstrapStep.AccountPassword(false, stringProvider.getString(R.string.auth_invalid_login_param))
-                            )
-                        }
-                    }
-                    is BootstrapResult.Failure                 -> {
+                    is BootstrapResult.Failure -> {
                         if (bootstrapResult is BootstrapResult.GenericError
                                 && bootstrapResult.failure is Failure.OtherServerError
                                 && bootstrapResult.failure.httpCode == 401) {
@@ -497,7 +507,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     }
                 }
             }
-            is BootstrapStep.SetupPassphrase                 -> {
+            is BootstrapStep.SetupPassphrase -> {
                 setState {
                     copy(
                             step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist),
@@ -507,7 +517,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is BootstrapStep.ConfirmPassphrase               -> {
+            is BootstrapStep.ConfirmPassphrase -> {
                 setState {
                     copy(
                             step = BootstrapStep.SetupPassphrase(
@@ -516,19 +526,19 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is BootstrapStep.AccountPassword                 -> {
+            is BootstrapStep.AccountReAuth -> {
                 _viewEvents.post(BootstrapViewEvents.SkipBootstrap(state.passphrase != null))
             }
-            BootstrapStep.Initializing                       -> {
+            BootstrapStep.Initializing -> {
                 // do we let you cancel from here?
                 _viewEvents.post(BootstrapViewEvents.SkipBootstrap(state.passphrase != null))
             }
             is BootstrapStep.SaveRecoveryKey,
-            BootstrapStep.DoneSuccess                        -> {
+            BootstrapStep.DoneSuccess -> {
                 // nop
             }
-            BootstrapStep.CheckingMigration                  -> Unit
-            is BootstrapStep.FirstForm                       -> {
+            BootstrapStep.CheckingMigration -> Unit
+            is BootstrapStep.FirstForm -> {
                 _viewEvents.post(
                         when (args.setUpMode) {
                             SetupMode.CROSS_SIGNING_ONLY,
@@ -537,7 +547,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         }
                 )
             }
-            is BootstrapStep.GetBackupSecretForMigration     -> {
+            is BootstrapStep.GetBackupSecretForMigration -> {
                 setState {
                     copy(
                             step = BootstrapStep.FirstForm(keyBackUpExist = doesKeyBackupExist),
@@ -555,7 +565,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
     private fun BackupToQuadSMigrationTask.Result.Failure.toHumanReadable(): String {
         return when (this) {
             is BackupToQuadSMigrationTask.Result.InvalidRecoverySecret -> stringProvider.getString(R.string.keys_backup_passphrase_error_decrypt)
-            is BackupToQuadSMigrationTask.Result.ErrorFailure          -> errorFormatter.toHumanReadable(throwable)
+            is BackupToQuadSMigrationTask.Result.ErrorFailure -> errorFormatter.toHumanReadable(throwable)
             // is BackupToQuadSMigrationTask.Result.NoKeyBackupVersion,
             // is BackupToQuadSMigrationTask.Result.IllegalParams,
             else                                                       -> stringProvider.getString(R.string.unexpected_error)

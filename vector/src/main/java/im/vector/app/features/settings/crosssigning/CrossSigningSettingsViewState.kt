@@ -23,6 +23,5 @@ data class CrossSigningSettingsViewState(
         val crossSigningInfo: MXCrossSigningInfo? = null,
         val xSigningIsEnableInAccount: Boolean = false,
         val xSigningKeysAreTrusted: Boolean = false,
-        val xSigningKeyCanSign: Boolean = true,
-//        val pendingAuthSession: String? = null
+        val xSigningKeyCanSign: Boolean = true
 ) : MvRxState

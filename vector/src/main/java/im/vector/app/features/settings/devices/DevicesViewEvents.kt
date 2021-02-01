@@ -33,7 +33,7 @@ sealed class DevicesViewEvents : VectorViewEvents {
 
 //    object RequestPassword : DevicesViewEvents()
 
-    data class RequestReAuth(val registrationFlowResponse: RegistrationFlowResponse) : DevicesViewEvents()
+    data class RequestReAuth(val registrationFlowResponse: RegistrationFlowResponse, val lastErrorCode: String?) : DevicesViewEvents()
 
     data class PromptRenameDevice(val deviceInfo: DeviceInfo) : DevicesViewEvents()
 

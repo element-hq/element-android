@@ -173,7 +173,10 @@ class VectorSettingsDevicesFragment @Inject constructor(
      * Show a dialog to ask for user password, or use a previously entered password.
      */
     private fun maybeShowDeleteDeviceWithPasswordDialog(reAuthReq: DevicesViewEvents.RequestReAuth) {
-        ReAuthActivity.newIntent(requireContext(), reAuthReq.registrationFlowResponse, getString(R.string.devices_delete_dialog_title)).let { intent ->
+        ReAuthActivity.newIntent(requireContext(),
+                reAuthReq.registrationFlowResponse,
+                reAuthReq.lastErrorCode,
+                getString(R.string.devices_delete_dialog_title)).let { intent ->
             reAuthActivityResultLauncher.launch(intent)
         }
     }

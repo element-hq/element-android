@@ -17,8 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.tasks
 
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
+import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDeviceParams
 import org.matrix.android.sdk.internal.crypto.model.rest.UIABaseAuth
@@ -27,7 +26,6 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.coroutines.suspendCoroutine
 
 internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     data class Params(
@@ -48,46 +46,14 @@ internal class DefaultDeleteDeviceTask @Inject constructor(
                 apiCall = cryptoApi.deleteDevice(params.deviceId, DeleteDeviceParams(params.userAuthParam?.asMap()))
             }
         } catch (throwable: Throwable) {
-            if (params.userInteractiveAuthInterceptor == null || !handleUIA(throwable, params)) {
+            if (params.userInteractiveAuthInterceptor == null
+                    || !handleUIA(throwable, params.userInteractiveAuthInterceptor) { auth ->
+                        execute(params.copy(userAuthParam = auth))
+                    }
+            ) {
                 Timber.d("## UIA: propagate failure")
                 throw  throwable
             }
-        }
-    }
-
-    private suspend fun handleUIA(failure: Throwable, params: DeleteDeviceTask.Params): Boolean {
-        Timber.d("## UIA: check error delete device ${failure.message}")
-        if (failure is Failure.OtherServerError && failure.httpCode == 401) {
-            Timber.d("## UIA: error can be passed to interceptor")
-            // give a chance to the reauth helper?
-            val flowResponse = failure.toRegistrationFlowResponse()
-                    ?: return false.also {
-                        Timber.d("## UIA: failed to parse flow response")
-                    }
-
-            Timber.d("## UIA: type = ${flowResponse.flows}")
-            Timber.d("## UIA: has interceptor = ${params.userInteractiveAuthInterceptor != null}")
-
-            Timber.d("## UIA: delegate to interceptor...")
-            val authUpdate = try {
-                suspendCoroutine<UIABaseAuth> { continuation ->
-                    params.userInteractiveAuthInterceptor!!.performStage(flowResponse, continuation)
-                }
-            } catch (failure: Throwable) {
-                Timber.w(failure, "## UIA: failed to participate")
-                return false
-            }
-
-            Timber.d("## UIA: delete device updated auth $authUpdate")
-            return try {
-                execute(params.copy(userAuthParam = authUpdate))
-                true
-            } catch (failure: Throwable) {
-                handleUIA(failure, params)
-            }
-        } else {
-            Timber.d("## UIA: not a UIA error")
-            return false
         }
     }
 }

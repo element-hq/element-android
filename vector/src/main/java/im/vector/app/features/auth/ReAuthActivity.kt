@@ -38,6 +38,7 @@ import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.internal.auth.registration.nextUncompletedStage
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,7 +48,8 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
     data class Args(
             val flowType: String?,
             val title: String?,
-            val session: String?
+            val session: String?,
+            val lastErrorCode: String?
     ) : Parcelable
 
     // For sso
@@ -196,17 +198,21 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
         const val RESULT_FLOW_TYPE = "RESULT_FLOW_TYPE"
         const val RESULT_VALUE = "RESULT_VALUE"
 
-        fun newIntent(context: Context, fromError: RegistrationFlowResponse, reasonTitle: String?): Intent {
-            val authType = if (fromError.flows.orEmpty().any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true }) {
-                LoginFlowTypes.PASSWORD
-            } else if (fromError.flows.orEmpty().any { it.stages?.contains(LoginFlowTypes.SSO) == true }) {
-                LoginFlowTypes.SSO
-            } else {
-                // TODO, support more auth type?
-                null
+        fun newIntent(context: Context, fromError: RegistrationFlowResponse, lastErrorCode: String?, reasonTitle: String?): Intent {
+            val authType = when (fromError.nextUncompletedStage()) {
+                LoginFlowTypes.PASSWORD -> {
+                    LoginFlowTypes.PASSWORD
+                }
+                LoginFlowTypes.SSO -> {
+                    LoginFlowTypes.SSO
+                }
+                else                    -> {
+                    // TODO, support more auth type?
+                    null
+                }
             }
             return Intent(context, ReAuthActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(authType, reasonTitle, fromError.session))
+                putExtra(MvRx.KEY_ARG, Args(authType, reasonTitle, fromError.session, lastErrorCode))
             }
         }
     }

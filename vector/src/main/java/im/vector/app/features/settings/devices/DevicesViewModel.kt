@@ -49,6 +49,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.internal.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
@@ -330,9 +331,9 @@ class DevicesViewModel @AssistedInject constructor(
             try {
                 awaitCallback<Unit> {
                     session.cryptoService().deleteDevice(deviceId, object : UserInteractiveAuthInterceptor {
-                        override fun performStage(flow: RegistrationFlowResponse, promise: Continuation<UIABaseAuth>) {
+                        override fun performStage(flow: RegistrationFlowResponse, errorCode: String?, promise: Continuation<UIABaseAuth>) {
                             Timber.d("## UIA : deleteDevice UIA")
-                            if (flow.flows?.any { it.type == LoginFlowTypes.PASSWORD } == true && reAuthHelper.data != null) {
+                            if (flow.nextUncompletedStage() == LoginFlowTypes.PASSWORD && reAuthHelper.data != null && errorCode == null) {
                                 UserPasswordAuth(
                                         session = null,
                                         user = session.myUserId,
@@ -340,7 +341,7 @@ class DevicesViewModel @AssistedInject constructor(
                                 ).let { promise.resume(it) }
                             } else {
                                 Timber.d("## UIA : deleteDevice UIA > start reauth activity")
-                                _viewEvents.post(DevicesViewEvents.RequestReAuth(flow))
+                                _viewEvents.post(DevicesViewEvents.RequestReAuth(flow, errorCode))
                                 pendingAuth = DefaultBaseAuth(session = flow.session)
                                 uiaContinuation = promise
                             }

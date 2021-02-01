@@ -53,6 +53,16 @@ fun Throwable.toRegistrationFlowResponse(): RegistrationFlowResponse? {
                     .adapter(RegistrationFlowResponse::class.java)
                     .fromJson(this.errorBody)
         }
+    } else if (this is Failure.ServerError && this.error.code == MatrixError.M_FORBIDDEN) {
+        // This happens when the submission for this stage was bad (like bad password)
+        if (this.error.session != null && this.error.flows != null) {
+            RegistrationFlowResponse(
+                    flows = this.error.flows,
+                    session = this.error.session,
+                    completedStages = this.error.completedStages,
+                    params = this.error.params
+            )
+        } else null
     } else {
         null
     }
