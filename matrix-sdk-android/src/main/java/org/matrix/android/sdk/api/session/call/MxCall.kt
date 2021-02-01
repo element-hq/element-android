@@ -80,9 +80,9 @@ interface MxCall : MxCallDetail {
     fun offerSdp(sdpString: String)
 
     /**
-     * Send Ice candidate to the other participant.
+     * Send Call candidate to the other participant.
      */
-    fun sendLocalIceCandidates(candidates: List<CallCandidate>)
+    fun sendLocalCallCandidates(candidates: List<CallCandidate>)
 
     /**
      * Send removed ICE candidates to the other participant.

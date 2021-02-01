@@ -114,8 +114,8 @@ internal class MxCallImpl(
                 .also { eventSenderProcessor.postEvent(it) }
     }
 
-    override fun sendLocalIceCandidates(candidates: List<CallCandidate>) {
-        Timber.v("Send local ice canditates $callId: $candidates")
+    override fun sendLocalCallCandidates(candidates: List<CallCandidate>) {
+        Timber.v("Send local call canditates $callId: $candidates")
         CallCandidatesContent(
                 callId = callId,
                 partyId = ourPartyId,

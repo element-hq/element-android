@@ -177,7 +177,7 @@ class WebRtcCall(val mxCall: MxCall,
                 if (it.isNotEmpty()) {
                     Timber.v("## Sending local ice candidates to call")
                     // it.forEach { peerConnection?.addIceCandidate(it) }
-                    mxCall.sendLocalIceCandidates(it.mapToCallCandidate())
+                    mxCall.sendLocalCallCandidates(it.mapToCallCandidate())
                 }
             }
 

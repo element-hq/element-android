@@ -1,3 +1,30 @@
+Changes in Element 1.0.16 (2020-XX-XX)
+===================================================
+
+Features ✨:
+ - VoIP : support for VoIP V1 protocol, transfer call and dial-pad
+                                
+Improvements 🙌:
+ - VoIP : new tiles in timeline
+
+Bugfix 🐛:
+ - VoIP : fix audio devices output
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ - 
+
+Build 🧱:
+ - 
+
+Test:
+ -
+
+Other changes:
+ -  
+
 Changes in Element 1.0.15 (2020-XX-XX)
 ===================================================
 

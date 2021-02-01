@@ -147,6 +147,7 @@ class WebRtcCallManager @Inject constructor(
         }
     }
 
+    private val advertisedCalls = HashSet<String>()
     private val callsByCallId = ConcurrentHashMap<String, WebRtcCall>()
     private val callsByRoomId = ConcurrentHashMap<String, MutableList<WebRtcCall>>()
 
@@ -165,6 +166,11 @@ class WebRtcCallManager @Inject constructor(
     fun getCalls(): List<WebRtcCall> {
         return callsByCallId.values.toList()
     }
+
+    /**
+     * @return a set of all advertised call during the lifetime of the app.
+     */
+    fun getAdvertisedCalls() = advertisedCalls
 
     fun headSetButtonTapped() {
         Timber.v("## VOIP headSetButtonTapped")
@@ -299,6 +305,7 @@ class WebRtcCallManager @Inject constructor(
                 onCallBecomeActive = this::onCallActive,
                 onCallEnded = this::onCallEnded
         )
+        advertisedCalls.add(mxCall.callId)
         callsByCallId[mxCall.callId] = webRtcCall
         callsByRoomId.getOrPut(mxCall.roomId) { ArrayList(1) }
                 .add(webRtcCall)

@@ -30,7 +30,7 @@ import org.matrix.android.sdk.api.session.room.model.call.CallSelectAnswerConten
 /**
  * Dispatch each method safely to all listeners.
  */
-class CallListenersDispatcher(private val listeners: Set<CallListener>) : CallListener {
+internal class CallListenersDispatcher(private val listeners: Set<CallListener>) : CallListener {
 
     override fun onCallInviteReceived(mxCall: MxCall, callInviteContent: CallInviteContent) = dispatch {
         it.onCallInviteReceived(mxCall, callInviteContent)

@@ -210,10 +210,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val epoxyModel = it.value
             if (epoxyModel is CallTileTimelineItem) {
                 val callId = epoxyModel.attributes.callId
-                val call = callManager.getCallById(callId)
                 // We should remove the call tile if we already have one for this call or
                 // if this is an active call tile without an actual call (which can happen with permalink)
-                val shouldRemoveCallItem = callIds.contains(callId) || (call == null && epoxyModel.attributes.callStatus.isActive())
+                val shouldRemoveCallItem = callIds.contains(callId)
+                        || (!callManager.getAdvertisedCalls().contains(callId) && epoxyModel.attributes.callStatus.isActive())
                 if (shouldRemoveCallItem && !showHiddenEvents) {
                     modelsIterator.remove()
                     return@forEach
