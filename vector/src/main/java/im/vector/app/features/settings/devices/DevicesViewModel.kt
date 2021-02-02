@@ -32,6 +32,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -51,6 +52,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxStat
 import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
@@ -221,10 +223,11 @@ class DevicesViewModel @AssistedInject constructor(
                 Unit
             }
             is DevicesAction.PasswordAuthDone -> {
+                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,
-                                password = action.password,
+                                password = decryptedPass,
                                 user = session.myUserId
                         )
                 )

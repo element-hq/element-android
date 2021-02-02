@@ -49,7 +49,8 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
             val flowType: String?,
             val title: String?,
             val session: String?,
-            val lastErrorCode: String?
+            val lastErrorCode: String?,
+            val resultKeyStoreAlias: String
     ) : Parcelable
 
     // For sso
@@ -101,7 +102,7 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
                 is ReAuthEvents.PasswordFinishSuccess -> {
                     setResult(RESULT_OK, Intent().apply {
                         putExtra(RESULT_FLOW_TYPE, LoginFlowTypes.PASSWORD)
-                        putExtra(RESULT_VALUE, it.password)
+                        putExtra(RESULT_VALUE, it.passwordSafeForIntent)
                     })
                     finish()
                 }
@@ -197,8 +198,13 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
         const val EXTRA_REASON_TITLE = "EXTRA_REASON_TITLE"
         const val RESULT_FLOW_TYPE = "RESULT_FLOW_TYPE"
         const val RESULT_VALUE = "RESULT_VALUE"
+        const val DEFAULT_RESULT_KEYSTORE_ALIAS = "ReAuthActivity"
 
-        fun newIntent(context: Context, fromError: RegistrationFlowResponse, lastErrorCode: String?, reasonTitle: String?): Intent {
+        fun newIntent(context: Context,
+                      fromError: RegistrationFlowResponse,
+                      lastErrorCode: String?,
+                      reasonTitle: String?,
+                      resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
             val authType = when (fromError.nextUncompletedStage()) {
                 LoginFlowTypes.PASSWORD -> {
                     LoginFlowTypes.PASSWORD
@@ -212,7 +218,7 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
                 }
             }
             return Intent(context, ReAuthActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(authType, reasonTitle, fromError.session, lastErrorCode))
+                putExtra(MvRx.KEY_ARG, Args(authType, reasonTitle, fromError.session, lastErrorCode, resultKeyStoreAlias))
             }
         }
     }

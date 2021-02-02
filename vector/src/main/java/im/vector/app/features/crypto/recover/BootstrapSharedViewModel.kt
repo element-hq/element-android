@@ -34,6 +34,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,6 +45,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.auth.registration.nextUncompletedStage
+import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
@@ -269,10 +271,11 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                 uiaContinuation?.resume(DefaultBaseAuth(session = pendingAuth?.session ?: ""))
             }
             is BootstrapActions.PasswordAuthDone -> {
+                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,
-                                password = action.password,
+                                password = decryptedPass,
                                 user = session.myUserId
                         )
                 )

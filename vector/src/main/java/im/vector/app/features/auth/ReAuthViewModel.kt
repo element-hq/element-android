@@ -24,14 +24,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
-import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
+import java.io.ByteArrayOutputStream
 
 class ReAuthViewModel @AssistedInject constructor(
         @Assisted val initialState: ReAuthState,
-        private val session: Session,
-        private val authenticationService: AuthenticationService
+        private val session: Session
 ) : VectorViewModel<ReAuthState, ReAuthActions, ReAuthEvents>(initialState) {
 
     @AssistedFactory
@@ -72,7 +72,12 @@ class ReAuthViewModel @AssistedInject constructor(
                 }
             }
             is ReAuthActions.ReAuthWithPass -> {
-                _viewEvents.post(ReAuthEvents.PasswordFinishSuccess(action.password))
+                val safeForIntentCypher = ByteArrayOutputStream().also {
+                    it.use {
+                        session.securelyStoreObject(action.password, initialState.resultKeyStoreAlias, it)
+                    }
+                }.toByteArray().toBase64NoPadding()
+                _viewEvents.post(ReAuthEvents.PasswordFinishSuccess(safeForIntentCypher))
             }
         }
     }
