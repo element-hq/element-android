@@ -221,4 +221,51 @@
     <string name="notice_display_name_removed">%1$s уклони своје приказно име (било је %2$s)</string>
     <string name="notice_display_name_changed_from_by_you">Изменили сте приказно име са %1$s на %2$s</string>
     <string name="notice_display_name_changed_from">%1$s измени приказно име са %2$s на %3$s</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s забрани гостима да се придруже у собу.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Забранили сте гостима да се придруже у собу.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s забрани гостима да се придруже у собу.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Дозволили сте гостима да се придруже овде.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s дозволи гостима да се придруже овде.</string>
+    <string name="notice_room_guest_access_can_join">%1$s дозволи гостима да се придруже у собу.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Изменили сте адресе за ову собу.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s измени адресе за ову собу.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Изменили сте главну и алтернативне адресе за ову собу.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s измени главну и алтернативне адресе за ову собу.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s измени алтернативне адресе за ову собу.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Уклонили сте алтернативну адресу %1$s за ову собу.</item>
+        <item quantity="few">Уклонили сте алтернативне адресе %1$s за ову собу.</item>
+        <item quantity="other">Уклонили сте алтернативне адресе %1$s за ову собу.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s уклони алтернативну адресу %2$s за ову собу.</item>
+        <item quantity="few">%1$s уклони алтернативне адресе %2$s за ову собу.</item>
+        <item quantity="other">%1$s уклони алтернативне адресе %2$s за ову собу.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Додали сте алтернативну адресу %1$s за ову собу.</item>
+        <item quantity="few">Додали сте алтернативне адресе %1$s за ову собу.</item>
+        <item quantity="other">Додали сте алтернативне адресе %1$s за ову собу.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s додаде алтернативну адресу %2$s за ову собу.</item>
+        <item quantity="few">%1$s додаде алтернативне адресе %2$s за ову собу.</item>
+        <item quantity="other">%1$s додаде алтернативне адресе %2$s за ову собу.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset_by_you">Уклонили сте главну адресу за ову собу.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s уклони главну адресу за ову собу.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Поставили сте главну адресу ове собе на %1$s.</string>
+    <string name="notice_room_canonical_alias_set">%1$s постави главну адресу ове собе на %2$s.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Додали сте %1$s и уклонили %2$s као адресе ове собе.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s додаде %2$s и уклони %3$s као адресе ове собе.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Уклонили сте %1$s као адресу ове собе.</item>
+        <item quantity="few">Уклонили сте %1$s као адресе ове собе.</item>
+        <item quantity="other">Уклонили сте %1$s као адресе ове собе.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s уклони %2$s као адресу ове собе.</item>
+        <item quantity="few">%1$s уклони %2$s као адресе ове собе.</item>
+        <item quantity="other">%1$s уклони %2$s као адресе ове собе.</item>
+    </plurals>
 </resources>
