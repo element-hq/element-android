@@ -74,7 +74,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
             when (it) {
                 is DevicesViewEvents.Loading            -> showLoading(it.message)
                 is DevicesViewEvents.Failure            -> showFailure(it.throwable)
-                is DevicesViewEvents.RequestReAuth    -> maybeShowDeleteDeviceWithPasswordDialog(it)
+                is DevicesViewEvents.RequestReAuth      -> askForReAuthentication(it)
                 is DevicesViewEvents.PromptRenameDevice -> displayDeviceRenameDialog(it.deviceInfo)
                 is DevicesViewEvents.ShowVerifyDevice   -> {
                     VerificationBottomSheet.withArgs(
@@ -114,14 +114,6 @@ class VectorSettingsDevicesFragment @Inject constructor(
                 "VERIF_INFO"
         )
     }
-
-//    override fun onDeleteDevice(deviceInfo: DeviceInfo) {
-//        devicesViewModel.handle(DevicesAction.Delete(deviceInfo))
-//    }
-//
-//    override fun onRenameDevice(deviceInfo: DeviceInfo) {
-//        displayDeviceRenameDialog(deviceInfo)
-//    }
 
     override fun retry() {
         viewModel.handle(DevicesAction.Refresh)
@@ -170,9 +162,9 @@ class VectorSettingsDevicesFragment @Inject constructor(
     }
 
     /**
-     * Show a dialog to ask for user password, or use a previously entered password.
+     * Launch the re auth activity to get credentials
      */
-    private fun maybeShowDeleteDeviceWithPasswordDialog(reAuthReq: DevicesViewEvents.RequestReAuth) {
+    private fun askForReAuthentication(reAuthReq: DevicesViewEvents.RequestReAuth) {
         ReAuthActivity.newIntent(requireContext(),
                 reAuthReq.registrationFlowResponse,
                 reAuthReq.lastErrorCode,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.model.rest
+package org.matrix.android.sdk.api.auth
 
 interface UIABaseAuth {
     /**

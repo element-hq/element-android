@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto.model.rest
 
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+
 data class DefaultBaseAuth(
         /**
          * This is a session identifier that the client must pass back to the homeserver,

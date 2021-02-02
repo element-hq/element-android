@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.amshove.kluent.shouldBe
 import org.junit.FixMethodOrder

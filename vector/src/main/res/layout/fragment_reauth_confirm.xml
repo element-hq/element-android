@@ -29,7 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:layout_constraintBottom_toTopOf="@id/loginPasswordNotice"
             app:layout_constraintTop_toBottomOf="@id/reAuthConfirmText">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -69,18 +68,18 @@
 
         </FrameLayout>
 
-<!--        <TextView-->
-<!--            android:id="@+id/loginPasswordNotice"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:gravity="start"-->
-<!--            android:text="@string/login_signin_matrix_id_password_notice"-->
-<!--            android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"-->
-<!--            android:visibility="gone"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/passwordContainer"-->
-<!--            tools:visibility="visible" />-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/loginPasswordNotice"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:gravity="start"-->
+        <!--            android:text="@string/login_signin_matrix_id_password_notice"-->
+        <!--            android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"-->
+        <!--            android:visibility="gone"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/passwordContainer"-->
+        <!--            tools:visibility="visible" />-->
 
         <TextView
             android:id="@+id/genericErrorText"
@@ -89,8 +88,8 @@
             android:gravity="start"
             android:text="@string/authentication_error"
             android:textAppearance="@style/TextAppearance.Vector.Login.Text.Small"
-            android:visibility="gone"
             android:textColor="?colorError"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passwordContainer"

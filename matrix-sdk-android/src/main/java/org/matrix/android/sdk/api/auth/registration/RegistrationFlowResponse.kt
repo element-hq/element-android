@@ -19,9 +19,6 @@ package org.matrix.android.sdk.api.auth.registration
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-import org.matrix.android.sdk.api.auth.registration.FlowResult
-import org.matrix.android.sdk.api.auth.registration.Stage
-import org.matrix.android.sdk.api.auth.registration.TermPolicies
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.data.InteractiveAuthenticationFlow
 
@@ -109,7 +106,6 @@ fun RegistrationFlowResponse.toFlowResult(): FlowResult {
 
     return FlowResult(missingStage, completedStage)
 }
-
 
 fun RegistrationFlowResponse.nextUncompletedStage(flowIndex: Int = 0): String? {
     val completed = completedStages ?: emptyList()

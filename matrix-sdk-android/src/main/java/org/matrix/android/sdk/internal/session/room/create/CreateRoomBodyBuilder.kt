@@ -147,7 +147,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
                 // Parity with web, enable if users have encryption ready devices
                 // for now remove checks on cross signing and 3pid invites
                 // && crossSigningService.isCrossSigningVerified()
-                // && params.invite3pids.isEmpty())
+                && params.invite3pids.isEmpty()
                 && params.invitedUserIds.isNotEmpty()
                 && params.invitedUserIds.let { userIds ->
             val keys = deviceListManager.downloadKeys(userIds, forceDownload = false)

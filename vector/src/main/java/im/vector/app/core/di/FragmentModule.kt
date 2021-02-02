@@ -523,7 +523,7 @@ interface FragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(BootstrapReAuthFragment::class)
-    fun bindBootstrapAccountPasswordFragment(fragment: BootstrapReAuthFragment): Fragment
+    fun bindBootstrapReAuthFragment(fragment: BootstrapReAuthFragment): Fragment
 
     @Binds
     @IntoMap

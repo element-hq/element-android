@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.crypto.model.rest
+package org.matrix.android.sdk.api.auth
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

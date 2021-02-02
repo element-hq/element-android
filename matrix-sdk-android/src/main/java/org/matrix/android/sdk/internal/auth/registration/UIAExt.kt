@@ -19,11 +19,11 @@ package org.matrix.android.sdk.internal.auth.registration
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
-import org.matrix.android.sdk.internal.crypto.model.rest.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import timber.log.Timber
 import kotlin.coroutines.suspendCoroutine
 
-suspend fun handleUIA(failure: Throwable, interceptor: UserInteractiveAuthInterceptor, retryBlock: suspend (UIABaseAuth) -> Unit): Boolean {
+internal suspend fun handleUIA(failure: Throwable, interceptor: UserInteractiveAuthInterceptor, retryBlock: suspend (UIABaseAuth) -> Unit): Boolean {
     Timber.d("## UIA: check error ${failure.message}")
     val flowResponse = failure.toRegistrationFlowResponse()
             ?: return false.also {

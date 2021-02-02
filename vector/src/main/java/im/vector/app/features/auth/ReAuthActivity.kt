@@ -84,11 +84,12 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
         // the UI, due to the sandbox nature of CCT (chrome custom tab) we cannot get much information
         // on how the process did go :/
         // so we assume that after the user close the tab we return success and let caller retry the UIA flow :/
-
-        addFragment(
-                R.id.container,
-                PromptFragment::class.java
-        )
+        if (isFirstCreation()) {
+            addFragment(
+                    R.id.container,
+                    PromptFragment::class.java
+            )
+        }
 
         sharedViewModel.observeViewEvents {
             when (it) {
@@ -124,12 +125,14 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
         }
     }
 
-    override fun onStart() = withState(sharedViewModel) { state ->
+    override fun onStart() {
         super.onStart()
 
-        if (state.ssoFallbackPageWasShown) {
-            sharedViewModel.handle(ReAuthActions.FallBackPageClosed)
-            return@withState
+        withState(sharedViewModel) { state ->
+            if (state.ssoFallbackPageWasShown) {
+                sharedViewModel.handle(ReAuthActions.FallBackPageClosed)
+                return@withState
+            }
         }
 
         val packageName = CustomTabsClient.getPackageName(this, null)

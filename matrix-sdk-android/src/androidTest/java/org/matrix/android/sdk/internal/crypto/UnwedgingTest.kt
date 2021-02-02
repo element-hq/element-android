@@ -30,7 +30,7 @@ import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
 import org.amshove.kluent.shouldBe

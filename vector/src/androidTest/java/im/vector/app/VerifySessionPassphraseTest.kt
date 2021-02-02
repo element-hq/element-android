@@ -47,7 +47,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest

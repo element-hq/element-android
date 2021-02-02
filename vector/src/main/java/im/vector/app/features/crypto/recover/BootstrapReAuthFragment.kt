@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentBootstrapReauthBinding
@@ -70,14 +71,12 @@ class BootstrapReAuthFragment @Inject constructor(
         }
         val failure = state.step.failure
         if (failure == null) {
-            views.reAuthFailureText.text = null
-            views.reAuthFailureText.isVisible = false
+            views.reAuthFailureText.setTextOrHide(null)
             views.waitingProgress.isVisible = true
             views.bootstrapCancelButton.isVisible = false
             views.bootstrapRetryButton.isVisible = false
         } else {
-            views.reAuthFailureText.text = failure
-            views.reAuthFailureText.isVisible = true
+            views.reAuthFailureText.setTextOrHide(failure)
             views.waitingProgress.isVisible = false
             views.bootstrapCancelButton.isVisible = true
             views.bootstrapRetryButton.isVisible = true
