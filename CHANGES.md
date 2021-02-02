@@ -15,6 +15,7 @@ Bugfix 🐛:
  - Crashes reported by PlayStore (new in 1.0.14) (#2707)
  - Widgets: Support $matrix_widget_id parameter (#2748)
  - Data for Worker overload (#2721)
+ - Fix multiple tasks
 
 Translations 🗣:
  -
