@@ -11,7 +11,7 @@
     <string name="notice_direct_room_created_by_you">Направили сте дискусију</string>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="initial_sync_start_importing_account">Почетна синхронизација:
-\nУвозим налог…</string>
+\nувозим налог…</string>
     <string name="room_displayname_empty_room_was">Празна соба (била је %s)</string>
     <string name="room_displayname_empty_room">Празна соба</string>
     <plurals name="room_displayname_three_and_more_members">
@@ -110,4 +110,115 @@
     <string name="notice_room_avatar_changed_by_you">Изменили сте аватар собе</string>
     <string name="notice_display_name_set_by_you">Поставили сте своје приказно име на %1$s</string>
     <string name="notice_display_name_set">%1$s постави своје приказно име на %2$s</string>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Додали сте %1$s као адресу ове собе.</item>
+        <item quantity="few">Додали сте %1$s као адресе ове собе.</item>
+        <item quantity="other">Додали сте %1$s као адресе ове собе.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s додаде %2$s као адресу ове собе.</item>
+        <item quantity="few">%1$s додаде %2$s као адресе ове собе.</item>
+        <item quantity="other">%1$s додаде %2$s као адресе ове собе.</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">Повукли сте позивницу корисника %1$s. Разлог: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s повлачи позивницу корисника %2$s. Разлог: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Прихватили сте позивницу за %1$s. Разлог: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s прихвата позивницу за %2$s. Разлог:%3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Повукли сте позивницу да се %1$s придружи соби. Разлог: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s повуче позивницу да се %2$s придружи соби. Разлог: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Послали сте позивницу да се %1$s придружи соби. Разлог: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s посла позивницу да се %2$s придружи соби. Разлог: %3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Забранили сте корисника %1$s. Разлог: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s забрани корисника %2$s. Разлог: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Одблокирали сте корисника %1$s. Разлог: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s одблокира корисника %2$s. Разлог: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Избацили сте корисника %1$s. Разлог: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s избаци корисника %2$s. Разлог: %3$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Одбили сте позивницу. Разлог: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s одби позивницу. Разлог: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Изашли сте. Разлог: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s изађе. Разлог: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Напустили сте собу. Разлог: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s напусти собу. Разлог: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Придружили сте се. Разлог: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s се придружи. Разлог: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Придружили сте се соби. Разлог: %1$s</string>
+    <string name="notice_room_join_with_reason">%1$s се придружи соби. Разлог: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s вас позива. Разлог: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Позвали сте корисника %1$s. Разлог: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s позва корисника %2$s. Разлог: %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Ваша позивница. Разлог: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s - позивница. Разлог: %2$s</string>
+    <string name="initial_sync_start_importing_account_data">Почетна синхронизација:
+\nувозим податке о налогу</string>
+    <string name="initial_sync_start_importing_account_groups">Почетна синхронизација:
+\nувозим заједнице</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Почетна синхронизација:
+\nувозим напуштене собе</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Почетна синхронизација:
+\nувозим собе са позивницом</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Почетна синхронизација:
+\nувозим собе у којима сте</string>
+    <string name="initial_sync_start_importing_account_crypto">Почетна синхронизација:
+\nувоз шифровања</string>
+    <string name="initial_sync_start_importing_account_rooms">Почетна синхронизација:
+\nувозим собе</string>
+    <string name="room_displayname_room_invite">Позивница за собу</string>
+    <string name="room_displayname_invite_from">%s вас позива</string>
+    <string name="could_not_redact">Не могу да редигујем</string>
+    <string name="notice_crypto_unable_to_decrypt">** Не могу да дешифрујем: %s **</string>
+    <string name="notice_power_level_diff">%1$s са %2$s на %3$s</string>
+    <string name="notice_power_level_changed">%1$s измени ниво снаге кориснику %2$s.</string>
+    <string name="notice_widget_modified_by_you">Изменили сте %1$s виџет</string>
+    <string name="notice_widget_modified">%1$s измени %2$s виџет</string>
+    <string name="notice_widget_removed_by_you">Уклонили сте %1$s виџет</string>
+    <string name="notice_widget_removed">%1$s уклони %2$s виџет</string>
+    <string name="notice_widget_added_by_you">Додали сте %1$s виџет</string>
+    <string name="notice_widget_added">%1$s додаде %2$s виџет</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Прихватили сте позивницу за %1$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s прихвати позивницу за %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Повукли сте позивницу за корисника %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s повуче позивницу за корисника %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Повукли сте позивницу да се %1$s придружи у собу</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s повуче позивницу да се %2$s придружи у собу</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Позвали сте корисника %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s позва корисника %2$s</string>
+    <string name="notice_room_third_party_invite_by_you">Послали сте позивницу да се %1$s придружи у собу</string>
+    <string name="notice_room_third_party_invite">%1$s посла позивницу да се %2$s придружи у собу</string>
+    <string name="notice_profile_change_redacted_by_you">Освежили сте свој профил %1$s</string>
+    <string name="notice_profile_change_redacted">%1$s освежи свој профил %2$s</string>
+    <string name="notice_event_redacted_by_with_reason">Поруку уклони %1$s [разлог: %2$s]</string>
+    <string name="notice_voip_finished">ВоИП конференција завршена</string>
+    <string name="notice_voip_started">ВоИП конференција започела</string>
+    <string name="notice_requested_voip_conference_by_you">Затражили сте ВоИП конференцију</string>
+    <string name="notice_requested_voip_conference">%1$s затражи ВоИП конференцију</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Сервери који садрже ИП бројеве су сада забрањени.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Сервери који садрже ИП бројеве су сада дозвољени.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Сервери који садрже %s су уклоњени са листе дозвољених.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Сервери који садрже %s су сада дозвољени.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Сервери који садрже %s су уклоњени са листе забрањених.</string>
+    <string name="notice_room_server_acl_updated_banned">• Сервери који садрже %s су сада забрањени.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Изменили сте АЦЛ сервера за ову собу.</string>
+    <string name="notice_room_server_acl_updated_title">%s измени АЦЛ сервера за ову собу.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Сервери са ИП бројевима су забрањени.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Сервери са ИП бројевима су дозвољени.</string>
+    <string name="notice_room_server_acl_set_allowed">• Сервери који садрже %s су дозвољени.</string>
+    <string name="notice_room_server_acl_set_banned">• Сервери који садрже %s су забрањени.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Поставили сте АЦЛ сервера за ову собу.</string>
+    <string name="notice_room_server_acl_set_title">%s постави АЦЛ сервера за ову собу.</string>
+    <string name="notice_direct_room_update_by_you">Надоградили сте овде.</string>
+    <string name="notice_direct_room_update">%s надогради овде.</string>
+    <string name="notice_room_update">%s надогради ову собу.</string>
+    <string name="notice_end_to_end_by_you">Укључили сте шифровање с краја на крај (%1$s)</string>
+    <string name="notice_end_to_end">%1$s укључи шифровање с краја на крај (%2$s)</string>
+    <string name="notice_placed_video_call">%s упути видео позив.</string>
+    <string name="notice_room_name_changed_by_you">Изменили сте назив собе у: %1$s</string>
+    <string name="notice_room_name_changed">%1$s измени назив собе у: %2$s</string>
+    <string name="notice_room_avatar_changed">%1$s измени аватар собе</string>
+    <string name="notice_room_topic_changed_by_you">Изменили сте тему на: %1$s</string>
+    <string name="notice_room_topic_changed">%1$s измени тему на: %2$s</string>
+    <string name="notice_display_name_removed_by_you">Уклонили сте своје приказно име (било је %1$s)</string>
+    <string name="notice_display_name_removed">%1$s уклони своје приказно име (било је %2$s)</string>
+    <string name="notice_display_name_changed_from_by_you">Изменили сте приказно име са %1$s на %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s измени приказно име са %2$s на %3$s</string>
 </resources>
