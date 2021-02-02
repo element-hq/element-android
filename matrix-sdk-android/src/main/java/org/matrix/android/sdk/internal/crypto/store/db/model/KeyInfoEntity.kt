@@ -29,4 +29,10 @@ internal open class KeyInfoEntity(
          */
         var signatures: String? = null,
         var trustLevelEntity: TrustLevelEntity? = null
-) : RealmObject()
+) : RealmObject() {
+
+    fun deleteOnCascade() {
+        trustLevelEntity?.deleteFromRealm()
+        deleteFromRealm()
+    }
+}

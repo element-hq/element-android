@@ -113,7 +113,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         val pushRules = event.content.toModel<GetPushRulesResponse>() ?: return
         realm.where(PushRulesEntity::class.java)
                 .findAll()
-                .deleteAllFromRealm()
+                .forEach { it.deleteOnCascade() }
 
         // Save only global rules for the moment
         val globalRules = pushRules.global

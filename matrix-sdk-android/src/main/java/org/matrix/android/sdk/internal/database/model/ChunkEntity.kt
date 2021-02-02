@@ -21,6 +21,7 @@ import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
+import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
 internal open class ChunkEntity(@Index var prevToken: String? = null,
         // Because of gaps we can have several chunks with nextToken == null
@@ -42,4 +43,13 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
     val room: RealmResults<RoomEntity>? = null
 
     companion object
+
+    fun deleteOnCascade(deleteStateEvents: Boolean, canDeleteRoot: Boolean) {
+        assertIsManaged()
+        if (deleteStateEvents) {
+            stateEvents.deleteAllFromRealm()
+        }
+        timelineEvents.forEach { it.deleteOnCascade(canDeleteRoot) }
+        deleteFromRealm()
+    }
 }

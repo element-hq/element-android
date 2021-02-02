@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.crypto.store.db.query
 
-import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
+import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
 
 /**
  * Get or create a user
@@ -39,5 +39,5 @@ internal fun UserEntity.Companion.delete(realm: Realm, userId: String) {
     realm.where<UserEntity>()
             .equalTo(UserEntityFields.USER_ID, userId)
             .findFirst()
-            ?.deleteFromRealm()
+            ?.deleteOnCascade()
 }

@@ -24,8 +24,14 @@ internal open class UserEntity(
         @PrimaryKey var userId: String? = null,
         var devices: RealmList<DeviceInfoEntity> = RealmList(),
         var crossSigningInfoEntity: CrossSigningInfoEntity? = null,
-        var deviceTrackingStatus: Int = 0)
-    : RealmObject() {
+        var deviceTrackingStatus: Int = 0
+) : RealmObject() {
 
     companion object
+
+    fun deleteOnCascade() {
+        devices.toList().forEach { it.deleteOnCascade() }
+        crossSigningInfoEntity?.deleteOnCascade()
+        deleteFromRealm()
+    }
 }
