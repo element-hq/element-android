@@ -248,7 +248,7 @@
             android:exported="false">
 
             <!-- XXX: UIA SSO has only web fallback, i.e no url redirect, so for now we comment this out
-            hopefully, we would use it when finalyy available
+            hopefully, we would use it when finally available
             -->
             <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
 <!--            <intent-filter>-->

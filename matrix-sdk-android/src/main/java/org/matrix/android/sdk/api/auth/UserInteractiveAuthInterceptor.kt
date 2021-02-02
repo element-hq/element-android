@@ -41,7 +41,7 @@ interface UserInteractiveAuthInterceptor {
     /**
      * When the API needs additional auth, this will be called.
      * Implementation should check the flows from flow response and act accordingly.
-     * Updated auth should be provider using promise.resume, this allow implementation to perform
+     * Updated auth should be provided using promise.resume, this allow implementation to perform
      * an async operation (prompt for user password, open sso fallback) and then resume initial API call when done.
      */
     fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>)
