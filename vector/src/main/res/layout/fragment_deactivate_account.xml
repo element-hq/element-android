@@ -31,75 +31,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/deactivateAccountContent" />
 
-        <TextView
-            android:id="@+id/deactivateAccountPromptPassword"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/deactivate_account_prompt_password"
-            android:textColor="?riotx_text_primary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deactivateAccountEraseCheckbox" />
-
-        <FrameLayout
-            android:id="@+id/deactivateAccountPasswordContainer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="@string/auth_password_placeholder"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:nextFocusDown="@+id/login_password"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deactivateAccountPromptPassword">
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/deactivateAccountPasswordTil"
-                style="@style/VectorTextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/login_signup_password_hint"
-                app:errorEnabled="true"
-                app:errorIconDrawable="@null">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/deactivateAccountPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:paddingEnd="48dp"
-                    tools:ignore="RtlSymmetry" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/deactivateAccountPasswordReveal"
-                android:layout_width="@dimen/layout_touch_size"
-                android:layout_height="@dimen/layout_touch_size"
-                android:layout_gravity="end"
-                android:layout_marginTop="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:scaleType="center"
-                android:src="@drawable/ic_eye"
-                tools:contentDescription="@string/a11y_show_password"
-                app:tint="?attr/colorAccent"
-                tools:ignore="MissingPrefix" />
-
-        </FrameLayout>
-
         <Button
             android:id="@+id/deactivateAccountSubmit"
             style="@style/VectorButtonStyleDestructive"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
             android:text="@string/deactivate_account_submit"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deactivateAccountPasswordContainer" />
+            app:layout_constraintTop_toBottomOf="@+id/deactivateAccountEraseCheckbox" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

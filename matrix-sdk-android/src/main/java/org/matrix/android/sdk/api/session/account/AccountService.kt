@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.session.account
 
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+
 /**
  * This interface defines methods to manage the account. It's implemented at the session level.
  */
@@ -43,5 +45,5 @@ interface AccountService {
      * @param eraseAllData set to true to forget all messages that have been sent. Warning: this will cause future users to see
      * an incomplete view of conversations
      */
-    suspend fun deactivateAccount(password: String, eraseAllData: Boolean)
+    suspend fun deactivateAccount(userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, eraseAllData: Boolean)
 }

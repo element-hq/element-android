@@ -154,7 +154,7 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
                             Timber.v("## CustomTab onNavigationEvent($navigationEvent), $extras")
                             super.onNavigationEvent(navigationEvent, extras)
                             if (navigationEvent == NAVIGATION_FINISHED) {
-                                sharedViewModel.handle(ReAuthActions.FallBackPageLoaded)
+//                                sharedViewModel.handle(ReAuthActions.FallBackPageLoaded)
                             }
                         }
 

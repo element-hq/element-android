@@ -124,16 +124,12 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                 Unit
             }
             is CrossSigningSettingsAction.SsoAuthDone -> {
-                // we should use token based auth
-                // _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
-                // will release the interactive auth interceptor
-                Timber.d("## UIA - FallBack success $pendingAuth , continuation: $uiaContinuation")
+                Timber.d("## UIA - FallBack success")
                 if (pendingAuth != null) {
                     uiaContinuation?.resume(pendingAuth!!)
                 } else {
                     uiaContinuation?.resumeWith(Result.failure((IllegalArgumentException())))
                 }
-                Unit
             }
             is CrossSigningSettingsAction.PasswordAuthDone -> {
                 val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)

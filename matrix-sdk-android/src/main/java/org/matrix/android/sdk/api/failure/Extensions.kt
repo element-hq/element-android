@@ -43,6 +43,12 @@ fun Throwable.isInvalidPassword(): Boolean {
             && error.message == "Invalid password"
 }
 
+fun Throwable.isInvalidUIAAuth(): Boolean {
+    return this is Failure.ServerError
+            && error.code == MatrixError.M_FORBIDDEN
+            && error.flows != null
+}
+
 /**
  * Try to convert to a RegistrationFlowResponse. Return null in the cases it's not possible
  */
