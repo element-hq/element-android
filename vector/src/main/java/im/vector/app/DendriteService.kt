@@ -18,6 +18,15 @@ package im.vector.app
 
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothGatt
+import android.bluetooth.BluetoothGattCallback
+import android.bluetooth.BluetoothGattCharacteristic
+import android.bluetooth.BluetoothGattServer
+import android.bluetooth.BluetoothGattServerCallback
+import android.bluetooth.BluetoothGattService
+import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothProfile
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.bluetooth.le.AdvertiseCallback
@@ -27,6 +36,7 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
@@ -46,13 +56,21 @@ import kotlin.concurrent.thread
 class DendriteService : Service() {
     private val binder = DendriteLocalBinder()
     private var monolith: DendriteMonolith? = null
-
     private val serviceUUID = ParcelUuid(UUID.fromString("a2fda8dd-d250-4a64-8b9a-248f50b93c64"))
+    private val psmUUID = UUID.fromString("15d4151b-1008-41c0-85f2-950facf8a3cd")
+
+    private lateinit var manager: BluetoothManager
+    private lateinit var gattServer: BluetoothGattServer
+    private lateinit var gattCharacteristic: BluetoothGattCharacteristic
+    private var gattService = BluetoothGattService(serviceUUID.uuid, BluetoothGattService.SERVICE_TYPE_PRIMARY)
+
     private var adapter = BluetoothAdapter.getDefaultAdapter()
     private var advertiser = adapter.bluetoothLeAdvertiser
     private var scanner = adapter.bluetoothLeScanner
-    private var server: BluetoothServerSocket = adapter.listenUsingInsecureL2capChannel()
-    private var psm: ByteArray = intToBytes(server.psm)
+
+    private var l2capServer: BluetoothServerSocket = adapter.listenUsingInsecureL2capChannel()
+    private var l2capPSM: ByteArray = intToBytes(l2capServer.psm)
+
     private var connections: MutableMap<String, DendriteBLEPeering> = mutableMapOf<String, DendriteBLEPeering>()
 
     inner class DendriteLocalBinder : Binder() {
@@ -151,12 +169,11 @@ class DendriteService : Service() {
                     .build()
 
             val advertiseData = AdvertiseData.Builder()
-                    .addServiceData(serviceUUID, psm)
+                    .addServiceUuid(serviceUUID)
                     .build()
 
-            val scanMask: ByteArray = ByteArray(4)
             val scanFilter = ScanFilter.Builder()
-                    .setServiceData(serviceUUID, scanMask, scanMask)
+                    .setServiceUuid(serviceUUID)
                     .build()
 
             val scanFilters: MutableList<ScanFilter> = ArrayList()
@@ -170,11 +187,18 @@ class DendriteService : Service() {
             advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
             scanner.startScan(scanFilters, scanSettings, scanCallback)
 
+            gattCharacteristic = BluetoothGattCharacteristic(psmUUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
+            gattService.addCharacteristic(gattCharacteristic)
+
+            manager = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+            gattServer = manager.openGattServer(applicationContext, gattServerCallback)
+            gattServer.addService(gattService)
+
             GlobalScope.launch {
                 while (true) {
-                    Timber.i("BLE: Waiting for connection on PSM ${server.psm}")
+                    Timber.i("BLE: Waiting for connection on PSM ${l2capServer.psm}")
                     try {
-                        var remote = server.accept() ?: continue
+                        var remote = l2capServer.accept() ?: continue
                         val device = remote.remoteDevice.address.toString()
 
                         var connection = connections[device]
@@ -183,14 +207,14 @@ class DendriteService : Service() {
                             connections.remove(device)
                         }
 
-                        Timber.i("BLE: Connected inbound $device PSM $psm")
+                        Timber.i("BLE: Connected inbound $device PSM $l2capPSM")
 
                         Timber.i("Creating DendriteBLEPeering")
                         connections[device] = DendriteBLEPeering(monolith!!.conduit("BLE"), remote)
                         Timber.i("Starting DendriteBLEPeering")
                         connections[device]!!.start()
 
-                        Timber.i("BLE: Created BLE peering with $device PSM $psm")
+                        Timber.i("BLE: Created BLE peering with $device PSM $l2capPSM")
                     } catch (e: Exception) {
                         Timber.i("BLE: Accept exception: ${e.message}")
                     }
@@ -219,6 +243,71 @@ class DendriteService : Service() {
         super.onDestroy()
     }
 
+    private val gattServerCallback: BluetoothGattServerCallback = object : BluetoothGattServerCallback() {
+        override fun onCharacteristicReadRequest(device: BluetoothDevice?, requestId: Int, offset: Int, characteristic: BluetoothGattCharacteristic?) {
+            super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
+            gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, l2capPSM);
+        }
+    }
+
+    private val gattCallback: BluetoothGattCallback = object : BluetoothGattCallback() {
+        override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
+            super.onConnectionStateChange(gatt, status, newState)
+            if (newState == BluetoothProfile.STATE_CONNECTED) {
+                gatt?.discoverServices()
+            }
+        }
+
+        override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
+            super.onServicesDiscovered(gatt, status)
+            if (status != BluetoothGatt.GATT_SUCCESS) {
+                return
+            }
+            val services = gatt?.services ?: return
+            services.forEach { service ->
+                if (service.uuid == serviceUUID.uuid) {
+                    service.characteristics.forEach { characteristic ->
+                        if (characteristic.uuid == psmUUID) {
+                            Timber.i("BLE: Requesting PSM characteristic")
+                            gatt.readCharacteristic(characteristic)
+                        }
+                    }
+                }
+            }
+        }
+
+        override fun onCharacteristicRead(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int) {
+            super.onCharacteristicRead(gatt, characteristic, status)
+
+            val device = gatt?.device ?: return
+            val psmBytes = characteristic?.value ?: return
+            val psm = bytesToInt(psmBytes)
+
+            var connection = connections[device.address]
+            if (connection != null && connection.isConnected) {
+                return
+            }
+
+            Timber.i("BLE: Connecting outbound $device PSM $psm")
+
+            val socket = device.createInsecureL2capChannel(psm)
+
+            try {
+                socket.connect()
+            } catch (e: Exception) {
+                timber.log.Timber.i("BLE: Failed to connect to $device PSM $psm: ${e.toString()}")
+                return
+            }
+
+            Timber.i("BLE: Connected outbound $device PSM $psm")
+
+            Timber.i("Creating DendriteBLEPeering")
+            connections[device.address] = DendriteBLEPeering(monolith!!.conduit("BLE"), socket)
+            Timber.i("Starting DendriteBLEPeering")
+            connections[device.address]!!.start()
+        }
+    }
+
     private val advertiseCallback: AdvertiseCallback = object : AdvertiseCallback() {
         override fun onStartFailure(errorCode: Int) {
             super.onStartFailure(errorCode)
@@ -238,46 +327,10 @@ class DendriteService : Service() {
             Toast.makeText(applicationContext, "BLE: Error code $errorCode", Toast.LENGTH_SHORT).show()
         }
 
-        override fun onBatchScanResults(results: MutableList<ScanResult>?) {
-            super.onBatchScanResults(results)
-            Timber.i("BLE: batch")
-            Toast.makeText(applicationContext, "BLE: Batched", Toast.LENGTH_SHORT).show()
-        }
-
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
-            val device = result.device.address.toString()
-            val record = result.scanRecord ?: return
-            try {
-                val service = record.serviceData.getValue(serviceUUID) ?: return
-                val psm = bytesToInt(service)
 
-                if (server.psm < psm) {
-                    // only connect in one direction, which stops both sides from
-                    // making and then closing/replacing connections
-                    return
-                }
-
-                var connection = connections[device]
-                if (connection != null && connection.isConnected) {
-                    return
-                }
-
-                Timber.i("BLE: Attempting connection to $device PSM $psm")
-                val remote = result.device.createInsecureL2capChannel(psm)
-                remote.connect()
-
-                Timber.i("BLE: Connected outbound $device PSM $psm")
-
-                Timber.i("Creating DendriteBLEPeering")
-                connections[device] = DendriteBLEPeering(monolith!!.conduit("BLE"), remote)
-                Timber.i("Starting DendriteBLEPeering")
-                connections[device]!!.start()
-
-                Timber.i("BLE: Created BLE peering with $device PSM $psm")
-            } catch (e: Exception) {
-                Timber.i("BLE: Device $device error %s", e.message)
-            }
+            result.device.connectGatt(applicationContext, false, gattCallback)
         }
     }
 
@@ -289,7 +342,7 @@ class DendriteService : Service() {
 
     fun bytesToInt(bytes: ByteArray): Int {
         val buffer: ByteBuffer = ByteBuffer.allocate(java.lang.Integer.BYTES)
-        buffer.put(bytes)
+        buffer.put(bytes.sliceArray(0 until java.lang.Integer.BYTES))
         buffer.flip()
         return buffer.int
     }
