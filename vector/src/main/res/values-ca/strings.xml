@@ -2148,4 +2148,12 @@
     <string name="login_signin_matrix_id_notice">Si configures un compte a un servidor local, utilitza el teu ID de Matrix (ex. @usuari:domini.com) i la contrasenya a sota.</string>
     <string name="login_connect_using_matrix_id_notice">Alternativament, si ja tens un compte i coneixes el teu identificador de Matrix i contrasenya, pots utilitzar aquest mètode:</string>
     <string name="login_server_text">Com els correus electrònics, els comptes pertanyen a una entitat però els pots fer servir per parlar amb tothom</string>
+    <string name="create_room_disable_federation_description">Potser ho hauries d\'activar si la sala només s\'utilitzarà per la interacció de grups interns dins el teu servidor local. Això no es podrà canviar més tard.</string>
+    <string name="create_room_disable_federation_title">Bloqueja qualsevol persona que no formi part de %s perquè mai pugui unir-se a la sala</string>
+    <string name="soft_logout_sso_not_same_user_error">La sessió actual és de l\'usuari %1$s i has introduït les credencials de l\'usuari %2$s. Això no es pot fer amb Element.
+\nPrimer esborra les dades i després torna a iniciar sessió amb l\'altre compte.</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">Perdràs l\'accés als missatges protegits tret de que iniciïs sessió i obtinguis les teves claus de xifrat.</string>
+    <string name="soft_logout_clear_data_notice">Atenció: les teves dades personals (incloses les claus de xifrat) encara estan desades en aquest dispositiu.
+\n
+\nEsborra-les si ja no vols utilitzar aquest dispositiu o vols iniciar sessió amb un altre compte.</string>
 </resources>
