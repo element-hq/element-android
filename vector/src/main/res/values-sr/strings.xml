@@ -115,4 +115,11 @@
     <string name="notification_listening_for_events">Ослушкујем догађања</string>
     <string name="system_theme">системска</string>
     <string name="encrypted_message">Шифрована порука</string>
+    <string name="play_video">Пусти</string>
+    <string name="active_call">Активан позив</string>
+    <string name="report_content">Пријави садржај</string>
+    <string name="disconnect">Искључи се</string>
+    <string name="revoke">Повуци</string>
+    <string name="none">Ништа</string>
+    <string name="backup">Резервна копија</string>
 </resources>
