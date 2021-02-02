@@ -37,8 +37,8 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.internal.auth.registration.nextUncompletedStage
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth

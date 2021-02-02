@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.auth.registration
+package org.matrix.android.sdk.api.auth.registration
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -108,4 +108,10 @@ fun RegistrationFlowResponse.toFlowResult(): FlowResult {
     }
 
     return FlowResult(missingStage, completedStage)
+}
+
+
+fun RegistrationFlowResponse.nextUncompletedStage(flowIndex: Int = 0): String? {
+    val completed = completedStages ?: emptyList()
+    return flows?.getOrNull(flowIndex)?.stages?.firstOrNull { completed.contains(it).not() }
 }

@@ -37,8 +37,8 @@ import im.vector.app.core.utils.openUrlInChromeCustomTab
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.internal.auth.registration.nextUncompletedStage
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import timber.log.Timber
 import javax.inject.Inject
 

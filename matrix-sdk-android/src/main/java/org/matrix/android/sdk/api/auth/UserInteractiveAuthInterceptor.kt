@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.auth
 
-import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.UIABaseAuth
 import kotlin.coroutines.Continuation
 

@@ -17,7 +17,7 @@
 package im.vector.app.features.crypto.recover
 
 import im.vector.app.core.platform.VectorViewEvents
-import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 
 sealed class BootstrapViewEvents : VectorViewEvents {
     data class Dismiss(val success: Boolean) : BootstrapViewEvents()

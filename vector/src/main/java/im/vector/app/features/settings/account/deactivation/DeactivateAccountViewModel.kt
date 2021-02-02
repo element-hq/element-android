@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.isInvalidUIAAuth
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.UIABaseAuth

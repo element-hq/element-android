@@ -333,6 +333,7 @@
     <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
 
     <string name="login_error_forbidden">Invalid username/password</string>
+    <string name="error_unauthorized">Unauthorized, missing valid authentication credentials</string>
     <string name="login_error_unknown_token">The access token specified was not recognised</string>
     <string name="login_error_bad_json">Malformed JSON</string>
     <string name="login_error_not_json">Did not contain valid JSON</string>

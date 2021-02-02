@@ -23,11 +23,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.UIABaseAuth
 import timber.log.Timber
 import kotlin.coroutines.suspendCoroutine
 
-fun RegistrationFlowResponse.nextUncompletedStage(flowIndex: Int = 0): String? {
-    val completed = completedStages ?: emptyList()
-    return flows?.getOrNull(flowIndex)?.stages?.firstOrNull { completed.contains(it).not() }
-}
-
 suspend fun handleUIA(failure: Throwable, interceptor: UserInteractiveAuthInterceptor, retryBlock: suspend (UIABaseAuth) -> Unit): Boolean {
     Timber.d("## UIA: check error ${failure.message}")
     val flowResponse = failure.toRegistrationFlowResponse()
