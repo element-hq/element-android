@@ -47,6 +47,7 @@ import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
 import org.matrix.android.sdk.internal.session.mapWithProgress
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
@@ -262,8 +263,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val leftMember = RoomMemberSummaryEntity.where(realm, roomId, userId).findFirst()
         val membership = leftMember?.membership ?: Membership.LEAVE
         roomEntity.membership = membership
-        roomEntity.chunks.forEach { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
-        roomEntity.chunks.clear()
+        roomEntity.chunks.clearWith { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
         roomTypingUsersHandler.handle(realm, roomId, null)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
         roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary, roomSync.unreadNotifications)

@@ -20,6 +20,7 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import org.matrix.android.sdk.internal.crypto.model.KeyUsage
+import org.matrix.android.sdk.internal.extensions.clearWith
 
 internal open class CrossSigningInfoEntity(
         @PrimaryKey
@@ -30,7 +31,7 @@ internal open class CrossSigningInfoEntity(
     companion object
 
     fun deleteOnCascade() {
-        crossSigningKeys.toList().forEach { it.deleteOnCascade() }
+        crossSigningKeys.clearWith { it.deleteOnCascade() }
         deleteFromRealm()
     }
 

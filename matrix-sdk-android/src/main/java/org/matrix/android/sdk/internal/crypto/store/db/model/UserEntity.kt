@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import org.matrix.android.sdk.internal.extensions.clearWith
 
 internal open class UserEntity(
         @PrimaryKey var userId: String? = null,
@@ -30,7 +31,7 @@ internal open class UserEntity(
     companion object
 
     fun deleteOnCascade() {
-        devices.toList().forEach { it.deleteOnCascade() }
+        devices.clearWith { it.deleteOnCascade() }
         crossSigningInfoEntity?.deleteOnCascade()
         deleteFromRealm()
     }
