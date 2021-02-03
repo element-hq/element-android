@@ -2278,4 +2278,6 @@
     <string name="room_settings_permissions_title">聊天室權限</string>
     <string name="room_participants_leave_private_warning">此聊天室不公開。沒有邀請，您將無法重新加入。</string>
     <string name="system_theme">系統預設值</string>
+    <string name="settings_show_emoji_keyboard_summary">在訊息編輯器上新增按鈕以開啟表情符號鍵盤</string>
+    <string name="settings_show_emoji_keyboard">顯示表情符號鍵盤</string>
 </resources>
