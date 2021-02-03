@@ -73,8 +73,8 @@
 \nImportuji místností, jichž jste členy</string>
     <string name="initial_sync_start_importing_account_left_rooms">Úvodní synchronizace: 
 \nImportuji místnost, jež jste opustili</string>
-    <string name="initial_sync_start_importing_account_groups">Úvodní synchronizace: 
-\nImportuji komunity</string>
+    <string name="initial_sync_start_importing_account_groups">Úvodní synchronizace:
+\nImportuji skupiny</string>
     <string name="initial_sync_start_importing_account_data">Úvodní synchronizace: 
 \nImportuji data účtu</string>
     <string name="event_status_sending_message">Odesílám zprávu…</string>
@@ -90,7 +90,7 @@
     <string name="summary_you_sent_sticker">Poslali jste nálepku.</string>
     <string name="notice_room_invite_no_invitee_by_you">Vaše pozvání</string>
     <string name="notice_room_created">%1$s založil místnost</string>
-    <string name="notice_room_created_by_you">Vy jste založili místnost</string>
+    <string name="notice_room_created_by_you">Založili jste místnost</string>
     <string name="notice_room_invite_by_you">Pozvali jste %1$s</string>
     <string name="notice_room_join_by_you">Vstoupili jste do místnosti</string>
     <string name="notice_room_leave_by_you">Opustili jste místnost</string>
@@ -204,11 +204,11 @@
     <string name="notice_direct_room_leave_with_reason">%1$s odešli. Důvod: %2$s</string>
     <string name="notice_direct_room_join_with_reason_by_you">Vstoupili jste. Důvod: %1$s</string>
     <string name="notice_direct_room_join_with_reason">%1$s vstoupili. Důvod: %2$s</string>
-    <string name="notice_direct_room_third_party_revoked_invite_by_you">Vy jste zrušili pozvání pro %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Zrušili jste pozvání pro %1$s</string>
     <string name="notice_direct_room_third_party_revoked_invite">%1$s zrušili pozvání pro %2$s</string>
-    <string name="notice_direct_room_third_party_invite_by_you">Vy jste pozvali %1$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Pozvali jste %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s pozvali %2$s</string>
-    <string name="notice_direct_room_update_by_you">Vy jste tady provedli upgrade.</string>
+    <string name="notice_direct_room_update_by_you">Tady jste provedli upgrade.</string>
     <string name="notice_direct_room_update">%s tady provedli upgrade.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Učinili jste budoucí zprávy viditelné pro %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s učinili budoucí zprávy viditelné pro %2$s</string>

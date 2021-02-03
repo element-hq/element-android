@@ -98,7 +98,7 @@
         <item quantity="other">%1$s 新增了 %2$s 为此聊天室的地址。</item>
     </plurals>
     <plurals name="notice_room_aliases_removed">
-        <item quantity="other">%1$s 移除了此聊天室的 %3$s 地址。</item>
+        <item quantity="other">%1$s 移除了 %2$s 作为此聊天室额地址。</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s 为此聊天室新增了 %2$s 并移除 %3$s 地址。</string>
     <string name="notice_room_canonical_alias_set">%1$s 将此聊天室的主地址设为了 %2$s。</string>
