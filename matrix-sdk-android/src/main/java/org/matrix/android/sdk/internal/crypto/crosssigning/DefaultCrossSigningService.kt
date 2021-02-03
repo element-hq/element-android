@@ -22,6 +22,7 @@ import androidx.work.ExistingWorkPolicy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -29,7 +30,6 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSignatureQueryBuilder
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.crypto.tasks.InitializeCrossSigningTask
@@ -150,11 +150,11 @@ internal class DefaultCrossSigningService @Inject constructor(
      *   - Sign the keys and upload them
      *   - Sign the current device with SSK and sign MSK with device key (migration) and upload signatures
      */
-    override fun initializeCrossSigning(authParams: UserPasswordAuth?, callback: MatrixCallback<Unit>) {
+    override fun initializeCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?, callback: MatrixCallback<Unit>) {
         Timber.d("## CrossSigning  initializeCrossSigning")
 
         val params = InitializeCrossSigningTask.Params(
-                authParams = authParams
+                interactiveAuthInterceptor = uiaInterceptor
         )
         initializeCrossSigningTask.configureWith(params) {
             this.callbackThread = TaskThread.CRYPTO

@@ -115,8 +115,10 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
 
                     // So recovery is not setup
                     // Check if cross signing is enabled and local secrets known
-                    if (crossSigningInfo.getOrNull()?.isTrusted() == true
-                            && pInfo.getOrNull()?.allKnown().orFalse()
+                    if (
+                            crossSigningInfo.getOrNull() == null
+                            || (crossSigningInfo.getOrNull()?.isTrusted() == true
+                            && pInfo.getOrNull()?.allKnown().orFalse())
                     ) {
                         // So 4S is not setup and we have local secrets,
                         return@Function4 BannerState.Setup(numberOfKeys = getNumberOfKeysToBackup())

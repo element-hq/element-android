@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.error
+package im.vector.app.features.auth
 
-class SsoFlowNotSupportedYet : Throwable()
+import im.vector.app.core.platform.VectorViewModelAction
+
+sealed class ReAuthActions : VectorViewModelAction {
+    object StartSSOFallback : ReAuthActions()
+    object FallBackPageLoaded : ReAuthActions()
+    object FallBackPageClosed : ReAuthActions()
+    object TogglePassVisibility : ReAuthActions()
+    data class ReAuthWithPass(val password: String) : ReAuthActions()
+}

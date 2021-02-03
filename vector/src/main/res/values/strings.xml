@@ -333,6 +333,7 @@
     <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
 
     <string name="login_error_forbidden">Invalid username/password</string>
+    <string name="error_unauthorized">Unauthorized, missing valid authentication credentials</string>
     <string name="login_error_unknown_token">The access token specified was not recognised</string>
     <string name="login_error_bad_json">Malformed JSON</string>
     <string name="login_error_not_json">Did not contain valid JSON</string>
@@ -2623,6 +2624,7 @@
     <string name="mark_as_verified">Mark as Trusted</string>
 
     <string name="error_sso_flow_not_supported_yet">Sorry, this operation is not possible yet for accounts connected using Single Sign-On.</string>
+    <string name="failed_to_initialize_cross_signing">Failed to set up Cross Signing</string>
 
     <string name="error_empty_field_choose_user_name">Please choose a username.</string>
     <string name="error_empty_field_choose_password">Please choose a password.</string>
@@ -2792,4 +2794,8 @@
     <string name="warning_unsaved_change_discard">Discard changes</string>
 
     <string name="matrix_to_card_title">Matrix Link</string>
+
+    <string name="re_authentication_activity_title">Re-Authentication Needed</string>
+    <string name="re_authentication_default_confirm_text">Element requires you to enter your credentials to perform this action.</string>
+    <string name="authentication_error">Failed to authenticate</string>
 </resources>

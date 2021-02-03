@@ -2,10 +2,12 @@ Changes in Element 1.0.15 (2020-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Social Login support
 
 Improvements 🙌:
- -
+ - SSO support for cross signing (#1062)
+ - Deactivate account when logged in with SSO (#1264)
+ - SSO UIA doesn't work (#2754)
 
 Bugfix 🐛:
  - Fix clear cache issue: sometimes, after a clear cache, there is still a token, so the init sync service is not started.

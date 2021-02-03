@@ -18,7 +18,21 @@ package org.matrix.android.sdk.internal.crypto.gossiping
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
+import junit.framework.TestCase.assertTrue
+import junit.framework.TestCase.fail
+import org.junit.Assert
+import org.junit.FixMethodOrder
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
@@ -28,6 +42,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxStat
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
@@ -40,19 +55,9 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNotNull
-import junit.framework.TestCase.assertTrue
-import junit.framework.TestCase.fail
-import org.junit.Assert
-import org.junit.FixMethodOrder
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.MethodSorters
-import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import java.util.concurrent.CountDownLatch
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -200,10 +205,17 @@ class KeyShareTests : InstrumentedTest {
 
         mTestHelper.doSync<Unit> {
             aliceSession1.cryptoService().crossSigningService()
-                    .initializeCrossSigning(UserPasswordAuth(
-                            user = aliceSession1.myUserId,
-                            password = TestConstants.PASSWORD
-                    ), it)
+                    .initializeCrossSigning(
+                            object : UserInteractiveAuthInterceptor {
+                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    promise.resume(
+                                            UserPasswordAuth(
+                                                    user = aliceSession1.myUserId,
+                                                    password = TestConstants.PASSWORD
+                                            )
+                                    )
+                                }
+                            }, it)
         }
 
         // Also bootstrap keybackup on first session
@@ -305,10 +317,18 @@ class KeyShareTests : InstrumentedTest {
 
         mTestHelper.doSync<Unit> {
             aliceSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(UserPasswordAuth(
-                            user = aliceSession.myUserId,
-                            password = TestConstants.PASSWORD
-                    ), it)
+                    .initializeCrossSigning(
+                            object : UserInteractiveAuthInterceptor {
+                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    promise.resume(
+                                            UserPasswordAuth(
+                                                    user = aliceSession.myUserId,
+                                                    password = TestConstants.PASSWORD,
+                                                    session = flowResponse.session
+                                            )
+                                    )
+                                }
+                            }, it)
         }
 
         // Create an encrypted room and send a couple of messages
@@ -332,10 +352,18 @@ class KeyShareTests : InstrumentedTest {
         val bobSession = mTestHelper.createAccount(TestConstants.USER_BOB, SessionTestParams(true))
         mTestHelper.doSync<Unit> {
             bobSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(UserPasswordAuth(
-                            user = bobSession.myUserId,
-                            password = TestConstants.PASSWORD
-                    ), it)
+                    .initializeCrossSigning(
+                            object : UserInteractiveAuthInterceptor {
+                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    promise.resume(
+                                            UserPasswordAuth(
+                                                    user = bobSession.myUserId,
+                                                    password = TestConstants.PASSWORD,
+                                                    session = flowResponse.session
+                                            )
+                                    )
+                                }
+                            }, it)
         }
 
         // Let alice invite bob
@@ -356,7 +384,7 @@ class KeyShareTests : InstrumentedTest {
         val roomRoomBobPov = aliceSession.getRoom(roomId)
         val beforeJoin = roomRoomBobPov!!.getTimeLineEvent(secondEventId)
 
-        var dRes = tryOrNull {  bobSession.cryptoService().decryptEvent(beforeJoin!!.root, "") }
+        var dRes = tryOrNull { bobSession.cryptoService().decryptEvent(beforeJoin!!.root, "") }
 
         assert(dRes == null)
 
@@ -367,7 +395,7 @@ class KeyShareTests : InstrumentedTest {
         Thread.sleep(3_000)
 
         // With the bug the first session would have improperly reshare that key :/
-        dRes = tryOrNull {  bobSession.cryptoService().decryptEvent(beforeJoin.root, "") }
+        dRes = tryOrNull { bobSession.cryptoService().decryptEvent(beforeJoin.root, "") }
         Log.d("#TEST", "KS: sgould not decrypt that ${beforeJoin.root.getClearContent().toModel<MessageContent>()?.body}")
         assert(dRes?.clearEvent == null)
     }

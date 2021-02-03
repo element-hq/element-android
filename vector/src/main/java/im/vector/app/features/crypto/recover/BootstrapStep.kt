@@ -52,11 +52,11 @@ package im.vector.app.features.crypto.recover
  *                             │                            │  BootstrapStep.ConfirmPassphrase   │──┐
  *                             │                            └────────────────────────────────────┘  │
  *                             │                                               │                    │
- *                             │                                      is password needed?           │
+ *                             │                                      is password/reauth needed?    │
  *                             │                                               │                    │
  *                             │                                               ▼                    │
  *                             │                            ┌────────────────────────────────────┐  │
- *                             │                            │   BootstrapStep.AccountPassword    │  │
+ *                             │                            │   BootstrapStep.AccountReAuth      │  │
  *                             │                            └────────────────────────────────────┘  │
  *                             │                                               │                    │
  *                             │                                               │                    │
@@ -94,7 +94,7 @@ sealed class BootstrapStep {
     data class SetupPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
     data class ConfirmPassphrase(val isPasswordVisible: Boolean) : BootstrapStep()
 
-    data class AccountPassword(val isPasswordVisible: Boolean, val failure: String? = null) : BootstrapStep()
+    data class AccountReAuth(val failure: String? = null) : BootstrapStep()
 
     abstract class GetBackupSecretForMigration : BootstrapStep()
     data class GetBackupSecretPassForMigration(val isPasswordVisible: Boolean, val useKey: Boolean) : GetBackupSecretForMigration()

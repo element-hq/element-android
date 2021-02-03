@@ -143,7 +143,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="8dp"
                 android:visibility="gone"
                 tools:visibility="visible">
 

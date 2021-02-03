@@ -28,7 +28,7 @@ import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragm
 import im.vector.app.features.crypto.quads.SharedSecuredStorageKeyFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStoragePassphraseFragment
 import im.vector.app.features.crypto.quads.SharedSecuredStorageResetAllFragment
-import im.vector.app.features.crypto.recover.BootstrapAccountPasswordFragment
+import im.vector.app.features.crypto.recover.BootstrapReAuthFragment
 import im.vector.app.features.crypto.recover.BootstrapConclusionFragment
 import im.vector.app.features.crypto.recover.BootstrapConfirmPassphraseFragment
 import im.vector.app.features.crypto.recover.BootstrapEnterPassphraseFragment
@@ -522,8 +522,8 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(BootstrapAccountPasswordFragment::class)
-    fun bindBootstrapAccountPasswordFragment(fragment: BootstrapAccountPasswordFragment): Fragment
+    @FragmentKey(BootstrapReAuthFragment::class)
+    fun bindBootstrapReAuthFragment(fragment: BootstrapReAuthFragment): Fragment
 
     @Binds
     @IntoMap

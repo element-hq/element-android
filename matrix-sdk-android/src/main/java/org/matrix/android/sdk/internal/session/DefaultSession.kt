@@ -52,6 +52,8 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
+import org.matrix.android.sdk.api.util.appendParamToUrl
+import org.matrix.android.sdk.internal.auth.SSO_UIA_FALLBACK_PATH
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
@@ -271,6 +273,18 @@ internal class DefaultSession @Inject constructor(
     // For easy debugging
     override fun toString(): String {
         return "$myUserId - ${sessionParams.deviceId}"
+    }
+
+    override fun getUiaSsoFallbackUrl(authenticationSessionId: String): String {
+        val hsBas = sessionParams.homeServerConnectionConfig
+                .homeServerUri
+                .toString()
+                .trim { it == '/' }
+        return buildString {
+            append(hsBas)
+            append(SSO_UIA_FALLBACK_PATH)
+            appendParamToUrl("session", authenticationSessionId)
+        }
     }
 
     override fun logDbUsageInfo() {
