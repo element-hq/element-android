@@ -89,7 +89,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
         fun create(initialState: CrossSigningSettingsViewState): CrossSigningSettingsViewModel
     }
 
-    override fun handle(action: CrossSigningSettingsAction) = withState { state ->
+    override fun handle(action: CrossSigningSettingsAction) {
         when (action) {
             CrossSigningSettingsAction.InitializeCrossSigning -> {
                 _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
