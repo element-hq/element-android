@@ -243,7 +243,7 @@ class RoomMemberProfileFragment @Inject constructor(
                     onAvatarClicked(view, userMatrixItem)
                 }
                 headerViews.memberProfileNameView.setOnClickListener { _ ->
-                    onProfileNameClicked(userMatrixItem)
+                    onOverrideColorClicked()
                 }
                 views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
@@ -331,14 +331,15 @@ class RoomMemberProfileFragment @Inject constructor(
         navigator.openBigImageViewer(requireActivity(), view, userMatrixItem)
     }
 
-    private fun onProfileNameClicked(userMatrixItem: MatrixItem) {
+    override fun onOverrideColorClicked(): Unit = withState(viewModel)  { state ->
         val inflater = requireActivity().layoutInflater
         val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
         val views = DialogBaseEditTextBinding.bind(layout)
         val session = injector().activeSessionHolder().getActiveSession()
         val overrideColorsSetting = session.getAccountDataEvent(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
         val overrideColorSpecs = overrideColorsSetting?.content?.toMap().orEmpty()
-        val overrideColorSpec = overrideColorSpecs[userMatrixItem.id]?.toString()
+        val userId = state.userId;
+        val overrideColorSpec = overrideColorSpecs[userId]?.toString()
         views.editText.setText(overrideColorSpec)
         views.editText.hint = "#000000"
 
@@ -349,16 +350,16 @@ class RoomMemberProfileFragment @Inject constructor(
                     val newOverrideColorSpec = views.editText.text.toString()
                     if (newOverrideColorSpec != overrideColorSpec) {
                         val newOverrideColorSpecs = overrideColorSpecs.toMutableMap()
-                        if (matrixItemColorProvider.setOverrideColor(userMatrixItem.id, newOverrideColorSpec)) {
-                            newOverrideColorSpecs[userMatrixItem.id] = newOverrideColorSpec
+                        if (matrixItemColorProvider.setOverrideColor(userId, newOverrideColorSpec)) {
+                            newOverrideColorSpecs[userId] = newOverrideColorSpec
                         } else {
-                            newOverrideColorSpecs.remove(userMatrixItem.id)
+                            newOverrideColorSpecs.remove(userId)
                         }
                         session.updateAccountData(
                                 type = UserAccountDataTypes.TYPE_OVERRIDE_COLORS,
                                 content = newOverrideColorSpecs
                         )
-                        headerViews.memberProfileNameView.setTextColor(matrixItemColorProvider.getColor(userMatrixItem))
+                        invalidate()
                     }
                 }
                 .setNegativeButton(R.string.cancel, null)
