@@ -16,37 +16,56 @@
 
 package im.vector.app.features.home.room.detail.timeline.url
 
+import android.os.Handler
+import android.os.Looper
 import im.vector.app.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getLatestEventId
 
 class PreviewUrlRetriever(session: Session) {
     private val mediaService = session.mediaService()
 
-    private val data = mutableMapOf<String, PreviewUrlUiState>()
+    private data class EventIdPreviewUrlUiState(
+            // Id of the latest event in the case of an edited event, or the eventId for an event which has not been edited
+            val latestEventId: String,
+            val previewUrlUiState: PreviewUrlUiState
+    )
+
+    // Keys are the main eventId
+    private val data = mutableMapOf<String, EventIdPreviewUrlUiState>()
     private val listeners = mutableMapOf<String, MutableSet<PreviewUrlRetrieverListener>>()
+    private val uiHandler = Handler(Looper.getMainLooper())
 
     // In memory list
     private val blockedUrl = mutableSetOf<String>()
 
-    fun getPreviewUrl(event: Event, coroutineScope: CoroutineScope) {
-        val eventId = event.eventId ?: return
+    fun getPreviewUrl(event: TimelineEvent, coroutineScope: CoroutineScope) {
+        val eventId = event.root.eventId ?: return
+        val latestEventId = event.getLatestEventId()
 
         synchronized(data) {
-            if (data[eventId] == null) {
+            val current = data[eventId]
+            if (current?.latestEventId != latestEventId) {
+                // The event is not known or it has been edited
                 // Keep only the first URL for the moment
                 val url = mediaService.extractUrls(event)
                         .firstOrNull()
                         ?.takeIf { it !in blockedUrl }
                 if (url == null) {
-                    updateState(eventId, PreviewUrlUiState.NoUrl)
+                    updateState(eventId, latestEventId, PreviewUrlUiState.NoUrl)
+                    null
+                } else if (url != (current?.previewUrlUiState as? PreviewUrlUiState.Data)?.url) {
+                    // There is a not known URL, or the Event has been edited and the URL has changed
+                    updateState(eventId, latestEventId, PreviewUrlUiState.Loading)
+                    url
                 } else {
-                    updateState(eventId, PreviewUrlUiState.Loading)
+                    // Already handled
+                    null
                 }
-                url
             } else {
                 // Already handled
                 null
@@ -64,15 +83,15 @@ class PreviewUrlRetriever(session: Session) {
                             synchronized(data) {
                                 // Blocked after the request has been sent?
                                 if (urlToRetrieve in blockedUrl) {
-                                    updateState(eventId, PreviewUrlUiState.NoUrl)
+                                    updateState(eventId, latestEventId, PreviewUrlUiState.NoUrl)
                                 } else {
-                                    updateState(eventId, PreviewUrlUiState.Data(eventId, urlToRetrieve, it))
+                                    updateState(eventId, latestEventId, PreviewUrlUiState.Data(eventId, urlToRetrieve, it))
                                 }
                             }
                         },
                         {
                             synchronized(data) {
-                                updateState(eventId, PreviewUrlUiState.Error(it))
+                                updateState(eventId, latestEventId, PreviewUrlUiState.Error(it))
                             }
                         }
                 )
@@ -86,18 +105,20 @@ class PreviewUrlRetriever(session: Session) {
         // Notify the listener
         synchronized(data) {
             data[eventId]
-                    ?.takeIf { it is PreviewUrlUiState.Data && it.url == url }
+                    ?.takeIf { it.previewUrlUiState is PreviewUrlUiState.Data && it.previewUrlUiState.url == url }
                     ?.let {
-                        updateState(eventId, PreviewUrlUiState.NoUrl)
+                        updateState(eventId, it.latestEventId, PreviewUrlUiState.NoUrl)
                     }
         }
     }
 
-    private fun updateState(eventId: String, state: PreviewUrlUiState) {
-        data[eventId] = state
+    private fun updateState(eventId: String, latestEventId: String, state: PreviewUrlUiState) {
+        data[eventId] = EventIdPreviewUrlUiState(latestEventId, state)
         // Notify the listener
-        listeners[eventId].orEmpty().forEach {
-            it.onStateUpdated(state)
+        uiHandler.post {
+            listeners[eventId].orEmpty().forEach {
+                it.onStateUpdated(state)
+            }
         }
     }
 
@@ -107,7 +128,7 @@ class PreviewUrlRetriever(session: Session) {
 
         // Give the current state if any
         synchronized(data) {
-            listener.onStateUpdated(data[key] ?: PreviewUrlUiState.Unknown)
+            listener.onStateUpdated(data[key]?.previewUrlUiState ?: PreviewUrlUiState.Unknown)
         }
     }
 

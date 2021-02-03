@@ -16,6 +16,7 @@
 
 package im.vector.app.features.signout.soft
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -30,6 +31,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.hasUnsavedKeys
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.login.LoginMode
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
@@ -174,22 +176,19 @@ class SoftLogoutViewModel @AssistedInject constructor(
                             asyncLoginAction = Loading()
                     )
                 }
-                currentTask = session.updateCredentials(action.credentials,
-                        object : MatrixCallback<Unit> {
-                            override fun onFailure(failure: Throwable) {
-                                _viewEvents.post(SoftLogoutViewEvents.Failure(failure))
-                                setState {
-                                    copy(
-                                            asyncLoginAction = Uninitialized
-                                    )
-                                }
-                            }
-
-                            override fun onSuccess(data: Unit) {
-                                onSessionRestored()
-                            }
+                viewModelScope.launch {
+                    try {
+                        session.updateCredentials(action.credentials)
+                        onSessionRestored()
+                    } catch (failure: Throwable) {
+                        _viewEvents.post(SoftLogoutViewEvents.Failure(failure))
+                        setState {
+                            copy(
+                                    asyncLoginAction = Uninitialized
+                            )
                         }
-                )
+                    }
+                }
             }
         }
     }
@@ -202,21 +201,18 @@ class SoftLogoutViewModel @AssistedInject constructor(
                     passwordShown = false
             )
         }
-        currentTask = session.signInAgain(action.password,
-                object : MatrixCallback<Unit> {
-                    override fun onFailure(failure: Throwable) {
-                        setState {
-                            copy(
-                                    asyncLoginAction = Fail(failure)
-                            )
-                        }
-                    }
-
-                    override fun onSuccess(data: Unit) {
-                        onSessionRestored()
-                    }
+        viewModelScope.launch {
+            try {
+                session.signInAgain(action.password)
+                onSessionRestored()
+            } catch (failure: Throwable) {
+                setState {
+                    copy(
+                            asyncLoginAction = Fail(failure)
+                    )
                 }
-        )
+            }
+        }
     }
 
     private fun onSessionRestored() {

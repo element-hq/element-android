@@ -17,21 +17,19 @@
 package org.matrix.android.sdk.internal.session.media
 
 import android.util.Patterns
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import javax.inject.Inject
 
 internal class UrlsExtractor @Inject constructor() {
     // Sadly Patterns.WEB_URL_WITH_PROTOCOL is not public so filter the protocol later
     private val urlRegex = Patterns.WEB_URL.toRegex()
 
-    fun extract(event: Event): List<String> {
-        return event.takeIf { it.getClearType() == EventType.MESSAGE }
-                ?.getClearContent()
-                ?.toModel<MessageContent>()
+    fun extract(event: TimelineEvent): List<String> {
+        return event.takeIf { it.root.getClearType() == EventType.MESSAGE }
+                ?.getLastMessageContent()
                 ?.takeIf {
                     it.msgType == MessageType.MSGTYPE_TEXT
                             || it.msgType == MessageType.MSGTYPE_NOTICE

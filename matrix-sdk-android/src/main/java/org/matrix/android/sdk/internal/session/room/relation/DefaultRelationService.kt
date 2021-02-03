@@ -141,7 +141,7 @@ internal class DefaultRelationService @AssistedInject constructor(
     }
 
     override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
-        val params = FetchEditHistoryTask.Params(roomId, cryptoSessionInfoProvider.isRoomEncrypted(roomId), eventId)
+        val params = FetchEditHistoryTask.Params(roomId, eventId)
         fetchEditHistoryTask
                 .configureWith(params) {
                     this.callback = callback

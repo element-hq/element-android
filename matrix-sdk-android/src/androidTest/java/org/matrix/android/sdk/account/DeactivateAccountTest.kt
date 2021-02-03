@@ -16,8 +16,18 @@
 
 package org.matrix.android.sdk.account
 
+import org.junit.Assert.assertTrue
+import org.junit.FixMethodOrder
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
@@ -25,12 +35,8 @@ import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
-import org.junit.Assert.assertTrue
-import org.junit.FixMethodOrder
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import org.junit.runners.MethodSorters
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -44,7 +50,18 @@ class DeactivateAccountTest : InstrumentedTest {
 
         // Deactivate the account
         commonTestHelper.runBlockingTest {
-            session.deactivateAccount(TestConstants.PASSWORD, false)
+            session.deactivateAccount(
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            promise.resume(
+                                    UserPasswordAuth(
+                                            user = session.myUserId,
+                                            password = TestConstants.PASSWORD,
+                                            session = flowResponse.session
+                                    )
+                            )
+                        }
+                    }, false)
         }
 
         // Try to login on the previous account, it will fail (M_USER_DEACTIVATED)

@@ -17,15 +17,16 @@
 package org.matrix.android.sdk.api.session.media
 
 import org.matrix.android.sdk.api.cache.CacheStrategy
-import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.JsonDict
 
 interface MediaService {
     /**
-     * Extract URLs from an Event.
-     * @return the list of URLs contains in the body of the Event. It does not mean that URLs in this list have UrlPreview data
+     * Extract URLs from a TimelineEvent.
+     * @param event TimelineEvent to extract the URL from.
+     * @return the list of URLs contains in the body of the TimelineEvent. It does not mean that URLs in this list have UrlPreview data
      */
-    fun extractUrls(event: Event): List<String>
+    fun extractUrls(event: TimelineEvent): List<String>
 
     /**
      * Get Raw Url Preview data from the homeserver. There is no cache management for this request

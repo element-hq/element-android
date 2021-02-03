@@ -30,6 +30,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
@@ -207,9 +208,9 @@ internal class DefaultCryptoService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun deleteDevice(deviceId: String, callback: MatrixCallback<Unit>) {
+    override fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>) {
         deleteDeviceTask
-                .configureWith(DeleteDeviceTask.Params(deviceId)) {
+                .configureWith(DeleteDeviceTask.Params(deviceId, userInteractiveAuthInterceptor, null)) {
                     this.executionThread = TaskThread.CRYPTO
                     this.callback = callback
                 }
