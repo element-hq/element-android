@@ -90,6 +90,17 @@ data class TimelineEvent(
 fun TimelineEvent.hasBeenEdited() = annotations?.editSummary != null
 
 /**
+ * Get the latest known eventId for an edited event, or the eventId for an Event which has not been edited
+ */
+fun TimelineEvent.getLatestEventId(): String {
+    return annotations
+            ?.editSummary
+            ?.sourceEvents
+            ?.lastOrNull()
+            ?: eventId
+}
+
+/**
  * Get the relation content if any
  */
 fun TimelineEvent.getRelationContent(): RelationDefaultContent? {

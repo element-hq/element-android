@@ -140,14 +140,13 @@ internal class RoomSummaryUpdater @Inject constructor(
                     .queryActiveRoomMembersEvent()
                     .notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
                     .findAll()
-                    .asSequence()
                     .map { it.userId }
 
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
             if (roomSummaryEntity.isEncrypted) {
                 // mmm maybe we could only refresh shield instead of checking trust also?
-                crossSigningService.onUsersDeviceUpdate(roomSummaryEntity.otherMemberIds.toList())
+                crossSigningService.onUsersDeviceUpdate(otherRoomMembers)
             }
         }
     }

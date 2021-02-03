@@ -19,8 +19,11 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericItemWithValue
+import im.vector.app.core.ui.list.genericPositiveButtonItem
+import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.core.utils.DimensionConverter
 import me.gujun.android.span.span
 import javax.inject.Inject
@@ -31,7 +34,9 @@ class CrossSigningSettingsController @Inject constructor(
         private val dimensionConverter: DimensionConverter
 ) : TypedEpoxyController<CrossSigningSettingsViewState>() {
 
-    interface InteractionListener
+    interface InteractionListener {
+        fun didTapInitializeCrossSigning()
+    }
 
     var interactionListener: InteractionListener? = null
 
@@ -44,12 +49,26 @@ class CrossSigningSettingsController @Inject constructor(
                     titleIconResourceId(R.drawable.ic_shield_trusted)
                     title(stringProvider.getString(R.string.encryption_information_dg_xsigning_complete))
                 }
+                genericButtonItem {
+                    id("Reset")
+                    text(stringProvider.getString(R.string.reset_cross_signing))
+                    buttonClickAction(DebouncedClickListener({
+                        interactionListener?.didTapInitializeCrossSigning()
+                    }))
+                }
             }
             data.xSigningKeysAreTrusted    -> {
                 genericItem {
                     id("trusted")
                     titleIconResourceId(R.drawable.ic_shield_custom)
                     title(stringProvider.getString(R.string.encryption_information_dg_xsigning_trusted))
+                }
+                genericButtonItem {
+                    id("Reset")
+                    text(stringProvider.getString(R.string.reset_cross_signing))
+                    buttonClickAction(DebouncedClickListener({
+                        interactionListener?.didTapInitializeCrossSigning()
+                    }))
                 }
             }
             data.xSigningIsEnableInAccount -> {
@@ -58,11 +77,26 @@ class CrossSigningSettingsController @Inject constructor(
                     titleIconResourceId(R.drawable.ic_shield_black)
                     title(stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted))
                 }
+                genericButtonItem {
+                    id("Reset")
+                    text(stringProvider.getString(R.string.reset_cross_signing))
+                    buttonClickAction(DebouncedClickListener({
+                        interactionListener?.didTapInitializeCrossSigning()
+                    }))
+                }
             }
             else                           -> {
                 genericItem {
                     id("not")
                     title(stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled))
+                }
+
+                genericPositiveButtonItem {
+                    id("Initialize")
+                    text(stringProvider.getString(R.string.initialize_cross_signing))
+                    buttonClickAction(DebouncedClickListener({
+                        interactionListener?.didTapInitializeCrossSigning()
+                    }))
                 }
             }
         }

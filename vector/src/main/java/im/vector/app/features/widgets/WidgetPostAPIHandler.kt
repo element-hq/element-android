@@ -17,8 +17,9 @@
 package im.vector.app.features.widgets
 
 import android.text.TextUtils
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.GlobalScope
@@ -45,7 +46,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
                                                        private val stringProvider: StringProvider,
                                                        private val session: Session) : WidgetPostAPIMediator.Handler {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(roomId: String): WidgetPostAPIHandler
     }

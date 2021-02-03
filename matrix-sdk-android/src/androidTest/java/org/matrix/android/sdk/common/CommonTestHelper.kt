@@ -378,7 +378,9 @@ class CommonTestHelper(context: Context) {
     fun Iterable<Session>.signOutAndClose() = forEach { signOutAndClose(it) }
 
     fun signOutAndClose(session: Session) {
-        doSync<Unit>(60_000) { session.signOut(true, it) }
+        runBlockingTest(timeout = 60_000) {
+            session.signOut(true)
+        }
         // no need signout will close
         // session.close()
     }

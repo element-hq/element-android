@@ -25,6 +25,7 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.features.MainActivity
+import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.call.CallControlsBottomSheet
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.conference.VectorJitsiActivity
@@ -86,7 +87,6 @@ import im.vector.app.features.workers.signout.SignOutBottomSheetDialogFragment
             VectorComponent::class
         ],
         modules = [
-            AssistedInjectModule::class,
             ViewModelModule::class,
             FragmentModule::class,
             HomeModule::class,
@@ -146,6 +146,7 @@ interface ScreenComponent {
     fun inject(activity: VectorJitsiActivity)
     fun inject(activity: SearchActivity)
     fun inject(activity: UserCodeActivity)
+    fun inject(activity: ReAuthActivity)
 
     /* ==========================================================================================
      * BottomSheets

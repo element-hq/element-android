@@ -156,7 +156,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                     }
                 }
         return if (receivedChunk.events.isEmpty()) {
-            if (receivedChunk.start != receivedChunk.end) {
+            if (receivedChunk.hasMore()) {
                 Result.SHOULD_FETCH_MORE
             } else {
                 Result.REACHED_END
@@ -196,7 +196,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
 
         val now = System.currentTimeMillis()
 
-        for (stateEvent in stateEvents) {
+        stateEvents?.forEach { stateEvent ->
             val ageLocalTs = stateEvent.unsignedData?.age?.let { now - it }
             val stateEventEntity = stateEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
             currentChunk.addStateEvent(roomId, stateEventEntity, direction)
@@ -205,9 +205,9 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             }
         }
         val eventIds = ArrayList<String>(eventList.size)
-        for (event in eventList) {
+        eventList.forEach { event ->
             if (event.eventId == null || event.senderId == null) {
-                continue
+                return@forEach
             }
             val ageLocalTs = event.unsignedData?.age?.let { now - it }
             eventIds.add(event.eventId)

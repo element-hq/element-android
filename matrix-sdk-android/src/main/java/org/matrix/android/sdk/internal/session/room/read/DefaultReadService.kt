@@ -18,8 +18,9 @@ package org.matrix.android.sdk.internal.session.room.read
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
@@ -46,9 +47,9 @@ internal class DefaultReadService @AssistedInject constructor(
         @UserId private val userId: String
 ) : ReadService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): ReadService
+        fun create(roomId: String): DefaultReadService
     }
 
     override fun markAsRead(params: ReadService.MarkAsReadParams, callback: MatrixCallback<Unit>) {

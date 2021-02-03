@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomprofile.uploads.media
 
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -78,9 +79,14 @@ class RoomUploadsMediaFragment @Inject constructor(
         controller.listener = this
     }
 
+    @Suppress("DEPRECATION")
     private fun getNumberOfColumns(): Int {
         val displayMetrics = DisplayMetrics()
-        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireContext().display?.getMetrics(displayMetrics)
+        } else {
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        }
         return dimensionConverter.pxToDp(displayMetrics.widthPixels) / IMAGE_SIZE_DP
     }
 

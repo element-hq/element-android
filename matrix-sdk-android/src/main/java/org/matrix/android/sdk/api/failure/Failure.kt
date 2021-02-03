@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.api.failure
 
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 import java.io.IOException
 

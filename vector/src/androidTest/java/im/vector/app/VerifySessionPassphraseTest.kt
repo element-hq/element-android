@@ -46,8 +46,13 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -67,17 +72,35 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
         existingSession = createAccountAndSync(matrix, userName, password, true)
         doSync<Unit> {
             existingSession!!.cryptoService().crossSigningService()
-                    .initializeCrossSigning(UserPasswordAuth(
-                            user = existingSession!!.myUserId,
-                            password = "password"
-                    ), it)
+                    .initializeCrossSigning(
+                            object : UserInteractiveAuthInterceptor {
+                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    promise.resume(
+                                            UserPasswordAuth(
+                                                    user = existingSession!!.myUserId,
+                                                    password = "password",
+                                                    session = flowResponse.session
+                                            )
+                                    )
+                                }
+                            }, it)
         }
 
         val task = BootstrapCrossSigningTask(existingSession!!, StringProvider(context.resources))
 
         runBlocking {
             task.execute(Params(
-                    userPasswordAuth = UserPasswordAuth(password = password),
+                    userInteractiveAuthInterceptor =  object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            promise.resume(
+                                    UserPasswordAuth(
+                                            user = existingSession!!.myUserId,
+                                            password = password,
+                                            session = flowResponse.session
+                                    )
+                            )
+                        }
+                    },
                     passphrase = passphrase,
                     setupMode = SetupMode.NORMAL
             ))

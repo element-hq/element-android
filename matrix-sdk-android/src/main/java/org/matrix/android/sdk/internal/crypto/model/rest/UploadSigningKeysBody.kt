@@ -30,5 +30,5 @@ internal data class UploadSigningKeysBody(
         val userSigningKey: RestKeyInfo? = null,
 
         @Json(name = "auth")
-        val auth: UserPasswordAuth? = null
+        val auth: Map<String, *>? = null
 )

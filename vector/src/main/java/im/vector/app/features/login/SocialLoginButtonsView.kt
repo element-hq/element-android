@@ -83,25 +83,28 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
         ssoIdentityProviders?.forEach { identityProvider ->
             // Use some heuristic to render buttons according to branding guidelines
             val button: MaterialButton = cachedViews[identityProvider.id]
-                    ?: when (identityProvider.id) {
-                        SsoIdentityProvider.ID_GOOGLE   -> {
+                    ?: when (identityProvider.brand) {
+                        SsoIdentityProvider.BRAND_GOOGLE   -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_google_style)
                         }
-                        SsoIdentityProvider.ID_GITHUB   -> {
+                        SsoIdentityProvider.BRAND_GITHUB   -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_github_style)
                         }
-                        SsoIdentityProvider.ID_APPLE    -> {
+                        SsoIdentityProvider.BRAND_APPLE    -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_apple_style)
                         }
-                        SsoIdentityProvider.ID_FACEBOOK -> {
+                        SsoIdentityProvider.BRAND_FACEBOOK -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_facebook_style)
                         }
-                        SsoIdentityProvider.ID_TWITTER  -> {
+                        SsoIdentityProvider.BRAND_TWITTER  -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_twitter_style)
+                        }
+                        SsoIdentityProvider.BRAND_GITLAB  -> {
+                            MaterialButton(context, null, R.attr.vctr_social_login_button_gitlab_style)
                         }
                         else                            -> {
                             // TODO Use iconUrl
-                            MaterialButton(context, null, R.attr.materialButtonStyle).apply {
+                            MaterialButton(context, null, R.attr.materialButtonOutlinedStyle).apply {
                                 transformationMethod = null
                                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                             }
@@ -131,12 +134,13 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
         clipChildren = false
         if (isInEditMode) {
             ssoIdentityProviders = listOf(
-                    SsoIdentityProvider(SsoIdentityProvider.ID_GOOGLE, "Google", null),
-                    SsoIdentityProvider(SsoIdentityProvider.ID_FACEBOOK, "Facebook", null),
-                    SsoIdentityProvider(SsoIdentityProvider.ID_APPLE, "Apple", null),
-                    SsoIdentityProvider(SsoIdentityProvider.ID_GITHUB, "GitHub", null),
-                    SsoIdentityProvider(SsoIdentityProvider.ID_TWITTER, "Twitter", null),
-                    SsoIdentityProvider("Custom_pro", "SSO", null)
+                    SsoIdentityProvider("Google", "Google", null, SsoIdentityProvider.BRAND_GOOGLE),
+                    SsoIdentityProvider("Facebook", "Facebook", null, SsoIdentityProvider.BRAND_FACEBOOK),
+                    SsoIdentityProvider("Apple", "Apple", null, SsoIdentityProvider.BRAND_APPLE),
+                    SsoIdentityProvider("GitHub", "GitHub", null, SsoIdentityProvider.BRAND_GITHUB),
+                    SsoIdentityProvider("Twitter", "Twitter", null, SsoIdentityProvider.BRAND_TWITTER),
+                    SsoIdentityProvider("Gitlab", "Gitlab", null, SsoIdentityProvider.BRAND_GITLAB),
+                    SsoIdentityProvider("Custom_pro", "SSO", null, null)
             )
         }
         val typedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.SocialLoginButtonsView, 0, 0)
