@@ -16,6 +16,9 @@
 
 package im.vector.app
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -42,18 +45,26 @@ import android.os.Binder
 import android.os.IBinder
 import android.os.ParcelUuid
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import gobind.Conduit
 import gobind.DendriteMonolith
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.InputStream
 import java.io.OutputStream
 import java.nio.ByteBuffer
+import java.util.Timer
+import java.util.TimerTask
 import java.util.UUID
 import kotlin.concurrent.thread
 
 class DendriteService : Service() {
+    private var notificationChannel = NotificationChannel("im.vector.p2p", "Element P2P", NotificationManager.IMPORTANCE_DEFAULT)
+    private var notificationManager: NotificationManager? = null
+    private var notification: Notification? = null
+
     private val binder = DendriteLocalBinder()
     private var monolith: DendriteMonolith? = null
     private val serviceUUID = ParcelUuid(UUID.fromString("a2fda8dd-d250-4a64-8b9a-248f50b93c64"))
@@ -72,6 +83,7 @@ class DendriteService : Service() {
     private var l2capPSM: ByteArray = intToBytes(l2capServer.psm)
 
     private var connections: MutableMap<String, DendriteBLEPeering> = mutableMapOf<String, DendriteBLEPeering>()
+    private var conduits: MutableMap<String, Conduit> = mutableMapOf<String, Conduit>()
 
     inner class DendriteLocalBinder : Binder() {
         fun getService() : DendriteService {
@@ -96,10 +108,29 @@ class DendriteService : Service() {
             thread {
                 writer()
             }
+
+            updateNotification()
         }
 
         public fun close() {
+            val device = socket.remoteDevice.address.toString()
+            Timber.i("BLE: Closing connection to $device")
+
+            conduit.close()
             socket.close()
+
+            val conduit = conduits[device]
+            if (conduit != null) {
+                val port = conduit.port()
+                if (port > 0) {
+                    monolith?.disconnectPort(port)
+                }
+            }
+
+            connections.remove(device)
+            conduits.remove(device)
+
+            updateNotification()
         }
 
         private fun reader() {
@@ -151,14 +182,60 @@ class DendriteService : Service() {
         return monolith?.registerDevice(userID, "P2P") ?: ""
     }
 
+    fun updateNotification() {
+        if (notificationManager == null || monolith == null) {
+            return
+        }
+
+        val peers = monolith!!.peerCount().toInt()
+        val sessions = monolith!!.sessionCount().toInt()
+
+        var title: String
+        var text: String
+
+        if (peers == 0) {
+            title = "No connectivity"
+            text = "There are no nearby devices"
+        } else {
+            text = when (sessions) {
+                0    -> "No active connections"
+                1    -> "$sessions active connection"
+                else -> "$sessions active connections"
+            }
+            title = when (peers) {
+                1    -> "$peers nearby device"
+                else -> "$peers nearby devices"
+            }
+        }
+
+        notification = NotificationCompat.Builder(applicationContext, "im.vector.p2p")
+                .setContentTitle(title)
+                .setContentText(text)
+                .setNotificationSilent()
+                .setSmallIcon(R.drawable.ic_smartphone)
+                .setOngoing(true)
+                .setCategory(Notification.CATEGORY_STATUS)
+                .setOnlyAlertOnce(true)
+                .build()
+        notificationManager!!.notify(545, notification)
+    }
+
     override fun onCreate() {
         if (monolith == null) {
             monolith = gobind.DendriteMonolith()
         }
 
-        Toast.makeText(applicationContext, "Starting Dendrite", Toast.LENGTH_SHORT).show()
-        monolith?.storageDirectory = applicationContext.filesDir.toString()
-        monolith?.start()
+        notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager!!.createNotificationChannel(notificationChannel)
+
+        monolith!!.storageDirectory = applicationContext.filesDir.toString()
+        monolith!!.start()
+
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                updateNotification()
+            }
+        }, 0, 1000)
 
         if (adapter.isEnabled && adapter.isMultipleAdvertisementSupported) {
             val advertiseSettings = AdvertiseSettings.Builder()
@@ -184,8 +261,15 @@ class DendriteService : Service() {
                     .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
                     .build()
 
-            advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
-            scanner.startScan(scanFilters, scanSettings, scanCallback)
+            GlobalScope.launch {
+                while (monolith != null) {
+                    advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
+                    scanner.startScan(scanFilters, scanSettings, scanCallback)
+                    delay(60000L)
+                    advertiser.stopAdvertising(advertiseCallback)
+                    scanner.stopScan(scanCallback)
+                }
+            }
 
             gattCharacteristic = BluetoothGattCharacteristic(psmUUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
             gattService.addCharacteristic(gattCharacteristic)
@@ -210,7 +294,9 @@ class DendriteService : Service() {
                         Timber.i("BLE: Connected inbound $device PSM $l2capPSM")
 
                         Timber.i("Creating DendriteBLEPeering")
-                        connections[device] = DendriteBLEPeering(monolith!!.conduit("BLE"), remote)
+                        val conduit = monolith!!.conduit("BLE")
+                        conduits[device] = conduit
+                        connections[device] = DendriteBLEPeering(conduit, remote)
                         Timber.i("Starting DendriteBLEPeering")
                         connections[device]!!.start()
 
@@ -231,12 +317,14 @@ class DendriteService : Service() {
         }
 
         if (adapter.isEnabled && adapter.isMultipleAdvertisementSupported) {
-            //server.close()
             advertiser.stopAdvertising(advertiseCallback)
             scanner.stopScan(scanCallback)
         }
 
-        Toast.makeText(applicationContext, "Shutting down Dendrite", Toast.LENGTH_SHORT).show()
+        if (notificationManager != null) {
+            notificationManager!!.cancel(545)
+        }
+
         monolith?.stop()
         monolith = null
 
@@ -283,26 +371,31 @@ class DendriteService : Service() {
             val psmBytes = characteristic?.value ?: return
             val psm = bytesToInt(psmBytes)
 
-            var connection = connections[device.address]
+            var connection = connections[device.address.toString()]
             if (connection != null && connection.isConnected) {
-                return
+                connection.close()
             }
 
             Timber.i("BLE: Connecting outbound $device PSM $psm")
 
             val socket = device.createInsecureL2capChannel(psm)
-
             try {
                 socket.connect()
             } catch (e: Exception) {
                 timber.log.Timber.i("BLE: Failed to connect to $device PSM $psm: ${e.toString()}")
                 return
             }
+            if (!socket.isConnected) {
+                Timber.i("BLE: Expected to be connected but not")
+                return
+            }
 
             Timber.i("BLE: Connected outbound $device PSM $psm")
 
             Timber.i("Creating DendriteBLEPeering")
-            connections[device.address] = DendriteBLEPeering(monolith!!.conduit("BLE"), socket)
+            val conduit = monolith!!.conduit("BLE")
+            conduits[device.address] = conduit
+            connections[device.address] = DendriteBLEPeering(conduit, socket)
             Timber.i("Starting DendriteBLEPeering")
             connections[device.address]!!.start()
         }
@@ -316,7 +409,6 @@ class DendriteService : Service() {
 
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
             super.onStartSuccess(settingsInEffect)
-            Toast.makeText(applicationContext, "BLE advertise started", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -329,6 +421,15 @@ class DendriteService : Service() {
 
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
+
+            val key = result.device.address.toString()
+            if (connections.containsKey(key)) {
+                val connection = connections[key]
+                if (connection?.isConnected == true) {
+                    Timber.i("Ignoring device $key that we are already connected to")
+                    return
+                }
+            }
 
             result.device.connectGatt(applicationContext, false, gattCallback)
         }
