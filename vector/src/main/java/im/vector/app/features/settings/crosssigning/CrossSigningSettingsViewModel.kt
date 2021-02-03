@@ -98,9 +98,9 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                         awaitCallback<Unit> {
                             session.cryptoService().crossSigningService().initializeCrossSigning(
                                     object : UserInteractiveAuthInterceptor {
-                                        override fun performStage(flow: RegistrationFlowResponse, errorCode: String?, promise: Continuation<UIABaseAuth>) {
+                                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                                             Timber.d("## UIA : initializeCrossSigning UIA")
-                                            if (flow.nextUncompletedStage() == LoginFlowTypes.PASSWORD && reAuthHelper.data != null && errorCode == null) {
+                                            if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD && reAuthHelper.data != null && errCode == null) {
                                                 UserPasswordAuth(
                                                         session = null,
                                                         user = session.myUserId,
@@ -108,8 +108,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                                                 ).let { promise.resume(it) }
                                             } else {
                                                 Timber.d("## UIA : initializeCrossSigning UIA > start reauth activity")
-                                                _viewEvents.post(CrossSigningSettingsViewEvents.RequestReAuth(flow, errorCode))
-                                                pendingAuth = DefaultBaseAuth(session = flow.session)
+                                                _viewEvents.post(CrossSigningSettingsViewEvents.RequestReAuth(flowResponse, errCode))
+                                                pendingAuth = DefaultBaseAuth(session = flowResponse.session)
                                                 uiaContinuation = promise
                                             }
                                         }

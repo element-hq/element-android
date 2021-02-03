@@ -334,9 +334,9 @@ class DevicesViewModel @AssistedInject constructor(
             try {
                 awaitCallback<Unit> {
                     session.cryptoService().deleteDevice(deviceId, object : UserInteractiveAuthInterceptor {
-                        override fun performStage(flow: RegistrationFlowResponse, errorCode: String?, promise: Continuation<UIABaseAuth>) {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                             Timber.d("## UIA : deleteDevice UIA")
-                            if (flow.nextUncompletedStage() == LoginFlowTypes.PASSWORD && reAuthHelper.data != null && errorCode == null) {
+                            if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD && reAuthHelper.data != null && errCode == null) {
                                 UserPasswordAuth(
                                         session = null,
                                         user = session.myUserId,
@@ -344,8 +344,8 @@ class DevicesViewModel @AssistedInject constructor(
                                 ).let { promise.resume(it) }
                             } else {
                                 Timber.d("## UIA : deleteDevice UIA > start reauth activity")
-                                _viewEvents.post(DevicesViewEvents.RequestReAuth(flow, errorCode))
-                                pendingAuth = DefaultBaseAuth(session = flow.session)
+                                _viewEvents.post(DevicesViewEvents.RequestReAuth(flowResponse, errCode))
+                                pendingAuth = DefaultBaseAuth(session = flowResponse.session)
                                 uiaContinuation = promise
                             }
                         }

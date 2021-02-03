@@ -215,14 +215,14 @@ class HomeActivityViewModel @AssistedInject constructor(
                     try {
                         session.cryptoService().crossSigningService().initializeCrossSigning(
                                 object : UserInteractiveAuthInterceptor {
-                                    override fun performStage(flow: RegistrationFlowResponse, errorCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                                         // We missed server grace period or it's not setup, see if we remember locally password
-                                        if (flow.nextUncompletedStage() == LoginFlowTypes.PASSWORD
-                                                && errorCode == null
+                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD
+                                                && errCode == null
                                                 && reAuthHelper.data != null) {
                                             promise.resume(
                                                     UserPasswordAuth(
-                                                            session = flow.session,
+                                                            session = flowResponse.session,
                                                             user = session.myUserId,
                                                             password = reAuthHelper.data
                                                     )
