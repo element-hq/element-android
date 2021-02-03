@@ -55,7 +55,7 @@ class ReAuthViewModel @AssistedInject constructor(
             ReAuthActions.StartSSOFallback -> {
                 if (state.flowType == LoginFlowTypes.SSO) {
                     setState { copy(ssoFallbackPageWasShown = true) }
-                    val ssoURL = session.getUIASsoFallbackUrl(initialState.session ?: "")
+                    val ssoURL = session.getUiaSsoFallbackUrl(initialState.session ?: "")
                     _viewEvents.post(ReAuthEvents.OpenSsoURl(ssoURL))
                 }
             }

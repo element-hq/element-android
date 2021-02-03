@@ -70,13 +70,12 @@ class BootstrapReAuthFragment @Inject constructor(
             return@withState
         }
         val failure = state.step.failure
+        views.reAuthFailureText.setTextOrHide(failure)
         if (failure == null) {
-            views.reAuthFailureText.setTextOrHide(null)
             views.waitingProgress.isVisible = true
             views.bootstrapCancelButton.isVisible = false
             views.bootstrapRetryButton.isVisible = false
         } else {
-            views.reAuthFailureText.setTextOrHide(failure)
             views.waitingProgress.isVisible = false
             views.bootstrapCancelButton.isVisible = true
             views.bootstrapRetryButton.isVisible = true

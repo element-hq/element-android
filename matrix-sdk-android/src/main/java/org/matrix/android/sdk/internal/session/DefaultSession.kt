@@ -52,6 +52,8 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
+import org.matrix.android.sdk.api.util.appendParamToUrl
+import org.matrix.android.sdk.internal.auth.SSO_UIA_FALLBACK_PATH
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.tools.RealmDebugTools
@@ -273,16 +275,15 @@ internal class DefaultSession @Inject constructor(
         return "$myUserId - ${sessionParams.deviceId}"
     }
 
-    override fun getUIASsoFallbackUrl(authenticationSessionId: String): String {
+    override fun getUiaSsoFallbackUrl(authenticationSessionId: String): String {
         val hsBas = sessionParams.homeServerConnectionConfig
                 .homeServerUri
                 .toString()
                 .trim { it == '/' }
         return buildString {
             append(hsBas)
-            append("/_matrix/client/r0/auth/m.login.sso/fallback/web")
-            append("?session=")
-            append(authenticationSessionId)
+            append(SSO_UIA_FALLBACK_PATH)
+            appendParamToUrl("session", authenticationSessionId)
         }
     }
 

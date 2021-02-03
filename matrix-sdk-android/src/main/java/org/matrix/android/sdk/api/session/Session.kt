@@ -245,7 +245,7 @@ interface Session :
 
     val sharedSecretStorageService: SharedSecretStorageService
 
-    fun getUIASsoFallbackUrl(authenticationSessionId: String): String
+    fun getUiaSsoFallbackUrl(authenticationSessionId: String): String
 
     /**
      * Maintenance API, allows to print outs info on DB size to logcat
