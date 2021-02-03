@@ -1819,7 +1819,7 @@
 \nPokud nechcete nastavit heslo pro zprávy, založte klíč pro zprávy.</string>
     <string name="bootstrap_skip_text_no_gen_key">Nastavení hesla pro obnovení Vám umožní zabezpečit &amp; odemknout zašifrované zprávy a důvěryhodnost.</string>
     <string name="encryption_enabled">Šifrování zapnuto</string>
-    <string name="encryption_enabled_tile_description">Zprávy v této místnosti jsou zašifrovány end-to-end. Poučte se více &amp; ověřte uživatele v jejich profilech.</string>
+    <string name="encryption_enabled_tile_description">Zprávy v této místnosti jsou end-to-end šifrovány. Zjistěte více a ověřte uživatele v jejich profilech.</string>
     <string name="encryption_not_enabled">Šifrování není zapnuto</string>
     <string name="encryption_unknown_algorithm_tile_description">Šifrování použité v této místnosti není podporováno</string>
     <string name="room_created_summary_item">%s založil a nastavil tuto místnost.</string>
