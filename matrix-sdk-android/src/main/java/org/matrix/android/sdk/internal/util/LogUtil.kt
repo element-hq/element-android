@@ -22,9 +22,10 @@ internal suspend fun <T> logDuration(message: String,
                                      block: suspend () -> T): T {
     val runtime = Runtime.getRuntime()
     runtime.gc()
-    val usedMemInMBStart = (runtime.totalMemory() - runtime.freeMemory()) / 1048576L
+    val freeMemoryInMb = runtime.freeMemory() / 1048576L
+    val usedMemInMBStart = runtime.totalMemory() / 1048576L - freeMemoryInMb
 
-    Timber.v("$message -- BEGIN")
+    Timber.v("$message -- BEGIN (free memory: $freeMemoryInMb MB)")
     val start = System.currentTimeMillis()
     val result = block()
     val duration = System.currentTimeMillis() - start
