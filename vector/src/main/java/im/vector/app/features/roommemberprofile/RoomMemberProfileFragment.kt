@@ -338,7 +338,7 @@ class RoomMemberProfileFragment @Inject constructor(
         val session = injector().activeSessionHolder().getActiveSession()
         val overrideColorsSetting = session.getAccountDataEvent(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
         val overrideColorSpecs = overrideColorsSetting?.content?.toMap().orEmpty()
-        val userId = state.userId;
+        val userId = state.userId
         val overrideColorSpec = overrideColorSpecs[userId]?.toString()
         views.editText.setText(overrideColorSpec)
         views.editText.hint = "#000000"
