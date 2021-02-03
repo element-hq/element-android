@@ -1,4 +1,4 @@
-Changes in Element 1.0.15 (2020-XX-XX)
+Changes in Element 1.0.15 (2020-02-03)
 ===================================================
 
 Features ✨:
@@ -19,17 +19,11 @@ Bugfix 🐛:
  - Data for Worker overload (#2721)
  - Fix multiple tasks
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
  - Increase targetSdkVersion to 30 (#2600)
 
 Build 🧱:
  - Compile with Android SDK 30 (Android 11)
-
-Test:
- -
 
 Other changes:
  - Update Dagger to 2.31 version so we can use the embedded AssistedInject feature 
