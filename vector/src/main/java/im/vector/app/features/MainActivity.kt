@@ -22,15 +22,13 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.viewModel
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
-import im.vector.app.core.platform.EmptyViewModel
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
 import im.vector.app.databinding.FragmentLoadingBinding
@@ -82,8 +80,6 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
             activity.startActivity(intent)
         }
     }
-
-    private val emptyViewModel: EmptyViewModel by viewModel()
 
     override fun getBinding() = FragmentLoadingBinding.inflate(layoutInflater)
 
@@ -150,7 +146,7 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
         }
         when {
             args.isAccountDeactivated -> {
-                emptyViewModel.viewModelScope.launch {
+                lifecycleScope.launch {
                     // Just do the local cleanup
                     Timber.w("Account deactivated, start app")
                     sessionHolder.clearActiveSession()
@@ -159,7 +155,7 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
                 }
             }
             args.clearCredentials     -> {
-                emptyViewModel.viewModelScope.launch {
+                lifecycleScope.launch {
                     try {
                         session.signOut(!args.isUserLoggedOut)
                         Timber.w("SIGN_OUT: success, start app")
@@ -172,7 +168,7 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
                 }
             }
             args.clearCache           -> {
-                emptyViewModel.viewModelScope.launch {
+                lifecycleScope.launch {
                     try {
                         session.clearCache()
                         doLocalCleanup(clearPreferences = false)

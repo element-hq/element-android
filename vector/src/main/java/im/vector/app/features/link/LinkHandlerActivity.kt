@@ -19,13 +19,11 @@ package im.vector.app.features.link
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.viewModel
+import androidx.lifecycle.lifecycleScope
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.platform.EmptyViewModel
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityProgressBinding
@@ -47,8 +45,6 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
     @Inject lateinit var permalinkHandler: PermalinkHandler
-
-    private val emptyViewModel: EmptyViewModel by viewModel()
 
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
@@ -155,7 +151,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
             // Should not happen
             startLoginActivity(uri)
         } else {
-            emptyViewModel.viewModelScope.launch {
+            lifecycleScope.launch {
                 try {
                     session.signOut(true)
                     Timber.d("## displayAlreadyLoginPopup(): logout succeeded")
