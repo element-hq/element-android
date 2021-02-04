@@ -143,9 +143,11 @@ internal class CreateRoomBodyBuilder @Inject constructor(
     }
 
     private suspend fun canEnableEncryption(params: CreateRoomParams): Boolean {
-        return (params.enableEncryptionIfInvitedUsersSupportIt
-                && crossSigningService.isCrossSigningVerified()
-                && params.invite3pids.isEmpty())
+        return params.enableEncryptionIfInvitedUsersSupportIt
+                // Parity with web, enable if users have encryption ready devices
+                // for now remove checks on cross signing and 3pid invites
+                // && crossSigningService.isCrossSigningVerified()
+                && params.invite3pids.isEmpty()
                 && params.invitedUserIds.isNotEmpty()
                 && params.invitedUserIds.let { userIds ->
             val keys = deviceListManager.downloadKeys(userIds, forceDownload = false)

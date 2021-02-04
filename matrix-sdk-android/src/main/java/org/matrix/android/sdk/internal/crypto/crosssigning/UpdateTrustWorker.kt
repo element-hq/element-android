@@ -55,7 +55,11 @@ internal class UpdateTrustWorker(context: Context,
     internal data class Params(
             override val sessionId: String,
             override val lastFailureMessage: String? = null,
-            val updatedUserIds: List<String>
+            // Kept for compatibility, but not used anymore (can be used for pending Worker)
+            val updatedUserIds: List<String>? = null,
+            // Passing a long list of userId can break the Work Manager due to data size limitation.
+            // so now we use a temporary file to store the data
+            val filename: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var crossSigningService: DefaultCrossSigningService
@@ -64,6 +68,7 @@ internal class UpdateTrustWorker(context: Context,
     @CryptoDatabase @Inject lateinit var realmConfiguration: RealmConfiguration
     @UserId @Inject lateinit var myUserId: String
     @Inject lateinit var crossSigningKeysMapper: CrossSigningKeysMapper
+    @Inject lateinit var updateTrustWorkerDataRepository: UpdateTrustWorkerDataRepository
     @SessionDatabase @Inject lateinit var sessionRealmConfiguration: RealmConfiguration
 
     //    @Inject lateinit var roomSummaryUpdater: RoomSummaryUpdater
@@ -74,7 +79,17 @@ internal class UpdateTrustWorker(context: Context,
     }
 
     override suspend fun doSafeWork(params: Params): Result {
-        var userList = params.updatedUserIds
+        var userList = params.filename
+                ?.let { updateTrustWorkerDataRepository.getParam(it) }
+                ?.userIds
+                ?: params.updatedUserIds.orEmpty()
+
+        if (userList.isEmpty()) {
+            // This should not happen, but let's avoid go further in case of empty list
+            cleanup(params)
+            return Result.success()
+        }
+
         // Unfortunately we don't have much info on what did exactly changed (is it the cross signing keys of that user,
         // or a new device?) So we check all again :/
 
@@ -213,7 +228,13 @@ internal class UpdateTrustWorker(context: Context,
             }
         }
 
+        cleanup(params)
         return Result.success()
+    }
+
+    private fun cleanup(params: Params) {
+        params.filename
+                ?.let { updateTrustWorkerDataRepository.delete(it) }
     }
 
     private fun updateCrossSigningKeysTrust(realm: Realm, userId: String, verified: Boolean) {

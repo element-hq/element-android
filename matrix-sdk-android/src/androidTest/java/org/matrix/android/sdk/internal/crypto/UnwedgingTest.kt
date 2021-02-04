@@ -17,7 +17,18 @@
 package org.matrix.android.sdk.internal.crypto
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.amshove.kluent.shouldBe
+import org.junit.Assert
+import org.junit.Before
+import org.junit.FixMethodOrder
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -30,19 +41,13 @@ import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
-import org.amshove.kluent.shouldBe
-import org.junit.Assert
-import org.junit.Before
-import org.junit.FixMethodOrder
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.MethodSorters
 import org.matrix.olm.OlmSession
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 /**
  * Ref:
@@ -202,10 +207,18 @@ class UnwedgingTest : InstrumentedTest {
         // It's a trick to force key request on fail to decrypt
         mTestHelper.doSync<Unit> {
             bobSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(UserPasswordAuth(
-                            user = bobSession.myUserId,
-                            password = TestConstants.PASSWORD
-                    ), it)
+                    .initializeCrossSigning(
+                            object : UserInteractiveAuthInterceptor {
+                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    promise.resume(
+                                            UserPasswordAuth(
+                                                    user = bobSession.myUserId,
+                                                    password = TestConstants.PASSWORD,
+                                                    session = flowResponse.session
+                                            )
+                                    )
+                                }
+                            }, it)
         }
 
         // Wait until we received back the key

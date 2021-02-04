@@ -311,10 +311,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         }
 
         mCrossSigningStatePreference.isVisible = true
-        if (!vectorPreferences.developerMode()) {
-            // When not in developer mode, intercept click on this preference
-            mCrossSigningStatePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener { true }
-        }
     }
 
     private val saveMegolmStartForActivityResult = registerStartForActivityResult {

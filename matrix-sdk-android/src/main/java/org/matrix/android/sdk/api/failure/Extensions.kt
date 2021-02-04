@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.api.failure
 
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.internal.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import java.io.IOException
 import javax.net.ssl.HttpsURLConnection
@@ -43,6 +43,12 @@ fun Throwable.isInvalidPassword(): Boolean {
             && error.message == "Invalid password"
 }
 
+fun Throwable.isInvalidUIAAuth(): Boolean {
+    return this is Failure.ServerError
+            && error.code == MatrixError.M_FORBIDDEN
+            && error.flows != null
+}
+
 /**
  * Try to convert to a RegistrationFlowResponse. Return null in the cases it's not possible
  */
@@ -53,6 +59,16 @@ fun Throwable.toRegistrationFlowResponse(): RegistrationFlowResponse? {
                     .adapter(RegistrationFlowResponse::class.java)
                     .fromJson(this.errorBody)
         }
+    } else if (this is Failure.ServerError && this.httpCode == 401 && this.error.code == MatrixError.M_FORBIDDEN) {
+        // This happens when the submission for this stage was bad (like bad password)
+        if (this.error.session != null && this.error.flows != null) {
+            RegistrationFlowResponse(
+                    flows = this.error.flows,
+                    session = this.error.session,
+                    completedStages = this.error.completedStages,
+                    params = this.error.params
+            )
+        } else null
     } else {
         null
     }

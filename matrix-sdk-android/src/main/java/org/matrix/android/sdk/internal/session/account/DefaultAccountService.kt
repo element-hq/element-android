@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.account
 
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.account.AccountService
 import javax.inject.Inject
 
@@ -26,7 +27,7 @@ internal class DefaultAccountService @Inject constructor(private val changePassw
         changePasswordTask.execute(ChangePasswordTask.Params(password, newPassword))
     }
 
-    override suspend fun deactivateAccount(password: String, eraseAllData: Boolean) {
-        deactivateAccountTask.execute(DeactivateAccountTask.Params(password, eraseAllData))
+    override suspend fun deactivateAccount(userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, eraseAllData: Boolean) {
+        deactivateAccountTask.execute(DeactivateAccountTask.Params(userInteractiveAuthInterceptor, eraseAllData))
     }
 }

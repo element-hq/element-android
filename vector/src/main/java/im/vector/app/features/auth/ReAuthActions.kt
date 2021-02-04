@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.platform
+package im.vector.app.features.auth
 
-/**
- * Mainly used to get a viewModelScope
- */
-class EmptyViewModel(initialState: EmptyState) : VectorViewModel<EmptyState, EmptyAction, EmptyViewEvents>(initialState) {
-    override fun handle(action: EmptyAction) {
-        // N/A
-    }
+import im.vector.app.core.platform.VectorViewModelAction
+
+sealed class ReAuthActions : VectorViewModelAction {
+    object StartSSOFallback : ReAuthActions()
+    object FallBackPageLoaded : ReAuthActions()
+    object FallBackPageClosed : ReAuthActions()
+    object TogglePassVisibility : ReAuthActions()
+    data class ReAuthWithPass(val password: String) : ReAuthActions()
 }

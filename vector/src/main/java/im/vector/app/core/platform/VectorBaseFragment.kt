@@ -200,6 +200,7 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     }
 
     protected fun showLoadingDialog(message: CharSequence? = null, cancelable: Boolean = false) {
+        progress?.dismiss()
         progress = ProgressDialog(requireContext()).apply {
             setCancelable(cancelable)
             setMessage(message ?: getString(R.string.please_wait))

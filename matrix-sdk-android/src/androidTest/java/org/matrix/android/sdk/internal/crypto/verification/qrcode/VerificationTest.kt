@@ -17,20 +17,25 @@
 package org.matrix.android.sdk.internal.crypto.verification.qrcode
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
-import org.matrix.android.sdk.common.CommonTestHelper
-import org.matrix.android.sdk.common.CryptoTestHelper
-import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
-import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.amshove.kluent.shouldBe
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
+import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
+import org.matrix.android.sdk.common.CommonTestHelper
+import org.matrix.android.sdk.common.CryptoTestHelper
+import org.matrix.android.sdk.common.TestConstants
 import java.util.concurrent.CountDownLatch
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -157,18 +162,34 @@ class VerificationTest : InstrumentedTest {
 
         mTestHelper.doSync<Unit> { callback ->
             aliceSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(UserPasswordAuth(
-                            user = aliceSession.myUserId,
-                            password = TestConstants.PASSWORD
-                    ), callback)
+                    .initializeCrossSigning(
+                            object : UserInteractiveAuthInterceptor {
+                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    promise.resume(
+                                            UserPasswordAuth(
+                                                    user = aliceSession.myUserId,
+                                                    password = TestConstants.PASSWORD,
+                                                    session = flowResponse.session
+                                            )
+                                    )
+                                }
+                            }, callback)
         }
 
         mTestHelper.doSync<Unit> { callback ->
             bobSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(UserPasswordAuth(
-                            user = bobSession.myUserId,
-                            password = TestConstants.PASSWORD
-                    ), callback)
+                    .initializeCrossSigning(
+                            object : UserInteractiveAuthInterceptor {
+                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    promise.resume(
+                                            UserPasswordAuth(
+                                                    user = bobSession.myUserId,
+                                                    password = TestConstants.PASSWORD,
+                                                    session = flowResponse.session
+                                            )
+                                    )
+                                }
+                            }, callback)
         }
 
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
