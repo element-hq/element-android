@@ -44,7 +44,7 @@
     <string name="notice_direct_room_leave">%1$s напусти собу</string>
     <string name="notice_room_leave_by_you">Напустили сте собу</string>
     <string name="key_verification_request_fallback_message">%s тражи да провери ваш кључ али ваш клијент не подржава верификацију унутар ћаскања. Мораћете да употребите старији начин за оверу кључева.</string>
-    <string name="notice_end_to_end_unknown_algorithm_by_you">Укључили сте шифровање с краја на крај (непознат алгоритам %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Укључили сте шифровање с краја на крај (непознат алгоритам %1$s).</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s укључи шифровање с краја на крај (непознат алгоритам %2$s).</string>
     <string name="notice_end_to_end_ok">%1$s искључи шифровање с краја на крај.</string>
     <string name="notice_direct_room_guest_access_forbidden_by_you">Спречили сте да се гости придруже у собу.</string>
@@ -90,9 +90,9 @@
     <string name="notice_room_server_acl_updated_no_change">Без измене.</string>
     <string name="notice_room_update_by_you">Надоградили сте ову собу.</string>
     <string name="notice_room_visibility_unknown">непознато (%s).</string>
-    <string name="notice_made_future_room_visibility_by_you">Учинили сте да од сада, историјат буде видљив за %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Учинили сте да од сада, историјат буде видљив за %1$s</string>
     <string name="notice_made_future_room_visibility">%1$s учини да од сада, историјат буде видљив за %2$s</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">Учинили сте да будуће поруке буду видљиве за %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Учинили сте да будуће поруке буду видљиве за %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s учини да будуће поруке буду видљиве за %2$s</string>
     <string name="notice_room_visibility_world_readable">свакога.</string>
     <string name="notice_room_visibility_shared">све чланове.</string>

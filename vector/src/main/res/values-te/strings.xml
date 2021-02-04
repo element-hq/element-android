@@ -12,7 +12,6 @@
     <string name="invite">ఆహ్వానము</string>
 
     <string name="action_open">తెరువు</string>
-    <string name="resources_language">te</string>
     <string name="title_activity_historical">చారిత్రిక</string>
 
     <string name="leave">వదిలివేయు</string>
@@ -77,8 +76,6 @@
     <string name="send_anyway">ఏమైనాసరే పంపు</string>
     <string name="action_sign_out">సైన్ అవుట్ చేయండి</string>
     <string name="historical_placeholder">చారిత్రక కోసం శోధించండి</string>
-
-    <string name="resources_country_code">IN</string>
 
     <string name="action_historical">చారిత్రక</string>
     <string name="action_quick_reply">శీఘ్ర ప్రత్యుత్తరం</string>

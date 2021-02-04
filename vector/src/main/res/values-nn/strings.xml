@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">nn</string>
-    <string name="resources_country_code">NO</string>
     <string name="light_theme">Lyst tema</string>
     <string name="dark_theme">Mørkt tema</string>
     <string name="black_them">Svart tema</string>

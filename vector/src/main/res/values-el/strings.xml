@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">el</string>
-    <string name="resources_country_code">GR</string>
     <string name="cancel">Ακύρωση</string>
     <string name="action_close">Κλείσιμο</string>
     <string name="room_settings_direct_chat">Απευθείας συνομιλία</string>
@@ -280,7 +276,6 @@
     <string name="bottom_action_people">Άτομα</string>
     <string name="home_filter_placeholder_people">Αναζήτηση ατόμων</string>
     <string name="tab_title_search_people">ΑΤΟΜΑ</string>
-    <string name="resources_script">Grek</string>
     <string name="notification_sync_init">Αρχικοποίηση υπηρεσίας</string>
     <string name="notification_listening_for_events">Αναμονή για συμβάντα</string>
     <string name="title_activity_keys_backup_setup">Δημιουργία αντιγράφων ασφαλείας κλειδιών</string>

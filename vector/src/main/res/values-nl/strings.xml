@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">nl</string>
-    <string name="resources_country_code">NL</string>
     <!-- titles -->
     <string name="title_activity_home">Berichten</string>
     <string name="title_activity_room">Gesprek</string>
@@ -1251,7 +1247,6 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nDe synchronisatie is mogelijk uitgesteld als gevolg van de batterij of staat van uw apparaat (slaapmodus).</string>
     <string name="settings_integrations">Integraties</string>
-    <string name="resources_script">Latn</string>
     <string name="settings_call_ringtone_use_default_stun">Terugvaloproepassistentieserver toestaan</string>
     <string name="settings_add_3pid_authentication_needed">Authenticatie vereist</string>
     <string name="settings_integrations_summary">Gebruik een integratiebeheerder om bots, bruggen, widgets en stickerpakketten te beheren.

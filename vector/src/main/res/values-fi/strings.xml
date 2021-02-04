@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">fi</string>
-    <string name="resources_country_code">FI</string>
     <!-- titles -->
     <string name="title_activity_home">Viestit</string>
     <string name="title_activity_room">Huone</string>
@@ -1381,7 +1377,6 @@
     <string name="settings_text_message_sent">Tekstiviesti on lähetetty numeroon %s. Syötä sen sisältämä varmistuskoodi.</string>
     <string name="settings_push_rules_no_rules">Viesti-ilmoitusten sääntöjä ei ole määritetty</string>
     <string name="a11y_create_direct_message">Luo uusi yksityiskeskustelu</string>
-    <string name="resources_script">Latn</string>
     <string name="revoke">Kumoa</string>
     <string name="review">Tarkasta</string>
     <string name="auth_add_phone_message_2">Aseta puhelinnumerosi, ja voit myöhemmin antaa muiden löytää sinut puhelinnumerosi perusteella.</string>

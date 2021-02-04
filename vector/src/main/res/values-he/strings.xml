@@ -124,9 +124,6 @@
     <string name="black_them">ערכת נושא שחורה</string>
     <string name="dark_theme">ערכת נושא כהה</string>
     <string name="light_theme">ערכת נושא בהירה</string>
-    <string name="resources_script">Latn</string>
-    <string name="resources_country_code">US</string>
-    <string name="resources_language">en</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">משתמש %d</item>
         <item quantity="two">%d משתמשים</item>
@@ -363,7 +360,7 @@
     <string name="today">היום</string>
     <string name="yesterday">אתמול</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
-    <string name="attachment_remaining_time_seconds">% d s</string>
+    <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_cancel_upload">האם לבטל את ההעלאה\?</string>
     <string name="attachment_cancel_download">האם לבטל את ההורדה\?</string>
     <string name="compression_opt_list_small">קטן</string>
@@ -410,10 +407,10 @@
     <string name="settings_olm_version">גרסת olm</string>
     <string name="settings_version">גִרְסָה</string>
     <plurals name="seconds">
-        <item quantity="one">% d שנייה</item>
-        <item quantity="two">% d שניות</item>
-        <item quantity="many">% d שניות</item>
-        <item quantity="other">% d שניות</item>
+        <item quantity="one">%d שנייה</item>
+        <item quantity="two">%d שניות</item>
+        <item quantity="many">%d שניות</item>
+        <item quantity="other">%d שניות</item>
     </plurals>
     <string name="settings_set_sync_delay">עיכוב בין כל סינכרון</string>
     <string name="settings_set_workmanager_delay_summary">%s
@@ -525,10 +522,10 @@
     <string name="room_details_people_invited_group_name">מוזמן</string>
     <string name="malformed_id">תעודת זהות שגויה. צריכה להיות כתובת דוא\"ל או מזהה מטריצה כמו \'@localpart: domain\'</string>
     <plurals name="room_details_selected">
-        <item quantity="one">% d נבחר</item>
-        <item quantity="two">% d נבחרים</item>
-        <item quantity="many">% d נבחרים</item>
-        <item quantity="other">% d נבחרים</item>
+        <item quantity="one">%d נבחר</item>
+        <item quantity="two">%d נבחרים</item>
+        <item quantity="many">%d נבחרים</item>
+        <item quantity="other">%d נבחרים</item>
     </plurals>
     <string name="room_details_settings">הגדרות</string>
     <string name="room_details_files">קבצים</string>
@@ -682,10 +679,10 @@
     <string name="room_settings_all_messages_noisy">כל ההודעות (קוליות)</string>
     <string name="directory_searching_title">מחפש בתיקייה…</string>
     <plurals name="directory_search_rooms">
-        <item quantity="one">d% חדר</item>
-        <item quantity="two">d% חדרים</item>
-        <item quantity="many">d% חדרים</item>
-        <item quantity="other">d% חדרים</item>
+        <item quantity="one">%d חדר</item>
+        <item quantity="two">%d חדרים</item>
+        <item quantity="many">%d חדרים</item>
+        <item quantity="other">%d חדרים</item>
     </plurals>
     <string name="directory_search_results_title">חפש בתיקיות</string>
     <string name="room_recents_join_room_prompt">הקלד מזהה חדר או כינוי לחדר</string>
@@ -1685,7 +1682,7 @@
     <string name="verification_request_alert_description">ליתר ביטחון, אמת את %s על ידי בדיקת קוד חד פעמי בשני המכשירים שלך.
 \n
 \nליתר ביטחון, עשה זאת באופן אישי.</string>
-    <string name="verification_request_waiting_for">ממתין ל- s%…</string>
+    <string name="verification_request_waiting_for">ממתין ל- %s…</string>
     <string name="verification_verified_user">%s מאומת</string>
     <string name="verification_verify_user">אמת. את %s</string>
     <string name="a13n_qr_code_description">תמונת קוד QR</string>
@@ -1841,8 +1838,8 @@
     <string name="settings_show_emoji_keyboard">הצג מקלדת אימוג\'י</string>
     <string name="settings_chat_effects_description">השתמש בפקודה / confetti או שלח הודעה המכילה ❄️ או 🎉</string>
     <string name="settings_chat_effects_title">הצג אפקטים של צ\'אט</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">פועל ... (% 1 $ d מתוך% 2 $ d)</string>
-    <string name="room_sliding_menu_version_x">גרסה% s</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">פועל … (%1$d מתוך%2$d)</string>
+    <string name="room_sliding_menu_version_x">גרסה%s</string>
     <string name="room_permissions_change_topic">שנה נושא שיחה</string>
     <string name="room_permissions_upgrade_the_room">שדרג את החדר</string>
     <string name="room_permissions_send_m_room_server_acl_events">שלח אירועים m.room.server_acl</string>
@@ -1866,15 +1863,15 @@
     <string name="room_permissions_title">הרשאות</string>
     <string name="room_settings_permissions_subtitle">צפה ועדכן את התפקידים הנדרשים לשינוי חלקים שונים בחדר.</string>
     <string name="room_settings_permissions_title">הרשאות חדרים</string>
-    <string name="people_search_user_directory">מדריך למשתמש (% s)</string>
-    <string name="room_participants_ago">לפני% 1 $ s% 2 $ s</string>
-    <string name="room_participants_now">% 1 $ s עכשיו</string>
+    <string name="people_search_user_directory">מדריך למשתמש (%s)</string>
+    <string name="room_participants_ago">לפני%1$s%2$s</string>
+    <string name="room_participants_now">%1$s עכשיו</string>
     <string name="room_participants_leave_private_warning">חדר זה אינו ציבורי. לא תוכל להצטרף שוב ללא הזמנה.</string>
     <string name="login_error_login_email_not_yet">קישור הדוא\"ל שעדיין לא נלחץ עליו</string>
-    <string name="call_failed_no_ice_description">אנא בקש ממנהל שרת הבית שלך (% 1 $ s) להגדיר שרת TURN כדי שהשיחות יעבדו בצורה אמינה.
+    <string name="call_failed_no_ice_description">אנא בקש ממנהל שרת הבית שלך (%1$s) להגדיר שרת TURN כדי שהשיחות יעבדו בצורה אמינה.
 \n
-\nלחלופין, אתה יכול לנסות להשתמש בשרת הציבורי ב-% 2 $ s, אך זה לא יהיה אמין כל כך, והוא ישתף את כתובת ה- IP שלך עם השרת הזה. תוכל לנהל זאת גם בהגדרות.</string>
-    <string name="send_bug_report_progress">התקדמות</string>
+\nלחלופין, אתה יכול לנסות להשתמש בשרת הציבורי ב-%2$s, אך זה לא יהיה אמין כל כך, והוא ישתף את כתובת ה- IP שלך עם השרת הזה. תוכל לנהל זאת גם בהגדרות.</string>
+    <string name="send_bug_report_progress">(%%%s)התקדמות</string>
     <string name="bottom_action_people">אנשים</string>
     <string name="bottom_action_favourites">מועדפים</string>
     <string name="ongoing_conference_call">שיחת ועידה מתמשכת.
@@ -1882,64 +1879,64 @@
     <string name="system_theme">ברירת מחדל מערכת</string>
     <string name="room_member_jump_to_read_receipt">קפצו לקבלת קריאה</string>
     <string name="room_member_open_or_create_dm">הודעה ישירה</string>
-    <string name="room_member_power_level_custom_in">מותאם אישית (% 1 $ d) ב-% 2 $ s</string>
-    <string name="room_member_power_level_default_in">ברירת מחדל ב-% 1 $ s</string>
-    <string name="room_member_power_level_moderator_in">מנחה ב-% 1 $ s</string>
-    <string name="room_member_power_level_admin_in">מנהל מערכת ב-% 1 $ s</string>
+    <string name="room_member_power_level_custom_in">מותאם אישית (%1$d) ב-%2$s</string>
+    <string name="room_member_power_level_default_in">ברירת מחדל ב-%1$s</string>
+    <string name="room_member_power_level_moderator_in">מנחה ב-%1$s</string>
+    <string name="room_member_power_level_admin_in">מנהל מערכת ב-%1$s</string>
     <string name="room_member_power_level_users">משתמשים</string>
     <string name="room_member_power_level_invites">הזמנות</string>
     <string name="room_member_power_level_custom">מותאם אישית</string>
     <string name="room_member_power_level_moderators">מנחים</string>
     <plurals name="room_profile_section_more_member_list">
         <item quantity="one">אדם אחד</item>
-        <item quantity="two">% 1 $ d אנשים</item>
-        <item quantity="many">% 1 $ d אנשים</item>
-        <item quantity="other">% 1 $ d אנשים</item>
+        <item quantity="two">%1$d אנשים</item>
+        <item quantity="many">%1$d אנשים</item>
+        <item quantity="other">%1$d אנשים</item>
     </plurals>
     <plurals name="login_error_limit_exceeded_retry_after">
-        <item quantity="one">יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד% 1 $ d שנייה …</item>
-        <item quantity="two">יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד% 1 $ d שניות …</item>
-        <item quantity="many">יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד% 1 $ d שניות …</item>
-        <item quantity="other">יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד% 1 $ d שניות …</item>
+        <item quantity="one">יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד%1$d שנייה …</item>
+        <item quantity="two">יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד%1$d שניות …</item>
+        <item quantity="many">יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד%1$d שניות …</item>
+        <item quantity="other">יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד%1$d שניות …</item>
     </plurals>
     <string name="login_clear_homeserver_history">נקה היסטוריה</string>
     <string name="login_social_sso">כניסה יחידה</string>
-    <string name="login_social_signin_with">היכנס באמצעות% s</string>
-    <string name="login_social_signup_with">הירשם עם% s</string>
-    <string name="login_social_continue_with">המשך עם% s</string>
+    <string name="login_social_signin_with">היכנס באמצעות%s</string>
+    <string name="login_social_signup_with">הירשם עם%s</string>
+    <string name="login_social_continue_with">המשך עם%s</string>
     <string name="login_social_continue">או</string>
     <plurals name="fallback_users_read">
-        <item quantity="one">משתמש d% קרא</item>
-        <item quantity="two">% d משתמשים קראו</item>
-        <item quantity="many">% d משתמשים קראו</item>
-        <item quantity="other">% d משתמשים קראו</item>
+        <item quantity="one">משתמש %d קרא</item>
+        <item quantity="two">%d משתמשים קראו</item>
+        <item quantity="many">%d משתמשים קראו</item>
+        <item quantity="other">%d משתמשים קראו</item>
     </plurals>
     <plurals name="two_and_some_others_read">
-        <item quantity="one">% 1 $ s,% 2 $ s ו-% 3 $ d אחרים קראו</item>
-        <item quantity="two">% 1 $ s,% 2 $ s ו-% 3 $ d אחרים קוראים</item>
-        <item quantity="many">% 1 $ s,% 2 $ s ו-% 3 $ d אחרים קוראים</item>
-        <item quantity="other">% 1 $ s,% 2 $ s ו-% 3 $ d אחרים קוראים</item>
+        <item quantity="one">%1$s,%2$s ו-%3$d אחרים קראו</item>
+        <item quantity="two">%1$s,%2$s ו-%3$d אחרים קוראים</item>
+        <item quantity="many">%1$s,%2$s ו-%3$d אחרים קוראים</item>
+        <item quantity="other">%1$s,%2$s ו-%3$d אחרים קוראים</item>
     </plurals>
     <plurals name="keys_backup_info_keys_backing_up">
-        <item quantity="one">גיבוי המפתח% d …</item>
-        <item quantity="two">גיבוי% d המפתחות …</item>
-        <item quantity="many">מגבה% d המפתחות …</item>
-        <item quantity="other">מגבה% d המפתחות …</item>
+        <item quantity="one">גיבוי המפתח%d …</item>
+        <item quantity="two">גיבוי%d המפתחות …</item>
+        <item quantity="many">מגבה%d המפתחות …</item>
+        <item quantity="other">מגבה%d המפתחות …</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
-        <item quantity="one">% d מפתח חדש נוסף להפעלה זו.</item>
-        <item quantity="two">% d מפתחות חדשים נוספו להפעלה זו.</item>
-        <item quantity="many">% d מפתחות חדשים נוספו להפעלה זו.</item>
-        <item quantity="other">% d מפתחות חדשים נוספו להפעלה זו.</item>
+        <item quantity="one">%d מפתח חדש נוסף להפעלה זו.</item>
+        <item quantity="two">%d מפתחות חדשים נוספו להפעלה זו.</item>
+        <item quantity="many">%d מפתחות חדשים נוספו להפעלה זו.</item>
+        <item quantity="other">%d מפתחות חדשים נוספו להפעלה זו.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">שוחזרו גיבויים עם %d מפתח.</item>
-        <item quantity="two">שוחזרו גיבויים עם מפתחות% d.</item>
-        <item quantity="many">שוחזרו גיבויים עם מפתחות% d.</item>
-        <item quantity="other">שוחזרו גיבויים עם מפתחות% d.</item>
+        <item quantity="two">שוחזרו גיבויים עם מפתחות%d.</item>
+        <item quantity="many">שוחזרו גיבויים עם מפתחות%d.</item>
+        <item quantity="other">שוחזרו גיבויים עם מפתחות%d.</item>
     </plurals>
     <string name="room_widget_failed_to_load">טעינת היישומון נכשלה.
-\n% s</string>
+\n%s</string>
     <plurals name="room_settings_banned_users_count">
         <item quantity="one">%b משתמש נחסם</item>
         <item quantity="two">%b משתמשים נחסמו</item>
@@ -2049,23 +2046,23 @@
     <string name="bottom_sheet_setup_secure_backup_submit">התקן</string>
     <string name="bottom_sheet_setup_secure_backup_subtitle">הגן מפני אובדן גישה להודעות ונתונים מוצפנים על ידי גיבוי של מפתחות הצפנה בשרת שלך.</string>
     <plurals name="poll_info">
-        <item quantity="one">% d הצבעה</item>
-        <item quantity="two">% d הצבעות</item>
-        <item quantity="many">% d הצבעות</item>
-        <item quantity="other">% d הצבעות</item>
+        <item quantity="one">%d הצבעה</item>
+        <item quantity="two">%d הצבעות</item>
+        <item quantity="many">%d הצבעות</item>
+        <item quantity="other">%d הצבעות</item>
     </plurals>
     <string name="settings_dev_tools">כלי מפתחים</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">מצב טיסה פועל</string>
     <string name="no_connectivity_to_the_server_indicator">הקישוריות לשרת אבדה</string>
     <string name="qr_code_scanned_by_other_no">לא</string>
     <string name="qr_code_scanned_by_other_yes">כן</string>
-    <string name="qr_code_scanned_by_other_notice">כמעט שם! האם% s מציג את אותו מגן\?</string>
+    <string name="qr_code_scanned_by_other_notice">כמעט שם! האם%s מציג את אותו מגן\?</string>
     <string name="a11y_qr_code_for_verification">קוד QR</string>
     <string name="reset_cross_signing">אפס מקשים</string>
     <string name="initialize_cross_signing">אתחל את CrossSigning</string>
     <string name="verification_profile_device_untrust_info">עד שמשתמש זה בוטח בהפעלה זו, הודעות שנשלחות אליה וממנה מתויגות באזהרות. לחילופין, ניתן לאמת זאת ידנית.</string>
-    <string name="verification_profile_device_new_signing">% 1 $ s (% 2 $ s) נכנס באמצעות הפעלה חדשה:</string>
-    <string name="verification_profile_device_verified_because">הפעלה זו מהימנה להודעות מאובטחות מכיוון ש-% 1 $ s (% 2 $ s) אימת אותה:</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) נכנס באמצעות הפעלה חדשה:</string>
+    <string name="verification_profile_device_verified_because">הפעלה זו מהימנה להודעות מאובטחות מכיוון ש-%1$s (%2$s) אימת אותה:</string>
     <string name="not_trusted">לא מהימן</string>
     <string name="trusted">מהימן</string>
     <string name="room_member_profile_sessions_section_title">מושבים</string>
@@ -2078,10 +2075,10 @@
     <string name="crosssigning_other_user_not_trust">משתמשים אחרים עשויים שלא לסמוך על כך</string>
     <string name="crosssigning_verify_this_session">אמת כניסה זו</string>
     <plurals name="settings_active_sessions_count">
-        <item quantity="one">% d מושב פעיל</item>
-        <item quantity="two">% d מושבים פעילים</item>
-        <item quantity="many">% d מושבים פעילים</item>
-        <item quantity="other">% d מושבים פעילים</item>
+        <item quantity="one">%d מושב פעיל</item>
+        <item quantity="two">%d מושבים פעילים</item>
+        <item quantity="many">%d מושבים פעילים</item>
+        <item quantity="other">%d מושבים פעילים</item>
     </plurals>
     <string name="settings_active_sessions_unverified_device_desc">אמת את ההפעלה הזו כדי לסמן אותה כאמינה והענק לה גישה להודעות מוצפנות. אם לא נכנסת למפגש זה ייתכן שחשבונך נפגע:</string>
     <string name="settings_active_sessions_verified_device_desc">הפגישה הזו מהימנה בהודעות מאובטחות מכיוון שאמתת אותה:</string>
@@ -2105,7 +2102,7 @@
     <string name="verification_code_notice">השווה את הקוד לזה שמוצג על מסך המשתמש האחר.</string>
     <string name="verification_emoji_notice">השווה את האימוג\'י הייחודי, וודא שהם מופיעים באותו סדר.</string>
     <string name="verification_request_start_notice">כדי להיות בטוחים, עשו זאת באופן אישי או השתמשו בדרך אחרת לתקשר.</string>
-    <string name="verification_request_notice">כדי להיות בטוחים, אמת את% s על ידי בדיקת קוד חד פעמי.</string>
+    <string name="verification_request_notice">כדי להיות בטוחים, אמת את%s על ידי בדיקת קוד חד פעמי.</string>
     <string name="room_settings_enable_encryption_dialog_submit">אפשר הצפנה</string>
     <string name="room_settings_enable_encryption_dialog_content">לאחר הפעלתו, לא ניתן להשבית את ההצפנה לחדר. הודעות שנשלחות בחדר מוצפן אינן נראות על ידי השרת, רק על ידי משתתפי החדר. הפעלת הצפנה עשויה למנוע בוטים וגשרים רבים לעבוד כראוי.</string>
     <string name="room_settings_enable_encryption_dialog_title">לאפשר הצפנה\?</string>
@@ -2121,7 +2118,7 @@
     <string name="verify_cannot_cross_sign">הפעלה זו אינה יכולה לשתף את האימות הזה עם הפעלות אחרות שלך.
 \nהאימות יישמר באופן מקומי וישותף בגרסה עתידית של האפליקציה.</string>
     <string name="unignore">בטל התעלמות</string>
-    <string name="rendering_event_error_exception">אלמנט נתקל בבעיה בעת הצגת תוכן האירוע עם המזהה \'% 1 $ s\'</string>
+    <string name="rendering_event_error_exception">אלמנט נתקל בבעיה בעת הצגת תוכן האירוע עם המזהה \'%1$s\'</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="command_confetti">שולח את ההודעה הנתונה עם קונפטי</string>
     <string name="secure_backup_reset_no_history">תתחיל מחדש ללא היסטוריה, ללא הודעות, מכשירים מאומתים או משתמשים מאומתים</string>
@@ -2188,9 +2185,9 @@
     <string name="topic_prefix">"נושא: "</string>
     <string name="add_a_topic_link_text">הוספת נושא</string>
     <string name="room_created_summary_no_topic_creation_text">%s כדי להודיע לאנשים על מה החדר הזה.</string>
-    <string name="this_is_the_beginning_of_dm">זוהי ההתחלה של היסטוריית ההודעות הישירות שלך עם% s.</string>
+    <string name="this_is_the_beginning_of_dm">זוהי ההתחלה של היסטוריית ההודעות הישירות שלך עם%s.</string>
     <string name="this_is_the_beginning_of_room_no_name">זו תחילתה של השיחה הזו.</string>
-    <string name="this_is_the_beginning_of_room">זו ההתחלה ש ל% s.</string>
+    <string name="this_is_the_beginning_of_room">זו ההתחלה ש ל%s.</string>
     <string name="direct_room_created_summary_item_by_you">הצתרפתם.</string>
     <string name="direct_room_created_summary_item">%s הצטרף.</string>
     <string name="room_created_summary_item_by_you">יצרת ותגדרת את החדר.</string>
@@ -2257,25 +2254,25 @@
         <item quantity="other">שלח תמונות בגודל המקורי</item>
     </plurals>
     <plurals name="poll_info_final">
-        <item quantity="one">% d הצבעה - תוצאות סופיות</item>
-        <item quantity="two">% d הצבעות - תוצאות סופיות</item>
-        <item quantity="many">% d הצבעעות - תוצאות סופיות</item>
-        <item quantity="other">% d הצבעות - תוצאות סופיות</item>
+        <item quantity="one">%d הצבעה - תוצאות סופיות</item>
+        <item quantity="two">%d הצבעות - תוצאות סופיות</item>
+        <item quantity="many">%d הצבעעות - תוצאות סופיות</item>
+        <item quantity="other">%d הצבעות - תוצאות סופיות</item>
     </plurals>
     <string name="create_pin_title">בחר PIN לאבטחה</string>
     <string name="too_many_pin_failures">שגיאות רבות מדי, יצאת מהחשבון</string>
     <string name="wrong_pin_message_last_remaining_attempt">אַזהָרָה! ניסיון אחרון שנותר לפני היציאה!</string>
     <plurals name="wrong_pin_message_remaining_attempts">
-        <item quantity="one">קוד שגוי,% d ניסיון נוסף</item>
-        <item quantity="two">קוד שגוי,% d ניסיונות נוספים</item>
-        <item quantity="many">קוד שגוי,% d ניסיונות נוספים</item>
-        <item quantity="other">קוד שגוי,% d ניסיונות נוספים</item>
+        <item quantity="one">קוד שגוי,%d ניסיון נוסף</item>
+        <item quantity="two">קוד שגוי,%d ניסיונות נוספים</item>
+        <item quantity="many">קוד שגוי,%d ניסיונות נוספים</item>
+        <item quantity="other">קוד שגוי,%d ניסיונות נוספים</item>
     </plurals>
     <string name="alert_push_are_disabled_description">בדוק את ההגדרות שלך כדי לאפשר התראות דחיפה</string>
     <string name="alert_push_are_disabled_title">התראות קופצות מושבתות</string>
     <string name="failed_to_unban">נכשל המשתמש לבטל את הסילוק</string>
-    <string name="member_banned_by">נחסם על ידי% 1 $ s</string>
-    <string name="three_pid_revoke_invite_dialog_content">לבטל את ההזמנה ל-% 1 $ s\?</string>
+    <string name="member_banned_by">נחסם על ידי%1$s</string>
+    <string name="three_pid_revoke_invite_dialog_content">לבטל את ההזמנה ל-%1$s\?</string>
     <string name="three_pid_revoke_invite_dialog_title">בטל הזמנה</string>
     <string name="phone_book_perform_lookup">חפש אנשי קשר ב-Matrix</string>
     <string name="contacts_book_title">אנשי הקשר</string>
@@ -2326,8 +2323,8 @@
     <string name="identity_server_set_alternative_submit">שלח</string>
     <string name="identity_server_set_alternative_notice_no_default">הזן את כתובת ה- URL של שרת זהות</string>
     <string name="identity_server_set_alternative_notice">לחלופין, תוכל להזין כל כתובת אתר אחרת של שרת URL</string>
-    <string name="identity_server_set_default_submit">השתמש ב-% 1 $ s</string>
-    <string name="identity_server_set_default_notice">שרת הבית שלך (% 1 $ s) מציע להשתמש ב-% 2 $ s עבור שרת הזהות שלך</string>
+    <string name="identity_server_set_default_submit">השתמש ב-%1$s</string>
+    <string name="identity_server_set_default_notice">שרת הבית שלך (%1$s) מציע להשתמש ב-%2$s עבור שרת הזהות שלך</string>
     <string name="identity_server_user_consent_not_provided">הסכמת המשתמש לא סופקה.</string>
     <string name="identity_server_error_no_current_binding_error">אין קשר נוכחי למזהה זה.</string>
     <string name="identity_server_error_binding_error">העמותה נכשלה.</string>
@@ -2336,8 +2333,8 @@
     <string name="identity_server_error_no_identity_server_configured">אנא הגדר תחילה שרת זהות.</string>
     <string name="identity_server_error_outdated_home_server">פעולה זו אינה אפשרית. שרת הבית מיושן.</string>
     <string name="identity_server_error_outdated_identity_server">שרת זהות זה מיושן .Element תומך רק ב- API V2.</string>
-    <string name="disconnect_identity_server_dialog_content">להתנתק משרת הזהות% s\?</string>
-    <string name="open_terms_of">תנאים פתוחים של% s</string>
+    <string name="disconnect_identity_server_dialog_content">להתנתק משרת הזהות%s\?</string>
+    <string name="open_terms_of">תנאים פתוחים של%s</string>
     <string name="choose_locale_loading_locales">טוען שפות זמינות …</string>
     <string name="choose_locale_other_locales_title">שפות זמינות אחרות</string>
     <string name="choose_locale_current_locale_title">שפה נוכחית</string>
@@ -2346,23 +2343,23 @@
     <string name="user_code_scan">סרוק קוד QR</string>
     <string name="invite_users_to_room_failure">לא יכולנו להזמין משתמשים. אנא בדוק את המשתמשים שברצונך להזמין ונסה שוב.</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-        <item quantity="one">הזמנות נשלחו אל% 1 $ s ואחד נוסף</item>
-        <item quantity="two">הזמנות נשלחו אל% 1 $ s ואחרים</item>
-        <item quantity="many">הזמנות נשלחו אל% 1 $ s ואחרים</item>
-        <item quantity="other">הזמנות נשלחו אל% 1 $ s ואחריםה</item>
+        <item quantity="one">הזמנות נשלחו אל%1$s ואחד נוסף</item>
+        <item quantity="two">הזמנות נשלחו אל%1$s ואחרים</item>
+        <item quantity="many">הזמנות נשלחו אל%1$s ואחרים</item>
+        <item quantity="other">הזמנות נשלחו אל%1$s ואחריםה</item>
     </plurals>
     <string name="not_a_valid_qr_code">זה לא קוד QR מטריציוני תקף</string>
-    <string name="invitations_sent_to_two_users">הזמנות נשלחו אל% 1 $ s ו-% 2 $ s</string>
-    <string name="invitation_sent_to_one_user">ההזמנה נשלחה אל% 1 $ s</string>
+    <string name="invitations_sent_to_two_users">הזמנות נשלחו אל%1$s ו-%2$s</string>
+    <string name="invitation_sent_to_one_user">ההזמנה נשלחה אל%1$s</string>
     <string name="invite_friends_rich_title">🔐️ הצטרפו אלי באלמנט</string>
-    <string name="invite_friends_text">היי, דבר איתי באלמנט:% s</string>
+    <string name="invite_friends_text">היי, דבר איתי באלמנט:%s</string>
     <string name="invite_friends">להזמין חברים</string>
     <string name="invite_users_to_room_title">הזמן משתמשים</string>
     <string name="inviting_users_to_room">מזמין משתמשים …</string>
     <string name="invite_users_to_room_action_invite">להזמין</string>
     <string name="add_people">הוסף אנשים</string>
     <string name="create_room_dm_failure">לא הצלחנו ליצור את ה- DM שלך. אנא בדוק את המשתמשים שברצונך להזמין ונסה שוב.</string>
-    <string name="external_link_confirmation_message">הקישור% 1 $ s מעביר אותך לאתר אחר:% 2 $ s.
+    <string name="external_link_confirmation_message">הקישור%1$s מעביר אותך לאתר אחר:%2$s.
 \n
 \nהאם אתה בטוח שאתה רוצה להמשיך\?</string>
     <string name="external_link_confirmation_title">בדוק-פעמיים קישור זה</string>

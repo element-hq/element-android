@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">is</string>
-    <string name="resources_country_code">IS</string>
-
     <string name="light_theme">Ljóst þema</string>
     <string name="dark_theme">Dökkt þema</string>
     <string name="black_them">Svart þema</string>

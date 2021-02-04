@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">ca</string>
-    <string name="resources_country_code">ES</string>
     <!-- theme -->
     <string name="light_theme">Tema clar</string>
     <string name="dark_theme">Tema fosc</string>
@@ -1355,7 +1351,6 @@
     <string name="disconnect">Desconnecta</string>
     <string name="revoke">Revoca</string>
     <string name="none">Cap</string>
-    <string name="resources_script">Latn</string>
     <string name="active_call_with_duration">Trucada activa (%s)</string>
     <string name="settings_call_show_confirmation_dialog_summary">Demana confirmació abans d\'iniciar una trucada</string>
     <string name="settings_call_show_confirmation_dialog_title">Evita trucada accidental</string>

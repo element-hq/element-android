@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">es</string>
-    <string name="resources_country_code">ES</string>
     <!-- titles -->
     <string name="title_activity_home">Mensajes</string>
     <string name="title_activity_room">Sala</string>
@@ -1262,7 +1258,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="send_suggestion">Haz una sugerencia</string>
     <string name="send_suggestion_content">Por favor escriba su sugerencia a continuación.</string>
     <string name="send_suggestion_report_placeholder">Describa su sugerencia aquí</string>
-    <string name="resources_script">Latn</string>
     <string name="none">Ninguno</string>
     <string name="revoke">Revocar</string>
     <string name="disconnect">Desconectar</string>

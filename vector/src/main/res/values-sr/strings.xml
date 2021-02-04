@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">sr</string>
-    <string name="resources_country_code">RS</string>
-    <string name="resources_script">Cyrl</string>
     <string name="light_theme">светла тема</string>
     <string name="dark_theme">тамна тема</string>
     <string name="black_them">црна тема</string>

@@ -47,9 +47,6 @@
     <string name="dialog_title_warning">Cảnh báo</string>
     <string name="copied_to_clipboard">Sao chép vào bộ nhớ tạm</string>
     <string name="action_add">Thêm</string>
-    <string name="resources_country_code">VN</string>
-    <string name="resources_language">vi</string>
-    <string name="resources_script">Latn</string>
     <string name="action_copy">Sao chép</string>
     <string name="action_close">Đóng</string>
     <string name="action_open">Mở</string>

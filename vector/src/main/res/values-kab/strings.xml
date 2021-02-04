@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">kab</string>
-    <string name="resources_country_code">DZ</string>
-    <string name="resources_script">Latn</string>
     <string name="light_theme">Asentel aceɛlal</string>
     <string name="dark_theme">Asentel n yiḍ</string>
     <string name="black_them">Asentel aberkan</string>

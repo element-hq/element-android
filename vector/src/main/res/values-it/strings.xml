@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">it</string>
-    <string name="resources_country_code">IT</string>
     <!-- titles -->
     <string name="title_activity_home">Messaggi</string>
     <string name="title_activity_room">Stanza</string>
@@ -1388,7 +1384,6 @@
     <string name="settings_text_message_sent">È stato inviato un messaggio a %s. Inserisci il codice di verifica che contiene.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">In questo momento stai condividendo i tuoi indirizzi email o numeri di telefono sull\'Identity Server %1$s. Dovrai riconnetterti a %2$s per interromperne la condivisione.</string>
     <string name="settings_agree_to_terms">Accetta i termini di servizio dell\'Identity Server (%s) per permettere ad altri utenti di trovarti tramite la tua email o numero di telefono.</string>
-    <string name="resources_script">Latn</string>
     <string name="labs_allow_extended_logging">Attiva i log dettagliati.</string>
     <string name="labs_allow_extended_logging_summary">I log dettagliati aiuteranno gli sviluppatori fornendo loro molte più informazioni nelle segnalazioni che invii scuotendo il dispositivo. Anche se attivi i log dettagliati, Element non registra mai i contenuti dei messaggi o altri dati personali.</string>
     <string name="error_terms_not_accepted">Riprova dopo avere accettato i termini di servizio del tuo Home Server.</string>

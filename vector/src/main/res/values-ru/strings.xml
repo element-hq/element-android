@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">ru</string>
-    <string name="resources_country_code">RU</string>
     <!-- titles -->
     <string name="title_activity_home">Сообщения</string>
     <string name="title_activity_room">Комната</string>
@@ -1441,7 +1437,6 @@
     <string name="room_widget_permission_added_by">Этот виджет был добавлен:</string>
     <string name="room_widget_permission_theme">Ваши тема</string>
     <string name="room_widget_permission_room_id">ID комнаты</string>
-    <string name="resources_script">Cyrl</string>
     <string name="settings_integrations_summary">Используйте менеджер интеграций чтобы управлять ботами, мостами, виджетами и наборами стикеров.
 \nМенеджеры интеграций получают данные о конфигурации, могут изменять виджеты, отправлять приглашения в комнаты и устанавливать права от вашего имени.</string>
     <string name="room_widget_permission_webview_shared_info_title">Использование может оставить cookie на вашем устройстве и отправить данные в %s:</string>
