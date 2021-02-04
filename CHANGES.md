@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Join room by alias other federation error (#2778)
 
 Translations 🗣:
  -
