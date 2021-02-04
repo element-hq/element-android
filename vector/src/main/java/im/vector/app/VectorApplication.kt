@@ -30,6 +30,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.IBinder
 import android.os.StrictMode
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
@@ -175,6 +176,14 @@ class VectorApplication :
                 FcmHelper.onEnterForeground(appContext, activeSessionHolder)
                 activeSessionHolder.getSafeActiveSession()?.also {
                     it.stopAnyBackgroundSync()
+                }
+
+                val dendriteConnection = object : ServiceConnection {
+                    override fun onServiceConnected(name: ComponentName?, service: IBinder?) { }
+                    override fun onServiceDisconnected(name: ComponentName?) { }
+                }
+                Intent(applicationContext, DendriteService::class.java).also { intent ->
+                    applicationContext.bindService(intent, dendriteConnection, Context.BIND_AUTO_CREATE)
                 }
             }
 
