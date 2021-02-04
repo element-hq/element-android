@@ -72,7 +72,7 @@
     <string name="no_room_placeholder">Nincs szoba</string>
     <string name="no_public_room_placeholder">Nincs elérhető nyilvános szoba</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 felhasználó</item>
+        <item quantity="one">%d felhasználó</item>
         <item quantity="other">%d felhasználó</item>
     </plurals>
     <string name="send_bug_report_include_logs">Naplófájlok küldése</string>
@@ -644,18 +644,18 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="actions">Műveletek</string>
     <string name="send_bug_report_rage_shake">Rázd meg az eszközt, ha hibát szeretnél bejelenteni</string>
     <plurals name="membership_changes">
-        <item quantity="one">1 tagság változás</item>
+        <item quantity="one">%d tagság változás</item>
         <item quantity="other">%d tagság változás</item>
     </plurals>
     <string name="list_members">Tagok listázása</string>
     <string name="open_chat_header">Fejléc megnyitása</string>
     <string name="room_sync_in_progress">Szinkronizálás…</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 aktív tag</item>
+        <item quantity="one">%d aktív tag</item>
         <item quantity="other">%d aktív tag</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">1 tag</item>
+        <item quantity="one">%d tag</item>
         <item quantity="other">%d tag</item>
     </plurals>
     <plurals name="room_new_messages_notification">
@@ -767,11 +767,11 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="room_tombstone_predecessor_link">Régebbi üzenetek megjelenítéséhez kattints ide</string>
     <string name="missing_permissions_error">A műveletet a hiányzó engedélyek miatt nem lehet végrehajtani.</string>
     <plurals name="format_time_s">
-        <item quantity="one">1mp</item>
+        <item quantity="one">%1mp</item>
         <item quantity="other">%dmp</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1p</item>
+        <item quantity="one">%dp</item>
         <item quantity="other">%dp</item>
     </plurals>
     <plurals name="format_time_h">
@@ -2150,4 +2150,10 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="no_permissions_to_start_conf_call_in_direct_room">Nincsen jogosultságod konferenciahívás indításához</string>
     <string name="start_chatting">Csevegés indítása</string>
     <string name="reset">Visszaállítás</string>
+    <string name="permissions_denied_add_contact">Engedélyezd a névjegyek elérését.</string>
+    <string name="auth_msisdn_already_defined">Ez a telefonszám már meg van adva.</string>
+    <string name="send_bug_report_include_key_share_history">Kulcs megosztási kérések naplójának küldése</string>
+    <string name="no_more_results">Nincs több eredmény</string>
+    <string name="action_unpublish">Visszavonás</string>
+    <string name="system_theme">Alapértelmezett rendszertéma</string>
 </resources>
