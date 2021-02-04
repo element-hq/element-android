@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Duplicate thumbs | Mobile reactions for 👍 and 👎 are not the same as web (#2776)
 
 Translations 🗣:
  -
