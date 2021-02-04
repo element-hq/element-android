@@ -90,9 +90,9 @@
     <string name="notice_room_server_acl_updated_no_change">Без измене.</string>
     <string name="notice_room_update_by_you">Надоградили сте ову собу.</string>
     <string name="notice_room_visibility_unknown">непознато (%s).</string>
-    <string name="notice_made_future_room_visibility_by_you">Учинили сте да од сада, историјат буде видљив за %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Учинили сте да од сада, историјат буде видљив за %1$s</string>
     <string name="notice_made_future_room_visibility">%1$s учини да од сада, историјат буде видљив за %2$s</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">Учинили сте да будуће поруке буду видљиве за %2$s</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Учинили сте да будуће поруке буду видљиве за %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s учини да будуће поруке буду видљиве за %2$s</string>
     <string name="notice_room_visibility_world_readable">свакога.</string>
     <string name="notice_room_visibility_shared">све чланове.</string>

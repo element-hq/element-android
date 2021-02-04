@@ -2344,12 +2344,12 @@
     <string name="room_permissions_change_settings">Einstellungen ändern</string>
     <string name="room_permissions_invite_users">Nutzer:in einladen</string>
     <string name="room_permissions_send_messages">Nachrichten senden</string>
-    <string name="room_permissions_default_role">Standart Rolle</string>
+    <string name="room_permissions_default_role">Standard Rolle</string>
     <string name="room_permissions_title">Berechtigungen</string>
     <string name="room_settings_permissions_title">Raum-Berechtigungen</string>
     <string name="room_permissions_notice_read_only">Du hast nicht die Berechtigung zum Aktualisieren der Rollen, die zum Ändern verschiedener Teile des Raums erforderlich sind</string>
     <string name="room_participants_leave_private_warning">Dieser Raum ist nicht öffentlich. Du wirst ihn ohne Einladung nicht wieder betreten können.</string>
-    <string name="system_theme">Standart Design</string>
+    <string name="system_theme">Standard Design</string>
     <string name="login_social_continue">Oder</string>
     <string name="default_message_emote_snow">Sendet Schnee ❄️</string>
     <string name="default_message_emote_confetti">Sendet Konfetti 🎉</string>

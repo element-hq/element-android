@@ -1233,7 +1233,7 @@
     <string name="room_list_people_empty_title">Tartışmalar</string>
     <string name="room_list_people_empty_body">Direkt mesajların burada görülecek. Yeni bir tane başlatmak için aşağıdan + ya tıkla.</string>
     <string name="room_list_rooms_empty_title">Odalar</string>
-    <string name="room_list_rooms_empty_body">Odalar burada görünecek. Mevcut odaları görmek yada kendi odanızı kurmak için aşağıdan + butonuna tıklayın.</string>
+    <string name="room_list_rooms_empty_body">Odalar burada görünecek. Mevcut odaları görmek ya da kendi odanızı kurmak için aşağıdan + butonuna tıklayın.</string>
     <string name="title_activity_emoji_reaction_picker">Tepkiler</string>
     <string name="reactions_agree">Bencede</string>
     <string name="reactions_like">Beğendim</string>
@@ -1371,9 +1371,9 @@
     <string name="send_bug_report_include_key_share_history">Anahtar paylaşım istekleri geçmişini gönderin</string>
     <string name="soft_logout_clear_data_notice">Uyarı: Kişisel verileriniz (şifreleme anahtarlarınız dahil) bu cihazda depolanır.
 \n
-\nEğer bu cihazı artık kullanmayacaksanız yada başka bir hesapta oturum açmak istiyorsanız onları temizleyin.</string>
+\nEğer bu cihazı artık kullanmayacaksanız ya da başka bir hesapta oturum açmak istiyorsanız onları temizleyin.</string>
     <string name="labs_allow_extended_logging_summary">Ayrıntılı günlükler, telefonunuzu öfkeyle salladığınızda daha fazla günlük göndererek geliştiriciye yardım edecektir. Etkin olsa bile, uygulama mesaj içeriklerini veya başka özel verileri günlüğe kaydetmeyecektir.</string>
-    <string name="error_network_timeout">Sunucunun yanıt vermesi uzun sürmüş gibi görünüyor. Bu durum, kötü bağlantıdan yada sunucuyla ilgili bir sorundan meydana gelmiş olabilir. Bir süre sonra tekrar deneyin.</string>
+    <string name="error_network_timeout">Sunucunun yanıt vermesi uzun sürmüş gibi görünüyor. Bu durum, kötü bağlantıdan ya da sunucuyla ilgili bir sorundan meydana gelmiş olabilir. Bir süre sonra tekrar deneyin.</string>
     <string name="bootstrap_cancel_text">Şimdi iptal ederseniz, oturum açma bilgilerinize erişiminizi kaybetmeniz durumunda şifrelenmiş mesajlarınızı ve verilerinizi kaybedebilirsiniz.
 \n
 \nAyrıca, ayarlardan güvenli yedeklemeyi kurabilir ve anahtarlarınızı yönetebilirsiniz.</string>
@@ -1458,7 +1458,7 @@
     <string name="room_alias_local_address_add">Yerel bir adres ekle</string>
     <string name="room_alias_local_address_title">Yerel Adresler</string>
     <string name="room_alias_address_empty">Henüz yayınlanan adres yok.</string>
-    <string name="room_alias_publish">Bu oda % 1$s \'nın oda dizininde herkese açık olarak yayınlansın mı\?</string>
+    <string name="room_alias_publish">Bu oda %1$s \'nın oda dizininde herkese açık olarak yayınlansın mı\?</string>
     <string name="room_alias_delete_confirmation">\"%1$s\"\? adresi silinsin mi \?</string>
     <string name="room_alias_unpublish_confirmation">\"%1$s\"\? adresi yayından kaldırılsın mı\?</string>
     <string name="room_alias_published_alias_add_manually">Manuel olarak yeni bir adres yayınla</string>
@@ -1489,7 +1489,7 @@
     <string name="settings_troubleshoot_test_push_loop_success">Uygulama, PUSH alıyor</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Uygulama, PUSH bekliyor</string>
     <string name="settings_troubleshoot_test_push_loop_title">Push\'u test et</string>
-    <string name="direct_room_filter_hint">Kullanıcı adı yada IDsine göre filtrele…</string>
+    <string name="direct_room_filter_hint">Kullanıcı adı ya da IDsine göre filtrele…</string>
     <string name="room_filtering_filter_hint">Sohbetleri filtrele…</string>
     <string name="send_suggestion_failed">Öneri gönderilemedi (%s)</string>
     <string name="send_suggestion_content">Önerilerinizi aşağıya yazınız.</string>
@@ -1548,7 +1548,7 @@
         <item quantity="other">%d davetiye</item>
     </plurals>
     <string name="room_alias_publish_to_directory_error">Mevcut oda dizini görünürlüğü alınamıyor Hata: (%1$s).</string>
-    <string name="room_alias_publish_to_directory">Bu odayı</string>
+    <string name="room_alias_publish_to_directory">Bu odayı %1$s</string>
     <string name="login_signup">Kayıt ol</string>
     <string name="login_signin_to">%1$s sunucusuna giriş yap</string>
     <string name="login_connect_to_a_custom_server">Özel bir sunucuya bağlan</string>
@@ -1557,7 +1557,7 @@
     <string name="login_social_sso">tek seferlik giriş</string>
     <string name="login_social_signup_with">%s ile kayıt ol</string>
     <string name="login_social_signin_with">%s ile giriş yap</string>
-    <string name="login_social_continue">Yada</string>
+    <string name="login_social_continue">Ya da</string>
     <string name="login_server_other_text">Özel ve gelişmiş ayarlar</string>
     <string name="login_server_modular_learn_more">Daha fazlasını öğren</string>
     <string name="login_server_modular_text">Kuruluşlar için premium sunucu(hosting)</string>
@@ -1610,8 +1610,8 @@
     <string name="send_attachment">Ek gönder</string>
     <string name="settings_text_message_sent_wrong_code">Onay kodu doğru değil.</string>
     <string name="settings_text_message_sent_hint">Kod</string>
-    <string name="identity_server_consent_dialog_content">Bildiğiniz kişileri keşfetmek için, rehber verilerinizi ()</string>
-    <string name="settings_discovery_disconnect_identity_server_info">Kimlik sunucunuzdan ayrılmanız, diğer kullanıcılar tarafından keşfedilemeyeceğiniz ve başkalarını e-posta yada telefonla davet edemeyeceğiniz anlamına gelir.</string>
+    <string name="identity_server_consent_dialog_content">Bildiğiniz kişileri keşfetmek için, rehber verilerinizi (%1$s)</string>
+    <string name="settings_discovery_disconnect_identity_server_info">Kimlik sunucunuzdan ayrılmanız, diğer kullanıcılar tarafından keşfedilemeyeceğiniz ve başkalarını e-posta ya da telefonla davet edemeyeceğiniz anlamına gelir.</string>
     <string name="settings_discovery_identity_server_info_none">Henüz bir kimlik sunucusu kullanmıyorsunuz. Tanıdığınız mevcut kişileri bulmak ve bu kişiler tarafından görünür olmak için aşağıdakilerden birini yapılandırın.</string>
     <string name="change_identity_server">Kimlik sunucusunu değiştir</string>
     <string name="add_identity_server">Kimlik sunucusunu yapılandırın</string>
