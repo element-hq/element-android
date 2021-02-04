@@ -36,7 +36,7 @@ import org.matrix.android.sdk.internal.network.parsing.ForceToBooleanJsonAdapter
 import org.matrix.android.sdk.internal.network.parsing.RuntimeJsonAdapterFactory
 import org.matrix.android.sdk.internal.network.parsing.TlsVersionMoshiAdapter
 import org.matrix.android.sdk.internal.network.parsing.UriMoshiAdapter
-import org.matrix.android.sdk.internal.session.sync.model.LazyRoomSyncJsonAdapter
+import org.matrix.android.sdk.internal.session.sync.parsing.DefaultLazyRoomSyncJsonAdapter
 
 object MoshiProvider {
 
@@ -45,7 +45,8 @@ object MoshiProvider {
             .add(ForceToBooleanJsonAdapter())
             .add(CipherSuiteMoshiAdapter())
             .add(TlsVersionMoshiAdapter())
-            .add(LazyRoomSyncJsonAdapter())
+            // Use addLast here so we can inject a SplitLazyRoomSyncJsonAdapter later to override the default parsing.
+            .addLast(DefaultLazyRoomSyncJsonAdapter())
             .add(RuntimeJsonAdapterFactory.of(MessageContent::class.java, "msgtype", MessageDefaultContent::class.java)
                     .registerSubtype(MessageTextContent::class.java, MessageType.MSGTYPE_TEXT)
                     .registerSubtype(MessageNoticeContent::class.java, MessageType.MSGTYPE_NOTICE)

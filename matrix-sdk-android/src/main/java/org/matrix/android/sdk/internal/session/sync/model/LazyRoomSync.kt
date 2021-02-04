@@ -16,17 +16,17 @@
 
 package org.matrix.android.sdk.internal.session.sync.model
 
+import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.JsonReader
 import okio.buffer
 import okio.source
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import java.io.File
 
 @JsonClass(generateAdapter = false)
 internal sealed class LazyRoomSync {
     data class Parsed(val _roomSync: RoomSync) : LazyRoomSync()
-    data class Stored(val file: File) : LazyRoomSync()
+    data class Stored(val roomSyncAdapter: JsonAdapter<RoomSync>, val file: File) : LazyRoomSync()
 
     val roomSync: RoomSync
         get() {
@@ -35,8 +35,7 @@ internal sealed class LazyRoomSync {
                 is Stored -> {
                     // Parse the file now
                     file.inputStream().use { pos ->
-                        MoshiProvider.providesMoshi().adapter(RoomSync::class.java)
-                                .fromJson(JsonReader.of(pos.source().buffer()))!!
+                        roomSyncAdapter.fromJson(JsonReader.of(pos.source().buffer()))!!
                     }
                 }
             }

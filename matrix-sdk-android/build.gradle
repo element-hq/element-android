@@ -13,6 +13,7 @@ buildscript {
     }
 }
 
+
 android {
     compileSdkVersion 30
     testOptions.unitTests.includeAndroidResources = true
@@ -88,6 +89,7 @@ android {
             java.srcDirs += "src/sharedTest/java"
         }
     }
+
 }
 
 static def gitRevision() {

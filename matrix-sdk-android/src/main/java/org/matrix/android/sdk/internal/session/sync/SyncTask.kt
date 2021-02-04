@@ -17,10 +17,7 @@
 package org.matrix.android.sdk.internal.session.sync
 
 import okhttp3.ResponseBody
-import okio.buffer
-import okio.source
 import org.matrix.android.sdk.R
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -32,8 +29,8 @@ import org.matrix.android.sdk.internal.session.filter.FilterRepository
 import org.matrix.android.sdk.internal.session.homeserver.GetHomeServerCapabilitiesTask
 import org.matrix.android.sdk.internal.session.reportSubtask
 import org.matrix.android.sdk.internal.session.sync.model.LazyRoomSync
-import org.matrix.android.sdk.internal.session.sync.model.LazyRoomSyncJsonAdapter
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
+import org.matrix.android.sdk.internal.session.sync.parsing.InitialSyncResponseParser
 import org.matrix.android.sdk.internal.session.user.UserStore
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.logDuration
@@ -64,7 +61,8 @@ internal class DefaultSyncTask @Inject constructor(
         private val syncTaskSequencer: SyncTaskSequencer,
         private val globalErrorReceiver: GlobalErrorReceiver,
         @SessionFilesDirectory
-        private val fileDirectory: File
+        private val fileDirectory: File,
+        private val syncResponseParser: InitialSyncResponseParser
 ) : SyncTask {
 
     private val workingDir = File(fileDirectory, "is")
@@ -101,9 +99,10 @@ internal class DefaultSyncTask @Inject constructor(
         val readTimeOut = (params.timeout + TIMEOUT_MARGIN).coerceAtLeast(TimeOutInterceptor.DEFAULT_LONG_TIMEOUT)
 
         if (isInitialSync) {
-            logDuration("INIT_SYNC strategy: $initialSyncStrategy") {
-                if (initialSyncStrategy is InitialSyncStrategy.Optimized) {
-                    safeInitialSync(requestParams)
+            val initSyncStrategy = initialSyncStrategy
+            logDuration("INIT_SYNC strategy: $initSyncStrategy") {
+                if (initSyncStrategy is InitialSyncStrategy.Optimized) {
+                    safeInitialSync(requestParams, initSyncStrategy)
                 } else {
                     val syncResponse = logDuration("INIT_SYNC Request") {
                         executeRequest<SyncResponse>(globalErrorReceiver) {
@@ -132,7 +131,7 @@ internal class DefaultSyncTask @Inject constructor(
         Timber.v("Sync task finished on Thread: ${Thread.currentThread().name}")
     }
 
-    private suspend fun safeInitialSync(requestParams: Map<String, String>) {
+    private suspend fun safeInitialSync(requestParams: Map<String, String>, initSyncStrategy: InitialSyncStrategy.Optimized) {
         workingDir.mkdirs()
         val workingFile = File(workingDir, "initSync.json")
         val status = initialSyncStatusRepository.getStep()
@@ -163,7 +162,7 @@ internal class DefaultSyncTask @Inject constructor(
             }
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_DOWNLOADED)
         }
-        handleSyncFile(workingFile)
+        handleSyncFile(workingFile, initSyncStrategy)
 
         // Delete all files
         workingDir.deleteRecursively()
@@ -188,44 +187,22 @@ internal class DefaultSyncTask @Inject constructor(
         }
     }
 
-    private suspend fun handleSyncFile(workingFile: File) {
-        val syncResponseLength = workingFile.length().toInt()
-
-        logDuration("INIT_SYNC handleSyncFile() file size $syncResponseLength bytes") {
-            if (syncResponseLength < (initialSyncStrategy as? InitialSyncStrategy.Optimized)?.minSizeToSplit ?: Long.MAX_VALUE) {
-                // OK, no need to split just handle as a regular sync response
-                Timber.v("INIT_SYNC no need to split")
-                handleInitialSyncFile(workingFile)
-            } else {
-                Timber.v("INIT_SYNC Split into several smaller files")
-                // Set file mode
-                // TODO This is really ugly, I should improve that
-                LazyRoomSyncJsonAdapter.initWith(workingFile)
-
-                handleInitialSyncFile(workingFile)
-
-                // Reset file mode
-                LazyRoomSyncJsonAdapter.reset()
+    private suspend fun handleSyncFile(workingFile: File, initSyncStrategy: InitialSyncStrategy.Optimized) {
+        logDuration("INIT_SYNC handleSyncFile()") {
+            val syncResponse = logDuration("INIT_SYNC Read file and parse") {
+                syncResponseParser.parse(initSyncStrategy, workingFile)
             }
-        }
-    }
+            initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_PARSED)
+            // Log some stats
+            val nbOfJoinedRooms = syncResponse.rooms?.join?.size ?: 0
+            val nbOfJoinedRoomsInFile = syncResponse.rooms?.join?.values?.count { it is LazyRoomSync.Stored }
+            Timber.v("INIT_SYNC $nbOfJoinedRooms rooms, $nbOfJoinedRoomsInFile stored into files")
 
-    private suspend fun handleInitialSyncFile(workingFile: File) {
-        val syncResponse = logDuration("INIT_SYNC Read file and parse") {
-            MoshiProvider.providesMoshi().adapter(SyncResponse::class.java)
-                    .fromJson(workingFile.source().buffer())!!
+            logDuration("INIT_SYNC Database insertion") {
+                syncResponseHandler.handleResponse(syncResponse, null)
+            }
+            initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_SUCCESS)
         }
-        initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_PARSED)
-
-        // Log some stats
-        val nbOfJoinedRooms = syncResponse.rooms?.join?.size ?: 0
-        val nbOfJoinedRoomsInFile = syncResponse.rooms?.join?.values?.count { it is LazyRoomSync.Stored }
-        Timber.v("INIT_SYNC $nbOfJoinedRooms rooms, $nbOfJoinedRoomsInFile stored into files")
-
-        logDuration("INIT_SYNC Database insertion") {
-            syncResponseHandler.handleResponse(syncResponse, null)
-        }
-        initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_SUCCESS)
     }
 
     companion object {
