@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix crash on API < 30 and light theme (#2774)
 
 Translations 🗣:
  -
