@@ -138,7 +138,7 @@ internal class MXMegolmEncryption(
     }
 
     override suspend fun ensureOutboundSession(usersInRoom: List<String>) {
-        getDevicesInRoom(usersInRoom).allowedDevices
+        ensureOutboundSession(getDevicesInRoom(usersInRoom).allowedDevices)
     }
 
     private suspend fun ensureOutboundSession(devicesInRoom: MXUsersDevicesMap<CryptoDeviceInfo>): MXOutboundSessionInfo {
