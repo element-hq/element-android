@@ -274,7 +274,7 @@
     <string name="start_video_call">ビデオ通話を開始</string>
     <string name="option_take_photo_video">写真または動画を撮影</string>
     <string name="auth_send_reset_email">初期化メール送信</string>
-    <string name="permissions_rationale_msg_camera">写真撮影やビデオ通話には, SchildiChatアプリに端末のカメラの使用を許可する必要があります.</string>
+    <string name="permissions_rationale_msg_camera">写真撮影やビデオ通話には, Elementアプリに端末のカメラの使用を許可する必要があります.</string>
     <string name="cannot_start_call">通話を開始できませんでした。後ほど試してください。</string>
     <string name="missing_permissions_warning">権限が無いため、一部の機能を利用できない可能性があります…</string>
     <string name="missing_permissions_to_start_conf_call">この部屋で会議を開始するためには招待権限が必要です</string>
@@ -282,7 +282,7 @@
     <string name="action_sign_out">ログアウト</string>
     <string name="bottom_action_home">ホーム</string>
     <string name="no_conversation_placeholder">会話なし</string>
-    <string name="no_contact_access_placeholder">端末の電話帳をSchildiChatアプリが読み取ることは許可されていません</string>
+    <string name="no_contact_access_placeholder">端末の電話帳をElementアプリが読み取ることは許可されていません</string>
     <string name="no_result_placeholder">結果なし</string>
     <string name="rooms_header">部屋</string>
     <string name="rooms_directory_header">部屋一覧</string>
@@ -429,25 +429,25 @@
     <string name="matrix_only_filter">Matrixの連絡先のみ</string>
     <string name="call_error_user_not_responding">通信先が通話の受取に失敗しました。</string>
     <string name="permissions_rationale_popup_title">情報</string>
-    <string name="permissions_rationale_msg_storage">SchildiChatは添付ファイルを送信および保存するために写真とビデオライブラリにアクセスするための許可が必要です。
+    <string name="permissions_rationale_msg_storage">Elementは添付ファイルを送信および保存するために写真とビデオライブラリにアクセスするための許可が必要です。
 
 あなたの携帯端末からファイルを送信できるようにするには、次のポップアップでアクセスを許可してください。</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \n通話をするには、次のポップアップでアクセスできるように設定してください。"</string>
-    <string name="permissions_rationale_msg_record_audio">SchildiChatアプリは、音声通話を実行するためにマイクへアクセスするための許可が必要です。</string>
+    <string name="permissions_rationale_msg_record_audio">Elementアプリは、音声通話を実行するためにマイクへアクセスするための許可が必要です。</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 通話をするには、次のポップアップでアクセスできるようにしてください。</string>
-    <string name="permissions_rationale_msg_camera_and_audio">ビデオ通話を行うには、カメラとマイクにアクセスするための権限がSchildiChatアプリに必要です。
+    <string name="permissions_rationale_msg_camera_and_audio">ビデオ通話を行うには、カメラとマイクにアクセスするための権限がElementアプリに必要です。
 
 通話をするには、次のポップアップでのアクセスを許可してください。</string>
-    <string name="permissions_rationale_msg_contacts">Matrixユーザが電子メールアドレスや電話番号を元に他のユーザを検索するためには、SchildiChatアプリがあなたの端末内電話帳へアクセスする許可が必要です。
+    <string name="permissions_rationale_msg_contacts">Matrixユーザが電子メールアドレスや電話番号を元に他のユーザを検索するためには、Elementアプリがあなたの端末内電話帳へアクセスする許可が必要です。
 
-SchildiChatからあなた個人の電話帳への検索要求を許可する場合は、次のポップアップでアクセスを許可してください。</string>
-    <string name="permissions_msg_contacts_warning_other_androids">あなた個人の端末内の電話帳に登録されている電子メールアドレス、電話番号を元に、SchildiChatの利用者を検索する場合は、アプリが端末内電話帳へアクセスする許可が必要です。
+Elementからあなた個人の電話帳への検索要求を許可する場合は、次のポップアップでアクセスを許可してください。</string>
+    <string name="permissions_msg_contacts_warning_other_androids">あなた個人の端末内の電話帳に登録されている電子メールアドレス、電話番号を元に、Elementの利用者を検索する場合は、アプリが端末内電話帳へアクセスする許可が必要です。
 
-SchildiChatアプリがあなたの電話帳へアクセスすることを許可しますか？</string>
+Elementアプリがあなたの電話帳へアクセスすることを許可しますか？</string>
     <string name="permissions_action_not_performed_missing_permissions">申し訳ありません。権限がないために操作が実行されませんでした</string>
     <string name="report_content">発言を通報する</string>
     <string name="read_receipt">既読</string>
@@ -681,7 +681,7 @@ SchildiChatアプリがあなたの電話帳へアクセスすることを許可
     <string name="e2e_re_request_encryption_key">他のデバイスから <u>暗号鍵を再度要求</u> します。</string>
     <string name="e2e_re_request_encryption_key_sent">鍵のリクエストが送信されました。</string>
     <string name="e2e_re_request_encryption_key_dialog_title">リクエスト送信済</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">鍵をこのデバイスに送信できるように、メッセージを復号化できる他のデバイスでSchildiChatを起動してください。</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">鍵をこのデバイスに送信できるように、メッセージを復号化できる他のデバイスでElementを起動してください。</string>
     <plurals name="format_time_s">
         <item quantity="other">%d 秒</item>
     </plurals>
@@ -713,12 +713,12 @@ SchildiChatアプリがあなたの電話帳へアクセスすることを許可
     <string name="settings_deactivate_account_section">アカウントを停止</string>
     <string name="settings_deactivate_my_account">自分のアカウントを停止</string>
     <string name="startup_notification_privacy_title">通知のプライバシー</string>
-    <string name="startup_notification_privacy_message">SchildiChatは通知を安全で内密に扱うため、バックグラウンドで動作できます。これによりバッテリー使用に影響が出ることがあります。</string>
+    <string name="startup_notification_privacy_message">Elementは通知を安全で内密に扱うため、バックグラウンドで動作できます。これによりバッテリー使用に影響が出ることがあります。</string>
     <string name="startup_notification_privacy_button_grant">許可を与える</string>
     <string name="startup_notification_privacy_button_other">他のオプションを選択</string>
     <string name="settings_opt_in_of_analytics">解析データを送信</string>
-    <string name="settings_opt_in_of_analytics_summary">SchildiChatはアプリを改善するため、匿名の解析データを収集します。</string>
-    <string name="settings_opt_in_of_analytics_prompt">SchildiChatを改善するのを助けるため、解析を許可してください。</string>
+    <string name="settings_opt_in_of_analytics_summary">Elementはアプリを改善するため、匿名の解析データを収集します。</string>
+    <string name="settings_opt_in_of_analytics_prompt">Elementを改善するのを助けるため、解析を許可してください。</string>
     <string name="settings_opt_in_of_analytics_ok">はい、助けたいです！</string>
     <string name="settings_without_flair">あなたは現在どのコミュニティーのメンバーでもありません。</string>
     <string name="lock_screen_hint">ここに入力…</string>
@@ -809,7 +809,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="accept">了承</string>
     <string name="auth_accept_policies">このホームサーバーの方針を閲覧し承認してください:</string>
     <string name="settings_call_category">通話設定画面</string>
-    <string name="settings_call_ringtone_use_app_ringtone">着信にSchildiChatの既定の着信音を使う</string>
+    <string name="settings_call_ringtone_use_app_ringtone">着信にElementの既定の着信音を使う</string>
     <string name="settings_call_ringtone_title">着信音</string>
     <string name="settings_call_ringtone_dialog_title">着信音を選んでください:</string>
     <string name="room_participants_action_kick">追い出す</string>
@@ -1025,7 +1025,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="settings_emails_and_phone_numbers_title">メールアドレスと電話番号</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">有効化</string>
     <string name="settings_troubleshoot_test_device_settings_failed">このセッションで通知が無効化されています。
-\nSchildiChat の設定をご確認ください。</string>
+\nElement の設定をご確認ください。</string>
     <string name="settings_troubleshoot_test_device_settings_success">このセッションで通知は有効化されています。</string>
     <string name="settings_troubleshoot_test_device_settings_title">セッション設定</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">有効化</string>
@@ -1112,7 +1112,7 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="qr_code">QR コード</string>
     <string name="add_by_qr_code">QR コードによる追加</string>
     <string name="user_code_share">コードを共有</string>
-    <string name="invite_friends_text">SchildiChat で会話しましょう: %s</string>
+    <string name="invite_friends_text">Element で会話しましょう: %s</string>
     <string name="invite_friends">フレンドを招待</string>
     <string name="user_directory_search_hint">名前または ID で検索</string>
     <string name="direct_room_user_list_known_title">既知のユーザー</string>

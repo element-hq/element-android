@@ -379,7 +379,7 @@
     </plurals>
     <string name="groups_list">רשימת קבוצות</string>
     <string name="read_receipts_list">קרא את רשימת הקבלות</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">הפעל את SchildiChat במכשיר אחר שיכול לפענח את ההודעה כדי שיוכל לשלוח את המפתחות להפעלה זו.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">הפעל את Element במכשיר אחר שיכול לפענח את ההודעה כדי שיוכל לשלוח את המפתחות להפעלה זו.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">הבקשה נשלחה</string>
     <string name="e2e_re_request_encryption_key_sent">בקשת המפתח נשלחה.</string>
     <string name="e2e_re_request_encryption_key">בקש מחדש מפתחות הצפנה מהפעלות האחרות שלך.</string>
@@ -462,10 +462,10 @@
     <string name="settings_troubleshoot_test_battery_success">אלמנט אינו מושפע מתהליך מיטוב הסוללה.</string>
     <string name="settings_troubleshoot_test_battery_title">אופטימיזציה של הסוללה</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">השבת הגבלות</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">מגבלות רקע מופעלות עבור SchildiChat.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">מגבלות רקע מופעלות עבור Element.
 \nהעבודה שהאפליקציה מנסה לעשות תוגבל באגרסיביות בזמן שהיא ברקע, וזה עלול להשפיע על ההודעות.
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">מגבלות רקע מושבתות עבור SchildiChat. יש להריץ בדיקה זו באמצעות נתונים ניידים (ללא WIFI).
+    <string name="settings_troubleshoot_test_bg_restricted_success">מגבלות רקע מושבתות עבור Element. יש להריץ בדיקה זו באמצעות נתונים ניידים (ללא WIFI).
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">בדוק מגבלות רקע</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">הפעל את התחלה לאחר אתחול</string>
@@ -498,7 +498,7 @@
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nשגיאה זו אינה בשליטה על אלמנט. זה יכול להתרחש מכמה סיבות. אולי זה יעבוד אם תנסה שוב מאוחר יותר, תוכל גם לבדוק ששירות Google Play אינו מוגבל בשימוש נתונים בהגדרות המערכת, או ששעון המכשיר שלך תקין, או שזה יכול לקרות ב- ROM מותאם אישית.</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nשגיאה זו איננה בשליטה על SchildiChat ולפי גוגל, שגיאה זו מצביעה על כך שלמכשיר יש יותר מדי אפליקציות הרשומות ב- FCM. השגיאה מתרחשת רק במקרים שבהם ישנם מספרים קיצוניים של אפליקציות, כך שהיא לא אמורה להשפיע על המשתמש הממוצע.</string>
+\nשגיאה זו איננה בשליטה על Element ולפי גוגל, שגיאה זו מצביעה על כך שלמכשיר יש יותר מדי אפליקציות הרשומות ב- FCM. השגיאה מתרחשת רק במקרים שבהם ישנם מספרים קיצוניים של אפליקציות, כך שהיא לא אמורה להשפיע על המשתמש הממוצע.</string>
     <string name="settings_troubleshoot_test_fcm_failed">נכשל באחזור אסימון FCM:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_success">אסימון FCM אוחזר בהצלחה:
@@ -1075,7 +1075,7 @@
 \nגבה את המפתחות שלך בצורה מאובטחת כדי לא לאבד אותם.</string>
     <string name="keys_backup_setup_step1_title">לעולם אל תאבד הודעות מוצפנות</string>
     <string name="keys_backup_no_session_error">אין מושב מטריקס זמין</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">אנא מחק את משפט הסיסמה אם ברצונך ש- SchildiChat ייצור מפתח שחזור.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">אנא מחק את משפט הסיסמה אם ברצונך ש- Element ייצור מפתח שחזור.</string>
     <string name="passphrase_passphrase_too_weak">משפט הסיסמה חלש מדי</string>
     <string name="passphrase_empty_error_message">אנא הזן משפט סיסמה</string>
     <string name="passphrase_passphrase_does_not_match">משפט הסיסמה אינו תואם</string>
