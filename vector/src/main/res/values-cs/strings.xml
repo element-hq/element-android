@@ -20,8 +20,6 @@
     <string name="or">nebo</string>
     <string name="invite">Pozvat</string>
     <string name="offline">Offline</string>
-    <string name="resources_language">cs</string>
-    <string name="resources_country_code">CZ</string>
     <string name="forget_room">Zapomenout místnost</string>
     <string name="notification_sync_in_progress">Probíhá synchronizace…</string>
     <string name="notification_noisy_notifications">Hlasitá oznámení</string>
@@ -501,7 +499,6 @@
     <string name="ignore">Ignorovat</string>
     <string name="decline">Odmítnout</string>
     <string name="action_mark_room_read">Označit za přečtené</string>
-    <string name="resources_script">Latn</string>
     <string name="none">Žádný</string>
     <string name="revoke">Zrušit</string>
     <string name="review">Přehled</string>

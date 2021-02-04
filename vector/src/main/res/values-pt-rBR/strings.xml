@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">pt</string>
-    <string name="resources_country_code">BR</string>
     <!-- titles -->
     <string name="title_activity_home">Mensagens</string>
     <string name="title_activity_room">Sala</string>
@@ -1024,7 +1020,6 @@
     <string name="settings_system_preferences_summary">Escolha a cor do LED, vibração, som…</string>
     <string name="settings_cryptography_manage_keys">Gerenciamento de Chaves de Criptografia</string>
     <string name="settings_send_message_with_enter">Enviar mensagem com a tecla enter</string>
-    <string name="resources_script">Latn</string>
     <string name="title_activity_verify_device">Confirmar sessão</string>
     <string name="none">Nenhuma</string>
     <string name="revoke">Revogar</string>

@@ -60,7 +60,4 @@
     <string name="black_them">Czorny tymat</string>
     <string name="dark_theme">Ciymny tymat</string>
     <string name="light_theme">Jasny tymat</string>
-    <string name="resources_script">Latn</string>
-    <string name="resources_country_code">PL</string>
-    <string name="resources_language">pl</string>
 </resources>

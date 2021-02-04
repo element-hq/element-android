@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">gl</string>
-    <string name="resources_country_code">ES</string>
     <string name="light_theme">Decorado claro</string>
     <string name="dark_theme">Decorado escuro</string>
     <string name="black_them">Decorado negro</string>

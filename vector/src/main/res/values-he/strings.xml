@@ -124,9 +124,6 @@
     <string name="black_them">ערכת נושא שחורה</string>
     <string name="dark_theme">ערכת נושא כהה</string>
     <string name="light_theme">ערכת נושא בהירה</string>
-    <string name="resources_script">Latn</string>
-    <string name="resources_country_code">US</string>
-    <string name="resources_language">en</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">משתמש %d</item>
         <item quantity="two">%d משתמשים</item>

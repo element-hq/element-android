@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">uk</string>
-    <string name="resources_country_code">UA</string>
     <!-- theme -->
     <string name="light_theme">Світла Тема</string>
     <string name="dark_theme">Темна Тема</string>
@@ -930,7 +926,6 @@
     <string name="accept">Прийняти</string>
     <string name="auth_accept_policies">Будь ласка, ознайомтесь та прийміть правила цього серверу:</string>
     <string name="action_mark_room_read">Позначити як прочитане</string>
-    <string name="resources_script">Cyrl</string>
     <string name="notification_sync_init">Запуск сервісу</string>
     <string name="title_activity_keys_backup_setup">Резервна копія ключа</string>
     <string name="title_activity_keys_backup_restore">Використати резервну копію ключа</string>

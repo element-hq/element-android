@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">et</string>
-    <string name="resources_country_code">EE</string>
-    <string name="resources_script">Latn</string>
     <string name="light_theme">Hele teema</string>
     <string name="dark_theme">Tume teema</string>
     <string name="black_them">Must teema</string>

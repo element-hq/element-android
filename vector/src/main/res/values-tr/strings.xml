@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">tr</string>
-    <string name="resources_country_code">TR</string>
     <string name="light_theme">Açık Tema</string>
     <string name="dark_theme">Koyu Tema</string>
     <string name="black_them">Siyah Tema</string>
@@ -1080,7 +1078,6 @@
     <string name="settings_notification_privacy_no_background_sync">Bu uygulamanın arkaplanda anasunucuya bağlanması <b>gerekmez</b>, bu durum batarya kullanımını azaltır</string>
     <string name="settings_send_message_with_enter">Enter ile mesaj gönder</string>
     <string name="settings_send_message_with_enter_summary">Klavyedeki Enter tuşuna bastığında alt satıra geçmek yerine mesajı gönder</string>
-    <string name="resources_script">Latn</string>
     <string name="people_no_identity_server">Hiçbir kimlik sunucusu yapılandırılmamış.</string>
     <string name="call_failed_no_ice_description">Lütfen çağrıların düzgün çalışması için anasunucuzun (%1$s) yetkilisine DÖNÜŞ sunucusunu yapılandırmasını söyleyin.
 \n

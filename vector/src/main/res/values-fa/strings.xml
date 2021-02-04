@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">fa</string>
-    <string name="resources_country_code">IR</string>
     <string name="light_theme">زمینهٔ روشن</string>
     <string name="dark_theme">زمینهٔ تیره</string>
     <string name="black_them">زمینهٔ سیاه</string>
@@ -299,7 +297,6 @@
     <string name="auth_add_email_message_2">رایانامه‌ای برای بازیابی تنظیم کرده تا بتوانید در صورت نیاز، از طریقش به دست افرادی که می‌شناسید، قابل کشف باشید.</string>
     <string name="auth_add_phone_message_2">ثبت شماره تلفن (بعدا در صورت دلخواه می توانید از آن برای شناسایی دوستان خود استفاده کنید).</string>
     <string name="auth_reset_password_message">نشانی رایانامهٔ پیوسته به حسابتان را برای بازنشانی گذواژه‌تان وارد کنید:</string>
-    <string name="resources_script">Arab</string>
     <string name="room_participants_invite_search_another_user">شناسهٔ کاربری، نام یا رایانامه</string>
     <string name="room_message_placeholder_reply_to_encrypted">فرستادن پاسخی رمزشده…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">فرستادن یک پاسخ (رمزنشده)…</string>

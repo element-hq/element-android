@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">ko</string>
-    <string name="resources_country_code">KR</string>
-
     <string name="light_theme">밝은 테마</string>
     <string name="dark_theme">어두운 테마</string>
     <string name="black_them">검정 테마</string>
@@ -1557,7 +1554,6 @@
 
     <string name="settings_discovery_disconnect_with_bound_pid">현재 이메일 주소나 전화번호를 ID 서버 %1$s와 공유하고 있습니다. 공유하기를 중지하려면 %2$s(으)로 다시 연결해야 합니다.</string>
     <string name="settings_agree_to_terms">ID 서버 (%s)의 서비스 약관에 동의하면 다른 사용자가 당신을 이메일 주소나 전화번호로 찾을 수 있게 됩니다.</string>
-    <string name="resources_script">Latn</string>
 
     <string name="labs_allow_extended_logging">상세 로그 켜기.</string>
     <string name="labs_allow_extended_logging_summary">상세 로그는 분노의 흔들기를 보낼 때 더 많은 로그를 제공해서 개발자에게 도움을 줍니다. 이 설정을 켜도 애플리케이션은 메시지 내용이나 다른 개인 정보를 기록하지 않습니다.</string>
