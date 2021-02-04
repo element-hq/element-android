@@ -1,29 +1,8 @@
-Changes in Element 1.0.16 (2020-XX-XX)
+Changes in Element 1.0.16 (2020-02-04)
 ===================================================
-
-Features ✨:
- -
-
-Improvements 🙌:
- -
 
 Bugfix 🐛:
  - Fix crash on API < 30 and light theme (#2774)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
-
-Build 🧱:
- -
-
-Test:
- -
-
-Other changes:
- -
 
 Changes in Element 1.0.15 (2020-02-03)
 ===================================================
