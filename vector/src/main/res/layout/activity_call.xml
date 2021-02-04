@@ -42,11 +42,11 @@
         android:layout_height="144dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:visibility="gone"
-        tools:visibility="visible"
         android:background="@color/riotx_background_light"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/otherKnownCallAvatarView"
@@ -120,9 +120,10 @@
         app:layout_constraintTop_toBottomOf="@id/participantNameText"
         tools:text="@string/call_connecting" />
 
-    <TextView
+    <Button
         android:id="@+id/callActionText"
-        android:layout_width="0dp"
+        style="@style/VectorButtonStyleText"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_margin="8dp"
         android:gravity="center"

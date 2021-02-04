@@ -18,7 +18,8 @@
             android:id="@+id/ringingControlAccept"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:background="@drawable/oval_positive"
+            android:background="@drawable/bg_rounded_button"
+            android:backgroundTint="@color/riotx_accent"
             android:clickable="true"
             android:contentDescription="@string/call_notification_answer"
             android:focusable="true"
@@ -31,7 +32,8 @@
             android:id="@+id/ringingControlDecline"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:background="@drawable/oval_destructive"
+            android:background="@drawable/bg_rounded_button"
+            android:backgroundTint="@color/riotx_destructive_accent"
             android:clickable="true"
             android:contentDescription="@string/call_notification_reject"
             android:focusable="true"
@@ -43,6 +45,8 @@
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:flow_horizontalStyle="packed"
+            app:flow_horizontalGap="48dp"
             app:constraint_referenced_ids="ringingControlDecline, ringingControlAccept"
             tools:ignore="MissingConstraints" />
 
@@ -63,12 +67,13 @@
 
         <ImageView
             android:id="@+id/openChatIcon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/layout_touch_size"
+            android:layout_height="@dimen/layout_touch_size"
+            android:scaleType="center"
             android:clickable="true"
+            android:background="@drawable/bg_rounded_button"
             android:contentDescription="@string/a11y_open_chat"
             android:focusable="true"
-            android:padding="4dp"
             android:src="@drawable/ic_call_pip"
             app:tint="@android:color/white"
             tools:ignore="MissingConstraints,MissingPrefix" />
@@ -77,7 +82,7 @@
             android:id="@+id/muteIcon"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:background="@drawable/oval_positive"
+            android:background="@drawable/bg_rounded_button"
             android:clickable="true"
             android:focusable="true"
             android:padding="16dp"
@@ -85,14 +90,14 @@
             app:backgroundTint="?attr/riotx_background"
             app:tint="?attr/riotx_text_primary"
             tools:contentDescription="@string/a11y_mute_microphone"
-            tools:ignore="MissingConstraints,MissingPrefix"
-            tools:src="@drawable/ic_microphone_on" />
+            tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
             android:id="@+id/endCallIcon"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:background="@drawable/oval_destructive"
+            android:background="@drawable/bg_rounded_button"
+            android:backgroundTint="@color/riotx_destructive_accent"
             android:clickable="true"
             android:contentDescription="@string/call_notification_hangup"
             android:focusable="true"
@@ -103,9 +108,9 @@
 
         <ImageView
             android:id="@+id/videoToggleIcon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/oval_positive"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_rounded_button"
             android:clickable="true"
             android:focusable="true"
             android:padding="16dp"
@@ -117,12 +122,13 @@
 
         <ImageView
             android:id="@+id/moreIcon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/layout_touch_size"
+            android:layout_height="@dimen/layout_touch_size"
+            android:scaleType="center"
             android:clickable="true"
+            android:background="@drawable/bg_rounded_button"
             android:contentDescription="@string/settings"
             android:focusable="true"
-            android:padding="8dp"
             android:src="@drawable/ic_more_horizontal"
             app:tint="@android:color/white"
             tools:ignore="MissingConstraints,MissingPrefix" />
@@ -130,6 +136,8 @@
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:flow_horizontalGap="16dp"
+            app:flow_horizontalStyle="packed"
             app:constraint_referenced_ids="openChatIcon, muteIcon, endCallIcon,videoToggleIcon,moreIcon"
             tools:ignore="MissingConstraints" />
 
