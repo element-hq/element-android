@@ -1290,6 +1290,21 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.logDbUsageInfo()
     }
 
+    override fun ensureOutboundSession(roomId: String) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            roomEncryptorsStore
+                    .get(roomId)
+                    ?.let {
+                        getEncryptionAlgorithm(roomId)?.let { safeAlgorithm ->
+                            val userIds = getRoomUserIds(roomId)
+                            if (setEncryptionInRoom(roomId, safeAlgorithm, false, userIds)) {
+                                roomEncryptorsStore.get(roomId)?.ensureOutboundSession(getRoomUserIds(roomId))
+                            }
+                        }
+                    }
+        }
+    }
+
     /* ==========================================================================================
      * For test only
      * ========================================================================================== */

@@ -41,6 +41,7 @@ Improvements 🙌:
  - Improve room profile UX
  - Upgrade Jitsi library from 2.9.3 to 3.1.0
  - a11y improvements
+ - Pre-share session keys when opening a room or start typing (#2771)
 
 Bugfix 🐛:
  - VoIP : fix audio devices output

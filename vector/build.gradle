@@ -136,6 +136,8 @@ android {
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
         resValue "string", "build_number", "\"${buildNumber}\""
 
+        buildConfigField "org.matrix.android.sdk.api.crypto.OutboundSessionKeySharingStrategy", "OutboundSessionKeySharingStrategy", "org.matrix.android.sdk.api.crypto.OutboundSessionKeySharingStrategy.WhenTyping"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk

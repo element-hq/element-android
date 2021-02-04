@@ -205,7 +205,7 @@ class VectorApplication :
         }
     }
 
-    override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)
+    override fun providesMatrixConfiguration() = MatrixConfiguration(applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION, outboundSessionKeySharingStrategy = BuildConfig.OutboundSessionKeySharingStrategy)
 
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()

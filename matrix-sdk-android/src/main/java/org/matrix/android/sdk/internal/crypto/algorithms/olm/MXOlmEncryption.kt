@@ -85,4 +85,8 @@ internal class MXOlmEncryption(
         // No need for olm
         return false
     }
+
+    override suspend fun ensureOutboundSession(usersInRoom: List<String>) {
+        // NOOP
+    }
 }

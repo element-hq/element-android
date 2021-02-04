@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api
 
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
+import org.matrix.android.sdk.api.crypto.OutboundSessionKeySharingStrategy
 import java.net.Proxy
 
 data class MatrixConfiguration(
@@ -40,6 +41,7 @@ data class MatrixConfiguration(
          * True to advertise support for call transfers to other parties on Matrix calls.
          */
         val supportsCallTransfer: Boolean = false
+        val outboundSessionKeySharingStrategy: OutboundSessionKeySharingStrategy = OutboundSessionKeySharingStrategy.WhenSendingEvent
 ) {
 
     /**

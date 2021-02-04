@@ -21,6 +21,11 @@ import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
 import kotlinx.coroutines.delay
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.crypto.OutboundSessionKeySharingStrategy
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import javax.inject.Inject
 
@@ -38,11 +43,20 @@ internal interface SendTypingTask : Task<SendTypingTask.Params, Unit> {
 internal class DefaultSendTypingTask @Inject constructor(
         private val roomAPI: RoomAPI,
         @UserId private val userId: String,
-        private val globalErrorReceiver: GlobalErrorReceiver
+        private val globalErrorReceiver: GlobalErrorReceiver,
+        private val matrixConfiguration: MatrixConfiguration,
+        private val session: Session,
+        private val cryptoService: CryptoService
 ) : SendTypingTask {
 
     override suspend fun execute(params: SendTypingTask.Params) {
         delay(params.delay ?: -1)
+
+        if (params.isTyping
+                && session.getRoom(params.roomId)?.isEncrypted().orFalse()
+                && matrixConfiguration.outboundSessionKeySharingStrategy == OutboundSessionKeySharingStrategy.WhenTyping) {
+            cryptoService.ensureOutboundSession(params.roomId)
+        }
 
         executeRequest<Unit>(globalErrorReceiver) {
             apiCall = roomAPI.sendTypingState(
