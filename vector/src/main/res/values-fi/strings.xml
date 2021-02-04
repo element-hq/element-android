@@ -78,7 +78,7 @@
     <string name="local_address_book_header">Paikalliset yhteystiedot</string>
     <string name="matrix_only_filter">Ainoastaan Matrix-yhteyshenkilöt</string>
     <string name="no_conversation_placeholder">Ei keskusteluita</string>
-    <string name="no_contact_access_placeholder">Et ole sallinut Elementille pääsyä paikallisiin yhteystietoihisi</string>
+    <string name="no_contact_access_placeholder">Et ole sallinut SchildiChatille pääsyä paikallisiin yhteystietoihisi</string>
     <string name="no_result_placeholder">Ei tuloksia</string>
     <!-- Rooms fragment -->
     <string name="rooms_header">Huoneet</string>
@@ -226,22 +226,22 @@
     <!-- ??? -->
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Huomio</string>
-    <string name="permissions_rationale_msg_storage">Element tarvitsee käyttöluvan mediagalleriaasi lähettäkseen liitteitä.\n\nSalli tiedostojen käyttö seuraavalla näytöllä liittääksesi kuvia ja muita tiedostoja viesteihin.</string>
-    <string name="permissions_rationale_msg_camera">Element tarvitsee käyttöluvan kameraan ottaakseen kuvia ja suorittakseen videopuheluita.</string>
+    <string name="permissions_rationale_msg_storage">SchildiChat tarvitsee käyttöluvan mediagalleriaasi lähettäkseen liitteitä.\n\nSalli tiedostojen käyttö seuraavalla näytöllä liittääksesi kuvia ja muita tiedostoja viesteihin.</string>
+    <string name="permissions_rationale_msg_camera">SchildiChat tarvitsee käyttöluvan kameraan ottaakseen kuvia ja suorittakseen videopuheluita.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nSoittaaksesi videopuhelun, salli seuraavassa ponnahdusikkunassa sovelluksen käyttää kameraa."</string>
-    <string name="permissions_rationale_msg_record_audio">Element tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChat tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nSoittaaksesi äänipuhelun, salli seuraavassa ponnahdusikkunassa sovelluksen käyttää mikrofonia."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
 \n
 \nSalli mikrofonin ja kameran käyttö seuraavilla näytöillä aloittaaksesi tämän puhelun.</string>
-    <string name="permissions_rationale_msg_contacts">Element voi tarkistaa yhteystietosi löytääkseen muita Matrixin käyttäjiä sähköpostiosoitteiden ja puhelinnumeroiden perusteella. Jos suostut jakamaan yhteystietosi tätä tarkoitusta varten, salli yhteystietojen käyttö seuraavassa ponnahdusikkunassa.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element pystyy käyttämään yhteystietojasi, etsiäkseen muita Matrix-käyttäjiä sähköpostiosoitteiden sekä puhelinnumeroiden perusteella. 
+    <string name="permissions_rationale_msg_contacts">SchildiChat voi tarkistaa yhteystietosi löytääkseen muita Matrixin käyttäjiä sähköpostiosoitteiden ja puhelinnumeroiden perusteella. Jos suostut jakamaan yhteystietosi tätä tarkoitusta varten, salli yhteystietojen käyttö seuraavassa ponnahdusikkunassa.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat pystyy käyttämään yhteystietojasi, etsiäkseen muita Matrix-käyttäjiä sähköpostiosoitteiden sekä puhelinnumeroiden perusteella. 
 \n
-\nSaako Element käyttää yhteystietojasi tätä varten\?</string>
+\nSaako SchildiChat käyttää yhteystietojasi tätä varten\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Toimenpide epäonnistui puuttuvien käyttölupien takia</string>
     <!-- medias slider string -->
     <string name="media_slider_saved">Tallennettu</string>
@@ -558,7 +558,7 @@
     <string name="passphrase_confirm_passphrase">Vahvista salasana</string>
     <string name="encryption_export_saved_as">Huoneen osapuolten välisen salauksen avaimet tallennettiin tiedostoon \'%s\'
 \n
-\nVaroitus: tämä tiedosto saatetaan poistaa, mikäli Element poistetaan.</string>
+\nVaroitus: tämä tiedosto saatetaan poistaa, mikäli SchildiChat poistetaan.</string>
     <string name="encryption_import_e2e_room_keys">Tuo päästä päähän -salatun huoneen avaimet</string>
     <string name="encryption_import_room_keys">Tuo huoneen avaimet</string>
     <string name="encryption_import_room_keys_summary">Tuo avaimet paikallisesta tiedostosta</string>
@@ -772,12 +772,12 @@
     <string name="e2e_re_request_encryption_key"><u>Pyydä salausavaimia uudelleen</u> muista istunnoistasi.</string>
     <string name="e2e_re_request_encryption_key_sent">Avainpyyntö lähetetty.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Pyyntö lähetetty</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Käynnistä Element toisella laitteella, joka voi purkaa viestin, jotta se voi lähettää avaimet tähän istuntoon.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Käynnistä SchildiChat toisella laitteella, joka voi purkaa viestin, jotta se voi lähettää avaimet tähän istuntoon.</string>
     <plurals name="membership_changes">
         <item quantity="one">yksi jäsenyysmuutos</item>
         <item quantity="other">%d jäsenyysmuutosta</item>
     </plurals>
-    <string name="settings_call_ringtone_use_app_ringtone">Käytä Elementin oletussoittoääntä saapuville puheluille</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Käytä SchildiChatin oletussoittoääntä saapuville puheluille</string>
     <string name="settings_call_ringtone_title">Saapuvien puheluiden soittoääni</string>
     <string name="video_call_in_progress">Videopuhelu menossa…</string>
     <string name="list_members">Käyttäjälista</string>
@@ -855,7 +855,7 @@
     <string name="settings_troubleshoot_test_device_settings_title">Istunnon asetukset.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Ilmoitukset ovat käytössä tässä istunnossa.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Ilmoitukset eivät ole käytössä tässä istunnossa.
-\nTarkista Elementin asetukset.</string>
+\nTarkista SchildiChatin asetukset.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Ota käyttöön</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Mukautetut asetukset.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Huomaathan, että osa viestityypeistä on asetettu olemaan hiljaisia (tuottavat ilmoituksen ilman ääntä).</string>
@@ -864,7 +864,7 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Tarkista asetukset</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Services -palvelun tarkistus</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK on saatavilla ja ajan tasalla.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element käyttää Google Play Services -palvelua ilmoitusten välittämiseen, mutta se ei näytä olevan määritetty oikein:
+    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat käyttää Google Play Services -palvelua ilmoitusten välittämiseen, mutta se ei näytä olevan määritetty oikein:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Korjaa Play Services -palvelu</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase-tunniste</string>
@@ -873,11 +873,11 @@
     <string name="settings_troubleshoot_test_fcm_failed">FCM-tunnisteen haku epäonnistui: 
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s] 
-\nElement ei voi vaikuttaa tähän virheeseen, ja Googlen mukaan tämä virhe tarkoittaa, että tällä laitteella on liikaa FCM:ään rekisteröityjä sovelluksia. Tämä virhe ilmenee vain tapauksissa, joissa on erittäin paljon FCM:ään rekisteröityjä sovelluksia asennettuna, joten tätä ei pitäisi tapahtua normaalisti.</string>
+\nSchildiChat ei voi vaikuttaa tähän virheeseen, ja Googlen mukaan tämä virhe tarkoittaa, että tällä laitteella on liikaa FCM:ään rekisteröityjä sovelluksia. Tämä virhe ilmenee vain tapauksissa, joissa on erittäin paljon FCM:ään rekisteröityjä sovelluksia asennettuna, joten tätä ei pitäisi tapahtua normaalisti.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nTämä virhe ei ole Elementin ratkaistavissa. Se voi johtua useasta eri syystä. Ehkä tämä toimii, jos yrität myöhemmin. Voit myös tarkistaa, että Google Play Services -palvelu ei ole rajoitettuna järjestelmäasetuksissa, ja että laitteesi kello on oikein. Tämä voi tapahtua myös mukautetun käyttöjärjestelmän kanssa.</string>
+\nTämä virhe ei ole SchildiChatin ratkaistavissa. Se voi johtua useasta eri syystä. Ehkä tämä toimii, jos yrität myöhemmin. Voit myös tarkistaa, että Google Play Services -palvelu ei ole rajoitettuna järjestelmäasetuksissa, ja että laitteesi kello on oikein. Tämä voi tapahtua myös mukautetun käyttöjärjestelmän kanssa.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s] 
-\nTämä virhe ei ole Elementin ratkaistavissa. Tässä puhelimessa ei ole Google-tiliä. Lisää laitteeseesi Google-tili tätä toimintoa varten.</string>
+\nTämä virhe ei ole SchildiChatin ratkaistavissa. Tässä puhelimessa ei ole Google-tiliä. Lisää laitteeseesi Google-tili tätä toimintoa varten.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Lisää tili</string>
     <string name="settings_troubleshoot_test_token_registration_title">Tunnisteen rekisteröinti</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM-tunniste rekisteröity onnistuneesti kotipalvelimelle.</string>
@@ -886,24 +886,24 @@
     <string name="settings_troubleshoot_test_foreground_service_started_title">Ilmoituspalvelu</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Ilmoituspalvelu on käynnissä.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Ilmoituspalvelu ei ole käynnissä.
-\nKokeile Elementin uudelleenkäynnistystä.</string>
+\nKokeile SchildiChatin uudelleenkäynnistystä.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Käynnistä palvelu</string>
     <string name="settings_troubleshoot_test_service_restart_title">Ilmoituspalvelun automaattinen uudelleenkäynnistys</string>
     <string name="settings_troubleshoot_test_service_restart_success">Palvelu suljettiin ja se käynnistyi uudelleen automaattisesti.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Palvelun uudelleenkäynnistäminen epäonnistui</string>
     <string name="settings_troubleshoot_test_service_boot_title">Käynnistä laitteen käynnistyessä</string>
     <string name="settings_troubleshoot_test_service_boot_success">Palvelu käynnistetään, kun laite käynnistetään uudelleen.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Palvelua ei käynnistetä laitteen uudelleenkäynnistyksen yhteydessä. Et tule saamaan ilmoituksia ennen kuin Element on käynnistetty uudelleen.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Palvelua ei käynnistetä laitteen uudelleenkäynnistyksen yhteydessä. Et tule saamaan ilmoituksia ennen kuin SchildiChat on käynnistetty uudelleen.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Ota käyttöön automaattinen käynnistys</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Tarkista taustapalveluiden rajoitukset</string>
     <string name="settings_troubleshoot_test_bg_restricted_success">Taustapalveluiden rajoitukset ovat pois käytöstä. Tämä testi tulee ajaa mobiilidatayhteydellä (ilman wlania). 
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_failed">Taustapalveluiden rajoitukset ovat käytössä. 
-\nTyötä, jota Element yrittää tehdä, rajoitetaan aggressiivisesti, kun se on taustalla, mikä saattaa vaikuttaa ilmoituksiin.
+\nTyötä, jota SchildiChat yrittää tehdä, rajoitetaan aggressiivisesti, kun se on taustalla, mikä saattaa vaikuttaa ilmoituksiin.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Poista rajoitukset</string>
     <string name="settings_troubleshoot_test_battery_title">Akunkäytön optimointi</string>
-    <string name="settings_troubleshoot_test_battery_success">Akunkäytön optimointi ei vaikuta Elementin toimintaan.</string>
+    <string name="settings_troubleshoot_test_battery_success">Akunkäytön optimointi ei vaikuta SchildiChatin toimintaan.</string>
     <string name="settings_troubleshoot_test_battery_failed">Jos käyttäjä jättää laitteen paikalleen ilman latausjohtoa niin, että näyttö on pois päältä, laite siirtyy torkkutilaan. Tämä estää sovelluksia käyttämästä verkkoyhteyksiä ja lykkää niiden töitä, synkronointeja ja perushälytyksiä.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Jätä optimointi huomiotta</string>
     <string name="settings_notification_privacy_normal">Normaali</string>
@@ -926,15 +926,15 @@
     <string name="settings_show_join_leave_messages_summary">Ei vaikuta kutsuihin, poistamisiin ja porttikieltoihin.</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Sisältää hahmokuvat ja näyttönimien vaihdot.</string>
     <string name="startup_notification_privacy_title">Ilmoitusten yksityisyys</string>
-    <string name="startup_notification_privacy_message">Element voi ajaa itseään taustalla hallitakseen sinulle näytettäviä ilmoituksia turvallisesti ja yksityisesti. Tämä voi vaikuttaa akunkäyttöön.</string>
+    <string name="startup_notification_privacy_message">SchildiChat voi ajaa itseään taustalla hallitakseen sinulle näytettäviä ilmoituksia turvallisesti ja yksityisesti. Tämä voi vaikuttaa akunkäyttöön.</string>
     <string name="startup_notification_privacy_button_grant">Anna oikeus</string>
     <string name="startup_notification_privacy_button_other">Valitse toinen vaihtoehto</string>
     <string name="startup_notification_fdroid_battery_optim_title">Taustayhteys</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Elementin tarvitsee käyttää taustayhteyttä, jotta se voi näyttää luotettavia ilmoituksia.
-\nSeuraavalla ruudulla sinulta kysytään lupaa, jotta Element voi pitää itsensä käynnissä taustalla.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">SchildiChatin tarvitsee käyttää taustayhteyttä, jotta se voi näyttää luotettavia ilmoituksia.
+\nSeuraavalla ruudulla sinulta kysytään lupaa, jotta SchildiChat voi pitää itsensä käynnissä taustalla.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Anna oikeus</string>
-    <string name="settings_opt_in_of_analytics_summary">Element kerää anonyymiä analytiikkaa sovelluksen parantamiseksi.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Otathan analytiikan käyttöön Elementin parantamiseksi.</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChat kerää anonyymiä analytiikkaa sovelluksen parantamiseksi.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Otathan analytiikan käyttöön SchildiChatin parantamiseksi.</string>
     <string name="settings_opt_in_of_analytics_ok">Kyllä, haluan auttaa!</string>
     <string name="settings_data_save_mode_summary">Datansäästötila ottaa käyttöön erityisen suodattimen, joka poistaa paikallaoloilmoitukset ja kirjoittamisen ilmoitukset.</string>
     <string name="account_email_error">Sähköpostiasi varmennettaessa tapahtui virhe.</string>
@@ -963,7 +963,7 @@
     </plurals>
     <string name="widget_integration_missing_parameter">Vaadittu parametri puuttuu.</string>
     <string name="widget_integration_invalid_parameter">Parametri ei ole kelvollinen.</string>
-    <string name="settings_labs_native_camera_summary">Käynnistä järjestelmän kamera Elementin kameraruudun sijaan.</string>
+    <string name="settings_labs_native_camera_summary">Käynnistä järjestelmän kamera SchildiChatin kameraruudun sijaan.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Käytä näppäimistön rivinvaihtopainiketta viestin lähettämiseen</string>
     <string name="settings_labs_enable_send_voice_summary">Tämä valinta vaatii kolmannen osapuolen sovelluksen viestien tallennukseen.</string>
     <string name="command_problem_with_parameters">Komento ”%s” vaatii enemmän parametreja, tai jotkin parametrit ovat virheellisiä.</string>
@@ -1033,7 +1033,7 @@
     <string name="passphrase_passphrase_does_not_match">Salalause ei täsmää</string>
     <string name="passphrase_empty_error_message">Syötä salalause</string>
     <string name="passphrase_passphrase_too_weak">Salalause on liian heikko</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Poista salalause, jos haluat Element generoivan palautusavaimen.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Poista salalause, jos haluat SchildiChat generoivan palautusavaimen.</string>
     <string name="keys_backup_no_session_error">Matrix-istuntoa ei ole saatavilla</string>
     <string name="keys_backup_setup_step1_title">Älä koskaan menetä salattuja viestejä</string>
     <string name="keys_backup_setup_step1_description">Salatuissa huoneissa viestit ovat suojattuna osapuolten välisellä salauksella. Vain sinä ja vastaanottaja(t) omistavat avaimet näiden viestien lukemiseen.
@@ -1062,7 +1062,7 @@
     <string name="keys_backup_setup_step3_save_button_title">Tallenna tiedostona</string>
     <string name="recovery_key_export_saved_as_warning">Palautusavain on tallennettu kohteeseen \'%s\'.
 \n
-\nVaroitus: tämä tiedosto saatetaan poistaa, mikäli Element poistetaan.</string>
+\nVaroitus: tämä tiedosto saatetaan poistaa, mikäli SchildiChat poistetaan.</string>
     <string name="keys_backup_setup_step3_please_make_copy">Teethän kopion</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Jaa palautusavain kohteelle…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Luodaan palautusavainta käyttäen salalausetta. Tässä saattaa kestää useampi sekunti.</string>
@@ -1149,7 +1149,7 @@
 \nJos et asettanut uutta palautustapaa, hyökkääjä saattaa yrittää päästä käsiksi tiliisi. Vaihda tilisi salasana ja aseta uusi palautustapa asetuksissa välittömästi.</string>
     <string name="autodiscover_invalid_response">Epäkelpo kotipalvelimen löytövastaus</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Automaattitäydennyksen palvelinasetukset</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element löysi mukautetun palvelinasetuksen userId:si domainille ”%1$s”:
+    <string name="autodiscover_well_known_autofill_dialog_message">SchildiChat löysi mukautetun palvelinasetuksen userId:si domainille ”%1$s”:
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Käytä asetuksia</string>
     <string name="notification_sync_init">Alustetaan palvelua</string>
@@ -1226,7 +1226,7 @@
     <string name="please_wait">Odota…</string>
     <string name="group_all_communities">Kaikki yhteisöt</string>
     <string name="room_preview_no_preview">Tätä huonetta ei voi esikatsella</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Element ei vielä tue täysin julkisen huoneen esikatselua</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">SchildiChat ei vielä tue täysin julkisen huoneen esikatselua</string>
     <string name="fab_menu_create_room">Huoneet</string>
     <string name="fab_menu_create_chat">Yksityisviestit</string>
     <string name="create_room_title">Uusi huone</string>
@@ -1371,11 +1371,11 @@
     <string name="call_failed_no_ice_use_alt">Kokeile käyttää palvelinta %s</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Käyttää palvelinta %s apupalvelimena, jos kotipalvelimesi ei tarjoa sellaista (IP-osoitteesi näkyy palvelimelle puhelun aikana)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimoitu akunkestoa varten</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element synkronoi taustalla laitteen rajallisia resursseja (akkua) säästäen.
+    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat synkronoi taustalla laitteen rajallisia resursseja (akkua) säästäen.
 \nLaitteesi resurssien tilasta riippuen käyttöjärjestelmä saattaa lykätä synkronointia.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimoitu reaaliaikaa varten</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element synkronoi taustalla täsmällisin aikavälein (säädettävä).
-\nTämä vaikuttaa radion ja akun käyttöön. Näet pysyvän ilmoituksen, joka kertoo, että Element kuuntelee tapahtumia.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat synkronoi taustalla täsmällisin aikavälein (säädettävä).
+\nTämä vaikuttaa radion ja akun käyttöön. Näet pysyvän ilmoituksen, joka kertoo, että SchildiChat kuuntelee tapahtumia.</string>
     <string name="message_edits">Viestimuokkaukset</string>
     <string name="terms_description_for_identity_server">Ole löydettävissä</string>
     <string name="settings_text_message_sent">Tekstiviesti on lähetetty numeroon %s. Syötä sen sisältämä varmistuskoodi.</string>
@@ -1388,7 +1388,7 @@
     <string name="auth_add_email_phone_message_2">Aseta sähköpostisi tunnuksen palautusta varten. Myöhemmin voit asettaa sähköpostisi tai puhelinnumerosi löydettäviksi, jotta sinut voi löytää näillä tiedoilla.</string>
     <string name="auth_add_email_and_phone_message_2">Aseta sähköpostisi tunnuksen palautusta varten. Myöhemmin voit asettaa sähköpostisi tai puhelinnumerosi löydettäviksi, jotta sinut voi löytää näillä tiedoilla.</string>
     <string name="settings_add_3pid_confirm_password_title">Vahvista salasanasi</string>
-    <string name="settings_add_3pid_flow_not_supported">Et voi tehdä tätä mobiili-Elementista</string>
+    <string name="settings_add_3pid_flow_not_supported">Et voi tehdä tätä mobiili-SchildiChatista</string>
     <string name="settings_add_3pid_authentication_needed">Tunnistautuminen vaaditaan</string>
     <string name="settings_integrations">Integraatiot</string>
     <string name="settings_integrations_summary">Käytä integraatioiden lähdettä bottien, siltojen ja tarrapakettien hallintaan.
@@ -1478,7 +1478,7 @@
     <string name="content_reported_as_inappropriate_content">Tämä sisältö on ilmiannettu epäsopivana. 
 \n 
 \nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit.</string>
-    <string name="permissions_rationale_msg_keys_backup_export">Element tarvitsee oikeuden tallentaakseen osapuolten välisen salauksen avaimesi talteen.
+    <string name="permissions_rationale_msg_keys_backup_export">SchildiChat tarvitsee oikeuden tallentaakseen osapuolten välisen salauksen avaimesi talteen.
 \n
 \nSalli pääsy tiedostoihin seuraavassa ponnahdusikkunassa, jotta voit viedä avaimesi käsin.</string>
     <string name="login_error_no_homeserver_found">Tämä ei ole kelvollinen Matrix-palvelimen osoite</string>
@@ -1521,7 +1521,7 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Services in osoite</string>
     <string name="login_server_url_form_other_hint">Osoite</string>
     <string name="login_server_url_form_modular_text">Korkealuokkaista isännöintiä organisaatioille</string>
-    <string name="login_server_url_form_modular_notice">Syötä Modular Elementin tai haluamasi palvelimen osoite</string>
+    <string name="login_server_url_form_modular_notice">Syötä Modular SchildiChatin tai haluamasi palvelimen osoite</string>
     <string name="login_sso_error_message">Sivun lataamisessa tapahtui virhe: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Sovellus ei pysty kirjautumaan sisään tälle kotipalvelimelle. Tämä kotipalvelin tukee seuraavia kirjautumistyyppejä: %1$s.
 \n
@@ -1612,11 +1612,11 @@
 \nKirjaudu sisään päästäksesi käsiksi tunnuksesi tietoihin ja viesteihin.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Menetät pääsyn salattuihin viesteihisi ellet kirjaudu sisään palauttaaksesi salausavaimesi.</string>
     <string name="soft_logout_clear_data_dialog_submit">Poista tiedot</string>
-    <string name="soft_logout_sso_not_same_user_error">Nykyinen istunto on käyttäjälle %1$s, ja yritit kirjautuas isään käyttäjälle %2$s. Element ei tue tätä.
-\nPoista ensin tietosi ja kirjaudu sen jälkeen toisella tunnuksella. Voit vaihtoehtoisesti käyttää Elementin selainversiota.</string>
+    <string name="soft_logout_sso_not_same_user_error">Nykyinen istunto on käyttäjälle %1$s, ja yritit kirjautuas isään käyttäjälle %2$s. SchildiChat ei tue tätä.
+\nPoista ensin tietosi ja kirjaudu sen jälkeen toisella tunnuksella. Voit vaihtoehtoisesti käyttää SchildiChatin selainversiota.</string>
     <string name="permalink_malformed">matrix.to-linkkisi oli epämuodostunut</string>
     <string name="bug_report_error_too_short">Kuvaus on liian lyhyt</string>
-    <string name="login_server_url_form_other_notice">Syötä palvelin tai sen Elementin osoite, mihin haluat yhdistää</string>
+    <string name="login_server_url_form_other_notice">Syötä palvelin tai sen SchildiChatin osoite, mihin haluat yhdistää</string>
     <string name="signed_out_notice">Se voi johtua monesta eri syystä:
 \n
 \n• olet vaihtanut salasanasi toisella laitteella
@@ -1655,7 +1655,7 @@
     <string name="settings_rageshake_detection_threshold_summary">Ravista puhelintasi testataksesi tunnistusrajan</string>
     <string name="rageshake_detected">Ravistus tunnistettu!</string>
     <string name="autocomplete_limited_results">Näytetään vain ensimmäiset tulokset, kirjoita lisää kirjaimia…</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element voi kaatuilla tavallista useammin odottamattomien virheiden vuoksi</string>
+    <string name="settings_developer_mode_fail_fast_summary">SchildiChat voi kaatuilla tavallista useammin odottamattomien virheiden vuoksi</string>
     <string name="command_description_shrug">Lisää ¯\\_(ツ)_/¯ tavallisen viestin alkuun</string>
     <string name="login_error_threepid_denied">Käyttämäsi sähköpostipalvelun ei ole sallittu rekisteröityä tälle palvelimelle</string>
     <string name="verification_sas_match">Täsmäävät</string>
@@ -1705,9 +1705,9 @@
     <string name="room_member_power_level_admin_in">Ylläpitäjä %1$s:ssä</string>
     <string name="room_member_power_level_moderator_in">Moderaattori %1$s:ssä</string>
     <string name="room_member_jump_to_read_receipt">Siirry lukukuittaukseen</string>
-    <string name="rendering_event_error_type_of_event_not_handled">Element ei osaa käsitellä tapahtumia joiden tyyppi on \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element ei osaa käsitellä viestejä joiden tyyppi on \'%1$s\'</string>
-    <string name="rendering_event_error_exception">Element ei osannut piirtää tapahtuman jonka tunniste on \'%1$s\' sisältöä</string>
+    <string name="rendering_event_error_type_of_event_not_handled">SchildiChat ei osaa käsitellä tapahtumia joiden tyyppi on \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">SchildiChat ei osaa käsitellä viestejä joiden tyyppi on \'%1$s\'</string>
+    <string name="rendering_event_error_exception">SchildiChat ei osannut piirtää tapahtuman jonka tunniste on \'%1$s\' sisältöä</string>
     <string name="room_list_sharing_header_recent_rooms">Viimeaikaiset huoneet</string>
     <string name="room_list_sharing_header_other_rooms">Muut huoneet</string>
     <string name="command_description_rainbow">Lähettää annetun viestin väritettynä sateenkaaren väreillä</string>
@@ -1777,7 +1777,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Käyttäjä poistanut tapahtuman, syynä: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Tapahtuma moderoitu huoneen ylläpitäjän toimesta, syynä: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Avaimet ovat jo ajan tasalla!</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">SchildiChat Android</string>
     <string name="settings_key_requests">Avainpyynnöt</string>
     <string name="refresh">Päivitä</string>
     <string name="new_session">Uusi kirjautuminen. Olitko se sinä\?</string>
@@ -1856,7 +1856,7 @@
     <string name="sound_device_speaker">Kaiutin</string>
     <string name="sound_device_phone">Puhelin</string>
     <string name="call_select_sound_device">Valitse äänilaite</string>
-    <string name="call_failed_no_connection">Element-puhelu epäonnistui</string>
+    <string name="call_failed_no_connection">SchildiChat-puhelu epäonnistui</string>
     <string name="send_bug_report_include_key_share_history">Lähetä avaimen jakopyyntöjen historia</string>
     <string name="no_more_results">Ei enempää tuloksia</string>
     <string name="bottom_action_notification">Ilmoitukset</string>

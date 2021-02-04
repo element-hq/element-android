@@ -483,7 +483,7 @@
     <string name="user_directory_header">Akaram n useqdac</string>
     <string name="matrix_only_filter">Inermisen kan n Matrix</string>
     <string name="no_conversation_placeholder">Ulac idiwenniyen</string>
-    <string name="no_contact_access_placeholder">Ur teǧǧiḍ ara Element ad yekcem ɣer yinermisen-ik·im idiganen</string>
+    <string name="no_contact_access_placeholder">Ur teǧǧiḍ ara SchildiChat ad yekcem ɣer yinermisen-ik·im idiganen</string>
     <string name="people_no_identity_server">Ulac aqeddac n timagit yettusiwlen.</string>
     <string name="no_room_placeholder">Ulac tixxamin</string>
     <string name="no_public_room_placeholder">Ulac tixxamin tizuyaz yellan</string>
@@ -518,7 +518,7 @@
 \nDeg wadeg n wayen, tzemreḍ ad tesqedceḍ aqeddac azayez ɣef %2$s, maca aya ur yettettkal ara fell-as, ad yebḍu tansa-ik·im IP d uqeddac-a. Tzemreḍ ad tesferkeḍ aya deg yiɣewwaren.</string>
     <string name="call_failed_no_ice_use_alt">Ɛreḍ aseqdec n %s</string>
     <string name="call_failed_dont_ask_again">Ur iyi-d-ssutur ara tikkelt-nniḍen</string>
-    <string name="call_failed_no_connection">Asiwel s Element ur yeddi ara</string>
+    <string name="call_failed_no_connection">Asiwel s SchildiChat ur yeddi ara</string>
     <string name="call_select_sound_device">Fren ibenk n yimesli</string>
     <string name="sound_device_speaker">Amennay</string>
     <string name="sound_device_headset">Kask</string>
@@ -958,7 +958,7 @@
     <string name="login_connect_to">Qqen ɣer %1$s</string>
     <string name="login_signin_to">Kcem ɣer %1$s</string>
     <string name="login_signin_sso">Kemmel s SSO</string>
-    <string name="login_server_url_form_modular_hint">Tansa n yimeẓla n Element Matrix</string>
+    <string name="login_server_url_form_modular_hint">Tansa n yimeẓla n SchildiChat Matrix</string>
     <string name="login_server_url_form_common_notice">Sekcem tansa n uqeddac i tebɣiḍ ad tesqedceḍ</string>
     <string name="login_login_with_email_error">Imayl-a ur iqqin ula ɣer yiwen n umiḍan.</string>
     <string name="login_reset_password_on">Wennez awal uffir ɣef %1$s</string>
@@ -978,7 +978,7 @@
     <string name="login_signin_username_hint">Isem n useqdac neɣ imayl</string>
     <string name="login_signup_error_user_in_use">Isem-a n useqdac yettwamudd</string>
     <string name="login_a11y_choose_matrix_org">Fren matrix.org</string>
-    <string name="login_a11y_choose_modular">Fren imeẓla n Element Matrix</string>
+    <string name="login_a11y_choose_modular">Fren imeẓla n SchildiChat Matrix</string>
     <string name="login_a11y_choose_other">Fren aqeddac agejdan udmawan</string>
     <string name="login_terms_title">Qbel tiwtilin i wakken ad tkemmleḍ</string>
     <string name="login_wait_for_email_title">Ttxil-k·m senqed imayl-ik·im</string>
@@ -1019,7 +1019,7 @@
     <string name="app_desktop_web">Element Web
 \nElement Desktop</string>
     <string name="app_ios_android">Element iOS
-\nElement Android</string>
+\nSchildiChat Android</string>
     <string name="use_latest_app">Seqdec aferdis aneggaru ɣef yibenkan-nniḍen:</string>
     <string name="command_description_discard_session_not_handled">Yettusefrak kan deg texxamin yettwawgelhen</string>
     <string name="enter_secret_storage_passphrase_or_key">Seqdec %1$s-inek·inem neɣ seqdec %2$s-inek.inem i wakken ad tkemmleḍ.</string>
@@ -1132,21 +1132,21 @@
     <string name="call_error_camera_init_failed">Awennez n tkamiṛat d awezɣi</string>
     <string name="call_error_answered_elsewhere">tiririt ɣef usiwel seg wadeg-nniḍen</string>
     <string name="media_picker_cannot_record_video">Ur yezmir ara ad isekles tavidyut</string>
-    <string name="permissions_rationale_msg_storage">Element yesra tasiregt n unekcum ɣer temkarḍit-inek·inem n tewlafin d tvidyut i tuzna d usekles n tceqqufin yeddan.
+    <string name="permissions_rationale_msg_storage">SchildiChat yesra tasiregt n unekcum ɣer temkarḍit-inek·inem n tewlafin d tvidyut i tuzna d usekles n tceqqufin yeddan.
 \n
 \nMa ulac aɣilif sireg anekcum deg yisfuyla udhimen i d-iteddun i wakken ad tizmireḍ ad tazneḍ ifuyla seg tiliɣri-inek·inem.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nMa ulac aɣilif sireg anekcum ɣer isfuyla udhimen i d-iteddun i wakken tizmireḍ ad tessiwleḍ."</string>
-    <string name="permissions_rationale_msg_record_audio">Element yesra tasiregt n unekcum ɣer usawaḍ-inek·inem i wakken ad iseddu isawalen s umeslaw.</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChat yesra tasiregt n unekcum ɣer usawaḍ-inek·inem i wakken ad iseddu isawalen s umeslaw.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nMa ulac aɣilif sireg anekcum ɣer isfuyla udhimen i d-iteddun i wakken tizmireḍ ad tessiwleḍ."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element yesra tasiregt n unekcum ɣer temkarḍit-inek·inem n tewlafin d tvidyut i tuzna d usekles n tceqqufin yeddan.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat yesra tasiregt n unekcum ɣer temkarḍit-inek·inem n tewlafin d tvidyut i tuzna d usekles n tceqqufin yeddan.
 \n 
 \n
 \nMa ulac aɣilif sireg anekcum deg yisfuyla udhimen i d-iteddun i wakken ad tizmireḍ ad tazneḍ ifuyla seg tiliɣri-inek·inem.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element yezmer ad issenqed adlis-inek·inem n tansiwin i wakken ad d-yaf iseqdacen-nniḍen n Matrix s usenned ɣer yimaylen d wuṭṭunen n tiliɣri nsen.
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat yezmer ad issenqed adlis-inek·inem n tansiwin i wakken ad d-yaf iseqdacen-nniḍen n Matrix s usenned ɣer yimaylen d wuṭṭunen n tiliɣri nsen.
 \n
 \nTebɣiḍ ad tebduḍ adlis-inek·inem n tansiwin i yiswi-a\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Nesḥassef. Tiggawt-a ur tezmir ara ad d-tili imi llant tsirag i ixuṣṣen</string>
@@ -1245,7 +1245,7 @@
     <string name="passphrase_passphrase_does_not_match">Tafyirt tuffirt ur temṣada ara</string>
     <string name="passphrase_empty_error_message">Ma ulac aɣilif sekcem tafyirt tuffirt</string>
     <string name="passphrase_passphrase_too_weak">Tafyirt tuffirt ur teǧhid ara aṭas</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Ma ulac aɣilif kkes tafyirt tuffirt ma yella tebɣiḍ Element ad isirew tasarut n tririt.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Ma ulac aɣilif kkes tafyirt tuffirt ma yella tebɣiḍ SchildiChat ad isirew tasarut n tririt.</string>
     <string name="keys_backup_no_session_error">Ulac tiɣimit n Matrix i yellan</string>
     <string name="keys_backup_setup_step1_advanced">(Leqqayen)</string>
     <string name="keys_backup_setup_step2_button_title">Sbadu tafyirt tuffirt</string>
@@ -1274,7 +1274,7 @@
     <string name="enter_secret_storage_passphrase">Sekcem tasarut tuffirt n uḥraz uffir</string>
     <string name="enter_secret_storage_passphrase_warning">Ɣur-k·m:</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Tisur ttwaleqqment yakan!</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="login_default_session_public_name">SchildiChat Android</string>
     <string name="settings_key_requests">Isutar n tsura</string>
     <string name="qr_code_scanned_verif_waiting">Ittraju %s…</string>
     <string name="settings_troubleshoot_title">Tifrat n wugur</string>
@@ -1282,7 +1282,7 @@
     <string name="enter_backup_passphrase">Kcem %s</string>
     <string name="call_error_ice_failed">Tuqqna n umidyat ur teddi ara</string>
     <string name="media_picker_both_capture_title">Ṭṭef-d tawlaft neɣ tavidyut</string>
-    <string name="permissions_rationale_msg_camera">Element yesra tasiregt n unekcum er tkamiat-ik·im i wakken ad d-yeṭṭef tawlafin d yisawalen s tvidyut.</string>
+    <string name="permissions_rationale_msg_camera">SchildiChat yesra tasiregt n unekcum er tkamiat-ik·im i wakken ad d-yeṭṭef tawlafin d yisawalen s tvidyut.</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Yal win·tin yessnen aseɣwen n texxamt, slid inebgawen</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Yal win·tin yessnen aseɣwen n texxamt rnu-d ɣer-sen inebgawen</string>
     <plurals name="room_settings_banned_users_count">
@@ -1390,8 +1390,8 @@
 \n
 \nIlaq-ak·am ad ternuḍ imayl-ik·im ɣer umaɣun-inek·inem deg yiɣewwaren.</string>
     <string name="login_error_ssl_handshake">Ibenk-inek·inem yesseqdac aneggaf n tɣellist TLS aqbur, yemzer i uḍfar s waṭas, i tɣellist-inek·inem ur tettizmireḍ ara a teqqneḍ</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Ma ulac aɣilif err Element deg yibenk-nniḍen i izemren ad yekkes awgelhen i yiznan, akken ad yizmir ad yazen tisura ɣer tɣimit-a.</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Seqdec taṭenṭunt n Element tamezwert i yisawalin ara d-ikecmen</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Ma ulac aɣilif err SchildiChat deg yibenk-nniḍen i izemren ad yekkes awgelhen i yiznan, akken ad yizmir ad yazen tisura ɣer tɣimit-a.</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Seqdec taṭenṭunt n SchildiChat tamezwert i yisawalin ara d-ikecmen</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Ad isseqdec %s d tallalt mi ara yili uqeddac-ik·im agejdan ur d-imudd ara yiwen (tansa-inek·inem IP ad tettwabḍu ayen akk ara yeqqim usiwel)</string>
     <string name="settings_call_ringtone_title">Taṭenṭunt n usiwel i d-ikecmen</string>
     <string name="settings_call_ringtone_dialog_title">Fren asṭeṭen i yisawalen:</string>
@@ -1423,7 +1423,7 @@
     <string name="room_sliding_menu_third_party_notices">Turagin n wis tlata</string>
     <string name="settings_phone_number_empty">Ulac uṭṭun n tiliɣri i yettwarnan ɣer umiḍan-inek·inem</string>
     <string name="settings_app_info_link_summary">Sken talɣut n usnas deg yiɣewwaren n unagraw.</string>
-    <string name="settings_add_3pid_flow_not_supported">Ur tezmireḍ ara ad tgeḍ aya seg Element n uziraz</string>
+    <string name="settings_add_3pid_flow_not_supported">Ur tezmireḍ ara ad tgeḍ aya seg SchildiChat n uziraz</string>
     <string name="settings_emails_empty">Ulac imayl yettwarnan ɣer umiḍan-ik·im</string>
     <string name="error_threepid_auth_failed">Ttkel tettekkaḍ ɣef useɣwen yellan deg yimayl i ak·am-n-uznen.</string>
     <string name="settings_notification_advanced">Iɣewwaren n yilɣa leqqayen</string>
@@ -1434,12 +1434,12 @@
 \nMa ulac aɣilif senqed iɣewwaren n umiḍan.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Ttwaremden yilɣa i tɣimit-a.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Ur ttwaremden ara yilɣa i tɣimit-a.
-\nMa ulac aɣilif senqed iɣewwaren n Element.</string>
+\nMa ulac aɣilif senqed iɣewwaren n SchildiChat.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Ẓer belli kra n yiznan yettwarun, ttusbadun ad ilin s tsusmi (ad d-neg alɣu s war imesli).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Kra n yilɣa ttusensen deg yiɣewwaren-ik·im udmawanen.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Asali n yilugan udmawanen ur yeddi ara, ma ulac aɣilif ɛreḍ tikkelt-nniḍen.</string>
     <string name="settings_troubleshoot_test_play_services_success">Imeẓla APK n Google Play llan rnu d imaynuten.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element yesseqdac imeẓla n Google Play i wakken ad d-iserreḥ i yiznan push maca ur yettban ara ttusewlen akken iwata:
+    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat yesseqdac imeẓla n Google Play i wakken ad d-iserreḥ i yiznan push maca ur yettban ara ttusewlen akken iwata:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_success">Ajuṭu FCM yettwasekles akken iwata ɣef uqeddac agejdan.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Asekles n ujuṭu FCM ɣef uqeddac agejdan ur yeddi ara.
@@ -1452,12 +1452,12 @@
     <string name="settings_troubleshoot_test_service_restart_success">Ameẓlu yettwanɣa syen yules asenker s wudem awurman.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Allus n usenker n umeẓlu ur yeddi ara</string>
     <string name="settings_troubleshoot_test_service_boot_success">Ameẓlu ad yenker mi ara yales yibenk asenker.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">"Ameẓlu ur yettenker ara mi ara yales yibenk asenker, ur d-tremseḍ ara ilɣa alamma yettwaldi  Element xerṣum yiwet n tikkelt."</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">"Ameẓlu ur yettenker ara mi ara yales yibenk asenker, ur d-tremseḍ ara ilɣa alamma yettwaldi  SchildiChat xerṣum yiwet n tikkelt."</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Rmed asenker seg tnekra</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Senqed ilugan n ugilal</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Iluggan n ugilal ttusensen i Element. Asekyed-a ilaq ad yeddu s useqdec n yisefka n uziraz (ulac WIFI).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Iluggan n ugilal ttusensen i SchildiChat. Asekyed-a ilaq ad yeddu s useqdec n yisefka n uziraz (ulac WIFI).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Ilugan n ugilal ttwaremden i Element.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Ilugan n ugilal ttwaremden i SchildiChat.
 \nAmahil i yettaɛraḍ usnas ad t-yeg yesɛa talast ma mazal-it yella ɣef ugilal, aya yezmer ad d-yawi ugur i yilɣa.
 \n
 \n%1$s</string>
@@ -1475,7 +1475,7 @@
     <string name="settings_containing_my_display_name">Iznan ideg yella yisem-iw yettwaskanen</string>
     <string name="settings_invited_to_room">Mi ara d-ttunecdeɣ ɣer texxamt</string>
     <string name="settings_background_fdroid_sync_mode_battery">Yettusesfer i uẓru</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element ad yemtawi deg ugilal akken ara yeḥrez tilisa n teɣbula n yibenk (aẓru).
+    <string name="settings_background_fdroid_sync_mode_battery_description">SchildiChat ad yemtawi deg ugilal akken ara yeḥrez tilisa n teɣbula n yibenk (aẓru).
 \nAlmend n waddad n teɣbalut n yibenk-inek·inem, amtawi yezmer ad iɛeṭṭel seg anagraw n wammud.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Yettusesfer i wakud ilaw</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Ur d-tetteṭṭfeḍ ara ulɣu n yiznan i d-ikecmen ma yili asnas ɣef ugilal i yella.</string>
@@ -1526,8 +1526,8 @@
     <string name="startup_notification_privacy_button_other">Fren taxtiṛit-nniḍen</string>
     <string name="startup_notification_fdroid_battery_optim_title">Tuqqna n ugilal</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Mudd tasiregt</string>
-    <string name="settings_opt_in_of_analytics_summary">Element ileqqeḍ tasleḍt tudrigt i wakken ad aɣ-iɛawen ad nesnerni asnas.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Ma ulac aɣilif rmed tasleḍt i wakken ad aɣ-ɛiwnent ad nesnerni Element.</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChat ileqqeḍ tasleḍt tudrigt i wakken ad aɣ-iɛawen ad nesnerni asnas.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Ma ulac aɣilif rmed tasleḍt i wakken ad aɣ-ɛiwnent ad nesnerni SchildiChat.</string>
     <string name="settings_opt_in_of_analytics_ok">Ih, bɣiɣ ad d-muddeɣ tallalt!</string>
     <string name="settings_data_save_mode">Askar n usekles n yisefka</string>
     <string name="devices_details_device_name">Leqqem isem azayez</string>
@@ -1664,7 +1664,7 @@
         <item quantity="other">Aḥraz n tsura %d…</item>
     </plurals>
     <string name="autodiscover_well_known_autofill_dialog_title">Iɣewwaren n uqeddac ummid awurman</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element yufa-d tawila n uqeddac udmawan i taɣult usulay—inek·inem n uqeddac \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">SchildiChat yufa-d tawila n uqeddac udmawan i taɣult usulay—inek·inem n uqeddac \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Seqdec tawila</string>
     <string name="invalid_or_expired_credentials">Tettusuffɣeḍ ssebba n yinekcam arimeɣta neɣ yemmuten.</string>
@@ -1778,7 +1778,7 @@
     <string name="content_reported_as_inappropriate_content">Agbur-a yettwakter-d mačči d win i iwulmen.
 \n
 \nMa yella dayen ur tebɣiḍ ara ad twaliḍ agbur-nniḍen sɣur aseqdac-a, tzemreḍ ad t-tesweḥleḍ i wakken ad teffreḍ iznan-ines</string>
-    <string name="permissions_rationale_msg_keys_backup_export">Element yesra tasiregt i usekles n tsura-inek·inem E2E ɣef uḍebsi.
+    <string name="permissions_rationale_msg_keys_backup_export">SchildiChat yesra tasiregt i usekles n tsura-inek·inem E2E ɣef uḍebsi.
 \n
 \nMa ulac aɣilif sireg anekcum ɣef yisfuyla udhimen i d-iteddun i wakken ad tizmireḍ ad tsifḍeḍ tisura-ik·im s ufus.</string>
     <string name="no_network_indicator">Ulac akk tuqqna n uzeṭṭa i igerrzen akka tura</string>
@@ -1787,11 +1787,11 @@
     <string name="login_server_matrix_org_text">Rnu ɣer yimelyan n yimdanen baṭel ɣef uqeddac azayez ameqqran akk</string>
     <string name="login_server_modular_text">Tanezduɣt n Premium i tkebbaniyin</string>
     <string name="login_server_other_text">Iɣewwaren udmawanen &amp; leqqayen</string>
-    <string name="login_connect_to_modular">Qqen ɣer yimeẓla n Element Matrix</string>
+    <string name="login_connect_to_modular">Qqen ɣer yimeẓla n SchildiChat Matrix</string>
     <string name="login_connect_to_a_custom_server">Qqen aqeddac udmawan</string>
     <string name="login_server_url_form_modular_text">Tanezduɣt n Premium i tkebbaniyin</string>
-    <string name="login_server_url_form_modular_notice">Sekcem tansa n Element Modular neɣ n uqeddac i tebɣiḍ ad t-tesqedceḍ</string>
-    <string name="login_server_url_form_other_notice">Sekcem tansa n uqeddac neɣ n Element i tebɣiḍ ad teqqneḍ ɣer-s</string>
+    <string name="login_server_url_form_modular_notice">Sekcem tansa n SchildiChat Modular neɣ n uqeddac i tebɣiḍ ad t-tesqedceḍ</string>
+    <string name="login_server_url_form_other_notice">Sekcem tansa n uqeddac neɣ n SchildiChat i tebɣiḍ ad teqqneḍ ɣer-s</string>
     <string name="login_sso_error_message">Tella-d tuccḍa mi ara d-nessalay asebter: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Asnas ur yezmir ara ad yekcem ɣer uqeddac-a agejdan. Aqeddac agejdan yessefrak anaw-a n unekcum: %1$s.
 \n
@@ -1843,7 +1843,7 @@
 \nKcem tikkelt-nniḍen i wakken ad tkecmeḍ ɣer yisefka d yiznan n umiḍan-inek·inem.</string>
     <string name="permalink_malformed">Aseɣwen-inek·inem n Matrix.to ur yemsil ara akken iwata</string>
     <string name="autocomplete_limited_results">Ala igmaḍ imezwura i d-yettwaseknen, aru ugar n yisekkilen…</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element yezmer ad yewḥel ugar n tikkal mi ara d-tili tuccḍa ur nettwaṛǧa ara</string>
+    <string name="settings_developer_mode_fail_fast_summary">SchildiChat yezmer ad yewḥel ugar n tikkal mi ara d-tili tuccḍa ur nettwaṛǧa ara</string>
     <string name="login_error_threepid_denied">Taɣult n yimayl—ik·im ur tesɛi ara azref i wakken ad tettwasekles ɣef uqeddac-a</string>
     <string name="verification_conclusion_warning">Tuqqna ur nettwattkal ara</string>
     <string name="verify_user_sas_emoji_help_text">Senqed aseqdac-a s usentem n yimujit-a asuf i d-yettbanen ɣef ugdil-ines, deg yiwem umsizwer.</string>
@@ -1882,9 +1882,9 @@
     <string name="room_member_power_level_moderator_in">D amaẓrag deg %1$s</string>
     <string name="room_member_power_level_default_in">Amezwer deg %1$s</string>
     <string name="room_member_power_level_custom_in">D udmawan (%1$d) deg %2$s</string>
-    <string name="rendering_event_error_type_of_event_not_handled">"Element ur isekker ara ineḍruyen n wanaw  \'%1$s\'"</string>
-    <string name="rendering_event_error_type_of_message_not_handled">"Element ur isekker ara izen n wanaw  \'%1$s\'"</string>
-    <string name="rendering_event_error_exception">Element yemlal-d ugur mi ara d-yettarra agbur n uneḍru s usulay \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">"SchildiChat ur isekker ara ineḍruyen n wanaw  \'%1$s\'"</string>
+    <string name="rendering_event_error_type_of_message_not_handled">"SchildiChat ur isekker ara izen n wanaw  \'%1$s\'"</string>
+    <string name="rendering_event_error_exception">SchildiChat yemlal-d ugur mi ara d-yettarra agbur n uneḍru s usulay \'%1$s\'</string>
     <string name="verify_cannot_cross_sign">Tiɣimit-a ulamek ara tebḍu aselken-a akked tqimiyin-nniḍen.
 \nAselken ad yettwaseklas s wudem adigan syen yettwabḍu deg lqem i d-iteddun n usnas.</string>
     <string name="room_list_sharing_header_recent_rooms">Tixxamin n melmi kan</string>
@@ -2013,7 +2013,7 @@
     <string name="settings_security_prevent_screenshots_summary">Armad n uɣewwar-a ad yernu FLAG_SECURE ɣer meṛṛa irmad. Ales asenker n usnas i wakken ad yemmed usnifel.</string>
     <string name="media_file_added_to_gallery">Afaylu n umidyat yettwarna ɣer temsikent</string>
     <string name="error_adding_media_file_to_gallery">D awezɣi ad yernu ufaylu n umidyat ɣer temsikent</string>
-    <string name="use_other_session_content_description">Seqdec lqem akk aneggaru n Element ɣef yibenkan-inek·inem-nniḍen: Element Web, Element n tnarit, Element iOS, Element i Android neɣ amsaɣ-nniḍen n Matrix yessefraken azmul anmidag</string>
+    <string name="use_other_session_content_description">Seqdec lqem akk aneggaru n SchildiChat ɣef yibenkan-inek·inem-nniḍen: Element Web, SchildiChat/Element n tnarit, Element iOS, SchildiChat i Android neɣ amsaɣ-nniḍen n Matrix yessefraken azmul anmidag</string>
     <string name="enter_secret_storage_input_key">Fren tasarut-ik·im n tririt, neɣ err-itt s ufus s tira-ines s uasiw neɣ s usenteḍ-ines seg ɣefafus-inek·inem</string>
     <string name="cross_signing_verify_by_emoji">Senqed amyigew s yimujit</string>
     <string name="confirm_your_identity_quad_s">Sentem timagit-inek·inem s usenqed n yinekcam-a, anef-as ad yekcem ɣer yiznan yettwawgelhen.</string>
@@ -2023,11 +2023,11 @@
 \n
 \nTebɣiḍ s tidet ad tkemmleḍ\?</string>
     <string name="disconnect_identity_server_dialog_content">Ffeɣ seg tuqqna n uqeddac n timagit %s\?</string>
-    <string name="identity_server_error_outdated_identity_server">Aqeddac-a n timagit iɛedda d aqbur. Element yessafrak kan API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Aqeddac-a n timagit iɛedda d aqbur. SchildiChat yessafrak kan API V2.</string>
     <string name="identity_server_error_outdated_home_server">Tamahekt-a ulamek tedda. Aqeddac agejdan d aqbur.</string>
     <string name="identity_server_error_no_identity_server_configured">Ma ulac aɣilif qbel deg tazwara swel aqeddac n timagit.</string>
     <string name="identity_server_error_terms_not_signed">Ma ulac aɣilif qbel deg tazwara tiwtilin n uqeddac n timagit deg yiɣewwaren.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">I tɣellist n tbaḍnit-ik·im, Element yessefrak kan tuzna n yimaylen d wuṭṭunen n tiliɣri yettudwin i useqdac.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">I tɣellist n tbaḍnit-ik·im, SchildiChat yessefrak kan tuzna n yimaylen d wuṭṭunen n tiliɣri yettudwin i useqdac.</string>
     <string name="identity_server_error_binding_error">Assaɣ ur yeddi ara.</string>
     <string name="identity_server_error_no_current_binding_error">Akka tura ulac akk assaɣ d unekcam-a.</string>
     <string name="identity_server_set_default_notice">Aqeddac-ik·im agejdan (%1$s) yefka-d takti n useqdec n %2$s d aqeddac-ik·im n timagit</string>
@@ -2040,7 +2040,7 @@
     <string name="error_opening_banned_room">Ur tezmireḍ ara ad teldiḍ taxxamt ansi i d-tettwagedleḍ.</string>
     <string name="room_error_not_found">Ur nessaweḍ ara ad d-naf taxamt-a. Muqel ma tella d tidet.</string>
     <string name="room_settings_de_prioritize">Senqes deg wazal</string>
-    <string name="settings_troubleshoot_test_battery_success">Element ur t-iḥuza ara usesfer n uẓru.</string>
+    <string name="settings_troubleshoot_test_battery_success">SchildiChat ur t-iḥuza ara usesfer n uẓru.</string>
     <string name="devices_delete_dialog_text">Tamahelt-a tesra asentem-nniḍen.
 \nI ukemmel, ma ulac aɣilif sekcem awal-ik·im uffir.</string>
     <string name="failed_to_load_timeline_position">%s yettaɛraḍ ad d-isali tazmilt tufrint deg tesnakudt n texxamt-a, maca ur yessaweḍ ara ad tt-naf.</string>
@@ -2067,21 +2067,21 @@
     <string name="ssl_expected_existing_expl">Aselkin yettwabeddel seg win yettwamanen ɣer win ur nettwaman ara. Ahat aqeddac iɛawed-d aselkin-ines. Nermes anedbal n uqeddac ɣef udsil umḍin yetturaǧun.</string>
     <string name="ssl_only_accept">Ur qebbel ara aselkin alamma isuffeɣ-d unedbal n uqeddac adsil umḍin yemṣadan d win yellan ddaw-a.</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nTuccḍa yekka nnig tezmert n Element, akken i d-yenna Google, tuccḍa-a teskan-d belli ibenk ɣer-s aqettun n yisnasen yettwaskelsen s FCM. Tuccḍa ur d-tettili ara ala ma yilin umiḍan n yisnasen aṭas, ɣef waya ur ilaq ara ad tḥaz aseqdac n tlemmast.</string>
+\nTuccḍa yekka nnig tezmert n SchildiChat, akken i d-yenna Google, tuccḍa-a teskan-d belli ibenk ɣer-s aqettun n yisnasen yettwaskelsen s FCM. Tuccḍa ur d-tettili ara ala ma yilin umiḍan n yisnasen aṭas, ɣef waya ur ilaq ara ad tḥaz aseqdac n tlemmast.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nTuccḍa-a tekka nnig tezmert n Element. Aya yezmer ad d-yili seg waṭas n ssebbat. Ahat ad yeddu ma yella tɛerḍeḍ tikkelt-nniḍen ticki, daɣen tzemreḍ ad tesneqdeḍ ma yella ameẓlu Google Play ur yesɛi ara talast deg useqdec n yisefka deg yiɣewwaren n unagraw, neɣ tamrilt n yibenk-inek·inem tṣeḥḥa, neɣ yezmer ad d-yili waya ɣef Rom tudmawant.</string>
+\nTuccḍa-a tekka nnig tezmert n SchildiChat. Aya yezmer ad d-yili seg waṭas n ssebbat. Ahat ad yeddu ma yella tɛerḍeḍ tikkelt-nniḍen ticki, daɣen tzemreḍ ad tesneqdeḍ ma yella ameẓlu Google Play ur yesɛi ara talast deg useqdec n yisefka deg yiɣewwaren n unagraw, neɣ tamrilt n yibenk-inek·inem tṣeḥḥa, neɣ yezmer ad d-yili waya ɣef Rom tudmawant.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nTuccḍ-a tekka nnig tezmert n Element. Ulac amiḍan Google ɣe tiliɣri. Ma ulac aɣilif, ldi amsefrak n umiḍan syen rnu amiḍan n Google.</string>
+\nTuccḍ-a tekka nnig tezmert n SchildiChat. Ulac amiḍan Google ɣe tiliɣri. Ma ulac aɣilif, ldi amsefrak n umiḍan syen rnu amiḍan n Google.</string>
     <string name="settings_troubleshoot_test_battery_failed">Ma yella aseqdac yeǧǧa ibenk ur t-isfurek ara rnu i kra n wakud, s ugdil yensan, ibenk ad yekcem deg uskar Doze. Aya ur yettaǧǧa ara isnasen ad kecmen ɣer uzeṭṭa i wakken ad aznen imahilen, amtawi d tesluɣin tiluganin nsen.</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element ad yemtawi ɣef ugilal sya ɣer da deg yiwen n wakud (yettuswal).
-\nAya ad iḥaz aseqdec n ṛṛadyu d uẓru, ad yili wulɣu ad d-yettwaskanen i lebda i d-yemmalen belli Element yettɛassa ineḍruyen.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">SchildiChat ad yemtawi ɣef ugilal sya ɣer da deg yiwen n wakud (yettuswal).
+\nAya ad iḥaz aseqdec n ṛṛadyu d uẓru, ad yili wulɣu ad d-yettwaskanen i lebda i d-yemmalen belli SchildiChat yettɛassa ineḍruyen.</string>
     <string name="settings_integrations_summary">Seqdec amsefrak n yimsidaf i usefrek n yibuḍen, n tleggiyin, n yiwiǧiten d yikemmusen n ustiker.
 \nImsefrak n yimsidaf temmsen-d isefka n twila, syen zemren ad snilen iwiǧiten, ad aznen tinubgiwin ɣer teamin yerna ad sbadun iswiren n tezmert s yisem-ik·im.</string>
     <string name="settings_send_markdown_summary">Msel iznan s useqdec n tseddast n markdown send ad ttwaznen. Aya ad isireg amsal leqqayen am useqdec n yizamulen n yitran i uskan n uḍris uknan.</string>
     <string name="settings_send_message_with_enter_summary">Taqeffalt Kcem n unasiw n useɣzan ad tazen izen ideg ara teg angaz gar yizirigen</string>
-    <string name="startup_notification_privacy_message">Element yezmer ad yeddu deg ugilal i usefrek n yilɣa-inek·inem s wudem aɣelsan, uslig. Aya yezmer ad iḥaz aseqdec n uẓru.</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element yesra ad yeǧǧ tuqqna s usemdu meẓẓiyen ɣef ugilal i wakken ad d-yawi ilɣa yettwamanen.
-\nƔef ugdil i d-iteddun, ad tettusnubegteḍ i wakken ad tmuddeḍ tisirag i Element ad yeddu i lebda ɣef ugilal, ttxil-k·m qbel.</string>
+    <string name="startup_notification_privacy_message">SchildiChat yezmer ad yeddu deg ugilal i usefrek n yilɣa-inek·inem s wudem aɣelsan, uslig. Aya yezmer ad iḥaz aseqdec n uẓru.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">SchildiChat yesra ad yeǧǧ tuqqna s usemdu meẓẓiyen ɣef ugilal i wakken ad d-yawi ilɣa yettwamanen.
+\nƔef ugdil i d-iteddun, ad tettusnubegteḍ i wakken ad tmuddeḍ tisirag i SchildiChat ad yeddu i lebda ɣef ugilal, ttxil-k·m qbel.</string>
     <string name="settings_data_save_mode_summary">Askar n usekles n yisefka yessemras imsizdeg afrayan i wakken ileqman n tihawt d yilɣa n tira ad ttwasizedgen.</string>
     <string name="room_settings_labs_warning_message">Tigi d timahilin tarmitanin i izemren ad rẓent s wayen ur nettwaṛǧa ara. Seqdec-itent maca ɣur-k·m.</string>
     <string name="deactivate_account_content">Aya ad yerr amiḍan-ik·im ur yettusexdam ara i lebda. Ur tettizmireḍ ara ad tkecmeḍ, ula d amdan-nniḍen ur yettizmir ara ad yales ajerred s usulay-a n useqdac. Aya ad isuffeɣ amiḍan-ik·im seg meṛṛa tixxamin ideg ittekka, yerna ad yekkes akk talqayt n umiḍan-ik·im seg uqeddac n timagit. <b>Ulac tuɣalin ɣer deffir deg tigawt-a</b>.
@@ -2098,14 +2098,14 @@
     <string name="sas_incoming_request_description">Senqed tiɣimit-a i wakken ad tcerḍeḍ fell-as tettwaḍman. Attkal ɣef tɣimiyin n yimendiden yettakk-ak·am-d lehna n uqerru mi ara tesseqdaceḍ iznan yettwawgelhen seg yixef ɣer yixef.</string>
     <string name="sas_error_m_unknown_method">Tiɣimit ur tessaweḍ ara ad teqbel amtawi n tsarut, agbar, MAC neɣ tarrayt SAS</string>
     <string name="room_list_catchup_welcome_body">Af-d iznan ur nettwaɣra ara da</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Taskant n texxamt ara yettwaɣran deg umaḍal ur tettusefrak ara ar tura deg Element</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Taskant n texxamt ara yettwaɣran deg umaḍal ur tettusefrak ara ar tura deg SchildiChat</string>
     <string name="settings_push_gateway_no_pushers">Ulac tinezgarin push ikelsen</string>
     <string name="send_file_step_sending_thumbnail">Tuzna n tenfult (%1$s / %2$s)</string>
     <string name="labs_swipe_to_reply_in_timeline">Rmed afraḍ i tririt deg tesnakudt</string>
     <string name="settings_discovery_no_terms">Aqeddac n timagit i tferneḍ ulac ɣer-s akk tiwtilin n yimeẓla. Ur ttkemmil ara ala ma yella tettekleḍ ɣef umeẓlu</string>
     <string name="labs_allow_extended_logging_summary">Iɣmisen ɣezzifen ad ɛawnen ineflayen s umuddu n wugar n yiɣemisen mi ara tazneḍ aneqqis RageShake, ula ma yili yermed asnas ur yettazen ara agbur n yiznan neɣ isefka-nniḍen usligen.</string>
     <string name="error_network_timeout">Akka d-yettban aqeddac yettaṭṭaf aṭas n wakud ɣef tririt. Yezmer aya yekka-d seg yir tuqqna neɣ seg tuccḍa deg uqeddac. Ma ulac aɣilif ɛreḍ tikkelt-nniḍen ticki.</string>
-    <string name="soft_logout_sso_not_same_user_error">Tiɣimit-a tamirant n useqdac %1$s ma d kečč·kemm ad tesnetmeḍ inekcam i useqdac %2$s. Aya ur t-yessefrak ara Element.
+    <string name="soft_logout_sso_not_same_user_error">Tiɣimit-a tamirant n useqdac %1$s ma d kečč·kemm ad tesnetmeḍ inekcam i useqdac %2$s. Aya ur t-yessefrak ara SchildiChat.
 \nMa ulac aɣilif, deg tazwara sfeḍ isefka, syen kcem tikkelt-nniḍen s umiḍan-nniḍen.</string>
     <string name="settings_developer_mode_summary">Askar n uneflay yermed timahilin i yeffren yerna yezmer daɣen ad yerr asnas ur yerkid ara akken iwata. I yineflayen kan!</string>
     <string name="settings_developer_mode_fail_fast_title">Abrir arurad</string>
@@ -2138,7 +2138,7 @@
     <string name="warning_room_not_created_yet">Mazal ur tettwarna ara texxamt ar tura. Sefsex timerna n texxamt\?</string>
     <string name="invalid_qr_code_uri">Tangalt QR d tarameɣtut (URI d arameɣtu)!</string>
     <string name="settings_security_pin_code_change_pin_summary">Senfel PIN inek·inem amiran</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">Tangalt PIN tettusra yal mi ara teldiḍ Element.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Tangalt PIN tettusra yal mi ara teldiḍ SchildiChat.</string>
     <string name="warning_unsaved_change">Llan yisenfal ur nettusekles ara. Sefsex isenfal\?</string>
     <string name="room_settings_set_avatar">Sbadu avaṭar</string>
     <string name="matrix_to_card_title">Aseɣwen n Matrix</string>
@@ -2176,7 +2176,7 @@
     <string name="room_alias_address_hint">Tansa tamynut i d-yettusuffɣen (am. #alias:server)</string>
     <string name="direct_room_user_list_suggestions_title">Isumar</string>
     <string name="invite_friends_rich_title">🔐️ Rnu-d ɣur-i ɣer element</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">Tangalt PIN d nettat kan i d ttawil s wayes ara teldiḍ Element.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">Tangalt PIN d nettat kan i d ttawil s wayes ara teldiḍ SchildiChat.</string>
     <string name="add_a_topic_link_text">Rnu asentel</string>
     <string name="invite_friends">Snubget-d imeddukkal</string>
     <string name="user_code_my_code">Tangalt-inu</string>
@@ -2210,7 +2210,7 @@
         <item quantity="one">%d tinubga</item>
         <item quantity="other">%d n tnubgiwin</item>
     </plurals>
-    <string name="settings_security_pin_code_grace_period_summary_on">Tangalt PIN tettusra seld 2 tesdatin n war aseqdec n Element.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">Tangalt PIN tettusra seld 2 tesdatin n war aseqdec n SchildiChat.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Iznan dagi ur ttwawgelhen ara seg yixef ɣer yixef</string>
     <string name="qr_code_not_scanned">Tangalt QR ur tettusmiḍen ara!</string>
     <string name="user_code_share">Bḍu tangalt-inu</string>

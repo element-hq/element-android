@@ -689,7 +689,7 @@ Til að halda áfram skaltu setja inn lykilorðið þitt.</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">Ógilt snið samnefnis</string>
     <string name="directory_server_fail_to_retrieve_server">Netþjónninn gæti verið undir miklu álagi eða ekki til taks</string>
     <string name="missing_permissions_warning">Þar sem ýmsar heimildir vantar, eru sumir eiginleikar ekki tiltækir…</string>
-    <string name="no_contact_access_placeholder">Þú heimilaðir Element ekki aðgang að tengiliðum á tækinu</string>
+    <string name="no_contact_access_placeholder">Þú heimilaðir SchildiChat ekki aðgang að tengiliðum á tækinu</string>
     <string name="send_bug_report_rage_shake">Hristu ákveðið til að senda villutilkynningu</string>
 
     <string name="send_bug_report_sent">Það tókst að senda villuskýrsluna</string>
@@ -711,7 +711,7 @@ Ertu alveg viss?</string>
     <string name="settings_set_sync_delay">Hlé milli tveggja samstillingarbeiðna</string>
     <string name="settings_keep_media">Halda gögnum</string>
 
-    <string name="startup_notification_privacy_message">Element getur keyrt í bakgrunni og stýrt tilkynningum á öruggan hátt (getur haft áhrif á rafhlöðunotkun).</string>
+    <string name="startup_notification_privacy_message">SchildiChat getur keyrt í bakgrunni og stýrt tilkynningum á öruggan hátt (getur haft áhrif á rafhlöðunotkun).</string>
 
     <string name="account_email_validation_message">Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram.</string>
     <string name="account_email_validation_error">Tókst ekki að sannreyna tölvupóstfang. Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram</string>
@@ -743,26 +743,26 @@ Ertu alveg viss?</string>
 
     <string name="login_error_unknown_token">Tiltekið aðgangsteikn þekktist ekki</string>
     <string name="call_error_user_not_responding">Ekki var svarað á fjartengda endanum.</string>
-    <string name="permissions_rationale_msg_storage">Element þarf heimild til að nota mynda- og myndskeiðasafn svo hægt sé að senda og vista viðhengi.
+    <string name="permissions_rationale_msg_storage">SchildiChat þarf heimild til að nota mynda- og myndskeiðasafn svo hægt sé að senda og vista viðhengi.
 
 Leyfðu aðgang í næsta sprettglugga til þess að geta sent skrár úr símanum.</string>
-    <string name="permissions_rationale_msg_camera">Element þarf heimild til að nota myndavélina svo hægt sé að taka myndir og hringja myndsímtöl.</string>
+    <string name="permissions_rationale_msg_camera">SchildiChat þarf heimild til að nota myndavélina svo hægt sé að taka myndir og hringja myndsímtöl.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Leyfðu aðgang í næsta sprettglugga til þess að geta hringt.</string>
-    <string name="permissions_rationale_msg_record_audio">Element þarf heimild til að nota hljóðnemann svo hægt sé að hringja hljóðsímtöl.</string>
+    <string name="permissions_rationale_msg_record_audio">SchildiChat þarf heimild til að nota hljóðnemann svo hægt sé að hringja hljóðsímtöl.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Leyfðu aðgang í næsta sprettglugga til þess að geta hringt.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element þarf heimild til að nota myndavélina og hljóðnemann svo hægt sé að hringja myndsímtöl.
+    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat þarf heimild til að nota myndavélina og hljóðnemann svo hægt sé að hringja myndsímtöl.
 
 Leyfðu aðgang í næstu sprettgluggum til þess að geta hringt.</string>
-    <string name="permissions_rationale_msg_contacts">Element þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
+    <string name="permissions_rationale_msg_contacts">SchildiChat þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
 
-Leyfðu aðgang í næsta sprettglugga til þess að finna þá notendur í nafnaskránni sem hægt er að hafa samband við úr Element.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
+Leyfðu aðgang í næsta sprettglugga til þess að finna þá notendur í nafnaskránni sem hægt er að hafa samband við úr SchildiChat.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
 
-Leyfa Element nota tengiliðina ?</string>
+Leyfa SchildiChat nota tengiliðina ?</string>
 
     <string name="settings_deactivate_account_section">Gera notandaaðgang óvirkann</string>
     <string name="settings_deactivate_my_account">Gera notandaaðganginn minn óvirkann</string>
@@ -789,8 +789,8 @@ Leyfa Element nota tengiliðina ?</string>
     <string name="login_error_login_email_not_yet">Tölvupósttengill sem ekki er enn búið að smella á</string>
 
     <string name="malformed_id">Rangt formað auðkenni. Ætti að vera tölvupóstfang eða Matrix-auðkenni á borð við\'@sérheiti:lén\'</string>
-    <string name="settings_opt_in_of_analytics_summary">Element safnar nafnlausum greiningargögnum til að gera okkur kleift að bæta forritið.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Endilega virkjaðu greiningargögn til að hjálpa okkur að bæta Element.</string>
+    <string name="settings_opt_in_of_analytics_summary">SchildiChat safnar nafnlausum greiningargögnum til að gera okkur kleift að bæta forritið.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Endilega virkjaðu greiningargögn til að hjálpa okkur að bæta SchildiChat.</string>
     <string name="room_settings_room_access_warning">Til að tengja við spjallrás verður hún að vera með vistfang.</string>
     <string name="room_preview_try_join_an_unknown_room">Þú ert að reyna að tengjast %s. Myndirðu vilja gerast meðlimur til að geta tekið þátt í samræðunni?</string>
     <string name="room_preview_room_interactions_disabled">Þetta er forskoðun á spjallrásinni. Samskipti spjallrásarinnar hafa verið gerð óvirk.</string>
