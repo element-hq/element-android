@@ -76,10 +76,10 @@ class SearchFragment @Inject constructor(
         controller.listener = this
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         views.searchResultRecycler.cleanup()
         controller.listener = null
+        super.onDestroyView()
     }
 
     override fun invalidate() = withState(searchViewModel) { state ->

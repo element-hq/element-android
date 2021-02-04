@@ -19,8 +19,9 @@ package im.vector.app.features.home.room.breadcrumbs
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -35,7 +36,7 @@ class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: B
                                                        private val session: Session)
     : VectorViewModel<BreadcrumbsViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(initialState: BreadcrumbsViewState): BreadcrumbsViewModel
     }

@@ -16,8 +16,9 @@
 
 package org.matrix.android.sdk.internal.session.room.call
 
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.internal.session.room.RoomGetter
@@ -27,9 +28,9 @@ internal class DefaultRoomCallService @AssistedInject constructor(
         private val roomGetter: RoomGetter
 ) : RoomCallService {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
-        fun create(roomId: String): RoomCallService
+        fun create(roomId: String): DefaultRoomCallService
     }
 
     override fun canStartCall(): Boolean {

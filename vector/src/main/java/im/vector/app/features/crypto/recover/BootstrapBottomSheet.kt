@@ -16,7 +16,9 @@
 
 package im.vector.app.features.crypto.recover
 
+import android.app.Activity
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.KeyEvent
@@ -35,9 +37,12 @@ import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetBootstrapBinding
+import im.vector.app.features.auth.ReAuthActivity
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -63,6 +68,25 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
         return BottomSheetBootstrapBinding.inflate(inflater, container, false)
     }
 
+    private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
+                LoginFlowTypes.SSO -> {
+                    viewModel.handle(BootstrapActions.SsoAuthDone)
+                }
+                LoginFlowTypes.PASSWORD -> {
+                    val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
+                    viewModel.handle(BootstrapActions.PasswordAuthDone(password))
+                }
+                else                    -> {
+                    viewModel.handle(BootstrapActions.ReAuthCancelled)
+                }
+            }
+        } else {
+            viewModel.handle(BootstrapActions.ReAuthCancelled)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.observeViewEvents { event ->
@@ -84,6 +108,14 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
                 is BootstrapViewEvents.SkipBootstrap -> {
                     promptSkip()
                 }
+                is BootstrapViewEvents.RequestReAuth -> {
+                    ReAuthActivity.newIntent(requireContext(),
+                            event.flowResponse,
+                            event.lastErrorCode,
+                            getString(R.string.initialize_cross_signing)).let { intent ->
+                        reAuthActivityResultLauncher.launch(intent)
+                    }
+                }
             }
         }
     }
@@ -102,7 +134,12 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = super.onCreateView(inflater, container, savedInstanceState)
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            dialog?.window?.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        }
         return rootView
     }
 
@@ -143,11 +180,11 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
                 views.bootstrapTitleText.text = getString(R.string.set_a_security_phrase_title)
                 showFragment(BootstrapConfirmPassphraseFragment::class, Bundle())
             }
-            is BootstrapStep.AccountPassword             -> {
+            is BootstrapStep.AccountReAuth               -> {
                 views.bootstrapIcon.isVisible = true
                 views.bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_user))
-                views.bootstrapTitleText.text = getString(R.string.account_password)
-                showFragment(BootstrapAccountPasswordFragment::class, Bundle())
+                views.bootstrapTitleText.text = getString(R.string.re_authentication_activity_title)
+                showFragment(BootstrapReAuthFragment::class, Bundle())
             }
             is BootstrapStep.Initializing                -> {
                 views.bootstrapIcon.isVisible = true

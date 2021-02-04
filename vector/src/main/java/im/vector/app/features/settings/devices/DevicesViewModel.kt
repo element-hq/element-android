@@ -26,16 +26,22 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
-import im.vector.app.core.error.SsoFlowNotSupportedYet
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.auth.ReAuthActivity
+import im.vector.app.features.login.ReAuthHelper
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
@@ -43,13 +49,22 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.api.auth.UIABaseAuth
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.HttpsURLConnection
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
 
 data class DevicesViewState(
         val myDeviceId: String = "",
@@ -69,10 +84,15 @@ data class DeviceFullInfo(
 
 class DevicesViewModel @AssistedInject constructor(
         @Assisted initialState: DevicesViewState,
-        private val session: Session
+        private val session: Session,
+        private val reAuthHelper: ReAuthHelper,
+        private val stringProvider: StringProvider
 ) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
-    @AssistedInject.Factory
+    var uiaContinuation: Continuation<UIABaseAuth>? = null
+    var pendingAuth: UIABaseAuth? = null
+
+    @AssistedFactory
     interface Factory {
         fun create(initialState: DevicesViewState): DevicesViewModel
     }
@@ -85,10 +105,6 @@ class DevicesViewModel @AssistedInject constructor(
             return fragment.devicesViewModelFactory.create(state)
         }
     }
-
-    // temp storage when we ask for the user password
-    private var _currentDeviceId: String? = null
-    private var _currentSession: String? = null
 
     private val refreshPublisher: PublishSubject<Unit> = PublishSubject.create()
 
@@ -188,13 +204,43 @@ class DevicesViewModel @AssistedInject constructor(
         return when (action) {
             is DevicesAction.Refresh                -> queryRefreshDevicesList()
             is DevicesAction.Delete                 -> handleDelete(action)
-            is DevicesAction.Password               -> handlePassword(action)
             is DevicesAction.Rename                 -> handleRename(action)
             is DevicesAction.PromptRename           -> handlePromptRename(action)
             is DevicesAction.VerifyMyDevice         -> handleInteractiveVerification(action)
             is DevicesAction.CompleteSecurity       -> handleCompleteSecurity()
             is DevicesAction.MarkAsManuallyVerified -> handleVerifyManually(action)
             is DevicesAction.VerifyMyDeviceManually -> handleShowDeviceCryptoInfo(action)
+            is DevicesAction.SsoAuthDone            -> {
+                // we should use token based auth
+                // _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
+                // will release the interactive auth interceptor
+                Timber.d("## UIA - FallBack success $pendingAuth , continuation: $uiaContinuation")
+                if (pendingAuth != null) {
+                    uiaContinuation?.resume(pendingAuth!!)
+                } else {
+                    uiaContinuation?.resumeWith(Result.failure((IllegalArgumentException())))
+                }
+                Unit
+            }
+            is DevicesAction.PasswordAuthDone       -> {
+                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+                uiaContinuation?.resume(
+                        UserPasswordAuth(
+                                session = pendingAuth?.session,
+                                password = decryptedPass,
+                                user = session.myUserId
+                        )
+                )
+                Unit
+            }
+            DevicesAction.ReAuthCancelled           -> {
+                Timber.d("## UIA - Reauth cancelled")
+//                _viewEvents.post(DevicesViewEvents.Loading)
+                uiaContinuation?.resumeWith(Result.failure((Exception())))
+                uiaContinuation = null
+                pendingAuth = null
+                Unit
+            }
         }
     }
 
@@ -284,95 +330,48 @@ class DevicesViewModel @AssistedInject constructor(
             )
         }
 
-        session.cryptoService().deleteDevice(deviceId, object : MatrixCallback<Unit> {
-            override fun onFailure(failure: Throwable) {
-                var isPasswordRequestFound = false
-
-                if (failure is Failure.RegistrationFlowError) {
-                    // We only support LoginFlowTypes.PASSWORD
-                    // Check if we can provide the user password
-                    failure.registrationFlowResponse.flows?.forEach { interactiveAuthenticationFlow ->
-                        isPasswordRequestFound = isPasswordRequestFound || interactiveAuthenticationFlow.stages?.any { it == LoginFlowTypes.PASSWORD } == true
-                    }
-
-                    if (isPasswordRequestFound) {
-                        _currentDeviceId = deviceId
-                        _currentSession = failure.registrationFlowResponse.session
-
-                        setState {
-                            copy(
-                                    request = Success(Unit)
-                            )
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                awaitCallback<Unit> {
+                    session.cryptoService().deleteDevice(deviceId, object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            Timber.d("## UIA : deleteDevice UIA")
+                            if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD && reAuthHelper.data != null && errCode == null) {
+                                UserPasswordAuth(
+                                        session = null,
+                                        user = session.myUserId,
+                                        password = reAuthHelper.data
+                                ).let { promise.resume(it) }
+                            } else {
+                                Timber.d("## UIA : deleteDevice UIA > start reauth activity")
+                                _viewEvents.post(DevicesViewEvents.RequestReAuth(flowResponse, errCode))
+                                pendingAuth = DefaultBaseAuth(session = flowResponse.session)
+                                uiaContinuation = promise
+                            }
                         }
-
-                        _viewEvents.post(DevicesViewEvents.RequestPassword)
-                    }
+                    }, it)
                 }
-
-                if (!isPasswordRequestFound) {
-                    // LoginFlowTypes.PASSWORD not supported, and this is the only one Element supports so far...
-                    setState {
-                        copy(
-                                request = Fail(failure)
-                        )
-                    }
-
-                    _viewEvents.post(DevicesViewEvents.Failure(SsoFlowNotSupportedYet()))
-                }
-            }
-
-            override fun onSuccess(data: Unit) {
                 setState {
                     copy(
-                            request = Success(data)
+                            request = Success(Unit)
                     )
                 }
                 // force settings update
                 queryRefreshDevicesList()
-            }
-        })
-    }
-
-    private fun handlePassword(action: DevicesAction.Password) {
-        val currentDeviceId = _currentDeviceId
-        if (currentDeviceId.isNullOrBlank()) {
-            // Abort
-            return
-        }
-
-        setState {
-            copy(
-                    request = Loading()
-            )
-        }
-
-        session.cryptoService().deleteDeviceWithUserPassword(currentDeviceId, _currentSession, action.password, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _currentDeviceId = null
-                _currentSession = null
-
-                setState {
-                    copy(
-                            request = Success(data)
-                    )
-                }
-                // force settings update
-                queryRefreshDevicesList()
-            }
-
-            override fun onFailure(failure: Throwable) {
-                _currentDeviceId = null
-                _currentSession = null
-
-                // Password is maybe not good
+            } catch (failure: Throwable) {
                 setState {
                     copy(
                             request = Fail(failure)
                     )
                 }
-
-                _viewEvents.post(DevicesViewEvents.Failure(failure))
+                if (failure is Failure.OtherServerError && failure.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                    _viewEvents.post(DevicesViewEvents.Failure(Exception(stringProvider.getString(R.string.authentication_error))))
+                } else {
+                    _viewEvents.post(DevicesViewEvents.Failure(Exception(stringProvider.getString(R.string.matrix_error))))
+                }
+                // ...
+                Timber.e(failure, "failed to delete session")
             }
-        })
+        }
     }
 }

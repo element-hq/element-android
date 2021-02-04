@@ -33,4 +33,7 @@
     <!-- Max width for some buttons -->
     <dimen name="button_max_width">280dp</dimen>
 
+    <!-- Navigation Drawer -->
+    <dimen name="navigation_drawer_max_width">320dp</dimen>
+
 </resources>

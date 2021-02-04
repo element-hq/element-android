@@ -15,12 +15,12 @@
  */
 package im.vector.app.features.popup
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import android.widget.ImageView
 import com.tapadoo.alerter.Alerter
 import com.tapadoo.alerter.OnHideAlertListener
@@ -157,32 +157,38 @@ class PopupAlertManager @Inject constructor(private val avatarRenderer: Lazy<Ava
         }
     }
 
-    @SuppressLint("InlinedApi")
     private fun clearLightStatusBar() {
-        weakCurrentActivity?.get()
-                ?.takeIf { Build.VERSION.SDK_INT >= Build.VERSION_CODES.M }
-                // Do not change anything on Dark themes
-                ?.takeIf { ThemeUtils.isLightTheme(it) }
-                ?.let { it.window?.decorView }
-                ?.let { view ->
-                    var flags = view.systemUiVisibility
-                    flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-                    view.systemUiVisibility = flags
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            weakCurrentActivity?.get()
+                    // Do not change anything on Dark themes
+                    ?.takeIf { ThemeUtils.isLightTheme(it) }
+                    ?.window?.decorView
+                    ?.let { view ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            view.windowInsetsController?.setSystemBarsAppearance(0, APPEARANCE_LIGHT_STATUS_BARS)
+                        } else {
+                            @Suppress("DEPRECATION")
+                            view.systemUiVisibility = view.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+                        }
+                    }
+        }
     }
 
-    @SuppressLint("InlinedApi")
     private fun setLightStatusBar() {
-        weakCurrentActivity?.get()
-                ?.takeIf { Build.VERSION.SDK_INT >= Build.VERSION_CODES.M }
-                // Do not change anything on Dark themes
-                ?.takeIf { ThemeUtils.isLightTheme(it) }
-                ?.let { it.window?.decorView }
-                ?.let { view ->
-                    var flags = view.systemUiVisibility
-                    flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                    view.systemUiVisibility = flags
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            weakCurrentActivity?.get()
+                    // Do not change anything on Dark themes
+                    ?.takeIf { ThemeUtils.isLightTheme(it) }
+                    ?.window?.decorView
+                    ?.let { view ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            view.windowInsetsController?.setSystemBarsAppearance(APPEARANCE_LIGHT_STATUS_BARS, APPEARANCE_LIGHT_STATUS_BARS)
+                        } else {
+                            @Suppress("DEPRECATION")
+                            view.systemUiVisibility = view.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                        }
+                    }
+        }
     }
 
     private fun showAlert(alert: VectorAlert, activity: Activity, animate: Boolean = true) {

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.di
+package org.matrix.android.sdk.api.auth
 
-import com.squareup.inject.assisted.dagger2.AssistedModule
-import dagger.Module
+interface UIABaseAuth {
+    /**
+     * This is a session identifier that the client must pass back to the homeserver,
+     * if one is provided, in subsequent attempts to authenticate in the same API call.
+     */
+    val session: String?
 
-@AssistedModule
-@Module(includes = [AssistedInject_SessionAssistedInjectModule::class])
-interface SessionAssistedInjectModule
+    fun hasAuthInfo(): Boolean
+
+    fun copyWithSession(session: String): UIABaseAuth
+
+    fun asMap() : Map<String, *>
+}

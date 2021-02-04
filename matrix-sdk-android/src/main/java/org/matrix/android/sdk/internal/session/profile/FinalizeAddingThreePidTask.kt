@@ -17,10 +17,12 @@
 package org.matrix.android.sdk.internal.session.profile
 
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
+import org.matrix.android.sdk.internal.auth.registration.handleUIA
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -29,13 +31,14 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import timber.log.Timber
 import javax.inject.Inject
 
 internal abstract class FinalizeAddingThreePidTask : Task<FinalizeAddingThreePidTask.Params, Unit> {
     data class Params(
             val threePid: ThreePid,
-            val session: String?,
-            val accountPassword: String?,
+            val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor?,
+            val userAuthParam: UIABaseAuth? = null,
             val userWantsToCancel: Boolean
     )
 }
@@ -62,20 +65,21 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
                     val body = FinalizeAddThreePidBody(
                             clientSecret = pendingThreePids.clientSecret,
                             sid = pendingThreePids.sid,
-                            auth = if (params.session != null && params.accountPassword != null) {
-                                UserPasswordAuth(
-                                        session = params.session,
-                                        user = userId,
-                                        password = params.accountPassword
-                                )
-                            } else null
+                            auth = params.userAuthParam?.asMap()
                     )
                     apiCall = profileAPI.finalizeAddThreePid(body)
                 }
             } catch (throwable: Throwable) {
-                throw throwable.toRegistrationFlowResponse()
-                        ?.let { Failure.RegistrationFlowError(it) }
-                        ?: throwable
+                if (params.userInteractiveAuthInterceptor == null
+                        || !handleUIA(throwable, params.userInteractiveAuthInterceptor) { auth ->
+                            execute(params.copy(userAuthParam = auth))
+                        }
+                ) {
+                    Timber.d("## UIA: propagate failure")
+                    throw  throwable.toRegistrationFlowResponse()
+                            ?.let { Failure.RegistrationFlowError(it) }
+                            ?: throwable
+                }
             }
         }
 

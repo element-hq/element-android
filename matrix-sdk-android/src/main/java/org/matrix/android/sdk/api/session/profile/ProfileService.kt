@@ -20,6 +20,7 @@ package org.matrix.android.sdk.api.session.profile
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.JsonDict
@@ -107,8 +108,7 @@ interface ProfileService {
      * Finalize adding a 3Pids. Call this method once the user has validated that he owns the ThreePid
      */
     fun finalizeAddingThreePid(threePid: ThreePid,
-                               uiaSession: String?,
-                               accountPassword: String?,
+                               userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor,
                                matrixCallback: MatrixCallback<Unit>): Cancelable
 
     /**

@@ -38,15 +38,24 @@ data class SsoIdentityProvider(
          * If present then it must be an HTTPS URL to an image resource.
          * This should be hosted by the homeserver service provider to not leak the client's IP address unnecessarily.
          */
-        @Json(name = "icon") val iconUrl: String?
+        @Json(name = "icon") val iconUrl: String?,
+
+        /**
+         * The `brand` field is **optional**. It allows the client to style the login
+         * button to suit a particular brand. It should be a string matching the
+         * "Common namespaced identifier grammar" as defined in
+         * [MSC2758](https://github.com/matrix-org/matrix-doc/pull/2758).
+         */
+        @Json(name = "brand") val brand: String?
+
 ) : Parcelable {
 
     companion object {
-        // Not really defined by the spec, but we may define some ids here
-        const val ID_GOOGLE = "google"
-        const val ID_GITHUB = "github"
-        const val ID_APPLE = "apple"
-        const val ID_FACEBOOK = "facebook"
-        const val ID_TWITTER = "twitter"
+        const val BRAND_GOOGLE = "org.matrix.google"
+        const val BRAND_GITHUB = "org.matrix.github"
+        const val BRAND_APPLE = "org.matrix.apple"
+        const val BRAND_FACEBOOK = "org.matrix.facebook"
+        const val BRAND_TWITTER = "org.matrix.twitter"
+        const val BRAND_GITLAB = "org.matrix.gitlab"
     }
 }

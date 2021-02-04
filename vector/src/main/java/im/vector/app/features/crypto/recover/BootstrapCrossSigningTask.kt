@@ -20,10 +20,9 @@ import im.vector.app.R
 import im.vector.app.core.platform.ViewModelTask
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
-import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
-import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -38,7 +37,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreat
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
 import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import java.util.UUID
@@ -51,16 +49,12 @@ sealed class BootstrapResult {
 
     abstract class Failure(val error: String?) : BootstrapResult()
 
-    class UnsupportedAuthFlow : Failure(null)
-
     data class GenericError(val failure: Throwable) : Failure(failure.localizedMessage)
     data class InvalidPasswordError(val matrixError: MatrixError) : Failure(null)
     class FailedToCreateSSSSKey(failure: Throwable) : Failure(failure.localizedMessage)
     class FailedToSetDefaultSSSSKey(failure: Throwable) : Failure(failure.localizedMessage)
     class FailedToStorePrivateKeyInSSSS(failure: Throwable) : Failure(failure.localizedMessage)
     object MissingPrivateKey : Failure(null)
-
-    data class PasswordAuthFlowMissing(val sessionId: String) : Failure(null)
 }
 
 interface BootstrapProgressListener {
@@ -68,7 +62,7 @@ interface BootstrapProgressListener {
 }
 
 data class Params(
-        val userPasswordAuth: UserPasswordAuth? = null,
+        val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor,
         val progressListener: BootstrapProgressListener? = null,
         val passphrase: String?,
         val keySpec: SsssKeySpec? = null,
@@ -101,7 +95,10 @@ class BootstrapCrossSigningTask @Inject constructor(
 
             try {
                 awaitCallback<Unit> {
-                    crossSigningService.initializeCrossSigning(params.userPasswordAuth, it)
+                    crossSigningService.initializeCrossSigning(
+                            params.userInteractiveAuthInterceptor,
+                            it
+                    )
                 }
                 if (params.setupMode == SetupMode.CROSS_SIGNING_ONLY) {
                     return BootstrapResult.SuccessCrossSigningOnly
@@ -312,16 +309,6 @@ class BootstrapCrossSigningTask @Inject constructor(
     private fun handleInitializeXSigningError(failure: Throwable): BootstrapResult {
         if (failure is Failure.ServerError && failure.error.code == MatrixError.M_FORBIDDEN) {
             return BootstrapResult.InvalidPasswordError(failure.error)
-        } else {
-            val registrationFlowResponse = failure.toRegistrationFlowResponse()
-            if (registrationFlowResponse != null) {
-                return if (registrationFlowResponse.flows.orEmpty().any { it.stages?.contains(LoginFlowTypes.PASSWORD) == true }) {
-                    BootstrapResult.PasswordAuthFlowMissing(registrationFlowResponse.session ?: "")
-                } else {
-                    // can't do this from here
-                    BootstrapResult.UnsupportedAuthFlow()
-                }
-            }
         }
         return BootstrapResult.GenericError(failure)
     }

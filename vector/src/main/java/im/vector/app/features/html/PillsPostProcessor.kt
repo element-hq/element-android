@@ -19,8 +19,9 @@ package im.vector.app.features.html
 import android.content.Context
 import android.text.Spannable
 import android.text.Spanned
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
@@ -37,7 +38,7 @@ class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomI
                                                      private val sessionHolder: ActiveSessionHolder)
     : EventHtmlRenderer.PostProcessor {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(roomId: String?): PillsPostProcessor
     }

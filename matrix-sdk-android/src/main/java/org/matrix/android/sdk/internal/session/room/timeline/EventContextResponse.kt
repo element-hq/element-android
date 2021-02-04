@@ -21,16 +21,34 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Event
 
 @JsonClass(generateAdapter = true)
-data class EventContextResponse(
+internal data class EventContextResponse(
+        /**
+         * Details of the requested event.
+         */
         @Json(name = "event") val event: Event,
+        /**
+         * A token that can be used to paginate backwards with.
+         */
         @Json(name = "start") override val start: String? = null,
-        @Json(name = "events_before") val eventsBefore: List<Event> = emptyList(),
-        @Json(name = "events_after") val eventsAfter: List<Event> = emptyList(),
+        /**
+         * A list of room events that happened just before the requested event, in reverse-chronological order.
+         */
+        @Json(name = "events_before") val eventsBefore: List<Event>? = null,
+        /**
+         * A list of room events that happened just after the requested event, in chronological order.
+         */
+        @Json(name = "events_after") val eventsAfter: List<Event>? = null,
+        /**
+         * A token that can be used to paginate forwards with.
+         */
         @Json(name = "end") override val end: String? = null,
-        @Json(name = "state") override val stateEvents: List<Event> = emptyList()
+        /**
+         * The state of the room at the last event returned.
+         */
+        @Json(name = "state") override val stateEvents: List<Event>? = null
 ) : TokenChunkEvent {
 
     override val events: List<Event> by lazy {
-        eventsAfter.reversed() + listOf(event) + eventsBefore
+        eventsAfter.orEmpty().reversed() + event + eventsBefore.orEmpty()
     }
 }

@@ -22,6 +22,7 @@ import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.util.Cancelable
@@ -170,14 +171,12 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
     }
 
     override fun finalizeAddingThreePid(threePid: ThreePid,
-                                        uiaSession: String?,
-                                        accountPassword: String?,
+                                        userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor,
                                         matrixCallback: MatrixCallback<Unit>): Cancelable {
         return finalizeAddingThreePidTask
                 .configureWith(FinalizeAddingThreePidTask.Params(
                         threePid = threePid,
-                        session = uiaSession,
-                        accountPassword = accountPassword,
+                        userInteractiveAuthInterceptor = userInteractiveAuthInterceptor,
                         userWantsToCancel = false
                 )) {
                     callback = alsoRefresh(matrixCallback)
@@ -189,8 +188,7 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
         return finalizeAddingThreePidTask
                 .configureWith(FinalizeAddingThreePidTask.Params(
                         threePid = threePid,
-                        session = null,
-                        accountPassword = null,
+                        userInteractiveAuthInterceptor = null,
                         userWantsToCancel = true
                 )) {
                     callback = alsoRefresh(matrixCallback)

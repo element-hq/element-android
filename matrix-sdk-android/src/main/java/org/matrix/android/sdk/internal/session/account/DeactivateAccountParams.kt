@@ -18,21 +18,21 @@ package org.matrix.android.sdk.internal.session.account
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.crypto.model.rest.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 
 @JsonClass(generateAdapter = true)
 internal data class DeactivateAccountParams(
-        @Json(name = "auth")
-        val auth: UserPasswordAuth? = null,
-
         // Set to true to erase all data of the account
         @Json(name = "erase")
-        val erase: Boolean
+        val erase: Boolean,
+
+        @Json(name = "auth")
+        val auth: Map<String, *>? = null
 ) {
     companion object {
-        fun create(userId: String, password: String, erase: Boolean): DeactivateAccountParams {
+        fun create(auth: UIABaseAuth?, erase: Boolean): DeactivateAccountParams {
             return DeactivateAccountParams(
-                    auth = UserPasswordAuth(user = userId, password = password),
+                    auth = auth?.asMap(),
                     erase = erase
             )
         }

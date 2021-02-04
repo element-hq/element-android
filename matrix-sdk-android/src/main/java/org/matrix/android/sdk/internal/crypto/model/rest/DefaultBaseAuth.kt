@@ -13,29 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.matrix.android.sdk.internal.crypto.model.rest
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 
-/**
- * This class provides the authentication data by using user and password
- */
-@JsonClass(generateAdapter = true)
-data class UserPasswordAuth(
+data class DefaultBaseAuth(
+        /**
+         * This is a session identifier that the client must pass back to the homeserver,
+         * if one is provided, in subsequent attempts to authenticate in the same API call.
+         */
+        override val session: String? = null
 
-        // device device session id
-        @Json(name = "session")
-        val session: String? = null,
+) : UIABaseAuth {
+    override fun hasAuthInfo() = true
 
-        // registration information
-        @Json(name = "type")
-        val type: String? = LoginFlowTypes.PASSWORD,
+    override fun copyWithSession(session: String) = this.copy(session = session)
 
-        @Json(name = "user")
-        val user: String? = null,
-
-        @Json(name = "password")
-        val password: String? = null
-)
+    override fun asMap(): Map<String, *> = mapOf("session" to session)
+}

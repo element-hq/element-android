@@ -24,8 +24,9 @@ import android.widget.EditText
 import com.otaliastudios.autocomplete.Autocomplete
 import com.otaliastudios.autocomplete.AutocompleteCallback
 import com.otaliastudios.autocomplete.CharPolicy
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.glide.GlideRequests
@@ -59,7 +60,7 @@ class AutoCompleter @AssistedInject constructor(
 
     private lateinit var autocompleteMemberPresenter: AutocompleteMemberPresenter
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(roomId: String): AutoCompleter
     }
