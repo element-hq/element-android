@@ -32,8 +32,9 @@ class JitsiWidgetProperties(private val uriString: String, val stringProvider: S
     private val configs: Map<String, String?> by lazy {
         configString?.split("&")
                 ?.map { it.split("=") }
+                ?.filter { it.size == 2 }
                 ?.map { (key, value) -> key to URLDecoder.decode(value, "UTF-8") }
                 ?.toMap()
-                ?: mapOf()
+                .orEmpty()
     }
 }
