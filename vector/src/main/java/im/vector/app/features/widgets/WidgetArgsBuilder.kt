@@ -49,14 +49,6 @@ class WidgetArgsBuilder @Inject constructor(
         )
     }
 
-    private fun getTheme(): String {
-        return if (ThemeUtils.isLightTheme(context)) {
-            "light"
-        } else {
-            "dark"
-        }
-    }
-
     @Suppress("UNCHECKED_CAST")
     fun buildStickerPickerArgs(roomId: String, widget: Widget): WidgetArgs {
         val widgetId = widget.widgetId
@@ -68,7 +60,8 @@ class WidgetArgsBuilder @Inject constructor(
                 widgetId = widgetId,
                 urlParams = mapOf(
                         "widgetId" to widgetId,
-                        "room_id" to roomId
+                        "room_id" to roomId,
+                        "theme" to getTheme()
                 ).filterNotNull()
         )
     }
@@ -80,12 +73,23 @@ class WidgetArgsBuilder @Inject constructor(
                 baseUrl = baseUrl,
                 kind = WidgetKind.ROOM,
                 roomId = roomId,
-                widgetId = widgetId
+                widgetId = widgetId,
+                urlParams = mapOf(
+                        "theme" to getTheme()
+                ).filterNotNull()
         )
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun Map<String, String?>.filterNotNull(): Map<String, String> {
         return filterValues { it != null } as Map<String, String>
+    }
+
+    private fun getTheme(): String {
+        return if (ThemeUtils.isLightTheme(context)) {
+            "light"
+        } else {
+            "dark"
+        }
     }
 }
