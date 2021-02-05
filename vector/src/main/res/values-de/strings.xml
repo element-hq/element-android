@@ -2370,4 +2370,9 @@
     <string name="room_settings_permissions_subtitle">Rollen, die zum Ändern verschiedener Teile des Raums erforderlich sind, anzeigen und aktualisieren.</string>
     <string name="room_permissions_send_m_room_server_acl_events">m.room.server_acl-Ereignisse senden</string>
     <string name="room_permissions_change_permissions">Berechtigungen ändern</string>
+    <string name="authentication_error">Authentifizierung fehlgeschlagen</string>
+    <string name="re_authentication_default_confirm_text">Deine Anmeldeinformationen müssen für Element eingegeben werden, um diese Aktion auszuführen.</string>
+    <string name="re_authentication_activity_title">Erneute Authentifizierung erforderlich</string>
+    <string name="failed_to_initialize_cross_signing">Cross Signing konnte nicht eingerichtet werden</string>
+    <string name="error_unauthorized">Nicht autorisierte, fehlende gültige Authentifizierungsdaten</string>
 </resources>
