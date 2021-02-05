@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Bug in WidgetContent.computeURL() (#2767)
 
 Translations 🗣:
  -

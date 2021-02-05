@@ -70,7 +70,7 @@ internal class WidgetFactory @Inject constructor(private val userDataSource: Use
         val myUser = userDataSource.getUser(userId)
         computedUrl = computedUrl
                 .replace("\$matrix_user_id", userId)
-                .replace("\$matrix_display_name", myUser?.displayName ?: userId)
+                .replace("\$matrix_display_name", myUser?.getBestName() ?: userId)
                 .replace("\$matrix_avatar_url", myUser?.avatarUrl ?: "")
                 .replace("\$matrix_widget_id", widgetId)
 
