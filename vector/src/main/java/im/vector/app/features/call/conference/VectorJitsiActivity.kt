@@ -156,7 +156,10 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     override fun onConferenceTerminated(p0: MutableMap<String, Any>?) {
         Timber.v("JitsiMeetViewListener.onConferenceTerminated()")
-        finish()
+        // Do not finish if there is an error
+        if (p0?.get("error") == null) {
+            finish()
+        }
     }
 
     override fun onConferenceJoined(p0: MutableMap<String, Any>?) {
