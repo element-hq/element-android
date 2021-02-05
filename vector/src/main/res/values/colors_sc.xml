@@ -7,7 +7,10 @@
     <color name="accent_sc_dark">#689F38</color>
     <color name="accent_sc_50">#F1F8E9</color>
     <color name="accent_sc_100">#DCEDC8</color>
+    <color name="accent_sc_200">#C5E1A5</color>
+    <color name="accent_sc_300">#AED581</color>
     <color name="accent_sc_900">#33691E</color>
+    <color name="accent_sc_pale">@color/accent_sc_300</color>
     <color name="direct_chat_ring_color_sc">@color/accent_sc_dark</color>
 
     <color name="avatar_fill_sc_1">@color/accent_sc</color>
@@ -31,4 +34,7 @@
 
     <color name="sc_reaction_background_on_light">@color/accent_sc_50</color>
     <color name="sc_reaction_background_on_dark">@color/accent_sc_900</color>
+
+    <!-- This is actually not an SC color, but the one found in element for ic_material_play_circle PNGs -->
+    <color name="element_accent_pale">#76cfa6</color>
 </resources>

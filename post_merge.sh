@@ -9,7 +9,8 @@ source "$mydir/merge_helpers.sh"
 require_clean_git
 
 # Color corrections | TODO more?
-sed -i 's|@color/riotx_accent|?colorAccent|g' vector/src/main/res/layout/*
+sed -i 's|"@color/riotx_accent"|"?colorAccent"|g' vector/src/*/res/layout/*
+sed -i 's|"@style/VectorButtonStyle"|"?materialButtonStyle"|g' vector/src/*/res/layout/*
 uncommitted=`git status --porcelain`
 if [ -z "$uncommitted" ]; then
     echo "Seems like colors are still fine :)"

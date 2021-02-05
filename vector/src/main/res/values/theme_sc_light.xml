@@ -32,6 +32,7 @@
         <item name="riotx_positive_accent_alpha12">@color/accent_sc_alpha12</item>
         <item name="riotx_toolbar_bg">?riotx_background</item>
         <item name="riotx_unread_unimportant_room_badge">?riotx_header_panel_text_secondary</item>
+        <item name="colorAccentPale">@color/accent_sc_pale</item>
 
         <item name="bottomSheetDialogTheme">@style/Vector.BottomSheet.SC.Light</item>
 

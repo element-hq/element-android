@@ -22,49 +22,49 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/debug_test_text_view_link"
-                style="@style/VectorButtonStyle"
+                style="?materialButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Test linkification" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/debug_test_notification"
-                style="@style/VectorButtonStyle"
+                style="?materialButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Test Notification" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/debug_test_material_theme_light"
-                style="@style/VectorButtonStyle"
+                style="?materialButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Test Material theme Light" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/debug_test_material_theme_dark"
-                style="@style/VectorButtonStyle"
+                style="?materialButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Test Material theme Dark" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/debug_show_sas_emoji"
-                style="@style/VectorButtonStyle"
+                style="?materialButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Display all SAS emoji" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/debug_test_crash"
-                style="@style/VectorButtonStyle"
+                style="?materialButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Crash the app" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/debug_scan_qr_code"
-                style="@style/VectorButtonStyle"
+                style="?materialButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Scan QR-code" />
