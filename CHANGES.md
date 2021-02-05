@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Duplicate thumbs | Mobile reactions for 👍 and 👎 are not the same as web (#2776)
+ - Join room by alias other federation error (#2778)
 
 Translations 🗣:
  -
@@ -17,7 +18,7 @@ SDK API changes ⚠️:
  -
 
 Build 🧱:
- -
+ - Upgrade build tools
 
 Test:
  -

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">uk</string>
-    <string name="resources_country_code">UA</string>
     <!-- theme -->
     <string name="light_theme">Світла Тема</string>
     <string name="dark_theme">Темна Тема</string>
@@ -313,7 +309,7 @@
     <string name="ssl_logout_account">Вийти</string>
     <string name="ssl_remain_offline">Нехтувати</string>
     <string name="ssl_fingerprint_hash">Відбиток (%s):</string>
-    <string name="ssl_could_not_verify">Не вдалося перевірити сертифікат сервера.</string>
+    <string name="ssl_could_not_verify">Не вдалося перевірити сертифікат віддаленого сервера.</string>
     <string name="ssl_cert_not_trust">Це може означати, що хтось зі злими намірами намагається перехопити ваш трафік або ваш телефон не довіряє сертифікату, наданому віддаленим сервером.</string>
     <string name="ssl_cert_new_account_expl">Якщо адміністратор сервера сказав цього чекати, переконайтесь, що відбиток нижче збігається з відбитком, наданим ним.</string>
     <string name="ssl_unexpected_existing_expl">Сертифікат почав відрізнятися від того, якому довіряв ваш телефон. Це ДУЖЕ НЕЗВИЧНО. Наполегливо радимо НЕ ПРИЙМАТИ цей новий сертифікат.</string>
@@ -814,7 +810,7 @@
     <string name="widget_integration_invalid_parameter">Недійсний параметр.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Відправляти повідомлення клавішею Enter</string>
     <string name="settings_labs_enable_send_voice">Надсилати голосові повідомлення</string>
-    <string name="conference_call_warning_message">Конференц-зв’язок знаходиться у розробці та може виявитися ненадійним.</string>
+    <string name="conference_call_warning_message">Конференц-зв’язок перебуває в розробці та може бути ненадійним.</string>
     <string name="command_description_emote">Відобразити дію</string>
     <string name="command_description_ban_user">Блокувати користувача із вказаним ID</string>
     <string name="command_description_unban_user">Розблокувати користувача із вказаним ID</string>
@@ -930,7 +926,6 @@
     <string name="accept">Прийняти</string>
     <string name="auth_accept_policies">Будь ласка, ознайомтесь та прийміть правила цього серверу:</string>
     <string name="action_mark_room_read">Позначити як прочитане</string>
-    <string name="resources_script">Cyrl</string>
     <string name="notification_sync_init">Запуск сервісу</string>
     <string name="title_activity_keys_backup_setup">Резервна копія ключа</string>
     <string name="title_activity_keys_backup_restore">Використати резервну копію ключа</string>

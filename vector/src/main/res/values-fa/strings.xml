@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">fa</string>
-    <string name="resources_country_code">IR</string>
     <string name="light_theme">زمینهٔ روشن</string>
     <string name="dark_theme">زمینهٔ تیره</string>
     <string name="black_them">زمینهٔ سیاه</string>
@@ -299,7 +297,6 @@
     <string name="auth_add_email_message_2">رایانامه‌ای برای بازیابی تنظیم کرده تا بتوانید در صورت نیاز، از طریقش به دست افرادی که می‌شناسید، قابل کشف باشید.</string>
     <string name="auth_add_phone_message_2">ثبت شماره تلفن (بعدا در صورت دلخواه می توانید از آن برای شناسایی دوستان خود استفاده کنید).</string>
     <string name="auth_reset_password_message">نشانی رایانامهٔ پیوسته به حسابتان را برای بازنشانی گذواژه‌تان وارد کنید:</string>
-    <string name="resources_script">Arab</string>
     <string name="room_participants_invite_search_another_user">شناسهٔ کاربری، نام یا رایانامه</string>
     <string name="room_message_placeholder_reply_to_encrypted">فرستادن پاسخی رمزشده…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">فرستادن یک پاسخ (رمزنشده)…</string>
@@ -2264,9 +2261,9 @@
     <string name="room_settings_alias_title">نشانی‌های اتاق</string>
     <string name="room_settings_room_access_title">دسترسی اتاق</string>
     <string name="action_add">افزودن</string>
-    <string name="settings_security_pin_code_change_pin_summary">پین کنونی خود را تغییر دهید</string>
+    <string name="settings_security_pin_code_change_pin_summary">تغییر پین کنونیتان</string>
     <string name="settings_security_pin_code_change_pin_title">تغییر پین</string>
-    <string name="room_preview_no_preview_join">اتاق قابل پیش‌نمایش نیست. آیا می‌خواهید به آن بپیوندید؟</string>
+    <string name="room_preview_no_preview_join">این اتاق نمی‌تواند پیش‌نمایش یابد. می‌خواهید به آن بپیوندید؟</string>
     <string name="room_alias_action_unpublish">لغو انتشار این نشانی</string>
     <string name="room_alias_address_hint">نشانی جدید منتشر شده (ب.ن. #نام:کارساز)</string>
     <string name="room_alias_address_empty">هنوز نشانی دیگری منتشر نشده است.</string>
@@ -2279,4 +2276,43 @@
     <string name="room_alias_publish_to_directory">انتشار این اتاق برای عموم در شاخهٔ اتاق %1$s؟</string>
     <string name="room_alias_local_address_subtitle">تنظیم نشانی‌ها برای این اتاق تا کاربران بتوانند از طریق کارساز خانگیتان (%1$s) بیابندش</string>
     <string name="room_alias_publish">انتشار این اتاق برای عموم در شاخهٔ اتاق %1$s؟</string>
+    <string name="system_theme">پیش‌گزیدهٔ سامانه</string>
+    <string name="settings_chat_effects_title">نمایش جلوه‌های گپ</string>
+    <string name="settings_chat_effects_description">استفاده از دستور ‪/confetti‬ یا فرستادن پیام‌هایی با ❄️ یا 🎉</string>
+    <string name="room_participants_leave_private_warning">این اتاق عمومی نیست. نخواهید توانست بدون دعوت، دوباره بپیوندید.</string>
+    <string name="room_settings_permissions_title">اجازه‌های اتاق</string>
+    <string name="room_settings_permissions_subtitle">دیدن و به‌روز رسانی نقش‌های لازم برای تغییر بخش‌های مختلف اتاق.</string>
+    <string name="room_permissions_title">اجازه‌ها</string>
+    <string name="room_permissions_notice">گزینش اجازه‌های لازم برای تغییر بخش‌های مختلف اتاق</string>
+    <string name="room_permissions_notice_read_only">اجازهٔ به‌روز رسانی نقش‌های لازم برای تغییر بخش‌های مختلف اتاق را ندارید</string>
+    <string name="room_permissions_default_role">نقش پیش‌گزیده</string>
+    <string name="room_permissions_send_messages">فرستادن پیام‌ها</string>
+    <string name="room_permissions_invite_users">دعوت کاربران</string>
+    <string name="room_permissions_change_settings">تغییر تنظیمات</string>
+    <string name="room_permissions_kick_users">اخراج کاربران</string>
+    <string name="room_permissions_ban_users">تحریم کاربران</string>
+    <string name="room_permissions_remove_messages_sent_by_others">برداشتن پیام‌های دیگران</string>
+    <string name="room_permissions_notify_everyone">آگاه کردن همه</string>
+    <string name="room_permissions_modify_widgets">دستکاری ابزارک‌ها</string>
+    <string name="room_permissions_change_room_avatar">تغییر آواتار اتاق</string>
+    <string name="room_permissions_change_main_address_for_the_room">تغییر نشانی اصلی اتاق</string>
+    <string name="room_permissions_enable_room_encryption">به کار انداختن رمزنگاری اتاق</string>
+    <string name="room_permissions_change_history_visibility">تغییر نمایانی تاریخچه</string>
+    <string name="room_permissions_change_room_name">تغییر نام اتاق</string>
+    <string name="room_permissions_change_permissions">تغییر اجازه‌ها</string>
+    <string name="room_permissions_send_m_room_server_acl_events">فرستادن رویدادهای m.room.server_acl</string>
+    <string name="room_permissions_upgrade_the_room">ارتقای اتاق</string>
+    <string name="room_permissions_change_topic">تغییر موضوع</string>
+    <string name="settings_show_emoji_keyboard">نمایش صفحه‌کلید اموجی</string>
+    <string name="settings_show_emoji_keyboard_summary">افزودن دکمه‌ای به پیام‌ساز برای گشودن صفحه‌کلید اموجی</string>
+    <string name="login_social_continue">یا</string>
+    <string name="login_social_continue_with">ادامه با %s</string>
+    <string name="login_social_signup_with">ثبت‌نام با %s</string>
+    <string name="login_social_signin_with">ورود با %s</string>
+    <string name="login_social_sso">ورود یک‌پارچه</string>
+    <string name="login_clear_homeserver_history">پاک‌سازی تاریخچه</string>
+    <string name="command_confetti">فرستادن پیام داده با کاغذ رنگی</string>
+    <string name="command_snow">فرستادن پیام داده با برف</string>
+    <string name="default_message_emote_confetti">فرستادن کاغذ رنگی 🎉</string>
+    <string name="default_message_emote_snow">فرستادن برف ❄️</string>
 </resources>

@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">cy</string>
-    <string name="resources_country_code">GB</string>
-    <string name="resources_script">Latn</string>
 
     <string name="light_theme">Thema Golau</string>
     <string name="dark_theme">Thema Tywyll</string>

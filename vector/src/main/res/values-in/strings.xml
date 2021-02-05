@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">in</string>
-    <string name="resources_country_code">ID</string>
-
     <string name="title_activity_home">Pesan</string>
     <string name="title_activity_room">Ruang</string>
     <string name="title_activity_settings">Pengaturan</string>
