@@ -10,6 +10,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Duplicate thumbs | Mobile reactions for 👍 and 👎 are not the same as web (#2776)
  - Join room by alias other federation error (#2778)
+ - RTL: some arrows should be rotated in RTL (#2757)
 
 Translations 🗣:
  -
