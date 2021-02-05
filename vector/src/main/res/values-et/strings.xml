@@ -2315,4 +2315,9 @@
     <string name="room_settings_permissions_title">Õigused jututoas</string>
     <string name="room_participants_leave_private_warning">See ei ole avalik jututuba. Ilma kutseta sa ei saa uuesti liituda.</string>
     <string name="system_theme">Süsteemi vaikeseadistused</string>
+    <string name="authentication_error">Autentimine ei õnnestunud</string>
+    <string name="re_authentication_default_confirm_text">Selle tegevuse jaoks palub Element sul sisestada oma kasutajanime ja salasõna.</string>
+    <string name="re_authentication_activity_title">Palun korda autentimist</string>
+    <string name="failed_to_initialize_cross_signing">Risttunnustamise alustamine ei õnnestunud</string>
+    <string name="error_unauthorized">Volitused puuduvad, kasutajakonto ja/või salasõna on valed</string>
 </resources>
