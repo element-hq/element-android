@@ -22,6 +22,7 @@ import im.vector.app.core.resources.StringProvider
 
 class JitsiWidgetProperties(private val uriString: String, val stringProvider: StringProvider) {
     val domain: String by lazy { configs["conferenceDomain"] ?: stringProvider.getString(R.string.preferred_jitsi_domain) }
+    val confId: String? by lazy { configs["conferenceId"] }
     val displayName: String? by lazy { configs["displayName"] }
     val avatarUrl: String? by lazy { configs["avatarUrl"] }
 
