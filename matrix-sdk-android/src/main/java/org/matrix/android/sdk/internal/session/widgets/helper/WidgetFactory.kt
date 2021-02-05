@@ -70,7 +70,7 @@ internal class WidgetFactory @Inject constructor(private val userDataSource: Use
         var computedUrl = url ?: return null
         val myUser = userDataSource.getUser(userId)
 
-        val keyValue = data.mapKeys { "\$$it" }.toMutableMap()
+        val keyValue = data.mapKeys { "\$${it.key}" }.toMutableMap()
 
         keyValue[WIDGET_PATTERN_MATRIX_USER_ID] = userId
         keyValue[WIDGET_PATTERN_MATRIX_DISPLAY_NAME] = myUser?.getBestName() ?: userId
