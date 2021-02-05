@@ -37,6 +37,7 @@ import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import org.jitsi.meet.sdk.JitsiMeetView
 import org.jitsi.meet.sdk.JitsiMeetViewListener
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import timber.log.Timber
 import java.net.URL
 import javax.inject.Inject
 
@@ -154,13 +155,16 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     }
 
     override fun onConferenceTerminated(p0: MutableMap<String, Any>?) {
+        Timber.v("JitsiMeetViewListener.onConferenceTerminated()")
         finish()
     }
 
     override fun onConferenceJoined(p0: MutableMap<String, Any>?) {
+        Timber.v("JitsiMeetViewListener.onConferenceJoined()")
     }
 
     override fun onConferenceWillJoin(p0: MutableMap<String, Any>?) {
+        Timber.v("JitsiMeetViewListener.onConferenceWillJoin()")
     }
 
     companion object {
