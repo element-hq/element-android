@@ -2151,4 +2151,5 @@
     <string name="soft_logout_clear_data_notice">Atenció: les teves dades personals (incloses les claus de xifrat) encara estan desades en aquest dispositiu.
 \n
 \nEsborra-les si ja no vols utilitzar aquest dispositiu o vols iniciar sessió amb un altre compte.</string>
+    <string name="error_unauthorized">No estàs autoritzat, no s\'han trobat credencials d\'autenticació vàlides</string>
 </resources>
