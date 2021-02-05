@@ -16,7 +16,6 @@
 
 package im.vector.app.features.call.conference
 
-import android.net.Uri
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
