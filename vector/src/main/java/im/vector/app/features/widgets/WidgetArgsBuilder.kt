@@ -16,11 +16,16 @@
 
 package im.vector.app.features.widgets
 
+import android.content.Context
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
-class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSessionHolder) {
+class WidgetArgsBuilder @Inject constructor(
+        private val sessionHolder: ActiveSessionHolder,
+        private val context: Context
+) {
 
     @Suppress("UNCHECKED_CAST")
     fun buildIntegrationManagerArgs(roomId: String, integId: String?, screen: String?): WidgetArgs {
@@ -38,9 +43,18 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
                 urlParams = mapOf(
                         "screen" to normalizedScreen,
                         "integ_id" to integId,
-                        "room_id" to roomId
+                        "room_id" to roomId,
+                        "theme" to getTheme()
                 ).filterNotNull()
         )
+    }
+
+    private fun getTheme(): String {
+        return if (ThemeUtils.isLightTheme(context)) {
+            "light"
+        } else {
+            "dark"
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
