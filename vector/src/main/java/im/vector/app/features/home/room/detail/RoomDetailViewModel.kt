@@ -400,15 +400,20 @@ class RoomDetailViewModel @AssistedInject constructor(
 
             // We use the default element wrapper for this widget
             // https://github.com/vector-im/element-web/blob/develop/docs/jitsi-dev.md
-            val url = "https://app.element.io/jitsi.html" +
-                    "?confId=$confId" +
-                    "#conferenceDomain=\$domain" +
-                    "&conferenceId=\$conferenceId" +
-                    "&isAudioOnly=${!action.withVideo}" +
-                    "&displayName=\$matrix_display_name" +
-                    "&avatarUrl=\$matrix_avatar_url" +
-                    "&userId=\$matrix_user_id"
-
+            // https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/utils/WidgetUtils.ts#L469
+            val url = buildString {
+                append("https://app.element.io/jitsi.html")
+                // ElementWeb does not do that
+                // appendParamToUrl("confId", confId)
+                append("#conferenceDomain=\$domain")
+                append("&conferenceId=\$conferenceId")
+                append("&isAudioOnly=\$isAudioOnly")
+                append("&displayName=\$matrix_display_name")
+                append("&avatarUrl=\$matrix_avatar_url")
+                append("&userId=\$matrix_user_id")
+                append("&roomId=\$matrix_room_id")
+                append("&theme=\$theme")
+            }
             val widgetEventContent = mapOf(
                     "url" to url,
                     "type" to WidgetType.Jitsi.legacy,
