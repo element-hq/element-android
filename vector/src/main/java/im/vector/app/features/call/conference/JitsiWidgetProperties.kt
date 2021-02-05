@@ -19,6 +19,7 @@ package im.vector.app.features.call.conference
 import android.net.Uri
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import java.net.URLDecoder
 
 class JitsiWidgetProperties(private val uriString: String, val stringProvider: StringProvider) {
     val domain: String by lazy { configs["conferenceDomain"] ?: stringProvider.getString(R.string.preferred_jitsi_domain) }
@@ -31,7 +32,7 @@ class JitsiWidgetProperties(private val uriString: String, val stringProvider: S
     private val configs: Map<String, String?> by lazy {
         configString?.split("&")
                 ?.map { it.split("=") }
-                ?.map { (key, value) -> key to value }
+                ?.map { (key, value) -> key to URLDecoder.decode(value, "UTF-8") }
                 ?.toMap()
                 ?: mapOf()
     }
