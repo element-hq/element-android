@@ -21,8 +21,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.crypto.OutboundSessionKeySharingStrategy
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.internal.session.room.RoomGetter
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import timber.log.Timber
@@ -36,7 +41,10 @@ import timber.log.Timber
 internal class DefaultTypingService @AssistedInject constructor(
         @Assisted private val roomId: String,
         private val taskExecutor: TaskExecutor,
-        private val sendTypingTask: SendTypingTask
+        private val sendTypingTask: SendTypingTask,
+        private val matrixConfiguration: MatrixConfiguration,
+        private val cryptoService: CryptoService,
+        private val roomGetter: RoomGetter
 ) : TypingService {
 
     @AssistedFactory
@@ -68,6 +76,11 @@ internal class DefaultTypingService @AssistedInject constructor(
         lastRequestTimestamp = now
 
         currentTask?.cancel()
+
+        if (roomGetter.getRoom(roomId)?.isEncrypted().orFalse()
+                && matrixConfiguration.outboundSessionKeySharingStrategy == OutboundSessionKeySharingStrategy.WhenTyping) {
+            cryptoService.ensureOutboundSession(roomId)
+        }
 
         val params = SendTypingTask.Params(roomId, true)
         currentTask = sendTypingTask

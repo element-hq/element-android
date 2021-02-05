@@ -30,6 +30,7 @@ import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
+import org.matrix.android.sdk.internal.crypto.algorithms.IMXGroupEncryption
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
@@ -61,7 +62,7 @@ internal class MXMegolmEncryption(
         private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope
-) : IMXEncrypting {
+) : IMXEncrypting, IMXGroupEncryption {
 
     // OutboundSessionInfo. Null if we haven't yet started setting one up. Note
     // that even if this is non-null, it may not be ready for use (in which

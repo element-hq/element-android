@@ -53,6 +53,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
+import org.matrix.android.sdk.internal.crypto.algorithms.IMXGroupEncryption
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXWithHeldExtension
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
@@ -667,7 +668,12 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun discardOutboundSession(roomId: String) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            roomEncryptorsStore.get(roomId)?.discardSessionKey()
+            val roomEncryptor = roomEncryptorsStore.get(roomId)
+            if (roomEncryptor is IMXGroupEncryption) {
+                roomEncryptor.discardSessionKey()
+            } else {
+                Timber.e("## CRYPTO | discardOutboundSession() for:$roomId: Unable to handle IMXGroupEncryption")
+            }
         }
     }
 
@@ -1298,7 +1304,12 @@ internal class DefaultCryptoService @Inject constructor(
                         getEncryptionAlgorithm(roomId)?.let { safeAlgorithm ->
                             val userIds = getRoomUserIds(roomId)
                             if (setEncryptionInRoom(roomId, safeAlgorithm, false, userIds)) {
-                                roomEncryptorsStore.get(roomId)?.ensureOutboundSession(getRoomUserIds(roomId))
+                                val roomEncryptor = roomEncryptorsStore.get(roomId)
+                                if (roomEncryptor is IMXGroupEncryption) {
+                                    roomEncryptor.ensureOutboundSession(getRoomUserIds(roomId))
+                                } else {
+                                    Timber.e("## CRYPTO | ensureOutboundSession() for:$roomId: Unable to handle IMXGroupEncryption for $safeAlgorithm")
+                                }
                             }
                         }
                     }
