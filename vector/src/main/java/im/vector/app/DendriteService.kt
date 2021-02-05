@@ -123,7 +123,11 @@ class DendriteService : Service() {
             if (conduit != null) {
                 val port = conduit.port()
                 if (port > 0) {
-                    monolith?.disconnectPort(port)
+                    try {
+                        monolith?.disconnectPort(port)
+                    } catch (e: Exception) {
+                        // no biggie
+                    }
                 }
             }
 
@@ -257,7 +261,7 @@ class DendriteService : Service() {
             scanFilters.add(scanFilter)
 
             val scanSettings = ScanSettings.Builder()
-                    .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+                    .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
                     .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
                     .build()
 
@@ -294,7 +298,7 @@ class DendriteService : Service() {
                         Timber.i("BLE: Connected inbound $device PSM $l2capPSM")
 
                         Timber.i("Creating DendriteBLEPeering")
-                        val conduit = monolith!!.conduit("BLE")
+                        val conduit = monolith!!.conduit("BLE-"+device)
                         conduits[device] = conduit
                         connections[device] = DendriteBLEPeering(conduit, remote)
                         Timber.i("Starting DendriteBLEPeering")
