@@ -1,0 +1,2 @@
+Hauptänderungen in dieser Version: Unterstützung für soziale Anmeldungen.
+Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases/tag/v1.0.15

@@ -1,0 +1,2 @@
+Hauptänderungen in dieser Version: Bearbeiten von Raumberechtigungen, automatisches Hell/Dunkel-Design und eine Reihe von Fehlerkorrekturen.
+Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases/tag/v1.0.14
