@@ -80,8 +80,9 @@ class DendriteService : Service() {
     private var scanner = adapter.bluetoothLeScanner
 
     private var l2capServer: BluetoothServerSocket = adapter.listenUsingInsecureL2capChannel()
-    private var l2capPSM: ByteArray = intToBytes(l2capServer.psm)
+    private var l2capPSM: ByteArray = intToBytes(l2capServer.psm.toShort())
 
+    private var connecting: MutableMap<String, Boolean> = mutableMapOf<String, Boolean>()
     private var connections: MutableMap<String, DendriteBLEPeering> = mutableMapOf<String, DendriteBLEPeering>()
     private var conduits: MutableMap<String, Conduit> = mutableMapOf<String, Conduit>()
 
@@ -131,6 +132,7 @@ class DendriteService : Service() {
                 }
             }
 
+            connecting.remove(device)
             connections.remove(device)
             conduits.remove(device)
 
@@ -199,7 +201,7 @@ class DendriteService : Service() {
 
         if (peers == 0) {
             title = "No connectivity"
-            text = "There are no nearby devices"
+            text = "There are no nearby devices connected"
         } else {
             text = when (sessions) {
                 0    -> "No active connections"
@@ -242,6 +244,8 @@ class DendriteService : Service() {
         }, 0, 1000)
 
         if (adapter.isEnabled && adapter.isMultipleAdvertisementSupported) {
+            manager = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+
             val advertiseSettings = AdvertiseSettings.Builder()
                     .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
                     .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
@@ -261,24 +265,16 @@ class DendriteService : Service() {
             scanFilters.add(scanFilter)
 
             val scanSettings = ScanSettings.Builder()
-                    .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
+                    .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
                     .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
                     .build()
 
-            GlobalScope.launch {
-                while (monolith != null) {
-                    advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
-                    scanner.startScan(scanFilters, scanSettings, scanCallback)
-                    delay(60000L)
-                    advertiser.stopAdvertising(advertiseCallback)
-                    scanner.stopScan(scanCallback)
-                }
-            }
+            advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
+            scanner.startScan(scanFilters, scanSettings, scanCallback)
 
             gattCharacteristic = BluetoothGattCharacteristic(psmUUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
             gattService.addCharacteristic(gattCharacteristic)
 
-            manager = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
             gattServer = manager.openGattServer(applicationContext, gattServerCallback)
             gattServer.addService(gattService)
 
@@ -340,22 +336,32 @@ class DendriteService : Service() {
             super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
             gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, offset, l2capPSM);
         }
+
+        override fun onConnectionStateChange(device: BluetoothDevice?, status: Int, newState: Int) {
+            super.onConnectionStateChange(device, status, newState)
+        }
     }
 
     private val gattCallback: BluetoothGattCallback = object : BluetoothGattCallback() {
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             super.onConnectionStateChange(gatt, status, newState)
+
             if (newState == BluetoothProfile.STATE_CONNECTED) {
+                Timber.i("BLE: Discovering services via GATT ${gatt.toString()}")
                 gatt?.discoverServices()
+            } else {
+                connecting.remove(gatt?.device?.address?.toString())
             }
         }
 
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
             super.onServicesDiscovered(gatt, status)
             if (status != BluetoothGatt.GATT_SUCCESS) {
+                connecting.remove(gatt?.device?.address?.toString())
                 return
             }
             val services = gatt?.services ?: return
+            Timber.i("BLE: Found services via GATT ${gatt.toString()}")
             services.forEach { service ->
                 if (service.uuid == serviceUUID.uuid) {
                     service.characteristics.forEach { characteristic ->
@@ -370,7 +376,10 @@ class DendriteService : Service() {
 
         override fun onCharacteristicRead(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int) {
             super.onCharacteristicRead(gatt, characteristic, status)
-
+            if (status != BluetoothGatt.GATT_SUCCESS) {
+                connecting.remove(gatt?.device?.address?.toString())
+                return
+            }
             val device = gatt?.device ?: return
             val psmBytes = characteristic?.value ?: return
             val psm = bytesToInt(psmBytes)
@@ -382,7 +391,7 @@ class DendriteService : Service() {
 
             Timber.i("BLE: Connecting outbound $device PSM $psm")
 
-            val socket = device.createInsecureL2capChannel(psm)
+            val socket = device.createInsecureL2capChannel(psm.toInt())
             try {
                 socket.connect()
             } catch (e: Exception) {
@@ -413,6 +422,7 @@ class DendriteService : Service() {
 
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
             super.onStartSuccess(settingsInEffect)
+            Toast.makeText(applicationContext, "BLE advertise started", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -425,30 +435,42 @@ class DendriteService : Service() {
 
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
+            if (!result.isConnectable || result.scanRecord?.serviceUuids?.contains(serviceUUID) != true) {
+                return
+            }
 
             val key = result.device.address.toString()
+           // Timber.i("BLE: Scan result found $key")
+
             if (connections.containsKey(key)) {
                 val connection = connections[key]
                 if (connection?.isConnected == true) {
-                    Timber.i("Ignoring device $key that we are already connected to")
+                   // Timber.i("BLE: Ignoring device $key that we are already connected to")
                     return
                 }
             }
 
+            if (connecting.containsKey(key)) {
+               // Timber.i("BLE: Ignoring device $key that we are already connecting to")
+                return
+            }
+
+            Timber.i("BLE: Connecting to $key")
+            connecting[key] = true
             result.device.connectGatt(applicationContext, false, gattCallback)
         }
     }
 
-    private fun intToBytes(x: Int): ByteArray {
-        val buffer: ByteBuffer = ByteBuffer.allocate(java.lang.Integer.BYTES)
-        buffer.putInt(x)
+    private fun intToBytes(x: Short): ByteArray {
+        val buffer: ByteBuffer = ByteBuffer.allocate(java.lang.Short.BYTES)
+        buffer.putShort(x)
         return buffer.array()
     }
 
-    fun bytesToInt(bytes: ByteArray): Int {
-        val buffer: ByteBuffer = ByteBuffer.allocate(java.lang.Integer.BYTES)
-        buffer.put(bytes.sliceArray(0 until java.lang.Integer.BYTES))
+    fun bytesToInt(bytes: ByteArray): Short {
+        val buffer: ByteBuffer = ByteBuffer.allocate(java.lang.Short.BYTES)
+        buffer.put(bytes.sliceArray(0 until java.lang.Short.BYTES))
         buffer.flip()
-        return buffer.int
+        return buffer.short
     }
 }
