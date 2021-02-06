@@ -9,6 +9,8 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Bug in WidgetContent.computeURL() (#2767)
+ - Duplicate thumbs | Mobile reactions for 👍 and 👎 are not the same as web (#2776)
+ - Join room by alias other federation error (#2778)
 
 Translations 🗣:
  -
