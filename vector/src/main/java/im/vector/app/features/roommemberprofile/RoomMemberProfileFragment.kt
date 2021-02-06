@@ -242,9 +242,6 @@ class RoomMemberProfileFragment @Inject constructor(
                 headerViews.memberProfileAvatarView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
-                headerViews.memberProfileNameView.setOnClickListener { _ ->
-                    onOverrideColorClicked()
-                }
                 views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
                     onAvatarClicked(view, userMatrixItem)
                 }
