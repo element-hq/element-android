@@ -16,11 +16,16 @@
 
 package im.vector.app.features.widgets
 
+import android.content.Context
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
-class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSessionHolder) {
+class WidgetArgsBuilder @Inject constructor(
+        private val sessionHolder: ActiveSessionHolder,
+        private val context: Context
+) {
 
     @Suppress("UNCHECKED_CAST")
     fun buildIntegrationManagerArgs(roomId: String, integId: String?, screen: String?): WidgetArgs {
@@ -38,7 +43,8 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
                 urlParams = mapOf(
                         "screen" to normalizedScreen,
                         "integ_id" to integId,
-                        "room_id" to roomId
+                        "room_id" to roomId,
+                        "theme" to getTheme()
                 ).filterNotNull()
         )
     }
@@ -54,7 +60,8 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
                 widgetId = widgetId,
                 urlParams = mapOf(
                         "widgetId" to widgetId,
-                        "room_id" to roomId
+                        "room_id" to roomId,
+                        "theme" to getTheme()
                 ).filterNotNull()
         )
     }
@@ -66,12 +73,23 @@ class WidgetArgsBuilder @Inject constructor(private val sessionHolder: ActiveSes
                 baseUrl = baseUrl,
                 kind = WidgetKind.ROOM,
                 roomId = roomId,
-                widgetId = widgetId
+                widgetId = widgetId,
+                urlParams = mapOf(
+                        "theme" to getTheme()
+                ).filterNotNull()
         )
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun Map<String, String?>.filterNotNull(): Map<String, String> {
         return filterValues { it != null } as Map<String, String>
+    }
+
+    private fun getTheme(): String {
+        return if (ThemeUtils.isLightTheme(context)) {
+            "light"
+        } else {
+            "dark"
+        }
     }
 }
