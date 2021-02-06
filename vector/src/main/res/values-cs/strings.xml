@@ -525,7 +525,7 @@
     <string name="settings_add_3pid_flow_not_supported">Nelze provést z Element mobile</string>
     <string name="settings_add_3pid_authentication_needed">Ověření je nutné</string>
     <string name="settings_notification_privacy">Soukromí oznámení</string>
-    <string name="settings_notification_troubleshoot">Řešit oznámení</string>
+    <string name="settings_notification_troubleshoot">Odstraňování problémů s oznámeními</string>
     <string name="settings_troubleshoot_diagnostic">Řešit diagnostiku</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Spustit testy</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Spouštím… (%1$d z %2$d)</string>
@@ -1829,7 +1829,7 @@
     <string name="settings_messages_in_e2e_one_to_one">Zašifrované zprávy v chatech one-to-one</string>
     <string name="settings_messages_in_e2e_group_chat">Zašifrované zprávy ve skupinových chatech</string>
     <string name="settings_when_rooms_are_upgraded">Když dojde k upgradu místností</string>
-    <string name="settings_troubleshoot_title">Řešit problémy</string>
+    <string name="settings_troubleshoot_title">Řešení problémů</string>
     <string name="settings_notification_advanced_summary">Nastavit důležitost oznámení podle události</string>
     <string name="command_description_plain">Odešle zprávu jako prostý text bez interpretace markdown</string>
     <string name="auth_invalid_login_param_space_in_password">Nesprávné uživatelské jméno nebo heslo. Zadané heslo začíná nebo končí mezerami, prosím, zkontrolovat.</string>
@@ -2212,7 +2212,7 @@
     <string name="settings_troubleshoot_test_notification_notification_clicked">Na oznámení bylo kliknuto!</string>
     <string name="settings_troubleshoot_test_notification_notice">Prosím, klikněte na oznámení. Pokud je nevidíte, zkontrolujte v nastavení.</string>
     <string name="settings_troubleshoot_test_notification_title">Zobrazení oznámení</string>
-    <string name="settings_troubleshoot_test_push_notification_content">Vidíte oznámení! Kliknout!</string>
+    <string name="settings_troubleshoot_test_push_notification_content">Vidíte oznámení! Klikněte!</string>
     <string name="settings_troubleshoot_test_push_loop_failed">Příjem PUSH se nezdařil. Řešením by mohla být reinstalace aplikace.</string>
     <string name="settings_troubleshoot_test_push_loop_success">Aplikace přijímá PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Aplikace čeká na PUSH</string>
