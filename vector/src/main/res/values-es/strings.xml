@@ -1181,7 +1181,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="sas_security_advise">Para más seguridad, te recomendamos que hagas esto en persona o por otros medios confiables.</string>
     <string name="sas_verify_start_button_title">Empezar verificación</string>
     <string name="sas_incoming_request_title">Solicitud de verificación</string>
-    <string name="sas_incoming_request_description">Verifica esta sesión para marcarla de confianza. Marcar sesiones de otros como de confianza te da aún más tranquilidad cuando usas encriptacion de Extremo-a-Extremo.</string>
+    <string name="sas_incoming_request_description">Verifica esta sesión para marcarla de confianza. Marcar sesiones de otros como de confianza te da aún más tranquilidad cuando usas cifrado de Extremo-a-Extremo.</string>
     <string name="sas_incoming_request_description_2">Verificar esta sesión la marcará como confiable, y también marcará como confiable tu sesión para la contraparte.</string>
     <string name="sas_emoji_description">Verifica esta sesión confirmando los emojis que aparecen en la pantalla de la contraparte</string>
     <string name="sas_decimal_description">Verifica esta sesión confirmando que los siguietes números aparecen en la pantalla de la contraparte</string>
@@ -1601,7 +1601,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_developer_mode_fail_fast_title">Fallar rápido (Test)</string>
     <string name="settings_developer_mode_fail_fast_summary">Element puede fallar con más frecuencia cuando ocurre un error inesperado</string>
     <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ a un mensaje de texto sin formato</string>
-    <string name="create_room_encryption_title">Habilitar encriptacion</string>
+    <string name="create_room_encryption_title">Habilitar crifrado</string>
     <string name="create_room_encryption_description">Una vez habilitada, la encriptación no se puede deshabilitar.</string>
     <string name="login_error_threepid_denied">Su dominio de correo electrónico no está autorizado para registrarse en este servidor</string>
     <string name="verification_conclusion_warning">Inicio de sesión no confiable</string>
@@ -1648,7 +1648,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
         <item quantity="one">Una persona</item>
         <item quantity="other">%1$d personas</item>
     </plurals>
-    <string name="room_profile_section_more_uploads">Archivos, Medias y Documentos</string>
+    <string name="room_profile_section_more_uploads">Archivos subidos</string>
     <string name="room_profile_section_more_leave">Abandonar Sala</string>
     <string name="room_profile_leaving_room">Saliendo de la sala…</string>
     <string name="room_member_power_level_admins">Administradores</string>
@@ -1702,7 +1702,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="poll_item_selected_aria">Seleccionar Opcion</string>
     <string name="new_signin">Nuevo inicio de sesión</string>
     <string name="enter_secret_storage_passphrase_warning">Advertencia:</string>
-    <string name="message_action_item_redact">Remover…</string>
+    <string name="message_action_item_redact">Eliminar…</string>
     <string name="delete_event_dialog_reason_checkbox">Razón</string>
     <string name="delete_event_dialog_reason_hint">Razón para redactar</string>
     <string name="login_default_session_public_name">Element Android</string>
@@ -2174,7 +2174,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="direct_room_profile_not_encrypted_subtitle">Los mensajes aquí no están encriptados de Extremo-a-Extremo.</string>
     <string name="sent_a_bot_buttons">Botones de Bot</string>
     <string name="sent_a_poll">Encuesta</string>
-    <string name="room_list_quick_actions_low_priority_remove">Remover de Baja prioridad</string>
+    <string name="room_list_quick_actions_low_priority_remove">Eliminar de baja prioridad</string>
     <string name="room_list_quick_actions_low_priority_add">Añadir a Baja prioridad</string>
     <string name="rotate_and_crop_screen_title">Rotar y recortar</string>
     <plurals name="seconds">
