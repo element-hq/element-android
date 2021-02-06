@@ -90,6 +90,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
+import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
@@ -403,8 +404,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             // https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/utils/WidgetUtils.ts#L469
             val url = buildString {
                 append("https://app.element.io/jitsi.html")
-                // ElementWeb does not do that
-                // appendParamToUrl("confId", confId)
+                appendParamToUrl("confId", confId)
                 append("#conferenceDomain=\$domain")
                 append("&conferenceId=\$conferenceId")
                 append("&isAudioOnly=\$isAudioOnly")
