@@ -23,7 +23,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.databinding.UrlPreviewBinding
+import im.vector.app.databinding.ViewUrlPreviewBinding
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.media.ImageContentRenderer
 
@@ -39,7 +39,7 @@ class PreviewUrlView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
 
-    private lateinit var views: UrlPreviewBinding
+    private lateinit var views: ViewUrlPreviewBinding
 
     var delegate: TimelineEventController.PreviewUrlCallback? = null
 
@@ -103,8 +103,8 @@ class PreviewUrlView @JvmOverloads constructor(
     // PRIVATE METHODS ****************************************************************************************************************************************
 
     private fun setupView() {
-        inflate(context, R.layout.url_preview, this)
-        views = UrlPreviewBinding.bind(this)
+        inflate(context, R.layout.view_url_preview, this)
+        views = ViewUrlPreviewBinding.bind(this)
 
         setOnClickListener(this)
         views.urlPreviewImage.setOnClickListener { onImageClick() }
