@@ -279,8 +279,8 @@
     <string name="room_creation_add_member">Afegeix un participant</string>
     <string name="room_title_one_member">1 participant</string>
     <!--  Chat participants -->
-    <string name="room_participants_leave_prompt_title">Abandona la sala</string>
-    <string name="room_participants_leave_prompt_msg">Esteu segurs que voleu sortir de la sala\?</string>
+    <string name="room_participants_leave_prompt_title">Marxa de la sala</string>
+    <string name="room_participants_leave_prompt_msg">Estàs segur que vols marxar de la sala\?</string>
     <string name="room_participants_remove_prompt_msg">Estàs segur que vols eliminar %s d\'aquest xat\?</string>
     <string name="room_participants_create">Crea</string>
     <string name="room_participants_online">En línia</string>
@@ -291,7 +291,7 @@
     <string name="room_participants_header_direct_chats">Xats personals</string>
     <string name="room_participants_header_devices">DISPOSITIUS</string>
     <string name="room_participants_action_invite">Convida</string>
-    <string name="room_participants_action_leave">Deixa aquesta sala</string>
+    <string name="room_participants_action_leave">Marxa d\'aquesta sala</string>
     <string name="room_participants_action_remove">Elimina d\'aquesta sala</string>
     <string name="room_participants_action_ban">Veta</string>
     <string name="room_participants_action_unban">Treu el vet</string>
@@ -385,7 +385,7 @@
     <string name="room_settings_favourite">Preferit</string>
     <string name="room_settings_de_prioritize">Treu prioritat</string>
     <string name="room_settings_direct_chat">Xat directe</string>
-    <string name="room_settings_leave_conversation">Deixa el xat</string>
+    <string name="room_settings_leave_conversation">Marxa del xat</string>
     <string name="room_settings_forget">Oblida</string>
     <string name="room_settings_add_homescreen_shortcut">Afegeix a la pantalla d\'inici</string>
     <!-- home sliding menu -->
@@ -607,7 +607,7 @@
     <string name="encryption_information_unblock">Deixa de bloquejar</string>
     <string name="encryption_information_verify_device">Verifica el dispositiu</string>
     <string name="encryption_information_verify_device_warning">Verifica comparant el següent amb la configuració d\'usuari de la teva altra sessió:</string>
-    <string name="encryption_information_verify_device_warning2">Si coincideix, premeu el botó per verificar. Si no coincideix, algú està interceptant aquest dispositiu i probablement voldreu prémer el botó per bloquejar-lo. En un futur aquest procés de verificació serà més sofisticat.</string>
+    <string name="encryption_information_verify_device_warning2">Si no coincideixen pot ser que la seguretat de la comunicació estigui compromesa.</string>
     <string name="encryption_information_verify_key_match">Verifica que les claus coincideixen</string>
     <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">La sala conté sessions desconegudes</string>
@@ -848,7 +848,7 @@
     <string name="dialog_user_consent_content">Per poder continuar utilitzant el servidor local %1$s has de revisar i acceptar els termes i condicions.</string>
     <string name="dialog_user_consent_submit">Revisa ara</string>
     <string name="deactivate_account_title">Desactiva el compte</string>
-    <string name="deactivate_account_content">Això farà que no puguis utilitzar més el teu compte. No podràs iniciar sessió i ningú podrà tornar-se a registrar amb el mateix ID d\'usuari. Això farà que el teu compte surti de totes les sales a les que estigui participant i eliminarà les dades del compte del teu servidor d\'identitat. <b>Aquesta acció és irreversible</b>.
+    <string name="deactivate_account_content">Això farà que no puguis utilitzar més el teu compte. No podràs iniciar sessió i ningú podrà tornar-se a registrar amb el mateix ID d\'usuari. Això farà que el teu compte marxi de totes les sales a les que estigui participant i eliminarà les dades del compte del teu servidor d\'identitat. <b>Aquesta acció és irreversible</b>.
 \n
 \nDesactivar el compte <b>no implica que s\'oblidin els missatges que has enviat</b>. Si vols que ens n\'oblidem, marca la casella a continuació.
 \n
@@ -920,7 +920,7 @@
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Inhabilita les restriccions</string>
     <string name="settings_troubleshoot_test_battery_title">Optimització de bateria</string>
     <string name="settings_troubleshoot_test_battery_success">El Element no està afectat per l\'optimització de bateria.</string>
-    <string name="settings_show_join_leave_messages">Mostra els esdeveniments d\'entrada i sortida</string>
+    <string name="settings_show_join_leave_messages">Mostra els esdeveniments d\'unió i sortida</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Inclou els canvis d\'icona i d\'àlies.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Connexió al rerefons</string>
     <string name="startup_notification_fdroid_battery_optim_message">Per poder obtenir notificacions fiables, Element necessita mantenir una connexió en segon pla de baixa incidència.
@@ -1188,13 +1188,13 @@
 \n%2$s</string>
     <string name="invalid_or_expired_credentials">Us heu desconnectat a causa de credencials incorrectes o caducades.</string>
     <string name="sas_verify_title">Verificar comparant una cadena de text curta.</string>
-    <string name="sas_security_advise">Per la màxima seguretat us recomanem fer això en persona o usar un altre medi de comunicació confiable.</string>
+    <string name="sas_security_advise">Per a la màxima seguretat et recomanem fer-ho en persona o utilitzar un altre mètode de comunicació segur.</string>
     <string name="sas_verify_start_button_title">Començar la verificació</string>
     <string name="sas_incoming_request_title">Sol·licitud de verificació entrant</string>
     <string name="sas_incoming_request_description">Verifica aquesta sessió per fer-la de confiança. Les sessions de confiança amb els contactes et donen un alleujament addicional quan utilitzes missatges xifrats d\'extrem a extrem.</string>
-    <string name="sas_incoming_request_description_2">Verificant aquest dispositiu el marcareu com a confiable, i també marcareu el vostre dispositiu com a confiable pel vostre company.</string>
-    <string name="sas_emoji_description">Verificar aquest dispositiu confirmant els següents emojis que apareguin a la pantalla del vostre company</string>
-    <string name="sas_decimal_description">Verificar aquest dispositiu confirmant els següents números que sortiran a la pantalla del vostre company</string>
+    <string name="sas_incoming_request_description_2">Si verifiques aquesta sessió, es farà de confiança. L\'altre usuari també la veurà com a sessió de confiança.</string>
+    <string name="sas_emoji_description">Verifica aquesta sessió confirmant que les següents emoticones apareixen a la pantalla de l\'altre usuari</string>
+    <string name="sas_decimal_description">Verifica aquesta sessió confirmant que els següents números apareixen a la pantalla de l\'altre usuari</string>
     <string name="sas_incoming_verification_request_dialog">Heu rebut una sol·licitud de verificació entrant.</string>
     <string name="sas_view_request_action">Veure sol·licitud</string>
     <string name="sas_waiting_for_partner">Esperant que el vostre company confirmi…</string>
@@ -1627,7 +1627,7 @@
 \n
 \nPer evitar que torni a unir-s\'hi, l\'hauries de vetar.</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Segur que vols cancel·lar la invitació d\'aquest usuari\?</string>
-    <string name="room_participants_leave_private_warning">Aquesta sala no és pública. No podràs tornar a unir-t\'hi sense una invitació.</string>
+    <string name="room_participants_leave_private_warning">Aquesta sala no és pública. No podràs tornar-t\'hi a unir sense una invitació.</string>
     <string name="call_failed_no_connection_description">No s\'ha pogut establir una connexió en temps real.
 \nDemana a l\'administrador del servidor local que configuri un servidor TURN perquè les trucades funcionin correctament.</string>
     <string name="call_failed_no_ice_description">Demana a l\'administrador del servidor local (%1$s) que configuri un servidor TURN perquè les trucades funcionin correctament.
@@ -1958,7 +1958,7 @@
     <string name="recovery_passphrase">Frase de recuperació</string>
     <string name="verification_cancelled">Verificació cancel·lada</string>
     <string name="verify_cancelled_notice">Verifica els teus dispositius des de la configuració.</string>
-    <string name="verify_not_me_self_verification">Alguna de les següents coses pot haver estat compromesa:
+    <string name="verify_not_me_self_verification">Alguna de les següents pot haver estat compromesa:
 \n
 \n- La teva contrasenya
 \n- El servidor local
@@ -1992,7 +1992,7 @@
     <string name="new_signin">Nou inici de sessió</string>
     <string name="verification_use_passphrase">Si no pots accedir a una sessió existent</string>
     <string name="verification_cannot_access_other_session">Utilitza una frase de recuperació o una clau</string>
-    <string name="command_description_poll">Crea una enquesta simple</string>
+    <string name="command_description_poll">Crea una votació simple</string>
     <string name="poll_item_selected_aria">Opció seleccionada</string>
     <plurals name="poll_info_final">
         <item quantity="one">%d vot - Resultat final</item>
@@ -2152,4 +2152,145 @@
 \n
 \nEsborra-les si ja no vols utilitzar aquest dispositiu o vols iniciar sessió amb un altre compte.</string>
     <string name="error_unauthorized">No estàs autoritzat, no s\'han trobat credencials d\'autenticació vàlides</string>
+    <string name="new_session_review_with_info">%1$s (%2$s)</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Generant clau SSSS a partir de clau de recuperació</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Generant clau SSSS a partir de frase (%s)</string>
+    <string name="bootstrap_progress_generating_ssss">Generant clau SSSS a partir de frase</string>
+    <string name="bootstrap_progress_checking_backup_with_info">Comprovant clau de còpia de seguretat (%s)</string>
+    <string name="bootstrap_progress_checking_backup">Comprovant clau de còpia de seguretat</string>
+    <string name="enter_backup_passphrase">Introdueix %s</string>
+    <string name="use_file">Utilitza un fitxer</string>
+    <string name="bootstrap_enter_recovery">Introdueix la %s per a continuar</string>
+    <string name="upgrade_security">Actualització de xifrat disponible</string>
+    <string name="room_message_placeholder">Missatge…</string>
+    <string name="settings_troubleshoot_title">Resolució de problemes</string>
+    <string name="settings_when_rooms_are_upgraded">Quan les sales s\'actualitzin</string>
+    <string name="settings_messages_in_e2e_one_to_one">Missatges xifrats en xats individuals</string>
+    <string name="settings_messages_in_e2e_group_chat">Missatges xifrats en xats de grup</string>
+    <string name="settings_messages_at_room">Missatges que contenen @room</string>
+    <string name="settings_notification_configuration">Configuració de notificacions</string>
+    <string name="error_failed_to_import_keys">No s\'han pogut importar les claus</string>
+    <string name="qr_code_scanned_verif_waiting">Esperant %s…</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Ja gairebé has acabat! Esperant la confirmació…</string>
+    <string name="qr_code_scanned_self_verif_notice">Ja gairebé has acabat! Veus el mateix escut a l\'altre dispositiu\?</string>
+    <string name="direct_room_created_summary_item_by_you">T\'has unit.</string>
+    <string name="direct_room_created_summary_item">%s s\'ha unit.</string>
+    <string name="room_created_summary_item_by_you">Has creat i configurat la sala.</string>
+    <string name="room_created_summary_item">%s ha creat i configurat la sala.</string>
+    <string name="encryption_not_enabled">El xifrat no està activat</string>
+    <string name="bootstrap_finish_title">Ja has acabat!</string>
+    <string name="bootstrap_loading_text">Això pot tardar uns segons, un moment, si us plau.</string>
+    <string name="bootstrap_info_confirm_text">Torna a introduir la %s per a confirmar-la.</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) ha entrat amb una nova sessió:</string>
+    <string name="not_trusted">No és de confiança</string>
+    <string name="verification_request_alert_description">Per a més seguretat, verifica %s comprovant un codi d\'un sol ús als vostres dos dispositius.
+\n
+\nPer a la màxima seguretat, fes-ho en persona.</string>
+    <string name="authentication_error">Ha fallat l\'autenticació</string>
+    <string name="wrong_pin_message_last_remaining_attempt">Atenció! Últim intent disponible abans de tancar la sessió!</string>
+    <plurals name="wrong_pin_message_remaining_attempts">
+        <item quantity="one">Codi incorrecte, %d intent restant</item>
+        <item quantity="other">Codi incorrecte, %d intents restants</item>
+    </plurals>
+    <string name="phone_book_perform_lookup">Busca contactes a Matrix</string>
+    <string name="search_in_my_contacts">Busca als meus contactes</string>
+    <string name="element_login_splash_brand">element</string>
+    <string name="element_disclaimer_positive_button">MÉS INFORMACIÓ</string>
+    <string name="element_disclaimer_title">Riot ara és Element!</string>
+    <string name="crypto_error_withheld_generic">No pots accedir al missatge perquè el remitent, intencionadament, no ha enviat les claus</string>
+    <string name="crypto_error_withheld_unverified">No pots accedir al missatge perquè la teva sessió no és de confiança pel remitent</string>
+    <string name="crypto_error_withheld_blacklisted">No pots accedir al missatge perquè el remitent t\'ha bloquejat</string>
+    <string name="crypto_utd">No s\'ha pogut desxifrar</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Esperant el missatge, pot tardar una estona</string>
+    <string name="notice_crypto_unable_to_decrypt_final">No tens accés a aquest missatge</string>
+    <string name="room_settings_save_success">Has canviat la configuració de la sala correctament</string>
+    <string name="room_settings_name_hint">Nom de la sala</string>
+    <string name="initialize_cross_signing">Inicia la signatura creuada</string>
+    <string name="failed_to_initialize_cross_signing">No s\'ha pogut configurar la signatura creuada</string>
+    <string name="setup_cross_signing">Activa la signatura creuada</string>
+    <string name="reset_cross_signing">Restableix les claus</string>
+    <string name="error_empty_field_choose_user_name">Introdueix un nom d\'usuari.</string>
+    <string name="error_empty_field_choose_password">Introdueix una contrasenya.</string>
+    <string name="save_your_security_key_notice">Desa la clau de seguretat en un lloc segur, com ara un gestor de contrasenyes o una caixa forta.</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Desa la clau de seguretat en un lloc segur, com ara un gestor de contrasenyes o una caixa forta.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Genera una clau de seguretat per desar-la en un lloc molt segur, com ara un gestor de contrasenyes o una caixa forta.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Utilitza una frase de seguretat</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">Utilitza una clau de seguretat</string>
+    <string name="bottom_sheet_setup_secure_backup_title">Còpia de seguretat segura</string>
+    <string name="identity_server_set_alternative_submit">Envia</string>
+    <string name="identity_server_set_alternative_notice_no_default">Introdueix l\'URL del servidor d\'identitat</string>
+    <string name="identity_server_set_alternative_notice">També pots introduir qualsevol altre enllaç d\'un servidor d\'identitat</string>
+    <string name="identity_server_set_default_submit">Utilitza %1$s</string>
+    <string name="identity_server_set_default_notice">El servidor local (%1$s) proposa utilitzar %2$s com a servidor d\'identitat</string>
+    <string name="trusted">De confiança</string>
+    <string name="room_member_profile_sessions_section_title">Sessions</string>
+    <string name="room_member_profile_failed_to_get_devices">No s\'han pogut obtenir les sessions</string>
+    <string name="verification_profile_warning">Atenció</string>
+    <string name="verification_profile_verified">Verificat</string>
+    <string name="verification_profile_verify">Verifica</string>
+    <string name="complete_security">Completa la seguretat</string>
+    <string name="crosssigning_other_user_not_trust">Pot ser que altres usuaris no hi confiïn</string>
+    <string name="unignore">Deixa d\'ignorar</string>
+    <string name="rendering_event_error_exception">Element ha trobat un problema al renderitzar el contingut de l\'esdeveniment amb ID \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">Element no gestiona els missatges de tipus \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">Element no gestiona els esdeveniments de tipus \'%1$s\'</string>
+    <string name="room_profile_leaving_room">Marxant de la sala…</string>
+    <string name="direct_room_profile_section_more_leave">Marxa</string>
+    <string name="room_profile_section_more_leave">Marxa de la sala</string>
+    <string name="room_profile_section_more_uploads">Pujades</string>
+    <plurals name="room_profile_section_more_member_list">
+        <item quantity="one">Una persona</item>
+        <item quantity="other">%1$d persones</item>
+    </plurals>
+    <string name="direct_room_profile_section_more_settings">Configuració</string>
+    <string name="room_profile_section_more_settings">Configuració de sala</string>
+    <string name="room_profile_section_admin">Accions d\'administrador</string>
+    <string name="room_profile_section_more">Més</string>
+    <string name="room_profile_section_security_learn_more">Més informació</string>
+    <string name="room_profile_section_security">Seguretat</string>
+    <string name="verification_request_waiting_for">Esperant %s…</string>
+    <string name="verification_verified_user">%s verificat</string>
+    <string name="verification_verify_user">Verifica %s</string>
+    <string name="verification_scan_their_code">Escaneja el seu codi</string>
+    <string name="verification_scan_notice">Escaneja el codi amb el dispositiu de l\'altre usuari per a verificar-vos</string>
+    <string name="you">Tu</string>
+    <string name="verification_verify_device_manually">Verificació manual</string>
+    <string name="verification_request">Verificació sol·licitada</string>
+    <string name="verification_sent">Verificació enviada</string>
+    <string name="verification_request_you_accepted">Has acceptat</string>
+    <string name="verification_request_other_accepted">%s ha acceptat</string>
+    <string name="verification_request_you_cancelled">Has cancel·lat</string>
+    <string name="verification_request_other_cancelled">%s ha cancel·lat</string>
+    <string name="verification_request_waiting">Esperant…</string>
+    <string name="sent_verification_conclusion">Conclusió de la verificació</string>
+    <string name="sent_a_reaction">Ha reaccionat amb: %s</string>
+    <string name="sent_a_bot_buttons">Botons de bot</string>
+    <string name="sent_a_poll">Votació</string>
+    <string name="send_a_sticker">Adhesiu</string>
+    <string name="sent_an_image">Imatge.</string>
+    <string name="sent_a_video">Vídeo.</string>
+    <string name="cross_signing_verify_by_emoji">Verifica interactivament mitjançant emoticones</string>
+    <string name="verification_emoji_notice">Compara les emoticones, assegura\'t que apareixen en el mateix ordre.</string>
+    <string name="verify_by_emoji_description">Si no pots escanejar el codi de dalt, verifica comparant una petita selecció d\'emoticones única.</string>
+    <string name="verify_by_emoji_title">Verifica mitjançant emoticones</string>
+    <string name="verification_no_scan_emoji_title">Verificació comparant emoticones</string>
+    <string name="verification_scan_emoji_subtitle">Si no us trobeu físicament junts, compara les emoticones</string>
+    <string name="verification_scan_emoji_title">No s\'ha pogut escanejar</string>
+    <string name="verify_user_sas_emoji_help_text">Verifica aquest usuari confirmant que les següents emoticones apareixen a la pantalla de l\'altre usuari en el mateix ordre.</string>
+    <string name="confirm_your_identity">Confirma la teva identitat verificant aquest inici de sessió des d\'una altra de les teves sessions i, així, poder-li donar accés als missatges xifrats.</string>
+    <string name="verify_this_session">Verifica el nou inici de sessió que està accedint al teu compte: %1$s</string>
+    <string name="verification_open_other_to_verify">Utilitza aquesta sessió per a verificar-ne una de nova i poder-li donar accés als missatges xifrats.</string>
+    <string name="verification_profile_device_untrust_info">Fins que aquest usuari no confiï en aquesta sessió, els missatges enviats i rebuts es marcaran amb una alerta. Com a alternativa, pots verificar-lo manualment.</string>
+    <string name="crosssigning_verify_this_session">Verifica aquest inici de sessió</string>
+    <string name="settings_active_sessions_unverified_device_desc">Verifica aquesta sessió per fer-la de confiança i permetre que accedeixi als missatges xifrats. Si no has estat tu el que ha iniciat sessió aquí, pot ser que el teu compte estigui compromès:</string>
+    <string name="verification_verify_device">Verifica aquesta sessió</string>
+    <string name="verification_conclusion_compromised">Alguna de les següents pot haver estat compromesa:
+\n
+\n- El teu servidor local
+\n- El servidor on està connectat l\'usuari que estàs intentant verificar
+\n- La teva connexió a internet a la de l\'altre usuari
+\n- El teu dispositiu o el de l\'altre usuari</string>
+    <string name="verification_conclusion_not_secure">No segur</string>
+    <string name="verification_green_shield">Busca l\'escut verd per assegurar-te que l\'usuari és de confiança. Per assegurar-te que una sala és segura, tots els usuaris han de ser de confiança.</string>
+    <string name="verify_user_sas_emoji_security_tip">Per a una seguretat màxima, utilitza un altre mètode segur de comunicació o fes-ho en persona.</string>
 </resources>
