@@ -27,7 +27,6 @@ import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
-import io.realm.annotations.Ignore
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import timber.log.Timber
@@ -888,8 +887,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     // SC addition
-    fun singleOverview(): Boolean {
+    fun combinedOverview(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SINGLE_OVERVIEW, true)
+    }
+    fun enableOverviewTabs(): Boolean {
+        return labAddNotificationTab() || !combinedOverview()
     }
 
     // SC addition

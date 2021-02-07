@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -97,15 +98,7 @@ class HomeDetailFragment @Inject constructor(
         setupKeysBackupBanner()
         setupActiveCallView()
 
-        withState(viewModel) {
-            // Update the navigation view if needed (for when we restore the tabs)
-            if (it.displayMode == RoomListDisplayMode.ALL) {
-                views.bottomNavigationView.visibility = View.GONE
-            } else {
-                views.bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
-                views.bottomNavigationView.visibility = View.VISIBLE
-            }
-        }
+        loadNavigationView()
 
         viewModel.selectSubscribe(this, HomeDetailViewState::groupSummary) { groupSummary ->
             onGroupChange(groupSummary.orNull())
@@ -140,34 +133,62 @@ class HomeDetailFragment @Inject constructor(
                 })
     }
 
-    override fun onResume() {
-        super.onResume()
-        // update notification tab if needed
-        checkNotificationTabStatus()
-        // Recreate if single-mode overview status changed
+    private fun loadNavigationView() {
         withState(viewModel) {
-            if ((it.displayMode == RoomListDisplayMode.ALL) != vectorPreferences.singleOverview()) {
-                Timber.i("Restart due to single-overview setting change")
-                startActivity(activity?.intent)
-                activity?.finish()
+            // Update the navigation view if needed (for when we restore the tabs)
+            if (!vectorPreferences.enableOverviewTabs()) {
+                views.bottomNavigationView.isVisible = false
+            } else {
+                views.bottomNavigationView.selectedItemId = it.displayMode.toMenuId()
+                views.bottomNavigationView.isVisible = true
             }
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // update notification tab if needed
+        checkNotificationTabStatus()
+    }
+
     private fun checkNotificationTabStatus() {
         val wasVisible = views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible
+        val combinedOverview = vectorPreferences.combinedOverview()
+        val combinedOverviewWasVisible = views.bottomNavigationView.menu.findItem(R.id.bottom_action_all).isVisible
         views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
+        views.bottomNavigationView.menu.findItem(R.id.bottom_action_people).isVisible = !combinedOverview
+        views.bottomNavigationView.menu.findItem(R.id.bottom_action_rooms).isVisible = !combinedOverview
+        views.bottomNavigationView.menu.findItem(R.id.bottom_action_all).isVisible = combinedOverview
+        if (combinedOverviewWasVisible != combinedOverview) {
+            // As we hide it check if it's not the current item!
+            withState(viewModel) {
+                val menuId = it.displayMode.toMenuId()
+                if (combinedOverview) {
+                    if (menuId == R.id.bottom_action_people || menuId == R.id.bottom_action_rooms) {
+                        viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.ALL))
+                    }
+                } else {
+                    if (menuId == R.id.bottom_action_all) {
+                        viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.PEOPLE))
+                    }
+                }
+            }
+        }
         if (wasVisible && !vectorPreferences.labAddNotificationTab()) {
             // As we hide it check if it's not the current item!
             withState(viewModel) {
                 if (it.displayMode.toMenuId() == R.id.bottom_action_notification) {
-                    if (vectorPreferences.singleOverview()) {
+                    if (combinedOverview) {
                         viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.ALL))
                     } else {
                         viewModel.handle(HomeDetailAction.SwitchDisplayMode(RoomListDisplayMode.PEOPLE))
                     }
                 }
             }
+        }
+        val wasBottomBarVisible = views.bottomNavigationView.isVisible
+        if (wasBottomBarVisible != vectorPreferences.enableOverviewTabs()) {
+            loadNavigationView()
         }
     }
 
@@ -269,7 +290,11 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun setupBottomNavigationView() {
+        val combinedOverview = vectorPreferences.combinedOverview()
         views.bottomNavigationView.menu.findItem(R.id.bottom_action_notification).isVisible = vectorPreferences.labAddNotificationTab()
+        views.bottomNavigationView.menu.findItem(R.id.bottom_action_people).isVisible = !combinedOverview
+        views.bottomNavigationView.menu.findItem(R.id.bottom_action_rooms).isVisible = !combinedOverview
+        views.bottomNavigationView.menu.findItem(R.id.bottom_action_all).isVisible = combinedOverview
         views.bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
@@ -333,6 +358,7 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
+        views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_all).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
         views.syncStateView.render(it.syncState)
     }
 
@@ -351,6 +377,7 @@ class HomeDetailFragment @Inject constructor(
     private fun RoomListDisplayMode.toMenuId() = when (this) {
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
         RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
+        RoomListDisplayMode.ALL    -> R.id.bottom_action_all
         else                       -> R.id.bottom_action_notification
     }
 

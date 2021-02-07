@@ -33,12 +33,6 @@ class VectorSettingsLabsFragment @Inject constructor(
     override fun bindPref() {
         // Lab
 
-        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB)?.let {
-            if (vectorPreferences.singleOverview()) {
-                it.parent?.removePreference(it)
-            }
-        }
-
         val systemDarkThemePreTenPref = findPreference<VectorSwitchPreference>(ThemeUtils.SYSTEM_DARK_THEME_PRE_TEN)
         systemDarkThemePreTenPref?.let {
             if (ThemeUtils.darkThemeDefinitivelyPossible()) {
