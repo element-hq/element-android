@@ -262,8 +262,7 @@ class DefaultNavigator @Inject constructor(
                 ?.let { avatarUrl ->
                     val intent = BigImageViewerActivity.newIntent(activity, matrixItem.getBestName(), avatarUrl)
                     val options = sharedElement?.let {
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it)
-                                ?: "")
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
                     }
                     activity.startActivity(intent, options?.toBundle())
                 }
