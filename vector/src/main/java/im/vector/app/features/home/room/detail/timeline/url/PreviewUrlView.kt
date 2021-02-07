@@ -80,6 +80,19 @@ class PreviewUrlView @JvmOverloads constructor(
         }
     }
 
+    private fun onImageClick() {
+        when (val finalState = state) {
+            is PreviewUrlUiState.Data -> {
+                delegate?.onPreviewUrlImageClicked(
+                        sharedView = views.urlPreviewImage,
+                        mxcUrl = finalState.previewUrlData.mxcUrl,
+                        title = finalState.previewUrlData.title
+                )
+            }
+            else                      -> Unit
+        }
+    }
+
     private fun onCloseClick() {
         when (val finalState = state) {
             is PreviewUrlUiState.Data -> delegate?.onPreviewUrlCloseClicked(finalState.eventId, finalState.url)
@@ -94,6 +107,7 @@ class PreviewUrlView @JvmOverloads constructor(
         views = UrlPreviewBinding.bind(this)
 
         setOnClickListener(this)
+        views.urlPreviewImage.setOnClickListener { onImageClick() }
         views.urlPreviewClose.setOnClickListener { onCloseClick() }
     }
 

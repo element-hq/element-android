@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Open image from URL Preview (#2705)
 
 Bugfix 🐛:
  - Duplicate thumbs | Mobile reactions for 👍 and 👎 are not the same as web (#2776)
