@@ -11,6 +11,7 @@ Bugfix 🐛:
  - Duplicate thumbs | Mobile reactions for 👍 and 👎 are not the same as web (#2776)
  - Join room by alias other federation error (#2778)
  - HTML unescaping for URL preview (#2766)
+ - URL preview on reply fallback (#2756)
 
 Translations 🗣:
  -
