@@ -56,18 +56,9 @@ class WidgetItemFactory @Inject constructor(
         val previousWidgetContent: WidgetContent? = event.root.resolvedPrevContent().toModel()
 
         return when (WidgetType.fromString(widgetContent.type ?: previousWidgetContent?.type ?: "")) {
-            WidgetType.Jitsi       -> createJitsiItem(event, callback, widgetContent, previousWidgetContent)
-            WidgetType.TradingView,
-            WidgetType.Spotify,
-            WidgetType.Video,
-            WidgetType.GoogleDoc,
-            WidgetType.GoogleCalendar,
-            WidgetType.Etherpad,
-            WidgetType.StickerPicker,
-            WidgetType.Grafana,
-            WidgetType.Custom,
-            WidgetType.IntegrationManager,
-            is WidgetType.Fallback -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+            WidgetType.Jitsi -> createJitsiItem(event, callback, widgetContent, previousWidgetContent)
+            // There is lot of other widget types we could improve here
+            else             -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
         }
     }
 
