@@ -2315,4 +2315,9 @@
     <string name="room_settings_permissions_title">Rumsbehörigheter</string>
     <string name="room_participants_leave_private_warning">Det är rummet är inte offentligt. Du kommer inte kunna gå med igen utan en inbjudan.</string>
     <string name="system_theme">Systemets förval</string>
+    <string name="authentication_error">Misslyckades att autentisera</string>
+    <string name="re_authentication_default_confirm_text">Element kräver att du anger dina autentiseringsuppgifter innan du gör det här.</string>
+    <string name="re_authentication_activity_title">Omautentisering krävs</string>
+    <string name="failed_to_initialize_cross_signing">Mislyckades att ställa in korssignering</string>
+    <string name="error_unauthorized">Obehörig, saknar giltiga autentiseringsuppgifter</string>
 </resources>
