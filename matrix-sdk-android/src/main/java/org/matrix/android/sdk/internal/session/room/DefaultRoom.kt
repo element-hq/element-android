@@ -104,6 +104,10 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
         return cryptoService.shouldEncryptForInvitedMembers(roomId)
     }
 
+    override fun ensureOutboundSession() {
+        cryptoService.ensureOutboundSession(roomId)
+    }
+
     override suspend fun enableEncryption(algorithm: String) {
         when {
             isEncrypted()                          -> {

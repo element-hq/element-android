@@ -50,6 +50,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.util.emptyJsonDict
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
@@ -709,7 +710,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     @Throws(MXCryptoError::class)
     private fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-       return eventDecryptor.decryptEvent(event, timeline)
+        return eventDecryptor.decryptEvent(event, timeline)
     }
 
     /**
@@ -1297,22 +1298,31 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun ensureOutboundSession(roomId: String) {
+        // Ensure to load all room members
+        loadRoomMembersTask
+                .configureWith(LoadRoomMembersTask.Params(roomId)) {
+                    this.callback = NoOpMatrixCallback()
+                }
+                .executeBy(taskExecutor)
+
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            roomEncryptorsStore
-                    .get(roomId)
-                    ?.let {
-                        getEncryptionAlgorithm(roomId)?.let { safeAlgorithm ->
-                            val userIds = getRoomUserIds(roomId)
-                            if (setEncryptionInRoom(roomId, safeAlgorithm, false, userIds)) {
-                                val roomEncryptor = roomEncryptorsStore.get(roomId)
-                                if (roomEncryptor is IMXGroupEncryption) {
-                                    roomEncryptor.ensureOutboundSession(getRoomUserIds(roomId))
-                                } else {
-                                    Timber.e("## CRYPTO | ensureOutboundSession() for:$roomId: Unable to handle IMXGroupEncryption for $safeAlgorithm")
-                                }
-                            }
-                        }
-                    }
+            val userIds = getRoomUserIds(roomId)
+            val alg = roomEncryptorsStore.get(roomId)
+                    ?: getEncryptionAlgorithm(roomId)
+                            ?.let { setEncryptionInRoom(roomId, it, false, userIds) }
+                            ?.let { roomEncryptorsStore.get(roomId) }
+
+            if (alg == null) {
+                val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                Timber.e("## CRYPTO | encryptEventContent() : $reason")
+                return@launch
+            }
+
+            runCatching {
+                alg.encryptEventContent(emptyJsonDict, EventType.DUMMY, userIds)
+            }.onFailure {
+                Timber.e("## CRYPTO | encryptEventContent() failed.")
+            }
         }
     }
 

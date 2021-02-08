@@ -20,11 +20,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.MatrixConfiguration
-import org.matrix.android.sdk.api.NoOpMatrixCallback
-import org.matrix.android.sdk.api.crypto.OutboundSessionKeySharingStrategy
-import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.RoomService
@@ -44,7 +39,6 @@ import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
-import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
@@ -71,10 +65,7 @@ internal class DefaultRoomService @Inject constructor(
         private val roomGetter: RoomGetter,
         private val roomSummaryDataSource: RoomSummaryDataSource,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
-        private val taskExecutor: TaskExecutor,
-        private val loadRoomMembersTask: LoadRoomMembersTask,
-        private val matrixConfiguration: MatrixConfiguration,
-        private val cryptoService: CryptoService
+        private val taskExecutor: TaskExecutor
 ) : RoomService {
 
     override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
@@ -114,18 +105,6 @@ internal class DefaultRoomService @Inject constructor(
     }
 
     override fun onRoomDisplayed(roomId: String): Cancelable {
-        // Ensure to load all room members
-        loadRoomMembersTask
-                .configureWith(LoadRoomMembersTask.Params(roomId)) {
-                    this.callback = NoOpMatrixCallback()
-                }
-                .executeBy(taskExecutor)
-
-        // Ensure to share the outbound session keys with all members
-        if (roomGetter.getRoom(roomId)?.isEncrypted().orFalse()
-                && matrixConfiguration.outboundSessionKeySharingStrategy == OutboundSessionKeySharingStrategy.WhenEnteringRoom) {
-            cryptoService.ensureOutboundSession(roomId)
-        }
         return updateBreadcrumbsTask
                 .configureWith(UpdateBreadcrumbsTask.Params(roomId))
                 .executeBy(taskExecutor)

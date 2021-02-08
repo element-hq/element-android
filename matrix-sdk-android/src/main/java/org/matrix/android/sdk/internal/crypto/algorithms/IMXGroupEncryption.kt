@@ -47,11 +47,4 @@ internal interface IMXGroupEncryption {
                            userId: String,
                            deviceId: String,
                            senderKey: String): Boolean
-
-    /**
-     * Ensure the outbound session
-     *
-     * @param usersInRoom the users in the room
-     */
-    suspend fun ensureOutboundSession(usersInRoom: List<String>)
 }

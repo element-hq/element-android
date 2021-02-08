@@ -30,4 +30,11 @@ interface RoomCryptoService {
      * Enable encryption of the room
      */
     suspend fun enableEncryption(algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM)
+
+    /**
+     * Ensures all members of the room are loaded and outbound session keys are shared.
+     * Call this method according to [OutboundSessionKeySharingStrategy].
+     * If this method is not called, CryptoService will ensure it before sending events.
+     */
+    fun ensureOutboundSession()
 }

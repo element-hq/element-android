@@ -138,10 +138,11 @@ internal class MXMegolmEncryption(
         return MXOutboundSessionInfo(sessionId, SharedWithHelper(roomId, sessionId, cryptoStore))
     }
 
-    override suspend fun ensureOutboundSession(usersInRoom: List<String>) {
-        ensureOutboundSession(getDevicesInRoom(usersInRoom).allowedDevices)
-    }
-
+    /**
+     * Ensure the outbound session
+     *
+     * @param devicesInRoom the devices list
+     */
     private suspend fun ensureOutboundSession(devicesInRoom: MXUsersDevicesMap<CryptoDeviceInfo>): MXOutboundSessionInfo {
         Timber.v("## CRYPTO | ensureOutboundSession start")
         var session = outboundSession

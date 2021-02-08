@@ -24,6 +24,7 @@ import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -49,6 +50,7 @@ import org.matrix.android.sdk.internal.database.query.filterEvents
 import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendStates
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
+import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.Debouncer
@@ -77,8 +79,9 @@ internal class DefaultTimeline(
         private val hiddenReadReceipts: TimelineHiddenReadReceipts,
         private val timelineInput: TimelineInput,
         private val eventDecryptor: TimelineEventDecryptor,
-        private val realmSessionProvider: RealmSessionProvider
-        ) : Timeline,
+        private val realmSessionProvider: RealmSessionProvider,
+        private val loadRoomMembersTask: LoadRoomMembersTask
+) : Timeline,
         TimelineHiddenReadReceipts.Delegate,
         TimelineInput.Listener {
 
@@ -178,6 +181,12 @@ internal class DefaultTimeline(
                 if (settings.shouldHandleHiddenReadReceipts()) {
                     hiddenReadReceipts.start(realm, filteredEvents, nonFilteredEvents, this)
                 }
+
+                loadRoomMembersTask
+                        .configureWith(LoadRoomMembersTask.Params(roomId)) {
+                            this.callback = NoOpMatrixCallback()
+                        }
+                        .executeBy(taskExecutor)
 
                 isReady.set(true)
             }
