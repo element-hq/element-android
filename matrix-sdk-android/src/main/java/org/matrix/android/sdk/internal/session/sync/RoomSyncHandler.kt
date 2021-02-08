@@ -162,7 +162,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                         )
                                     }
                             realm.insertOrUpdate(roomEntities)
-                            reporter?.reportProgress(index + 1)
+                            reporter?.reportProgress(index + 1F)
                         }
             }
         } else {

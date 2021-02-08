@@ -36,7 +36,7 @@ internal class DefaultInitialSyncProgressService @Inject constructor(
         return status
     }
 
-    fun startTask(@StringRes nameRes: Int, totalProgress: Int, parentWeight: Float = 1f) {
+    fun startTask(@StringRes nameRes: Int, totalProgress: Int, parentWeight: Float) {
         // Create a rootTask, or add a child to the leaf
         if (rootTask == null) {
             rootTask = TaskInfo(nameRes, totalProgress)
@@ -52,20 +52,20 @@ internal class DefaultInitialSyncProgressService @Inject constructor(
 
             currentLeaf.child = newTask
         }
-        reportProgress(0)
+        reportProgress(0F)
     }
 
-    fun reportProgress(progress: Int) {
+    fun reportProgress(progress: Float) {
         rootTask?.leaf()?.setProgress(progress)
     }
 
     fun endTask(nameRes: Int) {
         val endedTask = rootTask?.leaf()
         if (endedTask?.nameRes == nameRes) {
-            // close it
-            val parent = endedTask.parent
-            parent?.child = null
-            parent?.setProgress(endedTask.offset + (endedTask.totalProgress * endedTask.parentWeight).toInt())
+            // Ensure the task progress is complete
+            endedTask.setProgress(endedTask.totalProgress.toFloat())
+            // And close it
+            endedTask.parent?.child = null
         }
         if (endedTask?.parent == null) {
             status.postValue(InitialSyncProgressService.Status.Idle)
@@ -81,9 +81,9 @@ internal class DefaultInitialSyncProgressService @Inject constructor(
                                  val totalProgress: Int,
                                  val parent: TaskInfo? = null,
                                  val parentWeight: Float = 1f,
-                                 val offset: Int = parent?.currentProgress ?: 0) {
+                                 val offset: Float = parent?.currentProgress ?: 0F) {
         var child: TaskInfo? = null
-        var currentProgress: Int = 0
+        private var currentProgress: Float = 0F
 
         /**
          * Get the further child
@@ -97,17 +97,18 @@ internal class DefaultInitialSyncProgressService @Inject constructor(
         }
 
         /**
-         * Set progress of the parent if any (which will post value), or post the value
+         * Set progress of this task and update the parent progress. Last parent will post value.
          */
-        fun setProgress(progress: Int) {
+        fun setProgress(progress: Float) {
+            Timber.v("setProgress: $progress / $totalProgress")
             currentProgress = progress
 //            val newProgress = Math.min(currentProgress + progress, totalProgress)
             if (parent != null) {
-                val parentProgress = (currentProgress * parentWeight).toInt()
+                val parentProgress = (currentProgress / totalProgress) * (parentWeight * parent.totalProgress)
                 parent.setProgress(offset + parentProgress)
             } else {
-                Timber.v("--- ${stringProvider.getString(leaf().nameRes)}: $currentProgress")
-                status.postValue(InitialSyncProgressService.Status.Progressing(leaf().nameRes, currentProgress))
+                Timber.v("--- ${stringProvider.getString(leaf().nameRes)}: ${currentProgress.toInt()}")
+                status.postValue(InitialSyncProgressService.Status.Progressing(leaf().nameRes, currentProgress.toInt()))
             }
         }
     }
@@ -116,7 +117,7 @@ internal class DefaultInitialSyncProgressService @Inject constructor(
 internal inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?,
                                       @StringRes nameRes: Int,
                                       totalProgress: Int,
-                                      parentWeight: Float = 1f,
+                                      parentWeight: Float,
                                       block: () -> T): T {
     reporter?.startTask(nameRes, totalProgress, parentWeight)
     return block().also {
@@ -126,13 +127,12 @@ internal inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressServic
 
 internal inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: DefaultInitialSyncProgressService?,
                                                             taskId: Int,
-                                                            weight: Float,
+                                                            parentWeight: Float,
                                                             transform: (Map.Entry<K, V>) -> R): List<R> {
-    val total = count().toFloat()
-    var current = 0
-    reporter?.startTask(taskId, 100, weight)
+    var current = 0F
+    reporter?.startTask(taskId, count() + 1, parentWeight)
     return map {
-        reporter?.reportProgress((current / total * 100).toInt())
+        reporter?.reportProgress(current)
         current++
         transform.invoke(it)
     }.also {

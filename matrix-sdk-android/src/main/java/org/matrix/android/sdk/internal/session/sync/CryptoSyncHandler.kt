@@ -38,7 +38,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
     fun handleToDevice(toDevice: ToDeviceSyncResponse, initialSyncProgressService: DefaultInitialSyncProgressService? = null) {
         val total = toDevice.events?.size ?: 0
         toDevice.events?.forEachIndexed { index, event ->
-            initialSyncProgressService?.reportProgress(((index / total.toFloat()) * 100).toInt())
+            initialSyncProgressService?.reportProgress(index * 100F / total)
             // Decrypt event if necessary
             Timber.i("## CRYPTO | To device event from ${event.senderId} of type:${event.type}")
             decryptToDeviceEvent(event, null)

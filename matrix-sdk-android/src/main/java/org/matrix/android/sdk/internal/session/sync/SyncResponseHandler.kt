@@ -51,13 +51,11 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
                                                        private val cryptoService: DefaultCryptoService,
                                                        private val tokenStore: SyncTokenStore,
                                                        private val processEventForPushTask: ProcessEventForPushTask,
-                                                       private val pushRuleService: PushRuleService,
-                                                       private val initialSyncProgressService: DefaultInitialSyncProgressService) {
+                                                       private val pushRuleService: PushRuleService) {
 
-    suspend fun handleResponse(syncResponse: SyncResponse, fromToken: String?) {
+    suspend fun handleResponse(syncResponse: SyncResponse, fromToken: String?, reporter: DefaultInitialSyncProgressService?) {
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
-        val reporter = initialSyncProgressService.takeIf { isInitialSync }
 
         measureTimeMillis {
             if (!cryptoService.isStarted()) {
@@ -85,7 +83,7 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
         monarchy.awaitTransaction { realm ->
             measureTimeMillis {
                 Timber.v("Handle rooms")
-                reportSubtask(reporter, R.string.initial_sync_start_importing_account_rooms, 100, 0.7f) {
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_rooms, 1, 0.7f) {
                     if (syncResponse.rooms != null) {
                         roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, reporter)
                     }
@@ -95,7 +93,7 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
             }
 
             measureTimeMillis {
-                reportSubtask(reporter, R.string.initial_sync_start_importing_account_groups, 100, 0.1f) {
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_groups, 1, 0.1f) {
                     Timber.v("Handle groups")
                     if (syncResponse.groups != null) {
                         groupSyncHandler.handle(realm, syncResponse.groups, reporter)
@@ -106,7 +104,7 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
             }
 
             measureTimeMillis {
-                reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
+                reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 1, 0.1f) {
                     Timber.v("Handle accountData")
                     userAccountDataSyncHandler.handle(realm, syncResponse.accountData)
                 }

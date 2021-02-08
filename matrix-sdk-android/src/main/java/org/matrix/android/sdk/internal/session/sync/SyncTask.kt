@@ -91,7 +91,7 @@ internal class DefaultSyncTask @Inject constructor(
             // We might want to get the user information in parallel too
             userStore.createOrUpdate(userId)
             initialSyncProgressService.endAll()
-            initialSyncProgressService.startTask(R.string.initial_sync_start_importing_account, 100)
+            initialSyncProgressService.startTask(R.string.initial_sync_start_importing_account, 100, 1F)
         }
         // Maybe refresh the home server capabilities data we know
         getHomeServerCapabilitiesTask.execute(GetHomeServerCapabilitiesTask.Params(forceRefresh = false))
@@ -114,7 +114,7 @@ internal class DefaultSyncTask @Inject constructor(
                     }
 
                     logDuration("INIT_SYNC Database insertion") {
-                        syncResponseHandler.handleResponse(syncResponse, token)
+                        syncResponseHandler.handleResponse(syncResponse, token, initialSyncProgressService)
                     }
                 }
             }
@@ -126,7 +126,7 @@ internal class DefaultSyncTask @Inject constructor(
                         readTimeOut = readTimeOut
                 )
             }
-            syncResponseHandler.handleResponse(syncResponse, token)
+            syncResponseHandler.handleResponse(syncResponse, token, null)
         }
         Timber.v("Sync task finished on Thread: ${Thread.currentThread().name}")
     }
@@ -138,17 +138,20 @@ internal class DefaultSyncTask @Inject constructor(
         if (workingFile.exists() && status >= InitialSyncStatus.STEP_DOWNLOADED) {
             // Go directly to the parse step
             Timber.v("INIT_SYNC file is already here")
+            reportSubtask(initialSyncProgressService, R.string.initial_sync_start_downloading, 1, 0.3f) {
+                // Empty task
+            }
         } else {
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_DOWNLOADING)
             val syncResponse = logDuration("INIT_SYNC Perform server request") {
-                reportSubtask(initialSyncProgressService, R.string.initial_sync_start_server_computing, 0, 0.5f) {
+                reportSubtask(initialSyncProgressService, R.string.initial_sync_start_server_computing, 1, 0.2f) {
                     getSyncResponse(requestParams, MAX_NUMBER_OF_RETRY_AFTER_TIMEOUT)
                 }
             }
 
             if (syncResponse.isSuccessful) {
                 logDuration("INIT_SYNC Download and save to file") {
-                    reportSubtask(initialSyncProgressService, R.string.initial_sync_start_downloading, 0, 0.5f) {
+                    reportSubtask(initialSyncProgressService, R.string.initial_sync_start_downloading, 1, 0.1f) {
                         syncResponse.body()?.byteStream()?.use { inputStream ->
                             workingFile.outputStream().use { outputStream ->
                                 inputStream.copyTo(outputStream)
@@ -162,7 +165,9 @@ internal class DefaultSyncTask @Inject constructor(
             }
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_DOWNLOADED)
         }
-        handleSyncFile(workingFile, initSyncStrategy)
+        reportSubtask(initialSyncProgressService, R.string.initial_sync_start_importing_account, 1, 0.7F) {
+            handleSyncFile(workingFile, initSyncStrategy)
+        }
 
         // Delete all files
         workingDir.deleteRecursively()
@@ -199,7 +204,7 @@ internal class DefaultSyncTask @Inject constructor(
             Timber.v("INIT_SYNC $nbOfJoinedRooms rooms, $nbOfJoinedRoomsInFile stored into files")
 
             logDuration("INIT_SYNC Database insertion") {
-                syncResponseHandler.handleResponse(syncResponse, null)
+                syncResponseHandler.handleResponse(syncResponse, null, initialSyncProgressService)
             }
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_SUCCESS)
         }
