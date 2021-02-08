@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import timber.log.Timber
 import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 
-internal class DefaultLazyRoomSyncJsonAdapter() {
+internal class DefaultLazyRoomSyncJsonAdapter {
 
     @FromJson
     fun fromJson(reader: JsonReader, delegate: JsonAdapter<RoomSync>): LazyRoomSync? {
@@ -48,7 +48,6 @@ internal class SplitLazyRoomSyncJsonAdapter(
         private val workingDirectory: File,
         private val syncStrategy: InitialSyncStrategy.Optimized
 ) {
-
     private val atomicInteger = AtomicInteger(0)
 
     private fun createFile(): File {
