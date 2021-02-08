@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.crypto
+package im.vector.app.features.crypto.keysrequest
 
 enum class OutboundSessionKeySharingStrategy {
     /**

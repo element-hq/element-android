@@ -61,7 +61,7 @@ import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.NoOpMatrixCallback
-import org.matrix.android.sdk.api.crypto.OutboundSessionKeySharingStrategy
+import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
@@ -599,7 +599,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             }
         }
         // Ensure outbound session keys
-        if (room.isEncrypted() && BuildConfig.outboundSessionKeySharingStrategy == OutboundSessionKeySharingStrategy.WhenTyping) {
+        if (action.isTyping && room.isEncrypted() && BuildConfig.outboundSessionKeySharingStrategy == OutboundSessionKeySharingStrategy.WhenTyping) {
             room.ensureOutboundSession()
         }
     }

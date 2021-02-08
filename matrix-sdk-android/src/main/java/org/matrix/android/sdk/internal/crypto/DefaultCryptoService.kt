@@ -1298,14 +1298,14 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     override fun ensureOutboundSession(roomId: String) {
-        // Ensure to load all room members
-        loadRoomMembersTask
-                .configureWith(LoadRoomMembersTask.Params(roomId)) {
-                    this.callback = NoOpMatrixCallback()
-                }
-                .executeBy(taskExecutor)
-
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            // Ensure to load all room members
+            loadRoomMembersTask
+                    .configureWith(LoadRoomMembersTask.Params(roomId)) {
+                        this.callback = NoOpMatrixCallback()
+                    }
+                    .executeBy(taskExecutor)
+
             val userIds = getRoomUserIds(roomId)
             val alg = roomEncryptorsStore.get(roomId)
                     ?: getEncryptionAlgorithm(roomId)
