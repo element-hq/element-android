@@ -2293,4 +2293,5 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_chat_effects_title">Mostrar efectos de chat</string>
     <string name="permissions_denied_qr_code">Para escanear el codigo QR , necesita darle permisos a su camara.</string>
     <string name="invite_friends">Invitar contactos</string>
+    <string name="room_settings_permissions_subtitle">Ver y actualizar los roles es necesario para modificar varias cosas del chat.</string>
 </resources>
