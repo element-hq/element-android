@@ -21,6 +21,7 @@ import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.deleteOnCascade
 
 /**
  * Get or create a user

@@ -83,6 +83,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.createPrimaryKey
+import org.matrix.android.sdk.internal.crypto.store.db.model.deleteOnCascade
 import org.matrix.android.sdk.internal.crypto.store.db.query.create
 import org.matrix.android.sdk.internal.crypto.store.db.query.delete
 import org.matrix.android.sdk.internal.crypto.store.db.query.get
