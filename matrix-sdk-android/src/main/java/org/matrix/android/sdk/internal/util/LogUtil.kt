@@ -16,23 +16,36 @@
 
 package org.matrix.android.sdk.internal.util
 
+import org.matrix.android.sdk.BuildConfig
 import timber.log.Timber
 
 internal suspend fun <T> logDuration(message: String,
                                      block: suspend () -> T): T {
-    val runtime = Runtime.getRuntime()
-    runtime.gc()
-    val freeMemoryInMb = runtime.freeMemory() / 1048576L
-    val usedMemInMBStart = runtime.totalMemory() / 1048576L - freeMemoryInMb
-
-    Timber.v("$message -- BEGIN (free memory: $freeMemoryInMb MB)")
+    Timber.v("$message -- BEGIN")
     val start = System.currentTimeMillis()
-    val result = block()
+    val result = logRamUsage(message) {
+        block()
+    }
     val duration = System.currentTimeMillis() - start
-    runtime.gc()
-    val usedMemInMBEnd = (runtime.totalMemory() - runtime.freeMemory()) / 1048576L
-    val usedMemInMBDiff = usedMemInMBEnd - usedMemInMBStart
+    Timber.v("$message -- END duration: $duration ms")
 
-    Timber.v("$message -- END duration: $duration ms RAM usage: $usedMemInMBDiff MB")
     return result
+}
+
+internal suspend fun <T> logRamUsage(message: String, block: suspend () -> T): T {
+    return if (BuildConfig.DEBUG) {
+        val runtime = Runtime.getRuntime()
+        runtime.gc()
+        val freeMemoryInMb = runtime.freeMemory() / 1048576L
+        val usedMemInMBStart = runtime.totalMemory() / 1048576L - freeMemoryInMb
+        Timber.v("$message -- BEGIN (free memory: $freeMemoryInMb MB)")
+        val result = block()
+        runtime.gc()
+        val usedMemInMBEnd = (runtime.totalMemory() - runtime.freeMemory()) / 1048576L
+        val usedMemInMBDiff = usedMemInMBEnd - usedMemInMBStart
+        Timber.v("$message -- END RAM usage: $usedMemInMBDiff MB")
+        result
+    } else {
+        block()
+    }
 }
