@@ -35,9 +35,9 @@ internal open class PushRulesEntity(
         }
 
     companion object
+}
 
-    fun deleteOnCascade() {
-        pushRules.clearWith { it.deleteOnCascade() }
-        deleteFromRealm()
-    }
+internal fun PushRulesEntity.deleteOnCascade() {
+    pushRules.clearWith { it.deleteOnCascade() }
+    deleteFromRealm()
 }

@@ -39,14 +39,14 @@ internal open class TimelineEventEntity(var localId: Long = 0,
     val chunk: RealmResults<ChunkEntity>? = null
 
     companion object
+}
 
-    fun deleteOnCascade(canDeleteRoot: Boolean) {
-        assertIsManaged()
-        if (canDeleteRoot) {
-            root?.deleteFromRealm()
-        }
-        annotations?.deleteOnCascade()
-        readReceipts?.deleteOnCascade()
-        deleteFromRealm()
+internal fun TimelineEventEntity.deleteOnCascade(canDeleteRoot: Boolean) {
+    assertIsManaged()
+    if (canDeleteRoot) {
+        root?.deleteFromRealm()
     }
+    annotations?.deleteOnCascade()
+    readReceipts?.deleteOnCascade()
+    deleteFromRealm()
 }

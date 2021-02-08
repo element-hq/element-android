@@ -33,9 +33,9 @@ internal open class ReadReceiptsSummaryEntity(
     val timelineEvent: RealmResults<TimelineEventEntity>? = null
 
     companion object
+}
 
-    fun deleteOnCascade() {
-        readReceipts.deleteAllFromRealm()
-        deleteFromRealm()
-    }
+internal fun ReadReceiptsSummaryEntity.deleteOnCascade() {
+    readReceipts.deleteAllFromRealm()
+    deleteFromRealm()
 }

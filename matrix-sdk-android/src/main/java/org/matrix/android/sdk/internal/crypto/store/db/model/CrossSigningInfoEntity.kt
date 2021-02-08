@@ -30,11 +30,6 @@ internal open class CrossSigningInfoEntity(
 
     companion object
 
-    fun deleteOnCascade() {
-        crossSigningKeys.clearWith { it.deleteOnCascade() }
-        deleteFromRealm()
-    }
-
     fun getMasterKey() = crossSigningKeys.firstOrNull { it.usages.contains(KeyUsage.MASTER.value) }
 
     fun setMasterKey(info: KeyInfoEntity?) {
@@ -61,4 +56,9 @@ internal open class CrossSigningInfoEntity(
                 .forEach { crossSigningKeys.remove(it) }
         info?.let { crossSigningKeys.add(it) }
     }
+}
+
+internal fun CrossSigningInfoEntity.deleteOnCascade() {
+    crossSigningKeys.clearWith { it.deleteOnCascade() }
+    deleteFromRealm()
 }

@@ -29,10 +29,10 @@ internal open class UserEntity(
 ) : RealmObject() {
 
     companion object
+}
 
-    fun deleteOnCascade() {
-        devices.clearWith { it.deleteOnCascade() }
-        crossSigningInfoEntity?.deleteOnCascade()
-        deleteFromRealm()
-    }
+internal fun UserEntity.deleteOnCascade() {
+    devices.clearWith { it.deleteOnCascade() }
+    crossSigningInfoEntity?.deleteOnCascade()
+    deleteFromRealm()
 }

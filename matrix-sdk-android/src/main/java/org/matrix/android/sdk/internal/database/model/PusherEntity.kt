@@ -53,9 +53,9 @@ internal open class PusherEntity(
         }
 
     companion object
+}
 
-    fun deleteOnCascade() {
-        data?.deleteFromRealm()
-        deleteFromRealm()
-    }
+internal fun PusherEntity.deleteOnCascade() {
+    data?.deleteFromRealm()
+    deleteFromRealm()
 }

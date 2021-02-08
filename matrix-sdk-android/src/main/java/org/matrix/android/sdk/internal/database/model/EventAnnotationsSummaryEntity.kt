@@ -30,12 +30,12 @@ internal open class EventAnnotationsSummaryEntity(
 ) : RealmObject() {
 
     companion object
+}
 
-    fun deleteOnCascade() {
-        reactionsSummary.deleteAllFromRealm()
-        editSummary?.deleteFromRealm()
-        referencesSummaryEntity?.deleteFromRealm()
-        pollResponseSummary?.deleteFromRealm()
-        deleteFromRealm()
-    }
+internal fun EventAnnotationsSummaryEntity.deleteOnCascade() {
+    reactionsSummary.deleteAllFromRealm()
+    editSummary?.deleteFromRealm()
+    referencesSummaryEntity?.deleteFromRealm()
+    pollResponseSummary?.deleteFromRealm()
+    deleteFromRealm()
 }
