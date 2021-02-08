@@ -52,7 +52,7 @@ internal class SplitLazyRoomSyncJsonAdapter(
 
     private fun createFile(): File {
         val index = atomicInteger.getAndIncrement()
-        return File(workingDirectory.parentFile, "room_$index.json")
+        return File(workingDirectory, "room_$index.json")
     }
 
     @FromJson

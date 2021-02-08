@@ -32,17 +32,17 @@ internal class InitialSyncResponseParser @Inject constructor(private val moshi: 
         Timber.v("INIT_SYNC Sync file size is $syncResponseLength bytes")
         val shouldSplit = syncResponseLength >= syncStrategy.minSizeToSplit
         Timber.v("INIT_SYNC should split in several files: $shouldSplit")
-        return getMoshi(syncStrategy, workingFile, shouldSplit)
+        return getMoshi(syncStrategy, workingFile.parentFile!!, shouldSplit)
                 .adapter(SyncResponse::class.java)
                 .fromJson(workingFile.source().buffer())!!
     }
 
-    private fun getMoshi(syncStrategy: InitialSyncStrategy.Optimized, workingFile: File, shouldSplit: Boolean): Moshi {
+    private fun getMoshi(syncStrategy: InitialSyncStrategy.Optimized, workingDirectory: File, shouldSplit: Boolean): Moshi {
         // If we don't have to split we'll rely on the already default moshi
         if (!shouldSplit) return moshi
         // Otherwise, we create a new adapter for handling Map of Lazy sync
         return moshi.newBuilder()
-                .add(SplitLazyRoomSyncJsonAdapter(workingFile, syncStrategy))
+                .add(SplitLazyRoomSyncJsonAdapter(workingDirectory, syncStrategy))
                 .build()
     }
 }
