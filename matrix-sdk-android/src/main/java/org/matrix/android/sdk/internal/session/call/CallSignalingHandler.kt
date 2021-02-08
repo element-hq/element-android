@@ -211,7 +211,7 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
             activeCallHandler.getCallWithId(it)
         }
         if (currentCall == null) {
-            Timber.v("Call for content: $this is null")
+            Timber.v("Call with id $callId is null")
         }
         return currentCall
     }

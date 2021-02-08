@@ -60,7 +60,7 @@
         app:layout_constraintStart_toStartOf="@+id/itemVerificationActionTitle"
         app:layout_constraintTop_toBottomOf="@+id/itemVerificationActionTitle"
         tools:text="For maximum security, do this in person"
-        />
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/itemVerificationActionIcon"

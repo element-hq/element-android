@@ -41,7 +41,7 @@ internal class MxCallFactory @Inject constructor(
 ) {
 
     fun createIncomingCall(roomId: String, opponentUserId: String, content: CallInviteContent): MxCall? {
-        if (content.callId == null) return null
+        content.callId ?: return null
         return MxCallImpl(
                 callId = content.callId,
                 isOutgoing = false,
