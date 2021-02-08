@@ -1,4 +1,4 @@
-Changes in Element 1.X.X (2020-XX-XX)
+Changes in Element 1.0.17 (2020-XX-XX)
 ===================================================
 
 Features ✨:
@@ -26,7 +26,7 @@ Test:
  -
 
 Other changes:
- -
+ - Change app name from "Element (Riot.im)" to "Element"
 
 Changes in Element 1.0.16 (2020-02-04)
 ===================================================
