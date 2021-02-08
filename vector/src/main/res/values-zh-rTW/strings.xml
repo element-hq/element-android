@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">zh</string>
-    <string name="resources_country_code">TW</string>
     <string name="light_theme">淺色主題</string>
     <string name="dark_theme">深色主題</string>
     <string name="black_them">黑色主題</string>
@@ -1354,7 +1352,6 @@
 \n
 \n請在下個彈出視窗中允許存取以讓您可以手動匯出您的金鑰。</string>
     <string name="no_network_indicator">目前沒有網路連線</string>
-    <string name="resources_script">Latn</string>
     <string name="settings_add_3pid_confirm_password_title">確認您的密碼</string>
     <string name="settings_add_3pid_flow_not_supported">您無法在行動裝置上的 Element 做這件事</string>
     <string name="settings_add_3pid_authentication_needed">需要驗證</string>
@@ -2278,4 +2275,6 @@
     <string name="room_settings_permissions_title">聊天室權限</string>
     <string name="room_participants_leave_private_warning">此聊天室不公開。沒有邀請，您將無法重新加入。</string>
     <string name="system_theme">系統預設值</string>
+    <string name="settings_show_emoji_keyboard_summary">在訊息編輯器上新增按鈕以開啟表情符號鍵盤</string>
+    <string name="settings_show_emoji_keyboard">顯示表情符號鍵盤</string>
 </resources>

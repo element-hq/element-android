@@ -25,9 +25,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -52,7 +50,6 @@ import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
-import im.vector.app.features.media.BigImageViewerActivity
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -103,8 +100,8 @@ class RoomProfileFragment @Inject constructor(
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
                 headerView,
                 listOf(views.matrixProfileToolbarAvatarImageView,
-                       views.matrixProfileToolbarTitleView,
-                       views.matrixProfileDecorationToolbarAvatarImageView)
+                        views.matrixProfileToolbarTitleView,
+                        views.matrixProfileDecorationToolbarAvatarImageView)
         )
         views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.observeViewEvents {
@@ -289,13 +286,7 @@ class RoomProfileFragment @Inject constructor(
         )
     }
 
-    private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) = withState(roomProfileViewModel) {
-        matrixItem.avatarUrl
-                ?.takeIf { it.isNotEmpty() }
-                ?.let { avatarUrl ->
-                    val intent = BigImageViewerActivity.newIntent(requireContext(), matrixItem.getBestName(), avatarUrl)
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, ViewCompat.getTransitionName(view) ?: "")
-                    startActivity(intent, options.toBundle())
-                }
+    private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) {
+        navigator.openBigImageViewer(requireActivity(), view, matrixItem)
     }
 }

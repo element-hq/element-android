@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">ar</string>
-    <string name="resources_country_code">""</string>
 
     <string name="light_theme">السمة الفاتحة</string>
     <string name="dark_theme">السمة الداكنة</string>

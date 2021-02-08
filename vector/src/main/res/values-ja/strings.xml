@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">ja</string>
-    <string name="resources_country_code">JP</string>
     <string name="title_activity_room">部屋</string>
     <string name="title_activity_settings">設定</string>
     <string name="title_activity_historical">履歴</string>

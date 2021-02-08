@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">ru</string>
-    <string name="resources_country_code">RU</string>
     <!-- titles -->
     <string name="title_activity_home">Сообщения</string>
     <string name="title_activity_room">Комната</string>
@@ -1441,7 +1437,6 @@
     <string name="room_widget_permission_added_by">Этот виджет был добавлен:</string>
     <string name="room_widget_permission_theme">Ваши тема</string>
     <string name="room_widget_permission_room_id">ID комнаты</string>
-    <string name="resources_script">Cyrl</string>
     <string name="settings_integrations_summary">Используйте менеджер интеграций чтобы управлять ботами, мостами, виджетами и наборами стикеров.
 \nМенеджеры интеграций получают данные о конфигурации, могут изменять виджеты, отправлять приглашения в комнаты и устанавливать права от вашего имени.</string>
     <string name="room_widget_permission_webview_shared_info_title">Использование может оставить cookie на вашем устройстве и отправить данные в %s:</string>
@@ -2393,4 +2388,43 @@
     <string name="room_settings_room_read_history_dialog_subtitle">Изменение того, кто может читать историю, будет применяться только к будущим сообщениям в этой комнате. Видимость существующей истории не изменится.</string>
     <string name="action_unpublish">Отменить публикацию</string>
     <string name="action_add">Добавить</string>
+    <string name="default_message_emote_snow">отправляет снег ❄️</string>
+    <string name="default_message_emote_confetti">отправляет конфетти 🎉</string>
+    <string name="command_snow">Отправляет данное сообщение со снегом</string>
+    <string name="command_confetti">Отправляет данное сообщение с конфетти</string>
+    <string name="login_clear_homeserver_history">Очистить историю</string>
+    <string name="login_social_sso">Единая точка входа</string>
+    <string name="login_social_signup_with">Зарегистрироваться через %s</string>
+    <string name="login_social_signin_with">Войти через %s</string>
+    <string name="login_social_continue_with">Продолжить с %s</string>
+    <string name="login_social_continue">Или</string>
+    <string name="settings_show_emoji_keyboard_summary">Добавить кнопку в редактор сообщений, чтобы открыть клавиатуру эмодзи</string>
+    <string name="settings_show_emoji_keyboard">Показать клавиатуру эмодзи</string>
+    <string name="settings_chat_effects_description">Используйте команду /confetti или отправьте сообщение, содержащее ❄️ или 🎉</string>
+    <string name="settings_chat_effects_title">Показать эффекты чата</string>
+    <string name="room_permissions_change_topic">Изменить тему</string>
+    <string name="room_permissions_upgrade_the_room">Обновить комнату</string>
+    <string name="room_permissions_send_m_room_server_acl_events">Отправить событие m.room.server_acl</string>
+    <string name="room_permissions_change_permissions">Изменить разрешения</string>
+    <string name="room_permissions_change_room_name">Изменить название комнаты</string>
+    <string name="room_permissions_change_history_visibility">Изменить видимость истории</string>
+    <string name="room_permissions_enable_room_encryption">Включить шифрование комнаты</string>
+    <string name="room_permissions_change_main_address_for_the_room">Изменить основной адрес комнаты</string>
+    <string name="room_permissions_change_room_avatar">Изменить аватар комнаты</string>
+    <string name="room_permissions_modify_widgets">Изменить виджеты</string>
+    <string name="room_permissions_notify_everyone">Уведомить всех</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Удалить сообщения, отправленные другими</string>
+    <string name="room_permissions_ban_users">Блокировка пользователей</string>
+    <string name="room_permissions_kick_users">Выгнать пользователей</string>
+    <string name="room_permissions_change_settings">Изменить настройки</string>
+    <string name="room_permissions_invite_users">Пригласить пользователей</string>
+    <string name="room_permissions_send_messages">Отправить сообщения</string>
+    <string name="room_permissions_default_role">Роль по умолчанию</string>
+    <string name="room_permissions_notice_read_only">У вас нет права доступа на обновление ролей, необходимых для изменения различных параметров комнаты</string>
+    <string name="room_permissions_notice">Выберите роли, которые смогут менять различные параметры комнаты</string>
+    <string name="room_settings_permissions_subtitle">Просматривайте и обновляйте роли, необходимые для изменения различных параметров комнаты.</string>
+    <string name="room_permissions_title">Права доступа</string>
+    <string name="room_settings_permissions_title">Права доступа комнаты</string>
+    <string name="room_participants_leave_private_warning">Эта комната не публичная. Вы не сможете повторно присоединиться без приглашения.</string>
+    <string name="system_theme">Системная тема</string>
 </resources>

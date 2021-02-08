@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.pushrules.RuleSetKey
 import org.matrix.android.sdk.api.pushrules.rest.GetPushRulesResponse
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
 import org.matrix.android.sdk.internal.database.model.PushRulesEntity
+import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
@@ -40,7 +41,7 @@ internal class DefaultSavePushRulesTask @Inject constructor(@SessionDatabase pri
             // clear current push rules
             realm.where(PushRulesEntity::class.java)
                     .findAll()
-                    .deleteAllFromRealm()
+                    .forEach { it.deleteOnCascade() }
 
             // Save only global rules for the moment
             val globalRules = params.pushRules.global

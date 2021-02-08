@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">sv</string>
-    <string name="resources_country_code">SE</string>
-    <string name="resources_script">Latn</string>
     <string name="light_theme">Ljust tema</string>
     <string name="dark_theme">Mörkt tema</string>
     <string name="black_them">Svart tema</string>
@@ -51,8 +48,8 @@
     <string name="later">Senare</string>
     <string name="forward">Vidarebefordra</string>
     <string name="permalink">Permanent länk</string>
-    <string name="view_source">Visa källa</string>
-    <string name="view_decrypted_source">Visa avkrypterad källa</string>
+    <string name="view_source">Visa källkod</string>
+    <string name="view_decrypted_source">Visa avkrypterad källkod</string>
     <string name="delete">Radera</string>
     <string name="rename">Döp om</string>
     <string name="none">Ingen</string>
@@ -2279,4 +2276,43 @@
     <string name="room_settings_alias_title">Rumsadresser</string>
     <string name="room_settings_room_access_title">Rumsåtkomst</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Ändringar av vilka som kan läsa historik kommer bara gälla för framtida meddelanden i det här rummet. Synligheten för existerande historik kommer att vara oförändrad.</string>
+    <string name="default_message_emote_snow">skickar snö ❄️</string>
+    <string name="default_message_emote_confetti">skickar konfetti 🎉</string>
+    <string name="command_snow">Skickar det givna meddelandet med snö</string>
+    <string name="command_confetti">Skickar de givna meddelandet med konfetti</string>
+    <string name="login_clear_homeserver_history">Rensa historik</string>
+    <string name="login_social_sso">externt konto</string>
+    <string name="login_social_signin_with">Logga in med %s</string>
+    <string name="login_social_signup_with">Skapa konto med %s</string>
+    <string name="login_social_continue_with">Fortsätt med %s</string>
+    <string name="login_social_continue">Eller</string>
+    <string name="settings_show_emoji_keyboard_summary">Lägg till en knapp på meddelanderedigeraren för att öppna emojitangentbordet</string>
+    <string name="settings_show_emoji_keyboard">Visa emojitangentbord</string>
+    <string name="settings_chat_effects_description">Använda /confetti för att skicka meddelanden som innehåller ❄️ eller 🎉</string>
+    <string name="settings_chat_effects_title">Visa chatteffekter</string>
+    <string name="room_permissions_change_topic">Ändra ämnet</string>
+    <string name="room_permissions_upgrade_the_room">Uppgradera rummet</string>
+    <string name="room_permissions_send_m_room_server_acl_events">Skicka m.room.server_acl-händelser</string>
+    <string name="room_permissions_change_permissions">Ändra behörigheter</string>
+    <string name="room_permissions_change_room_name">Byta rumsnamn</string>
+    <string name="room_permissions_change_history_visibility">Ändra historikens synlighet</string>
+    <string name="room_permissions_enable_room_encryption">Aktivera rumskryptering</string>
+    <string name="room_permissions_change_main_address_for_the_room">Byta huvudadress för rummet</string>
+    <string name="room_permissions_change_room_avatar">Byta rumsavatar</string>
+    <string name="room_permissions_modify_widgets">Modifiera widgets</string>
+    <string name="room_permissions_notify_everyone">Underrätta alla</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Ta bort meddelanden skickade av andra</string>
+    <string name="room_permissions_ban_users">Banna användare</string>
+    <string name="room_permissions_kick_users">Kicka användare</string>
+    <string name="room_permissions_change_settings">Ändra inställningar</string>
+    <string name="room_permissions_invite_users">Bjuda in användare</string>
+    <string name="room_permissions_send_messages">Skicka meddelanden</string>
+    <string name="room_permissions_default_role">Förvald roll</string>
+    <string name="room_permissions_notice_read_only">Du har inte behörighet att uppdatera rollerna som krävs för att ändra olika delar av rummet</string>
+    <string name="room_permissions_notice">Välj roller som krävs för att ändra olika delar av rummet</string>
+    <string name="room_permissions_title">Behörigheter</string>
+    <string name="room_settings_permissions_subtitle">Se och uppdatera rollerna som krävs för att ändra olika delar av rummet.</string>
+    <string name="room_settings_permissions_title">Rumsbehörigheter</string>
+    <string name="room_participants_leave_private_warning">Det är rummet är inte offentligt. Du kommer inte kunna gå med igen utan en inbjudan.</string>
+    <string name="system_theme">Systemets förval</string>
 </resources>

@@ -95,6 +95,6 @@ class EmojiDataSource @Inject constructor(
     }
 
     companion object {
-        val quickEmojis = listOf("👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀")
+        val quickEmojis = listOf("\uD83D\uDC4D️", "\uD83D\uDC4E️", "😄", "🎉", "😕", "❤️", "🚀", "👀")
     }
 }

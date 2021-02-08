@@ -97,10 +97,11 @@ interface WidgetService {
     ): LiveData<List<Widget>>
 
     /**
-     * Creates a new widget in a room. It makes sure you have the rights to handle this.
+     * Creates and send a new widget in a room. It makes sure you have the rights to handle this.
      *
-     * @param roomId: the room where you want to deactivate the widget.
-     * @param widgetId: the widget to deactivate.
+     * @param roomId the room where you want to create the widget.
+     * @param widgetId the widget to create.
+     * @param content the content of the widget
      * @param callback the matrix callback to listen for result.
      * @return Cancelable
      */

@@ -12,8 +12,8 @@
     <string name="notice_room_invite_you">%1$s t\'ha convidat</string>
     <string name="notice_room_reject">%1$s ha rebutjat la invitació</string>
     <string name="notice_room_kick">%1$s ha expulsat %2$s</string>
-    <string name="notice_display_name_changed_from">%1$s ha canviat el seu nom de visualització de %2$s a %3$s</string>
-    <string name="notice_display_name_removed">%1$s ha eliminat el seu nom de visualització (era %2$s)</string>
+    <string name="notice_display_name_changed_from">%1$s ha canviat el seu àlies de %2$s a %3$s</string>
+    <string name="notice_display_name_removed">%1$s ha eliminat el àlies (era %2$s)</string>
     <string name="notice_room_topic_changed">%1$s ha canviat el tema a: %2$s</string>
     <string name="notice_room_name_changed">%1$s ha canviat el nom de la sala a: %2$s</string>
     <string name="notice_answered_call">%s ha respost a la trucada.</string>
@@ -23,16 +23,16 @@
     <string name="notice_room_visibility_unknown">desconegut (%s).</string>
     <string name="notice_end_to_end">%1$s ha activat el xifrat d\'extrem a extrem (%2$s)</string>
     <string name="notice_requested_voip_conference">%1$s ha sol·licitat una conferència VoIP</string>
-    <string name="notice_room_unban">%1$s ha tret el veto a %2$s</string>
+    <string name="notice_room_unban">%1$s ha tret el vet a %2$s</string>
     <string name="notice_room_ban">%1$s ha vetat %2$s</string>
     <string name="notice_room_withdraw">%1$s ha retirat la invitació de %2$s</string>
-    <string name="notice_avatar_url_changed">%1$s ha canviat el seu avatar</string>
-    <string name="notice_made_future_room_visibility">%1$s ha establert la visibilitat de l\'historial futur de la sala a %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s ha canviat la seva icona</string>
+    <string name="notice_made_future_room_visibility">%1$s ha establert la visibilitat de l\'històric futur de la sala a %2$s</string>
     <string name="notice_room_visibility_joined">tots els participants de la sala, des de que s\'hi uneixen.</string>
     <string name="notice_room_visibility_world_readable">qualsevol.</string>
     <string name="notice_voip_started">S\'ha iniciat la conferència VoIP</string>
     <string name="notice_voip_finished">Ha finalitzat la conferència VoIP</string>
-    <string name="notice_avatar_changed_too">(també ha canviat l\'avatar)</string>
+    <string name="notice_avatar_changed_too">(també ha canviat la icona)</string>
     <string name="notice_room_name_removed">%1$s ha eliminat el nom de la sala</string>
     <string name="notice_room_topic_removed">%1$s ha eliminat el tema de la sala</string>
     <string name="notice_profile_change_redacted">%1$s ha actualitzat el seu perfil %2$s</string>
@@ -46,7 +46,7 @@
     <string name="network_error">Error de xarxa</string>
     <string name="matrix_error">Error de Matrix</string>
     <string name="room_error_join_failed_empty_room">Ara per ara no és possible tornar a unir-se a una sala buida.</string>
-    <string name="notice_display_name_set">%1$s a canviat el seu nom de visualització a %2$s</string>
+    <string name="notice_display_name_set">%1$s a canviat el seu àlies a %2$s</string>
     <string name="notice_placed_video_call">%s ha realitzat una videotrucada.</string>
     <string name="notice_placed_voice_call">%s ha realitzat una trucada de veu.</string>
     <!-- Room display name -->
@@ -85,8 +85,8 @@
         <item quantity="other">Has eliminat les adreces %1$s d\'aquesta sala.</item>
     </plurals>
     <plurals name="notice_room_aliases_removed">
-        <item quantity="one">%1$s ha eliminat l\'adreça %2$s d\'aquesta sala.</item>
-        <item quantity="other">%1$s ha eliminat les adreces %3$s d\'aquesta sala.</item>
+        <item quantity="one">%1$s ha eliminat %2$s com a adreça d\'aquesta sala.</item>
+        <item quantity="other">%1$s ha eliminat %2$s com a adreces d\'aquesta sala.</item>
     </plurals>
     <plurals name="notice_room_aliases_added_by_you">
         <item quantity="one">Has afegit l\'adreça %1$s a aquesta sala.</item>
@@ -110,8 +110,8 @@
     <string name="notice_room_third_party_invite_with_reason">%1$s ha enviat una invitació a %2$s perquè s\'uneixi a la sala. Motiu: %3$s</string>
     <string name="notice_room_ban_with_reason_by_you">Has vetat %1$s. Motiu: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s ha vetat %2$s. Motiu: %3$s</string>
-    <string name="notice_room_unban_with_reason_by_you">Has tret el veto a %1$s. Motiu: %2$s</string>
-    <string name="notice_room_unban_with_reason">%1$s ha tret el veto a %2$s. Motiu: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Has tret el vet a %1$s. Motiu: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s ha tret el vet a %2$s. Motiu: %3$s</string>
     <string name="notice_room_ban_by_you">Has vetat %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Has marxat de la sala. Motiu: %1$s</string>
     <string name="notice_room_leave_with_reason">%1$s ha marxat de la sala. Motiu: %2$s</string>
@@ -175,8 +175,8 @@
     <string name="notice_event_redacted_with_reason">Missatge eliminat [motiu: %1$s]</string>
     <string name="notice_event_redacted_by">Missatge eliminat per %1$s</string>
     <string name="notice_event_redacted">Missatge eliminat</string>
-    <string name="notice_room_avatar_removed_by_you">Has eliminat l\'avatar de la sala</string>
-    <string name="notice_room_avatar_removed">%1$s ha eliminat l\'avatar de la sala</string>
+    <string name="notice_room_avatar_removed_by_you">Has eliminat la icona de la sala</string>
+    <string name="notice_room_avatar_removed">%1$s ha eliminat la icona de la sala</string>
     <string name="notice_room_topic_removed_by_you">Has eliminat el tema de la sala</string>
     <string name="notice_room_name_removed_by_you">Has eliminat el nom de la sala</string>
     <string name="notice_requested_voip_conference_by_you">Has sol·licitat una conferència VoIP</string>
@@ -185,7 +185,7 @@
     <string name="notice_end_to_end_by_you">Has activat el xifrat d\'extrem a extrem (%1$s)</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Has establert la visibilitat dels missatges futurs a %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s ha establert la visibilitat dels missatges futurs a %2$s</string>
-    <string name="notice_made_future_room_visibility_by_you">Has establert la visibilitat de l\'historial futur de la sala a %1$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Has establert la visibilitat de l\'històric futur de la sala a %1$s</string>
     <string name="notice_ended_call_by_you">Has finalitzat la trucada.</string>
     <string name="notice_answered_call_by_you">Has respost a la trucada.</string>
     <string name="notice_call_candidates_by_you">Has enviat dades per configurar la trucada.</string>
@@ -193,15 +193,15 @@
     <string name="notice_placed_voice_call_by_you">Has realitzat una trucada de veu.</string>
     <string name="notice_placed_video_call_by_you">Has realitzat una videotrucada.</string>
     <string name="notice_room_name_changed_by_you">Has canviat el nom de la sala a: %1$s</string>
-    <string name="notice_room_avatar_changed_by_you">Has canviat l\'avatar de la sala</string>
-    <string name="notice_room_avatar_changed">%1$s ha canviat l\'avatar de la sala</string>
+    <string name="notice_room_avatar_changed_by_you">Has canviat la icona de la sala</string>
+    <string name="notice_room_avatar_changed">%1$s ha canviat la icona de la sala</string>
     <string name="notice_room_topic_changed_by_you">Has canviat el tema a: %1$s</string>
-    <string name="notice_display_name_removed_by_you">Has eliminat el teu nom de visualització (era %1$s)</string>
-    <string name="notice_display_name_changed_from_by_you">Has canviat el teu nom de visualització de %1$s a %2$s</string>
-    <string name="notice_display_name_set_by_you">Has canviat el teu nom de visualització a %1$s</string>
-    <string name="notice_avatar_url_changed_by_you">Has canviat el teu avatar</string>
+    <string name="notice_display_name_removed_by_you">Has eliminat el teu àlies (era %1$s)</string>
+    <string name="notice_display_name_changed_from_by_you">Has canviat el teu àlies de %1$s a %2$s</string>
+    <string name="notice_display_name_set_by_you">Has canviat el teu àlies a %1$s</string>
+    <string name="notice_avatar_url_changed_by_you">Has canviat la teva icona</string>
     <string name="notice_room_withdraw_by_you">Has retirat la invitació de %1$s</string>
-    <string name="notice_room_unban_by_you">Has tret el veto a %1$s</string>
+    <string name="notice_room_unban_by_you">Has tret el vet a %1$s</string>
     <string name="notice_room_reject_by_you">Has rebutjat la invitació</string>
     <string name="notice_direct_room_created_by_you">Has creat la discussió</string>
     <string name="notice_direct_room_created">%1$s ha creat la discussió</string>
@@ -214,4 +214,49 @@
     <string name="notice_room_invite_no_invitee_by_you">La teva invitació</string>
     <string name="summary_you_sent_sticker">Has enviat un adhesiu.</string>
     <string name="summary_you_sent_image">Has enviat una imatge.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servidors coincidents amb literals IP ara estan vetats.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servidors coincidents amb literals IP ara estan permesos.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Servidors coincidents amb %s han estat eliminats de la llista de permesos.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Servidors coincidents amb %s ara estan permesos.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Servidors coincidents amb %s han estat eliminats del llista de vetats.</string>
+    <string name="notice_room_server_acl_updated_banned">• Servidors coincidents amb %s ara estan vetats.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servidors coincidents amb literals IP estan vetats.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servidors coincidents amb literals IP estan permesos.</string>
+    <string name="notice_room_server_acl_set_allowed">• Servidors coincidents amb %s estan permesos.</string>
+    <string name="notice_room_server_acl_set_banned">• Servidors coincidents amb %s estan vetats.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Has canviat les adreces d\'aquesta sala.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s ha canviat les adreces d\'aquesta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Has canviat l\'adreça principal i les adreces alternatives d\'aquesta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s ha canviat l\'adreça principal i les adreces alternatives d\'aquesta sala.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Has canviat les adreces alternatives d\'aquesta sala.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s ha canviat les adreces alternatives d\'aquesta sala.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Has eliminat l\'adreça alternativa %1$s d\'aquesta sala.</item>
+        <item quantity="other">Has eliminat les adreces alternatives %1$s d\'aquesta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s ha eliminat l\'adreça alternativa %2$s d\'aquesta sala.</item>
+        <item quantity="other">%1$s ha eliminat les adreces alternatives %2$s d\'aquesta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Has afegit l\'adreça alternativa %1$s per aquesta sala.</item>
+        <item quantity="other">Has afegit les adreces alternatives %1$s per aquesta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s ha afegit l\'adreça alternativa %2$s per aquesta sala.</item>
+        <item quantity="other">%1$s ha afegit les adreces alternatives %2$s per aquesta sala.</item>
+    </plurals>
+    <string name="room_displayname_empty_room_was">Sala buida (era %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s i %4$d altre</item>
+        <item quantity="other">%1$s, %2$s, %3$s i %4$d altres</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s i %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s i %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Tots els servidors tenen la participació vetada! Aquesta sala ja no pot ser utilitzada.</string>
+    <string name="notice_room_server_acl_updated_no_change">Sense canvis.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Has canviat les ACLs de servidor d\'aquesta sala.</string>
+    <string name="notice_room_server_acl_updated_title">%s ha canviat les ACLs de servidor d\'aquesta sala.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Has establert les ACLs de servidor per aquesta sala.</string>
+    <string name="notice_room_server_acl_set_title">%s ha establert les ACLs de servidor d\'aquesta sala.</string>
 </resources>
