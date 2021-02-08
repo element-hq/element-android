@@ -83,6 +83,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.createPrimaryKey
+import org.matrix.android.sdk.internal.crypto.store.db.model.deleteOnCascade
 import org.matrix.android.sdk.internal.crypto.store.db.query.create
 import org.matrix.android.sdk.internal.crypto.store.db.query.delete
 import org.matrix.android.sdk.internal.crypto.store.db.query.get
@@ -94,6 +95,7 @@ import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
@@ -293,7 +295,7 @@ internal class RealmCryptoStore @Inject constructor(
                                 realm.insertOrUpdate(entity)
                             }
                             // Ensure all other devices are deleted
-                            u.devices.deleteAllFromRealm()
+                            u.devices.clearWith { it.deleteOnCascade() }
                             u.devices.addAll(new)
                         }
             }
@@ -309,7 +311,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .let { userEntity ->
                         if (masterKey == null || selfSigningKey == null) {
                             // The user has disabled cross signing?
-                            userEntity.crossSigningInfoEntity?.deleteFromRealm()
+                            userEntity.crossSigningInfoEntity?.deleteOnCascade()
                             userEntity.crossSigningInfoEntity = null
                         } else {
                             var shouldResetMyDevicesLocalTrust = false
@@ -1633,7 +1635,7 @@ internal class RealmCryptoStore @Inject constructor(
         } else {
             // Just override existing, caller should check and untrust id needed
             val existing = CrossSigningInfoEntity.getOrCreate(realm, userId)
-            existing.crossSigningKeys.deleteAllFromRealm()
+            existing.crossSigningKeys.clearWith { it.deleteOnCascade() }
             existing.crossSigningKeys.addAll(
                     info.crossSigningKeys.map {
                         crossSigningKeysMapper.map(it)

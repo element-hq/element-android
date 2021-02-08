@@ -28,6 +28,7 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.unescapeHtml
 import java.util.Date
 import javax.inject.Inject
 
@@ -73,9 +74,9 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
     private fun JsonDict.toPreviewUrlData(url: String): PreviewUrlData {
         return PreviewUrlData(
                 url = (get("og:url") as? String) ?: url,
-                siteName = get("og:site_name") as? String,
-                title = get("og:title") as? String,
-                description = get("og:description") as? String,
+                siteName = (get("og:site_name") as? String)?.unescapeHtml(),
+                title = (get("og:title") as? String)?.unescapeHtml(),
+                description = (get("og:description") as? String)?.unescapeHtml(),
                 mxcUrl = get("og:image") as? String
         )
     }

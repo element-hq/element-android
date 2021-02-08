@@ -84,6 +84,7 @@
             android:insetRight="0dp"
             android:insetBottom="0dp"
             android:padding="0dp"
+            android:rotationY="@integer/rtl_mirror_flip"
             app:cornerRadius="17dp"
             app:icon="@drawable/ic_qr_code_add"
             app:iconGravity="textStart"
