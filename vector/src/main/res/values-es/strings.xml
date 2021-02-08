@@ -2248,7 +2248,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_show_room_member_state_events">Mostrar eventos de los miembros de la sala</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">¡La notificación ha sido cliqueada!</string>
     <string name="system_theme">Tema del sistema</string>
-    <string name="permissions_denied_add_contact">Dar permiso para acceder a tus contactos.</string>
+    <string name="permissions_denied_add_contact">Permitir acceder a sus contactos.</string>
     <string name="error_unauthorized">Desautorizado, credenciales de autenticación no autorizadas</string>
     <string name="login_clear_homeserver_history">Limpiar Historial</string>
     <string name="re_authentication_default_confirm_text">Element requiere que ingrese sus credenciales para realizar esta acción.</string>
