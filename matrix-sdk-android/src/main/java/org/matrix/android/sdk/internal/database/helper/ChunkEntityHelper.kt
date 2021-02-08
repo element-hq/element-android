@@ -38,12 +38,6 @@ import io.realm.Sort
 import io.realm.kotlin.createObject
 import timber.log.Timber
 
-internal fun ChunkEntity.deleteOnCascade() {
-    assertIsManaged()
-    this.timelineEvents.deleteAllFromRealm()
-    this.deleteFromRealm()
-}
-
 internal fun ChunkEntity.merge(roomId: String, chunkToMerge: ChunkEntity, direction: PaginationDirection) {
     assertIsManaged()
     val localRealm = this.realm

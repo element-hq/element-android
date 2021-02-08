@@ -56,6 +56,7 @@ Bugfix 🐛:
  - Widgets: Support $matrix_widget_id parameter (#2748)
  - Data for Worker overload (#2721)
  - Fix multiple tasks
+ - Object deletion in database is not complete (#2759)
 
 SDK API changes ⚠️:
  - Increase targetSdkVersion to 30 (#2600)
