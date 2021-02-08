@@ -244,7 +244,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="preview">Vista Previa</string>
     <string name="reject">Rechazar</string>
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Ir al primer mensaje no leído.</string>
+    <string name="room_jump_to_first_unread">Mensajes no leídos.</string>
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Has sido invitado por %s a unirte a esta sala</string>
     <string name="room_preview_unlinked_email_warning">Esta invitación fue enviada a %s, que no esta asociado a esta cuenta.
@@ -2294,5 +2294,12 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="permissions_denied_qr_code">Para escanear el codigo QR , necesita darle permisos a su camara.</string>
     <string name="invite_friends">Invitar contactos</string>
     <string name="room_settings_permissions_subtitle">Modifique los roles y privilegios de la sala.</string>
-    <string name="room_participants_leave_private_warning">Este chat no es público. Necesitaras una invitación para reunirte.</string>
+    <string name="room_participants_leave_private_warning">Sala no pública. No puede acceder sin una invitacion.</string>
+    <string name="room_permissions_upgrade_the_room">Actualizar sala</string>
+    <string name="room_permissions_change_topic">Cambiar tema</string>
+    <string name="room_permissions_send_messages">Enviar mensajes</string>
+    <string name="room_permissions_change_history_visibility">Editar historial de visibilidad</string>
+    <string name="room_permissions_change_permissions">Editar permisos</string>
+    <string name="room_permissions_change_room_name">Cambiar el nombre de la sala</string>
+    <string name="room_settings_permissions_title">Administracion de sala</string>
 </resources>
