@@ -65,23 +65,31 @@ internal class WidgetFactory @Inject constructor(private val userDataSource: Use
         )
     }
 
+    // Ref: https://github.com/matrix-org/matrix-widget-api/blob/master/src/templating/url-template.ts#L29-L33
     private fun WidgetContent.computeURL(roomId: String?, widgetId: String): String? {
         var computedUrl = url ?: return null
         val myUser = userDataSource.getUser(userId)
-        computedUrl = computedUrl
-                .replace("\$matrix_user_id", userId)
-                .replace("\$matrix_display_name", myUser?.displayName ?: userId)
-                .replace("\$matrix_avatar_url", myUser?.avatarUrl ?: "")
-                .replace("\$matrix_widget_id", widgetId)
 
-        if (roomId != null) {
-            computedUrl = computedUrl.replace("\$matrix_room_id", roomId)
-        }
-        for ((key, value) in data) {
-            if (value is String) {
-                computedUrl = computedUrl.replace("$$key", URLEncoder.encode(value, "utf-8"))
-            }
+        val keyValue = data.mapKeys { "\$${it.key}" }.toMutableMap()
+
+        keyValue[WIDGET_PATTERN_MATRIX_USER_ID] = userId
+        keyValue[WIDGET_PATTERN_MATRIX_DISPLAY_NAME] = myUser?.getBestName() ?: userId
+        keyValue[WIDGET_PATTERN_MATRIX_AVATAR_URL] = myUser?.avatarUrl ?: ""
+        keyValue[WIDGET_PATTERN_MATRIX_WIDGET_ID] = widgetId
+        keyValue[WIDGET_PATTERN_MATRIX_ROOM_ID] = roomId ?: ""
+
+        for ((key, value) in keyValue) {
+            computedUrl = computedUrl.replace(key, URLEncoder.encode(value.toString(), "utf-8"))
         }
         return computedUrl
+    }
+
+    companion object {
+        // Value to be replaced in URLS
+        const val WIDGET_PATTERN_MATRIX_USER_ID = "\$matrix_user_id"
+        const val WIDGET_PATTERN_MATRIX_DISPLAY_NAME = "\$matrix_display_name"
+        const val WIDGET_PATTERN_MATRIX_AVATAR_URL = "\$matrix_avatar_url"
+        const val WIDGET_PATTERN_MATRIX_WIDGET_ID = "\$matrix_widget_id"
+        const val WIDGET_PATTERN_MATRIX_ROOM_ID = "\$matrix_room_id"
     }
 }

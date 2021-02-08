@@ -1,4 +1,4 @@
-Changes in Element 1.X.X (2020-XX-XX)
+Changes in Element 1.0.17 (2020-XX-XX)
 ===================================================
 
 Features ✨:
@@ -8,10 +8,12 @@ Improvements 🙌:
  - Open image from URL Preview (#2705)
 
 Bugfix 🐛:
+ - Bug in WidgetContent.computeURL() (#2767)
  - Duplicate thumbs | Mobile reactions for 👍 and 👎 are not the same as web (#2776)
  - Join room by alias other federation error (#2778)
  - HTML unescaping for URL preview (#2766)
  - URL preview on reply fallback (#2756)
+ - RTL: some arrows should be rotated in RTL (#2757)
 
 Translations 🗣:
  -
@@ -26,7 +28,7 @@ Test:
  -
 
 Other changes:
- -
+ - Change app name from "Element (Riot.im)" to "Element"
 
 Changes in Element 1.0.16 (2020-02-04)
 ===================================================
