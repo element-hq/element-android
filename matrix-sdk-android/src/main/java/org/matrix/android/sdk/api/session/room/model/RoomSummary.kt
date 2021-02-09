@@ -109,6 +109,20 @@ data class RoomSummary constructor(
         }
     }
 
+    fun scNotificationCountWithManualUnread(): Int {
+        return when {
+            notificationCount > 0 -> {
+                notificationCount
+            }
+            markedUnread          -> {
+                1
+            }
+            else                  -> {
+                0
+            }
+        }
+    }
+
     companion object {
         const val NOT_IN_BREADCRUMBS = -1
         // SC addition

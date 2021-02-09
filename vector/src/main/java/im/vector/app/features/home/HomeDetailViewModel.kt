@@ -128,7 +128,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
                     val peopleNotifications = summaries
                             .filter { it.isDirect }
-                            .map { it.notificationCount }
+                            .map { it.scNotificationCountWithManualUnread() }
                             .sum()
                     val peopleHasHighlight = summaries
                             .filter { it.isDirect }
@@ -136,7 +136,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
 
                     val roomsNotifications = summaries
                             .filter { !it.isDirect }
-                            .map { it.notificationCount }
+                            .map { it.scNotificationCountWithManualUnread() }
                             .sum()
                     val roomsHasHighlight = summaries
                             .filter { !it.isDirect }

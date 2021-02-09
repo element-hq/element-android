@@ -29,7 +29,6 @@ import im.vector.app.features.home.room.filtered.filteredRoomFooterItem
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import timber.log.Timber
 import javax.inject.Inject
 
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
@@ -135,7 +134,7 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             0
         } else {
             // Count notifications + number of chats with no notifications marked as unread
-            summaries.map { it }.sumBy { x -> if (x.notificationCount > 0) x.notificationCount else if (x.markedUnread) 1 else 0 }
+            summaries.map { it }.sumBy { it.scNotificationCountWithManualUnread() }
         }
         val markedUnread = if (summaries.isEmpty()) {
             false
