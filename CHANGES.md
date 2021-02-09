@@ -1,4 +1,4 @@
-Changes in Element 1.0.17 (2020-XX-XX)
+Changes in Element 1.0.18 (2020-XX-XX)
 ===================================================
 
 Features ✨:
@@ -6,17 +6,9 @@ Features ✨:
                                 
 Improvements 🙌:
  - VoIP : new tiles in timeline
- - Create a WidgetItemFactory and use it for better rendering of Jitsi widget change (video conference)
- - Open image from URL Preview (#2705)
 
 Bugfix 🐛:
  - VoIP : fix audio devices output
- - Bug in WidgetContent.computeURL() (#2767)
- - Duplicate thumbs | Mobile reactions for 👍 and 👎 are not the same as web (#2776)
- - Join room by alias other federation error (#2778)
- - HTML unescaping for URL preview (#2766)
- - URL preview on reply fallback (#2756)
- - RTL: some arrows should be rotated in RTL (#2757)
 
 Translations 🗣:
  -
@@ -25,10 +17,32 @@ SDK API changes ⚠️:
  - 
 
 Build 🧱:
- - Upgrade build tools
+ -
 
 Test:
  -
+
+Other changes:
+ -
+
+Changes in Element 1.0.17 (2020-02-09)
+===================================================
+
+Improvements 🙌:
+ - Create a WidgetItemFactory and use it for better rendering of Jitsi widget change (video conference)
+ - Open image from URL Preview (#2705)
+
+Bugfix 🐛:
+ - Bug in WidgetContent.computeURL() (#2767)
+ - Duplicate thumbs | Mobile reactions for 👍 and 👎 are not the same as web (#2776)
+ - Join room by alias other federation error (#2778)
+ - HTML unescaping for URL preview (#2766)
+ - URL preview on reply fallback (#2756)
+ - RTL: some arrows should be rotated in RTL (#2757)
+ - Properly delete objects from Realm DB (#2765)
+
+Build 🧱:
+ - Upgrade build tools
 
 Other changes:
  - Change app name from "Element (Riot.im)" to "Element"
