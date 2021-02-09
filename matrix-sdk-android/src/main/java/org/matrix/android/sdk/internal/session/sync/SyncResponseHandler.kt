@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
-import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
+import org.matrix.android.sdk.internal.session.ProgressReporter
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.notification.ProcessEventForPushTask
 import org.matrix.android.sdk.internal.session.reportSubtask
@@ -53,7 +53,9 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
                                                        private val processEventForPushTask: ProcessEventForPushTask,
                                                        private val pushRuleService: PushRuleService) {
 
-    suspend fun handleResponse(syncResponse: SyncResponse, fromToken: String?, reporter: DefaultInitialSyncProgressService?) {
+    suspend fun handleResponse(syncResponse: SyncResponse,
+                               fromToken: String?,
+                               reporter: ProgressReporter?) {
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 

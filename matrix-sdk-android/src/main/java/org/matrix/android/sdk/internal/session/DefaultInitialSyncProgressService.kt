@@ -22,8 +22,20 @@ import org.matrix.android.sdk.api.session.InitialSyncProgressService
 import timber.log.Timber
 import javax.inject.Inject
 
+internal interface ProgressReporter {
+    fun startTask(@StringRes nameRes: Int,
+                  totalProgress: Int,
+                  parentWeight: Float)
+
+    fun reportProgress(progress: Float)
+
+    fun endTask()
+}
+
 @SessionScope
-internal class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgressService {
+internal class DefaultInitialSyncProgressService @Inject constructor()
+    : InitialSyncProgressService,
+        ProgressReporter {
 
     private val status = MutableLiveData<InitialSyncProgressService.Status>()
 
@@ -33,9 +45,9 @@ internal class DefaultInitialSyncProgressService @Inject constructor() : Initial
         return status
     }
 
-    fun startTask(@StringRes nameRes: Int,
-                  totalProgress: Int,
-                  parentWeight: Float) {
+    override fun startTask(@StringRes nameRes: Int,
+                           totalProgress: Int,
+                           parentWeight: Float) {
         // Create a rootTask, or add a child to the leaf
         if (rootTask == null) {
             rootTask = TaskInfo(nameRes, totalProgress, null, 1F)
@@ -51,7 +63,7 @@ internal class DefaultInitialSyncProgressService @Inject constructor() : Initial
         reportProgress(0F)
     }
 
-    fun reportProgress(progress: Float) {
+    override fun reportProgress(progress: Float) {
         rootTask?.let { root ->
             root.leaf().let { leaf ->
                 // Update the progress of the leaf and all its parents
@@ -62,7 +74,7 @@ internal class DefaultInitialSyncProgressService @Inject constructor() : Initial
         }
     }
 
-    fun endTask() {
+    override fun endTask() {
         rootTask?.leaf()?.let { endedTask ->
             // Ensure the task progress is complete
             reportProgress(endedTask.totalProgress.toFloat())
@@ -117,7 +129,7 @@ private class TaskInfo(@StringRes val nameRes: Int,
     }
 }
 
-internal inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressService?,
+internal inline fun <T> reportSubtask(reporter: ProgressReporter?,
                                       @StringRes nameRes: Int,
                                       totalProgress: Int,
                                       parentWeight: Float,
@@ -128,7 +140,7 @@ internal inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressServic
     }
 }
 
-internal inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: DefaultInitialSyncProgressService?,
+internal inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: ProgressReporter?,
                                                             @StringRes nameRes: Int,
                                                             parentWeight: Float,
                                                             transform: (Map.Entry<K, V>) -> R): List<R> {

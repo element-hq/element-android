@@ -49,7 +49,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
-import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
+import org.matrix.android.sdk.internal.session.ProgressReporter
 import org.matrix.android.sdk.internal.session.mapWithProgress
 import org.matrix.android.sdk.internal.session.reportSubtask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
@@ -86,12 +86,10 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    fun handle(
-            realm: Realm,
-            roomsSyncResponse: RoomsSyncResponse,
-            isInitialSync: Boolean,
-            reporter: DefaultInitialSyncProgressService? = null
-    ) {
+    fun handle(realm: Realm,
+               roomsSyncResponse: RoomsSyncResponse,
+               isInitialSync: Boolean,
+               reporter: ProgressReporter? = null) {
         Timber.v("Execute transaction from $this")
         handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, reporter)
         handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
@@ -100,7 +98,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService?) {
+    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: ProgressReporter?) {
         val insertType = if (isInitialSync) {
             EventInsertType.INITIAL_SYNC
         } else {
@@ -137,7 +135,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                 handlingStrategy: HandlingStrategy.JOINED,
                                 insertType: EventInsertType,
                                 syncLocalTimeStampMillis: Long,
-                                reporter: DefaultInitialSyncProgressService?) {
+                                reporter: ProgressReporter?) {
         val maxSize = (initialSyncStrategy as? InitialSyncStrategy.Optimized)?.maxRoomsToInsert ?: Int.MAX_VALUE
         val listSize = handlingStrategy.data.keys.size
         val numberOfChunks = ceil(listSize / maxSize.toDouble()).toInt()
