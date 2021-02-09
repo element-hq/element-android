@@ -57,9 +57,9 @@ class CallItemFactory @Inject constructor(
         val callId = callSignalingContent.callId ?: return null
         val call = callManager.getCallById(callId)
         val callKind = when {
-            call == null -> CallTileTimelineItem.CallKind.UNKNOWN
+            call == null            -> CallTileTimelineItem.CallKind.UNKNOWN
             call.mxCall.isVideoCall -> CallTileTimelineItem.CallKind.VIDEO
-            else -> CallTileTimelineItem.CallKind.AUDIO
+            else                    -> CallTileTimelineItem.CallKind.AUDIO
         }
         return when (event.root.getClearType()) {
             EventType.CALL_ANSWER -> {

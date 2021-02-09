@@ -2797,6 +2797,7 @@
     <string name="call_tile_you_started_call">You started a call</string>
     <string name="call_tile_other_started_call">%1$s started a call</string>
     <string name="call_tile_in_call">You\'re currently in this call</string>
+    <!-- Pattern can be replaced by the value of string call_tile_call_back -->
     <string name="call_tile_you_declined">You declined this call %1$s</string>
     <string name="call_tile_other_declined">%1$s declined this call</string>
     <string name="call_tile_ended">This call has ended</string>

@@ -78,17 +78,17 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
                     holder.acceptView.setText(R.string.join)
                     holder.acceptView.setLeftDrawable(R.drawable.ic_call_audio_small, R.color.riotx_accent)
                 }
-                CallKind.AUDIO -> {
+                CallKind.AUDIO      -> {
                     holder.rejectView.setText(R.string.call_notification_reject)
                     holder.acceptView.setText(R.string.call_notification_answer)
                     holder.acceptView.setLeftDrawable(R.drawable.ic_call_audio_small, R.color.riotx_accent)
                 }
-                CallKind.VIDEO -> {
+                CallKind.VIDEO      -> {
                     holder.rejectView.setText(R.string.call_notification_reject)
                     holder.acceptView.setText(R.string.call_notification_answer)
                     holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, R.color.riotx_accent)
                 }
-                else -> {
+                else                -> {
                     Timber.w("Shouldn't be in that state")
                 }
             }
@@ -102,12 +102,12 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
 
     private fun TextView.setCallStatus(attributes: Attributes) {
         when (attributes.callStatus) {
-            CallStatus.INVITED -> if (attributes.informationData.sentByMe) {
+            CallStatus.INVITED  -> if (attributes.informationData.sentByMe) {
                 setText(R.string.call_tile_you_started_call)
             } else {
                 text = context.getString(R.string.call_tile_other_started_call, attributes.userOfInterest.getBestName())
             }
-            CallStatus.IN_CALL -> setText(R.string.call_tile_in_call)
+            CallStatus.IN_CALL  -> setText(R.string.call_tile_in_call)
             CallStatus.REJECTED -> if (attributes.informationData.sentByMe) {
                 setTextWithColoredPart(R.string.call_tile_you_declined, R.string.call_tile_call_back) {
                     val callbackAction = RoomDetailAction.StartCall(attributes.callKind == CallKind.VIDEO)
@@ -116,7 +116,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
             } else {
                 text = context.getString(R.string.call_tile_other_declined, attributes.userOfInterest.getBestName())
             }
-            CallStatus.ENDED -> setText(R.string.call_tile_ended)
+            CallStatus.ENDED    -> setText(R.string.call_tile_ended)
         }
     }
 

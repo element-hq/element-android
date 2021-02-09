@@ -91,7 +91,7 @@ class NoticeEventFormatter @Inject constructor(
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
-                EventType.CALL_REJECT,
+            EventType.CALL_REJECT,
             EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
             EventType.CALL_NEGOTIATE,
             EventType.CALL_SELECT_ANSWER,
@@ -352,11 +352,12 @@ class NoticeEventFormatter @Inject constructor(
                 } else {
                     sp.getString(R.string.notice_call_candidates, senderName)
                 }
-            EventType.CALL_REJECT ->  if (event.isSentByCurrentUser()) {
-                sp.getString(R.string.call_tile_you_declined, "")
-            } else {
-                sp.getString(R.string.call_tile_other_declined, senderName)
-            }
+            EventType.CALL_REJECT     ->
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.call_tile_you_declined, "")
+                } else {
+                    sp.getString(R.string.call_tile_other_declined, senderName)
+                }
             else                      -> null
         }
     }
