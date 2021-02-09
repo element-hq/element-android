@@ -86,7 +86,10 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_MAC,
-                EventType.CALL_CANDIDATES       -> {
+                EventType.CALL_CANDIDATES,
+                EventType.CALL_REPLACES,
+                EventType.CALL_SELECT_ANSWER,
+                EventType.CALL_NEGOTIATE        -> {
                     // TODO These are not filtered out by timeline when encrypted
                     // For now manually ignore
                     if (userPreferencesProvider.shouldShowHiddenEvents()) {
