@@ -197,7 +197,7 @@
     <string name="login_error_login_email_not_yet">L\'enllaç del correu electrònic que encara no heu fet clic</string>
     <!-- crypto warnings -->
     <!-- read receipts list Screen -->
-    <string name="read_receipts_list">Llegit per</string>
+    <string name="read_receipts_list">Llista de confirmacions de lectura</string>
     <!-- accounts list Screen -->
     <!-- image size selection -->
     <string name="compression_options">Envia com</string>
@@ -986,7 +986,7 @@
     <string name="settings_system_preferences_summary">Seleccioneu el color de LED, la vibració, so…</string>
     <string name="settings_cryptography_manage_keys">Gestió de claus criptogràfiques</string>
     <string name="settings_show_read_receipts">Mostra les confirmacions de lectura</string>
-    <string name="settings_show_read_receipts_summary">Feu clic en les confirmacions de lectura per obtenir una llista detallada.</string>
+    <string name="settings_show_read_receipts_summary">Fes clic a les confirmacions de lectura per obtenir-ne una llista detallada.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Concedeix el permís</string>
     <string name="account_email_error">S\'ha produït un error en verificar la vostra adreça de correu electrònic.</string>
     <string name="account_phone_number_error">S\'ha produït un error en verificar el vostre número de telèfon.</string>
@@ -1244,7 +1244,7 @@
     <string name="message_add_reaction">Afegir reacció</string>
     <string name="message_view_reaction">Veure reaccions</string>
     <string name="reactions">Reaccions</string>
-    <string name="event_redacted_by_user_reason">Esdeveniment eliminat per l\'usuari</string>
+    <string name="event_redacted_by_user_reason">Esdeveniment eliminat per usuari</string>
     <string name="event_redacted_by_admin_reason">Esdeveniment moderat per l\'administrador de la sala</string>
     <string name="last_edited_info_message">Última edició per %1$s el %2$s</string>
     <string name="malformed_message">Esdeveniment mal format, no es pot mostrar</string>
@@ -2173,7 +2173,7 @@
     <string name="qr_code_scanned_verif_waiting">Esperant %s…</string>
     <string name="qr_code_scanned_verif_waiting_notice">Ja gairebé has acabat! Esperant la confirmació…</string>
     <string name="qr_code_scanned_self_verif_notice">Ja gairebé has acabat! Veus el mateix escut a l\'altre dispositiu\?</string>
-    <string name="direct_room_created_summary_item_by_you">T\'has unit.</string>
+    <string name="direct_room_created_summary_item_by_you">T\'hi has unit.</string>
     <string name="direct_room_created_summary_item">%s s\'ha unit.</string>
     <string name="room_created_summary_item_by_you">Has creat i configurat la sala.</string>
     <string name="room_created_summary_item">%s ha creat i configurat la sala.</string>
@@ -2293,4 +2293,78 @@
     <string name="verification_conclusion_not_secure">No segur</string>
     <string name="verification_green_shield">Busca l\'escut verd per assegurar-te que l\'usuari és de confiança. Per assegurar-te que una sala és segura, tots els usuaris han de ser de confiança.</string>
     <string name="verify_user_sas_emoji_security_tip">Per a una seguretat màxima, utilitza un altre mètode segur de comunicació o fes-ho en persona.</string>
+    <string name="room_member_jump_to_read_receipt">Vés a confirmacions de lectura</string>
+    <string name="soft_logout_signin_e2e_warning_notice">Inicia sessió per recuperar les claus de xifrat emmagatzemades exclusivament en aquest dispositiu. Les necessites per poder llegir, en qualsevol dispositiu, els teus missatges segurs.</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="one">Invitacions enviades a %1$s i un més</item>
+        <item quantity="other">Invitacions enviades a %1$s i %2$d més</item>
+    </plurals>
+    <string name="invitations_sent_to_two_users">Invitacions enviades a %1$s i %2$s</string>
+    <string name="invitation_sent_to_one_user">Invitació enviada a %1$s</string>
+    <string name="invite_users_to_room_title">Convida usuaris</string>
+    <string name="inviting_users_to_room">Convidant usuaris…</string>
+    <string name="invite_users_to_room_action_invite">CONVIDA</string>
+    <string name="external_link_confirmation_message">L\'enllaç %1$s t\'està intentant portar a un altre lloc: %2$s.
+\n
+\nSegur que vols continuar\?</string>
+    <string name="external_link_confirmation_title">Comprova aquest enllaç</string>
+    <string name="mark_as_verified">Marca-ho com a segur</string>
+    <string name="use_other_session_content_description">Utilitza l\'última versió d\'Element als teus altres dispositius, Element Web, Element per escriptori, Element iOS, Element per Android, o algun altre client de Matrix que admeti signatura creuada</string>
+    <string name="bootstrap_progress_storing_in_sss">Desant secret de clau de còpia de seguretat a SSSS</string>
+    <string name="security_prompt_text">Verifica\'t a tu i als altres per mantenir els teus xats segurs</string>
+    <string name="command_description_plain">Envia un missatge com a text pla, sense tenir en compte la formatació markdown</string>
+    <string name="bootstrap_save_key_description">Utilitza aquesta %1$s com a alternativa en cas de que perdis la teva %2$s.</string>
+    <string name="finish">Acaba</string>
+    <string name="keep_it_safe">Mantén-la segura</string>
+    <string name="bootstrap_loading_title">Configurant recuperació.</string>
+    <string name="bootstrap_info_text_2">Introdueix una frase secreta que només coneguis tu per protegir els secrets del teu servidor.</string>
+    <string name="bootstrap_info_text">Protegeix i desbloqueja missatges xifrats amb la %s.</string>
+    <string name="secure_backup_reset_all">Restableix-ho tot</string>
+    <string name="failed_to_access_secure_storage">No s\'ha pogut accedir a l\'emmagatzematge segur</string>
+    <string name="change_password_summary">Configura una nova contrasenya pel compte…</string>
+    <string name="error_saving_media_file">No s\'ha pogut desar el fitxer multimèdia</string>
+    <string name="error_adding_media_file_to_gallery">No s\'ha pogut afegir el fitxer multimèdia a la galeria</string>
+    <string name="media_file_added_to_gallery">S\'ha afegit el fitxer multimèdia a la galeria</string>
+    <string name="confirm_your_identity_quad_s">Confirma la teva identitat verificant aquest inici de sessió i, així, poder-li donar accés als missatges xifrats.</string>
+    <string name="crosssigning_verify_session">Verifica l\'inici de sessió</string>
+    <string name="verify_other_sessions">Verifica totes les teves sessions per assegurar-te que el teu compte i missatges estan segurs</string>
+    <string name="review_logins">Comprova on has iniciat sessió</string>
+    <string name="encrypted_unverified">Xifrat amb un dispositiu no verificat</string>
+    <string name="unencrypted">No xifrat</string>
+    <plurals name="secure_backup_reset_devices_you_can_verify">
+        <item quantity="one">Veure el dispositiu amb el qual et pots verificar</item>
+        <item quantity="other">Veure els %d dispositius amb el quals et pots verificar</item>
+    </plurals>
+    <string name="secure_backup_reset_if_you_reset_all">Si ho restableixes tot</string>
+    <string name="secure_backup_reset_all_no_other_devices">Fes això només si no tens cap altre dispositiu per poder verificar-ne aquest.</string>
+    <string name="re_authentication_default_confirm_text">Element necessita que introdueixis les teves credencials per poder realitzar aquesta acció.</string>
+    <string name="re_authentication_activity_title">Re-autenticació necessària</string>
+    <string name="contacts_book_title">Llista de contactes</string>
+    <string name="empty_phone_book">La teva agenda està buida</string>
+    <string name="phone_book_title">Agenda</string>
+    <string name="empty_contact_book">La teva llista de contactes està buida</string>
+    <string name="loading_contact_book">Obtenint contactes…</string>
+    <string name="element_disclaimer_negative_button">D\'ACORD</string>
+    <string name="element_disclaimer_content">Estem contents d\'anunciar que hem canviat de nom! L\'aplicació està actualitzada i s\'ha iniciat sessió amb el teu compte.</string>
+    <string name="save_your_security_key_title">Desa la clau de seguretat</string>
+    <string name="set_a_security_phrase_again_notice">Torna a introduir la frase de seguretat per a confirmar-la.</string>
+    <string name="set_a_security_phrase_hint">Frase de seguretat</string>
+    <string name="set_a_security_phrase_notice">Introdueix una frase secreta que només coneguis tu per protegir els secrets del teu servidor.</string>
+    <string name="set_a_security_phrase_title">Configura una frase de seguretat</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Introdueix una frase secreta que només coneguis tu per generar una clau per a la còpia de seguretat.</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Configura</string>
+    <string name="settings_setup_secure_backup">Configura la còpia de seguretat segura</string>
+    <string name="identity_server_error_no_current_binding_error">Ara mateix no hi ha cap associació amb aquest identificador.</string>
+    <string name="identity_server_error_binding_error">L\'associació ha fallat.</string>
+    <string name="identity_server_error_no_identity_server_configured">Primer configura un servidor d\'identitat.</string>
+    <string name="identity_server_error_outdated_home_server">No es pot realitzar aquesta operació. El servidor local no està actualitzat.</string>
+    <string name="identity_server_error_outdated_identity_server">Aquest servidor d\'identitat no està actualitzat. Element només és compatible amb l\'API V2.</string>
+    <string name="disconnect_identity_server_dialog_content">Vols desconnectar-te del servidor d\'identitat %s\?</string>
+    <string name="choose_locale_loading_locales">Carregant idiomes disponibles…</string>
+    <string name="choose_locale_other_locales_title">Altres idiomes disponibles</string>
+    <string name="choose_locale_current_locale_title">Idioma actual</string>
+    <string name="delete_event_dialog_reason_hint">Motiu de l\'eliminació</string>
+    <string name="enter_secret_storage_passphrase">Introdueix la frase per l\'emmagatzematge secret</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Només hauries d\'accedir a l\'emmagatzematge secret amb dispositius de confiança</string>
+    <string name="verification_profile_device_verified_because">Aquesta sessió és de confiança per a xats segurs ja que %1$s (%2$s) l\'ha verificat:</string>
 </resources>
