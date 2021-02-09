@@ -49,9 +49,9 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
-import org.matrix.android.sdk.internal.session.ProgressReporter
-import org.matrix.android.sdk.internal.session.mapWithProgress
-import org.matrix.android.sdk.internal.session.reportSubtask
+import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
+import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
+import org.matrix.android.sdk.internal.session.initsync.reportSubtask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberEventHandler
 import org.matrix.android.sdk.internal.session.room.read.FullyReadContent

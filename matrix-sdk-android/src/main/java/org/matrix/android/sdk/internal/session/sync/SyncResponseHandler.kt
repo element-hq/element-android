@@ -25,10 +25,10 @@ import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
-import org.matrix.android.sdk.internal.session.ProgressReporter
+import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.notification.ProcessEventForPushTask
-import org.matrix.android.sdk.internal.session.reportSubtask
+import org.matrix.android.sdk.internal.session.initsync.reportSubtask
 import org.matrix.android.sdk.internal.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse

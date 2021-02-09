@@ -23,8 +23,8 @@ import org.matrix.android.sdk.internal.database.model.GroupEntity
 import org.matrix.android.sdk.internal.database.model.GroupSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
-import org.matrix.android.sdk.internal.session.ProgressReporter
-import org.matrix.android.sdk.internal.session.mapWithProgress
+import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
+import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
 import org.matrix.android.sdk.internal.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.InvitedGroupSync
 import javax.inject.Inject
