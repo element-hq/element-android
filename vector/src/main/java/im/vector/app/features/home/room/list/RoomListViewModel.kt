@@ -25,6 +25,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.utils.DataSource
 import im.vector.app.features.home.RoomListDisplayMode
+import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,6 +46,8 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             private val session: Session,
                                             private val roomSummariesSource: DataSource<List<RoomSummary>>)
     : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
+
+    private var vectorPreferences: VectorPreferences? = null
 
     interface Factory {
         fun create(initialState: RoomListViewState): RoomListViewModel
@@ -68,6 +71,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     }
 
     fun initWithContext(context: Context, displayMode: RoomListDisplayMode) {
+        vectorPreferences = VectorPreferences(context)
         setState {
             // RoomListViewState.initWithContext
             this.initWithContext(context, displayMode)
@@ -292,10 +296,11 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                                                          }
                     }
                 }
+        val vectorPreferences = this.vectorPreferences
         return RoomSummaries().apply {
             put(RoomCategory.INVITE, invites)
             put(RoomCategory.FAVOURITE, favourites)
-            if (displayMode == RoomListDisplayMode.ALL) {
+            if (displayMode == RoomListDisplayMode.ALL || vectorPreferences?.combinedOverview() == true) {
                 put(RoomCategory.COMBINED, normalPriority)
             } else {
                 put(RoomCategory.DIRECT, directChats)
