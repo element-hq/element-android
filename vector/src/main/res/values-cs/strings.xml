@@ -1455,7 +1455,7 @@
     <string name="login_server_text">Jako email, účty mají jeden domov, ačkoli můžete mluvit s kýmkoli</string>
     <string name="login_server_matrix_org_text">Přidejte se k miliónům svobodným na největším veřejném serveru</string>
     <string name="login_server_modular_text">Prémiový hosting pro organizace</string>
-    <string name="login_server_modular_learn_more">Dozvědět se víc</string>
+    <string name="login_server_modular_learn_more">Dozvědět se více</string>
     <string name="login_server_other_title">Další</string>
     <string name="login_server_other_text">Vlastní a pokročilá nastavení</string>
     <string name="login_continue">Pokračovat</string>
@@ -1637,7 +1637,7 @@
 \n
 \nVaše zprávy jsou zabezpečeny zámky a pouze Vy a příjemce máte jedinečné klíče k jejich odemknutí.</string>
     <string name="room_profile_section_security">Zabezpečení</string>
-    <string name="room_profile_section_security_learn_more">Dozvědět se víc</string>
+    <string name="room_profile_section_security_learn_more">Dozvědět se více</string>
     <string name="room_profile_section_more">Více</string>
     <string name="room_profile_section_more_settings">Nastavení místnosti</string>
     <string name="room_profile_section_more_notifications">Oznámení</string>
@@ -1713,8 +1713,8 @@
     <string name="room_member_profile_sessions_section_title">Relace</string>
     <string name="trusted">Důvěryhodné</string>
     <string name="not_trusted">Nedůvěryhodné</string>
-    <string name="verification_profile_device_verified_because">Tato relace je důvěryhodná pro bezpečnou komunikaci, protože %1$s (%2$s) ji ověřili:</string>
-    <string name="verification_profile_device_new_signing">%1$s (%2$s) se příhlásili skrze novou relaci:</string>
+    <string name="verification_profile_device_verified_because">Tato relace je důvěryhodná pro bezpečnou komunikaci, protože %1$s (%2$s) ji ověřil:</string>
+    <string name="verification_profile_device_new_signing">%1$s (%2$s) se přihlásil skrze novou relaci:</string>
     <string name="verification_profile_device_untrust_info">Dokud tento uživatel nezačne důvěřovat této relaci, zprávy z ní odeslané a v ní přijaté budou označeny varováním. Volitelně ji můžete manuálně ověřit.</string>
     <string name="initialize_cross_signing">Spustit křížové podepsání</string>
     <string name="reset_cross_signing">Resetovat klíče</string>
@@ -2104,7 +2104,7 @@
     <string name="element_disclaimer_title">Riot je nyní Element!</string>
     <string name="element_disclaimer_content">Jsme nadšení, že smíme oznámit změnu jména! Vaše app je aktuální a jste přihlášeni do svého účtu.</string>
     <string name="element_disclaimer_negative_button">ROZUMÍM</string>
-    <string name="element_disclaimer_positive_button">DOZVĚDĚT SE VÍC</string>
+    <string name="element_disclaimer_positive_button">DOZVĚDĚT SE VÍCE</string>
     <string name="element_login_splash_brand">element</string>
     <string name="save_recovery_key_chooser_hint">Uložit klíče pro obnovu v</string>
     <string name="add_from_phone_book">Přidat z mého adresáře</string>
