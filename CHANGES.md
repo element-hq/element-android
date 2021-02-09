@@ -1,8 +1,5 @@
-Changes in Element 1.0.17 (2020-XX-XX)
+Changes in Element 1.0.17 (2020-02-09)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Create a WidgetItemFactory and use it for better rendering of Jitsi widget change (video conference)
@@ -15,18 +12,10 @@ Bugfix 🐛:
  - HTML unescaping for URL preview (#2766)
  - URL preview on reply fallback (#2756)
  - RTL: some arrows should be rotated in RTL (#2757)
-
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
+ - Properly delete objects from Realm DB (#2765)
 
 Build 🧱:
  - Upgrade build tools
-
-Test:
- -
 
 Other changes:
  - Change app name from "Element (Riot.im)" to "Element"
