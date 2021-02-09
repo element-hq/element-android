@@ -105,5 +105,6 @@ object EventType {
                 || type == CALL_SELECT_ANSWER
                 || type == CALL_NEGOTIATE
                 || type == CALL_REJECT
+                || type == CALL_REPLACES
     }
 }
