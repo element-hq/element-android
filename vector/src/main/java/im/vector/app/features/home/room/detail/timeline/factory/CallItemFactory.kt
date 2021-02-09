@@ -26,7 +26,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHold
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.call.CallAnswerContent
@@ -57,10 +56,10 @@ class CallItemFactory @Inject constructor(
         val callSignalingContent = event.getCallSignallingContent() ?: return null
         val callId = callSignalingContent.callId ?: return null
         val call = callManager.getCallById(callId)
-        val callKind = if (call?.mxCall?.isVideoCall.orFalse()) {
-            CallTileTimelineItem.CallKind.VIDEO
-        } else {
-            CallTileTimelineItem.CallKind.AUDIO
+        val callKind = when {
+            call == null -> CallTileTimelineItem.CallKind.UNKNOWN
+            call.mxCall.isVideoCall -> CallTileTimelineItem.CallKind.VIDEO
+            else -> CallTileTimelineItem.CallKind.AUDIO
         }
         return when (event.root.getClearType()) {
             EventType.CALL_ANSWER -> {

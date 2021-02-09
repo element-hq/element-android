@@ -91,7 +91,11 @@ class NoticeEventFormatter @Inject constructor(
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
+                EventType.CALL_REJECT,
             EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.CALL_NEGOTIATE,
+            EventType.CALL_SELECT_ANSWER,
+            EventType.CALL_REPLACES,
             EventType.MESSAGE,
             EventType.REACTION,
             EventType.KEY_VERIFICATION_START,
@@ -179,6 +183,7 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName, rs)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
+            EventType.CALL_REJECT,
             EventType.CALL_ANSWER                   -> formatCallEvent(type, event, senderName)
             EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(event, senderName, rs)
             else                                    -> {
@@ -347,6 +352,11 @@ class NoticeEventFormatter @Inject constructor(
                 } else {
                     sp.getString(R.string.notice_call_candidates, senderName)
                 }
+            EventType.CALL_REJECT ->  if (event.isSentByCurrentUser()) {
+                sp.getString(R.string.call_tile_you_declined, "")
+            } else {
+                sp.getString(R.string.call_tile_other_declined, senderName)
+            }
             else                      -> null
         }
     }

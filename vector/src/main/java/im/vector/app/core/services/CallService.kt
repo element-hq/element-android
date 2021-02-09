@@ -33,7 +33,6 @@ import im.vector.app.features.call.telecom.CallConnection
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.popup.IncomingCallAlert
 import im.vector.app.features.popup.PopupAlertManager
@@ -160,9 +159,7 @@ class CallService : VectorService() {
         Timber.v("displayIncomingCallNotification : display the dedicated notification")
         val incomingCallAlert = IncomingCallAlert(callId,
                 shouldBeDisplayedIn = { activity ->
-                    if (activity is RoomDetailActivity) {
-                        call.roomId != activity.currentRoomId
-                    } else if (activity is VectorCallActivity) {
+                    if (activity is VectorCallActivity) {
                         activity.intent.getParcelableExtra<CallArgs>(MvRx.KEY_ARG)?.callId != call.callId
                     } else true
                 }

@@ -72,6 +72,7 @@ object EventType {
     const val CALL_NEGOTIATE = "m.call.negotiate"
     const val CALL_REJECT = "m.call.reject"
     const val CALL_HANGUP = "m.call.hangup"
+    // This type is not processed by the client, just sent to the server
     const val CALL_REPLACES = "m.call.replaces"
 
     // Key share events

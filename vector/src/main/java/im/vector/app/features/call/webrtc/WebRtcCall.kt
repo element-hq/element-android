@@ -190,7 +190,7 @@ class WebRtcCall(val mxCall: MxCall,
 
     fun onIceCandidate(iceCandidate: IceCandidate) = iceCandidateSource.onNext(iceCandidate)
 
-    fun onRenegationNeeded(restartIce: Boolean) {
+    fun onRenegotiationNeeded(restartIce: Boolean) {
         GlobalScope.launch(dispatcher) {
             if (mxCall.state != CallState.CreateOffer && mxCall.opponentVersion == 0) {
                 Timber.v("Opponent does not support renegotiation: ignoring onRenegotiationNeeded event")

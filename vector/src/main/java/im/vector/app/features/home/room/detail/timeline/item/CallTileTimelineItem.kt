@@ -35,6 +35,7 @@ import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import org.matrix.android.sdk.api.util.MatrixItem
+import timber.log.Timber
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
 abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Holder>() {
@@ -52,11 +53,15 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         holder.endGuideline.updateLayoutParams<RelativeLayout.LayoutParams> {
             this.marginEnd = leftGuideline
         }
-
         holder.creatorNameView.text = attributes.userOfInterest.getBestName()
         attributes.avatarRenderer.render(attributes.userOfInterest, holder.creatorAvatarView)
-        holder.callKindView.setText(attributes.callKind.title)
-        holder.callKindView.setLeftDrawable(attributes.callKind.icon)
+        if (attributes.callKind != CallKind.UNKNOWN) {
+            holder.callKindView.isVisible = true
+            holder.callKindView.setText(attributes.callKind.title)
+            holder.callKindView.setLeftDrawable(attributes.callKind.icon)
+        } else {
+            holder.callKindView.isVisible = false
+        }
         if (attributes.callStatus == CallStatus.INVITED && !attributes.informationData.sentByMe && attributes.isStillActive) {
             holder.acceptRejectViewGroup.isVisible = true
             holder.acceptView.setOnClickListener {
@@ -82,6 +87,9 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
                     holder.rejectView.setText(R.string.call_notification_reject)
                     holder.acceptView.setText(R.string.call_notification_answer)
                     holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, R.color.riotx_accent)
+                }
+                else -> {
+                    Timber.w("Shouldn't be in that state")
                 }
             }
         } else {
@@ -147,7 +155,8 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     enum class CallKind(@DrawableRes val icon: Int, @StringRes val title: Int) {
         VIDEO(R.drawable.ic_call_video_small, R.string.action_video_call),
         AUDIO(R.drawable.ic_call_audio_small, R.string.action_voice_call),
-        CONFERENCE(R.drawable.ic_call_conference_small, R.string.conference_call_in_progress)
+        CONFERENCE(R.drawable.ic_call_conference_small, R.string.conference_call_in_progress),
+        UNKNOWN(0, 0)
     }
 
     enum class CallStatus {

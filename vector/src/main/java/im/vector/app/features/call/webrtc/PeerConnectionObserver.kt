@@ -129,7 +129,7 @@ class PeerConnectionObserver(private val webRtcCall: WebRtcCall) : PeerConnectio
              * It is, however, possible that the ICE agent did find compatible connections for some components.
              */
             PeerConnection.IceConnectionState.FAILED -> {
-                webRtcCall.onRenegationNeeded(restartIce = true)
+                webRtcCall.onRenegotiationNeeded(restartIce = true)
             }
             /**
              *  The ICE agent has finished gathering candidates, has checked all pairs against one another, and has found a connection for all components.
@@ -168,7 +168,7 @@ class PeerConnectionObserver(private val webRtcCall: WebRtcCall) : PeerConnectio
 
     override fun onRenegotiationNeeded() {
         Timber.v("## VOIP StreamObserver onRenegotiationNeeded")
-        webRtcCall.onRenegationNeeded(restartIce = false)
+        webRtcCall.onRenegotiationNeeded(restartIce = false)
     }
 
     /**
