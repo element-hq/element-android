@@ -1,0 +1,56 @@
+namespace olm {};
+
+[Error]
+enum MachineCreationError {
+    "Identifier",
+    "CryptoStore",
+};
+
+[Error]
+enum CryptoStoreError {
+    "CryptoStore",
+};
+
+dictionary Device {
+    string user_id;
+    string device_id;
+    record<DOMString, string> keys;
+};
+
+dictionary Sas {
+    string other_user_id;
+    string other_device_id;
+    string flow_id;
+    Request request;
+};
+
+dictionary Request {
+    string request_id;
+    RequestType request_type;
+    string request_body;
+};
+
+enum RequestType {
+    "KeysQuery",
+    "KeysUpload",
+    "ToDevice",
+};
+
+interface OlmMachine {
+    [Throws=MachineCreationError]
+    constructor([ByRef] string user_id, [ByRef] string device_id, [ByRef] string path);
+
+    void receive_sync_response([ByRef] string response);
+
+    record<DOMString, string> identity_keys();
+
+    string user_id();
+    string slow_user_id();
+    string device_id();
+
+    Device? get_device([ByRef] string user_id, [ByRef] string device_id);
+    sequence<Device> get_user_devices([ByRef] string user_id);
+
+    [Throws=CryptoStoreError]
+    Sas start_verification([ByRef] Device device);
+};

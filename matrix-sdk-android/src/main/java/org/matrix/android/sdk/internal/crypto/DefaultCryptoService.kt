@@ -50,6 +50,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.internal.OlmMachine
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
@@ -362,6 +363,14 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
         isStarting.set(true)
+        try {
+            val dataDir = "/data/data/im.vector.app.debug/files"
+            val olmMachine = OlmMachine("@example:localhost", "DEVICEID", dataDir)
+            Timber.v("HELLLO WORLD STARTING CRYPTO ${olmMachine.identityKeys()}")
+        } catch (throwable: Throwable) {
+            Timber.v("HELLLO WORLD FAILED CRYPTO $throwable")
+        }
+        Timber.v("HELLLO WORLD STARTING CRYPTO")
 
         // Open the store
         cryptoStore.open()
