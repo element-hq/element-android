@@ -19,14 +19,11 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.matrix.android.sdk.api.session.InitialSyncProgressService
-import org.matrix.android.sdk.internal.util.StringProvider
 import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
-internal class DefaultInitialSyncProgressService @Inject constructor(
-        private val stringProvider: StringProvider
-) : InitialSyncProgressService {
+internal class DefaultInitialSyncProgressService @Inject constructor() : InitialSyncProgressService {
 
     private val status = MutableLiveData<InitialSyncProgressService.Status>()
 
@@ -36,39 +33,47 @@ internal class DefaultInitialSyncProgressService @Inject constructor(
         return status
     }
 
-    fun startTask(@StringRes nameRes: Int, totalProgress: Int, parentWeight: Float) {
+    fun startTask(@StringRes nameRes: Int,
+                  totalProgress: Int,
+                  parentWeight: Float) {
         // Create a rootTask, or add a child to the leaf
         if (rootTask == null) {
-            rootTask = TaskInfo(nameRes, totalProgress)
+            rootTask = TaskInfo(nameRes, totalProgress, null, 1F)
         } else {
             val currentLeaf = rootTask!!.leaf()
-
-            val newTask = TaskInfo(
+            currentLeaf.child = TaskInfo(
                     nameRes = nameRes,
                     totalProgress = totalProgress,
                     parent = currentLeaf,
                     parentWeight = parentWeight
             )
-
-            currentLeaf.child = newTask
         }
         reportProgress(0F)
     }
 
     fun reportProgress(progress: Float) {
-        rootTask?.leaf()?.setProgress(progress)
+        rootTask?.let { root ->
+            root.leaf().let { leaf ->
+                // Update the progress of the leaf and all its parents
+                leaf.setProgress(progress)
+                // Then update the live data using leaf wording and root progress
+                status.postValue(InitialSyncProgressService.Status.Progressing(leaf.nameRes, root.currentProgress.toInt()))
+            }
+        }
     }
 
-    fun endTask(nameRes: Int) {
-        val endedTask = rootTask?.leaf()
-        if (endedTask?.nameRes == nameRes) {
+    fun endTask() {
+        rootTask?.leaf()?.let { endedTask ->
             // Ensure the task progress is complete
-            endedTask.setProgress(endedTask.totalProgress.toFloat())
-            // And close it
+            reportProgress(endedTask.totalProgress.toFloat())
             endedTask.parent?.child = null
-        }
-        if (endedTask?.parent == null) {
-            status.postValue(InitialSyncProgressService.Status.Idle)
+
+            if (endedTask.parent != null) {
+                // And close it
+                endedTask.parent.child = null
+            } else {
+                status.postValue(InitialSyncProgressService.Status.Idle)
+            }
         }
     }
 
@@ -76,40 +81,38 @@ internal class DefaultInitialSyncProgressService @Inject constructor(
         rootTask = null
         status.postValue(InitialSyncProgressService.Status.Idle)
     }
+}
 
-    private inner class TaskInfo(@StringRes val nameRes: Int,
-                                 val totalProgress: Int,
-                                 val parent: TaskInfo? = null,
-                                 val parentWeight: Float = 1f,
-                                 val offset: Float = parent?.currentProgress ?: 0F) {
-        var child: TaskInfo? = null
-        private var currentProgress: Float = 0F
+private class TaskInfo(@StringRes val nameRes: Int,
+                       val totalProgress: Int,
+                       val parent: TaskInfo?,
+                       val parentWeight: Float) {
+    var child: TaskInfo? = null
+    var currentProgress = 0F
+        private set
+    private val offset = parent?.currentProgress ?: 0F
 
-        /**
-         * Get the further child
-         */
-        fun leaf(): TaskInfo {
-            var last = this
-            while (last.child != null) {
-                last = last.child!!
-            }
-            return last
+    /**
+     * Get the further child
+     */
+    fun leaf(): TaskInfo {
+        var last = this
+        while (last.child != null) {
+            last = last.child!!
         }
+        return last
+    }
 
-        /**
-         * Set progress of this task and update the parent progress. Last parent will post value.
-         */
-        fun setProgress(progress: Float) {
-            Timber.v("setProgress: $progress / $totalProgress")
-            currentProgress = progress
-//            val newProgress = Math.min(currentProgress + progress, totalProgress)
-            if (parent != null) {
-                val parentProgress = (currentProgress / totalProgress) * (parentWeight * parent.totalProgress)
-                parent.setProgress(offset + parentProgress)
-            } else {
-                Timber.v("--- ${stringProvider.getString(leaf().nameRes)}: ${currentProgress.toInt()}")
-                status.postValue(InitialSyncProgressService.Status.Progressing(leaf().nameRes, currentProgress.toInt()))
-            }
+    /**
+     * Set progress of this task and update the parent progress iteratively
+     */
+    fun setProgress(progress: Float) {
+        Timber.v("setProgress: $progress / $totalProgress")
+        currentProgress = progress
+
+        parent?.let {
+            val parentProgress = (currentProgress / totalProgress) * (parentWeight * it.totalProgress)
+            it.setProgress(offset + parentProgress)
         }
     }
 }
@@ -121,21 +124,21 @@ internal inline fun <T> reportSubtask(reporter: DefaultInitialSyncProgressServic
                                       block: () -> T): T {
     reporter?.startTask(nameRes, totalProgress, parentWeight)
     return block().also {
-        reporter?.endTask(nameRes)
+        reporter?.endTask()
     }
 }
 
 internal inline fun <K, V, R> Map<out K, V>.mapWithProgress(reporter: DefaultInitialSyncProgressService?,
-                                                            taskId: Int,
+                                                            @StringRes nameRes: Int,
                                                             parentWeight: Float,
                                                             transform: (Map.Entry<K, V>) -> R): List<R> {
     var current = 0F
-    reporter?.startTask(taskId, count() + 1, parentWeight)
+    reporter?.startTask(nameRes, count() + 1, parentWeight)
     return map {
         reporter?.reportProgress(current)
         current++
         transform.invoke(it)
     }.also {
-        reporter?.endTask(taskId)
+        reporter?.endTask()
     }
 }
