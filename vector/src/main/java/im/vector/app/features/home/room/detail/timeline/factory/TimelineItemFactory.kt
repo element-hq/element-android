@@ -20,7 +20,6 @@ import im.vector.app.core.epoxy.EmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
@@ -32,7 +31,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val defaultItemFactory: DefaultItemFactory,
                                               private val encryptionItemFactory: EncryptionItemFactory,
                                               private val roomCreateItemFactory: RoomCreateItemFactory,
-                                              private val roomSummariesHolder: RoomSummariesHolder,
+                                              private val widgetItemFactory: WidgetItemFactory,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
                                               private val callItemFactory: CallItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {
@@ -59,11 +58,11 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
-                EventType.STATE_ROOM_WIDGET_LEGACY,
-                EventType.STATE_ROOM_WIDGET,
                 EventType.STATE_ROOM_POWER_LEVELS,
                 EventType.REACTION,
                 EventType.REDACTION             -> noticeItemFactory.create(event, highlight, callback)
+                EventType.STATE_ROOM_WIDGET_LEGACY,
+                EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(event, highlight, callback)
                 // State room create
                 EventType.STATE_ROOM_CREATE     -> roomCreateItemFactory.create(event, callback)

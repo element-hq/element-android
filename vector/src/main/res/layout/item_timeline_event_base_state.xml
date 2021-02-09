@@ -60,6 +60,13 @@
             android:layout="@layout/item_timeline_event_status_tile_stub"
             tools:visibility="visible" />
 
+        <ViewStub
+            android:id="@+id/messageWidgetStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout="@layout/item_timeline_event_widget_stub"
+            tools:layout_marginTop="280dp"
+            tools:visibility="visible" />
+
     </FrameLayout>
 
 

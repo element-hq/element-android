@@ -83,7 +83,7 @@ abstract class BaseAttachmentProvider<Type>(
             val dateString = dateFormatter.format(timelineEvent.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
             overlayView?.updateWith(
                     counter = stringProvider.getString(R.string.attachment_viewer_item_x_of_y, position + 1, getItemCount()),
-                    senderInfo = "${timelineEvent.senderInfo.displayName} $dateString"
+                    senderInfo = "${timelineEvent.senderInfo.disambiguatedDisplayName} $dateString"
             )
             overlayView?.views?.overlayVideoControlsGroup?.isVisible = timelineEvent.root.isVideoMessage()
         } else {
