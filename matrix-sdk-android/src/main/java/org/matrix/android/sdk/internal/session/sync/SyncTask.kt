@@ -24,9 +24,9 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.TimeOutInterceptor
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.network.toFailure
-import org.matrix.android.sdk.internal.session.initsync.DefaultInitialSyncProgressService
 import org.matrix.android.sdk.internal.session.filter.FilterRepository
 import org.matrix.android.sdk.internal.session.homeserver.GetHomeServerCapabilitiesTask
+import org.matrix.android.sdk.internal.session.initsync.DefaultInitialSyncProgressService
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
 import org.matrix.android.sdk.internal.session.sync.model.LazyRoomSync
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
@@ -90,8 +90,7 @@ internal class DefaultSyncTask @Inject constructor(
         if (isInitialSync) {
             // We might want to get the user information in parallel too
             userStore.createOrUpdate(userId)
-            initialSyncProgressService.endAll()
-            initialSyncProgressService.startTask(R.string.initial_sync_start_importing_account, 100, 1F)
+            initialSyncProgressService.startRoot(R.string.initial_sync_start_importing_account, 100)
         }
         // Maybe refresh the home server capabilities data we know
         getHomeServerCapabilitiesTask.execute(GetHomeServerCapabilitiesTask.Params(forceRefresh = false))

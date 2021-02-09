@@ -35,21 +35,29 @@ internal class DefaultInitialSyncProgressService @Inject constructor()
         return status
     }
 
+    /**
+     * Create a rootTask
+     */
+    fun startRoot(@StringRes nameRes: Int,
+                  totalProgress: Int) {
+        endAll()
+        rootTask = TaskInfo(nameRes, totalProgress, null, 1F)
+        reportProgress(0F)
+    }
+
+    /**
+     * Add a child to the leaf
+     */
     override fun startTask(@StringRes nameRes: Int,
                            totalProgress: Int,
                            parentWeight: Float) {
-        // Create a rootTask, or add a child to the leaf
-        if (rootTask == null) {
-            rootTask = TaskInfo(nameRes, totalProgress, null, 1F)
-        } else {
-            val currentLeaf = rootTask!!.leaf()
-            currentLeaf.child = TaskInfo(
-                    nameRes = nameRes,
-                    totalProgress = totalProgress,
-                    parent = currentLeaf,
-                    parentWeight = parentWeight
-            )
-        }
+        val currentLeaf = rootTask?.leaf() ?: return
+        currentLeaf.child = TaskInfo(
+                nameRes = nameRes,
+                totalProgress = totalProgress,
+                parent = currentLeaf,
+                parentWeight = parentWeight
+        )
         reportProgress(0F)
     }
 
