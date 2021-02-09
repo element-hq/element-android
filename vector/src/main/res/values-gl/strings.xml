@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">gl</string>
-    <string name="resources_country_code">ES</string>
-    <string name="light_theme">Tema claro</string>
-    <string name="dark_theme">Tema escuro</string>
-    <string name="black_them">Tema negro</string>
+    <string name="light_theme">Decorado claro</string>
+    <string name="dark_theme">Decorado escuro</string>
+    <string name="black_them">Decorado negro</string>
     <string name="notification_sync_in_progress">Sincronizando…</string>
     <string name="notification_noisy_notifications">Notificacións con son</string>
     <string name="notification_silent_notifications">Notificacións silenciosas</string>

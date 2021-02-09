@@ -2,8 +2,6 @@
 <resources>
     <string name="encrypted_message">Шифровано съобщение</string>
     <!-- groups creation -->
-    <string name="resources_language">bg</string>
-    <string name="resources_country_code">BG</string>
     <string name="light_theme">Светла тема</string>
     <string name="dark_theme">Тъмна тема</string>
     <string name="black_them">Черна тема</string>
@@ -1270,7 +1268,6 @@
     <string name="terms_description_for_identity_server">Бъдете откриваеми от други</string>
     <string name="terms_description_for_integration_manager">Използвайте ботове, връзки с други мрежи, приспособления и стикери</string>
     <string name="read_at">Прочетете на</string>
-    <string name="resources_script">Cyrl</string>
     <string name="none">Нищо</string>
     <string name="revoke">Оттегли</string>
     <string name="disconnect">Прекъсни</string>

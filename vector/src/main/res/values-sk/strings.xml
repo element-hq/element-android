@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">sk</string>
-    <string name="resources_country_code">SK</string>
-
     <string name="light_theme">Svetlý vzhľad</string>
     <string name="dark_theme">Tmavý vzhľad</string>
     <string name="black_them">Čierny vzhľad</string>
@@ -1227,8 +1224,6 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="notification_silent">Tiché</string>
     <string name="error_empty_field_enter_user_name">Prosím zadajte meno používateľa.</string>
     <string name="title_activity_verify_device">Overiť reláciu</string>
-
-    <string name="resources_script">Latn</string>
 
     <string name="none">Žiadny</string>
     <string name="revoke">Zrušiť</string>

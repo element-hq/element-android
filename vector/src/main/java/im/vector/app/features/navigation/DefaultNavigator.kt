@@ -73,7 +73,6 @@ import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryDat
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -256,14 +255,13 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(RoomProfileActivity.newIntent(context, roomId, directAccess))
     }
 
-    override fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem) {
-        matrixItem.avatarUrl
+    override fun openBigImageViewer(activity: Activity, sharedElement: View?, mxcUrl: String?, title: String?) {
+        mxcUrl
                 ?.takeIf { it.isNotBlank() }
                 ?.let { avatarUrl ->
-                    val intent = BigImageViewerActivity.newIntent(activity, matrixItem.getBestName(), avatarUrl)
+                    val intent = BigImageViewerActivity.newIntent(activity, title, avatarUrl)
                     val options = sharedElement?.let {
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it)
-                                ?: "")
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
                     }
                     activity.startActivity(intent, options?.toBundle())
                 }

@@ -126,6 +126,13 @@
     <string name="notice_widget_modified">%1$s modified %2$s widget</string>
     <string name="notice_widget_modified_by_you">You modified %1$s widget</string>
 
+    <string name="notice_widget_jitsi_added">Video conference started by %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">You started video conference</string>
+    <string name="notice_widget_jitsi_removed">Video conference ended by %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">You ended video conference</string>
+    <string name="notice_widget_jitsi_modified">Video conference modified by %1$s</string>
+    <string name="notice_widget_jitsi_modified_by_you">You modified video conference</string>
+
     <string name="power_level_admin">Admin</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_default">Default</string>

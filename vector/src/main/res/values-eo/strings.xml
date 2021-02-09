@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">eo</string>
     <string name="light_theme">Hela haŭto</string>
     <string name="dark_theme">Malhela haŭto</string>
     <string name="black_them">Nigra haŭto</string>
@@ -10,7 +9,6 @@
     <string name="notification_silent_notifications">Silentaj sciigoj</string>
     <string name="title_activity_home">Mesaĝoj</string>
     <string name="title_activity_room">Ĉambro</string>
-    <string name="resources_country_code">EO</string>
     <string name="title_activity_settings">Agordoj</string>
     <string name="title_activity_bug_report">Erar-raporto</string>
     <string name="title_activity_group_details">Detaloj pri komunumo</string>
@@ -86,7 +84,6 @@
     <string name="title_activity_keys_backup_restore">Uzi savkopiadon de ŝlosiloj</string>
     <string name="title_activity_verify_device">Kontroli salutaĵon</string>
     <string name="encryption_information_verify_device">Kontroli salutaĵon</string>
-    <string name="resources_script">Latn</string>
     <string name="status_theme">Haŭto de Status.im</string>
     <string name="keys_backup_is_not_finished_please_wait">Savkopio de ŝlosiloj ne finiĝis; bonvolu atendi…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Vi perdos viajn ĉifritajn mesaĝojn se vi nun adiaŭos</string>

@@ -32,6 +32,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val defaultItemFactory: DefaultItemFactory,
                                               private val encryptionItemFactory: EncryptionItemFactory,
                                               private val roomCreateItemFactory: RoomCreateItemFactory,
+                                              private val widgetItemFactory: WidgetItemFactory,
                                               private val roomSummaryHolder: RoomSummaryHolder,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {
@@ -58,14 +59,14 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
-                EventType.STATE_ROOM_WIDGET_LEGACY,
-                EventType.STATE_ROOM_WIDGET,
                 EventType.CALL_INVITE,
                 EventType.CALL_HANGUP,
                 EventType.CALL_ANSWER,
                 EventType.STATE_ROOM_POWER_LEVELS,
                 EventType.REACTION,
                 EventType.REDACTION             -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+                EventType.STATE_ROOM_WIDGET_LEGACY,
+                EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(event, highlight, callback)
                 // State room create
                 EventType.STATE_ROOM_CREATE     -> roomCreateItemFactory.create(event, callback)

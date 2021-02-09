@@ -1687,6 +1687,10 @@ class RoomDetailFragment @Inject constructor(
         roomDetailViewModel.handle(RoomDetailAction.DoNotShowPreviewUrlFor(eventId, url))
     }
 
+    override fun onPreviewUrlImageClicked(sharedView: View?, mxcUrl: String?, title: String?) {
+        navigator.openBigImageViewer(requireActivity(), sharedView, mxcUrl, title)
+    }
+
     private fun onShareActionClicked(action: EventSharedAction.Share) {
         if (action.messageContent is MessageTextContent) {
             shareText(requireContext(), action.messageContent.body)

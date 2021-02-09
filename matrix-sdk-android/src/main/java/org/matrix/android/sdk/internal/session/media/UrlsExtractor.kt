@@ -21,6 +21,8 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
+import org.matrix.android.sdk.api.session.room.timeline.isReply
+import org.matrix.android.sdk.api.util.ContentUtils
 import javax.inject.Inject
 
 internal class UrlsExtractor @Inject constructor() {
@@ -35,7 +37,14 @@ internal class UrlsExtractor @Inject constructor() {
                             || it.msgType == MessageType.MSGTYPE_NOTICE
                             || it.msgType == MessageType.MSGTYPE_EMOTE
                 }
-                ?.body
+                ?.let { messageContent ->
+                    if (event.isReply()) {
+                        // This is a reply, strip the reply fallback
+                        ContentUtils.extractUsefulTextFromReply(messageContent.body)
+                    } else {
+                        messageContent.body
+                    }
+                }
                 ?.let { urlRegex.findAll(it) }
                 ?.map { it.value }
                 ?.filter { it.startsWith("https://") || it.startsWith("http://") }

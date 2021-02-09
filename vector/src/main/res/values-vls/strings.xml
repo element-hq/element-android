@@ -2,9 +2,6 @@
 <resources>
     <string name="encrypted_message">Versleuteld bericht</string>
 
-    <string name="resources_language">vls</string>
-    <string name="resources_country_code">BE</string>
-
     <string name="light_theme">Licht thema</string>
     <string name="dark_theme">Dounker thema</string>
     <string name="black_them">Zwart thema</string>

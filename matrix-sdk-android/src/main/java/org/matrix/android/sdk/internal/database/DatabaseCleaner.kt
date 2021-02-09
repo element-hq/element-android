@@ -16,6 +16,10 @@
 
 package org.matrix.android.sdk.internal.database
 
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.internal.database.helper.nextDisplayIndex
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
@@ -23,14 +27,11 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.SessionLifecycleObserver
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -56,7 +57,7 @@ internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val 
         }
     }
 
-    private suspend fun cleanUp(realm: Realm, threshold: Long) {
+    private fun cleanUp(realm: Realm, threshold: Long) {
         val numberOfEvents = realm.where(EventEntity::class.java).findAll().size
         val numberOfTimelineEvents = realm.where(TimelineEventEntity::class.java).findAll().size
         Timber.v("Number of events in db: $numberOfEvents | Number of timeline events in db: $numberOfTimelineEvents")
@@ -76,20 +77,7 @@ internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val 
                 chunk.numberOfTimelineEvents = chunk.numberOfTimelineEvents - eventsToRemove.size
                 eventsToRemove.forEach {
                     val canDeleteRoot = it.root?.stateKey == null
-                    if (canDeleteRoot) {
-                        it.root?.deleteFromRealm()
-                    }
-                    it.readReceipts?.readReceipts?.deleteAllFromRealm()
-                    it.readReceipts?.deleteFromRealm()
-                    it.annotations?.apply {
-                        editSummary?.deleteFromRealm()
-                        pollResponseSummary?.deleteFromRealm()
-                        referencesSummaryEntity?.deleteFromRealm()
-                        reactionsSummary.deleteAllFromRealm()
-                    }
-                    it.annotations?.deleteFromRealm()
-                    it.readReceipts?.deleteFromRealm()
-                    it.deleteFromRealm()
+                    it.deleteOnCascade(canDeleteRoot)
                 }
                 // We reset the prevToken so we will need to fetch again.
                 chunk.prevToken = null
