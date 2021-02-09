@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.session.room.sender
 
+import org.matrix.android.sdk.internal.util.replaceSpaceChars
+
 data class SenderInfo(
         val userId: String,
         /**
@@ -27,8 +29,9 @@ data class SenderInfo(
 ) {
     val disambiguatedDisplayName: String
         get() = when {
-            displayName.isNullOrBlank() -> userId
-            isUniqueDisplayName         -> displayName
-            else                        -> "$displayName ($userId)"
+            displayName == null                       -> userId
+            displayName.replaceSpaceChars().isBlank() -> "$displayName ($userId)"
+            isUniqueDisplayName                       -> displayName
+            else                                      -> "$displayName ($userId)"
         }
 }

@@ -5,6 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
+ - Create a WidgetItemFactory and use it for better rendering of Jitsi widget change (video conference)
  - Open image from URL Preview (#2705)
 
 Bugfix 🐛:

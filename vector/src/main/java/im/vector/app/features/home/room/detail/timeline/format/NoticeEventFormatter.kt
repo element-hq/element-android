@@ -140,12 +140,14 @@ class NoticeEventFormatter @Inject constructor(
         return if (widgetContent.isActive()) {
             val widgetName = widgetContent.getHumanName()
             if (previousWidgetContent?.isActive().orFalse()) {
+                // Widget has been modified
                 if (event.isSentByCurrentUser()) {
                     sp.getString(R.string.notice_widget_modified_by_you, widgetName)
                 } else {
                     sp.getString(R.string.notice_widget_modified, disambiguatedDisplayName, widgetName)
                 }
             } else {
+                // Widget has been added
                 if (event.isSentByCurrentUser()) {
                     sp.getString(R.string.notice_widget_added_by_you, widgetName)
                 } else {
@@ -153,6 +155,7 @@ class NoticeEventFormatter @Inject constructor(
                 }
             }
         } else {
+            // Widget has been removed
             val widgetName = previousWidgetContent?.getHumanName()
             if (event.isSentByCurrentUser()) {
                 sp.getString(R.string.notice_widget_removed_by_you, widgetName)
