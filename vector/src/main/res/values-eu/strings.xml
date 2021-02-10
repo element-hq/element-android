@@ -1338,7 +1338,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="notification_sender_me">Ni</string>
     <string name="notification_inline_reply_failed">** Bidalketak huts egin du, ireki gela</string>
 
-    <string name="error_jitsi_not_supported_on_old_device">Sentitzen dugu, gailu zaharretan ezin dira Jitsi bidezko konferentzia deiak egin (Android OS 5.0 baino zaharragoak)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Sentitzen dugu, gailu zaharretan ezin dira Jitsi bidezko konferentzia deiak egin (Android OS 6.0 baino zaharragoak)</string>
 
     <string name="title_activity_verify_device">Egiaztatu saioa</string>
 

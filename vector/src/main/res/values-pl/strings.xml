@@ -1241,7 +1241,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="room_widget_permission_avatar_url">Adres URL awatara</string>
     <string name="room_widget_permission_user_id">Twój ID użytkownika</string>
     <string name="room_widget_permission_widget_id">ID Widżetu</string>
-    <string name="error_jitsi_not_supported_on_old_device">Przepraszamy, połączenia konferencyjne za pomocą Jitsi nie są wspierane na starszych urządzeniach (urządzenia z systemem Android poniżej wersji 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Przepraszamy, połączenia konferencyjne za pomocą Jitsi nie są wspierane na starszych urządzeniach (urządzenia z systemem Android poniżej wersji 6.0)</string>
     <string name="room_widget_resource_permission_title">Widżet chce użyć następujących zasobów:</string>
     <string name="room_widget_resource_decline_permission">Zablokuj wszystko</string>
     <string name="room_widget_webview_access_camera">Użyj aparatu</string>

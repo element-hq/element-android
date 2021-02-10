@@ -1155,7 +1155,7 @@
     <string name="notification_new_invitation">Neue Einladung</string>
     <string name="notification_sender_me">Ich</string>
     <string name="notification_inline_reply_failed">** Fehler beim Senden - bitte Raum öffnen</string>
-    <string name="error_jitsi_not_supported_on_old_device">Entschuldigung, Konferenzanrufe mit Jitsi werden auf älteren Geräten (mit älteren Android-Versionen als 5.0) nicht unterstützt</string>
+    <string name="error_jitsi_not_supported_on_old_device">Entschuldigung, Konferenzanrufe mit Jitsi werden auf älteren Geräten (mit älteren Android-Versionen als 6.0) nicht unterstützt</string>
     <string name="title_activity_verify_device">Sitzung verifizieren</string>
     <string name="encryption_information_unknown_ip">Unbekannte IP-Adresse</string>
     <string name="you_added_a_new_device_with_info">Eine neue Sitzung fordert Verschlüsselungsschlüssel an. 
