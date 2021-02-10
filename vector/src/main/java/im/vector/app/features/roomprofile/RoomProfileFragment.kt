@@ -269,6 +269,14 @@ class RoomProfileFragment @Inject constructor(
                 }
     }
 
+    override fun onRoomAliasesClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
+    }
+
+    override fun onRoomPermissionsClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPermissionsSettings)
+    }
+
     override fun onRoomIdClicked() {
         copyToClipboard(requireContext(), roomProfileArgs.roomId)
     }

@@ -6,6 +6,7 @@ Features ✨:
                                 
 Improvements 🙌:
  - VoIP : new tiles in timeline
+ - Improve room profile UX
 
 Bugfix 🐛:
  - VoIP : fix audio devices output
