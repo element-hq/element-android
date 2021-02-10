@@ -35,6 +35,7 @@ import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.crypto.recover.BootstrapBottomSheet
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
+import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.HomeModule
 import im.vector.app.features.home.room.detail.RoomDetailActivity
@@ -147,6 +148,7 @@ interface ScreenComponent {
     fun inject(activity: SearchActivity)
     fun inject(activity: UserCodeActivity)
     fun inject(activity: ReAuthActivity)
+    fun inject(activity: RoomDevToolActivity)
 
     /* ==========================================================================================
      * BottomSheets

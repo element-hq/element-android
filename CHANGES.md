@@ -23,7 +23,7 @@ Test:
  -
 
 Other changes:
- -
+ - New Dev Tools panel for developers
 
 Changes in Element 1.0.17 (2020-02-09)
 ===================================================

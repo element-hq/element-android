@@ -606,6 +606,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.video_call       -> true // always show for discoverability
             R.id.hangup_call      -> webRtcPeerConnectionManager.currentCall != null
             R.id.search           -> true
+            R.id.dev_tools        -> vectorPreferences.developerMode()
             else                  -> false
         }
     }

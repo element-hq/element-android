@@ -2792,4 +2792,5 @@
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <string name="re_authentication_default_confirm_text">Element requires you to enter your credentials to perform this action.</string>
     <string name="authentication_error">Failed to authenticate</string>
+    <string name="dev_tools_menu_name">Dev Tools</string>
 </resources>
