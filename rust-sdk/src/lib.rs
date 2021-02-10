@@ -1,17 +1,18 @@
-use std::{collections::HashMap, convert::TryFrom, time::Duration};
-
-use futures::{
-    executor::block_on,
-    future::{abortable, AbortHandle, Aborted},
-    Future,
+use std::{
+    collections::{BTreeMap, HashMap},
+    convert::TryFrom,
+    time::Duration,
 };
-use http::Response;
+
+use futures::executor::block_on;
 use tokio::{runtime::Runtime, time::sleep};
 
 use matrix_sdk_common::{
-    api::r0::sync::sync_events::Response as SyncResponse,
-    api::r0::to_device::send_event_to_device::METADATA,
-    identifiers::{Error as RumaIdentifierError, UserId},
+    api::r0::sync::sync_events::{
+        DeviceLists as RumaDeviceLists, ToDevice,
+    },
+    identifiers::{DeviceKeyAlgorithm, Error as RumaIdentifierError, UserId},
+    UInt,
 };
 use matrix_sdk_crypto::{
     store::CryptoStoreError as InnerStoreError, OlmMachine as InnerMachine, ToDeviceRequest,
@@ -20,6 +21,28 @@ use matrix_sdk_crypto::{
 pub struct OlmMachine {
     inner: InnerMachine,
     runtime: Runtime,
+}
+
+pub struct DeviceLists {
+    pub changed: Vec<String>,
+    pub left: Vec<String>,
+}
+
+impl Into<RumaDeviceLists> for DeviceLists {
+    fn into(self) -> RumaDeviceLists {
+        RumaDeviceLists {
+            changed: self
+                .changed
+                .into_iter()
+                .filter_map(|u| UserId::try_from(u).ok())
+                .collect(),
+            left: self
+                .left
+                .into_iter()
+                .filter_map(|u| UserId::try_from(u).ok())
+                .collect(),
+        }
+    }
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -71,12 +94,12 @@ impl From<ToDeviceRequest> for Request {
     }
 }
 
-fn response_from_string(body: &str) -> Response<Vec<u8>> {
-    Response::builder()
-        .status(200)
-        .body(body.as_bytes().to_vec())
-        .expect("Can't create HTTP response")
-}
+// fn response_from_string(body: &str) -> Response<Vec<u8>> {
+//     Response::builder()
+//         .status(200)
+//         .body(body.as_bytes().to_vec())
+//         .expect("Can't create HTTP response")
+// }
 
 impl OlmMachine {
     pub fn new(user_id: &str, device_id: &str, path: &str) -> Result<Self, MachineCreationError> {
@@ -167,11 +190,24 @@ impl OlmMachine {
         })
     }
 
-    pub fn receive_sync_response(&self, response: &str) {
-        let response = response_from_string(response);
-        let mut response = SyncResponse::try_from(response).expect("Can't parse response");
+    pub fn receive_sync_changes(
+        &self,
+        events: &str,
+        device_changes: DeviceLists,
+        key_counts: HashMap<String, u32>,
+    ) {
+        let events: ToDevice = serde_json::from_str(events).unwrap();
+        let device_changes: RumaDeviceLists = device_changes.into();
+        let key_counts: BTreeMap<DeviceKeyAlgorithm, UInt> = key_counts
+            .into_iter()
+            .map(|(k, v)| (DeviceKeyAlgorithm::from(k), v.into()))
+            .collect();
 
-        block_on(self.inner.receive_sync_response(&mut response)).unwrap();
+        block_on(
+            self.inner
+                .receive_sync_changes(&events, &device_changes, &key_counts),
+        )
+        .unwrap();
     }
 }
 

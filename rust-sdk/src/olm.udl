@@ -11,6 +11,11 @@ enum CryptoStoreError {
     "CryptoStore",
 };
 
+dictionary DeviceLists {
+    sequence<string> changed;
+    sequence<string> left;
+};
+
 dictionary Device {
     string user_id;
     string device_id;
@@ -40,7 +45,9 @@ interface OlmMachine {
     [Throws=MachineCreationError]
     constructor([ByRef] string user_id, [ByRef] string device_id, [ByRef] string path);
 
-    void receive_sync_response([ByRef] string response);
+    void receive_sync_changes([ByRef] string events,
+                              DeviceLists device_changes,
+                              record<DOMString, u32> key_counts);
 
     record<DOMString, string> identity_keys();
 
