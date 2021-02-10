@@ -43,7 +43,7 @@ You can uncomment and update the line starting with `// url "file://...` and com
 - Update the dependency of the Jitsi Meet library in the file `./vector/build.gradle`. Currently we have this line:
 
 ```groovy
-implementation('org.jitsi.react:jitsi-meet-sdk:3.1.0') { transitive = true }
+implementation('org.jitsi.react:jitsi-meet-sdk:3.1.0')
 ```
 
 - Update the dependency of the WebRTC library in the file `./vector/build.gradle`. Currently we have this line:
