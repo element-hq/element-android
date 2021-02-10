@@ -1,10 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">lv</string>
-    <string name="resources_country_code">LV</string>
-
     <string name="title_activity_home">Ziņas</string>
     <string name="title_activity_room">Istaba</string>
     <string name="title_activity_settings">Iestatījumi</string>

@@ -1,12 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">th</string>
-    <string name="resources_country_code">TH</string>
-
-
     <string name="or">หรือ</string>
     <string name="action_open">เปิด</string>
     <string name="action_close">ปิด</string>
@@ -35,7 +28,6 @@
     <string name="delete">ลบ</string>
     <string name="rename">เปลี่ยนชื่อ</string>
     <string name="skip">ข้าม</string>
-    <string name="resources_script">Thai</string>
 
     <string name="title_activity_choose_sticker">ส่งสติกเกอร์</string>
     <string name="loading">กำลังโหลด…</string>

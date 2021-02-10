@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">pt</string>
-    <string name="resources_country_code">PT</string>
     <!-- titles -->
     <string name="title_activity_home">Mensagens</string>
     <string name="title_activity_room">Sala</string>
@@ -968,5 +964,4 @@ Por favor, verifique configurações de aplicação</string>
     <string name="settings_system_preferences_summary">Escolha cor de LED, vibração, som…</string>
     <string name="notification_sync_init">A iniciar o serviço</string>
     <string name="title_activity_verify_device">Verificar sessão</string>
-    <string name="resources_script">Latn</string>
 </resources>

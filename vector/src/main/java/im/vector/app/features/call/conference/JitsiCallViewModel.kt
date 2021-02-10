@@ -16,7 +16,6 @@
 
 package im.vector.app.features.call.conference
 
-import android.net.Uri
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -64,14 +63,12 @@ class JitsiCallViewModel @AssistedInject constructor(
                 .subscribe {
                     val jitsiWidget = it.firstOrNull()
                     if (jitsiWidget != null) {
-                        val uri = Uri.parse(jitsiWidget.computedUrl)
-                        val confId = uri.getQueryParameter("confId")
                         val ppt = jitsiWidget.computedUrl?.let { url -> JitsiWidgetProperties(url, stringProvider) }
                         setState {
                             copy(
                                     widget = Success(jitsiWidget),
                                     jitsiUrl = "https://${ppt?.domain}",
-                                    confId = confId ?: "",
+                                    confId = ppt?.confId ?: "",
                                     subject = roomName ?: ""
                             )
                         }

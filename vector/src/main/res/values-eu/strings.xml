@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">eu</string>
-    <string name="resources_country_code">ES</string>
 
     <string name="title_activity_home">Mezuak</string>
     <string name="title_activity_room">Gela</string>
@@ -1625,7 +1623,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="settings_discovery_disconnect_with_bound_pid">Orain e-mail helbideak edo telefono zenbakiak partekatzen dituzu %1$s zerbitzarian. %2$s zerbitzarira konektatu beharko zara partekatzeari uzteko.</string>
     <string name="settings_agree_to_terms">Onartu %s identitate-zerbitzariaren erabilera baldintzak besteek zu e-mail helbidea edo telefonoa erabiliz aurkitzea ahalbidetzeko.</string>
-    <string name="resources_script">Latn</string>
 
     <string name="labs_allow_extended_logging">Gaitu egunkari xehetsuak.</string>
     <string name="labs_allow_extended_logging_summary">Amorruz astintzean egunkari xehetsuak bidaltzeak garatzaileei laguntzen diete. Gaituta badago ere, aplikazioak ez ditu mezuen edukiak edo beste datu probaturik gordetzen egunkarian.</string>

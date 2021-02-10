@@ -1,13 +1,10 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="medium_email">Enderezo de correo</string>
     <string name="message_failed_to_upload">Fallo ao subir a páxina</string>
-
-
     <string name="summary_message">%1$s: %2$s</string>
     <string name="summary_user_sent_image">%1$s enviou unha imaxe.</string>
     <string name="summary_user_sent_sticker">%1$s enviou unha icona.</string>
-
     <string name="notice_room_invite_no_invitee">Convite de %s</string>
     <string name="notice_room_invite">%1$s convidou a %2$s</string>
     <string name="notice_room_invite_you">%1$s convidouno</string>
@@ -35,34 +32,52 @@
     <string name="notice_room_visibility_world_readable">todos.</string>
     <string name="notice_room_visibility_unknown">descoñecido (%s).</string>
     <string name="notice_end_to_end">%1$s activou a criptografía par-a-par (%2$s)</string>
-
     <string name="notice_requested_voip_conference">%1$s solicitou unha conferencia VoIP</string>
     <string name="notice_voip_started">A conferencia VoIP comenzou</string>
     <string name="notice_voip_finished">A conferencia VoIP terminou</string>
-
     <string name="notice_avatar_changed_too">(o avatar tamén foi cambiado)</string>
     <string name="notice_room_name_removed">%1$s borrou o nome da sala</string>
     <string name="notice_room_topic_removed">%1$s removeu o tema da sala</string>
     <string name="notice_profile_change_redacted">%1$s actualizou o seu perfil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s envioulle un convite a %2$s para que entre na sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s aceptou o convite para %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Imposíbel descifrar: %s **</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">O dispositivo do que envía non enviou as chaves desta mensaxe.</string>
-
     <string name="could_not_redact">Non se puido redactar</string>
     <string name="unable_to_send_message">Non foi posíbel enviar a mensaxe</string>
-
     <string name="network_error">Erro da conexión</string>
     <string name="matrix_error">Erro de Matrix</string>
-
     <string name="room_error_join_failed_empty_room">Aínda non é posíbel volver a entrar nunha sala baleira.</string>
-
     <string name="encrypted_message">Mensaxe cifrada</string>
-
     <string name="medium_phone_number">Número de teléfono</string>
-
     <string name="room_displayname_two_members">%1$s e %2$s</string>
-
-
+    <string name="notice_placed_voice_call_by_you">Fixeches unha chamada de audio.</string>
+    <string name="notice_placed_video_call_by_you">Fixeches unha chamada de vídeo.</string>
+    <string name="notice_room_name_changed_by_you">Cambiaches o nome da sala a: %1$s</string>
+    <string name="notice_room_avatar_changed_by_you">Cambiaches o avatar da sala</string>
+    <string name="notice_room_avatar_changed">%1$s cambiou o avatar da sala</string>
+    <string name="notice_room_topic_changed_by_you">Cambiaches o asunto a: %1$s</string>
+    <string name="notice_display_name_removed_by_you">Eliminaches o teu nome público (era %1$s)</string>
+    <string name="notice_display_name_changed_from_by_you">Cambiaches o teu nome público de %1$s a %2$s</string>
+    <string name="notice_display_name_set_by_you">Estableceches o nome público a %1$s</string>
+    <string name="notice_avatar_url_changed_by_you">Cambiaches o teu avatar</string>
+    <string name="notice_room_withdraw_by_you">Retirácheslle o convite a %1$s</string>
+    <string name="notice_room_ban_by_you">Vetaches a %1$s</string>
+    <string name="notice_room_unban_by_you">Readmitiches a %1$s</string>
+    <string name="notice_room_kick_by_you">Expulsaches a %1$s</string>
+    <string name="notice_room_reject_by_you">Rexeitaches o convite</string>
+    <string name="notice_direct_room_leave_by_you">Deixaches a sala</string>
+    <string name="notice_direct_room_leave">%1$s deixou a sala</string>
+    <string name="notice_room_leave_by_you">Saíches da sala</string>
+    <string name="notice_direct_room_join_by_you">Unícheste</string>
+    <string name="notice_direct_room_join">%1$s iniuse</string>
+    <string name="notice_room_join_by_you">Unícheste a sala</string>
+    <string name="notice_room_invite_by_you">Convidaches a %1$s</string>
+    <string name="notice_direct_room_created_by_you">Creaches a conversa</string>
+    <string name="notice_direct_room_created">%1$s creou a conversa</string>
+    <string name="notice_room_created_by_you">Creaches a sala</string>
+    <string name="notice_room_created">%1$s creou a sala</string>
+    <string name="notice_room_invite_no_invitee_by_you">O teu convite</string>
+    <string name="summary_you_sent_sticker">Enviaches un adhesivo.</string>
+    <string name="summary_you_sent_image">Enviaches unha imaxe.</string>
 </resources>

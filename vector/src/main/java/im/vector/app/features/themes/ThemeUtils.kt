@@ -137,14 +137,6 @@ object ThemeUtils {
         }
     }
 
-    fun getWidgetTheme(context: Context): String {
-        return when {
-            isLightTheme(context) -> "light"
-            isBlackTheme(context) -> "black"
-            else -> "dark"
-        }
-    }
-
     /**
      * Provides the selected application theme
      *

@@ -21,11 +21,11 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import timber.log.Timber
 
-fun CryptoDeviceInfo.canonicalSignable(): String {
+internal fun CryptoDeviceInfo.canonicalSignable(): String {
     return JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableJSONDictionary())
 }
 
-fun CryptoCrossSigningKey.canonicalSignable(): String {
+internal fun CryptoCrossSigningKey.canonicalSignable(): String {
     return JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableJSONDictionary())
 }
 
@@ -40,7 +40,7 @@ fun String.fromBase64(): ByteArray {
 /**
  * Decode the base 64. Return null in case of bad format. Should be used when parsing received data from external source
  */
-fun String.fromBase64Safe(): ByteArray? {
+internal fun String.fromBase64Safe(): ByteArray? {
     return try {
         Base64.decode(this, Base64.DEFAULT)
     } catch (throwable: Throwable) {

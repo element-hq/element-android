@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">it</string>
-    <string name="resources_country_code">IT</string>
     <!-- titles -->
     <string name="title_activity_home">Messaggi</string>
     <string name="title_activity_room">Stanza</string>
@@ -1388,7 +1384,6 @@
     <string name="settings_text_message_sent">È stato inviato un messaggio a %s. Inserisci il codice di verifica che contiene.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">In questo momento stai condividendo i tuoi indirizzi email o numeri di telefono sull\'Identity Server %1$s. Dovrai riconnetterti a %2$s per interromperne la condivisione.</string>
     <string name="settings_agree_to_terms">Accetta i termini di servizio dell\'Identity Server (%s) per permettere ad altri utenti di trovarti tramite la tua email o numero di telefono.</string>
-    <string name="resources_script">Latn</string>
     <string name="labs_allow_extended_logging">Attiva i log dettagliati.</string>
     <string name="labs_allow_extended_logging_summary">I log dettagliati aiuteranno gli sviluppatori fornendo loro molte più informazioni nelle segnalazioni che invii scuotendo il dispositivo. Anche se attivi i log dettagliati, Element non registra mai i contenuti dei messaggi o altri dati personali.</string>
     <string name="error_terms_not_accepted">Riprova dopo avere accettato i termini di servizio del tuo Home Server.</string>
@@ -2342,4 +2337,43 @@
     <string name="room_settings_room_read_history_dialog_subtitle">La leggibilità della cronologia sarà modificata solo per i futuri messaggi di questa stanza. La visibilità dei messaggi esistenti rimarrà invariata.</string>
     <string name="action_unpublish">Revoca pubblicazione</string>
     <string name="action_add">Aggiungi</string>
+    <string name="default_message_emote_snow">invia neve ❄️</string>
+    <string name="default_message_emote_confetti">invia coriandoli 🎉</string>
+    <string name="command_snow">Invia il messaggio in questione con neve</string>
+    <string name="command_confetti">Invia il messaggio in questione con coriandoli</string>
+    <string name="login_clear_homeserver_history">Svuota cronologia</string>
+    <string name="login_social_sso">single sign-on</string>
+    <string name="login_social_signin_with">Accedi con %s</string>
+    <string name="login_social_signup_with">Registrati con %s</string>
+    <string name="login_social_continue_with">Continua con %s</string>
+    <string name="login_social_continue">O</string>
+    <string name="settings_show_emoji_keyboard_summary">Aggiungi un pulsante nel compositore di messaggi per aprire la tastiera emoji</string>
+    <string name="settings_show_emoji_keyboard">Mostra tastiera emoji</string>
+    <string name="settings_chat_effects_description">Usa il comando /confetti o invia un messaggio contenente ❄️ o 🎉</string>
+    <string name="settings_chat_effects_title">Mostra effetti chat</string>
+    <string name="room_permissions_change_topic">Modifica argomento</string>
+    <string name="room_permissions_upgrade_the_room">Aggiorna la stanza</string>
+    <string name="room_permissions_send_m_room_server_acl_events">Invia eventi m.room.server_acl</string>
+    <string name="room_permissions_change_permissions">Cambia autorizzazioni</string>
+    <string name="room_permissions_change_room_name">Modifica nome stanza</string>
+    <string name="room_permissions_change_history_visibility">Cambia visibilità cronologia</string>
+    <string name="room_permissions_enable_room_encryption">Attiva la crittografia della stanza</string>
+    <string name="room_permissions_change_main_address_for_the_room">Modifica indirizzo principale della stanza</string>
+    <string name="room_permissions_change_room_avatar">Cambia avatar stanza</string>
+    <string name="room_permissions_modify_widgets">Modifica i widget</string>
+    <string name="room_permissions_notify_everyone">Notifica tutti</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Rimuovi i messaggi inviati dagli altri</string>
+    <string name="room_permissions_ban_users">Bandisci utenti</string>
+    <string name="room_permissions_kick_users">Butta fuori utenti</string>
+    <string name="room_permissions_change_settings">Modifica impostazioni</string>
+    <string name="room_permissions_invite_users">Invita utenti</string>
+    <string name="room_permissions_send_messages">Invia messaggi</string>
+    <string name="room_permissions_default_role">Ruolo predefinito</string>
+    <string name="room_permissions_notice_read_only">Non hai l\'autorizzazione di aggiornare i ruoli necessari per cambiare varie parti della stanza</string>
+    <string name="room_permissions_notice">Seleziona i ruoli necessari per cambiare varie parti della stanza</string>
+    <string name="room_permissions_title">Autorizzazioni</string>
+    <string name="room_settings_permissions_subtitle">Vedi e aggiorna i ruoli necessari per cambiare varie parti della stanza.</string>
+    <string name="room_settings_permissions_title">Autorizzazioni stanza</string>
+    <string name="room_participants_leave_private_warning">Questa stanza non è pubblica. Non potrai rientrare senza un invito.</string>
+    <string name="system_theme">Predefinito di sistema</string>
 </resources>

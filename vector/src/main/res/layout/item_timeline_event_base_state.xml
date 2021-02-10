@@ -44,12 +44,20 @@
             android:id="@+id/messageVerificationRequestStub"
             style="@style/TimelineContentStubBaseParams"
             android:layout="@layout/item_timeline_event_verification_stub"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
         <ViewStub
             android:id="@+id/messageVerificationDoneStub"
             style="@style/TimelineContentStubBaseParams"
             android:layout="@layout/item_timeline_event_status_tile_stub"
+            tools:layout_marginTop="180dp"
+            tools:visibility="visible" />
+
+        <ViewStub
+            android:id="@+id/messageWidgetStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout="@layout/item_timeline_event_widget_stub"
+            tools:layout_marginTop="280dp"
             tools:visibility="visible" />
 
     </FrameLayout>
@@ -59,8 +67,8 @@
         android:id="@+id/messageE2EDecoration"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginTop="4dp"
         android:layout_alignTop="@id/viewStubContainer"
+        android:layout_marginTop="4dp"
         android:layout_toStartOf="@id/viewStubContainer"
         android:visibility="gone"
         tools:src="@drawable/ic_shield_warning"
@@ -70,11 +78,11 @@
         android:id="@+id/messageFailToSendIndicator"
         android:layout_width="14dp"
         android:layout_height="14dp"
+        android:layout_alignTop="@+id/viewStubContainer"
         android:layout_marginStart="2dp"
+        android:layout_toEndOf="@+id/viewStubContainer"
         android:src="@drawable/ic_warning_badge"
         android:visibility="gone"
-        android:layout_toEndOf="@+id/viewStubContainer"
-        android:layout_alignTop="@+id/viewStubContainer"
         tools:visibility="visible" />
 
 

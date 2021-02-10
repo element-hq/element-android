@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">pt</string>
-    <string name="resources_country_code">BR</string>
     <!-- titles -->
     <string name="title_activity_home">Mensagens</string>
     <string name="title_activity_room">Sala</string>
@@ -1024,7 +1020,6 @@
     <string name="settings_system_preferences_summary">Escolha a cor do LED, vibração, som…</string>
     <string name="settings_cryptography_manage_keys">Gerenciamento de Chaves de Criptografia</string>
     <string name="settings_send_message_with_enter">Enviar mensagem com a tecla enter</string>
-    <string name="resources_script">Latn</string>
     <string name="title_activity_verify_device">Confirmar sessão</string>
     <string name="none">Nenhuma</string>
     <string name="revoke">Revogar</string>
@@ -2342,4 +2337,43 @@
     <string name="room_settings_room_access_title">Acesso à sala</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Alterar quem pode ler o histórico só se aplicará às futuras mensagens nesta sala. A visibilidade do histórico existente não será alterada.</string>
     <string name="action_unpublish">Remover</string>
+    <string name="login_social_sso">login único</string>
+    <string name="settings_show_emoji_keyboard_summary">Adicionar um botão no campo de texto para abrir o teclado de emojis</string>
+    <string name="room_permissions_notify_everyone">Notificar a todos</string>
+    <string name="default_message_emote_snow">enviar neve ❄️</string>
+    <string name="default_message_emote_confetti">enviar confetes 🎉</string>
+    <string name="command_snow">Enviar a mensagem com neve</string>
+    <string name="command_confetti">Enviar a mensagem com confetes</string>
+    <string name="login_clear_homeserver_history">Limpar o histórico</string>
+    <string name="login_social_signin_with">Entrar com %s</string>
+    <string name="login_social_signup_with">Registrar-se com %s</string>
+    <string name="login_social_continue_with">Continuar com %s</string>
+    <string name="login_social_continue">Ou</string>
+    <string name="settings_show_emoji_keyboard">Exibir o teclado de emojis</string>
+    <string name="settings_chat_effects_description">Use o comando /confetti ou envie uma mensagem contendo ❄️ ou 🎉</string>
+    <string name="settings_chat_effects_title">Exibir efeitos em conversas</string>
+    <string name="room_permissions_change_topic">Alterar a descrição</string>
+    <string name="room_permissions_upgrade_the_room">Atualizar a sala</string>
+    <string name="room_permissions_send_m_room_server_acl_events">Enviar eventos m.room.server_acl</string>
+    <string name="room_permissions_change_permissions">Alterar permissões</string>
+    <string name="room_permissions_change_room_name">Alterar o nome da sala</string>
+    <string name="room_permissions_change_history_visibility">Alterar a visibilidade do histórico de alterações</string>
+    <string name="room_permissions_enable_room_encryption">Ativar a criptografia da sala</string>
+    <string name="room_permissions_change_main_address_for_the_room">Alterar o endereço principal da sala</string>
+    <string name="room_permissions_change_room_avatar">Alterar a foto da sala</string>
+    <string name="room_permissions_modify_widgets">Modificar widgets</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Remover mensagens enviadas por outras pessoas</string>
+    <string name="room_permissions_ban_users">Banir usuários</string>
+    <string name="room_permissions_kick_users">Remover usuários</string>
+    <string name="room_permissions_change_settings">Alterar as configurações</string>
+    <string name="room_permissions_invite_users">Convidar usuários</string>
+    <string name="room_permissions_send_messages">Enviar mensagens</string>
+    <string name="room_permissions_default_role">Papel de usuário padrão</string>
+    <string name="room_permissions_notice_read_only">Você não tem permissão para atualizar os papéis de usuário necessários para alterar várias partes da sala</string>
+    <string name="room_permissions_notice">Selecione os papéis de usuário necessários para alterar várias partes da sala</string>
+    <string name="room_settings_permissions_subtitle">Visualize e atualize os papéis de usuário necessários para alterar várias partes da sala.</string>
+    <string name="room_permissions_title">Permissões</string>
+    <string name="room_settings_permissions_title">Permissões da sala</string>
+    <string name="room_participants_leave_private_warning">Esta sala não é pública. Você não poderá entrar novamente sem um convite.</string>
+    <string name="system_theme">Padrão do sistema</string>
 </resources>

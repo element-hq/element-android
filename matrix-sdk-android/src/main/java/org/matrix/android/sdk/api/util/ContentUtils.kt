@@ -20,7 +20,7 @@ object ContentUtils {
         val lines = repliedBody.lines()
         var wellFormed = repliedBody.startsWith(">")
         var endOfPreviousFound = false
-        val usefullines = ArrayList<String>()
+        val usefulLines = ArrayList<String>()
         lines.forEach {
             if (it == "") {
                 endOfPreviousFound = true
@@ -29,10 +29,10 @@ object ContentUtils {
             if (!endOfPreviousFound) {
                 wellFormed = wellFormed && it.startsWith(">")
             } else {
-                usefullines.add(it)
+                usefulLines.add(it)
             }
         }
-        return usefullines.joinToString("\n").takeIf { wellFormed } ?: repliedBody
+        return usefulLines.joinToString("\n").takeIf { wellFormed } ?: repliedBody
     }
 
     fun extractUsefulTextFromHtmlReply(repliedBody: String): String {

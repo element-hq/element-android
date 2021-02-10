@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">bn</string>
-    <string name="resources_country_code">IN</string>
 
     <string name="light_theme">হালকা থিম</string>
     <string name="dark_theme">গাঢ় থিম</string>
@@ -1240,8 +1238,6 @@
 
     <string name="resource_limit_soft_mau"> এই হোমসার্ভারটি তার মাসিক অ্যাক্টিভ ব্যবহারকারীর সীমাটিতে আঘাত করেছে তাই <b> কিছু ব্যবহারকারী লগ ইন করতে পারবেন না </b>।</string>
     <string name="resource_limit_hard_mau">এই হোমসার্ভারটি তার মাসিক সক্রিয় ব্যবহারকারীর সীমাতে ছুঁয়েছে।</string>
-
-    <string name="resources_script">Beng</string>
 
     <string name="play_video">চালু</string>
     <string name="pause_video">থামাও</string>

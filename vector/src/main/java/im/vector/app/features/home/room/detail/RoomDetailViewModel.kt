@@ -87,11 +87,12 @@ import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
+import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
@@ -400,15 +401,19 @@ class RoomDetailViewModel @AssistedInject constructor(
 
             // We use the default element wrapper for this widget
             // https://github.com/vector-im/element-web/blob/develop/docs/jitsi-dev.md
-            val url = "https://app.element.io/jitsi.html" +
-                    "?confId=$confId" +
-                    "#conferenceDomain=\$domain" +
-                    "&conferenceId=\$conferenceId" +
-                    "&isAudioOnly=${!action.withVideo}" +
-                    "&displayName=\$matrix_display_name" +
-                    "&avatarUrl=\$matrix_avatar_url" +
-                    "&userId=\$matrix_user_id"
-
+            // https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/utils/WidgetUtils.ts#L469
+            val url = buildString {
+                append("https://app.element.io/jitsi.html")
+                appendParamToUrl("confId", confId)
+                append("#conferenceDomain=\$domain")
+                append("&conferenceId=\$conferenceId")
+                append("&isAudioOnly=\$isAudioOnly")
+                append("&displayName=\$matrix_display_name")
+                append("&avatarUrl=\$matrix_avatar_url")
+                append("&userId=\$matrix_user_id")
+                append("&roomId=\$matrix_room_id")
+                append("&theme=\$theme")
+            }
             val widgetEventContent = mapOf(
                     "url" to url,
                     "type" to WidgetType.Jitsi.legacy,
@@ -751,8 +756,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
                 is SendMode.EDIT    -> {
                     // is original event a reply?
-                    val inReplyTo = state.sendMode.timelineEvent.root.getClearContent().toModel<MessageContent>()?.relatesTo?.inReplyTo?.eventId
-                            ?: state.sendMode.timelineEvent.root.content.toModel<EncryptedEventContent>()?.relatesTo?.inReplyTo?.eventId
+                    val inReplyTo = state.sendMode.timelineEvent.getRelationContent()?.inReplyTo?.eventId
                     if (inReplyTo != null) {
                         // TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {

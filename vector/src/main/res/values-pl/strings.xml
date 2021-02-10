@@ -101,8 +101,6 @@
     <string name="start_new_chat">Rozpocznij nową rozmowę</string>
     <string name="start_voice_call">Rozpocznij połączenie telefoniczne</string>
     <string name="start_video_call">Rozpocznij połączenie wideo</string>
-    <string name="resources_language">pl</string>
-    <string name="resources_country_code">PL</string>
     <string name="identity_url">Adres serwera tożsamości</string>
     <string name="option_send_files">Wyślij pliki</string>
     <string name="option_take_photo_video">Zrób zdjęcie lub film</string>
@@ -1172,7 +1170,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_call_notifications_preferences">Konfiguruj powiadomienia połączeń</string>
     <string name="settings_system_preferences_summary">Wybierz kolor diody LED, wibrację, dźwięk…</string>
     <string name="settings_integrations">Integracje</string>
-    <string name="resources_script">Latn</string>
     <string name="auth_add_email_phone_message_2">Wprowadź adres e-mail, aby możliwe było odzyskiwanie konta. Opcjonalnie użyj adresu e-mail lub numeru telefonu aby móc zostać odkrytym przez znajomych.</string>
     <string name="auth_add_email_and_phone_message_2">Wprowadź adres e-mail, aby możliwe było odzyskiwanie konta. Opcjonalnie użyj adresu e-mail lub numeru telefonu aby móc zostać odkrytym przez znajomych.</string>
     <string name="settings_call_ringtone_use_default_stun">Pozwól na awaryjny serwer wspomagania połączeń</string>

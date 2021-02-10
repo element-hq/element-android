@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">es</string>
-    <string name="resources_country_code">ES</string>
     <!-- titles -->
     <string name="title_activity_home">Mensajes</string>
     <string name="title_activity_room">Sala</string>
@@ -1255,14 +1251,13 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="create_room_directory_description">Publicar esta sala en el directorio de salas</string>
     <string name="keys_backup_unable_to_get_trust_info">Error obteniendo información de confiabilidad</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">Error obteniendo claves para copias de respaldo</string>
-    <string name="room_list_catchup_empty_title">!Estás al día!</string>
+    <string name="room_list_catchup_empty_title">¡Estás al día!</string>
     <string name="settings_preferences">Preferencias</string>
     <string name="settings_security_and_privacy">Seguridad &amp; Privacidad</string>
     <string name="preference_voice_and_video">Voz &amp; Video</string>
     <string name="send_suggestion">Haz una sugerencia</string>
     <string name="send_suggestion_content">Por favor escriba su sugerencia a continuación.</string>
     <string name="send_suggestion_report_placeholder">Describa su sugerencia aquí</string>
-    <string name="resources_script">Latn</string>
     <string name="none">Ninguno</string>
     <string name="revoke">Revocar</string>
     <string name="disconnect">Desconectar</string>
@@ -2252,4 +2247,5 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_show_room_member_state_events_summary">Incluye invitar/unirse/expulsar/prohibir/mostrar cambios de nombre.</string>
     <string name="settings_show_room_member_state_events">Mostrar eventos de los miembros de la sala</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">¡La notificación ha sido cliqueada!</string>
+    <string name="system_theme">Tema del sistema</string>
 </resources>
