@@ -476,7 +476,6 @@ class WebRtcCall(val mxCall: MxCall,
 
         if (camera != null) {
             val videoCapturer = cameraIterator.createCapturer(camera.name, object : CameraEventsHandlerAdapter() {
-
                 override fun onFirstFrameAvailable() {
                     super.onFirstFrameAvailable()
                     videoCapturerIsInError = false
@@ -490,7 +489,6 @@ class WebRtcCall(val mxCall: MxCall,
                     videoCapturerIsInError = true
                     val cameraManager = context.getSystemService<CameraManager>()
                     cameraAvailabilityCallback = object : CameraManager.AvailabilityCallback() {
-
                         override fun onCameraUnavailable(cameraId: String) {
                             super.onCameraUnavailable(cameraId)
                             Timber.v("On camera unavailable: $cameraId")

@@ -199,7 +199,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         }
     }
 
-
     companion object {
         fun newIntent(context: Context, roomId: String, widgetId: String, enableVideo: Boolean): Intent {
             return Intent(context, VectorJitsiActivity::class.java).apply {
