@@ -1,4 +1,4 @@
-Changes in Element 1.0.18 (2020-XX-XX)
+Changes in Element 1.0.18 (2021-XX-XX)
 ===================================================
 
 Features ✨:
@@ -23,9 +23,9 @@ Test:
  -
 
 Other changes:
- -
+ - Fix typos in CHANGES.md (#2811)
 
-Changes in Element 1.0.17 (2020-02-09)
+Changes in Element 1.0.17 (2021-02-09)
 ===================================================
 
 Improvements 🙌:
@@ -47,13 +47,13 @@ Build 🧱:
 Other changes:
  - Change app name from "Element (Riot.im)" to "Element"
 
-Changes in Element 1.0.16 (2020-02-04)
+Changes in Element 1.0.16 (2021-02-04)
 ===================================================
 
 Bugfix 🐛:
  - Fix crash on API < 30 and light theme (#2774)
 
-Changes in Element 1.0.15 (2020-02-03)
+Changes in Element 1.0.15 (2021-02-03)
 ===================================================
 
 Features ✨:
@@ -84,7 +84,7 @@ Build 🧱:
 Other changes:
  - Update Dagger to 2.31 version so we can use the embedded AssistedInject feature 
 
-Changes in Element 1.0.14 (2020-01-15)
+Changes in Element 1.0.14 (2021-01-15)
 ===================================================
 
 Features ✨:
