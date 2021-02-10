@@ -56,6 +56,7 @@ import org.matrix.android.sdk.internal.session.sync.SyncTask
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.session.terms.TermsModule
+import org.matrix.android.sdk.internal.session.thirdparty.ThirdPartyModule
 import org.matrix.android.sdk.internal.session.user.UserModule
 import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataModule
 import org.matrix.android.sdk.internal.session.widgets.WidgetModule
@@ -87,7 +88,8 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
             ProfileModule::class,
             AccountModule::class,
             CallModule::class,
-            SearchModule::class
+            SearchModule::class,
+            ThirdPartyModule::class
         ]
 )
 @SessionScope

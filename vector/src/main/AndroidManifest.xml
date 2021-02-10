@@ -230,7 +230,8 @@
         <activity
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
             android:theme="@style/AppTheme.AttachmentsPreview" />
-        <activity android:name=".features.call.VectorCallActivity" />
+        <activity android:name=".features.call.VectorCallActivity"
+            android:excludeFromRecents="true"/>
         <activity
             android:name=".features.call.conference.VectorJitsiActivity"
             android:configChanges="orientation|screenSize" />
@@ -240,6 +241,7 @@
         <activity android:name=".features.pin.PinActivity" />
         <activity android:name=".features.home.room.detail.search.SearchActivity" />
         <activity android:name=".features.usercode.UserCodeActivity" />
+        <activity android:name=".features.call.transfer.CallTransferActivity" />
 
         <!-- Single instance is very important for the custom scheme callback-->
         <activity android:name=".features.auth.ReAuthActivity"

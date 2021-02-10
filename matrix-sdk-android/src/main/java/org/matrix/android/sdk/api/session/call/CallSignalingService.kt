@@ -28,9 +28,9 @@ interface CallSignalingService {
      */
     fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall
 
-    fun addCallListener(listener: CallsListener)
+    fun addCallListener(listener: CallListener)
 
-    fun removeCallListener(listener: CallsListener)
+    fun removeCallListener(listener: CallListener)
 
     fun getCallWithId(callId: String): MxCall?
 

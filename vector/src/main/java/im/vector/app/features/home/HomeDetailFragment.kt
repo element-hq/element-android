@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -33,13 +32,13 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.ui.views.ActiveCallView
-import im.vector.app.core.ui.views.ActiveCallViewHolder
+import im.vector.app.core.ui.views.CurrentCallsView
+import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.core.ui.views.KeysBackupBanner
 import im.vector.app.databinding.FragmentHomeDetailBinding
-import im.vector.app.features.call.SharedActiveCallViewModel
+import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
-import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
 import im.vector.app.features.popup.PopupAlertManager
@@ -66,11 +65,11 @@ class HomeDetailFragment @Inject constructor(
         private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val alertManager: PopupAlertManager,
-        private val webRtcPeerConnectionManager: WebRtcPeerConnectionManager,
+        private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
-        ActiveCallView.Callback,
+        CurrentCallsView.Callback,
         ServerBackupStatusViewModel.Factory {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
@@ -78,18 +77,18 @@ class HomeDetailFragment @Inject constructor(
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by activityViewModel()
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
-    private lateinit var sharedCallActionViewModel: SharedActiveCallViewModel
+    private lateinit var sharedCallActionViewModel: SharedKnownCallsViewModel
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeDetailBinding {
         return FragmentHomeDetailBinding.inflate(inflater, container, false)
     }
 
-    private val activeCallViewHolder = ActiveCallViewHolder()
+    private val activeCallViewHolder = KnownCallsViewHolder()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
-        sharedCallActionViewModel = activityViewModelProvider.get(SharedActiveCallViewModel::class.java)
+        sharedCallActionViewModel = activityViewModelProvider.get(SharedKnownCallsViewModel::class.java)
 
         setupBottomNavigationView()
         setupToolbar()
@@ -127,9 +126,9 @@ class HomeDetailFragment @Inject constructor(
         }
 
         sharedCallActionViewModel
-                .activeCall
-                .observe(viewLifecycleOwner, Observer {
-                    activeCallViewHolder.updateCall(it, webRtcPeerConnectionManager)
+                .liveKnownCalls
+                .observe(viewLifecycleOwner, {
+                    activeCallViewHolder.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 })
     }
@@ -160,9 +159,9 @@ class HomeDetailFragment @Inject constructor(
                         uid = uid,
                         title = getString(R.string.new_session),
                         description = getString(R.string.verify_this_session, newest.displayName ?: newest.deviceId ?: ""),
-                        iconId = R.drawable.ic_shield_warning,
-                        matrixItem = user
+                        iconId = R.drawable.ic_shield_warning
                 ).apply {
+                    viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
                     colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)
@@ -188,9 +187,9 @@ class HomeDetailFragment @Inject constructor(
                         uid = uid,
                         title = getString(R.string.review_logins),
                         description = getString(R.string.verify_other_sessions),
-                        iconId = R.drawable.ic_shield_warning,
-                        matrixItem = user
+                        iconId = R.drawable.ic_shield_warning
                 ).apply {
+                    viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer)
                     colorInt = ContextCompat.getColor(requireActivity(), R.color.riotx_accent)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
@@ -336,14 +335,14 @@ class HomeDetailFragment @Inject constructor(
     }
 
     override fun onTapToReturnToCall() {
-        sharedCallActionViewModel.activeCall.value?.let { call ->
+        callManager.getCurrentCall()?.let { call ->
             VectorCallActivity.newIntent(
                     context = requireContext(),
                     callId = call.callId,
-                    roomId = call.roomId,
-                    otherUserId = call.otherUserId,
-                    isIncomingCall = !call.isOutgoing,
-                    isVideoCall = call.isVideoCall,
+                    roomId = call.mxCall.roomId,
+                    otherUserId = call.mxCall.opponentUserId,
+                    isIncomingCall = !call.mxCall.isOutgoing,
+                    isVideoCall = call.mxCall.isVideoCall,
                     mode = null
             ).let {
                 startActivity(it)

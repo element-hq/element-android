@@ -24,7 +24,6 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.app.features.home.room.detail.timeline.item.WidgetTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.WidgetTileTimelineItem_
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -37,7 +36,6 @@ import javax.inject.Inject
 
 class WidgetItemFactory @Inject constructor(
         private val sp: StringProvider,
-        private val roomSummaryHolder: RoomSummaryHolder,
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val informationDataFactory: MessageInformationDataFactory,
         private val noticeItemFactory: NoticeItemFactory,
@@ -58,7 +56,7 @@ class WidgetItemFactory @Inject constructor(
         return when (WidgetType.fromString(widgetContent.type ?: previousWidgetContent?.type ?: "")) {
             WidgetType.Jitsi -> createJitsiItem(event, callback, widgetContent, previousWidgetContent)
             // There is lot of other widget types we could improve here
-            else             -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+            else             -> noticeItemFactory.create(event, highlight, callback)
         }
     }
 

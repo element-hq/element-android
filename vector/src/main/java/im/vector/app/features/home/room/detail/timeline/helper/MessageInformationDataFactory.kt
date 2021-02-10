@@ -45,7 +45,7 @@ import javax.inject.Inject
  * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
  */
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
-                                                        private val roomSummaryHolder: RoomSummaryHolder,
+                                                        private val roomSummariesHolder: RoomSummariesHolder,
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val vectorPreferences: VectorPreferences) {
 
@@ -116,7 +116,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
     }
 
     private fun getE2EDecoration(event: TimelineEvent): E2EDecoration {
-        val roomSummary = roomSummaryHolder.roomSummary
+        val roomSummary = roomSummariesHolder.get(event.roomId)
         return if (
                 event.root.sendState == SendState.SYNCED
                 && roomSummary?.isEncrypted.orFalse()

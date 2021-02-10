@@ -27,16 +27,24 @@ data class CallAnswerContent(
         /**
          * Required. The ID of the call this event relates to.
          */
-        @Json(name = "call_id") val callId: String,
+        @Json(name = "call_id") override val callId: String,
+        /**
+         * Required. ID to let user identify remote echo of their own events
+         */
+        @Json(name = "party_id") override val partyId: String? = null,
         /**
          * Required. The session description object
          */
         @Json(name = "answer") val answer: Answer,
         /**
-         * Required. The version of the VoIP specification this messages adheres to. This specification is version 0.
+         * Required. The version of the VoIP specification this messages adheres to.
          */
-        @Json(name = "version") val version: Int = 0
-) {
+        @Json(name = "version") override val version: String?,
+        /**
+         * Capability advertisement.
+         */
+        @Json(name = "capabilities") val capabilities: CallCapabilities? = null
+): CallSignallingContent  {
 
     @JsonClass(generateAdapter = true)
     data class Answer(
