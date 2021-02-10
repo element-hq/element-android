@@ -55,35 +55,38 @@ internal class WidgetFactory @Inject constructor(private val userDataSource: Use
             }
         }
         val isAddedByMe = widgetEvent.senderId == userId
-        val computedUrl = widgetContent.computeURL(widgetEvent.roomId, widgetId)
         return Widget(
                 widgetContent = widgetContent,
                 event = widgetEvent,
                 widgetId = widgetId,
                 senderInfo = senderInfo,
                 isAddedByMe = isAddedByMe,
-                computedUrl = computedUrl,
                 type = WidgetType.fromString(type)
         )
     }
 
     // Ref: https://github.com/matrix-org/matrix-widget-api/blob/master/src/templating/url-template.ts#L29-L33
-    private fun WidgetContent.computeURL(roomId: String?, widgetId: String): String? {
-        var computedUrl = url ?: return null
+    fun computeURL(widget: Widget, isLightTheme: Boolean): String? {
+        var computedUrl = widget.widgetContent.url ?: return null
         val myUser = userDataSource.getUser(userId)
 
-        val keyValue = data.mapKeys { "\$${it.key}" }.toMutableMap()
+        val keyValue = widget.widgetContent.data.mapKeys { "\$${it.key}" }.toMutableMap()
 
         keyValue[WIDGET_PATTERN_MATRIX_USER_ID] = userId
         keyValue[WIDGET_PATTERN_MATRIX_DISPLAY_NAME] = myUser?.getBestName() ?: userId
         keyValue[WIDGET_PATTERN_MATRIX_AVATAR_URL] = urlResolver.resolveFullSize(myUser?.avatarUrl) ?: ""
-        keyValue[WIDGET_PATTERN_MATRIX_WIDGET_ID] = widgetId
-        keyValue[WIDGET_PATTERN_MATRIX_ROOM_ID] = roomId ?: ""
+        keyValue[WIDGET_PATTERN_MATRIX_WIDGET_ID] = widget.widgetId
+        keyValue[WIDGET_PATTERN_MATRIX_ROOM_ID] = widget.event.roomId ?: ""
+        keyValue[WIDGET_PATTERN_THEME] = getTheme(isLightTheme)
 
         for ((key, value) in keyValue) {
             computedUrl = computedUrl.replace(key, URLEncoder.encode(value.toString(), "utf-8"))
         }
         return computedUrl
+    }
+
+    private fun getTheme(isLightTheme: Boolean): String {
+        return if (isLightTheme) "light" else "dark"
     }
 
     companion object {
@@ -93,5 +96,6 @@ internal class WidgetFactory @Inject constructor(private val userDataSource: Use
         const val WIDGET_PATTERN_MATRIX_AVATAR_URL = "\$matrix_avatar_url"
         const val WIDGET_PATTERN_MATRIX_WIDGET_ID = "\$matrix_widget_id"
         const val WIDGET_PATTERN_MATRIX_ROOM_ID = "\$matrix_room_id"
+        const val WIDGET_PATTERN_THEME = "\$theme"
     }
 }

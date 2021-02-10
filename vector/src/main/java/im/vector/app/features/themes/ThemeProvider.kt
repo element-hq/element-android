@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.widgets.model
+package im.vector.app.features.themes
 
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.sender.SenderInfo
+import android.content.Context
+import javax.inject.Inject
 
-data class Widget(
-        val widgetContent: WidgetContent,
-        val event: Event,
-        val widgetId: String,
-        val senderInfo: SenderInfo?,
-        val isAddedByMe: Boolean,
-        val type: WidgetType
+/**
+ * Injectable class to encapsulate ThemeUtils call...
+ */
+class ThemeProvider @Inject constructor(
+        private val context: Context
 ) {
-
-    val isActive = widgetContent.isActive()
-
-    val name = widgetContent.getHumanName()
+    fun isLightTheme() = ThemeUtils.isLightTheme(context)
 }

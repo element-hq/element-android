@@ -57,6 +57,11 @@ interface WidgetService {
     ): List<Widget>
 
     /**
+     * Return the computed URL of a widget
+     */
+    fun getWidgetComputedUrl(widget: Widget, isLightTheme: Boolean): String?
+
+    /**
      * Returns the live room widgets so you can listen to them.
      * Some widgets can be deactivated, so be sure to check for isActive.
      *
