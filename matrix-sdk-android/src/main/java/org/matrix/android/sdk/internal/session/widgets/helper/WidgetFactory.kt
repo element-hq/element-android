@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.widgets.helper
 
+import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
@@ -31,6 +32,7 @@ import javax.inject.Inject
 
 internal class WidgetFactory @Inject constructor(private val userDataSource: UserDataSource,
                                                  private val realmSessionProvider: RealmSessionProvider,
+                                                 private val urlResolver: ContentUrlResolver,
                                                  @UserId private val userId: String) {
 
     fun create(widgetEvent: Event): Widget? {
@@ -74,7 +76,7 @@ internal class WidgetFactory @Inject constructor(private val userDataSource: Use
 
         keyValue[WIDGET_PATTERN_MATRIX_USER_ID] = userId
         keyValue[WIDGET_PATTERN_MATRIX_DISPLAY_NAME] = myUser?.getBestName() ?: userId
-        keyValue[WIDGET_PATTERN_MATRIX_AVATAR_URL] = myUser?.avatarUrl ?: ""
+        keyValue[WIDGET_PATTERN_MATRIX_AVATAR_URL] = urlResolver.resolveFullSize(myUser?.avatarUrl) ?: ""
         keyValue[WIDGET_PATTERN_MATRIX_WIDGET_ID] = widgetId
         keyValue[WIDGET_PATTERN_MATRIX_ROOM_ID] = roomId ?: ""
 
