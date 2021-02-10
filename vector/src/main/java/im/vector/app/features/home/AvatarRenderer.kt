@@ -26,7 +26,9 @@ import androidx.core.graphics.drawable.toBitmap
 import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.Transformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
