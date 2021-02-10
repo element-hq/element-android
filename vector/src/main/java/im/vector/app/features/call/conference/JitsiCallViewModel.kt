@@ -68,7 +68,7 @@ class JitsiCallViewModel @AssistedInject constructor(
                     val jitsiWidget = it.firstOrNull()
                     if (jitsiWidget != null) {
                         val ppt = widgetService.getWidgetComputedUrl(jitsiWidget, themeProvider.isLightTheme())
-                                ?.let { url -> JitsiWidgetProperties(url, stringProvider) }
+                                ?.let { url -> JitsiWidgetProperties.fromUrl(url, stringProvider) }
                         setState {
                             copy(
                                     widget = Success(jitsiWidget),
