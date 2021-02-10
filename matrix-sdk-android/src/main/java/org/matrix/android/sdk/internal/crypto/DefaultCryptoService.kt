@@ -1300,7 +1300,9 @@ internal class DefaultCryptoService @Inject constructor(
     override fun ensureOutboundSession(roomId: String) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             // Ensure to load all room members
-            loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+            runCatching {
+                loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+            }
 
             val userIds = getRoomUserIds(roomId)
             val alg = roomEncryptorsStore.get(roomId)
