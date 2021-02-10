@@ -116,12 +116,29 @@ class RoomProfileFragment @Inject constructor(
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
+        setupClicks()
         setupLongClicks()
     }
 
     private fun setupWaitingView() {
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
+    }
+
+    private fun setupClicks() {
+        // Shortcut to room settings
+        listOf(
+                headerViews.roomProfileNameView,
+                views.matrixProfileToolbarTitleView,
+        ).forEach {
+            it.setOnClickListener {
+                roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomSettings)
+            }
+        }
+        // Shortcut to room alias
+        headerViews.roomProfileAliasView.setOnClickListener {
+            roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
+        }
     }
 
     private fun setupLongClicks() {
