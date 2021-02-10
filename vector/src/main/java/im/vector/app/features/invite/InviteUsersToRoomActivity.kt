@@ -25,6 +25,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -54,6 +55,7 @@ import javax.inject.Inject
 @Parcelize
 data class InviteUsersToRoomArgs(val roomId: String) : Parcelable
 
+@AndroidEntryPoint
 class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Factory, ContactsBookViewModel.Factory, InviteUsersToRoomViewModel.Factory {
 
     private val viewModel: InviteUsersToRoomViewModel by viewModel()
@@ -62,11 +64,6 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fa
     @Inject lateinit var inviteUsersToRoomViewModelFactory: InviteUsersToRoomViewModel.Factory
     @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun create(initialState: UserListViewState) = userListViewModelFactory.create(initialState)
 

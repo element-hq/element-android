@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import com.airbnb.mvrx.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -29,17 +30,13 @@ import im.vector.app.core.platform.SimpleFragmentActivity
 import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ReviewTermsActivity : SimpleFragmentActivity() {
 
     @Inject lateinit var errorFormatter: ErrorFormatter
     @Inject lateinit var viewModelFactory: ReviewTermsViewModel.Factory
 
     private val reviewTermsViewModel: ReviewTermsViewModel by viewModel()
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun initUiAndData() {
         super.initUiAndData()

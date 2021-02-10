@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.net.toUri
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
@@ -30,14 +31,11 @@ import javax.inject.Inject
 /**
  * Simple Activity to display an avatar in fullscreen
  */
+@AndroidEntryPoint
 class BigImageViewerActivity : VectorBaseActivity<ActivityBigImageViewerBinding>() {
     @Inject lateinit var sessionHolder: ActiveSessionHolder
 
     override fun getBinding() = ActivityBigImageViewerBinding.inflate(layoutInflater)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

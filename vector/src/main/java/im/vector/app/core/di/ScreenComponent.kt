@@ -114,43 +114,6 @@ interface ScreenComponent {
     fun unrecognizedCertificateDialog(): UnrecognizedCertificateDialog
 
     /* ==========================================================================================
-     * Activities
-     * ========================================================================================== */
-
-    fun inject(activity: HomeActivity)
-    fun inject(activity: RoomDetailActivity)
-    fun inject(activity: RoomProfileActivity)
-    fun inject(activity: RoomMemberProfileActivity)
-    fun inject(activity: VectorSettingsActivity)
-    fun inject(activity: KeysBackupManageActivity)
-    fun inject(activity: EmojiReactionPickerActivity)
-    fun inject(activity: LoginActivity)
-    fun inject(activity: LinkHandlerActivity)
-    fun inject(activity: MainActivity)
-    fun inject(activity: RoomDirectoryActivity)
-    fun inject(activity: BugReportActivity)
-    fun inject(activity: FilteredRoomsActivity)
-    fun inject(activity: CreateRoomActivity)
-    fun inject(activity: CreateDirectRoomActivity)
-    fun inject(activity: IncomingShareActivity)
-    fun inject(activity: SoftLogoutActivity)
-    fun inject(activity: PermalinkHandlerActivity)
-    fun inject(activity: QrCodeScannerActivity)
-    fun inject(activity: DebugMenuActivity)
-    fun inject(activity: SharedSecureStorageActivity)
-    fun inject(activity: BigImageViewerActivity)
-    fun inject(activity: InviteUsersToRoomActivity)
-    fun inject(activity: ReviewTermsActivity)
-    fun inject(activity: WidgetActivity)
-    fun inject(activity: VectorCallActivity)
-    fun inject(activity: VectorAttachmentViewerActivity)
-    fun inject(activity: VectorJitsiActivity)
-    fun inject(activity: SearchActivity)
-    fun inject(activity: UserCodeActivity)
-    fun inject(activity: CallTransferActivity)
-    fun inject(activity: ReAuthActivity)
-
-    /* ==========================================================================================
      * BottomSheets
      * ========================================================================================== */
 

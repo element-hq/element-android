@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
@@ -39,6 +40,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
+@AndroidEntryPoint
 class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         UserCodeSharedViewModel.Factory,
         MatrixToBottomSheet.InteractionListener {
@@ -55,10 +57,6 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

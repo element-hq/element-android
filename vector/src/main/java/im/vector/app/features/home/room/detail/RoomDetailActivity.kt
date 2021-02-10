@@ -24,6 +24,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.mvrx.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.hideKeyboard
@@ -41,6 +42,7 @@ import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
 
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class RoomDetailActivity :
         VectorBaseActivity<ActivityRoomDetailBinding>(),
         ToolbarConfigurable,
@@ -66,11 +68,6 @@ class RoomDetailActivity :
     lateinit var permissionsViewModelFactory: RoomWidgetPermissionViewModel.Factory
     override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel {
         return permissionsViewModelFactory.create(initialState)
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
     }
 
     // Simple filter

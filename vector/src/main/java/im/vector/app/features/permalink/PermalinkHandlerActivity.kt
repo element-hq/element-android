@@ -18,6 +18,7 @@ package im.vector.app.features.permalink
 
 import android.content.Intent
 import android.os.Bundle
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -29,16 +30,13 @@ import im.vector.app.features.home.LoadingFragment
 import im.vector.app.features.login.LoginActivity
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class PermalinkHandlerActivity : VectorBaseActivity<FragmentProgressBinding>() {
 
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var sessionHolder: ActiveSessionHolder
 
     override fun getBinding() = FragmentProgressBinding.inflate(layoutInflater)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -30,6 +30,7 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -69,6 +70,7 @@ data class HomeActivityArgs(
         val accountCreation: Boolean
 ) : Parcelable
 
+@AndroidEntryPoint
 class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
         ToolbarConfigurable,
@@ -102,10 +104,6 @@ class HomeActivity :
     }
 
     override fun getBinding() = ActivityHomeBinding.inflate(layoutInflater)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun create(initialState: UnknownDevicesState): UnknownDeviceDetectorSharedViewModel {
         return unknownDeviceViewModelFactory.create(initialState)

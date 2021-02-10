@@ -27,6 +27,7 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.facebook.react.modules.core.PermissionListener
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
@@ -41,6 +42,7 @@ import timber.log.Timber
 import java.net.URL
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMeetActivityInterface, JitsiMeetViewListener {
 
     @Parcelize
@@ -57,11 +59,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     private var jitsiMeetView: JitsiMeetView? = null
 
     private val jitsiViewModel: JitsiCallViewModel by viewModel()
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

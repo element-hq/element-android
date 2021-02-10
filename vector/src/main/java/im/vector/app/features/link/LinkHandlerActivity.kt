@@ -20,6 +20,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -40,15 +41,12 @@ import javax.inject.Inject
 /**
  * Dummy activity used to dispatch the vector URL links.
  */
+@AndroidEntryPoint
 class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
 
     @Inject lateinit var sessionHolder: ActiveSessionHolder
     @Inject lateinit var errorFormatter: ErrorFormatter
     @Inject lateinit var permalinkHandler: PermalinkHandler
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding() = ActivityProgressBinding.inflate(layoutInflater)
 

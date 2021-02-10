@@ -23,6 +23,7 @@ import android.os.Parcelable
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -40,6 +41,7 @@ data class CallTransferArgs(val callId: String) : Parcelable
 
 private const val USER_LIST_FRAGMENT_TAG = "USER_LIST_FRAGMENT_TAG"
 
+@AndroidEntryPoint
 class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
         CallTransferViewModel.Factory,
         UserListViewModel.Factory,
@@ -57,11 +59,6 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
     override fun getBinding() = ActivityCallTransferBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.vectorCoordinatorLayout
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun create(initialState: UserListViewState): UserListViewModel {
         return userListViewModelFactory.create(initialState)

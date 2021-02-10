@@ -23,6 +23,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -43,6 +44,7 @@ import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class RoomProfileActivity :
         VectorBaseActivity<ActivitySimpleBinding>(),
         ToolbarConfigurable,
@@ -77,11 +79,6 @@ class RoomProfileActivity :
 
     override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel {
         return requireActiveMembershipViewModelFactory.create(initialState)
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
     }
 
     override fun getBinding(): ActivitySimpleBinding {

@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -32,6 +33,7 @@ import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 /**
  * Simple container for [CreateRoomFragment]
  */
+@AndroidEntryPoint
 class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
@@ -42,10 +44,6 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
 
     override fun configure(toolbar: Toolbar) {
         configureToolbar(toolbar)
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
     }
 
     override fun initUiAndData() {

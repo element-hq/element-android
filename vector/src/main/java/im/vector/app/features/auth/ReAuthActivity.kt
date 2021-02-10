@@ -29,6 +29,7 @@ import androidx.browser.customtabs.CustomTabsSession
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -42,6 +43,7 @@ import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import timber.log.Timber
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
 
     @Parcelize
@@ -62,11 +64,6 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
     @Inject lateinit var reAuthViewModelFactory: ReAuthViewModel.Factory
 
     override fun create(initialState: ReAuthState) = reAuthViewModelFactory.create(initialState)
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     private val sharedViewModel: ReAuthViewModel by viewModel()
 

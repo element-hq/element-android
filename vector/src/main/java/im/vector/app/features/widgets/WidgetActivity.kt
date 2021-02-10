@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
@@ -38,6 +39,7 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
         ToolbarConfigurable,
         WidgetViewModel.Factory,
@@ -78,10 +80,6 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
     override fun getMenuRes() = R.menu.menu_widget
 
     override fun getTitleRes() = R.string.room_widget_activity_title
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun initUiAndData() {
         val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(MvRx.KEY_ARG)

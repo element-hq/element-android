@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
@@ -58,6 +59,7 @@ import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Factory, CreateDirectRoomViewModel.Factory, ContactsBookViewModel.Factory {
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
@@ -66,11 +68,6 @@ class CreateDirectRoomActivity : SimpleFragmentActivity(), UserListViewModel.Fac
     @Inject lateinit var createDirectRoomViewModelFactory: CreateDirectRoomViewModel.Factory
     @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun create(initialState: UserListViewState) = userListViewModelFactory.create(initialState)
 

@@ -21,6 +21,7 @@ import android.content.Intent
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.annotation.CallSuper
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
@@ -35,16 +36,12 @@ import javax.inject.Inject
  * It relies on the VectorWebViewClient
  * This class shouldn't be extended. To add new behaviors, you might create a new WebViewMode and a new WebViewEventListener
  */
+@AndroidEntryPoint
 class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>() {
 
     override fun getBinding() = ActivityVectorWebViewBinding.inflate(layoutInflater)
 
     @Inject lateinit var session: Session
-
-    @CallSuper
-    override fun injectWith(injector: ScreenComponent) {
-        session = injector.activeSessionHolder().getActiveSession()
-    }
 
     override fun initUiAndData() {
         configureToolbar(views.webviewToolbar)

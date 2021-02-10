@@ -35,6 +35,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
@@ -71,16 +72,12 @@ data class CallArgs(
         val isVideoCall: Boolean
 ) : Parcelable
 
+@AndroidEntryPoint
 class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallControlsView.InteractionListener {
 
     override fun getBinding() = ActivityCallBinding.inflate(layoutInflater)
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     private val callViewModel: VectorCallViewModel by viewModel()
     private lateinit var callArgs: CallArgs

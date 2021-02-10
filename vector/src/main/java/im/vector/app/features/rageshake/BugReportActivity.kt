@@ -21,6 +21,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
@@ -31,11 +32,8 @@ import timber.log.Timber
 /**
  * Form to send a bug report
  */
+@AndroidEntryPoint
 class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding() = ActivityBugReportBinding.inflate(layoutInflater)
 
