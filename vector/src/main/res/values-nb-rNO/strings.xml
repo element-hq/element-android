@@ -410,7 +410,7 @@
     <string name="room_settings_mention_only">Kun nevninger</string>
     <string name="settings_olm_version">olm-versjon</string>
     <string name="settings_deactivate_account_section">Deaktiver kontoen</string>
-    <string name="settings_opt_in_of_analytics_summary">SchildiChat samler inn anonyme statistikker for å hjelpe oss med å forbedre programmet.</string>
+    <string name="settings_opt_in_of_analytics_summary">Element samler inn anonyme statistikker for å hjelpe oss med å forbedre programmet.</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="settings_integration_manager">Integreringsbehandler</string>
     <string name="room_settings_room_name">Rommets navn</string>
@@ -585,7 +585,7 @@
     <string name="user_directory_header">Brukerkatalog</string>
     <string name="matrix_only_filter">Bare matrix-kontakter</string>
     <string name="no_conversation_placeholder">Ingen samtaler</string>
-    <string name="no_contact_access_placeholder">Du ga ikke SchildiChat tilgang til dine lokale kontakter</string>
+    <string name="no_contact_access_placeholder">Du ga ikke Element tilgang til dine lokale kontakter</string>
     <string name="people_no_identity_server">Ingen identitetsserver konfigurert.</string>
     <string name="rooms_directory_header">Romkatalog</string>
     <string name="no_public_room_placeholder">Ingen offentlige rom tilgjengelig</string>
@@ -631,7 +631,7 @@
     <string name="call_failed_no_ice_title">Oppringing feilet som følge av feilkonfigurert tjener</string>
     <string name="call_failed_no_ice_use_alt">Prøv med %s</string>
     <string name="call_failed_dont_ask_again">Ikke spør meg igjen</string>
-    <string name="call_failed_no_connection">SchildiChat samtale feilet</string>
+    <string name="call_failed_no_connection">Element samtale feilet</string>
     <string name="call_select_sound_device">Velg lydenhet</string>
     <string name="sound_device_phone">Telefon</string>
     <string name="sound_device_speaker">Høytaler</string>
@@ -925,7 +925,7 @@
     <string name="crypto_error_withheld_unverified">Du får ikke tilgang til denne meldingen fordi økten ikke er klarert av avsenderen</string>
     <string name="crypto_error_withheld_generic">Du får ikke tilgang til denne meldingen fordi avsenderen med vilje ikke sendte nøklene</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Venter på krypteringshistorikk</string>
-    <string name="element_disclaimer_title">Riot er nå SchildiChat!</string>
+    <string name="element_disclaimer_title">Riot er nå Element!</string>
     <string name="element_disclaimer_content">Vi er glade for å kunngjøre at vi har byttet navn! Appen din er oppdatert, og du er logget på kontoen din.</string>
     <string name="element_login_splash_brand">element</string>
     <string name="save_recovery_key_chooser_hint">Lagre gjenopprettingsnøkkel i</string>
@@ -952,13 +952,13 @@
     <string name="settings_security_pin_code_summary">Hvis du vil tilbakestille PIN-koden, trykker du på Glemt PIN-kode for å logge av og tilbakestille.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Aktiver biometri</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Aktiver enhetsspesifikk biometri, som fingeravtrykk og ansiktsgjenkjenning.</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-kode er den eneste måten å låse opp SchildiChat.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-kode er den eneste måten å låse opp Element.</string>
     <string name="settings_security_pin_code_notifications_title">Vis innhold i varsler</string>
     <string name="settings_security_pin_code_notifications_summary_on">Vis detaljer som romnavn og meldingsinnhold.</string>
     <string name="settings_security_pin_code_notifications_summary_off">Vis bare antall uleste meldinger i et enkelt varsel.</string>
     <string name="settings_security_pin_code_grace_period_title">Krev PIN etter 2 minutter</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">PIN-kode kreves etter 2 minutter uten bruk av SchildiChat.</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">PIN-kode kreves hver gang du åpner SchildiChat.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-kode kreves etter 2 minutter uten bruk av Element.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN-kode kreves hver gang du åpner Element.</string>
     <string name="settings_security_pin_code_change_pin_title">Endre PIN-kode</string>
     <string name="settings_security_pin_code_change_pin_summary">Endre din nåværende PIN-kode</string>
     <string name="auth_pin_confirm_to_disable_title">Bekreft PIN for å deaktivere PIN</string>
@@ -977,9 +977,9 @@
     <string name="settings_troubleshoot_test_push_loop_failed">Kunne ikke motta push. Løsningen kan være å installere applikasjonen på nytt.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Legg til konto</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nDenne feilen er utenfor kontroll av SchildiChat. Det er ingen Google-konto på telefonen. Åpne kontoadministratoren og legg til en Google-konto.</string>
+\nDenne feilen er utenfor kontroll av Element. Det er ingen Google-konto på telefonen. Åpne kontoadministratoren og legg til en Google-konto.</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Fiks Play Services</string>
-    <string name="settings_troubleshoot_test_play_services_failed">SchildiChat bruker Google Play Services for å levere push-meldinger, men det ser ikke ut til å være konfigurert riktig:
+    <string name="settings_troubleshoot_test_play_services_failed">Element bruker Google Play Services for å levere push-meldinger, men det ser ikke ut til å være konfigurert riktig:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK er tilgjengelig og oppdatert.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Sjekk innstillinger</string>
@@ -988,7 +988,7 @@
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Legg merke til at enkelte meldinger er satt til å være lydløse (gir et varsel uten lyd).</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Egendefinerte innstillinger.</string>
     <string name="settings_troubleshoot_test_device_settings_failed">Varsler er ikke aktivert for denne økten.
-\nKontroller SchildiChatinnstillingene.</string>
+\nKontroller Elementinnstillingene.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Varsler er aktivert for denne økten.</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sesjonsinnstillinger.</string>
     <string name="settings_troubleshoot_test_account_settings_failed">Varsler er deaktivert for kontoen din.
@@ -1012,7 +1012,7 @@
     <string name="settings_emails_empty">Ingen e-post er lagt til kontoen din</string>
     <string name="settings_emails">E-post adresser</string>
     <string name="settings_add_3pid_authentication_needed">Autentisering er påkrevd</string>
-    <string name="settings_add_3pid_flow_not_supported">Du kan ikke gjøre dette fra SchildiChat mobile</string>
+    <string name="settings_add_3pid_flow_not_supported">Du kan ikke gjøre dette fra Element mobile</string>
     <string name="settings_add_3pid_confirm_password_title">Bekreft passordet ditt</string>
     <string name="settings_app_info_link_summary">Vis applikasjonsinformasjonen i systeminnstillingene.</string>
     <string name="settings_app_info_link_title">App info</string>
@@ -1109,22 +1109,22 @@
     <string name="permissions_denied_add_contact">Tillat tillatelse til å få tilgang til kontaktene dine.</string>
     <string name="permissions_denied_qr_code">For å skanne en QR-kode, må du gi tilgang til kameraet.</string>
     <string name="permissions_action_not_performed_missing_permissions">Beklager. Handlingen ble ikke utført på grunn av manglende tillatelser</string>
-    <string name="permissions_msg_contacts_warning_other_androids">SchildiChat kan sjekke adresseboken din for å finne andre Matrix-brukere basert på e-post og telefonnummer.
+    <string name="permissions_msg_contacts_warning_other_androids">Element kan sjekke adresseboken din for å finne andre Matrix-brukere basert på e-post og telefonnummer.
 \n
 \nEr du enig i å dele adresseboken for dette formålet\?</string>
-    <string name="permissions_rationale_msg_contacts">SchildiChat kan sjekke adresseboken din for å finne andre Matrix-brukere basert på e-post og telefonnummer. Hvis du godtar å dele adresseboken din for dette formålet, vennligst gi tilgang til neste popup.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">SchildiChat trenger tillatelse for å få tilgang til kameraet og mikrofonen for å utføre videosamtaler.
+    <string name="permissions_rationale_msg_contacts">Element kan sjekke adresseboken din for å finne andre Matrix-brukere basert på e-post og telefonnummer. Hvis du godtar å dele adresseboken din for dette formålet, vennligst gi tilgang til neste popup.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Element trenger tillatelse for å få tilgang til kameraet og mikrofonen for å utføre videosamtaler.
 \n
 \nTillat tilgang til de neste popup-vinduene for å kunne ringe.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nTillat tilgang i neste popup for å kunne ringe."</string>
-    <string name="permissions_rationale_msg_record_audio">SchildiChat trenger tillatelse for å få tilgang til mikrofonen din for å utføre lydanrop.</string>
+    <string name="permissions_rationale_msg_record_audio">Element trenger tillatelse for å få tilgang til mikrofonen din for å utføre lydanrop.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nTillat tilgang i neste popup for å kunne ringe."</string>
-    <string name="permissions_rationale_msg_camera">SchildiChat trenger tillatelse for å få tilgang til kameraet ditt for å ta bilder og videosamtaler.</string>
-    <string name="permissions_rationale_msg_storage">SchildiChat trenger tillatelse for å få tilgang til bilde- og videobiblioteket ditt for å sende og lagre vedlegg.
+    <string name="permissions_rationale_msg_camera">Element trenger tillatelse for å få tilgang til kameraet ditt for å ta bilder og videosamtaler.</string>
+    <string name="permissions_rationale_msg_storage">Element trenger tillatelse for å få tilgang til bilde- og videobiblioteket ditt for å sende og lagre vedlegg.
 \n
 \nTillat tilgang i neste popup for å kunne sende filer fra telefonen din.</string>
     <string name="media_picker_cannot_record_video">Kan ikke ta opp video</string>
@@ -1146,7 +1146,7 @@
     <string name="settings_call_ringtone_title">Ringetone for innkommende samtaler</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Vil bruke %s som assistanse når hjemmeserveren din ikke tilbyr en (IP-adressen din blir delt under en samtale)</string>
     <string name="settings_call_ringtone_use_default_stun">Tillat reservehjelpsserver</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Bruk standard SchildiChat-ringetone for innkommende anrop</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Bruk standard Element-ringetone for innkommende anrop</string>
     <string name="settings_call_show_confirmation_dialog_summary">Be om bekreftelse før du starter en samtale</string>
     <string name="settings_call_show_confirmation_dialog_title">Forhindre utilsiktet samtale</string>
     <string name="room_info_room_topic">Romemne</string>
@@ -1156,7 +1156,7 @@
         <item quantity="other">%d medlemskapsendringer</item>
     </plurals>
     <string name="groups_list">Gruppeliste</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Start SchildiChat på en annen enhet som kan dekryptere meldingen, slik at den kan sende nøklene til denne økten.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start Element på en annen enhet som kan dekryptere meldingen, slik at den kan sende nøklene til denne økten.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Forespørsel sendt</string>
     <string name="e2e_re_request_encryption_key_sent">Nøkkelforespørsel sendt.</string>
     <string name="login_error_ssl_peer_unverified">SSL-feil: identiteten til jevnaldrende er ikke bekreftet.</string>
@@ -1168,7 +1168,7 @@
     <string name="action_add">Legg til</string>
     <string name="start_chatting">Begynn å chatte</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nDenne feilen er utenfor kontroll av SchildiChat, og ifølge Google indikerer denne feilen at enheten har for mange apper registrert hos FCM. Feilen oppstår bare i tilfeller der det er ekstremt mange apper, så det bør ikke påvirke gjennomsnittsbrukeren.</string>
+\nDenne feilen er utenfor kontroll av Element, og ifølge Google indikerer denne feilen at enheten har for mange apper registrert hos FCM. Feilen oppstår bare i tilfeller der det er ekstremt mange apper, så det bør ikke påvirke gjennomsnittsbrukeren.</string>
     <string name="room_event_action_report_prompt_ignore_user">Vil du skjule alle meldinger fra denne brukeren\?
 \n
 \nMerk at denne handlingen starter appen på nytt, og det kan ta litt tid.</string>
