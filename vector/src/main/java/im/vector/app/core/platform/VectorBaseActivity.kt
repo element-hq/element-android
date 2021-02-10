@@ -49,11 +49,11 @@ import com.jakewharton.rxbinding3.view.clicks
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.AggregatorEntryPoint
 import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.di.VectorComponent
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.extensions.exhaustive
@@ -420,7 +420,7 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
      * PRIVATE METHODS
      * ========================================================================================== */
 
-    internal fun getVectorComponent(): VectorComponent {
+    internal fun getVectorComponent(): AggregatorEntryPoint {
         return (application as HasVectorInjector).injector()
     }
 

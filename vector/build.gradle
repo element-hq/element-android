@@ -5,6 +5,7 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 kapt {
     correctErrorTypes = true
@@ -87,9 +88,10 @@ static def getFdroidVersionSuffix() {
 }
 
 project.android.buildTypes.all { buildType ->
-    buildType.javaCompileOptions.annotationProcessorOptions.arguments =
+    buildType.javaCompileOptions.annotationProcessorOptions.arguments +=
             [
-                    validateEpoxyModelUsage: String.valueOf(buildType.name == 'debug')
+                    validateEpoxyModelUsage: String.valueOf(buildType.name == 'debug'),
+                    "dagger.hilt.disableModulesHaveInstallInCheck": "true"
             ]
 }
 
@@ -294,7 +296,7 @@ dependencies {
     def big_image_viewer_version = '1.6.2'
     def glide_version = '4.11.0'
     def moshi_version = '1.11.0'
-    def daggerVersion = '2.31'
+    def daggerVersion = '2.32'
     def autofill_version = "1.0.0"
     def work_version = '2.4.0'
     def arch_version = '2.1.0'
@@ -417,6 +419,8 @@ dependencies {
     // DI
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    implementation "com.google.dagger:hilt-android:$daggerHiltVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$daggerHiltVersion"
 
     // gplay flavor only
     gplayImplementation('com.google.firebase:firebase-messaging:21.0.0') {

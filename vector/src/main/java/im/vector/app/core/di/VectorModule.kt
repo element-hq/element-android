@@ -23,6 +23,9 @@ import android.content.res.Resources
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.features.navigation.DefaultNavigator
@@ -38,11 +41,16 @@ import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 
+@InstallIn(SingletonComponent::class)
 @Module
 abstract class VectorModule {
 
     @Module
     companion object {
+
+        @Provides
+        @JvmStatic
+        fun providesContext(@ApplicationContext context: Context) = context
 
         @Provides
         @JvmStatic

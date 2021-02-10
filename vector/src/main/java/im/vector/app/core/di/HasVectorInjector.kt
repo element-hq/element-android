@@ -17,6 +17,5 @@
 package im.vector.app.core.di
 
 interface HasVectorInjector {
-
-    fun injector(): VectorComponent
+    fun injector(): AggregatorEntryPoint
 }

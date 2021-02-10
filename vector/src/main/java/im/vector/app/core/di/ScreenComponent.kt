@@ -85,7 +85,7 @@ import im.vector.app.features.workers.signout.SignOutBottomSheetDialogFragment
 
 @Component(
         dependencies = [
-            VectorComponent::class
+            AggregatorEntryPoint::class
         ],
         modules = [
             ViewModelModule::class,
@@ -186,7 +186,7 @@ interface ScreenComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(vectorComponent: VectorComponent,
+        fun create(vectorComponent: AggregatorEntryPoint,
                    @BindsInstance context: AppCompatActivity
         ): ScreenComponent
     }

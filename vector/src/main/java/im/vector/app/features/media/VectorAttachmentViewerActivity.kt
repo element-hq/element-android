@@ -32,10 +32,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.transition.Transition
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.AggregatorEntryPoint
 import im.vector.app.core.di.DaggerScreenComponent
 import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.di.VectorComponent
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.features.themes.ActivityOtherThemes
@@ -217,7 +217,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
 
     private fun args() = intent.getParcelableExtra<Args>(EXTRA_ARGS)
 
-    private fun getVectorComponent(): VectorComponent {
+    private fun getVectorComponent(): AggregatorEntryPoint {
         return (application as HasVectorInjector).injector()
     }
 

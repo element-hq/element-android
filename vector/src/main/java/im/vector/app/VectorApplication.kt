@@ -38,10 +38,11 @@ import com.facebook.stetho.Stetho
 import com.gabrielittner.threetenbp.LazyThreeTen
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.google.GoogleEmojiProvider
+import dagger.hilt.EntryPoints
+import dagger.hilt.android.HiltAndroidApp
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.DaggerVectorComponent
+import im.vector.app.core.di.AggregatorEntryPoint
 import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.core.di.VectorComponent
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.rx.RxConfig
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -70,6 +71,7 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 import androidx.work.Configuration as WorkConfiguration
 
+@HiltAndroidApp
 class VectorApplication :
         Application(),
         HasVectorInjector,
@@ -94,8 +96,8 @@ class VectorApplication :
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var callManager: WebRtcCallManager
 
-    lateinit var vectorComponent: VectorComponent
 
+    private lateinit var component: AggregatorEntryPoint
     // font thread handler
     private var fontThreadHandler: Handler? = null
 
@@ -112,15 +114,13 @@ class VectorApplication :
         enableStrictModeIfNeeded()
         super.onCreate()
         appContext = this
-        vectorComponent = DaggerVectorComponent.factory().create(this)
-        vectorComponent.inject(this)
         vectorUncaughtExceptionHandler.activate(this)
         rxConfig.setupRxPlugin()
-
+        component = EntryPoints.get(this, AggregatorEntryPoint::class.java)
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        Timber.plant(vectorComponent.vectorFileLogger())
+        Timber.plant(component.vectorFileLogger())
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
@@ -190,6 +190,10 @@ class VectorApplication :
         EmojiManager.install(GoogleEmojiProvider())
     }
 
+    fun component(): AggregatorEntryPoint {
+        return EntryPoints.get(this, AggregatorEntryPoint::class.java)
+    }
+
     private fun enableStrictModeIfNeeded() {
         if (BuildConfig.ENABLE_STRICT_MODE_LOGS) {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
@@ -207,8 +211,8 @@ class VectorApplication :
                 .build()
     }
 
-    override fun injector(): VectorComponent {
-        return vectorComponent
+    override fun injector(): AggregatorEntryPoint {
+        return component
     }
 
     private fun logInfo() {
