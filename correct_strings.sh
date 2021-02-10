@@ -30,8 +30,10 @@ find "$mydir/vector/src/main/res" -name strings.xml -exec \
 for strings_de in "$mydir/vector/src/main/res/values-de/strings.xml" "$mydir/matrix-sdk-android/src/main/res/values-de/strings.xml"; do
 sed -i 's|!nnen|wolpertinger|g' "$strings_de"
 sed -i 's|/innen|wolpertinger|g' "$strings_de"
+sed -i 's|:innen|wolpertinger|g' "$strings_de"
 sed -i 's|!n|schlumpfwesen|g' "$strings_de"
 sed -i 's|/in|schlumpfwesen|g' "$strings_de"
+sed -i 's|:in|schlumpfwesen|g' "$strings_de"
 # Automated manual intervention:
 sed -i 's|da der/die Benutzerschlumpfwesen dasselbe Berechtigungslevel wie du erhalten wirst|da der Benutzer dasselbe Berechtigungslevel wie du erhalten wird|g' "$strings_de"
 sed -i 's|des/der anderen Nutzerschlumpfwesen|der anderen Nutzer|g' "$strings_de"
@@ -67,8 +69,23 @@ sed -i 's|Bitte den/die Administratorschlumpfwesen|Bitte den Administrator|g' "$
 sed -i 's|keine weiteren Inhalte dieses/r Nutzersschlumpfwesen sehen|keine weiteren Inhalte dieses Nutzers sehen|g' "$strings_de"
 sed -i 's|gelöscht von Benutzerschlumpfwesen,|gelöscht vom Benutzer,|g' "$strings_de"
 sed -i 's|Aktivieren Ende-zu-Ende-Verschlüsselung|Ende-zu-Ende-Verschlüsselung aktivieren|g' "$strings_de"
+sed -i 's|Nachrichten dieses/r Nutzersschlumpfwesen|Nachrichten dieses Nutzers|g' "$strings_de"
+sed -i 's|Ausschluss eines/r Nutzersschlumpfwesen|Ausschluss eines Nutzers|g' "$strings_de"
+sed -i 's|Erwähnen eines/r Nutzersschlumpfwesen|Erwähnen eines Nutzers|g' "$strings_de"
+sed -i 's|Nachrichten des/r Nutzersschlumpfwesen|Nachrichten des Nutzers|g' "$strings_de"
+sed -i 's|Nutzerschlumpfwesen \([einladen\|entfernen\|verbannen\|filtern\|ignorieren]\)|Nutzer \1|g' "$strings_de"
+sed -i 's|Nutzerwolpertinger \([einladen\|entfernen\|verbannen\|filtern\|ignorieren]\)|Nutzer \1|g' "$strings_de"
+sed -i 's|>Nutzerwolpertinger<|>Nutzer<|g' "$strings_de"
+sed -i 's|von einem Nutzerschlumpfwesen|von einem Nutzer|g' "$strings_de"
+sed -i 's|von %d Nutzerwolpertinger|von %d Nutzern|g' "$strings_de"
+sed -i 's|ignorierst keine Nutzerwolpertinger|ignorierst keine Nutzer|g' "$strings_de"
+sed -i 's|Prüfe die Nutzerschlumpfwesen,|Prüfe die Nutzer,|g' "$strings_de"
+sed -i 's|Sitzungen von anderen Nutzerwolpertinger|Sitzungen von anderen Nutzern|g' "$strings_de"
+sed -i 's|sodass <b>einige Nutzerwolpertinger sich|sodass <b>einige Nutzer sich|g' "$strings_de"
+sed -i 's|für zukünftige Nutzerwolpertinger|für zukünftige Nutzer|g' "$strings_de"
+sed -i 's|registrierte Nutzerwolpertinger, die|registrierte Nutzer, die|g' "$strings_de"
 echo "Check for unresolved strings in $strings_de..."
-if grep "wolpertinger\|schlumpfwesen" "$strings_de"; then
+if grep --color "wolpertinger\|schlumpfwesen" "$strings_de"; then
     echo -e "\033[1;33m""Script outdated, please update manually!""\033[0m"
     exit 1
 fi
