@@ -6,6 +6,7 @@ Features ✨:
                                 
 Improvements 🙌:
  - VoIP : new tiles in timeline
+ - Upgrade Jitsi library from 2.9.3 to 3.1.0
 
 Bugfix 🐛:
  - VoIP : fix audio devices output

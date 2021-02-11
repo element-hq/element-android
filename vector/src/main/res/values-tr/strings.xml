@@ -1148,7 +1148,7 @@
     <string name="room_widget_permission_theme">Teman</string>
     <string name="room_widget_permission_widget_id">Widget kimliği</string>
     <string name="room_widget_permission_room_id">Oda kimliği</string>
-    <string name="error_jitsi_not_supported_on_old_device">Üzgünüz, jitsi konferans aramaları eski cihazlarda desteklenmiyor (Android 5.0 altı)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Üzgünüz, jitsi konferans aramaları eski cihazlarda desteklenmiyor (Android 6.0 altı)</string>
     <string name="room_widget_resource_permission_title">Bu widget şu kaynakları kullanmak istiyor:</string>
     <string name="room_widget_resource_grant_permission">İzin ver</string>
     <string name="room_widget_resource_decline_permission">Hepsini reddet</string>

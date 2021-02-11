@@ -50,6 +50,10 @@ internal class DefaultWidgetService @Inject constructor(private val widgetManage
         return widgetManager.getRoomWidgets(roomId, widgetId, widgetTypes, excludedTypes)
     }
 
+    override fun getWidgetComputedUrl(widget: Widget, isLightTheme: Boolean): String? {
+        return widgetManager.getWidgetComputedUrl(widget, isLightTheme)
+    }
+
     override fun getRoomWidgetsLive(
             roomId: String,
             widgetId: QueryStringValue,

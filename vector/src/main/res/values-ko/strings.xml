@@ -993,7 +993,7 @@
         <item quantity="other">%d개의 활성 위젯</item>
     </plurals>
 
-    <string name="error_jitsi_not_supported_on_old_device">죄송합니다, Jitsi로 회의 전화는 오래된 기기에서 지원하지 않습니다 (안드로이드 OS가 5.0 이하인 기기)</string>
+    <string name="error_jitsi_not_supported_on_old_device">죄송합니다, Jitsi로 회의 전화는 오래된 기기에서 지원하지 않습니다 (안드로이드 OS가 6.0 이하인 기기)</string>
 
     <string name="widget_integration_unable_to_create">위젯을 만들 수 없습니다.</string>
     <string name="widget_integration_failed_to_send_request">요청을 보낼 수 없습니다.</string>

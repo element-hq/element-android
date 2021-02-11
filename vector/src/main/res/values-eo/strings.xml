@@ -1212,7 +1212,7 @@
     <string name="room_widget_resource_decline_permission">Ĉion bloki</string>
     <string name="room_widget_resource_grant_permission">Permesi</string>
     <string name="room_widget_resource_permission_title">Ĉi tiu fenestraĵo volas uzi la jenajn rimedojn:</string>
-    <string name="error_jitsi_not_supported_on_old_device">Pardonu, grupaj vokoj ne estas subtenataj sur malnovaj aparatoj (Android je versio sub 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Pardonu, grupaj vokoj ne estas subtenataj sur malnovaj aparatoj (Android je versio sub 6.0)</string>
     <string name="room_widget_permission_room_id">Identigilo de ĉambro</string>
     <string name="room_widget_permission_widget_id">Identigilo de fenestraĵo</string>
     <string name="room_widget_permission_theme">Via haŭto</string>

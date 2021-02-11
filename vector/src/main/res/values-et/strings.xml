@@ -1020,7 +1020,7 @@
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="historical_placeholder">Otsi ajaloost</string>
-    <string name="error_jitsi_not_supported_on_old_device">Vabandust, aga rühmakõned Jitsi vahendusel ei ole vanades seadmetes toetatud (Androidi versioon alla 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Vabandust, aga rühmakõned Jitsi vahendusel ei ole vanades seadmetes toetatud (Androidi versioon alla 6.0)</string>
     <string name="room_widget_resource_permission_title">See vidin soovib kasutada järgmisi andmeid:</string>
     <string name="room_widget_resource_grant_permission">Luba</string>
     <string name="room_widget_resource_decline_permission">Ära luba mitte midagi</string>

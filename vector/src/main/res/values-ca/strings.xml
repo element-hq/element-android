@@ -1164,7 +1164,7 @@
     <string name="notification_new_invitation">Nova invitació</string>
     <string name="notification_sender_me">Jo</string>
     <string name="notification_inline_reply_failed">** No s\'ha pogut enviar - si us plau, obre la sala</string>
-    <string name="error_jitsi_not_supported_on_old_device">Ho sentim, les videoconferències amb Jitsi no són compatibles amb dispositius antics (dispositius amb Android inferior a 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Ho sentim, les videoconferències amb Jitsi no són compatibles amb dispositius antics (dispositius amb Android inferior a 6.0)</string>
     <string name="integration_manager_not_configured">No has configurat cap gestor d\'integracions.</string>
     <string name="you_added_a_new_device_with_info">Una nova sessió està sol·licitant claus de xifrat.
 \nNom de la sessió: %1$s

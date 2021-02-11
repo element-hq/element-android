@@ -1040,7 +1040,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="notification_new_invitation">Nueva invitación</string>
     <string name="notification_sender_me">Yo</string>
     <string name="notification_inline_reply_failed">** Error al enviar - por favor abra la sala</string>
-    <string name="error_jitsi_not_supported_on_old_device">Lo sentimos, las llamadas de grupo con Jitsi no están soportadas en dispositivos antiguos (dispositivos con Android inferior a 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Lo sentimos, las llamadas de grupo con Jitsi no están soportadas en dispositivos antiguos (dispositivos con Android inferior a 6.0)</string>
     <string name="settings_labs_native_camera_summary">Iniciar la cámara del sistema en lugar de la pantalla de cámara personalizada.</string>
     <string name="settings_labs_enable_send_voice_summary">Esta opción requiere una aplicación de terceros para grabar los mensajes.</string>
     <string name="command_problem_with_parameters">El comando \"%s\" necesita mas parámetros o algunos parámetros son incorrectos.</string>

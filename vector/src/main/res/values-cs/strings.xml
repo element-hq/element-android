@@ -975,7 +975,7 @@
     <string name="room_widget_permission_theme">Váš motiv</string>
     <string name="room_widget_permission_widget_id">ID widgetu</string>
     <string name="room_widget_permission_room_id">ID místnosti</string>
-    <string name="error_jitsi_not_supported_on_old_device">Promiňte, konferenční hovory s Jitsi nejsou podporovány na starších zařízeních (zařízení s Androidem nižším než 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Promiňte, konferenční hovory s Jitsi nejsou podporovány na starších zařízeních (zařízení s Androidem nižším než 6.0)</string>
     <string name="room_widget_resource_permission_title">Widget si žádá použití následujících zdrojů:</string>
     <string name="room_widget_resource_grant_permission">Povolit</string>
     <string name="room_widget_resource_decline_permission">Zamítnout vše</string>
