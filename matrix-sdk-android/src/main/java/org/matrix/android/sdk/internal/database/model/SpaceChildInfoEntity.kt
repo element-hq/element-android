@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import io.realm.RealmObject
  */
 internal open class SpaceChildInfoEntity(
         var viaServers: RealmList<String> = RealmList(),
-        // it's an active child of the space if and only if present is not null and true
-        var present: Boolean? = null,
         // Use for alphabetic ordering of this child
         var order: String? = null,
         // If true, this child should be join when parent is joined
