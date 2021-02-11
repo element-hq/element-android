@@ -16,35 +16,9 @@
 
 package im.vector.app.features.call.conference
 
-import android.net.Uri
-import im.vector.app.R
-import im.vector.app.core.resources.StringProvider
-import org.matrix.android.sdk.api.extensions.tryOrNull
-import java.net.URLDecoder
-
 data class JitsiWidgetProperties(
         val domain: String,
         val confId: String?,
         val displayName: String?,
         val avatarUrl: String?
-) {
-    companion object {
-        fun fromUrl(url: String, stringProvider: StringProvider): JitsiWidgetProperties {
-            val configString: String? = tryOrNull { Uri.parse(url) }?.fragment
-
-            val configs: Map<String, String?> = configString?.split("&")
-                    ?.map { it.split("=") }
-                    ?.filter { it.size == 2 }
-                    ?.map { (key, value) -> key to URLDecoder.decode(value, "UTF-8") }
-                    ?.toMap()
-                    .orEmpty()
-
-            return JitsiWidgetProperties(
-                    domain = configs["conferenceDomain"] ?: stringProvider.getString(R.string.preferred_jitsi_domain),
-                    confId = configs["conferenceId"],
-                    displayName = configs["displayName"],
-                    avatarUrl = configs["avatarUrl"]
-            )
-        }
-    }
-}
+)

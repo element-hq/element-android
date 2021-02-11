@@ -24,7 +24,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.themes.ThemeProvider
 import org.jitsi.meet.sdk.JitsiMeetUserInfo
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -38,7 +37,7 @@ class JitsiCallViewModel @AssistedInject constructor(
         @Assisted initialState: JitsiCallViewState,
         @Assisted val args: VectorJitsiActivity.Args,
         private val session: Session,
-        private val stringProvider: StringProvider,
+        private val jitsiMeetPropertiesFactory: JitsiWidgetPropertiesFactory,
         private val themeProvider: ThemeProvider
 ) : VectorViewModel<JitsiCallViewState, JitsiCallViewActions, JitsiCallViewEvents>(initialState) {
 
@@ -68,7 +67,7 @@ class JitsiCallViewModel @AssistedInject constructor(
                     val jitsiWidget = it.firstOrNull()
                     if (jitsiWidget != null) {
                         val ppt = widgetService.getWidgetComputedUrl(jitsiWidget, themeProvider.isLightTheme())
-                                ?.let { url -> JitsiWidgetProperties.fromUrl(url, stringProvider) }
+                                ?.let { url -> jitsiMeetPropertiesFactory.create(url) }
                         setState {
                             copy(
                                     widget = Success(jitsiWidget),
