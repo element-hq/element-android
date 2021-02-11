@@ -22,6 +22,11 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import com.squareup.moshi.Types
 import dagger.Lazy
+import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
+import javax.inject.Inject
+import kotlin.jvm.Throws
+import kotlin.math.max
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
@@ -98,11 +103,7 @@ import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.olm.OlmManager
 import timber.log.Timber
-import java.io.File
-import java.util.concurrent.atomic.AtomicBoolean
-import javax.inject.Inject
-import kotlin.jvm.Throws
-import kotlin.math.max
+import uniffi.olm.Request
 
 /**
  * A `CryptoService` class instance manages the end-to-end crypto for a session.
@@ -363,7 +364,7 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    private fun internalStart() {
+    private suspend fun internalStart() {
         if (isStarted.get() || isStarting.get()) {
             return
         }
@@ -372,7 +373,17 @@ internal class DefaultCryptoService @Inject constructor(
 
         try {
             olmMachine = OlmMachine(userId, deviceId!!, dataDir)
+
             Timber.v("HELLLO WORLD STARTING CRYPTO ${olmMachine?.identityKeys()}")
+
+            // TODO sent out those requests in a sensible place.
+            for (request in olmMachine!!.outgoingRequests()) {
+                when (request) {
+                    is Request.KeysUpload -> Timber.v("HELLO KEYS UPLOAD REQUEST ${request.body}")
+                    is Request.KeysQuery -> Timber.v("HELLO KEYS QUERY REQUEST ${request.body}")
+                    is Request.ToDevice -> Timber.v("HELLO TO DEVICE REQUEST ${request.body}")
+                }
+            }
         } catch (throwable: Throwable) {
             Timber.v("HELLLO WORLD FAILED CRYPTO $throwable")
         }

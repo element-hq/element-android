@@ -21,6 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import uniffi.olm.Device as InnerDevice
 import uniffi.olm.OlmMachine as InnerMachine
+import uniffi.olm.Request
+import uniffi.olm.RequestType
 import uniffi.olm.Sas as InnerSas
 
 class Device(inner: InnerDevice, machine: InnerMachine) {
@@ -57,6 +59,18 @@ class OlmMachine(user_id: String, device_id: String, path: File) {
 
     fun identityKeys(): Map<String, String> {
         return this.inner.identityKeys()
+    }
+
+    suspend fun outgoingRequests(): List<Request> = withContext(Dispatchers.IO) {
+        inner.outgoingRequests()
+    }
+
+    suspend fun markRequestAsSent(
+        request_id: String,
+        request_type: RequestType,
+        response_body: String
+    ) = withContext(Dispatchers.IO) {
+        inner.markRequestAsSent(request_id, request_type, response_body)
     }
 
     suspend fun getDevice(user_id: String, device_id: String): Device? = withContext(Dispatchers.IO) {
