@@ -57,6 +57,9 @@ items = [
     # Need token , ["Capability", baseUrl + "_matrix/client/r0/capabilities", True]
     # Need token , ["Media config", baseUrl + "_matrix/media/r0/config", True]
     # Need token , ["Turn", baseUrl + "_matrix/client/r0/voip/turnServer", True]
+
+    # Only for Synapse
+    , ["Synapse version", baseUrl + "_synapse/admin/v1/server_version", True]
 ]
 
 for item in items:
