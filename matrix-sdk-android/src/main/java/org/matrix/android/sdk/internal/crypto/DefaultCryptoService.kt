@@ -84,6 +84,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -97,6 +98,7 @@ import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.olm.OlmManager
 import timber.log.Timber
+import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import kotlin.jvm.Throws
@@ -120,6 +122,8 @@ internal class DefaultCryptoService @Inject constructor(
         private val userId: String,
         @DeviceId
         private val deviceId: String?,
+        @SessionFilesDirectory
+        private val dataDir: File,
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
@@ -171,6 +175,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
+    private var olmMachine: OlmMachine? = null
 
     fun onStateEvent(roomId: String, event: Event) {
         when (event.getClearType()) {
@@ -310,7 +315,7 @@ internal class DefaultCryptoService @Inject constructor(
      * devices.
      *
      */
-    fun start() {
+    suspend fun start() {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             internalStart()
         }
@@ -363,14 +368,14 @@ internal class DefaultCryptoService @Inject constructor(
             return
         }
         isStarting.set(true)
+        Timber.v("HELLLO WORLD STARTING CRYPTO")
+
         try {
-            val dataDir = "/data/data/im.vector.app.debug/files"
-            val olmMachine = OlmMachine("@example:localhost", "DEVICEID", dataDir)
-            Timber.v("HELLLO WORLD STARTING CRYPTO ${olmMachine.identityKeys()}")
+            olmMachine = OlmMachine(userId, deviceId!!, dataDir)
+            Timber.v("HELLLO WORLD STARTING CRYPTO ${olmMachine?.identityKeys()}")
         } catch (throwable: Throwable) {
             Timber.v("HELLLO WORLD FAILED CRYPTO $throwable")
         }
-        Timber.v("HELLLO WORLD STARTING CRYPTO")
 
         // Open the store
         cryptoStore.open()

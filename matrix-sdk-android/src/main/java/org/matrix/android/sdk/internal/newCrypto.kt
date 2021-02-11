@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal
 
-import kotlinx.coroutines.withContext
+import java.io.File
 import kotlinx.coroutines.Dispatchers
-
-import uniffi.olm.OlmMachine as InnerMachine
+import kotlinx.coroutines.withContext
 import uniffi.olm.Device as InnerDevice
+import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.Sas as InnerSas
 
 class Device(inner: InnerDevice, machine: InnerMachine) {
@@ -44,8 +44,8 @@ class Device(inner: InnerDevice, machine: InnerMachine) {
     }
 }
 
-class OlmMachine(user_id: String, device_id: String, path: String) {
-    private val inner: InnerMachine = InnerMachine(user_id, device_id, path)
+class OlmMachine(user_id: String, device_id: String, path: File) {
+    private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
 
     fun userId(): String {
         return this.inner.userId()
@@ -57,10 +57,6 @@ class OlmMachine(user_id: String, device_id: String, path: String) {
 
     fun identityKeys(): Map<String, String> {
         return this.inner.identityKeys()
-    }
-
-    suspend fun slowUserId(): String = withContext(Dispatchers.Default) {
-        inner.slowUserId()
     }
 
     suspend fun getDevice(user_id: String, device_id: String): Device? = withContext(Dispatchers.IO) {
