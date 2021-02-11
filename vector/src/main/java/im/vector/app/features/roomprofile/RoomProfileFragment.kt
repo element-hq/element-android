@@ -128,7 +128,7 @@ class RoomProfileFragment @Inject constructor(
         // Shortcut to room settings
         setOf(
                 headerViews.roomProfileNameView,
-                views.matrixProfileToolbarTitleView,
+                views.matrixProfileToolbarTitleView
         ).forEach {
             it.setOnClickListener {
                 roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomSettings)
