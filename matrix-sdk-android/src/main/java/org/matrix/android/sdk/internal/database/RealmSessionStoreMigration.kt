@@ -165,8 +165,6 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
         val spaceChildInfoSchema = realm.schema.create("SpaceChildInfoEntity")
                 ?.addField(SpaceChildInfoEntityFields.ORDER,  String::class.java)
-                ?.addField(SpaceChildInfoEntityFields.PRESENT, Boolean::class.java)
-                ?.setNullable(SpaceChildInfoEntityFields.PRESENT, true)
                 ?.addRealmListField(SpaceChildInfoEntityFields.VIA_SERVERS.`$`, String::class.java)
                 ?.addRealmObjectField(SpaceChildInfoEntityFields.ROOM_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
 
