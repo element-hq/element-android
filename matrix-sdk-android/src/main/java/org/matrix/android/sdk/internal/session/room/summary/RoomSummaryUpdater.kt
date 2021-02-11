@@ -99,6 +99,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         val roomType = ContentMapper.map(roomCreateEvent?.content).toModel<RoomCreateContent>()?.type
         roomSummaryEntity.roomType = roomType
+        Timber.v("## Space: Updating summary room [$roomId] roomType: [$roomType]")
 
         // Don't use current state for this one as we are only interested in having MXCRYPTO_ALGORITHM_MEGOLM event in the room
         val encryptionEvent = EventEntity.whereType(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
@@ -173,7 +174,6 @@ internal class RoomSummaryUpdater @Inject constructor(
                                 realm.createObject<SpaceChildInfoEntity>().apply {
                                     this.roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, it.roomId)
                                     this.order = it.order
-                                    this.present = it.present
                                     this.autoJoin = it.autoJoin
                                 }.also {
                                     Timber.v("## Space: Updating summary for room $roomId with children $it")

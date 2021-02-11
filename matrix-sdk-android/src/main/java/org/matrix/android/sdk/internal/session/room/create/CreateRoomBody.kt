@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.session.room.create
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContentOverride
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.internal.session.room.membership.threepid.ThreePidInviteBody
@@ -111,5 +111,5 @@ internal data class CreateRoomBody(
          * The power level content to override in the default power level event
          */
         @Json(name = "power_level_content_override")
-        val powerLevelContentOverride: PowerLevelsContent?
+        val powerLevelContentOverride: PowerLevelsContentOverride?
 )
