@@ -9,6 +9,7 @@ enum MachineCreationError {
 [Error]
 enum CryptoStoreError {
     "CryptoStore",
+    "OlmError",
 };
 
 dictionary DeviceLists {
@@ -29,10 +30,11 @@ dictionary Sas {
     Request request;
 };
 
-dictionary Request {
-    string request_id;
-    RequestType request_type;
-    string request_body;
+[TaggedUnion]
+interface Request {
+    ToDevice(string request_id, string event_type, string body);
+    KeysUpload(string request_id, string body);
+    KeysQuery(string request_id, string body);
 };
 
 enum RequestType {
@@ -41,6 +43,7 @@ enum RequestType {
     "ToDevice",
 };
 
+[Threadsafe]
 interface OlmMachine {
     [Throws=MachineCreationError]
     constructor([ByRef] string user_id, [ByRef] string device_id, [ByRef] string path);
@@ -52,11 +55,18 @@ interface OlmMachine {
     record<DOMString, string> identity_keys();
 
     string user_id();
-    string slow_user_id();
     string device_id();
 
     Device? get_device([ByRef] string user_id, [ByRef] string device_id);
     sequence<Device> get_user_devices([ByRef] string user_id);
+    sequence<Request> outgoing_requests();
+
+    [Throws=CryptoStoreError]
+    void mark_request_as_sent(
+        [ByRef] string request_id,
+        RequestType request_type,
+        [ByRef] string response
+    );
 
     [Throws=CryptoStoreError]
     Sas start_verification([ByRef] Device device);

@@ -5,17 +5,25 @@ use std::{
 };
 
 use futures::executor::block_on;
+use http::Response;
+use serde_json::json;
 use tokio::{runtime::Runtime, time::sleep};
 
 use matrix_sdk_common::{
-    api::r0::sync::sync_events::{
-        DeviceLists as RumaDeviceLists, ToDevice,
+    api::r0::{
+        keys::{
+            claim_keys::Response as KeysClaimResponse, get_keys::Response as KeysQueryResponse,
+            upload_keys::Response as KeysUploadResponse,
+        },
+        sync::sync_events::{DeviceLists as RumaDeviceLists, ToDevice},
     },
     identifiers::{DeviceKeyAlgorithm, Error as RumaIdentifierError, UserId},
+    uuid::Uuid,
     UInt,
 };
 use matrix_sdk_crypto::{
-    store::CryptoStoreError as InnerStoreError, OlmMachine as InnerMachine, ToDeviceRequest,
+    store::CryptoStoreError as InnerStoreError, IncomingResponse, OlmError,
+    OlmMachine as InnerMachine, OutgoingRequest, ToDeviceRequest,
 };
 
 pub struct OlmMachine {
@@ -45,6 +53,40 @@ impl Into<RumaDeviceLists> for DeviceLists {
     }
 }
 
+enum OwnedResponse {
+    KeysClaim(KeysClaimResponse),
+    KeysUpload(KeysUploadResponse),
+    KeysQuery(KeysQueryResponse),
+}
+
+impl From<KeysClaimResponse> for OwnedResponse {
+    fn from(response: KeysClaimResponse) -> Self {
+        OwnedResponse::KeysClaim(response)
+    }
+}
+
+impl From<KeysQueryResponse> for OwnedResponse {
+    fn from(response: KeysQueryResponse) -> Self {
+        OwnedResponse::KeysQuery(response)
+    }
+}
+
+impl From<KeysUploadResponse> for OwnedResponse {
+    fn from(response: KeysUploadResponse) -> Self {
+        OwnedResponse::KeysUpload(response)
+    }
+}
+
+impl<'a> Into<IncomingResponse<'a>> for &'a OwnedResponse {
+    fn into(self) -> IncomingResponse<'a> {
+        match self {
+            OwnedResponse::KeysClaim(r) => IncomingResponse::KeysClaim(r),
+            OwnedResponse::KeysQuery(r) => IncomingResponse::KeysQuery(r),
+            OwnedResponse::KeysUpload(r) => IncomingResponse::KeysUpload(r),
+        }
+    }
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum MachineCreationError {
     #[error(transparent)]
@@ -57,6 +99,8 @@ pub enum MachineCreationError {
 pub enum CryptoStoreError {
     #[error(transparent)]
     CryptoStore(#[from] InnerStoreError),
+    #[error(transparent)]
+    OlmError(#[from] OlmError),
 }
 
 pub enum RequestType {
@@ -78,28 +122,81 @@ pub struct Sas {
     pub request: Request,
 }
 
-pub struct Request {
-    pub request_id: String,
-    pub request_type: RequestType,
-    pub request_body: String,
+pub enum Request {
+    ToDevice {
+        request_id: String,
+        event_type: String,
+        body: String,
+    },
+    KeysUpload {
+        request_id: String,
+        body: String,
+    },
+    KeysQuery {
+        request_id: String,
+        body: String,
+    },
 }
 
-impl From<ToDeviceRequest> for Request {
-    fn from(r: ToDeviceRequest) -> Self {
-        Request {
-            request_id: r.txn_id_string(),
-            request_type: RequestType::ToDevice,
-            request_body: serde_json::to_string(&r.messages).unwrap(),
+impl From<OutgoingRequest> for Request {
+    fn from(r: OutgoingRequest) -> Self {
+        use matrix_sdk_crypto::OutgoingRequests::*;
+
+        match r.request() {
+            KeysUpload(u) => {
+                let body = json!({
+                    "device_keys": u.device_keys,
+                    "one_time_keys": u.one_time_keys,
+                });
+
+                Request::KeysUpload {
+                    request_id: r.request_id().to_string(),
+                    body: serde_json::to_string(&body)
+                        .expect("Can't serialize keys upload request"),
+                }
+            }
+            KeysQuery(k) => {
+                let body = json!({
+                    "device_keys": k.device_keys,
+                });
+                Request::KeysQuery {
+                    request_id: r.request_id().to_string(),
+                    body: serde_json::to_string(&body).expect("Can't serialize keys query request"),
+                }
+            }
+            ToDeviceRequest(t) => Request::from(t),
+            SignatureUpload(_) => todo!(),
+            RoomMessage(_) => todo!(),
         }
     }
 }
 
-// fn response_from_string(body: &str) -> Response<Vec<u8>> {
-//     Response::builder()
-//         .status(200)
-//         .body(body.as_bytes().to_vec())
-//         .expect("Can't create HTTP response")
-// }
+impl From<ToDeviceRequest> for Request {
+    fn from(r: ToDeviceRequest) -> Self {
+        Request::ToDevice {
+            request_id: r.txn_id_string(),
+            event_type: r.event_type.to_string(),
+            body: serde_json::to_string(&r.messages).unwrap(),
+        }
+    }
+}
+
+impl From<&ToDeviceRequest> for Request {
+    fn from(r: &ToDeviceRequest) -> Self {
+        Request::ToDevice {
+            request_id: r.txn_id_string(),
+            event_type: r.event_type.to_string(),
+            body: serde_json::to_string(&r.messages).unwrap(),
+        }
+    }
+}
+
+fn response_from_string(body: &str) -> Response<Vec<u8>> {
+    Response::builder()
+        .status(200)
+        .body(body.as_bytes().to_vec())
+        .expect("Can't create HTTP response")
+}
 
 impl OlmMachine {
     pub fn new(user_id: &str, device_id: &str, path: &str) -> Result<Self, MachineCreationError> {
@@ -175,6 +272,28 @@ impl OlmMachine {
         })
     }
 
+    pub fn mark_request_as_sent(
+        &self,
+        request_id: &str,
+        request_type: RequestType,
+        response_body: &str,
+    ) -> Result<(), CryptoStoreError> {
+        let id = Uuid::parse_str(request_id).expect("Can't parse request id");
+
+        let response = response_from_string(&response_body);
+
+        let response: OwnedResponse = match request_type {
+            RequestType::KeysUpload => KeysUploadResponse::try_from(response).map(Into::into),
+            RequestType::KeysQuery => KeysQueryResponse::try_from(response).map(Into::into),
+            RequestType::ToDevice => KeysClaimResponse::try_from(response).map(Into::into),
+        }
+        .expect("Can't convert json string to response");
+
+        block_on(self.inner.mark_request_as_sent(&id, &response))?;
+
+        Ok(())
+    }
+
     pub fn start_verification(&self, device: &Device) -> Result<Sas, CryptoStoreError> {
         let user_id = UserId::try_from(device.user_id.clone()).unwrap();
         let device_id = device.device_id.as_str().into();
@@ -188,6 +307,13 @@ impl OlmMachine {
             flow_id: sas.flow_id().as_str().to_owned(),
             request: request.into(),
         })
+    }
+
+    pub fn outgoing_requests(&self) -> Vec<Request> {
+        block_on(self.inner.outgoing_requests())
+            .into_iter()
+            .map(|r| r.into())
+            .collect()
     }
 
     pub fn receive_sync_changes(
