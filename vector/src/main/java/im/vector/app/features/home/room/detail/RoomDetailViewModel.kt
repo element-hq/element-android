@@ -783,7 +783,13 @@ class RoomDetailViewModel @AssistedInject constructor(
                                         invitedUserIds.addAll(slashCommandResult.invitees)
                                     }
                                     val spaceId = session.spaceService().createSpace(params)
-                                    session.spaceService().getSpace(spaceId)?.addRoom(state.roomId)
+                                    session.spaceService().getSpace(spaceId)
+                                            ?.addChildren(
+                                                    state.roomId,
+                                                    listOf(session.sessionParams.homeServerHost ?: ""),
+                                                    null,
+                                                    true
+                                            )
                                 } catch (failure: Throwable) {
                                     _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
                                 }
@@ -794,7 +800,37 @@ class RoomDetailViewModel @AssistedInject constructor(
                         is ParsedCommand.AddToSpace            -> {
                             viewModelScope.launch(Dispatchers.IO) {
                                 try {
-                                    session.spaceService().getSpace(slashCommandResult.spaceId)?.addRoom(room.roomId)
+                                    session.spaceService().getSpace(slashCommandResult.spaceId)
+                                            ?.addChildren(
+                                                    room.roomId,
+                                                    listOf(session.sessionParams.homeServerHost ?: ""),
+                                                    null,
+                                                    false
+                                            )
+                                } catch (failure: Throwable) {
+                                    _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+                                }
+                            }
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.JoinSpace -> {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                try {
+                                    session.spaceService().joinSpace(slashCommandResult.spaceIdOrAlias)
+                                } catch (failure: Throwable) {
+                                    _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
+                                }
+                            }
+                            _viewEvents.post(RoomDetailViewEvents.SlashCommandHandled())
+                            popDraft()
+                        }
+                        is ParsedCommand.LeaveRoom -> {
+                            viewModelScope.launch(Dispatchers.IO) {
+                                try {
+                                    awaitCallback {
+                                        session.getRoom(slashCommandResult.roomId)?.leave(null, it)
+                                    }
                                 } catch (failure: Throwable) {
                                     _viewEvents.post(RoomDetailViewEvents.SlashCommandResultError(failure))
                                 }
