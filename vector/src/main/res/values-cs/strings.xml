@@ -843,7 +843,7 @@
     <string name="encryption_export_room_keys">Export klíčů místností</string>
     <string name="encryption_export_room_keys_summary">Export klíčů do místního souboru</string>
     <string name="encryption_export_export">Export</string>
-    <string name="encryption_export_notice">Prosím, založte heslo k zašifrování exportovaných klíčů. Pro import klíčů budete muset zadat stejné heslo.</string>
+    <string name="encryption_export_notice">Prosím, vytvořte frázi k zašifrování exportovaných klíčů. Pro import klíčů budete muset zadat stejnou přístupovou frázi.</string>
     <string name="encryption_export_saved_as">E2E klíče místností byly uloženy do \'%s\'.
 \n
 \nVarování: může dojít k smazání souboru, pokud bude aplikace odinstalována.</string>
@@ -1113,13 +1113,13 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Žádný platný APK Google Plaz Services nenalezen. Oznámení možná nebudou pracovat spolehlivě.</string>
-    <string name="passphrase_create_passphrase">Založit heslo</string>
-    <string name="passphrase_confirm_passphrase">Potvrdit heslo</string>
-    <string name="passphrase_enter_passphrase">Zadat heslo</string>
-    <string name="passphrase_passphrase_does_not_match">Heslo se neshoduje</string>
-    <string name="passphrase_empty_error_message">Prosím, zadejte heslo</string>
-    <string name="passphrase_passphrase_too_weak">Heslo je příliš slabé</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Prosím, smažte heslo, přejete-lis si, aby Element generoval klíč pro obnovu.</string>
+    <string name="passphrase_create_passphrase">Založit přístupovou frázi</string>
+    <string name="passphrase_confirm_passphrase">Potvrdit přístupovou frázi</string>
+    <string name="passphrase_enter_passphrase">Zadat přístupovou frázi</string>
+    <string name="passphrase_passphrase_does_not_match">Přistupová fráze se neshoduje</string>
+    <string name="passphrase_empty_error_message">Prosím, zadejte přístupovou frázi</string>
+    <string name="passphrase_passphrase_too_weak">Přístupová fráze je příliš slabá</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Prosím, smažte přístupovou frázi, přejete-li si, aby Element generoval klíč pro obnovu.</string>
     <string name="keys_backup_no_session_error">Žádná relace Matrix není dostupná</string>
     <string name="keys_backup_setup_step1_title">Nikdy neztraťte šifrované zprávy</string>
     <string name="keys_backup_setup_step1_description">Zprávy v šifrovaných místnostech jsou zabezpečeny pomocí end-to-end šifrováním. Pouze Vy a adresát(i) máte klíče ke čtení těchto zpráv.
@@ -1127,16 +1127,16 @@
 \nKlíče bezpečně zálohujte, abyste je neztratili.</string>
     <string name="keys_backup_setup">Začít používat zálohu klíčů</string>
     <string name="keys_backup_setup_step1_advanced">(Pokročilé)</string>
-    <string name="keys_backup_setup_step2_text_title">Zabezpečit zálohu heslem.</string>
-    <string name="keys_backup_setup_step2_text_description">Uložíme zašifrovanou kopii Vašich klíčů na Vašem homeserveru. Chraňte svoji zálohu heslem, abyste ji udrželi v bezpečí.
+    <string name="keys_backup_setup_step2_text_title">Zabezpečit zálohu přístupovou frází.</string>
+    <string name="keys_backup_setup_step2_text_description">Uložíme zašifrovanou kopii Vašich klíčů na Vašem homeserveru. Chraňte svoji zálohu přístupovou frází, abyste ji udrželi v bezpečí.
 \n
-\nZ důvodu nejvyšší bezpečnosti by se mělo lišit od hesla účtu.</string>
-    <string name="keys_backup_setup_step2_button_title">Nastavit heslo</string>
+\nZ důvodu nejvyšší bezpečnosti by se měla lišit od hesla účtu.</string>
+    <string name="keys_backup_setup_step2_button_title">Nastavit přístupovou frází</string>
     <string name="keys_backup_setup_creating_backup">Zálohuji</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Nebo zabezpečte svoji zálohu pomocí klíče obnovy, uloženého někde v bezpečí.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Pokročilé) Nastavit s klíčem obnovy</string>
     <string name="keys_backup_setup_step3_success_title">Podařilo se!</string>
-    <string name="keys_backup_setup_step3_text_line2">Váš klíč obnovy je záchranná síť - lze jej použít pro obnovu Vašich šifrovaných zpráv, pokud zapomenete své heslo.
+    <string name="keys_backup_setup_step3_text_line2">Váš klíč obnovy je záchranná síť - lze jej použít pro obnovu Vašich šifrovaných zpráv, pokud zapomenete svou přístupovou frázi.
 \nUchovávejte svůj klíč obnovy velmi bezpečně, např. ve správci hesel (nebo trezoru)</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Uchovávejte svůj klíč obnovy velmi bezpečně, např. ve správci hesel (nebo trezoru)</string>
     <string name="keys_backup_setup_step3_button_title">Hotovo</string>
@@ -1153,21 +1153,21 @@
     <string name="keys_backup_setup_override_stop">Zastavit</string>
     <string name="keys_backup_setup_step3_please_make_copy">Prosím, udělat kopii</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Sdílet klíč obnovy s…</string>
-    <string name="keys_backup_setup_step3_generating_key_status">Generuji klíč obnovy pomocí hesla, tento proces může trvat několi vteřin.</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Generuji klíč obnovy pomocí přístupové fráze, tento proces může trvat několi vteřin.</string>
     <string name="recovery_key">Klíč obnovy</string>
     <string name="unexpected_error">Neočekávaná chyba</string>
     <string name="keys_backup_setup_backup_started_title">Zálohování se spustilo</string>
     <string name="keys_backup_setup_skip_title">Jste si jisti\?</string>
     <string name="keys_backup_setup_skip_msg">Můžete ztratit přístup ke svým zprávám, pokud se odhlásíte nebo ztratíte toto zařízení.</string>
     <string name="keys_backup_restore_is_getting_backup_version">Načítám verzi zálohy…</string>
-    <string name="keys_backup_restore_with_passphrase">Použijte heslo obnovy k odemknutí historie svých šifrovaných zpráv</string>
+    <string name="keys_backup_restore_with_passphrase">Použijte přístupovou frázi k odemknutí historie svých šifrovaných zpráv</string>
     <string name="keys_backup_restore_use_recovery_key">použít klíč obnovy</string>
-    <string name="keys_backup_restore_with_passphrase_helper_with_link">Neznám Vaše heslo obnovy, můžete %s.</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">Neznám Vaší přístupovou frázi pro obnovení, můžete %s.</string>
     <string name="keys_backup_restore_with_recovery_key">Použijte svůj klíč obnovy k odemknutí historie svých šifrovaných zpráv</string>
     <string name="keys_backup_restore_key_enter_hint">Zadat klíč obnovy</string>
     <string name="keys_backup_restore_setup_recovery_key">Obnova zpráv</string>
     <string name="keys_backup_restore_with_key_helper">Ztratili jste klíč obnovy\? Můžete nastavit nový v nastavení.</string>
-    <string name="keys_backup_passphrase_error_decrypt">Zálohu nebylo možno s tímto heslem dešifrovat: prosím, ověřit, že jste zadali správné heslo obnovy.</string>
+    <string name="keys_backup_passphrase_error_decrypt">Zálohu nebylo možno s touto přístupovou frází dešifrovat: prosím, ověřit, že jste zadali správnou přístupovou frázi pro obnovu.</string>
     <string name="network_error_please_check_and_retry">Síťová chyba: prosím, ověřte své spojení a opakujte.</string>
     <string name="keys_backup_restoring_waiting_message">Obnovuji zálohu:</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Kalkuluji klíč zálohy…</string>
@@ -1189,7 +1189,7 @@
     <string name="keys_backup_settings_invalid_signature_from_verified_device">Záloha má neplatný podpis z ověřené relace %s</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Záloha má neplatný podpis z neověřené relace %s</string>
     <string name="keys_backup_get_trust_error">Načtení informace o důvěryhodnosti zálohy (%s) se nezdařilo.</string>
-    <string name="keys_backup_settings_untrusted_backup">Abyste použili zálohu klíčů na tuto relaci, obnovte nyní pomocí svého hesla nebo klíče obnovy.</string>
+    <string name="keys_backup_settings_untrusted_backup">Abyste použili zálohu klíčů na tuto relaci, obnovte je nyní pomocí své přístupové fráze nebo klíče obnovy.</string>
     <string name="keys_backup_settings_deleting_backup">Odstraňuji zálohu…</string>
     <string name="keys_backup_settings_delete_backup_error">Odstranění zálohy (%s) selhalo</string>
     <string name="keys_backup_settings_checking_backup_state">Kontroluji stav zálohy</string>
@@ -1741,7 +1741,7 @@
     <string name="verification_use_passphrase">Pokud se nemůžete dostat do existující relace</string>
     <string name="new_signin">Nové přihlášení</string>
     <string name="enter_secret_storage_invalid">Nemohu najít přihlašovací data v úložišti</string>
-    <string name="enter_secret_storage_passphrase">Zadejte heslo pro úložište údajů</string>
+    <string name="enter_secret_storage_passphrase">Zadejte přístupovou frázi pro úložište údajů</string>
     <string name="enter_secret_storage_passphrase_warning">Varování:</string>
     <string name="enter_secret_storage_passphrase_warning_text">Měli byste otevřít úložiště údajů z důvěryhodného zařízení</string>
     <string name="message_action_item_redact">Odstranit…</string>
@@ -1780,7 +1780,7 @@
 \nDoporučujeme, abyste okamžitě změnili heslo a klíč obnovy v nastavení.</string>
     <string name="verify_cancelled_notice">Ověřit svá zařízení v nastavení.</string>
     <string name="verification_cancelled">Ověření zrušeno</string>
-    <string name="recovery_passphrase">Heslo obnovy</string>
+    <string name="recovery_passphrase">Přístupová fráze pro obnovu</string>
     <string name="message_key">Klíč zpráv</string>
     <string name="account_password">Heslo účtu</string>
     <string name="set_recovery_passphrase">Nastavte %s</string>
@@ -1798,7 +1798,7 @@
     <string name="finish">Dokončit</string>
     <string name="bootstrap_save_key_description">Použijte tento %1$s jako záchrannou síť v případě, že zapomenete své %2$s.</string>
     <string name="bootstrap_crosssigning_progress_initializing">Zvěřejňuji založené klíče identity</string>
-    <string name="bootstrap_crosssigning_progress_pbkdf2">Generuji zabezpečené klíče z hesla</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Generuji zabezpečené klíče z přístupové fráze</string>
     <string name="bootstrap_crosssigning_progress_default_key">Určuji výchozí klíč SSSS</string>
     <string name="bootstrap_crosssigning_progress_save_msk">Synchronizuji hlavní klíč</string>
     <string name="bootstrap_crosssigning_progress_save_usk">Synchronizuji uživatelský klíč</string>
@@ -1811,10 +1811,10 @@
     <string name="bootstrap_crosssigning_save_usb">Uložte je na USB nebo zálohový disk</string>
     <string name="bootstrap_crosssigning_save_cloud">Nahrajte do svého osobního úložiště v cloudu</string>
     <string name="auth_flow_not_supported">To nelze provést z mobilního zařízení</string>
-    <string name="bootstrap_skip_text">Nastavení hesla pro obnovení Vám umožní zabezpečit &amp; odemknout zašifrované zprávy a důvěryhodnost.
+    <string name="bootstrap_skip_text">Nastavení přístupové fráze pro obnovení Vám umožní zabezpečit a odemknout zašifrované zprávy a důvěryhodnost.
 \n
-\nPokud nechcete nastavit heslo pro zprávy, založte klíč pro zprávy.</string>
-    <string name="bootstrap_skip_text_no_gen_key">Nastavení hesla pro obnovení Vám umožní zabezpečit &amp; odemknout zašifrované zprávy a důvěryhodnost.</string>
+\nPokud nechcete nastavit bezpečnostní frázi pro zprávy, založte klíč pro zprávy.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Nastavení přístupové fráze pro obnovení Vám umožní zabezpečit a odemknout zašifrované zprávy a důvěryhodnost.</string>
     <string name="encryption_enabled">Šifrování zapnuto</string>
     <string name="encryption_enabled_tile_description">Zprávy v této místnosti jsou end-to-end šifrovány. Zjistěte více a ověřte uživatele v jejich profilech.</string>
     <string name="encryption_not_enabled">Šifrování není zapnuto</string>
@@ -1839,20 +1839,20 @@
     <string name="bootstrap_enter_recovery">Zadejte svůj %s a pokračujte</string>
     <string name="use_file">Použít soubor</string>
     <string name="enter_backup_passphrase">Zadejte %s</string>
-    <string name="backup_recovery_passphrase">Heslo obnovení</string>
+    <string name="backup_recovery_passphrase">Přístupové fráze pro obnovení</string>
     <string name="bootstrap_invalid_recovery_key">To není platný klíč obnovení</string>
     <string name="recovery_key_empty_error_message">Prosím, zadejte klíč obnovení</string>
     <string name="bootstrap_progress_checking_backup">Kontroluji klíč zálohy</string>
     <string name="bootstrap_progress_checking_backup_with_info">Kontroluji klíč zálohy (%s)</string>
     <string name="bootstrap_progress_compute_curve_key">Generuji klíč curve</string>
-    <string name="bootstrap_progress_generating_ssss">Generuji klíč SSSS z hesla</string>
-    <string name="bootstrap_progress_generating_ssss_with_info">Generuji klíč SSSS z hesla (%s)</string>
+    <string name="bootstrap_progress_generating_ssss">Generuji klíč SSSS z přístupové fráze</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">Generuji klíč SSSS z přístupové fráze (%s)</string>
     <string name="bootstrap_progress_generating_ssss_recovery">Generuji klíč SSSS z klíče obnovení</string>
     <string name="bootstrap_progress_storing_in_sss">Ukládám heslo pro zálohu klíče v SSSS</string>
     <string name="new_session_review_with_info">%1$s (%2$s)</string>
-    <string name="bootstrap_migration_enter_backup_password">Zadejte své heslo pro zálohu klíče a pokračujte.</string>
+    <string name="bootstrap_migration_enter_backup_password">Zadejte svoji přístupovou frázi pro zálohu klíče a pokračujte.</string>
     <string name="bootstrap_migration_use_recovery_key">použít svůj klíč obnovy zálohy klíčů</string>
-    <string name="bootstrap_migration_with_passphrase_helper_with_link">Neznáte-li své heslo zálohy klíčů, můžete %s.</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Neznáte-li svoji přístupovou frázi pro zálohu klíčů, můžete %s.</string>
     <string name="bootstrap_migration_backup_recovery_key">Klíč pro obnovu zálohy klíčů</string>
     <string name="settings_security_prevent_screenshots_title">Zamezit screenshotům aplikace</string>
     <string name="settings_security_prevent_screenshots_summary">Zapnutí toho nastavení doplní značku FLAG_SECURE ke všem aktivitám. Pro aktivaci změny restartujte aplikaci.</string>
@@ -2010,8 +2010,8 @@
     <string name="settings_secure_backup_reset">Resetovat bezpečnou zálohu</string>
     <string name="settings_secure_backup_enter_to_setup">Nastavit na tomto zařízení</string>
     <string name="settings_secure_backup_section_info">Ochrana před ztrátou přístupu k šifrovaným zprávám a datům pomocí zálohy šifrovacích klíčů na Vašem serveru.</string>
-    <string name="reset_secure_backup_title">Generovat nový bezpečnostní klíč nebo nastavit nové bezpečnostní heslo pro existující zálohu.</string>
-    <string name="reset_secure_backup_warning">To nahradí Váš nynější klíč nebo heslo.</string>
+    <string name="reset_secure_backup_title">Generovat nový bezpečnostní klíč nebo nastavit novou bezpečnostní frázi pro existující zálohu.</string>
+    <string name="reset_secure_backup_warning">To nahradí Váš nynější klíč nebo frázi.</string>
     <string name="disabled_integration_dialog_title">Integrace jsou vypnuty</string>
     <string name="disabled_integration_dialog_content">Zapnout \'Povolit integrace\' v nastavení.</string>
     <string name="settings_emails_and_phone_numbers_title">Emailové adresy a telefonní čísla</string>
@@ -2057,7 +2057,7 @@
     <string name="room_profile_section_admin">Akce správce</string>
     <string name="room_member_power_level_default_in">Výchozí v %1$s</string>
     <string name="settings_hs_admin_e2e_disabled">Správce Vašeho serveru vypnul end-to-end šifrování jako výchozí v soukromých místnostech a přímých zprávách.</string>
-    <string name="bootstrap_info_text_2">Zadejte bezpečnostní heslo, jež znáte pouze Vy, k zabezpečení tajností na Vašem serveru.</string>
+    <string name="bootstrap_info_text_2">Zadejte přístupovou frázi, jež znáte pouze Vy, k zabezpečení klíčů na vašem serveru.</string>
     <string name="bootstrap_cancel_text">Pokud nyní přerušíte, mohli byste přijít o šifrované zprávy &amp; data, pokud ztratíte přístup k Vašemu účtu.
 \n
 \nMůžete nastavit bezpečnou zálohu &amp; správu klíčů též v nastaveních.</string>
@@ -2080,14 +2080,14 @@
     <string name="bottom_sheet_setup_secure_backup_submit">Nastavit</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_title">Použít bezpečnostní klíč</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Generovat bezpečnostní klíč k uložení na bezpečném místě např. správci hesel nebo sejfu.</string>
-    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Použít bezpečnostní heslo</string>
-    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Zadejte bezpečnostní heslo známé pouze Vám a generujte klíč pro zálohy.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Použít bezpečnostní frázi</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Zadejte bezpečnostní frázi známou pouze Vám a generujte klíč pro zálohy.</string>
     <string name="bottom_sheet_save_your_recovery_key_title">Uložit bezpečnostní klíč</string>
     <string name="bottom_sheet_save_your_recovery_key_content">Uložte bezpečnostní klíč na bezpečném místě, např. správci hesel nebo sejfu.</string>
-    <string name="set_a_security_phrase_title">Nastavit bezpečnostní heslo</string>
-    <string name="set_a_security_phrase_notice">Zadejte bezpečnostní heslo známé pouze Vám pro zabezpečení tajností na svém serveru.</string>
-    <string name="set_a_security_phrase_hint">Bezpečnostní heslo</string>
-    <string name="set_a_security_phrase_again_notice">Zadejte své bezpečnostní heslo znovu pro potvrzení.</string>
+    <string name="set_a_security_phrase_title">Nastavit bezpečnostní frázi</string>
+    <string name="set_a_security_phrase_notice">Zadejte bezpečnostní frázi známou pouze Vám pro zabezpečení klíčů na vašem serveru.</string>
+    <string name="set_a_security_phrase_hint">Bezpečnostní fráze</string>
+    <string name="set_a_security_phrase_again_notice">Pro potvrzení zadejte znovu svoji bezpečnostní frázi.</string>
     <string name="save_your_security_key_title">Uložit bezpečnostní klíč</string>
     <string name="save_your_security_key_notice">Uložte své bezpečnostní heslo na bezpečném místě, např. správci hesel nebo sejfu.</string>
     <string name="room_settings_name_hint">Název místnosti</string>
