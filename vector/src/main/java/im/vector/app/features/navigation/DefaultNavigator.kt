@@ -19,9 +19,11 @@ package im.vector.app.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.View
 import android.view.Window
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
@@ -298,8 +300,17 @@ class DefaultNavigator @Inject constructor(
 
     override fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>?) {
         if (widget.type is WidgetType.Jitsi) {
-            val enableVideo = options?.get(JitsiCallViewModel.ENABLE_VIDEO_OPTION) == true
-            context.startActivity(VectorJitsiActivity.newIntent(context, roomId = roomId, widgetId = widget.widgetId, enableVideo = enableVideo))
+            // Jitsi SDK is now for API 23+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                AlertDialog.Builder(context)
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(R.string.error_jitsi_not_supported_on_old_device)
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
+            } else {
+                val enableVideo = options?.get(JitsiCallViewModel.ENABLE_VIDEO_OPTION) == true
+                context.startActivity(VectorJitsiActivity.newIntent(context, roomId = roomId, widgetId = widget.widgetId, enableVideo = enableVideo))
+            }
         } else {
             val widgetArgs = widgetArgsBuilder.buildRoomWidgetArgs(roomId, widget)
             context.startActivity(WidgetActivity.newIntent(context, widgetArgs))

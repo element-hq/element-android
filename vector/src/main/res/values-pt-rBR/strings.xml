@@ -1176,7 +1176,7 @@
     <string name="room_widget_permission_theme">Seu tema</string>
     <string name="room_widget_permission_widget_id">ID do widget</string>
     <string name="room_widget_permission_room_id">ID da sala</string>
-    <string name="error_jitsi_not_supported_on_old_device">Desculpe, as chamadas em grupo com o Jitsi não são suportadas em aparelhos antigos (com versões do Android anteriores a 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Desculpe, as chamadas em grupo com o Jitsi não são suportadas em aparelhos antigos (com versões do Android anteriores a 6.0)</string>
     <string name="room_widget_resource_permission_title">Este wigdet deseja utilizar os seguintes recursos:</string>
     <string name="room_widget_resource_grant_permission">Permitir</string>
     <string name="room_widget_resource_decline_permission">Bloquear Tudo</string>

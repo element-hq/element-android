@@ -104,6 +104,10 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
         return widgetEvents.mapEventsToWidgets(widgetTypes, excludedTypes)
     }
 
+    fun getWidgetComputedUrl(widget: Widget, isLightTheme: Boolean): String? {
+        return widgetFactory.computeURL(widget, isLightTheme)
+    }
+
     private fun List<Event>.mapEventsToWidgets(widgetTypes: Set<String>? = null,
                                                excludedTypes: Set<String>? = null): List<Widget> {
         val widgetEvents = this

@@ -1386,7 +1386,7 @@
     <string name="room_widget_permission_room_id">Identitet sobe</string>
 
 
-    <string name="error_jitsi_not_supported_on_old_device">Nažalost konferencijski pozivi kroz Jitsi nisu podržani na starim uređajima (uređaji s Androidom inačice manje od 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Nažalost konferencijski pozivi kroz Jitsi nisu podržani na starim uređajima (uređaji s Androidom inačice manje od 6.0)</string>
     <string name="command_description_clear_scalar_token">Za popravak upravljanja aplikacijama unutar Matrixa</string>
 
     <string name="group_details_home">Početna</string>

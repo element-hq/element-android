@@ -1159,7 +1159,7 @@
     <string name="autodiscover_well_known_autofill_dialog_message">Element heeft een aangepaste serverconfiguratie gedetecteerd voor uw gebruikers-ID-domein ‘%1$s’:
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Configuratie gebruiken</string>
-    <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 6.0)</string>
     <string name="title_activity_verify_device">Sessie verifiëren</string>
     <string name="encryption_information_unknown_ip">onbekend IP-adres</string>
     <string name="you_added_a_new_device_with_info">Een nieuwe sessie vraagt versleutelingssleutels aan. 

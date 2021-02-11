@@ -37,7 +37,6 @@ import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataDataS
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import org.matrix.android.sdk.internal.session.widgets.helper.WidgetFactory
 import org.matrix.android.sdk.internal.session.widgets.helper.extractWidgetSequence
-import org.matrix.android.sdk.internal.task.TaskExecutor
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -55,7 +54,6 @@ import javax.inject.Inject
  */
 @SessionScope
 internal class IntegrationManager @Inject constructor(matrixConfiguration: MatrixConfiguration,
-                                                      private val taskExecutor: TaskExecutor,
                                                       @SessionDatabase private val monarchy: Monarchy,
                                                       private val updateUserAccountDataTask: UpdateUserAccountDataTask,
                                                       private val accountDataDataSource: AccountDataDataSource,

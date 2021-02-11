@@ -1314,7 +1314,7 @@
     <string name="room_widget_permission_room_id">Room ID</string>
 
 
-    <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 6.0)</string>
     <string name="room_widget_resource_permission_title">This widget wants to use the following resources:</string>
     <string name="room_widget_resource_grant_permission">Allow</string>
     <string name="room_widget_resource_decline_permission">Block All</string>
