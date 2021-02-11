@@ -41,28 +41,31 @@ internal class RoomRelationshipHelper(private val realm: Realm,
 
     data class SpaceChildInfo(
             val roomId: String,
-            val present: Boolean,
             val order: String?,
             val autoJoin: Boolean,
             val viaServers: List<String>
     )
 
+    /**
+     * Gets the ordered list of valid child description.
+     */
     fun getDirectChildrenDescriptions(): List<SpaceChildInfo> {
         return CurrentStateEventEntity.whereType(realm, roomId, EventType.STATE_SPACE_CHILD)
                 .findAll()
-//                .filter { ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()?.present == true }
                 .mapNotNull {
-                    // ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()
                     ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()?.let { scc ->
                         Timber.d("## Space child desc state event $scc")
-                        SpaceChildInfo(
-                                roomId = it.stateKey,
-                                present = scc.present ?: false,
-                                order = scc.order,
-                                autoJoin = scc.default ?: false,
-                                viaServers = scc.via ?: emptyList()
-                        )
+                        // Children where via is not present are ignored.
+                        scc.via?.let { via ->
+                            SpaceChildInfo(
+                                    roomId = it.stateKey,
+                                    order = scc.validOrder(),
+                                    autoJoin = scc.autoJoin ?: false,
+                                    viaServers = via
+                            )
+                        }
                     }
                 }
+                .sortedBy { it.order }
     }
 }

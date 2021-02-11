@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.space
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -23,6 +24,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
+import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.session.space.SpaceService
@@ -64,6 +66,15 @@ internal class DefaultSpaceService @Inject constructor(
 
     override suspend fun createSpace(params: CreateSpaceParams): String {
         return createRoomTask.execute(params)
+    }
+
+    override suspend fun createSpace(name: String, topic: String?, avatarUri: Uri?, isPublic: Boolean): String {
+        return createSpace(CreateSpaceParams().apply {
+            this.name = name
+            this.topic = topic
+            this.preset = if (isPublic) CreateRoomPreset.PRESET_PUBLIC_CHAT else CreateRoomPreset.PRESET_PRIVATE_CHAT
+            this.avatarUri = avatarUri
+        })
     }
 
     override fun getSpace(spaceId: String): Space? {
@@ -120,8 +131,7 @@ internal class DefaultSpaceService @Inject constructor(
                                                 isEncrypted = false
                                         ),
                                         order = childStateEv?.order,
-                                        present = childStateEv?.present ?: false,
-                                        autoJoin = childStateEv?.default ?: false,
+                                        autoJoin = childStateEv?.autoJoin ?: false,
                                         viaServers = childStateEv?.via ?: emptyList()
                                 )
                             } ?: emptyList()
@@ -131,30 +141,8 @@ internal class DefaultSpaceService @Inject constructor(
 
     override suspend fun joinSpace(spaceIdOrAlias: String,
                                    reason: String?,
-                                   viaServers: List<String>,
-                                   autoJoinChild: List<SpaceService.ChildAutoJoinInfo>): SpaceService.JoinSpaceResult {
-        try {
-            joinSpaceTask.execute(JoinSpaceTask.Params(spaceIdOrAlias, reason, viaServers))
-            // TODO partial success
-            return SpaceService.JoinSpaceResult.Success
-//            val childJoinFailures = mutableMapOf<String, Throwable>()
-//            autoJoinChild.forEach { info ->
-//                // TODO what if the child is it self a subspace with some default children?
-//                try {
-//                    joinRoomTask.execute(JoinRoomTask.Params(info.roomIdOrAlias, null, info.viaServers))
-//                } catch (failure: Throwable) {
-//                    // TODO, i could already be a member of this room, handle that as it should not be an error in this context
-//                    childJoinFailures[info.roomIdOrAlias] = failure
-//                }
-//            }
-//            return if (childJoinFailures.isEmpty()) {
-//                SpaceService.JoinSpaceResult.Success
-//            } else {
-//                SpaceService.JoinSpaceResult.PartialSuccess(childJoinFailures)
-//            }
-        } catch (throwable: Throwable) {
-            return SpaceService.JoinSpaceResult.Fail(throwable)
-        }
+                                   viaServers: List<String>): SpaceService.JoinSpaceResult {
+        return joinSpaceTask.execute(JoinSpaceTask.Params(spaceIdOrAlias, reason, viaServers))
     }
 
     override suspend fun rejectInvite(spaceId: String, reason: String?) {

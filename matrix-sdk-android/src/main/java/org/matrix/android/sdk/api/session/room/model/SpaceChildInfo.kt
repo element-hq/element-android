@@ -18,7 +18,6 @@ package org.matrix.android.sdk.api.session.room.model
 
 data class SpaceChildInfo(
         val roomSummary: IRoomSummary?,
-        val present: Boolean,
         val order: String?,
         val autoJoin: Boolean,
         val viaServers: List<String>

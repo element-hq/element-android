@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.api.session.space
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -32,6 +33,11 @@ interface SpaceService {
     suspend fun createSpace(params: CreateSpaceParams): String
 
     /**
+     * Just a shortcut for space creation for ease of use
+     */
+    suspend fun createSpace(name: String, topic: String?, avatarUri: Uri?, isPublic: Boolean): String
+
+    /**
      * Get a space from a roomId
      * @param roomId the roomId to look for.
      * @return a room with roomId or null if room type is not space
@@ -43,12 +49,12 @@ interface SpaceService {
      * Use this call get preview of children of this space, particularly useful to get a
      * preview of rooms that you did not join yet.
      */
-    suspend fun peekSpace(spaceId: String) : SpacePeekResult
+    suspend fun peekSpace(spaceId: String): SpacePeekResult
 
     /**
      * Get's information of a space by querying the server
      */
-    suspend fun querySpaceChildren(spaceId: String) : Pair<RoomSummary, List<SpaceChildInfo>>
+    suspend fun querySpaceChildren(spaceId: String): Pair<RoomSummary, List<SpaceChildInfo>>
 
     /**
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.
@@ -64,8 +70,9 @@ interface SpaceService {
     )
 
     sealed class JoinSpaceResult {
-        object Success: JoinSpaceResult()
-        data class Fail(val error: Throwable?): JoinSpaceResult()
+        object Success : JoinSpaceResult()
+        data class Fail(val error: Throwable) : JoinSpaceResult()
+
         /** Success fully joined the space, but failed to join all or some of it's rooms */
         data class PartialSuccess(val failedRooms: Map<String, Throwable>) : JoinSpaceResult()
 
@@ -74,8 +81,7 @@ interface SpaceService {
 
     suspend fun joinSpace(spaceIdOrAlias: String,
                           reason: String? = null,
-                          viaServers: List<String> = emptyList(),
-                          autoJoinChild: List<ChildAutoJoinInfo>) : JoinSpaceResult
+                          viaServers: List<String> = emptyList()): JoinSpaceResult
 
     suspend fun rejectInvite(spaceId: String, reason: String?)
 }

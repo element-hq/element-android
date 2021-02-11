@@ -318,6 +318,18 @@ object CommandParser {
                             rawCommand
                     )
                 }
+                Command.JOIN_SPACE.command        -> {
+                    val spaceIdOrAlias = textMessage.substring(Command.JOIN_SPACE.command.length).trim()
+                    ParsedCommand.JoinSpace(
+                            spaceIdOrAlias
+                    )
+                }
+                Command.LEAVE_ROOM.command        -> {
+                    val spaceIdOrAlias = textMessage.substring(Command.LEAVE_ROOM.command.length).trim()
+                    ParsedCommand.LeaveRoom(
+                            spaceIdOrAlias
+                    )
+                }
                 else                                   -> {
                     // Unknown command
                     ParsedCommand.ErrorUnknownSlashCommand(slashCommand)

@@ -100,7 +100,7 @@ class SpacePreviewViewModel @AssistedInject constructor(
         // trigger modal loading
         _viewEvents.post(SpacePreviewViewEvents.StartJoining)
         viewModelScope.launch(Dispatchers.IO) {
-            val joinResult = session.spaceService().joinSpace(initialState.idOrAlias, null, spaceVia, emptyList())
+            val joinResult = session.spaceService().joinSpace(initialState.idOrAlias, null, spaceVia)
             when (joinResult) {
                 SpaceService.JoinSpaceResult.Success,
                 is SpaceService.JoinSpaceResult.PartialSuccess -> {
