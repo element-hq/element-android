@@ -48,7 +48,9 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     CONFETTI("/confetti", "<message>", R.string.command_confetti),
     SNOW("/snow", "<message>", R.string.command_snow),
     CREATE_SPACE("/createspace", "<name> <invitee>*", R.string.command_description_create_space),
-    ADD_TO_SPACE("/addToSpace", "spaceId", R.string.command_description_create_space);
+    ADD_TO_SPACE("/addToSpace", "spaceId", R.string.command_description_create_space),
+    JOIN_SPACE("/joinSpace", "spaceId", R.string.command_description_join_space),
+    LEAVE_ROOM("/leave", "<roomId?>", R.string.command_description_leave_room);
 
     val length
         get() = command.length + 1

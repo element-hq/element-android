@@ -31,7 +31,6 @@ internal class SpaceSummaryMapper @Inject constructor(private val roomSummaryMap
                     SpaceChildInfo(
                             roomSummary = it.roomSummaryEntity?.let { rs -> roomSummaryMapper.map(rs) },
                             autoJoin = it.autoJoin ?: false,
-                            present = it.present ?: false,
                             viaServers = it.viaServers.map { it },
                             order = it.order
                     )
