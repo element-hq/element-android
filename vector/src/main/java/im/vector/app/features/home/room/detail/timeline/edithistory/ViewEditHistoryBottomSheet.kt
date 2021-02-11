@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
@@ -37,6 +38,7 @@ import javax.inject.Inject
 /**
  * Bottom sheet displaying list of edits for a given event ordered by timestamp
  */
+@AndroidEntryPoint
 class ViewEditHistoryBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>() {
 
@@ -47,10 +49,6 @@ class ViewEditHistoryBottomSheet :
 
     private val epoxyController by lazy {
         ViewEditHistoryEpoxyController(requireContext(), viewModel.dateFormatter, eventHtmlRenderer)
-    }
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {

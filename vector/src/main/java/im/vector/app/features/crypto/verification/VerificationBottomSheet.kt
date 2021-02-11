@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
@@ -60,6 +61,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
+@AndroidEntryPoint
 class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetVerificationBinding>() {
 
     @Parcelize
@@ -76,15 +78,11 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
 
     @Inject
     lateinit var verificationViewModelFactory: VerificationBottomSheetViewModel.Factory
-
     @Inject
     lateinit var avatarRenderer: AvatarRenderer
 
     private val viewModel by fragmentViewModel(VerificationBottomSheetViewModel::class)
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetVerificationBinding {
         return BottomSheetVerificationBinding.inflate(inflater, container, false)

@@ -44,6 +44,7 @@ data class RoomAliasBottomSheetArgs(
 /**
  * Bottom sheet fragment that shows room alias information with list of contextual actions
  */
+
 class RoomAliasBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
         RoomAliasBottomSheetController.Listener {

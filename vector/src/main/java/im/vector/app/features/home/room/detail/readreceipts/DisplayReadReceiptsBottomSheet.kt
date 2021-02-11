@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.args
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
@@ -43,6 +44,7 @@ data class DisplayReadReceiptArgs(
 /**
  * Bottom sheet displaying list of read receipts for a given event ordered by descending timestamp
  */
+@AndroidEntryPoint
 class DisplayReadReceiptsBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
         DisplayReadReceiptsController.Listener {
@@ -53,9 +55,6 @@ class DisplayReadReceiptsBottomSheet :
 
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {
         return BottomSheetGenericListWithTitleBinding.inflate(inflater, container, false)

@@ -30,6 +30,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -38,6 +39,7 @@ import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MatrixToBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetMatrixToCardBinding>() {
 
@@ -51,9 +53,6 @@ class MatrixToBottomSheet :
     @Inject
     lateinit var matrixToBottomSheetViewModelFactory: MatrixToBottomSheetViewModel.Factory
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     private var interactionListener: InteractionListener? = null
 

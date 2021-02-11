@@ -117,31 +117,10 @@ interface ScreenComponent {
      * BottomSheets
      * ========================================================================================== */
 
-    fun inject(bottomSheet: MessageActionsBottomSheet)
-    fun inject(bottomSheet: ViewReactionsBottomSheet)
-    fun inject(bottomSheet: ViewEditHistoryBottomSheet)
-    fun inject(bottomSheet: DisplayReadReceiptsBottomSheet)
     fun inject(bottomSheet: RoomListQuickActionsBottomSheet)
     fun inject(bottomSheet: RoomAliasBottomSheet)
     fun inject(bottomSheet: RoomHistoryVisibilityBottomSheet)
     fun inject(bottomSheet: RoomJoinRuleBottomSheet)
-    fun inject(bottomSheet: VerificationBottomSheet)
-    fun inject(bottomSheet: DeviceVerificationInfoBottomSheet)
-    fun inject(bottomSheet: DeviceListBottomSheet)
-    fun inject(bottomSheet: BootstrapBottomSheet)
-    fun inject(bottomSheet: RoomWidgetPermissionBottomSheet)
-    fun inject(bottomSheet: RoomWidgetsBottomSheet)
-    fun inject(bottomSheet: CallControlsBottomSheet)
-    fun inject(bottomSheet: SignOutBottomSheetDialogFragment)
-    fun inject(bottomSheet: MatrixToBottomSheet)
-
-    /* ==========================================================================================
-     * Others
-     * ========================================================================================== */
-
-    fun inject(view: VectorInviteView)
-    fun inject(preference: UserAvatarPreference)
-    fun inject(button: ReactionButton)
 
     /* ==========================================================================================
      * Factory

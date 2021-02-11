@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
@@ -40,6 +41,7 @@ import javax.inject.Inject
 /**
  * Bottom sheet displaying active widgets in a room
  */
+@AndroidEntryPoint
 class RoomWidgetsBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
         RoomWidgetsController.Listener {
@@ -49,10 +51,6 @@ class RoomWidgetsBottomSheet :
     @Inject lateinit var navigator: Navigator
 
     private val roomDetailViewModel: RoomDetailViewModel by parentFragmentViewModel()
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {
         return BottomSheetGenericListWithTitleBinding.inflate(inflater, container, false)

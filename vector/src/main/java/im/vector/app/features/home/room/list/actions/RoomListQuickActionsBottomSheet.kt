@@ -48,6 +48,7 @@ data class RoomListActionsArgs(
 /**
  * Bottom sheet fragment that shows room information with list of contextual actions
  */
+
 class RoomListQuickActionsBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
         RoomListQuickActionsEpoxyController.Listener {

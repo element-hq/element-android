@@ -21,6 +21,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.platform.ButtonStateView
@@ -32,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class VectorInviteView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : ConstraintLayout(context, attrs, defStyle) {
 
@@ -51,9 +53,6 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
     var callback: Callback? = null
 
     init {
-        if (context is HasScreenInjector) {
-            context.injector().inject(this)
-        }
         inflate(context, R.layout.vector_invite_view, this)
         views = VectorInviteViewBinding.bind(this)
         views.inviteAcceptView.callback = object : ButtonStateView.Callback {

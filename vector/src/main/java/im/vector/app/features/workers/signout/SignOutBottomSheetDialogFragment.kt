@@ -31,6 +31,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.dialogs.ExportKeysDialog
@@ -48,6 +49,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 // TODO this needs to be refactored to current standard and remove legacy
+@AndroidEntryPoint
 class SignOutBottomSheetDialogFragment :
         VectorBaseBottomSheetDialogFragment<BottomSheetLogoutAndBackupBinding>(),
         SignoutCheckViewModel.Factory {
@@ -71,9 +73,6 @@ class SignOutBottomSheetDialogFragment :
 
     private val viewModel: SignoutCheckViewModel by fragmentViewModel(SignoutCheckViewModel::class)
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onResume() {
         super.onResume()

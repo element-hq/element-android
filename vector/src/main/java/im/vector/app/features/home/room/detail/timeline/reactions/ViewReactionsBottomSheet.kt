@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
@@ -39,6 +40,7 @@ import javax.inject.Inject
 /**
  * Bottom sheet displaying list of reactions for a given event ordered by timestamp
  */
+@AndroidEntryPoint
 class ViewReactionsBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
         ViewReactionsEpoxyController.Listener {
@@ -47,12 +49,8 @@ class ViewReactionsBottomSheet :
 
     @Inject lateinit var viewReactionsViewModelFactory: ViewReactionsViewModel.Factory
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
-
     @Inject lateinit var epoxyController: ViewReactionsEpoxyController
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {
         return BottomSheetGenericListWithTitleBinding.inflate(inflater, container, false)
