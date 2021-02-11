@@ -10,6 +10,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - VoIP : fix audio devices output
+ - Fix crash after initial sync on Dendrite
 
 Translations 🗣:
  -
