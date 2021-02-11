@@ -390,7 +390,7 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="settings_background_sync">Sinhronizācija</string>
     <string name="settings_enable_background_sync">Iespējot sinhronizāciju fonā</string>
     <string name="settings_set_sync_timeout">Sinhronizācijas pieprasījuma noildze</string>
-    <string name="settings_set_sync_delay">Intervāls starp 2 sinhronizācijas pieprasījumiem</string>
+    <string name="settings_set_sync_delay">Intervāls starp sinhronizācijām</string>
     <string name="settings_version">Versija</string>
     <string name="settings_olm_version">olm versija</string>
     <string name="settings_app_term_conditions">Lietošanas noteikumi</string>
@@ -492,7 +492,7 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="room_settings_room_access_entry_only_invited">Tikai uzaicinātie</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Visi, kuri zin saiti uz istabu, izņemot viesus</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Visi, kuri zin saiti uz istabu, ieskatot viesus</string>
-    <string name="room_settings_banned_users_title">Banotie lietotāji</string>
+    <string name="room_settings_banned_users_title">Lietotāji, kuriem liegta pieeja</string>
     <string name="room_settings_category_advanced_title">Papildus</string>
     <string name="room_settings_room_internal_id">Šīs istabas iekšējais ID</string>
     <string name="room_settings_addresses_pref_title">Adreses</string>
@@ -582,15 +582,15 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="passphrase_confirm_passphrase">Apstiprināt paroli</string>
     <string name="encryption_export_saved_as">Istabas šifrēšanas atslēgas tika salabātas \'%s\'.
 \n
-\nBrīdinājums: datne var tikt izdzēsta, ja lietotne tiek atinstalēta.</string>
+\nBrīdinājums: fails var tikt izdzēsts, ja lietotne tiek atinstalēta.</string>
     <string name="encryption_import_e2e_room_keys">Importēt E2E istabas atslēgas</string>
     <string name="encryption_import_room_keys">Importēt istabas atslēgas</string>
     <string name="encryption_import_room_keys_summary">Importēt atslēgas no vietējā faila</string>
     <string name="encryption_import_import">Imports</string>
     <string name="encryption_never_send_to_unverified_devices_title">Šifrēt vienīgi uz pārbaudītām ierīcēm</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Nekad nesūtīt šifrētas ziņas uz nepārbaudītām ierīcēm no šīs ierīces.</string>
-    <string name="encryption_information_not_verified">NEpārbaudīta</string>
-    <string name="encryption_information_verified">Pārbaudīta</string>
+    <string name="encryption_information_not_verified">Neverificēta</string>
+    <string name="encryption_information_verified">Verificēta</string>
     <string name="encryption_information_blocked">Melnajā sarakstā</string>
     <string name="encryption_information_unknown_device">nepazīstama ierīce</string>
     <string name="encryption_information_none">nekā</string>
@@ -693,9 +693,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="invited">Uzaicināts</string>
     <string name="filter_group_members">Grupas biedru filtrs</string>
     <string name="filter_group_rooms">Grupas istabu filtrs</string>
-    <string name="group_no_long_description">Kopienas admins nav izveidojis šīs kopienas garo aprakstu.</string>
-    <string name="has_been_kicked">Tevi no %1$s padzina %2$s</string>
-    <string name="has_been_banned">Tev pieeju %1$s liedza (nobanoja) %2$s</string>
+    <string name="group_no_long_description">Kopienas administrators nav izveidojis šīs kopienas garo aprakstu.</string>
+    <string name="has_been_kicked">%2$s padzina jūs no %1$s</string>
+    <string name="has_been_banned">%2$s liedza jums pieeju %1$s</string>
     <string name="reason_colon">Iemesls: %1$s</string>
     <string name="rejoin">Pievienoties par jaunu</string>
     <string name="forget_room">Aizmirst istabu</string>
@@ -747,7 +747,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_settings_enable_encryption_dialog_title">Iespējot šifrēšanu\?</string>
     <string name="room_settings_enable_encryption_warning">Šifrēšana nevar tikt atspējota, ja reiz tikusi iespējota.</string>
     <string name="room_settings_enable_encryption">Iespējot pilnīgu šifrēšanu…</string>
-    <string name="unignore">Rīdīt visas ziņas no šī dalībnieka</string>
+    <string name="unignore">Pārstāt ignorēt</string>
     <string name="room_member_jump_to_read_receipt">Pāriet uz pēdējo skatīto ziņu</string>
     <string name="room_member_open_or_create_dm">Uzsākt dialogu</string>
     <string name="room_member_power_level_users">Lietotāji</string>
@@ -1004,4 +1004,22 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="title_activity_verify_device">Verificēt ierīci</string>
     <string name="status_theme">Status.im tēma</string>
     <string name="system_theme">Sistēmas noklusējuma</string>
+    <string name="room_member_power_level_custom_in">Pielāgots (%1$d) iekš %2$s</string>
+    <string name="room_member_power_level_default_in">Noklusējums iekš %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderators iekš %1$s</string>
+    <string name="room_member_power_level_admin_in">Administrators iekš %1$s</string>
+    <string name="room_member_power_level_custom">Pielāgots</string>
+    <string name="room_member_power_level_moderators">Moderators</string>
+    <string name="room_member_power_level_admins">Administrators</string>
+    <string name="encryption_information_unknown_ip">nepazīstama ip</string>
+    <plurals name="room_settings_banned_users_count">
+        <item quantity="zero">%d lietotājs, kuram liegta pieeja</item>
+        <item quantity="one">%d lietotāji, kuriem liegta pieeja</item>
+        <item quantity="other">%d lietotāji, kuriem liegta pieeja</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="zero">%d sekunde</item>
+        <item quantity="one">%d sekundes</item>
+        <item quantity="other">%d sekundes</item>
+    </plurals>
 </resources>
