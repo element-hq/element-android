@@ -37,10 +37,11 @@ import com.airbnb.mvrx.BaseMvRxFragment
 import com.bumptech.glide.util.Util.assertMainThread
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
+import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.R
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.HasScreenInjector
-import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.di.ActivityEntryPoint
+import im.vector.app.core.di.AggregatorEntryPoint
+import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.toMvRxBundle
@@ -52,7 +53,7 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScreenInjector {
+abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasVectorInjector {
 
     protected val vectorBaseActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -61,8 +62,6 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     /* ==========================================================================================
      * Navigator and other common objects
      * ========================================================================================== */
-
-    private lateinit var screenComponent: ScreenComponent
 
     protected lateinit var navigator: Navigator
     protected lateinit var errorFormatter: ErrorFormatter
@@ -97,12 +96,13 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
      * ========================================================================================== */
 
     override fun onAttach(context: Context) {
-        screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
-        navigator = screenComponent.navigator()
-        errorFormatter = screenComponent.errorFormatter()
-        unrecognizedCertificateDialog = screenComponent.unrecognizedCertificateDialog()
-        viewModelFactory = screenComponent.viewModelFactory()
-        childFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
+        val vectorComponent = vectorBaseActivity.getVectorComponent()
+        navigator = vectorComponent.navigator()
+        errorFormatter = vectorComponent.errorFormatter()
+        unrecognizedCertificateDialog = vectorComponent.unrecognizedCertificateDialog()
+        val entryPoint = EntryPointAccessors.fromActivity(requireActivity(), ActivityEntryPoint::class.java)
+        viewModelFactory = entryPoint.viewModelFactory()
+        childFragmentManager.fragmentFactory = entryPoint.fragmentFactory()
         super.onAttach(context)
     }
 
@@ -155,8 +155,8 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
         super.onDestroy()
     }
 
-    override fun injector(): ScreenComponent {
-        return screenComponent
+    override fun injector(): AggregatorEntryPoint {
+        return vectorBaseActivity.getVectorComponent()
     }
 
     /* ==========================================================================================

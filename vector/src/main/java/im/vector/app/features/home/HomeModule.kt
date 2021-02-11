@@ -19,10 +19,13 @@ package im.vector.app.features.home
 import android.os.Handler
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import im.vector.app.features.home.room.detail.timeline.TimelineEventControllerHandler
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineAsyncHelper
 
 @Module
+@InstallIn(ActivityComponent::class)
 object HomeModule {
 
     @Provides

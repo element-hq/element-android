@@ -15,14 +15,13 @@
  */
 package im.vector.app.core.platform
 
-import androidx.annotation.CallSuper
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.databinding.ActivityBinding
 
 import org.matrix.android.sdk.api.session.Session
+import javax.inject.Inject
 
 /**
  * Simple activity with a toolbar, a waiting overlay, and a fragment container and a session.
@@ -33,12 +32,8 @@ abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
 
     final override fun getCoordinatorLayout() = views.coordinatorLayout
 
-    lateinit var session: Session
+    @Inject lateinit var session: Session
 
-    @CallSuper
-    override fun injectWith(injector: ScreenComponent) {
-        session = injector.activeSessionHolder().getActiveSession()
-    }
 
     override fun initUiAndData() {
         configureToolbar(views.toolbar)

@@ -23,7 +23,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.di.HasScreenInjector
+import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -56,7 +56,7 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
         }
 
         override fun initialState(viewModelContext: ViewModelContext): HomeServerCapabilitiesViewState? {
-            val session = (viewModelContext.activity as HasScreenInjector).injector().activeSessionHolder().getSafeActiveSession()
+            val session = (viewModelContext.activity as HasVectorInjector).injector().activeSessionHolder().getSafeActiveSession()
             return HomeServerCapabilitiesViewState(
                     capabilities = session?.getHomeServerCapabilities() ?: HomeServerCapabilities()
             )

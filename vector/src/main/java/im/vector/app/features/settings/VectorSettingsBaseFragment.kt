@@ -22,9 +22,8 @@ import android.view.View
 import androidx.annotation.CallSuper
 import androidx.preference.PreferenceFragmentCompat
 import im.vector.app.R
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.HasScreenInjector
-import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.di.AggregatorEntryPoint
+import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
@@ -33,7 +32,7 @@ import io.reactivex.disposables.Disposable
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
-abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScreenInjector {
+abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasVectorInjector {
 
     val vectorActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -44,7 +43,6 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
     // members
     protected lateinit var session: Session
     protected lateinit var errorFormatter: ErrorFormatter
-    private lateinit var screenComponent: ScreenComponent
 
     abstract val preferenceXmlRes: Int
 
@@ -55,17 +53,15 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasScree
     }
 
     override fun onAttach(context: Context) {
-        screenComponent = DaggerScreenComponent.factory().create(vectorActivity.getVectorComponent(), vectorActivity)
         super.onAttach(context)
-        session = screenComponent.activeSessionHolder().getActiveSession()
-        errorFormatter = screenComponent.errorFormatter()
-        injectWith(injector())
+        val vectorComponent = injector()
+        session = vectorComponent.activeSessionHolder().getActiveSession()
+        errorFormatter = vectorComponent.errorFormatter()
     }
 
-    protected open fun injectWith(injector: ScreenComponent) = Unit
 
-    override fun injector(): ScreenComponent {
-        return screenComponent
+    override fun injector(): AggregatorEntryPoint {
+        return vectorActivity.getVectorComponent()
     }
 
     override fun onResume() {

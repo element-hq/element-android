@@ -34,8 +34,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.jakewharton.rxbinding3.view.clicks
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.EntryPointAccessors
+import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.utils.DimensionConverter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -50,7 +50,6 @@ abstract class VectorBaseBottomSheetDialogFragment<VB: ViewBinding> : BottomShee
 
     private val mvrxViewIdProperty = MvRxViewId()
     final override val mvrxViewId: String by mvrxViewIdProperty
-    private lateinit var screenComponent: ScreenComponent
 
     /* ==========================================================================================
      * View
@@ -125,13 +124,11 @@ abstract class VectorBaseBottomSheetDialogFragment<VB: ViewBinding> : BottomShee
     }
 
     override fun onAttach(context: Context) {
-        screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
-        viewModelFactory = screenComponent.viewModelFactory()
+        val entryPoint = EntryPointAccessors.fromActivity(requireActivity(), ActivityEntryPoint::class.java)
+        viewModelFactory = entryPoint.viewModelFactory()
+        childFragmentManager.fragmentFactory = entryPoint.fragmentFactory()
         super.onAttach(context)
-        injectWith(screenComponent)
     }
-
-    protected open fun injectWith(injector: ScreenComponent) = Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mvrxViewIdProperty.restoreFrom(savedInstanceState)

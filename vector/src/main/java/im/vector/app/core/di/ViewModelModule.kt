@@ -20,6 +20,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import im.vector.app.core.platform.ConfigurationViewModel
 import im.vector.app.features.call.SharedKnownCallsViewModel
@@ -40,6 +43,7 @@ import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistory
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 
+@InstallIn(ActivityComponent::class)
 @Module
 interface ViewModelModule {
 

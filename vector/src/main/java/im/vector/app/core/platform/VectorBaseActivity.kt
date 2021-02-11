@@ -46,14 +46,13 @@ import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.util.Util
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
+import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.di.AggregatorEntryPoint
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.extensions.exhaustive
@@ -84,14 +83,13 @@ import im.vector.app.receivers.DebugReceiver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.GlobalError
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import kotlin.system.measureTimeMillis
+import javax.inject.Inject
 
-abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScreenInjector {
+abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasVectorInjector {
     /* ==========================================================================================
      * View
      * ========================================================================================== */
@@ -138,7 +136,7 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
     private lateinit var pinLocker: PinLocker
-    lateinit var rageShake: RageShake
+    @Inject lateinit var rageShake: RageShake
 
     lateinit var navigator: Navigator
         private set
@@ -157,8 +155,6 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
 
     private val uiDisposables = CompositeDisposable()
     private val restorables = ArrayList<Restorable>()
-
-    private lateinit var screenComponent: ScreenComponent
 
     override fun attachBaseContext(base: Context) {
         val vectorConfiguration = VectorConfiguration(this)
@@ -189,25 +185,18 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate Activity ${javaClass.simpleName}")
-        val vectorComponent = getVectorComponent()
-        screenComponent = DaggerScreenComponent.factory().create(vectorComponent, this)
-        val timeForInjection = measureTimeMillis {
-            injectWith(screenComponent)
-        }
-        Timber.v("Injecting dependencies into ${javaClass.simpleName} took $timeForInjection ms")
         ThemeUtils.setActivityTheme(this, getOtherThemes())
-        fragmentFactory = screenComponent.fragmentFactory()
-        supportFragmentManager.fragmentFactory = fragmentFactory
+        val aggregatorEntryPoint = getVectorComponent()
+        val entryPoint = EntryPointAccessors.fromActivity(this,ActivityEntryPoint::class.java)
+        supportFragmentManager.fragmentFactory = entryPoint.fragmentFactory()
         super.onCreate(savedInstanceState)
-        viewModelFactory = screenComponent.viewModelFactory()
+        viewModelFactory = entryPoint.viewModelFactory()
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
-        bugReporter = screenComponent.bugReporter()
-        pinLocker = screenComponent.pinLocker()
-        // Shake detector
-        rageShake = screenComponent.rageShake()
-        navigator = screenComponent.navigator()
-        activeSessionHolder = screenComponent.activeSessionHolder()
-        vectorPreferences = vectorComponent.vectorPreferences()
+        bugReporter = aggregatorEntryPoint.bugReporter()
+        pinLocker = aggregatorEntryPoint.pinLocker()
+        navigator = aggregatorEntryPoint.navigator()
+        activeSessionHolder = aggregatorEntryPoint.activeSessionHolder()
+        vectorPreferences = aggregatorEntryPoint.vectorPreferences()
         configurationViewModel.activityRestarter.observe(this, Observer {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
@@ -219,7 +208,7 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
                 navigator.openPinCode(this, pinStartForActivityResult, PinMode.AUTH)
             }
         }
-        sessionListener = vectorComponent.sessionListener()
+        sessionListener = aggregatorEntryPoint.sessionListener()
         sessionListener.globalErrorLiveData.observeEvent(this) {
             handleGlobalError(it)
         }
@@ -263,12 +252,12 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
 
     private fun handleGlobalError(globalError: GlobalError) {
         when (globalError) {
-            is GlobalError.InvalidToken         ->
+            is GlobalError.InvalidToken ->
                 handleInvalidToken(globalError)
             is GlobalError.ConsentNotGivenError ->
                 consentNotGivenHelper.displayDialog(globalError.consentUri,
                         activeSessionHolder.getActiveSession().sessionParams.homeServerHost ?: "")
-            is GlobalError.CertificateError     ->
+            is GlobalError.CertificateError ->
                 handleCertificateError(globalError)
         }.exhaustive
     }
@@ -404,11 +393,9 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
         bugReporter.inMultiWindowMode = isInMultiWindowMode
     }
 
-    override fun injector(): ScreenComponent {
-        return screenComponent
+    override fun injector(): AggregatorEntryPoint {
+        return vectorComponent()
     }
-
-    protected open fun injectWith(injector: ScreenComponent) = Unit
 
     protected fun createFragment(fragmentClass: Class<out Fragment>, args: Bundle?): Fragment {
         return fragmentFactory.instantiate(classLoader, fragmentClass.name).apply {

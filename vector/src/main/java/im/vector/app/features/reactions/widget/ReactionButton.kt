@@ -36,7 +36,6 @@ import androidx.core.content.withStyledAttributes
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.R
-import im.vector.app.core.di.HasScreenInjector
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.databinding.ReactionButtonBinding
 import javax.inject.Inject

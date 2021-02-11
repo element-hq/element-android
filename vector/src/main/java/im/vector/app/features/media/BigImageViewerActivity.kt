@@ -22,7 +22,6 @@ import android.os.Bundle
 import androidx.core.net.toUri
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityBigImageViewerBinding
 

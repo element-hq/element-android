@@ -23,6 +23,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import com.squareup.seismic.ShakeDetector
+import dagger.hilt.android.scopes.ActivityScoped
 import im.vector.app.R
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.features.navigation.Navigator
@@ -30,6 +31,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import javax.inject.Inject
 
+@ActivityScoped
 class RageShake @Inject constructor(private val activity: AppCompatActivity,
                                     private val bugReporter: BugReporter,
                                     private val navigator: Navigator,

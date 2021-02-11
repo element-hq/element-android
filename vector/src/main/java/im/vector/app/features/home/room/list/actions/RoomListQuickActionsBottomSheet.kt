@@ -24,7 +24,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -49,6 +49,7 @@ data class RoomListActionsArgs(
  * Bottom sheet fragment that shows room information with list of contextual actions
  */
 
+@AndroidEntryPoint
 class RoomListQuickActionsBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
         RoomListQuickActionsEpoxyController.Listener {
@@ -62,10 +63,6 @@ class RoomListQuickActionsBottomSheet :
     private val viewModel: RoomListQuickActionsViewModel by fragmentViewModel(RoomListQuickActionsViewModel::class)
 
     override val showExpanded = true
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListBinding {
         return BottomSheetGenericListBinding.inflate(inflater, container, false)

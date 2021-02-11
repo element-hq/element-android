@@ -157,4 +157,5 @@ interface AggregatorEntryPoint{
   fun webRtcCallManager(): WebRtcCallManager
 
   fun roomSummaryHolder(): RoomSummariesHolder
+
 }

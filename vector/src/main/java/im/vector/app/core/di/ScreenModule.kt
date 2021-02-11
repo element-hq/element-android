@@ -16,14 +16,25 @@
 
 package im.vector.app.core.di
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.scopes.ActivityScoped
 import im.vector.app.core.glide.GlideApp
 
+@InstallIn(ActivityComponent::class)
 @Module
 object ScreenModule {
+
+    @Provides
+    @JvmStatic
+    fun providesAppCompatActivity(activity: Activity): AppCompatActivity {
+        return activity as AppCompatActivity
+    }
 
     @Provides
     @JvmStatic
@@ -31,6 +42,6 @@ object ScreenModule {
 
     @Provides
     @JvmStatic
-    @ScreenScope
+    @ActivityScoped
     fun providesSharedViewPool() = RecyclerView.RecycledViewPool()
 }
