@@ -41,8 +41,8 @@ import com.vanniktech.emoji.google.GoogleEmojiProvider
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.HiltAndroidApp
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.AggregatorEntryPoint
-import im.vector.app.core.di.HasVectorInjector
+import im.vector.app.core.di.SingletonEntryPoint
+import im.vector.app.core.di.HasSingletonEntryPoint
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.rx.RxConfig
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -74,7 +74,7 @@ import androidx.work.Configuration as WorkConfiguration
 @HiltAndroidApp
 class VectorApplication :
         Application(),
-        HasVectorInjector,
+        HasSingletonEntryPoint,
         MatrixConfiguration.Provider,
         WorkConfiguration.Provider {
 
@@ -97,7 +97,7 @@ class VectorApplication :
     @Inject lateinit var callManager: WebRtcCallManager
 
 
-    private lateinit var component: AggregatorEntryPoint
+    private lateinit var singletonEntryPoint: SingletonEntryPoint
     // font thread handler
     private var fontThreadHandler: Handler? = null
 
@@ -116,11 +116,11 @@ class VectorApplication :
         appContext = this
         vectorUncaughtExceptionHandler.activate(this)
         rxConfig.setupRxPlugin()
-        component = EntryPoints.get(this, AggregatorEntryPoint::class.java)
+        singletonEntryPoint = EntryPoints.get(this, SingletonEntryPoint::class.java)
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        Timber.plant(component.vectorFileLogger())
+        Timber.plant(singletonEntryPoint.vectorFileLogger())
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
@@ -190,9 +190,6 @@ class VectorApplication :
         EmojiManager.install(GoogleEmojiProvider())
     }
 
-    fun component(): AggregatorEntryPoint {
-        return EntryPoints.get(this, AggregatorEntryPoint::class.java)
-    }
 
     private fun enableStrictModeIfNeeded() {
         if (BuildConfig.ENABLE_STRICT_MODE_LOGS) {
@@ -211,8 +208,8 @@ class VectorApplication :
                 .build()
     }
 
-    override fun injector(): AggregatorEntryPoint {
-        return component
+    override fun singletonEntryPoint(): SingletonEntryPoint {
+        return singletonEntryPoint
     }
 
     private fun logInfo() {

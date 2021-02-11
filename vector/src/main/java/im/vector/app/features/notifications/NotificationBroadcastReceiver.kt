@@ -20,9 +20,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.vectorComponent
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.Room
@@ -34,6 +34,7 @@ import javax.inject.Inject
 /**
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.)
  */
+@AndroidEntryPoint
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
@@ -42,7 +43,6 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
         Timber.v("NotificationBroadcastReceiver received : $intent")
-        context.vectorComponent().inject(this)
         when (intent.action) {
             NotificationUtils.SMART_REPLY_ACTION        ->
                 handleSmartReply(intent, context)

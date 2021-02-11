@@ -30,13 +30,16 @@ import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.extensions.asSingletonEntryPoint
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
 import org.matrix.android.sdk.internal.session.sync.job.SyncService
 import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class VectorSyncService : SyncService() {
 
     companion object {
@@ -71,12 +74,7 @@ class VectorSyncService : SyncService() {
         }
     }
 
-    private lateinit var notificationUtils: NotificationUtils
-
-    override fun onCreate() {
-        super.onCreate()
-        notificationUtils = vectorComponent().notificationUtils()
-    }
+    @Inject lateinit var notificationUtils: NotificationUtils
 
     override fun getDefaultSyncDelaySeconds() = BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS
 

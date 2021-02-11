@@ -51,8 +51,6 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ActivityEntryPoint
-import im.vector.app.core.di.AggregatorEntryPoint
-import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.extensions.exhaustive
@@ -61,7 +59,7 @@ import im.vector.app.core.extensions.observeNotNull
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.extensions.asSingletonEntryPoint
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -89,7 +87,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasVectorInjector {
+abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity() {
     /* ==========================================================================================
      * View
      * ========================================================================================== */
@@ -186,17 +184,17 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasVe
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("onCreate Activity ${javaClass.simpleName}")
         ThemeUtils.setActivityTheme(this, getOtherThemes())
-        val aggregatorEntryPoint = getVectorComponent()
-        val entryPoint = EntryPointAccessors.fromActivity(this,ActivityEntryPoint::class.java)
-        supportFragmentManager.fragmentFactory = entryPoint.fragmentFactory()
+        val singletonEntryPoint = asSingletonEntryPoint()
+        val activityEntryPoint = EntryPointAccessors.fromActivity(this,ActivityEntryPoint::class.java)
+        supportFragmentManager.fragmentFactory = activityEntryPoint.fragmentFactory()
         super.onCreate(savedInstanceState)
-        viewModelFactory = entryPoint.viewModelFactory()
+        viewModelFactory = activityEntryPoint.viewModelFactory()
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
-        bugReporter = aggregatorEntryPoint.bugReporter()
-        pinLocker = aggregatorEntryPoint.pinLocker()
-        navigator = aggregatorEntryPoint.navigator()
-        activeSessionHolder = aggregatorEntryPoint.activeSessionHolder()
-        vectorPreferences = aggregatorEntryPoint.vectorPreferences()
+        bugReporter = singletonEntryPoint.bugReporter()
+        pinLocker = singletonEntryPoint.pinLocker()
+        navigator = singletonEntryPoint.navigator()
+        activeSessionHolder = singletonEntryPoint.activeSessionHolder()
+        vectorPreferences = singletonEntryPoint.vectorPreferences()
         configurationViewModel.activityRestarter.observe(this, Observer {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
@@ -208,7 +206,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasVe
                 navigator.openPinCode(this, pinStartForActivityResult, PinMode.AUTH)
             }
         }
-        sessionListener = aggregatorEntryPoint.sessionListener()
+        sessionListener = singletonEntryPoint.sessionListener()
         sessionListener.globalErrorLiveData.observeEvent(this) {
             handleGlobalError(it)
         }
@@ -263,7 +261,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasVe
     }
 
     private fun handleCertificateError(certificateError: GlobalError.CertificateError) {
-        vectorComponent()
+        asSingletonEntryPoint()
                 .unrecognizedCertificateDialog()
                 .show(this,
                         certificateError.fingerprint,
@@ -393,9 +391,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasVe
         bugReporter.inMultiWindowMode = isInMultiWindowMode
     }
 
-    override fun injector(): AggregatorEntryPoint {
-        return vectorComponent()
-    }
 
     protected fun createFragment(fragmentClass: Class<out Fragment>, args: Bundle?): Fragment {
         return fragmentFactory.instantiate(classLoader, fragmentClass.name).apply {
@@ -406,10 +401,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), HasVe
     /* ==========================================================================================
      * PRIVATE METHODS
      * ========================================================================================== */
-
-    internal fun getVectorComponent(): AggregatorEntryPoint {
-        return (application as HasVectorInjector).injector()
-    }
 
     /**
      * Force to render the activity in fullscreen

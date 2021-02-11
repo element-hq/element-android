@@ -16,6 +16,6 @@
 
 package im.vector.app.core.di
 
-interface HasVectorInjector {
-    fun injector(): AggregatorEntryPoint
+interface HasSingletonEntryPoint {
+    fun singletonEntryPoint(): SingletonEntryPoint
 }

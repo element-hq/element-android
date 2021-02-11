@@ -66,31 +66,11 @@ import org.matrix.android.sdk.api.session.Session
 
 @InstallIn(SingletonComponent::class)
 @EntryPoint
-interface AggregatorEntryPoint{
-
-  fun inject(notificationBroadcastReceiver: NotificationBroadcastReceiver)
-
-  fun matrix(): Matrix
-
-  fun matrixItemColorProvider(): MatrixItemColorProvider
+interface SingletonEntryPoint{
 
   fun sessionListener(): SessionListener
 
   fun currentSession(): Session
-
-  fun notificationUtils(): NotificationUtils
-
-  fun notificationDrawerManager(): NotificationDrawerManager
-
-  fun appContext(): Context
-
-  fun resources(): Resources
-
-  fun assetReader(): AssetReader
-
-  fun dimensionConverter(): DimensionConverter
-
-  fun vectorConfiguration(): VectorConfiguration
 
   fun avatarRenderer(): AvatarRenderer
 
@@ -98,45 +78,11 @@ interface AggregatorEntryPoint{
 
   fun unrecognizedCertificateDialog(): UnrecognizedCertificateDialog
 
-  fun emojiCompatFontProvider(): EmojiCompatFontProvider
-
-  fun emojiCompatWrapper(): EmojiCompatWrapper
-
-  fun eventHtmlRenderer(): EventHtmlRenderer
-
-  fun vectorHtmlCompressor(): VectorHtmlCompressor
-
   fun navigator(): Navigator
 
   fun errorFormatter(): ErrorFormatter
 
-  fun homeRoomListObservableStore(): HomeRoomListDataSource
-
-  fun selectedGroupStore(): SelectedGroupDataSource
-
-  fun roomDetailPendingActionStore(): RoomDetailPendingActionStore
-
-  fun activeSessionObservableStore(): ActiveSessionDataSource
-
-  fun incomingVerificationRequestHandler(): IncomingVerificationRequestHandler
-
-  fun incomingKeyRequestHandler(): KeyRequestHandler
-
-  fun authenticationService(): AuthenticationService
-
-  fun rawService(): RawService
-
-  fun homeServerHistoryService(): HomeServerHistoryService
-
   fun bugReporter(): BugReporter
-
-  fun vectorUncaughtExceptionHandler(): VectorUncaughtExceptionHandler
-
-  fun pushRuleTriggerListener(): PushRuleTriggerListener
-
-  fun pusherManager(): PushersManager
-
-  fun notifiableEventResolver(): NotifiableEventResolver
 
   fun vectorPreferences(): VectorPreferences
 
@@ -144,18 +90,7 @@ interface AggregatorEntryPoint{
 
   fun uiStateRepository(): UiStateRepository
 
-  fun pinCodeStore(): PinCodeStore
-
-  fun emojiDataSource(): EmojiDataSource
-
-  fun alertManager(): PopupAlertManager
-
-  fun reAuthHelper(): ReAuthHelper
-
   fun pinLocker(): PinLocker
 
-  fun webRtcCallManager(): WebRtcCallManager
-
-  fun roomSummaryHolder(): RoomSummariesHolder
 
 }

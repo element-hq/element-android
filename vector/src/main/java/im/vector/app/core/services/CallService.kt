@@ -26,7 +26,8 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
 import com.airbnb.mvrx.MvRx
-import im.vector.app.core.extensions.vectorComponent
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.extensions.asSingletonEntryPoint
 import im.vector.app.features.call.CallArgs
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.telecom.CallConnection
@@ -39,20 +40,22 @@ import im.vector.app.features.popup.PopupAlertManager
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Foreground service to manage calls
  */
+@AndroidEntryPoint
 class CallService : VectorService() {
 
     private val connections = mutableMapOf<String, CallConnection>()
     private val knownCalls = mutableSetOf<String>()
 
     private lateinit var notificationManager: NotificationManagerCompat
-    private lateinit var notificationUtils: NotificationUtils
-    private lateinit var callManager: WebRtcCallManager
-    private lateinit var avatarRenderer: AvatarRenderer
-    private lateinit var alertManager: PopupAlertManager
+    @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var callManager: WebRtcCallManager
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var alertManager: PopupAlertManager
 
     private var callRingPlayerIncoming: CallRingPlayerIncoming? = null
     private var callRingPlayerOutgoing: CallRingPlayerOutgoing? = null
@@ -74,10 +77,6 @@ class CallService : VectorService() {
     override fun onCreate() {
         super.onCreate()
         notificationManager = NotificationManagerCompat.from(this)
-        notificationUtils = vectorComponent().notificationUtils()
-        callManager = vectorComponent().webRtcCallManager()
-        avatarRenderer = vectorComponent().avatarRenderer()
-        alertManager = vectorComponent().alertManager()
         callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext, notificationUtils)
         callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext)
     }
@@ -275,7 +274,7 @@ class CallService : VectorService() {
     }
 
     private fun getOpponentMatrixItem(call: WebRtcCall): MatrixItem? {
-        return vectorComponent().currentSession().getUser(call.mxCall.opponentUserId)?.toMatrixItem()
+        return asSingletonEntryPoint().currentSession().getUser(call.mxCall.opponentUserId)?.toMatrixItem()
     }
 
     companion object {

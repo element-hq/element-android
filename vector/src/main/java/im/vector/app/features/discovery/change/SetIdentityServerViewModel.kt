@@ -23,8 +23,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
 import im.vector.app.R
-import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.asSingletonEntryPoint
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureProtocol
@@ -50,7 +50,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
     companion object : MvRxViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
 
         override fun initialState(viewModelContext: ViewModelContext): SetIdentityServerState? {
-            val session = (viewModelContext.activity as HasVectorInjector).injector().activeSessionHolder().getActiveSession()
+            val session = viewModelContext.activity.asSingletonEntryPoint().activeSessionHolder().getActiveSession()
 
             return SetIdentityServerState(
                     homeServerUrl = session.sessionParams.homeServerUrl,

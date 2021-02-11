@@ -33,8 +33,8 @@ import androidx.transition.Transition
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.AggregatorEntryPoint
-import im.vector.app.core.di.HasVectorInjector
+import im.vector.app.core.di.SingletonEntryPoint
+import im.vector.app.core.di.HasSingletonEntryPoint
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.features.themes.ActivityOtherThemes
@@ -44,7 +44,6 @@ import im.vector.lib.attachmentviewer.AttachmentViewerActivity
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.system.measureTimeMillis
 
 @AndroidEntryPoint
 class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmentProvider.InteractionListener {
@@ -209,8 +208,8 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
 
     private fun args() = intent.getParcelableExtra<Args>(EXTRA_ARGS)
 
-    private fun getVectorComponent(): AggregatorEntryPoint {
-        return (application as HasVectorInjector).injector()
+    private fun getVectorComponent(): SingletonEntryPoint {
+        return (application as HasSingletonEntryPoint).singletonEntryPoint()
     }
 
     private fun scheduleStartPostponedTransition(sharedElement: View) {

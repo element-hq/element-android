@@ -25,9 +25,9 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.di.HasVectorInjector
+import dagger.assisted.AssistedInject
+import im.vector.app.core.extensions.asSingletonEntryPoint
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -81,7 +81,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
             is VerificationTxState.OnAccepted,
             is VerificationTxState.SendingKey,
             is VerificationTxState.KeySent,
-            is VerificationTxState.OnKeyReceived  -> {
+            is VerificationTxState.OnKeyReceived -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
@@ -111,12 +111,12 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
             is VerificationTxState.SendingMac,
             is VerificationTxState.MacSent,
             is VerificationTxState.Verifying,
-            is VerificationTxState.Verified       -> {
+            is VerificationTxState.Verified -> {
                 setState {
                     copy(isWaitingFromOther = true)
                 }
             }
-            is VerificationTxState.Cancelled      -> {
+            is VerificationTxState.Cancelled -> {
                 // The fragment should not be rendered in this state,
                 // it should have been replaced by a conclusion fragment
                 setState {
@@ -128,7 +128,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
-            null                                  -> {
+            null -> {
                 setState {
                     copy(
                             isWaitingFromOther = false,
@@ -164,7 +164,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
 
         override fun initialState(viewModelContext: ViewModelContext): VerificationEmojiCodeViewState? {
             val args = viewModelContext.args<VerificationBottomSheet.VerificationArgs>()
-            val session = (viewModelContext.activity as HasVectorInjector).injector().activeSessionHolder().getActiveSession()
+            val session = viewModelContext.activity.asSingletonEntryPoint().activeSessionHolder().getActiveSession()
             val matrixItem = session.getUser(args.otherUserId)?.toMatrixItem()
 
             return VerificationEmojiCodeViewState(

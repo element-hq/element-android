@@ -30,7 +30,6 @@ import com.google.firebase.messaging.RemoteMessage
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
@@ -48,28 +47,19 @@ import timber.log.Timber
 /**
  * Class extending FirebaseMessagingService.
  */
+
+@dagger.hilt.android.AndroidEntryPoint
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
-    private lateinit var notificationDrawerManager: NotificationDrawerManager
-    private lateinit var notifiableEventResolver: NotifiableEventResolver
-    private lateinit var pusherManager: PushersManager
-    private lateinit var activeSessionHolder: ActiveSessionHolder
-    private lateinit var vectorPreferences: VectorPreferences
+    @javax.inject.Inject lateinit var notificationDrawerManager: NotificationDrawerManager
+    @javax.inject.Inject  lateinit var notifiableEventResolver: NotifiableEventResolver
+    @javax.inject.Inject  lateinit var pusherManager: PushersManager
+    @javax.inject.Inject  lateinit var activeSessionHolder: ActiveSessionHolder
+    @javax.inject.Inject  lateinit var vectorPreferences: VectorPreferences
 
     // UI handler
     private val mUIHandler by lazy {
         Handler(Looper.getMainLooper())
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        with(vectorComponent()) {
-            notificationDrawerManager = notificationDrawerManager()
-            notifiableEventResolver = notifiableEventResolver()
-            pusherManager = pusherManager()
-            activeSessionHolder = activeSessionHolder()
-            vectorPreferences = vectorPreferences()
-        }
     }
 
     /**

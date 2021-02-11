@@ -18,7 +18,7 @@ package im.vector.app.features.settings.push
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import im.vector.app.core.di.HasVectorInjector
+import im.vector.app.core.extensions.asSingletonEntryPoint
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -34,7 +34,7 @@ class PushRulesViewModel(initialState: PushRulesViewState)
     companion object : MvRxViewModelFactory<PushRulesViewModel, PushRulesViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): PushRulesViewState? {
-            val session = (viewModelContext.activity as HasVectorInjector).injector().activeSessionHolder().getActiveSession()
+            val session = viewModelContext.activity.asSingletonEntryPoint().activeSessionHolder().getActiveSession()
             val rules = session.getPushRules().getAllRules()
             return PushRulesViewState(rules)
         }

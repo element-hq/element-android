@@ -20,9 +20,9 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.di.HasVectorInjector
+import dagger.assisted.AssistedInject
+import im.vector.app.core.extensions.asSingletonEntryPoint
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -53,7 +53,7 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     companion object : MvRxViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
 
         override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState? {
-            val uiStateRepository = (viewModelContext.activity as HasVectorInjector).injector().uiStateRepository()
+            val uiStateRepository = viewModelContext.activity.asSingletonEntryPoint().uiStateRepository()
             return HomeDetailViewState(
                     displayMode = uiStateRepository.getDisplayMode()
             )

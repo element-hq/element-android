@@ -22,9 +22,8 @@ import android.view.View
 import androidx.annotation.CallSuper
 import androidx.preference.PreferenceFragmentCompat
 import im.vector.app.R
-import im.vector.app.core.di.AggregatorEntryPoint
-import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.asSingletonEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import io.reactivex.disposables.CompositeDisposable
@@ -32,7 +31,7 @@ import io.reactivex.disposables.Disposable
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
-abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasVectorInjector {
+abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat() {
 
     val vectorActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -54,15 +53,11 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), HasVecto
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val vectorComponent = injector()
-        session = vectorComponent.activeSessionHolder().getActiveSession()
-        errorFormatter = vectorComponent.errorFormatter()
+        val singletonEntryPoint = context.asSingletonEntryPoint()
+        session = singletonEntryPoint.activeSessionHolder().getActiveSession()
+        errorFormatter = singletonEntryPoint.errorFormatter()
     }
 
-
-    override fun injector(): AggregatorEntryPoint {
-        return vectorActivity.getVectorComponent()
-    }
 
     override fun onResume() {
         super.onResume()

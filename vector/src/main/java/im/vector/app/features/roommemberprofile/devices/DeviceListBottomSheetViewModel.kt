@@ -23,10 +23,10 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
-import im.vector.app.core.di.HasVectorInjector
+import dagger.assisted.AssistedInject
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.asSingletonEntryPoint
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -70,7 +70,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
 
     override fun handle(action: DeviceListAction) {
         when (action) {
-            is DeviceListAction.SelectDevice   -> selectDevice(action)
+            is DeviceListAction.SelectDevice -> selectDevice(action)
             is DeviceListAction.DeselectDevice -> deselectDevice()
             is DeviceListAction.ManuallyVerify -> manuallyVerify(action)
         }.exhaustive
@@ -118,7 +118,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
 
         override fun initialState(viewModelContext: ViewModelContext): DeviceListViewState? {
             val userId = viewModelContext.args<DeviceListBottomSheet.Args>().userId
-            val session = (viewModelContext.activity as HasVectorInjector).injector().activeSessionHolder().getActiveSession()
+            val session = viewModelContext.activity.asSingletonEntryPoint().activeSessionHolder().getActiveSession()
             return session.getUser(userId)?.toMatrixItem()?.let {
                 DeviceListViewState(
                         userItem = it,

@@ -31,6 +31,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
@@ -63,6 +64,7 @@ import io.reactivex.disposables.Disposable
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
@@ -71,12 +73,15 @@ import org.matrix.android.sdk.rx.SecretsSynchronisationInfo
 import org.matrix.android.sdk.rx.rx
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val activeSessionHolder: ActiveSessionHolder,
         private val pinCodeStore: PinCodeStore,
         private val navigator: Navigator
 ) : VectorSettingsBaseFragment() {
+
+    @Inject lateinit var rawService: RawService
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
@@ -153,8 +158,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
         lifecycleScope.launchWhenResumed {
             findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
-                    vectorActivity.getVectorComponent()
-                            .rawService()
+                            rawService
                             .getElementWellknown(session.myUserId)
                             ?.isE2EByDefault() == false
         }

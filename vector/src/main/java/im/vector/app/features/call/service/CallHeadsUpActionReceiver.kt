@@ -19,10 +19,13 @@ package im.vector.app.features.call.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import im.vector.app.core.di.HasVectorInjector
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.di.HasSingletonEntryPoint
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CallHeadsUpActionReceiver : BroadcastReceiver() {
 
     companion object {
@@ -31,16 +34,14 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
         const val CALL_ACTION_REJECT = 0
     }
 
-    override fun onReceive(context: Context, intent: Intent?) {
-        val webRtcCallManager = (context.applicationContext as? HasVectorInjector)
-                ?.injector()
-                ?.webRtcCallManager()
-                ?: return
+    @Inject lateinit var webRtcCallManager: WebRtcCallManager
 
+
+    override fun onReceive(context: Context, intent: Intent?) {
         when (intent?.getIntExtra(EXTRA_CALL_ACTION_KEY, 0)) {
             CALL_ACTION_REJECT -> {
                 val callId = intent.getStringExtra(EXTRA_CALL_ID) ?: return
-                onCallRejectClicked(webRtcCallManager, callId)
+                onCallRejectClicked(callId)
             }
         }
 
@@ -52,9 +53,9 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
 //        context.stopService(Intent(context, CallHeadsUpService::class.java))
     }
 
-    private fun onCallRejectClicked(callManager: WebRtcCallManager, callId: String) {
+    private fun onCallRejectClicked(callId: String) {
         Timber.d("onCallRejectClicked")
-        callManager.getCallById(callId)?.endCall()
+        webRtcCallManager.getCallById(callId)?.endCall()
     }
 
 //    private fun onCallAnswerClicked(context: Context) {

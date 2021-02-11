@@ -24,7 +24,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import im.vector.app.core.di.HasVectorInjector
+import im.vector.app.core.di.HasSingletonEntryPoint
 import im.vector.app.core.services.VectorSyncService
 import org.matrix.android.sdk.internal.session.sync.job.SyncService
 import timber.log.Timber
@@ -33,8 +33,8 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Timber.d("## Sync: AlarmSyncBroadcastReceiver received intent")
-        val vectorPreferences = (context.applicationContext as? HasVectorInjector)
-                ?.injector()
+        val vectorPreferences = (context.applicationContext as? HasSingletonEntryPoint)
+                ?.singletonEntryPoint()
                 ?.takeIf { it.activeSessionHolder().getSafeActiveSession() != null }
                 ?.vectorPreferences()
                 ?: return Unit.also { Timber.v("No active session, so don't launch sync service.") }

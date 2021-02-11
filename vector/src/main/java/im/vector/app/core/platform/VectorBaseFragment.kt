@@ -40,10 +40,9 @@ import com.jakewharton.rxbinding3.view.clicks
 import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.R
 import im.vector.app.core.di.ActivityEntryPoint
-import im.vector.app.core.di.AggregatorEntryPoint
-import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.asSingletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.features.navigation.Navigator
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -53,7 +52,7 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasVectorInjector {
+abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment() {
 
     protected val vectorBaseActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -96,13 +95,13 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasVect
      * ========================================================================================== */
 
     override fun onAttach(context: Context) {
-        val vectorComponent = vectorBaseActivity.getVectorComponent()
-        navigator = vectorComponent.navigator()
-        errorFormatter = vectorComponent.errorFormatter()
-        unrecognizedCertificateDialog = vectorComponent.unrecognizedCertificateDialog()
-        val entryPoint = EntryPointAccessors.fromActivity(requireActivity(), ActivityEntryPoint::class.java)
-        viewModelFactory = entryPoint.viewModelFactory()
-        childFragmentManager.fragmentFactory = entryPoint.fragmentFactory()
+        val singletonEntryPoint = context.asSingletonEntryPoint()
+        navigator = singletonEntryPoint.navigator()
+        errorFormatter = singletonEntryPoint.errorFormatter()
+        unrecognizedCertificateDialog = singletonEntryPoint.unrecognizedCertificateDialog()
+        val activityEntryPoint = EntryPointAccessors.fromActivity(requireActivity(), ActivityEntryPoint::class.java)
+        viewModelFactory = activityEntryPoint.viewModelFactory()
+        childFragmentManager.fragmentFactory = activityEntryPoint.fragmentFactory()
         super.onAttach(context)
     }
 
@@ -153,10 +152,6 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasVect
     override fun onDestroy() {
         uiDisposables.dispose()
         super.onDestroy()
-    }
-
-    override fun injector(): AggregatorEntryPoint {
-        return vectorBaseActivity.getVectorComponent()
     }
 
     /* ==========================================================================================
