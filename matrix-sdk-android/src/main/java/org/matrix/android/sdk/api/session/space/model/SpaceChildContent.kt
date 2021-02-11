@@ -31,13 +31,9 @@ import com.squareup.moshi.JsonClass
 data class SpaceChildContent(
         /**
          * Key which gives a list of candidate servers that can be used to join the room
+         * Children where via is not present are ignored.
          */
         @Json(name = "via") val via: List<String>? = null,
-        /**
-         * present: true key is included to distinguish from a deleted state event
-         * Children where present is not present or is not set to true are ignored.
-         */
-        @Json(name = "present") val present: Boolean? = false,
         /**
          * The order key is a string which is used to provide a default ordering of siblings in the room list.
          * (Rooms are sorted based on a lexicographic ordering of order values; rooms with no order come last.
@@ -46,8 +42,25 @@ data class SpaceChildContent(
          */
         @Json(name = "order") val order: String? = null,
         /**
-         * The default flag on a child listing allows a space admin to list the "default" sub-spaces and rooms in that space.
-         * This means that when a user joins the parent space, they will automatically be joined to those default children.
+         * The auto_join flag on a child listing allows a space admin to list the sub-spaces and rooms in that space which should
+         * be automatically joined by members of that space.
+         * (This is not a force-join, which are descoped for a future MSC; the user can subsequently part these room if they desire.)
          */
-        @Json(name = "default") val default: Boolean? = false
-)
+        @Json(name = "auto_join") val autoJoin: Boolean? = false
+) {
+    /**
+     * Orders which are not strings, or do not consist solely of ascii characters in the range \x20 (space) to \x7F (~),
+     * or consist of more than 50 characters, are forbidden and should be ignored if received.)
+     */
+    fun validOrder(): String? {
+        order?.let {
+            if (order.length > 50) return null
+            if (!ORDER_VALID_CHAR_REGEX.matches(it)) return null
+        }
+        return order
+    }
+
+    companion object {
+        private val ORDER_VALID_CHAR_REGEX = "[ -~]+".toRegex()
+    }
+}
