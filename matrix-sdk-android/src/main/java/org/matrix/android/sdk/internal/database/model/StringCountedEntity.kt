@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,10 @@
 
 package org.matrix.android.sdk.internal.database.model
 
-import io.realm.RealmList
 import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
-internal open class UserEntity(@PrimaryKey var userId: String = "",
-                               var displayName: String = "",
-                               var avatarUrl: String = "",
-                               var displayNameInRoom: RealmList<StringCountedEntity> = RealmList(),
-                               var avatarUrlInRoom: RealmList<StringCountedEntity> = RealmList()
-) : RealmObject() {
-
-    companion object
-}
+@RealmClass(embedded = true)
+internal open class StringCountedEntity(var value: String = "",
+                                        var counter: Int = 0
+) : RealmObject()

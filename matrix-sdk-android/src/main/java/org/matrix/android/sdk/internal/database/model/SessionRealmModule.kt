@@ -37,6 +37,7 @@ import io.realm.annotations.RealmModule
             SyncEntity::class,
             PendingThreePidEntity::class,
             UserEntity::class,
+            StringCountedEntity::class,
             IgnoredUserEntity::class,
             BreadcrumbsEntity::class,
             UserThreePidEntity::class,

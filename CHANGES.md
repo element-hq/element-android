@@ -11,6 +11,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - VoIP : fix audio devices output
  - Fix crash after initial sync on Dendrite
+ - myroomnick changes the global name (#1715)
 
 Translations 🗣:
  -

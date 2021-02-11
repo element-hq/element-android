@@ -24,13 +24,15 @@ import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityField
 import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.StringCountedEntityFields
+import org.matrix.android.sdk.internal.database.model.UserEntityFields
 import timber.log.Timber
 import javax.inject.Inject
 
 class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 7L
+        const val SESSION_STORE_SCHEMA_VERSION = 8L
     }
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
@@ -43,6 +45,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 4) migrateTo5(realm)
         if (oldVersion <= 5) migrateTo6(realm)
         if (oldVersion <= 6) migrateTo7(realm)
+        if (oldVersion <= 7) migrateTo8(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -121,5 +124,20 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                     }
                 }
                 ?.removeField("areAllMembersLoaded")
+    }
+
+    private fun migrateTo8(realm: DynamicRealm) {
+        Timber.d("Step 7 -> 8")
+        realm.schema.create("StringCountedEntity")
+                .apply {
+                    isEmbedded = true
+                }
+                .addField(StringCountedEntityFields.VALUE, String::class.java)
+                .addField(StringCountedEntityFields.COUNTER, Int::class.java)
+                .setRequired(StringCountedEntityFields.VALUE, true)
+
+        realm.schema.get("UserEntity")
+                ?.addRealmListField(UserEntityFields.DISPLAY_NAME_IN_ROOM.`$`, realm.schema.get("StringCountedEntity")!!)
+                ?.addRealmListField(UserEntityFields.AVATAR_URL_IN_ROOM.`$`, realm.schema.get("StringCountedEntity")!!)
     }
 }

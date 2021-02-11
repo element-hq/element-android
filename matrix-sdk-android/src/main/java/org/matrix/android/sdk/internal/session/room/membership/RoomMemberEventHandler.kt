@@ -32,18 +32,22 @@ internal class RoomMemberEventHandler @Inject constructor() {
         }
         val userId = event.stateKey ?: return false
         val roomMember = event.content.toModel<RoomMemberContent>()
-        return handle(realm, roomId, userId, roomMember)
+        val previousContent = event.resolvedPrevContent().toModel<RoomMemberContent>()
+        return handle(realm, roomId, userId, roomMember, previousContent)
     }
 
-    fun handle(realm: Realm, roomId: String, userId: String, roomMember: RoomMemberContent?): Boolean {
+    fun handle(realm: Realm,
+               roomId: String,
+               userId: String,
+               roomMember: RoomMemberContent?,
+               previousRoomMember: RoomMemberContent?): Boolean {
         if (roomMember == null) {
             return false
         }
         val roomMemberEntity = RoomMemberEntityFactory.create(roomId, userId, roomMember)
         realm.insertOrUpdate(roomMemberEntity)
         if (roomMember.membership.isActive()) {
-            val userEntity = UserEntityFactory.create(userId, roomMember)
-            realm.insertOrUpdate(userEntity)
+            UserEntityFactory.insertOrUpdate(realm, userId, roomMember, previousRoomMember)
         }
         return true
     }

@@ -313,7 +313,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 if (event.type == EventType.STATE_ROOM_MEMBER) {
                     val fixedContent = event.getFixedRoomMemberContent()
                     roomMemberContentsByUser[event.stateKey] = fixedContent
-                    roomMemberEventHandler.handle(realm, roomEntity.roomId, event.stateKey, fixedContent)
+                    roomMemberEventHandler.handle(
+                            realm,
+                            roomEntity.roomId,
+                            event.stateKey,
+                            fixedContent,
+                            event.resolvedPrevContent().toModel<RoomMemberContent>()
+                    )
                 }
             }
             roomMemberContentsByUser.getOrPut(event.senderId) {
