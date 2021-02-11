@@ -16,8 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.space
 
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
@@ -28,11 +30,34 @@ class DefaultSpace(private val room: Room) : Space {
         return room
     }
 
-    override suspend fun addRoom(roomId: String) {
+    override suspend fun addChildren(roomId: String, viaServers: List<String>, order: String?, autoJoin: Boolean) {
         asRoom().sendStateEvent(
                 eventType = EventType.STATE_SPACE_CHILD,
                 stateKey = roomId,
-                body = SpaceChildContent(present = true).toContent()
+                body = SpaceChildContent(
+                        via = viaServers,
+                        autoJoin = autoJoin,
+                        order = order
+                ).toContent()
+        )
+    }
+
+    override suspend fun removeRoom(roomId: String) {
+        val existing = asRoom().getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
+                .firstOrNull()
+                ?.content.toModel<SpaceChildContent>()
+                ?: // should we throw here?
+                return
+
+        // edit state event and set via to null
+        asRoom().sendStateEvent(
+                eventType = EventType.STATE_SPACE_CHILD,
+                stateKey = roomId,
+                body = SpaceChildContent(
+                        order = existing.order,
+                        via = null,
+                        autoJoin = existing.autoJoin
+                ).toContent()
         )
     }
 
