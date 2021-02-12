@@ -87,14 +87,7 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
         }
 
         views.passwordField.showPassword(it.passwordVisible)
-
-        if (it.passwordVisible) {
-            views.passwordReveal.setImageResource(R.drawable.ic_eye_closed)
-            views.passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
-        } else {
-            views.passwordReveal.setImageResource(R.drawable.ic_eye)
-            views.passwordReveal.contentDescription = getString(R.string.a11y_show_password)
-        }
+        views.passwordReveal.render(it.passwordVisible)
 
         if (it.lastErrorCode != null) {
             when (it.flowType) {

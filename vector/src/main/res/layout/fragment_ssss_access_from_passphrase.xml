@@ -76,12 +76,13 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
+        <im.vector.app.core.ui.views.RevealPasswordImageView
             android:id="@+id/ssss_view_show_password"
             android:layout_width="@dimen/layout_touch_size"
             android:layout_height="@dimen/layout_touch_size"
             android:layout_marginTop="8dp"
             android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/a11y_show_password"
             android:scaleType="center"
             android:src="@drawable/ic_eye"
             app:layout_constraintEnd_toEndOf="parent"

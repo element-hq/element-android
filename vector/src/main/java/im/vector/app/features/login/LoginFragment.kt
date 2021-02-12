@@ -255,14 +255,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
     private fun renderPasswordField() {
         views.passwordField.showPassword(passwordShown)
-
-        if (passwordShown) {
-            views.passwordReveal.setImageResource(R.drawable.ic_eye_closed)
-            views.passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
-        } else {
-            views.passwordReveal.setImageResource(R.drawable.ic_eye)
-            views.passwordReveal.contentDescription = getString(R.string.a11y_show_password)
-        }
+        views.passwordReveal.render(passwordShown)
     }
 
     override fun resetViewModel() {

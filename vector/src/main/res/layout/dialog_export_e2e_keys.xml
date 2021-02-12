@@ -20,7 +20,7 @@
         android:textSize="16sp"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.RevealPasswordImageView
         android:id="@+id/exportDialogShowPassword"
         android:layout_width="@dimen/layout_touch_size"
         android:layout_height="@dimen/layout_touch_size"

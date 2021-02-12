@@ -361,7 +361,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 views.changePasswordNewPwdText.showPassword(passwordShown)
                 views.changePasswordConfirmNewPwdText.showPassword(passwordShown)
 
-                views.changePasswordShowPasswords.setImageResource(if (passwordShown) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+                views.changePasswordShowPasswords.render(passwordShown)
             }
 
             val dialog = AlertDialog.Builder(activity)
