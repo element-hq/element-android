@@ -2829,4 +2829,8 @@
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <string name="re_authentication_default_confirm_text">Element requires you to enter your credentials to perform this action.</string>
     <string name="authentication_error">Failed to authenticate</string>
+
+    <string name="a11y_screenshot">Screenshot</string>
+    <string name="a11y_open_widget">Open widgets</string>
+    <string name="a11y_import_key_from_file">Import key from file</string>
 </resources>
