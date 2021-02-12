@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.toSpannable
-import androidx.core.view.isVisible
 import androidx.transition.ChangeBounds
 import androidx.transition.Fade
 import androidx.transition.Transition
@@ -143,16 +142,10 @@ class TextComposerView @JvmOverloads constructor(
     fun setRoomEncrypted(isEncrypted: Boolean, roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
         if (isEncrypted) {
             views.composerEditText.setHint(R.string.room_message_placeholder)
-            views.composerShieldImageView.isVisible = true
-            val shieldRes = when (roomEncryptionTrustLevel) {
-                RoomEncryptionTrustLevel.Trusted -> R.drawable.ic_shield_trusted
-                RoomEncryptionTrustLevel.Warning -> R.drawable.ic_shield_warning
-                else                             -> R.drawable.ic_shield_black
-            }
-            views.composerShieldImageView.setImageResource(shieldRes)
+            views.composerShieldImageView.render(roomEncryptionTrustLevel)
         } else {
             views.composerEditText.setHint(R.string.room_message_placeholder)
-            views.composerShieldImageView.isVisible = false
+            views.composerShieldImageView.render(null)
         }
     }
 }

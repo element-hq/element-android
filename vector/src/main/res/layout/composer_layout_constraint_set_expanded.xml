@@ -125,7 +125,7 @@
         app:layout_constraintTop_toTopOf="@+id/sendButton"
         tools:ignore="MissingPrefix" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/composerShieldImageView"
         android:layout_width="16dp"
         android:layout_height="16dp"

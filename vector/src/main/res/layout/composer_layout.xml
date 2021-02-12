@@ -97,7 +97,7 @@
         android:src="@drawable/ic_attachment"
         tools:ignore="MissingConstraints" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/composerShieldImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
