@@ -34,6 +34,7 @@ import im.vector.app.databinding.BottomSheetRoomWidgetPermissionBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.widgets.WidgetArgs
 
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomWidgetPermissionBottomSheet :
