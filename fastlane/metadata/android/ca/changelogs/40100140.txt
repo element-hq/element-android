@@ -1,0 +1,2 @@
+Canvis principals d'aquesta versió: modificació dels permisos de sala, tema clar/fosc automàtic, correcció d'errors.
+Registre de canvis complet: https://github.com/vector-im/element-android/releases/tag/v1.0.14

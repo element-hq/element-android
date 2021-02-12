@@ -1640,7 +1640,7 @@
     <string name="room_settings_enable_encryption_dialog_content">Веднъж включено, шифроването за дадена стая не може да бъде изключено. Съобщенията изпратени в шифрована стая не могат да бъдат прочетени от сървъра, а само от участниците в стаята. Включването на шифроване може да попречи на работата на немалък брой ботове и мостове към други мрежи.</string>
     <string name="room_settings_enable_encryption_dialog_title">Включване на шифроване\?</string>
     <string name="room_settings_enable_encryption_warning">Веднъж включено, шифроването не може да бъде изключено.</string>
-    <string name="room_settings_enable_encryption">Включи шифроване от-край-до-край</string>
+    <string name="room_settings_enable_encryption">Включи шифроване от-край-до-край…</string>
     <string name="settings_category_composer">Редактор на съобщения</string>
     <string name="settings_category_timeline">Списък със съобщения</string>
     <string name="command_description_rainbow_emote">Изпраща емоцията оцветена като дъга</string>

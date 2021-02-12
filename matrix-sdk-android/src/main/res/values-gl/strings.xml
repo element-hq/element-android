@@ -80,4 +80,22 @@
     <string name="notice_room_invite_no_invitee_by_you">O teu convite</string>
     <string name="summary_you_sent_sticker">Enviaches un adhesivo.</string>
     <string name="summary_you_sent_image">Enviaches unha imaxe.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servidores con literais IP están vetados.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servidores con IP literais están permitidos.</string>
+    <string name="notice_room_server_acl_set_banned">• Servidores con %s están vetados.</string>
+    <string name="notice_room_server_acl_set_allowed">• Servidores con %s están permitidos.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Estableceches os ACLs do servidor para esta sala.</string>
+    <string name="notice_room_server_acl_set_title">%s estableceu os ACLs do servidor para esta sala.</string>
+    <string name="notice_direct_room_update">%s actualizou aquí.</string>
+    <string name="notice_direct_room_update_by_you">Actualizaches aquí.</string>
+    <string name="notice_room_update_by_you">Actualizaches esta sala.</string>
+    <string name="notice_room_update">%s actualizou esta sala.</string>
+    <string name="notice_end_to_end_by_you">Activaches o cifrado extremo-a-extremo (%1$s)</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Fixeches visibles as mensaxes futuras para %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s fixo visibles as mensaxes futuras para %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Fixeches visible no futuro o historial da sala para %1$s</string>
+    <string name="notice_ended_call_by_you">Remataches a chamada.</string>
+    <string name="notice_answered_call_by_you">Respondeches á chamada.</string>
+    <string name="notice_call_candidates_by_you">Enviaches datos para configurar a chamada.</string>
+    <string name="notice_call_candidates">%s enviou datos para configurar a chamada.</string>
 </resources>

@@ -563,4 +563,10 @@
     <string name="dialog_user_consent_content">Para continuar usando o servidor %1$s ten que revisar primeiro os seus termos e condicións.</string>
     <string name="deactivate_account_delete_checkbox">Esquezan todas as mensaxes que eu enviara no momento en que elimine a miña conta. (Aviso: iso suporá que os seguintes participantes só verán unha versión incompleta das conversas.)</string>
     <string name="error_empty_field_your_password">Introduza o seu contrasinal.</string>
+    <string name="title_activity_verify_device">Verificar sesión</string>
+    <string name="title_activity_keys_backup_restore">Usar copia da Chave</string>
+    <string name="title_activity_keys_backup_setup">Copia de apoio da chave</string>
+    <string name="notification_sync_init">Iniciando o servizo</string>
+    <string name="status_theme">Decorado Status.im</string>
+    <string name="system_theme">Por defecto no sistema</string>
 </resources>
