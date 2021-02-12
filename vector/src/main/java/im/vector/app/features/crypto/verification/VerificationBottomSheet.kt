@@ -49,6 +49,7 @@ import im.vector.app.features.crypto.verification.request.VerificationRequestFra
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -162,23 +163,22 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 if (state.sasTransactionState == VerificationTxState.Verified
                         || state.qrTransactionState == VerificationTxState.Verified
                         || state.verifiedFromPrivateKeys) {
-                    views.otherUserShield.setImageResource(R.drawable.ic_shield_trusted)
+                    views.otherUserShield.render(RoomEncryptionTrustLevel.Trusted)
                 } else {
-                    views.otherUserShield.setImageResource(R.drawable.ic_shield_warning)
+                    views.otherUserShield.render(RoomEncryptionTrustLevel.Warning)
                 }
                 views.otherUserNameText.text = getString(
                         if (state.selfVerificationMode) R.string.crosssigning_verify_this_session else R.string.crosssigning_verify_session
                 )
-                views.otherUserShield.isVisible = true
             } else {
                 avatarRenderer.render(matrixItem, views.otherUserAvatarImageView)
 
                 if (state.sasTransactionState == VerificationTxState.Verified || state.qrTransactionState == VerificationTxState.Verified) {
                     views.otherUserNameText.text = getString(R.string.verification_verified_user, matrixItem.getBestName())
-                    views.otherUserShield.isVisible = true
+                    views.otherUserShield.render(RoomEncryptionTrustLevel.Trusted)
                 } else {
                     views.otherUserNameText.text = getString(R.string.verification_verify_user, matrixItem.getBestName())
-                    views.otherUserShield.isVisible = false
+                    views.otherUserShield.render(null)
                 }
             }
         }

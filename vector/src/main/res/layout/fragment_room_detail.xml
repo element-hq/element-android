@@ -41,8 +41,7 @@
                 app:layout_constraintCircle="@+id/roomToolbarAvatarImageView"
                 app:layout_constraintCircleAngle="135"
                 app:layout_constraintCircleRadius="20dp"
-                tools:ignore="MissingConstraints"
-                tools:src="@drawable/ic_shield_trusted" />
+                tools:ignore="MissingConstraints" />
 
             <TextView
                 android:id="@+id/roomToolbarTitleView"

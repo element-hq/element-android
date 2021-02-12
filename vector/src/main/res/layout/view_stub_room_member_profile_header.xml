@@ -37,8 +37,7 @@
             app:layout_constraintCircle="@+id/memberProfileAvatarView"
             app:layout_constraintCircleAngle="135"
             app:layout_constraintCircleRadius="64dp"
-            tools:ignore="MissingConstraints"
-            tools:src="@drawable/ic_shield_trusted" />
+            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/memberProfileNameView"
