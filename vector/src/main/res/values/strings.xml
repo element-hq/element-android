@@ -2839,4 +2839,5 @@
     <string name="a11y_error_some_message_not_sent">Some messages have not been sent</string>
     <string name="a11y_unsent_draft">This room has unsent draft</string>
     <string name="a11y_video">Video</string>
+    <string name="a11y_selected">Selected</string>
 </resources>

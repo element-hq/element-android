@@ -70,6 +70,7 @@
         android:id="@+id/actionSelected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/a11y_selected"
         android:src="@drawable/ic_check_white_24dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
