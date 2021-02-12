@@ -8,6 +8,7 @@ Improvements 🙌:
  - VoIP : new tiles in timeline
  - Improve room profile UX
  - Upgrade Jitsi library from 2.9.3 to 3.1.0
+ - a11y improvements
 
 Bugfix 🐛:
  - VoIP : fix audio devices output
