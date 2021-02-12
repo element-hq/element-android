@@ -80,6 +80,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginBottom="38dp"
         android:alpha="1"
+        android:importantForAccessibility="no"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@id/composerRelatedMessageAvatar"
         app:layout_constraintStart_toStartOf="@id/composerRelatedMessageAvatar"

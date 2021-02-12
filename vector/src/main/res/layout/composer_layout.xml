@@ -64,6 +64,7 @@
         android:id="@+id/composerRelatedMessageActionIcon"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:importantForAccessibility="no"
         app:tint="?riotx_text_primary"
         tools:ignore="MissingConstraints,MissingPrefix" />
 
