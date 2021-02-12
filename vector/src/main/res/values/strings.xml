@@ -144,6 +144,8 @@
     <string name="dialog_title_error">Error</string>
     <string name="dialog_title_success">Success</string>
 
+    <string name="dialog_edit_hint">New value</string>
+
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
     <string name="bottom_action_notification">Notifications</string>
