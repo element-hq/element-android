@@ -2847,4 +2847,7 @@
     <string name="a11y_close_emoji_picker">Close Emoji picker</string>
     <string name="a11y_checked">Checked</string>
     <string name="a11y_error_message_not_sent">Message not sent due to error</string>
+    <string name="a11y_rule_notify_noisy">Notify with sound</string>
+    <string name="a11y_rule_notify_silent">Notify without sound</string>
+    <string name="a11y_rule_notify_off">Do not notify</string>
 </resources>
