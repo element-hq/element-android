@@ -60,7 +60,7 @@
                         tools:alpha="1"
                         tools:src="@tools:sample/avatars" />
 
-                    <ImageView
+                    <im.vector.app.core.ui.views.ShieldImageView
                         android:id="@+id/matrixProfileDecorationToolbarAvatarImageView"
                         android:layout_width="24dp"
                         android:layout_height="24dp"

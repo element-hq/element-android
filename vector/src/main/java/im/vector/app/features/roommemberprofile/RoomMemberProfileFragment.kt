@@ -53,6 +53,7 @@ import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -205,31 +206,28 @@ class RoomMemberProfileFragment @Inject constructor(
 
                 if (state.isRoomEncrypted) {
                     headerViews.memberProfileDecorationImageView.isVisible = true
-                    if (state.userMXCrossSigningInfo != null) {
+                    val trustLevel = if (state.userMXCrossSigningInfo != null) {
                         // Cross signing is enabled for this user
-                        val icon = if (state.userMXCrossSigningInfo.isTrusted()) {
+                        if (state.userMXCrossSigningInfo.isTrusted()) {
                             // User is trusted
                             if (state.allDevicesAreCrossSignedTrusted) {
-                                R.drawable.ic_shield_trusted
+                                RoomEncryptionTrustLevel.Trusted
                             } else {
-                                R.drawable.ic_shield_warning
+                                RoomEncryptionTrustLevel.Warning
                             }
                         } else {
-                            R.drawable.ic_shield_black
+                            RoomEncryptionTrustLevel.Default
                         }
-
-                        headerViews.memberProfileDecorationImageView.setImageResource(icon)
-                        views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(icon)
                     } else {
                         // Legacy
                         if (state.allDevicesAreTrusted) {
-                            headerViews.memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_trusted)
-                            views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_trusted)
+                            RoomEncryptionTrustLevel.Trusted
                         } else {
-                            headerViews.memberProfileDecorationImageView.setImageResource(R.drawable.ic_shield_warning)
-                            views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(R.drawable.ic_shield_warning)
+                            RoomEncryptionTrustLevel.Warning
                         }
                     }
+                    headerViews.memberProfileDecorationImageView.render(trustLevel)
+                    views.matrixProfileDecorationToolbarAvatarImageView.render(trustLevel)
                 } else {
                     headerViews.memberProfileDecorationImageView.isVisible = false
                 }

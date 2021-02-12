@@ -60,7 +60,7 @@
         app:layout_constraintCircleRadius="30dp"
         tools:ignore="MissingConstraints" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/roomAvatarDecorationImageView"
         android:layout_width="24dp"
         android:layout_height="24dp"

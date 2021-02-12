@@ -124,7 +124,6 @@ import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
-import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.composer.TextComposerView
@@ -1189,10 +1188,7 @@ class RoomDetailFragment @Inject constructor(
             avatarRenderer.render(roomSummary.toMatrixItem(), views.roomToolbarAvatarImageView)
 
             renderSubTitle(typingMessage, roomSummary.topic)
-            views.roomToolbarDecorationImageView.let {
-                it.setImageResource(roomSummary.roomEncryptionTrustLevel.toImageRes())
-                it.isVisible = roomSummary.roomEncryptionTrustLevel != null
-            }
+            views.roomToolbarDecorationImageView.render(roomSummary.roomEncryptionTrustLevel)
         }
     }
 

@@ -30,7 +30,7 @@
             app:layout_constraintVertical_chainStyle="spread_inside"
             tools:src="@tools:sample/avatars" />
 
-        <ImageView
+        <im.vector.app.core.ui.views.ShieldImageView
             android:id="@+id/memberProfileDecorationImageView"
             android:layout_width="48dp"
             android:layout_height="48dp"

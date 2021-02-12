@@ -34,7 +34,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/avatars" />
 
-            <ImageView
+            <im.vector.app.core.ui.views.ShieldImageView
                 android:id="@+id/roomToolbarDecorationImageView"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
