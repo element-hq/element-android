@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="4dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_poll"
             app:tint="@color/riotx_accent"
             tools:ignore="MissingPrefix" />

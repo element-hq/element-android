@@ -24,6 +24,7 @@
             android:id="@+id/knownUserAvatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:contentDescription="@string/avatar"
             tools:src="@tools:sample/avatars" />
 
         <ImageView

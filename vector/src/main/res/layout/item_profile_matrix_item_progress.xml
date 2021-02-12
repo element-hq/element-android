@@ -19,6 +19,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_centerVertical="true"
+        android:contentDescription="@string/avatar"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,13 +92,14 @@
         android:id="@+id/matrixItemEditable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_arrow_right"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible"
         app:tint="?riotx_text_secondary"
-        tools:ignore="MissingPrefix" />
+        tools:ignore="MissingPrefix"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

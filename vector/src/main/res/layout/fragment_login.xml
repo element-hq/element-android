@@ -19,6 +19,7 @@
                 android:id="@+id/loginServerIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
                 app:tint="?riotx_text_primary"
                 tools:ignore="MissingPrefix"
                 tools:src="@drawable/ic_logo_matrix_org" />

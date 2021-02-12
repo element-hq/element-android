@@ -2833,4 +2833,10 @@
     <string name="a11y_screenshot">Screenshot</string>
     <string name="a11y_open_widget">Open widgets</string>
     <string name="a11y_import_key_from_file">Import key from file</string>
+    <string name="a11y_image">Image</string>
+    <string name="a11y_change_avatar">Change avatar</string>
+    <string name="a11y_delete_avatar">Delete avatar</string>
+    <string name="a11y_error_some_message_not_sent">Some messages have not been sent</string>
+    <string name="a11y_unsent_draft">This room has unsent draft</string>
+    <string name="a11y_video">Video</string>
 </resources>
