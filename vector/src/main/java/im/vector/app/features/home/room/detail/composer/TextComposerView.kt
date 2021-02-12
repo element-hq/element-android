@@ -40,8 +40,8 @@ import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
  */
 class TextComposerView @JvmOverloads constructor(
         context: Context,
-                                                 attrs: AttributeSet? = null,
-                                                 defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     interface Callback : ComposerEditText.Callback {
         fun onCloseRelatedMessage()
