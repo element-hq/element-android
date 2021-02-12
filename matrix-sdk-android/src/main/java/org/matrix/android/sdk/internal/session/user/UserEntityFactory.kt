@@ -49,15 +49,15 @@ internal object UserEntityFactory {
                         .takeIf { it != -1 }
                         ?.let { entity.displayNameInRoom[it] }
                         ?.takeIf { it.counter > 0 }
-                        ?.counter
-                        ?.dec()
+                        ?.let { it.counter-- }
             }
             entity.displayNameInRoom.indexOfFirst { it.value == newDisplayName }
                     .let { index ->
                         if (index == -1) {
                             entity.displayNameInRoom.add(StringCountedEntity(newDisplayName, 1))
                         } else {
-                            entity.displayNameInRoom[index]?.counter?.inc()
+                            entity.displayNameInRoom[index]
+                                    ?.let { it.counter++ }
                         }
                     }
 
@@ -76,15 +76,15 @@ internal object UserEntityFactory {
                         .takeIf { it != -1 }
                         ?.let { entity.avatarUrlInRoom[it] }
                         ?.takeIf { it.counter > 0 }
-                        ?.counter
-                        ?.dec()
+                        ?.let { it.counter-- }
             }
             entity.avatarUrlInRoom.indexOfFirst { it.value == newAvatar }
                     .let { index ->
                         if (index == -1) {
                             entity.avatarUrlInRoom.add(StringCountedEntity(newAvatar, 1))
                         } else {
-                            entity.avatarUrlInRoom[index]?.counter?.inc()
+                            entity.avatarUrlInRoom[index]
+                                    ?.let { it.counter++ }
                         }
                     }
 
