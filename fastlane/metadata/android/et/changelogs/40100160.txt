@@ -1,0 +1,2 @@
+Olulisemad muutused selles versioonis: Sisselogimine sotsiaalmeediakontode abil.
+Muudatuste logi täismahus: https://github.com/vector-im/element-android/releases/tag/v1.0.15 ja https://github.com/vector-im/element-android/releases/tag/v1.0.16
