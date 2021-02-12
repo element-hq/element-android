@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.app.core.platform.DefaultListUpdateCallback
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.BaseEventItem
+import im.vector.app.features.home.room.detail.timeline.item.IsEventItem
 import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -47,7 +48,7 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
         if (layoutManager.findFirstVisibleItemPosition() != position) {
             return
         }
-        val firstNewItem = timelineEventController.adapter.getModelAtPosition(position) as? BaseEventItem ?: return
+        val firstNewItem = timelineEventController.adapter.getModelAtPosition(position) as? IsEventItem ?: return
         val firstNewItemIds = firstNewItem.getEventIds().firstOrNull()
         val indexOfFirstNewItem = newTimelineEventIds.indexOf(firstNewItemIds)
         if (indexOfFirstNewItem != -1) {

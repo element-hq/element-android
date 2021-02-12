@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.epoxy
+package im.vector.app.features.home.room.detail.timeline.item
 
-import com.airbnb.epoxy.EpoxyModelClass
-import im.vector.app.R
-
-@EpoxyModelClass(layout = R.layout.item_empty)
-abstract class EmptyItem : VectorEpoxyModel<EmptyItem.Holder>() {
-    class Holder : VectorEpoxyHolder()
+interface IsEventItem {
+    /**
+     * Returns the eventIds associated with the EventItem.
+     * Will generally get only one, but it handles the merging items.
+     */
+    fun getEventIds(): List<String>
 }
