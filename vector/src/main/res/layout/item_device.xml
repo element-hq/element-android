@@ -84,7 +84,7 @@
 
     </LinearLayout>
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/itemDeviceTrustLevelIcon"
         android:layout_width="50dp"
         android:layout_height="match_parent"

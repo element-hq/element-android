@@ -89,6 +89,7 @@
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/cancel"
         android:src="@drawable/ic_close_round"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="parent"

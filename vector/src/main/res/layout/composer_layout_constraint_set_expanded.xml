@@ -95,7 +95,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/action_close"
+        android:contentDescription="@string/cancel"
         android:src="@drawable/ic_close_round"
         app:layout_constraintBottom_toBottomOf="@id/composerRelatedMessageContent"
         app:layout_constraintEnd_toEndOf="parent"

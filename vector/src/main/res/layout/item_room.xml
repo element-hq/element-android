@@ -41,9 +41,9 @@
             android:id="@+id/roomAvatarCheckedImageView"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:contentDescription="@string/a11y_checked"
             android:scaleType="centerInside"
             android:src="@drawable/ic_material_done"
-            android:visibility="visible"
             app:tint="@android:color/white"
             tools:ignore="MissingPrefix" />
 

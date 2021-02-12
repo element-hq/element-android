@@ -18,6 +18,7 @@ package im.vector.app.core.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.isVisible
 import im.vector.app.R
@@ -52,5 +53,14 @@ class ShieldImageView @JvmOverloads constructor(
                 setImageResource(R.drawable.ic_shield_trusted)
             }
         }
+    }
+}
+
+@DrawableRes
+fun RoomEncryptionTrustLevel.toDrawableRes(): Int {
+    return when (this) {
+        RoomEncryptionTrustLevel.Default -> R.drawable.ic_shield_black
+        RoomEncryptionTrustLevel.Warning -> R.drawable.ic_shield_warning
+        RoomEncryptionTrustLevel.Trusted -> R.drawable.ic_shield_trusted
     }
 }
