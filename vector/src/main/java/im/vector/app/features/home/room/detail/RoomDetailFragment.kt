@@ -536,8 +536,18 @@ class RoomDetailFragment @Inject constructor(
                 .Builder
                 .fromRootView(views.rootConstraintLayout)
                 .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
-                .setOnEmojiPopupShownListener { views.composerLayout.views.composerEmojiButton.setImageResource(R.drawable.ic_keyboard) }
-                .setOnEmojiPopupDismissListener { views.composerLayout.views.composerEmojiButton.setImageResource(R.drawable.ic_insert_emoji) }
+                .setOnEmojiPopupShownListener {
+                    views.composerLayout.views.composerEmojiButton.let {
+                        it.setImageResource(R.drawable.ic_keyboard)
+                        it.contentDescription = getString(R.string.a11y_close_emoji_picker)
+                    }
+                }
+                .setOnEmojiPopupDismissListener {
+                    views.composerLayout.views.composerEmojiButton.let {
+                        it.setImageResource(R.drawable.ic_insert_emoji)
+                        it.contentDescription = getString(R.string.a11y_open_emoji_picker)
+                    }
+                }
                 .build(views.composerLayout.views.composerEditText)
 
         views.composerLayout.views.composerEmojiButton.debouncedClicks {

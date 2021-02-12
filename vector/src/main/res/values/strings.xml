@@ -2843,4 +2843,6 @@
     <string name="a11y_trust_level_default">Default trust level</string>
     <string name="a11y_trust_level_warning">Warning trust level</string>
     <string name="a11y_trust_level_trusted">Trusted trust level</string>
+    <string name="a11y_open_emoji_picker">Open Emoji picker</string>
+    <string name="a11y_close_emoji_picker">Close Emoji picker</string>
 </resources>
