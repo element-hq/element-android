@@ -21,7 +21,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import androidx.transition.TransitionManager
 import com.nulabinc.zxcvbn.Zxcvbn
@@ -30,7 +29,6 @@ import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupSetupStep2Binding
 import im.vector.app.features.settings.VectorLocale
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -69,40 +67,38 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<Fr
      * ========================================================================================== */
 
     private fun bindViewToViewModel() {
-        viewModel.run {
-            passwordStrength.observe(viewLifecycleOwner, Observer { strength ->
-                if (strength == null) {
-                    views.keysBackupSetupStep2PassphraseStrengthLevel.strength = 0
-                    views.keysBackupSetupStep2PassphraseEnterTil.error = null
-                } else {
-                    val score = strength.score
-                    views.keysBackupSetupStep2PassphraseStrengthLevel.strength = score
+        viewModel.passwordStrength.observe(viewLifecycleOwner) { strength ->
+            if (strength == null) {
+                views.keysBackupSetupStep2PassphraseStrengthLevel.strength = 0
+                views.keysBackupSetupStep2PassphraseEnterTil.error = null
+            } else {
+                val score = strength.score
+                views.keysBackupSetupStep2PassphraseStrengthLevel.strength = score
 
-                    if (score in 1..3) {
-                        val warning = strength.feedback?.getWarning(VectorLocale.applicationLocale)
-                        if (warning != null) {
-                            views.keysBackupSetupStep2PassphraseEnterTil.error = warning
-                        }
-
-                        val suggestions = strength.feedback?.getSuggestions(VectorLocale.applicationLocale)
-                        if (suggestions != null) {
-                            views.keysBackupSetupStep2PassphraseEnterTil.error = suggestions.firstOrNull()
-                        }
-                    } else {
-                        views.keysBackupSetupStep2PassphraseEnterTil.error = null
+                if (score in 1..3) {
+                    val warning = strength.feedback?.getWarning(VectorLocale.applicationLocale)
+                    if (warning != null) {
+                        views.keysBackupSetupStep2PassphraseEnterTil.error = warning
                     }
-                }
-            })
 
-            passphrase.observe(viewLifecycleOwner) { newValue ->
-                if (newValue.isEmpty()) {
-                    passwordStrength.value = null
+                    val suggestions = strength.feedback?.getSuggestions(VectorLocale.applicationLocale)
+                    if (suggestions != null) {
+                        views.keysBackupSetupStep2PassphraseEnterTil.error = suggestions.firstOrNull()
+                    }
                 } else {
-                    viewModelScope.launch(Dispatchers.IO) {
-                        val strength = zxcvbn.measure(newValue)
-                        launch(Dispatchers.Main) {
-                            passwordStrength.value = strength
-                        }
+                    views.keysBackupSetupStep2PassphraseEnterTil.error = null
+                }
+            }
+        }
+
+        viewModel.passphrase.observe(viewLifecycleOwner) { newValue ->
+            if (newValue.isEmpty()) {
+                viewModel.passwordStrength.value = null
+            } else {
+                viewModel.viewModelScope.launch(Dispatchers.IO) {
+                    val strength = zxcvbn.measure(newValue)
+                    launch(Dispatchers.Main) {
+                        viewModel.passwordStrength.value = strength
                     }
                 }
             }
@@ -143,8 +139,8 @@ class KeysBackupSetupStep2Fragment @Inject constructor() : VectorBaseFragment<Fr
         views.keysBackupSetupStep2Button.setOnClickListener { doNext() }
         views.keysBackupSetupStep2SkipButton.setOnClickListener { skipPassphrase() }
 
-        views.keysBackupSetupStep2PassphraseEnterEdittext.doOnTextChanged { _, _, _, _ ->  onPassphraseChanged() }
-        views.keysBackupSetupStep2PassphraseConfirmEditText.doOnTextChanged { _, _, _, _ ->  onConfirmPassphraseChanged() }
+        views.keysBackupSetupStep2PassphraseEnterEdittext.doOnTextChanged { _, _, _, _ -> onPassphraseChanged() }
+        views.keysBackupSetupStep2PassphraseConfirmEditText.doOnTextChanged { _, _, _, _ -> onConfirmPassphraseChanged() }
     }
 
     private fun toggleVisibilityMode() {
