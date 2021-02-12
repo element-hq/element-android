@@ -90,7 +90,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                                 .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
                                 .mapOptional { it.content.toModel<PowerLevelsContent>() }
                                 .unwrap(),
-                        BiFunction { roomMembers, powerLevelsContent ->
+                        { roomMembers, powerLevelsContent ->
                             buildRoomMemberSummaries(powerLevelsContent, roomMembers)
                         }
                 )

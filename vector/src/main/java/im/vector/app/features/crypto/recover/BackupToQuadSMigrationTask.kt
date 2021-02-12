@@ -97,7 +97,7 @@ class BackupToQuadSMigrationTask @Inject constructor(
                     when {
                         params.passphrase?.isNotEmpty() == true -> {
                             reportProgress(params, R.string.bootstrap_progress_generating_ssss)
-                            awaitCallback<SsssKeyCreationInfo> {
+                            awaitCallback {
                                 quadS.generateKeyWithPassphrase(
                                         UUID.randomUUID().toString(),
                                         "ssss_key",

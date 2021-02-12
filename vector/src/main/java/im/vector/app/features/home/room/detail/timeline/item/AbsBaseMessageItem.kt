@@ -39,7 +39,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
     abstract val baseAttributes: Attributes
 
-    private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
+    private val _readReceiptsClickListener = DebouncedClickListener({
         baseAttributes.readReceiptsCallback?.onReadReceiptsClicked(baseAttributes.informationData.readReceipts)
     })
 

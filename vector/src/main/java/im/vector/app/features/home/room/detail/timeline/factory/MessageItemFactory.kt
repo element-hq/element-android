@@ -322,7 +322,7 @@ class MessageItemFactory @Inject constructor(
                         mode(ImageContentRenderer.Mode.STICKER)
                     } else {
                         clickListener(
-                                DebouncedClickListener(View.OnClickListener { view ->
+                                DebouncedClickListener({ view ->
                                     callback?.onImageMessageClicked(messageContent, data, view)
                                 }))
                     }

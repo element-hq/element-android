@@ -65,7 +65,7 @@ class BreadcrumbsController @Inject constructor(
                         hasUnreadMessage(it.hasUnreadMessages)
                         hasDraft(it.userDrafts.isNotEmpty())
                         itemClickListener(
-                                DebouncedClickListener(View.OnClickListener { _ ->
+                                DebouncedClickListener({ _ ->
                                     listener?.onBreadcrumbClicked(it.roomId)
                                 })
                         )

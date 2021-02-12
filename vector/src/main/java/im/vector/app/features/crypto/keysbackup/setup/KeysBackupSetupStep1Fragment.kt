@@ -40,12 +40,12 @@ class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment<Fr
 
         viewModel = activityViewModelProvider.get(KeysBackupSetupSharedViewModel::class.java)
 
-        viewModel.showManualExport.observe(viewLifecycleOwner, Observer {
+        viewModel.showManualExport.observe(viewLifecycleOwner) {
             val showOption = it ?: false
             // Can't use isVisible because the kotlin compiler will crash with  Back-end (JVM) Internal error: wrong code generated
             views.keysBackupSetupStep1AdvancedOptionText.visibility = if (showOption) View.VISIBLE else View.GONE
             views.keysBackupSetupStep1ManualExportButton.visibility = if (showOption) View.VISIBLE else View.GONE
-        })
+        }
 
         views.keysBackupSetupStep1Button.setOnClickListener { onButtonClick() }
         views.keysBackupSetupStep1ManualExportButton.setOnClickListener { onManualExportClick() }

@@ -103,7 +103,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
                 session.rx().liveUserCryptoDevices(session.myUserId),
                 session.rx().liveMyDevicesInfo(),
                 session.rx().liveCrossSigningPrivateKeys(),
-                Function3 { cryptoList, infoList, pInfo ->
+                { cryptoList, infoList, pInfo ->
                     //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
 //                    Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
                     infoList

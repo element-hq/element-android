@@ -225,7 +225,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 .combineLatest(
                         views.loginField.textChanges().map { it.trim().isNotEmpty() },
                         views.passwordField.textChanges().map { it.isNotEmpty() },
-                        BiFunction<Boolean, Boolean, Boolean> { isLoginNotEmpty, isPasswordNotEmpty ->
+                        { isLoginNotEmpty, isPasswordNotEmpty ->
                             isLoginNotEmpty && isPasswordNotEmpty
                         }
                 )

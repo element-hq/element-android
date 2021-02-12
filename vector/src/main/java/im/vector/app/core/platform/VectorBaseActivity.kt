@@ -208,12 +208,12 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
         navigator = screenComponent.navigator()
         activeSessionHolder = screenComponent.activeSessionHolder()
         vectorPreferences = vectorComponent.vectorPreferences()
-        configurationViewModel.activityRestarter.observe(this, Observer {
+        configurationViewModel.activityRestarter.observe(this) {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
                 restart()
             }
-        })
+        }
         pinLocker.getLiveState().observeNotNull(this) {
             if (this@VectorBaseActivity !is UnlockedActivity && it == PinLocker.State.LOCKED) {
                 navigator.openPinCode(this, pinStartForActivityResult, PinMode.AUTH)

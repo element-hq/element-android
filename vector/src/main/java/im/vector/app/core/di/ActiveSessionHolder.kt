@@ -23,7 +23,6 @@ import im.vector.app.features.crypto.keysrequest.KeyRequestHandler
 import im.vector.app.features.crypto.verification.IncomingVerificationRequestHandler
 import im.vector.app.features.notifications.PushRuleTriggerListener
 import im.vector.app.features.session.SessionListener
-import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
@@ -31,8 +30,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ActiveSessionHolder @Inject constructor(private val authenticationService: AuthenticationService,
-                                              private val sessionObservableStore: ActiveSessionDataSource,
+class ActiveSessionHolder @Inject constructor(private val sessionObservableStore: ActiveSessionDataSource,
                                               private val keyRequestHandler: KeyRequestHandler,
                                               private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler,
                                               private val callManager: WebRtcCallManager,

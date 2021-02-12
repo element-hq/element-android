@@ -92,13 +92,11 @@ class IncomingVerificationRequestHandler @Inject constructor(
                             }
                             addButton(
                                     context.getString(R.string.ignore),
-                                    Runnable {
-                                        tx.cancel()
-                                    }
+                                    { tx.cancel() }
                             )
                             addButton(
                                     context.getString(R.string.action_open),
-                                    Runnable {
+                                    {
                                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                             it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
                                         }

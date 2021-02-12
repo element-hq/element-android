@@ -123,7 +123,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                 session
                         .rx()
                         .liveGroupSummaries(groupSummariesQueryParams),
-                BiFunction { allCommunityGroup, communityGroups ->
+                { allCommunityGroup, communityGroups ->
                     listOf(allCommunityGroup) + communityGroups
                 }
         )

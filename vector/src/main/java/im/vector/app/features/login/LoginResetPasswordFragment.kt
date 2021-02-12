@@ -69,7 +69,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
                 .combineLatest(
                         views.resetPasswordEmail.textChanges().map { it.isEmail() },
                         views.passwordField.textChanges().map { it.isNotEmpty() },
-                        BiFunction<Boolean, Boolean, Boolean> { isEmail, isPasswordNotEmpty ->
+                        { isEmail, isPasswordNotEmpty ->
                             isEmail && isPasswordNotEmpty
                         }
                 )

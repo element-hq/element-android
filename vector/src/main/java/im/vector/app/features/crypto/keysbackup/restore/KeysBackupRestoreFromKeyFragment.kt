@@ -56,9 +56,9 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor()
         }
 
         views.keyInputLayout.error = viewModel.recoveryCodeErrorText.value
-        viewModel.recoveryCodeErrorText.observe(viewLifecycleOwner, Observer { newValue ->
+        viewModel.recoveryCodeErrorText.observe(viewLifecycleOwner) { newValue ->
             views.keyInputLayout.error = newValue
-        })
+        }
 
         views.keysRestoreButton.setOnClickListener { onRestoreFromKey() }
         views.keysBackupImport.setOnClickListener { onImport() }

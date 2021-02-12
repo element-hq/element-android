@@ -41,7 +41,7 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
                 avatarRenderer = avatarRenderer,
                 informationData = informationData,
                 noticeText = formattedText,
-                itemLongClickListener = View.OnLongClickListener { view ->
+                itemLongClickListener = { view ->
                     callback?.onEventLongClicked(informationData, null, view) ?: false
                 },
                 readReceiptsCallback = callback,

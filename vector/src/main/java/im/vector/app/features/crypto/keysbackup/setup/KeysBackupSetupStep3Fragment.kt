@@ -61,7 +61,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
 
         viewModel.shouldPromptOnBack = false
 
-        viewModel.passphrase.observe(viewLifecycleOwner, Observer {
+        viewModel.passphrase.observe(viewLifecycleOwner) {
             if (it.isNullOrBlank()) {
                 // Recovery was generated, so show key and options to save
                 views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_text_line2_no_passphrase)
@@ -81,7 +81,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
                 views.keysBackupSetupStep3FinishButton.text = getString(R.string.keys_backup_setup_step3_button_title)
                 views.keysBackupSetupStep3RecoveryKeyText.isVisible = false
             }
-        })
+        }
 
         setupViews()
     }

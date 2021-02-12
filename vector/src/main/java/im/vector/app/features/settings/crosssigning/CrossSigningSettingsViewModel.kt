@@ -62,7 +62,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
         Observable.combineLatest<List<DeviceInfo>, Optional<MXCrossSigningInfo>, Pair<List<DeviceInfo>, Optional<MXCrossSigningInfo>>>(
                 session.rx().liveMyDevicesInfo(),
                 session.rx().liveCrossSigningInfo(session.myUserId),
-                BiFunction { myDevicesInfo, mxCrossSigningInfo ->
+                { myDevicesInfo, mxCrossSigningInfo ->
                     myDevicesInfo to mxCrossSigningInfo
                 }
         )

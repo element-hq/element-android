@@ -39,13 +39,13 @@ class MessageItemAttributesFactory @Inject constructor(
                 informationData = informationData,
                 avatarRenderer = avatarRenderer,
                 messageColorProvider = messageColorProvider,
-                itemLongClickListener = View.OnLongClickListener { view ->
+                itemLongClickListener = { view ->
                     callback?.onEventLongClicked(informationData, messageContent, view) ?: false
                 },
-                itemClickListener = DebouncedClickListener(View.OnClickListener { view ->
+                itemClickListener = DebouncedClickListener({ view ->
                     callback?.onEventCellClicked(informationData, messageContent, view)
                 }),
-                memberClickListener = DebouncedClickListener(View.OnClickListener {
+                memberClickListener = DebouncedClickListener({
                     callback?.onMemberNameClicked(informationData)
                 }),
                 reactionPillCallback = callback,

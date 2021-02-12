@@ -51,17 +51,17 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
         viewModel = fragmentViewModelProvider.get(KeysBackupRestoreFromPassphraseViewModel::class.java)
         sharedViewModel = activityViewModelProvider.get(KeysBackupRestoreSharedViewModel::class.java)
 
-        viewModel.passphraseErrorText.observe(viewLifecycleOwner, Observer { newValue ->
+        viewModel.passphraseErrorText.observe(viewLifecycleOwner) { newValue ->
             views.keysBackupPassphraseEnterTil.error = newValue
-        })
+        }
 
         views.helperTextWithLink.text = spannableStringForHelperText()
 
-        viewModel.showPasswordMode.observe(viewLifecycleOwner, Observer {
+        viewModel.showPasswordMode.observe(viewLifecycleOwner) {
             val shouldBeVisible = it ?: false
             views.keysBackupPassphraseEnterEdittext.showPassword(shouldBeVisible)
             views.keysBackupViewShowPassword.render(shouldBeVisible)
-        })
+        }
 
         views.keysBackupPassphraseEnterEdittext.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
