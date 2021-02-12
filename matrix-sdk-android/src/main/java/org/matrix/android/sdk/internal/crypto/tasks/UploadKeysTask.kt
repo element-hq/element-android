@@ -54,3 +54,23 @@ internal class DefaultUploadKeysTask @Inject constructor(
         }
     }
 }
+
+internal interface NewUploadKeysTask : Task<NewUploadKeysTask.Params, KeysUploadResponse> {
+    data class Params(
+            val body: JsonDict
+    )
+}
+
+internal class NewDefaultUploadKeysTask @Inject constructor(
+        private val cryptoApi: CryptoApi,
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : NewUploadKeysTask {
+
+    override suspend fun execute(params: NewUploadKeysTask.Params): KeysUploadResponse {
+        Timber.i("## Uploading device keys -> $params.body")
+
+        return executeRequest(globalErrorReceiver) {
+            apiCall = cryptoApi.newUploadKeys(params.body)
+        }
+    }
+}

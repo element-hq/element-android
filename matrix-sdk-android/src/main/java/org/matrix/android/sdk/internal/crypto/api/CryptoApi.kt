@@ -15,6 +15,7 @@
  */
 package org.matrix.android.sdk.internal.crypto.api
 
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDeviceParams
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
@@ -63,6 +64,13 @@ internal interface CryptoApi {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/upload")
     fun uploadKeys(@Body body: KeysUploadBody): Call<KeysUploadResponse>
+
+    /**
+     * Upload device and one-time keys
+     * @param body the keys to be sent.
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/upload")
+    fun newUploadKeys(@Body body: JsonDict): Call<KeysUploadResponse>
 
     /**
      * Download device keys.

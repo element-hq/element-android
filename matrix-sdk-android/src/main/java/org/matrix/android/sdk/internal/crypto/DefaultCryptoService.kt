@@ -55,6 +55,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.OlmMachine
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
@@ -76,14 +77,15 @@ import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
+import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
-import org.matrix.android.sdk.internal.crypto.model.toRest
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
+import org.matrix.android.sdk.internal.crypto.tasks.NewUploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
@@ -99,11 +101,11 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.TaskThread
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.task.launchToCallback
-import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.olm.OlmManager
 import timber.log.Timber
 import uniffi.olm.Request
+import uniffi.olm.RequestType
 
 /**
  * A `CryptoService` class instance manages the end-to-end crypto for a session.
@@ -166,6 +168,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val getDeviceInfoTask: GetDeviceInfoTask,
         private val setDeviceNameTask: SetDeviceNameTask,
         private val uploadKeysTask: UploadKeysTask,
+        private val newUploadKeysTask: NewUploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
@@ -337,7 +340,7 @@ internal class DefaultCryptoService @Inject constructor(
                 uploadDeviceKeys()
             }
 
-            oneTimeKeysUploader.maybeUploadOneTimeKeys()
+            // oneTimeKeysUploader.maybeUploadOneTimeKeys()
             // this can throw if no backup
             tryOrNull {
                 keysBackupService.checkAndStartKeysBackup()
@@ -374,16 +377,7 @@ internal class DefaultCryptoService @Inject constructor(
         try {
             olmMachine = OlmMachine(userId, deviceId!!, dataDir)
 
-            Timber.v("HELLLO WORLD STARTING CRYPTO ${olmMachine?.identityKeys()}")
-
-            // TODO sent out those requests in a sensible place.
-            for (request in olmMachine!!.outgoingRequests()) {
-                when (request) {
-                    is Request.KeysUpload -> Timber.v("HELLO KEYS UPLOAD REQUEST ${request.body}")
-                    is Request.KeysQuery -> Timber.v("HELLO KEYS QUERY REQUEST ${request.body}")
-                    is Request.ToDevice -> Timber.v("HELLO TO DEVICE REQUEST ${request.body}")
-                }
-            }
+            Timber.v("HELLLO WORLD STARTING $dataDir CRYPTO ${olmMachine?.identityKeys()}")
         } catch (throwable: Throwable) {
             Timber.v("HELLLO WORLD FAILED CRYPTO $throwable")
         }
@@ -444,7 +438,11 @@ internal class DefaultCryptoService @Inject constructor(
      *
      * @param syncResponse the syncResponse
      */
-    fun onSyncCompleted(syncResponse: SyncResponse) {
+    suspend fun onSyncCompleted(syncResponse: SyncResponse) {
+        if (isStarted()) {
+            sendOutgoingRequests()
+        }
+
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
                 if (syncResponse.deviceLists != null) {
@@ -457,7 +455,7 @@ internal class DefaultCryptoService @Inject constructor(
                 if (isStarted()) {
                     // Make sure we process to-device messages before generating new one-time-keys #2782
                     deviceListManager.refreshOutdatedDeviceLists()
-                    oneTimeKeysUploader.maybeUploadOneTimeKeys()
+                    // oneTimeKeysUploader.maybeUploadOneTimeKeys()
                     incomingGossipingRequestManager.processReceivedGossipingRequests()
                 }
             }
@@ -939,27 +937,49 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
+    private suspend fun sendOutgoingRequests() {
+        // TODO these requests should be sent out in parallel
+        for (outgoingRequest in olmMachine!!.outgoingRequests()) {
+            when (outgoingRequest) {
+                is Request.KeysUpload -> {
+                    Timber.v("HELLO UPLOADING RUSTY KEYS")
+                    val body = MoshiProvider.providesMoshi().adapter<JsonDict>(Map::class.java).fromJson(outgoingRequest.body)!!
+                    val request = NewUploadKeysTask.Params(body)
+
+                    val response = newUploadKeysTask.execute(request)
+                    val adapter = MoshiProvider.providesMoshi().adapter<KeysUploadResponse>(KeysUploadResponse::class.java)
+                    val json_response = adapter.toJson(response)!!
+                    olmMachine!!.markRequestAsSent(outgoingRequest.requestId, RequestType.KEYS_UPLOAD, json_response)
+                    Timber.v("HELLO UPLOADED KEYS $response")
+                }
+                is Request.KeysQuery -> Timber.v("HELLO KEYS QUERY REQUEST ${outgoingRequest.body}")
+                is Request.ToDevice -> Timber.v("HELLO TO DEVICE REQUEST ${outgoingRequest.body}")
+            }
+        }
+    }
+
     /**
      * Upload my user's device keys.
      */
     private suspend fun uploadDeviceKeys() {
-        if (cryptoStore.getDeviceKeysUploaded()) {
-            Timber.d("Keys already uploaded, nothing to do")
-            return
-        }
-        // Prepare the device keys data to send
-        // Sign it
-        val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
-        var rest = getMyDevice().toRest()
+        // sendOutgoingRequests()
+        // if (cryptoStore.getDeviceKeysUploaded()) {
+        //     Timber.d("Keys already uploaded, nothing to do")
+        //     return
+        // }
+        // // Prepare the device keys data to send
+        // // Sign it
+        // val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
+        // var rest = getMyDevice().toRest()
 
-        rest = rest.copy(
-                signatures = objectSigner.signObject(canonicalJson)
-        )
+        // rest = rest.copy(
+        //         signatures = objectSigner.signObject(canonicalJson)
+        // )
 
-        val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null)
-        uploadKeysTask.execute(uploadDeviceKeysParams)
+        // val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null)
+        // uploadKeysTask.execute(uploadDeviceKeysParams)
 
-        cryptoStore.setDeviceKeysUploaded(true)
+        // cryptoStore.setDeviceKeysUploaded(true)
     }
 
     /**

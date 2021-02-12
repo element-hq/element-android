@@ -72,6 +72,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendVerificationMessageTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultSetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultUploadKeysTask
+import org.matrix.android.sdk.internal.crypto.tasks.NewDefaultUploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultUploadSignaturesTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultUploadSigningKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
@@ -86,6 +87,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
+import org.matrix.android.sdk.internal.crypto.tasks.NewUploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSignaturesTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSigningKeysTask
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
@@ -176,6 +178,9 @@ internal abstract class CryptoModule {
 
     @Binds
     abstract fun bindUploadKeysTask(task: DefaultUploadKeysTask): UploadKeysTask
+
+    @Binds
+    abstract fun bindNewUploadKeysTask(task: NewDefaultUploadKeysTask): NewUploadKeysTask
 
     @Binds
     abstract fun bindUploadSigningKeysTask(task: DefaultUploadSigningKeysTask): UploadSigningKeysTask
