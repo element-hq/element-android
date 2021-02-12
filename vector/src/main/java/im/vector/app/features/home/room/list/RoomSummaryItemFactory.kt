@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.list
 
-import android.view.View
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter

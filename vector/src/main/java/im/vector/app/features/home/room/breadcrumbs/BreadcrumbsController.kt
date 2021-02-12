@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.breadcrumbs
 
-import android.view.View
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.core.epoxy.zeroItem
 import im.vector.app.core.utils.DebouncedClickListener

@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.text.set
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.Observer
 import im.vector.app.R
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.VectorBaseFragment

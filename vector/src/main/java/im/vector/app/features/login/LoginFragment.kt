@@ -36,7 +36,6 @@ import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginBinding
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 
 import org.matrix.android.sdk.api.failure.Failure

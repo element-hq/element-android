@@ -19,7 +19,6 @@ package im.vector.app.core.extensions
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import im.vector.app.core.utils.EventObserver
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.LiveEvent

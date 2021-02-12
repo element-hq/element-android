@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import android.view.View
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
