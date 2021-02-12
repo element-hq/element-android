@@ -2850,4 +2850,5 @@
     <string name="a11y_rule_notify_noisy">Notify with sound</string>
     <string name="a11y_rule_notify_silent">Notify without sound</string>
     <string name="a11y_rule_notify_off">Do not notify</string>
+    <string name="a11y_view_read_receipts">View read receipts</string>
 </resources>
