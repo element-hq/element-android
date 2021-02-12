@@ -74,9 +74,7 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor() : Abstrac
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            is Success -> {
-                Unit
-            }
+            is Success -> Unit
         }
     }
 }

@@ -146,9 +146,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
             is Fail    -> {
                 views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
-            is Success -> {
-                Unit
-            }
+            is Success -> Unit
         }
     }
 }

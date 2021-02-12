@@ -27,8 +27,8 @@ class CountUpTimer(private val intervalInMs: Long) {
     private val resumed: AtomicBoolean = AtomicBoolean(false)
 
     private val disposable = Observable.interval(intervalInMs, TimeUnit.MILLISECONDS)
-            .filter { _ -> resumed.get() }
-            .doOnNext { _ -> elapsedTime.addAndGet(intervalInMs) }
+            .filter { resumed.get() }
+            .doOnNext { elapsedTime.addAndGet(intervalInMs) }
             .subscribe {
                 tickListener?.onTick(elapsedTime.get())
             }

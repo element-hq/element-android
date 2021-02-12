@@ -239,7 +239,6 @@ class DevicesViewModel @AssistedInject constructor(
                 uiaContinuation?.resumeWith(Result.failure((Exception())))
                 uiaContinuation = null
                 pendingAuth = null
-                Unit
             }
         }
     }

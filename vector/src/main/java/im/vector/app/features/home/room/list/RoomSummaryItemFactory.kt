@@ -109,7 +109,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                     onLongClick?.invoke(roomSummary) ?: false
                 }
                 .itemClickListener(
-                        DebouncedClickListener(View.OnClickListener { _ ->
+                        DebouncedClickListener({
                             onClick?.invoke(roomSummary)
                         })
                 )
