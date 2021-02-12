@@ -1891,7 +1891,7 @@
     <string name="room_member_power_level_users">Användare</string>
     <string name="room_member_power_level_admin_in">Administratör i %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator i %1$s</string>
-    <string name="room_member_power_level_default_in">Standard i %1$s</string>
+    <string name="room_member_power_level_default_in">Standardbehörig i %1$s</string>
     <string name="room_member_power_level_custom_in">Anpassad (%1$d) i %2$s</string>
     <string name="room_member_jump_to_read_receipt">Hoppa till läskvitto</string>
     <string name="rendering_event_error_type_of_event_not_handled">Element hanterar inte händelser av typen \'%1$s\'</string>
