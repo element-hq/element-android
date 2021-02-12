@@ -19,6 +19,7 @@
 
     <!-- Accessibility -->
     <issue id="LabelFor" severity="error" />
+    <issue id="ContentDescription" severity="error" />
 
     <!-- Layout -->
     <issue id="UnknownIdInLayout" severity="error" />
