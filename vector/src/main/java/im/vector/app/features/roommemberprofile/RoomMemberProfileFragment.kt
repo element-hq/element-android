@@ -341,7 +341,7 @@ class RoomMemberProfileFragment @Inject constructor(
         views.editText.hint = "#000000"
 
         AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.room_member_override_color)
+                .setTitle(R.string.room_member_override_nick_color)
                 .setView(layout)
                 .setPositiveButton(R.string.ok) { _, _ ->
                     val newOverrideColorSpec = views.editText.text.toString()
