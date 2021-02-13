@@ -18,7 +18,7 @@ The generated maven repository is then host in the project https://github.com/ve
 
 Update the script `./tools/jitsi/build_jisti_libs.sh` with the tag of the project `https://github.com/jitsi/jitsi-meet`.
 
-Currently we are building the version with the tag `android-sdk-2.9.3`.
+Currently we are building the version with the tag `android-sdk-3.1.0`.
 
 ### Run the build script
 
@@ -35,21 +35,21 @@ It will build the Jitsi Meet Android library and put every generated files in th
 - Update the file `./build.gradle` to use the previously created local Maven repository. Currently we have this line:
 
 ```groovy
-url "https://github.com/vector-im/jitsi_libre_maven/raw/master/android-sdk-2.9.3"
+url "https://github.com/vector-im/jitsi_libre_maven/raw/master/android-sdk-3.1.0"
 ```
 
 You can uncomment and update the line starting with `// url "file://...` and comment the line starting with `url`, to test the library using the locally generated Maven repository.
 
-- Update the dependency of the WebRTC library in the file `./matrix-sdk-android/build.gradle`. Currently we have this line:
-
-```groovy
-implementation('com.facebook.react:react-native-webrtc:1.84.0-jitsi-5112273@aar')
-```
-
 - Update the dependency of the Jitsi Meet library in the file `./vector/build.gradle`. Currently we have this line:
 
 ```groovy
-implementation('org.jitsi.react:jitsi-meet-sdk:2.9.3') { transitive = true }
+implementation('org.jitsi.react:jitsi-meet-sdk:3.1.0')
+```
+
+- Update the dependency of the WebRTC library in the file `./vector/build.gradle`. Currently we have this line:
+
+```groovy
+implementation('com.facebook.react:react-native-webrtc:1.87.3-jitsi-6624067@aar')
 ```
 
 - Perform a gradle sync and build the project
@@ -74,9 +74,9 @@ If all the tests are passed, you can export the generated Jitsi library to our M
 - Update the file `./build.gradle` to use the previously created Maven repository. Currently we have this line:
 
 ```groovy
-url "https://github.com/vector-im/jitsi_libre_maven/raw/master/android-sdk-2.9.3"
+url "https://github.com/vector-im/jitsi_libre_maven/raw/master/android-sdk-3.1.0"
 ```
 
 - Build the project and perform the sanity tests again.
 
-- Update the file `/CANGES.md` to notify about the library upgrade, and create a regular PR for project Element Android.
+- Update the file `/CHANGES.md` to notify about the library upgrade, and create a regular PR for project Element Android.

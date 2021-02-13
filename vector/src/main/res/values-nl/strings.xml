@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">nl</string>
-    <string name="resources_country_code">NL</string>
     <!-- titles -->
     <string name="title_activity_home">Berichten</string>
     <string name="title_activity_room">Gesprek</string>
@@ -1163,7 +1159,7 @@
     <string name="autodiscover_well_known_autofill_dialog_message">Element heeft een aangepaste serverconfiguratie gedetecteerd voor uw gebruikers-ID-domein ‘%1$s’:
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Configuratie gebruiken</string>
-    <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 6.0)</string>
     <string name="title_activity_verify_device">Sessie verifiëren</string>
     <string name="encryption_information_unknown_ip">onbekend IP-adres</string>
     <string name="you_added_a_new_device_with_info">Een nieuwe sessie vraagt versleutelingssleutels aan. 
@@ -1251,7 +1247,6 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nDe synchronisatie is mogelijk uitgesteld als gevolg van de batterij of staat van uw apparaat (slaapmodus).</string>
     <string name="settings_integrations">Integraties</string>
-    <string name="resources_script">Latn</string>
     <string name="settings_call_ringtone_use_default_stun">Terugvaloproepassistentieserver toestaan</string>
     <string name="settings_add_3pid_authentication_needed">Authenticatie vereist</string>
     <string name="settings_integrations_summary">Gebruik een integratiebeheerder om bots, bruggen, widgets en stickerpakketten te beheren.

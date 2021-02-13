@@ -1,8 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">sk</string>
-    <string name="resources_country_code">SK</string>
-
     <string name="light_theme">Svetlý vzhľad</string>
     <string name="dark_theme">Tmavý vzhľad</string>
     <string name="black_them">Čierny vzhľad</string>
@@ -1228,8 +1225,6 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="error_empty_field_enter_user_name">Prosím zadajte meno používateľa.</string>
     <string name="title_activity_verify_device">Overiť reláciu</string>
 
-    <string name="resources_script">Latn</string>
-
     <string name="none">Žiadny</string>
     <string name="revoke">Zrušiť</string>
     <string name="disconnect">Odpojiť sa</string>
@@ -1401,7 +1396,7 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="room_widget_permission_room_id">ID miestnosti</string>
 
 
-    <string name="error_jitsi_not_supported_on_old_device">Prepáčte, konferenčné hovory Jitsi nie sú podporované na starších zariadeniach (starší systém než Android 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Prepáčte, konferenčné hovory Jitsi nie sú podporované na starších zariadeniach (starší systém než Android 6.0)</string>
     <string name="room_widget_resource_permission_title">Tento widget žiada o nasledujúce zdroje:</string>
     <string name="room_widget_resource_grant_permission">Povoliť</string>
     <string name="room_widget_resource_decline_permission">Zablokovať všetko</string>

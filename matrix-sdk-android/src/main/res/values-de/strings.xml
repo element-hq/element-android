@@ -113,7 +113,7 @@
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s fügt %2$s als Adresse für diesen Raum hinzu und entfernt %3$s.</string>
     <string name="notice_room_canonical_alias_set">%1$s legt die Hauptadresse fest für diesen Raum als %2$s fest.</string>
-    <string name="notice_room_canonical_alias_unset">%1$s entfernt die Hauptadresse für diesen Raum.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s entfernte die Hauptadresse für diesen Raum.</string>
     <string name="notice_room_guest_access_can_join">%1$s hat Gästen erlaubt den Raum zu betreten.</string>
     <string name="notice_room_guest_access_forbidden">%1$s hat Gästen untersagt den Raum zu betreten.</string>
     <string name="notice_end_to_end_ok">%1$s aktivierte Ende-zu-Ende-Verschlüsselung.</string>
@@ -221,4 +221,49 @@
     <string name="notice_direct_room_guest_access_forbidden">%1$s hat Gästen untersagt den Raum zu betreten.</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Du bist gegangen. Grund: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s ist gegangen. Grund: %2$s</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Du hast die Adressen für diesen Raum geändert.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s hat die Adressen für diesen Raum geändert.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Du hast die Haupt- und die alternativen Adressen für diesen Raum geändert.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s hat die Haupt- und die alternativen Adressen für diesen Raum geändert.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Du hast die alternativen Adressen für diesen Raum geändert.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s hat die alternativen Adressen für diesen Raum geändert.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Du entferntest die alternative Adresse %1$s für diesen Raum.</item>
+        <item quantity="other">Du entferntest die alternativen Adressen %1$s für diesen Raum.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s entfernte die alternative Adresse %2$s für diesen Raum.</item>
+        <item quantity="other">%1$s entfernte die alternativen Adressen %2$s für diesen Raum.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Du fügtest die alternative Adresse %2$s für diesen Raum hinzu.</item>
+        <item quantity="other">Du fügtest die alternativen Adressen %2$s für diesen Raum hinzu.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s fügte die alternative Adresse %2$s für diesen Raum hinzu.</item>
+        <item quantity="other">%1$s fügte die alternativen Adressen %2$s für diesen Raum hinzu.</item>
+    </plurals>
+    <string name="room_displayname_empty_room_was">Leerer Raum (war %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s und %4$d andere/r</item>
+        <item quantity="other">%1$s, %2$s, %3$s und %4$d andere</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s und %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s und %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Alle Server sind von der Teilnahme ausgeschlossen! Dieser Raum kann nicht mehr genutzt werden.</string>
+    <string name="notice_room_server_acl_updated_no_change">Keine Änderung.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Server, die mit IPs übereinstimmen, sind jetzt gesperrt.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Server, die mit IPs übereinstimmen, sind nicht erlaubt.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Server, die mit %s übereinstimmen, wurden von der Elaubten-Liste entfernt.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Server, die mit %s übereinstimmen, sind jetzt erlaubt.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Server, die mit %s übereinstimmen, werden von der Sperrliste entfernt.</string>
+    <string name="notice_room_server_acl_updated_banned">• Server, die mit %s übereinstimmen, sind jetzt gesperrt.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Du hast die Server-ACL für diesen Raum geändert.</string>
+    <string name="notice_room_server_acl_updated_title">%s hat die Server-Zugriffssteuerungsliste (ACL) für diesen Raum geändert.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Server, die mit IPs übereinstimmen, sind gesperrt.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Server, die mit IPs übereinstimmen, sind erlaubt.</string>
+    <string name="notice_room_server_acl_set_allowed">• Server, die mit %s übereinstimmen, sind erlaubt.</string>
+    <string name="notice_room_server_acl_set_banned">• Server, die mit %s übereinstimmen, sind gesperrt.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Du hast die Server-ACL für diesen Raum gesetzt.</string>
+    <string name="notice_room_server_acl_set_title">%s hat die Server-Zugriffssteuerungsliste (ACL) für diesen Raum gesetzt.</string>
 </resources>

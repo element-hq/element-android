@@ -16,4 +16,20 @@
     <string name="notice_room_invite_no_invitee_by_you">Jūsų pakvietimas</string>
     <string name="summary_you_sent_sticker">Jūs išsiuntėte lipduką.</string>
     <string name="summary_you_sent_image">Jūs išsiuntėte vaizdą.</string>
+    <string name="notice_room_withdraw_by_you">Jūs atšaukėte %1$s pakvietimą</string>
+    <string name="notice_room_withdraw">%1$s atšaukė %2$s pakvietimą</string>
+    <string name="notice_room_ban_by_you">Jūs užblokavote %1$s</string>
+    <string name="notice_room_ban">%1$s užblokavo %2$s</string>
+    <string name="notice_room_unban_by_you">Jūs atblokavote %1$s</string>
+    <string name="notice_room_unban">%1$s atblokavo %2$s</string>
+    <string name="notice_room_kick_by_you">Jūs išmetėte %1$s</string>
+    <string name="notice_room_kick">%1$s išmetė %2$s</string>
+    <string name="notice_room_reject_by_you">Jūs atmetėte pakvietimą</string>
+    <string name="notice_room_reject">%1$s atmetė pakvietimą</string>
+    <string name="notice_direct_room_leave_by_you">Jūs išėjote iš kambario</string>
+    <string name="notice_direct_room_leave">%1$s išėjo iš kambario</string>
+    <string name="notice_room_leave_by_you">Jūs išėjote iš kambario</string>
+    <string name="notice_room_leave">%1$s išėjo iš kambario</string>
+    <string name="notice_direct_room_join_by_you">Jūs prisijungėte</string>
+    <string name="notice_direct_room_join">%1$s prisijungė</string>
 </resources>

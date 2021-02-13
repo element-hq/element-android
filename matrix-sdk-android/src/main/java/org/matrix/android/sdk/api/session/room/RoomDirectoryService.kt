@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsResponse
-import org.matrix.android.sdk.api.session.room.model.thirdparty.ThirdPartyProtocol
 import org.matrix.android.sdk.api.util.Cancelable
 
 /**
@@ -34,12 +33,6 @@ interface RoomDirectoryService {
     fun getPublicRooms(server: String?,
                        publicRoomsParams: PublicRoomsParams,
                        callback: MatrixCallback<PublicRoomsResponse>): Cancelable
-
-    /**
-     * Fetches the overall metadata about protocols supported by the homeserver.
-     * Includes both the available protocols and all fields required for queries against each protocol.
-     */
-    fun getThirdPartyProtocol(callback: MatrixCallback<Map<String, ThirdPartyProtocol>>): Cancelable
 
     /**
      * Get the visibility of a room in the directory

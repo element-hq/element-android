@@ -30,9 +30,8 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
-import org.matrix.android.sdk.internal.database.helper.addOrUpdate
+import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
-import org.matrix.android.sdk.internal.database.helper.deleteOnCascade
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -40,6 +39,7 @@ import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
+import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
@@ -48,6 +48,7 @@ import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
 import org.matrix.android.sdk.internal.session.mapWithProgress
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
@@ -175,7 +176,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     syncLocalTimestampMillis,
                     isInitialSync
             )
-            roomEntity.addOrUpdate(chunkEntity)
+            roomEntity.addIfNecessary(chunkEntity)
         }
         val hasRoomMember = roomSync.state?.events?.firstOrNull {
             it.type == EventType.STATE_ROOM_MEMBER
@@ -263,7 +264,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val leftMember = RoomMemberSummaryEntity.where(realm, roomId, userId).findFirst()
         val membership = leftMember?.membership ?: Membership.LEAVE
         roomEntity.membership = membership
-        roomEntity.chunks.deleteAllFromRealm()
+        roomEntity.chunks.clearWith { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
         roomTypingUsersHandler.handle(realm, roomId, null)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
         roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary, roomSync.unreadNotifications)
@@ -340,7 +341,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                         }
                     }
                     // Finally delete the local echo
-                    sendingEventEntity.deleteOnCascade()
+                    sendingEventEntity.deleteOnCascade(true)
                 } else {
                     Timber.v("Can't find corresponding local echo for tx:$it")
                 }

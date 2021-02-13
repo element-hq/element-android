@@ -101,8 +101,6 @@
     <string name="start_new_chat">Rozpocznij nową rozmowę</string>
     <string name="start_voice_call">Rozpocznij połączenie telefoniczne</string>
     <string name="start_video_call">Rozpocznij połączenie wideo</string>
-    <string name="resources_language">pl</string>
-    <string name="resources_country_code">PL</string>
     <string name="identity_url">Adres serwera tożsamości</string>
     <string name="option_send_files">Wyślij pliki</string>
     <string name="option_take_photo_video">Zrób zdjęcie lub film</string>
@@ -1172,7 +1170,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="settings_call_notifications_preferences">Konfiguruj powiadomienia połączeń</string>
     <string name="settings_system_preferences_summary">Wybierz kolor diody LED, wibrację, dźwięk…</string>
     <string name="settings_integrations">Integracje</string>
-    <string name="resources_script">Latn</string>
     <string name="auth_add_email_phone_message_2">Wprowadź adres e-mail, aby możliwe było odzyskiwanie konta. Opcjonalnie użyj adresu e-mail lub numeru telefonu aby móc zostać odkrytym przez znajomych.</string>
     <string name="auth_add_email_and_phone_message_2">Wprowadź adres e-mail, aby możliwe było odzyskiwanie konta. Opcjonalnie użyj adresu e-mail lub numeru telefonu aby móc zostać odkrytym przez znajomych.</string>
     <string name="settings_call_ringtone_use_default_stun">Pozwól na awaryjny serwer wspomagania połączeń</string>
@@ -1244,7 +1241,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="room_widget_permission_avatar_url">Adres URL awatara</string>
     <string name="room_widget_permission_user_id">Twój ID użytkownika</string>
     <string name="room_widget_permission_widget_id">ID Widżetu</string>
-    <string name="error_jitsi_not_supported_on_old_device">Przepraszamy, połączenia konferencyjne za pomocą Jitsi nie są wspierane na starszych urządzeniach (urządzenia z systemem Android poniżej wersji 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Przepraszamy, połączenia konferencyjne za pomocą Jitsi nie są wspierane na starszych urządzeniach (urządzenia z systemem Android poniżej wersji 6.0)</string>
     <string name="room_widget_resource_permission_title">Widżet chce użyć następujących zasobów:</string>
     <string name="room_widget_resource_decline_permission">Zablokuj wszystko</string>
     <string name="room_widget_webview_access_camera">Użyj aparatu</string>

@@ -80,7 +80,11 @@ interface Navigator {
 
     fun openRoomProfile(context: Context, roomId: String, directAccess: Int? = null)
 
-    fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem)
+    fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem) {
+        openBigImageViewer(activity, sharedElement, matrixItem.avatarUrl, matrixItem.getBestName())
+    }
+
+    fun openBigImageViewer(activity: Activity, sharedElement: View?, mxcUrl: String?, title: String?)
 
     fun openPinCode(context: Context,
                     activityResultLauncher: ActivityResultLauncher<Intent>,
@@ -113,4 +117,6 @@ interface Navigator {
                         options: ((MutableList<Pair<View, String>>) -> Unit)?)
 
     fun openSearch(context: Context, roomId: String)
+
+    fun openCallTransfer(context: Context, callId: String)
 }

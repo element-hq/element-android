@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">zh</string>
-    <string name="resources_country_code">TW</string>
     <string name="light_theme">淺色主題</string>
     <string name="dark_theme">深色主題</string>
     <string name="black_them">黑色主題</string>
@@ -1079,7 +1077,7 @@
     <string name="notification_new_invitation">新邀請</string>
     <string name="notification_sender_me">我</string>
     <string name="notification_inline_reply_failed">** 傳送失敗 - 請開啟聊天室</string>
-    <string name="error_jitsi_not_supported_on_old_device">抱歉，使用 Jitsi 建立會議通話在舊裝置上並不支援（Android 系統版本小於 5.0 的裝置）</string>
+    <string name="error_jitsi_not_supported_on_old_device">抱歉，使用 Jitsi 建立會議通話在舊裝置上並不支援（Android 系統版本小於 6.0 的裝置）</string>
     <string name="title_activity_verify_device">驗證工作階段</string>
     <string name="encryption_information_unknown_ip">未知的 IP</string>
     <string name="you_added_a_new_device_with_info">有新工作階段正在要求加密金鑰。
@@ -1354,7 +1352,6 @@
 \n
 \n請在下個彈出視窗中允許存取以讓您可以手動匯出您的金鑰。</string>
     <string name="no_network_indicator">目前沒有網路連線</string>
-    <string name="resources_script">Latn</string>
     <string name="settings_add_3pid_confirm_password_title">確認您的密碼</string>
     <string name="settings_add_3pid_flow_not_supported">您無法在行動裝置上的 Element 做這件事</string>
     <string name="settings_add_3pid_authentication_needed">需要驗證</string>
@@ -2278,4 +2275,11 @@
     <string name="room_settings_permissions_title">聊天室權限</string>
     <string name="room_participants_leave_private_warning">此聊天室不公開。沒有邀請，您將無法重新加入。</string>
     <string name="system_theme">系統預設值</string>
+    <string name="settings_show_emoji_keyboard_summary">在訊息編輯器上新增按鈕以開啟表情符號鍵盤</string>
+    <string name="settings_show_emoji_keyboard">顯示表情符號鍵盤</string>
+    <string name="authentication_error">驗證失敗</string>
+    <string name="re_authentication_default_confirm_text">Element 需要您輸入您的憑證來執行此動作。</string>
+    <string name="re_authentication_activity_title">需要重新驗證</string>
+    <string name="failed_to_initialize_cross_signing">未能設定交叉簽章</string>
+    <string name="error_unauthorized">未授權，缺少有效的身份驗證憑證</string>
 </resources>

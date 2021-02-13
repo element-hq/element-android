@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="resources_language">da</string>
-    <string name="resources_country_code">DK</string>
 
     <string name="light_theme">Lyst Tema</string>
     <string name="dark_theme">Mørkt Tema</string>

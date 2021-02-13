@@ -21,7 +21,7 @@ import im.vector.app.core.platform.VectorViewModelAction
 sealed class UserListAction : VectorViewModelAction {
     data class SearchUsers(val value: String) : UserListAction()
     object ClearSearchUsers : UserListAction()
-    data class SelectPendingInvitee(val pendingInvitee: PendingInvitee) : UserListAction()
-    data class RemovePendingInvitee(val pendingInvitee: PendingInvitee) : UserListAction()
+    data class AddPendingSelection(val pendingSelection: PendingSelection) : UserListAction()
+    data class RemovePendingSelection(val pendingSelection: PendingSelection) : UserListAction()
     object ComputeMatrixToLinkForSharing : UserListAction()
 }

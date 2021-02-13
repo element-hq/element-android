@@ -13,7 +13,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 16
+ext.versionPatch = 18
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -114,6 +114,9 @@ android {
         targetSdkVersion 30
         multiDexEnabled true
 
+        renderscriptTargetApi 24
+        renderscriptSupportModeEnabled true
+
         // `develop` branch will have version code from timestamp, to ensure each build from CI has a incremented versionCode.
         // Other branches (master, features, etc.) will have version code based on application version.
         versionCode project.getVersionCode()
@@ -210,7 +213,7 @@ android {
         }
 
         release {
-            resValue "string", "app_name", "Element (Riot.im)"
+            resValue "string", "app_name", "Element"
 
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
@@ -232,7 +235,7 @@ android {
     productFlavors {
         gplay {
             dimension "store"
-
+            isDefault = true
             versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
 
             resValue "bool", "isGplay", "true"
@@ -319,6 +322,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation "androidx.sharetarget:sharetarget:1.0.0"
     implementation 'androidx.core:core-ktx:1.3.2'
+    implementation "androidx.media:media:1.2.1"
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.7.0"
@@ -373,6 +377,7 @@ dependencies {
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.google.android:flexbox:1.1.1'
     implementation "androidx.autofill:autofill:$autofill_version"
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
 
     // Custom Tab
@@ -430,7 +435,10 @@ dependencies {
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('org.jitsi.react:jitsi-meet-sdk:2.9.3') { transitive = true }
+    implementation('com.facebook.react:react-native-webrtc:1.87.3-jitsi-6624067@aar')
+
+    // Jitsi
+    implementation('org.jitsi.react:jitsi-meet-sdk:3.1.0')
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
@@ -440,6 +448,8 @@ dependencies {
     // Emoji Keyboard
     implementation 'com.vanniktech:emoji-material:0.7.0'
     implementation 'com.vanniktech:emoji-google:0.7.0'
+
+    implementation 'im.dlg:android-dialer:1.2.5'
 
     // TESTS
     testImplementation 'junit:junit:4.13'

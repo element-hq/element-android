@@ -27,6 +27,7 @@ import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetCallControlsBinding
+import im.vector.app.features.call.audio.CallAudioManager
 
 import me.gujun.android.span.span
 
@@ -44,17 +45,31 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             renderState(it)
         }
 
-        views.callControlsSoundDevice.views.itemVerificationClickableZone.debouncedClicks {
+        views.callControlsSoundDevice.views.bottomSheetActionClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.SwitchSoundDevice)
         }
 
-        views.callControlsSwitchCamera.views.itemVerificationClickableZone.debouncedClicks {
+        views.callControlsSwitchCamera.views.bottomSheetActionClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleCamera)
             dismiss()
         }
 
-        views.callControlsToggleSDHD.views.itemVerificationClickableZone.debouncedClicks {
+        views.callControlsToggleSDHD.views.bottomSheetActionClickableZone.debouncedClicks {
             callViewModel.handle(VectorCallViewActions.ToggleHDSD)
+            dismiss()
+        }
+
+        views.callControlsToggleHoldResume.views.bottomSheetActionClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.ToggleHoldResume)
+            dismiss()
+        }
+
+        views.callControlsOpenDialPad.views.bottomSheetActionClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.OpenDialPad)
+        }
+
+        views.callControlsTransfer.views.bottomSheetActionClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.InitiateCallTransfer)
             dismiss()
         }
 
@@ -69,22 +84,22 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
         }
     }
 
-    private fun showSoundDeviceChooser(available: List<CallAudioManager.SoundDevice>, current: CallAudioManager.SoundDevice) {
+    private fun showSoundDeviceChooser(available: Set<CallAudioManager.Device>, current: CallAudioManager.Device) {
         val soundDevices = available.map {
             when (it) {
-                CallAudioManager.SoundDevice.WIRELESS_HEADSET -> span {
+                CallAudioManager.Device.WIRELESS_HEADSET -> span {
                     text = getString(R.string.sound_device_wireless_headset)
                     textStyle = if (current == it) "bold" else "normal"
                 }
-                CallAudioManager.SoundDevice.PHONE            -> span {
+                CallAudioManager.Device.PHONE            -> span {
                     text = getString(R.string.sound_device_phone)
                     textStyle = if (current == it) "bold" else "normal"
                 }
-                CallAudioManager.SoundDevice.SPEAKER          -> span {
+                CallAudioManager.Device.SPEAKER          -> span {
                     text = getString(R.string.sound_device_speaker)
                     textStyle = if (current == it) "bold" else "normal"
                 }
-                CallAudioManager.SoundDevice.HEADSET          -> span {
+                CallAudioManager.Device.HEADSET          -> span {
                     text = getString(R.string.sound_device_headset)
                     textStyle = if (current == it) "bold" else "normal"
                 }
@@ -95,17 +110,17 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
                     d.cancel()
                     when (soundDevices[n].toString()) {
                         // TODO Make an adapter and handle multiple Bluetooth headsets. Also do not use translations.
-                        getString(R.string.sound_device_phone)            -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.PHONE))
+                        getString(R.string.sound_device_phone) -> {
+                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.PHONE))
                         }
-                        getString(R.string.sound_device_speaker)          -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.SPEAKER))
+                        getString(R.string.sound_device_speaker) -> {
+                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.SPEAKER))
                         }
-                        getString(R.string.sound_device_headset)          -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.HEADSET))
+                        getString(R.string.sound_device_headset) -> {
+                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.HEADSET))
                         }
                         getString(R.string.sound_device_wireless_headset) -> {
-                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.SoundDevice.WIRELESS_HEADSET))
+                            callViewModel.handle(VectorCallViewActions.ChangeAudioDevice(CallAudioManager.Device.WIRELESS_HEADSET))
                         }
                     }
                 }
@@ -115,11 +130,11 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
 
     private fun renderState(state: VectorCallViewState) {
         views.callControlsSoundDevice.title = getString(R.string.call_select_sound_device)
-        views.callControlsSoundDevice.subTitle = when (state.soundDevice) {
-            CallAudioManager.SoundDevice.PHONE            -> getString(R.string.sound_device_phone)
-            CallAudioManager.SoundDevice.SPEAKER          -> getString(R.string.sound_device_speaker)
-            CallAudioManager.SoundDevice.HEADSET          -> getString(R.string.sound_device_headset)
-            CallAudioManager.SoundDevice.WIRELESS_HEADSET -> getString(R.string.sound_device_wireless_headset)
+        views.callControlsSoundDevice.subTitle = when (state.device) {
+            CallAudioManager.Device.PHONE            -> getString(R.string.sound_device_phone)
+            CallAudioManager.Device.SPEAKER          -> getString(R.string.sound_device_speaker)
+            CallAudioManager.Device.HEADSET          -> getString(R.string.sound_device_headset)
+            CallAudioManager.Device.WIRELESS_HEADSET -> getString(R.string.sound_device_wireless_headset)
         }
 
         views.callControlsSwitchCamera.isVisible = state.isVideoCall && state.canSwitchCamera
@@ -139,5 +154,15 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
         } else {
             views.callControlsToggleSDHD.isVisible = false
         }
+        if (state.isRemoteOnHold) {
+            views.callControlsToggleHoldResume.title = getString(R.string.call_resume_action)
+            views.callControlsToggleHoldResume.subTitle = null
+            views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_resume_action)
+        } else {
+            views.callControlsToggleHoldResume.title = getString(R.string.call_hold_action)
+            views.callControlsToggleHoldResume.subTitle = null
+            views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_hold_action)
+        }
+        views.callControlsTransfer.isVisible = state.canOpponentBeTransferred
     }
 }

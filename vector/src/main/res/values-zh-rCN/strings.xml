@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- use to retrieve the supported languages list -->
-    <!-- should the same value as the file name -->
-    <string name="resources_language">zh</string>
-    <string name="resources_country_code">CN</string>
     <string name="call_notification_answer">接受</string>
     <string name="call_notification_reject">拒绝</string>
     <string name="call_notification_hangup">挂断</string>
@@ -1089,7 +1085,7 @@
     <string name="notification_new_invitation">新邀请</string>
     <string name="notification_sender_me">我</string>
     <string name="notification_inline_reply_failed">** 发送失败 - 请打开聊天室</string>
-    <string name="error_jitsi_not_supported_on_old_device">抱歉，旧设备（Android 系统版本低于 5.0）不支持使用 Jitsi 创建电话会议</string>
+    <string name="error_jitsi_not_supported_on_old_device">抱歉，旧设备（Android 系统版本低于 6.0）不支持使用 Jitsi 创建电话会议</string>
     <string name="title_activity_verify_device">验证会话</string>
     <string name="encryption_information_unknown_ip">未知 IP</string>
     <string name="you_added_a_new_device_with_info">一个新设备正在请求加密密钥。
@@ -1173,7 +1169,6 @@
     <string name="decline">拒绝</string>
     <string name="people_no_identity_server">没有设置身份服务器。</string>
     <string name="call_failed_no_ice_title">服务器的错误配置导致通话失败</string>
-    <string name="resources_script">Hans</string>
     <string name="call_failed_no_ice_description">请要求您的家庭服务器 (%1$s) 的管理员配置 TURN 服务器，以使通话可靠地工作。
 \n
 \n或者，您可以尝试使用 %2$s 的公共服务器，但这将不那么可靠，并且它将与该服务器共享您的 IP 地址。您也可以在“设置”中进行管理。</string>

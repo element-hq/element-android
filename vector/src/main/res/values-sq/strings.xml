@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">sq</string>
-    <string name="resources_country_code">SQ</string>
     <string name="light_theme">Temë e Çelët</string>
     <string name="dark_theme">Temë e Errët</string>
     <string name="black_them">Temë e Zezë</string>
@@ -1096,7 +1094,7 @@
     <string name="notification_new_invitation">Ftesë e Re</string>
     <string name="notification_sender_me">Unë</string>
     <string name="notification_inline_reply_failed">** S’u arrit të dërgohej - ju lutemi, hapni dhomë</string>
-    <string name="error_jitsi_not_supported_on_old_device">Na ndjeni, thirrjet konferencë me Jitsi-n nuk mbulohen në pajisje të vjetra (pajisje me Android OS nën 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Na ndjeni, thirrjet konferencë me Jitsi-n nuk mbulohen në pajisje të vjetra (pajisje me Android OS nën 6.0)</string>
     <string name="title_activity_verify_device">Verifiko sesion</string>
     <string name="encryption_information_unknown_ip">ip e panjohur</string>
     <string name="you_added_a_new_device_with_info">Një sesion i ri po kërkon emër kyçe fshehtëzimi.
@@ -1315,7 +1313,6 @@
     <string name="settings_text_message_sent">Te %s u dërgua një mesazh tekst. Ju lutemi, jepni kodin e verifikimit që përmban ai.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Hëpërhë, ndani me të tjerë adresa email ose numra telefoni te shërbyesi i identiteteve %1$s. Do të duhet të rilidheni me %2$s që të ndalni ndarjen e tyre.</string>
     <string name="settings_agree_to_terms">Që të lejoni veten të jetë e zbulueshme nga adresë email apo numër telefoni, pajtohuni me Kushtet e Shërbimit të shërbyesit të identiteteve (%s).</string>
-    <string name="resources_script">Latn</string>
     <string name="settings_discovery_category">Zbulim</string>
     <string name="labs_allow_extended_logging">Aktivizo regjistra fjalamanë.</string>
     <string name="labs_allow_extended_logging_summary">Regjistrat fjalamanë do t’i ndihmojnë zhvilluesit duke furnizuar më tepër regjistrim kur dërgoni një RageShake. Edhe kur është e aktivizuar kjo, aplikimi nuk regjistron lëndë mesazhesh apo çfarëdo të dhëne tjetër private.</string>

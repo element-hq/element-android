@@ -49,8 +49,10 @@ internal class QueueMemento @Inject constructor(context: Context,
     }
 
     fun unTrack(task: QueuedTask) {
-        managedTaskInfos.remove(task)
-        persist()
+        synchronized(managedTaskInfos) {
+            managedTaskInfos.remove(task)
+            persist()
+        }
     }
 
     private fun persist() {
@@ -64,19 +66,17 @@ internal class QueueMemento @Inject constructor(context: Context,
     }
 
     private fun toTaskInfo(task: QueuedTask, order: Int): TaskInfo? {
-        synchronized(managedTaskInfos) {
-            return when (task) {
-                is SendEventQueuedTask -> SendEventTaskInfo(
-                        localEchoId = task.event.eventId ?: "",
-                        encrypt = task.encrypt,
-                        order = order
-                )
-                is RedactQueuedTask    -> RedactEventTaskInfo(
-                        redactionLocalEcho = task.redactionLocalEchoId,
-                        order = order
-                )
-                else                   -> null
-            }
+        return when (task) {
+            is SendEventQueuedTask -> SendEventTaskInfo(
+                    localEchoId = task.event.eventId ?: "",
+                    encrypt = task.encrypt,
+                    order = order
+            )
+            is RedactQueuedTask -> RedactEventTaskInfo(
+                    redactionLocalEcho = task.redactionLocalEchoId,
+                    order = order
+            )
+            else                   -> null
         }
     }
 
@@ -90,7 +90,7 @@ internal class QueueMemento @Inject constructor(context: Context,
                 ?.forEach { info ->
                     try {
                         when (info) {
-                            is SendEventTaskInfo   -> {
+                            is SendEventTaskInfo -> {
                                 localEchoRepository.getUpToDateEcho(info.localEchoId)?.let {
                                     if (it.sendState.isSending() && it.eventId != null && it.roomId != null) {
                                         localEchoRepository.updateSendState(it.eventId, it.roomId, SendState.UNSENT)

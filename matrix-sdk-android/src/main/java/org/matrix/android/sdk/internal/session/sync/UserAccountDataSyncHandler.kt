@@ -16,8 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
-import com.squareup.moshi.Moshi
 import com.zhuinden.monarchy.Monarchy
+import io.realm.Realm
+import io.realm.RealmList
+import io.realm.kotlin.where
 import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
 import org.matrix.android.sdk.api.pushrules.rest.GetPushRulesResponse
@@ -37,6 +39,7 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntity
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntityFields
+import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.query.getDirectRooms
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
@@ -50,9 +53,6 @@ import org.matrix.android.sdk.internal.session.sync.model.accountdata.IgnoredUse
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.UserAccountDataSync
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
-import io.realm.Realm
-import io.realm.RealmList
-import io.realm.kotlin.where
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -60,7 +60,6 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         @UserId private val userId: String,
         private val directChatsHelper: DirectChatsHelper,
-        private val moshi: Moshi,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask) {
 
     fun handle(realm: Realm, accountData: UserAccountDataSync?) {
@@ -113,7 +112,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         val pushRules = event.content.toModel<GetPushRulesResponse>() ?: return
         realm.where(PushRulesEntity::class.java)
                 .findAll()
-                .deleteAllFromRealm()
+                .forEach { it.deleteOnCascade() }
 
         // Save only global rules for the moment
         val globalRules = pushRules.global

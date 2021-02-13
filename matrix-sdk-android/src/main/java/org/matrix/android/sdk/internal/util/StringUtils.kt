@@ -71,3 +71,10 @@ fun String.caseInsensitiveFind(subString: String): Boolean {
 
     return false
 }
+
+internal val spaceChars = "[\u00A0\u2000-\u200B\u2800\u3000]".toRegex()
+
+/**
+ * Strip all the UTF-8 chars which are actually spaces
+ */
+internal fun String.replaceSpaceChars() = replace(spaceChars, "")

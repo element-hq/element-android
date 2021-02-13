@@ -277,8 +277,23 @@ class UiAllScreensSanityTest {
 
         assertDisplayed(R.id.roomProfileAvatarView)
 
-        // Leave
+        // Room addresses
         clickListItem(R.id.matrixProfileRecyclerView, 13)
+        onView(isRoot()).perform(waitForView(withText(R.string.room_alias_published_alias_title)))
+        pressBack()
+
+        // Room permissions
+        clickListItem(R.id.matrixProfileRecyclerView, 15)
+        onView(isRoot()).perform(waitForView(withText(R.string.room_permissions_title)))
+        clickOn(R.string.room_permissions_change_room_avatar)
+        clickDialogNegativeButton()
+        // Toggle
+        clickOn(R.string.show_advanced)
+        clickOn(R.string.hide_advanced)
+        pressBack()
+
+        // Leave
+        clickListItem(R.id.matrixProfileRecyclerView, 17)
         clickDialogNegativeButton()
 
         // Menu share
@@ -289,27 +304,12 @@ class UiAllScreensSanityTest {
     }
 
     private fun navigateToRoomParameters() {
-        // Room addresses
-        clickListItem(R.id.roomSettingsRecyclerView, 4)
-        onView(isRoot()).perform(waitForView(withText(R.string.room_alias_published_alias_title)))
-        pressBack()
-
-        // Room permissions
-        clickListItem(R.id.roomSettingsRecyclerView, 6)
-        onView(isRoot()).perform(waitForView(withText(R.string.room_permissions_title)))
-        clickOn(R.string.room_permissions_change_room_avatar)
-        clickDialogNegativeButton()
-        // Toggle
-        clickOn(R.string.show_advanced)
-        clickOn(R.string.hide_advanced)
-        pressBack()
-
         // Room history readability
-        clickListItem(R.id.roomSettingsRecyclerView, 8)
+        clickListItem(R.id.roomSettingsRecyclerView, 4)
         pressBack()
 
         // Room access
-        clickListItem(R.id.roomSettingsRecyclerView, 10)
+        clickListItem(R.id.roomSettingsRecyclerView, 6)
         pressBack()
     }
 

@@ -22,9 +22,8 @@ import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.databinding.ViewCallControlsBinding
-
 import org.matrix.android.sdk.api.session.call.CallState
-import org.webrtc.PeerConnection
+import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 
 class CallControlsView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -36,16 +35,15 @@ class CallControlsView @JvmOverloads constructor(
 
     init {
         inflate(context, R.layout.view_call_controls, this)
-        // layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         views = ViewCallControlsBinding.bind(this)
 
         views.ringingControlAccept.setOnClickListener { acceptIncomingCall() }
         views.ringingControlDecline.setOnClickListener { declineIncomingCall() }
-        views.ivEndCall.setOnClickListener { endOngoingCall() }
+        views.endCallIcon.setOnClickListener { endOngoingCall() }
         views.muteIcon.setOnClickListener { toggleMute() }
         views.videoToggleIcon.setOnClickListener { toggleVideo() }
-        views.ivLeftMiniControl.setOnClickListener { returnToChat() }
-        views.ivMore.setOnClickListener { moreControlOption() }
+        views.openChatIcon.setOnClickListener { returnToChat() }
+        views.moreIcon.setOnClickListener { moreControlOption() }
     }
 
     private fun acceptIncomingCall() {
@@ -109,7 +107,7 @@ class CallControlsView @JvmOverloads constructor(
                 views.connectedControls.isVisible = false
             }
             is CallState.Connected    -> {
-                if (callState.iceConnectionState == PeerConnection.PeerConnectionState.CONNECTED) {
+                if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     views.ringingControls.isVisible = false
                     views.connectedControls.isVisible = true
                     views.videoToggleIcon.isVisible = state.isVideoCall

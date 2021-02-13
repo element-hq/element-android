@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">et</string>
-    <string name="resources_country_code">EE</string>
-    <string name="resources_script">Latn</string>
     <string name="light_theme">Hele teema</string>
     <string name="dark_theme">Tume teema</string>
     <string name="black_them">Must teema</string>
@@ -1023,7 +1020,7 @@
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="historical_placeholder">Otsi ajaloost</string>
-    <string name="error_jitsi_not_supported_on_old_device">Vabandust, aga rühmakõned Jitsi vahendusel ei ole vanades seadmetes toetatud (Androidi versioon alla 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Vabandust, aga rühmakõned Jitsi vahendusel ei ole vanades seadmetes toetatud (Androidi versioon alla 6.0)</string>
     <string name="room_widget_resource_permission_title">See vidin soovib kasutada järgmisi andmeid:</string>
     <string name="room_widget_resource_grant_permission">Luba</string>
     <string name="room_widget_resource_decline_permission">Ära luba mitte midagi</string>
@@ -2279,4 +2276,48 @@
     <string name="room_settings_room_read_history_dialog_subtitle">Kui muudad seda, kes saavad selle jututoa ajalugu lugeda, siis kehtib see vaid tulevaste sõnumite kohta. Senise ajaloo nähtavus sellega ei muutu.</string>
     <string name="action_unpublish">Tühista avaldamine</string>
     <string name="action_add">Lisa</string>
+    <string name="default_message_emote_snow">saadab lumesaju ❄️</string>
+    <string name="default_message_emote_confetti">saadab serpentiine 🎉</string>
+    <string name="command_snow">Saadab antud sõnumi koos lumesajuga</string>
+    <string name="command_confetti">Lisab sellele sõnumile serpentiine</string>
+    <string name="login_clear_homeserver_history">Kustuta ajalugu</string>
+    <string name="login_social_sso">ühekordne sisselogimine</string>
+    <string name="login_social_signin_with">Logi sisse kasutades %s teenust</string>
+    <string name="login_social_signup_with">Loo konto kasutades %s teenust</string>
+    <string name="login_social_continue_with">Jätka kasutades %s teenust</string>
+    <string name="login_social_continue">või</string>
+    <string name="settings_show_emoji_keyboard_summary">Lisa sõnumivormile nupp emoji klahvistiku avamiseks</string>
+    <string name="settings_show_emoji_keyboard">Näita emoji klahvistikku</string>
+    <string name="settings_chat_effects_description">Kasuta /confetti käsku või saada sõnum, milles leidub ❄️ või 🎉</string>
+    <string name="settings_chat_effects_title">Näita vestlustes efekte</string>
+    <string name="room_permissions_change_topic">Muuda teemat</string>
+    <string name="room_permissions_upgrade_the_room">Uuenda jututuba uue versioonini</string>
+    <string name="room_permissions_send_m_room_server_acl_events">Saada m.room.server_acl sündmusi</string>
+    <string name="room_permissions_change_permissions">Muuda õigusi</string>
+    <string name="room_permissions_change_room_name">Muuda jututoa nime</string>
+    <string name="room_permissions_change_history_visibility">Muuda vestlusajaloo nähtavust</string>
+    <string name="room_permissions_enable_room_encryption">Võta jututoas kasutusele krüptimine</string>
+    <string name="room_permissions_change_main_address_for_the_room">Muuda jututoa põhiaadressi</string>
+    <string name="room_permissions_change_room_avatar">Muuda jututoa profiilipilti ehk avatari</string>
+    <string name="room_permissions_modify_widgets">Muuda vidinaid</string>
+    <string name="room_permissions_notify_everyone">Teavita kõiki</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Kustuta teiste saadetud sõnumid</string>
+    <string name="room_permissions_ban_users">Määra kasutajatele suhtluskeeld</string>
+    <string name="room_permissions_kick_users">Müksa kasutajaid välja</string>
+    <string name="room_permissions_change_settings">Muuda seadistusi</string>
+    <string name="room_permissions_invite_users">Kutsu kasutajaid</string>
+    <string name="room_permissions_send_messages">Saada sõnumeid</string>
+    <string name="room_permissions_default_role">Vaikimisi roll</string>
+    <string name="room_permissions_notice_read_only">Sul pole õigust uuenda rolle, mis on vajalikud jututoa eri osade muutmiseks</string>
+    <string name="room_permissions_notice">Vali rollid, mis on vajalikud jututoa eri osade muutmiseks</string>
+    <string name="room_permissions_title">Õigused</string>
+    <string name="room_settings_permissions_subtitle">Vaata ja uuenda rolle, mis on vajalikud jututoa eri osade muutmiseks.</string>
+    <string name="room_settings_permissions_title">Õigused jututoas</string>
+    <string name="room_participants_leave_private_warning">See ei ole avalik jututuba. Ilma kutseta sa ei saa uuesti liituda.</string>
+    <string name="system_theme">Süsteemi vaikeseadistused</string>
+    <string name="authentication_error">Autentimine ei õnnestunud</string>
+    <string name="re_authentication_default_confirm_text">Selle tegevuse jaoks palub Element sul sisestada oma kasutajanime ja salasõna.</string>
+    <string name="re_authentication_activity_title">Palun korda autentimist</string>
+    <string name="failed_to_initialize_cross_signing">Risttunnustamise alustamine ei õnnestunud</string>
+    <string name="error_unauthorized">Volitused puuduvad, kasutajakonto ja/või salasõna on valed</string>
 </resources>

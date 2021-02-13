@@ -19,9 +19,11 @@ package im.vector.app.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.View
 import android.view.Window
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
@@ -34,6 +36,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
+import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
@@ -73,7 +76,6 @@ import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryDat
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -256,14 +258,13 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(RoomProfileActivity.newIntent(context, roomId, directAccess))
     }
 
-    override fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem) {
-        matrixItem.avatarUrl
+    override fun openBigImageViewer(activity: Activity, sharedElement: View?, mxcUrl: String?, title: String?) {
+        mxcUrl
                 ?.takeIf { it.isNotBlank() }
                 ?.let { avatarUrl ->
-                    val intent = BigImageViewerActivity.newIntent(activity, matrixItem.getBestName(), avatarUrl)
+                    val intent = BigImageViewerActivity.newIntent(activity, title, avatarUrl)
                     val options = sharedElement?.let {
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it)
-                                ?: "")
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
                     }
                     activity.startActivity(intent, options?.toBundle())
                 }
@@ -299,8 +300,17 @@ class DefaultNavigator @Inject constructor(
 
     override fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>?) {
         if (widget.type is WidgetType.Jitsi) {
-            val enableVideo = options?.get(JitsiCallViewModel.ENABLE_VIDEO_OPTION) == true
-            context.startActivity(VectorJitsiActivity.newIntent(context, roomId = roomId, widgetId = widget.widgetId, enableVideo = enableVideo))
+            // Jitsi SDK is now for API 23+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                AlertDialog.Builder(context)
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(R.string.error_jitsi_not_supported_on_old_device)
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
+            } else {
+                val enableVideo = options?.get(JitsiCallViewModel.ENABLE_VIDEO_OPTION) == true
+                context.startActivity(VectorJitsiActivity.newIntent(context, roomId = roomId, widgetId = widget.widgetId, enableVideo = enableVideo))
+            }
         } else {
             val widgetArgs = widgetArgsBuilder.buildRoomWidgetArgs(roomId, widget)
             context.startActivity(WidgetActivity.newIntent(context, widgetArgs))
@@ -344,6 +354,11 @@ class DefaultNavigator @Inject constructor(
 
     override fun openSearch(context: Context, roomId: String) {
         val intent = SearchActivity.newIntent(context, SearchArgs(roomId))
+        context.startActivity(intent)
+    }
+
+    override fun openCallTransfer(context: Context, callId: String) {
+        val intent = CallTransferActivity.newIntent(context, callId)
         context.startActivity(intent)
     }
 

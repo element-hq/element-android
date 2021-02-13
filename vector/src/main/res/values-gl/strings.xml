@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="resources_language">gl</string>
-    <string name="resources_country_code">ES</string>
-    <string name="light_theme">Tema claro</string>
-    <string name="dark_theme">Tema escuro</string>
-    <string name="black_them">Tema negro</string>
+    <string name="light_theme">Decorado claro</string>
+    <string name="dark_theme">Decorado escuro</string>
+    <string name="black_them">Decorado negro</string>
     <string name="notification_sync_in_progress">Sincronizando…</string>
     <string name="notification_noisy_notifications">Notificacións con son</string>
     <string name="notification_silent_notifications">Notificacións silenciosas</string>
@@ -565,4 +563,10 @@
     <string name="dialog_user_consent_content">Para continuar usando o servidor %1$s ten que revisar primeiro os seus termos e condicións.</string>
     <string name="deactivate_account_delete_checkbox">Esquezan todas as mensaxes que eu enviara no momento en que elimine a miña conta. (Aviso: iso suporá que os seguintes participantes só verán unha versión incompleta das conversas.)</string>
     <string name="error_empty_field_your_password">Introduza o seu contrasinal.</string>
+    <string name="title_activity_verify_device">Verificar sesión</string>
+    <string name="title_activity_keys_backup_restore">Usar copia da Chave</string>
+    <string name="title_activity_keys_backup_setup">Copia de apoio da chave</string>
+    <string name="notification_sync_init">Iniciando o servizo</string>
+    <string name="status_theme">Decorado Status.im</string>
+    <string name="system_theme">Por defecto no sistema</string>
 </resources>

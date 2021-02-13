@@ -1,21 +1,24 @@
-Changes in Element 1.0.16 (2020-XX-XX)
+Changes in Element 1.0.18 (2021-XX-XX)
 ===================================================
 
 Features ✨:
  - Allow changing nick colors (#2610)
- -
-
+ - VoIP : support for VoIP V1 protocol, transfer call and dial-pad
+                                
 Improvements 🙌:
- -
+ - VoIP : new tiles in timeline
+ - Improve room profile UX
+ - Upgrade Jitsi library from 2.9.3 to 3.1.0
 
 Bugfix 🐛:
- -
+ - VoIP : fix audio devices output
+ - Fix crash after initial sync on Dendrite
 
 Translations 🗣:
  -
 
 SDK API changes ⚠️:
- -
+ - 
 
 Build 🧱:
  -
@@ -24,9 +27,37 @@ Test:
  -
 
 Other changes:
- -
+ - Fix typos in CHANGES.md (#2811)
 
-Changes in Element 1.0.15 (2020-02-03)
+Changes in Element 1.0.17 (2021-02-09)
+===================================================
+
+Improvements 🙌:
+ - Create a WidgetItemFactory and use it for better rendering of Jitsi widget change (video conference)
+ - Open image from URL Preview (#2705)
+
+Bugfix 🐛:
+ - Bug in WidgetContent.computeURL() (#2767)
+ - Duplicate thumbs | Mobile reactions for 👍 and 👎 are not the same as web (#2776)
+ - Join room by alias other federation error (#2778)
+ - HTML unescaping for URL preview (#2766)
+ - URL preview on reply fallback (#2756)
+ - RTL: some arrows should be rotated in RTL (#2757)
+ - Properly delete objects from Realm DB (#2765)
+
+Build 🧱:
+ - Upgrade build tools
+
+Other changes:
+ - Change app name from "Element (Riot.im)" to "Element"
+
+Changes in Element 1.0.16 (2021-02-04)
+===================================================
+
+Bugfix 🐛:
+ - Fix crash on API < 30 and light theme (#2774)
+
+Changes in Element 1.0.15 (2021-02-03)
 ===================================================
 
 Features ✨:
@@ -46,6 +77,7 @@ Bugfix 🐛:
  - Widgets: Support $matrix_widget_id parameter (#2748)
  - Data for Worker overload (#2721)
  - Fix multiple tasks
+ - Object deletion in database is not complete (#2759)
 
 SDK API changes ⚠️:
  - Increase targetSdkVersion to 30 (#2600)
@@ -56,7 +88,7 @@ Build 🧱:
 Other changes:
  - Update Dagger to 2.31 version so we can use the embedded AssistedInject feature 
 
-Changes in Element 1.0.14 (2020-01-15)
+Changes in Element 1.0.14 (2021-01-15)
 ===================================================
 
 Features ✨:
@@ -1168,7 +1200,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in Element 1.X.X (2020-XX-XX)
+Changes in Element 1.X.X (2021-XX-XX)
 ===================================================
 
 Features ✨:

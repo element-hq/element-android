@@ -17,10 +17,18 @@
 package im.vector.app.core.extensions
 
 // Create a new Set including the provided element if not already present, or removing the element if already present
-fun <T> Set<T>.toggle(element: T): Set<T> {
+fun <T> Set<T>.toggle(element: T, singleElement: Boolean = false): Set<T> {
     return if (contains(element)) {
-        minus(element)
+        if (singleElement) {
+            emptySet()
+        } else {
+            minus(element)
+        }
     } else {
-        plus(element)
+        if (singleElement) {
+            setOf(element)
+        } else {
+            plus(element)
+        }
     }
 }

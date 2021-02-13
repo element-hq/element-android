@@ -57,6 +57,11 @@ interface WidgetService {
     ): List<Widget>
 
     /**
+     * Return the computed URL of a widget
+     */
+    fun getWidgetComputedUrl(widget: Widget, isLightTheme: Boolean): String?
+
+    /**
      * Returns the live room widgets so you can listen to them.
      * Some widgets can be deactivated, so be sure to check for isActive.
      *
@@ -97,10 +102,11 @@ interface WidgetService {
     ): LiveData<List<Widget>>
 
     /**
-     * Creates a new widget in a room. It makes sure you have the rights to handle this.
+     * Creates and send a new widget in a room. It makes sure you have the rights to handle this.
      *
-     * @param roomId: the room where you want to deactivate the widget.
-     * @param widgetId: the widget to deactivate.
+     * @param roomId the room where you want to create the widget.
+     * @param widgetId the widget to create.
+     * @param content the content of the widget
      * @param callback the matrix callback to listen for result.
      * @return Cancelable
      */

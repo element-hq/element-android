@@ -30,6 +30,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.LoadingItem_
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.extensions.nextOrNull
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.home.room.detail.UnreadState
@@ -43,6 +44,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisi
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.BaseEventItem
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
+import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
@@ -73,6 +75,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
                                                   private val session: Session,
+                                                  private val callManager: WebRtcCallManager,
                                                   @TimelineEventControllerHandler
                                                   private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
@@ -99,6 +102,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         // TODO move all callbacks to this?
         fun onTimelineItemAction(itemAction: RoomDetailAction)
 
+        // Introduce ViewModel scoped component (or Hilt?)
         fun getPreviewUrlRetriever(): PreviewUrlRetriever
     }
 
@@ -130,6 +134,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     interface PreviewUrlCallback {
         fun onPreviewUrlClicked(url: String)
         fun onPreviewUrlCloseClicked(eventId: String, url: String)
+        fun onPreviewUrlImageClicked(sharedView: View?, mxcUrl: String?, title: String?)
     }
 
     // Map eventId to adapter position
@@ -198,10 +203,27 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     override fun intercept(models: MutableList<EpoxyModel<*>>) = synchronized(modelCache) {
         positionOfReadMarker = null
         adapterPositionMapping.clear()
-        models.forEachIndexed { index, epoxyModel ->
+        val callIds = mutableSetOf<String>()
+        val modelsIterator = models.listIterator()
+        val showHiddenEvents = vectorPreferences.shouldShowHiddenEvents()
+        modelsIterator.withIndex().forEach {
+            val index = it.index
+            val epoxyModel = it.value
+            if (epoxyModel is CallTileTimelineItem) {
+                val callId = epoxyModel.attributes.callId
+                // We should remove the call tile if we already have one for this call or
+                // if this is an active call tile without an actual call (which can happen with permalink)
+                val shouldRemoveCallItem = callIds.contains(callId)
+                        || (!callManager.getAdvertisedCalls().contains(callId) && epoxyModel.attributes.callStatus.isActive())
+                if (shouldRemoveCallItem && !showHiddenEvents) {
+                    modelsIterator.remove()
+                    return@forEach
+                }
+                callIds.add(callId)
+            }
             if (epoxyModel is BaseEventItem) {
-                epoxyModel.getEventIds().forEach {
-                    adapterPositionMapping[it] = index
+                epoxyModel.getEventIds().forEach { eventId ->
+                    adapterPositionMapping[eventId] = index
                 }
             }
         }
