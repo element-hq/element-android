@@ -2387,4 +2387,32 @@
     <string name="settings_export_trail">Exporta informe</string>
     <string name="verify_cannot_cross_sign">Aquesta sessió no pot compartir la verificació amb les teves altres sessions.
 \nLa verificació es desarà localment i es compartirà més endavant en noves versions de l\'aplicació.</string>
+    <string name="call_transfer_users_tab_title">Usuaris</string>
+    <string name="call_transfer_failure">S\'ha produït un error al transferir la trucada</string>
+    <string name="call_transfer_title">Transferència</string>
+    <string name="call_transfer_connect_action">Connecta</string>
+    <string name="call_transfer_consult_first">Consulta primer</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">1 trucada activa (%1$s) · 1 trucada en pausa</item>
+        <item quantity="other">1 trucada activa (%1$s) · %2$d trucades en pausa</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="one">Trucada en pausa</item>
+        <item quantity="other">%1$d trucades en pausa</item>
+    </plurals>
+    <string name="call_only_active">Trucada activa (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">S\'ha produït un error al cercar el número de telèfon</string>
+    <string name="call_dial_pad_title">Teclat</string>
+    <string name="call_tile_call_back">Torna la trucada</string>
+    <string name="call_tile_ended">La trucada ha finalitzat</string>
+    <string name="call_tile_other_declined">%1$s ha rebutjat la trucada</string>
+    <string name="call_tile_you_declined">Has rebutjat la trucada %1$s</string>
+    <string name="call_tile_in_call">Ets dins aquesta trucada</string>
+    <string name="call_tile_other_started_call">%1$s ha iniciat la trucada</string>
+    <string name="call_tile_you_started_call">Has iniciat la trucada</string>
+    <string name="call_held_by_you">Has posat la trucada en espera</string>
+    <string name="call_hold_action">Posa en espera</string>
+    <string name="call_held_by_user">%s ha posat la trucada en espera</string>
+    <string name="call_resume_action">Continua</string>
+    <string name="action_return">Torna</string>
 </resources>
