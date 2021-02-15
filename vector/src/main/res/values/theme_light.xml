@@ -6,9 +6,7 @@
     <style name="AppTheme.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Riotx attribute for palette -->
         <item name="riotx_background">@color/riotx_background_light</item>
-        <item name="riotx_base">@color/riotx_base_light</item>
-        <item name="riotx_base_text_icon_primary">@color/riotx_base_text_icon_primary_light</item>
-        <item name="riotx_base_text_icon_secondary">@color/riotx_base_text_icon_secondary_light</item>
+        <item name="vctr_home_drawer_header_background">@color/vctr_home_drawer_header_background_light</item>
         <item name="riotx_search_background_mobile">@color/riotx_search_background_mobile_light</item>
         <item name="riotx_header_panel_background">@color/riotx_header_panel_background_light</item>
         <item name="riotx_header_panel_border_mobile">@color/riotx_header_panel_border_mobile_light</item>
