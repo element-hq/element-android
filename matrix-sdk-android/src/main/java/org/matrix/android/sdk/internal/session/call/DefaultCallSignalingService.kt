@@ -16,16 +16,12 @@
 
 package org.matrix.android.sdk.internal.session.call
 
-import kotlinx.coroutines.Dispatchers
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.call.CallListener
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.call.MxCall
+import org.matrix.android.sdk.api.session.call.PSTNProtocolChecker
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
-import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.session.SessionScope
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.launchToCallback
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,14 +30,16 @@ internal class DefaultCallSignalingService @Inject constructor(
         private val callSignalingHandler: CallSignalingHandler,
         private val mxCallFactory: MxCallFactory,
         private val activeCallHandler: ActiveCallHandler,
-        private val taskExecutor: TaskExecutor,
-        private val turnServerDataSource: TurnServerDataSource
+        private val turnServerDataSource: TurnServerDataSource,
+        private val pstnProtocolChecker: PSTNProtocolChecker
 ) : CallSignalingService {
 
-    override fun getTurnServer(callback: MatrixCallback<TurnServerResponse>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(Dispatchers.Default, callback) {
-            turnServerDataSource.getTurnServer()
-        }
+    override suspend fun getTurnServer(): TurnServerResponse {
+        return turnServerDataSource.getTurnServer()
+    }
+
+    override fun getPSTNProtocolChecker(): PSTNProtocolChecker {
+        return pstnProtocolChecker
     }
 
     override fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall {
