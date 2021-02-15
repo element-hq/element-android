@@ -177,6 +177,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         // Inform the SDK that the room is displayed
         session.onRoomDisplayed(initialState.roomId)
         callManager.addPstnSupportListener(this)
+        callManager.checkForPSTNSupportIfNeeded()
         chatEffectManager.delegate = this
     }
 

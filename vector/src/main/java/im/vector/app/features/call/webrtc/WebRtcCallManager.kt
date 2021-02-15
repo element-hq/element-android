@@ -59,7 +59,8 @@ import javax.inject.Singleton
 @Singleton
 class WebRtcCallManager @Inject constructor(
         private val context: Context,
-        private val activeSessionDataSource: ActiveSessionDataSource
+        private val activeSessionDataSource: ActiveSessionDataSource,
+        private val pstnProtocolChecker: PSTNProtocolChecker
 ) : CallListener, LifecycleObserver {
 
     private val currentSession: Session?
@@ -74,13 +75,19 @@ class WebRtcCallManager @Inject constructor(
         fun onPSTNSupportUpdated()
     }
 
-    private val pstnSupportListeners = emptyList<PSTNSupportListener>().toMutableList()
+    val supportedPSTNProtocol: String?
+        get() = pstnProtocolChecker.supportedPSTNProtocol
+
+    val supportsPSTNProtocol: Boolean
+        get() = supportedPSTNProtocol != null
+
+
     fun addPstnSupportListener(listener: PSTNSupportListener) {
-        pstnSupportListeners.add(listener)
+        pstnProtocolChecker.addPstnSupportListener(listener)
     }
 
     fun removePstnSupportListener(listener: PSTNSupportListener) {
-        pstnSupportListeners.remove(listener)
+        pstnProtocolChecker.removePstnSupportListener(listener)
     }
 
     private val currentCallsListeners = CopyOnWriteArrayList<CurrentCallListener>()
@@ -104,30 +111,16 @@ class WebRtcCallManager @Inject constructor(
     private var peerConnectionFactory: PeerConnectionFactory? = null
     private val executor = Executors.newSingleThreadExecutor()
     private val dispatcher = executor.asCoroutineDispatcher()
-    var supportedPSTNProtocol: String? = null
-        private set
 
-    val supportsPSTNProtocol: Boolean
-        get() = supportedPSTNProtocol != null
 
     private val rootEglBase by lazy { EglUtils.rootEglBase }
 
     private var isInBackground: Boolean = true
 
-    init {
-        GlobalScope.launch {
-            supportedPSTNProtocol = currentSession?.getSupportedPSTN(3)
-            if (supportedPSTNProtocol != null) {
-                pstnSupportListeners.forEach {
-                    tryOrNull { it.onPSTNSupportUpdated() }
-                }
-            }
-        }
-    }
-
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
         isInBackground = false
+        checkForPSTNSupportIfNeeded()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -165,6 +158,10 @@ class WebRtcCallManager @Inject constructor(
 
     fun getCalls(): List<WebRtcCall> {
         return callsByCallId.values.toList()
+    }
+
+    fun checkForPSTNSupportIfNeeded() {
+        pstnProtocolChecker.checkForPSTNSupportIfNeeded(currentSession)
     }
 
     /**
