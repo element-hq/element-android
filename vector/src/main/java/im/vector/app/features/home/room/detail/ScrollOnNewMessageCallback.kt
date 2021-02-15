@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.detail
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.app.core.platform.DefaultListUpdateCallback
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.item.BaseEventItem
 import im.vector.app.features.home.room.detail.timeline.item.IsEventItem
 import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList

@@ -26,9 +26,7 @@ import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.audio.CallAudioManager
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.push.fcm.FcmHelper
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallListener
@@ -81,7 +79,6 @@ class WebRtcCallManager @Inject constructor(
     val supportsPSTNProtocol: Boolean
         get() = supportedPSTNProtocol != null
 
-
     fun addPstnSupportListener(listener: PSTNSupportListener) {
         pstnProtocolChecker.addPstnSupportListener(listener)
     }
@@ -111,7 +108,6 @@ class WebRtcCallManager @Inject constructor(
     private var peerConnectionFactory: PeerConnectionFactory? = null
     private val executor = Executors.newSingleThreadExecutor()
     private val dispatcher = executor.asCoroutineDispatcher()
-
 
     private val rootEglBase by lazy { EglUtils.rootEglBase }
 

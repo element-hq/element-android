@@ -20,7 +20,6 @@ import com.airbnb.epoxy.EpoxyModel
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.detail.UnreadState
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.item.BaseEventItem
 import com.airbnb.epoxy.VisibilityState
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.settings.VectorPreferences
@@ -31,7 +30,6 @@ import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.features.home.room.detail.timeline.item.IsEventItem
 import timber.log.Timber
 import kotlin.reflect.KMutableProperty0
-
 
 private const val DEFAULT_PREFETCH_THRESHOLD = 30
 
@@ -130,7 +128,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         }
     }
 
-    private fun MutableList<EpoxyModel<*>>.addForwardPrefetchIfNeeded(timeline: Timeline?,callback: TimelineEventController.Callback?) {
+    private fun MutableList<EpoxyModel<*>>.addForwardPrefetchIfNeeded(timeline: Timeline?, callback: TimelineEventController.Callback?) {
         val shouldAddForwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.FORWARDS) ?: false
         if (shouldAddForwardPrefetch) {
             val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD.coerceAtMost(size - 1)
@@ -152,5 +150,4 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
             }
         }
     }
-
 }

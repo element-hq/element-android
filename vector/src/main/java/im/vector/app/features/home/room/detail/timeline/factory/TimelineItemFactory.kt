@@ -118,10 +118,9 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
         return (computedModel ?: buildEmptyItem(event))
     }
 
-    private fun buildEmptyItem(timelineEvent: TimelineEvent): TimelineEmptyItem{
+    private fun buildEmptyItem(timelineEvent: TimelineEvent): TimelineEmptyItem {
         return TimelineEmptyItem_()
                 .id(timelineEvent.localId)
                 .eventId(timelineEvent.eventId)
     }
-
 }
