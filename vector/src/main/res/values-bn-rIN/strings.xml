@@ -1026,7 +1026,7 @@
         <item quantity="other">%d টা সক্রিয় উইজেট</item>
     </plurals>
 
-    <string name="error_jitsi_not_supported_on_old_device">দুঃখিত, জিটসির সাথে কনফারেন্স কলগুলি পুরোনো ডিভাইসগুলিতে সমর্থিত নয় (৫.০ এর নীচে এন্ড্রোইড অপারেটিং সিস্টেম সহ ডিভাইসগুলি)</string>
+    <string name="error_jitsi_not_supported_on_old_device">দুঃখিত, জিটসির সাথে কনফারেন্স কলগুলি পুরোনো ডিভাইসগুলিতে সমর্থিত নয় (৬.০ এর নীচে এন্ড্রোইড অপারেটিং সিস্টেম সহ ডিভাইসগুলি)</string>
 
     <string name="widget_integration_unable_to_create">উইজেট তৈরি করতে অক্ষম।</string>
     <string name="widget_integration_failed_to_send_request">অনুরোধ পাঠাতে ব্যর্থ।</string>

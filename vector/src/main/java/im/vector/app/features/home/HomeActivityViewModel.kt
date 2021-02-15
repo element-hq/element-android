@@ -32,20 +32,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
-import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
@@ -211,8 +211,8 @@ class HomeActivityViewModel @AssistedInject constructor(
             } else {
                 // Try to initialize cross signing in background if possible
                 Timber.d("Initialize cross signing...")
-                awaitCallback<Unit> {
-                    try {
+                try {
+                    awaitCallback<Unit> {
                         session.cryptoService().crossSigningService().initializeCrossSigning(
                                 object : UserInteractiveAuthInterceptor {
                                     override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
@@ -235,9 +235,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                                 callback = it
                         )
                         Timber.d("Initialize cross signing SUCCESS")
-                    } catch (failure: Throwable) {
-                        Timber.e(failure, "Failed to initialize cross signing")
                     }
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "Failed to initialize cross signing")
                 }
             }
         }

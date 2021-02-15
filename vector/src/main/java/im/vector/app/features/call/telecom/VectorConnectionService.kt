@@ -71,7 +71,7 @@ import im.vector.app.core.services.CallService
 
         bindService(Intent(applicationContext, CallService::class.java), CallServiceConnection(connection), 0)
         connection.setInitializing()
-        return CallConnection(applicationContext, roomId, callId)
+        return connection
     }
 
     inner class CallServiceConnection(private val callConnection: CallConnection) : ServiceConnection {

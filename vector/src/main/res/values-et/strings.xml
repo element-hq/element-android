@@ -1020,7 +1020,7 @@
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="historical_placeholder">Otsi ajaloost</string>
-    <string name="error_jitsi_not_supported_on_old_device">Vabandust, aga rühmakõned Jitsi vahendusel ei ole vanades seadmetes toetatud (Androidi versioon alla 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Vabandust, aga rühmakõned Jitsi vahendusel ei ole vanades seadmetes toetatud (Androidi versioon alla 6.0)</string>
     <string name="room_widget_resource_permission_title">See vidin soovib kasutada järgmisi andmeid:</string>
     <string name="room_widget_resource_grant_permission">Luba</string>
     <string name="room_widget_resource_decline_permission">Ära luba mitte midagi</string>
@@ -2315,4 +2315,9 @@
     <string name="room_settings_permissions_title">Õigused jututoas</string>
     <string name="room_participants_leave_private_warning">See ei ole avalik jututuba. Ilma kutseta sa ei saa uuesti liituda.</string>
     <string name="system_theme">Süsteemi vaikeseadistused</string>
+    <string name="authentication_error">Autentimine ei õnnestunud</string>
+    <string name="re_authentication_default_confirm_text">Selle tegevuse jaoks palub Element sul sisestada oma kasutajanime ja salasõna.</string>
+    <string name="re_authentication_activity_title">Palun korda autentimist</string>
+    <string name="failed_to_initialize_cross_signing">Risttunnustamise alustamine ei õnnestunud</string>
+    <string name="error_unauthorized">Volitused puuduvad, kasutajakonto ja/või salasõna on valed</string>
 </resources>

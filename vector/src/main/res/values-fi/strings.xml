@@ -1171,7 +1171,7 @@
     <string name="notification_new_invitation">Uusi kutsu</string>
     <string name="notification_sender_me">Minä</string>
     <string name="notification_inline_reply_failed">** Lähetys epäonnistui — avaathan huoneen</string>
-    <string name="error_jitsi_not_supported_on_old_device">Valitettavasti konferenssipuhelut Jitsin kanssa eivät toimi vanhoissa laitteissa (laitteet, joissa on Android 5.0 tai vanhempi)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Valitettavasti konferenssipuhelut Jitsin kanssa eivät toimi vanhoissa laitteissa (laitteet, joissa on Android 6.0 tai vanhempi)</string>
     <string name="encryption_information_unknown_ip">tuntematon IP-osoite</string>
     <string name="you_added_a_new_device_with_info">Uusi istunto pyytää salausavaimia.
 \nIstunnon nimi: %1$s

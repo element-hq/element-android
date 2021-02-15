@@ -1103,7 +1103,7 @@
     <string name="notification_new_invitation">Нова покана</string>
     <string name="notification_sender_me">Аз</string>
     <string name="notification_inline_reply_failed">** Неуспешно изпращане - моля, отворете стаята</string>
-    <string name="error_jitsi_not_supported_on_old_device">Извиняваме се, но конферентни разговори с Jitsi не се поддържат на стари устройства (устройства с Android OS под 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Извиняваме се, но конферентни разговори с Jitsi не се поддържат на стари устройства (устройства с Android OS под 6.0)</string>
     <string name="title_activity_verify_device">Удостоверяване на устройство</string>
     <string name="auth_login_sso">Влез с единично вписване</string>
     <string name="encryption_information_unknown_ip">неизвестен IP адрес</string>
@@ -1640,7 +1640,7 @@
     <string name="room_settings_enable_encryption_dialog_content">Веднъж включено, шифроването за дадена стая не може да бъде изключено. Съобщенията изпратени в шифрована стая не могат да бъдат прочетени от сървъра, а само от участниците в стаята. Включването на шифроване може да попречи на работата на немалък брой ботове и мостове към други мрежи.</string>
     <string name="room_settings_enable_encryption_dialog_title">Включване на шифроване\?</string>
     <string name="room_settings_enable_encryption_warning">Веднъж включено, шифроването не може да бъде изключено.</string>
-    <string name="room_settings_enable_encryption">Включи шифроване от-край-до-край</string>
+    <string name="room_settings_enable_encryption">Включи шифроване от-край-до-край…</string>
     <string name="settings_category_composer">Редактор на съобщения</string>
     <string name="settings_category_timeline">Списък със съобщения</string>
     <string name="command_description_rainbow_emote">Изпраща емоцията оцветена като дъга</string>

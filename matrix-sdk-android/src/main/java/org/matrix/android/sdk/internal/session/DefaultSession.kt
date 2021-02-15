@@ -49,6 +49,7 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.terms.TermsService
+import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
@@ -114,6 +115,7 @@ internal class DefaultSession @Inject constructor(
         private val accountService: Lazy<AccountService>,
         private val defaultIdentityService: DefaultIdentityService,
         private val integrationManagerService: IntegrationManagerService,
+        private val thirdPartyService: Lazy<ThirdPartyService>,
         private val callSignalingService: Lazy<CallSignalingService>,
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
@@ -257,6 +259,8 @@ internal class DefaultSession @Inject constructor(
     override fun callSignalingService(): CallSignalingService = callSignalingService.get()
 
     override fun searchService(): SearchService = searchService.get()
+
+    override fun thirdPartyService(): ThirdPartyService = thirdPartyService.get()
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()

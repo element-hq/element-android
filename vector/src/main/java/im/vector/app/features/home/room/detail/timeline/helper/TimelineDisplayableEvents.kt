@@ -38,6 +38,7 @@ object TimelineDisplayableEvents {
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
             EventType.CALL_ANSWER,
+            EventType.CALL_REJECT,
             EventType.ENCRYPTED,
             EventType.STATE_ROOM_ENCRYPTION,
             EventType.STATE_ROOM_GUEST_ACCESS,

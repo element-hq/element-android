@@ -24,7 +24,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.themes.ThemeProvider
 import org.jitsi.meet.sdk.JitsiMeetUserInfo
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -37,13 +37,16 @@ class JitsiCallViewModel @AssistedInject constructor(
         @Assisted initialState: JitsiCallViewState,
         @Assisted val args: VectorJitsiActivity.Args,
         private val session: Session,
-        private val stringProvider: StringProvider
+        private val jitsiMeetPropertiesFactory: JitsiWidgetPropertiesFactory,
+        private val themeProvider: ThemeProvider
 ) : VectorViewModel<JitsiCallViewState, JitsiCallViewActions, JitsiCallViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
         fun create(initialState: JitsiCallViewState, args: VectorJitsiActivity.Args): JitsiCallViewModel
     }
+
+    private val widgetService = session.widgetService()
 
     init {
         val me = session.getRoomMember(session.myUserId, args.roomId)?.toMatrixItem()
@@ -57,13 +60,14 @@ class JitsiCallViewModel @AssistedInject constructor(
             copy(userInfo = userInfo)
         }
 
-        session.widgetService().getRoomWidgetsLive(args.roomId, QueryStringValue.Equals(args.widgetId), WidgetType.Jitsi.values())
+        widgetService.getRoomWidgetsLive(args.roomId, QueryStringValue.Equals(args.widgetId), WidgetType.Jitsi.values())
                 .asObservable()
                 .distinctUntilChanged()
                 .subscribe {
                     val jitsiWidget = it.firstOrNull()
                     if (jitsiWidget != null) {
-                        val ppt = jitsiWidget.computedUrl?.let { url -> JitsiWidgetProperties(url, stringProvider) }
+                        val ppt = widgetService.getWidgetComputedUrl(jitsiWidget, themeProvider.isLightTheme())
+                                ?.let { url -> jitsiMeetPropertiesFactory.create(url) }
                         setState {
                             copy(
                                     widget = Success(jitsiWidget),

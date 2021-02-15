@@ -1193,7 +1193,7 @@
     <string name="settings_play_shutter_sound">Воспроизвести звук затвора</string>
     <string name="encryption_information_unknown_ip">неизвестный IP</string>
     <string name="notification_inline_reply_failed">** Отправить не удалось - пожалуйста откройте комнату</string>
-    <string name="error_jitsi_not_supported_on_old_device">К сожалению, конференц-звонки с Jitsi не поддерживаются на старых устройствах (ниже Android OS - 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">К сожалению, конференц-звонки с Jitsi не поддерживаются на старых устройствах (ниже Android OS - 6.0)</string>
     <string name="you_added_a_new_device_with_info">Новая сессия запрашивает ключи шифрования. 
 \nИмя сессии: %1$s 
 \nПоследний раз в сети: %2$s 
@@ -2427,4 +2427,8 @@
     <string name="room_settings_permissions_title">Права доступа комнаты</string>
     <string name="room_participants_leave_private_warning">Эта комната не публичная. Вы не сможете повторно присоединиться без приглашения.</string>
     <string name="system_theme">Системная тема</string>
+    <string name="authentication_error">Не удалось пройти аутентификацию</string>
+    <string name="re_authentication_default_confirm_text">Element требует от вас ввести свои учетные данные для выполнения этого действия.</string>
+    <string name="re_authentication_activity_title">Требуется повторная аутентификация</string>
+    <string name="failed_to_initialize_cross_signing">Не удалось настроить перекрестную подпись</string>
 </resources>

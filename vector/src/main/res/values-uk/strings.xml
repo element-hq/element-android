@@ -1218,7 +1218,7 @@
     <string name="room_widget_resource_decline_permission">Заблокувати все</string>
     <string name="room_widget_resource_grant_permission">Дозволити</string>
     <string name="room_widget_resource_permission_title">Цей віджет хоче використовувати такі ресурси:</string>
-    <string name="error_jitsi_not_supported_on_old_device">На жаль, конференц-дзвінки з Jitsi не підтримуються на старих пристроях (пристрої з ОС Android нижче 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">На жаль, конференц-дзвінки з Jitsi не підтримуються на старих пристроях (пристрої з ОС Android нижче 6.0)</string>
     <string name="room_widget_permission_room_id">Ідентифікатор кімнати</string>
     <string name="room_widget_permission_widget_id">Ідентифікатор віджета</string>
     <string name="room_widget_permission_theme">Ваша тема</string>

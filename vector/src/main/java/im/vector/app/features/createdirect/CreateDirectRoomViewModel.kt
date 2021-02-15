@@ -18,6 +18,7 @@ package im.vector.app.features.createdirect
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
+import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
@@ -28,7 +29,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
-import im.vector.app.features.userdirectory.PendingInvitee
+import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.raw.RawService
@@ -51,8 +52,11 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: CreateDirectRoomViewState): CreateDirectRoomViewModel? {
-            val activity: CreateDirectRoomActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.createDirectRoomViewModelFactory.create(state)
+            val factory = when (viewModelContext) {
+                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
+                is ActivityViewModelContext -> viewModelContext.activity as? Factory
+            }
+            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 
@@ -73,11 +77,11 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
             }
         } else {
             // Create the DM
-            createRoomAndInviteSelectedUsers(action.invitees)
+            createRoomAndInviteSelectedUsers(action.selections)
         }
     }
 
-    private fun createRoomAndInviteSelectedUsers(invitees: Set<PendingInvitee>) {
+    private fun createRoomAndInviteSelectedUsers(selections: Set<PendingSelection>) {
         viewModelScope.launch(Dispatchers.IO) {
             val adminE2EByDefault = rawService.getElementWellknown(session.myUserId)
                     ?.isE2EByDefault()
@@ -85,10 +89,10 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
             val roomParams = CreateRoomParams()
                     .apply {
-                        invitees.forEach {
+                        selections.forEach {
                             when (it) {
-                                is PendingInvitee.UserPendingInvitee     -> invitedUserIds.add(it.user.userId)
-                                is PendingInvitee.ThreePidPendingInvitee -> invite3pids.add(it.threePid)
+                                is PendingSelection.UserPendingSelection     -> invitedUserIds.add(it.user.userId)
+                                is PendingSelection.ThreePidPendingSelection -> invite3pids.add(it.threePid)
                             }.exhaustive
                         }
                         setDirectMessage()

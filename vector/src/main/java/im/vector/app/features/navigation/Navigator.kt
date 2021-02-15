@@ -119,4 +119,6 @@ interface Navigator {
     fun openSearch(context: Context, roomId: String)
 
     fun openDevTools(context: Context, roomId: String)
+
+    fun openCallTransfer(context: Context, callId: String)
 }

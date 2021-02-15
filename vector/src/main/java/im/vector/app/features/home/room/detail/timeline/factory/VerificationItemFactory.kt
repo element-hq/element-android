@@ -24,7 +24,6 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem_
 import org.matrix.android.sdk.api.session.Session
@@ -51,7 +50,6 @@ class VerificationItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val noticeItemFactory: NoticeItemFactory,
         private val userPreferencesProvider: UserPreferencesProvider,
-        private val roomSummaryHolder: RoomSummaryHolder,
         private val stringProvider: StringProvider,
         private val session: Session
 ) {
@@ -153,7 +151,7 @@ class VerificationItemFactory @Inject constructor(
                                   highlight: Boolean,
                                   callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
-        if (userPreferencesProvider.shouldShowHiddenEvents()) return noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+        if (userPreferencesProvider.shouldShowHiddenEvents()) return noticeItemFactory.create(event, highlight, callback)
         return null
     }
 }

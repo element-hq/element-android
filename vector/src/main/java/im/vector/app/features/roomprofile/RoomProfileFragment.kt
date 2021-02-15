@@ -52,7 +52,6 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
-import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject
@@ -116,12 +115,36 @@ class RoomProfileFragment @Inject constructor(
                 .observe()
                 .subscribe { handleQuickActions(it) }
                 .disposeOnDestroyView()
+        setupClicks()
         setupLongClicks()
     }
 
     private fun setupWaitingView() {
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
+    }
+
+    private fun setupClicks() {
+        // Shortcut to room settings
+        setOf(
+                headerViews.roomProfileNameView,
+                views.matrixProfileToolbarTitleView
+        ).forEach {
+            it.setOnClickListener {
+                roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomSettings)
+            }
+        }
+        // Shortcut to room alias
+        headerViews.roomProfileAliasView.setOnClickListener {
+            roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
+        }
+        // Open Avatar
+        setOf(
+                headerViews.roomProfileAvatarView,
+                views.matrixProfileToolbarAvatarImageView
+        ).forEach { view ->
+            view.setOnClickListener { onAvatarClicked(view) }
+        }
     }
 
     private fun setupLongClicks() {
@@ -170,7 +193,7 @@ class RoomProfileFragment @Inject constructor(
     override fun invalidate() = withState(roomProfileViewModel) { state ->
         views.waitingView.root.isVisible = state.isLoading
 
-        state.roomSummary()?.also {
+        state.roomSummary()?.let {
             if (it.membership.isLeft()) {
                 Timber.w("The room has been left")
                 activity?.finish()
@@ -184,13 +207,6 @@ class RoomProfileFragment @Inject constructor(
                 headerViews.roomProfileDecorationImageView.isVisible = it.roomEncryptionTrustLevel != null
                 headerViews.roomProfileDecorationImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
                 views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
-
-                headerViews.roomProfileAvatarView.setOnClickListener { view ->
-                    onAvatarClicked(view, matrixItem)
-                }
-                views.matrixProfileToolbarAvatarImageView.setOnClickListener { view ->
-                    onAvatarClicked(view, matrixItem)
-                }
             }
         }
         roomProfileController.setData(state)
@@ -269,6 +285,14 @@ class RoomProfileFragment @Inject constructor(
                 }
     }
 
+    override fun onRoomAliasesClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
+    }
+
+    override fun onRoomPermissionsClicked() {
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPermissionsSettings)
+    }
+
     override fun onRoomIdClicked() {
         copyToClipboard(requireContext(), roomProfileArgs.roomId)
     }
@@ -286,7 +310,9 @@ class RoomProfileFragment @Inject constructor(
         )
     }
 
-    private fun onAvatarClicked(view: View, matrixItem: MatrixItem.RoomItem) {
-        navigator.openBigImageViewer(requireActivity(), view, matrixItem)
+    private fun onAvatarClicked(view: View) = withState(roomProfileViewModel) { state ->
+        state.roomSummary()?.toMatrixItem()?.let { matrixItem ->
+            navigator.openBigImageViewer(requireActivity(), view, matrixItem)
+        }
     }
 }

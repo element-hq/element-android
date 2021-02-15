@@ -44,7 +44,7 @@ import im.vector.app.core.di.HasVectorInjector
 import im.vector.app.core.di.VectorComponent
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.rx.RxConfig
-import im.vector.app.features.call.WebRtcPeerConnectionManager
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.disclaimer.doNotShowDisclaimerDialog
 import im.vector.app.features.lifecycle.VectorActivityLifecycleCallbacks
@@ -92,7 +92,7 @@ class VectorApplication :
     @Inject lateinit var rxConfig: RxConfig
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var pinLocker: PinLocker
-    @Inject lateinit var webRtcPeerConnectionManager: WebRtcPeerConnectionManager
+    @Inject lateinit var callManager: WebRtcCallManager
 
     lateinit var vectorComponent: VectorComponent
 
@@ -177,7 +177,7 @@ class VectorApplication :
         })
         ProcessLifecycleOwner.get().lifecycle.addObserver(appStateHandler)
         ProcessLifecycleOwner.get().lifecycle.addObserver(pinLocker)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(webRtcPeerConnectionManager)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(callManager)
         // This should be done as early as possible
         // initKnownEmojiHashSet(appContext)
 

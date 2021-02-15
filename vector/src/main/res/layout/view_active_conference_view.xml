@@ -22,7 +22,7 @@
         android:textColorLink="@color/white"
         app:drawableTint="@color/white"
         tools:text="@string/ongoing_conference_call"
-        app:drawableStartCompat="@drawable/ic_call" />
+        app:drawableStartCompat="@drawable/ic_call_answer" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/deleteWidgetButton"

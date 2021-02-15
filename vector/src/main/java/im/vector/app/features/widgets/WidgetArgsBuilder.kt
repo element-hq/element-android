@@ -16,15 +16,14 @@
 
 package im.vector.app.features.widgets
 
-import android.content.Context
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.themes.ThemeProvider
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
 class WidgetArgsBuilder @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
-        private val context: Context
+        private val themeProvider: ThemeProvider
 ) {
 
     @Suppress("UNCHECKED_CAST")
@@ -52,7 +51,8 @@ class WidgetArgsBuilder @Inject constructor(
     @Suppress("UNCHECKED_CAST")
     fun buildStickerPickerArgs(roomId: String, widget: Widget): WidgetArgs {
         val widgetId = widget.widgetId
-        val baseUrl = widget.computedUrl ?: throw IllegalStateException()
+        val baseUrl = sessionHolder.getActiveSession().widgetService()
+                .getWidgetComputedUrl(widget, themeProvider.isLightTheme()) ?: throw IllegalStateException()
         return WidgetArgs(
                 baseUrl = baseUrl,
                 kind = WidgetKind.STICKER_PICKER,
@@ -68,15 +68,13 @@ class WidgetArgsBuilder @Inject constructor(
 
     fun buildRoomWidgetArgs(roomId: String, widget: Widget): WidgetArgs {
         val widgetId = widget.widgetId
-        val baseUrl = widget.computedUrl ?: throw IllegalStateException()
+        val baseUrl = sessionHolder.getActiveSession().widgetService()
+                .getWidgetComputedUrl(widget, themeProvider.isLightTheme()) ?: throw IllegalStateException()
         return WidgetArgs(
                 baseUrl = baseUrl,
                 kind = WidgetKind.ROOM,
                 roomId = roomId,
-                widgetId = widgetId,
-                urlParams = mapOf(
-                        "theme" to getTheme()
-                ).filterNotNull()
+                widgetId = widgetId
         )
     }
 
@@ -86,7 +84,7 @@ class WidgetArgsBuilder @Inject constructor(
     }
 
     private fun getTheme(): String {
-        return if (ThemeUtils.isLightTheme(context)) {
+        return if (themeProvider.isLightTheme()) {
             "light"
         } else {
             "dark"

@@ -27,8 +27,7 @@ import dagger.assisted.AssistedFactory
 import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.raw.wellknown.getElementWellknown
-import im.vector.app.features.raw.wellknown.isE2EByDefault
+import im.vector.app.features.createdirect.DirectRoomHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -36,7 +35,6 @@ import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
-import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.util.awaitCallback
@@ -45,6 +43,7 @@ class UserCodeSharedViewModel @AssistedInject constructor(
         @Assisted val initialState: UserCodeState,
         private val session: Session,
         private val stringProvider: StringProvider,
+        private val directRoomHelper: DirectRoomHelper,
         private val rawService: RawService) : VectorViewModel<UserCodeState, UserCodeActions, UserCodeShareViewEvents>(initialState) {
 
     companion object : MvRxViewModelFactory<UserCodeSharedViewModel, UserCodeState> {
@@ -96,39 +95,20 @@ class UserCodeSharedViewModel @AssistedInject constructor(
 
     private fun handleStartChatting(withUser: UserCodeActions.StartChattingWithUser) {
         val mxId = withUser.matrixItem.id
-        val existing = session.getExistingDirectRoomWithUser(mxId)
         setState {
             copy(mode = UserCodeState.Mode.SHOW)
         }
-        if (existing != null) {
-            // navigate to this room
-            _viewEvents.post(UserCodeShareViewEvents.NavigateToRoom(existing))
-        } else {
-            // we should create the room then navigate
-            _viewEvents.post(UserCodeShareViewEvents.ShowWaitingScreen)
-            viewModelScope.launch(Dispatchers.IO) {
-                val adminE2EByDefault = rawService.getElementWellknown(session.myUserId)
-                        ?.isE2EByDefault()
-                        ?: true
-
-                val roomParams = CreateRoomParams()
-                        .apply {
-                            invitedUserIds.add(mxId)
-                            setDirectMessage()
-                            enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
-                        }
-
-                val roomId =
-                        try {
-                            awaitCallback<String> { session.createRoom(roomParams, it) }
-                        } catch (failure: Throwable) {
-                            _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.invite_users_to_room_failure)))
-                            return@launch
-                        } finally {
-                            _viewEvents.post(UserCodeShareViewEvents.HideWaitingScreen)
-                        }
-                _viewEvents.post(UserCodeShareViewEvents.NavigateToRoom(roomId))
+        _viewEvents.post(UserCodeShareViewEvents.ShowWaitingScreen)
+        viewModelScope.launch(Dispatchers.IO) {
+            val roomId = try {
+                directRoomHelper.ensureDMExists(mxId)
+            } catch (failure: Throwable) {
+                _viewEvents.post(UserCodeShareViewEvents.ToastMessage(stringProvider.getString(R.string.invite_users_to_room_failure)))
+                return@launch
+            } finally {
+                _viewEvents.post(UserCodeShareViewEvents.HideWaitingScreen)
             }
+            _viewEvents.post(UserCodeShareViewEvents.NavigateToRoom(roomId))
         }
     }
 
