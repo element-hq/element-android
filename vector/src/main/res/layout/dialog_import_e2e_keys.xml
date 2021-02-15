@@ -29,7 +29,6 @@
         style="@style/VectorTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColorHint="?attr/vctr_default_text_hint_color"
         app:layout_constraintEnd_toStartOf="@+id/importDialogShowPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dialog_e2e_keys_passphrase_filename">

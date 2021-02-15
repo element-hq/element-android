@@ -7,24 +7,16 @@
         <!-- Riotx attribute for palette -->
         <item name="riotx_background">@color/riotx_background_light</item>
         <item name="vctr_home_drawer_header_background">@color/vctr_home_drawer_header_background_light</item>
-        <item name="riotx_search_background_mobile">@color/riotx_search_background_mobile_light</item>
         <item name="riotx_header_panel_background">@color/riotx_header_panel_background_light</item>
         <item name="riotx_header_panel_border_mobile">@color/riotx_header_panel_border_mobile_light</item>
-        <item name="riotx_header_panel_text_primary">@color/riotx_header_panel_text_primary_light</item>
         <item name="riotx_header_panel_text_secondary">@color/riotx_header_panel_text_secondary_light</item>
         <item name="riotx_text_primary">@color/riotx_text_primary_light</item>
         <item name="riotx_text_secondary">@color/riotx_text_secondary_light</item>
         <item name="riotx_text_tertiary">@color/riotx_text_tertiary_light</item>
         <item name="riotx_text_primary_body_contrast">@color/riotx_text_primary_body_contrast_light</item>
         <item name="riotx_android_secondary">@color/riotx_android_secondary_light</item>
-        <item name="riotx_search_placeholder">@color/riotx_search_placeholder_light</item>
-        <item name="riotx_room_highlight">@color/riotx_room_highlight_light</item>
         <item name="riotx_unread_room_indent">@color/riotx_unread_room_indent_light</item>
-        <item name="riotx_android_status_bar">@color/riotx_android_status_bar_light</item>
-        <item name="riotx_line_break_mobile">@color/riotx_line_break_mobile_light</item>
         <item name="riotx_unread_room_badge">@color/riotx_unread_room_badge_light</item>
-        <item name="riotx_fab_secondary_bg">@color/riotx_fab_secondary_bg_light</item>
-        <item name="riotx_fab_secondary_color">@color/riotx_fab_secondary_color_light</item>
         <item name="riotx_fab_label_bg">@color/riotx_fab_label_bg_light</item>
         <item name="riotx_fab_label_stroke">@color/riotx_fab_label_stroke_light</item>
         <item name="riotx_fab_label_color">@color/riotx_fab_label_color_light</item>
@@ -82,9 +74,6 @@
         <item name="vctr_toolbar_secondary_text_color">@color/riotx_text_primary_light</item>
         <item name="vctr_toolbar_link_text_color">@color/link_color_light</item>
 
-        <!-- default text colors -->
-        <item name="vctr_default_text_hint_color">@color/default_text_hint_color_light</item>
-
         <!-- room message colors -->
         <item name="vctr_notice_secondary">#61708B</item>
         <item name="vctr_unsent_message_text_color">@color/vector_fuchsia_color</item>
@@ -97,9 +86,6 @@
 
         <item name="riot_primary_text_color">@color/riot_primary_text_color_light</item>
         <item name="riot_primary_text_color_disabled">@color/riot_primary_text_color_disabled_light</item>
-
-        <!-- tab bar colors -->
-        <item name="vctr_tab_bar_inverted_background_color">#FFF2F2F2</item>
 
         <!-- list colors -->
         <!--Header/Panel Background-->
