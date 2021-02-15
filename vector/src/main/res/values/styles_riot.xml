@@ -97,11 +97,6 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!-- home scroller menu -->
-    <style name="NavigationViewStyle">
-        <item name="android:textSize">14sp</item>
-    </style>
-
     <!-- Styles for login screen -->
     <style name="LoginEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textSize">16sp</item>
@@ -193,38 +188,6 @@
         <item name="searchIcon">@drawable/ic_search</item>
         <item name="closeIcon">@drawable/ic_x_gray</item>
         <item name="iconifiedByDefault">false</item>
-    </style>
-
-    <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">
-        <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="background">@android:color/transparent</item>
-    </style>
-
-    <style name="VectorSearches.Styled.ActionBar" parent="Vector.Styled.ActionBar">
-        <item name="android:background">?android:attr/colorBackground</item>
-        <item name="background">?android:attr/colorBackground</item>
-    </style>
-
-    <!-- tabbar text color -->
-    <style name="VectorSearches.TabText" parent="Widget.AppCompat.ActionBar.TabText">
-        <item name="android:textColor">?attr/colorAccent</item>
-    </style>
-
-    <style name="VectorSearches.ActionBarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">?attr/colorAccent</item>
-    </style>
-
-    <style name="VectorPeopleSearches.TabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabGravity">fill</item>
-        <item name="tabMode">fixed</item>
-        <item name="tabPaddingStart">0dp</item>
-        <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">?attr/colorAccent</item>
-        <item name="tabTextColor">@android:color/white</item>
-        <item name="tabSelectedTextColor">@android:color/white</item>
-        <item name="tabIndicatorColor">@android:color/white</item>
-        <item name="tabMaxWidth">0dp</item>
     </style>
 
     <!-- BottomSheet theming -->
