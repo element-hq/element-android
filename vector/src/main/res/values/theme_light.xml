@@ -65,7 +65,7 @@
         <item name="toolbarStyle">@style/VectorToolbarStyle</item>
         <item name="alertDialogTheme">@style/VectorAlertDialogStyleLight</item>
 
-        <item name="android:textColorLink">@color/riotx_links</item>
+        <item name="android:textColorLink">@color/link_color_light</item>
 
         <!-- Menu text color -->
         <item name="android:actionMenuTextColor">?colorAccent</item>
@@ -82,7 +82,7 @@
         <item name="vctr_toolbar_primary_text_color">@color/riotx_text_primary_light</item>
         <!-- Base Text Secondary-->
         <item name="vctr_toolbar_secondary_text_color">@color/riotx_text_primary_light</item>
-        <item name="vctr_toolbar_link_text_color">@color/riotx_links</item>
+        <item name="vctr_toolbar_link_text_color">@color/link_color_light</item>
 
         <!-- default text colors -->
         <item name="vctr_default_text_hint_color">@color/default_text_hint_color_light</item>
