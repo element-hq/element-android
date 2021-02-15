@@ -155,7 +155,6 @@
       'riotx_<name in the palette snake case>_<theme>'
       -->
 
-
     <attr name="riotx_background" format="color" />
     <color name="riotx_background_light">#FFFFFFFF</color>
     <color name="riotx_background_dark">#FF15191E</color>

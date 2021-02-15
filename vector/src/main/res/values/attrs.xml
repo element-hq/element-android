@@ -29,9 +29,6 @@
 
     <attr name="vctr_list_divider_color" format="color" />
 
-    <!-- outgoing call background color -->
-    <attr name="vctr_pending_outgoing_view_background_color" format="color" />
-
     <!-- room notification text color (typing, unsent...) -->
     <attr name="vctr_room_notification_text_color" format="color" />
 
