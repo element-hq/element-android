@@ -52,6 +52,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -1030,7 +1031,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun updateJumpToReadMarkerViewVisibility() {
-        views.jumpToReadMarkerView.post {
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             withState(roomDetailViewModel) {
                 val showJumpToUnreadBanner = when (it.unreadState) {
                     UnreadState.Unknown,
