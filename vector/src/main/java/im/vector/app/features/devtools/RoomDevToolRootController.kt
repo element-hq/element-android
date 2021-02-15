@@ -17,44 +17,43 @@
 package im.vector.app.features.devtools
 
 import android.view.View
-import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.epoxy.EpoxyController
+import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
 import javax.inject.Inject
 
 class RoomDevToolRootController @Inject constructor(
         private val stringProvider: StringProvider
-) : TypedEpoxyController<RoomDevToolViewState>() {
+) : EpoxyController() {
 
-    interface InteractionListener {
-        fun processAction(action: RoomDevToolAction)
+    init {
+        requestModelBuild()
     }
 
-    var interactionListener: InteractionListener? = null
+    var interactionListener: DevToolsInteractionListener? = null
 
-    override fun buildModels(data: RoomDevToolViewState?) {
-        if (data?.displayMode == RoomDevToolViewState.Mode.Root) {
-            genericButtonItem {
-                id("explore")
-                text("Explore Room State")
-                buttonClickAction(View.OnClickListener {
-                    interactionListener?.processAction(RoomDevToolAction.ExploreRoomState)
-                })
-            }
-            genericButtonItem {
-                id("send")
-                text("Send Custom Event")
-                buttonClickAction(View.OnClickListener {
-                    interactionListener?.processAction(RoomDevToolAction.SendCustomEvent(false))
-                })
-            }
-            genericButtonItem {
-                id("send_state")
-                text("Send State Event")
-                buttonClickAction(View.OnClickListener {
-                    interactionListener?.processAction(RoomDevToolAction.SendCustomEvent(true))
-                })
-            }
+    override fun buildModels() {
+        genericButtonItem {
+            id("explore")
+            text(stringProvider.getString(R.string.dev_tools_explore_room_state))
+            buttonClickAction(View.OnClickListener {
+                interactionListener?.processAction(RoomDevToolAction.ExploreRoomState)
+            })
+        }
+        genericButtonItem {
+            id("send")
+            text(stringProvider.getString(R.string.dev_tools_send_custom_event))
+            buttonClickAction(View.OnClickListener {
+                interactionListener?.processAction(RoomDevToolAction.SendCustomEvent(false))
+            })
+        }
+        genericButtonItem {
+            id("send_state")
+            text(stringProvider.getString(R.string.dev_tools_send_state_event))
+            buttonClickAction(View.OnClickListener {
+                interactionListener?.processAction(RoomDevToolAction.SendCustomEvent(true))
+            })
         }
     }
 }

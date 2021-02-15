@@ -25,14 +25,12 @@ import com.airbnb.mvrx.withState
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
 class RoomDevToolSendFormFragment @Inject constructor(
-        val epoxyController: RoomDevToolSendFormController,
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(), RoomDevToolSendFormController.InteractionListener {
+        private val epoxyController: RoomDevToolSendFormController
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>(), DevToolsInteractionListener {
 
     val sharedViewModel: RoomDevToolViewModel by activityViewModel()
 

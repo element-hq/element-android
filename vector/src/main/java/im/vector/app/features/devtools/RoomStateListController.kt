@@ -32,18 +32,12 @@ class RoomStateListController @Inject constructor(
         private val colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomDevToolViewState>() {
 
-    interface InteractionListener {
-        fun processAction(action: RoomDevToolAction)
-    }
-
-    var interactionListener: InteractionListener? = null
+    var interactionListener: DevToolsInteractionListener? = null
 
     override fun buildModels(data: RoomDevToolViewState?) {
         when (data?.displayMode) {
             RoomDevToolViewState.Mode.StateEventList -> {
-                val stateEventsGroups = (data.stateEvents.invoke() ?: emptyList()).groupBy {
-                    it.type
-                }
+                val stateEventsGroups = data.stateEvents.invoke().orEmpty().groupBy { it.type }
 
                 if (stateEventsGroups.isEmpty()) {
                     noResultItem {
@@ -55,7 +49,7 @@ class RoomStateListController @Inject constructor(
                         genericItem {
                             id(entry.key)
                             title(entry.key)
-                            description("${entry.value.size} entries")
+                            description(stringProvider.getQuantityString(R.plurals.entries, entry.value.size, entry.value.size))
                             itemClickAction(GenericItem.Action("view").apply {
                                 perform = Runnable {
                                     interactionListener?.processAction(RoomDevToolAction.ShowStateEventType(entry.key))
@@ -66,7 +60,7 @@ class RoomStateListController @Inject constructor(
                 }
             }
             RoomDevToolViewState.Mode.StateEventListByType -> {
-                val stateEvents = (data.stateEvents.invoke() ?: emptyList()).filter { it.type == data.currentStateType }
+                val stateEvents = data.stateEvents.invoke().orEmpty().filter { it.type == data.currentStateType }
                 if (stateEvents.isEmpty()) {
                     noResultItem {
                         id("no state events")
@@ -74,10 +68,12 @@ class RoomStateListController @Inject constructor(
                     }
                 } else {
                     stateEvents.forEach { stateEvent ->
-                        val contentMap = JSONObject(stateEvent.content ?: emptyMap<String, Any>()).toString().let {
+                        val contentJson = JSONObject(stateEvent.content.orEmpty()).toString().let {
                             if (it.length > 140) {
                                 it.take(140) + Typography.ellipsis
-                            } else it.take(140)
+                            } else {
+                                it.take(140)
+                            }
                         }
                         genericItem {
                             id(stateEvent.eventId)
@@ -95,7 +91,7 @@ class RoomStateListController @Inject constructor(
                                     textStyle = "normal"
                                 }
                             })
-                            description(contentMap)
+                            description(contentJson)
                             itemClickAction(GenericItem.Action("view").apply {
                                 perform = Runnable {
                                     interactionListener?.processAction(RoomDevToolAction.ShowStateEvent(stateEvent))

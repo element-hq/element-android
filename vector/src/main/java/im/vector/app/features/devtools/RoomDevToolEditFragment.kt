@@ -25,16 +25,13 @@ import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentDevtoolsEditorBinding
 import javax.inject.Inject
 
-class RoomDevToolEditFragment @Inject constructor(
-        val epoxyController: RoomDevToolRootController,
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentDevtoolsEditorBinding>(), RoomDevToolRootController.InteractionListener {
+class RoomDevToolEditFragment @Inject constructor()
+    : VectorBaseFragment<FragmentDevtoolsEditorBinding>() {
 
-    val sharedViewModel: RoomDevToolViewModel by activityViewModel()
+    private val sharedViewModel: RoomDevToolViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentDevtoolsEditorBinding {
         return FragmentDevtoolsEditorBinding.inflate(inflater, container, false)
@@ -51,13 +48,6 @@ class RoomDevToolEditFragment @Inject constructor(
                     sharedViewModel.handle(RoomDevToolAction.UpdateContentText(it.toString()))
                 }
                 .disposeOnDestroyView()
-    }
-
-    override fun invalidate() = withState(sharedViewModel) { _ ->
-    }
-
-    override fun processAction(action: RoomDevToolAction) {
-        sharedViewModel.handle(action)
     }
 
     override fun onResume() {

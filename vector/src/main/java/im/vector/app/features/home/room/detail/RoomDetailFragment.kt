@@ -128,7 +128,6 @@ import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
-import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.composer.TextComposerView
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
@@ -769,7 +768,7 @@ class RoomDetailFragment @Inject constructor(
                 true
             }
             R.id.dev_tools        -> {
-                startActivity(RoomDevToolActivity.intent(roomDetailArgs.roomId, requireContext()))
+                navigator.openDevTools(requireContext(), roomDetailArgs.roomId)
                 true
             }
             else                  -> super.onOptionsItemSelected(item)

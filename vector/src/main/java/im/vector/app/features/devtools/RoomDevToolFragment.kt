@@ -21,20 +21,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
-import com.airbnb.mvrx.withState
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
 class RoomDevToolFragment @Inject constructor(
-        val epoxyController: RoomDevToolRootController,
-        private val colorProvider: ColorProvider
-) : VectorBaseFragment<FragmentGenericRecyclerBinding>(), RoomDevToolRootController.InteractionListener {
+        private val epoxyController: RoomDevToolRootController
+) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+        DevToolsInteractionListener {
 
-    val sharedViewModel: RoomDevToolViewModel by activityViewModel()
+    private val sharedViewModel: RoomDevToolViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -60,10 +58,6 @@ class RoomDevToolFragment @Inject constructor(
         views.genericRecyclerView.cleanup()
         epoxyController.interactionListener = null
         super.onDestroyView()
-    }
-
-    override fun invalidate() = withState(sharedViewModel) { state ->
-        epoxyController.setData(state)
     }
 
     override fun processAction(action: RoomDevToolAction) {

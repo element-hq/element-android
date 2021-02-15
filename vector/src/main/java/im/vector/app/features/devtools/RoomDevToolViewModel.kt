@@ -28,12 +28,15 @@ import com.squareup.moshi.Types
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.util.JsonDict
@@ -43,6 +46,7 @@ import org.matrix.android.sdk.rx.rx
 class RoomDevToolViewModel @AssistedInject constructor(
         @Assisted val initialState: RoomDevToolViewState,
         private val errorFormatter: ErrorFormatter,
+        private val stringProvider: StringProvider,
         private val session: Session
 ) : VectorViewModel<RoomDevToolViewState, RoomDevToolAction, DevToolsViewEvents>(initialState) {
 
@@ -64,8 +68,8 @@ class RoomDevToolViewModel @AssistedInject constructor(
     }
 
     init {
-
-        session.getRoom(initialState.roomId)?.rx()
+        session.getRoom(initialState.roomId)
+                ?.rx()
                 ?.liveStateEvents(emptySet())
                 ?.execute { async ->
                     copy(stateEvents = async)
@@ -74,7 +78,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomDevToolAction) {
         when (action) {
-            RoomDevToolAction.ExploreRoomState -> {
+            RoomDevToolAction.ExploreRoomState             -> {
                 setState {
                     copy(
                             displayMode = RoomDevToolViewState.Mode.StateEventList,
@@ -82,7 +86,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is RoomDevToolAction.ShowStateEvent -> {
+            is RoomDevToolAction.ShowStateEvent            -> {
                 val jsonString = MoshiProvider.providesMoshi()
                         .adapter(Event::class.java)
                         .toJson(action.event)
@@ -95,10 +99,10 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            RoomDevToolAction.OnBackPressed -> {
+            RoomDevToolAction.OnBackPressed                -> {
                 handleBack()
             }
-            RoomDevToolAction.MenuEdit -> {
+            RoomDevToolAction.MenuEdit                     -> {
                 withState {
                     if (it.displayMode == RoomDevToolViewState.Mode.StateEventDetail) {
                         // we want to edit it
@@ -112,7 +116,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     }
                 }
             }
-            is RoomDevToolAction.ShowStateEventType -> {
+            is RoomDevToolAction.ShowStateEventType        -> {
                 setState {
                     copy(
                             displayMode = RoomDevToolViewState.Mode.StateEventListByType,
@@ -120,23 +124,23 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            RoomDevToolAction.MenuItemSend -> {
+            RoomDevToolAction.MenuItemSend                 -> {
                 handleMenuItemSend()
             }
-            is RoomDevToolAction.UpdateContentText -> {
+            is RoomDevToolAction.UpdateContentText         -> {
                 setState {
                     copy(editedContent = action.contentJson)
                 }
             }
-            is RoomDevToolAction.SendCustomEvent -> {
+            is RoomDevToolAction.SendCustomEvent           -> {
                 setState {
                     copy(
                             displayMode = RoomDevToolViewState.Mode.SendEventForm(action.isStateEvent),
-                            sendEventDraft = RoomDevToolViewState.SendEventDraft("m.room.message", null, "{\n}")
+                            sendEventDraft = RoomDevToolViewState.SendEventDraft(EventType.MESSAGE, null, "{\n}")
                     )
                 }
             }
-            is RoomDevToolAction.CustomEventTypeChange -> {
+            is RoomDevToolAction.CustomEventTypeChange     -> {
                 setState {
                     copy(
                             sendEventDraft = sendEventDraft?.copy(type = action.type)
@@ -150,7 +154,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is RoomDevToolAction.CustomEventContentChange -> {
+            is RoomDevToolAction.CustomEventContentChange  -> {
                 setState {
                     copy(
                             sendEventDraft = sendEventDraft?.copy(content = action.content)
@@ -160,95 +164,102 @@ class RoomDevToolViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleMenuItemSend() = withState {
-        when (it.displayMode) {
-            RoomDevToolViewState.Mode.EditEventContent -> {
-                setState { copy(modalLoading = Loading()) }
-                viewModelScope.launch {
-                    try {
-                        val room = session.getRoom(initialState.roomId)
-                                ?: throw IllegalArgumentException("Room not found")
+    private fun handleMenuItemSend() = withState { state ->
+        when (state.displayMode) {
+            RoomDevToolViewState.Mode.EditEventContent -> editEventContent(state)
+            is RoomDevToolViewState.Mode.SendEventForm -> sendEventContent(state, state.displayMode.isState)
+            else                                       -> Unit
+        }
+    }
 
-                        val adapter = MoshiProvider.providesMoshi()
-                                .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
-                        val json = adapter.fromJson(it.editedContent ?: "")
-                                ?: throw IllegalArgumentException("No content")
+    private fun editEventContent(state: RoomDevToolViewState) {
+        setState { copy(modalLoading = Loading()) }
 
-                        room.sendStateEvent(
-                                it.selectedEvent?.type ?: "",
-                                it.selectedEvent?.stateKey,
-                                json
+        viewModelScope.launch {
+            try {
+                val room = session.getRoom(initialState.roomId)
+                        ?: throw IllegalArgumentException(stringProvider.getString(R.string.room_error_not_found))
 
-                        )
-                        _viewEvents.post(DevToolsViewEvents.showSnackMessage("State event sent!"))
-                        setState {
-                            copy(
-                                    modalLoading = Success(Unit),
-                                    selectedEventJson = null,
-                                    editedContent = null,
-                                    displayMode = RoomDevToolViewState.Mode.StateEventListByType
-                            )
-                        }
-                    } catch (failure: Throwable) {
-                        _viewEvents.post(DevToolsViewEvents.showAlertMessage(errorFormatter.toHumanReadable(failure)))
-                        setState { copy(modalLoading = Fail(failure)) }
-                    }
+                val adapter = MoshiProvider.providesMoshi()
+                        .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
+                val json = adapter.fromJson(state.editedContent ?: "")
+                        ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_content))
+
+                room.sendStateEvent(
+                        state.selectedEvent?.type ?: "",
+                        state.selectedEvent?.stateKey,
+                        json
+
+                )
+                _viewEvents.post(DevToolsViewEvents.ShowSnackMessage(stringProvider.getString(R.string.dev_tools_success_state_event)))
+                setState {
+                    copy(
+                            modalLoading = Success(Unit),
+                            selectedEventJson = null,
+                            editedContent = null,
+                            displayMode = RoomDevToolViewState.Mode.StateEventListByType
+                    )
                 }
+            } catch (failure: Throwable) {
+                _viewEvents.post(DevToolsViewEvents.ShowAlertMessage(errorFormatter.toHumanReadable(failure)))
+                setState { copy(modalLoading = Fail(failure)) }
             }
-            is RoomDevToolViewState.Mode.SendEventForm -> {
-                setState { copy(modalLoading = Loading()) }
-                viewModelScope.launch {
-                    try {
-                        val room = session.getRoom(initialState.roomId)
-                                ?: throw IllegalArgumentException("Room not found")
+        }
+    }
 
-                        val adapter = MoshiProvider.providesMoshi()
-                                .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
-                        val json = adapter.fromJson(it.sendEventDraft?.content ?: "")
-                                ?: throw IllegalArgumentException("No content")
+    private fun sendEventContent(state: RoomDevToolViewState, isState: Boolean) {
+        setState { copy(modalLoading = Loading()) }
+        viewModelScope.launch {
+            try {
+                val room = session.getRoom(initialState.roomId)
+                        ?: throw IllegalArgumentException(stringProvider.getString(R.string.room_error_not_found))
 
-                        val eventType = it.sendEventDraft?.type ?: throw IllegalArgumentException("Missing message type")
-                        if (it.displayMode.isState) {
-                            room.sendStateEvent(
-                                    eventType,
-                                    it.sendEventDraft.stateKey,
-                                    json
+                val adapter = MoshiProvider.providesMoshi()
+                        .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
+                val json = adapter.fromJson(state.sendEventDraft?.content ?: "")
+                        ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_content))
 
-                            )
-                        } else {
-                            // can we try to do some validation??
-                            // val validParse = MoshiProvider.providesMoshi().adapter(MessageContent::class.java).fromJson(it.sendEventDraft.content ?: "")
-                            json.toModel<MessageContent>(catchError = false)
-                                    ?: throw IllegalArgumentException("Malformed event")
-                            room.sendEvent(
-                                    eventType,
-                                    json
-                            )
-                        }
+                val eventType = state.sendEventDraft?.type
+                        ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_message_type))
 
-                        _viewEvents.post(DevToolsViewEvents.showSnackMessage("Event sent!"))
-                        setState {
-                            copy(
-                                    modalLoading = Success(Unit),
-                                    sendEventDraft = null,
-                                    displayMode = RoomDevToolViewState.Mode.Root
-                            )
-                        }
-                    } catch (failure: Throwable) {
-                        _viewEvents.post(DevToolsViewEvents.showAlertMessage(errorFormatter.toHumanReadable(failure)))
-                        setState { copy(modalLoading = Fail(failure)) }
-                    }
+                if (isState) {
+                    room.sendStateEvent(
+                            eventType,
+                            state.sendEventDraft.stateKey,
+                            json
+                    )
+                } else {
+                    // can we try to do some validation??
+                    // val validParse = MoshiProvider.providesMoshi().adapter(MessageContent::class.java).fromJson(it.sendEventDraft.content ?: "")
+                    json.toModel<MessageContent>(catchError = false)
+                            ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_malformed_event))
+                    room.sendEvent(
+                            eventType,
+                            json
+                    )
                 }
+
+                _viewEvents.post(DevToolsViewEvents.ShowSnackMessage(stringProvider.getString(R.string.dev_tools_success_event)))
+                setState {
+                    copy(
+                            modalLoading = Success(Unit),
+                            sendEventDraft = null,
+                            displayMode = RoomDevToolViewState.Mode.Root
+                    )
+                }
+            } catch (failure: Throwable) {
+                _viewEvents.post(DevToolsViewEvents.ShowAlertMessage(errorFormatter.toHumanReadable(failure)))
+                setState { copy(modalLoading = Fail(failure)) }
             }
         }
     }
 
     private fun handleBack() = withState {
         when (it.displayMode) {
-            RoomDevToolViewState.Mode.Root -> {
+            RoomDevToolViewState.Mode.Root                 -> {
                 _viewEvents.post(DevToolsViewEvents.Dismiss)
             }
-            RoomDevToolViewState.Mode.StateEventList -> {
+            RoomDevToolViewState.Mode.StateEventList       -> {
                 setState {
                     copy(
                             selectedEvent = null,
@@ -257,7 +268,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            RoomDevToolViewState.Mode.StateEventDetail -> {
+            RoomDevToolViewState.Mode.StateEventDetail     -> {
                 setState {
                     copy(
                             selectedEvent = null,
@@ -266,7 +277,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            RoomDevToolViewState.Mode.EditEventContent -> {
+            RoomDevToolViewState.Mode.EditEventContent     -> {
                 setState {
                     copy(
                             displayMode = RoomDevToolViewState.Mode.StateEventDetail
@@ -281,7 +292,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                     )
                 }
             }
-            is RoomDevToolViewState.Mode.SendEventForm -> {
+            is RoomDevToolViewState.Mode.SendEventForm     -> {
                 setState {
                     copy(
                             displayMode = RoomDevToolViewState.Mode.Root

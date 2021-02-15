@@ -25,9 +25,9 @@
             android:id="@+id/formMultiLineEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:imeOptions="actionDone"
             android:gravity="top|start"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
             android:minLines="4"
             tools:hint="@string/create_room_name_hint" />
 

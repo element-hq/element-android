@@ -17,22 +17,21 @@
 package im.vector.app.features.devtools
 
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formMultiLineEditTextItem
 import javax.inject.Inject
 
-class RoomDevToolSendFormController @Inject constructor() : TypedEpoxyController<RoomDevToolViewState>() {
+class RoomDevToolSendFormController @Inject constructor(
+        private val stringProvider: StringProvider
+) : TypedEpoxyController<RoomDevToolViewState>() {
 
-    interface InteractionListener {
-        fun processAction(action: RoomDevToolAction)
-    }
-
-    var interactionListener: InteractionListener? = null
+    var interactionListener: DevToolsInteractionListener? = null
 
     override fun buildModels(data: RoomDevToolViewState?) {
-        val sendMode =  (data?.displayMode as? RoomDevToolViewState.Mode.SendEventForm)
-                ?: return
+        val sendEventForm = (data?.displayMode as? RoomDevToolViewState.Mode.SendEventForm) ?: return
 
         genericFooterItem {
             id("topSpace")
@@ -42,19 +41,19 @@ class RoomDevToolSendFormController @Inject constructor() : TypedEpoxyController
             id("event_type")
             enabled(true)
             value(data.sendEventDraft?.type)
-            hint("Type")
+            hint(stringProvider.getString(R.string.dev_tools_form_hint_type))
             showBottomSeparator(false)
             onTextChange { text ->
                 interactionListener?.processAction(RoomDevToolAction.CustomEventTypeChange(text))
             }
         }
 
-        if (sendMode.isState) {
+        if (sendEventForm.isState) {
             formEditTextItem {
                 id("state_key")
                 enabled(true)
                 value(data.sendEventDraft?.stateKey)
-                hint("State Key")
+                hint(stringProvider.getString(R.string.dev_tools_form_hint_state_key))
                 showBottomSeparator(false)
                 onTextChange { text ->
                     interactionListener?.processAction(RoomDevToolAction.CustomEventStateKeyChange(text))
@@ -66,7 +65,7 @@ class RoomDevToolSendFormController @Inject constructor() : TypedEpoxyController
             id("event_content")
             enabled(true)
             value(data.sendEventDraft?.content)
-            hint("Event Content")
+            hint(stringProvider.getString(R.string.dev_tools_form_hint_event_content))
             showBottomSeparator(false)
             onTextChange { text ->
                 interactionListener?.processAction(RoomDevToolAction.CustomEventContentChange(text))
