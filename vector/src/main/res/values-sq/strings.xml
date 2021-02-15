@@ -1751,7 +1751,7 @@
     <string name="set_recovery_passphrase">Caktoni një %s</string>
     <string name="generate_message_key">Prodhoni një Kyç Mesazhesh</string>
     <string name="confirm_recovery_passphrase">Ripohoni %s</string>
-    <string name="enter_account_password">Që të vazhdohet, jepni % tuaj.</string>
+    <string name="enter_account_password">Që të vazhdohet, jepni %s tuaj.</string>
     <string name="bootstrap_info_text">Siguroni &amp; shkyçni mesazhet tuaj të fshehtëzuar dhe besim me një %s.</string>
     <string name="bootstrap_info_confirm_text">Për ta ripohuar, rijepni %s tuaj.</string>
     <string name="bootstrap_dont_reuse_pwd">Mos ripërdorni fjalëkalimin e llogarisë tuaj.</string>

@@ -1549,8 +1549,8 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="invitation_sent_to_one_user">Invitación enviada a %1$s</string>
     <string name="invitations_sent_to_two_users">Invitación enviada a %1$s y %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-        <item quantity="one">Invitaciones enviadas a % $s y a uno más</item>
-        <item quantity="other">Invitaciones enviadas a %$s y a %2$d más</item>
+        <item quantity="one">Invitaciones enviadas a %1$s y a uno más</item>
+        <item quantity="other">Invitaciones enviadas a %1$s y a %2$d más</item>
     </plurals>
     <string name="invite_users_to_room_failure">No se pudo invitar el usuario. Por favor, intente nuevamente.</string>
     <string name="choose_locale_current_locale_title">Idioma actual</string>
@@ -2291,7 +2291,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="direct_room_user_list_contacts_title">Contactos</string>
     <string name="direct_room_user_list_known_title">Usuarios conocidos</string>
     <string name="settings_chat_effects_title">Mostrar efectos de chat</string>
-    <string name="permissions_denied_qr_code">Para escanear el codigo QR , necesita darle permisos a su camara.</string>
+    <string name="permissions_denied_qr_code">Para escanear el codigo QR , necesita darle permisos a su cámara.</string>
     <string name="invite_friends">Invitar contactos</string>
     <string name="room_settings_permissions_subtitle">Modifique los roles y privilegios de la sala.</string>
     <string name="room_participants_leave_private_warning">Sala no pública. No puede acceder sin una invitacion.</string>
@@ -2301,5 +2301,5 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_permissions_change_history_visibility">Editar historial de visibilidad</string>
     <string name="room_permissions_change_permissions">Editar permisos</string>
     <string name="room_permissions_change_room_name">Cambiar el nombre de la sala</string>
-    <string name="room_settings_permissions_title">Administracion de sala</string>
+    <string name="room_settings_permissions_title">Administración de sala</string>
 </resources>
