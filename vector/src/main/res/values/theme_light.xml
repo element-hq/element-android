@@ -112,9 +112,6 @@
         <item name="riotx_list_bottom_sheet_divider_color">@color/riotx_list_bottom_sheet_divider_color_light</item>
         <item name="vctr_list_divider_color">@color/riotx_header_panel_background_light</item>
 
-        <!-- outgoing call background color -->
-        <item name="vctr_pending_outgoing_view_background_color">#33000000</item>
-
         <!-- room notification text color (typing, unsent...) -->
         <!--Notice (secondary)-->
         <item name="vctr_room_notification_text_color">#FF61708b</item>
