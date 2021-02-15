@@ -66,8 +66,6 @@
         <item name="materialButtonStyle">@style/VectorButtonStyle</item>
         <item name="toolbarStyle">@style/VectorToolbarStyle</item>
 
-        <item name="android:textColorLink">@color/riotx_links</item>
-
         <!-- Menu text color -->
         <item name="android:actionMenuTextColor">?colorAccent</item>
 
