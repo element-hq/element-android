@@ -101,8 +101,7 @@
         android:id="@+id/composerShieldImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:ignore="MissingConstraints"
-        tools:src="@drawable/ic_shield_black" />
+        tools:ignore="MissingConstraints" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"

@@ -130,7 +130,6 @@
         app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintStart_toEndOf="@+id/attachmentButton"
         app:layout_constraintTop_toTopOf="@id/sendButton"
-        tools:src="@drawable/ic_shield_black"
         tools:visibility="visible" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText

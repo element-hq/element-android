@@ -134,8 +134,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/sendButton"
         app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sendButton"
-        tools:src="@drawable/ic_shield_black" />
+        app:layout_constraintTop_toTopOf="@+id/sendButton" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"

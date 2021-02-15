@@ -32,7 +32,6 @@
             android:id="@+id/otherUserShield"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:importantForAccessibility="no"
             app:layout_constraintCircle="@+id/otherUserAvatarImageView"
             app:layout_constraintCircleAngle="135"
             app:layout_constraintCircleRadius="16dp"

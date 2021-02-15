@@ -73,7 +73,6 @@
         android:layout_alignEnd="@id/decorationSpace"
         android:layout_marginTop="7dp"
         android:visibility="gone"
-        tools:src="@drawable/ic_shield_warning"
         tools:visibility="visible" />
 
     <FrameLayout

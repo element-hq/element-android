@@ -78,7 +78,6 @@
         android:layout_marginTop="8dp"
         android:layout_toStartOf="@id/viewStubContainer"
         android:visibility="gone"
-        tools:src="@drawable/ic_shield_warning"
         tools:visibility="visible" />
 
 
