@@ -227,18 +227,6 @@
         <item name="tabMaxWidth">0dp</item>
     </style>
 
-    <style name="VectorUnifiedSearches.TabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabGravity">fill</item>
-        <item name="tabMode">fixed</item>
-        <item name="tabPaddingStart">0dp</item>
-        <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">?attr/vctr_tab_bar_inverted_background_color</item>
-        <item name="tabTextColor">?attr/colorAccent</item>
-        <item name="tabSelectedTextColor">?attr/colorAccent</item>
-        <item name="tabIndicatorColor">?attr/colorAccent</item>
-        <item name="tabMaxWidth">0dp</item>
-    </style>
-
     <style name="ListHeader">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">?vctr_list_header_primary_text_color</item>

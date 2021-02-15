@@ -171,11 +171,6 @@
     <color name="riotx_bottom_sheet_background_dark">#FF282C35</color>
     <color name="riotx_bottom_sheet_background_black">#FF282C35</color>
 
-    <attr name="riotx_search_background_mobile" format="color" />
-    <color name="riotx_search_background_mobile_light">#FFFFFFFF</color>
-    <color name="riotx_search_background_mobile_dark">#FF181B21</color>
-    <color name="riotx_search_background_mobile_black">#FF181B21</color>
-
     <attr name="riotx_header_panel_background" format="color" />
     <color name="riotx_header_panel_background_light">#FFF3F8FD</color>
     <color name="riotx_header_panel_background_dark">#FF22262E</color>
@@ -185,11 +180,6 @@
     <color name="riotx_header_panel_border_mobile_light">#FFE9EDF1</color>
     <color name="riotx_header_panel_border_mobile_dark">#FF181B21</color>
     <color name="riotx_header_panel_border_mobile_black">#FF0D0F12</color>
-
-    <attr name="riotx_header_panel_text_primary" format="color" />
-    <color name="riotx_header_panel_text_primary_light">#FF171910</color>
-    <color name="riotx_header_panel_text_primary_dark">#FFFFFFFF</color>
-    <color name="riotx_header_panel_text_primary_black">#FFFFFFFF</color>
 
     <attr name="riotx_header_panel_text_secondary" format="color" />
     <color name="riotx_header_panel_text_secondary_light">#8F97A3</color>
@@ -223,46 +213,16 @@
     <color name="riotx_android_secondary_dark">#FF8F97A3</color>
     <color name="riotx_android_secondary_black">#FFA9B2BC</color>
 
-    <attr name="riotx_search_placeholder" format="color" />
-    <color name="riotx_search_placeholder_light">#FF8F97A3</color>
-    <color name="riotx_search_placeholder_dark">#FFA9B2BC</color>
-    <color name="riotx_search_placeholder_black">#FFA9B2BC</color>
-
-    <attr name="riotx_room_highlight" format="color" />
-    <color name="riotx_room_highlight_light">#FFF6F7F8</color>
-    <color name="riotx_room_highlight_dark">#FF343446</color>
-    <color name="riotx_room_highlight_black">#FF343446</color>
-
     <attr name="riotx_unread_room_indent" format="color" />
     <color name="riotx_unread_room_indent_light">#FF2E3648</color>
     <color name="riotx_unread_room_indent_dark">#FF2E3648</color>
     <color name="riotx_unread_room_indent_black">#FF2E3648</color>
-
-    <attr name="riotx_android_status_bar" format="color" />
-    <color name="riotx_android_status_bar_light">#FF2E3648</color>
-    <color name="riotx_android_status_bar_dark">#FF0D0E10</color>
-    <color name="riotx_android_status_bar_black">#FF0D0E10</color>
-
-    <attr name="riotx_line_break_mobile" format="color" />
-    <color name="riotx_line_break_mobile_light">#FFEEEFEF</color>
-    <color name="riotx_line_break_mobile_dark">#FF61708B</color>
-    <color name="riotx_line_break_mobile_black">#FF61708B</color>
 
     <!-- Other colors, which are not in the pallette -->
     <attr name="riotx_unread_room_badge" format="color" />
     <color name="riotx_unread_room_badge_light">#FF61708B</color>
     <color name="riotx_unread_room_badge_dark">#FF61708B</color>
     <color name="riotx_unread_room_badge_black">#FF61708B</color>
-
-    <attr name="riotx_fab_secondary_bg" format="color" />
-    <color name="riotx_fab_secondary_bg_light">@color/white</color>
-    <color name="riotx_fab_secondary_bg_dark">#FF181B21</color>
-    <color name="riotx_fab_secondary_bg_black">#FF181B21</color>
-
-    <attr name="riotx_fab_secondary_color" format="color" />
-    <color name="riotx_fab_secondary_color_light">@color/black</color>
-    <color name="riotx_fab_secondary_color_dark">@color/white</color>
-    <color name="riotx_fab_secondary_color_black">@color/white</color>
 
     <attr name="riotx_fab_label_bg" format="color" />
     <color name="riotx_fab_label_bg_light">@color/white</color>
