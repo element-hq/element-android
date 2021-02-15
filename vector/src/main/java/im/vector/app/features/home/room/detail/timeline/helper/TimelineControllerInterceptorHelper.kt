@@ -90,6 +90,8 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                     it.setOnVisibilityStateChanged(ReadMarkerVisibilityStateChangedListener(callback))
                 }
         add(readMarker)
+        // Use next as we still have some process to do before the next iterator loop
+        next()
     }
 
     private fun MutableListIterator<EpoxyModel<*>>.removeCallItemIfNeeded(
