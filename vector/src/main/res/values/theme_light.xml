@@ -90,10 +90,6 @@
         <!-- list colors -->
         <!--Header/Panel Background-->
         <item name="vctr_list_header_background_color">#FFF3F8FD</item>
-        <!--Header/Panel Text Primary-->
-        <item name="vctr_list_header_primary_text_color">#FF61708B</item>
-        <!--Header/Panel Text Secondary-->
-        <item name="vctr_list_header_secondary_text_color">#FFC8C8CD</item>
 
         <item name="riotx_list_bottom_sheet_divider_color">@color/riotx_list_bottom_sheet_divider_color_light</item>
         <item name="vctr_list_divider_color">@color/riotx_header_panel_background_light</item>
