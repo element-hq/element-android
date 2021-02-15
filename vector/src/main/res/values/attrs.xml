@@ -1,55 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="VectorStyles">
+    <!-- application bar text color -->
+    <attr name="vctr_toolbar_primary_text_color" format="color" />
+    <attr name="vctr_toolbar_secondary_text_color" format="color" />
+    <attr name="vctr_toolbar_link_text_color" format="color" />
 
-        <!-- application bar text color -->
-        <attr name="vctr_toolbar_primary_text_color" format="color" />
-        <attr name="vctr_toolbar_secondary_text_color" format="color" />
-        <attr name="vctr_toolbar_link_text_color" format="color" />
+    <!-- default text colors -->
+    <attr name="vctr_default_text_hint_color" format="color" />
 
-        <!-- default text colors -->
-        <attr name="vctr_default_text_hint_color" format="color" />
+    <!-- room message colors -->
+    <attr name="vctr_unsent_message_text_color" format="color" />
+    <attr name="vctr_message_text_color" format="color" />
+    <attr name="vctr_notice_text_color" format="color" />
+    <attr name="vctr_notice_secondary" format="color" />
+    <attr name="vctr_encrypting_message_text_color" format="color" />
+    <attr name="vctr_sending_message_text_color" format="color" />
+    <attr name="vctr_markdown_block_background_color" format="color" />
+    <attr name="vctr_spoiler_background_color" format="color" />
 
-        <!-- room message colors -->
-        <attr name="vctr_unsent_message_text_color" format="color" />
-        <attr name="vctr_message_text_color" format="color" />
-        <attr name="vctr_notice_text_color" format="color" />
-        <attr name="vctr_notice_secondary" format="color" />
-        <attr name="vctr_encrypting_message_text_color" format="color" />
-        <attr name="vctr_sending_message_text_color" format="color" />
-        <attr name="vctr_markdown_block_background_color" format="color" />
-        <attr name="vctr_spoiler_background_color" format="color" />
+    <!-- tab bar colors -->
+    <attr name="vctr_tab_bar_inverted_background_color" format="color" />
 
-        <!-- tab bar colors -->
-        <attr name="vctr_tab_bar_inverted_background_color" format="color" />
+    <!-- list colors -->
+    <attr name="vctr_list_header_background_color" format="color" />
+    <attr name="vctr_list_header_primary_text_color" format="color" />
+    <attr name="vctr_list_header_secondary_text_color" format="color" />
 
-        <!-- list colors -->
-        <attr name="vctr_list_header_background_color" format="color" />
-        <attr name="vctr_list_header_primary_text_color" format="color" />
-        <attr name="vctr_list_header_secondary_text_color" format="color" />
+    <attr name="vctr_list_divider_color" format="color" />
 
-        <attr name="vctr_list_divider_color" format="color" />
+    <!-- outgoing call background color -->
+    <attr name="vctr_pending_outgoing_view_background_color" format="color" />
 
-        <!-- outgoing call background color -->
-        <attr name="vctr_pending_outgoing_view_background_color" format="color" />
+    <!-- room notification text color (typing, unsent...) -->
+    <attr name="vctr_room_notification_text_color" format="color" />
 
-        <!-- room notification text color (typing, unsent...) -->
-        <attr name="vctr_room_notification_text_color" format="color" />
+    <!-- icon colors -->
+    <attr name="vctr_icon_tint_on_light_action_bar_color" format="color" />
+    <attr name="vctr_settings_icon_tint_color" format="color" />
 
-        <!-- icon colors -->
-        <attr name="vctr_icon_tint_on_light_action_bar_color" format="color" />
-        <attr name="vctr_settings_icon_tint_color" format="color" />
+    <attr name="vctr_social_login_button_google_style" format="reference" />
+    <attr name="vctr_social_login_button_github_style" format="reference" />
+    <attr name="vctr_social_login_button_facebook_style" format="reference" />
+    <attr name="vctr_social_login_button_twitter_style" format="reference" />
+    <attr name="vctr_social_login_button_apple_style" format="reference" />
+    <attr name="vctr_social_login_button_gitlab_style" format="reference" />
 
-        <attr name="vctr_social_login_button_google_style" format="reference" />
-        <attr name="vctr_social_login_button_github_style" format="reference" />
-        <attr name="vctr_social_login_button_facebook_style" format="reference" />
-        <attr name="vctr_social_login_button_twitter_style" format="reference" />
-        <attr name="vctr_social_login_button_apple_style" format="reference" />
-        <attr name="vctr_social_login_button_gitlab_style" format="reference" />
-
-        <attr name="vctr_chat_effect_snow_background" format="color" />
-    </declare-styleable>
+    <attr name="vctr_chat_effect_snow_background" format="color" />
 
     <declare-styleable name="PollResultLineView">
         <attr name="optionName" format="string" localization="suggested" />
@@ -70,16 +67,16 @@
 
     <declare-styleable name="SignOutBottomSheetActionButton">
         <attr name="iconTint" format="color" />
-        <attr name="actionTitle"/>
+        <attr name="actionTitle" />
         <attr name="leftIcon" />
         <attr name="textColor" format="color" />
     </declare-styleable>
 
     <declare-styleable name="SocialLoginButtonsView">
         <attr name="signMode" format="enum">
-            <enum name="signin" value="0"/>
-            <enum name="signup" value="1"/>
-            <enum name="continue_with" value="2"/>
+            <enum name="signin" value="0" />
+            <enum name="signup" value="1" />
+            <enum name="continue_with" value="2" />
         </attr>
     </declare-styleable>
 </resources>
