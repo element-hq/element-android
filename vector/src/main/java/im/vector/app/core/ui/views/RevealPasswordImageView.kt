@@ -33,11 +33,11 @@ class RevealPasswordImageView @JvmOverloads constructor(
 
     fun render(isPasswordShown: Boolean) {
         if (isPasswordShown) {
-            setImageResource(R.drawable.ic_eye_closed)
             contentDescription = context.getString(R.string.a11y_hide_password)
+            setImageResource(R.drawable.ic_eye_closed)
         } else {
-            setImageResource(R.drawable.ic_eye)
             contentDescription = context.getString(R.string.a11y_show_password)
+            setImageResource(R.drawable.ic_eye)
         }
     }
 }

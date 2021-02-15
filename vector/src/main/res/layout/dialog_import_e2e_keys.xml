@@ -50,14 +50,11 @@
         android:layout_height="@dimen/layout_touch_size"
         android:layout_marginTop="8dp"
         android:background="?attr/selectableItemBackground"
-        android:contentDescription="@string/a11y_show_password"
         android:scaleType="center"
-        android:src="@drawable/ic_eye"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/importDialogTil"
         app:layout_constraintTop_toTopOf="@id/importDialogTil"
-        app:tint="?attr/colorAccent"
-        tools:ignore="MissingPrefix" />
+        app:tint="?attr/colorAccent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/dialog_e2e_keys_import_button"
