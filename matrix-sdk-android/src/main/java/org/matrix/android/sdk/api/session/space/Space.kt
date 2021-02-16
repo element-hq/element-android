@@ -26,5 +26,11 @@ interface Space {
 
     suspend fun removeRoom(roomId: String)
 
+    @Throws
+    suspend fun setChildrenOrder(roomId: String, order: String?)
+
+    @Throws
+    suspend fun setChildrenAutoJoin(roomId: String, autoJoin: Boolean)
+
 //    fun getChildren() : List<IRoomSummary>
 }
