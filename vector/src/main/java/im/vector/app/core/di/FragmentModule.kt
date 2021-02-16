@@ -45,6 +45,10 @@ import im.vector.app.features.crypto.verification.emoji.VerificationEmojiCodeFra
 import im.vector.app.features.crypto.verification.qrconfirmation.VerificationQRWaitingFragment
 import im.vector.app.features.crypto.verification.qrconfirmation.VerificationQrScannedByOtherFragment
 import im.vector.app.features.crypto.verification.request.VerificationRequestFragment
+import im.vector.app.features.devtools.RoomDevToolEditFragment
+import im.vector.app.features.devtools.RoomDevToolFragment
+import im.vector.app.features.devtools.RoomDevToolSendFormFragment
+import im.vector.app.features.devtools.RoomDevToolStateEventListFragment
 import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.discovery.change.SetIdentityServerFragment
 import im.vector.app.features.grouplist.GroupListFragment
@@ -594,4 +598,24 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(ShowUserCodeFragment::class)
     fun bindShowUserCodeFragment(fragment: ShowUserCodeFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomDevToolFragment::class)
+    fun bindRoomDevToolFragment(fragment: RoomDevToolFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomDevToolStateEventListFragment::class)
+    fun bindRoomDevToolStateEventListFragment(fragment: RoomDevToolStateEventListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomDevToolEditFragment::class)
+    fun bindRoomDevToolEditFragment(fragment: RoomDevToolEditFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(RoomDevToolSendFormFragment::class)
+    fun bindRoomDevToolSendFormFragment(fragment: RoomDevToolSendFormFragment): Fragment
 }
