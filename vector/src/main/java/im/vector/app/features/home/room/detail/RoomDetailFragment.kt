@@ -52,6 +52,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -124,7 +125,6 @@ import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
-import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.composer.TextComposerView
@@ -537,8 +537,18 @@ class RoomDetailFragment @Inject constructor(
                 .Builder
                 .fromRootView(views.rootConstraintLayout)
                 .setKeyboardAnimationStyle(R.style.emoji_fade_animation_style)
-                .setOnEmojiPopupShownListener { views.composerLayout.views.composerEmojiButton.setImageResource(R.drawable.ic_keyboard) }
-                .setOnEmojiPopupDismissListener { views.composerLayout.views.composerEmojiButton.setImageResource(R.drawable.ic_insert_emoji) }
+                .setOnEmojiPopupShownListener {
+                    views.composerLayout.views.composerEmojiButton.let {
+                        it.setImageResource(R.drawable.ic_keyboard)
+                        it.contentDescription = getString(R.string.a11y_close_emoji_picker)
+                    }
+                }
+                .setOnEmojiPopupDismissListener {
+                    views.composerLayout.views.composerEmojiButton.let {
+                        it.setImageResource(R.drawable.ic_insert_emoji)
+                        it.contentDescription = getString(R.string.a11y_open_emoji_picker)
+                    }
+                }
                 .build(views.composerLayout.views.composerEditText)
 
         views.composerLayout.views.composerEmojiButton.debouncedClicks {
@@ -789,6 +799,10 @@ class RoomDetailFragment @Inject constructor(
                 handleSearchAction()
                 true
             }
+            R.id.dev_tools        -> {
+                navigator.openDevTools(requireContext(), roomDetailArgs.roomId)
+                true
+            }
             else                  -> super.onOptionsItemSelected(item)
         }
     }
@@ -1030,7 +1044,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun updateJumpToReadMarkerViewVisibility() {
-        views.jumpToReadMarkerView.post {
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             withState(roomDetailViewModel) {
                 val showJumpToUnreadBanner = when (it.unreadState) {
                     UnreadState.Unknown,
@@ -1189,10 +1203,7 @@ class RoomDetailFragment @Inject constructor(
             avatarRenderer.render(roomSummary.toMatrixItem(), views.roomToolbarAvatarImageView)
 
             renderSubTitle(typingMessage, roomSummary.topic)
-            views.roomToolbarDecorationImageView.let {
-                it.setImageResource(roomSummary.roomEncryptionTrustLevel.toImageRes())
-                it.isVisible = roomSummary.roomEncryptionTrustLevel != null
-            }
+            views.roomToolbarDecorationImageView.render(roomSummary.roomEncryptionTrustLevel)
         }
     }
 

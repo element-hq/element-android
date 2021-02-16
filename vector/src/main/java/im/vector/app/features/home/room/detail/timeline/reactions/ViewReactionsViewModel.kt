@@ -60,7 +60,7 @@ data class ReactionInfo(
  */
 class ViewReactionsViewModel @AssistedInject constructor(@Assisted
                                                          initialState: DisplayReactionsViewState,
-                                                         private val session: Session,
+                                                         session: Session,
                                                          private val dateFormatter: VectorDateFormatter
 ) : VectorViewModel<DisplayReactionsViewState, EmptyAction, EmptyViewEvents>(initialState) {
 

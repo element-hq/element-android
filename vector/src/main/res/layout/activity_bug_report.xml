@@ -150,6 +150,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
                     android:adjustViewBounds="true"
+                    android:contentDescription="@string/a11y_screenshot"
                     android:maxWidth="260dp"
                     android:scaleType="fitCenter"
                     tools:src="@tools:sample/backgrounds/scenic" />

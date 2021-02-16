@@ -199,7 +199,6 @@ class RoomSettingsFragment @Inject constructor(
                 }
                 RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
                     /* Should not happen */
-                    Unit
                 }
                 is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {
                     // Cancel the update of the avatar

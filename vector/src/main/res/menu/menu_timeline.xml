@@ -68,4 +68,12 @@
         app:showAsAction="never"
         tools:visible="true" />
 
+    <item
+        android:id="@+id/dev_tools"
+        android:icon="@drawable/ic_settings_root_general"
+        android:title="@string/dev_tools_menu_name"
+        android:visible="false"
+        app:showAsAction="never"
+        tools:visible="true" />
+
 </menu>

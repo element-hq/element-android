@@ -19,6 +19,7 @@
                 android:id="@+id/loginServerIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
                 app:tint="?riotx_text_primary"
                 tools:ignore="MissingPrefix"
                 tools:src="@drawable/ic_logo_matrix_org" />
@@ -86,7 +87,7 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
+                <im.vector.app.core.ui.views.RevealPasswordImageView
                     android:id="@+id/passwordReveal"
                     android:layout_width="@dimen/layout_touch_size"
                     android:layout_height="@dimen/layout_touch_size"
@@ -94,10 +95,7 @@
                     android:layout_marginTop="8dp"
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="center"
-                    android:src="@drawable/ic_eye"
-                    app:tint="?attr/colorAccent"
-                    tools:contentDescription="@string/a11y_show_password"
-                    tools:ignore="MissingPrefix" />
+                    app:tint="?attr/colorAccent" />
 
             </FrameLayout>
 

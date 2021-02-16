@@ -11,12 +11,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        tools:drawableStart="@drawable/ic_shield_trusted"
         android:drawablePadding="6dp"
         android:gravity="center"
         android:textColor="?riotx_text_primary"
         android:textSize="15sp"
         android:textStyle="bold"
+        tools:drawableStart="@drawable/ic_shield_trusted"
         tools:text="@string/sas_verified" />
 
 

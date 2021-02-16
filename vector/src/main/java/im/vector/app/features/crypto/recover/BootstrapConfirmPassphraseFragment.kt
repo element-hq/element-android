@@ -109,7 +109,7 @@ class BootstrapConfirmPassphraseFragment @Inject constructor()
         if (state.step is BootstrapStep.ConfirmPassphrase) {
             val isPasswordVisible = state.step.isPasswordVisible
             views.ssssPassphraseEnterEdittext.showPassword(isPasswordVisible, updateCursor = false)
-            views.ssssViewShowPassword.setImageResource(if (isPasswordVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+            views.ssssViewShowPassword.render(isPasswordVisible)
         }
     }
 }

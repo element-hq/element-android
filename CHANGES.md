@@ -8,10 +8,12 @@ Improvements 🙌:
  - VoIP : new tiles in timeline
  - Improve room profile UX
  - Upgrade Jitsi library from 2.9.3 to 3.1.0
+ - a11y improvements
 
 Bugfix 🐛:
  - VoIP : fix audio devices output
  - Fix crash after initial sync on Dendrite
+ - Fix crash reported by PlayStore (#2707)
 
 Translations 🗣:
  -
@@ -26,6 +28,7 @@ Test:
  -
 
 Other changes:
+ - New Dev Tools panel for developers
  - Fix typos in CHANGES.md (#2811)
 
 Changes in Element 1.0.17 (2021-02-09)

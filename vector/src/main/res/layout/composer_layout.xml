@@ -36,6 +36,7 @@
         android:id="@+id/composerRelatedMessageAvatar"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/avatar"
         tools:ignore="MissingConstraints"
         tools:src="@tools:sample/avatars" />
 
@@ -63,6 +64,7 @@
         android:id="@+id/composerRelatedMessageActionIcon"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:importantForAccessibility="no"
         app:tint="?riotx_text_primary"
         tools:ignore="MissingConstraints,MissingPrefix" />
 
@@ -95,12 +97,11 @@
         android:src="@drawable/ic_attachment"
         tools:ignore="MissingConstraints" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/composerShieldImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:ignore="MissingConstraints"
-        tools:src="@drawable/ic_shield_black" />
+        tools:ignore="MissingConstraints" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
@@ -117,6 +118,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/a11y_open_emoji_picker"
         android:src="@drawable/ic_insert_emoji"
         tools:ignore="MissingConstraints" />
 

@@ -45,6 +45,7 @@ import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
+import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
@@ -355,6 +356,10 @@ class DefaultNavigator @Inject constructor(
     override fun openSearch(context: Context, roomId: String) {
         val intent = SearchActivity.newIntent(context, SearchArgs(roomId))
         context.startActivity(intent)
+    }
+
+    override fun openDevTools(context: Context, roomId: String) {
+        context.startActivity(RoomDevToolActivity.intent(context, roomId))
     }
 
     override fun openCallTransfer(context: Context, callId: String) {

@@ -56,6 +56,7 @@ class ReadReceiptsView @JvmOverloads constructor(
 
     private fun setupView() {
         inflate(context, R.layout.view_read_receipts, this)
+        contentDescription = context.getString(R.string.a11y_view_read_receipts)
     }
 
     fun render(readReceipts: List<ReadReceiptData>, avatarRenderer: AvatarRenderer, clickListener: OnClickListener) {

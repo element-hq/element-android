@@ -36,6 +36,7 @@
             android:id="@+id/loginSplashLogo"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/element_logo_green"
             android:transitionName="loginLogoTransition" />
 
@@ -44,6 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="44dp"
             android:layout_marginTop="8dp"
+            android:contentDescription="@string/app_name"
             android:src="@drawable/element_logotype"
             app:tint="?colorAccent"
             tools:ignore="MissingPrefix" />

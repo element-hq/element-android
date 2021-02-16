@@ -24,12 +24,14 @@
             android:id="@+id/createDirectRoomUserAvatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:contentDescription="@string/avatar"
             tools:src="@tools:sample/avatars" />
 
         <ImageView
             android:id="@+id/createDirectRoomUserAvatarChecked"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:contentDescription="@string/a11y_checked"
             android:scaleType="centerInside"
             android:src="@drawable/ic_material_done"
             android:visibility="visible"
