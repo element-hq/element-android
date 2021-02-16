@@ -2886,7 +2886,7 @@
     <string name="dev_tools_event_content_hint">Event content</string>
 
     <string name="command_description_create_space">Create a community</string>
-    <string name="command_description_create_space">Create a Spcae</string>
+    <string name="command_description_create_space">Create a Space</string>
     <string name="command_description_join_space">Join the Space with the given id</string>
     <string name="command_description_leave_room">Leave room with given id (or current room if null)</string>
 </resources>
