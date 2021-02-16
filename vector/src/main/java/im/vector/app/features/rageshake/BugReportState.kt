@@ -21,4 +21,3 @@ import com.airbnb.mvrx.MvRxState
 data class BugReportState(
         val serverVersion: String = ""
 ) : MvRxState
-

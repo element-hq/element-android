@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- - Fetch homeserver type and version and display in a new wetting screen and add info in rageshakes (#2831)
+ - Fetch homeserver type and version and display in a new setting screen and add info in rageshakes (#2831)
 
 Bugfix 🐛:
  -
