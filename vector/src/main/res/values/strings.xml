@@ -2336,6 +2336,9 @@
     <string name="settings_active_sessions_manage">Manage Sessions</string>
     <string name="settings_active_sessions_signout_device">Sign out of this session</string>
 
+    <string name="settings_server_name">Server name</string>
+    <string name="settings_server_version">Server version</string>
+
     <string name="settings_failed_to_get_crypto_device_info">No cryptographic information available</string>
 
     <string name="settings_active_sessions_verified_device_desc">This session is trusted for secure messaging because you verified it:</string>

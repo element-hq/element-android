@@ -33,8 +33,8 @@ internal class DefaultGetFederationVersionTask @Inject constructor(
         }
 
         return FederationVersion(
-                name = result.name,
-                version = result.version
+                name = result.server?.name,
+                version = result.server?.version
         )
     }
 }
