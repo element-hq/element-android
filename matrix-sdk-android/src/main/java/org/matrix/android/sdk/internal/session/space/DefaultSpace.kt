@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
+import java.lang.IllegalArgumentException
 
 class DefaultSpace(private val room: Room) : Space {
 
@@ -61,11 +62,39 @@ class DefaultSpace(private val room: Room) : Space {
         )
     }
 
-//    override fun getChildren(): List<IRoomSummary> {
-// //        asRoom().getStateEvents(setOf(EventType.STATE_SPACE_CHILD)).mapNotNull {
-// //            // statekeys are the roomIds
-// //
-// //        }
-//        return emptyList<IRoomSummary>()
-//    }
+    override suspend fun setChildrenOrder(roomId: String, order: String?) {
+        val existing = asRoom().getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
+                .firstOrNull()
+                ?.content.toModel<SpaceChildContent>()
+                ?: throw IllegalArgumentException("$roomId is not a child of this space")
+
+        // edit state event and set via to null
+        asRoom().sendStateEvent(
+                eventType = EventType.STATE_SPACE_CHILD,
+                stateKey = roomId,
+                body = SpaceChildContent(
+                        order = order,
+                        via = existing.via,
+                        autoJoin = existing.autoJoin
+                ).toContent()
+        )
+    }
+
+    override suspend fun setChildrenAutoJoin(roomId: String, autoJoin: Boolean) {
+        val existing = asRoom().getStateEvents(setOf(EventType.STATE_SPACE_CHILD), QueryStringValue.Equals(roomId))
+                .firstOrNull()
+                ?.content.toModel<SpaceChildContent>()
+                ?: throw IllegalArgumentException("$roomId is not a child of this space")
+
+        // edit state event and set via to null
+        asRoom().sendStateEvent(
+                eventType = EventType.STATE_SPACE_CHILD,
+                stateKey = roomId,
+                body = SpaceChildContent(
+                        order = existing.order,
+                        via = existing.via,
+                        autoJoin = autoJoin
+                ).toContent()
+        )
+    }
 }

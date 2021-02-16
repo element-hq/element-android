@@ -64,11 +64,6 @@ interface SpaceService {
 
     fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams): List<SpaceSummary>
 
-    data class ChildAutoJoinInfo(
-            val roomIdOrAlias: String,
-            val viaServers: List<String> = emptyList()
-    )
-
     sealed class JoinSpaceResult {
         object Success : JoinSpaceResult()
         data class Fail(val error: Throwable) : JoinSpaceResult()
