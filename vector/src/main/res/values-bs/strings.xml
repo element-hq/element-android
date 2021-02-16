@@ -1,22 +1,18 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="light_theme">Svijetla Tema</string>
     <string name="dark_theme">Tamna Tema</string>
     <string name="black_them">Crna Tema</string>
-
     <string name="notification_sync_in_progress">Sinkronizacija</string>
     <string name="notification_listening_for_events">Budući Događaji</string>
     <string name="notification_noisy_notifications">Glasne notifikacije</string>
     <string name="notification_silent_notifications">Nečujne notifikiacije</string>
-
     <string name="title_activity_home">Poruke</string>
     <string name="title_activity_room">Soba</string>
     <string name="title_activity_settings">Postavke</string>
     <string name="title_activity_member_details">Detalji o Članu</string>
     <string name="title_activity_historical">Istorijski</string>
     <string name="title_activity_bug_report">Izvještaj o Greški</string>
-
     <string name="ok">OK</string>
     <string name="cancel">Otkaži</string>
     <string name="save">Snimi</string>
@@ -48,7 +44,6 @@
     <string name="or">ili</string>
     <string name="invite">Pozovi</string>
     <string name="offline">Offline</string>
-
     <string name="action_sign_out">Odjavi se</string>
     <string name="action_voice_call">Glasovni Poziv</string>
     <string name="action_video_call">Video Poziv</string>
@@ -60,23 +55,18 @@
     <string name="action_close">Zatvori</string>
     <string name="copied_to_clipboard">Kopirano</string>
     <string name="disable">Isključi</string>
-
     <string name="dialog_title_confirmation">Potvrda</string>
     <string name="dialog_title_warning">Upozorenje</string>
-
     <string name="bottom_action_home">Naslovna</string>
     <string name="bottom_action_favourites">Omiljeni</string>
     <string name="bottom_action_people">Ljudi</string>
     <string name="bottom_action_rooms">Sobe</string>
-
     <string name="home_filter_placeholder_home">Traži sobe</string>
     <string name="home_filter_placeholder_favorites">Traži favorite</string>
     <string name="home_filter_placeholder_people">Traži ljude</string>
     <string name="home_filter_placeholder_rooms">Traži sobe</string>
-
     <string name="invitations_header">Pozivi</string>
     <string name="low_priority_header">Niski prioritet</string>
-
     <string name="direct_chats_header">Razgovori</string>
     <string name="local_address_book_header">Lokalni adresar</string>
     <string name="user_directory_header">Imenik korisnika</string>
@@ -84,12 +74,10 @@
     <string name="no_conversation_placeholder">Nema razgovora</string>
     <string name="no_contact_access_placeholder">Niste omogućili Elementu pristup vašim lokalnim kontaktima</string>
     <string name="no_result_placeholder">Nema rezultata</string>
-
     <string name="rooms_header">Sobe</string>
     <string name="rooms_directory_header">Imenik soba</string>
     <string name="no_room_placeholder">Nema soba</string>
     <string name="no_public_room_placeholder">Nema dostupnih javnih soba</string>
-
     <string name="send_bug_report_include_logs">Pošaljite zapise</string>
     <string name="send_bug_report_include_crash_logs">Pošaljite keš zapise</string>
     <string name="send_bug_report_include_screenshot">Pošalji sliku ekrana</string>
@@ -99,14 +87,11 @@
     <string name="send_bug_report_logs_description">Da bi dijagnosticirali probleme, zapisi ovog klijenta bit će poslani s ovim izvještajem o greški. Ako želite poslati samo gore navedeni tekst, uklonite oznaku:</string>
     <string name="send_bug_report_alert_message">Čini se da frustrirani. Želite li poslati izvještaj o pogrešci?</string>
     <string name="send_bug_report_app_crashed">Aplikacija se srušila posljednji put. Želite li poslati izvještaj o rušenju?</string>
-
     <string name="send_bug_report_sent">Izvješće o greški je uspješno poslano</string>
     <string name="send_bug_report_failed">Izvještaj o greški nije uspješno poslan (%s)</string>
     <string name="send_bug_report_progress">Napredak (%s%%)</string>
-
     <string name="send_files_in">Poslane informacije</string>
     <string name="read_receipt">Čitaj</string>
-
     <string name="join_room">Pridruži se u sobu</string>
     <string name="username">Korisničko ime</string>
     <string name="create_account">Registruj se</string>
@@ -115,16 +100,13 @@
     <string name="hs_url">URL lokalnog servera</string>
     <string name="identity_url">URL identitet servera</string>
     <string name="search">Traži</string>
-
     <string name="start_new_chat">Započni Novi Razgovor</string>
     <string name="start_voice_call">Započni Glasnovni Poziv</string>
     <string name="start_video_call">Započni Video Poziv</string>
-
     <string name="option_send_files">Pošalji fajlove</string>
     <string name="option_take_photo_video">Napravi fotografiju ili videozapis</string>
     <string name="option_take_photo">Napravi fotografiju</string>
     <string name="option_take_video">Napravi video</string>
-
     <string name="auth_login">Prijavi se</string>
     <string name="auth_register">Registruj se</string>
     <string name="auth_submit">Pošalji</string>
@@ -172,7 +154,6 @@ Možete dodati vašu email adresu na svoj profil u postavkama.</string>
     <string name="auth_reset_password_success_message">Vaša lozinka je resetovana.
 
 Odjavljeni ste sa svih uređaja i više nećete primati obavijesti. Da biste ponovno omogućili obavijesti, ponovo se prijavite na svaki uređaj.</string>
-
     <string name="login_error_must_start_http">URL mora početi sa http[s]://</string>
     <string name="login_error_network_error">Nemoguća prijava: Greška na mreži</string>
     <string name="login_error_unable_login">Nemoguća prijava</string>
@@ -180,7 +161,6 @@ Odjavljeni ste sa svih uređaja i više nećete primati obavijesti. Da biste pon
     <string name="login_error_unable_register">Nemoguća registracija</string>
     <string name="login_error_unable_register_mail_ownership">Nemoguća registracija : problem sa vlasništvom email adrese</string>
     <string name="login_error_invalid_home_server">Unesite ispravan URL</string>
-
     <string name="login_error_forbidden">Netačno korisničko ime/lozinka</string>
     <string name="login_error_unknown_token">Navedeni pristupni token nije prepoznat</string>
     <string name="login_error_bad_json">Neispravno formatiran JSON</string>
@@ -188,23 +168,18 @@ Odjavljeni ste sa svih uređaja i više nećete primati obavijesti. Da biste pon
     <string name="login_error_limit_exceeded">Previše zahtjeva je poslano</string>
     <string name="login_error_user_in_use">Ovo korisničko ime se već koristi</string>
     <string name="login_error_login_email_not_yet">Link email adrese koji još uvijek nije kliknut</string>
-
     <string name="read_receipts_list">Čitajte Listu Primalaca</string>
-
     <string name="compression_options">"Pošalji kao "</string>
     <string name="compression_opt_list_original">Orginal</string>
     <string name="compression_opt_list_large">Veliko</string>
     <string name="compression_opt_list_medium">Srednje</string>
     <string name="compression_opt_list_small">Malo</string>
-
     <string name="attachment_cancel_download">Otkazi preuzimanje?</string>
     <string name="attachment_cancel_upload">Otkaži prijenos?</string>
     <string name="yesterday">Jučer</string>
     <string name="today">Danas</string>
-
     <string name="room_info_room_name">Ime sobe</string>
     <string name="room_info_room_topic">Tema sobe</string>
-
     <string name="call">Poziv</string>
     <string name="call_connected">Poziv uspostavljen</string>
     <string name="call_connecting">Poziv se uspostavlja…</string>
@@ -214,15 +189,12 @@ Odjavljeni ste sa svih uređaja i više nećete primati obavijesti. Da biste pon
     <string name="incoming_video_call">Dolazni Video Poziv</string>
     <string name="incoming_voice_call">Dolazni Glasovni Poziv</string>
     <string name="call_in_progress">Poziv u Toku</string>
-
     <string name="call_error_user_not_responding">Daljinska strana nije uspjela pokupiti.</string>
     <string name="call_error_ice_failed">Medijska veza nije uspjela</string>
     <string name="call_error_camera_init_failed">Kamera se ne moze inicijalizirati</string>
     <string name="call_error_answered_elsewhere">poziv je odgovoren na drugom mjestu</string>
-
     <string name="media_picker_both_capture_title">Snimi fotografiju ili video</string>
     <string name="media_picker_cannot_record_video">Nije moguće snimiti video</string>
-
     <string name="permissions_rationale_popup_title">Informacije</string>
     <string name="permissions_rationale_msg_storage">Hepek treba dopuštenje za pristup vašoj biblioteci fotografija i videozapisa za slanje i spremanje privitaka.
 
@@ -244,47 +216,37 @@ Dopustite pristup sljedećem skočnom prozoru da biste otkrili kontakte koji kor
     <string name="permissions_msg_contacts_warning_other_androids">Hepek treba dopuštenje za pristup kontaktima kako bi pronašao druge Matrix korisnike na temelju njihove email adrese i telefonskih brojeva.
 
 Želite li dopustiti da Hepek pristupi vašim kontaktima?</string>
-
     <string name="permissions_action_not_performed_missing_permissions">Nažalost, akcija nije izvršena zbog nedostatka dozvola</string>
-
     <string name="media_slider_saved">Snimljeno</string>
     <string name="media_slider_saved_message">Snimi u preuzimanja</string>
     <string name="yes">DA</string>
     <string name="no">NE</string>
     <string name="_continue">Nastavi</string>
-
     <string name="remove">Ukloni</string>
     <string name="join">Spoji</string>
     <string name="preview">Pregled</string>
     <string name="reject">Odbij</string>
-
     <string name="room_jump_to_first_unread">Idi na prvu nepročitanu poruku.</string>
-
     <string name="room_preview_invitation_format">Pozvani ste da %s se pridružite u ovu sobu</string>
     <string name="room_preview_unlinked_email_warning">Ova je pozivnica poslana na%, koja nije povezana s ovim računom.
 Možda se želite prijaviti s nekim drugim računom ili dodati ovu poruku email adresu svom računu.</string>
     <string name="room_preview_try_join_an_unknown_room">Pokušavate pristupiti usluzi %s. Želite li se pridružiti kako biste sudjelovali u razgovoru?</string>
     <string name="room_preview_try_join_an_unknown_room_default">soba</string>
     <string name="room_preview_room_interactions_disabled">Ovo je pregled ove sobe. Razgovori u sobi su onemoguceni.</string>
-
     <string name="room_creation_title">Novi Razgovor</string>
     <string name="room_creation_add_member">Dodaj člana</string>
     <string name="room_title_one_member">1 član</string>
-
     <string name="room_participants_leave_prompt_title">Napusti sobu</string>
     <string name="room_participants_leave_prompt_msg">Da li ste sigurni da želite napustiti sobu?</string>
-    <string name="room_participants_remove_prompt_msg">Da li ste sigurni da želite ukloniti % iz ovog razgovora?</string>
+    <string name="room_participants_remove_prompt_msg">Da li ste sigurni da želite ukloniti %s iz ovog razgovora\?</string>
     <string name="room_participants_create">Kreiraj</string>
-
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
     <string name="room_participants_idle">Idle</string>
-
     <string name="room_participants_header_admin_tools">ADMINISTRATORSKI ALATI</string>
     <string name="room_participants_header_call">POZIV</string>
     <string name="room_participants_header_direct_chats">DIREKTNI RAZGOVORI</string>
     <string name="room_participants_header_devices">UREĐAJI</string>
-
     <string name="room_participants_action_invite">Pozovi</string>
     <string name="room_participants_action_leave">Napusti ovu sobu</string>
     <string name="room_participants_action_remove">Ukloni iz ove sobe</string>
@@ -300,18 +262,14 @@ Možda se želite prijaviti s nekim drugim računom ili dodati ovu poruku email 
     <string name="room_participants_action_devices_list">Prikaži listu uređaja</string>
     <string name="room_participants_power_level_prompt">Nećete moći poništiti ovu promjenu jer će te korisniku dati ista dopuštenja kao što imate i vi.
 Da li ste sigurani?</string>
-
-    <string name="room_participants_invite_prompt_msg">Da li ste sigurni da želite pozvati% u ovaj razgovor?</string>
-
+    <string name="room_participants_invite_prompt_msg">Da li ste sigurni da želite pozvati %s u ovaj razgovor\?</string>
     <string name="people_search_invite_by_id"><u>Pozovi preko ID-a</u></string>
     <string name="people_search_local_contacts">LOKALNI KONTAKTI (%d)</string>
     <string name="people_search_user_directory">KORISNIČKI IMENIK (%s)</string>
     <string name="people_search_filter_text">Samo Matrix korisnici</string>
-
     <string name="people_search_invite_by_id_dialog_title">Pozovi korisnika preko ID-a</string>
     <string name="people_search_invite_by_id_dialog_description">Unesite jednu ili više email adresa ili Matrix ID</string>
     <string name="people_search_invite_by_id_dialog_hint">Email il Matrix ID</string>
-
     <string name="room_menu_search">Pretraga</string>
     <string name="room_one_user_is_typing">%s tipka…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s tipkaju…</string>
@@ -327,7 +285,6 @@ Da li ste sigurani?</string>
     <string name="room_delete_unsent_messages">Izbriši neposlane poruke</string>
     <string name="room_message_file_not_found">Datoteka nije pronađena</string>
     <string name="room_do_not_have_permission_to_post">Nemate dopuštenje da komunicirate u ovoj sobi</string>
-
     <string name="ssl_trust">Povjerenje</string>
     <string name="ssl_do_not_trust">Ne vjerujte</string>
     <string name="ssl_logout_account">Odjava</string>
@@ -339,7 +296,6 @@ Da li ste sigurani?</string>
     <string name="ssl_unexpected_existing_expl">Certifikat je promijenjen s onoga koji vaš telefon smatra pouzdanim. Ovo je VRLO NEUBIČAJENO. Preporučuje se da NE PRIHVAĆATE ovaj novi certifikat.</string>
     <string name="ssl_expected_existing_expl">Potvrda se promijenila s prethodno pouzdane u onu koja nije pouzdana. Postoji mogučnost da je server obnovio svoj certifikat. Obratite se administratoru servera za očekivani otisak prsta.</string>
     <string name="ssl_only_accept">SAMO prihvatiti certifikat ako je administrator servera objavio otisak prsta koji odgovara gore navedenom.</string>
-
     <string name="room_details_title">Detalji Sobe</string>
     <string name="room_details_people">Ljudi</string>
     <string name="room_details_files">Fajlovi</string>
@@ -347,12 +303,10 @@ Da li ste sigurani?</string>
     <string name="malformed_id">Malformirani ID. Trebao bi biti email adresa ili Matrix ID poput \"@localpart: domain\"</string>
     <string name="room_details_people_invited_group_name">POZVAN</string>
     <string name="room_details_people_present_group_name">PRIKLJUČEN</string>
-
     <string name="room_event_action_report_prompt_reason">Razlog za prijavljivanje ovog sadržaja</string>
     <string name="room_event_action_report_prompt_ignore_user">Želite li sakriti sve poruke tog korisnika?</string>
     <string name="room_event_action_cancel_upload">Otkaži Prijenos</string>
     <string name="room_event_action_cancel_download">Otkaži Preuzimanje</string>
-
     <string name="search_hint">Pretraga</string>
     <string name="search_members_hint">Filtriraj članove sobe</string>
     <string name="search_no_results">Nema rezultata</string>
@@ -360,7 +314,6 @@ Da li ste sigurani?</string>
     <string name="tab_title_search_messages">PORUKE</string>
     <string name="tab_title_search_people">LJUDI</string>
     <string name="tab_title_search_files">FAJLOVI</string>
-
     <string name="room_recents_join">PRIDRUŽI SE</string>
     <string name="room_recents_directory">DIREKTORIJ</string>
     <string name="room_recents_favourites">FAVORITI</string>
@@ -372,16 +325,13 @@ Da li ste sigurani?</string>
     <string name="room_recents_join_room">Pridruži se sobi</string>
     <string name="room_recents_join_room_title">Pridriži se u sobu</string>
     <string name="room_recents_join_room_prompt">Upišite ID sobe ili alias sobe</string>
-
     <string name="directory_search_results_title">Pretražite imenik</string>
     <string name="directory_searching_title">Traži direktorij..</string>
-
     <string name="room_settings_favourite">Favorit</string>
     <string name="room_settings_de_prioritize">De-prioritiziraj</string>
     <string name="room_settings_direct_chat">Direktni Razgovor</string>
     <string name="room_settings_leave_conversation">Napusti Razgovor</string>
     <string name="room_settings_forget">Zaboravi</string>
-
     <string name="room_sliding_menu_messages">Poruke</string>
     <string name="room_sliding_menu_settings">Postavke</string>
     <string name="room_sliding_menu_version">"Verzija "</string>
@@ -389,7 +339,6 @@ Da li ste sigurani?</string>
     <string name="room_sliding_menu_third_party_notices">Obavijesti treće strane</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
     <string name="room_sliding_menu_privacy_policy">Privatnost</string>
-
     <string name="settings_profile_picture">Profilna Slika</string>
     <string name="settings_display_name">Ime</string>
     <string name="settings_email_address">Email</string>
@@ -398,12 +347,10 @@ Da li ste sigurani?</string>
     <string name="settings_add_phone_number">Dodaj broj telefona</string>
     <string name="settings_app_info_link_summary">Infomacije o aplikacijskom sustavu</string>
     <string name="settings_app_info_link_title">Informacije o aplikaciji</string>
-
     <string name="settings_notification_ringtone">Zvuk notifikacije</string>
     <string name="settings_enable_all_notif">Omogući obavijesti za ovaj račun</string>
     <string name="settings_enable_this_device">Omogući obavijesti za ovaj uređaj</string>
     <string name="settings_turn_screen_on">Uključite zaslon na 3 sekunde</string>
-
     <string name="settings_containing_my_display_name">Poruke sadrže moje ime</string>
     <string name="settings_containing_my_user_name">Poruke sadrže moje koristničko ime</string>
     <string name="settings_messages_in_one_to_one">Poruke u jedan-na-jedan razgovorima</string>
@@ -411,13 +358,11 @@ Da li ste sigurani?</string>
     <string name="settings_invited_to_room">Kada sam pozvan u sobu</string>
     <string name="settings_call_invitations">Pozivnice za poziv</string>
     <string name="settings_messages_sent_by_bot">Poruke koje šalje bot</string>
-
     <string name="settings_start_on_boot">Započni na boot</string>
     <string name="settings_background_sync">Pozadinska sinkronizacija</string>
     <string name="settings_enable_background_sync">Omogući pozadinsku sinkronizaciju</string>
     <string name="settings_set_sync_timeout">Sinkronizacijski zahtjev istekao</string>
     <string name="settings_set_sync_delay">Napravi pauzu između dva sinkronizacijska zahtjeva</string>
-
     <string name="settings_version">Verzija</string>
     <string name="settings_olm_version">olm verzija</string>
     <string name="settings_app_term_conditions">Uvjeti korištenja</string>
@@ -427,7 +372,6 @@ Da li ste sigurani?</string>
     <string name="settings_clear_cache">Očisti keš</string>
     <string name="settings_clear_media_cache">Očisti medija keš</string>
     <string name="settings_keep_media">Dodaj medij</string>
-
     <string name="settings_user_settings">Korisničke postavke</string>
     <string name="settings_notifications">Notifikacije</string>
     <string name="settings_ignored_users">Ignorisani korisnici</string>
@@ -444,13 +388,10 @@ Da li ste sigurani?</string>
     <string name="settings_devices_list">Uređaj</string>
     <string name="settings_always_show_timestamps">Uvijek prikažite vremenske oznake poruka</string>
     <string name="settings_12_24_timestamps">Prikaži vremenske oznake u 12-satnom obliku (npr. 14:30)</string>
-
     <string name="settings_analytics">Analiza</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$a %2$i</string>
-
     <string name="settings_data_save_mode">Način spremanja podataka</string>
-
     <string name="devices_details_dialog_title">Pojedinosti uređaja</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Ime</string>
@@ -462,22 +403,18 @@ Da biste nastavili, unesite lozinku.</string>
     <string name="devices_delete_dialog_title">Ovjera</string>
     <string name="devices_delete_pswd">Lozinka:</string>
     <string name="devices_delete_submit_button_label">Pošalji</string>
-
     <string name="settings_logged_in">Prijavljen kao</string>
     <string name="settings_home_server">Lokalni Server</string>
     <string name="settings_identity_server">Identifikacioni Server</string>
-
     <string name="settings_user_interface">Korisnički interfejs</string>
     <string name="settings_interface_language">Jezik interfejsa</string>
     <string name="settings_select_language">Izaberi jezik</string>
-
     <string name="account_email_validation_title">Čekanje na verifikaciju</string>
     <string name="account_email_validation_message">Proverite svoj email i kliknite na link u email-u. Nakon što to učinite, kliknite na dugme nastavi.</string>
     <string name="account_email_validation_error">Nije moguće proveriti email adresu. Proverite svoj email i kliknite na link u emailu. Nakon što to uradite, kliknite na dugme nastavi</string>
     <string name="account_email_already_used_error">Ova email adresa je već u upotrebi</string>
     <string name="account_email_not_found_error">Neuspješno slanje emaila: Ova adresa email adresa nije pronađena</string>
     <string name="account_phone_number_already_used_error">Ovaj telefonski broj je već u upotrebi</string>
-
     <string name="settings_change_password">Promenite lozinku</string>
     <string name="settings_old_password">stara lozinka</string>
     <string name="settings_new_password">nova lozinka</string>
@@ -485,13 +422,9 @@ Da biste nastavili, unesite lozinku.</string>
     <string name="settings_fail_to_update_password">Neuspešno ažuriranje lozinke</string>
     <string name="settings_password_updated">Vaša lozinka je ažurirana</string>
     <string name="settings_unignore_user">Prikaži sve poruke iz %s?</string>
-
     <string name="settings_delete_notification_targets_confirmation">Da li ste sigurni da želite ukloniti ovaj cilj obaveštenja?</string>
-
     <string name="settings_delete_threepid_confirmation">Da li ste sigurni da želite ukloniti %1$s %2$s?</string>
-
     <string name="settings_select_country">Izaberite zemlju</string>
-
     <string name="settings_phone_number_country_label">Zemlja</string>
     <string name="settings_phone_number_country_error">Izaberite zemlju</string>
     <string name="settings_phone_number_label">Broj telefona</string>

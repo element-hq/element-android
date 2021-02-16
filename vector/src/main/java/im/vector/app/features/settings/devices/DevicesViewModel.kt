@@ -35,7 +35,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -121,7 +120,7 @@ class DevicesViewModel @AssistedInject constructor(
         Observable.combineLatest<List<CryptoDeviceInfo>, List<DeviceInfo>, List<DeviceFullInfo>>(
                 session.rx().liveUserCryptoDevices(session.myUserId),
                 session.rx().liveMyDevicesInfo(),
-                BiFunction { cryptoList, infoList ->
+                { cryptoList, infoList ->
                     infoList
                             .sortedByDescending { it.lastSeenTs }
                             .map { deviceInfo ->
@@ -239,7 +238,6 @@ class DevicesViewModel @AssistedInject constructor(
                 uiaContinuation?.resumeWith(Result.failure((Exception())))
                 uiaContinuation = null
                 pendingAuth = null
-                Unit
             }
         }
     }

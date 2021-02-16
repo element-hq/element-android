@@ -2358,4 +2358,34 @@
     <string name="re_authentication_activity_title">Je nutné opětovné ověření</string>
     <string name="failed_to_initialize_cross_signing">Nastavení křížového podepisování se nezdařilo</string>
     <string name="error_unauthorized">Neautorizováno, chybí platné ověřovací údaje</string>
+    <string name="call_transfer_title">Přepojit</string>
+    <string name="call_transfer_users_tab_title">Uživatelé</string>
+    <string name="call_transfer_failure">Při přepojování hovoru došlo k chybě</string>
+    <string name="call_transfer_connect_action">Připojit</string>
+    <string name="call_transfer_consult_first">Nejprve se poraďte</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">1 probíhající hovor (%1$s) · 1 pozastavený hovor</item>
+        <item quantity="few">1 probíhající hovor (%1$s) · %2$d pozastavené hovory</item>
+        <item quantity="other">1 probíhající hovor (%1$s) · %2$d pozastavených hovorů</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="one">Pozastavený hovor</item>
+        <item quantity="few">%1$d pozastavené hovory</item>
+        <item quantity="other">%1$d pozastavených hovorů</item>
+    </plurals>
+    <string name="call_only_active">Probíhající hovor (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">Při vyhledávání telefonního čísla došlo k chybě</string>
+    <string name="call_dial_pad_title">Číselník</string>
+    <string name="call_tile_call_back">Zavolat zpět</string>
+    <string name="call_tile_ended">Tento hovor skončil</string>
+    <string name="call_tile_other_declined">%1$s odmítl tento hovor</string>
+    <string name="call_tile_you_declined">Odmítli jste tento hovor %1$s</string>
+    <string name="call_tile_in_call">Aktuálně jste v tomto hovoru</string>
+    <string name="call_tile_other_started_call">%1$s zahájil hovor</string>
+    <string name="call_tile_you_started_call">Zahájili jste hovor</string>
+    <string name="call_held_by_you">Podrželi jste hovor</string>
+    <string name="call_held_by_user">%s podržel hovor</string>
+    <string name="call_hold_action">Přidržet</string>
+    <string name="call_resume_action">Pokračovat</string>
+    <string name="action_return">Návrat</string>
 </resources>

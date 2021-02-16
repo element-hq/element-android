@@ -62,8 +62,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
         }
     }
 
-    private fun downloadRecoveryKey() = withState(sharedViewModel) { _ ->
-
+    private fun downloadRecoveryKey() {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "text/plain"

@@ -186,14 +186,14 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
 
         holder.setAvatarButton.isVisible = shouldSetAvatar
         if (shouldSetAvatar) {
-            holder.setAvatarButton.setOnClickListener(DebouncedClickListener({ _ ->
+            holder.setAvatarButton.setOnClickListener(DebouncedClickListener({
                 attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionSetAvatar)
             }))
         }
 
         holder.addPeopleButton.isVisible = !isDirect
         if (!isDirect) {
-            holder.addPeopleButton.setOnClickListener(DebouncedClickListener({ _ ->
+            holder.addPeopleButton.setOnClickListener(DebouncedClickListener({
                 attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionInvitePeople)
             }))
         }

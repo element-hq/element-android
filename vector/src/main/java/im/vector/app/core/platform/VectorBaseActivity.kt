@@ -40,7 +40,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.util.Util
@@ -208,12 +207,12 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
         navigator = screenComponent.navigator()
         activeSessionHolder = screenComponent.activeSessionHolder()
         vectorPreferences = vectorComponent.vectorPreferences()
-        configurationViewModel.activityRestarter.observe(this, Observer {
+        configurationViewModel.activityRestarter.observe(this) {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
                 restart()
             }
-        })
+        }
         pinLocker.getLiveState().observeNotNull(this) {
             if (this@VectorBaseActivity !is UnlockedActivity && it == PinLocker.State.LOCKED) {
                 navigator.openPinCode(this, pinStartForActivityResult, PinMode.AUTH)

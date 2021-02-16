@@ -89,7 +89,7 @@ class KnownCallsViewHolder {
         this.pipWrapper = pipWrapper
         this.currentCallsView?.callback = interactionListener
         pipWrapper.setOnClickListener(
-                DebouncedClickListener({ _ ->
+                DebouncedClickListener({
                     interactionListener.onTapToReturnToCall()
                 })
         )

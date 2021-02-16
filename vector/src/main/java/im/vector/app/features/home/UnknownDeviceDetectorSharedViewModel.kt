@@ -32,7 +32,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.Observable
-import io.reactivex.functions.Function3
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
@@ -103,7 +102,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
                 session.rx().liveUserCryptoDevices(session.myUserId),
                 session.rx().liveMyDevicesInfo(),
                 session.rx().liveCrossSigningPrivateKeys(),
-                Function3 { cryptoList, infoList, pInfo ->
+                { cryptoList, infoList, pInfo ->
                     //                    Timber.v("## Detector trigger ${cryptoList.map { "${it.deviceId} ${it.trustLevel}" }}")
 //                    Timber.v("## Detector trigger canCrossSign ${pInfo.get().selfSigned != null}")
                     infoList

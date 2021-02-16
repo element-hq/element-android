@@ -32,7 +32,7 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
+    private val _readReceiptsClickListener = DebouncedClickListener({
         attributes.readReceiptsCallback?.onReadReceiptsClicked(attributes.informationData.readReceipts)
     })
 

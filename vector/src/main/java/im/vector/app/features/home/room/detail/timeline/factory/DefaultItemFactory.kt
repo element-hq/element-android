@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import android.view.View
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
@@ -42,7 +41,7 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
                 avatarRenderer = avatarRenderer,
                 informationData = informationData,
                 text = text,
-                itemLongClickListener = View.OnLongClickListener { view ->
+                itemLongClickListener = { view ->
                     callback?.onEventLongClicked(informationData, null, view) ?: false
                 },
                 readReceiptsCallback = callback

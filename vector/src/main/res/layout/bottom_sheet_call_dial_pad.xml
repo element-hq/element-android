@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/callDialPad"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -27,10 +28,12 @@
             android:id="@+id/callDialPadClose"
             android:layout_width="@dimen/layout_touch_size"
             android:layout_height="@dimen/layout_touch_size"
-            android:scaleType="center"
-            app:tint="?riotx_text_primary"
+            android:contentDescription="@string/action_close"
             android:foreground="?selectableItemBackground"
-            android:src="@drawable/ic_cross" />
+            android:scaleType="center"
+            android:src="@drawable/ic_cross"
+            app:tint="?riotx_text_primary"
+            tools:ignore="MissingPrefix" />
 
     </LinearLayout>
 
