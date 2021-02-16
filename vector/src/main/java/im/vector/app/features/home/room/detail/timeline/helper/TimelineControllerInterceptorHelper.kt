@@ -17,18 +17,17 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import com.airbnb.epoxy.EpoxyModel
+import com.airbnb.epoxy.VisibilityState
+import im.vector.app.core.epoxy.LoadingItem_
+import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.detail.UnreadState
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import com.airbnb.epoxy.VisibilityState
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
-import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
-import org.matrix.android.sdk.api.session.room.timeline.Timeline
-import im.vector.app.core.epoxy.LoadingItem_
-import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.features.home.room.detail.timeline.item.IsEventItem
-import timber.log.Timber
+import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
+import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import kotlin.reflect.KMutableProperty0
 
 private const val DEFAULT_PREFETCH_THRESHOLD = 30
@@ -62,7 +61,6 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         val firstUnreadEventId = (unreadState as? UnreadState.HasUnread)?.firstUnreadEventId
         // Then iterate on models so we have the exact positions in the adapter
         modelsIterator.forEach { epoxyModel ->
-            Timber.v("Index of model:${epoxyModel::class}: $index")
             if (epoxyModel is IsEventItem) {
                 epoxyModel.getEventIds().forEach { eventId ->
                     adapterPositionMapping[eventId] = index
