@@ -798,6 +798,10 @@ class RoomDetailFragment @Inject constructor(
                 handleSearchAction()
                 true
             }
+            R.id.dev_tools        -> {
+                navigator.openDevTools(requireContext(), roomDetailArgs.roomId)
+                true
+            }
             else                  -> super.onOptionsItemSelected(item)
         }
     }

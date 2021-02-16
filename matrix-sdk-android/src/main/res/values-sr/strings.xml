@@ -268,4 +268,10 @@
         <item quantity="few">%1$s уклони %2$s као адресе ове собе.</item>
         <item quantity="other">%1$s уклони %2$s као адресе ове собе.</item>
     </plurals>
+    <string name="notice_widget_jitsi_modified_by_you">Изменили сте видео конференцију</string>
+    <string name="notice_widget_jitsi_modified">%1$s измени видео конференцију</string>
+    <string name="notice_widget_jitsi_removed_by_you">Завршили сте видео конференцију</string>
+    <string name="notice_widget_jitsi_removed">%1$s заврши видео конференцију</string>
+    <string name="notice_widget_jitsi_added_by_you">Покренули сте видео конференцију</string>
+    <string name="notice_widget_jitsi_added">%1$s покрену видео конференцију</string>
 </resources>

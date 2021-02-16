@@ -266,4 +266,10 @@
     <string name="notice_room_server_acl_set_banned">• Server, die mit %s übereinstimmen, sind gesperrt.</string>
     <string name="notice_room_server_acl_set_title_by_you">Du hast die Server-ACL für diesen Raum gesetzt.</string>
     <string name="notice_room_server_acl_set_title">%s hat die Server-Zugriffssteuerungsliste (ACL) für diesen Raum gesetzt.</string>
+    <string name="notice_widget_jitsi_modified_by_you">Du hast eine Videokonferenz geändert</string>
+    <string name="notice_widget_jitsi_modified">Videokonferenz von %1$s geändert</string>
+    <string name="notice_widget_jitsi_removed">Videokonferenz von %1$s beendet</string>
+    <string name="notice_widget_jitsi_removed_by_you">Du hast eine Videokonferenz beendet</string>
+    <string name="notice_widget_jitsi_added_by_you">Du hast eine Videokonferenz gestartet</string>
+    <string name="notice_widget_jitsi_added">Videokonferenz von %1$s gestartet</string>
 </resources>

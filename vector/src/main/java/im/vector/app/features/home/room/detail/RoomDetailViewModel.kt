@@ -624,10 +624,11 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.clear_all        -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.open_matrix_apps -> true
             R.id.voice_call,
-            R.id.video_call          -> callManager.getCallsByRoomId(state.roomId).isEmpty()
-            R.id.hangup_call         -> callManager.getCallsByRoomId(state.roomId).isNotEmpty()
-            R.id.search              -> true
-            else                     -> false
+            R.id.video_call       -> callManager.getCallsByRoomId(state.roomId).isEmpty()
+            R.id.hangup_call      -> callManager.getCallsByRoomId(state.roomId).isNotEmpty()
+            R.id.search           -> true
+            R.id.dev_tools        -> vectorPreferences.developerMode()
+            else                  -> false
         }
     }
 

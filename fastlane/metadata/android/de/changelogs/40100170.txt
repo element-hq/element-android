@@ -1,0 +1,2 @@
+Hauptänderungen in dieser Version: Fehlerkorrekturen
+Vollständiges Änderungsprotokoll: https://github.com/vector-im/element-android/releases/tag/v1.0.17

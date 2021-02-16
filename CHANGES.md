@@ -27,6 +27,7 @@ Test:
  -
 
 Other changes:
+ - New Dev Tools panel for developers
  - Fix typos in CHANGES.md (#2811)
 
 Changes in Element 1.0.17 (2021-02-09)

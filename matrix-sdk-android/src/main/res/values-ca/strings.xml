@@ -259,4 +259,10 @@
     <string name="notice_room_server_acl_updated_title">%s ha canviat les ACLs de servidor d\'aquesta sala.</string>
     <string name="notice_room_server_acl_set_title_by_you">Has establert les ACLs de servidor per aquesta sala.</string>
     <string name="notice_room_server_acl_set_title">%s ha establert les ACLs de servidor d\'aquesta sala.</string>
+    <string name="notice_widget_jitsi_modified_by_you">Has modificat la videoconferència</string>
+    <string name="notice_widget_jitsi_modified">%1$s ha modificat la videoconferència</string>
+    <string name="notice_widget_jitsi_removed_by_you">Has finalitzat la videoconferència</string>
+    <string name="notice_widget_jitsi_added">%1$s ha iniciat una videoconferència</string>
+    <string name="notice_widget_jitsi_added_by_you">Has iniciat una videoconferència</string>
+    <string name="notice_widget_jitsi_removed">%1$s ha finalitzat la videoconferència</string>
 </resources>
