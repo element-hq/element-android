@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
@@ -171,7 +172,7 @@ class UserListFragment @Inject constructor(
 
         // Scroll to the bottom when adding chips. When removing chips, do not scroll
         if (newNumberOfChips >= currentNumberOfChips) {
-            views.chipGroupScrollView.post {
+            viewLifecycleOwner.lifecycleScope.launchWhenResumed {
                 views.chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
             }
         }
