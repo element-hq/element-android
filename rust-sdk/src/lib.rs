@@ -2,12 +2,11 @@ use std::sync::{Arc, Mutex};
 
 use tracing_subscriber::{fmt::MakeWriter, EnvFilter};
 
+mod error;
 mod machine;
 
-pub use machine::{
-    CryptoStoreError, Device, DeviceLists, MachineCreationError, OlmMachine, Request, RequestType,
-    Sas,
-};
+pub use error::*;
+pub use machine::{Device, DeviceLists, OlmMachine, Request, RequestType, Sas};
 
 pub trait Logger: Send {
     fn log(&self, log_line: String);

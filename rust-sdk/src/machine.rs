@@ -17,15 +17,16 @@ use matrix_sdk_common::{
         },
         sync::sync_events::{DeviceLists as RumaDeviceLists, ToDevice},
     },
-    identifiers::{DeviceKeyAlgorithm, Error as RumaIdentifierError, UserId},
+    identifiers::{DeviceKeyAlgorithm, UserId},
     uuid::Uuid,
     UInt,
 };
 
 use matrix_sdk_crypto::{
-    store::CryptoStoreError as InnerStoreError, IncomingResponse, OlmError,
-    OlmMachine as InnerMachine, OutgoingRequest, ToDeviceRequest,
+    IncomingResponse, OlmMachine as InnerMachine, OutgoingRequest, ToDeviceRequest,
 };
+
+use crate::error::{CryptoStoreError, MachineCreationError};
 
 pub struct OlmMachine {
     inner: InnerMachine,
@@ -86,22 +87,6 @@ impl<'a> Into<IncomingResponse<'a>> for &'a OwnedResponse {
             OwnedResponse::KeysUpload(r) => IncomingResponse::KeysUpload(r),
         }
     }
-}
-
-#[derive(Debug, thiserror::Error)]
-pub enum MachineCreationError {
-    #[error(transparent)]
-    Identifier(#[from] RumaIdentifierError),
-    #[error(transparent)]
-    CryptoStore(#[from] InnerStoreError),
-}
-
-#[derive(Debug, thiserror::Error)]
-pub enum CryptoStoreError {
-    #[error(transparent)]
-    CryptoStore(#[from] InnerStoreError),
-    #[error(transparent)]
-    OlmError(#[from] OlmError),
 }
 
 pub enum RequestType {
@@ -334,4 +319,3 @@ impl OlmMachine {
         .unwrap();
     }
 }
-
