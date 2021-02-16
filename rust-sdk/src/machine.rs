@@ -246,15 +246,6 @@ impl OlmMachine {
             .collect()
     }
 
-    pub fn slow_user_id(&self) -> String {
-        let machine = self.inner.clone();
-
-        self.runtime.block_on(async {
-            sleep(Duration::from_secs(10)).await;
-            machine.user_id().to_string()
-        })
-    }
-
     pub fn mark_request_as_sent(
         &self,
         request_id: &str,
