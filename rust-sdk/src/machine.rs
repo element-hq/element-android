@@ -1,13 +1,11 @@
 use std::{
     collections::{BTreeMap, HashMap},
     convert::TryFrom,
-    time::Duration,
 };
 
-use futures::executor::block_on;
 use http::Response;
 use serde_json::json;
-use tokio::{runtime::Runtime, time::sleep};
+use tokio::runtime::Runtime;
 
 use matrix_sdk_common::{
     api::r0::{
@@ -17,6 +15,7 @@ use matrix_sdk_common::{
         },
         sync::sync_events::{DeviceLists as RumaDeviceLists, ToDevice},
     },
+    assign,
     identifiers::{DeviceKeyAlgorithm, UserId},
     uuid::Uuid,
     UInt,
@@ -40,7 +39,7 @@ pub struct DeviceLists {
 
 impl Into<RumaDeviceLists> for DeviceLists {
     fn into(self) -> RumaDeviceLists {
-        RumaDeviceLists {
+        assign!(RumaDeviceLists::new(), {
             changed: self
                 .changed
                 .into_iter()
@@ -51,7 +50,7 @@ impl Into<RumaDeviceLists> for DeviceLists {
                 .into_iter()
                 .filter_map(|u| UserId::try_from(u).ok())
                 .collect(),
-        }
+        })
     }
 }
 
@@ -188,12 +187,13 @@ impl OlmMachine {
     pub fn new(user_id: &str, device_id: &str, path: &str) -> Result<Self, MachineCreationError> {
         let user_id = UserId::try_from(user_id)?;
         let device_id = device_id.into();
+        let runtime = Runtime::new().unwrap();
 
         Ok(OlmMachine {
-            inner: block_on(InnerMachine::new_with_default_store(
+            inner: runtime.block_on(InnerMachine::new_with_default_store(
                 &user_id, device_id, path, None,
             ))?,
-            runtime: Runtime::new().unwrap(),
+            runtime,
         })
     }
 
@@ -208,7 +208,8 @@ impl OlmMachine {
     pub fn get_device(&self, user_id: &str, device_id: &str) -> Option<Device> {
         let user_id = UserId::try_from(user_id).unwrap();
 
-        block_on(self.inner.get_device(&user_id, device_id.into()))
+        self.runtime
+            .block_on(self.inner.get_device(&user_id, device_id.into()))
             .unwrap()
             .map(|d| Device {
                 user_id: d.user_id().to_string(),
@@ -223,7 +224,8 @@ impl OlmMachine {
 
     pub fn get_user_devices(&self, user_id: &str) -> Vec<Device> {
         let user_id = UserId::try_from(user_id).unwrap();
-        block_on(self.inner.get_user_devices(&user_id))
+        self.runtime
+            .block_on(self.inner.get_user_devices(&user_id))
             .unwrap()
             .devices()
             .map(|d| Device {
@@ -263,7 +265,8 @@ impl OlmMachine {
         }
         .expect("Can't convert json string to response");
 
-        block_on(self.inner.mark_request_as_sent(&id, &response))?;
+        self.runtime
+            .block_on(self.inner.mark_request_as_sent(&id, &response))?;
 
         Ok(())
     }
@@ -271,9 +274,12 @@ impl OlmMachine {
     pub fn start_verification(&self, device: &Device) -> Result<Sas, CryptoStoreError> {
         let user_id = UserId::try_from(device.user_id.clone()).unwrap();
         let device_id = device.device_id.as_str().into();
-        let device = block_on(self.inner.get_device(&user_id, device_id))?.unwrap();
+        let device = self
+            .runtime
+            .block_on(self.inner.get_device(&user_id, device_id))?
+            .unwrap();
 
-        let (sas, request) = block_on(device.start_verification())?;
+        let (sas, request) = self.runtime.block_on(device.start_verification())?;
 
         Ok(Sas {
             other_user_id: sas.other_user_id().to_string(),
@@ -284,7 +290,8 @@ impl OlmMachine {
     }
 
     pub fn outgoing_requests(&self) -> Vec<Request> {
-        block_on(self.inner.outgoing_requests())
+        self.runtime
+            .block_on(self.inner.outgoing_requests())
             .into_iter()
             .map(|r| r.into())
             .collect()
@@ -303,10 +310,11 @@ impl OlmMachine {
             .map(|(k, v)| (DeviceKeyAlgorithm::from(k), v.into()))
             .collect();
 
-        block_on(
-            self.inner
-                .receive_sync_changes(&events, &device_changes, &key_counts),
-        )
-        .unwrap();
+        self.runtime
+            .block_on(
+                self.inner
+                    .receive_sync_changes(&events, &device_changes, &key_counts),
+            )
+            .unwrap();
     }
 }
