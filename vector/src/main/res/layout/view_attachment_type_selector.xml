@@ -34,7 +34,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_camera"
                     android:src="@drawable/ic_attachment_camera_white_24dp"
-                    tools:background="@color/colorAccent" />
+                    tools:background="@color/riotx_accent" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
@@ -56,7 +56,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_gallery"
                     android:src="@drawable/ic_attachment_gallery_white_24dp"
-                    tools:background="@color/colorAccent" />
+                    tools:background="@color/riotx_accent" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
@@ -78,7 +78,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_file"
                     android:src="@drawable/ic_attachment_file_white_24dp"
-                    tools:background="@color/colorAccent" />
+                    tools:background="@color/riotx_accent" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
@@ -109,7 +109,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_audio"
                     android:src="@drawable/ic_attachment_audio_white_24dp"
-                    tools:background="@color/colorAccent" />
+                    tools:background="@color/riotx_accent" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
@@ -131,7 +131,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_contact"
                     android:src="@drawable/ic_attachment_contact_white_24dp"
-                    tools:background="@color/colorAccent" />
+                    tools:background="@color/riotx_accent" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"
@@ -153,7 +153,7 @@
                     style="@style/AttachmentTypeSelectorButton"
                     android:contentDescription="@string/attachment_type_sticker"
                     android:src="@drawable/ic_attachment_stickers_white_24dp"
-                    tools:background="@color/colorAccent" />
+                    tools:background="@color/riotx_accent" />
 
                 <TextView
                     style="@style/AttachmentTypeSelectorLabel"

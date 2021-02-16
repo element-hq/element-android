@@ -49,7 +49,6 @@ import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
@@ -1331,7 +1330,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .combineLatest<List<TimelineEvent>, RoomSummary, UnreadState>(
                         timelineEvents.observeOn(Schedulers.computation()),
                         room.rx().liveRoomSummary().unwrap(),
-                        BiFunction { timelineEvents, roomSummary ->
+                        { timelineEvents, roomSummary ->
                             computeUnreadState(timelineEvents, roomSummary)
                         }
                 )

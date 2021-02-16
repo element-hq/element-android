@@ -19,6 +19,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars" />
 
@@ -27,6 +28,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars" />
 
@@ -35,6 +37,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars" />
 
@@ -43,6 +46,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars" />
 
@@ -51,6 +55,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars" />
 

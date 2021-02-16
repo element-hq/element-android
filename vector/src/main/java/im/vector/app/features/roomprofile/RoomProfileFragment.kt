@@ -44,7 +44,6 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomProfileHeaderBinding
-import im.vector.app.features.crypto.util.toImageRes
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -204,9 +203,8 @@ class RoomProfileFragment @Inject constructor(
                 val matrixItem = it.toMatrixItem()
                 avatarRenderer.render(matrixItem, headerViews.roomProfileAvatarView)
                 avatarRenderer.render(matrixItem, views.matrixProfileToolbarAvatarImageView)
-                headerViews.roomProfileDecorationImageView.isVisible = it.roomEncryptionTrustLevel != null
-                headerViews.roomProfileDecorationImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
-                views.matrixProfileDecorationToolbarAvatarImageView.setImageResource(it.roomEncryptionTrustLevel.toImageRes())
+                headerViews.roomProfileDecorationImageView.render(it.roomEncryptionTrustLevel)
+                views.matrixProfileDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
             }
         }
         roomProfileController.setData(state)

@@ -24,6 +24,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="16dp"
+            android:importantForAccessibility="no"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_secure_backup"
             app:tint="?riotx_text_primary"

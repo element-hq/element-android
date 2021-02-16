@@ -96,6 +96,7 @@ class RoomUploadsFragment @Inject constructor(
     private fun renderRoomSummary(state: RoomUploadsViewState) {
         state.roomSummary()?.let {
             views.roomUploadsToolbarTitleView.text = it.displayName
+            views.roomUploadsDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
             avatarRenderer.render(it.toMatrixItem(), views.roomUploadsToolbarAvatarImageView)
         }
     }

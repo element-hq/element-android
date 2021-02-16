@@ -31,7 +31,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 
 class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                                                               @Assisted val roomId: String,
-                                                              private val session: Session,
+                                                              session: Session,
                                                               private val controller: AutocompleteMemberController
 ) : RecyclerViewPresenter<RoomMemberSummary>(context), AutocompleteClickListener<RoomMemberSummary> {
 

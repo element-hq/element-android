@@ -383,7 +383,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                       mode: String?): Intent {
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                flags = FLAG_ACTIVITY_CLEAR_TOP
                 putExtra(MvRx.KEY_ARG, CallArgs(roomId, callId, otherUserId, isIncomingCall, isVideoCall))
                 putExtra(EXTRA_MODE, mode)
             }

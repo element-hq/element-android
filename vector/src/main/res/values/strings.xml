@@ -144,6 +144,8 @@
     <string name="dialog_title_error">Error</string>
     <string name="dialog_title_success">Success</string>
 
+    <string name="dialog_edit_hint">New value</string>
+
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
     <string name="bottom_action_notification">Notifications</string>
@@ -2831,6 +2833,29 @@
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <string name="re_authentication_default_confirm_text">Element requires you to enter your credentials to perform this action.</string>
     <string name="authentication_error">Failed to authenticate</string>
+
+    <string name="a11y_screenshot">Screenshot</string>
+    <string name="a11y_open_widget">Open widgets</string>
+    <string name="a11y_import_key_from_file">Import key from file</string>
+    <string name="a11y_image">Image</string>
+    <string name="a11y_change_avatar">Change avatar</string>
+    <string name="a11y_delete_avatar">Delete avatar</string>
+    <string name="a11y_error_some_message_not_sent">Some messages have not been sent</string>
+    <string name="a11y_unsent_draft">This room has unsent draft</string>
+    <string name="a11y_video">Video</string>
+    <string name="a11y_selected">Selected</string>
+    <string name="a11y_trust_level_default">Default trust level</string>
+    <string name="a11y_trust_level_warning">Warning trust level</string>
+    <string name="a11y_trust_level_trusted">Trusted trust level</string>
+    <string name="a11y_open_emoji_picker">Open Emoji picker</string>
+    <string name="a11y_close_emoji_picker">Close Emoji picker</string>
+    <string name="a11y_checked">Checked</string>
+    <string name="a11y_error_message_not_sent">Message not sent due to error</string>
+    <string name="a11y_rule_notify_noisy">Notify with sound</string>
+    <string name="a11y_rule_notify_silent">Notify without sound</string>
+    <string name="a11y_rule_notify_off">Do not notify</string>
+    <string name="a11y_view_read_receipts">View read receipts</string>
+
     <string name="dev_tools_menu_name">Dev Tools</string>
     <string name="dev_tools_explore_room_state">Explore Room State</string>
     <string name="dev_tools_send_custom_event">Send Custom Event</string>
@@ -2846,5 +2871,4 @@
     <string name="dev_tools_error_malformed_event">Malformed event</string>
     <string name="dev_tools_success_event">Event sent!</string>
     <string name="dev_tools_success_state_event">State event sent!</string>
-
 </resources>

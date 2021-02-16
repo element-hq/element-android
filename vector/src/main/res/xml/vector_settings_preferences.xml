@@ -117,15 +117,6 @@
             android:title="@string/settings_vibrate_on_mention"
             app:isPreferenceVisible="@bool/false_not_implemented" />
 
-        <im.vector.app.core.preference.VectorListPreference
-            android:defaultValue="always"
-            android:entries="@array/show_info_area_entries"
-            android:entryValues="@array/show_info_area_values"
-            android:key="SETTINGS_SHOW_INFO_AREA_KEY"
-            android:summary="%s"
-            android:title="@string/settings_info_area_show"
-            app:isPreferenceVisible="@bool/false_not_implemented" />
-
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory

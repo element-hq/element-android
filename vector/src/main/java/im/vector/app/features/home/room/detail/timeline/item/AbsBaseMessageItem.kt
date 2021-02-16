@@ -23,11 +23,13 @@ import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.reactions.widget.ReactionButton
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.send.SendState
 
 /**
@@ -39,7 +41,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
     abstract val baseAttributes: Attributes
 
-    private val _readReceiptsClickListener = DebouncedClickListener(View.OnClickListener {
+    private val _readReceiptsClickListener = DebouncedClickListener({
         baseAttributes.readReceiptsCallback?.onReadReceiptsClicked(baseAttributes.informationData.readReceipts)
     })
 
@@ -94,13 +96,12 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
         when (baseAttributes.informationData.e2eDecoration) {
             E2EDecoration.NONE                 -> {
-                holder.e2EDecorationView.isVisible = false
+                holder.e2EDecorationView.render(null)
             }
             E2EDecoration.WARN_IN_CLEAR,
             E2EDecoration.WARN_SENT_BY_UNVERIFIED,
             E2EDecoration.WARN_SENT_BY_UNKNOWN -> {
-                holder.e2EDecorationView.setImageResource(R.drawable.ic_shield_warning)
-                holder.e2EDecorationView.isVisible = true
+                holder.e2EDecorationView.render(RoomEncryptionTrustLevel.Warning)
             }
         }
 
@@ -123,7 +124,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
     abstract class Holder(@IdRes stubId: Int) : BaseEventItem.BaseHolder(stubId) {
         val reactionsContainer by bind<ViewGroup>(R.id.reactionsContainer)
-        val e2EDecorationView by bind<ImageView>(R.id.messageE2EDecoration)
+        val e2EDecorationView by bind<ShieldImageView>(R.id.messageE2EDecoration)
     }
 
     /**

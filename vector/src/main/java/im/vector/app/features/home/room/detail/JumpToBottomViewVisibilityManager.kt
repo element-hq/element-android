@@ -60,9 +60,9 @@ class JumpToBottomViewVisibilityManager(
     }
 
     fun maybeShowJumpToBottomViewVisibilityWithDelay() {
-        debouncer.debounce("jump_to_bottom_visibility", 250, Runnable {
+        debouncer.debounce("jump_to_bottom_visibility", 250) {
             maybeShowJumpToBottomViewVisibility()
-        })
+        }
     }
 
     private fun maybeShowJumpToBottomViewVisibility() {

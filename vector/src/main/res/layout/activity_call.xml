@@ -16,6 +16,7 @@
         android:id="@+id/bgCallView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars" />
 
@@ -53,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:foreground="?attr/selectableItemBackground"
+            android:importantForAccessibility="no"
             android:scaleType="centerCrop"
             tools:src="@tools:sample/avatars" />
 
@@ -61,6 +63,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_call_small_pause" />
 
     </FrameLayout>
@@ -70,6 +73,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:contentDescription="@string/avatar"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,12 +85,12 @@
         android:id="@+id/smallIsHeldIcon"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_call_small_pause"
         app:layout_constraintBottom_toBottomOf="@id/otherMemberAvatar"
         app:layout_constraintEnd_toEndOf="@id/otherMemberAvatar"
         app:layout_constraintStart_toStartOf="@id/otherMemberAvatar"
         app:layout_constraintTop_toTopOf="@id/otherMemberAvatar" />
-
 
     <TextView
         android:id="@+id/participantNameText"
