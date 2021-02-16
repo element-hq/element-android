@@ -24,6 +24,20 @@ import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.Request
 import uniffi.olm.RequestType
 import uniffi.olm.Sas as InnerSas
+import uniffi.olm.Logger
+import uniffi.olm.setLogger
+
+import timber.log.Timber
+
+class CryptoLogger(): Logger {
+    override fun log(logLine: String) {
+        Timber.d(logLine)
+    }
+}
+
+fun setRustLogger() {
+    setLogger(CryptoLogger() as Logger)
+}
 
 class Device(inner: InnerDevice, machine: InnerMachine) {
     private val machine: InnerMachine = machine
