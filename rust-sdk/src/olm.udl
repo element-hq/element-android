@@ -1,4 +1,10 @@
-namespace olm {};
+namespace olm {
+    void set_logger(Logger logger);
+};
+
+callback interface Logger {
+    void log(string log_line);
+};
 
 [Error]
 enum MachineCreationError {
