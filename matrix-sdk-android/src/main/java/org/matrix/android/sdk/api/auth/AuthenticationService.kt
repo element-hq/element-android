@@ -30,7 +30,7 @@ import org.matrix.android.sdk.api.session.Session
 interface AuthenticationService {
     /**
      * Request the supported login flows for this homeserver.
-     * This is the first method to call to be able to get a wizard to login or the create an account
+     * This is the first method to call to be able to get a wizard to login or to create an account
      */
     suspend fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult
 

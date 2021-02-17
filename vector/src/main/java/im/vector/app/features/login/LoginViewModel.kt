@@ -146,7 +146,7 @@ class LoginViewModel @AssistedInject constructor(
     }
 
     private fun handleUserAcceptCertificate(action: LoginAction.UserAcceptCertificate) {
-        // It happen when we get the login flow, or during direct authentication.
+        // It happens when we get the login flow, or during direct authentication.
         // So alter the homeserver config and retrieve again the login flow
         when (val finalLastAction = lastAction) {
             is LoginAction.UpdateHomeServer -> {
