@@ -2320,4 +2320,32 @@
     <string name="re_authentication_activity_title">Omautentisering krävs</string>
     <string name="failed_to_initialize_cross_signing">Mislyckades att ställa in korssignering</string>
     <string name="error_unauthorized">Obehörig, saknar giltiga autentiseringsuppgifter</string>
+    <string name="call_transfer_users_tab_title">Användare</string>
+    <string name="call_transfer_failure">Ett fel inträffade när samtalet flyttades</string>
+    <string name="call_transfer_title">Flytta</string>
+    <string name="call_transfer_connect_action">Anslut</string>
+    <string name="call_transfer_consult_first">Rådfråga först</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">1 aktivt samtal (%1$s) - 1 pausat samtal</item>
+        <item quantity="other">1 aktivt samtal (%1$s) - %2$d pausade samtal</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="one">Pausat samtal</item>
+        <item quantity="other">%1$d pausade samtal</item>
+    </plurals>
+    <string name="call_only_active">Aktivt samtal (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">Ett fel inträffade när telefonnumret slogs upp</string>
+    <string name="call_dial_pad_title">Knappsats</string>
+    <string name="call_tile_call_back">Ring tillbaka</string>
+    <string name="call_tile_ended">Det här samtalet har avslutats</string>
+    <string name="call_tile_other_declined">%1$s avböjde det här samtalet</string>
+    <string name="call_tile_you_declined">Du avböjde det här samtalet %1$s</string>
+    <string name="call_tile_in_call">Du är för närvarande i det här samtalet</string>
+    <string name="call_tile_other_started_call">%1$s startade ett samtal</string>
+    <string name="call_tile_you_started_call">Du startade ett samtal</string>
+    <string name="call_held_by_you">Du parkerade samtalet</string>
+    <string name="call_held_by_user">%s parkerade samtalet</string>
+    <string name="call_hold_action">Parkera</string>
+    <string name="call_resume_action">Återuppta</string>
+    <string name="action_return">Tillbaka</string>
 </resources>
