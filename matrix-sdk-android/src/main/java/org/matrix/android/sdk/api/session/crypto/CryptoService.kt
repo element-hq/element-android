@@ -157,5 +157,9 @@ interface CryptoService {
 
     fun logDbUsageInfo()
 
-    fun ensureOutboundSession(roomId: String)
+    /**
+     * Perform any background tasks that can be done before a message is ready to
+     * send, in order to speed up sending of the message.
+     */
+    fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
 }

@@ -32,6 +32,8 @@ internal interface IMXGroupEncryption {
      */
     fun discardSessionKey()
 
+    suspend fun preshareKey(userIds: List<String>)
+
     /**
      * Re-shares a session key with devices if the key has already been
      * sent to them.

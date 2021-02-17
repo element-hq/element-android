@@ -50,7 +50,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibilityContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
-import org.matrix.android.sdk.api.util.emptyJsonDict
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
@@ -99,7 +98,6 @@ import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
-import kotlin.jvm.Throws
 import kotlin.math.max
 
 /**
@@ -1297,11 +1295,16 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.logDbUsageInfo()
     }
 
-    override fun ensureOutboundSession(roomId: String) {
+    override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            Timber.d("## CRYPTO | prepareToEncrypt() : Check room members up to date")
             // Ensure to load all room members
-            runCatching {
+            try {
                 loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+            } catch (failure: Throwable) {
+                Timber.e("## CRYPTO | prepareToEncrypt() : Failed to load room members")
+                callback.onFailure(failure)
+                return@launch
             }
 
             val userIds = getRoomUserIds(roomId)
@@ -1312,15 +1315,20 @@ internal class DefaultCryptoService @Inject constructor(
 
             if (alg == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
-                Timber.e("## CRYPTO | encryptEventContent() : $reason")
+                Timber.e("## CRYPTO | prepareToEncrypt() : $reason")
+                callback.onFailure(IllegalArgumentException("Missing algorithm"))
                 return@launch
             }
 
             runCatching {
-                alg.encryptEventContent(emptyJsonDict, EventType.DUMMY, userIds)
-            }.onFailure {
-                Timber.e("## CRYPTO | encryptEventContent() failed.")
-            }
+                (alg as? IMXGroupEncryption)?.preshareKey(userIds)
+            }.fold(
+                    { callback.onSuccess(Unit) },
+                    {
+                        Timber.e("## CRYPTO | prepareToEncrypt() failed.")
+                        callback.onFailure(it)
+                    }
+            )
         }
     }
 

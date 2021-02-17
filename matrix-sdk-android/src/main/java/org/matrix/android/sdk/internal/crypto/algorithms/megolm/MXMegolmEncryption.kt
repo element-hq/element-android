@@ -94,6 +94,7 @@ internal class MXMegolmEncryption(
                     // annoyingly we have to serialize again the saved outbound session to store message index :/
                     // if not we would see duplicate message index errors
                     olmDevice.storeOutboundGroupSessionForRoom(roomId, outboundSession.sessionId)
+                    Timber.v("## CRYPTO | encryptEventContent: Finished in ${System.currentTimeMillis() - ts} millis")
                 }
     }
 
@@ -118,6 +119,16 @@ internal class MXMegolmEncryption(
         olmDevice.discardOutboundGroupSessionForRoom(roomId)
     }
 
+    override suspend fun preshareKey(userIds: List<String>) {
+        val ts = System.currentTimeMillis()
+        Timber.v("## CRYPTO | preshareKey : getDevicesInRoom")
+        val devices = getDevicesInRoom(userIds)
+        val outboundSession = ensureOutboundSession(devices.allowedDevices)
+
+        notifyWithheldForSession(devices.withHeldDevices, outboundSession)
+
+        Timber.v("## CRYPTO | preshareKey ${System.currentTimeMillis() - ts} millis")
+    }
     /**
      * Prepare a new session.
      *
@@ -253,7 +264,7 @@ internal class MXMegolmEncryption(
 
                     continue
                 }
-                Timber.i("## CRYPTO | shareUserDevicesKey() : Sharing keys with device $userId:$deviceID")
+                Timber.i("## CRYPTO | shareUserDevicesKey() : Add to share keys contentMap for $userId:$deviceID")
                 contentMap.setObject(userId, deviceID, messageEncrypter.encryptMessage(payload, listOf(sessionResult.deviceInfo)))
                 haveTargets = true
             }
@@ -264,10 +275,12 @@ internal class MXMegolmEncryption(
         // attempted to share with) rather than the contentMap (those we did
         // share with), because we don't want to try to claim a one-time-key
         // for dead devices on every message.
+        val gossipingEventBuffer = arrayListOf<Event>()
         for ((userId, devicesToShareWith) in devicesByUser) {
             for ((deviceId) in devicesToShareWith) {
                 session.sharedWithHelper.markedSessionAsShared(userId, deviceId, chainIndex)
-                cryptoStore.saveGossipingEvent(Event(
+                gossipingEventBuffer.add(
+                        Event(
                         type = EventType.ROOM_KEY,
                         senderId = credentials.userId,
                         content = submap.apply {
@@ -278,6 +291,8 @@ internal class MXMegolmEncryption(
                 ))
             }
         }
+
+        cryptoStore.saveGossipingEvents(gossipingEventBuffer)
 
         if (haveTargets) {
             t0 = System.currentTimeMillis()
@@ -296,7 +311,7 @@ internal class MXMegolmEncryption(
     }
 
     private fun notifyKeyWithHeld(targets: List<UserDevice>, sessionId: String, senderKey: String?, code: WithHeldCode) {
-        Timber.i("## CRYPTO | notifyKeyWithHeld() :sending withheld key for $targets session:$sessionId ")
+        Timber.i("## CRYPTO | notifyKeyWithHeld() :sending withheld key for $targets session:$sessionId and code $code ")
         val withHeldContent = RoomKeyWithHeldContent(
                 roomId = roomId,
                 senderKey = senderKey,

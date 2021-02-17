@@ -40,7 +40,6 @@ data class MatrixConfiguration(
          * True to advertise support for call transfers to other parties on Matrix calls.
          */
         val supportsCallTransfer: Boolean = false
-        val outboundSessionKeySharingStrategy: OutboundSessionKeySharingStrategy = OutboundSessionKeySharingStrategy.WhenSendingEvent
 ) {
 
     /**

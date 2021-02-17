@@ -19,9 +19,13 @@ package im.vector.app.features.home.room.detail
 import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
@@ -37,6 +41,7 @@ import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
+import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
@@ -61,7 +66,6 @@ import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.NoOpMatrixCallback
-import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.raw.RawService
@@ -142,6 +146,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     private var trackUnreadMessages = AtomicBoolean(false)
     private var mostRecentDisplayedEvent: TimelineEvent? = null
 
+    private var prepareToEncrypt: Async<Unit> = Uninitialized
+
     @AssistedFactory
     interface Factory {
         fun create(initialState: RoomDetailViewState): RoomDetailViewModel
@@ -184,7 +190,23 @@ class RoomDetailViewModel @AssistedInject constructor(
 
         // Ensure to share the outbound session keys with all members
         if (room.isEncrypted() && BuildConfig.outboundSessionKeySharingStrategy == OutboundSessionKeySharingStrategy.WhenEnteringRoom) {
-            room.ensureOutboundSession()
+            prepareForEncryption()
+        }
+    }
+
+    private fun prepareForEncryption() {
+        // check if there is not already a call made
+        if (prepareToEncrypt !is Loading) {
+            prepareToEncrypt = Loading()
+            viewModelScope.launch {
+                kotlin.runCatching {
+                    room.prepareToEncrypt()
+                }.fold({
+                    prepareToEncrypt = Success(Unit)
+                }, {
+                    prepareToEncrypt = Fail(it)
+                })
+            }
         }
     }
 
@@ -241,6 +263,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     override fun handle(action: RoomDetailAction) {
         when (action) {
             is RoomDetailAction.UserIsTyping -> handleUserIsTyping(action)
+            is RoomDetailAction.ComposerFocusChange -> handleComposerFocusChange(action)
             is RoomDetailAction.SaveDraft -> handleSaveDraft(action)
             is RoomDetailAction.SendMessage -> handleSendMessage(action)
             is RoomDetailAction.SendMedia -> handleSendMedia(action)
@@ -598,9 +621,17 @@ class RoomDetailViewModel @AssistedInject constructor(
                 room.userStopsTyping()
             }
         }
+    }
+
+    private fun handleComposerFocusChange(action: RoomDetailAction.ComposerFocusChange) {
         // Ensure outbound session keys
-        if (action.isTyping && room.isEncrypted() && BuildConfig.outboundSessionKeySharingStrategy == OutboundSessionKeySharingStrategy.WhenTyping) {
-            room.ensureOutboundSession()
+        if (BuildConfig.outboundSessionKeySharingStrategy == OutboundSessionKeySharingStrategy.WhenTyping && room.isEncrypted()) {
+            if (action.focused) {
+                // Should we add some rate limit here, or do it only once per model lifecycle?
+                prepareForEncryption()
+            } else {
+                // we could eventually cancel here :/
+            }
         }
     }
 

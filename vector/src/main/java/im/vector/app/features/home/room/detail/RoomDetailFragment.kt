@@ -70,6 +70,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.snackbar.Snackbar
+import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.vanniktech.emoji.EmojiPopup
 import im.vector.app.R
@@ -1142,6 +1143,12 @@ class RoomDetailFragment @Inject constructor(
                 .subscribe {
                     Timber.d("Typing: User is typing: $it")
                     roomDetailViewModel.handle(RoomDetailAction.UserIsTyping(it))
+                }
+                .disposeOnDestroyView()
+
+        views.composerLayout.views.composerEditText.focusChanges()
+                .subscribe {
+                    roomDetailViewModel.handle(RoomDetailAction.ComposerFocusChange(it))
                 }
                 .disposeOnDestroyView()
     }

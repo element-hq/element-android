@@ -36,5 +36,5 @@ interface RoomCryptoService {
      * Call this method according to [OutboundSessionKeySharingStrategy].
      * If this method is not called, CryptoService will ensure it before sending events.
      */
-    fun ensureOutboundSession()
+    suspend fun prepareToEncrypt()
 }
