@@ -19,7 +19,7 @@ Translations 🗣:
  -
 
 SDK API changes ⚠️:
- - 
+ - Migrate AuthenticationService API to coroutines (#2449)
 
 Build 🧱:
  -
