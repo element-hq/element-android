@@ -16,6 +16,7 @@
 
 package im.vector.app.features.call
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
@@ -29,17 +30,16 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.audio.CallAudioManager
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
-import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.session.room.model.call.supportCallTransfer
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
-import java.util.Timer
-import java.util.TimerTask
 
 class VectorCallViewModel @AssistedInject constructor(
         @Assisted initialState: VectorCallViewState,
@@ -50,7 +50,7 @@ class VectorCallViewModel @AssistedInject constructor(
 
     private var call: WebRtcCall? = null
 
-    private var connectionTimeoutTimer: Timer? = null
+    private var connectionTimeoutJob: Job? = null
     private var hasBeenConnectedOnce = false
 
     private val callListener = object : WebRtcCall.Listener {
@@ -92,26 +92,20 @@ class VectorCallViewModel @AssistedInject constructor(
             val callState = call.state
             if (callState is CallState.Connected && callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                 hasBeenConnectedOnce = true
-                connectionTimeoutTimer?.cancel()
-                connectionTimeoutTimer = null
+                connectionTimeoutJob?.cancel()
+                connectionTimeoutJob = null
             } else {
                 // do we reset as long as it's moving?
-                connectionTimeoutTimer?.cancel()
+                connectionTimeoutJob?.cancel()
                 if (hasBeenConnectedOnce) {
-                    connectionTimeoutTimer = Timer().apply {
-                        schedule(object : TimerTask() {
-                            override fun run() {
-                                session.callSignalingService().getTurnServer(object : MatrixCallback<TurnServerResponse> {
-                                    override fun onFailure(failure: Throwable) {
-                                        _viewEvents.post(VectorCallViewEvents.ConnectionTimeout(null))
-                                    }
-
-                                    override fun onSuccess(data: TurnServerResponse) {
-                                        _viewEvents.post(VectorCallViewEvents.ConnectionTimeout(data))
-                                    }
-                                })
-                            }
-                        }, 30_000)
+                    connectionTimeoutJob = viewModelScope.launch {
+                        delay(30_000)
+                        try {
+                            val turn = session.callSignalingService().getTurnServer()
+                            _viewEvents.post(VectorCallViewEvents.ConnectionTimeout(turn))
+                        } catch (failure: Throwable) {
+                            _viewEvents.post(VectorCallViewEvents.ConnectionTimeout(null))
+                        }
                     }
                 }
             }

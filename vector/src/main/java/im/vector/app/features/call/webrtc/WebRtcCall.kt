@@ -53,7 +53,6 @@ import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.SdpType
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.threeten.bp.Duration
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
@@ -420,9 +419,7 @@ class WebRtcCall(val mxCall: MxCall,
 
     private suspend fun getTurnServer(): TurnServerResponse? {
         return tryOrNull {
-            awaitCallback {
-                sessionProvider.get()?.callSignalingService()?.getTurnServer(it)
-            }
+            sessionProvider.get()?.callSignalingService()?.getTurnServer()
         }
     }
 

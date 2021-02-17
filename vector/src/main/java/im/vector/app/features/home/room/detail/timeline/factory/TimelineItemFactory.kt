@@ -16,7 +16,8 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.core.epoxy.EmptyItem_
+import im.vector.app.core.epoxy.TimelineEmptyItem
+import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -114,6 +115,12 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             Timber.e(throwable, "failed to create message item")
             defaultItemFactory.create(event, highlight, callback, throwable)
         }
-        return (computedModel ?: EmptyItem_())
+        return computedModel ?: buildEmptyItem(event)
+    }
+
+    private fun buildEmptyItem(timelineEvent: TimelineEvent): TimelineEmptyItem {
+        return TimelineEmptyItem_()
+                .id(timelineEvent.localId)
+                .eventId(timelineEvent.eventId)
     }
 }

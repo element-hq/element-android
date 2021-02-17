@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.call
+package im.vector.app.features.home.room.detail.timeline.item
 
-interface CallSignalingService {
-
-    suspend fun getTurnServer(): TurnServerResponse
-
-    fun getPSTNProtocolChecker(): PSTNProtocolChecker
-
+interface ItemWithEvents {
     /**
-     * Create an outgoing call
+     * Returns the eventIds associated with the EventItem.
+     * Will generally get only one, but it handles the merged items.
      */
-    fun createOutgoingCall(roomId: String, otherUserId: String, isVideoCall: Boolean): MxCall
-
-    fun addCallListener(listener: CallListener)
-
-    fun removeCallListener(listener: CallListener)
-
-    fun getCallWithId(callId: String): MxCall?
-
-    fun isThereAnyActiveCall(): Boolean
+    fun getEventIds(): List<String>
 }
