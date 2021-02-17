@@ -14,6 +14,7 @@ Bugfix 🐛:
  - VoIP : fix audio devices output
  - Fix crash after initial sync on Dendrite
  - Fix crash reported by PlayStore (#2707)
+ - Ignore url override from credential if it is not valid (#2822)
 
 Translations 🗣:
  -
