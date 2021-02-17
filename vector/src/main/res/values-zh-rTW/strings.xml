@@ -385,7 +385,7 @@
         <item quantity="other">%d 個聊天室</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
-        <item quantity="other">有 %1$d 個聊天室匹配 “%2$s”</item>
+        <item quantity="other">%2$s 找到 %1$s 個聊天室</item>
     </plurals>
     <string name="directory_searching_title">正在搜尋目錄……</string>
     <string name="room_settings_all_messages_noisy">所有訊息（通知並震動）</string>
@@ -2096,7 +2096,7 @@
     <string name="settings_security_application_protection_summary">使用 PIN 碼與生物識別技術來保護存取權。</string>
     <string name="settings_security_application_protection_title">保護存取權</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
-        <item quantity="other">顯示您現在可以驗證的 %s 個裝置</item>
+        <item quantity="other">顯示您現在可以驗證的 %d 個裝置</item>
     </plurals>
     <string name="secure_backup_reset_no_history">您將會重新啟動，沒有歷史紀錄，已信任的裝置或已信任的使用者</string>
     <string name="secure_backup_reset_if_you_reset_all">如果您重設了所有東西</string>
@@ -2282,4 +2282,30 @@
     <string name="re_authentication_activity_title">需要重新驗證</string>
     <string name="failed_to_initialize_cross_signing">未能設定交叉簽章</string>
     <string name="error_unauthorized">未授權，缺少有效的身份驗證憑證</string>
+    <string name="call_transfer_users_tab_title">使用者</string>
+    <string name="call_transfer_failure">轉移電話時發生錯誤</string>
+    <string name="call_transfer_title">轉移</string>
+    <string name="call_transfer_connect_action">連線</string>
+    <string name="call_transfer_consult_first">先諮詢</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="other">1 個通話中 (%1$s) · %2$d 暫停的通話</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="other">%1$d 暫停了通話</item>
+    </plurals>
+    <string name="call_only_active">通話中 (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">查詢電話號碼時發生錯誤</string>
+    <string name="call_dial_pad_title">撥號鍵盤</string>
+    <string name="call_tile_call_back">回撥</string>
+    <string name="call_tile_ended">此通話已結束</string>
+    <string name="call_tile_other_declined">%1$s 婉拒了此通話</string>
+    <string name="call_tile_you_declined">您婉拒了此通話 %1$s</string>
+    <string name="call_tile_in_call">您目前在此通話中</string>
+    <string name="call_tile_other_started_call">%1$s 開始了通話</string>
+    <string name="call_tile_you_started_call">您開始了通話</string>
+    <string name="call_held_by_you">您保留了通話</string>
+    <string name="call_held_by_user">%s 保留了通話</string>
+    <string name="call_hold_action">保留</string>
+    <string name="call_resume_action">恢復</string>
+    <string name="action_return">返回</string>
 </resources>
