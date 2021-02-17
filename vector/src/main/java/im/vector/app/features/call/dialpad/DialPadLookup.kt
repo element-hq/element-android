@@ -22,20 +22,22 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
-class DialPadLookup @Inject constructor(val session: Session,
-                                        val directRoomHelper: DirectRoomHelper,
-                                        val callManager: WebRtcCallManager
+class DialPadLookup @Inject constructor(
+        private val session: Session,
+        private val directRoomHelper: DirectRoomHelper,
+        private val callManager: WebRtcCallManager
 ) {
-
     class Failure : Throwable()
+
     data class Result(val userId: String, val roomId: String)
 
     suspend fun lookupPhoneNumber(phoneNumber: String): Result {
         val supportedProtocolKey = callManager.supportedPSTNProtocol ?: throw Failure()
         val thirdPartyUser = tryOrNull {
-            session.thirdPartyService().getThirdPartyUser(supportedProtocolKey, fields = mapOf(
-                    "m.id.phone" to phoneNumber
-            )).firstOrNull()
+            session.thirdPartyService().getThirdPartyUser(
+                    protocol = supportedProtocolKey,
+                    fields = mapOf("m.id.phone" to phoneNumber)
+            ).firstOrNull()
         } ?: throw Failure()
 
         val roomId = directRoomHelper.ensureDMExists(thirdPartyUser.userId)

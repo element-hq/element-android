@@ -45,7 +45,7 @@ class PSTNProtocolChecker @Inject internal constructor(private val taskExecutor:
 
     private var alreadyChecked = AtomicBoolean(false)
 
-    private val pstnSupportListeners = emptyList<Listener>().toMutableList()
+    private val pstnSupportListeners = mutableListOf<Listener>()
 
     fun addListener(listener: Listener) {
         pstnSupportListeners.add(listener)

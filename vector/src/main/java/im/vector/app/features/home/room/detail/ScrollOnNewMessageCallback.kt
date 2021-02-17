@@ -48,7 +48,7 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
             return
         }
         val firstNewItem = timelineEventController.adapter.getModelAtPosition(position) as? IsEventItem ?: return
-        val firstNewItemIds = firstNewItem.getEventIds().firstOrNull()
+        val firstNewItemIds = firstNewItem.getEventIds().firstOrNull() ?: return
         val indexOfFirstNewItem = newTimelineEventIds.indexOf(firstNewItemIds)
         if (indexOfFirstNewItem != -1) {
             Timber.v("Should scroll to position: $position")
