@@ -16,7 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
-interface IsEventItem {
+interface ItemWithEvents {
     /**
      * Returns the eventIds associated with the EventItem.
      * Will generally get only one, but it handles the merged items.

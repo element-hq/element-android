@@ -24,7 +24,7 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.detail.UnreadState
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
-import im.vector.app.features.home.room.detail.timeline.item.IsEventItem
+import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -61,7 +61,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         val firstUnreadEventId = (unreadState as? UnreadState.HasUnread)?.firstUnreadEventId
         // Then iterate on models so we have the exact positions in the adapter
         modelsIterator.forEach { epoxyModel ->
-            if (epoxyModel is IsEventItem) {
+            if (epoxyModel is ItemWithEvents) {
                 epoxyModel.getEventIds().forEach { eventId ->
                     adapterPositionMapping[eventId] = index
                     if (eventId == firstUnreadEventId) {

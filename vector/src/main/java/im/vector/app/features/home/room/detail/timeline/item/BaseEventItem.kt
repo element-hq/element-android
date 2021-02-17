@@ -32,7 +32,7 @@ import im.vector.app.core.utils.DimensionConverter
 /**
  * Children must override getViewType()
  */
-abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>(), IsEventItem {
+abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>(), ItemWithEvents {
 
     // To use for instance when opening a permalink with an eventId
     @EpoxyAttribute
