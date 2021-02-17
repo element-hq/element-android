@@ -189,7 +189,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         chatEffectManager.delegate = this
 
         // Ensure to share the outbound session keys with all members
-        if (room.isEncrypted() && BuildConfig.outboundSessionKeySharingStrategy == OutboundSessionKeySharingStrategy.WhenEnteringRoom) {
+        if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
             prepareForEncryption()
         }
     }
@@ -625,7 +625,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleComposerFocusChange(action: RoomDetailAction.ComposerFocusChange) {
         // Ensure outbound session keys
-        if (BuildConfig.outboundSessionKeySharingStrategy == OutboundSessionKeySharingStrategy.WhenTyping && room.isEncrypted()) {
+        if (OutboundSessionKeySharingStrategy.WhenTyping == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
             if (action.focused) {
                 // Should we add some rate limit here, or do it only once per model lifecycle?
                 prepareForEncryption()
