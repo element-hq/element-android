@@ -115,7 +115,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             Timber.e(throwable, "failed to create message item")
             defaultItemFactory.create(event, highlight, callback, throwable)
         }
-        return (computedModel ?: buildEmptyItem(event))
+        return computedModel ?: buildEmptyItem(event)
     }
 
     private fun buildEmptyItem(timelineEvent: TimelineEvent): TimelineEmptyItem {
