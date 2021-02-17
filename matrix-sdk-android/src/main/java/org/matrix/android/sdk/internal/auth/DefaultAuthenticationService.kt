@@ -317,8 +317,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                 ?: let {
                     pendingSessionData?.homeServerConnectionConfig?.let {
                         DefaultRegistrationWizard(
-                                buildClient(it),
-                                retrofitFactory,
+                                buildAuthAPI(it),
                                 sessionCreator,
                                 pendingSessionStore
                         ).also {
@@ -336,8 +335,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                 ?: let {
                     pendingSessionData?.homeServerConnectionConfig?.let {
                         DefaultLoginWizard(
-                                buildClient(it),
-                                retrofitFactory,
+                                buildAuthAPI(it),
                                 sessionCreator,
                                 pendingSessionStore
                         ).also {

@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.auth.registration
 
 import kotlinx.coroutines.delay
-import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
@@ -29,21 +28,18 @@ import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.auth.PendingSessionStore
 import org.matrix.android.sdk.internal.auth.SessionCreator
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
-import org.matrix.android.sdk.internal.network.RetrofitFactory
 
 /**
  * This class execute the registration request and is responsible to keep the session of interactive authentication
  */
 internal class DefaultRegistrationWizard(
-        private val okHttpClient: OkHttpClient,
-        private val retrofitFactory: RetrofitFactory,
+        authAPI: AuthAPI,
         private val sessionCreator: SessionCreator,
         private val pendingSessionStore: PendingSessionStore
 ) : RegistrationWizard {
 
     private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
 
-    private val authAPI = buildAuthAPI()
     private val registerTask = DefaultRegisterTask(authAPI)
     private val registerAddThreePidTask = DefaultRegisterAddThreePidTask(authAPI)
     private val validateCodeTask = DefaultValidateCodeTask(authAPI)
@@ -51,12 +47,12 @@ internal class DefaultRegistrationWizard(
     override val currentThreePid: String?
         get() {
             return when (val threePid = pendingSessionData.currentThreePidData?.threePid) {
-                is RegisterThreePid.Email -> threePid.email
+                is RegisterThreePid.Email  -> threePid.email
                 is RegisterThreePid.Msisdn -> {
                     // Take formatted msisdn if provided by the server
                     pendingSessionData.currentThreePidData?.addThreePidRegistrationResponse?.formattedMsisdn?.takeIf { it.isNotBlank() } ?: threePid.msisdn
                 }
-                null -> null
+                null                       -> null
             }
         }
 
@@ -206,10 +202,5 @@ internal class DefaultRegistrationWizard(
 
         val session = sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
         return RegistrationResult.Success(session)
-    }
-
-    private fun buildAuthAPI(): AuthAPI {
-        val retrofit = retrofitFactory.create(okHttpClient, pendingSessionData.homeServerConnectionConfig.homeServerUri.toString())
-        return retrofit.create(AuthAPI::class.java)
     }
 }

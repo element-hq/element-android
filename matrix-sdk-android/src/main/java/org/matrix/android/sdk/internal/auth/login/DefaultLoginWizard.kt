@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.auth.login
 
 import android.util.Patterns
-import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
@@ -32,20 +31,15 @@ import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationParams
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationResponse
 import org.matrix.android.sdk.internal.auth.registration.RegisterAddThreePidTask
-import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.network.executeRequest
 
 internal class DefaultLoginWizard(
-        okHttpClient: OkHttpClient,
-        retrofitFactory: RetrofitFactory,
+        private val authAPI: AuthAPI,
         private val sessionCreator: SessionCreator,
         private val pendingSessionStore: PendingSessionStore
 ) : LoginWizard {
 
     private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
-
-    private val authAPI = retrofitFactory.create(okHttpClient, pendingSessionData.homeServerConnectionConfig.homeServerUri.toString())
-            .create(AuthAPI::class.java)
 
     override suspend fun login(login: String,
                                password: String,
