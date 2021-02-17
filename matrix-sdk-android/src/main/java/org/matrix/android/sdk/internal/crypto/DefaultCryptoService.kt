@@ -98,6 +98,9 @@ import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
+import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
+import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
+import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.TaskThread
 import org.matrix.android.sdk.internal.task.configureWith
@@ -321,9 +324,7 @@ internal class DefaultCryptoService @Inject constructor(
      *
      */
     suspend fun start() {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            internalStart()
-        }
+        internalStart()
         // Just update
         fetchDevicesList(NoOpMatrixCallback())
 
@@ -937,6 +938,13 @@ internal class DefaultCryptoService @Inject constructor(
         eventContent?.historyVisibility?.let {
             cryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
         }
+    }
+
+    suspend fun receiveSyncChanges(
+        toDevice: ToDeviceSyncResponse?,
+        deviceChanges: DeviceListResponse?,
+        keyCounts: DeviceOneTimeKeysCountSyncResponse?) {
+            olmMachine!!.receiveSyncChanges(toDevice, deviceChanges, keyCounts)
     }
 
     private suspend fun sendOutgoingRequests() {

@@ -1,6 +1,6 @@
 use std::{
     collections::{BTreeMap, HashMap},
-    convert::TryFrom,
+    convert::{TryFrom, TryInto},
 };
 
 use http::Response;
@@ -301,13 +301,20 @@ impl OlmMachine {
         &self,
         events: &str,
         device_changes: DeviceLists,
-        key_counts: HashMap<String, u32>,
+        key_counts: HashMap<String, i32>,
     ) {
         let events: ToDevice = serde_json::from_str(events).unwrap();
         let device_changes: RumaDeviceLists = device_changes.into();
         let key_counts: BTreeMap<DeviceKeyAlgorithm, UInt> = key_counts
             .into_iter()
-            .map(|(k, v)| (DeviceKeyAlgorithm::from(k), v.into()))
+            .map(|(k, v)| {
+                (
+                    DeviceKeyAlgorithm::from(k),
+                    v.clamp(0, i32::MAX)
+                        .try_into()
+                        .expect("Couldn't convert key counts into an UInt"),
+                )
+            })
             .collect();
 
         self.runtime

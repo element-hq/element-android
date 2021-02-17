@@ -56,7 +56,7 @@ interface OlmMachine {
 
     void receive_sync_changes([ByRef] string events,
                               DeviceLists device_changes,
-                              record<DOMString, u32> key_counts);
+                              record<DOMString, i32> key_counts);
 
     record<DOMString, string> identity_keys();
 

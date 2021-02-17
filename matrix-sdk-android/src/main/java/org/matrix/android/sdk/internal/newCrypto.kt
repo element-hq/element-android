@@ -19,17 +19,21 @@ package org.matrix.android.sdk.internal
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
+import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
+import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
+import timber.log.Timber
 import uniffi.olm.Device as InnerDevice
+import uniffi.olm.DeviceLists
+import uniffi.olm.Logger
 import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.Request
 import uniffi.olm.RequestType
 import uniffi.olm.Sas as InnerSas
-import uniffi.olm.Logger
 import uniffi.olm.setLogger
 
-import timber.log.Timber
-
-class CryptoLogger(): Logger {
+class CryptoLogger() : Logger {
     override fun log(logLine: String) {
         Timber.d(logLine)
     }
@@ -60,7 +64,7 @@ class Device(inner: InnerDevice, machine: InnerMachine) {
     }
 }
 
-class OlmMachine(user_id: String, device_id: String, path: File) {
+internal class OlmMachine(user_id: String, device_id: String, path: File) {
     private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
 
     fun userId(): String {
@@ -77,6 +81,24 @@ class OlmMachine(user_id: String, device_id: String, path: File) {
 
     suspend fun outgoingRequests(): List<Request> = withContext(Dispatchers.IO) {
         inner.outgoingRequests()
+    }
+
+    suspend fun receiveSyncChanges(
+        toDevice: ToDeviceSyncResponse?,
+        deviceChanges: DeviceListResponse?,
+        keyCounts: DeviceOneTimeKeysCountSyncResponse?
+    ) = withContext(Dispatchers.IO) {
+            var counts: MutableMap<String, Int> = mutableMapOf()
+
+            if (keyCounts?.signedCurve25519 != null) {
+                counts.put("signed_curve25519", keyCounts.signedCurve25519)
+            }
+
+            val devices = DeviceLists(deviceChanges?.changed ?: listOf(), deviceChanges?.left ?: listOf())
+            val adapter = MoshiProvider.providesMoshi().adapter<ToDeviceSyncResponse>(ToDeviceSyncResponse::class.java)
+            val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
+
+            inner.receiveSyncChanges(events, devices, counts)
     }
 
     suspend fun markRequestAsSent(

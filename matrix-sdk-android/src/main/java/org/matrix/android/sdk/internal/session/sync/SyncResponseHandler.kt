@@ -62,9 +62,10 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
         measureTimeMillis {
             if (!cryptoService.isStarted()) {
                 Timber.v("Should start cryptoService")
+                // TODO shirley there's a better place for this than the sync
+                // loop?
                 cryptoService.start()
             }
-            cryptoService.onSyncWillProcess(isInitialSync)
         }.also {
             Timber.v("Finish handling start cryptoService in $it ms")
         }
@@ -73,11 +74,12 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
         // to ensure to decrypt them properly
         measureTimeMillis {
             Timber.v("Handle toDevice")
-            reportSubtask(reporter, R.string.initial_sync_start_importing_account_crypto, 100, 0.1f) {
-                if (syncResponse.toDevice != null) {
-                    cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
-                }
-            }
+
+            cryptoService.receiveSyncChanges(
+                syncResponse.toDevice,
+                syncResponse.deviceLists,
+                syncResponse.deviceOneTimeKeysCount
+            )
         }.also {
             Timber.v("Finish handling toDevice in $it ms")
         }
