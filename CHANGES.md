@@ -24,6 +24,7 @@ SDK API changes ⚠️:
 
 Build 🧱:
  - Update a lot of dependencies, with the help of dependabot.
+ - Add a script to download and install APK from the CI
 
 Test:
  -
