@@ -27,7 +27,7 @@ internal class DefaultAccountService @Inject constructor(private val changePassw
         changePasswordTask.execute(ChangePasswordTask.Params(password, newPassword))
     }
 
-    override suspend fun deactivateAccount(userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, eraseAllData: Boolean) {
-        deactivateAccountTask.execute(DeactivateAccountTask.Params(userInteractiveAuthInterceptor, eraseAllData))
+    override suspend fun deactivateAccount(eraseAllData: Boolean, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) {
+        deactivateAccountTask.execute(DeactivateAccountTask.Params(eraseAllData, userInteractiveAuthInterceptor))
     }
 }

@@ -29,8 +29,8 @@ import javax.inject.Inject
 
 internal interface DeactivateAccountTask : Task<DeactivateAccountTask.Params, Unit> {
     data class Params(
-            val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor,
             val eraseAllData: Boolean,
+            val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor,
             val userAuthParam: UIABaseAuth? = null
     )
 }

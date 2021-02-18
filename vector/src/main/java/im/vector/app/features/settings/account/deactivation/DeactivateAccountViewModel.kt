@@ -98,13 +98,15 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
         viewModelScope.launch {
             val event = try {
                 session.deactivateAccount(
+                        action.eraseAllData,
                         object : UserInteractiveAuthInterceptor {
                             override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                                 _viewEvents.post(DeactivateAccountViewEvents.RequestReAuth(flowResponse, errCode))
                                 pendingAuth = DefaultBaseAuth(session = flowResponse.session)
                                 uiaContinuation = promise
                             }
-                        }, action.eraseAllData)
+                        }
+                )
                 DeactivateAccountViewEvents.Done
             } catch (failure: Exception) {
                 if (failure.isInvalidUIAAuth()) {
