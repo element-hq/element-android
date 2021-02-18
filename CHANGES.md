@@ -14,6 +14,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - VoIP : fix audio devices output
  - Fix crash after initial sync on Dendrite
+ - Fix crash reported by PlayStore (#2707)
 
 Translations 🗣:
  -
@@ -30,6 +31,7 @@ Test:
 Other changes:
  - New Dev Tools panel for developers
  - Fix typos in CHANGES.md (#2811)
+ - Colors rework: first step: merge file `colors_riot.xml` to file `colors_riotx.xml` and rename the file to `colors.xml`
 
 Changes in Element 1.0.17 (2021-02-09)
 ===================================================

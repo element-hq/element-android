@@ -2873,4 +2873,5 @@
     <string name="dev_tools_error_malformed_event">Malformed event</string>
     <string name="dev_tools_success_event">Event sent!</string>
     <string name="dev_tools_success_state_event">State event sent!</string>
+    <string name="dev_tools_event_content_hint">Event content</string>
 </resources>

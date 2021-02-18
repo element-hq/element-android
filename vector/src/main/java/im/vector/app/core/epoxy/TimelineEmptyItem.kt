@@ -16,10 +16,19 @@
 
 package im.vector.app.core.epoxy
 
+import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 
-@EpoxyModelClass(layout = R.layout.item_empty)
-abstract class EmptyItem : VectorEpoxyModel<EmptyItem.Holder>() {
+@EpoxyModelClass(layout = R.layout.item_timeline_empty)
+abstract class TimelineEmptyItem : VectorEpoxyModel<TimelineEmptyItem.Holder>(), ItemWithEvents {
+
+    @EpoxyAttribute lateinit var eventId: String
+
+    override fun getEventIds(): List<String> {
+        return listOf(eventId)
+    }
+
     class Holder : VectorEpoxyHolder()
 }
