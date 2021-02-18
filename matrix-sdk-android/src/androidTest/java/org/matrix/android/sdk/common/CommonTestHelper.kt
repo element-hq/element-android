@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
-import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -210,22 +209,21 @@ class CommonTestHelper(context: Context) {
                                      sessionTestParams: SessionTestParams): Session {
         val hs = createHomeServerConfig()
 
-        doSync<LoginFlowResult> {
-            matrix.authenticationService
-                    .getLoginFlow(hs, it)
+        runBlockingTest {
+            matrix.authenticationService.getLoginFlow(hs)
         }
 
-        doSync<RegistrationResult>(timeout = 60_000) {
+        runBlockingTest(timeout = 60_000) {
             matrix.authenticationService
                     .getRegistrationWizard()
-                    .createAccount(userName, password, null, it)
+                    .createAccount(userName, password, null)
         }
 
         // Perform dummy step
-        val registrationResult = doSync<RegistrationResult>(timeout = 60_000) {
+        val registrationResult = runBlockingTest(timeout = 60_000) {
             matrix.authenticationService
                     .getRegistrationWizard()
-                    .dummy(it)
+                    .dummy()
         }
 
         assertTrue(registrationResult is RegistrationResult.Success)
@@ -249,15 +247,14 @@ class CommonTestHelper(context: Context) {
                                   sessionTestParams: SessionTestParams): Session {
         val hs = createHomeServerConfig()
 
-        doSync<LoginFlowResult> {
-            matrix.authenticationService
-                    .getLoginFlow(hs, it)
+        runBlockingTest {
+            matrix.authenticationService.getLoginFlow(hs)
         }
 
-        val session = doSync<Session> {
+        val session = runBlockingTest {
             matrix.authenticationService
                     .getLoginWizard()
-                    .login(userName, password, "myDevice", it)
+                    .login(userName, password, "myDevice")
         }
 
         if (sessionTestParams.withInitialSync) {
@@ -277,21 +274,19 @@ class CommonTestHelper(context: Context) {
                             password: String): Throwable {
         val hs = createHomeServerConfig()
 
-        doSync<LoginFlowResult> {
-            matrix.authenticationService
-                    .getLoginFlow(hs, it)
+        runBlockingTest {
+            matrix.authenticationService.getLoginFlow(hs)
         }
 
         var requestFailure: Throwable? = null
-        waitWithLatch { latch ->
-            matrix.authenticationService
-                    .getLoginWizard()
-                    .login(userName, password, "myDevice", object : TestMatrixCallback<Session>(latch, onlySuccessful = false) {
-                        override fun onFailure(failure: Throwable) {
-                            requestFailure = failure
-                            super.onFailure(failure)
-                        }
-                    })
+        runBlockingTest {
+            try {
+                matrix.authenticationService
+                        .getLoginWizard()
+                        .login(userName, password, "myDevice")
+            } catch (failure: Throwable) {
+                requestFailure = failure
+            }
         }
 
         assertNotNull(requestFailure)
