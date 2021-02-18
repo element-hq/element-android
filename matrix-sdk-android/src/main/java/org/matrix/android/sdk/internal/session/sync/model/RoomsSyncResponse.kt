@@ -17,6 +17,7 @@ package org.matrix.android.sdk.internal.session.sync.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.util.Extended
 
 // RoomsSyncResponse represents the rooms list in server sync v2 response.
 @JsonClass(generateAdapter = true)
@@ -24,7 +25,7 @@ internal data class RoomsSyncResponse(
         /**
          * Joined rooms: keys are rooms ids.
          */
-        @Json(name = "join") val join: Map<String, RoomSync> = emptyMap(),
+        @Json(name = "join") val join: Map<String, Extended<RoomSync>> = emptyMap(),
 
         /**
          * Invitations. The rooms that the user has been invited to: keys are rooms ids.

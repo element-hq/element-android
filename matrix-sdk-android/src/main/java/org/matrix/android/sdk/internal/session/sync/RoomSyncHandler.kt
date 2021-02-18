@@ -27,6 +27,8 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTagContent
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.util.Extended
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
@@ -62,6 +64,7 @@ import org.matrix.android.sdk.internal.session.sync.model.InvitedRoomSync
 import org.matrix.android.sdk.internal.session.sync.model.RoomSync
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncAccountData
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncEphemeral
+import org.matrix.android.sdk.internal.session.sync.model.RoomSyncUnreadNotifications
 import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
 import timber.log.Timber
 import javax.inject.Inject
@@ -78,7 +81,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val timelineInput: TimelineInput) {
 
     sealed class HandlingStrategy {
-        data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
+        data class JOINED(val data: Map<String, Extended<RoomSync>>) : HandlingStrategy()
         data class INVITED(val data: Map<String, InvitedRoomSync>) : HandlingStrategy()
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
@@ -125,12 +128,12 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
     private fun handleJoinedRoom(realm: Realm,
                                  roomId: String,
-                                 roomSync: RoomSync,
+                                 roomSyncExtended: Extended<RoomSync>,
                                  isInitialSync: Boolean,
                                  insertType: EventInsertType,
                                  syncLocalTimestampMillis: Long): RoomEntity {
         Timber.v("Handle join sync for room $roomId")
-
+        val roomSync = roomSyncExtended.wrapped
         var ephemeralResult: EphemeralResult? = null
         if (roomSync.ephemeral?.events?.isNotEmpty() == true) {
             ephemeralResult = handleEphemeral(realm, roomId, roomSync.ephemeral, isInitialSync)
@@ -186,12 +189,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
         roomTypingUsersHandler.handle(realm, roomId, ephemeralResult)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.JOIN)
+        @Suppress("UNCHECKED_CAST")
         roomSummaryUpdater.update(
                 realm,
                 roomId,
                 Membership.JOIN,
                 roomSync.summary,
-                roomSync.unreadNotifications,
+                roomSyncExtended.undefined["unread_notifications"] as? JsonDict,
                 updateMembers = hasRoomMember
         )
         return roomEntity
@@ -267,7 +271,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         roomEntity.chunks.clearWith { it.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true) }
         roomTypingUsersHandler.handle(realm, roomId, null)
         roomChangeMembershipStateDataSource.setMembershipFromSync(roomId, Membership.LEAVE)
-        roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary, roomSync.unreadNotifications)
+        roomSummaryUpdater.update(realm, roomId, membership, roomSync.summary, null)
         return roomEntity
     }
 

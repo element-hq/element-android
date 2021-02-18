@@ -42,11 +42,6 @@ internal data class RoomSync(
         @Json(name = "account_data") val accountData: RoomSyncAccountData? = null,
 
         /**
-         * The notification counts for the room.
-         */
-        @Json(name = "unread_notifications") val unreadNotifications: RoomSyncUnreadNotifications? = null,
-
-        /**
          * The room summary
          */
         @Json(name = "summary") val summary: RoomSyncSummary? = null

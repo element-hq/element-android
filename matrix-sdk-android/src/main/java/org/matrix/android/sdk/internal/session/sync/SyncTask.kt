@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.sync
 
 import org.matrix.android.sdk.R
+import org.matrix.android.sdk.api.util.Extended
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.TimeOutInterceptor
@@ -81,13 +82,14 @@ internal class DefaultSyncTask @Inject constructor(
 
         val readTimeOut = (params.timeout + TIMEOUT_MARGIN).coerceAtLeast(TimeOutInterceptor.DEFAULT_LONG_TIMEOUT)
 
-        val syncResponse = executeRequest<SyncResponse>(globalErrorReceiver) {
+        val syncResponse = executeRequest<Extended<SyncResponse>>(globalErrorReceiver) {
             apiCall = syncAPI.sync(
                     params = requestParams,
                     readTimeOut = readTimeOut
             )
         }
-        syncResponseHandler.handleResponse(syncResponse, token)
+        Timber.v("Sync Response undefined: ${syncResponse.undefined}")
+        syncResponseHandler.handleResponse(syncResponse.wrapped, token)
         if (isInitialSync) {
             initialSyncProgressService.endAll()
         }

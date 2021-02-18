@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomNameContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
@@ -62,7 +63,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                roomId: String,
                membership: Membership? = null,
                roomSummary: RoomSyncSummary? = null,
-               unreadNotifications: RoomSyncUnreadNotifications? = null,
+               unreadNotifications: JsonDict? = null,
                updateMembers: Boolean = false,
                inviterId: String? = null) {
         val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
@@ -78,8 +79,8 @@ internal class RoomSummaryUpdater @Inject constructor(
                 roomSummaryEntity.joinedMembersCount = roomSummary.joinedMembersCount
             }
         }
-        roomSummaryEntity.highlightCount = unreadNotifications?.highlightCount ?: 0
-        roomSummaryEntity.notificationCount = unreadNotifications?.notificationCount ?: 0
+        roomSummaryEntity.highlightCount = (unreadNotifications?.get("highlight_count") as? Double)?.toInt() ?: 0
+        roomSummaryEntity.notificationCount = (unreadNotifications?.get("notification_count") as? Double)?.toInt() ?: 0
 
         if (membership != null) {
             roomSummaryEntity.membership = membership

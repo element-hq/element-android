@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.internal.network.parsing.CipherSuiteMoshiAdapter
+import org.matrix.android.sdk.internal.network.parsing.ExtendedAdapterFactory
 import org.matrix.android.sdk.internal.network.parsing.ForceToBooleanJsonAdapter
 import org.matrix.android.sdk.internal.network.parsing.RuntimeJsonAdapterFactory
 import org.matrix.android.sdk.internal.network.parsing.TlsVersionMoshiAdapter
@@ -44,6 +45,7 @@ object MoshiProvider {
             .add(ForceToBooleanJsonAdapter())
             .add(CipherSuiteMoshiAdapter())
             .add(TlsVersionMoshiAdapter())
+            .add(ExtendedAdapterFactory())
             .add(RuntimeJsonAdapterFactory.of(MessageContent::class.java, "msgtype", MessageDefaultContent::class.java)
                     .registerSubtype(MessageTextContent::class.java, MessageType.MSGTYPE_TEXT)
                     .registerSubtype(MessageNoticeContent::class.java, MessageType.MSGTYPE_NOTICE)

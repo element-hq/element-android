@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import org.matrix.android.sdk.api.util.Extended
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.network.TimeOutInterceptor
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
@@ -33,5 +34,5 @@ internal interface SyncAPI {
              @Header(TimeOutInterceptor.CONNECT_TIMEOUT) connectTimeOut: Long = TimeOutInterceptor.DEFAULT_LONG_TIMEOUT,
              @Header(TimeOutInterceptor.READ_TIMEOUT) readTimeOut: Long = TimeOutInterceptor.DEFAULT_LONG_TIMEOUT,
              @Header(TimeOutInterceptor.WRITE_TIMEOUT) writeTimeOut: Long = TimeOutInterceptor.DEFAULT_LONG_TIMEOUT
-    ): Call<SyncResponse>
+    ): Call<Extended<SyncResponse>>
 }

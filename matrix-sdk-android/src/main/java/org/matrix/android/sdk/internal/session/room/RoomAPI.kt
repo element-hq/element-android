@@ -204,7 +204,7 @@ internal interface RoomAPI {
      * Ref: https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-rooms-roomid-state
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state")
-    fun getRoomState(@Path("roomId") roomId: String) : Call<List<Event>>
+    fun getRoomState(@Path("roomId") roomId: String): Call<List<Event>>
 
     /**
      * Send a relation event to a room.
