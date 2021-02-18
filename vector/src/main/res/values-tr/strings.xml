@@ -1709,4 +1709,8 @@
         <item quantity="one">%1$d/%2$d anahtar başarıyla içe aktarıldı.</item>
         <item quantity="other">%1$d/%2$d anahtar başarıyla içe aktarıldı.</item>
     </plurals>
+    <string name="call_held_by_you">Aramayı beklettiniz</string>
+    <string name="call_held_by_user">%s aramayı bekletti</string>
+    <string name="call_hold_action">Beklet</string>
+    <string name="call_resume_action">Devam et</string>
 </resources>
