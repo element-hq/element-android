@@ -46,7 +46,7 @@ class DeactivateAccountTest : InstrumentedTest {
 
     @Test
     fun deactivateAccountTest() {
-        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
+        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         // Deactivate the account
         commonTestHelper.runBlockingTest {
