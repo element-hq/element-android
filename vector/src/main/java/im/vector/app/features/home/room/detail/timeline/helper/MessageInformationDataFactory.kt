@@ -138,7 +138,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                     ReferencesInfoData(verificationState)
                 },
                 sentByMe = event.root.senderId == session.myUserId,
-                readReceiptAnonymous = if (event.root.sendState == SendState.SYNCED) {
+                readReceiptAnonymous = if (event.root.sendState == SendState.SYNCED || event.root.sendState == SendState.SENT) {
                     /*if (event.readByOther) {
                         AnonymousReadReceipt.READ
                     } else {
