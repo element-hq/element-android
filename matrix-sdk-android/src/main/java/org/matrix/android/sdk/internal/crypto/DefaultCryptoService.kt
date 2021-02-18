@@ -75,7 +75,6 @@ import org.matrix.android.sdk.internal.crypto.model.toRest
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
-import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
@@ -153,9 +152,8 @@ internal class DefaultCryptoService @Inject constructor(
         // Repository
         private val megolmEncryptionFactory: MXMegolmEncryptionFactory,
         private val olmEncryptionFactory: MXOlmEncryptionFactory,
-        private val deleteDeviceTask: DeleteDeviceTask,
-        private val deleteDeviceWithUserPasswordTask: DeleteDeviceWithUserPasswordTask,
         // Tasks
+        private val deleteDeviceTask: DeleteDeviceTask,
         private val getDevicesTask: GetDevicesTask,
         private val getDeviceInfoTask: GetDeviceInfoTask,
         private val setDeviceNameTask: SetDeviceNameTask,
@@ -211,15 +209,6 @@ internal class DefaultCryptoService @Inject constructor(
     override fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>) {
         deleteDeviceTask
                 .configureWith(DeleteDeviceTask.Params(deviceId, userInteractiveAuthInterceptor, null)) {
-                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
-    }
-
-    override fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>) {
-        deleteDeviceWithUserPasswordTask
-                .configureWith(DeleteDeviceWithUserPasswordTask.Params(deviceId, authSession, password)) {
                     this.executionThread = TaskThread.CRYPTO
                     this.callback = callback
                 }
