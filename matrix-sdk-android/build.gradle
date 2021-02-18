@@ -137,6 +137,7 @@ dependencies {
 
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+    kapt project(':moshi:codegen')
 
     implementation "ru.noties.markwon:core:$markwon_version"
 

@@ -1,3 +1,4 @@
+include ':moshi:codegen'
 include ':vector'
 include ':matrix-sdk-android'
 include ':matrix-sdk-android-rx'
