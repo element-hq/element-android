@@ -113,7 +113,7 @@ class ReAuthActivity : SimpleFragmentActivity(), ReAuthViewModel.Factory {
 
     override fun onResume() {
         super.onResume()
-        // It's the only way we have to know if sso falback flow was successful
+        // It's the only way we have to know if sso fallback flow was successful
         withState(sharedViewModel) {
             if (it.ssoFallbackPageWasShown) {
                 Timber.d("## UIA ssoFallbackPageWasShown tentative success")
