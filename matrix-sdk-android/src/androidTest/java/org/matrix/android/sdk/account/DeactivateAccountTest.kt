@@ -51,7 +51,7 @@ class DeactivateAccountTest : InstrumentedTest {
         // Deactivate the account
         commonTestHelper.runBlockingTest {
             session.deactivateAccount(
-                    object : UserInteractiveAuthInterceptor {
+                    userInteractiveAuthInterceptor = object : UserInteractiveAuthInterceptor {
                         override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                             promise.resume(
                                     UserPasswordAuth(
@@ -61,7 +61,9 @@ class DeactivateAccountTest : InstrumentedTest {
                                     )
                             )
                         }
-                    }, false)
+                    },
+                    eraseAllData = false
+            )
         }
 
         // Try to login on the previous account, it will fail (M_USER_DEACTIVATED)
