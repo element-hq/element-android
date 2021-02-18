@@ -45,10 +45,11 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
     override suspend fun execute(params: DeactivateAccountTask.Params) {
         val deactivateAccountParams = DeactivateAccountParams.create(params.userAuthParam, params.eraseAllData)
 
-        try {
+        val canCleanup = try {
             executeRequest<Unit>(globalErrorReceiver) {
                 apiCall = accountAPI.deactivate(deactivateAccountParams)
             }
+            true
         } catch (throwable: Throwable) {
             if (!handleUIA(
                             failure = throwable,
@@ -60,12 +61,17 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
             ) {
                 Timber.d("## UIA: propagate failure")
                 throw throwable
+            } else {
+                false
             }
         }
-        // Logout from identity server if any, ignoring errors
-        runCatching { identityDisconnectTask.execute(Unit) }
-                .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
-        cleanupSession.handle()
+        if (canCleanup) {
+            // Logout from identity server if any, ignoring errors
+            runCatching { identityDisconnectTask.execute(Unit) }
+                    .onFailure { Timber.w(it, "Unable to disconnect identity server") }
+
+            cleanupSession.handle()
+        }
     }
 }
