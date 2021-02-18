@@ -25,13 +25,16 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.settingsCenteredImageItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import org.matrix.android.sdk.api.federation.FederationVersion
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import javax.inject.Inject
 
 class HomeserverSettingsController @Inject constructor(
+        private val stringProvider: StringProvider,
         private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<HomeServerSettingsViewState>() {
 
@@ -51,15 +54,16 @@ class HomeserverSettingsController @Inject constructor(
                 loadingItem {
                     id("loading")
                 }
-            is Fail ->
+            is Fail          ->
                 errorWithRetryItem {
                     id("error")
                     text(errorFormatter.toHumanReadable(federationVersion.error))
                     listener { callback?.retry() }
                 }
-            is Success ->
+            is Success       ->
                 buildFederationVersion(federationVersion())
         }
+        buildCapabilities(data)
     }
 
     private fun buildHeader(state: HomeServerSettingsViewState) {
@@ -93,6 +97,24 @@ class HomeserverSettingsController @Inject constructor(
         settingsInfoItem {
             id("versionValue")
             helperText(federationVersion.version)
+        }
+    }
+
+    private fun buildCapabilities(data: HomeServerSettingsViewState) {
+        settingsSectionTitleItem {
+            id("uploadTitle")
+            titleResId(R.string.settings_server_upload_size_title)
+        }
+
+        val limit = data.homeServerCapabilities.maxUploadFileSize
+
+        settingsInfoItem {
+            id("uploadValue")
+            if (limit == HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN) {
+                helperTextResId(R.string.settings_server_upload_size_unknown)
+            } else {
+                helperText(stringProvider.getString(R.string.settings_server_upload_size_content, "${limit / 1048576L} MB"))
+            }
         }
     }
 }

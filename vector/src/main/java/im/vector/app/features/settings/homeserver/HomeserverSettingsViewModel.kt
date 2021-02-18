@@ -53,10 +53,26 @@ class HomeserverSettingsViewModel @AssistedInject constructor(
     init {
         setState {
             copy(
-                    baseUrl = session.sessionParams.homeServerUrl
+                    baseUrl = session.sessionParams.homeServerUrl,
+                    homeServerCapabilities = session.getHomeServerCapabilities()
             )
         }
         fetchHomeserverVersion()
+        refreshHomeServerCapabilities()
+    }
+
+    private fun refreshHomeServerCapabilities() {
+        viewModelScope.launch {
+            runCatching {
+                session.refreshHomeServerCapabilities()
+            }
+
+            setState {
+                copy(
+                        homeServerCapabilities = session.getHomeServerCapabilities()
+                )
+            }
+        }
     }
 
     private fun fetchHomeserverVersion() {

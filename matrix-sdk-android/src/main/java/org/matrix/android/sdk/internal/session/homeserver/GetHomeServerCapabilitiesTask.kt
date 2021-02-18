@@ -38,7 +38,11 @@ import timber.log.Timber
 import java.util.Date
 import javax.inject.Inject
 
-internal interface GetHomeServerCapabilitiesTask : Task<Unit, Unit>
+internal interface GetHomeServerCapabilitiesTask : Task<GetHomeServerCapabilitiesTask.Params, Unit> {
+    data class Params(
+            val forceRefresh: Boolean
+    )
+}
 
 internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val capabilitiesAPI: CapabilitiesAPI,
@@ -52,12 +56,14 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         private val userId: String
 ) : GetHomeServerCapabilitiesTask {
 
-    override suspend fun execute(params: Unit) {
-        var doRequest = false
-        monarchy.awaitTransaction { realm ->
-            val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
+    override suspend fun execute(params: GetHomeServerCapabilitiesTask.Params) {
+        var doRequest = params.forceRefresh
+        if (!doRequest) {
+            monarchy.awaitTransaction { realm ->
+                val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
 
-            doRequest = homeServerCapabilitiesEntity.lastUpdatedTimestamp + MIN_DELAY_BETWEEN_TWO_REQUEST_MILLIS < Date().time
+                doRequest = homeServerCapabilitiesEntity.lastUpdatedTimestamp + MIN_DELAY_BETWEEN_TWO_REQUEST_MILLIS < Date().time
+            }
         }
 
         if (!doRequest) {
@@ -123,7 +129,7 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
     }
 
     companion object {
-        // 8 hours like on Riot Web
+        // 8 hours like on Element Web
         private const val MIN_DELAY_BETWEEN_TWO_REQUEST_MILLIS = 8 * 60 * 60 * 1000
     }
 }

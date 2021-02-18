@@ -2338,6 +2338,9 @@
 
     <string name="settings_server_name">Server name</string>
     <string name="settings_server_version">Server version</string>
+    <string name="settings_server_upload_size_title">Server file upload limit</string>
+    <string name="settings_server_upload_size_content">Your homeserver accepts attachments (files, media, etc.) with a size up to %s.</string>
+    <string name="settings_server_upload_size_unknown">The limit is unknown.</string>
 
     <string name="settings_failed_to_get_crypto_device_info">No cryptographic information available</string>
 
