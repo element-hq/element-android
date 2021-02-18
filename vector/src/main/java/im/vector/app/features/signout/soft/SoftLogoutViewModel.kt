@@ -89,7 +89,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
                 )
             }
 
-            try {
+            val data = try {
                 authenticationService.getLoginFlowOfSession(session.sessionId)
             } catch (failure: Throwable) {
                 setState {
@@ -99,26 +99,23 @@ class SoftLogoutViewModel @AssistedInject constructor(
                 }
                 null
             }
-                    ?.let { data ->
-                        when (data) {
-                            is LoginFlowResult.Success -> {
-                                val loginMode = when {
-                                    // SSO login is taken first
-                                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                                    else                                                                  -> LoginMode.Unsupported
-                                }
 
-                                setState {
-                                    copy(
-                                            asyncHomeServerLoginFlowRequest = Success(loginMode)
-                                    )
-                                }
-                            }
-                        }
-                    }
+            if (data is LoginFlowResult.Success) {
+                val loginMode = when {
+                    // SSO login is taken first
+                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+                    else                                                                  -> LoginMode.Unsupported
+                }
+
+                setState {
+                    copy(
+                            asyncHomeServerLoginFlowRequest = Success(loginMode)
+                    )
+                }
+            }
         }
     }
 
