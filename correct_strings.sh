@@ -31,9 +31,11 @@ for strings_de in "$mydir/vector/src/main/res/values-de/strings.xml" "$mydir/mat
 sed -i 's|!nnen|wolpertinger|g' "$strings_de"
 sed -i 's|/innen|wolpertinger|g' "$strings_de"
 sed -i 's|:innen|wolpertinger|g' "$strings_de"
+sed -i 's|*innen|wolpertinger|g' "$strings_de"
 sed -i 's|!n|schlumpfwesen|g' "$strings_de"
 sed -i 's|/in|schlumpfwesen|g' "$strings_de"
 sed -i 's|:in|schlumpfwesen|g' "$strings_de"
+sed -i 's|*in|schlumpfwesen|g' "$strings_de"
 # Automated manual intervention:
 sed -i 's|da der/die Benutzerschlumpfwesen dasselbe Berechtigungslevel wie du erhalten wirst|da der Benutzer dasselbe Berechtigungslevel wie du erhalten wird|g' "$strings_de"
 sed -i 's|des/der anderen Nutzerschlumpfwesen|der anderen Nutzer|g' "$strings_de"
@@ -84,6 +86,7 @@ sed -i 's|Sitzungen von anderen Nutzerwolpertinger|Sitzungen von anderen Nutzern
 sed -i 's|sodass <b>einige Nutzerwolpertinger sich|sodass <b>einige Nutzer sich|g' "$strings_de"
 sed -i 's|für zukünftige Nutzerwolpertinger|für zukünftige Nutzer|g' "$strings_de"
 sed -i 's|registrierte Nutzerwolpertinger, die|registrierte Nutzer, die|g' "$strings_de"
+sed -i 's|Bestätigung des/r anderen Nutzerschlumpfwesen|Bestätigung des anderen Nutzers|g' "$strings_de"
 echo "Check for unresolved strings in $strings_de..."
 if grep --color "wolpertinger\|schlumpfwesen" "$strings_de"; then
     echo -e "\033[1;33m""Script outdated, please update manually!""\033[0m"
