@@ -246,11 +246,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * particularly useful when you need to be notified of a configuration change
      * in a background service, e.g. for the P2P demos.
      */
-    
     fun subscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
         defaultPrefs.registerOnSharedPreferenceChangeListener(listener)
     }
-
     fun unsubscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
         defaultPrefs.unregisterOnSharedPreferenceChangeListener(listener)
     }
