@@ -83,7 +83,7 @@ internal abstract class AuthModule {
     abstract fun bindDirectLoginTask(task: DefaultDirectLoginTask): DirectLoginTask
 
     @Binds
-    abstract fun bindGetVersionTask(task: DefaultIsValidClientServerApiTask): IsValidClientServerApiTask
+    abstract fun bindIsValidClientServerApiTask(task: DefaultIsValidClientServerApiTask): IsValidClientServerApiTask
 
     @Binds
     abstract fun bindHomeServerHistoryService(service: DefaultHomeServerHistoryService): HomeServerHistoryService
