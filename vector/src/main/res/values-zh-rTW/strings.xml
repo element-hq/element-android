@@ -2105,7 +2105,7 @@
     <string name="bad_passphrase_key_reset_all_action">忘記或遺失所有復原選項？重設所有東西</string>
     <string name="direct_room_created_summary_item_by_you">您已加入。</string>
     <string name="direct_room_created_summary_item">%s 已加入。</string>
-    <string name="direct_room_encryption_enabled_tile_description">此聊天適中的訊息有端到端加密。</string>
+    <string name="direct_room_encryption_enabled_tile_description">此聊天室中的訊息有端到端加密。</string>
     <string name="direct_room_profile_section_more_leave">離開</string>
     <string name="direct_room_profile_section_more_settings">設定</string>
     <string name="direct_room_profile_encrypted_subtitle">這裡的訊息有端到端加密。
@@ -2115,7 +2115,7 @@
     <string name="login_error_outdated_homeserver_warning_content">此家伺服器正在執行較舊的版本。請要求您的家伺服器管理原升級。您可以繼續，但某些功能可能無法正常運作。</string>
     <string name="direct_room_join_rules_invite_by_you">您讓此變為僅邀請。</string>
     <string name="direct_room_join_rules_invite">%1$s 讓此變為僅邀請。</string>
-    <string name="settings_labs_show_complete_history_in_encrypted_room">在已加密的聊天適中顯示完整歷史紀錄</string>
+    <string name="settings_labs_show_complete_history_in_encrypted_room">在已加密的聊天室中顯示完整歷史紀錄</string>
     <string name="notification_unread_notified_messages_and_invitation">%1$s 與 %2$s</string>
     <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s 在 %2$s 與 %3$s</string>
     <plurals name="notification_invitations">
