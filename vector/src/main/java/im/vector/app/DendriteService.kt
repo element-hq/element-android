@@ -41,6 +41,8 @@ import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Binder
 import android.os.IBinder
 import android.os.ParcelUuid
@@ -48,6 +50,8 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import gobind.Conduit
 import gobind.DendriteMonolith
+import im.vector.app.features.configuration.VectorConfiguration
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -58,9 +62,12 @@ import java.nio.ByteBuffer
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
+import javax.inject.Inject
 import kotlin.concurrent.thread
 
-class DendriteService : Service() {
+class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeListener {
+    private var vectorPreferences = VectorPreferences(this)
+
     private var notificationChannel = NotificationChannel("im.vector.p2p", "Element P2P", NotificationManager.IMPORTANCE_DEFAULT)
     private var notificationManager: NotificationManager? = null
     private var notification: Notification? = null
@@ -231,11 +238,18 @@ class DendriteService : Service() {
             monolith = gobind.DendriteMonolith()
         }
 
+        vectorPreferences.subscribeToChanges(this)
+
         notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager!!.createNotificationChannel(notificationChannel)
 
         monolith!!.storageDirectory = applicationContext.filesDir.toString()
         monolith!!.start()
+
+        if (vectorPreferences.p2pEnableStatic()) {
+            monolith!!.setStaticPeer(vectorPreferences.p2pStaticURI())
+        }
+        monolith!!.setMulticastEnabled(vectorPreferences.p2pEnableNearby())
 
         Timer().schedule(object : TimerTask() {
             override fun run() {
@@ -440,18 +454,18 @@ class DendriteService : Service() {
             }
 
             val key = result.device.address.toString()
-           // Timber.i("BLE: Scan result found $key")
+            // Timber.i("BLE: Scan result found $key")
 
             if (connections.containsKey(key)) {
                 val connection = connections[key]
                 if (connection?.isConnected == true) {
-                   // Timber.i("BLE: Ignoring device $key that we are already connected to")
+                    // Timber.i("BLE: Ignoring device $key that we are already connected to")
                     return
                 }
             }
 
             if (connecting.containsKey(key)) {
-               // Timber.i("BLE: Ignoring device $key that we are already connecting to")
+                // Timber.i("BLE: Ignoring device $key that we are already connecting to")
                 return
             }
 
@@ -472,5 +486,38 @@ class DendriteService : Service() {
         buffer.put(bytes.sliceArray(0 until java.lang.Short.BYTES))
         buffer.flip()
         return buffer.short
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        val m = monolith ?: return
+        when (key){
+            VectorPreferences.SETTINGS_P2P_ENABLE_NEARBY -> {
+                val enabled = vectorPreferences.p2pEnableNearby()
+                m.setMulticastEnabled(enabled)
+                if (!enabled) {
+                    m.disconnectMulticastPeers()
+                }
+                Toast.makeText(applicationContext, "Toggled enable nearby: $enabled", Toast.LENGTH_SHORT).show()
+            }
+
+            VectorPreferences.SETTINGS_P2P_ENABLE_STATIC -> {
+                val enabled = vectorPreferences.p2pEnableStatic()
+                if (enabled) {
+                    val uri = vectorPreferences.p2pStaticURI()
+                    m.setStaticPeer(uri)
+                } else {
+                    m.disconnectNonMulticastPeers()
+                }
+                Toast.makeText(applicationContext, "Toggled enable static: $enabled", Toast.LENGTH_SHORT).show()
+            }
+
+            VectorPreferences.SETTINGS_P2P_STATIC_URI -> {
+                if (vectorPreferences.p2pEnableStatic()) {
+                    val uri = vectorPreferences.p2pStaticURI()
+                    m.setStaticPeer(uri)
+                    Toast.makeText(applicationContext, "Updated static peer URI: $uri", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }

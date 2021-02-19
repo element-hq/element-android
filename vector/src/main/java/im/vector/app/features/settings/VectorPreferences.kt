@@ -16,6 +16,7 @@
 package im.vector.app.features.settings
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
@@ -189,6 +190,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
 
+        // P2P
+        const val SETTINGS_P2P_ENABLE_NEARBY = "SETTINGS_P2P_ENABLE_NEARBY"
+        const val SETTINGS_P2P_ENABLE_STATIC = "SETTINGS_P2P_ENABLE_STATIC"
+        const val SETTINGS_P2P_STATIC_URI = "SETTINGS_P2P_STATIC_URI"
+
         // Background sync modes
 
         // some preferences keys must be kept after a logout
@@ -234,11 +240,29 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
 
                 SETTINGS_USE_RAGE_SHAKE_KEY,
-                SETTINGS_SECURITY_USE_FLAG_SECURE
+                SETTINGS_SECURITY_USE_FLAG_SECURE,
+
+                SETTINGS_P2P_ENABLE_NEARBY,
+                SETTINGS_P2P_ENABLE_STATIC,
+                SETTINGS_P2P_STATIC_URI
         )
     }
 
     private val defaultPrefs = DefaultSharedPreferences.getInstance(context)
+
+    /**
+     * Allow subscribing and unsubscribing to configuration changes. This is
+     * particularly useful when you need to be notified of a configuration change
+     * in a background service, e.g. for the P2P demos.
+     */
+
+    public fun subscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        defaultPrefs.registerOnSharedPreferenceChangeListener(listener)
+    }
+
+    public fun unsubscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        defaultPrefs.unregisterOnSharedPreferenceChangeListener(listener)
+    }
 
     /**
      * Clear the preferences.
@@ -315,6 +339,18 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         defaultPrefs.edit {
             putBoolean(DID_ASK_TO_ENABLE_SESSION_PUSH, true)
         }
+    }
+
+    fun p2pEnableNearby(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_P2P_ENABLE_NEARBY, true)
+    }
+
+    fun p2pEnableStatic(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_P2P_ENABLE_STATIC, false)
+    }
+
+    fun p2pStaticURI(): String {
+        return defaultPrefs.getString(SETTINGS_P2P_STATIC_URI, "") ?: ""
     }
 
     /**

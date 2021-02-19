@@ -1149,6 +1149,13 @@
     <string name="room_settings_addresses_e2e_disabled">Encryption is disabled in this room.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Enable encryption \n(warning: cannot be disabled again!)</string>
 
+    <!-- Room settings: Peer-to-peer -->
+    <string name="settings_p2p_title">Peer-to-peer</string>
+    <string name="settings_p2p_connect_nearby">Connect to nearby devices</string>
+    <string name="settings_p2p_connect_static">Connect to static peer</string>
+    <string name="settings_p2p_static_peer_uri">Static peer</string>
+    <string name="change_p2p_static_peer_summary">Peer to connect to over Wi-Fi or mobile data</string>
+
     <!-- Directory -->
     <string name="directory_title">Directory</string>
     <string name="settings_theme">Theme</string>
@@ -2793,4 +2800,17 @@
     <string name="warning_unsaved_change_discard">Discard changes</string>
 
     <string name="matrix_to_card_title">Matrix Link</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>
