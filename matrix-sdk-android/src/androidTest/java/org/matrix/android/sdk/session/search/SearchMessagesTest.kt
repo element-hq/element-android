@@ -61,7 +61,7 @@ class SearchMessagesTest : InstrumentedTest {
                 2)
 
         run {
-            var lock = CountDownLatch(1)
+            val lock = CountDownLatch(1)
 
             val eventListener = commonTestHelper.createEventListener(lock) { snapshot ->
                 snapshot.count { it.root.content.toModel<MessageContent>()?.body?.startsWith(MESSAGE).orFalse() } == 2
@@ -70,7 +70,6 @@ class SearchMessagesTest : InstrumentedTest {
             aliceTimeline.addListener(eventListener)
             commonTestHelper.await(lock)
 
-            lock = CountDownLatch(1)
             val data = commonTestHelper.runBlockingTest {
                 aliceSession
                         .searchService()

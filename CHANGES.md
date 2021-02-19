@@ -14,13 +14,14 @@ Bugfix 🐛:
  - VoIP : fix audio devices output
  - Fix crash after initial sync on Dendrite
  - Fix crash reported by PlayStore (#2707)
+ - Ignore url override from credential if it is not valid (#2822)
  - Fix crash when deactivating an account
 
 Translations 🗣:
  -
 
 SDK API changes ⚠️:
- - 
+ - Migrate AuthenticationService API to coroutines (#2449)
 
 Build 🧱:
  -

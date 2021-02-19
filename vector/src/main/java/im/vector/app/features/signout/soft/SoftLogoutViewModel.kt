@@ -25,19 +25,17 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.hasUnsavedKeys
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.login.LoginMode
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.util.Cancelable
 import timber.log.Timber
 
 /**
@@ -76,54 +74,49 @@ class SoftLogoutViewModel @AssistedInject constructor(
         }
     }
 
-    private var currentTask: Cancelable? = null
-
     init {
         // Get the supported login flow
         getSupportedLoginFlow()
     }
 
     private fun getSupportedLoginFlow() {
-        currentTask?.cancel()
-        currentTask = null
-        authenticationService.cancelPendingLoginOrRegistration()
+        viewModelScope.launch {
+            authenticationService.cancelPendingLoginOrRegistration()
 
-        setState {
-            copy(
-                    asyncHomeServerLoginFlowRequest = Loading()
-            )
-        }
+            setState {
+                copy(
+                        asyncHomeServerLoginFlowRequest = Loading()
+                )
+            }
 
-        currentTask = authenticationService.getLoginFlowOfSession(session.sessionId, object : MatrixCallback<LoginFlowResult> {
-            override fun onFailure(failure: Throwable) {
+            val data = try {
+                authenticationService.getLoginFlowOfSession(session.sessionId)
+            } catch (failure: Throwable) {
                 setState {
                     copy(
                             asyncHomeServerLoginFlowRequest = Fail(failure)
                     )
                 }
+                null
             }
 
-            override fun onSuccess(data: LoginFlowResult) {
-                when (data) {
-                    is LoginFlowResult.Success -> {
-                        val loginMode = when {
-                            // SSO login is taken first
-                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                                    && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                            else                                                                  -> LoginMode.Unsupported
-                        }
+            if (data is LoginFlowResult.Success) {
+                val loginMode = when {
+                    // SSO login is taken first
+                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+                    else                                                                  -> LoginMode.Unsupported
+                }
 
-                        setState {
-                            copy(
-                                    asyncHomeServerLoginFlowRequest = Success(loginMode)
-                            )
-                        }
-                    }
+                setState {
+                    copy(
+                            asyncHomeServerLoginFlowRequest = Success(loginMode)
+                    )
                 }
             }
-        })
+        }
     }
 
     override fun handle(action: SoftLogoutAction) {
@@ -226,10 +219,5 @@ class SoftLogoutViewModel @AssistedInject constructor(
                     asyncLoginAction = Success(Unit)
             )
         }
-    }
-
-    override fun onCleared() {
-        currentTask?.cancel()
-        super.onCleared()
     }
 }
