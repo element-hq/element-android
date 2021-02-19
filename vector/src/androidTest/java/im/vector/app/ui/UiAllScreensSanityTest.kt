@@ -277,13 +277,18 @@ class UiAllScreensSanityTest {
 
         assertDisplayed(R.id.roomProfileAvatarView)
 
-        // Room addresses
+        // Leave
         clickListItem(R.id.matrixProfileRecyclerView, 13)
+        clickDialogNegativeButton()
+
+        // Advanced
+        // Room addresses
+        clickListItem(R.id.matrixProfileRecyclerView, 15)
         onView(isRoot()).perform(waitForView(withText(R.string.room_alias_published_alias_title)))
         pressBack()
 
         // Room permissions
-        clickListItem(R.id.matrixProfileRecyclerView, 15)
+        clickListItem(R.id.matrixProfileRecyclerView, 17)
         onView(isRoot()).perform(waitForView(withText(R.string.room_permissions_title)))
         clickOn(R.string.room_permissions_change_room_avatar)
         clickDialogNegativeButton()
@@ -291,10 +296,6 @@ class UiAllScreensSanityTest {
         clickOn(R.string.show_advanced)
         clickOn(R.string.hide_advanced)
         pressBack()
-
-        // Leave
-        clickListItem(R.id.matrixProfileRecyclerView, 17)
-        clickDialogNegativeButton()
 
         // Menu share
         // clickMenu(R.id.roomProfileShareAction)
