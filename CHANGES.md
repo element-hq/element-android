@@ -1,4 +1,4 @@
-Changes in Element 1.0.18 (2021-XX-XX)
+Changes in Element 1.1.0 (2021-02-19)
 ===================================================
 
 Features ✨:
@@ -17,17 +17,8 @@ Bugfix 🐛:
  - Ignore url override from credential if it is not valid (#2822)
  - Fix crash when deactivating an account
 
-Translations 🗣:
- -
-
 SDK API changes ⚠️:
  - Migrate AuthenticationService API to coroutines (#2449)
-
-Build 🧱:
- -
-
-Test:
- -
 
 Other changes:
  - New Dev Tools panel for developers
