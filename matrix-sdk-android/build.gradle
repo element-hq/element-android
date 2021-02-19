@@ -114,7 +114,7 @@ dependencies {
     def markwon_version = '3.1.0'
     def daggerVersion = '2.32'
     def work_version = '2.4.0'
-    def retrofit_version = '2.6.2'
+    def retrofit_version = '2.9.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
