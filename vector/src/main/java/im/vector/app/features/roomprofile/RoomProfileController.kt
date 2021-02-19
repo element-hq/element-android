@@ -209,6 +209,16 @@ class RoomProfileController @Inject constructor(
                     editable = false,
                     action = { callback?.onRoomIdClicked() }
             )
+            data.roomCreateContent()?.roomVersion?.let {
+                buildProfileAction(
+                        id = "roomVersion",
+                        title = stringProvider.getString(R.string.room_settings_room_version_title),
+                        subtitle = it,
+                        dividerColor = dividerColor,
+                        divider = true,
+                        editable = false
+                )
+            }
             buildProfileAction(
                     id = "devTools",
                     title = stringProvider.getString(R.string.dev_tools_menu_name),

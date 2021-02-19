@@ -1117,6 +1117,7 @@
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Advanced</string>
     <string name="room_settings_room_internal_id">This room’s internal ID</string>
+    <string name="room_settings_room_version_title">Room version</string>
     <string name="room_settings_addresses_pref_title">Addresses</string>
     <string name="room_settings_labs_pref_title">Labs</string>
     <string name="room_settings_labs_warning_message">These are experimental features that may break in unexpected ways. Use with caution.</string>
