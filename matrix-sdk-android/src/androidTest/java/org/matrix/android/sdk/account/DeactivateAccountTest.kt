@@ -43,12 +43,13 @@ class DeactivateAccountTest : InstrumentedTest {
 
     @Test
     fun deactivateAccountTest() {
-        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = false))
+        val session = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(withInitialSync = true))
 
         // Deactivate the account
         commonTestHelper.runBlockingTest {
             session.deactivateAccount(
-                    object : UserInteractiveAuthInterceptor {
+                    eraseAllData = false,
+                    userInteractiveAuthInterceptor = object : UserInteractiveAuthInterceptor {
                         override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                             promise.resume(
                                     UserPasswordAuth(
@@ -58,7 +59,8 @@ class DeactivateAccountTest : InstrumentedTest {
                                     )
                             )
                         }
-                    }, false)
+                    }
+            )
         }
 
         // Try to login on the previous account, it will fail (M_USER_DEACTIVATED)

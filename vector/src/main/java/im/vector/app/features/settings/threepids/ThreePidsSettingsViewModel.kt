@@ -46,6 +46,7 @@ import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class ThreePidsSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: ThreePidsSettingsViewState,
@@ -140,7 +141,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                 if (pendingAuth != null) {
                     uiaContinuation?.resume(pendingAuth!!)
                 } else {
-                    uiaContinuation?.resumeWith(Result.failure((IllegalArgumentException())))
+                    uiaContinuation?.resumeWithException(IllegalArgumentException())
                 }
             }
             is ThreePidsSettingsAction.PasswordAuthDone -> {
@@ -155,7 +156,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
             }
             ThreePidsSettingsAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
-                uiaContinuation?.resumeWith(Result.failure((Exception())))
+                uiaContinuation?.resumeWithException(Exception())
                 uiaContinuation = null
                 pendingAuth = null
             }

@@ -83,12 +83,12 @@ class CallAudioManager(private val context: Context, val configChange: (() -> Un
     fun setAudioDevice(device: Device) {
         runInAudioThread(Runnable {
             if (!_availableDevices.contains(device)) {
-                Timber.w(" Audio device not available: $device")
+                Timber.w("Audio device not available: $device")
                 userSelectedDevice = null
                 return@Runnable
             }
             if (mode != Mode.DEFAULT) {
-                Timber.i(" User selected device set to: $device")
+                Timber.i("User selected device set to: $device")
                 userSelectedDevice = device
                 updateAudioRoute(mode, false)
             }
@@ -108,7 +108,7 @@ class CallAudioManager(private val context: Context, val configChange: (() -> Un
                 success = updateAudioRoute(mode, false)
             } catch (e: Throwable) {
                 success = false
-                Timber.e(e, " Failed to update audio route for mode: " + mode)
+                Timber.e(e, "Failed to update audio route for mode: $mode")
             }
             if (success) {
                 this@CallAudioManager.mode = mode
@@ -124,7 +124,7 @@ class CallAudioManager(private val context: Context, val configChange: (() -> Un
      * `false`, otherwise.
      */
     private fun updateAudioRoute(mode: Mode, force: Boolean): Boolean {
-        Timber.i(" Update audio route for mode: " + mode)
+        Timber.i("Update audio route for mode: $mode")
         if (!audioDeviceRouter?.setMode(mode).orFalse()) {
             return false
         }
@@ -158,7 +158,7 @@ class CallAudioManager(private val context: Context, val configChange: (() -> Un
             return true
         }
         selectedDevice = audioDevice
-        Timber.i(" Selected audio device: " + audioDevice)
+        Timber.i("Selected audio device: $audioDevice")
         audioDeviceRouter?.setAudioRoute(audioDevice)
         configChange?.invoke()
         return true

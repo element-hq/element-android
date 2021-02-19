@@ -27,7 +27,8 @@ interface AccountService {
      * @param password Current password.
      * @param newPassword New password
      */
-    suspend fun changePassword(password: String, newPassword: String)
+    suspend fun changePassword(password: String,
+                               newPassword: String)
 
     /**
      * Deactivate the account.
@@ -41,9 +42,10 @@ interface AccountService {
      * be shared with any new or unregistered users, but registered users who already have access to these messages will still
      * have access to their copy.
      *
-     * @param password the account password
      * @param eraseAllData set to true to forget all messages that have been sent. Warning: this will cause future users to see
      * an incomplete view of conversations
+     * @param userInteractiveAuthInterceptor see [UserInteractiveAuthInterceptor]
      */
-    suspend fun deactivateAccount(userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, eraseAllData: Boolean)
+    suspend fun deactivateAccount(eraseAllData: Boolean,
+                                  userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
 }
