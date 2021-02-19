@@ -373,7 +373,7 @@ dependencies {
     implementation 'me.gujun.android:span:1.7'
     implementation "io.noties.markwon:core:$markwon_version"
     implementation "io.noties.markwon:html:$markwon_version"
-    implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.4'
+    implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.google.android:flexbox:1.1.1'
     implementation "androidx.autofill:autofill:$autofill_version"
