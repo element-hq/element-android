@@ -55,6 +55,7 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 import java.io.OutputStream
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class BootstrapSharedViewModel @AssistedInject constructor(
         @Assisted initialState: BootstrapViewState,
@@ -421,7 +422,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         _viewEvents.post(BootstrapViewEvents.RequestReAuth(flowResponse, errCode))
                     }
                     else                    -> {
-                        promise.resumeWith(Result.failure(UnsupportedOperationException()))
+                        promise.resumeWithException(UnsupportedOperationException())
                     }
                 }
             }
