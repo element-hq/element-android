@@ -16,6 +16,7 @@
 package im.vector.app.features.settings
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
@@ -246,11 +247,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * in a background service, e.g. for the P2P demos.
      */
     
-    public fun subscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+    fun subscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
         defaultPrefs.registerOnSharedPreferenceChangeListener(listener)
     }
 
-    public fun unsubscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+    fun unsubscribeToChanges(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
         defaultPrefs.unregisterOnSharedPreferenceChangeListener(listener)
     }
 
