@@ -483,6 +483,9 @@ class UiAllScreensSanityTest {
         clickOn(R.string.add_identity_server)
         pressBack()
         pressBack()
+        // Home server
+        clickOnPreference(R.string.settings_home_server)
+        pressBack()
         // Identity server
         clickOnPreference(R.string.settings_identity_server)
         pressBack()
