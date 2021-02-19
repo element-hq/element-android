@@ -285,7 +285,7 @@
     <string name="people_search_invite_by_id"><u>Mit ID einladen</u></string>
     <string name="people_search_local_contacts">LOKALE KONTAKTE (%d)</string>
     <string name="people_search_filter_text">Nur Matrix-Benutzer</string>
-    <string name="people_search_invite_by_id_dialog_title">Benutzer per ID einladen</string>
+    <string name="people_search_invite_by_id_dialog_title">Benutzer:in per ID einladen</string>
     <string name="people_search_invite_by_id_dialog_description">Bitte gib eine oder mehrere E-Mail-Adressen oder eine Matrix-ID ein</string>
     <string name="people_search_invite_by_id_dialog_hint">E-Mail or Matrix-ID</string>
     <!--  Chat -->
@@ -797,15 +797,15 @@
     <string name="settings_without_flair">Du bist aktuell kein Mitglied einer Community.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Benutze die Enter-Taste der Tastatur zum Senden</string>
     <string name="command_description_emote">Zeigt Aktionen</string>
-    <string name="command_description_ban_user">Bannt Benutzer mit angegebener ID</string>
+    <string name="command_description_ban_user">Bannt Benutzer:in mit angegebener ID</string>
     <string name="command_description_unban_user">Hebt die Verbannung des Benutzers mit angegebener ID auf</string>
     <string name="command_description_op_user">Bestimmt das Berechtigungslevel des Benutzers</string>
     <string name="command_description_deop_user">Setzt Berechtigungen des Benutzers zurück</string>
-    <string name="command_description_invite_user">Lädt Benutzer mit angegebener Kennung in den aktuellen Raum ein</string>
+    <string name="command_description_invite_user">Lädt Benutzer:in mit angegebener Kennung in den aktuellen Raum ein</string>
     <string name="command_description_join_room">Tritt dem Raum mit angegebenen Alias bei</string>
     <string name="command_description_part_room">Verlasse Raum</string>
     <string name="command_description_topic">Setzt das Raum-Thema</string>
-    <string name="command_description_kick_user">Kickt Benutzer mit angegebener ID</string>
+    <string name="command_description_kick_user">Kickt Benutzer:in mit angegebener ID</string>
     <string name="command_description_nick">Ändert deinen Anzeigenamen</string>
     <string name="command_description_markdown">(De-)Aktiviert Markdown</string>
     <string name="command_description_clear_scalar_token">Um das Matrix-App-Management zu reparieren</string>
@@ -882,7 +882,7 @@
     <string name="reason_hint">Grund</string>
     <string name="settings_inline_url_preview_summary">Linkvorschau im Chat aktivieren, falls dein Home-Server diese Funktion unterstützt.</string>
     <string name="settings_send_typing_notifs">Sende Schreibbenachrichtigungen</string>
-    <string name="settings_send_typing_notifs_summary">Lasse andere Benutzer wissen, dass du tippst.</string>
+    <string name="settings_send_typing_notifs_summary">Lasse andere Benutzer:innen wissen, dass du tippst.</string>
     <string name="settings_send_markdown">Markdown-Formatierung</string>
     <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax, bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen, etwa Sternchen (*) um kursiven Text anzuzeigen.</string>
     <string name="settings_show_read_receipts">Zeige Lesebestätigungen</string>
@@ -960,7 +960,7 @@
     <string name="settings_troubleshoot_test_play_services_title">Prüfung der Play-Dienste</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play-Dienste-APK ist verfügbar und aktuell.</string>
     <string name="settings_troubleshoot_test_token_registration_title">Token-Registrierung</string>
-    <string name="settings_troubleshoot_test_battery_failed">Wenn ein Benutzer ein abgestecktes Gerät mit ausgeschaltetem Bildschirm eine Weile nicht bewegt, wechselt es in den Doze-Modus. Dies hindert Apps daran, auf das Netzwerk zuzugreifen und verzögert die Ausführung von Aufgaben, Synchronisierungen und Standard-Alarmen.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Wenn ein:e Benutzer:in ein abgestecktes Gerät mit ausgeschaltetem Bildschirm eine Weile nicht bewegt, wechselt es in den Bereitschaftsmodus. Dies hindert Apps daran, auf das Netzwerk zuzugreifen und verzögert die Ausführung von Aufgaben, Synchronisierungen und Standard-Alarmen.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignoriere Optimierungen</string>
     <string name="startup_notification_fdroid_battery_optim_title">Hintergrundverbindung</string>
     <string name="startup_notification_fdroid_battery_optim_message">Element muss eine Hintergrundverbindung (nur geringe Belastung) aufrechterhalten, um verlässliche Benachrichtigungen zu erhalten.
@@ -1014,7 +1014,7 @@
     <string name="keys_backup_settings_delete_confirm_title">Lösche Sicherung</string>
     <string name="settings_notification_by_event">Präferenz der Benachrichtigungen nach Ereignis</string>
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nDieser Fehler ist außerhalb von Element passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den Durchschnittsnutzer nicht betreffen.</string>
+\nDieser Fehler ist außerhalb von Element passiert. Google sagt, dass dieses Gerät zu viele Apps registriert hat um FCM zu nutzen. Der Fehler taucht nur auf, wenn sehr viele Apps installiert sind. Er sollte also den/die Durchschnittsnutzer:in nicht betreffen.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nDieser Fehler liegt nicht unter der Kontrolle von Element. Er kann aus verschiedenen Gründen auftreten. Vielleicht wird es funktionieren, wenn du es später noch einmal probierst. Außerdem kannst Du prüfen, ob die Datennutzung der Google Play-Dienste unbeschränkt ist und die Geräteuhr richtig eingestellt ist. Der Fehler kann aber auch unter Custom-ROMs auftreten.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
@@ -1155,7 +1155,7 @@
     <string name="notification_new_invitation">Neue Einladung</string>
     <string name="notification_sender_me">Ich</string>
     <string name="notification_inline_reply_failed">** Fehler beim Senden - bitte Raum öffnen</string>
-    <string name="error_jitsi_not_supported_on_old_device">Entschuldigung, Konferenzanrufe mit Jitsi werden auf älteren Geräten (mit älteren Android-Versionen als 5.0) nicht unterstützt</string>
+    <string name="error_jitsi_not_supported_on_old_device">Entschuldigung, Konferenzanrufe mit Jitsi werden auf älteren Geräten (mit älteren Android-Versionen als 6.0) nicht unterstützt</string>
     <string name="title_activity_verify_device">Sitzung verifizieren</string>
     <string name="encryption_information_unknown_ip">Unbekannte IP-Adresse</string>
     <string name="you_added_a_new_device_with_info">Eine neue Sitzung fordert Verschlüsselungsschlüssel an. 
@@ -1182,7 +1182,7 @@
     <string name="sas_waiting_for_partner">Warte auf Bestätigung des/r anderen Nutzer*in…</string>
     <string name="sas_verified">Verifiziert!</string>
     <string name="sas_verified_successful">Du hast diese Sitzung erfolgreich verifiziert.</string>
-    <string name="sas_verified_successful_description">Sichere Nachrichten mit diesem Benutzer sind Ende-zu-Ende verschlüsselt und können nicht von Dritten mitgelesen werden.</string>
+    <string name="sas_verified_successful_description">Sichere Nachrichten mit diesem/r Benutzer:in sind Ende-zu-Ende verschlüsselt und können nicht von Dritten mitgelesen werden.</string>
     <string name="sas_got_it">Verstanden</string>
     <string name="sas_verification_request_notification_channel_title">Schlüssel-Verifizierung</string>
     <string name="sas_cancelled_dialog_title">Anfrage abgebrochen</string>
@@ -1191,7 +1191,7 @@
     <string name="sas_verification_request_notification_channel">Interaktive Sitzungs-Verifizierung</string>
     <string name="sas_incoming_request_notif_title">Verifizierungsanfrage</string>
     <string name="sas_incoming_request_notif_content">%s möchte deine Sitzung verifizieren</string>
-    <string name="sas_error_m_user">Der Benutzer hat die Verifizierung abgebrochen</string>
+    <string name="sas_error_m_user">Der/die Benutzer:in hat die Verifizierung abgebrochen</string>
     <string name="sas_error_m_timeout">Der Verifizierungsprozess ist abgelaufen</string>
     <string name="sas_error_m_unexpected_message">Die Sitzung hat eine unerwartete Nachricht erhalten</string>
     <string name="sas_error_m_invalid_message">Eine ungültige Nachricht wurde empfangen</string>
@@ -1214,7 +1214,7 @@
     <string name="message_add_reaction">Reaktion hinzufügen</string>
     <string name="message_view_reaction">Reaktionen ansehen</string>
     <string name="reactions">Reaktionen</string>
-    <string name="event_redacted_by_user_reason">Ereignis von Benutzer gelöscht</string>
+    <string name="event_redacted_by_user_reason">Ereignis von Benutzer:in gelöscht</string>
     <string name="event_redacted_by_admin_reason">Ereignis moderiert durch Raum-Administrator</string>
     <string name="last_edited_info_message">Zuletzt bearbeitet von %1$s am %2$s</string>
     <string name="create_new_room">Neuen Raum erstellen</string>
@@ -1440,7 +1440,7 @@
     <string name="report_content_custom_title">Diesen Inhalt melden</string>
     <string name="report_content_custom_hint">Meldegrund</string>
     <string name="report_content_custom_submit">MELDEN</string>
-    <string name="block_user">NUTZER IGNORIEREN</string>
+    <string name="block_user">NUTZER:IN IGNORIEREN</string>
     <string name="content_reported_title">Inhalt gemeldet</string>
     <string name="content_reported_content">Dieser Inhalt wurde gemeldet. 
 \n 
@@ -1671,7 +1671,7 @@
     <string name="room_profile_section_security">Sicherheit</string>
     <string name="room_profile_section_security_learn_more">Mehr erfahren</string>
     <string name="room_profile_section_more">Mehr</string>
-    <string name="room_profile_section_more_settings">Raum-Einstellungen</string>
+    <string name="room_profile_section_more_settings">Raumeinstellungen</string>
     <string name="room_profile_section_more_notifications">Benachrichtigungen</string>
     <plurals name="room_profile_section_more_member_list">
         <item quantity="one">Eine Person</item>
@@ -1795,8 +1795,8 @@
     <string name="verify_new_session_notice">Benutze diese Sitzung um deine neue zu verfizieren, damit sie auf verschlüsselte Nachrichten zugreifen kann.</string>
     <string name="verify_new_session_was_not_me">Das war ich nicht</string>
     <string name="verify_new_session_compromized">Dein Account ist möglicherweise komprimittiert</string>
-    <string name="verify_cancel_self_verification_from_untrusted">Wenn du abbrichst, wirst du auf diesem Gerät keine verschlüsselten Nachrichten lesen können, und andere Benutzer werden ihm nicht vertrauen</string>
-    <string name="verify_cancel_self_verification_from_trusted">Wenn du abbrichst, wirst du auf deinem neuen Gerät keine verschlüsselten Nachrichten lesen können, und andere Benutzer werden ihm nicht vertrauen</string>
+    <string name="verify_cancel_self_verification_from_untrusted">Wenn du abbrichst, wirst du auf diesem Gerät keine verschlüsselten Nachrichten lesen können, und andere Benutzer:innen werden ihm nicht vertrauen</string>
+    <string name="verify_cancel_self_verification_from_trusted">Wenn du abbrichst, wirst du auf deinem neuen Gerät keine verschlüsselten Nachrichten lesen können, und andere Benutzer:innen werden ihm nicht vertrauen</string>
     <string name="verify_cancel_other">Du wirst %1$s (%2$s) nicht verifizieren, wenn du jetzt abbrichst. Beginne in deren Nutzerprofil erneut.</string>
     <string name="verify_not_me_self_verification">Eines der folgenden könnte kom­pro­mit­tie­rt sein:
 \n
@@ -1847,7 +1847,7 @@
     <string name="auth_flow_not_supported">Dies kann nicht von einem mobilen Gerät erfolgen</string>
     <string name="settings_when_rooms_are_upgraded">Wenn Räume verbessert werden</string>
     <string name="encryption_enabled">Verschlüsselung aktiviert</string>
-    <string name="encryption_enabled_tile_description">Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt. Erfahre mehr &amp; verifiziere Benutzer in deren Profil.</string>
+    <string name="encryption_enabled_tile_description">Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt. Erfahre mehr &amp; verifiziere Benutzer:innen in deren Profil.</string>
     <string name="encryption_unknown_algorithm_tile_description">Die Verschlüsselung in diesem Raum wird nicht unterstützt</string>
     <string name="qr_code_scanned_verif_waiting">Warte auf %s…</string>
     <string name="set_recovery_passphrase">%s setzen</string>
@@ -1922,15 +1922,15 @@
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="add_members_to_room">Nutzer!n hinzufügen</string>
     <string name="invite_users_to_room_action_invite">EINLADEN</string>
-    <string name="inviting_users_to_room">Benutzer werden eingeladen…</string>
-    <string name="invite_users_to_room_title">Benutzer einladen</string>
+    <string name="inviting_users_to_room">Benutzer:innen werden eingeladen…</string>
+    <string name="invite_users_to_room_title">Benutzer:innen einladen</string>
     <string name="invitation_sent_to_one_user">Einladung gesendet an %1$s</string>
     <string name="invitations_sent_to_two_users">Einladungen gesendet an %1$s und %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="one">Einladungen gesendet an %1$s und einen weiteren Benutzer</item>
         <item quantity="other">Einladungen gesendet an %1$s und %2$d weitere Benutzer</item>
     </plurals>
-    <string name="invite_users_to_room_failure">Wir konnten den Benutzer nicht einladen. Bitte überprüfe den Benutzernamen, welchen du einladen möchtest und versuche es erneut.</string>
+    <string name="invite_users_to_room_failure">Wir konnten die Benutzer:innen nicht einladen. Bitte überprüfe die Benutzer:innen, welchen du einladen möchtest, und versuche es erneut.</string>
     <string name="pause_video">Pause</string>
     <string name="action_copy">Kopieren</string>
     <string name="bottom_action_notification">Benachrichtigungen</string>
@@ -1956,25 +1956,25 @@
     <string name="return_to_call">Zum Anruf zurückkehren</string>
     <string name="room_participants_action_cancel_invite">Einladung zurückziehen</string>
     <string name="room_participants_power_level_demote_warning_title">Möchtest du dich zurückstufen\?</string>
-    <string name="room_participants_power_level_demote_warning_prompt">Du kannst die Zurückstufung nicht rückgängig machen und du wirst die Rechte nur mit einem anderen berechtigten Benutzer im Raum zurückerlangen können.</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Du kannst die Zurückstufung nicht rückgängig machen und du wirst die Rechte nur mit einem/r anderen berechtigten Benutzer:in im Raum zurückerlangen können.</string>
     <string name="room_participants_power_level_demote">Zurückstufen</string>
-    <string name="room_participants_action_ignore_title">Benutzer ignorieren</string>
+    <string name="room_participants_action_ignore_title">Benutzer:in ignorieren</string>
     <string name="room_participants_action_ignore_prompt_msg">Durch das Ignorieren werden für dich alle Nachrichten des/r Nutzers/in ausgeblendet.
 \n
 \nDu kannst die Aktion jederzeit in den allgemeinen Einstellungen rückgängig machen.</string>
     <string name="room_participants_action_unignore_title">Ignorieren des Benutzers rückgängig machen</string>
     <string name="room_participants_action_unignore_prompt_msg">Das Aufheben der Ignorierung wird alle Nachrichten des Benutzers wieder einblenden.</string>
     <string name="room_participants_action_cancel_invite_title">Einladung zurückziehen</string>
-    <string name="room_participants_action_cancel_invite_prompt_msg">Bist du dir sicher, dass du die Einladung für diesen Benutzer zurückziehen möchtest\?</string>
-    <string name="room_participants_kick_title">Benutzer entfernen</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Bist du dir sicher, dass du die Einladung für diese:n Benutzer:in zurückziehen möchtest\?</string>
+    <string name="room_participants_kick_title">Benutzer:in entfernen</string>
     <string name="room_participants_kick_reason">Grund für das Entfernen</string>
     <string name="room_participants_kick_prompt_msg">Das Entfernen wird den/die Benutzer!n von diesem Raum ausschließen.
 \n
 \nUm einen erneuten Beitritt zu verhindern, solltest du ihn/sie stattdessen bannen.</string>
-    <string name="room_participants_ban_title">Benutzer bannen</string>
+    <string name="room_participants_ban_title">Benutzer:in bannen</string>
     <string name="room_participants_ban_reason">Grund für den Bann</string>
     <string name="room_participants_unban_title">Bann des Benutzers aufheben</string>
-    <string name="room_participants_unban_prompt_msg">Das Aufheben des Bannes wird dem Benutzer erlauben dem Raum wieder beizutreten.</string>
+    <string name="room_participants_unban_prompt_msg">Das Aufheben des Bannes wird dem/r Benutzer:in erlauben dem Raum wieder beizutreten.</string>
     <string name="settings_secure_backup_section_title">Sicheres Backup</string>
     <string name="settings_secure_backup_manage">Verwalten</string>
     <string name="settings_secure_backup_setup">Backup einrichten</string>
@@ -2370,4 +2370,36 @@
     <string name="room_settings_permissions_subtitle">Rollen, die zum Ändern verschiedener Teile des Raums erforderlich sind, anzeigen und aktualisieren.</string>
     <string name="room_permissions_send_m_room_server_acl_events">m.room.server_acl-Ereignisse senden</string>
     <string name="room_permissions_change_permissions">Berechtigungen ändern</string>
+    <string name="authentication_error">Authentifizierung fehlgeschlagen</string>
+    <string name="re_authentication_default_confirm_text">Deine Anmeldeinformationen müssen für Element eingegeben werden, um diese Aktion auszuführen.</string>
+    <string name="re_authentication_activity_title">Erneute Authentifizierung erforderlich</string>
+    <string name="failed_to_initialize_cross_signing">Cross Signing konnte nicht eingerichtet werden</string>
+    <string name="error_unauthorized">Nicht autorisierte, fehlende gültige Authentifizierungsdaten</string>
+    <string name="call_transfer_users_tab_title">Nutzer:innen</string>
+    <string name="call_transfer_failure">Beim Übertragen des Anrufs ist ein Fehler aufgetreten</string>
+    <string name="call_transfer_title">Übertragen</string>
+    <string name="call_transfer_connect_action">Verbinden</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">1 aktiver Anruf (%1$s) · 1 pausierter Anruf</item>
+        <item quantity="other">1 aktiver Anruf (%1$s) · %2$d pausierte Anrufe</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="one">Pausierter Anruf</item>
+        <item quantity="other">%1$d pausierte Anrufe</item>
+    </plurals>
+    <string name="call_only_active">Aktiver Anruf (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">Beim Suchen der Telefonnummer ist ein Fehler aufgetreten</string>
+    <string name="call_dial_pad_title">Wähltastatur</string>
+    <string name="call_tile_call_back">Zurückrufen</string>
+    <string name="call_tile_ended">Dieser Anruf wurde beendet</string>
+    <string name="call_tile_other_declined">%1$s hat diesen Anruf abgelehnt</string>
+    <string name="call_tile_you_declined">Du hast diesen Anruf %1$s abgelehnt</string>
+    <string name="call_tile_in_call">Du nimmst zur Zeit an diesem Anruf teil</string>
+    <string name="call_tile_other_started_call">%1$s hat einen Anruf gestartet</string>
+    <string name="call_tile_you_started_call">Du hast einen Anruf gestartet</string>
+    <string name="call_held_by_you">Du hältst den Anruf</string>
+    <string name="call_held_by_user">%s hält den Anruf</string>
+    <string name="call_hold_action">Halten</string>
+    <string name="call_resume_action">Fortsetzen</string>
+    <string name="action_return">Zurück</string>
 </resources>

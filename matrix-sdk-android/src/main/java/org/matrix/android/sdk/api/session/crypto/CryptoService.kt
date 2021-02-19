@@ -56,8 +56,6 @@ interface CryptoService {
 
     fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>)
 
-    fun deleteDeviceWithUserPassword(deviceId: String, authSession: String?, password: String, callback: MatrixCallback<Unit>)
-
     fun getCryptoVersion(context: Context, longFormat: Boolean): String
 
     fun isCryptoEnabled(): Boolean

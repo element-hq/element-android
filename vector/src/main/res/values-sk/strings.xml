@@ -1396,7 +1396,7 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="room_widget_permission_room_id">ID miestnosti</string>
 
 
-    <string name="error_jitsi_not_supported_on_old_device">Prepáčte, konferenčné hovory Jitsi nie sú podporované na starších zariadeniach (starší systém než Android 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Prepáčte, konferenčné hovory Jitsi nie sú podporované na starších zariadeniach (starší systém než Android 6.0)</string>
     <string name="room_widget_resource_permission_title">Tento widget žiada o nasledujúce zdroje:</string>
     <string name="room_widget_resource_grant_permission">Povoliť</string>
     <string name="room_widget_resource_decline_permission">Zablokovať všetko</string>

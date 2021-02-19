@@ -1020,7 +1020,7 @@
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="historical_placeholder">Otsi ajaloost</string>
-    <string name="error_jitsi_not_supported_on_old_device">Vabandust, aga rühmakõned Jitsi vahendusel ei ole vanades seadmetes toetatud (Androidi versioon alla 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Vabandust, aga rühmakõned Jitsi vahendusel ei ole vanades seadmetes toetatud (Androidi versioon alla 6.0)</string>
     <string name="room_widget_resource_permission_title">See vidin soovib kasutada järgmisi andmeid:</string>
     <string name="room_widget_resource_grant_permission">Luba</string>
     <string name="room_widget_resource_decline_permission">Ära luba mitte midagi</string>
@@ -2315,4 +2315,37 @@
     <string name="room_settings_permissions_title">Õigused jututoas</string>
     <string name="room_participants_leave_private_warning">See ei ole avalik jututuba. Ilma kutseta sa ei saa uuesti liituda.</string>
     <string name="system_theme">Süsteemi vaikeseadistused</string>
+    <string name="authentication_error">Autentimine ei õnnestunud</string>
+    <string name="re_authentication_default_confirm_text">Selle tegevuse jaoks palub Element sul sisestada oma kasutajanime ja salasõna.</string>
+    <string name="re_authentication_activity_title">Palun korda autentimist</string>
+    <string name="failed_to_initialize_cross_signing">Risttunnustamise alustamine ei õnnestunud</string>
+    <string name="error_unauthorized">Volitused puuduvad, kasutajakonto ja/või salasõna on valed</string>
+    <string name="call_transfer_users_tab_title">Kasutajad</string>
+    <string name="call_transfer_failure">Kõne suunamisel tekkis viga</string>
+    <string name="call_transfer_title">Suuna</string>
+    <string name="call_transfer_connect_action">Ühenda</string>
+    <string name="call_transfer_consult_first">Pea esmalt nõu</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">Käsil on üks kõne (%1$s) · üks kõne on ootel</item>
+        <item quantity="other">Käsil on üks kõne (%1$s) · %2$d kõnet on ootel</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="one">Pooleli kõne</item>
+        <item quantity="other">%1$d pooleli kõnet</item>
+    </plurals>
+    <string name="call_only_active">Kõne on pooleli (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">Telefoninumbri otsimisel tekkis viga</string>
+    <string name="call_dial_pad_title">Numbriklahvistik</string>
+    <string name="call_tile_call_back">Helista tagasi</string>
+    <string name="call_tile_ended">See kõne on lõppenud</string>
+    <string name="call_tile_other_declined">%1$s keeldus kõnest</string>
+    <string name="call_tile_you_declined">Sa keeldusid %1$s kõnest</string>
+    <string name="call_tile_in_call">Sul on parasjagu see mõne pooleli</string>
+    <string name="call_tile_other_started_call">%1$s alustas kõnet</string>
+    <string name="call_tile_you_started_call">Sa alustasid kõnet</string>
+    <string name="call_held_by_you">Sina panid kõne ootele</string>
+    <string name="call_held_by_user">%s pani kõne ootele</string>
+    <string name="call_hold_action">Pane ootele</string>
+    <string name="call_resume_action">Jätka</string>
+    <string name="action_return">Pöördu tagasi</string>
 </resources>

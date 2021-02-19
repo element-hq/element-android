@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import android.view.View
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
@@ -24,7 +23,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvide
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.app.features.home.room.detail.timeline.item.NoticeItem_
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
@@ -35,15 +33,14 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
 
     fun create(event: TimelineEvent,
                highlight: Boolean,
-               roomSummary: RoomSummary?,
                callback: TimelineEventController.Callback?): NoticeItem? {
-        val formattedText = eventFormatter.format(event, roomSummary) ?: return null
+        val formattedText = eventFormatter.format(event) ?: return null
         val informationData = informationDataFactory.create(event, null)
         val attributes = NoticeItem.Attributes(
                 avatarRenderer = avatarRenderer,
                 informationData = informationData,
                 noticeText = formattedText,
-                itemLongClickListener = View.OnLongClickListener { view ->
+                itemLongClickListener = { view ->
                     callback?.onEventLongClicked(informationData, null, view) ?: false
                 },
                 readReceiptsCallback = callback,

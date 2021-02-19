@@ -1094,7 +1094,7 @@
     <string name="notification_new_invitation">Ftesë e Re</string>
     <string name="notification_sender_me">Unë</string>
     <string name="notification_inline_reply_failed">** S’u arrit të dërgohej - ju lutemi, hapni dhomë</string>
-    <string name="error_jitsi_not_supported_on_old_device">Na ndjeni, thirrjet konferencë me Jitsi-n nuk mbulohen në pajisje të vjetra (pajisje me Android OS nën 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Na ndjeni, thirrjet konferencë me Jitsi-n nuk mbulohen në pajisje të vjetra (pajisje me Android OS nën 6.0)</string>
     <string name="title_activity_verify_device">Verifiko sesion</string>
     <string name="encryption_information_unknown_ip">ip e panjohur</string>
     <string name="you_added_a_new_device_with_info">Një sesion i ri po kërkon emër kyçe fshehtëzimi.
@@ -1751,7 +1751,7 @@
     <string name="set_recovery_passphrase">Caktoni një %s</string>
     <string name="generate_message_key">Prodhoni një Kyç Mesazhesh</string>
     <string name="confirm_recovery_passphrase">Ripohoni %s</string>
-    <string name="enter_account_password">Që të vazhdohet, jepni % tuaj.</string>
+    <string name="enter_account_password">Që të vazhdohet, jepni %s tuaj.</string>
     <string name="bootstrap_info_text">Siguroni &amp; shkyçni mesazhet tuaj të fshehtëzuar dhe besim me një %s.</string>
     <string name="bootstrap_info_confirm_text">Për ta ripohuar, rijepni %s tuaj.</string>
     <string name="bootstrap_dont_reuse_pwd">Mos ripërdorni fjalëkalimin e llogarisë tuaj.</string>

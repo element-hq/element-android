@@ -1,48 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Room tags -->
-    <string-array name="tag_entries">
-        <item>@string/room_settings_tag_pref_entry_favourite</item>
-        <item>@string/room_settings_tag_pref_entry_low_priority</item>
-        <item>@string/room_settings_tag_pref_entry_none</item>
-    </string-array>
-
-    <string-array name="tag_values">
-        <item>"m.favourite"</item>
-        <item>"m.lowpriority"</item>
-        <item>"m.recent"</item>
-    </string-array>
-
-    <!-- access rules: Who can access this room? -->
-    <string-array name="room_access_rules_entries">
-        <item>@string/room_settings_room_access_entry_only_invited</item>
-        <item>@string/room_settings_room_access_entry_anyone_with_link_apart_guest</item>
-        <item>@string/room_settings_room_access_entry_anyone_with_link_including_guest</item>
-    </string-array>
-
-    <string-array name="room_access_rules_values">
-        <item>"1"</item>
-        <item>"2"</item>
-        <item>"3"</item>
-    </string-array>
-
-    <!-- read history rules: Who can read history? -->
-    <string-array name="room_read_history_rules_entries">
-        <item>@string/room_settings_read_history_entry_anyone</item>
-        <item>@string/room_settings_read_history_entry_members_only_option_time_shared</item>
-        <item>@string/room_settings_read_history_entry_members_only_invited</item>
-        <item>@string/room_settings_read_history_entry_members_only_joined</item>
-    </string-array>
-
-    <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
-    <string-array name="room_read_history_rules_values">
-        <item>"world_readable"</item>
-        <item>"shared"</item>
-        <item>"invited"</item>
-        <item>"joined"</item>
-    </string-array>
-
     <!-- media settings -->
     <string-array name="compression_levels">
         <item>@string/compression_opt_list_choose</item>
@@ -76,19 +34,6 @@
     </string-array>
 
     <!-- Room settings notification -->
-    <string-array name="notification_entries">
-        <item>@string/room_settings_all_messages_noisy</item>
-        <item>@string/room_settings_all_messages</item>
-        <item>@string/room_settings_mention_only</item>
-        <item>@string/room_settings_mute</item>
-    </string-array>
-
-    <string-array name="notification_values">
-        <item>"ALL_MESSAGES_NOISY"</item>
-        <item>"ALL_MESSAGES"</item>
-        <item>"MENTIONS_ONLY"</item>
-        <item>"MUTE"</item>
-    </string-array>
 
     <!-- Theme -->
     <string-array name="theme_entries">
@@ -105,32 +50,12 @@
         <item>black</item>
     </string-array>
 
-    <!-- Info area -->
-    <string-array name="show_info_area_entries">
-        <item>@string/show_info_area_always</item>
-        <item>@string/show_info_area_messages_and_errors</item>
-        <item>@string/show_info_area_only_errors</item>
-    </string-array>
-
-    <string-array name="show_info_area_values">
-        <item>always</item>
-        <item>messages_and_errors</item>
-        <item>only_errors</item>
-    </string-array>
-
     <!-- media saving choice list -->
     <string-array name="media_saving_choice">
         <item>@string/media_saving_period_3_days</item>
         <item>@string/media_saving_period_1_week</item>
         <item>@string/media_saving_period_1_month</item>
         <item>@string/media_saving_period_forever</item>
-    </string-array>
-
-    <!-- Notification status for bing rules -->
-    <string-array name="notification_status">
-        <item>@string/notification_off</item>
-        <item>@string/notification_silent</item>
-        <item>@string/notification_noisy</item>
     </string-array>
 
 </resources>

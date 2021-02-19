@@ -32,7 +32,7 @@ class StickerPickerActionHandler @Inject constructor(private val session: Sessio
             return@withContext RoomDetailViewEvents.DisplayEnableIntegrationsWarning
         }
         val stickerWidget = session.widgetService().getUserWidgets(WidgetType.StickerPicker.values()).firstOrNull { it.isActive }
-        if (stickerWidget == null || stickerWidget.computedUrl.isNullOrBlank()) {
+        if (stickerWidget == null || stickerWidget.widgetContent.url.isNullOrBlank()) {
             RoomDetailViewEvents.DisplayPromptForIntegrationManager
         } else {
             RoomDetailViewEvents.OpenStickerPicker(

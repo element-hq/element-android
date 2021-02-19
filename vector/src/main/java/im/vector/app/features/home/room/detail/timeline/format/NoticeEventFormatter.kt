@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.format
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -55,6 +56,7 @@ class NoticeEventFormatter @Inject constructor(
         private val activeSessionDataSource: ActiveSessionDataSource,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
         private val vectorPreferences: VectorPreferences,
+        private val roomSummariesHolder: RoomSummariesHolder,
         private val sp: StringProvider
 ) {
 
@@ -65,7 +67,8 @@ class NoticeEventFormatter @Inject constructor(
 
     private fun RoomSummary?.isDm() = this?.isDirect.orFalse()
 
-    fun format(timelineEvent: TimelineEvent, rs: RoomSummary?): CharSequence? {
+    fun format(timelineEvent: TimelineEvent): CharSequence? {
+        val rs = roomSummariesHolder.get(timelineEvent.roomId)
         return when (val type = timelineEvent.root.getClearType()) {
             EventType.STATE_ROOM_JOIN_RULES         -> formatJoinRulesEvent(timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName, rs)
             EventType.STATE_ROOM_CREATE             -> formatRoomCreateEvent(timelineEvent.root, rs)
@@ -88,7 +91,11 @@ class NoticeEventFormatter @Inject constructor(
             EventType.CALL_INVITE,
             EventType.CALL_CANDIDATES,
             EventType.CALL_HANGUP,
+            EventType.CALL_REJECT,
             EventType.CALL_ANSWER                   -> formatCallEvent(type, timelineEvent.root, timelineEvent.senderInfo.disambiguatedDisplayName)
+            EventType.CALL_NEGOTIATE,
+            EventType.CALL_SELECT_ANSWER,
+            EventType.CALL_REPLACES,
             EventType.MESSAGE,
             EventType.REACTION,
             EventType.KEY_VERIFICATION_START,
@@ -176,6 +183,7 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> formatRoomHistoryVisibilityEvent(event, senderName, rs)
             EventType.CALL_INVITE,
             EventType.CALL_HANGUP,
+            EventType.CALL_REJECT,
             EventType.CALL_ANSWER                   -> formatCallEvent(type, event, senderName)
             EventType.STATE_ROOM_TOMBSTONE          -> formatRoomTombstoneEvent(event, senderName, rs)
             else                                    -> {
@@ -343,6 +351,12 @@ class NoticeEventFormatter @Inject constructor(
                     sp.getString(R.string.notice_call_candidates_by_you)
                 } else {
                     sp.getString(R.string.notice_call_candidates, senderName)
+                }
+            EventType.CALL_REJECT     ->
+                if (event.isSentByCurrentUser()) {
+                    sp.getString(R.string.call_tile_you_declined, "")
+                } else {
+                    sp.getString(R.string.call_tile_other_declined, senderName)
                 }
             else                      -> null
         }

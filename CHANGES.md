@@ -1,4 +1,31 @@
-Changes in Element 1.0.17 (2020-02-09)
+Changes in Element 1.1.0 (2021-02-19)
+===================================================
+
+Features ✨:
+ - VoIP : support for VoIP V1 protocol, transfer call and dial-pad
+                                
+Improvements 🙌:
+ - VoIP : new tiles in timeline
+ - Improve room profile UX
+ - Upgrade Jitsi library from 2.9.3 to 3.1.0
+ - a11y improvements
+
+Bugfix 🐛:
+ - VoIP : fix audio devices output
+ - Fix crash after initial sync on Dendrite
+ - Fix crash reported by PlayStore (#2707)
+ - Ignore url override from credential if it is not valid (#2822)
+ - Fix crash when deactivating an account
+
+SDK API changes ⚠️:
+ - Migrate AuthenticationService API to coroutines (#2449)
+
+Other changes:
+ - New Dev Tools panel for developers
+ - Fix typos in CHANGES.md (#2811)
+ - Colors rework: first step: merge file `colors_riot.xml` to file `colors_riotx.xml` and rename the file to `colors.xml`
+
+Changes in Element 1.0.17 (2021-02-09)
 ===================================================
 
 Improvements 🙌:
@@ -20,13 +47,13 @@ Build 🧱:
 Other changes:
  - Change app name from "Element (Riot.im)" to "Element"
 
-Changes in Element 1.0.16 (2020-02-04)
+Changes in Element 1.0.16 (2021-02-04)
 ===================================================
 
 Bugfix 🐛:
  - Fix crash on API < 30 and light theme (#2774)
 
-Changes in Element 1.0.15 (2020-02-03)
+Changes in Element 1.0.15 (2021-02-03)
 ===================================================
 
 Features ✨:
@@ -57,7 +84,7 @@ Build 🧱:
 Other changes:
  - Update Dagger to 2.31 version so we can use the embedded AssistedInject feature 
 
-Changes in Element 1.0.14 (2020-01-15)
+Changes in Element 1.0.14 (2021-01-15)
 ===================================================
 
 Features ✨:
@@ -1169,7 +1196,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in Element 1.X.X (2020-XX-XX)
+Changes in Element 1.X.X (2021-XX-XX)
 ===================================================
 
 Features ✨:

@@ -28,20 +28,20 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:contentDescription="@string/avatar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/avatars" />
 
-            <ImageView
+            <im.vector.app.core.ui.views.ShieldImageView
                 android:id="@+id/roomToolbarDecorationImageView"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 app:layout_constraintCircle="@+id/roomToolbarAvatarImageView"
                 app:layout_constraintCircleAngle="135"
                 app:layout_constraintCircleRadius="20dp"
-                tools:ignore="MissingConstraints"
-                tools:src="@drawable/ic_shield_trusted" />
+                tools:ignore="MissingConstraints" />
 
             <TextView
                 android:id="@+id/roomToolbarTitleView"
@@ -96,7 +96,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/roomToolbar" />
 
-    <im.vector.app.core.ui.views.ActiveCallView
+    <im.vector.app.core.ui.views.CurrentCallsView
         android:id="@+id/activeCallView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -179,7 +179,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roomToolbar"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/badgeBarrier"

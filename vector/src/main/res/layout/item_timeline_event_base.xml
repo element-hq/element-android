@@ -21,6 +21,7 @@
         android:layout_height="44dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
+        android:contentDescription="@string/avatar"
         tools:src="@tools:sample/avatars" />
 
     <TextView
@@ -64,7 +65,7 @@
         android:layout_height="8dp"
         android:layout_toEndOf="@id/messageStartGuideline" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/messageE2EDecoration"
         android:layout_width="16dp"
         android:layout_height="16dp"
@@ -72,7 +73,6 @@
         android:layout_alignEnd="@id/decorationSpace"
         android:layout_marginTop="7dp"
         android:visibility="gone"
-        tools:src="@drawable/ic_shield_warning"
         tools:visibility="visible" />
 
     <FrameLayout

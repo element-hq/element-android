@@ -259,4 +259,10 @@
         <item quantity="one">%1$s ha aggiunto l\'indirizzo alternativo %2$s per questa stanza.</item>
         <item quantity="other">%1$s ha aggiunto gli indirizzi alternativi %2$s per questa stanza.</item>
     </plurals>
+    <string name="notice_widget_jitsi_modified_by_you">Hai modificato la video conferenza</string>
+    <string name="notice_widget_jitsi_modified">Video conferenza modificata da %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">Hai iniziato la video conferenza</string>
+    <string name="notice_widget_jitsi_removed_by_you">Hai terminato la video conferenza</string>
+    <string name="notice_widget_jitsi_removed">Video conferenza terminata da %1$s</string>
+    <string name="notice_widget_jitsi_added">Video conferenza iniziata da %1$s</string>
 </resources>

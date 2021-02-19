@@ -98,7 +98,7 @@ class NotificationTroubleshootRecyclerViewAdapter(val tests: ArrayList<Troublesh
             val quickFix = test.quickFix
             if (quickFix != null) {
                 troubleshootTestButton.setText(test.quickFix!!.title)
-                troubleshootTestButton.setOnClickListener { _ ->
+                troubleshootTestButton.setOnClickListener {
                     test.quickFix!!.doFix()
                 }
                 troubleshootTestButton.visibility = View.VISIBLE

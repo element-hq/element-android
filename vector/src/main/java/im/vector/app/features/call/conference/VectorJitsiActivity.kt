@@ -16,12 +16,15 @@
 
 package im.vector.app.features.call.conference
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Parcelable
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
@@ -31,17 +34,17 @@ import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
 import kotlinx.parcelize.Parcelize
+import org.jitsi.meet.sdk.BroadcastEvent
 import org.jitsi.meet.sdk.JitsiMeetActivityDelegate
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import org.jitsi.meet.sdk.JitsiMeetView
-import org.jitsi.meet.sdk.JitsiMeetViewListener
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import java.net.URL
 import javax.inject.Inject
 
-class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMeetActivityInterface, JitsiMeetViewListener {
+class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMeetActivityInterface {
 
     @Parcelize
     data class Args(
@@ -63,12 +66,21 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         injector.inject(this)
     }
 
+    // See https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-android-sdk#listening-for-broadcasted-events
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let { onBroadcastReceived(it) }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         jitsiViewModel.subscribe(this) {
             renderState(it)
         }
+
+        registerForBroadcastMessages()
     }
 
     override fun initUiAndData() {
@@ -76,7 +88,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         jitsiMeetView = JitsiMeetView(this)
         val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
         views.jitsiLayout.addView(jitsiMeetView, params)
-        jitsiMeetView?.listener = this
     }
 
     private fun renderState(viewState: JitsiCallViewState) {
@@ -132,6 +143,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     override fun onDestroy() {
         JitsiMeetActivityDelegate.onHostDestroy(this)
+        unregisterForBroadcastMessages()
         super.onDestroy()
     }
 
@@ -154,20 +166,37 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         JitsiMeetActivityDelegate.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    override fun onConferenceTerminated(p0: MutableMap<String, Any>?) {
-        Timber.v("JitsiMeetViewListener.onConferenceTerminated()")
-        // Do not finish if there is an error
-        if (p0?.get("error") == null) {
-            finish()
+    private fun registerForBroadcastMessages() {
+        val intentFilter = IntentFilter()
+        for (type in BroadcastEvent.Type.values()) {
+            intentFilter.addAction(type.action)
+        }
+        tryOrNull("Unable to register receiver") {
+            LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter)
         }
     }
 
-    override fun onConferenceJoined(p0: MutableMap<String, Any>?) {
-        Timber.v("JitsiMeetViewListener.onConferenceJoined()")
+    private fun unregisterForBroadcastMessages() {
+        tryOrNull("Unable to unregister receiver") {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+        }
     }
 
-    override fun onConferenceWillJoin(p0: MutableMap<String, Any>?) {
-        Timber.v("JitsiMeetViewListener.onConferenceWillJoin()")
+    private fun onBroadcastReceived(intent: Intent) {
+        val event = BroadcastEvent(intent)
+        Timber.v("Broadcast received: ${event.type}")
+        when (event.type) {
+            BroadcastEvent.Type.CONFERENCE_TERMINATED -> onConferenceTerminated(event.data)
+            else                                      -> Unit
+        }
+    }
+
+    private fun onConferenceTerminated(data: Map<String, Any>) {
+        Timber.v("JitsiMeetViewListener.onConferenceTerminated()")
+        // Do not finish if there is an error
+        if (data["error"] == null) {
+            finish()
+        }
     }
 
     companion object {

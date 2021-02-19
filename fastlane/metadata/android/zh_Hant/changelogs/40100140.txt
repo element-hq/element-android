@@ -1,0 +1,2 @@
+此版本的主要變動：編輯聊天室權限、自動淺色／深色佈景主題與許多臭蟲修復。
+完整變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.0.14

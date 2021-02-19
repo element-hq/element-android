@@ -45,8 +45,6 @@ class RoomSettingsController @Inject constructor(
         fun onNameChanged(name: String)
         fun onTopicChanged(topic: String)
         fun onHistoryVisibilityClicked()
-        fun onRoomAliasesClicked()
-        fun onRoomPermissionsClicked()
         fun onJoinRuleClicked()
     }
 
@@ -105,26 +103,6 @@ class RoomSettingsController @Inject constructor(
                 callback?.onTopicChanged(text)
             }
         }
-
-        buildProfileAction(
-                id = "alias",
-                title = stringProvider.getString(R.string.room_settings_alias_title),
-                subtitle = stringProvider.getString(R.string.room_settings_alias_subtitle),
-                dividerColor = dividerColor,
-                divider = true,
-                editable = true,
-                action = { callback?.onRoomAliasesClicked() }
-        )
-
-        buildProfileAction(
-                id = "permissions",
-                title = stringProvider.getString(R.string.room_settings_permissions_title),
-                subtitle = stringProvider.getString(R.string.room_settings_permissions_subtitle),
-                dividerColor = dividerColor,
-                divider = true,
-                editable = true,
-                action = { callback?.onRoomPermissionsClicked() }
-        )
 
         buildProfileAction(
                 id = "historyReadability",

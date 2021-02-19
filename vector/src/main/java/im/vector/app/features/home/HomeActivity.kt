@@ -93,6 +93,7 @@ class HomeActivity :
     @Inject lateinit var shortcutsHandler: ShortcutsHandler
     @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
     @Inject lateinit var permalinkHandler: PermalinkHandler
+    @Inject lateinit var avatarRenderer: AvatarRenderer
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -128,9 +129,9 @@ class HomeActivity :
                 .observe()
                 .subscribe { sharedAction ->
                     when (sharedAction) {
-                        is HomeActivitySharedAction.OpenDrawer  -> views.drawerLayout.openDrawer(GravityCompat.START)
+                        is HomeActivitySharedAction.OpenDrawer -> views.drawerLayout.openDrawer(GravityCompat.START)
                         is HomeActivitySharedAction.CloseDrawer -> views.drawerLayout.closeDrawer(GravityCompat.START)
-                        is HomeActivitySharedAction.OpenGroup   -> {
+                        is HomeActivitySharedAction.OpenGroup -> {
                             views.drawerLayout.closeDrawer(GravityCompat.START)
                             replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
                         }
@@ -147,9 +148,9 @@ class HomeActivity :
         homeActivityViewModel.observeViewEvents {
             when (it) {
                 is HomeActivityViewEvents.AskPasswordToInitCrossSigning -> handleAskPasswordToInitCrossSigning(it)
-                is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
-                HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
-                is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
+                is HomeActivityViewEvents.OnNewSession -> handleOnNewSession(it)
+                HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
+                is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
             }.exhaustive
         }
         homeActivityViewModel.subscribe(this) { renderState(it) }
@@ -202,7 +203,7 @@ class HomeActivity :
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.initialSyncProgressServiceStatus) {
-            is InitialSyncProgressService.Status.Idle        -> {
+            is InitialSyncProgressService.Status.Idle -> {
                 views.waitingView.root.isVisible = false
             }
             is InitialSyncProgressService.Status.Progressing -> {
@@ -284,10 +285,10 @@ class HomeActivity :
                     dismissedAction = Runnable {
                         homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
                     }
-                    addButton(getString(R.string.dismiss), Runnable {
+                    addButton(getString(R.string.dismiss), {
                         homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
                     }, true)
-                    addButton(getString(R.string.settings), Runnable {
+                    addButton(getString(R.string.settings), {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                             // action(it)
                             homeActivityViewModel.handle(HomeActivityViewActions.PushPromptHasBeenReviewed)
@@ -304,9 +305,9 @@ class HomeActivity :
                         uid = "upgradeSecurity",
                         title = getString(titleRes),
                         description = getString(descRes),
-                        iconId = R.drawable.ic_shield_warning,
-                        matrixItem = userItem
+                        iconId = R.drawable.ic_shield_warning
                 ).apply {
+                    viewBinder = VerificationVectorAlert.ViewBinder(userItem, avatarRenderer)
                     colorInt = ContextCompat.getColor(this@HomeActivity, R.color.riotx_positive_accent)
                     contentAction = Runnable {
                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
@@ -367,11 +368,11 @@ class HomeActivity :
                 bugReporter.openBugReportScreen(this, false)
                 return true
             }
-            R.id.menu_home_filter     -> {
+            R.id.menu_home_filter -> {
                 navigator.openRoomsFiltering(this)
                 return true
             }
-            R.id.menu_home_setting    -> {
+            R.id.menu_home_setting -> {
                 navigator.openSettings(this)
                 return true
             }

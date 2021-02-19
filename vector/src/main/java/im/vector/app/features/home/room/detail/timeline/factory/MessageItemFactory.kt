@@ -38,7 +38,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadSt
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageBlockCodeItem
@@ -106,15 +105,17 @@ class MessageItemFactory @Inject constructor(
         private val messageItemAttributesFactory: MessageItemAttributesFactory,
         private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
         private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
-        private val roomSummaryHolder: RoomSummaryHolder,
         private val defaultItemFactory: DefaultItemFactory,
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val session: Session) {
 
+    // TODO inject this properly?
+    private var roomId: String = ""
+
     private val pillsPostProcessor by lazy {
-        pillsPostProcessorFactory.create(roomSummaryHolder.roomSummary?.roomId)
+        pillsPostProcessorFactory.create(roomId)
     }
 
     fun create(event: TimelineEvent,
@@ -123,8 +124,8 @@ class MessageItemFactory @Inject constructor(
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
+        roomId = event.roomId
         val informationData = messageInformationDataFactory.create(event, nextEvent)
-
         if (event.root.isRedacted()) {
             // message is redacted
             val attributes = messageItemAttributesFactory.create(null, informationData, callback)
@@ -140,7 +141,7 @@ class MessageItemFactory @Inject constructor(
                 || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should display it when debugging as a notice event
-            return noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+            return noticeItemFactory.create(event, highlight, callback)
         }
         val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
 
@@ -156,7 +157,7 @@ class MessageItemFactory @Inject constructor(
             is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageOptionsContent             -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+            is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, callback)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }
@@ -230,14 +231,13 @@ class MessageItemFactory @Inject constructor(
                                                     attributes: AbsMessageItem.Attributes): VerificationRequestItem? {
         // If this request is not sent by me or sent to me, we should ignore it in timeline
         val myUserId = session.myUserId
-        val roomId = roomSummaryHolder.roomSummary?.roomId
         if (informationData.senderId != myUserId && messageContent.toUserId != myUserId) {
             return null
         }
 
         val otherUserId = if (informationData.sentByMe) messageContent.toUserId else informationData.senderId
         val otherUserName = if (informationData.sentByMe) {
-            session.getRoomMember(messageContent.toUserId, roomId ?: "")?.displayName
+            session.getRoomMember(messageContent.toUserId, roomId)?.displayName
         } else {
             informationData.memberName
         }
@@ -322,7 +322,7 @@ class MessageItemFactory @Inject constructor(
                         mode(ImageContentRenderer.Mode.STICKER)
                     } else {
                         clickListener(
-                                DebouncedClickListener(View.OnClickListener { view ->
+                                DebouncedClickListener({ view ->
                                     callback?.onImageMessageClicked(messageContent, data, view)
                                 }))
                     }

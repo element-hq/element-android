@@ -30,6 +30,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.LoadingItem_
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.extensions.nextOrNull
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewState
 import im.vector.app.features.home.room.detail.UnreadState
@@ -37,17 +38,15 @@ import im.vector.app.features.home.room.detail.timeline.factory.MergedHeaderItem
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactory
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
-import im.vector.app.features.home.room.detail.timeline.helper.ReadMarkerVisibilityStateChangedListener
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineControllerInterceptorHelper
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventDiffUtilCallback
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityStateChangedListener
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.app.features.home.room.detail.timeline.item.BaseEventItem
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
-import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
@@ -73,6 +72,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
                                                   private val mergedHeaderItemFactory: MergedHeaderItemFactory,
                                                   private val session: Session,
+                                                  private val callManager: WebRtcCallManager,
                                                   @TimelineEventControllerHandler
                                                   private val backgroundHandler: Handler
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
@@ -99,6 +99,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         // TODO move all callbacks to this?
         fun onTimelineItemAction(itemAction: RoomDetailAction)
 
+        // Introduce ViewModel scoped component (or Hilt?)
         fun getPreviewUrlRetriever(): PreviewUrlRetriever
     }
 
@@ -190,58 +191,20 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
     }
 
+    private val interceptorHelper = TimelineControllerInterceptorHelper(
+            ::positionOfReadMarker,
+            adapterPositionMapping,
+            vectorPreferences,
+            callManager
+    )
+
     init {
         addInterceptor(this)
         requestModelBuild()
     }
 
-    // Update position when we are building new items
     override fun intercept(models: MutableList<EpoxyModel<*>>) = synchronized(modelCache) {
-        positionOfReadMarker = null
-        adapterPositionMapping.clear()
-        models.forEachIndexed { index, epoxyModel ->
-            if (epoxyModel is BaseEventItem) {
-                epoxyModel.getEventIds().forEach {
-                    adapterPositionMapping[it] = index
-                }
-            }
-        }
-        val currentUnreadState = this.unreadState
-        if (currentUnreadState is UnreadState.HasUnread) {
-            val position = adapterPositionMapping[currentUnreadState.firstUnreadEventId]?.plus(1)
-            positionOfReadMarker = position
-            if (position != null) {
-                val readMarker = TimelineReadMarkerItem_()
-                        .also {
-                            it.id("read_marker")
-                            it.setOnVisibilityStateChanged(ReadMarkerVisibilityStateChangedListener(callback))
-                        }
-                models.add(position, readMarker)
-            }
-        }
-        val shouldAddBackwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.BACKWARDS) ?: false
-        if (shouldAddBackwardPrefetch) {
-            val indexOfPrefetchBackward = (previousModelsSize - 1)
-                    .coerceAtMost(models.size - DEFAULT_PREFETCH_THRESHOLD)
-                    .coerceAtLeast(0)
-
-            val loadingItem = LoadingItem_()
-                    .id("prefetch_backward_loading${System.currentTimeMillis()}")
-                    .showLoader(false)
-                    .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS)
-
-            models.add(indexOfPrefetchBackward, loadingItem)
-        }
-        val shouldAddForwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.FORWARDS) ?: false
-        if (shouldAddForwardPrefetch) {
-            val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD.coerceAtMost(models.size - 1)
-            val loadingItem = LoadingItem_()
-                    .id("prefetch_forward_loading${System.currentTimeMillis()}")
-                    .showLoader(false)
-                    .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS)
-            models.add(indexOfPrefetchForward, loadingItem)
-        }
-        previousModelsSize = models.size
+        interceptorHelper.intercept(models, unreadState, timeline, callback)
     }
 
     fun update(viewState: RoomDetailViewState) {
@@ -410,6 +373,14 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
     }
 
+    private fun LoadingItem_.setVisibilityStateChangedListener(direction: Timeline.Direction): LoadingItem_ {
+        return onVisibilityStateChanged { _, _, visibilityState ->
+            if (visibilityState == VisibilityState.VISIBLE) {
+                callback?.onLoadMore(direction)
+            }
+        }
+    }
+
     private fun updateUTDStates(event: TimelineEvent, nextEvent: TimelineEvent?) {
         if (vectorPreferences.labShowCompleteHistoryInEncryptedRoom()) {
             return
@@ -438,14 +409,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         val shouldAdd = timeline?.hasMoreToLoad(direction) ?: false
         addIf(shouldAdd, this@TimelineEventController)
         return shouldAdd
-    }
-
-    private fun LoadingItem_.setVisibilityStateChangedListener(direction: Timeline.Direction): LoadingItem_ {
-        return onVisibilityStateChanged { _, _, visibilityState ->
-            if (visibilityState == VisibilityState.VISIBLE) {
-                callback?.onLoadMore(direction)
-            }
-        }
     }
 
     fun searchPositionOfEvent(eventId: String?): Int? = synchronized(modelCache) {

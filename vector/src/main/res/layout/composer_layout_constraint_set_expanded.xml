@@ -42,6 +42,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:contentDescription="@string/avatar"
         app:layout_constraintBottom_toTopOf="@id/composerRelatedMessageActionIcon"
         app:layout_constraintEnd_toStartOf="@+id/composerRelatedMessageTitle"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +80,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginBottom="38dp"
         android:alpha="1"
+        android:importantForAccessibility="no"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@id/composerRelatedMessageAvatar"
         app:layout_constraintStart_toStartOf="@id/composerRelatedMessageAvatar"
@@ -93,6 +95,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/cancel"
         android:src="@drawable/ic_close_round"
         app:layout_constraintBottom_toBottomOf="@id/composerRelatedMessageContent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -116,13 +119,14 @@
         android:layout_height="52dp"
         android:layout_margin="1dp"
         android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/option_send_files"
         android:src="@drawable/ic_attachment"
         app:layout_constraintBottom_toBottomOf="@+id/sendButton"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sendButton"
         tools:ignore="MissingPrefix" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/composerShieldImageView"
         android:layout_width="16dp"
         android:layout_height="16dp"
@@ -130,8 +134,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/sendButton"
         app:layout_constraintEnd_toStartOf="@+id/composerEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sendButton"
-        tools:src="@drawable/ic_shield_black" />
+        app:layout_constraintTop_toTopOf="@+id/sendButton" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
         android:id="@+id/composerEditText"
@@ -152,6 +155,7 @@
         android:layout_height="52dp"
         android:layout_margin="1dp"
         android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/a11y_open_emoji_picker"
         android:src="@drawable/ic_insert_emoji"
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
@@ -165,6 +169,7 @@
         android:layout_height="56dp"
         android:layout_marginEnd="2dp"
         android:background="@drawable/bg_send"
+        android:contentDescription="@string/send"
         android:scaleType="center"
         android:src="@drawable/ic_send"
         app:layout_constraintBottom_toBottomOf="parent"

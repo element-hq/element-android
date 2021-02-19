@@ -42,10 +42,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    private val _avatarClickListener = DebouncedClickListener(View.OnClickListener {
+    private val _avatarClickListener = DebouncedClickListener({
         attributes.avatarCallback?.onAvatarClicked(attributes.informationData)
     })
-    private val _memberNameClickListener = DebouncedClickListener(View.OnClickListener {
+    private val _memberNameClickListener = DebouncedClickListener({
         attributes.avatarCallback?.onMemberNameClicked(attributes.informationData)
     })
 

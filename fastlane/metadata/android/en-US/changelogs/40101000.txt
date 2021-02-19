@@ -1,0 +1,2 @@
+Main changes in this version: VoIP (audio and video calls in DM) improvement and bug fixes!
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.1.0

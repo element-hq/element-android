@@ -136,12 +136,15 @@
     <string name="action_unpublish">Unpublish</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
+    <string name="action_return">Return</string>
 
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmation</string>
     <string name="dialog_title_warning">Warning</string>
     <string name="dialog_title_error">Error</string>
     <string name="dialog_title_success">Success</string>
+
+    <string name="dialog_edit_hint">New value</string>
 
     <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
@@ -401,6 +404,10 @@
     <string name="video_call_in_progress">Video Call In Progress…</string>
     <string name="active_call_with_duration">Active Call (%s)</string>
     <string name="return_to_call">Return to call</string>
+    <string name="call_resume_action">Resume</string>
+    <string name="call_hold_action">Hold</string>
+    <string name="call_held_by_user">%s held the call</string>
+    <string name="call_held_by_you">You held the call</string>
 
     <string name="call_error_user_not_responding">The remote side failed to pick up.</string>
     <string name="call_error_ice_failed">Media Connection Failed</string>
@@ -1309,7 +1316,7 @@
     <string name="room_widget_permission_room_id">Room ID</string>
 
 
-    <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 6.0)</string>
     <string name="room_widget_resource_permission_title">This widget wants to use the following resources:</string>
     <string name="room_widget_resource_grant_permission">Allow</string>
     <string name="room_widget_resource_decline_permission">Block All</string>
@@ -2745,6 +2752,10 @@
         <item quantity="one">Wrong code, %d remaining attempt</item>
         <item quantity="other">Wrong code, %d remaining attempts</item>
     </plurals>
+    <plurals name="entries">
+        <item quantity="one">%d entry"</item>
+        <item quantity="other">%d entries"</item>
+    </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Warning! Last remaining attempt before logout!</string>
     <string name="too_many_pin_failures">Too many errors, you\'ve been logged out</string>
     <string name="create_pin_title">Choose a PIN for security</string>
@@ -2789,7 +2800,76 @@
 
     <string name="matrix_to_card_title">Matrix Link</string>
 
+    <string name="call_tile_you_started_call">You started a call</string>
+    <string name="call_tile_other_started_call">%1$s started a call</string>
+    <string name="call_tile_in_call">You\'re currently in this call</string>
+    <!-- Pattern can be replaced by the value of string call_tile_call_back -->
+    <string name="call_tile_you_declined">You declined this call %1$s</string>
+    <string name="call_tile_other_declined">%1$s declined this call</string>
+    <string name="call_tile_ended">This call has ended</string>
+    <string name="call_tile_call_back">Call back</string>
+
+    <string name="call_dial_pad_title">Dial pad</string>
+    <string name="call_dial_pad_lookup_error">"There was an error looking up the phone number"</string>
+
+
+    <string name="call_only_active">Active call (%1$s)</string>
+    <plurals name="call_only_paused">
+        <item quantity="one">Paused call</item>
+        <item quantity="other">%1$d paused calls</item>
+    </plurals>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">1 active call (%1$s) · 1 paused call</item>
+        <item quantity="other">1 active call (%1$s) · %2$d paused calls</item>
+    </plurals>
+
+    <string name="call_transfer_consult_first">Consult first</string>
+    <string name="call_transfer_connect_action">Connect</string>
+    <string name="call_transfer_title">Transfer</string>
+    <string name="call_transfer_failure">An error occurred while transferring call</string>
+    <string name="call_transfer_users_tab_title">Users</string>
+
+
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <string name="re_authentication_default_confirm_text">Element requires you to enter your credentials to perform this action.</string>
     <string name="authentication_error">Failed to authenticate</string>
+
+    <string name="a11y_screenshot">Screenshot</string>
+    <string name="a11y_open_widget">Open widgets</string>
+    <string name="a11y_import_key_from_file">Import key from file</string>
+    <string name="a11y_image">Image</string>
+    <string name="a11y_change_avatar">Change avatar</string>
+    <string name="a11y_delete_avatar">Delete avatar</string>
+    <string name="a11y_error_some_message_not_sent">Some messages have not been sent</string>
+    <string name="a11y_unsent_draft">This room has unsent draft</string>
+    <string name="a11y_video">Video</string>
+    <string name="a11y_selected">Selected</string>
+    <string name="a11y_trust_level_default">Default trust level</string>
+    <string name="a11y_trust_level_warning">Warning trust level</string>
+    <string name="a11y_trust_level_trusted">Trusted trust level</string>
+    <string name="a11y_open_emoji_picker">Open Emoji picker</string>
+    <string name="a11y_close_emoji_picker">Close Emoji picker</string>
+    <string name="a11y_checked">Checked</string>
+    <string name="a11y_error_message_not_sent">Message not sent due to error</string>
+    <string name="a11y_rule_notify_noisy">Notify with sound</string>
+    <string name="a11y_rule_notify_silent">Notify without sound</string>
+    <string name="a11y_rule_notify_off">Do not notify</string>
+    <string name="a11y_view_read_receipts">View read receipts</string>
+
+    <string name="dev_tools_menu_name">Dev Tools</string>
+    <string name="dev_tools_explore_room_state">Explore Room State</string>
+    <string name="dev_tools_send_custom_event">Send Custom Event</string>
+    <string name="dev_tools_send_state_event">Send State Event</string>
+    <string name="dev_tools_state_event">State Events</string>
+    <string name="dev_tools_edit_content">Edit Content</string>
+    <string name="dev_tools_send_custom_state_event">Send Custom State Event</string>
+    <string name="dev_tools_form_hint_type">Type</string>
+    <string name="dev_tools_form_hint_state_key">State Key</string>
+    <string name="dev_tools_form_hint_event_content">Event Content</string>
+    <string name="dev_tools_error_no_content">No content</string>
+    <string name="dev_tools_error_no_message_type">Missing message type</string>
+    <string name="dev_tools_error_malformed_event">Malformed event</string>
+    <string name="dev_tools_success_event">Event sent!</string>
+    <string name="dev_tools_success_state_event">State event sent!</string>
+    <string name="dev_tools_event_content_hint">Event content</string>
 </resources>

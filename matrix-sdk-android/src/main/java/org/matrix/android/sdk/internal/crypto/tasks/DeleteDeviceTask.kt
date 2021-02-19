@@ -47,12 +47,16 @@ internal class DefaultDeleteDeviceTask @Inject constructor(
             }
         } catch (throwable: Throwable) {
             if (params.userInteractiveAuthInterceptor == null
-                    || !handleUIA(throwable, params.userInteractiveAuthInterceptor) { auth ->
-                        execute(params.copy(userAuthParam = auth))
-                    }
+                    || !handleUIA(
+                            failure = throwable,
+                            interceptor = params.userInteractiveAuthInterceptor,
+                            retryBlock = { authUpdate ->
+                                execute(params.copy(userAuthParam = authUpdate))
+                            }
+                    )
             ) {
                 Timber.d("## UIA: propagate failure")
-                throw  throwable
+                throw throwable
             }
         }
     }

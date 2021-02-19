@@ -79,7 +79,7 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
                 }
                 .disposeOnDestroyView()
 
-        views.ssssPassphraseReset.views.itemVerificationClickableZone.debouncedClicks {
+        views.ssssPassphraseReset.views.bottomSheetActionClickableZone.debouncedClicks {
             sharedViewModel.handle(SharedSecureStorageAction.ForgotResetAll)
         }
 
@@ -106,6 +106,6 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
     override fun invalidate() = withState(sharedViewModel) { state ->
         val shouldBeVisible = state.passphraseVisible
         views.ssssPassphraseEnterEdittext.showPassword(shouldBeVisible)
-        views.ssssViewShowPassword.setImageResource(if (shouldBeVisible) R.drawable.ic_eye_closed else R.drawable.ic_eye)
+        views.ssssViewShowPassword.render(shouldBeVisible)
     }
 }

@@ -1161,7 +1161,7 @@
     <string name="notification_new_invitation">Nuovo invito</string>
     <string name="notification_sender_me">Io</string>
     <string name="notification_inline_reply_failed">** Invio fallito - per favore apri la stanza</string>
-    <string name="error_jitsi_not_supported_on_old_device">Purtroppo i vecchi dispositivi (quelli con Android precedenti al 5.0) non supportano le conferenze con Jitsi</string>
+    <string name="error_jitsi_not_supported_on_old_device">Purtroppo i vecchi dispositivi (quelli con Android precedenti al 6.0) non supportano le conferenze con Jitsi</string>
     <string name="title_activity_verify_device">Verifica sessione</string>
     <string name="encryption_information_unknown_ip">IP sconosciuto</string>
     <string name="you_added_a_new_device_with_info">Una nuova sessione sta chiedendo le chiavi crittografiche.
@@ -2376,4 +2376,37 @@
     <string name="room_settings_permissions_title">Autorizzazioni stanza</string>
     <string name="room_participants_leave_private_warning">Questa stanza non è pubblica. Non potrai rientrare senza un invito.</string>
     <string name="system_theme">Predefinito di sistema</string>
+    <string name="authentication_error">Autenticazione fallita</string>
+    <string name="re_authentication_default_confirm_text">Element richiede di reinserire le credenziali per eseguire questa azione.</string>
+    <string name="re_authentication_activity_title">Necessario riautenticarsi</string>
+    <string name="call_transfer_users_tab_title">Utenti</string>
+    <string name="call_transfer_failure">Si è verificato un errore trasferendo la chiamata</string>
+    <string name="call_transfer_title">Trasferisci</string>
+    <string name="call_transfer_connect_action">Connetti</string>
+    <string name="call_transfer_consult_first">Prima consulta</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">1 chiamata attiva (%1$s) · 1 chiamata in pausa</item>
+        <item quantity="other">1 chiamata attiva (%1$s) · %2$d chiamate in pausa</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="one">Chiamata in pausa</item>
+        <item quantity="other">%1$d chiamate in pausa</item>
+    </plurals>
+    <string name="call_only_active">Chiamata attiva (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">Si è verificato un errore cercando il numero di telefono</string>
+    <string name="call_dial_pad_title">Tastierino numerico</string>
+    <string name="call_tile_call_back">Richiama</string>
+    <string name="call_tile_ended">Questa chiamata è terminata</string>
+    <string name="call_tile_other_declined">%1$s ha rifiutato questa chiamata</string>
+    <string name="call_tile_you_declined">Hai rifiutato questa chiamata %1$s</string>
+    <string name="call_tile_in_call">Sei attualmente in questa chiamata</string>
+    <string name="call_tile_other_started_call">%1$s ha iniziato una chiamata</string>
+    <string name="call_tile_you_started_call">Hai iniziato una chiamata</string>
+    <string name="failed_to_initialize_cross_signing">Impostazione della firma incrociata fallita</string>
+    <string name="call_held_by_you">Hai messo la chiamata in attesa</string>
+    <string name="call_held_by_user">%s ha messo la chiamata in attesa</string>
+    <string name="call_hold_action">In attesa</string>
+    <string name="call_resume_action">Riprendi</string>
+    <string name="error_unauthorized">Non autorizzato, credenziali di autenticazione valide mancanti</string>
+    <string name="action_return">Torna</string>
 </resources>

@@ -18,10 +18,7 @@ package org.matrix.android.sdk.internal.auth
 
 import android.net.Uri
 import dagger.Lazy
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -32,8 +29,6 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.util.Cancelable
-import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.auth.data.LoginFlowResponse
@@ -50,11 +45,6 @@ import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.network.httpclient.addSocketFactory
 import org.matrix.android.sdk.internal.network.ssl.UnrecognizedCertificateException
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
-import org.matrix.android.sdk.internal.task.launchToCallback
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import org.matrix.android.sdk.internal.util.toCancelable
 import org.matrix.android.sdk.internal.wellknown.GetWellknownTask
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
@@ -63,14 +53,12 @@ internal class DefaultAuthenticationService @Inject constructor(
         @Unauthenticated
         private val okHttpClient: Lazy<OkHttpClient>,
         private val retrofitFactory: RetrofitFactory,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val sessionParamsStore: SessionParamsStore,
         private val sessionManager: SessionManager,
         private val sessionCreator: SessionCreator,
         private val pendingSessionStore: PendingSessionStore,
         private val getWellknownTask: GetWellknownTask,
-        private val directLoginTask: DirectLoginTask,
-        private val taskExecutor: TaskExecutor
+        private val directLoginTask: DirectLoginTask
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
@@ -89,15 +77,11 @@ internal class DefaultAuthenticationService @Inject constructor(
         }
     }
 
-    override fun getLoginFlowOfSession(sessionId: String, callback: MatrixCallback<LoginFlowResult>): Cancelable {
+    override suspend fun getLoginFlowOfSession(sessionId: String): LoginFlowResult {
         val homeServerConnectionConfig = sessionParamsStore.get(sessionId)?.homeServerConnectionConfig
+                ?: throw IllegalStateException("Session not found")
 
-        return if (homeServerConnectionConfig == null) {
-            callback.onFailure(IllegalStateException("Session not found"))
-            NoOpCancellable
-        } else {
-            getLoginFlow(homeServerConnectionConfig, callback)
-        }
+        return getLoginFlow(homeServerConnectionConfig)
     }
 
     override fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String? {
@@ -146,70 +130,70 @@ internal class DefaultAuthenticationService @Inject constructor(
                 ?.trim { it == '/' }
     }
 
-    override fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig, callback: MatrixCallback<LoginFlowResult>): Cancelable {
+    /**
+     * This is the entry point of the authentication service.
+     * homeServerConnectionConfig contains a homeserver URL probably entered by the user, which can be a
+     * valid homeserver API url, the url of Element Web, or anything else.
+     */
+    override suspend fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
         pendingSessionData = null
 
-        return taskExecutor.executorScope.launch(coroutineDispatchers.main) {
-            pendingSessionStore.delete()
+        pendingSessionStore.delete()
 
-            val result = runCatching {
-                getLoginFlowInternal(homeServerConnectionConfig)
-            }
-            result.fold(
-                    {
-                        if (it is LoginFlowResult.Success) {
-                            // The homeserver exists and up to date, keep the config
-                            // Homeserver url may have been changed, if it was a Riot url
-                            val alteredHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                                    homeServerUri = Uri.parse(it.homeServerUrl)
-                            )
-
-                            pendingSessionData = PendingSessionData(alteredHomeServerConnectionConfig)
-                                    .also { data -> pendingSessionStore.savePendingSessionData(data) }
-                        }
-                        callback.onSuccess(it)
-                    },
-                    {
-                        if (it is UnrecognizedCertificateException) {
-                            callback.onFailure(Failure.UnrecognizedCertificateFailure(homeServerConnectionConfig.homeServerUri.toString(), it.fingerprint))
-                        } else {
-                            callback.onFailure(it)
-                        }
-                    }
-            )
+        val result = runCatching {
+            getLoginFlowInternal(homeServerConnectionConfig)
         }
-                .toCancelable()
+        return result.fold(
+                {
+                    if (it is LoginFlowResult.Success) {
+                        // The homeserver exists and up to date, keep the config
+                        // Homeserver url may have been changed, if it was a Riot url
+                        val alteredHomeServerConnectionConfig = homeServerConnectionConfig.copy(
+                                homeServerUri = Uri.parse(it.homeServerUrl)
+                        )
+
+                        pendingSessionData = PendingSessionData(alteredHomeServerConnectionConfig)
+                                .also { data -> pendingSessionStore.savePendingSessionData(data) }
+                    }
+                    it
+                },
+                {
+                    if (it is UnrecognizedCertificateException) {
+                        throw Failure.UnrecognizedCertificateFailure(homeServerConnectionConfig.homeServerUri.toString(), it.fingerprint)
+                    } else {
+                        throw it
+                    }
+                }
+        )
     }
 
     private suspend fun getLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
-        return withContext(coroutineDispatchers.io) {
-            val authAPI = buildAuthAPI(homeServerConnectionConfig)
+        val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
-            // First check the homeserver version
-            runCatching {
-                executeRequest<Versions>(null) {
-                    apiCall = authAPI.versions()
-                }
+        // First check the homeserver version
+        return runCatching {
+            executeRequest<Versions>(null) {
+                apiCall = authAPI.versions()
             }
-                    .map { versions ->
-                        // Ok, it seems that the homeserver url is valid
-                        getLoginFlowResult(authAPI, versions, homeServerConnectionConfig.homeServerUri.toString())
-                    }
-                    .fold(
-                            {
-                                it
-                            },
-                            {
-                                if (it is Failure.OtherServerError
-                                        && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
-                                    // It's maybe a Riot url?
-                                    getRiotDomainLoginFlowInternal(homeServerConnectionConfig)
-                                } else {
-                                    throw it
-                                }
-                            }
-                    )
         }
+                .map { versions ->
+                    // Ok, it seems that the homeserver url is valid
+                    getLoginFlowResult(authAPI, versions, homeServerConnectionConfig.homeServerUri.toString())
+                }
+                .fold(
+                        {
+                            it
+                        },
+                        {
+                            if (it is Failure.OtherServerError
+                                    && it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                                // It's maybe a Riot url?
+                                getRiotDomainLoginFlowInternal(homeServerConnectionConfig)
+                            } else {
+                                throw it
+                            }
+                        }
+                )
     }
 
     private suspend fun getRiotDomainLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
@@ -338,12 +322,9 @@ internal class DefaultAuthenticationService @Inject constructor(
                 ?: let {
                     pendingSessionData?.homeServerConnectionConfig?.let {
                         DefaultRegistrationWizard(
-                                buildClient(it),
-                                retrofitFactory,
-                                coroutineDispatchers,
+                                buildAuthAPI(it),
                                 sessionCreator,
-                                pendingSessionStore,
-                                taskExecutor.executorScope
+                                pendingSessionStore
                         ).also {
                             currentRegistrationWizard = it
                         }
@@ -359,12 +340,9 @@ internal class DefaultAuthenticationService @Inject constructor(
                 ?: let {
                     pendingSessionData?.homeServerConnectionConfig?.let {
                         DefaultLoginWizard(
-                                buildClient(it),
-                                retrofitFactory,
-                                coroutineDispatchers,
+                                buildAuthAPI(it),
                                 sessionCreator,
-                                pendingSessionStore,
-                                taskExecutor.executorScope
+                                pendingSessionStore
                         ).also {
                             currentLoginWizard = it
                         }
@@ -372,7 +350,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                 }
     }
 
-    override fun cancelPendingLoginOrRegistration() {
+    override suspend fun cancelPendingLoginOrRegistration() {
         currentLoginWizard = null
         currentRegistrationWizard = null
 
@@ -381,61 +359,39 @@ internal class DefaultAuthenticationService @Inject constructor(
         pendingSessionData = pendingSessionData?.homeServerConnectionConfig
                 ?.let { PendingSessionData(it) }
                 .also {
-                    taskExecutor.executorScope.launch(coroutineDispatchers.main) {
-                        if (it == null) {
-                            // Should not happen
-                            pendingSessionStore.delete()
-                        } else {
-                            pendingSessionStore.savePendingSessionData(it)
-                        }
+                    if (it == null) {
+                        // Should not happen
+                        pendingSessionStore.delete()
+                    } else {
+                        pendingSessionStore.savePendingSessionData(it)
                     }
                 }
     }
 
-    override fun reset() {
+    override suspend fun reset() {
         currentLoginWizard = null
         currentRegistrationWizard = null
 
         pendingSessionData = null
 
-        taskExecutor.executorScope.launch(coroutineDispatchers.main) {
-            pendingSessionStore.delete()
-        }
+        pendingSessionStore.delete()
     }
 
-    override fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                      credentials: Credentials,
-                                      callback: MatrixCallback<Session>): Cancelable {
-        return taskExecutor.executorScope.launchToCallback(coroutineDispatchers.main, callback) {
-            createSessionFromSso(credentials, homeServerConnectionConfig)
-        }
+    override suspend fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
+                                              credentials: Credentials): Session {
+        return sessionCreator.createSession(credentials, homeServerConnectionConfig)
     }
 
-    override fun getWellKnownData(matrixId: String,
-                                  homeServerConnectionConfig: HomeServerConnectionConfig?,
-                                  callback: MatrixCallback<WellknownResult>): Cancelable {
-        return getWellknownTask
-                .configureWith(GetWellknownTask.Params(matrixId, homeServerConnectionConfig)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun getWellKnownData(matrixId: String,
+                                          homeServerConnectionConfig: HomeServerConnectionConfig?): WellknownResult {
+        return getWellknownTask.execute(GetWellknownTask.Params(matrixId, homeServerConnectionConfig))
     }
 
-    override fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                      matrixId: String,
-                                      password: String,
-                                      initialDeviceName: String,
-                                      callback: MatrixCallback<Session>): Cancelable {
-        return directLoginTask
-                .configureWith(DirectLoginTask.Params(homeServerConnectionConfig, matrixId, password, initialDeviceName)) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
-    }
-
-    private suspend fun createSessionFromSso(credentials: Credentials,
-                                             homeServerConnectionConfig: HomeServerConnectionConfig): Session = withContext(coroutineDispatchers.computation) {
-        sessionCreator.createSession(credentials, homeServerConnectionConfig)
+    override suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
+                                              matrixId: String,
+                                              password: String,
+                                              initialDeviceName: String): Session {
+        return directLoginTask.execute(DirectLoginTask.Params(homeServerConnectionConfig, matrixId, password, initialDeviceName))
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {

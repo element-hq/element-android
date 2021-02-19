@@ -18,11 +18,11 @@ package im.vector.app.features.crypto.verification
 import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
-import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxStat
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -39,6 +40,7 @@ import javax.inject.Singleton
 @Singleton
 class IncomingVerificationRequestHandler @Inject constructor(
         private val context: Context,
+        private var avatarRenderer: Provider<AvatarRenderer>,
         private val popupAlertManager: PopupAlertManager) : VerificationService.Listener {
 
     private var session: Session? = null
@@ -60,9 +62,8 @@ class IncomingVerificationRequestHandler @Inject constructor(
         when (tx.state) {
             is VerificationTxState.OnStarted       -> {
                 // Add a notification for every incoming request
-                val name = session?.getUser(tx.otherUserId)?.displayName
-                        ?: tx.otherUserId
-
+                val user = session?.getUser(tx.otherUserId)
+                val name = user?.getBestName() ?: tx.otherUserId
                 val alert = VerificationVectorAlert(
                         uid,
                         context.getString(R.string.sas_incoming_request_notif_title),
@@ -77,10 +78,10 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                     }
                                 } ?: true
                             } else true
-                        },
-                        matrixItem = session?.getUser(tx.otherUserId)?.toMatrixItem()
+                        }
                 )
                         .apply {
+                            viewBinder = VerificationVectorAlert.ViewBinder(user?.toMatrixItem(), avatarRenderer.get())
                             contentAction = Runnable {
                                 (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                     it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
@@ -91,13 +92,11 @@ class IncomingVerificationRequestHandler @Inject constructor(
                             }
                             addButton(
                                     context.getString(R.string.ignore),
-                                    Runnable {
-                                        tx.cancel()
-                                    }
+                                    { tx.cancel() }
                             )
                             addButton(
                                     context.getString(R.string.action_open),
-                                    Runnable {
+                                    {
                                         (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                             it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
                                         }
@@ -120,8 +119,8 @@ class IncomingVerificationRequestHandler @Inject constructor(
         Timber.v("## SAS verificationRequestCreated ${pr.transactionId}")
         // For incoming request we should prompt (if not in activity where this request apply)
         if (pr.isIncoming) {
-            val name = session?.getUser(pr.otherUserId)?.displayName
-                    ?: pr.otherUserId
+            val user = session?.getUser(pr.otherUserId)
+            val name = user?.getBestName() ?: pr.otherUserId
 
             val alert = VerificationVectorAlert(
                     uniqueIdForVerificationRequest(pr),
@@ -134,10 +133,10 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 it.roomId != pr.roomId
                             } ?: true
                         } else true
-                    },
-                    matrixItem = session?.getUser(pr.otherUserId)?.toMatrixItem()
+                    }
             )
                     .apply {
+                        viewBinder = VerificationVectorAlert.ViewBinder(user?.toMatrixItem(), avatarRenderer.get())
                         contentAction = Runnable {
                             (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                 val roomId = pr.roomId
@@ -154,7 +153,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                     pr.roomId ?: ""
                             )
                         }
-                        colorInt = ThemeUtils.getColor(context, R.attr.vctr_notice_secondary)
+                        colorAttribute = R.attr.vctr_notice_secondary
                         // 5mn expiration
                         expirationTimestamp = System.currentTimeMillis() + (5 * 60 * 1000L)
                     }

@@ -1176,7 +1176,7 @@
     <string name="room_widget_permission_theme">Seu tema</string>
     <string name="room_widget_permission_widget_id">ID do widget</string>
     <string name="room_widget_permission_room_id">ID da sala</string>
-    <string name="error_jitsi_not_supported_on_old_device">Desculpe, as chamadas em grupo com o Jitsi não são suportadas em aparelhos antigos (com versões do Android anteriores a 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Desculpe, as chamadas em grupo com o Jitsi não são suportadas em aparelhos antigos (com versões do Android anteriores a 6.0)</string>
     <string name="room_widget_resource_permission_title">Este wigdet deseja utilizar os seguintes recursos:</string>
     <string name="room_widget_resource_grant_permission">Permitir</string>
     <string name="room_widget_resource_decline_permission">Bloquear Tudo</string>
@@ -2376,4 +2376,8 @@
     <string name="room_settings_permissions_title">Permissões da sala</string>
     <string name="room_participants_leave_private_warning">Esta sala não é pública. Você não poderá entrar novamente sem um convite.</string>
     <string name="system_theme">Padrão do sistema</string>
+    <string name="authentication_error">Falha ao se autenticar</string>
+    <string name="re_authentication_default_confirm_text">O Element precisa que você insira suas credenciais para executar esta ação.</string>
+    <string name="re_authentication_activity_title">Necessário autenticar-se novamente</string>
+    <string name="error_unauthorized">Não autorizado, sem credenciais de autenticação válidas</string>
 </resources>

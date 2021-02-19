@@ -16,6 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/key_big"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,19 +62,17 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
+        <im.vector.app.core.ui.views.RevealPasswordImageView
             android:id="@+id/keys_backup_view_show_password"
             android:layout_width="@dimen/layout_touch_size"
             android:layout_height="@dimen/layout_touch_size"
             android:layout_marginTop="8dp"
             android:background="?attr/selectableItemBackground"
             android:scaleType="center"
-            android:src="@drawable/ic_eye"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/keys_backup_passphrase_enter_til"
             app:layout_constraintTop_toTopOf="@+id/keys_backup_passphrase_enter_til"
-            app:tint="?colorAccent"
-            tools:ignore="MissingPrefix" />
+            app:tint="?colorAccent" />
 
         <TextView
             android:id="@+id/helperTextWithLink"
