@@ -294,7 +294,7 @@ dependencies {
     def big_image_viewer_version = '1.6.2'
     def glide_version = '4.11.0'
     def moshi_version = '1.11.0'
-    def daggerVersion = '2.31'
+    def daggerVersion = '2.32'
     def autofill_version = "1.0.0"
     def work_version = '2.4.0'
     def arch_version = '2.1.0'
