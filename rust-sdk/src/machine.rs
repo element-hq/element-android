@@ -27,7 +27,7 @@ use matrix_sdk_crypto::{
     IncomingResponse, OlmMachine as InnerMachine, OutgoingRequest, ToDeviceRequest,
 };
 
-use crate::error::{CryptoStoreError, MachineCreationError};
+use crate::error::{CryptoStoreError, DecryptionError, MachineCreationError};
 
 pub struct OlmMachine {
     inner: InnerMachine,
@@ -334,14 +334,17 @@ impl OlmMachine {
             .unwrap();
     }
 
-    pub fn decrypt_room_event(&self, event: &str, room_id: &str) -> DecryptedEvent {
-        let event: SyncMessageEvent<EncryptedEventContent> = serde_json::from_str(event).unwrap();
-        let room_id = RoomId::try_from(room_id).unwrap();
+    pub fn decrypt_room_event(
+        &self,
+        event: &str,
+        room_id: &str,
+    ) -> Result<DecryptedEvent, DecryptionError> {
+        let event: SyncMessageEvent<EncryptedEventContent> = serde_json::from_str(event)?;
+        let room_id = RoomId::try_from(room_id)?;
 
         let decrypted = self
             .runtime
-            .block_on(self.inner.decrypt_room_event(&event, &room_id))
-            .unwrap();
+            .block_on(self.inner.decrypt_room_event(&event, &room_id))?;
 
         let encryption_info = decrypted
             .encryption_info()
@@ -354,20 +357,19 @@ impl OlmMachine {
             "content": content,
         });
 
-        match &encryption_info.algorithm_info {
+        Ok(match &encryption_info.algorithm_info {
             AlgorithmInfo::MegolmV1AesSha2 {
                 curve25519_key,
                 sender_claimed_keys,
                 forwarding_curve25519_key_chain,
             } => DecryptedEvent {
-                clear_event: serde_json::to_string(&clear_event)
-                    .expect("Can't serialize the decrypted json object"),
+                clear_event: serde_json::to_string(&clear_event)?,
                 sender_curve25519_key: curve25519_key.to_owned(),
                 claimed_ed25519_key: sender_claimed_keys
                     .get(&DeviceKeyAlgorithm::Ed25519)
                     .cloned(),
                 forwarding_curve25519_chain: forwarding_curve25519_key_chain.to_owned(),
             },
-        }
+        })
     }
 }

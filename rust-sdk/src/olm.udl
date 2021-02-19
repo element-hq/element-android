@@ -18,6 +18,13 @@ enum CryptoStoreError {
     "OlmError",
 };
 
+[Error]
+enum DecryptionError {
+    "Identifier",
+    "Serialization",
+    "Megolm",
+};
+
 dictionary DeviceLists {
     sequence<string> changed;
     sequence<string> left;
@@ -65,6 +72,7 @@ interface OlmMachine {
                               DeviceLists device_changes,
                               record<DOMString, i32> key_counts);
 
+    [Throws=DecryptionError]
     DecryptedEvent decrypt_room_event([ByRef] string event, [ByRef] string room_id);
 
     record<DOMString, string> identity_keys();
