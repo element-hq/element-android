@@ -168,7 +168,7 @@ dependencies {
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.3'
     //testImplementation 'org.robolectric:shadows-support-v4:3.0'
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281

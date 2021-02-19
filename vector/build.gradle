@@ -452,7 +452,7 @@ dependencies {
     implementation 'im.dlg:android-dialer:1.2.5'
 
     // TESTS
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation "org.amshove.kluent:kluent-android:$kluent_version"
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
