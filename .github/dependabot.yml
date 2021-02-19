@@ -12,9 +12,7 @@ updates:
       interval: "weekly"
   # Updates for Gradle dependencies used in the app
   - package-ecosystem: gradle
-    directory:
-      - "/"
-      - "/vector/"
+    directory: "/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
