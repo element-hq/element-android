@@ -338,7 +338,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.1'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.18'
 
     // rx
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
