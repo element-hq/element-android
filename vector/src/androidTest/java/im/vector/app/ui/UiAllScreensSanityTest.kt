@@ -23,7 +23,6 @@ import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -145,7 +144,7 @@ class UiAllScreensSanityTest {
     }
 
     private fun ignoreVerification() {
-        Thread.sleep(6000)
+        sleep(6000)
         val activity = EspressoHelper.getCurrentActivity()!!
 
         val popup = activity.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)
@@ -155,7 +154,7 @@ class UiAllScreensSanityTest {
 
         assertDisplayed(R.id.bottomSheetFragmentContainer)
 
-        onView(ViewMatchers.isRoot()).perform(SleepViewAction.sleep(2000))
+        onView(isRoot()).perform(SleepViewAction.sleep(2000))
 
         clickOn(R.string.skip)
         assertDisplayed(R.string.are_you_sure)
@@ -206,12 +205,12 @@ class UiAllScreensSanityTest {
         // Test quick reaction
         longClickOnMessage()
         // Add quick reaction
-        clickOn("👍")
+        clickOn("\uD83D\uDC4D️") // 👍
 
         sleep(1000)
 
         // Open reactions
-        longClickOn("👍")
+        longClickOn("\uD83D\uDC4D️") // 👍
         pressBack()
 
         // Test add reaction
@@ -226,6 +225,8 @@ class UiAllScreensSanityTest {
         clickOn(R.string.edit)
         // TODO Cancel action
         writeTo(R.id.composerEditText, "Hello universe!")
+        // Wait a bit for the keyboard layout to update
+        sleep(30)
         clickOn(R.id.sendButton)
         // Open edit history
         longClickOnMessage("Hello universe! (edited)")
