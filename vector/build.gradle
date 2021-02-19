@@ -292,7 +292,7 @@ dependencies {
     def arrow_version = "0.8.2"
     def markwon_version = '4.1.2'
     def big_image_viewer_version = '1.6.2'
-    def glide_version = '4.11.0'
+    def glide_version = '4.12.0'
     def moshi_version = '1.11.0'
     def daggerVersion = '2.31'
     def autofill_version = "1.0.0"
