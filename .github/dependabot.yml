@@ -15,7 +15,7 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 30
+    open-pull-requests-limit: 200
     reviewers:
       - "bmarty"
 ###    ignore:
