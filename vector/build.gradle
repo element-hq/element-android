@@ -346,7 +346,7 @@ dependencies {
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
     // RXBinding
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0'
+    implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.1.0'
     implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.0.0'
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
