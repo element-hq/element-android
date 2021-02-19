@@ -1,0 +1,6 @@
+- Update codebase to Element v1.0.17
+- Minor color improvements
+- Support notification tab with unified overview
+- Treat manually unread chats as notifications in bottom tabs
+- Sending icon: Don't wait for sync, sent is enough to hide it
+- Some crash fixes from Element for the next release
