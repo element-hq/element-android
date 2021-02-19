@@ -145,7 +145,7 @@ dependencies {
 
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
-    kapt 'dk.ilios:realmfieldnameshelper:1.1.1'
+    kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
 
     // Work
     implementation "androidx.work:work-runtime-ktx:$work_version"
