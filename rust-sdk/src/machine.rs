@@ -16,7 +16,9 @@ use matrix_sdk_common::{
         sync::sync_events::{DeviceLists as RumaDeviceLists, ToDevice},
     },
     assign,
-    identifiers::{DeviceKeyAlgorithm, UserId},
+    deserialized_responses::events::{AlgorithmInfo, SyncMessageEvent},
+    events::{room::encrypted::EncryptedEventContent, EventContent},
+    identifiers::{DeviceKeyAlgorithm, RoomId, UserId},
     uuid::Uuid,
     UInt,
 };
@@ -30,6 +32,13 @@ use crate::error::{CryptoStoreError, MachineCreationError};
 pub struct OlmMachine {
     inner: InnerMachine,
     runtime: Runtime,
+}
+
+pub struct DecryptedEvent {
+    pub clear_event: String,
+    pub sender_curve25519_key: String,
+    pub claimed_ed25519_key: Option<String>,
+    pub forwarding_curve25519_chain: Vec<String>,
 }
 
 pub struct DeviceLists {
@@ -323,5 +332,42 @@ impl OlmMachine {
                     .receive_sync_changes(&events, &device_changes, &key_counts),
             )
             .unwrap();
+    }
+
+    pub fn decrypt_room_event(&self, event: &str, room_id: &str) -> DecryptedEvent {
+        let event: SyncMessageEvent<EncryptedEventContent> = serde_json::from_str(event).unwrap();
+        let room_id = RoomId::try_from(room_id).unwrap();
+
+        let decrypted = self
+            .runtime
+            .block_on(self.inner.decrypt_room_event(&event, &room_id))
+            .unwrap();
+
+        let encryption_info = decrypted
+            .encryption_info()
+            .expect("Decrypted event didn't contain any encryption info");
+
+        let content = decrypted.content();
+
+        let clear_event = json!({
+            "type": content.event_type(),
+            "content": content,
+        });
+
+        match &encryption_info.algorithm_info {
+            AlgorithmInfo::MegolmV1AesSha2 {
+                curve25519_key,
+                sender_claimed_keys,
+                forwarding_curve25519_key_chain,
+            } => DecryptedEvent {
+                clear_event: serde_json::to_string(&clear_event)
+                    .expect("Can't serialize the decrypted json object"),
+                sender_curve25519_key: curve25519_key.to_owned(),
+                claimed_ed25519_key: sender_claimed_keys
+                    .get(&DeviceKeyAlgorithm::Ed25519)
+                    .cloned(),
+                forwarding_curve25519_chain: forwarding_curve25519_key_chain.to_owned(),
+            },
+        }
     }
 }

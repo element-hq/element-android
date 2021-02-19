@@ -9,8 +9,6 @@ crate-type = ["cdylib", "lib"]
 name = "matrix_crypto"
 
 [dependencies]
-matrix-sdk-common = { git = "https://github.com/matrix-org/matrix-rust-sdk/"}
-
 serde_json = "1.0.62"
 http = "0.2.3"
 
@@ -22,8 +20,13 @@ tracing-subscriber = "0.2.15"
 version = "0.2.0"
 features = ["lax_deserialize"]
 
+[dependencies.matrix-sdk-common]
+git = "https://github.com/matrix-org/matrix-rust-sdk/"
+branch = "encryption-info"
+
 [dependencies.matrix-sdk-crypto]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
+branch = "encryption-info"
 features = ["sled_cryptostore"]
 
 [dependencies.tokio]
@@ -38,6 +41,3 @@ branch = "tagged-unions"
 
 [build-dependencies]
 uniffi_build = "0.7.0"
-
-[patch.crates-io]
-olm-sys = { git = "https://gitlab.gnome.org/poljar/olm-sys/", branch = "android-cross" }

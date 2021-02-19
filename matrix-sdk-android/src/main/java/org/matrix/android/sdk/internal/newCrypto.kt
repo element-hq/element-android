@@ -19,6 +19,9 @@ package org.matrix.android.sdk.internal
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
@@ -114,5 +117,22 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
             null -> null
             else -> Device(device, inner)
         }
+    }
+
+    suspend fun decryptRoomEvent(event: Event): MXEventDecryptionResult = withContext(Dispatchers.IO) {
+        val adapter = MoshiProvider.providesMoshi().adapter<Event>(Event::class.java)
+        val serializedEvent = adapter.toJson(event)
+
+        val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId!!)
+
+        val deserializationAdapter = MoshiProvider.providesMoshi().adapter<JsonDict>(Map::class.java)
+        val clearEvent = deserializationAdapter.fromJson(decrypted.clearEvent)!!
+
+        MXEventDecryptionResult(
+            clearEvent,
+            decrypted.senderCurve25519Key,
+            decrypted.claimedEd25519Key,
+            decrypted.forwardingCurve25519Chain
+        )
     }
 }
