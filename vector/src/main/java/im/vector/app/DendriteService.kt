@@ -436,7 +436,6 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
 
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
             super.onStartSuccess(settingsInEffect)
-            Toast.makeText(applicationContext, "BLE advertise started", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -497,7 +496,6 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                 if (!enabled) {
                     m.disconnectMulticastPeers()
                 }
-                Toast.makeText(applicationContext, "Toggled enable nearby: $enabled", Toast.LENGTH_SHORT).show()
             }
 
             VectorPreferences.SETTINGS_P2P_ENABLE_STATIC -> {
@@ -508,14 +506,12 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                 } else {
                     m.disconnectNonMulticastPeers()
                 }
-                Toast.makeText(applicationContext, "Toggled enable static: $enabled", Toast.LENGTH_SHORT).show()
             }
 
             VectorPreferences.SETTINGS_P2P_STATIC_URI -> {
                 if (vectorPreferences.p2pEnableStatic()) {
                     val uri = vectorPreferences.p2pStaticURI()
                     m.setStaticPeer(uri)
-                    Toast.makeText(applicationContext, "Updated static peer URI: $uri", Toast.LENGTH_SHORT).show()
                 }
             }
         }
