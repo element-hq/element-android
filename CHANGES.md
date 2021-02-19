@@ -1,3 +1,30 @@
+Changes in Element 1.1.1 (2021-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ -
+
+Test:
+ -
+
+Other changes:
+ -
+
 Changes in Element 1.1.0 (2021-02-19)
 ===================================================
 
@@ -1196,7 +1223,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in Element 1.X.X (2021-XX-XX)
+Changes in Element 1.1.X (2021-XX-XX)
 ===================================================
 
 Features ✨:
