@@ -442,7 +442,7 @@ dependencies {
 
     // QR-code
     // Stick to 3.3.3 because of https://github.com/zxing/zxing/issues/1170
-    implementation 'com.google.zxing:core:3.3.3'
+    implementation 'com.google.zxing:core:3.4.1'
     implementation 'me.dm7.barcodescanner:zxing:1.9.13'
 
     // Emoji Keyboard
