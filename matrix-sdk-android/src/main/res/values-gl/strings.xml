@@ -207,4 +207,8 @@
     <string name="notice_room_server_acl_updated_banned">• Os servidores con %s están agora vetados.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Cambiaches os ACLs do servidor para esta sala.</string>
     <string name="notice_room_server_acl_updated_title">%s cambiou os ACLs do servidor para esta sala.</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s engadiu %2$s como enderezo desta sala.</item>
+        <item quantity="other">%1$s engadiu %2$s como enderezos desta sala.</item>
+    </plurals>
 </resources>
