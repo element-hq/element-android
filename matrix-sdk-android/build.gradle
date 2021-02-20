@@ -113,7 +113,7 @@ dependencies {
     def arch_version = '2.1.0'
     def markwon_version = '3.1.0'
     def daggerVersion = '2.32'
-    def work_version = '2.4.0'
+    def work_version = '2.5.0'
     def retrofit_version = '2.9.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
