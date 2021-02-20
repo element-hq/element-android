@@ -1,6 +1,9 @@
 #!/bin/bash
 
+set -e
+
 mydir="$(dirname "$(realpath "$0")")"
+source "$mydir/merge_helpers.sh"
 
 pushd "$mydir" > /dev/null
 
@@ -26,73 +29,37 @@ find "$mydir/vector/src/main/res" -name strings.xml -exec \
 find "$mydir/vector/src/main/res" -name strings.xml -exec \
     sed -i 's|\("use_other_session_content_description">.*\)SchildiChat\(.*SchildiChat.*</string>\)|\1SchildiChat/Element\2|' '{}' \;
 
+unpatched_strings_file=.tmp_unpatched_strings
+new_patched_strings_file=.tmp_new_patched_strings
+
+patch_file_updated=0
+
 # Requires manual intervention for correct grammar
 for strings_de in "$mydir/vector/src/main/res/values-de/strings.xml" "$mydir/matrix-sdk-android/src/main/res/values-de/strings.xml"; do
-sed -i 's|!nnen|wolpertinger|g' "$strings_de"
-sed -i 's|/innen|wolpertinger|g' "$strings_de"
-sed -i 's|:innen|wolpertinger|g' "$strings_de"
-sed -i 's|*innen|wolpertinger|g' "$strings_de"
-sed -i 's|!n|schlumpfwesen|g' "$strings_de"
-sed -i 's|/in|schlumpfwesen|g' "$strings_de"
-sed -i 's|:in|schlumpfwesen|g' "$strings_de"
-sed -i 's|*in|schlumpfwesen|g' "$strings_de"
-# Automated manual intervention:
-sed -i 's|da der/die Benutzerschlumpfwesen dasselbe Berechtigungslevel wie du erhalten wirst|da der Benutzer dasselbe Berechtigungslevel wie du erhalten wird|g' "$strings_de"
-sed -i 's|des/der anderen Nutzerschlumpfwesen|der anderen Nutzer|g' "$strings_de"
-sed -i 's|Nur du und der/die Empfängerwolpertinger haben die Schlüssel um|Nur du und der/die Empfänger haben die Schlüssel, um|g' "$strings_de"
-sed -i 's|Nur du und der/die Empfängerschlumpfwesen haben|Nur du und der Empfänger haben|g' "$strings_de"
-sed -i 's|kann ein/e Angreiferschlumpfwesen versuchen auf|kann ein Angreifer versuchen, auf|g' "$strings_de"
-sed -i 's|wenn du dem/r Besitzerschlumpfwesen|wenn du dem Besitzer|g' "$strings_de"
-sed -i 's|Nur für Entwicklerwolpertinger|Nur für Entwickler|g' "$strings_de"
-sed -i 's|Verifiziere diese/n Benutzerschlumpfwesen|Verifiziere diesen Benutzer|g' "$strings_de"
-sed -i 's|dass ein/e Benutzerschlumpfwesen vertrauenswürdig ist|dass ein Benutzer vertrauenswürdig ist|g' "$strings_de"
-sed -i 's|"room_member_power_level_users">Nutzerschlumpfwesen<|"room_member_power_level_users">Nutzer<|g' "$strings_de"
-sed -i 's|andere Benutzerwolpertinger sehen|andere Benutzer sehen|g' "$strings_de"
-sed -i 's|Andere Benutzerwolpertinger vertrauen|Andere Benutzer vertrauen|g' "$strings_de"
-sed -i 's|wird den/die Benutzerschlumpfwesen von diesem Raum ausschließen|wird den Benutzer von diesem Raum ausschließen|g' "$strings_de"
-sed -i 's|Um einen erneuten Beitritt zu verhindern, solltest du ihn/sie|Um einen erneuten Beitritt zu verhindern, solltest du ihn|g' "$strings_de"
-sed -i 's|\(Du wirst ohne .* und vertraute\) Nutzerwolpertinger neu starten|\1 Nutzer neu starten|g' "$strings_de"
-sed -i 's|Der Identitätsserver den|Der Identitätsserver, den|g' "$strings_de"
-sed -i 's|aktuelle Sitzung gehört dem/der Benutzerschlumpfwesen%|aktuelle Sitzung gehört %|g' "$strings_de"
-sed -i 's|sind von Benutzerschlumpfwesen|sind von|g' "$strings_de"
-sed -i 's|Vertraue allen Benutzerwolpertinger|Vertraue allen Benutzern|g' "$strings_de"
-sed -i 's|Bis diese/r Benutzerschlumpfwesen \(.*\) werden an und von ihr/ihm|Bis dieser Benutzer \1 werden an und von ihm|g' "$strings_de"
-sed -i 's|gelöscht vom Benutzerschlumpfwesen|gelöscht vom Benutzer|g' "$strings_de"
-sed -i 's|Nutzerschlumpfwesen hinzufügen|Nutzer hinzufügen|g' "$strings_de"
-sed -i 's|von anderen Nutzenden|von anderen Nutzern|g' "$strings_de"
-sed -i 's|Bekannte Nutzerwolpertinger|Bekannte Nutzer|g' "$strings_de"
-sed -i 's|%d Benutzerwolpertinger<|%d Benutzer<|g' "$strings_de"
-sed -i 's|%d Benutzerschlumpfwesen<|%d Benutzer<|g' "$strings_de"
-sed -i 's|Zum/r normalen Benutzerschlumpfwesen herabstufen|Zum normalen Benutzer herabstufen|g' "$strings_de"
-sed -i 's|frage den/die Administratorwolpertinger|frage den Administrator|g' "$strings_de"
-sed -i 's|frage den/die Administratorschlumpfwesen|frage den Administrator|g' "$strings_de"
-sed -i 's|Bitte den/die Administratorwolpertinger|Bitte den Administrator|g' "$strings_de"
-sed -i 's|Bitte den/die Administratorschlumpfwesen|Bitte den Administrator|g' "$strings_de"
-sed -i 's|keine weiteren Inhalte dieses/r Nutzersschlumpfwesen sehen|keine weiteren Inhalte dieses Nutzers sehen|g' "$strings_de"
-sed -i 's|gelöscht von Benutzerschlumpfwesen,|gelöscht vom Benutzer,|g' "$strings_de"
-sed -i 's|Aktivieren Ende-zu-Ende-Verschlüsselung|Ende-zu-Ende-Verschlüsselung aktivieren|g' "$strings_de"
-sed -i 's|Nachrichten dieses/r Nutzersschlumpfwesen|Nachrichten dieses Nutzers|g' "$strings_de"
-sed -i 's|Ausschluss eines/r Nutzersschlumpfwesen|Ausschluss eines Nutzers|g' "$strings_de"
-sed -i 's|Erwähnen eines/r Nutzersschlumpfwesen|Erwähnen eines Nutzers|g' "$strings_de"
-sed -i 's|Nachrichten des/r Nutzersschlumpfwesen|Nachrichten des Nutzers|g' "$strings_de"
-sed -i 's|Nutzerschlumpfwesen \([einladen\|entfernen\|verbannen\|filtern\|ignorieren]\)|Nutzer \1|g' "$strings_de"
-sed -i 's|Nutzerwolpertinger \([einladen\|entfernen\|verbannen\|filtern\|ignorieren]\)|Nutzer \1|g' "$strings_de"
-sed -i 's|>Nutzerwolpertinger<|>Nutzer<|g' "$strings_de"
-sed -i 's|von einem Nutzerschlumpfwesen|von einem Nutzer|g' "$strings_de"
-sed -i 's|von %d Nutzerwolpertinger|von %d Nutzern|g' "$strings_de"
-sed -i 's|ignorierst keine Nutzerwolpertinger|ignorierst keine Nutzer|g' "$strings_de"
-sed -i 's|Prüfe die Nutzerschlumpfwesen,|Prüfe die Nutzer,|g' "$strings_de"
-sed -i 's|Sitzungen von anderen Nutzerwolpertinger|Sitzungen von anderen Nutzern|g' "$strings_de"
-sed -i 's|sodass <b>einige Nutzerwolpertinger sich|sodass <b>einige Nutzer sich|g' "$strings_de"
-sed -i 's|für zukünftige Nutzerwolpertinger|für zukünftige Nutzer|g' "$strings_de"
-sed -i 's|registrierte Nutzerwolpertinger, die|registrierte Nutzer, die|g' "$strings_de"
-sed -i 's|Bestätigung des/r anderen Nutzerschlumpfwesen|Bestätigung des anderen Nutzers|g' "$strings_de"
-echo "Check for unresolved strings in $strings_de..."
-if grep --color "wolpertinger\|schlumpfwesen" "$strings_de"; then
-    echo -e "\033[1;33m""Script outdated, please update manually!""\033[0m"
-    exit 1
-fi
+    echo "Apply known language fixes to $strings_de..."
+    source ./correct_strings_de.sh
+    while grep -q "wolpertinger\|schlumpfwesen" "$strings_de"; do
+        grep "wolpertinger\|schlumpfwesen" "$strings_de" | sed "s|.*>\\(.*\\)<.*|\1|" > "$unpatched_strings_file"
+        echo "Unpatched strings discovered, please shorten detection strings as appropriate:"
+        await_edit "$unpatched_strings_file"
+        cp "$unpatched_strings_file" "$new_patched_strings_file"
+        echo "Now enter the patched strings:"
+        await_edit "$new_patched_strings_file"
+        echo "Rewriting patch file..."
+        while read old_str <&3 && read new_str <&4; do
+            echo "sed -i 's|$old_str|$new_str|g' \"\$strings_de\"" >> ./correct_strings_de.sh
+        done 3<"$unpatched_strings_file" 4<"$new_patched_strings_file"
+        rm "$unpatched_strings_file" "$new_patched_strings_file"
+        echo "Re-applying language fix..."
+        source ./correct_strings_de.sh
+        patch_file_updated=1
+    done
 done
+
+if ((patch_file_updated)); then
+    git add ./correct_strings_de.sh
+    git commit -m "Update string correction"
+fi
 
 # Remove Triple-T stuff to avoid using them in F-Droid
 rm -rf "$mydir/vector/src/main/play/listings"

@@ -85,3 +85,18 @@ restore_sc() {
         mv "$path/$sc_f" "$path/$f"
     fi
 }
+
+await_edit() {
+    local f="$1"
+    shift 1
+    if [ ! -z "$GRAPHICAL_EDITOR" ]; then
+        $GRAPHICAL_EDITOR "$f"
+        read -p "Press enter when done"
+    elif [ ! -z "$VISUAL" ]; then
+        $VISUAL "$f"
+    elif [ ! -z "$EDITOR" ]; then
+        $EDITOR "$f"
+    else
+        read -p "No editor set, please edit $f manually, and press enter when done"
+    fi
+}

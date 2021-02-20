@@ -138,7 +138,9 @@ git_changelog() {
         | grep -v "Automatic color correction" \
         | grep -v "Automatic upstream merge postprocessing" \
         | grep -v "Automatic SchildiChat string correction" \
-        | grep -v 'merge_helpers\|README\|increment_version'
+        | grep -v 'merge_helpers\|README\|increment_version' \
+        | grep -v "\\.sh" \
+        | grep -v "Update string correction"
 }
 
 changelog_dir=fastlane/metadata/android/en-US/changelogs
@@ -163,8 +165,8 @@ else
     git_changelog --reverse > "$changelog_file"
 fi
 if [ "$release_type" != "test" ]; then
-    $EDITOR "$changelog_file" || true
-    read -p "Press enter when changelog is done"
+    echo "Opening changelog for manual revision..."
+    await_edit "$changelog_file" || true
 fi
 
 while [ "$(wc -m "$changelog_file"|sed 's| .*||')" -gt "$max_changelog_len" ]; do
