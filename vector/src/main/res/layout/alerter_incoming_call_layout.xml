@@ -59,7 +59,7 @@
         android:layout_height="40dp"
         android:layout_marginEnd="12dp"
         android:background="@drawable/bg_rounded_button"
-        android:backgroundTint="@color/riotx_accent"
+        android:backgroundTint="?colorAccent"
         android:clickable="true"
         android:contentDescription="@string/call_notification_answer"
         android:focusable="true"
