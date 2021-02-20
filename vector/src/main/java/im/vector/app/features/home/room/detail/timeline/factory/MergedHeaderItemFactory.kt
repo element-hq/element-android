@@ -22,7 +22,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MergedTimelineEventVisibilityStateChangedListener
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
+import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
 import im.vector.app.features.home.room.detail.timeline.helper.canBeMerged
 import im.vector.app.features.home.room.detail.timeline.helper.isRoomConfiguration
 import im.vector.app.features.home.room.detail.timeline.helper.prevSameTypeEvents
@@ -47,7 +47,7 @@ import javax.inject.Inject
 class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                   private val avatarRenderer: AvatarRenderer,
                                                   private val avatarSizeProvider: AvatarSizeProvider,
-                                                  private val roomSummaryHolder: RoomSummaryHolder) {
+                                                  private val roomSummariesHolder: RoomSummariesHolder) {
 
     private val collapsedEventIds = linkedSetOf<Long>()
     private val mergeItemCollapseStates = HashMap<Long, Boolean>()
@@ -77,7 +77,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
         }
     }
 
-    private fun isDirectRoom() = roomSummaryHolder.roomSummary?.isDirect.orFalse()
+    private fun isDirectRoom(roomId: String) = roomSummariesHolder.get(roomId)?.isDirect.orFalse()
 
     private fun buildMembershipEventsMergedSummary(currentPosition: Int,
                                                    items: List<TimelineEvent>,
@@ -102,7 +102,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                         memberName = mergedEvent.senderInfo.disambiguatedDisplayName,
                         localId = mergedEvent.localId,
                         eventId = mergedEvent.root.eventId ?: "",
-                        isDirectRoom = isDirectRoom()
+                        isDirectRoom = isDirectRoom(event.roomId)
                 )
                 mergedData.add(data)
             }
@@ -174,7 +174,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                                 memberName = mergedEvent.senderInfo.disambiguatedDisplayName,
                                 localId = mergedEvent.localId,
                                 eventId = mergedEvent.root.eventId ?: "",
-                                isDirectRoom = isDirectRoom()
+                                isDirectRoom = isDirectRoom(event.roomId)
                         )
                         mergedData.add(data)
                     }
@@ -191,8 +191,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                 collapsedEventIds.removeAll(mergedEventIds)
             }
             val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
-            val powerLevelsHelper = roomSummaryHolder.roomSummary?.roomId
-                    ?.let { activeSessionHolder.getSafeActiveSession()?.getRoom(it) }
+            val powerLevelsHelper = activeSessionHolder.getSafeActiveSession()?.getRoom(event.roomId)
                     ?.let { it.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)?.content?.toModel<PowerLevelsContent>() }
                     ?.let { PowerLevelsHelper(it) }
             val currentUserId = activeSessionHolder.getSafeActiveSession()?.myUserId ?: ""
@@ -209,7 +208,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                     readReceiptsCallback = callback,
                     callback = callback,
                     currentUserId = currentUserId,
-                    roomSummary = roomSummaryHolder.roomSummary,
+                    roomSummary = roomSummariesHolder.get(event.roomId),
                     canChangeAvatar = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_AVATAR) ?: false,
                     canChangeTopic = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_TOPIC) ?: false,
                     canChangeName = powerLevelsHelper?.isUserAllowedToSend(currentUserId, true, EventType.STATE_ROOM_NAME) ?: false

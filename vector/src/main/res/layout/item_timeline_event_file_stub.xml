@@ -8,11 +8,10 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/messageFilee2eIcon"
         android:layout_width="14dp"
         android:layout_height="14dp"
-        android:src="@drawable/ic_shield_black"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

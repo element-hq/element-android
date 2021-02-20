@@ -16,27 +16,29 @@
 
         <ImageView
             android:id="@+id/ringingControlAccept"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/oval_positive"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_rounded_button"
+            android:backgroundTint="@color/riotx_accent"
             android:clickable="true"
             android:contentDescription="@string/call_notification_answer"
             android:focusable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_call"
+            android:padding="12dp"
+            android:src="@drawable/ic_call_answer"
             app:tint="@color/white"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
             android:id="@+id/ringingControlDecline"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/oval_destructive"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_rounded_button"
+            android:backgroundTint="@color/riotx_destructive_accent"
             android:clickable="true"
             android:contentDescription="@string/call_notification_reject"
             android:focusable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_call_end"
+            android:padding="12dp"
+            android:src="@drawable/ic_call_hangup"
             app:tint="@color/white"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
@@ -44,6 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="ringingControlDecline, ringingControlAccept"
+            app:flow_horizontalGap="48dp"
+            app:flow_horizontalStyle="packed"
             tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -54,153 +58,89 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
         android:visibility="gone"
         tools:background="@color/password_strength_bar_low"
         tools:layout_marginTop="120dp"
         tools:visibility="visible">
 
         <ImageView
-            android:id="@+id/iv_leftMiniControl"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/oval_positive"
+            android:id="@+id/openChatIcon"
+            android:layout_width="@dimen/layout_touch_size"
+            android:layout_height="@dimen/layout_touch_size"
+            android:background="@drawable/bg_rounded_button"
             android:clickable="true"
             android:contentDescription="@string/a11y_open_chat"
             android:focusable="true"
-            android:padding="10dp"
-            android:src="@drawable/ic_home_bottom_chat"
-            app:backgroundTint="?attr/riotx_background"
-            app:tint="?attr/riotx_text_primary"
+            android:scaleType="center"
+            android:src="@drawable/ic_call_pip"
+            app:tint="@android:color/white"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
             android:id="@+id/muteIcon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/oval_positive"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_rounded_button"
             android:clickable="true"
+            android:contentDescription="@string/a11y_mute_microphone"
             android:focusable="true"
             android:padding="16dp"
             android:src="@drawable/ic_microphone_off"
             app:backgroundTint="?attr/riotx_background"
             app:tint="?attr/riotx_text_primary"
-            tools:contentDescription="@string/a11y_mute_microphone"
-            tools:ignore="MissingConstraints,MissingPrefix"
-            tools:src="@drawable/ic_microphone_on" />
+            tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
-            android:id="@+id/iv_end_call"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/oval_destructive"
+            android:id="@+id/endCallIcon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_rounded_button"
+            android:backgroundTint="@color/riotx_destructive_accent"
             android:clickable="true"
             android:contentDescription="@string/call_notification_hangup"
             android:focusable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_call_end"
+            android:padding="12dp"
+            android:src="@drawable/ic_call_hangup"
             app:tint="@color/white"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
             android:id="@+id/videoToggleIcon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/oval_positive"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_rounded_button"
             android:clickable="true"
+            android:contentDescription="@string/a11y_stop_camera"
             android:focusable="true"
             android:padding="16dp"
             android:src="@drawable/ic_call_videocam_off_default"
             app:backgroundTint="?attr/riotx_background"
             app:tint="?attr/riotx_text_primary"
-            tools:contentDescription="@string/a11y_stop_camera"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <ImageView
-            android:id="@+id/iv_more"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/oval_positive"
+            android:id="@+id/moreIcon"
+            android:layout_width="@dimen/layout_touch_size"
+            android:layout_height="@dimen/layout_touch_size"
+            android:background="@drawable/bg_rounded_button"
             android:clickable="true"
             android:contentDescription="@string/settings"
             android:focusable="true"
-            android:padding="8dp"
-            android:src="@drawable/ic_more_vertical"
-            app:backgroundTint="?attr/riotx_background"
-            app:tint="?attr/riotx_text_primary"
+            android:scaleType="center"
+            android:src="@drawable/ic_more_horizontal"
+            app:tint="@android:color/white"
             tools:ignore="MissingConstraints,MissingPrefix" />
 
         <androidx.constraintlayout.helper.widget.Flow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="iv_leftMiniControl, muteIcon, iv_end_call,videoToggleIcon,iv_more"
+            app:constraint_referenced_ids="openChatIcon, muteIcon, endCallIcon,videoToggleIcon,moreIcon"
+            app:flow_horizontalGap="16dp"
+            app:flow_horizontalStyle="packed"
             tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_call_speaker"-->
-    <!--        android:layout_width="32dp"-->
-    <!--        android:layout_height="32dp"-->
-    <!--        android:layout_marginStart="32dp"-->
-    <!--        android:clickable="true"-->
-    <!--        android:focusable="true"-->
-    <!--        android:src="@drawable/ic_call_speaker_default"-->
-    <!--        android:tint="?colorPrimary"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_call_flip_camera"-->
-    <!--        android:layout_width="32dp"-->
-    <!--        android:layout_height="32dp"-->
-    <!--        android:layout_marginStart="32dp"-->
-    <!--        android:clickable="true"-->
-    <!--        android:focusable="true"-->
-    <!--        android:src="@drawable/ic_call_flip_camera_default"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_end_call"-->
-    <!--        android:layout_width="64dp"-->
-    <!--        android:layout_height="64dp"-->
-    <!--        android:layout_marginBottom="32dp"-->
-    <!--        android:background="@drawable/oval_destructive"-->
-    <!--        android:clickable="true"-->
-    <!--        android:focusable="true"-->
-    <!--        android:padding="8dp"-->
-    <!--        android:src="@drawable/ic_call_end"-->
-    <!--        android:tint="@color/white"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintBottom_toTopOf="@+id/layout_call_actions"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent" />-->
-
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_call_videocam_off"-->
-    <!--        android:layout_width="32dp"-->
-    <!--        android:layout_height="32dp"-->
-    <!--        android:clickable="true"-->
-    <!--        android:focusable="true"-->
-    <!--        android:src="@drawable/ic_call_videocam_off_default"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/iv_call_mute"-->
-    <!--        android:layout_width="32dp"-->
-    <!--        android:layout_height="32dp"-->
-    <!--        android:layout_marginEnd="32dp"-->
-    <!--        android:clickable="true"-->
-    <!--        android:focusable="true"-->
-    <!--        android:src="@drawable/ic_call_mute_default"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 </merge>

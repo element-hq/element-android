@@ -61,7 +61,6 @@ import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultClaimOneTimeKeysForUsersDevice
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultDeleteDeviceTask
-import org.matrix.android.sdk.internal.crypto.tasks.DefaultDeleteDeviceWithUserPasswordTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultDownloadKeysForUsers
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultEncryptEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultGetDeviceInfoTask
@@ -75,7 +74,6 @@ import org.matrix.android.sdk.internal.crypto.tasks.DefaultUploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultUploadSignaturesTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultUploadSigningKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
-import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.crypto.tasks.EncryptEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
@@ -239,9 +237,6 @@ internal abstract class CryptoModule {
 
     @Binds
     abstract fun bindClaimOneTimeKeysForUsersDeviceTask(task: DefaultClaimOneTimeKeysForUsersDevice): ClaimOneTimeKeysForUsersDeviceTask
-
-    @Binds
-    abstract fun bindDeleteDeviceWithUserPasswordTask(task: DefaultDeleteDeviceWithUserPasswordTask): DeleteDeviceWithUserPasswordTask
 
     @Binds
     abstract fun bindCrossSigningService(service: DefaultCrossSigningService): CrossSigningService

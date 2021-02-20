@@ -28,24 +28,29 @@ data class UserListViewState(
         val knownUsers: Async<PagedList<User>> = Uninitialized,
         val directoryUsers: Async<List<User>> = Uninitialized,
         val filteredMappedContacts: List<MappedContact> = emptyList(),
-        val pendingInvitees: Set<PendingInvitee> = emptySet(),
-        val createAndInviteState: Async<String> = Uninitialized,
+        val pendingSelections: Set<PendingSelection> = emptySet(),
         val searchTerm: String = "",
-        val myUserId: String = "",
-        val existingRoomId: String? = null
+        val singleSelection: Boolean,
+        private val showInviteActions: Boolean,
+        val showContactBookAction: Boolean
 ) : MvRxState {
 
     constructor(args: UserListFragmentArgs) : this(
-            existingRoomId = args.existingRoomId
+            excludedUserIds = args.excludedUserIds,
+            singleSelection = args.singleSelection,
+            showInviteActions = args.showInviteActions,
+            showContactBookAction = args.showContactBookAction
     )
 
     fun getSelectedMatrixId(): List<String> {
-        return pendingInvitees
+        return pendingSelections
                 .mapNotNull {
                     when (it) {
-                        is PendingInvitee.UserPendingInvitee -> it.user.userId
-                        is PendingInvitee.ThreePidPendingInvitee -> null
+                        is PendingSelection.UserPendingSelection     -> it.user.userId
+                        is PendingSelection.ThreePidPendingSelection -> null
                     }
                 }
     }
+
+    fun showInviteActions() = showInviteActions && pendingSelections.isEmpty()
 }

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="keys_backup_settings_delete_backup_button">ബാക്കപ്പ് ഇല്ലാതാക്കൂ</string>
+    <string name="keys_backup_settings_deleting_backup">ബാക്കപ്പ് ഇല്ലാതാക്കുന്നൂ…</string>
+    <string name="keys_backup_settings_delete_confirm_title">ബാക്കപ്പ് ഇല്ലാതാക്കൂ</string>
+    <string name="room_list_quick_actions_settings">ക്രമീകരണങ്ങൾ</string>
+    <string name="room_list_quick_actions_notifications_mentions">സൂചനകൾ മാത്രം</string>
+    <string name="room_list_quick_actions_notifications_all">എല്ലാ സന്ദേശങ്ങളും</string>
+    <string name="notice_member_no_changes_by_you">നിങ്ങൾ മാറ്റങ്ങളൊന്നും വരുത്തിയില്ല</string>
+    <string name="timeline_unread_messages">വായിക്കാത്ത സന്ദേശങ്ങൾ</string>
+    <string name="media_file_added_to_gallery">മീഡിയ ഫയൽ ഗാലറിയിലേക്ക് ചേർത്തു</string>
+    <string name="unencrypted">എൻ‌ക്രിപ്റ്റ് ചെയ്യാത്തത്</string>
+    <string name="default_message_emote_snow">മഞ്ഞ് അയയ്ക്കുന്നു ❄️</string>
+    <string name="crosssigning_verify_session">പ്രവേശനം ഉറപ്പാക്കൂ</string>
+    <string name="error_empty_field_choose_password">ഒരു രഹസ്യവാക്ക് തിരഞ്ഞെടുക്കുക.</string>
+    <string name="error_empty_field_choose_user_name">ഒരു ഉപയോക്തൃനാമം തിരഞ്ഞെടുക്കുക.</string>
+    <string name="add_people">ആളുകളെ ചേർക്കൂ</string>
+    <string name="invite_users_to_room_title">ഉപയോക്താക്കളെ ക്ഷണിക്കുക</string>
+    <string name="invite_friends">സുഹൃത്തുക്കളെ ക്ഷണിക്കുക</string>
+    <string name="user_code_share">എന്റെ കോഡ് പങ്കിടുക</string>
+    <string name="user_code_my_code">എന്റെ കോഡ്</string>
+    <string name="invite_friends_rich_title">🔐️ element-ൽ എന്നോടൊപ്പം ചേരുക</string>
+    <string name="identity_server_set_alternative_submit">സമർപ്പിക്കൂ</string>
+    <string name="a11y_open_chat">ചാറ്റ് തുറക്കുക</string>
+    <string name="a11y_stop_camera">ക്യാമറ നിർത്തുക</string>
+    <string name="room_settings_topic_hint">വിഷയം</string>
+    <string name="room_settings_name_hint">മുറിയുടെ പേര്</string>
+    <string name="room_settings_set_avatar">അവതാർ സജ്ജമാക്കുക</string>
+    <string name="loading_contact_book">നിങ്ങളുടെ കോൺടാക്റ്റുകൾ ലഭ്യമാക്കുന്നൂ…</string>
+    <string name="auth_pin_forgot">പിൻ മറന്നോ\?</string>
+    <string name="auth_pin_title">നിങ്ങളുടെ പിൻ നൽകുക</string>
+    <string name="settings_security_pin_code_notifications_title">ഉള്ളടക്കം അറിയിപ്പുകളിൽ കാണിക്കൂ</string>
+    <string name="settings_security_pin_code_change_pin_title">പിൻ മാറ്റുക</string>
+    <string name="call_tile_ended">ഈ കോൾ അവസാനിച്ചു</string>
+    <string name="call_tile_other_started_call">%1$s ഒരു കോൾ ആരംഭിച്ചൂ</string>
+    <string name="call_tile_you_started_call">നിങ്ങൾ ഒരു കോൾ ആരംഭിച്ചൂ</string>
+    <string name="warning_unsaved_change_discard">മാറ്റങ്ങൾ ഉപേക്ഷിക്കുക</string>
+    <string name="call_tile_call_back">തിരിച്ചു വിളിക്കുക</string>
+    <string name="call_transfer_users_tab_title">ഉപയോക്താക്കൾ</string>
+    <string name="no_result_placeholder">ഫലങ്ങളൊന്നുമില്ല</string>
+    <string name="no_conversation_placeholder">സംഭാഷണങ്ങളൊന്നുമില്ല</string>
+    <string name="direct_chats_header">സംഭാഷണങ്ങൾ</string>
+    <string name="invitations_header">കഷണങ്ങൾ</string>
+    <string name="bottom_action_rooms">മുറികൾ</string>
+    <string name="bottom_action_people">ആളുകൾ</string>
+    <string name="bottom_action_favourites">പ്രിയപ്പെട്ടവ</string>
+    <string name="bottom_action_notification">അറിയിപ്പുകൾ</string>
+    <string name="dialog_title_success">വിജയകരം</string>
+    <string name="dialog_title_warning">മുന്നറിയിപ്പ്</string>
+    <string name="action_add">ചേർക്കുക</string>
+    <string name="action_copy">പകർത്തുക</string>
+    <string name="action_close">അടയ്ക്കുക</string>
+    <string name="action_open">തുറക്കുക</string>
+    <string name="action_mark_room_read">വായിച്ചതായി കാണിക്കൂ</string>
+    <string name="action_historical">ചരിത്രപരമായ</string>
+    <string name="action_mark_all_as_read">എല്ലാം വായിച്ചതായി കാണിക്കൂ</string>
+    <string name="action_video_call">വീഡിയോ കോൾ</string>
+    <string name="action_voice_call">വോയ്സ് കോൾ</string>
+    <string name="actions">പ്രവർത്തനങ്ങൾ</string>
+    <string name="action_exit">പുറത്തുകടക്കുക</string>
+    <string name="ignore">അവഗണിക്കൂ</string>
+    <string name="done">ചെയ്‌തു</string>
+    <string name="skip">ഒഴിവാക്കൂ</string>
+    <string name="offline">ഓഫ്‌ലൈൻ</string>
+    <string name="invite">ക്ഷണിക്കുക</string>
+    <string name="or">അല്ലെങ്കിൽ</string>
+    <string name="device_information">സെഷൻ വിശദാംശങ്ങൾ</string>
+    <string name="audio_meeting">ഓഡിയോ മീറ്റിംഗ് ആരംഭിക്കുക</string>
+    <string name="video_meeting">വീഡിയോ മീറ്റിംഗ് ആരംഭിക്കുക</string>
+    <string name="conference_call_in_progress">ഒരു കോൺഫറൻസ് ഇതിനകം പുരോഗമിക്കുന്നു!</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">ഒരു കോൺഫറൻസ് കോൾ ആരംഭിക്കാൻ നിങ്ങൾക്ക് അനുവാദമില്ല</string>
+    <string name="cannot_start_call">കോൾ ആരംഭിക്കാൻ കഴിയില്ല, ദയവായി പിന്നീട് ശ്രമിക്കുക</string>
+    <string name="ongoing_conference_call_video">വീഡിയോ</string>
+    <string name="start_chatting">ചാറ്റിംഗ് ആരംഭിക്കുക</string>
+    <string name="delete">ഇല്ലാതാക്കൂ</string>
+    <string name="clear">മായ്ക്കുക</string>
+    <string name="download">ഡൌൺലോഡ് ചെയ്യൂ</string>
+    <string name="share">പങ്കിടുക</string>
+    <string name="resend">വീണ്ടും അയയ്ക്കൂ</string>
+    <string name="send">അയയ്ക്കൂ</string>
+    <string name="save">സംരക്ഷിക്കൂ</string>
+    <string name="cancel">റദ്ദാക്കൂ</string>
+    <string name="ok">ശരി</string>
+    <string name="loading">ലഭ്യമാക്കുന്നു…</string>
+    <string name="are_you_sure">നിങ്ങൾക്കു ഉറപ്പാണോ\?</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">എന്റെ എൻക്രിപ്റ്റ് ചെയ്ത സന്ദേശങ്ങളൊന്നും എനിക്ക് വേണ്ട</string>
+    <string name="title_activity_verify_device">സെഷൻ ഉറപ്പാക്കൂ</string>
+    <string name="title_activity_choose_sticker">ഒരു സ്റ്റിക്കർ അയയ്‌ക്കുക</string>
+    <string name="title_activity_group_details">കമ്മ്യൂണിറ്റി വിശദാംശങ്ങൾ</string>
+    <string name="title_activity_historical">ചരിത്രപരമായ</string>
+    <string name="title_activity_settings">ക്രമീകരണങ്ങൾ</string>
+    <string name="title_activity_room">മുറി</string>
+    <string name="title_activity_home">സന്ദേശങ്ങൾ</string>
+    <string name="notification_silent_notifications">നിശബ്‌ദ അറിയിപ്പുകൾ</string>
+    <string name="notification_sync_in_progress">സമന്വയിപ്പിക്കുന്നു</string>
+</resources>

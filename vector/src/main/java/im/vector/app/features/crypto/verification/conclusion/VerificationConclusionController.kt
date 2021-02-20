@@ -25,6 +25,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationA
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.html.EventHtmlRenderer
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class VerificationConclusionController @Inject constructor(
@@ -56,7 +57,7 @@ class VerificationConclusionController @Inject constructor(
 
                 bottomSheetVerificationBigImageItem {
                     id("image")
-                    imageRes(R.drawable.ic_shield_trusted)
+                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Trusted)
                 }
 
                 bottomDone()
@@ -69,7 +70,7 @@ class VerificationConclusionController @Inject constructor(
 
                 bottomSheetVerificationBigImageItem {
                     id("image")
-                    imageRes(R.drawable.ic_shield_warning)
+                    roomEncryptionTrustLevel(RoomEncryptionTrustLevel.Warning)
                 }
 
                 bottomSheetVerificationNoticeItem {

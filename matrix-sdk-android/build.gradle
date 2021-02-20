@@ -168,12 +168,6 @@ dependencies {
     // Phone number https://github.com/google/libphonenumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.10.23'
 
-    // Web RTC
-    // org.webrtc:google-webrtc is for development purposes only. See http://webrtc.github.io/webrtc-org/native-code/android/
-    // implementation 'org.webrtc:google-webrtc:1.0.+'
-    // Use the same WebRTC library than the one used by Jitsi library
-    implementation('com.facebook.react:react-native-webrtc:1.84.0-jitsi-5112273@aar')
-
     testImplementation 'junit:junit:4.13'
     testImplementation 'org.robolectric:robolectric:4.3'
     //testImplementation 'org.robolectric:shadows-support-v4:3.0'

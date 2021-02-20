@@ -1103,7 +1103,7 @@
     <string name="notification_new_invitation">Nouvelle invitation</string>
     <string name="notification_sender_me">Moi</string>
     <string name="notification_inline_reply_failed">** Échec de l’envoi − veuillez ouvrir le salon</string>
-    <string name="error_jitsi_not_supported_on_old_device">Désolé, les appels en visioconférence avec Jitsi ne sont pas pris en charge sur les vieux appareils (avec une version d\'Android antérieure à 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Désolé, les appels en visioconférence avec Jitsi ne sont pas pris en charge sur les vieux appareils (avec une version d\'Android antérieure à 6.0)</string>
     <string name="title_activity_verify_device">Vérifier la session</string>
     <string name="encryption_information_unknown_ip">adresse IP inconnue</string>
     <string name="you_added_a_new_device_with_info">Une nouvelle session demande les clés de chiffrement.

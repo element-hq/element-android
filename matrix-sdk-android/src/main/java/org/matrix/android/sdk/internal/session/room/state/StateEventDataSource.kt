@@ -80,7 +80,11 @@ internal class StateEventDataSource @Inject constructor(@SessionDatabase private
     ): RealmQuery<CurrentStateEventEntity> {
         return realm.where<CurrentStateEventEntity>()
                 .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
-                .`in`(CurrentStateEventEntityFields.TYPE, eventTypes.toTypedArray())
+                .apply {
+                    if (eventTypes.isNotEmpty()) {
+                        `in`(CurrentStateEventEntityFields.TYPE, eventTypes.toTypedArray())
+                    }
+                }
                 .process(CurrentStateEventEntityFields.STATE_KEY, stateKey)
     }
 }

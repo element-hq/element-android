@@ -38,7 +38,7 @@ import im.vector.app.features.themes.BubbleThemeUtils
 /**
  * Children must override getViewType()
  */
-abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>() {
+abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>(), ItemWithEvents {
 
     // To use for instance when opening a permalink with an eventId
     @EpoxyAttribute
@@ -64,12 +64,6 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
 
         updateMessageBubble(holder)
     }
-
-    /**
-     * Returns the eventIds associated with the EventItem.
-     * Will generally get only one, but it handles the merging items.
-     */
-    abstract fun getEventIds(): List<String>
 
     abstract class BaseHolder(@IdRes val stubId: Int) : VectorEpoxyHolder() {
         val leftGuideline by bind<View>(R.id.messageStartGuideline)

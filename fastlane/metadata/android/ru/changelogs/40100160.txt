@@ -1,0 +1,2 @@
+Основные изменения в этой версии: Поддержка входа в социальные сети.
+Полный список изменений: https://github.com/vector-im/element-android/releases/tag/v1.0.15 and https://github.com/vector-im/element-android/releases/tag/v1.0.16

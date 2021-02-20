@@ -39,7 +39,7 @@ abstract class UploadsVideoItem : VectorEpoxyModel<UploadsVideoItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.setOnClickListener(
-                DebouncedClickListener(View.OnClickListener { _ ->
+                DebouncedClickListener({
                     listener?.onItemClicked(holder.imageView, data)
                 })
         )

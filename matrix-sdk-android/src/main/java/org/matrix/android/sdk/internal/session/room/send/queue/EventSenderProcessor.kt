@@ -196,6 +196,7 @@ internal class EventSenderProcessor @Inject constructor(
                                 else                                                                                       -> {
                                     Timber.v("## SendThread retryLoop Un-Retryable error, try next task")
                                     // this task is in error, check next one?
+                                    task.onTaskFailed()
                                     break@retryLoop
                                 }
                             }

@@ -48,6 +48,7 @@ abstract class BreadcrumbsItem : VectorEpoxyModel<BreadcrumbsItem.Holder>() {
         holder.rootView.setOnClickListener(itemClickListener)
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         avatarRenderer.render(matrixItem, holder.avatarImageView)
+        holder.avatarImageView.contentDescription = matrixItem.getBestName()
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted, unreadMessages, markedUnread))
         holder.draftIndentIndicator.isVisible = hasDraft
         holder.typingIndicator.isVisible = hasTypingUsers

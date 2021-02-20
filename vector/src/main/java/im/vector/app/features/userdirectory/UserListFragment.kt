@@ -68,18 +68,22 @@ class UserListFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)
-        views.userListTitle.text = args.title
-        vectorBaseActivity.setSupportActionBar(views.userListToolbar)
-
+        if (args.showToolbar) {
+            views.userListTitle.text = args.title
+            vectorBaseActivity.setSupportActionBar(views.userListToolbar)
+            setupCloseView()
+            views.userListToolbar.isVisible = true
+        } else {
+            views.userListToolbar.isVisible = false
+        }
         setupRecyclerView()
         setupSearchView()
-        setupCloseView()
 
         homeServerCapabilitiesViewModel.subscribe {
             views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
         }
 
-        viewModel.selectSubscribe(this, UserListViewState::pendingInvitees) {
+        viewModel.selectSubscribe(this, UserListViewState::pendingSelections) {
             renderSelectedUsers(it)
         }
 
@@ -106,7 +110,7 @@ class UserListFragment @Inject constructor(
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(viewModel) {
-            val showMenuItem = it.pendingInvitees.isNotEmpty()
+            val showMenuItem = it.pendingSelections.isNotEmpty()
             menu.forEach { menuItem ->
                 menuItem.isVisible = showMenuItem
             }
@@ -115,7 +119,7 @@ class UserListFragment @Inject constructor(
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) {
-        sharedActionViewModel.post(UserListSharedAction.OnMenuItemSelected(item.itemId, it.pendingInvitees))
+        sharedActionViewModel.post(UserListSharedAction.OnMenuItemSelected(item.itemId, it.pendingSelections))
         return@withState true
     }
 
@@ -157,14 +161,14 @@ class UserListFragment @Inject constructor(
         userListController.setData(it)
     }
 
-    private fun renderSelectedUsers(invitees: Set<PendingInvitee>) {
+    private fun renderSelectedUsers(selections: Set<PendingSelection>) {
         invalidateOptionsMenu()
 
         val currentNumberOfChips = views.chipGroup.childCount
-        val newNumberOfChips = invitees.size
+        val newNumberOfChips = selections.size
 
         views.chipGroup.removeAllViews()
-        invitees.forEach { addChipToGroup(it) }
+        selections.forEach { addChipToGroup(it) }
 
         // Scroll to the bottom when adding chips. When removing chips, do not scroll
         if (newNumberOfChips >= currentNumberOfChips) {
@@ -174,19 +178,21 @@ class UserListFragment @Inject constructor(
         }
     }
 
-    private fun addChipToGroup(pendingInvitee: PendingInvitee) {
+    private fun addChipToGroup(pendingSelection: PendingSelection) {
         val chip = Chip(requireContext())
         chip.setChipBackgroundColorResource(android.R.color.transparent)
         chip.chipStrokeWidth = dimensionConverter.dpToPx(1).toFloat()
-        chip.text = pendingInvitee.getBestName()
+        chip.text = pendingSelection.getBestName()
         chip.isClickable = true
         chip.isCheckable = false
         chip.isCloseIconVisible = true
         views.chipGroup.addView(chip)
         chip.setOnCloseIconClickListener {
-            viewModel.handle(UserListAction.RemovePendingInvitee(pendingInvitee))
+            viewModel.handle(UserListAction.RemovePendingSelection(pendingSelection))
         }
     }
+
+    fun getCurrentState() = withState(viewModel) { it }
 
     override fun onInviteFriendClick() {
         viewModel.handle(UserListAction.ComputeMatrixToLinkForSharing)
@@ -198,17 +204,17 @@ class UserListFragment @Inject constructor(
 
     override fun onItemClick(user: User) {
         view?.hideKeyboard()
-        viewModel.handle(UserListAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(user)))
+        viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.UserPendingSelection(user)))
     }
 
     override fun onMatrixIdClick(matrixId: String) {
         view?.hideKeyboard()
-        viewModel.handle(UserListAction.SelectPendingInvitee(PendingInvitee.UserPendingInvitee(User(matrixId))))
+        viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.UserPendingSelection(User(matrixId))))
     }
 
     override fun onThreePidClick(threePid: ThreePid) {
         view?.hideKeyboard()
-        viewModel.handle(UserListAction.SelectPendingInvitee(PendingInvitee.ThreePidPendingInvitee(threePid)))
+        viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(threePid)))
     }
 
     override fun onUseQRCode() {

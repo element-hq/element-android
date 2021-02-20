@@ -379,7 +379,7 @@ class BugReporter @Inject constructor(
                     if (responseCode != HttpURLConnection.HTTP_OK) {
                         if (null != errorMessage) {
                             serverError = "Failed with error $errorMessage"
-                        } else if (null == response || null == response.body) {
+                        } else if (response?.body == null) {
                             serverError = "Failed with error $responseCode"
                         } else {
                             try {

@@ -1101,7 +1101,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="notification_new_invitation">Új meghívók</string>
     <string name="notification_sender_me">Én</string>
     <string name="notification_inline_reply_failed">** A küldés nem sikerült - kérlek nyisd meg a szobát</string>
-    <string name="error_jitsi_not_supported_on_old_device">Elnézést, Jitsi konferencia hívások a régi eszközökön (Android OS 5.0-nál régebbi) nem támogatottak</string>
+    <string name="error_jitsi_not_supported_on_old_device">Elnézést, Jitsi konferencia hívások a régi eszközökön (Android OS 6.0-nál régebbi) nem támogatottak</string>
     <string name="title_activity_verify_device">Munkamenet ellenőrzése</string>
     <string name="encryption_information_unknown_ip">ismeretlen ip</string>
     <string name="you_added_a_new_device_with_info">Új munkamenet kér titkosítási kulcsokat. 

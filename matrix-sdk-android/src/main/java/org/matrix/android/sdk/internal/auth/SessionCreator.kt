@@ -20,6 +20,7 @@ import android.net.Uri
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.SessionManager
 import timber.log.Timber
@@ -32,7 +33,8 @@ internal interface SessionCreator {
 internal class DefaultSessionCreator @Inject constructor(
         private val sessionParamsStore: SessionParamsStore,
         private val sessionManager: SessionManager,
-        private val pendingSessionStore: PendingSessionStore
+        private val pendingSessionStore: PendingSessionStore,
+        private val isValidClientServerApiTask: IsValidClientServerApiTask
 ) : SessionCreator {
 
     /**
@@ -43,16 +45,28 @@ internal class DefaultSessionCreator @Inject constructor(
         // We can cleanup the pending session params
         pendingSessionStore.delete()
 
+        val overriddenUrl = credentials.discoveryInformation?.homeServer?.baseURL
+                // remove trailing "/"
+                ?.trim { it == '/' }
+                ?.takeIf { it.isNotBlank() }
+                ?.also { Timber.d("Overriding homeserver url to $it (will check if valid)") }
+                ?.let { Uri.parse(it) }
+                ?.takeIf {
+                    // Validate the URL, if the configuration is wrong server side, do not override
+                    tryOrNull {
+                        isValidClientServerApiTask.execute(
+                                IsValidClientServerApiTask.Params(
+                                        homeServerConnectionConfig.copy(homeServerUri = it)
+                                )
+                        )
+                                .also { Timber.d("Overriding homeserver url: $it") }
+                    } ?: true // In case of other error (no network, etc.), consider it is valid...
+                }
+
         val sessionParams = SessionParams(
                 credentials = credentials,
                 homeServerConnectionConfig = homeServerConnectionConfig.copy(
-                        homeServerUri = credentials.discoveryInformation?.homeServer?.baseURL
-                                // remove trailing "/"
-                                ?.trim { it == '/' }
-                                ?.takeIf { it.isNotBlank() }
-                                ?.also { Timber.d("Overriding homeserver url to $it") }
-                                ?.let { Uri.parse(it) }
-                                ?: homeServerConnectionConfig.homeServerUri,
+                        homeServerUri = overriddenUrl ?: homeServerConnectionConfig.homeServerUri,
                         identityServerUri = credentials.discoveryInformation?.identityServer?.baseURL
                                 // remove trailing "/"
                                 ?.trim { it == '/' }

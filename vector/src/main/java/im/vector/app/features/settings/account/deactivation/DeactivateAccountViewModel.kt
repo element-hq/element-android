@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 data class DeactivateAccountViewState(
         val passwordShown: Boolean = false
@@ -64,7 +65,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
                 if (pendingAuth != null) {
                     uiaContinuation?.resume(pendingAuth!!)
                 } else {
-                    uiaContinuation?.resumeWith(Result.failure((IllegalArgumentException())))
+                    uiaContinuation?.resumeWithException(IllegalArgumentException())
                 }
             }
             is DeactivateAccountAction.PasswordAuthDone -> {
@@ -79,7 +80,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
             }
             DeactivateAccountAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
-                uiaContinuation?.resumeWith(Result.failure((Exception())))
+                uiaContinuation?.resumeWithException(Exception())
                 uiaContinuation = null
                 pendingAuth = null
             }
@@ -98,13 +99,15 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
         viewModelScope.launch {
             val event = try {
                 session.deactivateAccount(
+                        action.eraseAllData,
                         object : UserInteractiveAuthInterceptor {
                             override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                                 _viewEvents.post(DeactivateAccountViewEvents.RequestReAuth(flowResponse, errCode))
                                 pendingAuth = DefaultBaseAuth(session = flowResponse.session)
                                 uiaContinuation = promise
                             }
-                        }, action.eraseAllData)
+                        }
+                )
                 DeactivateAccountViewEvents.Done
             } catch (failure: Exception) {
                 if (failure.isInvalidUIAAuth()) {

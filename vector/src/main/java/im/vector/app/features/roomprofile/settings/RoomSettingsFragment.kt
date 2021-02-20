@@ -41,7 +41,6 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
-import im.vector.app.features.roomprofile.RoomProfileSharedAction
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilitySharedActionViewModel
 import im.vector.app.features.roomprofile.settings.historyvisibility.RoomHistoryVisibilityBottomSheet
@@ -174,14 +173,6 @@ class RoomSettingsFragment @Inject constructor(
                 .show(childFragmentManager, "RoomHistoryVisibilityBottomSheet")
     }
 
-    override fun onRoomAliasesClicked() {
-        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
-    }
-
-    override fun onRoomPermissionsClicked() {
-        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPermissionsSettings)
-    }
-
     override fun onJoinRuleClicked()  = withState(viewModel) { state ->
         val currentJoinRule = state.newRoomJoinRules.newJoinRules ?: state.currentRoomJoinRules
         val currentGuestAccess = state.newRoomJoinRules.newGuestAccess ?: state.currentGuestAccess
@@ -208,7 +199,6 @@ class RoomSettingsFragment @Inject constructor(
                 }
                 RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
                     /* Should not happen */
-                    Unit
                 }
                 is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {
                     // Cancel the update of the avatar

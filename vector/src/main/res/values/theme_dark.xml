@@ -37,7 +37,7 @@
         <item name="riotx_room_active_widgets_banner_text">@color/riotx_room_active_widgets_banner_text_dark</item>
         <item name="riotx_reaction_background_off">@color/riotx_reaction_background_off_dark</item>
         <item name="riotx_reaction_background_on">@color/riotx_reaction_background_on_dark</item>
-
+        <item name="riotx_alerter_background">@color/riotx_alerter_background_dark</item>
         <item name="riotx_bottom_nav_icon_color">@color/riotx_bottom_nav_icon_color_dark</item>
 
         <item name="riotx_keys_backup_banner_accent_color">@color/riotx_keys_backup_banner_accent_color_dark</item>

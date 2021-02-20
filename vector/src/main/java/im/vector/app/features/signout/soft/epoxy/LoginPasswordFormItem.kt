@@ -19,7 +19,6 @@ package im.vector.app.features.signout.soft.epoxy
 import android.os.Build
 import android.text.Editable
 import android.widget.Button
-import android.widget.ImageView
 import androidx.autofill.HintConstants
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -31,6 +30,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.views.RevealPasswordImageView
 
 @EpoxyModelClass(layout = R.layout.item_login_password_form)
 abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Holder>() {
@@ -76,20 +76,13 @@ abstract class LoginPasswordFormItem : VectorEpoxyModel<LoginPasswordFormItem.Ho
 
     private fun renderPasswordField(holder: Holder) {
         holder.passwordField.showPassword(passwordShown)
-
-        if (passwordShown) {
-            holder.passwordReveal.setImageResource(R.drawable.ic_eye_closed)
-            holder.passwordReveal.contentDescription = stringProvider.getString(R.string.a11y_hide_password)
-        } else {
-            holder.passwordReveal.setImageResource(R.drawable.ic_eye)
-            holder.passwordReveal.contentDescription = stringProvider.getString(R.string.a11y_show_password)
-        }
+        holder.passwordReveal.render(passwordShown)
     }
 
     class Holder : VectorEpoxyHolder() {
         val passwordField by bind<TextInputEditText>(R.id.itemLoginPasswordFormPasswordField)
         val passwordFieldTil by bind<TextInputLayout>(R.id.itemLoginPasswordFormPasswordFieldTil)
-        val passwordReveal by bind<ImageView>(R.id.itemLoginPasswordFormPasswordReveal)
+        val passwordReveal by bind<RevealPasswordImageView>(R.id.itemLoginPasswordFormPasswordReveal)
         val forgetPassword by bind<Button>(R.id.itemLoginPasswordFormForgetPasswordButton)
         val submit by bind<Button>(R.id.itemLoginPasswordFormSubmit)
     }

@@ -258,4 +258,10 @@
         <item quantity="other">%1$s lisas sellele jututoale täiendavad aadressid %2$s.</item>
     </plurals>
     <string name="notice_room_canonical_alias_no_change_by_you">Sa muutsid selle jututoa aadresse.</string>
+    <string name="notice_widget_jitsi_modified_by_you">Sina muutsid videokoosolekut</string>
+    <string name="notice_widget_jitsi_removed_by_you">Sina lõpetasid videokoosoleku</string>
+    <string name="notice_widget_jitsi_removed">%1$s lõpetas videokoosoleku</string>
+    <string name="notice_widget_jitsi_added_by_you">Sina algatasid videokoosoleku</string>
+    <string name="notice_widget_jitsi_added">%1$s algatas videokoosoleku</string>
+    <string name="notice_widget_jitsi_modified">%1$s muutis videokoosolekut</string>
 </resources>

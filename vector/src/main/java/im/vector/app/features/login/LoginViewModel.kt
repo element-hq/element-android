@@ -19,6 +19,7 @@ package im.vector.app.features.login
 import android.content.Context
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -27,8 +28,8 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.configureAndStart
@@ -37,7 +38,8 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.signout.soft.SoftLogoutActivity
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -51,7 +53,6 @@ import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.util.Cancelable
 import timber.log.Timber
 import java.util.concurrent.CancellationException
 
@@ -117,7 +118,12 @@ class LoginViewModel @AssistedInject constructor(
 
     private var loginConfig: LoginConfig? = null
 
-    private var currentTask: Cancelable? = null
+    private var currentJob: Job? = null
+        set(value) {
+            // Cancel any previous Job
+            field?.cancel()
+            field = value
+        }
 
     override fun handle(action: LoginAction) {
         when (action) {
@@ -140,7 +146,7 @@ class LoginViewModel @AssistedInject constructor(
     }
 
     private fun handleUserAcceptCertificate(action: LoginAction.UserAcceptCertificate) {
-        // It happen when we get the login flow, or during direct authentication.
+        // It happens when we get the login flow, or during direct authentication.
         // So alter the homeserver config and retrieve again the login flow
         when (val finalLastAction = lastAction) {
             is LoginAction.UpdateHomeServer -> {
@@ -186,22 +192,20 @@ class LoginViewModel @AssistedInject constructor(
                 )
             }
 
-            currentTask = safeLoginWizard.loginWithToken(
-                    action.loginToken,
-                    object : MatrixCallback<Session> {
-                        override fun onSuccess(data: Session) {
-                            onSessionCreated(data)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            _viewEvents.post(LoginViewEvents.Failure(failure))
-                            setState {
-                                copy(
-                                        asyncLoginAction = Fail(failure)
-                                )
-                            }
-                        }
-                    })
+            currentJob = viewModelScope.launch {
+                try {
+                    safeLoginWizard.loginWithToken(action.loginToken)
+                } catch (failure: Throwable) {
+                    _viewEvents.post(LoginViewEvents.Failure(failure))
+                    setState {
+                        copy(
+                                asyncLoginAction = Fail(failure)
+                        )
+                    }
+                    null
+                }
+                        ?.let { onSessionCreated(it) }
+            }
         }
     }
 
@@ -231,46 +235,49 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun handleCheckIfEmailHasBeenValidated(action: LoginAction.CheckIfEmailHasBeenValidated) {
         // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
-        currentTask?.cancel()
-        currentTask = registrationWizard?.checkIfEmailHasBeenValidated(action.delayMillis, registrationCallback)
+        currentJob = executeRegistrationStep(withLoading = false) {
+            it.checkIfEmailHasBeenValidated(action.delayMillis)
+        }
     }
 
     private fun handleStopEmailValidationCheck() {
-        currentTask?.cancel()
-        currentTask = null
+        currentJob = null
     }
 
     private fun handleValidateThreePid(action: LoginAction.ValidateThreePid) {
-        setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.handleValidateThreePid(action.code, registrationCallback)
+        currentJob = executeRegistrationStep {
+            it.handleValidateThreePid(action.code)
+        }
     }
 
-    private val registrationCallback = object : MatrixCallback<RegistrationResult> {
-        override fun onSuccess(data: RegistrationResult) {
-            /*
-              // Simulate registration disabled
-              onFailure(Failure.ServerError(MatrixError(
-                      code = MatrixError.FORBIDDEN,
-                      message = "Registration is disabled"
-              ), 403))
-            */
-
-            setState {
-                copy(
-                        asyncRegistration = Uninitialized
-                )
-            }
-
-            when (data) {
-                is RegistrationResult.Success      -> onSessionCreated(data.session)
-                is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
-            }
+    private fun executeRegistrationStep(withLoading: Boolean = true,
+                                        block: suspend (RegistrationWizard) -> RegistrationResult): Job {
+        if (withLoading) {
+            setState { copy(asyncRegistration = Loading()) }
         }
-
-        override fun onFailure(failure: Throwable) {
-            if (failure !is CancellationException) {
-                _viewEvents.post(LoginViewEvents.Failure(failure))
+        return viewModelScope.launch {
+            try {
+                registrationWizard?.let { block(it) }
+                /*
+                   // Simulate registration disabled
+                   throw Failure.ServerError(MatrixError(
+                           code = MatrixError.FORBIDDEN,
+                           message = "Registration is disabled"
+                   ), 403))
+                */
+            } catch (failure: Throwable) {
+                if (failure !is CancellationException) {
+                    _viewEvents.post(LoginViewEvents.Failure(failure))
+                }
+                null
             }
+                    ?.let { data ->
+                        when (data) {
+                            is RegistrationResult.Success      -> onSessionCreated(data.session)
+                            is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
+                        }
+                    }
+
             setState {
                 copy(
                         asyncRegistration = Uninitialized
@@ -281,78 +288,68 @@ class LoginViewModel @AssistedInject constructor(
 
     private fun handleAddThreePid(action: LoginAction.AddThreePid) {
         setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.addThreePid(action.threePid, object : MatrixCallback<RegistrationResult> {
-            override fun onSuccess(data: RegistrationResult) {
-                setState {
-                    copy(
-                            asyncRegistration = Uninitialized
-                    )
-                }
-            }
-
-            override fun onFailure(failure: Throwable) {
+        currentJob = viewModelScope.launch {
+            try {
+                registrationWizard?.addThreePid(action.threePid)
+            } catch (failure: Throwable) {
                 _viewEvents.post(LoginViewEvents.Failure(failure))
-                setState {
-                    copy(
-                            asyncRegistration = Uninitialized
-                    )
-                }
             }
-        })
+            setState {
+                copy(
+                        asyncRegistration = Uninitialized
+                )
+            }
+        }
     }
 
     private fun handleSendAgainThreePid() {
         setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.sendAgainThreePid(object : MatrixCallback<RegistrationResult> {
-            override fun onSuccess(data: RegistrationResult) {
-                setState {
-                    copy(
-                            asyncRegistration = Uninitialized
-                    )
-                }
-            }
-
-            override fun onFailure(failure: Throwable) {
+        currentJob = viewModelScope.launch {
+            try {
+                registrationWizard?.sendAgainThreePid()
+            } catch (failure: Throwable) {
                 _viewEvents.post(LoginViewEvents.Failure(failure))
-                setState {
-                    copy(
-                            asyncRegistration = Uninitialized
-                    )
-                }
             }
-        })
+            setState {
+                copy(
+                        asyncRegistration = Uninitialized
+                )
+            }
+        }
     }
 
     private fun handleAcceptTerms() {
-        setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.acceptTerms(registrationCallback)
+        currentJob = executeRegistrationStep {
+            it.acceptTerms()
+        }
     }
 
     private fun handleRegisterDummy() {
-        setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.dummy(registrationCallback)
+        currentJob = executeRegistrationStep {
+            it.dummy()
+        }
     }
 
     private fun handleRegisterWith(action: LoginAction.LoginOrRegister) {
-        setState { copy(asyncRegistration = Loading()) }
         reAuthHelper.data = action.password
-        currentTask = registrationWizard?.createAccount(
-                action.username,
-                action.password,
-                action.initialDeviceName,
-                registrationCallback
-        )
+        currentJob = executeRegistrationStep {
+            it.createAccount(
+                    action.username,
+                    action.password,
+                    action.initialDeviceName
+            )
+        }
     }
 
     private fun handleCaptchaDone(action: LoginAction.CaptchaDone) {
-        setState { copy(asyncRegistration = Loading()) }
-        currentTask = registrationWizard?.performReCaptcha(action.captchaResponse, registrationCallback)
+        currentJob = executeRegistrationStep {
+            it.performReCaptcha(action.captchaResponse)
+        }
     }
 
     private fun handleResetAction(action: LoginAction.ResetAction) {
         // Cancel any request
-        currentTask?.cancel()
-        currentTask = null
+        currentJob = null
 
         when (action) {
             LoginAction.ResetHomeServerType -> {
@@ -363,16 +360,17 @@ class LoginViewModel @AssistedInject constructor(
                 }
             }
             LoginAction.ResetHomeServerUrl  -> {
-                authenticationService.reset()
-
-                setState {
-                    copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized,
-                            homeServerUrl = null,
-                            loginMode = LoginMode.Unknown,
-                            serverType = ServerType.Unknown,
-                            loginModeSupportedTypes = emptyList()
-                    )
+                viewModelScope.launch {
+                    authenticationService.reset()
+                    setState {
+                        copy(
+                                asyncHomeServerLoginFlowRequest = Uninitialized,
+                                homeServerUrl = null,
+                                loginMode = LoginMode.Unknown,
+                                serverType = ServerType.Unknown,
+                                loginModeSupportedTypes = emptyList()
+                        )
+                    }
                 }
             }
             LoginAction.ResetSignMode       -> {
@@ -386,13 +384,14 @@ class LoginViewModel @AssistedInject constructor(
                 }
             }
             LoginAction.ResetLogin          -> {
-                authenticationService.cancelPendingLoginOrRegistration()
-
-                setState {
-                    copy(
-                            asyncLoginAction = Uninitialized,
-                            asyncRegistration = Uninitialized
-                    )
+                viewModelScope.launch {
+                    authenticationService.cancelPendingLoginOrRegistration()
+                    setState {
+                        copy(
+                                asyncLoginAction = Uninitialized,
+                                asyncRegistration = Uninitialized
+                        )
+                    }
                 }
             }
             LoginAction.ResetResetPassword  -> {
@@ -473,26 +472,27 @@ class LoginViewModel @AssistedInject constructor(
                 )
             }
 
-            currentTask = safeLoginWizard.resetPassword(action.email, action.newPassword, object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    setState {
-                        copy(
-                                asyncResetPassword = Success(data),
-                                resetPasswordEmail = action.email
-                        )
-                    }
-
-                    _viewEvents.post(LoginViewEvents.OnResetPasswordSendThreePidDone)
-                }
-
-                override fun onFailure(failure: Throwable) {
+            currentJob = viewModelScope.launch {
+                try {
+                    safeLoginWizard.resetPassword(action.email, action.newPassword)
+                } catch (failure: Throwable) {
                     setState {
                         copy(
                                 asyncResetPassword = Fail(failure)
                         )
                     }
+                    return@launch
                 }
-            })
+
+                setState {
+                    copy(
+                            asyncResetPassword = Success(Unit),
+                            resetPasswordEmail = action.email
+                    )
+                }
+
+                _viewEvents.post(LoginViewEvents.OnResetPasswordSendThreePidDone)
+            }
         }
     }
 
@@ -514,26 +514,26 @@ class LoginViewModel @AssistedInject constructor(
                 )
             }
 
-            currentTask = safeLoginWizard.resetPasswordMailConfirmed(object : MatrixCallback<Unit> {
-                override fun onSuccess(data: Unit) {
-                    setState {
-                        copy(
-                                asyncResetMailConfirmed = Success(data),
-                                resetPasswordEmail = null
-                        )
-                    }
-
-                    _viewEvents.post(LoginViewEvents.OnResetPasswordMailConfirmationSuccess)
-                }
-
-                override fun onFailure(failure: Throwable) {
+            currentJob = viewModelScope.launch {
+                try {
+                    safeLoginWizard.resetPasswordMailConfirmed()
+                } catch (failure: Throwable) {
                     setState {
                         copy(
                                 asyncResetMailConfirmed = Fail(failure)
                         )
                     }
+                    return@launch
                 }
-            })
+                setState {
+                    copy(
+                            asyncResetMailConfirmed = Success(Unit),
+                            resetPasswordEmail = null
+                    )
+                }
+
+                _viewEvents.post(LoginViewEvents.OnResetPasswordMailConfirmationSuccess)
+            }
         }
     }
 
@@ -553,36 +553,36 @@ class LoginViewModel @AssistedInject constructor(
             )
         }
 
-        authenticationService.getWellKnownData(action.username, homeServerConnectionConfig, object : MatrixCallback<WellknownResult> {
-            override fun onSuccess(data: WellknownResult) {
-                when (data) {
-                    is WellknownResult.Prompt          ->
-                        onWellknownSuccess(action, data, homeServerConnectionConfig)
-                    is WellknownResult.FailPrompt      ->
-                        // Relax on IS discovery if home server is valid
-                        if (data.homeServerUrl != null && data.wellKnown != null) {
-                            onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
-                        } else {
-                            onWellKnownError()
-                        }
-                    is WellknownResult.InvalidMatrixId -> {
-                        setState {
-                            copy(
-                                    asyncLoginAction = Uninitialized
-                            )
-                        }
-                        _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id))))
-                    }
-                    else                               -> {
+        currentJob = viewModelScope.launch {
+            val data = try {
+                authenticationService.getWellKnownData(action.username, homeServerConnectionConfig)
+            } catch (failure: Throwable) {
+                onDirectLoginError(failure)
+                return@launch
+            }
+            when (data) {
+                is WellknownResult.Prompt          ->
+                    onWellknownSuccess(action, data, homeServerConnectionConfig)
+                is WellknownResult.FailPrompt      ->
+                    // Relax on IS discovery if home server is valid
+                    if (data.homeServerUrl != null && data.wellKnown != null) {
+                        onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
+                    } else {
                         onWellKnownError()
                     }
-                }.exhaustive
-            }
-
-            override fun onFailure(failure: Throwable) {
-                onDirectLoginError(failure)
-            }
-        })
+                is WellknownResult.InvalidMatrixId -> {
+                    setState {
+                        copy(
+                                asyncLoginAction = Uninitialized
+                        )
+                    }
+                    _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.login_signin_matrix_id_error_invalid_matrix_id))))
+                }
+                else                               -> {
+                    onWellKnownError()
+                }
+            }.exhaustive
+        }
     }
 
     private fun onWellKnownError() {
@@ -594,9 +594,9 @@ class LoginViewModel @AssistedInject constructor(
         _viewEvents.post(LoginViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
     }
 
-    private fun onWellknownSuccess(action: LoginAction.LoginOrRegister,
-                                   wellKnownPrompt: WellknownResult.Prompt,
-                                   homeServerConnectionConfig: HomeServerConnectionConfig?) {
+    private suspend fun onWellknownSuccess(action: LoginAction.LoginOrRegister,
+                                           wellKnownPrompt: WellknownResult.Prompt,
+                                           homeServerConnectionConfig: HomeServerConnectionConfig?) {
         val alteredHomeServerConnectionConfig = homeServerConnectionConfig
                 ?.copy(
                         homeServerUri = Uri.parse(wellKnownPrompt.homeServerUrl),
@@ -607,20 +607,17 @@ class LoginViewModel @AssistedInject constructor(
                         identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
                 )
 
-        authenticationService.directAuthentication(
-                alteredHomeServerConnectionConfig,
-                action.username,
-                action.password,
-                action.initialDeviceName,
-                object : MatrixCallback<Session> {
-                    override fun onSuccess(data: Session) {
-                        onSessionCreated(data)
-                    }
-
-                    override fun onFailure(failure: Throwable) {
-                        onDirectLoginError(failure)
-                    }
-                })
+        val data = try {
+            authenticationService.directAuthentication(
+                    alteredHomeServerConnectionConfig,
+                    action.username,
+                    action.password,
+                    action.initialDeviceName)
+        } catch (failure: Throwable) {
+            onDirectLoginError(failure)
+            return
+        }
+        onSessionCreated(data)
     }
 
     private fun onDirectLoginError(failure: Throwable) {
@@ -657,35 +654,33 @@ class LoginViewModel @AssistedInject constructor(
                 )
             }
 
-            currentTask = safeLoginWizard.login(
-                    action.username,
-                    action.password,
-                    action.initialDeviceName,
-                    object : MatrixCallback<Session> {
-                        override fun onSuccess(data: Session) {
+            currentJob = viewModelScope.launch {
+                try {
+                    safeLoginWizard.login(
+                            action.username,
+                            action.password,
+                            action.initialDeviceName
+                    )
+                } catch (failure: Throwable) {
+                    setState {
+                        copy(
+                                asyncLoginAction = Fail(failure)
+                        )
+                    }
+                    null
+                }
+                        ?.let {
                             reAuthHelper.data = action.password
-                            onSessionCreated(data)
+                            onSessionCreated(it)
                         }
-
-                        override fun onFailure(failure: Throwable) {
-                            setState {
-                                copy(
-                                        asyncLoginAction = Fail(failure)
-                                )
-                            }
-                        }
-                    })
+            }
         }
     }
 
     private fun startRegistrationFlow() {
-        setState {
-            copy(
-                    asyncRegistration = Loading()
-            )
+        currentJob = executeRegistrationStep {
+            it.getRegistrationFlow()
         }
-
-        currentTask = registrationWizard?.getRegistrationFlow(registrationCallback)
     }
 
     private fun startAuthenticationFlow() {
@@ -706,8 +701,9 @@ class LoginViewModel @AssistedInject constructor(
         }
     }
 
-    private fun onSessionCreated(session: Session) {
+    private suspend fun onSessionCreated(session: Session) {
         activeSessionHolder.setActiveSession(session)
+
         authenticationService.reset()
         session.configureAndStart(applicationContext)
         setState {
@@ -724,15 +720,17 @@ class LoginViewModel @AssistedInject constructor(
             // Should not happen
             Timber.w("homeServerConnectionConfig is null")
         } else {
-            authenticationService.createSessionFromSso(homeServerConnectionConfigFinal, action.credentials, object : MatrixCallback<Session> {
-                override fun onSuccess(data: Session) {
-                    onSessionCreated(data)
+            currentJob = viewModelScope.launch {
+                try {
+                    authenticationService.createSessionFromSso(homeServerConnectionConfigFinal, action.credentials)
+                } catch (failure: Throwable) {
+                    setState {
+                        copy(asyncLoginAction = Fail(failure))
+                    }
+                    null
                 }
-
-                override fun onFailure(failure: Throwable) = setState {
-                    copy(asyncLoginAction = Fail(failure))
-                }
-            })
+                        ?.let { onSessionCreated(it) }
+            }
         }
     }
 
@@ -749,21 +747,21 @@ class LoginViewModel @AssistedInject constructor(
     private fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig) {
         currentHomeServerConnectionConfig = homeServerConnectionConfig
 
-        currentTask?.cancel()
-        currentTask = null
-        authenticationService.cancelPendingLoginOrRegistration()
+        currentJob = viewModelScope.launch {
+            authenticationService.cancelPendingLoginOrRegistration()
 
-        setState {
-            copy(
-                    asyncHomeServerLoginFlowRequest = Loading(),
-                    // If user has entered https://matrix.org, ensure that server type is ServerType.MatrixOrg
-                    // It is also useful to set the value again in the case of a certificate error on matrix.org
-                    serverType = if (homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl) ServerType.MatrixOrg else serverType
-            )
-        }
+            setState {
+                copy(
+                        asyncHomeServerLoginFlowRequest = Loading(),
+                        // If user has entered https://matrix.org, ensure that server type is ServerType.MatrixOrg
+                        // It is also useful to set the value again in the case of a certificate error on matrix.org
+                        serverType = if (homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl) ServerType.MatrixOrg else serverType
+                )
+            }
 
-        currentTask = authenticationService.getLoginFlow(homeServerConnectionConfig, object : MatrixCallback<LoginFlowResult> {
-            override fun onFailure(failure: Throwable) {
+            val data = try {
+                authenticationService.getLoginFlow(homeServerConnectionConfig)
+            } catch (failure: Throwable) {
                 _viewEvents.post(LoginViewEvents.Failure(failure))
                 setState {
                     copy(
@@ -772,47 +770,39 @@ class LoginViewModel @AssistedInject constructor(
                             serverType = if (serverType == ServerType.MatrixOrg) ServerType.Unknown else serverType
                     )
                 }
+                null
             }
 
-            override fun onSuccess(data: LoginFlowResult) {
+            if (data is LoginFlowResult.Success) {
                 // Valid Homeserver, add it to the history.
                 // Note: we add what the user has input, data.homeServerUrl can be different
                 rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
 
-                when (data) {
-                    is LoginFlowResult.Success -> {
-                        val loginMode = when {
-                            // SSO login is taken first
-                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                                    && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                            else                                                                  -> LoginMode.Unsupported
-                        }
+                val loginMode = when {
+                    // SSO login is taken first
+                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
+                            && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                    data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
+                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
+                    else                                                                  -> LoginMode.Unsupported
+                }
 
-                        // FIXME We should post a view event here normally?
-                        setState {
-                            copy(
-                                    asyncHomeServerLoginFlowRequest = Uninitialized,
-                                    homeServerUrl = data.homeServerUrl,
-                                    loginMode = loginMode,
-                                    loginModeSupportedTypes = data.supportedLoginTypes.toList()
-                            )
-                        }
-                        if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                                || data.isOutdatedHomeserver) {
-                            // Notify the UI
-                            _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
-                        }
-                    }
+                // FIXME We should post a view event here normally?
+                setState {
+                    copy(
+                            asyncHomeServerLoginFlowRequest = Uninitialized,
+                            homeServerUrl = data.homeServerUrl,
+                            loginMode = loginMode,
+                            loginModeSupportedTypes = data.supportedLoginTypes.toList()
+                    )
+                }
+                if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
+                        || data.isOutdatedHomeserver) {
+                    // Notify the UI
+                    _viewEvents.post(LoginViewEvents.OutdatedHomeserver)
                 }
             }
-        })
-    }
-
-    override fun onCleared() {
-        currentTask?.cancel()
-        super.onCleared()
+        }
     }
 
     fun getInitialHomeServerUrl(): String? {

@@ -26,7 +26,6 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
@@ -47,11 +46,12 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
         private val profileAPI: ProfileAPI,
         @SessionDatabase private val monarchy: Monarchy,
         private val pendingThreePidMapper: PendingThreePidMapper,
-        @UserId private val userId: String,
         private val globalErrorReceiver: GlobalErrorReceiver) : FinalizeAddingThreePidTask() {
 
     override suspend fun execute(params: Params) {
-        if (params.userWantsToCancel.not()) {
+        val canCleanup = if (params.userWantsToCancel) {
+            true
+        } else {
             // Get the required pending data
             val pendingThreePids = monarchy.fetchAllMappedSync(
                     { it.where(PendingThreePidEntity::class.java) },
@@ -69,21 +69,30 @@ internal class DefaultFinalizeAddingThreePidTask @Inject constructor(
                     )
                     apiCall = profileAPI.finalizeAddThreePid(body)
                 }
+                true
             } catch (throwable: Throwable) {
                 if (params.userInteractiveAuthInterceptor == null
-                        || !handleUIA(throwable, params.userInteractiveAuthInterceptor) { auth ->
-                            execute(params.copy(userAuthParam = auth))
-                        }
+                        || !handleUIA(
+                                failure = throwable,
+                                interceptor = params.userInteractiveAuthInterceptor,
+                                retryBlock = { authUpdate ->
+                                    execute(params.copy(userAuthParam = authUpdate))
+                                }
+                        )
                 ) {
                     Timber.d("## UIA: propagate failure")
-                    throw  throwable.toRegistrationFlowResponse()
+                    throw throwable.toRegistrationFlowResponse()
                             ?.let { Failure.RegistrationFlowError(it) }
                             ?: throwable
+                } else {
+                    false
                 }
             }
         }
 
-        cleanupDatabase(params)
+        if (canCleanup) {
+            cleanupDatabase(params)
+        }
     }
 
     private suspend fun cleanupDatabase(params: Params) {

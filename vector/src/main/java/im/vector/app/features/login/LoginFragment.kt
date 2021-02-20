@@ -36,7 +36,6 @@ import im.vector.app.core.extensions.showPassword
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginBinding
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 
 import org.matrix.android.sdk.api.failure.Failure
@@ -225,7 +224,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 .combineLatest(
                         views.loginField.textChanges().map { it.trim().isNotEmpty() },
                         views.passwordField.textChanges().map { it.isNotEmpty() },
-                        BiFunction<Boolean, Boolean, Boolean> { isLoginNotEmpty, isPasswordNotEmpty ->
+                        { isLoginNotEmpty, isPasswordNotEmpty ->
                             isLoginNotEmpty && isPasswordNotEmpty
                         }
                 )
@@ -255,14 +254,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
     private fun renderPasswordField() {
         views.passwordField.showPassword(passwordShown)
-
-        if (passwordShown) {
-            views.passwordReveal.setImageResource(R.drawable.ic_eye_closed)
-            views.passwordReveal.contentDescription = getString(R.string.a11y_hide_password)
-        } else {
-            views.passwordReveal.setImageResource(R.drawable.ic_eye)
-            views.passwordReveal.contentDescription = getString(R.string.a11y_show_password)
-        }
+        views.passwordReveal.render(passwordShown)
     }
 
     override fun resetViewModel() {

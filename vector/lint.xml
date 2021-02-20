@@ -17,6 +17,10 @@
     <issue id="ButtonOrder" severity="error" />
     <issue id="TextFields" severity="error" />
 
+    <!-- Accessibility -->
+    <issue id="LabelFor" severity="error" />
+    <issue id="ContentDescription" severity="error" />
+
     <!-- Layout -->
     <issue id="UnknownIdInLayout" severity="error" />
     <issue id="StringFormatCount" severity="error" />

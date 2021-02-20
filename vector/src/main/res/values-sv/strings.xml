@@ -1487,7 +1487,7 @@
     <string name="room_widget_permission_user_id">Ditt användar-ID</string>
     <string name="room_widget_permission_widget_id">Widget-ID</string>
     <string name="room_widget_permission_room_id">Rums-ID</string>
-    <string name="error_jitsi_not_supported_on_old_device">Tyvärr, gruppsamtal med Jitsi stöds inte på gamla enheter (enheter med Android äldre än 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Tyvärr, gruppsamtal med Jitsi stöds inte på gamla enheter (enheter med Android äldre än 6.0)</string>
     <string name="room_widget_resource_permission_title">Den här widgeten vill använda följande resurser:</string>
     <string name="room_widget_resource_grant_permission">Tillåt</string>
     <string name="room_widget_resource_decline_permission">Blockera alla</string>
@@ -1891,7 +1891,7 @@
     <string name="room_member_power_level_users">Användare</string>
     <string name="room_member_power_level_admin_in">Administratör i %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator i %1$s</string>
-    <string name="room_member_power_level_default_in">Standard i %1$s</string>
+    <string name="room_member_power_level_default_in">Standardbehörig i %1$s</string>
     <string name="room_member_power_level_custom_in">Anpassad (%1$d) i %2$s</string>
     <string name="room_member_jump_to_read_receipt">Hoppa till läskvitto</string>
     <string name="rendering_event_error_type_of_event_not_handled">Element hanterar inte händelser av typen \'%1$s\'</string>
@@ -2315,4 +2315,9 @@
     <string name="room_settings_permissions_title">Rumsbehörigheter</string>
     <string name="room_participants_leave_private_warning">Det är rummet är inte offentligt. Du kommer inte kunna gå med igen utan en inbjudan.</string>
     <string name="system_theme">Systemets förval</string>
+    <string name="authentication_error">Misslyckades att autentisera</string>
+    <string name="re_authentication_default_confirm_text">Element kräver att du anger dina autentiseringsuppgifter innan du gör det här.</string>
+    <string name="re_authentication_activity_title">Omautentisering krävs</string>
+    <string name="failed_to_initialize_cross_signing">Mislyckades att ställa in korssignering</string>
+    <string name="error_unauthorized">Obehörig, saknar giltiga autentiseringsuppgifter</string>
 </resources>

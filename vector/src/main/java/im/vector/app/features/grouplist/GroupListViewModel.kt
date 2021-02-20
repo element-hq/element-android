@@ -29,7 +29,6 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -123,7 +122,7 @@ class GroupListViewModel @AssistedInject constructor(@Assisted initialState: Gro
                 session
                         .rx()
                         .liveGroupSummaries(groupSummariesQueryParams),
-                BiFunction { allCommunityGroup, communityGroups ->
+                { allCommunityGroup, communityGroups ->
                     listOf(allCommunityGroup) + communityGroups
                 }
         )

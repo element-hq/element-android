@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/itemCallCreatorAvatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/avatar"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/itemCallCreatorNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:drawablePadding="6dp"
+        android:gravity="center"
+        android:textColor="?riotx_text_primary"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        tools:text="@sample/matrix.json/data/displayName" />
+
+
+    <TextView
+        android:id="@+id/itemCallKindTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="12dp"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:textColor="?riotx_text_primary"
+        android:textSize="12sp"
+        tools:text="@string/action_video_call" />
+
+    <TextView
+        android:id="@+id/itemCallStatusTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="12dp"
+        android:textColor="?attr/vctr_notice_secondary"
+        android:textSize="13sp"
+        tools:text="@string/video_call_in_progress" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/itemCallAcceptRejectViewGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/itemCallAcceptView"
+            style="@style/VectorButtonStylePositive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:minWidth="120dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/itemCallRejectView"
+            app:layout_constraintTop_toTopOf="@id/itemCallRejectView" />
+
+        <Button
+            android:id="@+id/itemCallRejectView"
+            style="@style/VectorButtonStyleDestructive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:minWidth="120dp"
+            app:layout_constraintEnd_toStartOf="@+id/itemCallAcceptView"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

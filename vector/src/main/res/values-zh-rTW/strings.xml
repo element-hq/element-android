@@ -1077,7 +1077,7 @@
     <string name="notification_new_invitation">新邀請</string>
     <string name="notification_sender_me">我</string>
     <string name="notification_inline_reply_failed">** 傳送失敗 - 請開啟聊天室</string>
-    <string name="error_jitsi_not_supported_on_old_device">抱歉，使用 Jitsi 建立會議通話在舊裝置上並不支援（Android 系統版本小於 5.0 的裝置）</string>
+    <string name="error_jitsi_not_supported_on_old_device">抱歉，使用 Jitsi 建立會議通話在舊裝置上並不支援（Android 系統版本小於 6.0 的裝置）</string>
     <string name="title_activity_verify_device">驗證工作階段</string>
     <string name="encryption_information_unknown_ip">未知的 IP</string>
     <string name="you_added_a_new_device_with_info">有新工作階段正在要求加密金鑰。
@@ -2277,4 +2277,9 @@
     <string name="system_theme">系統預設值</string>
     <string name="settings_show_emoji_keyboard_summary">在訊息編輯器上新增按鈕以開啟表情符號鍵盤</string>
     <string name="settings_show_emoji_keyboard">顯示表情符號鍵盤</string>
+    <string name="authentication_error">驗證失敗</string>
+    <string name="re_authentication_default_confirm_text">Element 需要您輸入您的憑證來執行此動作。</string>
+    <string name="re_authentication_activity_title">需要重新驗證</string>
+    <string name="failed_to_initialize_cross_signing">未能設定交叉簽章</string>
+    <string name="error_unauthorized">未授權，缺少有效的身份驗證憑證</string>
 </resources>

@@ -6,12 +6,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:clipToPadding="false"
+    android:contentDescription="@string/a11y_open_widget"
     android:focusable="true">
 
     <ImageView
         android:id="@+id/action_view_icon_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_integrations"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

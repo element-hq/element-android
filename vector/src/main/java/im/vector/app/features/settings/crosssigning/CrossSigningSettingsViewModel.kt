@@ -29,7 +29,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
@@ -50,6 +49,7 @@ import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class CrossSigningSettingsViewModel @AssistedInject constructor(
         @Assisted private val initialState: CrossSigningSettingsViewState,
@@ -62,7 +62,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
         Observable.combineLatest<List<DeviceInfo>, Optional<MXCrossSigningInfo>, Pair<List<DeviceInfo>, Optional<MXCrossSigningInfo>>>(
                 session.rx().liveMyDevicesInfo(),
                 session.rx().liveCrossSigningInfo(session.myUserId),
-                BiFunction { myDevicesInfo, mxCrossSigningInfo ->
+                { myDevicesInfo, mxCrossSigningInfo ->
                     myDevicesInfo to mxCrossSigningInfo
                 }
         )
@@ -131,7 +131,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                 if (pendingAuth != null) {
                     uiaContinuation?.resume(pendingAuth!!)
                 } else {
-                    uiaContinuation?.resumeWith(Result.failure((IllegalArgumentException())))
+                    uiaContinuation?.resumeWithException(IllegalArgumentException())
                 }
             }
             is CrossSigningSettingsAction.PasswordAuthDone -> {
@@ -147,7 +147,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
             CrossSigningSettingsAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
                 _viewEvents.post(CrossSigningSettingsViewEvents.HideModalWaitingView)
-                uiaContinuation?.resumeWith(Result.failure((Exception())))
+                uiaContinuation?.resumeWithException(Exception())
                 uiaContinuation = null
                 pendingAuth = null
             }

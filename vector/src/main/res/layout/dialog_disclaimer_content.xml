@@ -19,12 +19,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_riot_icon" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="32dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_arrow_right"
             app:tint="?riotx_text_secondary"
             tools:ignore="MissingPrefix" />
@@ -32,6 +34,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
             android:src="@drawable/element_logo_sc" />
 
     </LinearLayout>

@@ -41,6 +41,9 @@ parser.add_argument('-b',
                     type=int,
                     required=True,
                     help='the buildkite build number.')
+parser.add_argument('-f',
+                    '--filename',
+                    help='the filename, to download only one artifact.')
 parser.add_argument('-e',
                     '--expecting',
                     type=int,
@@ -148,6 +151,8 @@ for elt in data:
             print("   %s: %s" % (key, str(value)))
     url = elt.get("download_url")
     filename = elt.get("filename")
+    if args.filename is not None and args.filename != filename:
+        continue
     target = targetDir + "/" + filename
     print("Downloading %s to '%s'..." % (filename, targetDir))
     if not args.simulate:

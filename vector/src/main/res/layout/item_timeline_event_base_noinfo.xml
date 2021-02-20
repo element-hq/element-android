@@ -70,7 +70,7 @@
 
     </FrameLayout>
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/messageE2EDecoration"
         android:layout_width="16dp"
         android:layout_height="16dp"
@@ -78,7 +78,6 @@
         android:layout_marginTop="8dp"
         android:layout_toStartOf="@id/viewStubContainer"
         android:visibility="gone"
-        tools:src="@drawable/ic_shield_warning"
         tools:visibility="visible" />
 
 

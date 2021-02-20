@@ -57,7 +57,7 @@
     <string name="bottom_action_home">Inicio</string>
     <string name="bottom_action_favourites">Favoritos</string>
     <string name="bottom_action_people">Personas</string>
-    <string name="bottom_action_rooms">Salas</string>
+    <string name="bottom_action_rooms">Salas y Grupos</string>
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Filtrar salas</string>
     <string name="home_filter_placeholder_favorites">Filtrar favoritos</string>
@@ -244,7 +244,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="preview">Vista Previa</string>
     <string name="reject">Rechazar</string>
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Ir al primer mensaje no leído.</string>
+    <string name="room_jump_to_first_unread">Mensajes no leídos.</string>
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">Has sido invitado por %s a unirte a esta sala</string>
     <string name="room_preview_unlinked_email_warning">Esta invitación fue enviada a %s, que no esta asociado a esta cuenta.
@@ -1040,7 +1040,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="notification_new_invitation">Nueva invitación</string>
     <string name="notification_sender_me">Yo</string>
     <string name="notification_inline_reply_failed">** Error al enviar - por favor abra la sala</string>
-    <string name="error_jitsi_not_supported_on_old_device">Lo sentimos, las llamadas de grupo con Jitsi no están soportadas en dispositivos antiguos (dispositivos con Android inferior a 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Lo sentimos, las llamadas de grupo con Jitsi no están soportadas en dispositivos antiguos (dispositivos con Android inferior a 6.0)</string>
     <string name="settings_labs_native_camera_summary">Iniciar la cámara del sistema en lugar de la pantalla de cámara personalizada.</string>
     <string name="settings_labs_enable_send_voice_summary">Esta opción requiere una aplicación de terceros para grabar los mensajes.</string>
     <string name="command_problem_with_parameters">El comando \"%s\" necesita mas parámetros o algunos parámetros son incorrectos.</string>
@@ -1181,7 +1181,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="sas_security_advise">Para más seguridad, te recomendamos que hagas esto en persona o por otros medios confiables.</string>
     <string name="sas_verify_start_button_title">Empezar verificación</string>
     <string name="sas_incoming_request_title">Solicitud de verificación</string>
-    <string name="sas_incoming_request_description">Verifica esta sesión para marcarla de confianza. Marcar sesiones de otros como de confianza te da aún más tranquilidad cuando usas encriptacion de Extremo-a-Extremo.</string>
+    <string name="sas_incoming_request_description">Verifica esta sesión para marcarla de confianza. Marcar sesiones de otros como de confianza te da aún más tranquilidad cuando usas cifrado de Extremo-a-Extremo.</string>
     <string name="sas_incoming_request_description_2">Verificar esta sesión la marcará como confiable, y también marcará como confiable tu sesión para la contraparte.</string>
     <string name="sas_emoji_description">Verifica esta sesión confirmando los emojis que aparecen en la pantalla de la contraparte</string>
     <string name="sas_decimal_description">Verifica esta sesión confirmando que los siguietes números aparecen en la pantalla de la contraparte</string>
@@ -1219,7 +1219,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_list_catchup_empty_body">No tienes más mensajes sin leer</string>
     <string name="room_list_catchup_welcome_title">¡Bienvenido!</string>
     <string name="room_list_people_empty_title">Conversaciones</string>
-    <string name="room_list_people_empty_body">Tus conversaciones directas (1 a 1) se mostrarán aquí</string>
+    <string name="room_list_people_empty_body">Tus conversaciones se mostrarán aquí. Toque + en la derecha para comenzar.</string>
     <string name="room_list_rooms_empty_title">Salas</string>
     <string name="room_list_rooms_empty_body">Tus salas se mostrarán aquí</string>
     <string name="title_activity_emoji_reaction_picker">Reacciones</string>
@@ -1241,7 +1241,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_preview_no_preview">Esta sala no se puede previsualizar</string>
     <string name="room_preview_world_readable_room_not_supported_yet">La previsualización de salas públicas no es posible todavía con Element</string>
     <string name="fab_menu_create_room">Salas</string>
-    <string name="fab_menu_create_chat">Mensajes directos</string>
+    <string name="fab_menu_create_chat">Chats</string>
     <string name="create_room_title">Nueva sala</string>
     <string name="create_room_action_create">CREAR</string>
     <string name="create_room_name_hint">Nombre</string>
@@ -1549,8 +1549,8 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="invitation_sent_to_one_user">Invitación enviada a %1$s</string>
     <string name="invitations_sent_to_two_users">Invitación enviada a %1$s y %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-        <item quantity="one">Invitaciones enviadas a % $s y a uno más</item>
-        <item quantity="other">Invitaciones enviadas a %$s y a %2$d más</item>
+        <item quantity="one">Invitaciones enviadas a %1$s y a uno más</item>
+        <item quantity="other">Invitaciones enviadas a %1$s y a %2$d más</item>
     </plurals>
     <string name="invite_users_to_room_failure">No se pudo invitar el usuario. Por favor, intente nuevamente.</string>
     <string name="choose_locale_current_locale_title">Idioma actual</string>
@@ -1577,7 +1577,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="failed_to_add_widget">Fallo al añadir Widget</string>
     <string name="failed_to_remove_widget">Fallo al eliminar Widget</string>
     <string name="settings_call_show_confirmation_dialog_title">Confirmar llamada</string>
-    <string name="settings_call_show_confirmation_dialog_summary">Pedir confirmacion antes de iniciar una llamda</string>
+    <string name="settings_call_show_confirmation_dialog_summary">Pedir confirmacion antes de iniciar una llamada</string>
     <string name="room_participants_kick_reason">Rason de expulsion</string>
     <string name="room_participants_ban_title">Banear usuario</string>
     <string name="room_participants_ban_reason">Rason de baneo</string>
@@ -1601,7 +1601,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_developer_mode_fail_fast_title">Fallar rápido (Test)</string>
     <string name="settings_developer_mode_fail_fast_summary">Element puede fallar con más frecuencia cuando ocurre un error inesperado</string>
     <string name="command_description_shrug">Antepone ¯\\_(ツ)_/¯ a un mensaje de texto sin formato</string>
-    <string name="create_room_encryption_title">Habilitar encriptacion</string>
+    <string name="create_room_encryption_title">Habilitar crifrado</string>
     <string name="create_room_encryption_description">Una vez habilitada, la encriptación no se puede deshabilitar.</string>
     <string name="login_error_threepid_denied">Su dominio de correo electrónico no está autorizado para registrarse en este servidor</string>
     <string name="verification_conclusion_warning">Inicio de sesión no confiable</string>
@@ -1648,7 +1648,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
         <item quantity="one">Una persona</item>
         <item quantity="other">%1$d personas</item>
     </plurals>
-    <string name="room_profile_section_more_uploads">Archivos, Medias y Documentos</string>
+    <string name="room_profile_section_more_uploads">Archivos subidos</string>
     <string name="room_profile_section_more_leave">Abandonar Sala</string>
     <string name="room_profile_leaving_room">Saliendo de la sala…</string>
     <string name="room_member_power_level_admins">Administradores</string>
@@ -1670,7 +1670,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="command_description_rainbow">Envía el mensaje dado en colores</string>
     <string name="settings_category_timeline">Línea de tiempo</string>
     <string name="settings_category_composer">Editor de mensage</string>
-    <string name="room_settings_enable_encryption">Encriptar (end-to-end)</string>
+    <string name="room_settings_enable_encryption">Encriptacion habilitada (end-to-end) …</string>
     <string name="room_settings_enable_encryption_warning">Una vez habilitada, la encriptación no se puede deshabilitar.</string>
     <string name="room_settings_enable_encryption_dialog_title">Encriptar \?</string>
     <string name="room_settings_enable_encryption_dialog_submit">Habilitar la encriptación</string>
@@ -1702,7 +1702,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="poll_item_selected_aria">Seleccionar Opcion</string>
     <string name="new_signin">Nuevo inicio de sesión</string>
     <string name="enter_secret_storage_passphrase_warning">Advertencia:</string>
-    <string name="message_action_item_redact">Remover…</string>
+    <string name="message_action_item_redact">Eliminar…</string>
     <string name="delete_event_dialog_reason_checkbox">Razón</string>
     <string name="delete_event_dialog_reason_hint">Razón para redactar</string>
     <string name="login_default_session_public_name">Element Android</string>
@@ -2174,7 +2174,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="direct_room_profile_not_encrypted_subtitle">Los mensajes aquí no están encriptados de Extremo-a-Extremo.</string>
     <string name="sent_a_bot_buttons">Botones de Bot</string>
     <string name="sent_a_poll">Encuesta</string>
-    <string name="room_list_quick_actions_low_priority_remove">Remover de Baja prioridad</string>
+    <string name="room_list_quick_actions_low_priority_remove">Eliminar de baja prioridad</string>
     <string name="room_list_quick_actions_low_priority_add">Añadir a Baja prioridad</string>
     <string name="rotate_and_crop_screen_title">Rotar y recortar</string>
     <plurals name="seconds">
@@ -2248,4 +2248,58 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_show_room_member_state_events">Mostrar eventos de los miembros de la sala</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">¡La notificación ha sido cliqueada!</string>
     <string name="system_theme">Tema del sistema</string>
+    <string name="permissions_denied_add_contact">Permitir acceder a sus contactos.</string>
+    <string name="error_unauthorized">Desautorizado, credenciales de autenticación no autorizadas</string>
+    <string name="login_clear_homeserver_history">Limpiar Historial</string>
+    <string name="re_authentication_default_confirm_text">Element requiere que ingrese sus credenciales para realizar esta acción.</string>
+    <string name="re_authentication_activity_title">Se necesita una nueva autenticación</string>
+    <string name="matrix_to_card_title">Enlace Matrix</string>
+    <string name="qr_code_not_scanned">¡Código QR no escaneado!</string>
+    <string name="invalid_qr_code_uri">Código QR no válido (URL no válida)!</string>
+    <string name="cannot_dm_self">No puede DM usted mismo!</string>
+    <string name="share_by_text">Compartir por texto</string>
+    <string name="settings_security_pin_code_change_pin_title">Cambiar PIN</string>
+    <string name="settings_security_pin_code_change_pin_summary">Cambie su PIN actual</string>
+    <string name="authentication_error">Fallo al autenticar</string>
+    <string name="this_is_the_beginning_of_room_no_name">Estes es el inicio de la conversacion.</string>
+    <string name="this_is_the_beginning_of_room">Este es el comienzo de %s.</string>
+    <string name="topic_prefix">"Tema: "</string>
+    <string name="add_a_topic_link_text">Agregar un tema</string>
+    <string name="room_created_summary_no_topic_creation_text">%s para dar a saber de qué se trata la sala.</string>
+    <string name="this_is_the_beginning_of_dm">Este es el inicio de mensajes con %s.</string>
+    <string name="start_chatting">Iniciar Chat</string>
+    <string name="action_unpublish">Despublicar</string>
+    <string name="action_add">Adicionar</string>
+    <string name="room_settings_enable_encryption_no_permission">No tiene permisos para encryptar esta sala.</string>
+    <string name="not_a_valid_qr_code">No es un ID matrix valido</string>
+    <string name="user_code_my_code">Mi codigo</string>
+    <string name="user_code_share">Compartir mi codigo</string>
+    <string name="user_code_scan">Escanear QR</string>
+    <string name="invite_friends_rich_title">🔐️ Unirme a Element</string>
+    <string name="invite_friends_text">Hey, contactame por Element:%s</string>
+    <string name="add_people">Adicionar persona</string>
+    <string name="user_code_info_text">Compartir ese codigo para que puedan contactarloa usted.</string>
+    <string name="a11y_create_direct_message_by_mxid">Crear una converzacion por ID Matrix</string>
+    <string name="a11y_create_direct_message_by_qr_code">Crear una converzacion escanenado QR</string>
+    <string name="settings_show_emoji_keyboard_summary">Adicionar botón en el redactor de mensajes para abrir el teclado emoji</string>
+    <string name="settings_show_emoji_keyboard">Mostrar teclado emoji</string>
+    <string name="direct_room_user_list_recent_title">Reciente</string>
+    <string name="add_by_qr_code">Adicionar por codigo QR</string>
+    <string name="user_directory_search_hint">Buscar por nick o ID</string>
+    <string name="qr_code">Codigo QR</string>
+    <string name="direct_room_user_list_suggestions_title">Sugerencias</string>
+    <string name="direct_room_user_list_contacts_title">Contactos</string>
+    <string name="direct_room_user_list_known_title">Usuarios conocidos</string>
+    <string name="settings_chat_effects_title">Mostrar efectos de chat</string>
+    <string name="permissions_denied_qr_code">Para escanear el codigo QR , necesita darle permisos a su cámara.</string>
+    <string name="invite_friends">Invitar contactos</string>
+    <string name="room_settings_permissions_subtitle">Modifique los roles y privilegios de la sala.</string>
+    <string name="room_participants_leave_private_warning">Sala no pública. No puede acceder sin una invitacion.</string>
+    <string name="room_permissions_upgrade_the_room">Actualizar sala</string>
+    <string name="room_permissions_change_topic">Cambiar tema</string>
+    <string name="room_permissions_send_messages">Enviar mensajes</string>
+    <string name="room_permissions_change_history_visibility">Editar historial de visibilidad</string>
+    <string name="room_permissions_change_permissions">Editar permisos</string>
+    <string name="room_permissions_change_room_name">Cambiar el nombre de la sala</string>
+    <string name="room_settings_permissions_title">Administración de sala</string>
 </resources>

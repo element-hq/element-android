@@ -78,6 +78,7 @@
         android:id="@+id/url_preview_close"
         android:layout_width="@dimen/layout_touch_size"
         android:layout_height="@dimen/layout_touch_size"
+        android:contentDescription="@string/action_close"
         android:scaleType="center"
         android:src="@drawable/ic_close_24dp"
         app:layout_constraintEnd_toEndOf="parent"

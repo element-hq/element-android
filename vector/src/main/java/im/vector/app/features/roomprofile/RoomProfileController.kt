@@ -54,6 +54,8 @@ class RoomProfileController @Inject constructor(
         fun createShortcut()
         fun onSettingsClicked()
         fun onLeaveRoomClicked()
+        fun onRoomAliasesClicked()
+        fun onRoomPermissionsClicked()
         fun onRoomIdClicked()
         fun onUrlInTopicLongClicked(url: String)
     }
@@ -180,8 +182,33 @@ class RoomProfileController @Inject constructor(
         )
 
         // Advanced
-        if (vectorPreferences.developerMode()) {
+        if (enableNonSimplifiedMode || vectorPreferences.developerMode()) {
             buildProfileSection(stringProvider.getString(R.string.room_settings_category_advanced_title))
+        }
+
+        if (enableNonSimplifiedMode) {
+            buildProfileAction(
+                    id = "alias",
+                    title = stringProvider.getString(R.string.room_settings_alias_title),
+                    subtitle = stringProvider.getString(R.string.room_settings_alias_subtitle),
+                    dividerColor = dividerColor,
+                    divider = true,
+                    editable = true,
+                    action = { callback?.onRoomAliasesClicked() }
+            )
+
+            buildProfileAction(
+                    id = "permissions",
+                    title = stringProvider.getString(R.string.room_settings_permissions_title),
+                    subtitle = stringProvider.getString(R.string.room_settings_permissions_subtitle),
+                    dividerColor = dividerColor,
+                    divider = true,
+                    editable = true,
+                    action = { callback?.onRoomPermissionsClicked() }
+            )
+        }
+
+        if (vectorPreferences.developerMode()) {
             buildProfileAction(
                     id = "roomId",
                     title = stringProvider.getString(R.string.room_settings_room_internal_id),

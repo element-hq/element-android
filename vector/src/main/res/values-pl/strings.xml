@@ -791,10 +791,10 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
         <item quantity="other"/>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">% godzina</item>
-        <item quantity="few">%s godz.</item>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="one">%d godzina</item>
+        <item quantity="few">%d godz.</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="format_time_d">
         <item quantity="one">%d dzień</item>
@@ -1241,7 +1241,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="room_widget_permission_avatar_url">Adres URL awatara</string>
     <string name="room_widget_permission_user_id">Twój ID użytkownika</string>
     <string name="room_widget_permission_widget_id">ID Widżetu</string>
-    <string name="error_jitsi_not_supported_on_old_device">Przepraszamy, połączenia konferencyjne za pomocą Jitsi nie są wspierane na starszych urządzeniach (urządzenia z systemem Android poniżej wersji 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Przepraszamy, połączenia konferencyjne za pomocą Jitsi nie są wspierane na starszych urządzeniach (urządzenia z systemem Android poniżej wersji 6.0)</string>
     <string name="room_widget_resource_permission_title">Widżet chce użyć następujących zasobów:</string>
     <string name="room_widget_resource_decline_permission">Zablokuj wszystko</string>
     <string name="room_widget_webview_access_camera">Użyj aparatu</string>
@@ -2211,8 +2211,8 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <plurals name="two_and_some_others_read">
         <item quantity="one">%1$s, %2$s i %3$d czyta</item>
         <item quantity="few">%1$s, %2$s i %3$d czytają</item>
-        <item quantity="many"></item>
-        <item quantity="other"></item>
+        <item quantity="many"/>
+        <item quantity="other"/>
     </plurals>
     <string name="room_alias_publish_to_directory_error">Nie udało się uzyskać widoczności katalogu bieżącego pokoju (%1$s).</string>
     <string name="settings_secure_backup_enter_to_setup">Skonfiguruj na tym urządzeniu</string>

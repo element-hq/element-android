@@ -16,11 +16,11 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.core.epoxy.EmptyItem_
+import im.vector.app.core.epoxy.TimelineEmptyItem
+import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.helper.RoomSummaryHolder
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
@@ -33,8 +33,8 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val encryptionItemFactory: EncryptionItemFactory,
                                               private val roomCreateItemFactory: RoomCreateItemFactory,
                                               private val widgetItemFactory: WidgetItemFactory,
-                                              private val roomSummaryHolder: RoomSummaryHolder,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
+                                              private val callItemFactory: CallItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {
 
     fun create(event: TimelineEvent,
@@ -59,17 +59,19 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
-                EventType.CALL_INVITE,
-                EventType.CALL_HANGUP,
-                EventType.CALL_ANSWER,
                 EventType.STATE_ROOM_POWER_LEVELS,
                 EventType.REACTION,
-                EventType.REDACTION             -> noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+                EventType.REDACTION             -> noticeItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(event, highlight, callback)
                 // State room create
                 EventType.STATE_ROOM_CREATE     -> roomCreateItemFactory.create(event, callback)
+                // Calls
+                EventType.CALL_INVITE,
+                EventType.CALL_HANGUP,
+                EventType.CALL_REJECT,
+                EventType.CALL_ANSWER           -> callItemFactory.create(event, highlight, callback)
                 // Crypto
                 EventType.ENCRYPTED             -> {
                     if (event.root.isRedacted()) {
@@ -85,11 +87,14 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_MAC,
-                EventType.CALL_CANDIDATES       -> {
+                EventType.CALL_CANDIDATES,
+                EventType.CALL_REPLACES,
+                EventType.CALL_SELECT_ANSWER,
+                EventType.CALL_NEGOTIATE        -> {
                     // TODO These are not filtered out by timeline when encrypted
                     // For now manually ignore
                     if (userPreferencesProvider.shouldShowHiddenEvents()) {
-                        noticeItemFactory.create(event, highlight, roomSummaryHolder.roomSummary, callback)
+                        noticeItemFactory.create(event, highlight, callback)
                     } else {
                         null
                     }
@@ -110,6 +115,12 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             Timber.e(throwable, "failed to create message item")
             defaultItemFactory.create(event, highlight, callback, throwable)
         }
-        return (computedModel ?: EmptyItem_())
+        return computedModel ?: buildEmptyItem(event)
+    }
+
+    private fun buildEmptyItem(timelineEvent: TimelineEvent): TimelineEmptyItem {
+        return TimelineEmptyItem_()
+                .id(timelineEvent.localId)
+                .eventId(timelineEvent.eventId)
     }
 }

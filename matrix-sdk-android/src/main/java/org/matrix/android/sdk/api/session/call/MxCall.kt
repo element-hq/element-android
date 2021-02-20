@@ -16,14 +16,17 @@
 
 package org.matrix.android.sdk.api.session.call
 
-import org.webrtc.IceCandidate
-import org.webrtc.SessionDescription
+import org.matrix.android.sdk.api.session.room.model.call.CallCandidate
+import org.matrix.android.sdk.api.session.room.model.call.CallCapabilities
+import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
+import org.matrix.android.sdk.api.session.room.model.call.SdpType
+import org.matrix.android.sdk.api.util.Optional
 
 interface MxCallDetail {
     val callId: String
     val isOutgoing: Boolean
     val roomId: String
-    val otherUserId: String
+    val opponentUserId: String
     val isVideoCall: Boolean
 }
 
@@ -32,40 +35,64 @@ interface MxCallDetail {
  */
 interface MxCall : MxCallDetail {
 
+    companion object {
+        const val VOIP_PROTO_VERSION = 1
+    }
+
+    val ourPartyId: String
+    var opponentPartyId: Optional<String>?
+    var opponentVersion: Int
+
+    var capabilities: CallCapabilities?
+
     var state: CallState
 
     /**
      * Pick Up the incoming call
      * It has no effect on outgoing call
      */
-    fun accept(sdp: SessionDescription)
+    fun accept(sdpString: String)
+
+    /**
+     * SDP negotiation for media pause, hold/resume, ICE restarts and voice/video call up/downgrading
+     */
+    fun negotiate(sdpString: String, type: SdpType)
+
+    /**
+     * This has to be sent by the caller's client once it has chosen an answer.
+     */
+    fun selectAnswer()
 
     /**
      * Reject an incoming call
-     * It's an alias to hangUp
      */
-    fun reject() = hangUp()
+    fun reject()
 
     /**
      * End the call
      */
-    fun hangUp()
+    fun hangUp(reason: CallHangupContent.Reason? = null)
 
     /**
      * Start a call
      * Send offer SDP to the other participant.
      */
-    fun offerSdp(sdp: SessionDescription)
+    fun offerSdp(sdpString: String)
 
     /**
-     * Send Ice candidate to the other participant.
+     * Send Call candidate to the other participant.
      */
-    fun sendLocalIceCandidates(candidates: List<IceCandidate>)
+    fun sendLocalCallCandidates(candidates: List<CallCandidate>)
 
     /**
      * Send removed ICE candidates to the other participant.
      */
-    fun sendLocalIceCandidateRemovals(candidates: List<IceCandidate>)
+    fun sendLocalIceCandidateRemovals(candidates: List<CallCandidate>)
+
+    /**
+     * Send a m.call.replaces event to initiate call transfer.
+     */
+    suspend fun transfer(targetUserId: String, targetRoomId: String?)
 
     fun addListener(listener: StateListener)
     fun removeListener(listener: StateListener)

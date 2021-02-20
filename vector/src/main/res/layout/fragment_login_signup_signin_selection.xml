@@ -81,17 +81,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/loginSignupSigninSubmit"
                 tools:visibility="visible" />
 
-            <!-- Social Logins buttons -->
+            <!-- Social Login buttons -->
             <LinearLayout
                 android:id="@+id/loginSignupSigninSignInSocialLoginContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/loginSignupSigninSignIn">
+                app:layout_constraintTop_toBottomOf="@id/loginSignupSigninSignIn"
+                tools:visibility="visible">
 
                 <TextView
                     android:id="@+id/loginSignupSigninSocialLoginHeader"

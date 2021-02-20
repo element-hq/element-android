@@ -25,7 +25,6 @@ data class Widget(
         val widgetId: String,
         val senderInfo: SenderInfo?,
         val isAddedByMe: Boolean,
-        val computedUrl: String?,
         val type: WidgetType
 ) {
 

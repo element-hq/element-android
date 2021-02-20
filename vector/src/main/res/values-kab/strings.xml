@@ -1360,7 +1360,7 @@
         <item quantity="one">1 uwiǧit i yettwaremden</item>
         <item quantity="other">%d n yiwiǧiten i yettwaremden</item>
     </plurals>
-    <string name="error_jitsi_not_supported_on_old_device">Nesḥassef, asarag s usiwel s Jitsi ur yettusefrak ara ɣef yibenkan iqburen (ibenkan s Android OS ddaw 5.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">Nesḥassef, asarag s usiwel s Jitsi ur yettusefrak ara ɣef yibenkan iqburen (ibenkan s Android OS ddaw 6.0)</string>
     <string name="room_widget_resource_permission_title">Iwiǧit-a yebɣa ad isseqdec tiɣbula-a:</string>
     <string name="room_widget_webview_access_camera">Seqdec takamiṛat</string>
     <string name="room_widget_webview_access_microphone">Seqdec asawaḍ</string>

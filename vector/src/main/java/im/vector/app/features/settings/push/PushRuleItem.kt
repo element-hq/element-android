@@ -59,10 +59,13 @@ abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
 
             if (notifAction.shouldNotify && !notifAction.soundName.isNullOrBlank()) {
                 holder.actionIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_notify_noisy))
+                holder.actionIcon.contentDescription = context.getString(R.string.a11y_rule_notify_noisy)
             } else if (notifAction.shouldNotify) {
                 holder.actionIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_notify_silent))
+                holder.actionIcon.contentDescription = context.getString(R.string.a11y_rule_notify_silent)
             } else {
                 holder.actionIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_dont_notify))
+                holder.actionIcon.contentDescription = context.getString(R.string.a11y_rule_notify_off)
             }
 
             val description = StringBuffer()

@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.list
 
-import android.view.View
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
@@ -88,7 +87,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         var latestEventTime: CharSequence = ""
         val latestEvent = roomSummary.scLatestPreviewableEvent(scSdkPreferences)
         if (latestEvent != null) {
-            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect.not(), roomSummary)
+            latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
@@ -112,7 +111,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                     onLongClick?.invoke(roomSummary) ?: false
                 }
                 .itemClickListener(
-                        DebouncedClickListener(View.OnClickListener { _ ->
+                        DebouncedClickListener({
                             onClick?.invoke(roomSummary)
                         })
                 )

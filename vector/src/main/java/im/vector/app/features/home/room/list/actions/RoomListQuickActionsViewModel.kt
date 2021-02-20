@@ -29,7 +29,7 @@ import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
 class RoomListQuickActionsViewModel @AssistedInject constructor(@Assisted initialState: RoomListQuickActionsState,
-                                                                private val session: Session
+                                                                session: Session
 ) : VectorViewModel<RoomListQuickActionsState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory

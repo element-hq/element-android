@@ -19,17 +19,16 @@ package im.vector.app.core.extensions
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import im.vector.app.core.utils.EventObserver
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.LiveEvent
 
 inline fun <T> LiveData<T>.observeK(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) {
-    this.observe(owner, Observer { observer(it) })
+    this.observe(owner, { observer(it) })
 }
 
 inline fun <T> LiveData<T>.observeNotNull(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
-    this.observe(owner, Observer { it?.run(observer) })
+    this.observe(owner, { it?.run(observer) })
 }
 
 inline fun <T> LiveData<LiveEvent<T>>.observeEvent(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {

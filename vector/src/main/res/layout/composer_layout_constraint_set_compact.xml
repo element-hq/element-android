@@ -42,6 +42,7 @@
         android:id="@+id/composerRelatedMessageAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:contentDescription="@string/avatar"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
@@ -75,6 +76,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="38dp"
         android:alpha="0"
+        android:importantForAccessibility="no"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
         app:tint="?riotx_text_primary"
@@ -87,6 +89,7 @@
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/cancel"
         android:src="@drawable/ic_close_round"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="parent"
@@ -111,6 +114,7 @@
         android:layout_height="48dp"
         android:layout_margin="1dp"
         android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/option_send_files"
         android:src="@drawable/ic_attachment"
         android:tint="?android:textColorHint"
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
@@ -119,7 +123,7 @@
         app:layout_constraintTop_toTopOf="@id/sendButton"
         tools:ignore="MissingPrefix" />
 
-    <ImageView
+    <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/composerShieldImageView"
         android:layout_width="16dp"
         android:layout_height="16dp"
@@ -128,7 +132,6 @@
         app:layout_constraintStart_toEndOf="@+id/composerEmojiButton"
         app:layout_constraintTop_toTopOf="@id/sendButton"
         app:layout_goneMarginStart="12dp"
-        tools:src="@drawable/ic_shield_black"
         tools:visibility="visible" />
 
     <im.vector.app.features.home.room.detail.composer.ComposerEditText
@@ -152,6 +155,7 @@
         android:layout_height="48dp"
         android:layout_margin="1dp"
         android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/a11y_open_emoji_picker"
         android:src="@drawable/ic_insert_emoji"
         android:tint="?android:textColorHint"
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
@@ -164,6 +168,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginEnd="2dp"
+        android:contentDescription="@string/send"
         android:scaleType="center"
         android:src="@drawable/ic_send"
         app:layout_constraintBottom_toBottomOf="parent"
