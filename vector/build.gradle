@@ -375,7 +375,7 @@ dependencies {
     implementation "io.noties.markwon:html:$markwon_version"
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
     implementation 'me.saket:better-link-movement-method:2.2.0'
-    implementation 'com.google.android:flexbox:1.1.1'
+    implementation 'com.google.android:flexbox:2.0.1'
     implementation "androidx.autofill:autofill:$autofill_version"
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
