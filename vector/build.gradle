@@ -387,7 +387,7 @@ dependencies {
     implementation 'com.nulab-inc:zxcvbn:1.4.0'
 
     //Alerter
-    implementation 'com.tapadoo.android:alerter:5.1.2'
+    implementation 'com.tapadoo.android:alerter:7.0.1'
 
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
