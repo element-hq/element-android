@@ -384,7 +384,7 @@ dependencies {
     implementation 'androidx.browser:browser:1.2.0'
 
     // Passphrase strength helper
-    implementation 'com.nulab-inc:zxcvbn:1.2.7'
+    implementation 'com.nulab-inc:zxcvbn:1.4.0'
 
     //Alerter
     implementation 'com.tapadoo.android:alerter:5.1.2'
