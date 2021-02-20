@@ -2,7 +2,7 @@
 
 buildscript {
     // Ref: https://kotlinlang.org/releases.html
-    ext.kotlin_version = '1.4.21'
+    ext.kotlin_version = '1.4.30'
     ext.kotlin_coroutines_version = "1.4.1"
     repositories {
         google()
