@@ -381,7 +381,7 @@ dependencies {
     implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
 
     // Custom Tab
-    implementation 'androidx.browser:browser:1.2.0'
+    implementation 'androidx.browser:browser:1.3.0'
 
     // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.4.0'
