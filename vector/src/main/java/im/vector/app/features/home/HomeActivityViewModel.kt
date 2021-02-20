@@ -52,6 +52,7 @@ import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class HomeActivityViewModel @AssistedInject constructor(
         @Assisted initialState: HomeActivityViewState,
@@ -228,7 +229,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                                                     )
                                             )
                                         } else {
-                                            promise.resumeWith(Result.failure(Exception("Cannot silently initialize cross signing, UIA missing")))
+                                            promise.resumeWithException(Exception("Cannot silently initialize cross signing, UIA missing"))
                                         }
                                     }
                                 },

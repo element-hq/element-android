@@ -1,0 +1,23 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  # Updates for Github Actions used in the repo
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  # Updates for Gradle dependencies used in the app
+  - package-ecosystem: gradle
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 200
+    reviewers:
+      - "bmarty"
+###    ignore:
+###      - dependency-name: com.squareup.okhttp3:logging-interceptor
+###        versions: "> 3.12.10"

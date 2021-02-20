@@ -16,14 +16,25 @@
 
 package org.matrix.android.sdk.internal.auth.registration
 
+import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
-import org.matrix.android.sdk.api.auth.UIABaseAuth
 import timber.log.Timber
 import kotlin.coroutines.suspendCoroutine
 
-internal suspend fun handleUIA(failure: Throwable, interceptor: UserInteractiveAuthInterceptor, retryBlock: suspend (UIABaseAuth) -> Unit): Boolean {
+/**
+ * Handle a UIA challenge
+ *
+ * @param failure the failure to handle
+ * @param interceptor see doc in [UserInteractiveAuthInterceptor]
+ * @param retryBlock called at the end of the process, in this block generally retry executing the task, with
+ * provided authUpdate
+ * @return true if UIA is handled without error
+ */
+internal suspend fun handleUIA(failure: Throwable,
+                               interceptor: UserInteractiveAuthInterceptor,
+                               retryBlock: suspend (UIABaseAuth) -> Unit): Boolean {
     Timber.d("## UIA: check error ${failure.message}")
     val flowResponse = failure.toRegistrationFlowResponse()
             ?: return false.also {
@@ -38,16 +49,16 @@ internal suspend fun handleUIA(failure: Throwable, interceptor: UserInteractiveA
         suspendCoroutine<UIABaseAuth> { continuation ->
             interceptor.performStage(flowResponse, (failure as? Failure.ServerError)?.error?.code, continuation)
         }
-    } catch (failure: Throwable) {
-        Timber.w(failure, "## UIA: failed to participate")
+    } catch (failure2: Throwable) {
+        Timber.w(failure2, "## UIA: failed to participate")
         return false
     }
 
-    Timber.d("## UIA: updated auth $authUpdate")
+    Timber.d("## UIA: updated auth")
     return try {
         retryBlock(authUpdate)
         true
-    } catch (failure: Throwable) {
-        handleUIA(failure, interceptor, retryBlock)
+    } catch (failure3: Throwable) {
+        handleUIA(failure3, interceptor, retryBlock)
     }
 }

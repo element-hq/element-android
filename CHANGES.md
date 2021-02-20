@@ -1,8 +1,34 @@
-Changes in Element 1.0.18 (2021-XX-XX)
+Changes in Element 1.1.1 (2021-XX-XX)
 ===================================================
 
 Features ✨:
  - Allow changing nick colors (#2610)
+                                
+Improvements 🙌:
+ -
+
+Bugfix 🐛:
+ -
+
+Translations 🗣:
+ -
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ -
+
+Test:
+ -
+
+Other changes:
+ -
+
+Changes in Element 1.1.0 (2021-02-19)
+===================================================
+
+Features ✨:
  - VoIP : support for VoIP V1 protocol, transfer call and dial-pad
                                 
 Improvements 🙌:
@@ -15,18 +41,11 @@ Bugfix 🐛:
  - VoIP : fix audio devices output
  - Fix crash after initial sync on Dendrite
  - Fix crash reported by PlayStore (#2707)
-
-Translations 🗣:
- -
+ - Ignore url override from credential if it is not valid (#2822)
+ - Fix crash when deactivating an account
 
 SDK API changes ⚠️:
- - 
-
-Build 🧱:
- -
-
-Test:
- -
+ - Migrate AuthenticationService API to coroutines (#2449)
 
 Other changes:
  - New Dev Tools panel for developers
@@ -1204,7 +1223,7 @@ Mode details here: https://medium.com/@RiotChat/introducing-the-riotx-beta-for-a
 =======================================================
 
 
-Changes in Element 1.X.X (2021-XX-XX)
+Changes in Element 1.1.X (2021-XX-XX)
 ===================================================
 
 Features ✨:
