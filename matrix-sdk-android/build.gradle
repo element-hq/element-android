@@ -173,7 +173,7 @@ dependencies {
     //testImplementation 'org.robolectric:shadows-support-v4:3.0'
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
     testImplementation 'io.mockk:mockk:1.9.2.kotlin12'
-    testImplementation 'org.amshove.kluent:kluent-android:1.61'
+    testImplementation 'org.amshove.kluent:kluent-android:1.65'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'

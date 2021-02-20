@@ -301,7 +301,7 @@ dependencies {
     def lifecycle_version = '2.2.0'
 
     // Tests
-    def kluent_version = '1.61'
+    def kluent_version = '1.65'
     def androidxTest_version = '1.3.0'
     def espresso_version = '3.3.0'
 
