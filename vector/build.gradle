@@ -347,7 +347,7 @@ dependencies {
     // RXBinding
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.1.0'
     implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.0.0'
+    implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.1.0'
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
     implementation "com.airbnb.android:epoxy-glide-preloading:$epoxy_version"
