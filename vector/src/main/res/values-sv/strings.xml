@@ -40,7 +40,7 @@
     <string name="send">Skicka</string>
     <string name="resend">Skicka igen</string>
     <string name="redact">Ta bort</string>
-    <string name="quote">Citat</string>
+    <string name="quote">Citera</string>
     <string name="download">Ladda ner</string>
     <string name="share">Dela</string>
     <string name="speak">Prata</string>
@@ -256,7 +256,7 @@
     <string name="groups_list">Grupplista</string>
     <plurals name="membership_changes">
         <item quantity="one">%d medlemsskapsändring</item>
-        <item quantity="other">%s medlemsskapsändringar</item>
+        <item quantity="other">%d medlemsskapsändringar</item>
     </plurals>
     <string name="compression_options">Skicka som</string>
     <string name="compression_opt_list_original">Original</string>
@@ -849,11 +849,11 @@
     <string name="select_room_directory">Välj en rumskatalog</string>
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d oläst aviserat meddelande</item>
-        <item quantity="other">%s olästa aviserade meddelanden</item>
+        <item quantity="other">%d olästa aviserade meddelanden</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">%d oläst aviserat meddelande</item>
-        <item quantity="other">%s olästa aviserade meddelanden</item>
+        <item quantity="other">%d olästa aviserade meddelanden</item>
     </plurals>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: %2$d meddelande</item>
