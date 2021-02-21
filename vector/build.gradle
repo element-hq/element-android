@@ -299,6 +299,7 @@ dependencies {
     def work_version = '2.5.0'
     def arch_version = '2.1.0'
     def lifecycle_version = '2.2.0'
+    def rxbinding_version = '3.1.0'
 
     // Tests
     def kluent_version = '1.65'
@@ -345,9 +346,9 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
     // RXBinding
-    implementation 'com.jakewharton.rxbinding3:rxbinding:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.1.0'
-    implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.1.0'
+    implementation "com.jakewharton.rxbinding3:rxbinding:$rxbinding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rxbinding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-material:$rxbinding_version"
 
     implementation("com.airbnb.android:epoxy:$epoxy_version")
     implementation "com.airbnb.android:epoxy-glide-preloading:$epoxy_version"
