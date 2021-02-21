@@ -17,7 +17,7 @@ SDK API changes ⚠️:
  -
 
 Build 🧱:
- -
+ - Update a lot of dependencies, with the help of dependabot.
 
 Test:
  -
