@@ -24,6 +24,7 @@ import io.realm.RealmResults
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.ReadReceiptsSummaryMapper
+import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
@@ -121,7 +122,7 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         // We are looking for read receipts set on hidden events.
         // We only accept those with a timelineEvent (so coming from pagination/sync).
         this.hiddenReadReceipts = ReadReceiptsSummaryEntity.whereInRoom(realm, roomId)
-                .isNotEmpty(ReadReceiptsSummaryEntityFields.TIMELINE_EVENT)
+                .isNotEmpty(ReadReceiptsSummaryEntityFields.TIMELINE_EVENT.`$`)
                 .isNotEmpty(ReadReceiptsSummaryEntityFields.READ_RECEIPTS.`$`)
                 .filterReceiptsWithSettings()
                 .findAllAsync()
@@ -157,12 +158,12 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
             // Result: D, F, H, I
             settings.filters.allowedTypes.forEachIndexed { index, filter ->
                 if (filter.stateKey == null) {
-                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", filter.eventType)
+                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT.ROOT}.${EventEntityFields.TYPE}", filter.eventType)
                 } else {
                     beginGroup()
-                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.TYPE}", filter.eventType)
+                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT.ROOT}.${EventEntityFields.TYPE}", filter.eventType)
                     or()
-                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.STATE_KEY}", filter.stateKey)
+                    notEqualTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT.ROOT}.${EventEntityFields.STATE_KEY}", filter.stateKey)
                     endGroup()
                 }
                 if (index != settings.filters.allowedTypes.size - 1) {
@@ -174,19 +175,19 @@ internal class TimelineHiddenReadReceipts constructor(private val readReceiptsSu
         }
         if (settings.filters.filterUseless) {
             if (needOr) or()
-            equalTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.IS_USELESS}", true)
+            equalTo("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT.ROOT}.${EventEntityFields.IS_USELESS}", true)
             needOr = true
         }
         if (settings.filters.filterEdits) {
             if (needOr) or()
-            like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", TimelineEventFilter.Content.EDIT)
+            like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT.ROOT}.${EventEntityFields.CONTENT}", TimelineEventFilter.Content.EDIT)
             or()
-            like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.CONTENT}", TimelineEventFilter.Content.RESPONSE)
+            like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT.ROOT}.${EventEntityFields.CONTENT}", TimelineEventFilter.Content.RESPONSE)
             needOr = true
         }
         if (settings.filters.filterRedacted) {
             if (needOr) or()
-            like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT}.${TimelineEventEntityFields.ROOT.UNSIGNED_DATA}", TimelineEventFilter.Unsigned.REDACTED)
+            like("${ReadReceiptsSummaryEntityFields.TIMELINE_EVENT.ROOT}.${EventEntityFields.UNSIGNED_DATA}", TimelineEventFilter.Unsigned.REDACTED)
         }
         endGroup()
         return this
