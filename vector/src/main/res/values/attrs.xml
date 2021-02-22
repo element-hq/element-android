@@ -65,8 +65,10 @@
         <attr name="forceStartPadding" format="boolean" />
     </declare-styleable>
 
+    <attr name="iconTint" format="color" />
+
     <declare-styleable name="SignOutBottomSheetActionButton">
-        <attr name="iconTint" format="color" />
+        <attr name="iconTint"/>
         <attr name="actionTitle" />
         <attr name="leftIcon" />
         <attr name="textColor" format="color" />
@@ -79,4 +81,12 @@
             <enum name="continue_with" value="2" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="WizardButtonView">
+        <attr name="icon" format="reference" />
+        <attr name="iconTint"/>
+        <attr name="title" format="string" />
+        <attr name="subTitle" format="string" />
+    </declare-styleable>
+
 </resources>

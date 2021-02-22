@@ -46,6 +46,7 @@ const val ALL_COMMUNITIES_GROUP_ID = "+ALL_COMMUNITIES_GROUP_ID"
 
 sealed class SpaceListAction : VectorViewModelAction {
     data class SelectSpace(val spaceSummary: SpaceSummary) : SpaceListAction()
+    object AddSpace : SpaceListAction()
 }
 
 /**
@@ -54,6 +55,7 @@ sealed class SpaceListAction : VectorViewModelAction {
 sealed class SpaceListViewEvents : VectorViewEvents {
     object OpenSpace : SpaceListViewEvents()
     data class OpenSpaceSummary(val id: String) : SpaceListViewEvents()
+    object AddSpace : SpaceListViewEvents()
 }
 
 data class SpaceListViewState(
@@ -110,6 +112,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     override fun handle(action: SpaceListAction) {
         when (action) {
             is SpaceListAction.SelectSpace -> handleSelectSpace(action)
+            else                           -> handleAddSpace()
         }
     }
 
@@ -134,6 +137,10 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 setState { copy(selectedSpace = action.spaceSummary) }
             }
         }
+    }
+
+    private fun handleAddSpace() {
+        _viewEvents.post(SpaceListViewEvents.AddSpace)
     }
 
     private fun observeGroupSummaries() {
