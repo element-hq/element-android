@@ -22,6 +22,7 @@ import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
+import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.Session
@@ -88,6 +89,7 @@ internal class DefaultSession @Inject constructor(
         private val groupService: Lazy<GroupService>,
         private val userService: Lazy<UserService>,
         private val filterService: Lazy<FilterService>,
+        private val federationService: Lazy<FederationService>,
         private val cacheService: Lazy<CacheService>,
         private val signOutService: Lazy<SignOutService>,
         private val pushRuleService: Lazy<PushRuleService>,
@@ -259,6 +261,8 @@ internal class DefaultSession @Inject constructor(
     override fun callSignalingService(): CallSignalingService = callSignalingService.get()
 
     override fun searchService(): SearchService = searchService.get()
+
+    override fun federationService(): FederationService = federationService.get()
 
     override fun thirdPartyService(): ThirdPartyService = thirdPartyService.get()
 

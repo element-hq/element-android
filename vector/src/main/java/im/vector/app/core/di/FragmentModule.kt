@@ -109,6 +109,7 @@ import im.vector.app.features.settings.devtools.GossipingEventsPaperTrailFragmen
 import im.vector.app.features.settings.devtools.IncomingKeyRequestListFragment
 import im.vector.app.features.settings.devtools.KeyRequestsFragment
 import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
+import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.app.features.settings.locale.LocalePickerFragment
 import im.vector.app.features.settings.push.PushGatewaysFragment
@@ -283,6 +284,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VectorSettingsLabsFragment::class)
     fun bindVectorSettingsLabsFragment(fragment: VectorSettingsLabsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(HomeserverSettingsFragment::class)
+    fun bindHomeserverSettingsFragment(fragment: HomeserverSettingsFragment): Fragment
 
     @Binds
     @IntoMap
