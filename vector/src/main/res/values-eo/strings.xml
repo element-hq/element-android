@@ -845,7 +845,7 @@
     <string name="settings_discovery_no_mails">Elektebloj pri trovado aperos post aldono de retpoŝtadreso.</string>
     <string name="settings_discovery_emails_title">Troveblaj retpoŝtadresoj</string>
     <string name="settings_discovery_identity_server_info_none">Vi nun ne uzas identigan servilon. Por trovi kaj troviĝi de jamaj kontaktoj, kiujn vi konas, agordu tian servilon sube.</string>
-    <string name="settings_discovery_identity_server_info">Vi nun uzas %1$s por trovi kaj troviĝi de jamaj kontaktoj, kiujn vi trovas.</string>
+    <string name="settings_discovery_identity_server_info">Vi nun uzas %1$s por trovi kaj troviĝi de jamaj kontaktoj, kiujn vi konas.</string>
     <string name="change_identity_server">Ŝanĝi identigan servilon</string>
     <string name="add_identity_server">Agordi identigan servilon</string>
     <string name="disconnect_identity_server">Malkonekti identigan servilon</string>
@@ -1186,7 +1186,7 @@
 \nSe vi ne salutis alian salutaĵon, malatentu ĉi tiun peton.</string>
     <string name="your_unverified_device_requesting">Via nekontrolita salutaĵo «%s» petas ĉifrajn ŝlosilojn.</string>
     <string name="you_added_a_new_device">Vi aldonis novan salutaĵon «%s», kiu petas ĉifrajn ŝlosilojn.</string>
-    <string name="widget_integration_review_terms">Por daŭrigi vi bezonas akcepti la uzokondiĉojn de tiu ĉi servo.</string>
+    <string name="widget_integration_review_terms">Por daŭrigi vi devas akcepti la uzokondiĉojn de tiu ĉi servo.</string>
     <string name="settings_labs_enable_send_voice_summary">Ĉi tiu elekteblo postulas aplikaĵon de ekstera liveranto por registri la mesaĝojn.</string>
     <string name="settings_labs_enable_send_voice">Sendi voĉmesaĝojn</string>
     <string name="settings_labs_keyboard_options_to_send_message">Uzi enigan klavon por sendi mesaĝon</string>
