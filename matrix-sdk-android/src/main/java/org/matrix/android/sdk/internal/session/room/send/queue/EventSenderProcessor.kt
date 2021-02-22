@@ -128,19 +128,13 @@ internal class EventSenderProcessor @Inject constructor(
 
     private var networkAvailableLock = Object()
     private var canReachServer = true
-    private val retryNoNetworkTask: TimerTask by lazy {
-        Timer(SyncState.NoNetwork.toString(), false).schedule(RETRY_DELAY_TIME_MS, RETRY_PERIOD_TIME_MS) {
-            synchronized(networkAvailableLock) {
-                canReachServer = checkHostAvailable().also {
-                    Timber.v("## SendThread checkHostAvailable $it")
-                }
-                networkAvailableLock.notify()
-            }
-        }
-    }
+    private lateinit var retryNoNetworkTask: TimerTask
 
     override fun run() {
         Timber.v("## SendThread started ts:${System.currentTimeMillis()}")
+
+        initTimer()
+
         try {
             while (!isInterrupted) {
                 Timber.v("## SendThread wait for task to process")
@@ -225,6 +219,17 @@ internal class EventSenderProcessor @Inject constructor(
         // is this needed?
         retryNoNetworkTask.cancel()
         Timber.w("## SendThread finished ${System.currentTimeMillis()}")
+    }
+
+    private fun initTimer() {
+        retryNoNetworkTask = Timer(SyncState.NoNetwork.toString(), false).schedule(RETRY_DELAY_TIME_MS, RETRY_PERIOD_TIME_MS) {
+            synchronized(networkAvailableLock) {
+                canReachServer = checkHostAvailable().also {
+                    Timber.v("## SendThread checkHostAvailable $it")
+                }
+                networkAvailableLock.notify()
+            }
+        }
     }
 
     private fun waitForNetwork() {
