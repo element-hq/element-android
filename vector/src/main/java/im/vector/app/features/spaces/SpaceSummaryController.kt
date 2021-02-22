@@ -19,8 +19,10 @@ package im.vector.app.features.spaces
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericItemHeader
+import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.grouplist.homeSpaceSummaryItem
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -103,9 +105,19 @@ class SpaceSummaryController @Inject constructor(
                         }
                     }
                 }
+
+        // Temporary item to create a new Space (will move with final design)
+
+        genericButtonItem {
+            id("create")
+            text(stringProvider.getString(R.string.add_space))
+            iconRes(R.drawable.ic_add_black)
+            buttonClickAction(DebouncedClickListener({ callback?.onAddSpaceSelected() }))
+        }
     }
 
     interface Callback {
         fun onSpaceSelected(spaceSummary: SpaceSummary)
+        fun onAddSpaceSelected()
     }
 }
