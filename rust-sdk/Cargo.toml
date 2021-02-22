@@ -37,7 +37,7 @@ features = ["rt-multi-thread"]
 [dependencies.uniffi]
 version = "0.7.0"
 git = "https://github.com/mozilla/uniffi-rs"
-branch = "tagged-unions"
+rev = "f7c8ccda783494ee507ea0f8a61f35b39527394f"
 
 [build-dependencies]
 uniffi_build = "0.7.0"
