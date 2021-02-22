@@ -16,17 +16,17 @@
 
 package im.vector.app.features.home.room.detail.timeline.url
 
-import android.os.Handler
-import android.os.Looper
 import im.vector.app.BuildConfig
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.cache.CacheStrategy
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLatestEventId
 
-class PreviewUrlRetriever(session: Session) {
+class PreviewUrlRetriever(session: Session,
+                          private val coroutineScope: CoroutineScope) {
     private val mediaService = session.mediaService()
 
     private data class EventIdPreviewUrlUiState(
@@ -38,12 +38,11 @@ class PreviewUrlRetriever(session: Session) {
     // Keys are the main eventId
     private val data = mutableMapOf<String, EventIdPreviewUrlUiState>()
     private val listeners = mutableMapOf<String, MutableSet<PreviewUrlRetrieverListener>>()
-    private val uiHandler = Handler(Looper.getMainLooper())
 
     // In memory list
     private val blockedUrl = mutableSetOf<String>()
 
-    fun getPreviewUrl(event: TimelineEvent, coroutineScope: CoroutineScope) {
+    fun getPreviewUrl(event: TimelineEvent) {
         val eventId = event.root.eventId ?: return
         val latestEventId = event.getLatestEventId()
 
@@ -115,7 +114,7 @@ class PreviewUrlRetriever(session: Session) {
     private fun updateState(eventId: String, latestEventId: String, state: PreviewUrlUiState) {
         data[eventId] = EventIdPreviewUrlUiState(latestEventId, state)
         // Notify the listener
-        uiHandler.post {
+        coroutineScope.launch(Dispatchers.Main) {
             listeners[eventId].orEmpty().forEach {
                 it.onStateUpdated(state)
             }
