@@ -2169,4 +2169,21 @@
     <string name="autodiscover_well_known_autofill_dialog_message">Element trovis propran servilan agordaron per la retnomo «%1$s» el via identigilo de uzanto:
 \n%2$s</string>
     <string name="autodiscover_invalid_response">Nevalidas hejmservil-serĉanta respondo</string>
+    <string name="room_permissions_notice">Elektu la rolojn bezonatajn por ŝanĝi diversajn partojn de la ĉambro</string>
+    <string name="room_permissions_title">Permesoj</string>
+    <string name="room_settings_permissions_subtitle">Montri kaj ĝisdatigi la rolojn bezonatajn por ŝanĝi diversajn partojn de la ĉambro.</string>
+    <string name="room_participants_leave_private_warning">Ĉi tiu ĉambro ne estas publika. Vi ne povos re-aliĝi sen invito.</string>
+    <string name="permissions_denied_add_contact">Permesi aliron al viaj kontaktoj.</string>
+    <string name="permissions_denied_qr_code">Por skani rapidrespondan kodon, vi bezonas permesi aliron al filmilo.</string>
+    <string name="call_held_by_you">Vi paŭzigis la vokon</string>
+    <string name="call_held_by_user">%s paŭzigis la vokon</string>
+    <string name="call_hold_action">Paŭzigi</string>
+    <string name="call_resume_action">Daŭrigi</string>
+    <string name="send_bug_report_include_key_share_history">Sendi historion de petoj havigi ŝlosilojn</string>
+    <string name="no_more_results">Neniu pliaj rezultoj</string>
+    <string name="action_return">Reiri</string>
+    <string name="action_unpublish">Malpublikigi</string>
+    <string name="action_add">Aldoni</string>
+    <string name="start_chatting">Ekbabili</string>
+    <string name="system_theme">Implicita de sistemo</string>
 </resources>
