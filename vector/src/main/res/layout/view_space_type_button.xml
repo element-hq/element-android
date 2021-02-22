@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_rect_shape_8"
+    android:id="@+id/content"
+    android:padding="4dp">
+
+    <ImageView
+        android:id="@+id/buttonImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="8dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_public_room"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="start"
+        android:textColor="?riotx_text_primary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/rightChevron"
+        app:layout_constraintStart_toEndOf="@id/buttonImageView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Public" />
+
+
+    <TextView
+        android:id="@+id/subTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="start"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/rightChevron"
+        app:layout_constraintStart_toEndOf="@id/buttonImageView"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_goneMarginBottom="8dp"
+        tools:text="Open to anyone, best for communities" />
+
+    <ImageView
+        android:id="@+id/rightChevron"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/ic_material_chevron_right_black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?riotx_text_secondary" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -274,6 +274,7 @@
         <activity android:name=".features.devtools.RoomDevToolActivity"/>
         <activity android:name=".features.spaces.SpacePreviewActivity"/>
         <activity android:name=".features.spaces.SpaceExploreActivity"/>
+        <activity android:name=".features.spaces.SpaceCreationActivity"/>
         <!-- Services -->
 
         <service

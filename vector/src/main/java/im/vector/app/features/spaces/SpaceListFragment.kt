@@ -57,6 +57,7 @@ class SpaceListFragment @Inject constructor(
             when (it) {
                 is SpaceListViewEvents.OpenSpaceSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpacePreview(it.id))
                 is SpaceListViewEvents.OpenSpace -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup)
+                is SpaceListViewEvents.AddSpace -> sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
             }.exhaustive
         }
     }
@@ -77,5 +78,9 @@ class SpaceListFragment @Inject constructor(
 
     override fun onSpaceSelected(spaceSummary: SpaceSummary) {
         viewModel.handle(SpaceListAction.SelectSpace(spaceSummary))
+    }
+
+    override fun onAddSpaceSelected() {
+        viewModel.handle(SpaceListAction.AddSpace)
     }
 }
