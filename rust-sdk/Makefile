@@ -8,4 +8,4 @@ x86:
 
 aarch64:
 	cargo build --target aarch64-linux-android
-	install -D target/aarch64-linux-android/debug/libmatrix_crypto.so ../matrix-sdk-android/src/main/jniLibs/aarch64/libuniffi_olm.so
+	install -D target/aarch64-linux-android/debug/libmatrix_crypto.so ../matrix-sdk-android/src/main/jniLibs/arm64-v8a/libuniffi_olm.so
