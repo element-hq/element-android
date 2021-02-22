@@ -211,4 +211,57 @@
         <item quantity="one">%1$s engadiu %2$s como enderezo desta sala.</item>
         <item quantity="other">%1$s engadiu %2$s como enderezos desta sala.</item>
     </plurals>
+    <string name="key_verification_request_fallback_message">%s solicita verificar a túa chave, pero o teu cliente non soporta a verificación de chaves nos chats. Necesitarás usar o método antigo de verificación de chaves.</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Activaches o cifrado extremo-a-extremo (algoritmo non recoñecido %1$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s activou o cifrado extremo-a-extrem (algoritmo non recoñecible %2$s).</string>
+    <string name="notice_end_to_end_ok_by_you">Activaches o cifrado extremo-a-extremo.</string>
+    <string name="notice_end_to_end_ok">%1$s activou o cifrado extremo-a-extremo.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Non permites que as convidadas se unan á sala.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s non permite que as usuarias se unan á sala.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Non permites que as convidadas se unan á sala.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s non permite que as convidadas se unan á sala.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Permitiches que as convidadas se unan aquí.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s permitiu que as convidadas se unan aquí.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Permitiches que as convidadas se unan á sala.</string>
+    <string name="notice_room_guest_access_can_join">%1$s permite que as convidadas se unan á sala.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Cambiaches os enderezos desta sala.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s cambiou os enderezos desta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Cambiaches os enderezos principal e alternativo para esta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s cambiou os enderezos alternativo e principal para esta sala.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Cambiaches os enderezos alternativos para esta sala.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s cambiou os enderezos alternativos para esta sala.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Eliminaches o enderezo alternativo %1$s para esta sala.</item>
+        <item quantity="other">Eliminaches os enderezos alternativos %1$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s eliminou o enderezo alternativo %2$s para esta sala.</item>
+        <item quantity="other">%1$s eliminou os enderezos alternativos %2$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Engadiches o enderezo alternativo %1$s para esta sala.</item>
+        <item quantity="other">Engadiches os enderezos alternativos %1$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s engadiu o enderezo alternativo %2$s para esta sala.</item>
+        <item quantity="other">%1$s engadiu os enderezos alternativos %2$s para esta sala.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset_by_you">Eliminaches o enderezo principal desta sala.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s eliminou o enderezo principal desta sala.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Estableceches %1$s como enderezo principal desta sala.</string>
+    <string name="notice_room_canonical_alias_set">%1$s estableceu %2$s como enderezo principal desta sala.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Engadiches %1$s e eliminaches %2$s como enderezos desta sala.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s engadiu %2$s e eliminou %3$s como enderezos desta sala.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Eliminaches %1$s como enderezo desta sala.</item>
+        <item quantity="other">Eliminaches %1$s como enderezos desta sala.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s eliminou %2$s como enderezo desta sala.</item>
+        <item quantity="other">%1$s eliminou %2$s como enderezos desta sala.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Engadiches %1$s como enderezo para esta sala.</item>
+        <item quantity="other">Engadiches %1$s como enderezos para esta sala.</item>
+    </plurals>
 </resources>
