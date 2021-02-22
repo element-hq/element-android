@@ -5,6 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
+ - Improve event processing backoff time on bad networks.
  -
 
 Bugfix 🐛:
