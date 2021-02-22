@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.TaskExecutor
+import org.matrix.android.sdk.internal.util.exhaustive
 import timber.log.Timber
 import java.io.IOException
 import java.net.InetAddress
@@ -117,7 +118,8 @@ internal class EventSenderProcessor @Inject constructor(
     }
 
     companion object {
-        private const val RETRY_WAIT_TIME_MS = 10_000L
+        private const val RETRY_DELAY_TIME_MS = 500L
+        private const val RETRY_PERIOD_TIME_MS = 10_000L
     }
 
     private var currentTask: QueuedTask? = null
@@ -126,7 +128,16 @@ internal class EventSenderProcessor @Inject constructor(
 
     private var networkAvailableLock = Object()
     private var canReachServer = true
-    private var retryNoNetworkTask: TimerTask? = null
+    private val retryNoNetworkTask: TimerTask by lazy {
+        Timer(SyncState.NoNetwork.toString(), false).schedule(RETRY_DELAY_TIME_MS, RETRY_PERIOD_TIME_MS) {
+            synchronized(networkAvailableLock) {
+                canReachServer = checkHostAvailable().also {
+                    Timber.v("## SendThread checkHostAvailable $it")
+                }
+                networkAvailableLock.notify()
+            }
+        }
+    }
 
     override fun run() {
         Timber.v("## SendThread started ts:${System.currentTimeMillis()}")
@@ -212,19 +223,12 @@ internal class EventSenderProcessor @Inject constructor(
         }
 //        state = State.KILLED
         // is this needed?
-        retryNoNetworkTask?.cancel()
+        retryNoNetworkTask.cancel()
         Timber.w("## SendThread finished ${System.currentTimeMillis()}")
     }
 
     private fun waitForNetwork() {
-        retryNoNetworkTask = Timer(SyncState.NoNetwork.toString(), false).schedule(RETRY_WAIT_TIME_MS) {
-            synchronized(networkAvailableLock) {
-                canReachServer = checkHostAvailable().also {
-                    Timber.v("## SendThread checkHostAvailable $it")
-                }
-                networkAvailableLock.notify()
-            }
-        }
+        retryNoNetworkTask.exhaustive // ensure retryNoNetworkTask is initialized
         synchronized(networkAvailableLock) { networkAvailableLock.wait() }
     }
 
