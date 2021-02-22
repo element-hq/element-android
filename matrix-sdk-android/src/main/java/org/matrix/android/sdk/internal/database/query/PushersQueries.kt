@@ -48,6 +48,6 @@ internal fun PushRuleEntity.Companion.where(realm: Realm,
                                             scope: String,
                                             ruleId: String): RealmQuery<PushRuleEntity> {
     return realm.where<PushRuleEntity>()
-            .equalTo("${PushRuleEntityFields.PARENT}.${PushRulesEntityFields.SCOPE}", scope)
+            .equalTo(PushRuleEntityFields.PARENT.SCOPE, scope)
             .equalTo(PushRuleEntityFields.RULE_ID, ruleId)
 }

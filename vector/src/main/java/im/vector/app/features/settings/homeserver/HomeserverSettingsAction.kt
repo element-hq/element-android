@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,10 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.homeserver
+package im.vector.app.features.settings.homeserver
 
-/**
- * This interface defines a method to retrieve the homeserver capabilities.
- */
-interface HomeServerCapabilitiesService {
+import im.vector.app.core.platform.VectorViewModelAction
 
-    /**
-     * Force a refresh of the stored data
-     */
-    suspend fun refreshHomeServerCapabilities()
-
-    /**
-     * Get the HomeServer capabilities
-     */
-    fun getHomeServerCapabilities(): HomeServerCapabilities
+sealed class HomeserverSettingsAction : VectorViewModelAction {
+    object Refresh : HomeserverSettingsAction()
 }

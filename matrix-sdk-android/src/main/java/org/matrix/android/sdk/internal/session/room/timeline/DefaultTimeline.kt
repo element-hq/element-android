@@ -43,7 +43,6 @@ import org.matrix.android.sdk.api.util.CancelableBag
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
-import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
@@ -688,11 +687,11 @@ internal class DefaultTimeline(
         return if (initialEventId == null) {
             TimelineEventEntity
                     .whereRoomId(realm, roomId = roomId)
-                    .equalTo("${TimelineEventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST_FORWARD}", true)
+                    .equalTo(TimelineEventEntityFields.CHUNK.IS_LAST_FORWARD, true)
         } else {
             TimelineEventEntity
                     .whereRoomId(realm, roomId = roomId)
-                    .`in`("${TimelineEventEntityFields.CHUNK}.${ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID}", arrayOf(initialEventId))
+                    .`in`("${TimelineEventEntityFields.CHUNK.TIMELINE_EVENTS}.${TimelineEventEntityFields.EVENT_ID}", arrayOf(initialEventId))
         }
     }
 

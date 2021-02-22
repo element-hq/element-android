@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.homeserver
+package org.matrix.android.sdk.api.federation
 
-/**
- * This interface defines a method to retrieve the homeserver capabilities.
- */
-interface HomeServerCapabilitiesService {
-
+interface FederationService {
     /**
-     * Force a refresh of the stored data
+     * Get information about the homeserver
      */
-    suspend fun refreshHomeServerCapabilities()
-
-    /**
-     * Get the HomeServer capabilities
-     */
-    fun getHomeServerCapabilities(): HomeServerCapabilities
+    suspend fun getFederationVersion(): FederationVersion
 }

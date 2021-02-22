@@ -27,6 +27,7 @@ import org.matrix.android.sdk.internal.crypto.SendGossipWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessageWorker
 import org.matrix.android.sdk.internal.di.MatrixComponent
+import org.matrix.android.sdk.internal.federation.FederationModule
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.account.AccountModule
 import org.matrix.android.sdk.internal.session.cache.CacheModule
@@ -87,6 +88,7 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
             AccountDataModule::class,
             ProfileModule::class,
             AccountModule::class,
+            FederationModule::class,
             CallModule::class,
             SearchModule::class,
             ThirdPartyModule::class

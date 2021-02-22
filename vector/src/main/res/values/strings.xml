@@ -1117,6 +1117,7 @@
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Advanced</string>
     <string name="room_settings_room_internal_id">This room’s internal ID</string>
+    <string name="room_settings_room_version_title">Room version</string>
     <string name="room_settings_addresses_pref_title">Addresses</string>
     <string name="room_settings_labs_pref_title">Labs</string>
     <string name="room_settings_labs_warning_message">These are experimental features that may break in unexpected ways. Use with caution.</string>
@@ -2335,6 +2336,12 @@
     <string name="settings_active_sessions_show_all">Show All Sessions</string>
     <string name="settings_active_sessions_manage">Manage Sessions</string>
     <string name="settings_active_sessions_signout_device">Sign out of this session</string>
+
+    <string name="settings_server_name">Server name</string>
+    <string name="settings_server_version">Server version</string>
+    <string name="settings_server_upload_size_title">Server file upload limit</string>
+    <string name="settings_server_upload_size_content">Your homeserver accepts attachments (files, media, etc.) with a size up to %s.</string>
+    <string name="settings_server_upload_size_unknown">The limit is unknown.</string>
 
     <string name="settings_failed_to_get_crypto_device_info">No cryptographic information available</string>
 

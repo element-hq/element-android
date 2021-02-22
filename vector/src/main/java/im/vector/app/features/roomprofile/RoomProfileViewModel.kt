@@ -33,13 +33,17 @@ import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.rx.RxRoom
+import org.matrix.android.sdk.rx.mapOptional
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
 
@@ -69,8 +73,18 @@ class RoomProfileViewModel @AssistedInject constructor(
     init {
         val rxRoom = room.rx()
         observeRoomSummary(rxRoom)
+        observeRoomCreateContent(rxRoom)
         observeBannedRoomMembers(rxRoom)
         observePermissions()
+    }
+
+    private fun observeRoomCreateContent(rxRoom: RxRoom) {
+        rxRoom.liveStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.NoCondition)
+                .mapOptional { it.content.toModel<RoomCreateContent>() }
+                .unwrap()
+                .execute {
+                    copy(roomCreateContent = it)
+                }
     }
 
     private fun observeRoomSummary(rxRoom: RxRoom) {

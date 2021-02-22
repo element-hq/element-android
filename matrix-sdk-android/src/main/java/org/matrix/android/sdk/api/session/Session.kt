@@ -21,6 +21,7 @@ import androidx.lifecycle.LiveData
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
+import org.matrix.android.sdk.api.federation.FederationService
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
@@ -212,6 +213,11 @@ interface Session :
      * Returns the search service associated with the session
      */
     fun searchService(): SearchService
+
+    /**
+     * Returns the federation service associated with the session
+     */
+    fun federationService(): FederationService
 
     /**
      * Returns the third party service associated with the session
