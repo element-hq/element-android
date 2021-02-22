@@ -118,6 +118,9 @@ import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
 import im.vector.app.features.share.IncomingShareFragment
 import im.vector.app.features.signout.soft.SoftLogoutFragment
 import im.vector.app.features.spaces.SpaceListFragment
+import im.vector.app.features.spaces.create.ChooseSpaceTypeFragment
+import im.vector.app.features.spaces.create.CreateSpaceDefaultRoomsFragment
+import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
 import im.vector.app.features.spaces.preview.SpacePreviewFragment
 import im.vector.app.features.terms.ReviewTermsFragment
 import im.vector.app.features.usercode.ShowUserCodeFragment
@@ -636,4 +639,19 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(SpacePreviewFragment::class)
     fun bindSpacePreviewFragment(fragment: SpacePreviewFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ChooseSpaceTypeFragment::class)
+    fun bindCreateSpaceFragment(fragment: ChooseSpaceTypeFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CreateSpaceDetailsFragment::class)
+    fun bindCreateSpaceDetailsFragment(fragment: CreateSpaceDetailsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CreateSpaceDefaultRoomsFragment::class)
+    fun bindCreateSpaceDefaultRoomsFragment(fragment: CreateSpaceDefaultRoomsFragment): Fragment
 }
