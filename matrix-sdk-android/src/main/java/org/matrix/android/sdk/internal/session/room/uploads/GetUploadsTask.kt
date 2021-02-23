@@ -95,7 +95,7 @@ internal class DefaultGetUploadsTask @Inject constructor(
                     nextToken = chunk.end ?: "",
                     hasMore = chunk.hasMore()
             )
-            events = chunk.events ?: emptyList()
+            events = chunk.events
         }
 
         var uploadEvents = listOf<UploadEvent>()
