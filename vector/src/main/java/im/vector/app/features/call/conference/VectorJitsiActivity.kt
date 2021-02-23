@@ -20,6 +20,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
 import android.widget.FrameLayout
@@ -31,6 +33,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.facebook.react.modules.core.PermissionListener
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
 import kotlinx.parcelize.Parcelize
@@ -81,12 +84,18 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         }
 
         jitsiViewModel.observeViewEvents {
-            when(it) {
+            when (it) {
                 is JitsiCallViewEvents.StartConference -> configureJitsiView(it)
-            }
+            }.exhaustive
         }
 
         registerForBroadcastMessages()
+    }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean,
+                                               newConfig: Configuration) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        Timber.w("onPictureInPictureModeChanged($isInPictureInPictureMode)")
     }
 
     override fun initUiAndData() {
@@ -131,9 +140,9 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         jitsiMeetView?.join(jitsiMeetConferenceOptions)
     }
 
-    override fun onPause() {
+    override fun onStop() {
         JitsiMeetActivityDelegate.onHostPause(this)
-        super.onPause()
+        super.onStop()
     }
 
     override fun onResume() {
@@ -154,7 +163,9 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        jitsiMeetView?.enterPictureInPicture()
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            jitsiMeetView?.enterPictureInPicture()
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {

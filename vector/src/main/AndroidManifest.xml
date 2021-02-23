@@ -235,10 +235,11 @@
         <activity
             android:name=".features.call.VectorCallActivity"
             android:excludeFromRecents="true" />
+        <!-- PIP Support https://developer.android.com/guide/topics/ui/picture-in-picture -->
         <activity
             android:name=".features.call.conference.VectorJitsiActivity"
             android:configChanges="orientation|smallestScreenSize|screenLayout|screenSize"
-            android:resizeableActivity="true"
+            android:launchMode="singleTask"
             android:supportsPictureInPicture="true" />
 
         <activity android:name=".features.terms.ReviewTermsActivity" />
