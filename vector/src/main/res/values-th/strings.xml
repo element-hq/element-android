@@ -164,4 +164,103 @@
     <string name="are_you_sure">คุณแน่ใจหรือไม่\?</string>
     <string name="title_activity_group_details">ข้อมูลชุมชน</string>
     <string name="system_theme">ค่าเริ่มต้นของระบบ</string>
+    <string name="settings_add_email_address">เพิ่มที่อยู่อีเมล</string>
+    <string name="settings_phone_number">หมายเลขโทรศัพท์</string>
+    <plurals name="directory_search_rooms_for">
+        <item quantity="other">พบ %1$s ห้องสำหรับ %2$s</item>
+    </plurals>
+    <plurals name="directory_search_rooms">
+        <item quantity="other">%d ห้อง</item>
+    </plurals>
+    <string name="room_recents_join">เข้าร่วม</string>
+    <string name="search_is_not_supported_in_e2e_room">ยังไม่รองรับการค้นหาในห้องที่เข้ารหัส</string>
+    <string name="tab_title_search_files">ไฟล์</string>
+    <string name="tab_title_search_people">ผู้คน</string>
+    <string name="tab_title_search_messages">ข้อความ</string>
+    <string name="tab_title_search_rooms">ห้อง</string>
+    <string name="search_no_results">ไม่มีผลลัพธ์</string>
+    <string name="search_hint">ค้นหา</string>
+    <string name="room_event_action_report_prompt_reason">เหตุผลที่รายงานเนื้อหานี้</string>
+    <string name="room_details_people_invited_group_name">เชิญแล้ว</string>
+    <plurals name="room_details_selected">
+        <item quantity="other">เลือก %d รายการ</item>
+    </plurals>
+    <string name="room_details_settings">การตั้งค่า</string>
+    <string name="room_details_files">ไฟล์</string>
+    <string name="room_details_people">ผู้คน</string>
+    <string name="room_details_title">ข้อมูลห้อง</string>
+    <string name="room_permissions_change_topic">เปลี่ยนหัวข้อ</string>
+    <string name="room_permissions_upgrade_the_room">อัปเกรดห้อง</string>
+    <string name="room_permissions_enable_room_encryption">เปิดใช้การเข้ารหัสห้อง</string>
+    <string name="room_permissions_change_settings">เปลี่ยนการตั้งค่า</string>
+    <string name="room_permissions_invite_users">เชิญผู้ใช้</string>
+    <string name="room_permissions_send_messages">ส่งข้อความ</string>
+    <string name="ssl_do_not_trust">ไม่เชื่อถือ</string>
+    <string name="ssl_trust">เชื่อถือ</string>
+    <string name="ssl_logout_account">ออกจากระบบ</string>
+    <plurals name="room_new_messages_notification">
+        <item quantity="other">%d ข้อความใหม่</item>
+    </plurals>
+    <string name="room_message_placeholder_not_encrypted">ส่งข้อความ (ไม่เข้ารหัส)…</string>
+    <string name="room_message_placeholder_encrypted">ส่งข้อความที่เข้ารหัส…</string>
+    <string name="room_many_users_are_typing">%1$s และ %2$s และคนอื่น ๆ กำลังพิมพ์…</string>
+    <string name="room_two_users_are_typing">%1$s และ %2$s กำลังพิมพ์…</string>
+    <string name="room_one_user_is_typing">%s กำลังพิมพ์…</string>
+    <string name="room_menu_search">ค้นหา</string>
+    <string name="room_participants_invite_join_names_and">%1$s และ %2$s</string>
+    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
+    <string name="reason_hint">เหตุผล</string>
+    <string name="room_participants_action_kick">เตะ</string>
+    <string name="room_participants_action_unban">เลิกแบน</string>
+    <string name="room_participants_action_ban">แบน</string>
+    <string name="room_participants_action_leave">ออกจากห้องนี้</string>
+    <string name="room_participants_action_invite">เชิญ</string>
+    <string name="room_participants_header_direct_chats">ข้อความโดยตรง</string>
+    <string name="room_participants_header_call">โทร</string>
+    <string name="room_participants_header_admin_tools">เครื่องมือผู้ดูแล</string>
+    <string name="room_participants_ago">%1$s %2$s ที่ผ่านมา</string>
+    <string name="room_participants_now">%1$s ตอนนี้</string>
+    <string name="room_participants_idle">ว่าง</string>
+    <string name="room_participants_offline">ออฟไลน์</string>
+    <string name="room_participants_online">ออนไลน์</string>
+    <string name="room_participants_create">สร้าง</string>
+    <string name="room_participants_leave_prompt_msg">คุณแน่ใจหรือไม่ว่าต้องการออกจากห้อง</string>
+    <string name="room_participants_leave_prompt_title">ออกจากห้อง</string>
+    <plurals name="format_time_s">
+        <item quantity="other">%d วิ</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="other">%d นาที</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="other">%d ชม.</item>
+    </plurals>
+    <plurals name="format_time_d">
+        <item quantity="other">%d วัน</item>
+    </plurals>
+    <string name="room_creation_add_member">เพิ่มสมาชิก</string>
+    <string name="room_creation_title">แชทใหม่</string>
+    <string name="room_preview_try_join_an_unknown_room_default">ห้อง</string>
+    <string name="room_jump_to_first_unread">ไปที่ข้อความแรกที่ยังไม่ได้อ่าน</string>
+    <string name="list_members">แสดงรายชื่อสมาชิก</string>
+    <string name="reject">ปฏิเสธ</string>
+    <string name="preview">ตัวอย่าง</string>
+    <string name="join">เข้าร่วม</string>
+    <string name="_continue">ดำเนินการต่อ</string>
+    <string name="no">ไม่</string>
+    <string name="yes">ใช่</string>
+    <string name="media_slider_saved">บันทึกแล้ว</string>
+    <string name="settings_call_show_confirmation_dialog_summary">ต้องยืนยันว่าต้องการโทรจริง ๆ ก่อนที่จะเริ่มการโทร</string>
+    <string name="settings_call_show_confirmation_dialog_title">ป้องกันการโทรโดยไม่ได้ตั้งใจ</string>
+    <string name="room_info_room_topic">หัวข้อห้อง</string>
+    <string name="attachment_cancel_upload">ยกเลิกการอัปโหลดหรือไม่\?</string>
+    <string name="attachment_cancel_download">ยกเลิกการดาวน์โหลดหรือไม่\?</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">ส่งคำขอแล้ว</string>
+    <string name="login_error_invalid_home_server">โปรดระบุ URL ที่ถูกต้อง</string>
+    <string name="login_error_must_start_http">URL ต้องขึ้นต้นด้วย http[s]://</string>
+    <string name="option_send_voice">ส่งข้อความเสียง</string>
+    <string name="matrix_only_filter">เฉพาะรายชื่อผู้ติดต่อ Matrix</string>
+    <string name="no_public_room_placeholder">ไม่มีห้องสาธารณะ</string>
+    <string name="abort">ยกเลิก</string>
+    <string name="action_mark_all_as_read">ระบุทั้งหมดว่าอ่านแล้ว</string>
 </resources>
