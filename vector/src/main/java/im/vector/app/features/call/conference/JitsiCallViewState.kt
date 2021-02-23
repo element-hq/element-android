@@ -19,16 +19,10 @@ package im.vector.app.features.call.conference
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import org.jitsi.meet.sdk.JitsiMeetUserInfo
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 
 data class JitsiCallViewState(
         val roomId: String = "",
         val widgetId: String = "",
-        val enableVideo: Boolean = true,
-        val jitsiUrl: String = "",
-        val subject: String = "",
-        val confId: String = "",
-        val userInfo: JitsiMeetUserInfo = JitsiMeetUserInfo(),
         val widget: Async<Widget> = Uninitialized
 ) : MvRxState

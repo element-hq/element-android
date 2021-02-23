@@ -28,6 +28,7 @@ import im.vector.app.features.themes.ThemeProvider
 import org.jitsi.meet.sdk.JitsiMeetUserInfo
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.rx.asObservable
@@ -35,7 +36,7 @@ import java.net.URL
 
 class JitsiCallViewModel @AssistedInject constructor(
         @Assisted initialState: JitsiCallViewState,
-        @Assisted val args: VectorJitsiActivity.Args,
+        @Assisted private val args: VectorJitsiActivity.Args,
         private val session: Session,
         private val jitsiMeetPropertiesFactory: JitsiWidgetPropertiesFactory,
         private val themeProvider: ThemeProvider
@@ -48,33 +49,22 @@ class JitsiCallViewModel @AssistedInject constructor(
 
     private val widgetService = session.widgetService()
 
+    private var confIsStarted = false
+
     init {
-        val me = session.getRoomMember(session.myUserId, args.roomId)?.toMatrixItem()
-        val userInfo = JitsiMeetUserInfo().apply {
-            displayName = me?.getBestName()
-            avatar = me?.avatarUrl?.let { session.contentUrlResolver().resolveFullSize(it) }?.let { URL(it) }
-        }
-        val roomName = session.getRoomSummary(args.roomId)?.displayName
-
-        setState {
-            copy(userInfo = userInfo)
-        }
-
         widgetService.getRoomWidgetsLive(args.roomId, QueryStringValue.Equals(args.widgetId), WidgetType.Jitsi.values())
                 .asObservable()
                 .distinctUntilChanged()
                 .subscribe {
                     val jitsiWidget = it.firstOrNull()
                     if (jitsiWidget != null) {
-                        val ppt = widgetService.getWidgetComputedUrl(jitsiWidget, themeProvider.isLightTheme())
-                                ?.let { url -> jitsiMeetPropertiesFactory.create(url) }
                         setState {
-                            copy(
-                                    widget = Success(jitsiWidget),
-                                    jitsiUrl = "https://${ppt?.domain}",
-                                    confId = ppt?.confId ?: "",
-                                    subject = roomName ?: ""
-                            )
+                            copy(widget = Success(jitsiWidget))
+                        }
+
+                        if (!confIsStarted) {
+                            confIsStarted = true
+                            startConference(jitsiWidget)
                         }
                     } else {
                         setState {
@@ -85,6 +75,26 @@ class JitsiCallViewModel @AssistedInject constructor(
                     }
                 }
                 .disposeOnClear()
+    }
+
+    private fun startConference(jitsiWidget: Widget) {
+        val me = session.getRoomMember(session.myUserId, args.roomId)?.toMatrixItem()
+        val userInfo = JitsiMeetUserInfo().apply {
+            displayName = me?.getBestName()
+            avatar = me?.avatarUrl?.let { session.contentUrlResolver().resolveFullSize(it) }?.let { URL(it) }
+        }
+        val roomName = session.getRoomSummary(args.roomId)?.displayName
+
+        val ppt = widgetService.getWidgetComputedUrl(jitsiWidget, themeProvider.isLightTheme())
+                ?.let { url -> jitsiMeetPropertiesFactory.create(url) }
+
+        _viewEvents.post(JitsiCallViewEvents.StartConference(
+                enableVideo = args.enableVideo,
+                jitsiUrl = "https://${ppt?.domain}",
+                subject = roomName ?: "",
+                confId = ppt?.confId ?: "",
+                userInfo = userInfo
+        ))
     }
 
     override fun handle(action: JitsiCallViewActions) {
@@ -106,8 +116,7 @@ class JitsiCallViewModel @AssistedInject constructor(
 
             return JitsiCallViewState(
                     roomId = args.roomId,
-                    widgetId = args.widgetId,
-                    enableVideo = args.enableVideo
+                    widgetId = args.widgetId
             )
         }
     }

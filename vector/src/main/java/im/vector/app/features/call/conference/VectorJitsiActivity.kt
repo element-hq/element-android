@@ -80,6 +80,12 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
             renderState(it)
         }
 
+        jitsiViewModel.observeViewEvents {
+            when(it) {
+                is JitsiCallViewEvents.StartConference -> configureJitsiView(it)
+            }
+        }
+
         registerForBroadcastMessages()
     }
 
@@ -96,7 +102,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
             is Success -> {
                 views.jitsiProgressLayout.isVisible = false
                 jitsiMeetView?.isVisible = true
-                configureJitsiView(viewState)
             }
             else       -> {
                 jitsiMeetView?.isVisible = false
@@ -105,12 +110,12 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         }
     }
 
-    private fun configureJitsiView(viewState: JitsiCallViewState) {
+    private fun configureJitsiView(startConference: JitsiCallViewEvents.StartConference) {
         val jitsiMeetConferenceOptions = JitsiMeetConferenceOptions.Builder()
-                .setVideoMuted(!viewState.enableVideo)
-                .setUserInfo(viewState.userInfo)
+                .setVideoMuted(!startConference.enableVideo)
+                .setUserInfo(startConference.userInfo)
                 .apply {
-                    tryOrNull { URL(viewState.jitsiUrl) }?.let {
+                    tryOrNull { URL(startConference.jitsiUrl) }?.let {
                         setServerURL(it)
                     }
                 }
@@ -120,8 +125,8 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
                 .setFeatureFlag("add-people.enabled", false)
                 .setFeatureFlag("video-share.enabled", false)
                 .setFeatureFlag("call-integration.enabled", false)
-                .setRoom(viewState.confId)
-                .setSubject(viewState.subject)
+                .setRoom(startConference.confId)
+                .setSubject(startConference.subject)
                 .build()
         jitsiMeetView?.join(jitsiMeetConferenceOptions)
     }
@@ -147,10 +152,10 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         super.onDestroy()
     }
 
-//    override fun onUserLeaveHint() {
-//        super.onUserLeaveHint()
-//        jitsiMeetView?.enterPictureInPicture()
-//    }
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        jitsiMeetView?.enterPictureInPicture()
+    }
 
     override fun onNewIntent(intent: Intent?) {
         JitsiMeetActivityDelegate.onNewIntent(intent)
