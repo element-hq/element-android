@@ -596,7 +596,7 @@
     <string name="send_bug_report_description_in_english">Om mulig, vennligst beskriv på engelsk.</string>
     <string name="send_bug_report_placeholder">Forklar problemet ditt her</string>
     <string name="send_bug_report_logs_description">For å diagnotisere feil, logger fra denne klienten vil bli sendt med denne feilmeldingen. Feilmeldingen, som inkluderer loggene og skjermdumper, blir ikke offentlig synlig. Hvis du foretrekker å bare sende teksten over, vennligst fjern merkene fra boksene:</string>
-    <string name="send_bug_report_alert_message">Det ser ut som du rister på telefonen i frustrasjon. Har du list til å åpne feilrapporteringsskjermen\?</string>
+    <string name="send_bug_report_alert_message">Det ser ut som du rister på telefonen i frustrasjon. Har du lyst til å åpne feilrapporteringsskjermen\?</string>
     <string name="send_bug_report_app_crashed">Applikasjonen kræsjet sist gang. Har du lyst til å åpne kræsjskjermen\?</string>
     <string name="send_bug_report_rage_shake">Sinnarist for å rapportere feil</string>
     <string name="send_bug_report_sent">Feilrapport har blitt sendt</string>
@@ -934,7 +934,7 @@
     <string name="alert_push_are_disabled_description">Gjennomgå innstillingene dine for å aktivere push-varsler</string>
     <plurals name="wrong_pin_message_remaining_attempts">
         <item quantity="one">Feil kode, %d gjenværende forsøk</item>
-        <item quantity="other">Feil kode, %d gjenværende forsøker</item>
+        <item quantity="other">Feil kode, %d gjenværende forsøk</item>
     </plurals>
     <string name="wrong_pin_message_last_remaining_attempt">Advarsel! Siste gjenværende forsøk før avlogging!</string>
     <string name="too_many_pin_failures">For mange feil, du er logget ut</string>
@@ -1022,7 +1022,7 @@
     <string name="room_settings_all_messages_noisy">Alle meldinger (støyende)</string>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s rom funnet for %2$s</item>
-        <item quantity="other">%1$s rommer funnet for %2$s</item>
+        <item quantity="other">%1$s rom funnet for %2$s</item>
     </plurals>
     <string name="directory_search_results_title">Bla gjennom katalogen</string>
     <string name="room_recents_join_room_prompt">Skriv inn et rom-ID eller et romalias</string>
@@ -1170,17 +1170,17 @@
 \n
 \nMerk at denne handlingen starter appen på nytt, og det kan ta litt tid.</string>
     <string name="room_participants_invite_prompt_msg">Er du sikker på at du vil invitere %s til denne chatten\?</string>
-    <string name="call_error_user_not_responding">ekstern side kunne ikke plukke opp.</string>
-    <string name="video_call_in_progress">Videoanrop i prosess…</string>
-    <string name="call_in_progress">Anrop i prosess…</string>
-    <string name="sas_error_m_user">Brukeren kansellerte bekreftelsen</string>
+    <string name="call_error_user_not_responding">Ekstern vert kunne ikke plukke opp.</string>
+    <string name="video_call_in_progress">Pågående videosamtale…</string>
+    <string name="call_in_progress">Pågående samtale…</string>
+    <string name="sas_error_m_user">Brukeren kansellerte verifikasjonen</string>
     <string name="identity_server_not_defined_for_password_reset">Ingen identitetsserver er konfigurert, det er nødvendig å tilbakestille passordet ditt.</string>
     <string name="error_user_already_logged_in">Det ser ut til at du prøver å koble til en annen hjemmeserver. Vil du logge av\?</string>
     <string name="room_list_empty">Bli med i et rom for å begynne å bruke appen.</string>
     <string name="room_list_catchup_empty_body">Du har ikke flere uleste meldinger</string>
     <string name="room_list_catchup_welcome_title">Velkommen hjem!</string>
-    <string name="room_list_people_empty_body">Dine direktemeldingssamtaler vises her. Trykk på + nederst til høyre for å starte noen.</string>
-    <string name="room_list_rooms_empty_body">Rommene dine vises her. Trykk på + nederst til høyre for å finne eksisterende eller starte noen av dine egne.</string>
+    <string name="room_list_people_empty_body">Dine direktemeldinger vises her. Trykk på + nederst til høyre for å starte noen.</string>
+    <string name="room_list_rooms_empty_body">Rommene dine vises her. Trykk på + nederst til høyre for å finne eksisterende eller start din egen.</string>
     <string name="reactions_agree">Godta</string>
     <string name="message_view_reaction">Se reaksjoner</string>
     <string name="event_redacted_by_user_reason">Arrangement slettet av bruker</string>
@@ -1193,7 +1193,7 @@
     <string name="create_room_name_section">Romnavn</string>
     <string name="create_room_topic_section">Romemne (valgfritt)</string>
     <string name="create_room_topic_hint">Emne</string>
-    <string name="create_room_public_description">Alle vil være med på dette rommet</string>
+    <string name="create_room_public_description">Hvem som helst kan bli med i dette rommet</string>
     <string name="create_room_settings_section">Rominnstillinger</string>
     <string name="settings_other_third_party_notices">Andre tredjepartsmeldinger</string>
     <string name="navigate_to_room_when_already_in_the_room">Du ser allerede på dette rommet!</string>
@@ -1210,11 +1210,11 @@
     <string name="user_directory_search_hint">Søk etter navn eller ID</string>
     <string name="labs_swipe_to_reply_in_timeline">Aktiver sveip for å svare på tidslinjen</string>
     <string name="link_copied_to_clipboard">Link kopiert til utklippstavlen</string>
-    <string name="add_by_matrix_id">Legg til etter matrix-ID</string>
+    <string name="add_by_matrix_id">Legg til med matrix-ID</string>
     <string name="qr_code">QR kode</string>
     <string name="add_by_qr_code">Legg til med QR-kode</string>
     <string name="creating_direct_room">Oppretter rom…</string>
-    <string name="direct_room_no_known_users">Ingen resultater funnet, bruk Legg til etter matrix-ID for å søke på serveren.</string>
+    <string name="direct_room_no_known_users">Ingen resultater funnet, bruk Legg til med matrix-ID for å søke på serveren.</string>
     <string name="direct_room_start_search">Begynn å skrive for å få resultater</string>
     <string name="direct_room_user_list_recent_title">Nylig</string>
     <string name="direct_room_user_list_known_title">Kjente brukere</string>
@@ -1564,4 +1564,6 @@
     <string name="error_unauthorized">Uautorisert, mangler gyldig autentiseringslegitimasjon</string>
     <string name="action_return">Tilbake</string>
     <string name="system_theme">System standard</string>
+    <string name="search_banned_user_hint">Filtrer utestengte brukere</string>
+    <string name="room_permissions_modify_widgets">Endre widgets</string>
 </resources>
