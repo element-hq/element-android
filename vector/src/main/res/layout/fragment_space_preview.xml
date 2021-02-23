@@ -16,25 +16,25 @@
             style="@style/VectorToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            app:navigationIcon="@drawable/ic_x_18dp"
-            android:elevation="4dp">
+            android:elevation="4dp"
+            app:navigationIcon="@drawable/ic_x_18dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/spacePreviewClose"-->
-<!--                    android:layout_width="@dimen/layout_touch_size"-->
-<!--                    android:layout_height="@dimen/layout_touch_size"-->
-<!--                    android:clickable="true"-->
-<!--                    android:focusable="true"-->
-<!--                    android:foreground="?attr/selectableItemBackground"-->
-<!--                    android:scaleType="center"-->
-<!--                    android:src="@drawable/ic_x_18dp"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/spacePreviewClose"-->
+                <!--                    android:layout_width="@dimen/layout_touch_size"-->
+                <!--                    android:layout_height="@dimen/layout_touch_size"-->
+                <!--                    android:clickable="true"-->
+                <!--                    android:focusable="true"-->
+                <!--                    android:foreground="?attr/selectableItemBackground"-->
+                <!--                    android:scaleType="center"-->
+                <!--                    android:src="@drawable/ic_x_18dp"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <ImageView
                     android:id="@+id/spacePreviewToolbarAvatar"
@@ -42,6 +42,7 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:contentDescription="@string/avatar"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -96,16 +97,16 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?list_divider_color"/>
+            android:background="?list_divider_color" />
 
         <LinearLayout
             android:id="@+id/spacePreviewButtonBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:layout_margin="8dp"
             android:elevation="2dp"
-            android:orientation="horizontal"
-            android:layout_margin="8dp">
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/spacePreviewDeclineInviteButton"
