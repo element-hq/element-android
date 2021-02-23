@@ -132,7 +132,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     val timeline = room.createTimeline(eventId, timelineSettings)
 
     // Same lifecycle than the ViewModel (survive to screen rotation)
-    val previewUrlRetriever = PreviewUrlRetriever(session)
+    val previewUrlRetriever = PreviewUrlRetriever(session, viewModelScope)
 
     // Slot to keep a pending action during permission request
     var pendingAction: RoomDetailAction? = null
@@ -1425,7 +1425,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 snapshot
                         .takeIf { state.asyncRoomSummary.invoke()?.isEncrypted == false }
                         ?.forEach {
-                            previewUrlRetriever.getPreviewUrl(it, viewModelScope)
+                            previewUrlRetriever.getPreviewUrl(it)
                         }
             }
         }

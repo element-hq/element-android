@@ -9,7 +9,7 @@ Improvements 🙌:
  - Improve initial sync performance (#983)
 
 Bugfix 🐛:
- -
+ - Try to fix crash about UrlPreview (#2640)
 
 Translations 🗣:
  -
