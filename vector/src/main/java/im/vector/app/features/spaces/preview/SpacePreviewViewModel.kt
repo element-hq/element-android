@@ -78,7 +78,7 @@ class SpacePreviewViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleDismissInvite() = withState { state ->
+    private fun handleDismissInvite() {
         // Here we need to join the space himself as well as the default rooms in that space
         // TODO modal loading
         viewModelScope.launch(Dispatchers.IO) {
@@ -108,7 +108,7 @@ class SpacePreviewViewModel @AssistedInject constructor(
                     _viewEvents.post(SpacePreviewViewEvents.JoinSuccess)
                 }
                 is SpaceService.JoinSpaceResult.Fail -> {
-                    _viewEvents.post(SpacePreviewViewEvents.JoinFailure(joinResult.error?.toString()))
+                    _viewEvents.post(SpacePreviewViewEvents.JoinFailure(joinResult.error.toString()))
                 }
             }
         }
