@@ -219,7 +219,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         fun newIntent(context: Context, roomId: String, widgetId: String, enableVideo: Boolean): Intent {
             return Intent(context, VectorJitsiActivity::class.java).apply {
                 putExtra(MvRx.KEY_ARG, Args(roomId, widgetId, enableVideo))
-                addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
         }
     }
