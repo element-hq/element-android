@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
 import im.vector.app.core.epoxy.LoadingItem_
+import im.vector.app.core.epoxy.TimelineEmptyItem
 import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.detail.UnreadState
@@ -59,12 +60,27 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         val showHiddenEvents = vectorPreferences.shouldShowHiddenEvents()
         var index = 0
         val firstUnreadEventId = (unreadState as? UnreadState.HasUnread)?.firstUnreadEventId
+        var prevWasHidden = false
+        var onlyHidden = true
         // Then iterate on models so we have the exact positions in the adapter
         modelsIterator.forEach { epoxyModel ->
+            if (epoxyModel is TimelineEmptyItem && !prevWasHidden) {
+                prevWasHidden = true
+                modelsIterator.remove()
+                val emptyItem = TimelineEmptyItem_()
+                        .id("not_hidden_${epoxyModel.id()}")
+                        .eventId(epoxyModel.eventId)
+                        .hidden(false)
+                        .setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, epoxyModel.eventId))
+                modelsIterator.add(emptyItem)
+            } else if (epoxyModel !is TimelineEmptyItem) {
+                onlyHidden = false
+                prevWasHidden = false
+            }
             if (epoxyModel is ItemWithEvents) {
                 epoxyModel.getEventIds().forEach { eventId ->
                     adapterPositionMapping[eventId] = index
-                    if (eventId == firstUnreadEventId) {
+                    if (eventId == firstUnreadEventId && !onlyHidden) {
                         modelsIterator.addReadMarkerItem(callback)
                         index++
                         positionOfReadMarker.set(index)
@@ -88,6 +104,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         add(readMarker)
         // Use next as we still have some process to do before the next iterator loop
         next()
+        previous()
     }
 
     private fun MutableListIterator<EpoxyModel<*>>.removeCallItemIfNeeded(
@@ -105,6 +122,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
             val emptyItem = TimelineEmptyItem_()
                     .id(epoxyModel.id())
                     .eventId(epoxyModel.attributes.informationData.eventId)
+                    .hidden(false)
             add(emptyItem)
         }
         callIds.add(callId)

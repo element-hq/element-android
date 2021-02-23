@@ -43,7 +43,6 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
             layoutManager.scrollToPosition(position)
             return
         }
-        Timber.v("On inserted $count count at position: $position")
         if (layoutManager.findFirstVisibleItemPosition() != position) {
             return
         }
@@ -51,11 +50,10 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
         val firstNewItemIds = firstNewItem.getEventIds().firstOrNull() ?: return
         val indexOfFirstNewItem = newTimelineEventIds.indexOf(firstNewItemIds)
         if (indexOfFirstNewItem != -1) {
-            Timber.v("Should scroll to position: $position")
             repeat(newTimelineEventIds.size - indexOfFirstNewItem) {
                 newTimelineEventIds.removeAt(indexOfFirstNewItem)
             }
-            layoutManager.scrollToPosition(position)
+            layoutManager.scrollToPosition(0)
         }
     }
 }

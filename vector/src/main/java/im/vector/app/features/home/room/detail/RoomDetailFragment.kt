@@ -1454,12 +1454,12 @@ class RoomDetailFragment @Inject constructor(
         return true
     }
 
-    override fun onEventVisible(event: TimelineEvent) {
-        roomDetailViewModel.handle(RoomDetailAction.TimelineEventTurnsVisible(event))
+    override fun onEventVisible(eventId: String) {
+        roomDetailViewModel.handle(RoomDetailAction.TimelineEventTurnsVisible(eventId))
     }
 
-    override fun onEventInvisible(event: TimelineEvent) {
-        roomDetailViewModel.handle(RoomDetailAction.TimelineEventTurnsInvisible(event))
+    override fun onEventInvisible(eventId: String) {
+        roomDetailViewModel.handle(RoomDetailAction.TimelineEventTurnsInvisible(eventId))
     }
 
     override fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View) {

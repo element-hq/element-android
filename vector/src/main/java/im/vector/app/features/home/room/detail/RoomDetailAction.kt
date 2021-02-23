@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -34,8 +33,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class SendSticker(val stickerContent: MessageStickerContent) : RoomDetailAction()
     data class SendMessage(val text: CharSequence, val autoMarkdown: Boolean) : RoomDetailAction()
     data class SendMedia(val attachments: List<ContentAttachmentData>, val compressBeforeSending: Boolean) : RoomDetailAction()
-    data class TimelineEventTurnsVisible(val event: TimelineEvent) : RoomDetailAction()
-    data class TimelineEventTurnsInvisible(val event: TimelineEvent) : RoomDetailAction()
+    data class TimelineEventTurnsVisible(val eventId: String) : RoomDetailAction()
+    data class TimelineEventTurnsInvisible(val eventId: String) : RoomDetailAction()
     data class LoadMoreTimelineEvents(val direction: Timeline.Direction) : RoomDetailAction()
     data class SendReaction(val targetEventId: String, val reaction: String) : RoomDetailAction()
     data class UndoReaction(val targetEventId: String, val reaction: String, val reason: String? = "") : RoomDetailAction()

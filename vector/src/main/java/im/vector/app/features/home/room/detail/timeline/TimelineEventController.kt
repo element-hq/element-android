@@ -85,8 +85,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             ReadReceiptsCallback,
             PreviewUrlCallback {
         fun onLoadMore(direction: Timeline.Direction)
-        fun onEventInvisible(event: TimelineEvent)
-        fun onEventVisible(event: TimelineEvent)
+        fun onEventInvisible(eventId: String)
+        fun onEventVisible(eventId: String)
         fun onRoomCreateLinkClicked(url: String)
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
         fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View)
@@ -144,7 +144,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private var unreadState: UnreadState = UnreadState.Unknown
     private var positionOfReadMarker: Int? = null
     private var eventIdToHighlight: String? = null
-    private var previousModelsSize = 0
 
     var callback: Callback? = null
     var timeline: Timeline? = null
@@ -341,7 +340,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         updateUTDStates(event, nextEvent)
         val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, callback).also {
             it.id(event.localId)
-            it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
+            it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event.eventId))
         }
         val addDaySeparator = if (hasReachedInvite && hasUTD) {
             true
