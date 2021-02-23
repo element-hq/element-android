@@ -49,8 +49,9 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
-import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
-import org.matrix.android.sdk.internal.session.mapWithProgress
+import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
+import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
+import org.matrix.android.sdk.internal.session.initsync.reportSubtask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberEventHandler
 import org.matrix.android.sdk.internal.session.room.read.FullyReadContent
@@ -59,12 +60,14 @@ import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineInput
 import org.matrix.android.sdk.internal.session.room.typing.TypingEventContent
 import org.matrix.android.sdk.internal.session.sync.model.InvitedRoomSync
+import org.matrix.android.sdk.internal.session.sync.model.LazyRoomSync
 import org.matrix.android.sdk.internal.session.sync.model.RoomSync
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncAccountData
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncEphemeral
 import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.ceil
 
 internal class RoomSyncHandler @Inject constructor(private val readReceiptHandler: ReadReceiptHandler,
                                                    private val roomSummaryUpdater: RoomSummaryUpdater,
@@ -78,17 +81,15 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val timelineInput: TimelineInput) {
 
     sealed class HandlingStrategy {
-        data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
+        data class JOINED(val data: Map<String, LazyRoomSync>) : HandlingStrategy()
         data class INVITED(val data: Map<String, InvitedRoomSync>) : HandlingStrategy()
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    fun handle(
-            realm: Realm,
-            roomsSyncResponse: RoomsSyncResponse,
-            isInitialSync: Boolean,
-            reporter: DefaultInitialSyncProgressService? = null
-    ) {
+    fun handle(realm: Realm,
+               roomsSyncResponse: RoomsSyncResponse,
+               isInitialSync: Boolean,
+               reporter: ProgressReporter? = null) {
         Timber.v("Execute transaction from $this")
         handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, reporter)
         handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
@@ -97,7 +98,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService?) {
+    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: ProgressReporter?) {
         val insertType = if (isInitialSync) {
             EventInsertType.INITIAL_SYNC
         } else {
@@ -105,10 +106,17 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
         val syncLocalTimeStampMillis = System.currentTimeMillis()
         val rooms = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  ->
-                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
-                    handleJoinedRoom(realm, it.key, it.value, isInitialSync, insertType, syncLocalTimeStampMillis)
+            is HandlingStrategy.JOINED  -> {
+                if (isInitialSync && initialSyncStrategy is InitialSyncStrategy.Optimized) {
+                    insertJoinRooms(realm, handlingStrategy, insertType, syncLocalTimeStampMillis, reporter)
+                    // Rooms are already inserted, return an empty list
+                    emptyList()
+                } else {
+                    handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
+                        handleJoinedRoom(realm, it.key, it.value.roomSync, insertType, syncLocalTimeStampMillis)
+                    }
                 }
+            }
             is HandlingStrategy.INVITED ->
                 handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.1f) {
                     handleInvitedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
@@ -123,17 +131,57 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         realm.insertOrUpdate(rooms)
     }
 
+    private fun insertJoinRooms(realm: Realm,
+                                handlingStrategy: HandlingStrategy.JOINED,
+                                insertType: EventInsertType,
+                                syncLocalTimeStampMillis: Long,
+                                reporter: ProgressReporter?) {
+        val maxSize = (initialSyncStrategy as? InitialSyncStrategy.Optimized)?.maxRoomsToInsert ?: Int.MAX_VALUE
+        val listSize = handlingStrategy.data.keys.size
+        val numberOfChunks = ceil(listSize / maxSize.toDouble()).toInt()
+
+        if (numberOfChunks > 1) {
+            reportSubtask(reporter, R.string.initial_sync_start_importing_account_joined_rooms, numberOfChunks, 0.6f) {
+                val chunkSize = listSize / numberOfChunks
+                Timber.v("INIT_SYNC $listSize rooms to insert, split into $numberOfChunks sublists of $chunkSize items")
+                // I cannot find a better way to chunk a map, so chunk the keys and then create new maps
+                handlingStrategy.data.keys
+                        .chunked(chunkSize)
+                        .forEachIndexed { index, roomIds ->
+                            val roomEntities = roomIds
+                                    .also { Timber.v("INIT_SYNC insert ${roomIds.size} rooms") }
+                                    .map {
+                                        handleJoinedRoom(
+                                                realm,
+                                                it,
+                                                (handlingStrategy.data[it] ?: error("Should not happen")).roomSync,
+                                                insertType,
+                                                syncLocalTimeStampMillis
+                                        )
+                                    }
+                            realm.insertOrUpdate(roomEntities)
+                            reporter?.reportProgress(index + 1F)
+                        }
+            }
+        } else {
+            // No need to split
+            val rooms = handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
+                handleJoinedRoom(realm, it.key, it.value.roomSync, insertType, syncLocalTimeStampMillis)
+            }
+            realm.insertOrUpdate(rooms)
+        }
+    }
+
     private fun handleJoinedRoom(realm: Realm,
                                  roomId: String,
                                  roomSync: RoomSync,
-                                 isInitialSync: Boolean,
                                  insertType: EventInsertType,
                                  syncLocalTimestampMillis: Long): RoomEntity {
         Timber.v("Handle join sync for room $roomId")
 
         var ephemeralResult: EphemeralResult? = null
         if (roomSync.ephemeral?.events?.isNotEmpty() == true) {
-            ephemeralResult = handleEphemeral(realm, roomId, roomSync.ephemeral, isInitialSync)
+            ephemeralResult = handleEphemeral(realm, roomId, roomSync.ephemeral, insertType == EventInsertType.INITIAL_SYNC)
         }
 
         if (roomSync.accountData?.events?.isNotEmpty() == true) {
@@ -173,8 +221,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     roomSync.timeline.prevToken,
                     roomSync.timeline.limited,
                     insertType,
-                    syncLocalTimestampMillis,
-                    isInitialSync
+                    syncLocalTimestampMillis
             )
             roomEntity.addIfNecessary(chunkEntity)
         }
@@ -278,8 +325,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      prevToken: String? = null,
                                      isLimited: Boolean = true,
                                      insertType: EventInsertType,
-                                     syncLocalTimestampMillis: Long,
-                                     isInitialSync: Boolean): ChunkEntity {
+                                     syncLocalTimestampMillis: Long): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
@@ -299,7 +345,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
             eventIds.add(event.eventId)
 
-            if (event.isEncrypted() && !isInitialSync) {
+            if (event.isEncrypted() && insertType != EventInsertType.INITIAL_SYNC) {
                 decryptIfNeeded(event, roomId)
             }
 

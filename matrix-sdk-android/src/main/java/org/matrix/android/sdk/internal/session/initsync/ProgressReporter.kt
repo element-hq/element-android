@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home
+package org.matrix.android.sdk.internal.session.initsync
 
-import com.airbnb.mvrx.MvRxState
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
+import androidx.annotation.StringRes
 
-data class HomeActivityViewState(
-        val initialSyncProgressServiceStatus: InitialSyncProgressService.Status = InitialSyncProgressService.Status.Idle
-) : MvRxState
+internal interface ProgressReporter {
+    fun startTask(@StringRes nameRes: Int,
+                  totalProgress: Int,
+                  parentWeight: Float)
+
+    fun reportProgress(progress: Float)
+
+    fun endTask()
+}

@@ -13,12 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.matrix.android.sdk.api.session.initsync
 
-package org.matrix.android.sdk.internal.database.model;
+import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
 
-public enum EventInsertType {
-    INITIAL_SYNC,
-    INCREMENTAL_SYNC,
-    PAGINATION,
-    LOCAL_ECHO
+interface InitialSyncProgressService {
+
+    fun getInitialSyncProgressStatus(): LiveData<Status>
+
+    sealed class Status {
+        object Idle : Status()
+        data class Progressing(
+                @StringRes val statusText: Int,
+                val percentProgress: Int = 0
+        ) : Status()
+    }
 }

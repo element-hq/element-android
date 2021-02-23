@@ -50,7 +50,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         }
         val newJoinEvents = params.syncResponse.join
                 .mapNotNull { (key, value) ->
-                    value.timeline?.events?.map { it.copy(roomId = key) }
+                    value.roomSync.timeline?.events?.map { it.copy(roomId = key) }
                 }
                 .flatten()
         val inviteEvents = params.syncResponse.invite
@@ -80,7 +80,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
 
         val allRedactedEvents = params.syncResponse.join
                 .asSequence()
-                .mapNotNull { (_, value) -> value.timeline?.events }
+                .mapNotNull { (_, value) -> value.roomSync.timeline?.events }
                 .flatten()
                 .filter { it.type == EventType.REDACTION }
                 .mapNotNull { it.redacts }

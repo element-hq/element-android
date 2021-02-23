@@ -199,6 +199,8 @@
     <string name="room_displayname_empty_room">Empty room</string>
     <string name="room_displayname_empty_room_was">Empty room (was %s)</string>
 
+    <string name="initial_sync_start_server_computing">Initial Sync:\nWaiting for server response…</string>
+    <string name="initial_sync_start_downloading">Initial Sync:\nDownloading data…</string>
     <string name="initial_sync_start_importing_account">Initial Sync:\nImporting account…</string>
     <string name="initial_sync_start_importing_account_crypto">Initial Sync:\nImporting crypto</string>
     <string name="initial_sync_start_importing_account_rooms">Initial Sync:\nImporting Rooms</string>
