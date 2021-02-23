@@ -78,9 +78,9 @@ class AppStateHandler @Inject constructor(
                                 .throttleLast(300, TimeUnit.MILLISECONDS),
                         selectedGroupDataSource.observe(),
                         selectedSpaceDataSource.observe(),
-                        Function3 { rooms, selectedGroupOption, selectedSpace ->
+                        Function3 { rooms, selectedGroupOption, selectedSpaceOption ->
                             if (vectorPreferences.labSpaces()) {
-                                val selectedSpace = selectedSpace.orNull()
+                                val selectedSpace = selectedSpaceOption.orNull()
                                 val filteredRooms = rooms.filter {
                                     if (selectedSpace == null || selectedSpace.spaceId == ALL_COMMUNITIES_GROUP_ID) {
                                         true
