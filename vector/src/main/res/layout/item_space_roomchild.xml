@@ -10,8 +10,8 @@
     <im.vector.app.features.spaces.preview.SpaceTabView
         android:id="@+id/spaceChildTabView"
         android:layout_width="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -31,6 +31,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
+            android:contentDescription="@string/avatar"
             android:scaleType="centerInside"
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +78,7 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_marginEnd="4dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ic_room_profile_member_list"
             app:layout_constraintBottom_toBottomOf="@+id/spaceChildMemberCountText"
             app:layout_constraintEnd_toStartOf="@+id/spaceChildMemberCountText"
