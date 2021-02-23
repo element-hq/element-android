@@ -50,6 +50,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import gobind.Conduit
 import gobind.DendriteMonolith
+import gobind.Gobind
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.GlobalScope
@@ -308,7 +309,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                         Timber.i("BLE: Connected inbound $device PSM $l2capPSM")
 
                         Timber.i("Creating DendriteBLEPeering")
-                        val conduit = monolith!!.conduit("BLE-"+device)
+                        val conduit = monolith!!.conduit("BLE-"+device, Gobind.PeerTypeBluetooth)
                         conduits[device] = conduit
                         connections[device] = DendriteBLEPeering(conduit, remote)
                         Timber.i("Starting DendriteBLEPeering")
@@ -420,7 +421,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
             Timber.i("BLE: Connected outbound $device PSM $psm")
 
             Timber.i("Creating DendriteBLEPeering")
-            val conduit = monolith!!.conduit("BLE")
+            val conduit = monolith!!.conduit("BLE", Gobind.PeerTypeBluetooth)
             conduits[device.address] = conduit
             connections[device.address] = DendriteBLEPeering(conduit, socket)
             Timber.i("Starting DendriteBLEPeering")
@@ -494,7 +495,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                 val enabled = vectorPreferences.p2pEnableNearby()
                 m.setMulticastEnabled(enabled)
                 if (!enabled) {
-                    m.disconnectMulticastPeers()
+                    m.disconnectType(Gobind.PeerTypeMulticast)
                 }
             }
 
@@ -504,7 +505,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                     val uri = vectorPreferences.p2pStaticURI()
                     m.setStaticPeer(uri)
                 } else {
-                    m.disconnectNonMulticastPeers()
+                    m.disconnectType(Gobind.PeerTypeRemote)
                 }
             }
 
