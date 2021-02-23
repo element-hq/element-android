@@ -16,6 +16,7 @@
 
 package im.vector.app.features.call.conference
 
+import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
@@ -28,6 +29,8 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.themes.ThemeProvider
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jitsi.meet.sdk.JitsiMeetUserInfo
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -119,8 +122,11 @@ class JitsiCallViewModel @AssistedInject constructor(
         if (action.args.roomId != state.roomId
                 || action.args.widgetId != state.widgetId) {
             if (action.withConfirmation) {
-                // Ask confirmation to switch
-                _viewEvents.post(JitsiCallViewEvents.ConfirmSwitchingConference(action.args))
+                // Ask confirmation to switch, but wait a bit for the Activity to quit the PiP mode
+                viewModelScope.launch {
+                    delay(500)
+                    _viewEvents.post(JitsiCallViewEvents.ConfirmSwitchingConference(action.args))
+                }
             } else {
                 // Ask the view to leave the conf, then the view will tell us when it's done, to join the new conf
                 pendingArgs = action.args
