@@ -25,6 +25,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
 import android.widget.FrameLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.airbnb.mvrx.Fail
@@ -32,6 +33,7 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.facebook.react.modules.core.PermissionListener
+import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
@@ -85,11 +87,29 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
         jitsiViewModel.observeViewEvents {
             when (it) {
-                is JitsiCallViewEvents.StartConference -> configureJitsiView(it)
+                is JitsiCallViewEvents.StartConference            -> configureJitsiView(it)
+                is JitsiCallViewEvents.ConfirmSwitchingConference -> handleConfirmSwitching(it)
+                JitsiCallViewEvents.Finish                        -> finish()
+                JitsiCallViewEvents.LeaveConference               -> handleLeaveConference()
             }.exhaustive
         }
 
         registerForBroadcastMessages()
+    }
+
+    private fun handleLeaveConference() {
+        jitsiMeetView?.leave()
+    }
+
+    private fun handleConfirmSwitching(action: JitsiCallViewEvents.ConfirmSwitchingConference) {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_warning)
+                .setMessage(R.string.jitsi_leave_conf_to_join_another_one_content)
+                .setPositiveButton(R.string.action_switch) { _, _ ->
+                    jitsiViewModel.handle(JitsiCallViewActions.SwitchTo(action.args, false))
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean,
@@ -170,6 +190,14 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     override fun onNewIntent(intent: Intent?) {
         JitsiMeetActivityDelegate.onNewIntent(intent)
+
+        // Is it a switch to another conf?
+        intent?.takeIf { it.hasExtra(MvRx.KEY_ARG) }
+                ?.let { intent.getParcelableExtra<Args>(MvRx.KEY_ARG) }
+                ?.let {
+                    jitsiViewModel.handle(JitsiCallViewActions.SwitchTo(it, true))
+                }
+
         super.onNewIntent(intent)
     }
 
@@ -211,7 +239,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         Timber.v("JitsiMeetViewListener.onConferenceTerminated()")
         // Do not finish if there is an error
         if (data["error"] == null) {
-            finish()
+            jitsiViewModel.handle(JitsiCallViewActions.OnConferenceLeft)
         }
     }
 

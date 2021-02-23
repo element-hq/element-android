@@ -27,4 +27,11 @@ sealed class JitsiCallViewEvents : VectorViewEvents {
             val confId: String,
             val userInfo: JitsiMeetUserInfo
     ) : JitsiCallViewEvents()
+
+    data class ConfirmSwitchingConference(
+            val args: VectorJitsiActivity.Args
+    ) : JitsiCallViewEvents()
+
+    object LeaveConference : JitsiCallViewEvents()
+    object Finish : JitsiCallViewEvents()
 }
