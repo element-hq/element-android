@@ -1158,7 +1158,7 @@
     <string name="e2e_re_request_encryption_key_sent">Nøkkelforespørsel sendt.</string>
     <string name="login_error_ssl_peer_unverified">SSL-feil: identiteten til jevnaldrende er ikke bekreftet.</string>
     <string name="login_error_homeserver_not_found">Kan ikke nå en hjemmeserver på denne URL-en, sjekk den</string>
-    <string name="login_error_no_homeserver_found">Dette er ikke en gyldig Matrix-serveradresse</string>
+    <string name="login_error_no_homeserver_found">Dette er ikke en gyldig adresse for en Matrix tjener</string>
     <string name="login_error_unknown_host">Denne URL-en er ikke tilgjengelig, sjekk den</string>
     <string name="login_error_unable_register_mail_ownership">Kan ikke registrere: e-post eierskap feil</string>
     <string name="action_unpublish">Fjern publiseringen</string>
