@@ -1,14 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="or">หรือ</string>
     <string name="action_open">เปิด</string>
     <string name="action_close">ปิด</string>
     <string name="disable">ปิดใช้งาน</string>
-
     <string name="dialog_title_warning">คำเตือน</string>
-
     <string name="read_receipt">อ่านแล้ว</string>
-
     <string name="auth_skip">ข้าม</string>
     <string name="auth_password_placeholder">รหัสผ่าน</string>
     <string name="auth_new_password_placeholder">รหัสผ่านใหม่</string>
@@ -28,10 +25,8 @@
     <string name="delete">ลบ</string>
     <string name="rename">เปลี่ยนชื่อ</string>
     <string name="skip">ข้าม</string>
-
     <string name="title_activity_choose_sticker">ส่งสติกเกอร์</string>
     <string name="loading">กำลังโหลด…</string>
-
     <string name="forward">ส่งต่อ</string>
     <string name="none">ไม่มี</string>
     <string name="report_content">รายงานเนื้อหา</string>
@@ -44,21 +39,17 @@
     <string name="bottom_action_people">ผู้คน</string>
     <string name="bottom_action_rooms">ห้อง</string>
     <string name="bottom_action_groups">ชุมชน</string>
-
     <string name="invitations_header">การเชิญ</string>
     <string name="system_alerts_header">การแจ้งเตือนจากระบบ</string>
-
     <string name="no_contact_access_placeholder">คุณไม่ได้อนุญาตให้ Element เข้าถึงรายชื่อผู้ติดต่อในเครื่อง</string>
     <string name="no_result_placeholder">ไม่มีผลลัพธ์</string>
     <string name="no_room_placeholder">ไม่มีห้อง</string>
     <plurals name="public_room_nb_users">
         <item quantity="other">ผู้ใช้ %d คน</item>
     </plurals>
-
     <string name="groups_invite_header">เชิญ</string>
     <string name="groups_header">ชุมชน</string>
     <string name="no_group_placeholder">ไม่มีกลุ่ม</string>
-
     <string name="send_bug_report_description_in_english">ถ้าเป็นไปได้ โปรดเขียนคำอธิบายเป็นภาษาอังกฤษ</string>
     <string name="send_bug_report_placeholder">อธิบายปัญหาของคุณที่นี่</string>
     <string name="send_files_in">ส่งไปยัง</string>
@@ -68,11 +59,9 @@
     <string name="login">เข้าสู่ระบบ</string>
     <string name="logout">ออกจากระบบ</string>
     <string name="search">ค้นหา</string>
-
     <string name="start_new_chat">เริ่มแชทใหม่</string>
     <string name="call_failed_no_ice_use_alt">ลองโดยใช้ %s</string>
     <string name="call_failed_dont_ask_again">ไม่ต้องถามฉันอีก</string>
-
     <string name="call_select_sound_device">เลือกอุปกรณ์เสียง</string>
     <string name="sound_device_phone">โทรศัพท์</string>
     <string name="sound_device_speaker">ลำโพง</string>
@@ -83,7 +72,6 @@
     <string name="call_camera_back">หลัง</string>
     <string name="call_format_turn_hd_off">ปิด HD</string>
     <string name="call_format_turn_hd_on">เปิด HD</string>
-
     <string name="option_send_sticker">ส่งสติกเกอร์</string>
     <string name="auth_login">เข้าสู่ระบบ</string>
     <string name="auth_register">สร้างบัญชี</string>
@@ -97,4 +85,83 @@
     <string name="auth_phone_number_placeholder">หมายเลขโทรศัพท์</string>
     <string name="auth_opt_phone_number_placeholder">หมายเลขโทรศัพท์ (ไม่จำเป็น)</string>
     <string name="auth_invalid_password">รหัสผ่านสั้นเกินไป (อย่างน้อย 6 ตัว)</string>
+    <string name="permissions_rationale_popup_title">ข้อมูล</string>
+    <string name="media_picker_both_capture_title">ถ่ายภาพหรือวิดีโอ</string>
+    <string name="call_ring">กำลังโทร…</string>
+    <string name="call">โทร</string>
+    <string name="settings_call_category">การโทร</string>
+    <string name="room_info_room_name">ชื่อห้อง</string>
+    <string name="today">วันนี้</string>
+    <string name="yesterday">เมื่อวาน</string>
+    <string name="attachment_remaining_time_minutes">%1$d นาที %2$d วิ</string>
+    <string name="attachment_remaining_time_seconds">%d วิ</string>
+    <string name="compression_opt_list_small">ขนาดเล็ก</string>
+    <string name="compression_opt_list_medium">ขนาดกลาง</string>
+    <string name="compression_opt_list_large">ขนาดใหญ่</string>
+    <string name="compression_opt_list_original">ต้นฉบับ</string>
+    <string name="compression_options">ส่งเป็น</string>
+    <string name="groups_list">รายการกลุ่ม</string>
+    <string name="login_error_user_in_use">ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว</string>
+    <string name="login_error_forbidden">ชื่อผู้ใช้/รหัสผ่านไม่ถูกต้อง</string>
+    <string name="login_error_ssl_other">ข้อผิดพลาด SSL</string>
+    <string name="login_error_unable_login">ไม่สามารถเข้าสู่ระบบ</string>
+    <string name="auth_username_in_use">ชื่อผู้ใช้ถูกใช้แล้ว</string>
+    <string name="auth_email_validation_message">กรุณาตรวจสอบอีเมลเพื่อดำเนินการลงทะเบียนต่อไป</string>
+    <string name="auth_forgot_password">ลืมรหัสผ่าน\?</string>
+    <string name="auth_password_dont_match">รหัสผ่านไม่ตรงกัน</string>
+    <string name="auth_missing_password">ไม่ได้ใส่รหัสผ่าน</string>
+    <string name="auth_invalid_login_param">ชื่อผู้ใช้ และ/หรือ รหัสผ่านไม่ถูกต้อง</string>
+    <string name="auth_repeat_new_password_placeholder">ยืนยันรหัสผ่านใหม่</string>
+    <string name="auth_repeat_password_placeholder">ใส่รหัสผ่านอีกครั้ง</string>
+    <string name="option_take_video">ถ่ายวิดีโอ</string>
+    <string name="option_take_photo">ถ่ายภาพ</string>
+    <string name="start_video_call">เริ่มการโทรวิดีโอ</string>
+    <string name="start_voice_call">เริ่มการโทรเสียง</string>
+    <string name="send_bug_report_progress">ความคืบหน้า (%s%%)</string>
+    <string name="rooms_directory_header">ไดเรกทอรีห้อง</string>
+    <string name="rooms_header">ห้อง</string>
+    <string name="no_more_results">ไม่มีผลลัพธ์เพิ่มเติม</string>
+    <string name="no_conversation_placeholder">ไม่มีการสนทนา</string>
+    <string name="direct_chats_header">การสนทนา</string>
+    <string name="low_priority_header">ลำดับความสำคัญต่ำ</string>
+    <string name="bottom_action_favourites">รายการโปรด</string>
+    <string name="dialog_title_error">ข้อผิดพลาด</string>
+    <string name="dialog_title_success">สำเร็จ</string>
+    <string name="dialog_title_confirmation">การยืนยัน</string>
+    <string name="copied_to_clipboard">คัดลอกไปยังคลิปบอร์ดแล้ว</string>
+    <string name="action_unpublish">เลิกเผยแพร่</string>
+    <string name="action_add">เพิ่ม</string>
+    <string name="action_copy">คัดลอก</string>
+    <string name="action_quick_reply">ตอบกลับด่วน</string>
+    <string name="action_video_call">การโทรวิดีโอ</string>
+    <string name="action_voice_call">การโทรเสียง</string>
+    <string name="action_sign_out">ออกจากระบบ</string>
+    <string name="action_exit">ออก</string>
+    <string name="call_notification_hangup">วางสาย</string>
+    <string name="call_notification_reject">ปฏิเสธ</string>
+    <string name="call_notification_answer">ยอมรับ</string>
+    <string name="decline">ปฏิเสธ</string>
+    <string name="ignore">เพิกเฉย</string>
+    <string name="done">เรียบร้อย</string>
+    <string name="accept">ยอมรับ</string>
+    <string name="offline">ออฟไลน์</string>
+    <string name="invite">เชิญ</string>
+    <string name="device_information">ข้อมูลเซสชั่น</string>
+    <string name="missing_permissions_title_to_start_conf_call">ไม่สามารถเริ่มการโทร</string>
+    <string name="audio_meeting">เริ่มการประชุมเสียง</string>
+    <string name="video_meeting">เริ่มการประชุมวิดีโอ</string>
+    <string name="start_chatting">เริ่มสนทนา</string>
+    <string name="reset">รีเซ็ต</string>
+    <string name="dismiss">ปิดทิ้ง</string>
+    <string name="disconnect">เลิกเชื่อมต่อ</string>
+    <string name="view_decrypted_source">ดูต้นฉบับที่ถอดรหัสแล้ว</string>
+    <string name="view_source">ดูต้นฉบับ</string>
+    <string name="later">ไว้ภายหลัง</string>
+    <string name="redact">ลบออก</string>
+    <string name="resend">ส่งซ้ำ</string>
+    <string name="stay">อยู่</string>
+    <string name="backup">สำรองข้อมูล</string>
+    <string name="are_you_sure">คุณแน่ใจหรือไม่\?</string>
+    <string name="title_activity_group_details">ข้อมูลชุมชน</string>
+    <string name="system_theme">ค่าเริ่มต้นของระบบ</string>
 </resources>
