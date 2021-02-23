@@ -31,7 +31,7 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @return the power level
      */
     fun getUserPowerLevelValue(userId: String): Int {
-        return powerLevelsContent.users?.get(userId)
+        return powerLevelsContent.users.get(userId)
                 ?: powerLevelsContent.usersDefault
     }
 
