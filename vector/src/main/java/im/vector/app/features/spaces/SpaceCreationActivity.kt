@@ -20,7 +20,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -91,6 +93,23 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                 CreateSpaceEvents.NavigateToAddRooms -> {
                     navigateToFragment(CreateSpaceDefaultRoomsFragment::class.java)
                 }
+                is CreateSpaceEvents.ShowModalError -> {
+                    hideWaitingView()
+                    AlertDialog.Builder(this)
+                            .setMessage(it.errorMessage)
+                            .setPositiveButton(getString(R.string.ok), null)
+                            .show()
+                }
+                is CreateSpaceEvents.FinishSuccess -> {
+                    setResult(RESULT_OK, Intent().apply {
+                        putExtra(RESULT_DATA_CREATED_SPACE_ID, it.spaceId)
+                        putExtra(RESULT_DATA_DEFAULT_ROOM_ID, it.defaultRoomId)
+                    })
+                    finish()
+                }
+                CreateSpaceEvents.HideModalLoading -> {
+                    hideWaitingView()
+                }
             }
         }
     }
@@ -114,16 +133,24 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
         val titleRes = when (state.step) {
             CreateSpaceState.Step.ChooseType -> R.string.activity_create_space_title
             CreateSpaceState.Step.SetDetails -> R.string.your_public_space
-            CreateSpaceState.Step.AddRooms   -> R.string.your_public_space
+            CreateSpaceState.Step.AddRooms -> R.string.your_public_space
         }
         supportActionBar?.let {
             it.title = getString(titleRes)
         } ?: run {
             setTitle(getString(titleRes))
         }
+
+        if (state.creationResult is Loading) {
+            showWaitingView(getString(R.string.create_spaces_loading_message))
+        }
     }
 
     companion object {
+
+        const val RESULT_DATA_CREATED_SPACE_ID = "RESULT_DATA_CREATED_SPACE_ID"
+        const val RESULT_DATA_DEFAULT_ROOM_ID = "RESULT_DATA_DEFAULT_ROOM_ID"
+
         fun newIntent(context: Context): Intent {
             return Intent(context, SpaceCreationActivity::class.java).apply {
                 // putExtra(MvRx.KEY_ARG, SpaceDirectoryArgs(spaceId))

@@ -18,6 +18,7 @@ package im.vector.app.features.spaces.create
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
 import android.util.TypedValue
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
@@ -85,7 +86,7 @@ class WizardButtonView @JvmOverloads constructor(context: Context, attrs: Attrib
 
         val outValue = TypedValue()
         context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.foreground = getDrawable(context, outValue.resourceId)
         }
 

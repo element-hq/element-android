@@ -22,7 +22,6 @@ import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
@@ -32,40 +31,33 @@ import org.matrix.android.sdk.api.session.space.SpaceSummary
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.session.room.RoomGetter
-import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
-import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
-import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
-import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
-import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
+import org.matrix.android.sdk.internal.session.room.SpaceGetter
 import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
-import org.matrix.android.sdk.internal.session.room.read.MarkAllRoomsReadTask
 import org.matrix.android.sdk.internal.session.space.peeking.PeekSpaceTask
 import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
-import org.matrix.android.sdk.internal.session.user.accountdata.UpdateBreadcrumbsTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
 
 internal class DefaultSpaceService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
-        private val createRoomTask: CreateRoomTask,
-        private val joinRoomTask: JoinRoomTask,
+        private val createSpaceTask: CreateSpaceTask,
+//        private val joinRoomTask: JoinRoomTask,
         private val joinSpaceTask: JoinSpaceTask,
-        private val markAllRoomsReadTask: MarkAllRoomsReadTask,
-        private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
-        private val roomIdByAliasTask: GetRoomIdByAliasTask,
-        private val deleteRoomAliasTask: DeleteRoomAliasTask,
-        private val roomGetter: RoomGetter,
+        private val spaceGetter: SpaceGetter,
+//        private val markAllRoomsReadTask: MarkAllRoomsReadTask,
+//        private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
+//        private val roomIdByAliasTask: GetRoomIdByAliasTask,
+//        private val deleteRoomAliasTask: DeleteRoomAliasTask,
+//        private val roomGetter: RoomGetter,
         private val spaceSummaryDataSource: SpaceSummaryDataSource,
         private val peekSpaceTask: PeekSpaceTask,
         private val resolveSpaceInfoTask: ResolveSpaceInfoTask,
-        private val leaveRoomTask: LeaveRoomTask,
-        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
-        private val taskExecutor: TaskExecutor
+        private val leaveRoomTask: LeaveRoomTask
+//        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
+//        private val taskExecutor: TaskExecutor
 ) : SpaceService {
 
     override suspend fun createSpace(params: CreateSpaceParams): String {
-        return createRoomTask.execute(params)
+        return createSpaceTask.executeRetry(params, 3)
     }
 
     override suspend fun createSpace(name: String, topic: String?, avatarUri: Uri?, isPublic: Boolean): String {
@@ -78,9 +70,7 @@ internal class DefaultSpaceService @Inject constructor(
     }
 
     override fun getSpace(spaceId: String): Space? {
-        return roomGetter.getRoom(spaceId)
-                ?.takeIf { it.roomSummary()?.roomType == RoomType.SPACE }
-                ?.let { DefaultSpace(it) }
+        return spaceGetter.get(spaceId)
     }
 
     override fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams): LiveData<List<SpaceSummary>> {

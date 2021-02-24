@@ -20,6 +20,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.room.DefaultSpaceGetter
+import org.matrix.android.sdk.internal.session.room.SpaceGetter
 import org.matrix.android.sdk.internal.session.space.peeking.DefaultPeekSpaceTask
 import org.matrix.android.sdk.internal.session.space.peeking.PeekSpaceTask
 import retrofit2.Retrofit
@@ -45,4 +47,10 @@ internal abstract class SpaceModule {
 
     @Binds
     abstract fun bindJoinSpaceTask(task: DefaultJoinSpaceTask): JoinSpaceTask
+
+    @Binds
+    abstract fun bindSpaceGetter(getter: DefaultSpaceGetter): SpaceGetter
+
+    @Binds
+    abstract fun bindCreateSpaceTask(getter: DefaultCreateSpaceTask): CreateSpaceTask
 }

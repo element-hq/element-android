@@ -22,13 +22,17 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.space.Space
+import org.matrix.android.sdk.api.session.space.SpaceSummary
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
-import java.lang.IllegalArgumentException
 
-class DefaultSpace(private val room: Room) : Space {
+internal class DefaultSpace(private val room: Room, private val spaceSummaryDataSource: SpaceSummaryDataSource) : Space {
 
     override fun asRoom(): Room {
         return room
+    }
+
+    override fun spaceSummary(): SpaceSummary? {
+        return spaceSummaryDataSource.getSpaceSummary(asRoom().roomId)
     }
 
     override suspend fun addChildren(roomId: String, viaServers: List<String>, order: String?, autoJoin: Boolean) {

@@ -86,8 +86,15 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     private var currentGroupId = ""
 
     init {
-        observeGroupSummaries()
+        observeSpaceSummaries()
         observeSelectionState()
+        selectedSpaceDataSource.observe().execute {
+            if (this.selectedSpace != it.invoke()?.orNull()) {
+                copy(
+                        selectedSpace = it.invoke()?.orNull()
+                )
+            } else this
+        }
     }
 
     private fun observeSelectionState() {
@@ -143,8 +150,8 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
         _viewEvents.post(SpaceListViewEvents.AddSpace)
     }
 
-    private fun observeGroupSummaries() {
-        val roomSummaryQueryParams = roomSummaryQueryParams() {
+    private fun observeSpaceSummaries() {
+        val spaceSummaryQueryParams = roomSummaryQueryParams() {
             memberships = listOf(Membership.JOIN, Membership.INVITE)
             displayName = QueryStringValue.IsNotEmpty
             excludeType = listOf(/**RoomType.MESSAGING,$*/
@@ -171,7 +178,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                         },
                 session
                         .rx()
-                        .liveSpaceSummaries(roomSummaryQueryParams),
+                        .liveSpaceSummaries(spaceSummaryQueryParams),
                 BiFunction { allCommunityGroup, communityGroups ->
                     listOf(allCommunityGroup) + communityGroups
                 }

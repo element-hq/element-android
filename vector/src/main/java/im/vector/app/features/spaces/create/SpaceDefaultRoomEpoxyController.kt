@@ -28,7 +28,6 @@ import javax.inject.Inject
 class SpaceDefaultRoomEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider
-//        private val avatarRenderer: AvatarRenderer
 ) : TypedEpoxyController<CreateSpaceState>() {
 
     var listener: Listener? = null
@@ -50,44 +49,41 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
         formEditTextItem {
             id("roomName1")
             enabled(true)
-            value(data?.name)
-            hint(stringProvider.getString(R.string.create_room_name_hint))
+            value(data?.defaultRooms?.get(0))
+            hint(stringProvider.getString(R.string.create_room_name_section))
             showBottomSeparator(false)
-//            errorMessage(data?.nameInlineError)
             onTextChange { text ->
-//                listener?.onNameChange(text)
+                listener?.onNameChange(0, text)
             }
         }
 
         formEditTextItem {
             id("roomName2")
             enabled(true)
-//            value(data?.name)
-            hint(stringProvider.getString(R.string.create_room_name_hint))
+            value(data?.defaultRooms?.get(1))
+            hint(stringProvider.getString(R.string.create_room_name_section))
             showBottomSeparator(false)
-//            errorMessage(data?.nameInlineError)
             onTextChange { text ->
-//                listener?.onNameChange(text)
+                listener?.onNameChange(1, text)
             }
         }
 
         formEditTextItem {
             id("roomName3")
             enabled(true)
-//            value(data?.name)
-            hint(stringProvider.getString(R.string.create_room_name_hint))
+            value(data?.defaultRooms?.get(2))
+            hint(stringProvider.getString(R.string.create_room_name_section))
             showBottomSeparator(false)
-//            errorMessage(data?.nameInlineError)
             onTextChange { text ->
-//                listener?.onNameChange(text)
+                listener?.onNameChange(2, text)
             }
         }
     }
 
     interface Listener {
-//        fun onAvatarDelete()
+        //        fun onAvatarDelete()
 //        fun onAvatarChange()
-//        fun onNameChange(newName: String)
+        fun onNameChange(index: Int, newName: String)
 //        fun onTopicChange(newTopic: String)
     }
 }

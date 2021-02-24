@@ -66,8 +66,13 @@ internal class DefaultRoomService @Inject constructor(
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource
 ) : RoomService {
 
-    override suspend fun createRoom(createRoomParams: CreateRoomParams): String {
-        return createRoomTask.execute(createRoomParams)
+    override fun createRoom(createRoomParams: CreateRoomParams, callback: MatrixCallback<String>): Cancelable {
+        return createRoomTask
+                .configureWith(createRoomParams) {
+                    this.callback = callback
+                    this.retryCount = 3
+                }
+                .executeBy(taskExecutor)
     }
 
     override fun getRoom(roomId: String): Room? {

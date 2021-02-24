@@ -16,13 +16,16 @@
 package im.vector.app.features.form
 
 import android.net.Uri
+import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
@@ -55,13 +58,24 @@ abstract class FormEditableSquareAvatarItem : EpoxyModelWithHolder<FormEditableS
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.imageContainer.onClick(clickListener?.takeIf { enabled })
-        if (matrixItem != null) {
-            avatarRenderer?.renderSpace(matrixItem!!, holder.image)
-        } else {
-            GlideApp.with(holder.image)
-                    .load(imageUri)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(holder.image)
+        when {
+            imageUri != null   -> {
+                val corner = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        8f,
+                        holder.view.resources.displayMetrics
+                ).toInt()
+                GlideApp.with(holder.image)
+                        .load(imageUri)
+                        .transform(MultiTransformation(CenterCrop(), RoundedCorners(corner)))
+                        .into(holder.image)
+            }
+            matrixItem != null -> {
+                avatarRenderer?.renderSpace(matrixItem!!, holder.image)
+            }
+            else               -> {
+                avatarRenderer?.clear(holder.image)
+            }
         }
         holder.delete.isVisible = enabled && (imageUri != null || matrixItem?.avatarUrl?.isNotEmpty() == true)
         holder.delete.onClick(deleteListener?.takeIf { enabled })
@@ -72,6 +86,7 @@ abstract class FormEditableSquareAvatarItem : EpoxyModelWithHolder<FormEditableS
         GlideApp.with(holder.image).clear(holder.image)
         super.unbind(holder)
     }
+
     class Holder : VectorEpoxyHolder() {
         val imageContainer by bind<View>(R.id.itemEditableAvatarImageContainer)
         val image by bind<ImageView>(R.id.itemEditableAvatarImage)

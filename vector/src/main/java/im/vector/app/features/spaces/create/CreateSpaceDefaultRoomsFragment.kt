@@ -46,8 +46,12 @@ class CreateSpaceDefaultRoomsFragment @Inject constructor(
         }
 
         views.nextButton.debouncedClicks {
-            sharedViewModel.handle(CreateSpaceAction.NextFromDetails)
+            sharedViewModel.handle(CreateSpaceAction.NextFromDefaultRooms)
         }
+    }
+
+    override fun onNameChange(index: Int, newName: String) {
+        sharedViewModel.handle(CreateSpaceAction.DefaultRoomNameChanged(index, newName))
     }
 
     // -----------------------------
