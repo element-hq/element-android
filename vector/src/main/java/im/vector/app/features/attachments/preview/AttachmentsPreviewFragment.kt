@@ -156,6 +156,7 @@ class AttachmentsPreviewFragment @Inject constructor(
 
     @Suppress("DEPRECATION")
     private fun applyInsets() {
+        /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             activity?.window?.setDecorFitsSystemWindows(false)
         } else {
@@ -171,6 +172,7 @@ class AttachmentsPreviewFragment @Inject constructor(
             }
             insets
         }
+        */
     }
 
     private fun handleRemoveAction() {
