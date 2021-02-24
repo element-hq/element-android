@@ -75,6 +75,7 @@ internal class DefaultRoomService @Inject constructor(
         return createRoomTask
                 .configureWith(createRoomParams) {
                     this.callback = callback
+                    this.retryCount = 3
                 }
                 .executeBy(taskExecutor)
     }
