@@ -35,6 +35,10 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute var listener: (() -> Unit)? = null
 
+    override fun getViewType(): Int {
+        // mm.. it's reusing the same layout for basic space item
+        return R.id.space_item_home
+    }
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.rootView.setOnClickListener { listener?.invoke() }
