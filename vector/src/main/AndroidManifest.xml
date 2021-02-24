@@ -106,7 +106,7 @@
         <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
         <activity
             android:name=".features.media.VectorAttachmentViewerActivity"
-            android:theme="@style/AppTheme.Transparent"
+            android:theme="@style/AppTheme.Transparent.SC"
             tools:ignore="Instantiatable" />
 
         <activity android:name=".features.media.BigImageViewerActivity" />
@@ -235,7 +235,7 @@
 
         <activity
             android:name=".features.attachments.preview.AttachmentsPreviewActivity"
-            android:theme="@style/AppTheme.AttachmentsPreview" />
+            android:theme="@style/AppTheme.AttachmentsPreview.SC" />
         <activity android:name=".features.call.VectorCallActivity"
             android:excludeFromRecents="true"/>
         <activity
