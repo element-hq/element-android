@@ -100,7 +100,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
                         .equalTo(RoomEntityFields.ROOM_ID, roomId)
             }
         } catch (exception: TimeoutCancellationException) {
-            throw CreateRoomFailure.CreatedWithTimeout
+            throw CreateRoomFailure.CreatedWithTimeout(roomId)
         }
         if (otherUserId != null) {
             handleDirectChatCreation(roomId, otherUserId)
