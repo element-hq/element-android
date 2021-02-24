@@ -17,10 +17,16 @@
 package org.matrix.android.sdk.api.session.space
 
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 interface Space {
 
     fun asRoom() : Room
+
+    /**
+     * A current snapshot of [RoomSummary] associated with the room
+     */
+    fun spaceSummary(): SpaceSummary?
 
     suspend fun addChildren(roomId: String, viaServers: List<String>, order: String?, autoJoin: Boolean = false)
 
