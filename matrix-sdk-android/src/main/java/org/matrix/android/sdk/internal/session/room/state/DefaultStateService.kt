@@ -75,7 +75,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 eventType = eventType,
                 body = body.toSafeJson(eventType)
         )
-        sendStateTask.execute(params)
+        sendStateTask.executeRetry(params, 3)
     }
 
     private fun JsonDict.toSafeJson(eventType: String): JsonDict {

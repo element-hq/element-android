@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -35,6 +36,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -97,6 +99,23 @@ class HomeActivity :
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
+    private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            val spaceId = activityResult.data?.extras?.getString(SpaceCreationActivity.RESULT_DATA_CREATED_SPACE_ID)
+            val defaultRoomsId = activityResult.data?.extras?.getString(SpaceCreationActivity.RESULT_DATA_DEFAULT_ROOM_ID)
+            views.drawerLayout.closeDrawer(GravityCompat.START)
+
+            // Here we want to change current space to the newly created one, and then immediatly open the default room
+            if (spaceId != null) {
+                navigator.switchToSpace(this, spaceId, defaultRoomsId)
+            }
+
+            // Also we should show the share space bottomsheet
+        } else {
+            // viewModel.handle(CrossSigningSettingsAction.ReAuthCancelled)
+        }
+    }
+
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
             hideKeyboard()
@@ -141,7 +160,7 @@ class HomeActivity :
                             startActivity(SpacePreviewActivity.newIntent(this, sharedAction.spaceId))
                         }
                         is HomeActivitySharedAction.AddSpace -> {
-                            startActivity(SpaceCreationActivity.newIntent(this))
+                            createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
                         }
                     }.exhaustive
                 }
