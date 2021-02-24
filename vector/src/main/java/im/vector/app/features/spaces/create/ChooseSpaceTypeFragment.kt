@@ -43,7 +43,7 @@ class ChooseSpaceTypeFragment @Inject constructor(
         }))
 
         views.privateButton.setOnClickListener(DebouncedClickListener({
-            sharedViewModel.handle(CreateSpaceAction.SetRoomType(SpaceType.Private))
+            // sharedViewModel.handle(CreateSpaceAction.SetRoomType(SpaceType.Private))
         }))
     }
 }

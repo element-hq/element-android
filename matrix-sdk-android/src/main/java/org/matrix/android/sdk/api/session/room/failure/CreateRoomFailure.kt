@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 
 sealed class CreateRoomFailure : Failure.FeatureFailure() {
-    object CreatedWithTimeout : CreateRoomFailure()
+    data class CreatedWithTimeout(val roomID: String) : CreateRoomFailure()
     data class CreatedWithFederationFailure(val matrixError: MatrixError) : CreateRoomFailure()
     data class AliasError(val aliasError: RoomAliasError) : CreateRoomFailure()
 }
