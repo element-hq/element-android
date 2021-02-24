@@ -40,9 +40,9 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
                 .launch(task.callbackThread.toDispatcher()) {
                     val resultOrFailure = runCatching {
                         withContext(task.executionThread.toDispatcher()) {
-                            Timber.v("Enqueue task $task")
-                            Timber.v("Execute task $task on ${Thread.currentThread().name}")
-                            task.execute(task.params)
+                            Timber.v("## TASK: Enqueue task $task")
+                            Timber.v("## TASK: Execute task $task on ${Thread.currentThread().name}")
+                            task.executeRetry(task.params, task.maxRetryCount)
                         }
                     }
                     resultOrFailure
