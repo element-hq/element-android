@@ -29,6 +29,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
+import arrow.core.Option
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
@@ -46,6 +47,7 @@ import im.vector.app.features.crypto.verification.SupportedVerificationMethodsPr
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
+import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
@@ -77,6 +79,7 @@ import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryDat
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -85,6 +88,7 @@ class DefaultNavigator @Inject constructor(
         private val sessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences,
         private val widgetArgsBuilder: WidgetArgsBuilder,
+        private val selectedSpaceDataSource: SelectedSpaceDataSource,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
 ) : Navigator {
 
@@ -96,6 +100,23 @@ class DefaultNavigator @Inject constructor(
         val args = RoomDetailArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
         startActivity(context, intent, buildTask)
+    }
+
+    override fun switchToSpace(context: Context, spaceId: String, roomId: String?) {
+        if (sessionHolder.getSafeActiveSession()?.spaceService()?.getSpace(spaceId) == null) {
+            fatalError("Trying to open an unknown space $spaceId", vectorPreferences.failFast())
+            return
+        }
+
+        sessionHolder.getSafeActiveSession()?.spaceService()?.getSpace(spaceId)?.spaceSummary()?.let {
+            Timber.d("## Nav: Switching to space $spaceId / ${it.roomSummary.name}")
+            selectedSpaceDataSource.post(Option.just(it))
+        } ?: kotlin.run {
+            Timber.d("## Nav: Failed to switch to space $spaceId")
+        }
+        if (roomId != null) {
+            openRoom(context, roomId)
+        }
     }
 
     override fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String) {
