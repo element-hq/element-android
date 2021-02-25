@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.rx.rx
@@ -144,33 +145,43 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
         val membership = roomSummary?.membership
         val eventId = permalinkData.eventId
         val roomAlias = permalinkData.getRoomAliasOrNull()
+        val isSpace = roomSummary?.roomType == RoomType.SPACE
         return when {
             membership == Membership.BAN     -> context.toast(R.string.error_opening_banned_room)
             membership?.isActive().orFalse() -> {
-                navigator.openRoom(context, roomId, eventId, buildTask)
+                if (isSpace) {
+//                    navigator.switchToSpace(context, roomId, null)
+                    navigator.openSpacePreview(context, roomId)
+                } else {
+                    navigator.openRoom(context, roomId, eventId, buildTask)
+                }
             }
             else                             -> {
-                if (roomSummary == null) {
-                    // we don't know this room, try to peek
-                    val roomPreviewData = RoomPreviewData(
-                            roomId = roomId,
-                            roomAlias = roomAlias,
-                            peekFromServer = true,
-                            buildTask = buildTask,
-                            homeServers = permalinkData.viaParameters
-                    )
-                    navigator.openRoomPreview(context, roomPreviewData)
+                if (isSpace) {
+                    navigator.openSpacePreview(context, roomId)
                 } else {
-                    val roomPreviewData = RoomPreviewData(
-                            roomId = roomId,
-                            eventId = eventId,
-                            roomAlias = roomAlias ?: roomSummary.canonicalAlias,
-                            roomName = roomSummary.displayName,
-                            avatarUrl = roomSummary.avatarUrl,
-                            buildTask = buildTask,
-                            homeServers = permalinkData.viaParameters
-                    )
-                    navigator.openRoomPreview(context, roomPreviewData)
+                    if (roomSummary == null) {
+                        // we don't know this room, try to peek
+                        val roomPreviewData = RoomPreviewData(
+                                roomId = roomId,
+                                roomAlias = roomAlias,
+                                peekFromServer = true,
+                                buildTask = buildTask,
+                                homeServers = permalinkData.viaParameters
+                        )
+                        navigator.openRoomPreview(context, roomPreviewData)
+                    } else {
+                        val roomPreviewData = RoomPreviewData(
+                                roomId = roomId,
+                                eventId = eventId,
+                                roomAlias = roomAlias ?: roomSummary.canonicalAlias,
+                                roomName = roomSummary.displayName,
+                                avatarUrl = roomSummary.avatarUrl,
+                                buildTask = buildTask,
+                                homeServers = permalinkData.viaParameters
+                        )
+                        navigator.openRoomPreview(context, roomPreviewData)
+                    }
                 }
             }
         }
