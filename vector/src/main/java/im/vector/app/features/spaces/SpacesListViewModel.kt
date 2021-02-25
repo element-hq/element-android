@@ -16,6 +16,7 @@
 
 package im.vector.app.features.spaces
 
+import androidx.lifecycle.viewModelScope
 import arrow.core.Option
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.FragmentViewModelContext
@@ -34,18 +35,22 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.SpaceSummary
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 
 const val ALL_COMMUNITIES_GROUP_ID = "+ALL_COMMUNITIES_GROUP_ID"
 
 sealed class SpaceListAction : VectorViewModelAction {
     data class SelectSpace(val spaceSummary: SpaceSummary) : SpaceListAction()
+    data class LeaveSpace(val spaceSummary: SpaceSummary) : SpaceListAction()
     object AddSpace : SpaceListAction()
 }
 
@@ -88,13 +93,18 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     init {
         observeSpaceSummaries()
         observeSelectionState()
-        selectedSpaceDataSource.observe().execute {
-            if (this.selectedSpace != it.invoke()?.orNull()) {
-                copy(
-                        selectedSpace = it.invoke()?.orNull()
-                )
-            } else this
-        }
+        selectedSpaceDataSource
+                .observe()
+                .subscribe {
+                    if (currentGroupId != it.orNull()?.spaceId) {
+                        setState {
+                            copy(
+                                    selectedSpace = it.orNull()
+                            )
+                        }
+                    }
+                }
+                .disposeOnClear()
     }
 
     private fun observeSelectionState() {
@@ -119,11 +129,12 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     override fun handle(action: SpaceListAction) {
         when (action) {
             is SpaceListAction.SelectSpace -> handleSelectSpace(action)
-            else                           -> handleAddSpace()
+            is SpaceListAction.LeaveSpace -> handleLeaveSpace(action)
+            SpaceListAction.AddSpace -> handleAddSpace()
         }
     }
 
-    // PRIVATE METHODS *****************************************************************************
+// PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
         // get uptodate version of the space
@@ -142,6 +153,16 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
 //                    selectedSpaceDataSource.post(Option.just(state.selectedSpace))
 //                }
                 setState { copy(selectedSpace = action.spaceSummary) }
+            }
+        }
+    }
+
+    private fun handleLeaveSpace(action: SpaceListAction.LeaveSpace) {
+        viewModelScope.launch {
+            awaitCallback {
+                tryOrNull("Failed to leave space ${action.spaceSummary.spaceId}") {
+                    session.spaceService().getSpace(action.spaceSummary.spaceId)?.asRoom()?.leave(null, it)
+                }
             }
         }
     }

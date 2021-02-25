@@ -70,6 +70,7 @@ import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
+import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
@@ -102,7 +103,7 @@ class DefaultNavigator @Inject constructor(
         startActivity(context, intent, buildTask)
     }
 
-    override fun switchToSpace(context: Context, spaceId: String, roomId: String?) {
+    override fun switchToSpace(context: Context, spaceId: String, roomId: String?, openShareSheet: Boolean) {
         if (sessionHolder.getSafeActiveSession()?.spaceService()?.getSpace(spaceId) == null) {
             fatalError("Trying to open an unknown space $spaceId", vectorPreferences.failFast())
             return
@@ -115,8 +116,14 @@ class DefaultNavigator @Inject constructor(
             Timber.d("## Nav: Failed to switch to space $spaceId")
         }
         if (roomId != null) {
-            openRoom(context, roomId)
+            val args = RoomDetailArgs(roomId, eventId = null, openShareSpaceForId = spaceId.takeIf { openShareSheet })
+            val intent = RoomDetailActivity.newIntent(context, args)
+            startActivity(context, intent, false)
         }
+    }
+
+    override fun openSpacePreview(context: Context, spaceId: String) {
+        startActivity(context, SpacePreviewActivity.newIntent(context, spaceId), false)
     }
 
     override fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String) {

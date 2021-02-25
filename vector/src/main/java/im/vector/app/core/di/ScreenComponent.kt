@@ -77,6 +77,7 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.settings.devices.DeviceVerificationInfoBottomSheet
 import im.vector.app.features.share.IncomingShareActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
+import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.ui.UiStateRepository
@@ -175,6 +176,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: CallControlsBottomSheet)
     fun inject(bottomSheet: SignOutBottomSheetDialogFragment)
     fun inject(bottomSheet: MatrixToBottomSheet)
+    fun inject(bottomSheet: ShareSpaceBottomSheet)
 
     /* ==========================================================================================
      * Others

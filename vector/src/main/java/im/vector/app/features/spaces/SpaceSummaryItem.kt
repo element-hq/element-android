@@ -18,12 +18,14 @@ package im.vector.app.features.spaces
 
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableConstraintLayout
+import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -34,12 +36,22 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute var listener: (() -> Unit)? = null
+    @EpoxyAttribute var onLeave: (() -> Unit)? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.rootView.setOnClickListener { listener?.invoke() }
         holder.groupNameView.text = matrixItem.displayName
         holder.rootView.isChecked = selected
+        if (onLeave != null) {
+            holder.leaveView.setOnClickListener(
+                    DebouncedClickListener({ _ ->
+                        onLeave?.invoke()
+                    })
+            )
+        } else {
+            holder.leaveView.isVisible = false
+        }
         avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
     }
 
@@ -52,5 +64,6 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         val avatarImageView by bind<ImageView>(R.id.groupAvatarImageView)
         val groupNameView by bind<TextView>(R.id.groupNameView)
         val rootView by bind<CheckableConstraintLayout>(R.id.itemGroupLayout)
+        val leaveView by bind<ImageView>(R.id.groupTmpLeave)
     }
 }

@@ -17,6 +17,7 @@
 package im.vector.app.features.spaces.create
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
@@ -25,6 +26,7 @@ import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.withStyledAttributes
 import im.vector.app.R
+import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.ViewSpaceTypeButtonBinding
 
 class WizardButtonView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
@@ -36,7 +38,7 @@ class WizardButtonView @JvmOverloads constructor(context: Context, attrs: Attrib
         set(value) {
             if (value != title) {
                 field = value
-                views.title.text = value
+                views.title.setTextOrHide(value)
             }
         }
 
@@ -44,7 +46,7 @@ class WizardButtonView @JvmOverloads constructor(context: Context, attrs: Attrib
         set(value) {
             if (value != subTitle) {
                 field = value
-                views.subTitle.text = value
+                views.subTitle.setTextOrHide(value)
             }
         }
 
@@ -56,15 +58,13 @@ class WizardButtonView @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         }
 
-//    private var tint: Int? = null
-//        set(value) {
-//            field = value
-//            if (value != null) {
-//                views.buttonImageView.imageTintList = ColorStateList.valueOf(value)
-//            } else {
-//                views.buttonImageView.clearColorFilter()
-//            }
-//        }
+    private var tint: Int? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                views.buttonImageView.imageTintList = ColorStateList.valueOf(value)
+            }
+        }
 
 //    var action: (() -> Unit)? = null
 
@@ -72,16 +72,19 @@ class WizardButtonView @JvmOverloads constructor(context: Context, attrs: Attrib
         inflate(context, R.layout.view_space_type_button, this)
         views = ViewSpaceTypeButtonBinding.bind(this)
 
+        views.subTitle.setTextOrHide(null)
+
         if (isInEditMode) {
             title = "Title"
             subTitle = "This is doing something"
         }
 
         context.withStyledAttributes(attrs, R.styleable.WizardButtonView) {
-            title = getString(R.styleable.WizardButtonView_title) ?: ""
-            subTitle = getString(R.styleable.WizardButtonView_subTitle) ?: ""
+            title = getString(R.styleable.WizardButtonView_title)
+            subTitle = getString(R.styleable.WizardButtonView_subTitle)
             icon = getDrawable(R.styleable.WizardButtonView_icon)
-//            tint = getColor(R.styleable.WizardButtonView_iconTint, ThemeUtils.getColor(context, R.attr.riotx_text_primary))
+            tint = getColor(R.styleable.WizardButtonView_iconTint, -1)
+                    .takeIf { it != -1 }
         }
 
         val outValue = TypedValue()

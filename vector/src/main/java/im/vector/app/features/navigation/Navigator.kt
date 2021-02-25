@@ -38,7 +38,9 @@ interface Navigator {
 
     fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false)
 
-    fun switchToSpace(context: Context, spaceId: String, roomId: String?)
+    fun switchToSpace(context: Context, spaceId: String, roomId: String?, openShareSheet: Boolean)
+
+    fun openSpacePreview(context: Context, spaceId: String)
 
     fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String)
 

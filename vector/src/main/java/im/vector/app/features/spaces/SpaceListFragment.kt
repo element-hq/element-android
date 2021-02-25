@@ -80,6 +80,10 @@ class SpaceListFragment @Inject constructor(
         viewModel.handle(SpaceListAction.SelectSpace(spaceSummary))
     }
 
+    override fun onLeaveSpace(spaceSummary: SpaceSummary) {
+        viewModel.handle(SpaceListAction.LeaveSpace(spaceSummary))
+    }
+
     override fun onAddSpaceSelected() {
         viewModel.handle(SpaceListAction.AddSpace)
     }

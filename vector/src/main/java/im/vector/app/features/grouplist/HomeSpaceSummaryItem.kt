@@ -22,6 +22,7 @@ import android.util.TypedValue
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -48,12 +49,14 @@ abstract class HomeSpaceSummaryItem : VectorEpoxyModel<HomeSpaceSummaryItem.Hold
         holder.avatarImageView.background = ContextCompat.getDrawable(holder.view.context, R.drawable.space_home_background)
         holder.avatarImageView.setImageResource(R.drawable.ic_space_home)
         holder.avatarImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
+        holder.leaveView.isVisible = false
     }
 
     class Holder : VectorEpoxyHolder() {
         val avatarImageView by bind<ImageView>(R.id.groupAvatarImageView)
         val groupNameView by bind<TextView>(R.id.groupNameView)
         val rootView by bind<CheckableConstraintLayout>(R.id.itemGroupLayout)
+        val leaveView by bind<ImageView>(R.id.groupTmpLeave)
     }
 
     fun dpToPx(resources: Resources, dp: Int): Int {
