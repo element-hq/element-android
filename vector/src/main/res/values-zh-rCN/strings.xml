@@ -1952,7 +1952,7 @@
     <string name="invitation_sent_to_one_user">邀请已发送到 %1$s</string>
     <string name="invitations_sent_to_two_users">邀请已发送到 %1$s 和 %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-        <item quantity="other">邀请已发送到 %1$s 和 %2$s 等</item>
+        <item quantity="other">邀请已发送到 %1$s 和 %2$d等</item>
     </plurals>
     <string name="invite_users_to_room_failure">我们无法邀请用户，请检查您想要邀请的用户并重试。</string>
     <string name="choose_locale_current_locale_title">当前语言</string>
@@ -2105,7 +2105,7 @@
     <string name="settings_security_application_protection_summary">使用 PIN 和生物特征识别保护访问。</string>
     <string name="settings_security_application_protection_title">保护访问</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
-        <item quantity="other">显示您现在可以验证的 ％d 个设备</item>
+        <item quantity="other">显示 %d 部设备，这些设备是你现在可以验证的</item>
     </plurals>
     <string name="secure_backup_reset_no_history">您将重新启动，没有历史记录，消息，受信任的设备或受信任的用户</string>
     <string name="secure_backup_reset_if_you_reset_all">如果您重置一切</string>
