@@ -25,6 +25,7 @@ import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
+import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -49,7 +50,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val vectorPreferences: VectorPreferences) {
 
-    fun create(event: TimelineEvent, nextEvent: TimelineEvent?): MessageInformationData {
+    fun create(event: TimelineEvent, prevEvent: TimelineEvent?, nextEvent: TimelineEvent?): MessageInformationData {
         // Non nullability has been tested before
         val eventId = event.root.eventId!!
 
@@ -69,6 +70,13 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val e2eDecoration = getE2EDecoration(event)
+
+        val isSentByMe = event.root.senderId == session.myUserId
+        val sendStateDecoration = if (isSentByMe) {
+            getSendStateDecoration(event.root.sendState, prevEvent?.root?.sendState, event.readReceipts.any { it.user.userId != session.myUserId })
+        } else {
+            SendStateDecoration.NONE
+        }
 
         return MessageInformationData(
                 eventId = eventId,
@@ -110,9 +118,22 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                             ?: VerificationState.REQUEST
                     ReferencesInfoData(verificationState)
                 },
-                sentByMe = event.root.senderId == session.myUserId,
-                e2eDecoration = e2eDecoration
+                sentByMe = isSentByMe,
+                e2eDecoration = e2eDecoration,
+                sendStateDecoration = sendStateDecoration
         )
+    }
+
+    private fun getSendStateDecoration(eventSendState: SendState, prevEventSendState: SendState?, anyReadReceipts: Boolean): SendStateDecoration {
+        return if (eventSendState.isSending()) {
+            SendStateDecoration.SENDING
+        } else if (eventSendState.hasFailed()) {
+            SendStateDecoration.FAILED
+        } else if (eventSendState.isSent() && !prevEventSendState?.isSent().orFalse() && !anyReadReceipts) {
+            SendStateDecoration.SENT
+        } else {
+            SendStateDecoration.NONE
+        }
     }
 
     private fun getE2EDecoration(event: TimelineEvent): E2EDecoration {

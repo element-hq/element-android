@@ -64,7 +64,7 @@ class WidgetItemFactory @Inject constructor(
                                 callback: TimelineEventController.Callback?,
                                 widgetContent: WidgetContent,
                                 previousWidgetContent: WidgetContent?): VectorEpoxyModel<*> {
-        val informationData = informationDataFactory.create(timelineEvent, null)
+        val informationData = informationDataFactory.create(timelineEvent, null, null)
         val attributes = messageItemAttributesFactory.create(null, informationData, callback)
 
         val disambiguatedDisplayName = timelineEvent.senderInfo.disambiguatedDisplayName

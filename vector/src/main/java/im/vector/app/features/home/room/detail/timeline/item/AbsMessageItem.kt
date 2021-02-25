@@ -31,7 +31,7 @@ import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 
 /**
- * Base timeline item that adds an optional information bar with the sender avatar, name and time
+ * Base timeline item that adds an optional information bar with the sender avatar, name, time, send state
  * Adds associated click listeners (on avatar, displayname)
  */
 abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>() {
@@ -82,6 +82,27 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.avatarImageView.setOnLongClickListener(null)
             holder.memberNameView.setOnLongClickListener(null)
         }
+
+        // Render send state indicator
+        holder.sendStateImageView.isVisible = true
+        when (attributes.informationData.sendStateDecoration) {
+            SendStateDecoration.SENDING  -> {
+                holder.sendStateImageView
+                        .apply { setImageResource(R.drawable.ic_sending_message) }
+                        .apply { contentDescription = context.getString(R.string.event_status_a11y_sending) }
+            }
+            SendStateDecoration.SENT     -> {
+                holder.sendStateImageView
+                        .apply { setImageResource(R.drawable.ic_message_sent) }
+                        .apply { contentDescription = context.getString(R.string.event_status_a11y_sent) }
+            }
+            SendStateDecoration.FAILED   -> {
+                holder.sendStateImageView
+                        .apply { setImageResource(R.drawable.ic_sending_message_failed) }
+                        .apply { contentDescription = context.getString(R.string.event_status_a11y_failed) }
+            }
+            SendStateDecoration.NONE     -> holder.sendStateImageView.isVisible = false
+        }
     }
 
     override fun unbind(holder: H) {
@@ -99,6 +120,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
+        val sendStateImageView by bind<ImageView>(R.id.messageSendStateImageView)
     }
 
     /**

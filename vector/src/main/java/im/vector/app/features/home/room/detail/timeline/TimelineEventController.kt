@@ -30,6 +30,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.LoadingItem_
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.extensions.nextOrNull
+import im.vector.app.core.extensions.prevOrNull
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailViewState
@@ -336,11 +337,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private fun buildCacheItem(currentPosition: Int, items: List<TimelineEvent>): CacheItemData {
         val event = items[currentPosition]
         val nextEvent = items.nextOrNull(currentPosition)
+        val prevEvent = items.prevOrNull(currentPosition)
         if (hasReachedInvite && hasUTD) {
             return CacheItemData(event.localId, event.root.eventId, null, null, null)
         }
         updateUTDStates(event, nextEvent)
-        val eventModel = timelineItemFactory.create(event, nextEvent, eventIdToHighlight, callback).also {
+        val eventModel = timelineItemFactory.create(event, prevEvent, nextEvent, eventIdToHighlight, callback).also {
             it.id(event.localId)
             it.setOnVisibilityStateChanged(TimelineEventVisibilityStateChangedListener(callback, event))
         }

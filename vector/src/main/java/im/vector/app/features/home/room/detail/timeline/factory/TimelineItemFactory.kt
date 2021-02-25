@@ -38,6 +38,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val userPreferencesProvider: UserPreferencesProvider) {
 
     fun create(event: TimelineEvent,
+               prevEvent: TimelineEvent?,
                nextEvent: TimelineEvent?,
                eventIdToHighlight: String?,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
@@ -46,7 +47,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
         val computedModel = try {
             when (event.root.getClearType()) {
                 EventType.STICKER,
-                EventType.MESSAGE               -> messageItemFactory.create(event, nextEvent, highlight, callback)
+                EventType.MESSAGE               -> messageItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
                 // State and call
                 EventType.STATE_ROOM_TOMBSTONE,
                 EventType.STATE_ROOM_NAME,
@@ -76,9 +77,9 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.ENCRYPTED             -> {
                     if (event.root.isRedacted()) {
                         // Redacted event, let the MessageItemFactory handle it
-                        messageItemFactory.create(event, nextEvent, highlight, callback)
+                        messageItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
                     } else {
-                        encryptedItemFactory.create(event, nextEvent, highlight, callback)
+                        encryptedItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
                     }
                 }
                 EventType.STATE_ROOM_ALIASES,

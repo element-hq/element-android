@@ -48,7 +48,7 @@ class EncryptionItemFactory @Inject constructor(
             return null
         }
         val algorithm = event.root.getClearContent().toModel<EncryptionEventContent>()?.algorithm
-        val informationData = informationDataFactory.create(event, null)
+        val informationData = informationDataFactory.create(event, null, null)
         val attributes = messageItemAttributesFactory.create(null, informationData, callback)
 
         val isSafeAlgorithm = algorithm == MXCRYPTO_ALGORITHM_MEGOLM
