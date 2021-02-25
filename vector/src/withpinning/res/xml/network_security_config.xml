@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Do not allow clearText traffic -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <!-- Do not allow system and user certificates -->
+
+            <!-- Allow only Tchap intermediate certificate authority -->
+            <certificates src="@raw/certignaservicesrootca"/>
+        </trust-anchors>
+    </base-config>
+</network-security-config>

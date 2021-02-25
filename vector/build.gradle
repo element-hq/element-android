@@ -11,9 +11,9 @@ kapt {
 }
 
 // Note: 2 digits max for each value
-ext.versionMajor = 1
+ext.versionMajor = 2
 ext.versionMinor = 0
-ext.versionPatch = 18
+ext.versionPatch = 0
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -201,8 +201,7 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix ".debug"
-            resValue "string", "app_name", "Element dbg"
+            resValue "string", "app_name", "Tchap dbg"
 
             resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
@@ -213,7 +212,7 @@ android {
         }
 
         release {
-            resValue "string", "app_name", "Element"
+            resValue "string", "app_name", "Tchap"
 
             resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
@@ -230,13 +229,16 @@ android {
         }
     }
 
-    flavorDimensions "store"
+    // The 'store' dimension permits to deal with GooglePlay/Fdroid app
+    // The 'target' dimension permits to specify which platform are used
+    // The 'voip' flavor dimension permits to include/exclude jitsi at compilation time
+    // The 'pinning' flavor dimension permits to enable/disable certificate pinning with fingerprint check
+    flavorDimensions "store", "target", "voip", "pinning"
 
     productFlavors {
         gplay {
             dimension "store"
             isDefault = true
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getGplayVersionSuffix()}"
 
             resValue "bool", "isGplay", "true"
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
@@ -247,12 +249,54 @@ android {
         fdroid {
             dimension "store"
 
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getFdroidVersionSuffix()}"
-
             resValue "bool", "isGplay", "false"
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
+        }
+
+        withvoip {
+            dimension "voip"
+        }
+
+        withoutvoip {
+            dimension "voip"
+        }
+
+        withpinning {
+            dimension "pinning"
+        }
+
+        withoutpinning {
+            dimension "pinning"
+        }
+
+        // Note: we cannot use reserved word protected, so typo the word
+        secure {
+            dimension "target"
+
+            applicationId "fr.gouv.tchap"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+            buildConfigField "String", "DEFAULT_PUSHER_APP_ID", "\"fr.gouv.tchap.android\""
+        }
+
+        preprod {
+            dimension "target"
+
+            applicationId "fr.gouv.rie.tchap"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}" + "_b"
+
+            buildConfigField "String", "DEFAULT_PUSHER_APP_ID", "\"fr.gouv.rie.tchap.android\""
+        }
+
+        agent {
+            dimension "target"
+
+            applicationId "fr.gouv.tchap.a"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}" + "_a"
+
+            buildConfigField "String", "DEFAULT_PUSHER_APP_ID", "\"fr.gouv.tchap.a.android\""
         }
     }
 
