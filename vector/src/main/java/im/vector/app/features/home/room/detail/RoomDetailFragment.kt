@@ -157,6 +157,7 @@ import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.reactions.EmojiReactionPickerActivity
 import im.vector.app.features.roomprofile.RoomProfileActivity
+import im.vector.app.features.roomprofile.alias.RoomAliasAction
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
@@ -1544,9 +1545,20 @@ class RoomDetailFragment @Inject constructor(
 
         this.view?.hideKeyboard()
 
-        MessageActionsBottomSheet
-                .newInstance(roomId, informationData)
-                .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
+        if (informationData.sendState.isSending()) {
+            AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.dialog_title_confirmation)
+                    .setMessage(getString(R.string.event_status_cancel_sending_dialog_message))
+                    .setNegativeButton(R.string.no, null)
+                    .setPositiveButton(R.string.yes) { _, _ ->
+                        sharedActionViewModel.post(EventSharedAction.Cancel(informationData.eventId))
+                    }
+                    .show()
+        } else {
+            MessageActionsBottomSheet
+                    .newInstance(roomId, informationData)
+                    .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
+        }
         return true
     }
 

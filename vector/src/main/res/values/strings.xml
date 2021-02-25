@@ -3239,4 +3239,9 @@
     <string name="dev_tools_success_event">Event sent!</string>
     <string name="dev_tools_success_state_event">State event sent!</string>
     <string name="dev_tools_event_content_hint">Event content</string>
+
+    <string name="event_status_a11y_sending">Sending</string>
+    <string name="event_status_a11y_sent">Sent</string>
+    <string name="event_status_a11y_failed">Failed</string>
+    <string name="event_status_cancel_sending_dialog_message">Do you want to cancel sending message?</string>
 </resources>
