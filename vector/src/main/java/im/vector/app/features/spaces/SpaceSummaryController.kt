@@ -71,6 +71,7 @@ class SpaceSummaryController @Inject constructor(
                                 matrixItem(it.toMatrixItem())
                                 selected(false)
                                 listener { callback?.onSpaceSelected(it) }
+//                                lea { callback?.onSpaceSelected(it) }
                             }
                         }
                         genericFooterItem {
@@ -101,6 +102,7 @@ class SpaceSummaryController @Inject constructor(
                             id(groupSummary.spaceId)
                             matrixItem(groupSummary.toMatrixItem())
                             selected(isSelected)
+                            onLeave { callback?.onLeaveSpace(groupSummary) }
                             listener { callback?.onSpaceSelected(groupSummary) }
                         }
                     }
@@ -118,6 +120,7 @@ class SpaceSummaryController @Inject constructor(
 
     interface Callback {
         fun onSpaceSelected(spaceSummary: SpaceSummary)
+        fun onLeaveSpace(spaceSummary: SpaceSummary)
         fun onAddSpaceSelected()
     }
 }
