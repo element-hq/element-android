@@ -105,14 +105,10 @@ class HomeActivity :
             val defaultRoomsId = activityResult.data?.extras?.getString(SpaceCreationActivity.RESULT_DATA_DEFAULT_ROOM_ID)
             views.drawerLayout.closeDrawer(GravityCompat.START)
 
-            // Here we want to change current space to the newly created one, and then immediatly open the default room
+            // Here we want to change current space to the newly created one, and then immediately open the default room
             if (spaceId != null) {
-                navigator.switchToSpace(this, spaceId, defaultRoomsId)
+                navigator.switchToSpace(this, spaceId, defaultRoomsId, true)
             }
-
-            // Also we should show the share space bottomsheet
-        } else {
-            // viewModel.handle(CrossSigningSettingsAction.ReAuthCancelled)
         }
     }
 

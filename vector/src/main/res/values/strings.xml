@@ -2906,6 +2906,14 @@
     <string name="create_spaces_room_public_header_desc">We’ll create rooms for them, and auto-join everyone. You can add more later too.</string>
     <string name="create_spaces_default_public_room_name">General</string>
     <string name="create_spaces_loading_message">Creating Space…</string>
+    <string name="invite_people_to_your_space">Invite people to your space</string>
+    <string name="invite_people_to_your_space_desc">It’s just you at the moment.  %s will be even better with others.</string>
+    <string name="invite_by_email">Invite by email</string>
+    <string name="invite_by_mxid">Invite by username</string>
+    <string name="invite_by_link">Share link</string>
+    <!-- First one is the space name, and the second one is the matrix.to link -->
+    <string name="share_space_link_message">Join my space %1$s %2$s</string>
+    <string name="skip_for_now">Skip for now</string>
 
 
 </resources>
