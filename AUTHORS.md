@@ -6,7 +6,7 @@ Even if we try to be able to work on all the functionalities, we have more knowl
 
 ## [Giomfo](https://github.com/giomfo): Product manager, Android team leader
 
-[@Giom.marty:matrix.org](https://matrix.to/#/@Giom:matrix.org)
+[@Giom:matrix.org](https://matrix.to/#/@Giom:matrix.org)
 - Android team leader and project manager, Android developer, GitHub community manager.
 - Specialist of the account creation, and many other fun features.
 - Reviewing and polishing developed features, code quality manager, PRs reviewer, GitHub community manager.
