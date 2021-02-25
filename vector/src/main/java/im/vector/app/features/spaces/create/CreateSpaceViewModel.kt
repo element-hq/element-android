@@ -111,7 +111,10 @@ class CreateSpaceViewModel @AssistedInject constructor(
 
         override fun initialState(viewModelContext: ViewModelContext): CreateSpaceState? {
             return CreateSpaceState(
-                    defaultRooms = mapOf(0 to viewModelContext.activity.getString(R.string.create_spaces_default_public_room_name))
+                    defaultRooms = mapOf(
+                            0 to viewModelContext.activity.getString(R.string.create_spaces_default_public_room_name),
+                            1 to viewModelContext.activity.getString(R.string.create_spaces_default_public_random_room_name)
+                    )
             )
         }
     }
