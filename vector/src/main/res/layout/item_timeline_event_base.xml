@@ -150,10 +150,10 @@
 
     <ProgressBar
         android:id="@+id/eventSendingIndicator"
-        style="?android:attr/progressBarStyleSmall"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_alignBottom="@+id/viewStubContainer"
+        android:indeterminateTint="?riotx_text_secondary"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
