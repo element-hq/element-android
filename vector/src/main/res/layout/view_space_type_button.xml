@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_rect_shape_8"
-    android:id="@+id/content"
     android:padding="4dp">
 
     <ImageView
@@ -34,6 +34,7 @@
         app:layout_constraintEnd_toStartOf="@id/rightChevron"
         app:layout_constraintStart_toEndOf="@id/buttonImageView"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginBottom="0dp"
         tools:text="Public" />
 
 
@@ -53,7 +54,8 @@
         app:layout_constraintStart_toEndOf="@id/buttonImageView"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_goneMarginBottom="8dp"
-        tools:text="Open to anyone, best for communities" />
+        tools:text="Open to anyone, best for communities"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/rightChevron"
