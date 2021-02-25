@@ -2301,5 +2301,5 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_permissions_change_history_visibility">Editar historial de visibilidad</string>
     <string name="room_permissions_change_permissions">Editar permisos</string>
     <string name="room_permissions_change_room_name">Cambiar el nombre de la sala</string>
-    <string name="room_settings_permissions_title">Administración de sala</string>
+    <string name="room_settings_permissions_title">Permisos de chat</string>
 </resources>
