@@ -2267,7 +2267,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="add_a_topic_link_text">Agregar un tema</string>
     <string name="room_created_summary_no_topic_creation_text">%s para dar a saber de qué se trata la sala.</string>
     <string name="this_is_the_beginning_of_dm">Este es el inicio de mensajes con %s.</string>
-    <string name="start_chatting">Empieza a hablar</string>
+    <string name="start_chatting">Empezar a chatear</string>
     <string name="action_unpublish">Despublicar</string>
     <string name="action_add">Añadir</string>
     <string name="room_settings_enable_encryption_no_permission">No tiene permisos para encryptar esta sala.</string>
@@ -2298,7 +2298,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_permissions_upgrade_the_room">Actualizar sala</string>
     <string name="room_permissions_change_topic">Cambiar tema</string>
     <string name="room_permissions_send_messages">Enviar mensajes</string>
-    <string name="room_permissions_change_history_visibility">Editar visibilidad del historial</string>
+    <string name="room_permissions_change_history_visibility">Cambiar la visibilidad del historial</string>
     <string name="room_permissions_change_permissions">Editar permisos</string>
     <string name="room_permissions_change_room_name">Cambiar el nombre de la sala</string>
     <string name="room_settings_permissions_title">Permisos de chat</string>
@@ -2306,11 +2306,11 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_permissions_change_main_address_for_the_room">Cambiar la dirección principal de la sala</string>
     <string name="room_permissions_change_room_avatar">Cambiar el avatar de la sala</string>
     <string name="room_permissions_modify_widgets">Modificar widgets</string>
-    <string name="room_permissions_notify_everyone">Notificar a todos</string>
-    <string name="room_permissions_remove_messages_sent_by_others">Eliminar mensajes enviados por otros</string>
+    <string name="room_permissions_notify_everyone">Notificar a todos los participantes</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Eliminar mensajes enviados por otros usuarios</string>
     <string name="room_permissions_ban_users">Banear usuarios</string>
     <string name="room_permissions_kick_users">Echar usuarios</string>
-    <string name="room_permissions_change_settings">Cambiar ajustes</string>
+    <string name="room_permissions_change_settings">Modificar ajustes</string>
     <string name="room_permissions_invite_users">Invitar usuarios</string>
     <string name="room_permissions_default_role">Rol por defecto</string>
     <string name="room_permissions_title">Permisos</string>
