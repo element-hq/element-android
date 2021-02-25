@@ -317,7 +317,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
-    implementation "androidx.recyclerview:recyclerview:1.2.0-beta01"
+    implementation "androidx.recyclerview:recyclerview:1.2.0-beta02"
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
