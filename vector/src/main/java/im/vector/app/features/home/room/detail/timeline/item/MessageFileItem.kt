@@ -87,13 +87,6 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         holder.fileImageWrapper.setOnClickListener(attributes.itemClickListener)
         holder.fileImageWrapper.setOnLongClickListener(attributes.itemLongClickListener)
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
-
-        holder.eventSendingIndicator.isVisible = when (attributes.informationData.sendState) {
-            SendState.UNSENT,
-            SendState.ENCRYPTING,
-            SendState.SENDING -> true
-            else              -> false
-        }
     }
 
     override fun unbind(holder: Holder) {
@@ -111,7 +104,6 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         val fileImageWrapper by bind<ViewGroup>(R.id.messageFileImageView)
         val fileDownloadProgress by bind<ProgressBar>(R.id.messageFileProgressbar)
         val filenameView by bind<TextView>(R.id.messageFilenameView)
-        val eventSendingIndicator by bind<ProgressBar>(R.id.eventSendingIndicator)
     }
 
     companion object {

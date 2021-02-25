@@ -80,8 +80,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/messageMemberNameView"
-        android:layout_toEndOf="@id/messageStartGuideline"
         android:layout_toStartOf="@id/messageSendStateImageView"
+        android:layout_toEndOf="@id/messageStartGuideline"
         android:addStatesFromChildren="true">
 
         <ViewStub
@@ -138,12 +138,28 @@
         android:id="@+id/messageSendStateImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_sending_message"
         android:layout_alignBottom="@+id/viewStubContainer"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:contentDescription="@string/event_status_a11y_sending" />
+        android:layout_marginBottom="4dp"
+        android:contentDescription="@string/event_status_a11y_sending"
+        android:src="@drawable/ic_sending_message"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/eventSendingIndicator"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignBottom="@+id/viewStubContainer"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/informationBottom"

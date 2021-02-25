@@ -87,7 +87,8 @@ enum class E2EDecoration {
 
 enum class SendStateDecoration {
     NONE,
-    SENDING,
+    SENDING_NON_MEDIA,
+    SENDING_MEDIA,
     SENT,
     FAILED
 }

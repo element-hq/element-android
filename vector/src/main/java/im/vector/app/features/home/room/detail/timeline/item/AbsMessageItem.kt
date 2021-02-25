@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.graphics.Typeface
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.core.view.isInvisible
@@ -85,23 +86,28 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
         // Render send state indicator
         holder.sendStateImageView.isVisible = true
+        holder.eventSendingIndicator.isVisible = false
         when (attributes.informationData.sendStateDecoration) {
-            SendStateDecoration.SENDING  -> {
+            SendStateDecoration.SENDING_NON_MEDIA  -> {
                 holder.sendStateImageView
                         .apply { setImageResource(R.drawable.ic_sending_message) }
                         .apply { contentDescription = context.getString(R.string.event_status_a11y_sending) }
             }
-            SendStateDecoration.SENT     -> {
+            SendStateDecoration.SENT               -> {
                 holder.sendStateImageView
                         .apply { setImageResource(R.drawable.ic_message_sent) }
                         .apply { contentDescription = context.getString(R.string.event_status_a11y_sent) }
             }
-            SendStateDecoration.FAILED   -> {
+            SendStateDecoration.FAILED             -> {
                 holder.sendStateImageView
                         .apply { setImageResource(R.drawable.ic_sending_message_failed) }
                         .apply { contentDescription = context.getString(R.string.event_status_a11y_failed) }
             }
-            SendStateDecoration.NONE     -> holder.sendStateImageView.isVisible = false
+            SendStateDecoration.SENDING_MEDIA      -> {
+                holder.sendStateImageView.isVisible = false
+                holder.eventSendingIndicator.isVisible = true
+            }
+            SendStateDecoration.NONE               -> holder.sendStateImageView.isVisible = false
         }
     }
 
@@ -121,6 +127,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
         val sendStateImageView by bind<ImageView>(R.id.messageSendStateImageView)
+        val eventSendingIndicator by bind<ProgressBar>(R.id.eventSendingIndicator)
     }
 
     /**

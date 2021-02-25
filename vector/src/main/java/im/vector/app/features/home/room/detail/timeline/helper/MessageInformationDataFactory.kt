@@ -33,7 +33,12 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -73,7 +78,14 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
         val isSentByMe = event.root.senderId == session.myUserId
         val sendStateDecoration = if (isSentByMe) {
-            getSendStateDecoration(event.root.sendState, prevEvent?.root?.sendState, event.readReceipts.any { it.user.userId != session.myUserId })
+            val isMedia = when (event.root.content?.toModel<MessageContent>()) {
+                is MessageImageContent,
+                is MessageVideoContent,
+                is MessageAudioContent,
+                is MessageFileContent   -> true
+                else                    -> false
+            }
+            getSendStateDecoration(event.root.sendState, prevEvent?.root?.sendState, event.readReceipts.any { it.user.userId != session.myUserId }, isMedia)
         } else {
             SendStateDecoration.NONE
         }
@@ -124,9 +136,9 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         )
     }
 
-    private fun getSendStateDecoration(eventSendState: SendState, prevEventSendState: SendState?, anyReadReceipts: Boolean): SendStateDecoration {
+    private fun getSendStateDecoration(eventSendState: SendState, prevEventSendState: SendState?, anyReadReceipts: Boolean, isMedia: Boolean): SendStateDecoration {
         return if (eventSendState.isSending()) {
-            SendStateDecoration.SENDING
+            if (isMedia) SendStateDecoration.SENDING_MEDIA else SendStateDecoration.SENDING_NON_MEDIA
         } else if (eventSendState.hasFailed()) {
             SendStateDecoration.FAILED
         } else if (eventSendState.isSent() && !prevEventSendState?.isSent().orFalse() && !anyReadReceipts) {

@@ -69,16 +69,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         ViewCompat.setTransitionName(holder.imageView, "imagePreview_${id()}")
         holder.mediaContentView.setOnClickListener(attributes.itemClickListener)
         holder.mediaContentView.setOnLongClickListener(attributes.itemLongClickListener)
-        // The sending state color will be apply to the progress text
-        renderSendState(holder.imageView, null, holder.failedToSendIndicator)
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
-
-        holder.eventSendingIndicator.isVisible = when (attributes.informationData.sendState) {
-            SendState.UNSENT,
-            SendState.ENCRYPTING,
-            SendState.SENDING -> true
-            else              -> false
-        }
     }
 
     override fun unbind(holder: Holder) {
@@ -96,10 +87,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         val progressLayout by bind<ViewGroup>(R.id.messageMediaUploadProgressLayout)
         val imageView by bind<ImageView>(R.id.messageThumbnailView)
         val playContentView by bind<ImageView>(R.id.messageMediaPlayView)
-
         val mediaContentView by bind<ViewGroup>(R.id.messageContentMedia)
-        val failedToSendIndicator by bind<ImageView>(R.id.messageFailToSendIndicator)
-        val eventSendingIndicator by bind<ProgressBar>(R.id.eventSendingIndicator)
     }
 
     companion object {
