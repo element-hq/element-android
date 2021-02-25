@@ -58,6 +58,9 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     var imeOptions: Int? = null
 
     @EpoxyAttribute
+    var endIconMode: Int? = null
+
+    @EpoxyAttribute
     var onTextChange: ((String) -> Unit)? = null
 
     private val onTextChangeListener = object : SimpleTextWatcher() {
@@ -71,6 +74,10 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         holder.textInputLayout.isEnabled = enabled
         holder.textInputLayout.hint = hint
         holder.textInputLayout.error = errorMessage
+
+        endIconMode?.let { mode ->
+            holder.textInputLayout.endIconMode = mode
+        }
 
         // Update only if text is different and value is not null
         holder.textInputEditText.setTextSafe(value)

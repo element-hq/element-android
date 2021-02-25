@@ -17,6 +17,7 @@
 package im.vector.app.features.spaces.create
 
 import com.airbnb.epoxy.TypedEpoxyController
+import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -51,6 +52,7 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
             enabled(true)
             value(data?.defaultRooms?.get(0))
             hint(stringProvider.getString(R.string.create_room_name_section))
+            endIconMode(TextInputLayout.END_ICON_CLEAR_TEXT)
             showBottomSeparator(false)
             onTextChange { text ->
                 listener?.onNameChange(0, text)
@@ -62,6 +64,7 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
             enabled(true)
             value(data?.defaultRooms?.get(1))
             hint(stringProvider.getString(R.string.create_room_name_section))
+            endIconMode(TextInputLayout.END_ICON_CLEAR_TEXT)
             showBottomSeparator(false)
             onTextChange { text ->
                 listener?.onNameChange(1, text)
@@ -73,6 +76,7 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
             enabled(true)
             value(data?.defaultRooms?.get(2))
             hint(stringProvider.getString(R.string.create_room_name_section))
+            endIconMode(TextInputLayout.END_ICON_CLEAR_TEXT)
             showBottomSeparator(false)
             onTextChange { text ->
                 listener?.onNameChange(2, text)
