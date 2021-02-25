@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+
+    <!-- tchap Authentication -->
+    <string name="start_message">Bienvenue dans Tchap</string>
+
+    <!-- tchap room creation -->
+    <string name="tchap_room_creation_title">Nouveau salon</string>
+    <string name="tchap_action_next">Suivant</string>
+    <string name="tchap_room_creation_avatar">Ajouter\nune photo</string>
+    <string name="tchap_room_creation_name">Nommer le salon</string>
+    <string name="tchap_room_creation_retention">Définir la durée de conservation de l’historique (en jours) :</string>
+    <plurals name="tchap_room_creation_retention">
+        <item quantity="one">Limiter l’historique du salon à %d jour</item>
+        <item quantity="other">Limiter l’historique du salon à %d jours</item>
+    </plurals>
+    <string name="tchap_room_creation_disable_federation">Limiter l’accès à ce salon aux membres du domaine \"%s\"</string>
+    <string name="tchap_room_creation_public_info">Un forum peut être rejoint par tous les utilisateurs excepté les invités externes. Il ne doit contenir aucune donnée sensible.</string>
+    <string name="tchap_room_invite_member_title">Inviter au salon</string>
+    <string name="tchap_room_invite_member_action">Valider</string>
+    <string name="tchap_room_creation_save_avatar_failed">La sauvegarde de la photo du salon a échoué. \n Que souhaitez-vous faire ?</string>
+    <string name="tchap_room_creation_room_type_title">Type de salon</string>
+    <string name="tchap_room_creation_private_room_title">Salon privé</string>
+    <string name="tchap_room_creation_extern_room_title">Salon privé ouvert aux externes</string>
+    <string name="tchap_room_creation_forum_room_title">Salon forum</string>
+    <string name="tchap_room_creation_private_room_info">Accessible à tous les utilisateurs sur invitation d’un administrateur.</string>
+    <string name="tchap_room_creation_extern_room_info">Accessible à tous les utilisateurs et aux invités externes sur invitation d’un administrateur.</string>
+    <string name="tchap_room_creation_forum_room_info">Accessible à tous les utilisateurs à partir de la liste des forums ou d’un lien partagé.</string>
+
+    <!-- tchap new strings -->
+    <string name="tchap_room_admin_leave_prompt_msg">Voulez-vous vraiment quitter cette conversation ?\n\nElle ne sera plus administrée, et vous risquez de ne plus pouvoir la joindre de nouveau.</string>
+    <string name="tchap_invite_contacts_to_tchap">Inviter des contacts dans Tchap</string>
+    <string name="tchap_invite_contacts_by_email">Inviter par e\u2011mail</string>
+    <string name="tchap_invite_contacts_by_link">Inviter par lien</string>
+    <string name="tchap_invite_contacts_to_room">Inviter au salon</string>
+    <string name="tchap_room_invite_member_direct_chat">Nouvelle discussion</string>
+    <string name="tchap_invite_already_send_message">Vous avez déjà envoyé une invitation à %s</string>
+    <string name="tchap_discussion_already_exist">Une discussion avec %s existe déjà</string>
+    <string name="tchap_start_discussion_with_discovered_user">%s utilise déjà Tchap, une discussion vient d’être crée avec ce contact</string>
+    <string name="tchap_invite_unreachable_message">%s n’est pas joignable pour l’instant par Tchap</string>
+    <string name="tchap_invite_unauthorized_title_restricted_room">Les externes ne sont pas autorisés à rejoindre ce salon</string>
+    <string name="tchap_invite_unauthorized_title_unfederated_room">Seuls les membres du domaine \"%s\" sont autorisés</string>
+    <string name="tchap_invite_unauthorized_message">Il n\'est pas possible d\'inviter : %s</string>
+    <string name="tchap_send_invite_failed">Echec de l’envoi de l’invitation à %s</string>
+    <string name="tchap_send_invite_network_error">Impossible d’envoyer une invitation : erreur réseau</string>
+    <string name="tchap_send_invite_confirmation">Vous recevrez une notification lorsque \n votre invité rejoindra la communauté Tchap</string>
+    <plurals name="tchap_succes_invite_notification">
+        <item quantity="one">%d invitation a bien été envoyée.</item>
+        <item quantity="other">%d invitations ont bien été envoyées.</item>
+    </plurals>
+    <string name="tchap_burger_menu_contacts">Contacts</string>
+    <string name="tchap_burger_menu_public_rooms">Salons forums</string>
+    <string name="tchap_burger_menu_info">Cette application n’est pas approuvée\npour l’échange d’informations en diffusion restreinte</string>
+    <string name="tchap_error_message_default">Une erreur est survenue, veuillez réessayer ultérieurement</string>
+
+    <!-- tchap discussion -->
+    <string name="tchap_cannot_invite_deactivated_account_user">Votre correspondant a quitté définitivement cette discussion.\nVous devez en créer une nouvelle pour le recontacter.</string>
+
+    <!-- tchap room -->
+    <string name="tchap_room_private_room_type">Privé</string>
+    <string name="tchap_room_long_private_room_type">Salon privé</string>
+    <string name="tchap_room_extern_room_type">Externes</string>
+    <string name="tchap_room_long_extern_room_type">Salon privé ouvert aux externes</string>
+    <string name="tchap_room_forum_type">Forum</string>
+    <string name="tchap_room_long_forum_type">Salon forum</string>
+    <string name="tchap_room_invalid_link">Ce lien n’est pas valide</string>
+    <string name="tchap_room_access_unauthorized">Vous n’êtes pas autorisé à rejoindre cette conversation. Une invitation est nécessaire.</string>
+    <plurals name="tchap_room_retention_info">
+        <item quantity="one">Historique limité à %d jour</item>
+        <item quantity="other">Historique limité à %d jours</item>
+    </plurals>
+
+    <!-- tchap scan media -->
+    <string name="tchap_scan_media_unavailable">Analyse Indisponible</string>
+    <string name="tchap_scan_media_in_progress">Analyse Antivirus</string>
+    <string name="tchap_scan_media_untrusted_content">Fichier Bloqué</string>
+    <string name="tchap_scan_media_untrusted_content_message">Le document (%s) a été filtré par la politique de sécurité</string>
+
+    <!-- tchap room settings -->
+    <string name="tchap_room_settings_remove_from_directory">Retirer ce salon de la liste des forums</string>
+    <string name="tchap_room_settings_remove_from_directory_prompt_msg"><b>Cette action est irréversible.</b>\nVoulez-vous vraiment retirer ce salon de la liste des forums ?</string>
+    <string name="tchap_room_settings_room_access_title">Gestion des comptes externes</string>
+    <string name="tchap_room_settings_room_access_restricted">Les externes ne sont pas autorisés à rejoindre ce salon</string>
+    <string name="tchap_room_settings_room_access_unrestricted">Les externes sont autorisés à rejoindre ce salon</string>
+    <string name="tchap_room_settings_allow_external_users_to_join">Autoriser l’accès aux externes à ce salon</string>
+    <string name="tchap_room_settings_allow_external_users_to_join_prompt_msg"><b>Cette action est irréversible.</b>\nVoulez-vous vraiment autoriser les externes à rejoindre ce salon ?</string>
+    <string name="tchap_room_settings_retention_title">Historique du salon</string>
+    <plurals name="tchap_room_settings_retention_summary">
+        <item quantity="one">L’historique est limité à %d jour</item>
+        <item quantity="other">L’historique est limité à %d jours</item>
+    </plurals>
+    <plurals name="tchap_room_settings_retention">
+        <item quantity="one">L’historique du salon est limité à %d jour</item>
+        <item quantity="other">L’historique du salon est limité à %d jours</item>
+    </plurals>
+    <string name="tchap_room_settings_leave_room">Quitter ce salon</string>
+    <string name="tchap_room_settings_room_access_by_link_title">Accès par lien</string>
+    <string name="tchap_room_settings_room_access_by_link_disabled">Ce salon n’est pas accessible par lien</string>
+    <string name="tchap_room_settings_room_access_by_link_enabled">Ce salon est accessible par lien</string>
+    <string name="tchap_room_settings_enable_room_access_by_link">Activer l’accès au salon par lien</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_off">Les autres utilisateurs seront autorisés à rejoindre ce salon à partir d’un lien</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_on">Les autres utilisateurs peuvent rejoindre ce salon à partir du lien suivant\u00A0:</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_on_with_limitation">Les autres utilisateurs peuvent rejoindre ce salon à partir du lien suivant (une invitation reste nécessaire pour les externes)\u00A0:</string>
+    <string name="tchap_room_settings_room_access_by_link_forward">Transférer le lien</string>
+    <string name="tchap_room_settings_room_access_by_link_share">Partager le lien</string>
+    <string name="tchap_room_settings_room_access_by_link_forbidden">Ce changement n’est pas supporté actuellement car les externes sont autorisés à rejoindre ce salon. Il sera supporté prochainement</string>
+    <string name="tchap_room_settings_allow_external_users_forbidden">Ce changement n’est pas supporté actuellement car le salon est accessible par lien. Il sera supporté prochainement</string>
+
+    <!-- tchap account validity -->
+    <string name="tchap_expired_account_msg">La durée de validité de votre compte a expiré. Un e\u2011mail vous a été envoyé pour la renouveler. Une fois que vous aurez suivi le lien qu’il contient, cliquez ci-dessous.</string>
+    <string name="tchap_expired_account_resume_button">J’ai renouvelé mon compte</string>
+    <string name="tchap_request_renewal_email_button">Demander l’envoi d’un nouvel email</string>
+    <string name="tchap_expired_account_on_new_sent_email_msg">Un nouvel e\u2011mail vous a été envoyé pour renouveler la validité de votre compte. Une fois que vous aurez suivi le lien qu’il contient, cliquez ci-dessous.</string>
+    <string name="tchap_renew_account_validity_success_msg">Votre compte a été renouvelé avec succès</string>
+    <string name="tchap_renew_account_validity_invalid_token_msg">Le jeton de renouvellement est invalide</string>
+
+    <!-- tchap android version limitation -->
+    <string name="tchap_unsupported_android_version_title">Pour des raisons de sécurité, Tchap n’est plus disponible sur les versions d’Android 4.4.4 et inférieures</string>
+    <string name="tchap_unsupported_android_version_message">Merci de bien vouloir vous déconnecter de cet appareil.\nNous vous invitons à exporter vos clés de chiffrement avant la déconnexion, afin de pouvoir déchiffrer l’historique de vos conversations sur un nouvel appareil. Vous pourrez alors les importer dans vos nouveaux appareils, lorsque vous vous reconnecterez.</string>
+    <string name="tchap_unsupported_android_version_export_keys">Exporter les clés</string>
+    <string name="tchap_unsupported_android_version_default_msg">Merci de votre compréhension.</string>
+
+    <!-- Login/Register Tchap -->
+    <string name="tchap_register_title">Inscription Tchap</string>
+    <string name="tchap_connection_title">Connexion Tchap</string>
+    <string name="tchap_has_account_no">Je n’ai pas\nde compte</string>
+    <string name="tchap_has_account_yes">J’ai un compte</string>
+    <string name="tchap_connection_email">Adresse email</string>
+    <string name="tchap_connection_email_help">Utilisez votre adresse professionnelle</string>
+    <string name="tchap_connection_password">Mot de passe Tchap</string>
+    <string name="tchap_connection_password_help">Votre mot de passe doit contenir au moins 8 caractères, avec au moins un caractère de chaque type : majuscule, minuscule, chiffre, caractère spécial.</string>
+    <string name="tchap_connection_password_confirm">Confirmer le mot de passe</string>
+    <string name="tchap_connection_forgotten_email">J’ai oublié mon mot de passe</string>
+    <string name="tchap_register_warning_for_external_title">Information concernant votre inscription</string>
+    <string name="tchap_register_warning_for_external">Le domaine de votre adresse e\u2011mail n’est pas déclaré dans Tchap. Si vous avez reçu une invitation, vous allez pouvoir créer un compte Tchap « invité », permettant uniquement de participer aux échanges privés auxquels vous êtes convié.</string>
+    <string name="tchap_register_warning_for_external_proceed">Poursuivre</string>
+    <string name="tchap_register_wait_for_email_title">Un e\u2011mail vous a été envoyé à l’adresse suivante, sauf si un compte Tchap lui a déjà été associé :</string>
+    <string name="tchap_register_wait_for_email_subtitle">Merci de cliquer sur le lien proposé dans cet e\u2011mail afin de terminer la création de votre compte. Vous pourrez alors vous connecter en allant sur l’écran de connexion.</string>
+    <string name="tchap_register_wait_for_email_login_button">Aller à l’écran de connexion</string>
+    <string name="tchap_register_wait_for_email_no_email">Je n’ai pas reçu l’email!</string>
+    <string name="tchap_register_unauthorized_email">Cette adresse e\u2011mail n’est pas autorisée</string>
+    <string name="tchap_password_weak_pwd_error">Ce mot de passe est trop faible. Il doit contenir au moins 8 caractères, avec au moins un caractère de chaque type : majuscule, minuscule, chiffre, caractère spécial.</string>
+    <string name="tchap_password_pwd_in_dict_error">Ce mot de passe a été trouvé dans un dictionnaire, il n’est pas autorisé</string>
+    <string name="tchap_register_user_already_logged_in_prompt">Il semblerait que vous essayez de vous connecter avec un autre compte. Voulez-vous vous déconnecter \?</string>
+    <string name="tchap_email_validation_succeeded">Votre e\u2011mail a été validé, vous pouvez poursuivre l’opération qui attendait cette validation.</string>
+    <string name="tchap_email_validation_failed">La validation de l’e\u2011mail a échouée. Le lien a expiré, ou il n’est pas valide.</string>
+
+    <string name="tchap_change_password_help">Votre nouveau mot de passe doit contenir au moins 8 caractères, avec au moins un caractère de chaque type : majuscule, minuscule, chiffre, caractère spécial.</string>
+
+    <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
+</resources>
