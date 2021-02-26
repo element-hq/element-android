@@ -1,0 +1,2 @@
+- Update codebase to Element v1.1.0
+- Don't hide attachment send button behind navbar in landscape orientation
