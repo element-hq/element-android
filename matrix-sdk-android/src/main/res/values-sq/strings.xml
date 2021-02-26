@@ -254,4 +254,10 @@
         <item quantity="one">%1$s shtoi adresën alternative %2$s për këtë dhomë.</item>
         <item quantity="other">%1$s shtoi adresat alternative %2$s për këtë dhomë.</item>
     </plurals>
+    <string name="notice_widget_jitsi_modified_by_you">Ndryshuat konferencën video</string>
+    <string name="notice_widget_jitsi_modified">Konferenca video u ndryshua nga %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">Përfunduat konferencën video</string>
+    <string name="notice_widget_jitsi_removed">Konferenca video u përfundua nga %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">Nisët një konferencë video</string>
+    <string name="notice_widget_jitsi_added">Konferencë video nisur nga %1$s</string>
 </resources>
