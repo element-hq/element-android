@@ -57,6 +57,7 @@
         android:backgroundTint="?riotx_background"
         android:padding="8dp"
         android:src="@drawable/ic_camera_plain"
+        android:contentDescription="@string/a11y_change_avatar"
         app:tint="?riotx_text_secondary"
         app:layout_constraintCircle="@+id/itemEditableAvatarImageContainer"
         app:layout_constraintCircleAngle="135"
