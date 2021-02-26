@@ -356,4 +356,11 @@
     <string name="verification_request_you_cancelled">നിങ്ങൾ റദ്ദാക്കി</string>
     <string name="verification_request_other_cancelled">%s റദ്ദാക്കി</string>
     <string name="verification_request_waiting">കാത്തിരിക്കുന്നൂ…</string>
+    <string name="auth_return_to_login">പ്രവേശന സ്ക്രീനിലേക്ക് മടങ്ങുക</string>
+    <string name="start_video_call_prompt_msg">നിങ്ങൾക്ക് ഒരു വിഡിയോ കോൾ ആരംഭിക്കണമെന്ന് ഉറപ്പാണോ\?</string>
+    <string name="identity_url">തിരിച്ചറിയൽ സെർവറിന്റെ URL</string>
+    <string name="send_bug_report_description_in_english">കഴിയുമെങ്കിൽ, വിവരണം ഇംഗ്ലീഷിൽ എഴുതുക.</string>
+    <string name="home_filter_placeholder_people">ആളുകളെ ഫിൽറ്റർ</string>
+    <string name="keys_backup_activate">കീ ബാക്കപ്പ് ഉപയൊഗിക്കുക</string>
+    <string name="keys_backup_is_not_finished_please_wait">കീ ബാക്കപ്പ് പൂർത്തിയായിട്ടില്ല, കാത്തിരിക്കൂ…</string>
 </resources>
