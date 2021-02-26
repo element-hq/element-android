@@ -2037,7 +2037,7 @@
     <string name="invitations_sent_to_two_users">Convites enviados para %1$s e %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
         <item quantity="one">Convites enviados para %1$s e mais um</item>
-        <item quantity="other">Convites enviados para %1$s e %2$s e mais</item>
+        <item quantity="other">Convites enviados para %1$s e %2$d mais</item>
     </plurals>
     <string name="invite_users_to_room_failure">Não foi possível convidar os usuários. Por favor, verifique os usuários que você deseja convidar e tente novamente.</string>
     <string name="choose_locale_current_locale_title">Idioma atual</string>
@@ -2380,4 +2380,33 @@
     <string name="re_authentication_default_confirm_text">O Element precisa que você insira suas credenciais para executar esta ação.</string>
     <string name="re_authentication_activity_title">Necessário autenticar-se novamente</string>
     <string name="error_unauthorized">Não autorizado, sem credenciais de autenticação válidas</string>
+    <string name="call_transfer_users_tab_title">Pessoas</string>
+    <string name="call_transfer_failure">Ocorreu um erro ao transferir a chamada</string>
+    <string name="call_transfer_title">Transferir</string>
+    <string name="call_transfer_connect_action">Conectar</string>
+    <string name="call_transfer_consult_first">Consultar primeiro</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">1 chamada em andamento (%1$s) · 1 chamada pausada</item>
+        <item quantity="other">1 chamada em andamento (%1$s) · %2$d chamadas pausadas</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="one">Chamada pausada</item>
+        <item quantity="other">%1$d chamadas pausadas</item>
+    </plurals>
+    <string name="call_only_active">Chamada em andamento (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">Ocorreu um erro ao pesquisar o número de telefone</string>
+    <string name="call_dial_pad_title">Teclado de discagem</string>
+    <string name="call_tile_call_back">Ligar de volta</string>
+    <string name="call_tile_ended">Essa chamada foi encerrada</string>
+    <string name="call_tile_other_declined">%1$s recusou essa chamada</string>
+    <string name="call_tile_you_declined">Você recusou essa chamada %1$s</string>
+    <string name="call_tile_in_call">Você está nessa chamada</string>
+    <string name="call_tile_other_started_call">%1$s começou uma chamada</string>
+    <string name="call_tile_you_started_call">Você começou uma chamada</string>
+    <string name="failed_to_initialize_cross_signing">Falha ao fazer a autoverificação</string>
+    <string name="call_held_by_you">Você pausou a chamada</string>
+    <string name="call_held_by_user">%s pausou a chamada</string>
+    <string name="call_hold_action">Pausar</string>
+    <string name="call_resume_action">Retomar</string>
+    <string name="action_return">Voltar</string>
 </resources>
