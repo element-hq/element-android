@@ -28,6 +28,7 @@
         android:layout_height="24dp"
         android:scaleType="centerInside"
         android:visibility="visible"
+        android:contentDescription="@string/a11y_image"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@id/childSpaceName"
         app:layout_constraintStart_toEndOf="@id/childSpaceTab"
