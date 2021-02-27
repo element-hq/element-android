@@ -3284,6 +3284,9 @@
     <!-- First one is the space name, and the second one is the matrix.to link -->
     <string name="share_space_link_message">Join my space %1$s %2$s</string>
     <string name="skip_for_now">Skip for now</string>
+    <string name="join_space">Join Space</string>
+    <string name="join_anyway">Join Anyway</string>
+    <string name="room_alias_preview_not_found">This alias is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
 
 
 </resources>
