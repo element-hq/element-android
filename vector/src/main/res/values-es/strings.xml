@@ -2314,4 +2314,13 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_permissions_invite_users">Invitar usuarios</string>
     <string name="room_permissions_default_role">Rol por defecto</string>
     <string name="room_permissions_title">Permisos</string>
+    <string name="settings_chat_effects_description">Usa el comando /confetti o envía un mensaje que contenga ❄️ o 🎉</string>
+    <string name="room_permissions_send_m_room_server_acl_events">Envía los eventos m.room.server_acl</string>
+    <string name="room_permissions_notice_read_only">No tienes permiso para actualizar los roles necesarios para cambiar varias partes de la sala</string>
+    <string name="room_permissions_notice">Seleciona los roles necesarios para cambiar varias partes de la sala</string>
+    <string name="call_held_by_you">Tú has puesto la llamada en espera</string>
+    <string name="call_held_by_user">%s ha puesto la llamada en espera</string>
+    <string name="call_hold_action">Esperar</string>
+    <string name="call_resume_action">Continuar</string>
+    <string name="action_return">Volver</string>
 </resources>
