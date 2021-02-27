@@ -37,7 +37,7 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
         genericFooterItem {
             id("info_help_header")
             style(GenericItem.STYLE.BIG_TEXT)
-            text(stringProvider.getString(R.string.create_spaces_room_public_header))
+            text(stringProvider.getString(R.string.create_spaces_room_public_header, data?.name))
             textColor(colorProvider.getColorFromAttribute(R.attr.riot_primary_text_color))
         }
 
