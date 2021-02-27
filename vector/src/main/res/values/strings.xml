@@ -3271,7 +3271,7 @@
     <string name="create_spaces_details_public_header">Add some details to help it stand out. You can change these at any point.</string>
     <string name="create_spaces_details_private_header">Add some details to help people identify it. You can change these at any point.</string>
     <string name="create_space_error_empty_field_space_name">Give it a name to continue.</string>
-    <string name="create_spaces_room_public_header">What are some discussions you want to have in Runner’s World?</string>
+    <string name="create_spaces_room_public_header">What are some discussions you want to have in %s?</string>
     <string name="create_spaces_room_public_header_desc">We’ll create rooms for them, and auto-join everyone. You can add more later too.</string>
     <string name="create_spaces_default_public_room_name">General</string>
     <string name="create_spaces_default_public_random_room_name">Random</string>
