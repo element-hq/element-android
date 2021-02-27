@@ -16,6 +16,7 @@
 
 package im.vector.app.features.roomdirectory
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -127,7 +128,7 @@ class PublicRoomsFragment @Inject constructor(
         val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
         permalinkHandler
                 .launch(requireContext(), permalink, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?): Boolean {
+                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
                         requireActivity().finish()
                         return false
                     }
