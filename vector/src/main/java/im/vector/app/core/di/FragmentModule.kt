@@ -72,6 +72,8 @@ import im.vector.app.features.login.LoginSplashFragment
 import im.vector.app.features.login.LoginWaitForEmailFragment
 import im.vector.app.features.login.LoginWebFragment
 import im.vector.app.features.login.terms.LoginTermsFragment
+import im.vector.app.features.matrixto.MatrixToRoomSpaceFragment
+import im.vector.app.features.matrixto.MatrixToUserFragment
 import im.vector.app.features.pin.PinFragment
 import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.reactions.EmojiChooserFragment
@@ -654,4 +656,14 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(CreateSpaceDefaultRoomsFragment::class)
     fun bindCreateSpaceDefaultRoomsFragment(fragment: CreateSpaceDefaultRoomsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(MatrixToUserFragment::class)
+    fun bindMatrixToUserFragment(fragment: MatrixToUserFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(MatrixToRoomSpaceFragment::class)
+    fun bindMatrixToRoomSpaceFragment(fragment: MatrixToRoomSpaceFragment): Fragment
 }

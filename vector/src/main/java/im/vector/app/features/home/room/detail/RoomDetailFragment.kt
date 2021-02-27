@@ -1445,7 +1445,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onUrlClicked(url: String, title: String): Boolean {
         permalinkHandler
                 .launch(requireActivity(), url, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?): Boolean {
+                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
                         // Same room?
                         if (roomId == roomDetailArgs.roomId) {
                             // Navigation to same room
@@ -1653,7 +1653,7 @@ class RoomDetailFragment @Inject constructor(
     override fun onRoomCreateLinkClicked(url: String) {
         permalinkHandler
                 .launch(requireContext(), url, object : NavigationInterceptor {
-                    override fun navToRoom(roomId: String?, eventId: String?): Boolean {
+                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
                         requireActivity().finish()
                         return false
                     }
