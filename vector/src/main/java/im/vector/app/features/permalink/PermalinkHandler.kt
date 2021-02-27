@@ -78,12 +78,12 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             buildTask: Boolean
     ): Single<Boolean> {
         return when (permalinkData) {
-            is PermalinkData.RoomLink     -> {
+            is PermalinkData.RoomLink -> {
                 permalinkData.getRoomId()
                         .observeOn(AndroidSchedulers.mainThread())
                         .map {
                             val roomId = it.getOrNull()
-                            if (navigationInterceptor?.navToRoom(roomId, permalinkData.eventId) != true) {
+                            if (navigationInterceptor?.navToRoom(roomId, permalinkData.eventId, rawLink) != true) {
                                 openRoom(
                                         context = context,
                                         roomId = roomId,
@@ -94,11 +94,11 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                             true
                         }
             }
-            is PermalinkData.GroupLink    -> {
+            is PermalinkData.GroupLink -> {
                 navigator.openGroupDetail(permalinkData.groupId, context, buildTask)
                 Single.just(true)
             }
-            is PermalinkData.UserLink     -> {
+            is PermalinkData.UserLink -> {
                 if (navigationInterceptor?.navToMemberProfile(permalinkData.userId, rawLink) != true) {
                     navigator.openRoomMemberProfile(userId = permalinkData.userId, roomId = null, context = context, buildTask = buildTask)
                 }
@@ -193,7 +193,7 @@ interface NavigationInterceptor {
     /**
      * Return true if the navigation has been intercepted
      */
-    fun navToRoom(roomId: String?, eventId: String? = null): Boolean {
+    fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri? = null): Boolean {
         return false
     }
 

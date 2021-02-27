@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomNameContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
+import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsFilter
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
@@ -100,7 +101,8 @@ internal class DefaultPeekRoomTask @Inject constructor(
                     name = publicRepoResult.name,
                     topic = publicRepoResult.topic,
                     numJoinedMembers = publicRepoResult.numJoinedMembers,
-                    viaServers = serverList
+                    viaServers = serverList,
+                    roomType = null // would be nice to get that from directory...
             )
         }
 
@@ -130,6 +132,10 @@ internal class DefaultPeekRoomTask @Inject constructor(
                     .distinctBy { it.stateKey }
                     .count()
 
+            val roomType = stateEvents
+                    .lastOrNull { it.type == EventType.STATE_ROOM_CREATE }
+                    ?.let { it.content?.toModel<RoomCreateContent>()?.type }
+
             return PeekResult.Success(
                     roomId = roomId,
                     alias = alias,
@@ -137,6 +143,7 @@ internal class DefaultPeekRoomTask @Inject constructor(
                     name = name,
                     topic = topic,
                     numJoinedMembers = memberCount,
+                    roomType = roomType,
                     viaServers = serverList
             )
         } catch (failure: Throwable) {
