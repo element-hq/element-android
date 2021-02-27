@@ -24,6 +24,7 @@ sealed class PeekResult {
             val topic: String?,
             val avatarUrl: String?,
             val numJoinedMembers: Int?,
+            val roomType: String?,
             val viaServers: List<String>
     ) : PeekResult()
 
