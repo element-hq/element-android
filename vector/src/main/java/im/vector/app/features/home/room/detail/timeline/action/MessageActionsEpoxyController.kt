@@ -63,13 +63,7 @@ class MessageActionsEpoxyController @Inject constructor(
         }
 
         // Send state
-        if (state.informationData.sendState.isSending()) {
-            bottomSheetSendStateItem {
-                id("send_state")
-                showProgress(true)
-                text(stringProvider.getString(R.string.event_status_sending_message))
-            }
-        } else if (state.informationData.sendState.hasFailed()) {
+        if (state.informationData.sendState.hasFailed()) {
             bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(false)

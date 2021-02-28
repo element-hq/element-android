@@ -5,7 +5,7 @@
     android:id="@+id/messageStatusInfo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
+    android:layout_marginStart="64dp"
     android:layout_marginEnd="16dp"
     android:layout_marginBottom="4dp">
 
