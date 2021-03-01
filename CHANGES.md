@@ -25,7 +25,7 @@ Test:
  -
 
 Other changes:
- -
+ - Rework edition of event management
 
 Changes in Element 1.1.0 (2021-02-19)
 ===================================================

@@ -36,6 +36,7 @@ import org.matrix.android.sdk.internal.crypto.verification.toState
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.model.EditionOfEvent
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
@@ -219,49 +220,48 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
             // create the edit summary
             eventAnnotationsSummaryEntity.editSummary = realm.createObject(EditAggregatedSummaryEntity::class.java)
                     .also { editSummary ->
-                        editSummary.aggregatedContent = ContentMapper.map(newContent)
-                        if (isLocalEcho) {
-                            editSummary.lastEditTs = 0
-                            editSummary.sourceLocalEchoEvents.add(eventId)
-                        } else {
-                            editSummary.lastEditTs = event.originServerTs ?: 0
-                            editSummary.sourceEvents.add(eventId)
-                        }
+                        editSummary.editions.add(
+                                EditionOfEvent(
+                                        senderId = event.senderId ?: "",
+                                        eventId = event.eventId,
+                                        content = ContentMapper.map(newContent),
+                                        timestamp = if (isLocalEcho) 0 else event.originServerTs ?: 0,
+                                        isLocalEcho = isLocalEcho
+                                )
+                        )
                     }
         } else {
-            if (existingSummary.sourceEvents.contains(eventId)) {
+            if (existingSummary.editions.any { it.eventId == eventId }) {
                 // ignore this event, we already know it (??)
                 Timber.v("###REPLACE ignoring event for summary, it's known $eventId")
                 return
             }
             val txId = event.unsignedData?.transactionId
             // is it a remote echo?
-            if (!isLocalEcho && existingSummary.sourceLocalEchoEvents.contains(txId)) {
+            if (!isLocalEcho && existingSummary.editions.any { it.eventId == txId }) {
                 // ok it has already been managed
                 Timber.v("###REPLACE Receiving remote echo of edit (edit already done)")
-                existingSummary.sourceLocalEchoEvents.remove(txId)
-                existingSummary.sourceEvents.add(event.eventId)
-            } else if (
-                    isLocalEcho // do not rely on ts for local echo, take it
-                    || event.originServerTs ?: 0 >= existingSummary.lastEditTs
-            ) {
-                Timber.v("###REPLACE Computing aggregated edit summary (isLocalEcho:$isLocalEcho)")
-                if (!isLocalEcho) {
-                    // Do not take local echo originServerTs here, could mess up ordering (keep old ts)
-                    existingSummary.lastEditTs = event.originServerTs ?: System.currentTimeMillis()
-                }
-                existingSummary.aggregatedContent = ContentMapper.map(newContent)
-                if (isLocalEcho) {
-                    existingSummary.sourceLocalEchoEvents.add(eventId)
-                } else {
-                    existingSummary.sourceEvents.add(eventId)
+                existingSummary.editions.firstOrNull { it.eventId == txId }?.let {
+                    it.eventId = event.eventId
+                    it.timestamp = event.originServerTs ?: System.currentTimeMillis()
+                    it.isLocalEcho = false
                 }
             } else {
-                // ignore this event for the summary (back paginate)
-                if (!isLocalEcho) {
-                    existingSummary.sourceEvents.add(eventId)
-                }
-                Timber.v("###REPLACE ignoring event for summary, it's to old $eventId")
+                Timber.v("###REPLACE Computing aggregated edit summary (isLocalEcho:$isLocalEcho)")
+                existingSummary.editions.add(
+                        EditionOfEvent(
+                                senderId = event.senderId ?: "",
+                                eventId = event.eventId,
+                                content = ContentMapper.map(newContent),
+                                timestamp = if (isLocalEcho) {
+                                    System.currentTimeMillis()
+                                } else {
+                                    // Do not take local echo originServerTs here, could mess up ordering (keep old ts)
+                                    event.originServerTs ?: System.currentTimeMillis()
+                                },
+                                isLocalEcho = isLocalEcho
+                        )
+                )
             }
         }
     }
@@ -448,29 +448,13 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
             Timber.w("Redaction of a replace targeting an unknown event $relatedEventId")
             return
         }
-        val sourceEvents = eventSummary.editSummary?.sourceEvents
-        val sourceToDiscard = sourceEvents?.indexOf(redacted.eventId)
+        val sourceToDiscard = eventSummary.editSummary?.editions?.firstOrNull {it.eventId == redacted.eventId }
         if (sourceToDiscard == null) {
             Timber.w("Redaction of a replace that was not known in aggregation $sourceToDiscard")
             return
         }
-        // Need to remove this event from the redaction list and compute new aggregation state
-        sourceEvents.removeAt(sourceToDiscard)
-        val previousEdit = sourceEvents.mapNotNull { EventEntity.where(realm, it).findFirst() }.sortedBy { it.originServerTs }.lastOrNull()
-        if (previousEdit == null) {
-            // revert to original
-            eventSummary.editSummary?.deleteFromRealm()
-        } else {
-            // I have the last event
-            ContentMapper.map(previousEdit.content)?.toModel<MessageContent>()?.newContent?.let { newContent ->
-                eventSummary.editSummary?.lastEditTs = previousEdit.originServerTs
-                        ?: System.currentTimeMillis()
-                eventSummary.editSummary?.aggregatedContent = ContentMapper.map(newContent)
-            } ?: run {
-                Timber.e("Failed to udate edited summary")
-                // TODO how to reccover that
-            }
-        }
+        // Need to remove this event from the edition list
+        sourceToDiscard.deleteFromRealm()
     }
 
     private fun handleReactionRedact(eventToPrune: EventEntity, realm: Realm, userId: String) {
