@@ -16,6 +16,7 @@
 package org.matrix.android.sdk.internal.session.room
 
 import io.realm.Realm
+import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.session.events.model.AggregatedAnnotation
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -49,14 +50,6 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import timber.log.Timber
 import javax.inject.Inject
-
-enum class VerificationState {
-    REQUEST,
-    WAITING,
-    CANCELED_BY_ME,
-    CANCELED_BY_OTHER,
-    DONE
-}
 
 fun VerificationState.isCanceled(): Boolean {
     return this == VerificationState.CANCELED_BY_ME || this == VerificationState.CANCELED_BY_OTHER
