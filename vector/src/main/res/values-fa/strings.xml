@@ -73,26 +73,26 @@
     <string name="auth_register">ساخت حساب</string>
     <string name="auth_submit">ارسال</string>
     <string name="auth_skip">رد شدن</string>
-    <string name="auth_send_reset_email">ارسال ایمیل بازنشانی</string>
-    <string name="auth_user_id_placeholder">ایمیل یا نام کاربری</string>
+    <string name="auth_send_reset_email">فرستادن رایانامهٔ بازنشانی</string>
+    <string name="auth_user_id_placeholder">رایانامه یا نام کاربری</string>
     <string name="auth_password_placeholder">گذرواژه</string>
     <string name="auth_new_password_placeholder">گذرواژه جدید</string>
     <string name="auth_user_name_placeholder">نام کاربری</string>
-    <string name="auth_email_placeholder">نشانی ایمیل</string>
-    <string name="auth_opt_email_placeholder">نشانی ایمیل (اختیاری)</string>
+    <string name="auth_email_placeholder">نشانی رایانامه</string>
+    <string name="auth_opt_email_placeholder">نشانی رایانامه (اختیاری)</string>
     <string name="auth_phone_number_placeholder">شماره تلفن</string>
     <string name="auth_opt_phone_number_placeholder">شماره تلفن (اختیاری)</string>
     <string name="auth_repeat_password_placeholder">گذرواژه را تکرار کنید</string>
     <string name="auth_repeat_new_password_placeholder">گذرواژه جدید خود را تأیید کنید</string>
     <string name="auth_invalid_login_param">نام کاربری یا گذرواژه نامعتبر است</string>
     <string name="auth_invalid_password">گذرواژه کوتاه است (حداقل ۶)</string>
-    <string name="auth_invalid_email">آدرس ایمیل نامعتبر به نظر می‌رسد</string>
+    <string name="auth_invalid_email">شبیه یک نشانی رایانامهٔ معتبر نیست</string>
     <string name="auth_invalid_phone">شماره تلفن نامعتبر به نظر می‌رسد</string>
     <string name="auth_password_dont_match">گذرواژه‌ها مطابقت ندارد</string>
     <string name="auth_forgot_password">گذرواژه را فراموش کردید؟</string>
-    <string name="auth_use_server_options">استفاده از گزینه‌های سفارشی سرور (پیش‌رفته)</string>
-    <string name="auth_email_validation_message">برای ادامه‌ی ثبت‌نام، لطفاً ایمیل خود را بررسی کنید</string>
-    <string name="auth_reset_password_next_step_button">من آدرس ایمیلم را تایید کرده‌ام</string>
+    <string name="auth_use_server_options">استفاده از گزینه‌های سفارشی کارساز (پیش‌رفته)</string>
+    <string name="auth_email_validation_message">برای ادامهٔ ثبت‌نام، لطفاً رایانامه‌تان را بررسی کنید</string>
+    <string name="auth_reset_password_next_step_button">نشانی رایانامه‌ام را تأیید کرده‌ام</string>
     <string name="login_error_network_error">نمی‌توان وارد شد: خطای شبکه</string>
     <string name="login_error_forbidden">نام کاربری/گذرواژه نامعتبر است</string>
     <string name="login_error_user_in_use">این نام کاربری قبلا استفاده شده است</string>
@@ -149,8 +149,8 @@
     <string name="send_bug_report_failed">امکان ارسال گزارش اشکال وجود نداشت، دوباره تلاش کنید (%s)</string>
     <string name="send_bug_report_progress">پیشرفت (%s%%)</string>
     <string name="send_files_in">ارسال در</string>
-    <string name="hs_url">نشانی سرور خانه</string>
-    <string name="identity_url">نشانی سرور هویتی</string>
+    <string name="hs_url">نشانی کارساز خانگی</string>
+    <string name="identity_url">نشانی کارساز هویت</string>
     <string name="option_send_voice">ارسال صدا</string>
     <string name="start_new_chat_prompt_msg">آیا مطمئنید می‌خواهید با %s یک گپ جدید را آغاز کنید؟</string>
     <string name="start_voice_call_prompt_msg">آیا مطمئنید می‌خواهید که یک تماس صوتی را آغاز کنید؟</string>
@@ -165,12 +165,12 @@
     <string name="auth_return_to_login">بازگشت به صفحه ورود</string>
     <string name="auth_missing_password">گذرواژه وارد نشده است</string>
     <string name="auth_missing_phone">شماره تلفن وارد نشده است</string>
-    <string name="auth_missing_email">نشانی ایمیل وارد نشده است</string>
+    <string name="auth_missing_email">نشانی رایانامه وارد نشده</string>
     <string name="auth_invalid_token">توکن نامعتبر است</string>
-    <string name="auth_missing_email_or_phone">آدرس ایمیل یا شماره تلفن وارد نشده است</string>
-    <string name="auth_email_already_defined">این نشانی ایمیل قبلاً ثبت شده است.</string>
-    <string name="auth_home_server">سرور خانه:</string>
-    <string name="auth_identity_server">سرور هویتی:</string>
+    <string name="auth_missing_email_or_phone">نشانی رایانامه یا شماره تلفن وارد نشده</string>
+    <string name="auth_email_already_defined">این نشانی رایانامه قبلاً ثبت شده.</string>
+    <string name="auth_home_server">کارساز خانگی:</string>
+    <string name="auth_identity_server">کارساز هویت:</string>
     <string name="login_error_unable_login">امکان ورود وجود ندارد</string>
     <string name="attachment_remaining_time_minutes">%1$dد %2$dث</string>
     <string name="room_info_room_topic">موضوع اتاق</string>
@@ -282,7 +282,7 @@
     <string name="auth_threepid_warning_message">ثبت‌نام با ورود همزمان ایمیل و شماره تلفن در حال حاضر پشتیبانی نمی‌شود. تنها شماره تلفن شما برای حساب‌تان ثبت خواهد شد.
 \n
 \nمی‌توانید در ادامه ایمیل خود را در تنظیمات برنامه به پروفایل خود اضافه کنید.</string>
-    <string name="auth_recaptcha_message">این سرور خانه می‌خواهد مطمئن شود که شما ربات نیستید</string>
+    <string name="auth_recaptcha_message">این کارساز خانگی می‌خواهد مطمئن شود که روبات نیستید</string>
     <string name="auth_username_in_use">نام کاربری قبلاً استفاده شده است</string>
     <string name="e2e_re_request_encryption_key"><u>بازدرخواست کلیدهای رمزنگاری</u> از دیگر نشست‌هایتان.</string>
     <string name="e2e_re_request_encryption_key_sent">درخواست کلید ارسال شد.</string>
@@ -550,27 +550,27 @@
     <string name="title_activity_verify_device">تأیید نشست</string>
     <string name="none">هیچ</string>
     <string name="revoke">ابطال</string>
-    <string name="people_no_identity_server">هیچ سرور هویتی پیکربندی نشده.</string>
-    <string name="call_failed_no_ice_title">تماس بدلیل سرور بد پیکربندی شده شکست خورد</string>
+    <string name="people_no_identity_server">هیچ کارساز هویتی پیکربندی نشده.</string>
+    <string name="call_failed_no_ice_title">تماس به دلیل پیکربندی بد کارساز، شکست خورد</string>
     <string name="call_failed_no_ice_use_alt">از %s استفاده کنید</string>
     <string name="auth_add_email_phone_message_2">رایانامه‌ای برای بازیابی تنظیم کنید. برای کشف شدن به دست افرادی که می‌شناسید، از رایانامه یا تلفن بعدی استفاده کنید.</string>
     <string name="auth_add_email_and_phone_message_2">رایانامه‌ای برای بازیابی تنظیم کنید. برای کشف شدن به دست افرادی که می‌شناسید، از رایانامه یا تلفن بعدی استفاده کنید.</string>
-    <string name="auth_reset_password_missing_email">نشانی ایمیل پیوست شده به حساب شما باید وارد شده باشد.</string>
+    <string name="auth_reset_password_missing_email">باید نشانی رایانامهٔ پیوسته به حسابتان وارد شود.</string>
     <string name="auth_reset_password_missing_password">گذرواژه جدیدی باید وارد شود.</string>
-    <string name="auth_reset_password_email_validation_message">یک ایمیل به %s فرستاده شد. هنگامی که پیوند همراه را دنبال کردید، در زیر کلیک کنید.</string>
-    <string name="auth_reset_password_error_unauthorized">تایید نشانی ایمیل ناموفق بود: مطمئن شوید که روی پیوند در ایمیل کلیک کرده‌اید</string>
+    <string name="auth_reset_password_email_validation_message">رایانامه‌ای به %s فرستاده شد. هنگامی که پیوند داخلش را دنبال کردید، پایین را کلیک کنید.</string>
+    <string name="auth_reset_password_error_unauthorized">شکست در تأیید نشانی رایانامه: مطمئن شوید که پیوند درون رایانامه را کلیک کرده‌اید</string>
     <string name="auth_reset_password_success_message">گذرواژه بازنشانی شد.
 \n
 \nشما از همه نشست‌ها خارج شدید و دیگر آگاهی ها را دریافت نخواهید کرد. برای فعال‌سازی دوباره آگاهی‌ها، در هر دستگاه دوباره وارد شوید.</string>
-    <string name="auth_accept_policies">لطفا سیاست‌های این سرور خانه را بررسی کنید و بپذیرید:</string>
+    <string name="auth_accept_policies">لطفاً سیاست‌های این کارساز خانگی را بررسی کرده و بپذیرید:</string>
     <string name="login_error_must_start_http">نشانی باید با http[s]:// آغاز شود</string>
     <string name="login_error_registration_network_error">نمی‌توان ثبت‌نام کرد: خطای شبکه</string>
     <string name="login_error_unable_register">نمی‎توان ثبت‌نام کرد</string>
-    <string name="login_error_unable_register_mail_ownership">نمی‌توان ثبت‌نام کرد : مالکیت ایمیل تایید نشد</string>
+    <string name="login_error_unable_register_mail_ownership">نمی‌توان ثبت‌نام کرد : شکست مالکیت رایانامه</string>
     <string name="login_error_invalid_home_server">لطفا یک نشانی معتبر وارد کنید</string>
     <string name="login_error_unknown_host">نشانی قابل دسترس نیست، لطفا آن را بررسی کنید</string>
     <string name="login_error_no_homeserver_found">این یک نشانی کارساز ماتریکس معتبر نیست</string>
-    <string name="login_error_homeserver_not_found">نمی‌توان به این نشانی سرور خانه دست یافت، لطفا آن را بررسی کنید</string>
+    <string name="login_error_homeserver_not_found">روی این نشانی نمی‌توان به کارساز خانگی‌ای رسید. لطفاً بررسیش کنید</string>
     <string name="login_error_ssl_handshake">افزاره‌تان از یک قرارداد امنیتی TLS تاریخ‌گذشته که به حمله آسیپ‌پذیر است استفاده می‌کند. برای امنیتتان، نخواهید توانست وصل شوید</string>
     <string name="login_error_unknown_token">توکن دسترسی مشخص شده، شناخته نشد</string>
     <string name="login_error_bad_json">JSON ناهنجار</string>
@@ -636,7 +636,7 @@
     <string name="pause_video">توقف</string>
     <string name="action_copy">رونوشت</string>
     <string name="dialog_title_success">موفقیت</string>
-    <string name="bottom_action_notification">اعلان‌ها</string>
+    <string name="bottom_action_notification">آگاهی‌ها</string>
     <string name="dismiss">خاتمه</string>
     <string name="no_permissions_to_start_conf_call">اجازهٔ شروع تماس کنفرانسی در این اتاق را ندارید</string>
     <string name="no_permissions_to_start_webrtc_call">اجازهٔ شروع تماس در این اتاق را ندارید</string>
@@ -1478,7 +1478,7 @@
     <string name="reset">بازنشانی</string>
     <string name="startup_notification_privacy_button_other">انتخاب گزینه‌ی دیگر</string>
     <string name="startup_notification_privacy_button_grant">مجوز دادن</string>
-    <string name="startup_notification_privacy_message">المنت می تواند در پس‌زمینه اجرا شود تا اعلان های شما را به صورت ایمن و اختصاصی مدیریت کند. این ممکن است بر میزان مصرف باتری شما تأثیر منفی بگذارد.</string>
+    <string name="startup_notification_privacy_message">المنت می تواند در پس‌زمینه اجرا شده تا آگاهی‌هایتان را به صورت ایمن و محرمانه مدیریت کند. ممکن است بر مصرف باتری تأثیر بگذارد.</string>
     <string name="reset_secure_backup_warning">این کار کلید امنیتی قبلی شما را حذف می‌کند.</string>
     <string name="reset_secure_backup_title">یک کلید امنیتی جدید به صورت تصادفی ایجاد کنید یا یک عبارت امنیتی جدید برای فایل‌های پشتیبان موجود خود تنظیم کنید.</string>
     <string name="settings_send_message_with_enter_summary">فشردن اینتر به جای رفتن به خط بعد، پیام را ارسال خواهد کرد</string>
@@ -1500,14 +1500,14 @@
     <string name="settings_notification_privacy_message_content_not_shown">• آگاهی‌ها <b>محتوای پیام را نشان نخواهند داد</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• آگاهی‌ها شاکل <b>فراداده و محتوای پیام</b> هستند</string>
     <string name="settings_notification_privacy_secure_message_content">• محتوای پیام آگاهی <b> به طور ایمن و مستقیم از کارساز خانگی ماتریکس</b> دریافت می‌شود</string>
-    <string name="settings_notification_privacy_metadata">• اعلان ها فقط حاوی فرا داده هستند</string>
-    <string name="settings_notification_privacy_fcm">• اعلان ها از طریق سرور Firebase ارسال می شوند</string>
+    <string name="settings_notification_privacy_metadata">• آگاهی‌ها فقط دارای فراداده هستند</string>
+    <string name="settings_notification_privacy_fcm">• آگاهی‌ها با پیام‌رسانی ابری Firebase فرستاده می‌شوند</string>
     <string name="settings_troubleshoot_test_battery_failed">اگر دستگاه برای مدتی از شارژر جدا باشد و از دستگاه نیز استفاده نشود، گوشی وارد حالت غیر هوشیار می‌شود. در این حالت از دسترسی برنامه‌ها به اینترنت جلوگیری می‌شود و همگام سازی و هشدارهای استاندارد آن‌ها به تعویق می‌افتد.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">این سرویس با ری‌استارت دستگاه شروع نمی‌شود. تا وقتی المنت را یک بار باز نکنید اعلانی دریافت نخواهید کرد.</string>
-    <string name="settings_troubleshoot_test_notification_notification_clicked">بر روی اعلان کلیک شد!</string>
-    <string name="settings_troubleshoot_test_notification_notice">لطفا بر روی اعلان کلیک کنید. اگر اعلان را نمی‌بینید، تنظیمات دستگاه را بررسی نمائید.</string>
-    <string name="settings_troubleshoot_test_notification_title">نمایش اعلان</string>
-    <string name="settings_troubleshoot_test_push_notification_content">شما اعلان را مشاهده می‌کنید! کلیک کنید!</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">خدمت، هنگام شروع دوبارهٔ افزاره اجرا نخواهد شد. تا وقتی یک بار المنت باز نشود، آگاهی‌ها را دریافت نخواهید کرد.</string>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">روی آگاهی کلیک شد!</string>
+    <string name="settings_troubleshoot_test_notification_notice">لطفاً روی آگاهی کلیک کنید. اگر آگاهی را نمی‌بینید، لطفاً تنظیمات سامانه را بررسی کنید.</string>
+    <string name="settings_troubleshoot_test_notification_title">نمایش آگاهی</string>
+    <string name="settings_troubleshoot_test_push_notification_content">دارید آگاهی را مشاهده می‌کنید! کلیک کنید!</string>
     <string name="settings_troubleshoot_test_push_loop_failed">دریافت Push با خطا مواجه شد. نصب مجدد برنامه می‌تواند یکی از راه‌حل‌های احتمالی باشد.</string>
     <string name="settings_troubleshoot_test_push_loop_success">برنامه Push دریافت کرد</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">برنامه منتظر دریافت Push است</string>
@@ -1529,11 +1529,11 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_title">توکن Firebase</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">مشکل Google Play Services را برطرف کنید</string>
-    <string name="settings_troubleshoot_test_play_services_failed">المنت از Google Play Services برای ارسال اعلان‌ها استفاده می‌کند اما به نظر می‌رسد به درستی پیکربندی نشده است:
+    <string name="settings_troubleshoot_test_play_services_failed">المنت برای ارسال آگاهی‌ها از خدمات پلی گوگل استفاده می‌کند اما به نظر می‌رسد به درستی پیکربندی نشده است:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services در دسترس و بروز است.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">تنظیمات سفارشی بارگذاری نشد، لطفاً دوباره امتحان کنید.</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">عیب‌یابی اولیه مشکلی را نشان نمی‌دهد. اگر همچنان در دریافت اعلان‌ها مشکل دارید لطفا خطا را گزارش کرده تا آن را بررسی کنیم.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">عیب‌یابی اولیه مشکلی را نشان نمی‌دهد. اگر همچنان در دریافت آگاهی‌ها مشکل دارید، لطفا خطا را گزارش کرده تا آن را بررسی کنیم.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">یک یا چند تست ناموفق بودند، لطفا خطا را گزارش کرده تا آن را بررسی کنیم.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">یک یا چند تست ناموفق بودند، راه حل(های) پیشنهادی را امتحان کنید.</string>
     <string name="settings_troubleshoot_diagnostic_running_status">در حال اجرا (%1$d از %2$d)</string>
@@ -1556,7 +1556,7 @@
     <string name="room_event_action_report_prompt_reason">دلیل گزارش این محتوا</string>
     <string name="room_details_people_present_group_name">عضو شد</string>
     <string name="room_details_people_invited_group_name">دعوت‌شدگان</string>
-    <string name="malformed_id">شناسه نامعتبر است. باید یک آدرس ایمیل یا شناسه‌ای در قالب \\\'@localpart:domain\\\' وارد نمایید</string>
+    <string name="malformed_id">شناسه بدریخت. باید یک نشانی رایانامه یا شناسهٔ ماتریکسی در قالب \'@localpart:domain\' باشد</string>
     <plurals name="room_details_selected">
         <item quantity="one">%d مورد</item>
         <item quantity="other">%d مورد</item>
@@ -1565,10 +1565,10 @@
     <string name="room_details_people">افراد</string>
     <string name="room_details_title">اطلاعات اتاق</string>
     <string name="ssl_only_accept">گواهی را تنها در صورتی تایید کنید که اثر انگشت آن با اثر انگشتی که ادمین سرور ارائه کرده‌است برابر باشد.</string>
-    <string name="ssl_expected_existing_expl">گواهی سرور تغییر کرده‌است. ممکن است این اتفاق به دلیل تمدید گواهی سرور رخ داده باشد. توصیه می‌شود از ادمین سرور سوال کنید.</string>
-    <string name="ssl_unexpected_existing_expl">گواهی سرور تغییر کرده است. این مورد بسیار نادر است. توصیه می شود گواهی جدید را قبول نکنید.</string>
-    <string name="ssl_cert_new_account_expl">اگر مدیر سرور گفته است که این مسئله اشکالی ندارد، اطمینان حاصل کنید که اثر انگشت زیر با اثر انگشت ارائه شده توسط آنها مطابقت دارد.</string>
-    <string name="ssl_cert_not_trust">این می‌تواند به این معنی باشد که حمله‌ی مرد میانی رخ داده است و یا اینکه گوشی شما، گواهی سرور را معتبر نمی‌داند.</string>
+    <string name="ssl_expected_existing_expl">گواهی از آنی که مورد اطمینان بوده، تغییر کرده. ممکن است کارساز، گواهیش را نوسازی کرده باشد. برای دریافت اثر انگشت مورد انتظار، با مدیر کارساز تماس بگیرید.</string>
+    <string name="ssl_unexpected_existing_expl">گواهی از آنی که مورد اطمینان تلفنتان است، تغییر کرده. این مورد بسیار نامعمول است. توصیه می شود این گواهی جدید را نپذیرید.</string>
+    <string name="ssl_cert_new_account_expl">اگر مدیر کارساز خبر از مورد انتظار بودنش داده، مطمئن شوید که اثر انگشت زیر با اثر انگشت ارائه شده به دستشان مطابق است.</string>
+    <string name="ssl_cert_not_trust">می‌تواند به این معنی باشد که کسی شدامدتان را بدخواهانه دستکاری کرده یا تلفنتان، به گواهی فراهم‌شده به دست کارساز دوردست، اطمینان ندارد.</string>
     <string name="room_unknown_devices_messages_notification">پیام به دلیل حضور یک دستگاه ناشناس ارسال نشد. %1$s یا %2$s؟</string>
     <string name="room_unsent_messages_notification">پیام ارسال نشد. %1$s یا %2$s؟</string>
     <string name="room_participants_unban_prompt_msg">با لغو مسدودیت، کاربر می‌تواند مجددا به اتاق اضافه شود.</string>
@@ -1602,14 +1602,14 @@
     <string name="permissions_rationale_msg_storage">المنت برای ارسال و ذخیره‌ی فایل‌ها نیاز به دسترسی به گالری شما را دارد.
 \n
 \nلطفا در پنجره‌ای که باز می‌شود این دسترسی را بدهید.</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">هنگامی که سرور شما قابلیت تماس ندارد، از سرور %s استفاده کن</string>
-    <string name="settings_call_ringtone_use_default_stun">اجازه استفاده از سرور تماس پشتیبان</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">هنگامی که کارساز خانگیتان قابلیت تماس نداشته باشد، از %s استفاده خواهد شد (نشانی IPتان در طول تماس هم‌رسانی خواهد شد)</string>
+    <string name="settings_call_ringtone_use_default_stun">اجازه استفاده از کارساز تماس پشتیبان</string>
     <string name="login_error_ssl_peer_unverified">خطای SSL: هویت طرف مقابل تأیید نشد.</string>
-    <string name="call_failed_no_connection_description">اتصال برقرار نشد.
-\nلطفا از ادمین سرور بخواهید جهت برقراری مطمئن تماس‌ها، سرور turn را پیکربندی کند.</string>
-    <string name="call_failed_no_ice_description">لطفا از ادمین سرور (%1$s) بخواهید جهت برقراری مطمئن تماس‌ها، turn server را پیکربندی کند.
+    <string name="call_failed_no_connection_description">شکست در برقراری ارتباط همزمان.
+\nلطاً از مدیر کارساز بخواهید برای برقراری مطمئن تماس‌ها، کارساز turn را پیکربندی کند.</string>
+    <string name="call_failed_no_ice_description">لطفا از مدیر کارساز خانگیتان (%1$s) بخواهید برای برقراری مطمئن تماس‌ها، کارساز turn را پیکربندی کند.
 \n
-\nبه عنوان جایگزین می‌توانید از سرور عمومی %2$s استفاده کنید، اما این راه مطمئنی نیست چرا که آدرس IP شما در اختیار آن سرور قرار خواهد گرفت. برای مدیریت این بخش می‌توانید به تنظیمات مراجعه نمائید.</string>
+\nهمین‌طور می‌توانید از کارساز عمومی %2$s استفاده کنید، گرچه به همان اطمینان نبوده و نشانی IP شما را با آن کارساز هم‌رسانی خواهد کرد. همچنین می‌توانید این بخش را در تنظیمات مدیریت کنید.</string>
     <string name="secure_backup_reset_no_history">بعد از راه‌اندازی مجدد، هیچ تاریخچه، پیام، دستگاه تائید شده یا کاربر تائید شده‌ای در حساب شما وجود نخواهد داشت</string>
     <string name="secure_backup_reset_if_you_reset_all">اگر همه چیز را بازنشانی کنید</string>
     <string name="secure_backup_reset_all_no_other_devices">تنها در صورتی این کار را انجام دهید که از هیچ دستگاه دیگری نمی‌توانید این دستگاه را تائید نمائید.</string>
@@ -1654,7 +1654,7 @@
     <string name="bootstrap_crosssigning_progress_initializing">انتشار کلید‌های هویتی ایجاد شده</string>
     <string name="bootstrap_save_key_description">در صورتی که %2$s را فراموش کردید از %1$s به عنوان safety net استفاده کنید.</string>
     <string name="bootstrap_loading_text">این ممکن است چند ثانیه طول بکشد، لطفاً صبور باشید.</string>
-    <string name="bootstrap_info_text_2">یک کلید امنیتی وارد کنید. از این عبارت جهت ذخیره امن کلید‌ها در سمت سرور استفاده می‌شود.</string>
+    <string name="bootstrap_info_text_2">عبارت امنیتی‌ای را که فقط خودتان می‌دانید، وارد کنید. استفاده‌شده برای امن کردن رمزها روی کارسازتان.</string>
     <string name="bootstrap_dont_reuse_pwd">ترجیحا از گذرواژه حساب خود استفاده نکنید.</string>
     <string name="bootstrap_info_confirm_text">برای تایید، %s خود را دوباره وارد کنید.</string>
     <string name="bootstrap_info_text">افزایش امنیت و رمزگشایی پیام‌های رمزشده و اعتماد به %s.</string>
@@ -1694,7 +1694,7 @@
     <string name="verification_emoji_notice">شکلک‌ها را مقایسه کنید، از ترتیب نمایش آنان نیز مطمئن شوید.</string>
     <string name="verification_request_start_notice">بهتر است اینکار را به صورت حضوری و یا با استفاده از یک روش ارتباطی مطمئن انجام دهید.</string>
     <string name="verification_request_notice">برای امنیت بیشتر، %s را با بررسی یک کد یکبارمصرف تایید کنید.</string>
-    <string name="room_settings_enable_encryption_dialog_content">پس از فعال‌شدن ، نمی‌توان رمزگذاری برای یک اتاق را غیرفعال کرد. پیام های ارسالی در یک اتاق رمزگذاری شده توسط سرور قابل مشاهده نیست و فقط توسط اعضای اتاق قابل مشاهده است. فعال کردن رمزنگاری ممکن است از کارکرد بسیاری از ربات ها و پل ها جلوگیری کند.</string>
+    <string name="room_settings_enable_encryption_dialog_content">پس از به‌کار افتادن، نمی‌توان رمزگذاری اتاق را از کار انداخت. پیام‌های ارسالی در اتاقی رمزشده، به دست کارساز قابل مشاهده نبوده و فقط اعضای اتاق قادر به دیدنشان هستند. به‌کار انداختن رمزنگاری ممکن است از کارکرد درست بسیاری از روبات‌ها و پل‌ها جلوگیری کند.</string>
     <string name="room_settings_enable_encryption_dialog_title">رمزگذاری فعال شود؟</string>
     <string name="room_settings_enable_encryption">به کار انداختن رمزنگاری سرتاسری…</string>
     <string name="command_description_rainbow_emote">شکلک را با رنگ‌بندی رنگین گمان ارسال می کند</string>
@@ -1713,7 +1713,7 @@
     <string name="verification_green_shield">برای اطمینان از صحت هویت کاربران، به رنگ آیکون سپر آنان توجه کنید. رنگ سبز به معنای هویت تائید شده‌ی است. برای اطمینان از امنیت اتاق، همه کاربران آن اتاق را تائید کنید.</string>
     <string name="verify_user_sas_emoji_security_tip">برای امنیت بالا ، از یک روش ارتباطی امن دیگر استفاده کنید یا این کار را حضوری انجام دهید.</string>
     <string name="verify_user_sas_emoji_help_text">با تأیید شکلک‌های منحصر به فرد زیر در صفحه نمایش طرف مقابل به همان ترتیب، این کاربر را تأئید کنید.</string>
-    <string name="login_error_threepid_denied">دامنه ایمیل شما مجاز به ثبت نام در این سرور نیست</string>
+    <string name="login_error_threepid_denied">دامنهٔ رایانامه‌تان مجاز به ثبت‌نام روی این کارساز نیست</string>
     <string name="command_description_shrug">¯\\\\_(ツ)_/¯ را به یک پیام متنی ساده تغییر می دهد</string>
     <string name="permalink_malformed">لینک مشکل دارد</string>
     <string name="soft_logout_sso_not_same_user_error">نشست فعلی مربوط به کاربر %1$s است و شما اطلاعات حساب کاربر %2$s را ارائه داده‌اید. این مورد توسط المنت پشتیبانی نمی‌شود .
@@ -1733,10 +1733,10 @@
 \n• این نشست را در یکی از نشست دیگر خود حذف کرده‌اید.
 \n
 \n• ادمین سرور حساب شما را غیرفعال کرده‌است.</string>
-    <string name="autodiscover_well_known_error">سرور معتبر نیست. لطفا شناسه‌کاربری خود را بررسی کنید</string>
+    <string name="autodiscover_well_known_error">ناتوان در یافتن یک کارساز خانگی معتبر. لطفاً شناسه‌تان را بررسی کنید</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">این یک شناسه کاربری معتبر نیست. قالب صحیح: \\\'@user:homeserver.org\\\'</string>
     <string name="login_signin_matrix_id_password_notice">اگر گذرواژه خود را نمی‌دانید، برای تنظیم مجدد آن بازگردید.</string>
-    <string name="login_signin_matrix_id_notice">اگر یک حساب کاربری بر روی یک سرور دارید، از شناسه ماتریکس (به عنوان مثال @user:domain.com) و گذرواژه برای ورود استفاده کنید.</string>
+    <string name="login_signin_matrix_id_notice">اگر زوی یک کارساز خانگی خسابی برپا کرده‌اید، در پایین از شناسهٔ ماتریکس (مثلاً @user:domain.com) و گذرواژه‌تان استفاده کنید.</string>
     <string name="login_connect_using_matrix_id_notice">همچنین اگر قبلاً حساب کاربری داشته و از نام‌کاربری و گذرواژه خود اطلاع دارید، می توانید از این روش استفاده کنید:</string>
     <plurals name="login_error_limit_exceeded_retry_after">
         <item quantity="one">درخواست های زیادی ارسال شده است. می توانید در %1$d ثانیه دوباره امتحان کنید…</item>
@@ -1744,15 +1744,15 @@
     </plurals>
     <string name="login_error_outdated_homeserver_warning_content">این نسخه سرور بسیار قدیمی است. از ادمین خود بخواهید که آن را ارتقا دهد. البته شما می‌توانید ادامه دهید ، اما برخی از ویژگی ها ممکن است به درستی کار نکنند.</string>
     <string name="login_error_outdated_homeserver_content">این نسخه سرور بسیار قدیمی است. از ادمین خود بخواهید که آن را ارتقا دهد.</string>
-    <string name="login_error_outdated_homeserver_title">سرور به روز نشده</string>
+    <string name="login_error_outdated_homeserver_title">کارساز خانگی قدیمی</string>
     <string name="login_validation_code_is_not_correct">کد وارد شده صحیح نیست. لطفا بررسی فرمائید.</string>
     <string name="login_wait_for_email_notice">ما ایمیلی به %1$s ارسال کردیم.
 \nلطفاً برای ادامه فرآیند ایجاد حساب‌کاربری بر روی لینک موجود در آن کلیک کنید.</string>
     <string name="login_wait_for_email_title">لطفا ایمیل خود را بررسی کنید</string>
     <string name="login_terms_title">برای ادامه، شرایط را قبول کنید</string>
     <string name="login_a11y_captcha_container">لطفا کپچا را حل کنید</string>
-    <string name="login_a11y_choose_other">انتخاب سرور دلخواه</string>
-    <string name="login_a11y_choose_modular">انتخاب سرورهای المنت</string>
+    <string name="login_a11y_choose_other">گزینش یک کارساز خانگی سفارشی</string>
+    <string name="login_a11y_choose_modular">گزینش خدمات ماتریکس المنت</string>
     <string name="login_a11y_choose_matrix_org">انتخاب matrix.org</string>
     <string name="login_signup_cancel_confirmation_content">حساب شما هنوز ایجاد نشده‌است.
 \n
@@ -1766,7 +1766,7 @@
     <string name="login_reset_password_cancel_confirmation_content">گذرواژه شما هنوز تغییر نکرده‌است.
 \n
 \nفرآیند تغییر گذرواژه را متوقف می‌کنید؟</string>
-    <string name="login_reset_password_success_notice_2">شما از همه نشست‌ها خارج شده‌اید و دیگر اعلان‌ها را دریافت نخواهید کرد. برای فعال کردن مجدد اعلان‌ها، در دستگاه‌های خود وارد حسابتان شوید.</string>
+    <string name="login_reset_password_success_notice_2">از تمام نشست‌ها خارج شده و دیگر آگاهی‌ای دریافت نخواهید کرد. برای به کار انداختن دوبارهٔ آگاهی‌ها، روی هر دستگاهی، دوباره وارد شوید.</string>
     <string name="login_reset_password_mail_confirmation_submit">ایمیل را تایید کردم</string>
     <string name="login_reset_password_mail_confirmation_notice_2">برای تایید گذرواژه جدید لینک ارسالی را باز کرده، سپس روی متن زیر کلیک کنید.</string>
     <string name="login_reset_password_mail_confirmation_notice">یک ایمیل تائید به %1$s ارسال شد.</string>
@@ -1780,17 +1780,17 @@
     <string name="login_registration_not_supported">برنامه قادر به ایجاد حساب در این سرور نیست.
 \n
 \nآیا می خواهید با استفاده از مرورگر حساب کاربری بسازید؟</string>
-    <string name="login_registration_disabled">متأسفیم، این سرور حساب‌های جدید را نمی پذیرد.</string>
+    <string name="login_registration_disabled">متأسفانه این کارساز، حساب جدید نمی‌پذیرد.</string>
     <string name="login_mode_not_supported">برنامه نمی‌تواند به این سرور متصل شود. سرور از این مکانیزم‌(ها) برای ورود پشتیبانی می کند: %1$s.
 \n
 \nآیا می خواهید با استفاده از مرورگر وارد شوید؟</string>
     <string name="login_sso_error_message">هنگام بارگیری صفحه، خطایی روی داد: %1$s (%2$d)</string>
-    <string name="login_server_url_form_common_notice">آدرس سرور مورد نظر خود را وارد کنید</string>
-    <string name="login_server_url_form_other_notice">آدرس سروری را که می‌‌خواهید به آن متصل شوید، وارد کنید</string>
-    <string name="login_server_url_form_modular_notice">آدرس سروری را که می‌‌خواهید از آن استفاده کنید، وارد کنید</string>
-    <string name="login_server_matrix_org_text">به میلیون ها نفر در بزرگترین سرور عمومی بپیوندید</string>
+    <string name="login_server_url_form_common_notice">نشانی کارسازی که می‌خواهید استفاده کنید را وارد کنید</string>
+    <string name="login_server_url_form_other_notice">نشانی المنت یا کارسازی را که می‌‌خواهید به آن وصل شوید، وارد کنید</string>
+    <string name="login_server_url_form_modular_notice">نشانی کارساز یا المنت ماژولاری که می‌خواهید استفاده کنید را وارد کنید</string>
+    <string name="login_server_matrix_org_text">به میلیون‌ها نفر در بزرگ‌ترین کارساز عمومی بپیوندید</string>
     <string name="login_server_text">درست مانند ایمیل، حساب‌های کاربری یک خانه دارند؛ اگرچه می توانید با هر کسی که دوست دارید، صحبت کنید</string>
-    <string name="login_server_title">یک سرور انتخاب کنید</string>
+    <string name="login_server_title">کارسازی برگزینید</string>
     <string name="login_splash_submit">شروع کنید</string>
     <string name="login_splash_text3">تجارب خود را گسترش داده و شخصی‌سازی کنید</string>
     <string name="login_splash_text2">گفتگوهای خصوصی خود را با رمزگذاری محافظت کنید</string>
@@ -1851,10 +1851,10 @@
     <string name="settings_text_message_sent_hint">کد</string>
     <string name="settings_text_message_sent">پیامکی به %s ارسال شده است. لطفاً کد تأیید موجود در آن را وارد کنید.</string>
     <string name="settings_discovery_no_terms">سرور هویت‌سنجی‌ای که انتخاب کرده‌اید هیچگونه شرایط و ضوابطی ندارد. فقط اگر به صاحب سرویس اعتماد دارید ادامه دهید</string>
-    <string name="settings_discovery_no_terms_title">سرور هویت‌سنجی شرایط و ضوابط استفاده ندارد</string>
-    <string name="settings_discovery_please_enter_server">آدرس سرور هویت‌سنجی را وارد کنید</string>
-    <string name="settings_discovery_bad_identity_server">اتصال به سرور هویت‌سنجی امکان پذیر نیست</string>
-    <string name="settings_discovery_enter_identity_server">آدرس سرور هویت‌سنجی را وارد کنید</string>
+    <string name="settings_discovery_no_terms_title">کارساز هویت، شرایط و ضوابط استفاده ندارد</string>
+    <string name="settings_discovery_please_enter_server">لطفاً نشانی کارساز هویت را وارد کنید</string>
+    <string name="settings_discovery_bad_identity_server">نتوانست به کارساز هویت وصل شود</string>
+    <string name="settings_discovery_enter_identity_server">یک نشانی کارساز هویت وارد کنید</string>
     <string name="settings_discovery_confirm_mail_not_clicked">ما یک ایمیل تأیید به %s ارسال کردیم، ابتدا ایمیل خود را بررسی کرده و روی لینک تأیید کلیک کنید</string>
     <string name="settings_discovery_confirm_mail">ما یک ایمیل تأیید به %s ارسال کردیم، ایمیل خود را بررسی کرده و روی لینک تأیید کلیک کنید</string>
     <string name="settings_discovery_disconnect_identity_server_info">قطع ارتباط با سرور هویت‌سنجی به این معنی است که توسط کاربران دیگر قابل شناسایی نخواهید بود و نمی توانید دیگران را از طریق ایمیل یا تلفن دعوت کنید.</string>
@@ -2011,7 +2011,7 @@
     <string name="passphrase_enter_passphrase">ورود عبارت عبور</string>
     <string name="passphrase_confirm_passphrase">تأیید عبارت عبور</string>
     <string name="passphrase_create_passphrase">ایجاد عبارت عبور</string>
-    <string name="no_valid_google_play_services_apk">APK معتبر Google Play Services پیدا نشد. اعلان‌ها ممکن است به درستی کار نکنند.</string>
+    <string name="no_valid_google_play_services_apk">بستهٔ اندرویدی معتبر خدمات پلی گوگل پیدا نشد. ممکن است آگاهی‌ها درست کار نکنند.</string>
     <string name="x_plus">%d+</string>
     <string name="plus_x">+%d</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
@@ -2038,7 +2038,7 @@
 \nغیرفعال کردن حساب شما <b> به طور پیش فرض باعث نمی شود پیام های ارسالی شما را حذف کنیم </b>. اگر می خواهید پیام های شما را فراموش کنیم ، لطفاً کادر زیر را علامت بزنید.
 \n
 \nقابلیت مشاهده پیام در المنت مانند ایمیل است. حذف کردن پیام‌های شما به این معنی است که پیام‌هایی که ارسال کرده‌اید به هیچ کاربر جدید یا ثبت نشده‌ای نمایش داده نمی شود، اما کاربران ثبت‌نام شده که از قبل به این پیام ها دسترسی داشتند همچنان به نسخه خود دسترسی خواهند داشت.</string>
-    <string name="dialog_user_consent_content">برای ادامه استفاده از سرور %1$s باید شرایط و ضوابط را خوانده و موافقت کنید.</string>
+    <string name="dialog_user_consent_content">برای ادامهٔ استفاده از کارساز خانگی %1$s باید شرایط و ضوابط را خوانده و بپذیرید.</string>
     <string name="markdown_has_been_disabled">Markdown غیرفعال شده است.</string>
     <string name="markdown_has_been_enabled">Markdown فعال شده است.</string>
     <string name="command_description_clear_scalar_token">جهت رفع مشکلات مدیریت برنامه‌های ماتریکس</string>
@@ -2141,7 +2141,7 @@
     <string name="devices_details_device_name">به‌روزرسانی نام عمومی</string>
     <string name="devices_details_id_title">شناسه</string>
     <string name="devices_details_dialog_title">اطلاعات دستگاه</string>
-    <string name="settings_data_save_mode_summary">حالت صرفه‌جویی داده یک فیلتر خاص را اعمال می کند، که در نتیجه‌ی آن به‌روزرسانی‌های وضعیت آنلاین بودن و اعلان‌های تایپ فیلتر می شوند.</string>
+    <string name="settings_data_save_mode_summary">حالت صرفه‌جویی داده، پالایهٔ خاصی را اعمال می‌کند که در نتیجهٔ آن، به‌روزرسانی‌های حضور و آگاهی‌های نوشتن، پالوده می‌شوند.</string>
     <string name="settings_data_save_mode">حالت صرفه‌جویی در مصرف دیتا</string>
     <string name="settings_opt_in_of_analytics_ok">بله ، من می خواهم کمک کنم!</string>
     <string name="settings_opt_in_of_analytics_prompt">لطفاً برای کمک به ما در بهبود المنت، ارسال ناشناس تجزیه و تحلیل را فعال کنید.</string>
