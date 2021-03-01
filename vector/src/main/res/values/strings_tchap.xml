@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- use to retrieve the supported languages list -->
+    <!-- should the same value as the file name -->
+
+    <!-- tchap Authentication -->
+    <string name="start_message">Welcome to Tchap</string>
+
+    <!-- tchap room creation -->
+    <string name="tchap_room_creation_title">New room</string>
+    <string name="tchap_action_next">Next</string>
+    <string name="tchap_room_creation_avatar">Add\nan avatar</string>
+    <string name="tchap_room_creation_name">Name this room</string>
+    <string name="tchap_room_creation_retention">Set the room history retention (in days)</string>
+    <plurals name="tchap_room_creation_retention">
+        <item quantity="one">The room history is limited to %d day</item>
+        <item quantity="other">The room history is limited to %d days</item>
+    </plurals>
+    <string name="tchap_room_creation_disable_federation">Limit the access to this room to the members of the domain \"%s\"</string>
+    <string name="tchap_room_creation_public_info">A public room can be joined by any member of the Tchap community, it must not contain any sensitive data.</string>
+    <string name="tchap_room_invite_member_title">Invite contacts in Room</string>
+    <string name="tchap_room_invite_member_action">Validate</string>
+    <string name="tchap_room_creation_save_avatar_failed">Failed to save picture.\n Do you want to retry?</string>
+    <string name="tchap_room_creation_room_type_title">Room type</string>
+    <string name="tchap_room_creation_private_room_title">Private room</string>
+    <string name="tchap_room_creation_extern_room_title">Private room opened to externals</string>
+    <string name="tchap_room_creation_forum_room_title">Forum room</string>
+    <string name="tchap_room_creation_private_room_info">Accessible to all users by invitation from an administrator.</string>
+    <string name="tchap_room_creation_extern_room_info">Accessible to all users and to external guests by invitation of an administrator.</string>
+    <string name="tchap_room_creation_forum_room_info">Accessible to all users from the forum directory or from a shared link.</string>
+
+    <!-- tchap new strings -->
+    <string name="tchap_room_admin_leave_prompt_msg">Are you sure you want to leave the room?\n\nThe room will no longer be administered, and you may not be able to join it again</string>
+    <string name="tchap_invite_contacts_to_tchap">Invite contacts in Tchap</string>
+    <string name="tchap_invite_contacts_by_email">Invite by email</string>
+    <string name="tchap_invite_contacts_by_link">Invite by link</string>
+    <string name="tchap_invite_contacts_to_room">Invite contacts in Room</string>
+    <string name="tchap_room_invite_member_direct_chat">New discussion</string>
+    <string name="tchap_invite_already_send_message">You have already sent an invitation to %s</string>
+    <string name="tchap_discussion_already_exist">A discussion with %s already exists</string>
+    <string name="tchap_start_discussion_with_discovered_user">%s already uses Tchap, a discussion has been created with this contact</string>
+    <string name="tchap_invite_unreachable_message">%s cannot be reached for the moment by Tchap</string>
+    <string name="tchap_invite_unauthorized_title_restricted_room">The externals are not allowed to join this room</string>
+    <string name="tchap_invite_unauthorized_title_unfederated_room">Only the members of the domain \"%s\" are allowed</string>
+    <string name="tchap_invite_unauthorized_message">Unable to send invite to %s</string>
+    <string name="tchap_send_invite_failed">Failed to send invitation to %s</string>
+    <string name="tchap_send_invite_network_error">Unable to send invite: Network error</string>
+    <string name="tchap_send_invite_confirmation">You will receive a notification when \n your guest joins the Tchap community</string>
+    <plurals name="tchap_succes_invite_notification">
+        <item quantity="one">%d invitation has been sent.</item>
+        <item quantity="other">%d invitations have been sent.</item>
+    </plurals>
+    <string name="tchap_burger_menu_contacts">Contacts</string>
+    <string name="tchap_burger_menu_public_rooms">Forums</string>
+    <string name="tchap_burger_menu_info">This app is not approved for\nrestricted information interchange</string>
+    <string name="tchap_error_message_default">An error occurred, please try later</string>
+
+    <!-- tchap discussion -->
+    <string name="tchap_cannot_invite_deactivated_account_user">The remote user left definitely this room</string>
+
+    <!-- tchap room -->
+    <string name="tchap_room_private_room_type">Private</string>
+    <string name="tchap_room_long_private_room_type">Private room</string>
+    <string name="tchap_room_extern_room_type">External</string>
+    <string name="tchap_room_long_extern_room_type">Private room opened to externals</string>
+    <string name="tchap_room_forum_type">Forum</string>
+    <string name="tchap_room_long_forum_type">Forum room</string>
+    <string name="tchap_room_invalid_link">This link is invalid</string>
+    <string name="tchap_room_access_unauthorized">You are not allowed to join this conversation. An invitation is needed.</string>
+    <plurals name="tchap_room_retention_info">
+        <item quantity="one">History limited to %d day</item>
+        <item quantity="other">History limited to %d days</item>
+    </plurals>
+
+    <!-- tchap scan media -->
+    <string name="tchap_scan_media_unavailable">Scan Unavailable</string>
+    <string name="tchap_scan_media_in_progress">Antivirus Scanning</string>
+    <string name="tchap_scan_media_untrusted_content">Infected File</string>
+    <string name="tchap_scan_media_untrusted_content_message">The file (%s) has been blocked</string>
+
+    <!-- tchap room settings -->
+    <string name="tchap_room_settings_remove_from_directory">Remove this room from the forums directory</string>
+    <string name="tchap_room_settings_remove_from_directory_prompt_msg"><b>This action is irreversible.</b>\nAre you sure you want to remove this room from the forums directory?</string>
+    <string name="tchap_room_settings_room_access_title">External accounts handling</string>
+    <string name="tchap_room_settings_room_access_restricted">The externals are not allowed to join this room</string>
+    <string name="tchap_room_settings_room_access_unrestricted">The externals are allowed to join this room</string>
+    <string name="tchap_room_settings_allow_external_users_to_join">Allow the externals to join this room</string>
+    <string name="tchap_room_settings_allow_external_users_to_join_prompt_msg"><b>This action is irreversible.</b>\nAre you sure you want to allow the externals to join this room?</string>
+    <string name="tchap_room_settings_retention_title">Room history</string>
+    <plurals name="tchap_room_settings_retention_summary">
+        <item quantity="one">The history is limited to %d day</item>
+        <item quantity="other">The history is limited to %d days</item>
+    </plurals>
+    <plurals name="tchap_room_settings_retention">
+        <item quantity="one">The room history is limited to %d day</item>
+        <item quantity="other">The room history is limited to %d days</item>
+    </plurals>
+    <string name="tchap_room_settings_leave_room">Leave this room</string>
+    <string name="tchap_room_settings_room_access_by_link_title">Access by link</string>
+    <string name="tchap_room_settings_room_access_by_link_disabled">This room is not accessible by link</string>
+    <string name="tchap_room_settings_room_access_by_link_enabled">This room is accessible by link</string>
+    <string name="tchap_room_settings_enable_room_access_by_link">Enable the room access by link</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_off">Users will be allowed to join the room from a link</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_on">Users can join the room from the following link:</string>
+    <string name="tchap_room_settings_enable_room_access_by_link_info_on_with_limitation">Users can join the room from the following link (an invite is still required for externals):</string>
+    <string name="tchap_room_settings_room_access_by_link_forward">Forward the link</string>
+    <string name="tchap_room_settings_room_access_by_link_share">Share the link</string>
+    <string name="tchap_room_settings_room_access_by_link_forbidden">This change is currently forbidden when externals are allowed to join the room</string>
+    <string name="tchap_room_settings_allow_external_users_forbidden">This change is currently forbidden when the room is accessible by link</string>
+
+    <!-- tchap account validity -->
+    <string name="tchap_expired_account_msg">The validity period of your account has expired. An email has been sent to you in order to renew it. Once you’ve followed the link it contains, click below.</string>
+    <string name="tchap_expired_account_resume_button">I renewed the validity of my account</string>
+    <string name="tchap_request_renewal_email_button">Request a renewal email</string>
+    <string name="tchap_expired_account_on_new_sent_email_msg">A new email has been sent to you in order to renew your account validity. Once you’ve followed the link it contains, click below.</string>
+    <string name="tchap_renew_account_validity_success_msg">Your account has been renewed with success</string>
+    <string name="tchap_renew_account_validity_invalid_token_msg">The token is invalid</string>
+
+    <!-- tchap android version limitation -->
+    <string name="tchap_unsupported_android_version_title">For security reasons, Tchap is not supported anymore on Android 4.4.4 and lower</string>
+    <string name="tchap_unsupported_android_version_message">Please log out your account from this device.\nIn order to be able to decrypt your chat history when you will log in from another device, we invite you to export your encryption keys before signing out.</string>
+    <string name="tchap_unsupported_android_version_export_keys">Export keys</string>
+    <string name="tchap_unsupported_android_version_default_msg">You may uninstall the application.</string>
+
+    <!-- Login/Register Tchap -->
+    <string name="tchap_register_title">Sign up to Tchap</string>
+    <string name="tchap_connection_title">Login to Tchap</string>
+    <string name="tchap_has_account_no">I do not have\nan account</string>
+    <string name="tchap_has_account_yes">I already have\nan account</string>
+    <string name="tchap_connection_email">Email</string>
+    <string name="tchap_connection_email_help">Use your business address</string>
+    <string name="tchap_connection_password">Tchap password</string>
+    <string name="tchap_connection_password_help">Your password must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
+    <string name="tchap_connection_password_confirm">Password confirmation</string>
+    <string name="tchap_connection_forgotten_email">I have forgotten my password</string>
+    <string name="tchap_register_warning_for_external_title">Information about your registration</string>
+    <string name="tchap_register_warning_for_external">Your email domain is not registered on Tchap. If you have received an invite, you will be able to create a Tchap account, which will allow you to join only the private discussions in which you are invited.</string>
+    <string name="tchap_register_warning_for_external_proceed">Proceed</string>
+    <string name="tchap_register_wait_for_email_title">An e-mail has been sent, except if an account already exists:</string>
+    <string name="tchap_register_wait_for_email_subtitle">Please open it and click in the link it contains to create your account</string>
+    <string name="tchap_register_wait_for_email_login_button">Go to login screen</string>
+    <string name="tchap_register_wait_for_email_no_email">I have not received any e-mail!</string>
+    <string name="tchap_register_unauthorized_email">This email address is unauthorized</string>
+    <string name="tchap_password_weak_pwd_error">This password is too weak. It must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
+    <string name="tchap_password_pwd_in_dict_error">This password was found in a dictionary, and is not acceptable</string>
+    <string name="tchap_register_user_already_logged_in_prompt">It looks like you’re trying to connect with another account. Do you want to sign out?</string>
+    <string name="tchap_email_validation_succeeded">The email has been validated. You may pursue the related operation.</string>
+    <string name="tchap_email_validation_failed">The email validation failed. The link has expired, or it is not valid.</string>
+
+    <string name="tchap_change_password_help">Your new password must include a lower-case letter, an upper-case letter, a number and a symbol and be at a minimum 8 characters in length.</string>
+
+    <string name="tchap_dialog_user_consent_homeserver_name">Tchap</string>
+</resources>

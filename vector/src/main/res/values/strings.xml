@@ -26,13 +26,13 @@
     <string name="title_activity_choose_sticker">Send a sticker</string>
     <string name="title_activity_keys_backup_setup">Key Backup</string>
     <string name="title_activity_keys_backup_restore">Use Key Backup</string>
-    <string name="title_activity_verify_device">Verify session</string>
+    <string name="title_activity_verify_device">Verify device</string>
 
     <!-- Signing out screen -->
     <string name="keys_backup_is_not_finished_please_wait">Keys backup is not finished, please wait…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">You’ll lose your encrypted messages if you sign out now</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Key backup in progress. If you sign out now you’ll lose access to your encrypted messages.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">Secure Key Backup should be active on all of your sessions to avoid losing access to your encrypted messages.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">Secure Key Backup should be active on all of your devices to avoid losing access to your encrypted messages.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">I don’t want my encrypted messages</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Backing up keys…</string>
     <string name="keys_backup_activate">Use Key Backup</string>
@@ -96,7 +96,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Cannot start call</string>
     <string name="cannot_call_yourself">You cannot place a call with yourself</string>
     <string name="cannot_call_yourself_with_invite">You cannot place a call with yourself, wait for participants to accept invitation</string>
-    <string name="device_information">Session information</string>
+    <string name="device_information">Device information</string>
     <string name="failed_to_add_widget">Failed to add widget</string>
     <string name="failed_to_remove_widget">Failed to remove widget</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Conference calls are not supported in encrypted rooms</string>
@@ -172,7 +172,7 @@
     <string name="user_directory_header">User directory</string>
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
-    <string name="no_contact_access_placeholder">You didn’t allow Element to access your local contacts</string>
+    <string name="no_contact_access_placeholder">You didn’t allow Tchap to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
     <string name="no_more_results">No more results</string>
     <string name="people_no_identity_server">No identity server configured.</string>
@@ -181,7 +181,7 @@
     <string name="rooms_header">Rooms</string>
     <string name="rooms_directory_header">Room directory</string>
     <string name="no_room_placeholder">No rooms</string>
-    <string name="no_public_room_placeholder">No public rooms available</string>
+    <string name="no_public_room_placeholder">No forum available</string>
     <plurals name="public_room_nb_users">
         <item quantity="one">%d user</item>
         <item quantity="other">%d users</item>
@@ -286,7 +286,7 @@
     <string name="auth_repeat_new_password_placeholder">Confirm your new password</string>
     <string name="auth_invalid_login_param">Incorrect username and/or password</string>
     <string name="auth_invalid_user_name">User names may only contain letters, numbers, dots, hyphens and underscores</string>
-    <string name="auth_invalid_password">Password too short (min 6)</string>
+    <string name="auth_invalid_password">Password too short (min 8)</string>
     <string name="auth_missing_password">Missing password</string>
     <string name="auth_invalid_email">"This doesn’t look like a valid email address"</string>
     <string name="auth_invalid_phone">"This doesn’t look like a valid phone number"</string>
@@ -311,7 +311,7 @@
     <string name="auth_reset_password_missing_password">A new password must be entered.</string>
     <string name="auth_reset_password_email_validation_message">An email has been sent to %s. Once you’ve followed the link it contains, click below.</string>
     <string name="auth_reset_password_error_unauthorized">Failed to verify email address: make sure you clicked the link in the email</string>
-    <string name="auth_reset_password_success_message">Your password has been reset.\n\nYou have been logged out of all sessions and will no longer receive push notifications. To re-enable notifications, re-log in on each device.</string>
+    <string name="auth_reset_password_success_message">Your password has been reset.\n\nYou have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, re-log in on each device.</string>
     <string name="auth_accept_policies">"Please review and accept the policies of this homeserver:"</string>
 
     <!-- Login Screen -->
@@ -339,12 +339,12 @@
     <string name="login_error_login_email_not_yet">The email link which has not been clicked yet</string>
 
     <!-- request again e2e key -->
-    <string name="e2e_re_request_encryption_key">Re-request encryption keys from your other sessions.</string>
+    <string name="e2e_re_request_encryption_key"><u>Re-request encryption keys</u> from your other devices.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Key request sent.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Request sent</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Please launch Element on another device that can decrypt the message so it can send the keys to this session.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Please launch Tchap on another device that can decrypt the message so it can send the keys to this session.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
@@ -385,7 +385,7 @@
     <string name="settings_call_category">Calls</string>
     <string name="settings_call_show_confirmation_dialog_title">Prevent accidental call</string>
     <string name="settings_call_show_confirmation_dialog_summary">Ask for confirmation before starting a call</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Use default Element ringtone for incoming calls</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Use default Tchap ringtone for incoming calls</string>
     <string name="settings_call_ringtone_use_default_stun">Allow fallback call assist server</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Will use "%s" as assist when your home server does not offer one (your IP address will be shared during a call)</string>
     <string name="settings_call_ringtone_title">Incoming call ringtone</string>
@@ -420,14 +420,14 @@
 
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Information</string>
-    <string name="permissions_rationale_msg_storage">Element needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
-    <string name="permissions_rationale_msg_camera">Element needs permission to access your camera to take pictures and video calls.</string>
+    <string name="permissions_rationale_msg_storage">Tchap needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
+    <string name="permissions_rationale_msg_camera">Tchap needs permission to access your camera to take pictures and video calls.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_record_audio">Element needs permission to access your microphone to perform audio calls.</string>
+    <string name="permissions_rationale_msg_record_audio">Tchap needs permission to access your microphone to perform audio calls.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
-    <string name="permissions_rationale_msg_contacts">Element can check your address book to find other Matrix users based on their email and phone numbers. If you agree to share your address book for this purpose, please allow access on the next pop-up.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element can check your address book to find other Matrix users based on their email and phone numbers.\n\nDo you agree to share your address book for this purpose?</string>
+    <string name="permissions_rationale_msg_camera_and_audio">Tchap needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <string name="permissions_rationale_msg_contacts">Tchap needs permission to access your address book contacts to find other Matrix users based on their email and phone numbers.\n\nPlease allow access on the next pop-up to discover address book users reachable from Tchap.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Tchap needs permission to access your address book contact to find other Matrix users based on their email and phone numbers.\n\nAllow Tchap to access your contacts ?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
     <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
@@ -511,7 +511,7 @@
     <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
     <string name="room_participants_header_call">CALL</string>
     <string name="room_participants_header_direct_chats">Direct Messages</string>
-    <string name="room_participants_header_devices">SESSIONS</string>
+    <string name="room_participants_header_devices">DEVICES</string>
 
     <string name="room_participants_action_invite">Invite</string>
     <string name="room_participants_action_cancel_invite">Cancel invite</string>
@@ -525,7 +525,7 @@
     <string name="room_participants_action_set_admin">Make admin</string>
     <string name="room_participants_invite_search_another_user">User ID, Name or email</string>
     <string name="room_participants_action_mention">Mention</string>
-    <string name="room_participants_action_devices_list">Show Session List</string>
+    <string name="room_participants_action_devices_list">Show Device List</string>
     <string name="room_participants_power_level_prompt">You will not be able to undo this change as you are promoting the user to have the same power level as yourself.\nAre you sure?</string>
 
     <string name="room_participants_power_level_demote_warning_title">Demote yourself?</string>
@@ -568,13 +568,13 @@
 
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invite by ID</u></string>
-    <string name="people_search_local_contacts">LOCAL CONTACTS (%d)</string>
-    <string name="people_search_user_directory">USER DIRECTORY (%s)</string>
+    <string name="people_search_local_contacts">Local contacts (%d)</string>
+    <string name="people_search_user_directory">User directory (%s)</string>
     <string name="people_search_filter_text">Matrix users only</string>
 
-    <string name="people_search_invite_by_id_dialog_title">Invite user by ID</string>
-    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address or Matrix ID</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email or Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_title">Invite user by email</string>
+    <string name="people_search_invite_by_id_dialog_description">Please enter one or more email address</string>
+    <string name="people_search_invite_by_id_dialog_hint">Email</string>
 
     <!--  Chat -->
     <string name="room_menu_search">Search</string>
@@ -587,7 +587,7 @@
     <string name="room_message_placeholder_reply_to_not_encrypted">Send a reply (unencrypted)…</string>
     <string name="room_offline_notification">Connectivity to the server has been lost.</string>
     <string name="room_unsent_messages_notification">Messages not sent. %1$s or %2$s now?</string>
-    <string name="room_unknown_devices_messages_notification">Messages not sent due to unknown sessions being present. %1$s or %2$s now?</string>
+    <string name="room_unknown_devices_messages_notification">Messages not sent due to unknown devices being present. %1$s or %2$s now?</string>
     <string name="room_prompt_resend">Resend all</string>
     <string name="room_prompt_cancel">Cancel all</string>
     <string name="room_resend_unsent_messages">Resend unsent messages</string>
@@ -675,7 +675,7 @@
     <string name="room_recents_favourites">FAVORITES</string>
     <string name="room_recents_conversations">ROOMS</string>
     <string name="room_recents_low_priority">LOW PRIORITY</string>
-    <string name="room_recents_invites">INVITES</string>
+    <string name="room_recents_invites">Invites</string>
     <string name="room_recents_start_chat">Start chat</string>
     <string name="room_recents_create_room">Create room</string>
     <string name="room_recents_join_room">Join room</string>
@@ -745,7 +745,7 @@
     <string name="settings_troubleshoot_diagnostic">Troubleshooting diagnostics</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Run Tests</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Running… (%1$d of %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Basic diagnostic is OK. If you still do not receive notifications, please submit a bug report to help us investigate.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Basic diagnostic is ok. If you still do not receive notifications, please submit a bug report to help us investigate.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">One or more tests have failed, try suggested fix(es).</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">One or more tests have failed, please submit a bug report to help us investigate.</string>
 
@@ -759,9 +759,9 @@
     <string name="settings_troubleshoot_test_account_settings_failed">Notifications are disabled for your account.\nPlease check account settings.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Enable</string>
 
-    <string name="settings_troubleshoot_test_device_settings_title">Session Settings.</string>
-    <string name="settings_troubleshoot_test_device_settings_success">Notifications are enabled for this session.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Notifications are not enabled for this session.\nPlease check the Element settings.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Device Settings.</string>
+    <string name="settings_troubleshoot_test_device_settings_success">Notifications are enabled for this device.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Notifications are not allowed for this device.\nPlease check the Tchap settings.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Enable</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Custom Settings.</string>
@@ -832,7 +832,7 @@
 
     <string name="settings_notification_ringtone">Notification sound</string>
     <string name="settings_enable_all_notif">Enable notifications for this account</string>
-    <string name="settings_enable_this_device">Enable notifications for this session</string>
+    <string name="settings_enable_this_device">Enable notifications for this device</string>
     <string name="settings_turn_screen_on">Turn the screen on for 3 seconds</string>
     <string name="settings_noisy_notifications_preferences">Configure Noisy Notifications</string>
     <string name="settings_call_notifications_preferences">Configure Call Notifications</string>
@@ -896,7 +896,7 @@
     <string name="settings_home_display">Home display</string>
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
     <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
-    <string name="settings_devices_list">Sessions</string>
+    <string name="settings_devices_list">Devices</string>
     <string name="settings_inline_url_preview">Inline URL preview</string>
     <string name="settings_inline_url_preview_summary">Preview links within the chat when your homeserver supports this feature.</string>
     <string name="settings_send_typing_notifs">Send typing notifications</string>
@@ -936,7 +936,7 @@
     <string name="settings_discovery_category">Discovery</string>
     <string name="settings_discovery_manage">Manage your discovery settings.</string>
     <string name="startup_notification_privacy_title">Notification Privacy</string>
-    <string name="startup_notification_privacy_message">Element can run in the background to manage your notifications securely and privately. This might affect battery usage.</string>
+    <string name="startup_notification_privacy_message">Tchap can run in the background to manage your notifications securely and privately. This might affect battery usage.</string>
     <string name="startup_notification_privacy_button_grant">Grant permission</string>
     <string name="startup_notification_privacy_button_other">Choose another option</string>
 
@@ -947,14 +947,14 @@
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_in_of_analytics">Send analytics data</string>
-    <string name="settings_opt_in_of_analytics_summary">Element collects anonymous analytics to allow us to improve the application.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve Element.</string>
+    <string name="settings_opt_in_of_analytics_summary">Tchap collects anonymous analytics to allow us to improve the application.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve Tchap.</string>
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
     <string name="settings_data_save_mode">Data save mode</string>
     <string name="settings_data_save_mode_summary">Data save mode applies a specific filter so presence updates and typing notifications are filtered out.</string>
 
-    <string name="devices_details_dialog_title">Session information</string>
+    <string name="devices_details_dialog_title">Device information</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Public Name</string>
     <string name="devices_details_device_name">Update Public Name</string>
@@ -1123,8 +1123,8 @@
     <string name="room_settings_labs_end_to_end">End-to-End Encryption</string>
     <string name="room_settings_labs_end_to_end_is_active">End-to-End Encryption is active</string>
     <string name="room_settings_labs_end_to_end_warnings">You need to logout to be able to enable the encryption.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Encrypt to verified sessions only</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified sessions in this room from this session.</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
+    <string name="room_settings_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices in this room from this device.</string>
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
@@ -1168,13 +1168,13 @@
     <string name="encryption_information_session_id">Session ID</string>
     <string name="encryption_information_decryption_error">Decryption error</string>
 
-    <string name="encryption_information_sender_device_information">Sender session information</string>
+    <string name="encryption_information_sender_device_information">Sender device information</string>
     <string name="encryption_information_device_name">Public name</string>
     <string name="encryption_information_device_name_with_warning">Public name (visible to people you communicate with)</string>
-    <string name="device_name_warning">"A session's public name is visible to people you communicate with"</string>
+    <string name="device_name_warning">"A device's public name is visible to people you communicate with"</string>
     <string name="encryption_information_name">Public name</string>
-    <string name="encryption_information_device_id">Session ID</string>
-    <string name="encryption_information_device_key">Session key</string>
+    <string name="encryption_information_device_id">Device ID</string>
+    <string name="encryption_information_device_key">Device key</string>
     <string name="encryption_information_verification">Verification</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 fingerprint</string>
 
@@ -1193,8 +1193,8 @@
     <string name="encryption_import_room_keys">Import room keys</string>
     <string name="encryption_import_room_keys_summary">Import the keys from a local file</string>
     <string name="encryption_import_import">Import</string>
-    <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified sessions only</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified sessions from this session.</string>
+    <string name="encryption_never_send_to_unverified_devices_title">Encrypt to verified devices only</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">Never send encrypted messages to unverified devices from this device.</string>
     <plurals name="encryption_import_room_keys_success">
         <item quantity="one">%1$d/%2$d key imported with success.</item>
         <item quantity="other">%1$d/%2$d keys imported with success.</item>
@@ -1204,7 +1204,7 @@
     <string name="encryption_information_verified">Verified</string>
     <string name="encryption_information_blocked">Blacklisted</string>
 
-    <string name="encryption_information_unknown_device">unknown session</string>
+    <string name="encryption_information_unknown_device">unknown device</string>
     <string name="encryption_information_unknown_ip">unknown ip</string>
     <string name="encryption_information_none">none</string>
 
@@ -1213,19 +1213,19 @@
     <string name="encryption_information_block">Blacklist</string>
     <string name="encryption_information_unblock">Unblacklist</string>
 
-    <string name="encryption_information_verify_device">Verify session</string>
-    <string name="encryption_information_verify_device_warning">Confirm by comparing the following with the User Settings in your other session:</string>
-    <string name="encryption_information_verify_device_warning2">"If they don't match, the security of your communication may be compromised."</string>
+    <string name="encryption_information_verify_device">Verify device</string>
+    <string name="encryption_information_verify_device_warning">To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:</string>
+    <string name="encryption_information_verify_device_warning2">If it matches, press the verify button below. If it doesn’t, then someone else is intercepting this device and you should probably blacklist it. In the future this verification process will be more sophisticated.</string>
     <string name="encryption_information_verify_key_match">I verify that the keys match</string>
 
-    <!-- unknown sessions management -->
-    <string name="unknown_devices_alert_title">Room contains unknown sessions</string>
-    <string name="unknown_devices_alert_message">This room contains unknown sessions which have not been verified.\nThis means there is no guarantee that the sessions belong to the users they claim to.\nWe recommend you go through the verification process for each session before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown sessions:</string>
+    <!-- unknown devices management -->
+    <string name="unknown_devices_alert_title">Room contains unknown devices</string>
+    <string name="unknown_devices_alert_message">This room contains unknown devices which have not been verified.\nThis means there is no guarantee that the devices belong to the users they claim to.\nWe recommend you go through the verification process for each device before continuing, but you can resend the message without verifying if you prefer.\n\nUnknown devices:</string>
 
     <!-- directory activity  -->
     <string name="select_room_directory">Select a room directory</string>
     <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
-    <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
+    <string name="directory_server_type_homeserver">Type a homeserver to list forums from</string>
     <string name="directory_server_placeholder">Homeserver URL</string>
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
@@ -1348,10 +1348,10 @@
     <string name="widget_integration_review_terms">To continue you need to accept the Terms of this service.</string>
 
     <!-- share keys -->
-    <string name="you_added_a_new_device">You added a new session \'%s\', which is requesting encryption keys.</string>
-    <string name="you_added_a_new_device_with_info">A new session is requesting encryption keys.\nSession name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another session, ignore this request.</string>
-    <string name="your_unverified_device_requesting">Your unverified session  \'%s\' is requesting encryption keys.</string>
-    <string name="your_unverified_device_requesting_with_info">An unverified session is requesting encryption keys.\nSession name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another session, ignore this request.</string>
+    <string name="you_added_a_new_device">You added a new device \'%s\', which is requesting encryption keys.</string>
+    <string name="you_added_a_new_device_with_info">A new device is requesting encryption keys.\nDevice name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another device, ignore this request.</string>
+    <string name="your_unverified_device_requesting">Your unverified device  \'%s\' is requesting encryption keys.</string>
+    <string name="your_unverified_device_requesting_with_info">An unverified device is requesting encryption keys.\nDevice name: %1$s\nLast seen: %2$s\nIf you didn’t log in on another device, ignore this request.</string>
 
     <string name="start_verification">Start verification</string>
     <!-- Keep the label as small as possible-->
@@ -1535,7 +1535,7 @@
     <string name="recovery_key_export_saved">The recovery key has been saved.</string>
 
     <string name="keys_backup_setup_override_backup_prompt_tile">A backup already exist on your HomeServer</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">It looks like you already have setup key backup from another session. Do you want to replace it with the one you’re creating?</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">It looks like you already have setup key backup from another device. Do you want to replace it with the one you’re creating?</string>
     <string name="keys_backup_setup_override_replace">Replace</string>
     <string name="keys_backup_setup_override_stop">Stop</string>
 
