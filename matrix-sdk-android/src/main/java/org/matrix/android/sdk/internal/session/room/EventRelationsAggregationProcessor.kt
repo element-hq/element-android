@@ -191,29 +191,45 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
     // OPT OUT serer aggregation until API mature enough
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false
 
-    private fun handleReplace(realm: Realm, event: Event, content: MessageContent, roomId: String, isLocalEcho: Boolean, relatedEventId: String? = null) {
+    private fun handleReplace(realm: Realm,
+                              event: Event,
+                              content: MessageContent,
+                              roomId: String,
+                              isLocalEcho: Boolean,
+                              relatedEventId: String? = null) {
         val eventId = event.eventId ?: return
         val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
         val newContent = content.newContent ?: return
+
+        // Check that the sender is the same
+        val editedEvent = EventEntity.where(realm, targetEventId).findFirst()
+        if (editedEvent == null) {
+            // We do not know yet about the edited event
+        } else if (editedEvent.sender != event.senderId) {
+            // Edited by someone else, ignore
+            Timber.w("Ignore edition by someone else")
+            return
+        }
+
         // ok, this is a replace
-        val existing = EventAnnotationsSummaryEntity.getOrCreate(realm, roomId, targetEventId)
+        val eventAnnotationsSummaryEntity = EventAnnotationsSummaryEntity.getOrCreate(realm, roomId, targetEventId)
 
         // we have it
-        val existingSummary = existing.editSummary
+        val existingSummary = eventAnnotationsSummaryEntity.editSummary
         if (existingSummary == null) {
             Timber.v("###REPLACE new edit summary for $targetEventId, creating one (localEcho:$isLocalEcho)")
             // create the edit summary
-            val editSummary = realm.createObject(EditAggregatedSummaryEntity::class.java)
-            editSummary.aggregatedContent = ContentMapper.map(newContent)
-            if (isLocalEcho) {
-                editSummary.lastEditTs = 0
-                editSummary.sourceLocalEchoEvents.add(eventId)
-            } else {
-                editSummary.lastEditTs = event.originServerTs ?: 0
-                editSummary.sourceEvents.add(eventId)
-            }
-
-            existing.editSummary = editSummary
+            eventAnnotationsSummaryEntity.editSummary = realm.createObject(EditAggregatedSummaryEntity::class.java)
+                    .also { editSummary ->
+                        editSummary.aggregatedContent = ContentMapper.map(newContent)
+                        if (isLocalEcho) {
+                            editSummary.lastEditTs = 0
+                            editSummary.sourceLocalEchoEvents.add(eventId)
+                        } else {
+                            editSummary.lastEditTs = event.originServerTs ?: 0
+                            editSummary.sourceEvents.add(eventId)
+                        }
+                    }
         } else {
             if (existingSummary.sourceEvents.contains(eventId)) {
                 // ignore this event, we already know it (??)

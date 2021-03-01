@@ -50,5 +50,5 @@ internal fun EventAnnotationsSummaryEntity.Companion.create(realm: Realm, roomId
 
 internal fun EventAnnotationsSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: String, eventId: String): EventAnnotationsSummaryEntity {
     return EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
-            ?: EventAnnotationsSummaryEntity.create(realm, roomId, eventId).apply { this.roomId = roomId }
+            ?: EventAnnotationsSummaryEntity.create(realm, roomId, eventId)
 }
