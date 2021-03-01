@@ -60,6 +60,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoCon
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.internal.session.room.timeline.SimpleTimeline
 import javax.inject.Inject
 
 private const val DEFAULT_PREFETCH_THRESHOLD = 30
@@ -75,7 +76,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val callManager: WebRtcCallManager,
                                                   @TimelineEventControllerHandler
                                                   private val backgroundHandler: Handler
-) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
+) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor, SimpleTimeline.Listener {
 
     interface Callback :
             BaseCallback,
@@ -84,7 +85,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             UrlClickCallback,
             ReadReceiptsCallback,
             PreviewUrlCallback {
-        fun onLoadMore(direction: Timeline.Direction)
+        fun onLoadMore(direction: SimpleTimeline.Direction)
         fun onEventInvisible(event: TimelineEvent)
         fun onEventVisible(event: TimelineEvent)
         fun onRoomCreateLinkClicked(url: String)
@@ -147,7 +148,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private var previousModelsSize = 0
 
     var callback: Callback? = null
-    var timeline: Timeline? = null
+    var timeline: SimpleTimeline? = null
 
     private val listUpdateCallback = object : ListUpdateCallback {
 
@@ -204,7 +205,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     override fun intercept(models: MutableList<EpoxyModel<*>>) = synchronized(modelCache) {
-        interceptorHelper.intercept(models, unreadState, timeline, callback)
+        //interceptorHelper.intercept(models, unreadState, timeline, callback)
     }
 
     fun update(viewState: RoomDetailViewState) {
@@ -250,8 +251,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
         val showingForwardLoader = LoadingItem_()
                 .id("forward_loading_item_$timestamp")
-                .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS)
-                .addWhenLoading(Timeline.Direction.FORWARDS)
+                .setVisibilityStateChangedListener(SimpleTimeline.Direction.Forward)
+                .addWhenLoading(SimpleTimeline.Direction.Forward)
 
         val timelineModels = getModels()
         add(timelineModels)
@@ -263,9 +264,9 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         // We can hide the loader but still add the item to controller so it can trigger backwards pagination
         LoadingItem_()
                 .id("backward_loading_item_$timestamp")
-                .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS)
+                .setVisibilityStateChangedListener(SimpleTimeline.Direction.Backward)
                 .showLoader(showBackwardsLoader)
-                .addWhenLoading(Timeline.Direction.BACKWARDS)
+                .addWhenLoading(SimpleTimeline.Direction.Backward)
     }
 
 // Timeline.LISTENER ***************************************************************************
@@ -373,7 +374,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
     }
 
-    private fun LoadingItem_.setVisibilityStateChangedListener(direction: Timeline.Direction): LoadingItem_ {
+    private fun LoadingItem_.setVisibilityStateChangedListener(direction: SimpleTimeline.Direction): LoadingItem_ {
         return onVisibilityStateChanged { _, _, visibilityState ->
             if (visibilityState == VisibilityState.VISIBLE) {
                 callback?.onLoadMore(direction)
@@ -405,8 +406,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     /**
      * Return true if added
      */
-    private fun LoadingItem_.addWhenLoading(direction: Timeline.Direction): Boolean {
-        val shouldAdd = timeline?.hasMoreToLoad(direction) ?: false
+    private fun LoadingItem_.addWhenLoading(direction: SimpleTimeline.Direction): Boolean {
+        val shouldAdd = timeline?.getPaginationState(direction)?.hasMoreToLoad ?: false
         addIf(shouldAdd, this@TimelineEventController)
         return shouldAdd
     }
@@ -429,5 +430,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun shouldTriggerBuild(): Boolean {
             return mergedHeaderModel != null || formattedDayModel != null
         }
+    }
+
+    override fun onStateUpdated() {
+
+    }
+
+    override fun onEventsUpdated(snapshot: List<TimelineEvent>) {
+        submitSnapshot(snapshot)
     }
 }

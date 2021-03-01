@@ -18,11 +18,14 @@ package org.matrix.android.sdk.api.session.room.timeline
 
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.session.room.timeline.SimpleTimeline
 
 /**
  * This interface defines methods to interact with the timeline. It's implemented at the room level.
  */
 interface TimelineService {
+
+    fun createSimpleTimeline(): SimpleTimeline
 
     /**
      * Instantiate a [Timeline] with an optional initial eventId, to be used with permalink.

@@ -96,6 +96,7 @@ import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.internal.session.room.timeline.SimpleTimeline
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
@@ -130,6 +131,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private val timelineSettings = timelineSettingsFactory.create()
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
     val timeline = room.createTimeline(eventId, timelineSettings)
+    val simpleTimeline = room.createSimpleTimeline()
 
     // Same lifecycle than the ViewModel (survive to screen rotation)
     val previewUrlRetriever = PreviewUrlRetriever(session, viewModelScope)
@@ -158,8 +160,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     init {
-        timeline.start()
-        timeline.addListener(this)
+        simpleTimeline.start()
+        viewModelScope.launch {
+            simpleTimeline.loadMore(10, SimpleTimeline.Direction.Backward)
+        }
         observeRoomSummary()
         observeMembershipChanges()
         observeSummaryState()
@@ -626,10 +630,10 @@ class RoomDetailViewModel @AssistedInject constructor(
             R.id.clear_all -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.open_matrix_apps -> true
             R.id.voice_call,
-            R.id.video_call       -> callManager.getCallsByRoomId(state.roomId).isEmpty()
-            R.id.hangup_call      -> callManager.getCallsByRoomId(state.roomId).isNotEmpty()
-            R.id.search           -> true
-            R.id.dev_tools        -> vectorPreferences.developerMode()
+            R.id.video_call -> callManager.getCallsByRoomId(state.roomId).isEmpty()
+            R.id.hangup_call -> callManager.getCallsByRoomId(state.roomId).isNotEmpty()
+            R.id.search -> true
+            R.id.dev_tools -> vectorPreferences.developerMode()
             else                  -> false
         }
     }
@@ -1047,8 +1051,10 @@ class RoomDetailViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.StopChatEffects)
     }
 
-    private fun handleLoadMore(action: RoomDetailAction.LoadMoreTimelineEvents) {
-        timeline.paginate(action.direction, PAGINATION_COUNT)
+    private fun handleLoadMore(action: RoomDetailAction.LoadMoreTimelineEvents){
+        viewModelScope.launch {
+            simpleTimeline.loadMore(PAGINATION_COUNT.toLong(), action.direction)
+        }
     }
 
     private fun handleRejectInvite() {
@@ -1454,8 +1460,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     override fun onCleared() {
         roomSummariesHolder.remove(room.roomId)
-        timeline.dispose()
-        timeline.removeAllListeners()
+        simpleTimeline.stop()
         if (vectorPreferences.sendTypingNotifs()) {
             room.userStopsTyping()
         }

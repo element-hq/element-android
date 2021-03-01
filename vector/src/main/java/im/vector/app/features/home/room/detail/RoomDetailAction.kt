@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.internal.session.room.timeline.SimpleTimeline
 
 sealed class RoomDetailAction : VectorViewModelAction {
     data class UserIsTyping(val isTyping: Boolean) : RoomDetailAction()
@@ -36,7 +37,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class SendMedia(val attachments: List<ContentAttachmentData>, val compressBeforeSending: Boolean) : RoomDetailAction()
     data class TimelineEventTurnsVisible(val event: TimelineEvent) : RoomDetailAction()
     data class TimelineEventTurnsInvisible(val event: TimelineEvent) : RoomDetailAction()
-    data class LoadMoreTimelineEvents(val direction: Timeline.Direction) : RoomDetailAction()
+    data class LoadMoreTimelineEvents(val direction: SimpleTimeline.Direction) : RoomDetailAction()
     data class SendReaction(val targetEventId: String, val reaction: String) : RoomDetailAction()
     data class UndoReaction(val targetEventId: String, val reaction: String, val reason: String? = "") : RoomDetailAction()
     data class RedactAction(val targetEventId: String, val reason: String? = "") : RoomDetailAction()

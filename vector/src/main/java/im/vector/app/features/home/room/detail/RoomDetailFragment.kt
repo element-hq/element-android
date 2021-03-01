@@ -196,6 +196,7 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.internal.session.room.timeline.SimpleTimeline
 import timber.log.Timber
 import java.io.File
 import java.net.URL
@@ -981,7 +982,7 @@ class RoomDetailFragment @Inject constructor(
 
     private fun setupRecyclerView() {
         timelineEventController.callback = this
-        timelineEventController.timeline = roomDetailViewModel.timeline
+        timelineEventController.timeline = roomDetailViewModel.simpleTimeline
 
         views.timelineRecyclerView.trackItemsVisibilityChange()
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, true)
@@ -1512,7 +1513,7 @@ class RoomDetailFragment @Inject constructor(
 //        vectorBaseActivity.notImplemented("open audio file")
 //    }
 
-    override fun onLoadMore(direction: Timeline.Direction) {
+    override fun onLoadMore(direction: SimpleTimeline.Direction) {
         roomDetailViewModel.handle(RoomDetailAction.LoadMoreTimelineEvents(direction))
     }
 

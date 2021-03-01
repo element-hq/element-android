@@ -28,6 +28,7 @@ import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
+import org.matrix.android.sdk.internal.session.room.timeline.SimpleTimeline
 import kotlin.reflect.KMutableProperty0
 
 private const val DEFAULT_PREFETCH_THRESHOLD = 30
@@ -120,7 +121,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
             val loadingItem = LoadingItem_()
                     .id("prefetch_backward_loading${System.currentTimeMillis()}")
                     .showLoader(false)
-                    .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS, callback)
+                    .setVisibilityStateChangedListener(SimpleTimeline.Direction.Backward, callback)
 
             add(indexOfPrefetchBackward, loadingItem)
         }
@@ -133,13 +134,13 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
             val loadingItem = LoadingItem_()
                     .id("prefetch_forward_loading${System.currentTimeMillis()}")
                     .showLoader(false)
-                    .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS, callback)
+                    .setVisibilityStateChangedListener(SimpleTimeline.Direction.Forward, callback)
             add(indexOfPrefetchForward, loadingItem)
         }
     }
 
     private fun LoadingItem_.setVisibilityStateChangedListener(
-            direction: Timeline.Direction,
+            direction: SimpleTimeline.Direction,
             callback: TimelineEventController.Callback?
     ): LoadingItem_ {
         return onVisibilityStateChanged { _, _, visibilityState ->

@@ -61,6 +61,18 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
         fun create(roomId: String): DefaultTimelineService
     }
 
+    override fun createSimpleTimeline(): SimpleTimeline {
+        return SimpleTimeline(
+                roomId = roomId,
+                realmConfiguration = monarchy.realmConfiguration,
+                paginationTask = paginationTask,
+                getEventTask = contextOfEventTask,
+                timelineEventMapper = timelineEventMapper
+        )
+    }
+
+
+
     override fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline {
         return DefaultTimeline(
                 roomId = roomId,
