@@ -2051,7 +2051,7 @@
     <string name="edit">Edit</string>
     <string name="reply">Reply</string>
 
-    <string name="global_retry">"Retry"</string>
+    <string name="global_retry">Retry</string>
     <string name="room_list_empty">"Join a room to start using the app."</string>
     <string name="send_you_invite">"Sent you an invitation"</string>
     <string name="invited_by">Invited by %s</string>
@@ -3243,5 +3243,9 @@
     <string name="event_status_a11y_sending">Sending</string>
     <string name="event_status_a11y_sent">Sent</string>
     <string name="event_status_a11y_failed">Failed</string>
+    <string name="event_status_a11y_delete_all">Delete all failed messages</string>
     <string name="event_status_cancel_sending_dialog_message">Do you want to cancel sending message?</string>
+    <string name="event_status_failed_messages_warning">Messages failed to send</string>
+    <string name="event_status_delete_all_failed_dialog_title">Delete unsent messages</string>
+    <string name="event_status_delete_all_failed_dialog_message">Are you sure you want to delete all unsent messages in this room?</string>
 </resources>

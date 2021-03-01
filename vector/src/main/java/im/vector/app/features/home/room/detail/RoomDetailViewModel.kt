@@ -322,6 +322,8 @@ class RoomDetailViewModel @AssistedInject constructor(
                 )
             }
             is RoomDetailAction.DoNotShowPreviewUrlFor -> handleDoNotShowPreviewUrlFor(action)
+            RoomDetailAction.RemoveAllFailedMessages -> handleRemoveAllFailedMessages()
+            RoomDetailAction.ResendAll -> handleResendAll()
         }.exhaustive
     }
 
@@ -660,10 +662,8 @@ class RoomDetailViewModel @AssistedInject constructor(
             return@withState false
         }
         when (itemId) {
-            R.id.resend_all -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.timeline_setting -> true
             R.id.invite -> state.canInvite
-            R.id.clear_all -> state.asyncRoomSummary()?.hasFailedSending == true
             R.id.open_matrix_apps -> true
             R.id.voice_call,
             R.id.video_call       -> callManager.getCallsByRoomId(state.roomId).isEmpty()
@@ -1223,6 +1223,10 @@ class RoomDetailViewModel @AssistedInject constructor(
         room.resendAllFailedMessages()
     }
 
+    private fun handleRemoveAllFailedMessages() {
+        room.cancelAllFailedMessages()
+    }
+
     private fun observeEventDisplayedActions() {
         // We are buffering scroll events for one second
         // and keep the most recent one to set the read receipt on.
@@ -1437,7 +1441,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             roomSummariesHolder.set(summary)
             setState {
                 val typingMessage = typingHelper.getTypingMessage(summary.typingUsers)
-                copy(typingMessage = typingMessage)
+                copy(typingMessage = typingMessage, hasFailedSending = summary.hasFailedSending)
             }
             if (summary.membership == Membership.INVITE) {
                 summary.inviterId?.let { inviterId ->
