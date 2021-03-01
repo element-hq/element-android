@@ -944,7 +944,7 @@
     <string name="room_widget_permission_user_id">شناسهٔ کاربریتان</string>
     <string name="room_widget_permission_widget_id">شناسهٔ ابزارک</string>
     <string name="room_widget_permission_room_id">شناسهٔ اتاق</string>
-    <string name="error_jitsi_not_supported_on_old_device">متأسّفانه تماس‌های کنفرانسی با جیتسی روی افزاره‌های قدیمی (افزاره‌هایی با سیستم‌عامل اندروید زیر ۵) پشتیبانی نمی‌شود</string>
+    <string name="error_jitsi_not_supported_on_old_device">متأسّفانه تماس‌های کنفرانسی با جیتسی روی دستگاه‌های قدیمی (دستگاه‌هایی با سیستم‌عامل اندروید زیر ۶) پشتیبانی نمی‌شود</string>
     <string name="room_widget_resource_permission_title">این ابزارک می‌خواهد از منابع زیر استفاده کند:</string>
     <string name="room_widget_resource_grant_permission">اجازه</string>
     <string name="room_widget_resource_decline_permission">انسداد همه</string>
@@ -1215,7 +1215,7 @@
     <string name="settings_hs_admin_e2e_disabled">مدیر کارسازتان رمزنگاری سرتاسری پیش‌گزیده را در اتاق‌های خصوصی و پیام‌های مستقیم از کار انداخته است.</string>
     <string name="settings_active_sessions_signout_device">خروج از این نشست</string>
     <string name="crosssigning_verify_this_session">تأیید این ورود</string>
-    <string name="crosssigning_other_user_not_trust">ممکن است دیگر کاربران، به آن اعتماد نکنند</string>
+    <string name="crosssigning_other_user_not_trust">شما در حال حاضر در این تماس هستید</string>
     <string name="complete_security">تکمیل امنیت</string>
     <string name="verification_open_other_to_verify">استفاده از نشستی موجود برای تأییدش که به پیام‌های رمزشده دسترسی می‌دهد.</string>
     <string name="verification_profile_verify">تأیید</string>
@@ -2315,4 +2315,36 @@
     <string name="command_snow">فرستادن پیام داده با برف</string>
     <string name="default_message_emote_confetti">فرستادن کاغذ رنگی 🎉</string>
     <string name="default_message_emote_snow">فرستادن برف ❄️</string>
+    <string name="authentication_error">احراز هویت انجام نشد</string>
+    <string name="re_authentication_default_confirm_text">المنت برای انجام این عمل نیاز دارد که گذواژه‌ی خود را وارد کنید.</string>
+    <string name="re_authentication_activity_title">احراز هویت مجدد مورد نیاز است</string>
+    <string name="call_transfer_users_tab_title">کاربران</string>
+    <string name="call_transfer_failure">هنگام انتقال تماس خطایی روی داد</string>
+    <string name="call_transfer_title">انتقال</string>
+    <string name="call_transfer_connect_action">متصل شوید</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">۱ تماس فعال (%1$s) . ۱ تماس متوقف شده</item>
+        <item quantity="other">۱ تماس فعال (%1$s) . %2$d تماس متوقف شده</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="one">تماس متوقف شده</item>
+        <item quantity="other">%1$d تماس متوقف شده</item>
+    </plurals>
+    <string name="call_only_active">تماس فعال (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">هنگام جستجوی شماره تلفن خطایی روی داد</string>
+    <string name="call_dial_pad_title">‬پد شماره گیری</string>
+    <string name="call_tile_call_back">تماس بگیرید</string>
+    <string name="call_tile_ended">این تماس پایان یافته است</string>
+    <string name="call_tile_other_declined">%1$s تماس را رد کرد</string>
+    <string name="call_tile_you_declined">شما این تماس را رد کردید %1$s</string>
+    <string name="call_tile_in_call">شما در حال حاضر در این تماس هستید</string>
+    <string name="failed_to_initialize_cross_signing">خطا در تنظیم امضای متقابل</string>
+    <string name="call_tile_other_started_call">%1$s یک تماس را شروع کرد</string>
+    <string name="call_tile_you_started_call">شما یک تماس را شروع کردید</string>
+    <string name="call_held_by_you">شما تماس را در حالت انتظار قرار داده‌اید</string>
+    <string name="call_held_by_user">%s تماس را در حالت انتظار قرار داده‌است</string>
+    <string name="call_hold_action">حالت انتظار</string>
+    <string name="call_resume_action">از سرگیری</string>
+    <string name="error_unauthorized">غیر مجاز، اطلاعات هویت‌سنجی موجود نمی‌باشد</string>
+    <string name="action_return">بازگشت</string>
 </resources>
