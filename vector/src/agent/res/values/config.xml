@@ -50,6 +50,16 @@
     <!-- Bug report config -->
     <string name="bug_report_default_host" translatable="false">agent.tchap.gouv.fr</string>
 
+    <!--
+    Pusher config for the application
+    https://matrix.org/docs/spec/client_server/r0.4.0#id128
+    -->
+
+    <!-- Note: pusher_http_url should have path '/_matrix/push/v1/notify' -->
+    <string name="pusher_http_url" translatable="false">https://matrix.org/_matrix/push/v1/notify</string>
+    <!-- Note: pusher_app_id cannot exceed 64 chars -->
+    <string name="pusher_app_id" translatable="false">fr.gouv.tchap.android</string>
+
     <!-- Permalink config -->
     <string name="permalink_prefix" translatable="false">https://tchap.gouv.fr</string>
     <string-array name="permalink_supported_hosts" translatable="false">

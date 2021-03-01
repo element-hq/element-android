@@ -77,8 +77,8 @@ static def gitTag() {
     return cmd.execute().text.trim()
 }
 
-// For F-Droid build, build on a not tagged commit will have a "-dev" suffix
-static def getFdroidVersionSuffix() {
+// For Tchap build, build on a not tagged commit will have a "-dev" suffix
+static def getTchapVersionSuffix() {
     if (gitTag() == "") {
         return "-dev"
     } else {
@@ -271,32 +271,25 @@ android {
             dimension "pinning"
         }
 
-        // Note: we cannot use reserved word protected, so typo the word
         secure {
             dimension "target"
 
             applicationId "fr.gouv.tchap"
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}"
-
-            buildConfigField "String", "DEFAULT_PUSHER_APP_ID", "\"fr.gouv.tchap.android\""
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}"
         }
 
         preprod {
             dimension "target"
 
             applicationId "fr.gouv.rie.tchap"
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}" + "_b"
-
-            buildConfigField "String", "DEFAULT_PUSHER_APP_ID", "\"fr.gouv.rie.tchap.android\""
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_b"
         }
 
         agent {
             dimension "target"
 
             applicationId "fr.gouv.tchap.a"
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}" + "_a"
-
-            buildConfigField "String", "DEFAULT_PUSHER_APP_ID", "\"fr.gouv.tchap.a.android\""
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}${getTchapVersionSuffix()}" + "_a"
         }
     }
 
