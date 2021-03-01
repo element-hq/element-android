@@ -58,7 +58,7 @@
     <!-- Note: pusher_http_url should have path '/_matrix/push/v1/notify' -->
     <string name="pusher_http_url" translatable="false">https://matrix.org/_matrix/push/v1/notify</string>
     <!-- Note: pusher_app_id cannot exceed 64 chars -->
-    <string name="pusher_app_id" translatable="false">fr.gouv.tchap.android</string>
+    <string name="pusher_app_id" translatable="false">fr.gouv.tchap.a.android</string>
 
     <!-- Permalink config -->
     <string name="permalink_prefix" translatable="false">https://tchap.gouv.fr</string>
