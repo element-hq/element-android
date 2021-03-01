@@ -58,6 +58,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
 import im.vector.app.push.fcm.FcmHelper
+import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -116,6 +117,11 @@ class VectorApplication :
         vectorComponent.inject(this)
         vectorUncaughtExceptionHandler.activate(this)
         rxConfig.setupRxPlugin()
+
+        // Remove Log handler statically added by Jitsi
+        Timber.forest()
+                .filterIsInstance(JitsiMeetDefaultLogHandler::class.java)
+                .forEach { Timber.uproot(it) }
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())

@@ -133,6 +133,7 @@
     <string name="action_close">Close</string>
     <string name="action_copy">Copy</string>
     <string name="action_add">Add</string>
+    <string name="action_switch">Switch</string>
     <string name="action_unpublish">Unpublish</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
@@ -1318,6 +1319,8 @@
 
 
     <string name="error_jitsi_not_supported_on_old_device">Sorry, conference calls with Jitsi are not supported on old devices (devices with Android OS below 6.0)</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Leave the current conference and switch to the other one?</string>
+
     <string name="room_widget_resource_permission_title">This widget wants to use the following resources:</string>
     <string name="room_widget_resource_grant_permission">Allow</string>
     <string name="room_widget_resource_decline_permission">Block All</string>
