@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponse
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
+import org.matrix.android.sdk.internal.crypto.verification.toState
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntity
@@ -50,25 +51,6 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import timber.log.Timber
 import javax.inject.Inject
-
-fun VerificationState.isCanceled(): Boolean {
-    return this == VerificationState.CANCELED_BY_ME || this == VerificationState.CANCELED_BY_OTHER
-}
-
-// State transition with control
-private fun VerificationState?.toState(newState: VerificationState): VerificationState {
-    // Cancel is always prioritary ?
-    // Eg id i found that mac or keys mismatch and send a cancel and the other send a done, i have to
-    // consider as canceled
-    if (newState.isCanceled()) {
-        return newState
-    }
-    // never move out of cancel
-    if (this?.isCanceled() == true) {
-        return this
-    }
-    return newState
-}
 
 internal class EventRelationsAggregationProcessor @Inject constructor(@UserId private val userId: String)
     : EventInsertLiveProcessor {

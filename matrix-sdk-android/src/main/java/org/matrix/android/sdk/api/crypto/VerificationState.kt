@@ -23,3 +23,7 @@ enum class VerificationState {
     CANCELED_BY_OTHER,
     DONE
 }
+
+fun VerificationState.isCanceled(): Boolean {
+    return this == VerificationState.CANCELED_BY_ME || this == VerificationState.CANCELED_BY_OTHER
+}
