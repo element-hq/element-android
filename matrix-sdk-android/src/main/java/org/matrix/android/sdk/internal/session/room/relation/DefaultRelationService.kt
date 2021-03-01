@@ -159,7 +159,7 @@ internal class DefaultRelationService @AssistedInject constructor(
 
     override fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary? {
         return monarchy.fetchCopyMap(
-                { EventAnnotationsSummaryEntity.where(it, eventId).findFirst() },
+                { EventAnnotationsSummaryEntity.where(it, roomId, eventId).findFirst() },
                 { entity, _ ->
                     entity.asDomain()
                 }
@@ -168,7 +168,7 @@ internal class DefaultRelationService @AssistedInject constructor(
 
     override fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { EventAnnotationsSummaryEntity.where(it, eventId) },
+                { EventAnnotationsSummaryEntity.where(it, roomId, eventId) },
                 { it.asDomain() }
         )
         return Transformations.map(liveData) { results ->

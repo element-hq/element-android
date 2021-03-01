@@ -97,7 +97,7 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
         this.root = eventEntity
         this.eventId = eventId
         this.roomId = roomId
-        this.annotations = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
+        this.annotations = EventAnnotationsSummaryEntity.where(realm, roomId, eventId).findFirst()
         this.readReceipts = readReceiptsSummaryEntity
         this.displayIndex = displayIndex
         val roomMemberContent = roomMemberContentsByUser[senderId]

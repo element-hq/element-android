@@ -93,13 +93,11 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                         Timber.v("###REACTION Agreggation in room $roomId for event ${event.eventId}")
                         handleInitialAggregatedRelations(event, roomId, event.unsignedData.relations.annotations, realm)
 
-                        EventAnnotationsSummaryEntity.where(realm, event.eventId
-                                ?: "").findFirst()?.let {
-                            TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId
-                                    ?: "").findFirst()?.let { tet ->
-                                tet.annotations = it
-                            }
-                        }
+                        EventAnnotationsSummaryEntity.where(realm, roomId, event.eventId ?: "").findFirst()
+                                ?.let {
+                                    TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId ?: "").findFirst()
+                                            ?.let { tet -> tet.annotations = it }
+                                }
                     }
 
                     val content: MessageContent? = event.content.toModel()
@@ -281,7 +279,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
         val eventTimestamp = event.originServerTs ?: return
 
         // ok, this is a poll response
-        var existing = EventAnnotationsSummaryEntity.where(realm, targetEventId).findFirst()
+        var existing = EventAnnotationsSummaryEntity.where(realm, roomId, targetEventId).findFirst()
         if (existing == null) {
             Timber.v("## POLL creating new relation summary for $targetEventId")
             existing = EventAnnotationsSummaryEntity.create(realm, roomId, targetEventId)
@@ -361,7 +359,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
             aggregation.chunk?.forEach {
                 if (it.type == EventType.REACTION) {
                     val eventId = event.eventId ?: ""
-                    val existing = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
+                    val existing = EventAnnotationsSummaryEntity.where(realm, roomId, eventId).findFirst()
                     if (existing == null) {
                         val eventSummary = EventAnnotationsSummaryEntity.create(realm, roomId, eventId)
                         val sum = realm.createObject(ReactionAggregatedSummaryEntity::class.java)
@@ -445,7 +443,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
      */
     private fun handleRedactionOfReplace(redacted: EventEntity, relatedEventId: String, realm: Realm) {
         Timber.d("Handle redaction of m.replace")
-        val eventSummary = EventAnnotationsSummaryEntity.where(realm, relatedEventId).findFirst()
+        val eventSummary = EventAnnotationsSummaryEntity.where(realm, redacted.roomId, relatedEventId).findFirst()
         if (eventSummary == null) {
             Timber.w("Redaction of a replace targeting an unknown event $relatedEventId")
             return
@@ -475,16 +473,15 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
         }
     }
 
-    fun handleReactionRedact(eventToPrune: EventEntity, realm: Realm, userId: String) {
+    private fun handleReactionRedact(eventToPrune: EventEntity, realm: Realm, userId: String) {
         Timber.v("REDACTION of reaction ${eventToPrune.eventId}")
         // delete a reaction, need to update the annotation summary if any
-        val reactionContent: ReactionContent = EventMapper.map(eventToPrune).content.toModel()
-                ?: return
+        val reactionContent: ReactionContent = EventMapper.map(eventToPrune).content.toModel() ?: return
         val eventThatWasReacted = reactionContent.relatesTo?.eventId ?: return
 
         val reactionKey = reactionContent.relatesTo.key
         Timber.v("REMOVE reaction for key $reactionKey")
-        val summary = EventAnnotationsSummaryEntity.where(realm, eventThatWasReacted).findFirst()
+        val summary = EventAnnotationsSummaryEntity.where(realm, eventToPrune.roomId, eventThatWasReacted).findFirst()
         if (summary != null) {
             summary.reactionsSummary.where()
                     .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reactionKey)
