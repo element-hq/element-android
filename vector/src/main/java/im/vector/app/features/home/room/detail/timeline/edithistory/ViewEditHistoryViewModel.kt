@@ -99,7 +99,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
                     }
                 }
 
-                if (event.eventId == event.eventId) {
+                if (event.eventId == eventId) {
                     originalIsReply = event.isReply()
                 }
             }
