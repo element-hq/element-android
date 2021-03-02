@@ -81,7 +81,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
 
             var originalIsReply = false
 
-            val events = data.map { event ->
+            data.forEach { event ->
                 val timelineID = event.roomId + UUID.randomUUID().toString()
                 // We need to check encryption
                 if (event.isEncrypted() && event.mxDecryptionResult == null) {
@@ -105,7 +105,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
             }
             setState {
                 copy(
-                        editList = Success(events),
+                        editList = Success(data),
                         isOriginalAReply = originalIsReply
                 )
             }
