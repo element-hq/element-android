@@ -56,10 +56,10 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
 
     fun createLocalEcho(event: Event) {
         val roomId = event.roomId ?: throw IllegalStateException("You should have set a roomId for your event")
-        val senderId = event.senderId ?: throw IllegalStateException("You should have set a senderIf for your event")
-        if (event.eventId == null) {
-            throw IllegalStateException("You should have set an eventId for your event")
-        }
+        val senderId = event.senderId ?: throw IllegalStateException("You should have set a senderId for your event")
+        event.eventId ?: throw IllegalStateException("You should have set an eventId for your event")
+        event.type ?: throw IllegalStateException("You should have set a type for your event")
+
         val timelineEventEntity = realmSessionProvider.withRealm { realm ->
             val eventEntity = event.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
             val roomMemberHelper = RoomMemberHelper(realm, roomId)

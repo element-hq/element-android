@@ -50,7 +50,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
                         localId,
                         roomId = event.roomId ?: "",
                         content = event.content,
-                        eventType = event.type
+                        eventType = event.type ?: ""
                 )
             }
             localEchoRepository.updateSendState(localId, event.roomId, SendState.SENT)

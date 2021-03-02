@@ -105,12 +105,17 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
                     ?: realm.createObject(roomId)
             val now = System.currentTimeMillis()
             for (roomMemberEvent in response.roomMemberEvents) {
-                if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null) {
+                if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null || roomMemberEvent.type == null) {
                     continue
                 }
                 val ageLocalTs = roomMemberEvent.unsignedData?.age?.let { now - it }
                 val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
-                CurrentStateEventEntity.getOrCreate(realm, roomId, roomMemberEvent.stateKey, roomMemberEvent.type).apply {
+                CurrentStateEventEntity.getOrCreate(
+                        realm,
+                        roomId,
+                        roomMemberEvent.stateKey,
+                        roomMemberEvent.type
+                ).apply {
                     eventId = roomMemberEvent.eventId
                     root = eventEntity
                 }

@@ -13,6 +13,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Try to fix crash about UrlPreview (#2640)
+ - Be robust if Event.type is missing (#2946)
 
 Translations 🗣:
  -

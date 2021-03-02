@@ -198,7 +198,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         // State event
         if (roomSync.state?.events?.isNotEmpty() == true) {
             for (event in roomSync.state.events) {
-                if (event.eventId == null || event.stateKey == null) {
+                if (event.eventId == null || event.stateKey == null || event.type == null) {
                     continue
                 }
                 val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
@@ -254,7 +254,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
             roomSync.inviteState.events.forEach { event ->
-                if (event.stateKey == null) {
+                if (event.stateKey == null || event.type == null) {
                     return@forEach
                 }
                 val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
@@ -281,7 +281,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                syncLocalTimestampMillis: Long): RoomEntity {
         val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: realm.createObject(roomId)
         for (event in roomSync.state?.events.orEmpty()) {
-            if (event.eventId == null || event.stateKey == null) {
+            if (event.eventId == null || event.stateKey == null || event.type == null) {
                 continue
             }
             val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
@@ -293,7 +293,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             roomMemberEventHandler.handle(realm, roomId, event)
         }
         for (event in roomSync.timeline?.events.orEmpty()) {
-            if (event.eventId == null || event.senderId == null) {
+            if (event.eventId == null || event.senderId == null || event.type == null) {
                 continue
             }
             val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
@@ -340,7 +340,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
         for (event in eventList) {
-            if (event.eventId == null || event.senderId == null) {
+            if (event.eventId == null || event.senderId == null || event.type == null) {
                 continue
             }
             eventIds.add(event.eventId)
