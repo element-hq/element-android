@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Do not allow clearText traffic -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+            <!-- Give access to the user certificate, as per default behaviour when targeting API 23 or lower -->
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

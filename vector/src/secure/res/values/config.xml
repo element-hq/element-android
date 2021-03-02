@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="tchap_app_name" translatable="false">Tchap</string>
+    <color name="padlock_icon_tint_color">@color/tchap_dark_red</color>
+
+    <!-- Identity server names -->
+    <string-array name="preferred_identity_server_names" translatable="false">
+        <item>culture.tchap.gouv.fr</item>
+        <item>dev-durable.tchap.gouv.fr</item>
+        <item>education.tchap.gouv.fr</item>
+    </string-array>
+
+    <string-array name="identity_server_names" translatable="false">
+        <item>agriculture.tchap.gouv.fr</item>
+        <item>dinum.tchap.gouv.fr</item>
+        <item>diplomatie.tchap.gouv.fr</item>
+        <item>elysee.tchap.gouv.fr</item>
+        <item>finances.tchap.gouv.fr</item>
+        <item>interieur.tchap.gouv.fr</item>
+        <item>intradef.tchap.gouv.fr</item>
+        <item>justice.tchap.gouv.fr</item>
+        <item>pm.tchap.gouv.fr</item>
+        <item>social.tchap.gouv.fr</item>
+        <item>ssi.tchap.gouv.fr</item>
+    </string-array>
+
+    <!-- Default list of federated server names -->
+    <string-array name="room_directory_servers" translatable="false">
+        <item>culture.tchap.gouv.fr</item>
+        <item>dev-durable.tchap.gouv.fr</item>
+        <item>education.tchap.gouv.fr</item>
+
+        <item>agriculture.tchap.gouv.fr</item>
+        <item>dinum.tchap.gouv.fr</item>
+        <item>diplomatie.tchap.gouv.fr</item>
+        <item>elysee.tchap.gouv.fr</item>
+        <item>finances.tchap.gouv.fr</item>
+        <item>interieur.tchap.gouv.fr</item>
+        <item>intradef.tchap.gouv.fr</item>
+        <item>justice.tchap.gouv.fr</item>
+        <item>pm.tchap.gouv.fr</item>
+        <item>social.tchap.gouv.fr</item>
+        <item>ssi.tchap.gouv.fr</item>
+    </string-array>
+
+    <!-- Bug report config -->
+    <string name="bug_report_default_host" translatable="false">education.tchap.gouv.fr</string>
+
+    <!--
+    Pusher config for the application
+    https://matrix.org/docs/spec/client_server/r0.4.0#id128
+    -->
+
+    <!-- Note: pusher_http_url should have path '/_matrix/push/v1/notify' -->
+    <string name="pusher_http_url" translatable="false">https://matrix.org/_matrix/push/v1/notify</string>
+    <!-- Note: pusher_app_id cannot exceed 64 chars -->
+    <string name="pusher_app_id" translatable="false">fr.gouv.tchap.android</string>
+
+    <!-- Permalink config -->
+    <string name="permalink_prefix" translatable="false">https://secure.tchap.gouv.fr</string>
+    <string-array name="permalink_supported_hosts" translatable="false">
+        <item>secure.tchap.gouv.fr</item>
+    </string-array>
+
+    <!-- server urls -->
+    <string name="default_stun_server" translatable="false">turn.matrix.org</string>
+
+    <!-- Widget urls
+    <string name="integrations_ui_url" translatable="false">"https://scalar.vector.im/"</string>
+    <string name="integrations_rest_url" translatable="false">"https://scalar.vector.im/api"</string>
+    <string name="integrations_jitsi_widget_url" translatable="false">"https://scalar.vector.im/api/widgets/jitsi.html"</string>
+
+    <string-array name="integrations_widgets_urls" translatable="false">
+        <item>https://scalar.vector.im/_matrix/integrations/v1</item>
+        <item>https://scalar.vector.im/api</item>
+        <item>https://scalar-staging.vector.im/_matrix/integrations/v1</item>
+        <item>https://scalar-staging.vector.im/api</item>
+        <item>https://scalar-staging.riot.im/scalar/api</item>
+    </string-array> -->
+
+</resources>
