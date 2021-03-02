@@ -142,7 +142,6 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 .addField(EditionOfEventFields.TIMESTAMP, Long::class.java)
                 .addField(EditionOfEventFields.IS_LOCAL_ECHO, Boolean::class.java)
 
-
         realm.schema.get("EditAggregatedSummaryEntity")
                 ?.removeField("aggregatedContent")
                 ?.removeField("sourceEvents")

@@ -33,4 +33,3 @@ internal fun VerificationState?.toState(newState: VerificationState): Verificati
     }
     return newState
 }
-

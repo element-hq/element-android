@@ -448,7 +448,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
             Timber.w("Redaction of a replace targeting an unknown event $relatedEventId")
             return
         }
-        val sourceToDiscard = eventSummary.editSummary?.editions?.firstOrNull {it.eventId == redacted.eventId }
+        val sourceToDiscard = eventSummary.editSummary?.editions?.firstOrNull { it.eventId == redacted.eventId }
         if (sourceToDiscard == null) {
             Timber.w("Redaction of a replace that was not known in aggregation $sourceToDiscard")
             return

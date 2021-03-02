@@ -16,7 +16,6 @@
 package org.matrix.android.sdk.api.session.room.model.relation
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
