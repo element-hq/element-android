@@ -58,7 +58,7 @@ internal class DefaultSendEventTask @Inject constructor(
                         localId,
                         roomId = event.roomId ?: "",
                         content = event.content,
-                        eventType = event.type
+                        eventType = event.type ?: ""
                 )
             }
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENT)
