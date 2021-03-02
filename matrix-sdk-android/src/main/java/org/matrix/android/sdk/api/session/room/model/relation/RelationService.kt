@@ -93,7 +93,7 @@ interface RelationService {
     /**
      * Get the edit history of the given event
      */
-    fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>)
+    suspend fun fetchEditHistory(eventId: String): List<Event>
 
     /**
      * Reply to an event in the timeline (must be in same room)

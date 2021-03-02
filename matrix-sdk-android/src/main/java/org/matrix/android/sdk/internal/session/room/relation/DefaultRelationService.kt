@@ -140,13 +140,8 @@ internal class DefaultRelationService @AssistedInject constructor(
         return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 
-    override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
-        val params = FetchEditHistoryTask.Params(roomId, eventId)
-        fetchEditHistoryTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun fetchEditHistory(eventId: String): List<Event> {
+        return fetchEditHistoryTask.execute(FetchEditHistoryTask.Params(roomId, eventId))
     }
 
     override fun replyToMessage(eventReplied: TimelineEvent, replyText: CharSequence, autoMarkdown: Boolean): Cancelable? {
