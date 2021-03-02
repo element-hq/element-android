@@ -49,11 +49,11 @@ internal class DefaultFetchEditHistoryTask @Inject constructor(
             )
         }
 
-        // Filter out edition form other users
+        // Filter out edition form other users, and redacted editions
         val originalSenderId = response.originalEvent?.senderId
-        val events = response.chunks.filter {
-            it.senderId == originalSenderId
-        }
+        val events = response.chunks
+                .filter { it.senderId == originalSenderId }
+                .filter { !it.isRedacted() }
         return events + listOfNotNull(response.originalEvent)
     }
 }
