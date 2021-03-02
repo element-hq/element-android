@@ -36,17 +36,18 @@ internal object EventAnnotationsSummaryMapper {
                             it.sourceLocalEcho.toList()
                     )
                 },
-                editSummary = annotationsSummary.editSummary?.let {
-                    val latestEdition = it.editions.maxByOrNull { editionOfEvent -> editionOfEvent.timestamp }
-                    EditAggregatedSummary(
-                            ContentMapper.map(latestEdition?.content),
-                            it.editions.filter { editionOfEvent -> !editionOfEvent.isLocalEcho }
-                                    .map { editionOfEvent -> editionOfEvent.eventId },
-                            it.editions.filter { editionOfEvent -> editionOfEvent.isLocalEcho }
-                                    .map { editionOfEvent -> editionOfEvent.eventId },
-                            latestEdition?.timestamp ?: 0L
-                    )
-                },
+                editSummary = annotationsSummary.editSummary
+                        ?.let {
+                            val latestEdition = it.editions.maxByOrNull { editionOfEvent -> editionOfEvent.timestamp } ?: return@let null
+                            EditAggregatedSummary(
+                                    aggregatedContent = ContentMapper.map(latestEdition.content),
+                                    sourceEvents = it.editions.filter { editionOfEvent -> !editionOfEvent.isLocalEcho }
+                                            .map { editionOfEvent -> editionOfEvent.eventId },
+                                    localEchos = it.editions.filter { editionOfEvent -> editionOfEvent.isLocalEcho }
+                                            .map { editionOfEvent -> editionOfEvent.eventId },
+                                    lastEditTs = latestEdition.timestamp
+                            )
+                        },
                 referencesAggregatedSummary = annotationsSummary.referencesSummaryEntity?.let {
                     ReferencesAggregatedSummary(
                             it.eventId,
