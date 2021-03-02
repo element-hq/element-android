@@ -195,11 +195,11 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun prepareForEncryption() {
-        // check if there is not already a call made
-        if (prepareToEncrypt !is Loading) {
+        // check if there is not already a call made, or if there has been an error
+        if (prepareToEncrypt.shouldLoad) {
             prepareToEncrypt = Loading()
             viewModelScope.launch {
-                kotlin.runCatching {
+                runCatching {
                     room.prepareToEncrypt()
                 }.fold({
                     prepareToEncrypt = Success(Unit)
@@ -629,8 +629,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             if (action.focused) {
                 // Should we add some rate limit here, or do it only once per model lifecycle?
                 prepareForEncryption()
-            } else {
-                // we could eventually cancel here :/
             }
         }
     }

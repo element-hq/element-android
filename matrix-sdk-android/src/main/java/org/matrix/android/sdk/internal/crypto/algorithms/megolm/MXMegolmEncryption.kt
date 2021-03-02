@@ -18,8 +18,6 @@ package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -40,8 +38,6 @@ import org.matrix.android.sdk.internal.crypto.model.forEach
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.convertToUTF8
@@ -55,11 +51,11 @@ internal class MXMegolmEncryption(
         private val cryptoStore: IMXCryptoStore,
         private val deviceListManager: DeviceListManager,
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
-        private val credentials: Credentials,
+        private val userId: String,
+        private val deviceId: String,
         private val sendToDeviceTask: SendToDeviceTask,
         private val messageEncrypter: MessageEncrypter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
-        private val taskExecutor: TaskExecutor,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope
 ) : IMXEncrypting, IMXGroupEncryption {
@@ -282,7 +278,7 @@ internal class MXMegolmEncryption(
                 gossipingEventBuffer.add(
                         Event(
                         type = EventType.ROOM_KEY,
-                        senderId = credentials.userId,
+                        senderId = this.userId,
                         content = submap.apply {
                             this["session_key"] = ""
                             // we add a fake key for trail
@@ -310,8 +306,11 @@ internal class MXMegolmEncryption(
         }
     }
 
-    private fun notifyKeyWithHeld(targets: List<UserDevice>, sessionId: String, senderKey: String?, code: WithHeldCode) {
-        Timber.i("## CRYPTO | notifyKeyWithHeld() :sending withheld key for $targets session:$sessionId and code $code ")
+    private suspend fun notifyKeyWithHeld(targets: List<UserDevice>,
+                                          sessionId: String,
+                                          senderKey: String?,
+                                          code: WithHeldCode) {
+        Timber.i("## CRYPTO | notifyKeyWithHeld() :sending withheld key for $targets session:$sessionId and code $code")
         val withHeldContent = RoomKeyWithHeldContent(
                 roomId = roomId,
                 senderKey = senderKey,
@@ -327,13 +326,11 @@ internal class MXMegolmEncryption(
                     }
                 }
         )
-        sendToDeviceTask.configureWith(params) {
-            callback = object : MatrixCallback<Unit> {
-                override fun onFailure(failure: Throwable) {
-                    Timber.e("## CRYPTO | notifyKeyWithHeld() : Failed to notify withheld key for $targets session: $sessionId ")
-                }
-            }
-        }.executeBy(taskExecutor)
+        try {
+            sendToDeviceTask.execute(params)
+        } catch (failure: Throwable) {
+            Timber.e("## CRYPTO | notifyKeyWithHeld() : Failed to notify withheld key for $targets session: $sessionId ")
+        }
     }
 
     /**
@@ -359,7 +356,7 @@ internal class MXMegolmEncryption(
 
         // Include our device ID so that recipients can send us a
         // m.new_device message if they don't have our session key.
-        map["device_id"] = credentials.deviceId!!
+        map["device_id"] = deviceId
         session.useCount++
         return map
     }

@@ -33,7 +33,6 @@ interface RoomCryptoService {
 
     /**
      * Ensures all members of the room are loaded and outbound session keys are shared.
-     * Call this method according to [OutboundSessionKeySharingStrategy].
      * If this method is not called, CryptoService will ensure it before sending events.
      */
     suspend fun prepareToEncrypt()
