@@ -92,6 +92,9 @@ interface RelationService {
 
     /**
      * Get the edit history of the given event
+     * The return list will contain the original event and all the editions of this event, done by the
+     * same sender, sorted in the reverse order (so the original event is the latest element, and the
+     * latest edition is the first element of the list)
      */
     suspend fun fetchEditHistory(eventId: String): List<Event>
 

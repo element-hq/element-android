@@ -49,8 +49,11 @@ internal class DefaultFetchEditHistoryTask @Inject constructor(
             )
         }
 
-        val events = response.chunks.toMutableList()
-        response.originalEvent?.let { events.add(it) }
-        return events
+        // Filter out edition form other users
+        val originalSenderId = response.originalEvent?.senderId
+        val events = response.chunks.filter {
+            it.senderId == originalSenderId
+        }
+        return events + listOfNotNull(response.originalEvent)
     }
 }
