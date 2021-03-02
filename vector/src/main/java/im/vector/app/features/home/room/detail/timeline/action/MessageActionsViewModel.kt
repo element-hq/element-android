@@ -229,8 +229,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun actionsForEvent(timelineEvent: TimelineEvent, actionPermissions: ActionPermissions): List<EventSharedAction> {
-        val messageContent: MessageContent? = timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                ?: timelineEvent.root.getClearContent().toModel()
+        val messageContent = timelineEvent.getLastMessageContent()
         val msgType = messageContent?.msgType
 
         return arrayListOf<EventSharedAction>().apply {

@@ -123,8 +123,7 @@ fun TimelineEvent.getLastMessageContent(): MessageContent? {
     return if (root.getClearType() == EventType.STICKER) {
         root.getClearContent().toModel<MessageStickerContent>()
     } else {
-        annotations?.editSummary?.aggregatedContent?.toModel()
-                ?: root.getClearContent().toModel()
+        (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
     }
 }
 

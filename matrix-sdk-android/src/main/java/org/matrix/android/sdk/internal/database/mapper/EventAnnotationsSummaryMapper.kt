@@ -40,7 +40,7 @@ internal object EventAnnotationsSummaryMapper {
                         ?.let {
                             val latestEdition = it.editions.maxByOrNull { editionOfEvent -> editionOfEvent.timestamp } ?: return@let null
                             EditAggregatedSummary(
-                                    aggregatedContent = ContentMapper.map(latestEdition.content),
+                                    latestContent = ContentMapper.map(latestEdition.content),
                                     sourceEvents = it.editions.filter { editionOfEvent -> !editionOfEvent.isLocalEcho }
                                             .map { editionOfEvent -> editionOfEvent.eventId },
                                     localEchos = it.editions.filter { editionOfEvent -> editionOfEvent.isLocalEcho }

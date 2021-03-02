@@ -89,6 +89,7 @@ import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -785,9 +786,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                             room.editReply(state.sendMode.timelineEvent, it, action.text.toString())
                         }
                     } else {
-                        val messageContent: MessageContent? =
-                                state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                        ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                        val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
                         val existingBody = messageContent?.body ?: ""
                         if (existingBody != action.text) {
                             room.editTextMessage(state.sendMode.timelineEvent.root.eventId ?: "",
@@ -802,9 +801,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                     popDraft()
                 }
                 is SendMode.QUOTE -> {
-                    val messageContent: MessageContent? =
-                            state.sendMode.timelineEvent.annotations?.editSummary?.aggregatedContent.toModel()
-                                    ?: state.sendMode.timelineEvent.root.getClearContent().toModel()
+                    val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
                     val textMsg = messageContent?.body
 
                     val finalText = legacyRiotQuoteText(textMsg, action.text.toString())
