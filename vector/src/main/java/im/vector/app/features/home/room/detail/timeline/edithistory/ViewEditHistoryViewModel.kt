@@ -83,26 +83,24 @@ class ViewEditHistoryViewModel @AssistedInject constructor(@Assisted
 
             val events = data.map { event ->
                 val timelineID = event.roomId + UUID.randomUUID().toString()
-                event.also {
-                    // We need to check encryption
-                    if (it.isEncrypted() && it.mxDecryptionResult == null) {
-                        // for now decrypt sync
-                        try {
-                            val result = session.cryptoService().decryptEvent(it, timelineID)
-                            it.mxDecryptionResult = OlmDecryptionResult(
-                                    payload = result.clearEvent,
-                                    senderKey = result.senderCurve25519Key,
-                                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                            )
-                        } catch (e: MXCryptoError) {
-                            Timber.w("Failed to decrypt event in history")
-                        }
+                // We need to check encryption
+                if (event.isEncrypted() && event.mxDecryptionResult == null) {
+                    // for now decrypt sync
+                    try {
+                        val result = session.cryptoService().decryptEvent(event, timelineID)
+                        event.mxDecryptionResult = OlmDecryptionResult(
+                                payload = result.clearEvent,
+                                senderKey = result.senderCurve25519Key,
+                                keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                        )
+                    } catch (e: MXCryptoError) {
+                        Timber.w("Failed to decrypt event in history")
                     }
+                }
 
-                    if (event.eventId == it.eventId) {
-                        originalIsReply = it.isReply()
-                    }
+                if (event.eventId == event.eventId) {
+                    originalIsReply = event.isReply()
                 }
             }
             setState {
