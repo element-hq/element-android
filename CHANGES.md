@@ -9,6 +9,7 @@ Improvements 🙌:
  - Fetch homeserver type and version and display in a new setting screen and add info in rageshakes (#2831)
  - Improve initial sync performance (#983)
  - PIP support for Jitsi call (#2418)
+ - Add tooltip for room quick actions
 
 Bugfix 🐛:
  - Try to fix crash about UrlPreview (#2640)
