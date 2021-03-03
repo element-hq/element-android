@@ -47,7 +47,6 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.internal.util.awaitCallback
-import timber.log.Timber
 
 class MatrixToBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: MatrixToBottomSheetState,
@@ -118,7 +117,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     }
                             ?.getOrNull()
                             ?.roomId?.let {
-                                session.getRoom(permalinkData.roomIdOrAlias)
+                                session.getRoom(it)
                             }
                 } else {
                     session.getRoom(permalinkData.roomIdOrAlias)
@@ -142,7 +141,6 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                         )
                     }
                 } else {
-
                     val result = when (val peekResult = tryOrNull { resolveRoom(permalinkData.roomIdOrAlias) }) {
                         is PeekResult.Success           -> {
                             RoomInfoResult.FullInfo(
@@ -163,7 +161,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                             )
                         }
                         PeekResult.UnknownAlias         -> {
-                            RoomInfoResult.NotFound
+                            RoomInfoResult.UnknownAlias(permalinkData.roomIdOrAlias)
                         }
                         null                            -> {
                             RoomInfoResult.PartialInfo(
@@ -201,12 +199,9 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
      * main thing is trying to see if it's a space or a room
      */
     private suspend fun resolveRoom(roomIdOrAlias: String): PeekResult {
-        return tryOrNull { // this should not throw as it returns a result, but better be safe
-            awaitCallback {
-                session.peekRoom(roomIdOrAlias, it)
-            }
+        return awaitCallback {
+            session.peekRoom(roomIdOrAlias, it)
         }
-                ?: PeekResult.PeekingNotAllowed(roomIdOrAlias, null, emptyList())
     }
 
     companion object : MvRxViewModelFactory<MatrixToBottomSheetViewModel, MatrixToBottomSheetState> {
@@ -258,7 +253,6 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     copy(startChattingState = Uninitialized)
                 }
             }
-
         }
     }
 
@@ -280,7 +274,6 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                     copy(startChattingState = Uninitialized)
                 }
             }
-
         }
     }
 
