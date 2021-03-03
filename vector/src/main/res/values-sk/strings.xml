@@ -56,8 +56,7 @@
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="one">%1$s a 1 ďalší</item>
         <item quantity="few">%1$s a %2$d ďalší</item>
-        <item quantity="many">%1$s a %2$d ďalších</item>
-        <item quantity="other"/>
+        <item quantity="other">%1$s a %2$d ďalších</item>
     </plurals>
     <string name="notice_room_update">%s aktualizoval/a túto miestnosť.</string>
     <string name="notice_event_redacted">Odstránená správa</string>
