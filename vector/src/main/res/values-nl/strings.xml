@@ -213,7 +213,7 @@
     <string name="local_address_book_header">Lokale contactenlijst</string>
     <string name="matrix_only_filter">Alleen Matrix-contacten</string>
     <string name="no_conversation_placeholder">Geen gesprekken</string>
-    <string name="no_contact_access_placeholder">U heeft Element geen toegang tot uw lokale contacten gegeven</string>
+    <string name="template_no_contact_access_placeholder">U heeft ${app_name} geen toegang tot uw lokale contacten gegeven</string>
     <string name="no_result_placeholder">Geen resultaten</string>
     <!-- Rooms fragment -->
     <string name="rooms_header">Gesprekken</string>
@@ -353,22 +353,22 @@
     <string name="media_picker_cannot_record_video">Kan geen video opnemen"</string>
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Informatie</string>
-    <string name="permissions_rationale_msg_storage">Element heeft toegang nodig tot uw mediabestanden om bijlagen te verzenden en op te slaan.
+    <string name="template_permissions_rationale_msg_storage">${app_name} heeft toegang nodig tot uw mediabestanden om bijlagen te verzenden en op te slaan.
 \n
 \nVerleen toegang op de volgende pop-up om bestanden vanaf uw telefoon te sturen.</string>
-    <string name="permissions_rationale_msg_camera">Element heeft toegang nodig tot uw camera om foto’s en video-oproepen te maken.</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} heeft toegang nodig tot uw camera om foto’s en video-oproepen te maken.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nVerleen toegang op de volgende pop-up om de oproep te maken."</string>
-    <string name="permissions_rationale_msg_record_audio">Element heeft toegang nodig tot uw microfoon om spraakoproepen te maken.</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} heeft toegang nodig tot uw microfoon om spraakoproepen te maken.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nVerleen toegang op de volgende pop-up om de oproep te maken."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element heeft toegang nodig tot uw camera en microfoon om video-oproepen te maken.
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} heeft toegang nodig tot uw camera en microfoon om video-oproepen te maken.
 \n
 \nVerleen toegang op de volgende pop-ups om de oproep te maken.</string>
-    <string name="permissions_rationale_msg_contacts">Element kan uw adresboek benaderen om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers. Als u het goed vindt om uw adresboek hiervoor te delen, verleen dan toegang op de volgende pop-up.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element kan uw adresboek gebruiken om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
+    <string name="template_permissions_rationale_msg_contacts">${app_name} kan uw adresboek benaderen om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers. Als u het goed vindt om uw adresboek hiervoor te delen, verleen dan toegang op de volgende pop-up.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} kan uw adresboek gebruiken om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
 \n 
 \nWilt u uw adresboek hiervoor delen\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Sorry. De actie is niet toegepast vanwege ontbrekende rechten</string>
@@ -901,12 +901,12 @@
     <string name="settings_deactivate_account_section">Account deactiveren</string>
     <string name="settings_deactivate_my_account">Mijn account deactiveren</string>
     <string name="startup_notification_privacy_title">Meldingsprivacy</string>
-    <string name="startup_notification_privacy_message">Element kan op de achtergrond werken om uw meldingen veilig en privé te beheren. Dit beïnvloedt mogelijk het accuverbruik.</string>
+    <string name="template_startup_notification_privacy_message">${app_name} kan op de achtergrond werken om uw meldingen veilig en privé te beheren. Dit beïnvloedt mogelijk het accuverbruik.</string>
     <string name="startup_notification_privacy_button_grant">Toestemming verlenen</string>
     <string name="startup_notification_privacy_button_other">Kies een andere optie</string>
     <string name="settings_opt_in_of_analytics">Statistische gegevens (analytics) versturen</string>
-    <string name="settings_opt_in_of_analytics_summary">Element verzamelt anonieme statistische gegevens (analytics) om het voor ons mogelijk te maken om de app te verbeteren.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Schakel statistische gegevens in om ons te helpen bij het verbeteren van Element.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} verzamelt anonieme statistische gegevens (analytics) om het voor ons mogelijk te maken om de app te verbeteren.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Schakel statistische gegevens in om ons te helpen bij het verbeteren van ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, ik wil helpen!</string>
     <string name="widget_integration_missing_parameter">Er ontbreekt een vereiste parameter.</string>
     <string name="widget_integration_invalid_parameter">Er is een parameter ongeldig.</string>
@@ -927,7 +927,7 @@
     <string name="e2e_re_request_encryption_key">Beveiligingssleutels van uw sessies <u>opnieuw aanvragen</u>.</string>
     <string name="e2e_re_request_encryption_key_sent">Sleutelaanvraag verstuurd.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Aanvraag verstuurd</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Start Element op een ander apparaat dat het bericht kan ontsleutelen, zodat het de sleutels naar deze sessie kan sturen.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Start ${app_name} op een ander apparaat dat het bericht kan ontsleutelen, zodat het de sleutels naar deze sessie kan sturen.</string>
     <string name="lock_screen_hint">Typ hier…</string>
     <string name="clear">Wissen</string>
     <string name="option_send_voice">Spraakbericht versturen</string>
@@ -1007,7 +1007,7 @@
     <string name="accept">Aanvaarden</string>
     <string name="auth_accept_policies">Gelieve het beleid van deze thuisserver te lezen en aanvaarden:</string>
     <string name="settings_call_category">Oproepen</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Gebruik de standaardbeltoon van Element voor inkomende oproepen</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Gebruik de standaardbeltoon van ${app_name} voor inkomende oproepen</string>
     <string name="settings_call_ringtone_title">Beltoon voor inkomende oproepen</string>
     <string name="settings_call_ringtone_dialog_title">Selecteer beltoon voor oproepen:</string>
     <string name="room_participants_action_kick">Eruit sturen</string>
@@ -1069,8 +1069,8 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Inschakelen</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sessie-instellingen.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Meldingen zijn ingeschakeld voor deze sessie.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Meldingen zijn niet ingeschakeld voor deze sessie. 
-\nGelieve de Element-instellingen te controleren.</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Meldingen zijn niet ingeschakeld voor deze sessie.
+\nGelieve de ${app_name}-instellingen te controleren.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Inschakelen</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Aangepaste instellingen.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Sommige soorten berichten zijn stil (ze geven een geluidsloze melding).</string>
@@ -1079,7 +1079,7 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Instellingen controleren</string>
     <string name="settings_troubleshoot_test_play_services_title">Play-diensten controleren</string>
     <string name="settings_troubleshoot_test_play_services_success">De APK van Google Play Services is beschikbaar en up-to-date.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element maakt gebruikt van Google Play Services om pushberichten af te leveren, maar dit lijkt niet juist geconfigureerd te zijn:
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} maakt gebruikt van Google Play Services om pushberichten af te leveren, maar dit lijkt niet juist geconfigureerd te zijn:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Play-diensten herstellen</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase-bewijs</string>
@@ -1087,12 +1087,12 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Het FCM-bewijs is niet opgehaald:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nDeze fout is onafhankelijk van Element. Volgens Google betekent deze fout dat het apparaat te veel apps heeft geregistreerd met FCM. De fout treedt enkel op ingeval er een enorm aantal apps is, dus zou dit de gemiddelde gebruiker niet mogen hinderen.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nDeze fout is onafhankelijk van Element. Ze kan verschillende oorzaken hebben. Misschien werkt het als u het later opnieuw probeert. U kunt ook controleren of het gegevensverbruik van Google Play Services niet wordt beperkt in de systeeminstellingen, of dat de klok van uw apparaat wel juist staat, of dat het misschien aan een aangepaste ROM ligt.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nDeze fout is onafhankelijk van Element. Er is geen Google-account verbonden met de telefoon. Open het accountbeheer en voeg er een Google-account toe.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nDeze fout is onafhankelijk van ${app_name}. Volgens Google betekent deze fout dat het apparaat te veel apps heeft geregistreerd met FCM. De fout treedt enkel op ingeval er een enorm aantal apps is, dus zou dit de gemiddelde gebruiker niet mogen hinderen.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nDeze fout is onafhankelijk van ${app_name}. Ze kan verschillende oorzaken hebben. Misschien werkt het als u het later opnieuw probeert. U kunt ook controleren of het gegevensverbruik van Google Play Services niet wordt beperkt in de systeeminstellingen, of dat de klok van uw apparaat wel juist staat, of dat het misschien aan een aangepaste ROM ligt.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nDeze fout is onafhankelijk van ${app_name}. Er is geen Google-account verbonden met de telefoon. Open het accountbeheer en voeg er een Google-account toe.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Account toevoegen</string>
     <string name="settings_troubleshoot_test_token_registration_title">Bewijsregistratie</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM-bewijs geregistreerd bij thuisserver.</string>
@@ -1108,17 +1108,17 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Dienst is niet herstart</string>
     <string name="settings_troubleshoot_test_service_boot_title">Starten bij opstarten van apparaat</string>
     <string name="settings_troubleshoot_test_service_boot_success">De dienst zal starten wanneer het apparaat wordt herstart.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">De dienst zal niet starten wanneer het apparaat wordt herstart en u zult geen meldingen ontvangen tot u Element hebt geopend.</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">De dienst zal niet starten wanneer het apparaat wordt herstart en u zult geen meldingen ontvangen tot u ${app_name} hebt geopend.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Starten bij opstarten inschakelen</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Achtergrondbeperkingen controleren</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Achtergrondbeperkingen zijn uitgeschakeld voor Element. Deze test dient uitgevoerd te worden met een mobiele verbinding (geen wifi).
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Achtergrondbeperkingen zijn uitgeschakeld voor ${app_name}. Deze test dient uitgevoerd te worden met een mobiele verbinding (geen wifi).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Achtergrondbeperkingen zijn ingeschakeld voor Element.
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Achtergrondbeperkingen zijn ingeschakeld voor ${app_name}.
 \nAl wat de app probeert te doen zal in de achtergrond hevig beperkt worden; dit kan het correct functioneren van meldingen beïnvloeden.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Beperkingen uitschakelen</string>
     <string name="settings_troubleshoot_test_battery_title">Accuoptimalisatie</string>
-    <string name="settings_troubleshoot_test_battery_success">Element wordt niet beperkt door accuoptimalisatie.</string>
+    <string name="template_settings_troubleshoot_test_battery_success">${app_name} wordt niet beperkt door accuoptimalisatie.</string>
     <string name="settings_troubleshoot_test_battery_failed">Als een gebruiker een apparaat los van de oplader een tijd laat stilliggen, met het scherm uitgeschakeld, gaat het apparaat in slaapmodus. Dit verhindert apps de toegang tot het netwerk, en stelt hun taken, synchronisaties en standaardalarmen uit.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Optimalisatie negeren</string>
     <string name="settings_notification_privacy_no_background_sync">De app heeft <b>geen</b> verbinding met de homeserver nodig in de achtergrond, dit zou het gebruik van de batterij moeten verlagen</string>
@@ -1130,8 +1130,8 @@
     <string name="settings_send_message_with_enter">Berichten versturen met Enter</string>
     <string name="settings_send_message_with_enter_summary">De Enter-knop van het toetsenbord zal berichten versturen in plaats van een regeleinde in te voegen</string>
     <string name="startup_notification_fdroid_battery_optim_title">Achtergrondverbinding</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element heeft een achtergrondverbinding met lage impact nodig om betrouwbare meldingen te kunnen hebben.
-\nOp het volgende scherm zult u gevraagd worden om Element toestemming te verlenen om altijd in de achtergrond te kunnen draaien, gelieve deze toestemming te verlenen.</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} heeft een achtergrondverbinding met lage impact nodig om betrouwbare meldingen te kunnen hebben.
+\nOp het volgende scherm zult u gevraagd worden om ${app_name} toestemming te verlenen om altijd in de achtergrond te kunnen draaien, gelieve deze toestemming te verlenen.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Toestemming verlenen</string>
     <string name="settings_data_save_mode_summary">Databesparingsmodus past een specifieke filter toe zodat aanwezigheidsupdates en typmeldingen weggefilterd worden.</string>
     <string name="account_email_error">Er is een fout opgetreden bij het verifiëren van uw e-mailadres.</string>
@@ -1190,7 +1190,7 @@
     <string name="passphrase_passphrase_does_not_match">Wachtwoorden komen niet overeen</string>
     <string name="passphrase_empty_error_message">Voer een wachtwoord in</string>
     <string name="passphrase_passphrase_too_weak">Wachtwoord is te zwak</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Verwijder het wachtwoord als u wilt dat Element een herstelsleutel genereert.</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">Verwijder het wachtwoord als u wilt dat ${app_name} een herstelsleutel genereert.</string>
     <string name="keys_backup_no_session_error">Geen Matrix-sessie beschikbaar</string>
     <string name="keys_backup_setup_step1_title">Verlies nooit uw versleutelde berichten</string>
     <string name="keys_backup_setup_step1_description">Berichten in versleutelde gesprekken worden beveiligd met eind-tot-eind-versleuteling. Enkel de ontvanger(s) en u hebben de sleutels om deze berichten te lezen. 
@@ -1296,7 +1296,7 @@
     <string name="keys_backup_info_title_signature">Ondertekening</string>
     <string name="autodiscover_invalid_response">Ongeldig thuisserverontdekkingsantwoord</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveropties automatisch aanvullen</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element heeft een aangepaste serverconfiguratie gedetecteerd voor uw gebruikers-ID-domein ‘%1$s’:
+    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} heeft een aangepaste serverconfiguratie gedetecteerd voor uw gebruikers-ID-domein ‘%1$s’:
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Configuratie gebruiken</string>
     <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 6.0)</string>
@@ -1372,13 +1372,13 @@
     <string name="settings_call_ringtone_use_default_stun_sum">Zal %s gebruiken om te assisteren in het geval dat uw thuisserver er niet over beschikt (uw IP-adres zal tijdens een oproep gedeeld worden)</string>
     <string name="invite_no_identity_server_error">Voeg een identiteitsserver toe in de instellingen om dit te doen.</string>
     <string name="settings_add_3pid_confirm_password_title">Bevestig uw wachtwoord</string>
-    <string name="settings_add_3pid_flow_not_supported">U kunt dit niet doen vanaf de mobiele Element</string>
+    <string name="template_settings_add_3pid_flow_not_supported">U kunt dit niet doen vanaf de mobiele ${app_name}</string>
     <string name="settings_background_fdroid_sync_mode">Synchroniseren op de achtergrond</string>
     <string name="settings_background_fdroid_sync_mode_battery">Geoptimaliseerd voor batterij</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element zal op een batterijzuinige manier synchroniseren op de achtergrond.
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} zal op een batterijzuinige manier synchroniseren op de achtergrond.
 \nAfhankelijk van de staat van uw apparaat kan het besturingssysteem de synchronisatie uitstellen.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Geoptimaliseerd voor snelheid</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element zal periodiek op de achtergrond synchroniseren (configureerbaar).
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} zal periodiek op de achtergrond synchroniseren (configureerbaar).
 \nDit heeft een negatieve impact op uw batterij- en datagebruik. Er zal een melding getoond worden ter informatie.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Geen achtergrondssynchronisatie</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">U zal geen melding van berichten ontvangen als de app zich in de achtergrond bevindt.</string>
@@ -1461,7 +1461,7 @@
     <string name="please_wait">Even wachten…</string>
     <string name="group_all_communities">Alle Gemeenschappen</string>
     <string name="room_preview_no_preview">Dit gesprek kan niet worden voorvertoond</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">De voorvertoning van wereld-leesbare gesprekken zijn nog niet ondersteund in Element</string>
+    <string name="template_room_preview_world_readable_room_not_supported_yet">De voorvertoning van wereld-leesbare gesprekken zijn nog niet ondersteund in ${app_name}</string>
     <string name="fab_menu_create_room">Gesprekken</string>
     <string name="fab_menu_create_chat">Directe Berichten</string>
     <string name="create_room_title">Nieuw Gesprek</string>

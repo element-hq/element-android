@@ -303,7 +303,7 @@
     <string name="local_address_book_header">Vietējā adrešu grāmata</string>
     <string name="matrix_only_filter">Vienīgi Matrix kontakti</string>
     <string name="no_conversation_placeholder">Nav sarunu</string>
-    <string name="no_contact_access_placeholder">Tu neesi atļāvis/usi Element piekļūt taviem vietējiem kontaktiem</string>
+    <string name="template_no_contact_access_placeholder">Tu neesi atļāvis/usi ${app_name} piekļūt taviem vietējiem kontaktiem</string>
     <string name="no_result_placeholder">Nav rezultātu</string>
     <string name="rooms_header">Istabas</string>
     <string name="rooms_directory_header">Istabu katalogs</string>
@@ -456,24 +456,24 @@
     <string name="media_picker_both_capture_title">Uzņemt foto vai video</string>
     <string name="media_picker_cannot_record_video">Neizdodas ierakstīt video</string>
     <string name="permissions_rationale_popup_title">Element informācija</string>
-    <string name="permissions_rationale_msg_storage">Element nepieciešama atļauja piekļūt jūsu fotoattēlu un video bibliotēkai, lai nosūtītu un saglabātu pielikumus.
+    <string name="template_permissions_rationale_msg_storage">${app_name} nepieciešama atļauja piekļūt jūsu fotoattēlu un video bibliotēkai, lai nosūtītu un saglabātu pielikumus.
 \n
 \nLūdzu, atļaujiet piekļuvi nākamajā uznirstošajā logā, lai varētu nosūtīt failus no sava tālruņa.</string>
-    <string name="permissions_rationale_msg_camera">Element-am nepieciešama atļauja piekļūt kamerai, lai uzņemtu foto un nodrošinātu video zvanus.</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name}-am nepieciešama atļauja piekļūt kamerai, lai uzņemtu foto un nodrošinātu video zvanus.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nLūdzu dot piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja veikt zvanus."</string>
-    <string name="permissions_rationale_msg_record_audio">Element-am nepieciešama atļauja piekļūt mikrofonam, lai nodrošinātu audio zvanus.</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name}-am nepieciešama atļauja piekļūt mikrofonam, lai nodrošinātu audio zvanus.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nLūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja veikt zvanus."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element nepieciešama atļauja piekļūt kamerai un mikrofonam, lai veiktu videozvanus. 
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} nepieciešama atļauja piekļūt kamerai un mikrofonam, lai veiktu videozvanus.
 \n
 \nLūdzu, dodiet piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja veikt zvanus.</string>
-    <string name="permissions_rationale_msg_contacts">Element-am nepieciešama atļauja piekļūt kontaktiem, lai varētu atrast citus lietotājus tīklā pēc to epasta adreses vai tālruņa #.
+    <string name="template_permissions_rationale_msg_contacts">${app_name}-am nepieciešama atļauja piekļūt kontaktiem, lai varētu atrast citus lietotājus tīklā pēc to epasta adreses vai tālruņa #.
 
-Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja atrast Tavus kontaktus, kuri ir sasniedzami Elementā.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element var pārbaudīt jūsu adrešu grāmatu, lai atrastu citus Matrix lietotājus pāc viņu epasta adresēm un tālruņa numuriem.
+Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja atrast Tavus kontaktus, kuri ir sasniedzami ${app_name}ā.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} var pārbaudīt jūsu adrešu grāmatu, lai atrastu citus Matrix lietotājus pāc viņu epasta adresēm un tālruņa numuriem.
 \n
 \nVai piekrītat koplietot savu adrešu grāmatu šim nolūkam\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Atvaino… Darbība nav veikta dēļ nepietiekamām piekļuves atļaujām</string>
@@ -1160,7 +1160,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_emails_empty">Jūsu kontam nav pievienota neviena epasta adrese</string>
     <string name="settings_emails">Epasta adreses</string>
     <string name="settings_add_3pid_authentication_needed">Nepieciešama autentifikācija</string>
-    <string name="settings_add_3pid_flow_not_supported">Jūs nevarat to izdarīt ar Element mobile</string>
+    <string name="template_settings_add_3pid_flow_not_supported">Jūs nevarat to izdarīt ar ${app_name} mobile</string>
     <string name="settings_add_3pid_confirm_password_title">Apstipriniet paroli</string>
     <string name="settings_phone_number_empty">Jūsu kontam nav pievienots neviens tālruņa numurs</string>
     <string name="room_sliding_menu_version_x">Versija %s</string>

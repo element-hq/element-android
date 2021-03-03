@@ -418,7 +418,7 @@
     </plurals>
     <string name="no_public_room_placeholder">Нема доступних јавних соба</string>
     <string name="no_more_results">Нема више резултата</string>
-    <string name="no_contact_access_placeholder">Нисте доволили да Елемент приступи вашим контактима</string>
+    <string name="template_no_contact_access_placeholder">Нисте доволили да Елемент приступи вашим контактима</string>
     <string name="no_conversation_placeholder">Нема разговора</string>
     <string name="system_alerts_header">Системска упозорења</string>
     <string name="bottom_action_groups">Заједнице</string>
