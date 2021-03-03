@@ -17,7 +17,7 @@ Bugfix 🐛:
  - Be robust if Event.type is missing (#2946)
 
 Translations 🗣:
- -
+ - All string resources and translations have been moved to the application module. Weblate project for the SDK will be removed.
 
 SDK API changes ⚠️:
  -
