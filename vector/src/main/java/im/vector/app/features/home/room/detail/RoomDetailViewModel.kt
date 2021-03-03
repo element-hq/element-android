@@ -162,7 +162,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     init {
         simpleTimeline.start()
         viewModelScope.launch {
-            simpleTimeline.loadMore(10, SimpleTimeline.Direction.Backward)
+            simpleTimeline.loadMore(10, SimpleTimeline.Direction.BACKWARDS)
         }
         observeRoomSummary()
         observeMembershipChanges()

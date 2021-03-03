@@ -251,8 +251,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
         val showingForwardLoader = LoadingItem_()
                 .id("forward_loading_item_$timestamp")
-                .setVisibilityStateChangedListener(SimpleTimeline.Direction.Forward)
-                .addWhenLoading(SimpleTimeline.Direction.Forward)
+                .setVisibilityStateChangedListener(SimpleTimeline.Direction.FORWARDS)
+                .addWhenLoading(SimpleTimeline.Direction.FORWARDS)
 
         val timelineModels = getModels()
         add(timelineModels)
@@ -264,9 +264,9 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         // We can hide the loader but still add the item to controller so it can trigger backwards pagination
         LoadingItem_()
                 .id("backward_loading_item_$timestamp")
-                .setVisibilityStateChangedListener(SimpleTimeline.Direction.Backward)
+                .setVisibilityStateChangedListener(SimpleTimeline.Direction.BACKWARDS)
                 .showLoader(showBackwardsLoader)
-                .addWhenLoading(SimpleTimeline.Direction.Backward)
+                .addWhenLoading(SimpleTimeline.Direction.BACKWARDS)
     }
 
 // Timeline.LISTENER ***************************************************************************

@@ -25,22 +25,15 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addStateEvent
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
-import org.matrix.android.sdk.internal.database.helper.merge
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.find
-import org.matrix.android.sdk.internal.database.query.findAllIncludingEvents
-import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
-import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryEventsHelper
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
@@ -136,21 +129,21 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                         prevToken = receivedChunk.end
                     }
 
+                    val existingChunk = ChunkEntity.find(realm, roomId, prevToken = prevToken, nextToken = nextToken)
+                    if (existingChunk != null) {
+                        Timber.v("This chunk is already in the db, returns")
+                        return@awaitTransaction
+                    }
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
                     val nextChunk = ChunkEntity.find(realm, roomId, prevToken = nextToken)
-
-                    // The current chunk is the one we will keep all along the merge processChanges.
-                    // We try to look for a chunk next to the token,
-                    // otherwise we create a whole new one which is unlinked (not live)
-                    val currentChunk = if (direction == PaginationDirection.FORWARDS) {
-                        prevChunk?.apply { this.nextToken = nextToken }
-                    } else {
-                        nextChunk?.apply { this.prevToken = prevToken }
+                    val currentChunk = ChunkEntity.create(realm, prevToken = prevToken, nextToken = nextToken).apply {
+                        this.nextChunk = nextChunk
+                        this.prevChunk = prevChunk
                     }
-                            ?: ChunkEntity.create(realm, prevToken, nextToken)
-
+                    nextChunk?.prevChunk = currentChunk
+                    prevChunk?.nextChunk = currentChunk
                     if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
-                        handleReachEnd(realm, roomId, direction, currentChunk)
+                        handleReachEnd(roomId, direction, currentChunk)
                     } else {
                         handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
                     }
@@ -166,17 +159,10 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
         }
     }
 
-    private fun handleReachEnd(realm: Realm, roomId: String, direction: PaginationDirection, currentChunk: ChunkEntity) {
+    private fun handleReachEnd(roomId: String, direction: PaginationDirection, currentChunk: ChunkEntity) {
         Timber.v("Reach end of $roomId")
         if (direction == PaginationDirection.FORWARDS) {
-            val currentLastForwardChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)
-            if (currentChunk != currentLastForwardChunk) {
-                currentChunk.isLastForward = true
-                currentLastForwardChunk?.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = false)
-                RoomSummaryEntity.where(realm, roomId).findFirst()?.apply {
-                    latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
-                }
-            }
+            Timber.v("We should keep the lastForward chunk unique, the one from sync")
         } else {
             currentChunk.isLastBackward = true
         }
@@ -209,6 +195,24 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
             if (event.eventId == null || event.senderId == null) {
                 return@forEach
             }
+            // We check for the timeline event with this id
+            /*
+            val eventId = event.eventId
+            val existingTimelineEvent = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
+            // If it exists, we want to skip here
+            val existingChunk = existingTimelineEvent?.chunk?.firstOrNull()
+            if (existingChunk != null) {
+                if (direction == PaginationDirection.BACKWARDS && existingChunk.nextToken == null) {
+                    currentChunk.prevChunk = existingChunk
+                    currentChunk.prevToken = existingChunk.nextToken
+                    existingChunk.nextChunk = currentChunk
+                } else if (direction == PaginationDirection.FORWARDS && existingChunk.prevChunk == null) {
+                    currentChunk.nextChunk = existingChunk
+                    currentChunk.nextToken = existingChunk.prevToken
+                    existingChunk.prevChunk = currentChunk
+                }
+                return@forEach
+            }*/
             val ageLocalTs = event.unsignedData?.age?.let { now - it }
             eventIds.add(event.eventId)
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
@@ -220,28 +224,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 }
                 roomMemberContentsByUser[event.stateKey] = contentToUse.toModel<RoomMemberContent>()
             }
-
             currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
-        }
-        // Find all the chunks which contain at least one event from the list of eventIds
-        val chunks = ChunkEntity.findAllIncludingEvents(realm, eventIds)
-        Timber.d("Found ${chunks.size} chunks containing at least one of the eventIds")
-        val chunksToDelete = ArrayList<ChunkEntity>()
-        chunks.forEach {
-            if (it != currentChunk) {
-                Timber.d("Merge $it")
-                currentChunk.merge(roomId, it, direction)
-                chunksToDelete.add(it)
-            }
-        }
-        chunksToDelete.forEach {
-            it.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = false)
-        }
-        val roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, roomId)
-        val shouldUpdateSummary = roomSummaryEntity.latestPreviewableEvent == null
-                || (chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS)
-        if (shouldUpdateSummary) {
-            roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
         }
         if (currentChunk.isValid) {
             RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)

@@ -19,11 +19,13 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
+import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
+import io.realm.RealmList
 import io.realm.RealmQuery
 import io.realm.RealmResults
-import io.realm.Sort
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -34,10 +36,9 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
-import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
-import org.matrix.android.sdk.internal.database.query.whereRoomId
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import timber.log.Timber
@@ -49,8 +50,7 @@ class SimpleTimeline internal constructor(val roomId: String,
                                           private val realmConfiguration: RealmConfiguration,
                                           private val paginationTask: PaginationTask,
                                           private val getEventTask: GetContextOfEventTask,
-                                          private val timelineEventMapper: TimelineEventMapper,
-                                          private val innerList: ArrayList<TimelineEvent> = ArrayList()) {
+                                          private val timelineEventMapper: TimelineEventMapper) {
 
     interface Listener {
         fun onStateUpdated()
@@ -75,7 +75,6 @@ class SimpleTimeline internal constructor(val roomId: String,
             roomId = roomId,
             realm = backgroundRealm,
             paginationTask = paginationTask,
-            builtItems = innerList,
             timelineEventMapper = timelineEventMapper,
             onEventsUpdated = this::postSnapshot
     )
@@ -87,8 +86,8 @@ class SimpleTimeline internal constructor(val roomId: String,
     )
 
     enum class Direction {
-        Forward,
-        Backward
+        FORWARDS,
+        BACKWARDS
     }
 
     fun addListener(listener: Listener) {
@@ -112,11 +111,15 @@ class SimpleTimeline internal constructor(val roomId: String,
                 strategy.onStart()
             }
         }
+        updateState(Direction.FORWARDS) {
+            it.copy(hasMoreToLoad = false)
+        }
     }
 
     fun stop() = timelineScope.launch {
         sequencer.post {
             if (isStarted.compareAndSet(true, false)) {
+                strategy.onStop()
                 backgroundRealm.get().closeQuietly()
             }
         }
@@ -124,8 +127,8 @@ class SimpleTimeline internal constructor(val roomId: String,
 
     private fun updateState(direction: Direction, update: (PaginationState) -> PaginationState) {
         val stateReference = when (direction) {
-            Direction.Forward -> forwardState
-            Direction.Backward -> backwardState
+            Direction.FORWARDS -> forwardState
+            Direction.BACKWARDS -> backwardState
         }
         val currentValue = stateReference.get()
         val newValue = update(currentValue)
@@ -136,7 +139,7 @@ class SimpleTimeline internal constructor(val roomId: String,
     }
 
     fun getPaginationState(direction: Direction): PaginationState {
-        return if (direction == Direction.Backward) {
+        return if (direction == Direction.BACKWARDS) {
             backwardState
         } else {
             forwardState
@@ -162,13 +165,7 @@ class SimpleTimeline internal constructor(val roomId: String,
             updateState(direction) {
                 it.copy(loading = true)
             }
-            val loadedItemsCount = loadFromDb(count, direction)
-            Timber.v("$baseLogMessage: loaded $loadedItemsCount items from db")
-            if (loadedItemsCount < count) {
-                val fetchCount = count - loadedItemsCount
-                Timber.v("$baseLogMessage : trigger paginate on server")
-                fetchOnServer(fetchCount, direction)
-            }
+            strategy.loadMore(count, direction)
             updateState(direction) {
                 it.copy(loading = false)
             }
@@ -176,36 +173,11 @@ class SimpleTimeline internal constructor(val roomId: String,
         }
     }
 
-    private fun postSnapshot() {
-        val snapshot = innerList.toList()
-        listeners.forEach {
-            tryOrNull { it.onEventsUpdated(snapshot) }
-        }
-    }
-
-    private suspend fun loadFromDb(count: Long, direction: Direction): Int {
-        return strategy.loadFromDb(count, direction)
-    }
-
-    private suspend fun fetchOnServer(count: Long, direction: Direction) {
-        try {
-            val fetchResult = strategy.fetchFromServer(count, direction)
-            when (fetchResult) {
-                TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE -> {
-                    strategy.fetchFromServer(count, direction)
-                }
-                TokenChunkEventPersistor.Result.REACHED_END -> {
-                    updateState(direction) {
-                        it.copy(hasMoreToLoad = false)
-                    }
-                }
-                TokenChunkEventPersistor.Result.SUCCESS -> {
-                    strategy.loadFromDb(count, direction)
-                }
-            }
-        } catch (failure: Throwable) {
-            updateState(direction) {
-                it.copy(inError = true)
+    private fun postSnapshot() = timelineScope.launch {
+        val snapshot = strategy.buildSnapshot()
+        withContext(Dispatchers.Main) {
+            listeners.forEach {
+                tryOrNull { it.onEventsUpdated(snapshot) }
             }
         }
     }
@@ -214,113 +186,82 @@ class SimpleTimeline internal constructor(val roomId: String,
 private interface LoadTimelineStrategy {
     fun onStart()
     fun onStop()
-    suspend fun loadFromDb(count: Long, direction: SimpleTimeline.Direction): Int
-    suspend fun fetchFromServer(count: Long, direction: SimpleTimeline.Direction): TokenChunkEventPersistor.Result
+    suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction)
+    fun buildSnapshot(): List<TimelineEvent>
 }
 
 private class LiveTimelineStrategy(private val roomId: String,
                                    private val realm: AtomicReference<Realm>,
                                    private val paginationTask: PaginationTask,
-                                   private val builtItems: MutableList<TimelineEvent>,
                                    private val timelineEventMapper: TimelineEventMapper,
                                    private val onEventsUpdated: () -> Unit) : LoadTimelineStrategy {
 
-    private lateinit var timelineEvents: RealmResults<TimelineEventEntity>
+    private var roomEntity: RoomEntity? = null
+    private var sendingTimelineEvents: RealmList<TimelineEventEntity>? = null
+    private var chunkEntity: RealmResults<ChunkEntity>? = null
+    private var timelineChunk: TimelineChunk? = null
 
-    override fun onStart() {
-        timelineEvents = getQuery().findAll()
-        val changeListener = OrderedRealmCollectionChangeListener { _: RealmResults<TimelineEventEntity>?, changeSet: OrderedCollectionChangeSet ->
-            val frozenResults = timelineEvents.freeze()
-            handleChangeSet(frozenResults, changeSet)
-        }
-        timelineEvents.addChangeListener(changeListener)
-    }
-
-    private fun handleChangeSet(frozenResults: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
-        val deletions = changeSet.deletionRanges
-        if (deletions.isNotEmpty()) {
-            // We have a gap clear everything
-        }
-        val insertions = changeSet.insertionRanges
-        for (range in insertions) {
-            // Add only forward events
-            if (range.startIndex == 0) {
-                val newItems = frozenResults
-                        .subList(0, range.length)
-                        .map {
-                            timelineEventMapper.map(it)
-                        }
-                builtItems.addAll(0, newItems)
-            } else {
-                Timber.v("Insertions from backwards handled on demand")
-            }
-        }
-        val modifications = changeSet.changeRanges
-        /*for (range in modifications) {
-            for (modificationIndex in (range.startIndex..range.startIndex + range.length)) {
-                val newEntity = frozenResults[modificationIndex] ?: continue
-                builtItems[modificationIndex] = timelineEventMapper.map(newEntity)
-            }
-        }
-
-         */
-        if (deletions.isNotEmpty() || insertions.isNotEmpty() || modifications.isNotEmpty()) {
+    private val chunkEntityListener = OrderedRealmCollectionChangeListener { _: RealmResults<ChunkEntity>, changeSet: OrderedCollectionChangeSet ->
+        val syncHasGap = changeSet.deletions.isNotEmpty() && changeSet.insertions.isNotEmpty()
+        if (syncHasGap) {
+            timelineChunk?.close(closeNext = false, closePrev = true)
+            timelineChunk = chunkEntity?.createTimelineChunk()
             onEventsUpdated()
         }
     }
 
+    private val sendingTimelineEventsListener = RealmChangeListener<RealmList<TimelineEventEntity>> {
+        onEventsUpdated()
+    }
+
+    override fun onStart() {
+        val safeRealm = realm.get()
+        roomEntity = RoomEntity.where(safeRealm, roomId = roomId).findFirst()
+        sendingTimelineEvents = roomEntity?.sendingTimelineEvents
+        sendingTimelineEvents?.addChangeListener(sendingTimelineEventsListener)
+        chunkEntity = getChunkEntity(safeRealm).also {
+            it.addChangeListener(chunkEntityListener)
+            timelineChunk = it.createTimelineChunk()
+        }
+    }
+
     override fun onStop() {
+        chunkEntity?.removeChangeListener(chunkEntityListener)
+        sendingTimelineEvents?.removeChangeListener(sendingTimelineEventsListener)
+        timelineChunk?.close(closeNext = false, closePrev = true)
+        sendingTimelineEvents = null
+        roomEntity = null
+        chunkEntity = null
+        timelineChunk = null
     }
 
-    private fun getQuery(): RealmQuery<TimelineEventEntity> {
-        return TimelineEventEntity
-                .whereRoomId(realm.get(), roomId = roomId)
-                .equalTo("${TimelineEventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST_FORWARD}", true)
-                // Higher display index is most recent
-                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-    }
-
-    override suspend fun loadFromDb(count: Long, direction: SimpleTimeline.Direction): Int {
-        if (direction == SimpleTimeline.Direction.Forward) {
-            return 0
+    override suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction) {
+        if (direction == SimpleTimeline.Direction.FORWARDS) {
+            return
         }
-        val safeRealm = realm.get()
-        if (safeRealm.isClosed) return 0
-        val currentIndex = builtItems.lastOrNull()?.displayIndex
-        val baseQuery = getChunkEntity(safeRealm)?.timelineEvents?.where()
-        val timelineEvents = if (currentIndex != null) {
-            baseQuery?.offsets(direction, count, currentIndex)
-        } else {
-            baseQuery?.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)?.limit(count)
-        }?.findAll().orEmpty()
-
-        timelineEvents
-                .map { timelineEventEntity ->
-                    timelineEventMapper.map(timelineEventEntity)
-                }.also {
-                    if (direction == SimpleTimeline.Direction.Forward) {
-                        builtItems.addAll(0, it)
-                    } else {
-                        builtItems.addAll(it)
-                    }
-                }
-        return timelineEvents.size
+        timelineChunk?.loadMore(count, direction)
     }
 
-    override suspend fun fetchFromServer(count: Long, direction: SimpleTimeline.Direction): TokenChunkEventPersistor.Result {
-        if (direction == SimpleTimeline.Direction.Forward) {
-            return TokenChunkEventPersistor.Result.REACHED_END
+    override fun buildSnapshot(): List<TimelineEvent> {
+        return buildSendingEvents() + timelineChunk?.builtItems(includesNext = false, includesPrev = true).orEmpty()
+    }
+
+    private fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
+        return ChunkEntity.where(realm, roomId)
+                .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
+                .findAll()
+    }
+
+    private fun buildSendingEvents(): List<TimelineEvent> {
+        return sendingTimelineEvents?.freeze()?.map {
+            timelineEventMapper.map(it)
+        }.orEmpty()
+    }
+
+    private fun RealmResults<ChunkEntity>.createTimelineChunk(): TimelineChunk? {
+        return firstOrNull()?.let {
+            TimelineChunk(it, roomId, paginationTask, timelineEventMapper, null, onEventsUpdated)
         }
-        val safeRealm = realm.get()
-        if (safeRealm.isClosed) throw java.lang.IllegalStateException("Realm has been closed")
-        val chunkEntity = getChunkEntity(safeRealm) ?: throw RuntimeException("No chunk found")
-        val token = chunkEntity.prevToken ?: throw RuntimeException("No token found")
-        val paginationParams = PaginationTask.Params(roomId, token, direction.toPaginationDirection(), count.toInt())
-        return paginationTask.execute(paginationParams)
-    }
-
-    private fun getChunkEntity(realm: Realm): ChunkEntity? {
-        return ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)
     }
 }
 
@@ -342,30 +283,12 @@ private class PastTimelineStrategy(
         TODO("Not yet implemented")
     }
 
-    override suspend fun loadFromDb(count: Long, direction: SimpleTimeline.Direction): Int {
-        return 0
+    override suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction) {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun fetchFromServer(count: Long, direction: SimpleTimeline.Direction): TokenChunkEventPersistor.Result {
-        return TokenChunkEventPersistor.Result.SUCCESS
+    override fun buildSnapshot(): List<TimelineEvent> {
+        return emptyList()
     }
 }
 
-private fun RealmQuery<TimelineEventEntity>.offsets(
-        direction: SimpleTimeline.Direction,
-        count: Long,
-        startDisplayIndex: Int
-): RealmQuery<TimelineEventEntity> {
-    if (direction == SimpleTimeline.Direction.Backward) {
-        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-        lessThan(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
-    } else {
-        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
-        greaterThan(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
-    }
-    return limit(count)
-}
-
-private fun SimpleTimeline.Direction.toPaginationDirection(): PaginationDirection {
-    return if (this == SimpleTimeline.Direction.Backward) PaginationDirection.BACKWARDS else PaginationDirection.FORWARDS
-}

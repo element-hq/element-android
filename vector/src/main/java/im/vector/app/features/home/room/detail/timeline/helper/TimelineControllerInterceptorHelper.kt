@@ -121,7 +121,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
             val loadingItem = LoadingItem_()
                     .id("prefetch_backward_loading${System.currentTimeMillis()}")
                     .showLoader(false)
-                    .setVisibilityStateChangedListener(SimpleTimeline.Direction.Backward, callback)
+                    .setVisibilityStateChangedListener(SimpleTimeline.Direction.BACKWARDS, callback)
 
             add(indexOfPrefetchBackward, loadingItem)
         }
@@ -134,7 +134,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
             val loadingItem = LoadingItem_()
                     .id("prefetch_forward_loading${System.currentTimeMillis()}")
                     .showLoader(false)
-                    .setVisibilityStateChangedListener(SimpleTimeline.Direction.Forward, callback)
+                    .setVisibilityStateChangedListener(SimpleTimeline.Direction.FORWARDS, callback)
             add(indexOfPrefetchForward, loadingItem)
         }
     }
