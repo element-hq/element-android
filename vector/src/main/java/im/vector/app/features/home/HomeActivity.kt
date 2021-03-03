@@ -99,6 +99,7 @@ class HomeActivity :
     @Inject lateinit var unknownDeviceViewModelFactory: UnknownDeviceDetectorSharedViewModel.Factory
     @Inject lateinit var permalinkHandler: PermalinkHandler
     @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var initSyncStepFormatter: InitSyncStepFormatter
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerStateChanged(newState: Int) {
@@ -208,11 +209,12 @@ class HomeActivity :
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.initialSyncProgressServiceStatus) {
-            is InitialSyncProgressService.Status.Idle -> {
+            is InitialSyncProgressService.Status.Idle        -> {
                 views.waitingView.root.isVisible = false
             }
             is InitialSyncProgressService.Status.Progressing -> {
-                Timber.v("${getString(status.statusText)} ${status.percentProgress}")
+                val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
+                Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
                     // block interactions
                 }
@@ -223,7 +225,7 @@ class HomeActivity :
                     isVisible = true
                 }
                 views.waitingView.waitingStatusText.apply {
-                    text = getString(status.statusText)
+                    text = initSyncStepStr
                     isVisible = true
                 }
                 views.waitingView.root.isVisible = true

@@ -59,8 +59,7 @@
     <string name="notification_noisy_notifications">Shovqinli bildirishnomalar</string>
     <string name="notification_listening_for_events">Hodisalarni tinglash</string>
     <string name="notification_sync_init">Xizmat ishga tushirilmoqda</string>
-    <string name="status_theme">Status.im temasi</string>
-    <string name="black_them">Qop-qora tema</string>
+    <string name="black_theme">Qop-qora tema</string>
     <string name="dark_theme">Qora tema</string>
     <string name="light_theme">Oq tema</string>
     <string name="system_theme">Tizim tanlovi boʻyicha</string>

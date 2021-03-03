@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">tu\'qom wov</string>
     <string name="dark_theme">tu\'qom Hurgh</string>
-    <string name="black_them">tu\'qom qIj</string>
+    <string name="black_theme">tu\'qom qIj</string>
 
     <string name="notification_sync_in_progress">vIrapmoHltaH</string>
     <string name="notification_listening_for_events">wanI\' vInejtaH</string>

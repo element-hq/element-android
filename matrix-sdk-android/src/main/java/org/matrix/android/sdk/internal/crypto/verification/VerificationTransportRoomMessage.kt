@@ -24,7 +24,6 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
@@ -46,23 +45,16 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_RECIPROCATE
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
-import org.matrix.android.sdk.internal.di.DeviceId
-import org.matrix.android.sdk.internal.di.SessionId
-import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.StringProvider
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 internal class VerificationTransportRoomMessage(
         private val workManagerProvider: WorkManagerProvider,
-        private val stringProvider: StringProvider,
         private val sessionId: String,
         private val userId: String,
         private val userDeviceId: String?,
@@ -167,7 +159,8 @@ internal class VerificationTransportRoomMessage(
         )
 
         val info = MessageVerificationRequestContent(
-                body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
+                body = "$userId is requesting to verify your key, but your client does not support in-chat key verification." +
+                        " You will need to use legacy key verification to verify keys.",
                 fromDevice = validInfo.fromDevice,
                 toUserId = otherUserId,
                 timestamp = validInfo.timestamp,
@@ -385,31 +378,5 @@ internal class VerificationTransportRoomMessage(
                                        callback: (() -> Unit)?) {
         // Not applicable (send event is called directly)
         Timber.w("## SAS ignored verification ready with methods: ${keyReq.methods}")
-    }
-}
-
-internal class VerificationTransportRoomMessageFactory @Inject constructor(
-        private val workManagerProvider: WorkManagerProvider,
-        private val stringProvider: StringProvider,
-        @SessionId
-        private val sessionId: String,
-        @UserId
-        private val userId: String,
-        @DeviceId
-        private val deviceId: String?,
-        private val localEchoEventFactory: LocalEchoEventFactory,
-        private val taskExecutor: TaskExecutor
-) {
-
-    fun createTransport(roomId: String, tx: DefaultVerificationTransaction?): VerificationTransportRoomMessage {
-        return VerificationTransportRoomMessage(workManagerProvider,
-                stringProvider,
-                sessionId,
-                userId,
-                deviceId,
-                roomId,
-                localEchoEventFactory,
-                tx,
-                taskExecutor.executorScope)
     }
 }

@@ -2,8 +2,7 @@
 <resources>
     <string name="light_theme">Temă luminoasă</string>
     <string name="dark_theme">Temă întunecată</string>
-    <string name="black_them">Temă Neagră</string>
-    <string name="status_theme">Tema Status.im</string>
+    <string name="black_theme">Temă Neagră</string>
 
     <string name="notification_sync_init">Inițializează serviciu</string>
     <string name="notification_sync_in_progress">Sincronizează…</string>

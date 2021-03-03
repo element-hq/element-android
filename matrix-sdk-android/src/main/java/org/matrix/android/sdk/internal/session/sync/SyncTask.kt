@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.sync
 
 import okhttp3.ResponseBody
-import org.matrix.android.sdk.R
+import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -90,7 +90,7 @@ internal class DefaultSyncTask @Inject constructor(
         if (isInitialSync) {
             // We might want to get the user information in parallel too
             userStore.createOrUpdate(userId)
-            initialSyncProgressService.startRoot(R.string.initial_sync_start_importing_account, 100)
+            initialSyncProgressService.startRoot(InitSyncStep.ImportingAccount, 100)
         }
         // Maybe refresh the home server capabilities data we know
         getHomeServerCapabilitiesTask.execute(GetHomeServerCapabilitiesTask.Params(forceRefresh = false))
@@ -137,20 +137,20 @@ internal class DefaultSyncTask @Inject constructor(
         if (workingFile.exists() && status >= InitialSyncStatus.STEP_DOWNLOADED) {
             // Go directly to the parse step
             Timber.v("INIT_SYNC file is already here")
-            reportSubtask(initialSyncProgressService, R.string.initial_sync_start_downloading, 1, 0.3f) {
+            reportSubtask(initialSyncProgressService, InitSyncStep.Downloading, 1, 0.3f) {
                 // Empty task
             }
         } else {
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_DOWNLOADING)
             val syncResponse = logDuration("INIT_SYNC Perform server request") {
-                reportSubtask(initialSyncProgressService, R.string.initial_sync_start_server_computing, 1, 0.2f) {
+                reportSubtask(initialSyncProgressService, InitSyncStep.ServerComputing, 1, 0.2f) {
                     getSyncResponse(requestParams, MAX_NUMBER_OF_RETRY_AFTER_TIMEOUT)
                 }
             }
 
             if (syncResponse.isSuccessful) {
                 logDuration("INIT_SYNC Download and save to file") {
-                    reportSubtask(initialSyncProgressService, R.string.initial_sync_start_downloading, 1, 0.1f) {
+                    reportSubtask(initialSyncProgressService, InitSyncStep.Downloading, 1, 0.1f) {
                         syncResponse.body()?.byteStream()?.use { inputStream ->
                             workingFile.outputStream().use { outputStream ->
                                 inputStream.copyTo(outputStream)
@@ -164,7 +164,7 @@ internal class DefaultSyncTask @Inject constructor(
             }
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_DOWNLOADED)
         }
-        reportSubtask(initialSyncProgressService, R.string.initial_sync_start_importing_account, 1, 0.7F) {
+        reportSubtask(initialSyncProgressService, InitSyncStep.ImportingAccount, 1, 0.7F) {
             handleSyncFile(workingFile, initSyncStrategy)
         }
 
