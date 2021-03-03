@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.initsync
+package org.matrix.android.sdk.api.session.initsync
 
-import org.matrix.android.sdk.api.session.initsync.InitSyncStep
-
-internal interface ProgressReporter {
-    fun startTask(initSyncStep: InitSyncStep,
-                  totalProgress: Int,
-                  parentWeight: Float)
-
-    fun reportProgress(progress: Float)
-
-    fun endTask()
+enum class InitSyncStep {
+    ServerComputing,
+    Downloading,
+    ImportingAccount,
+    ImportingAccountCrypto,
+    ImportingAccountRoom,
+    ImportingAccountGroups,
+    ImportingAccountData,
+    ImportingAccountJoinedRooms,
+    ImportingAccountInvitedRooms,
+    ImportingAccountLeftRooms
 }

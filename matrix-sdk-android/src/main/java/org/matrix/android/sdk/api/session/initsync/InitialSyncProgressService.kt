@@ -15,7 +15,6 @@
  */
 package org.matrix.android.sdk.api.session.initsync
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 
 interface InitialSyncProgressService {
@@ -25,7 +24,7 @@ interface InitialSyncProgressService {
     sealed class Status {
         object Idle : Status()
         data class Progressing(
-                @StringRes val statusText: Int,
+                val initSyncStep: InitSyncStep,
                 val percentProgress: Int = 0
         ) : Status()
     }

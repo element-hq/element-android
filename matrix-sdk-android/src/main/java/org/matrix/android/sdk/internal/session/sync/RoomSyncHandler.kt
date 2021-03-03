@@ -18,11 +18,11 @@ package org.matrix.android.sdk.internal.session.sync
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
-import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTagContent
@@ -112,18 +112,18 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     // Rooms are already inserted, return an empty list
                     emptyList()
                 } else {
-                    handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
+                    handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountJoinedRooms, 0.6f) {
                         handleJoinedRoom(realm, it.key, it.value.roomSync, insertType, syncLocalTimeStampMillis)
                     }
                 }
             }
             is HandlingStrategy.INVITED ->
-                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_invited_rooms, 0.1f) {
+                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountInvitedRooms, 0.1f) {
                     handleInvitedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
                 }
 
             is HandlingStrategy.LEFT    -> {
-                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_left_rooms, 0.3f) {
+                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountLeftRooms, 0.3f) {
                     handleLeftRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis)
                 }
             }
@@ -141,7 +141,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val numberOfChunks = ceil(listSize / maxSize.toDouble()).toInt()
 
         if (numberOfChunks > 1) {
-            reportSubtask(reporter, R.string.initial_sync_start_importing_account_joined_rooms, numberOfChunks, 0.6f) {
+            reportSubtask(reporter, InitSyncStep.ImportingAccountJoinedRooms, numberOfChunks, 0.6f) {
                 val chunkSize = listSize / numberOfChunks
                 Timber.v("INIT_SYNC $listSize rooms to insert, split into $numberOfChunks sublists of $chunkSize items")
                 // I cannot find a better way to chunk a map, so chunk the keys and then create new maps
@@ -165,7 +165,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
         } else {
             // No need to split
-            val rooms = handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_joined_rooms, 0.6f) {
+            val rooms = handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountJoinedRooms, 0.6f) {
                 handleJoinedRoom(realm, it.key, it.value.roomSync, insertType, syncLocalTimeStampMillis)
             }
             realm.insertOrUpdate(rooms)
