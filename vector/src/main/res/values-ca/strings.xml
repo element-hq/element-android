@@ -2675,4 +2675,24 @@
     <string name="call_held_by_user">%s ha posat la trucada en espera</string>
     <string name="call_resume_action">Continua</string>
     <string name="action_return">Torna</string>
+    <string name="a11y_video">Vídeo</string>
+    <string name="a11y_error_some_message_not_sent">Alguns missatges no s\'han enviat</string>
+    <string name="a11y_image">Imatge</string>
+    <string name="a11y_import_key_from_file">Importa clau des d\'un fitxer</string>
+    <string name="a11y_screenshot">Captura de pantalla</string>
+    <plurals name="entries">
+        <item quantity="one">%d entrada</item>
+        <item quantity="other">%d entrades</item>
+    </plurals>
+    <string name="settings_server_upload_size_unknown">Límit desconegut.</string>
+    <string name="settings_server_version">Versió del servidor</string>
+    <string name="settings_server_name">Nom del servidor</string>
+    <string name="room_list_quick_actions_room_settings">Configuració de sala</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Abandonar conferència actual i anar a l\'altra\?</string>
+    <string name="room_settings_room_version_title">Versió de sala</string>
+    <string name="dialog_edit_hint">Nou valor</string>
+    <string name="initial_sync_start_downloading">Sincronització inicial:
+\nBaixant dades…</string>
+    <string name="initial_sync_start_server_computing">Sincronització inicial:
+\nEsperant resposta del servidor…</string>
 </resources>
