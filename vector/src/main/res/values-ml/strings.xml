@@ -285,7 +285,7 @@
     <string name="room_participants_action_ban">നിരോധിക്കൂ</string>
     <string name="reset">പുനഃസജ്ജമാക്കൂ</string>
     <string name="none">ഒന്നുമില്ല</string>
-    <string name="call_only_active">സജീവ കോൾ ()</string>
+    <string name="call_only_active">സജീവ കോൾ (%1$s)</string>
     <string name="call_tile_other_declined">%1$s ഈ കോൾ നിരസിച്ചു</string>
     <string name="new_recovery_method_popup_was_me">അത് ഞാൻ ആയിരുന്നു</string>
     <string name="finish">പൂർത്തിയാക്കൂ</string>

@@ -2290,7 +2290,7 @@
     <string name="call_dial_pad_title">Pjesa e numrave</string>
     <string name="call_tile_call_back">Ktheji thirrjen</string>
     <string name="call_tile_ended">Kjo thirrje ka përfunduar</string>
-    <string name="call_tile_other_declined">%1$d hodhi poshtë këtë thirrje</string>
+    <string name="call_tile_other_declined">%1$s hodhi poshtë këtë thirrje</string>
     <string name="call_tile_you_declined">Hodhët poshtë këtë thirrje %1$s</string>
     <string name="call_tile_in_call">Gjendeni në këtë thirrje</string>
     <string name="call_tile_other_started_call">%1$s nisi një thirrje</string>

@@ -1503,7 +1503,7 @@
     <string name="settings_show_emoji_keyboard_summary">Legg til en knapp på meldingskomponisten for å åpne emoji-tastaturet</string>
     <string name="settings_show_emoji_keyboard">Vis emoji-tastatur</string>
     <string name="settings_send_message_with_enter_summary">Enter-knappen på det myke tastaturet vil sende melding i stedet for å legge til en linjeskift</string>
-    <string name="settings_preview_media_before_sending">Forhåndsvis media før sending</string>
+    <string name="settings_preview_media_before_sending">Forhåndsvis medier før sending</string>
     <string name="settings_vibrate_on_mention">Vibrer når du nevner en bruker</string>
     <string name="settings_chat_effects_description">Bruk kommandoen /confetti eller send en melding som inneholder ❄️ eller 🎉</string>
     <string name="settings_show_read_receipts_summary">Klikk på lest kvitteringene for en detaljert liste.</string>
@@ -1512,7 +1512,7 @@
     <string name="settings_send_typing_notifs_summary">La andre brukere vite at du skriver.</string>
     <string name="settings_contacts_phonebook_country">Telefonbok land</string>
     <string name="settings_contacts_app_permission">Kontakter tillatelse</string>
-    <string name="settings_keep_media">Behold media</string>
+    <string name="settings_keep_media">Behold medier</string>
     <string name="settings_third_party_notices">Tredjeparts varsler</string>
     <plurals name="seconds">
         <item quantity="one">%d sekund</item>
