@@ -930,7 +930,6 @@ Tindakan ini akan memulai ulang aplikasi dan mungkin cukup memakan waktu.</strin
     <string name="notice_avatar">Avatar pemberitahu</string>
     <string name="receipt_avatar">Avatar penerima</string>
     <string name="command_description_deop_user">Demosi pengguna dengan id berikut</string>
-    <string name="status_theme">Tema Status.im</string>
 
     <string name="call_anyway">Tetap Panggil</string>
     <string name="accept">Terima</string>

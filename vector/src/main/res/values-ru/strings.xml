@@ -887,7 +887,6 @@
     <string name="system_alerts_header">Системные оповещения</string>
     <string name="resource_limit_exceeded_title">Лимит ресурсов исчерпан</string>
     <string name="resource_limit_contact_action">Связаться с администратором</string>
-    <string name="status_theme">Тема status.im</string>
     <string name="dialog_title_error">Ошибка</string>
     <string name="room_sliding_menu_version_x">Версия %s</string>
     <string name="passphrase_create_passphrase">Создать парольную фразу</string>

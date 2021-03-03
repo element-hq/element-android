@@ -789,7 +789,6 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="resource_limit_hard_mau">Heimtenaren har truffe den Månadlege Grensa si for Aktive Brukarar.</string>
     <string name="resource_limit_soft_contact">Ver venleg og %s for å heva grensa.</string>
     <string name="resource_limit_hard_contact">Ver venleg og %s for å halda fram med å bruka tenesten.</string>
-    <string name="status_theme">Status.im-tema</string>
     <string name="call_anyway">Ring likevel</string>
     <string name="accept">Aksepter</string>
     <string name="dialog_title_error">Feil</string>

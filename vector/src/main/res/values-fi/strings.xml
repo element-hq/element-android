@@ -715,7 +715,6 @@
     <string name="settings_password">Salasana</string>
     <string name="deactivate_account_prompt_password">Kirjoita salasanasi jatkaaksesi:</string>
     <string name="error_empty_field_your_password">Kirjoita salasanasi.</string>
-    <string name="status_theme">Status.im-teema</string>
     <string name="settings_send_typing_notifs">Lähetä kirjoitusilmoitukset</string>
     <string name="settings_show_read_receipts">Näytä lukukuittaukset</string>
     <string name="settings_show_join_leave_messages">Näytä liittymiset ja poistumiset</string>

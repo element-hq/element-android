@@ -810,7 +810,6 @@
     <string name="settings_lazy_loading_description">Améliore les performances en ne chargeant les membres des salons qu’au premier affichage.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Votre serveur d’accueil ne prend pas encore en charge le chargement en différé des membres des salons. Réessayez ultérieurement.</string>
     <string name="unknown_error">Désolé, une erreur est survenue</string>
-    <string name="status_theme">Thème Status.im</string>
     <string name="room_sliding_menu_version_x">Version %s</string>
     <string name="encryption_export_notice">Veuillez créer une phrase secrète pour chiffrer les clés exportées. Vous devrez saisir cette même phrase secrète afin de pouvoir importer les clés.</string>
     <string name="passphrase_create_passphrase">Créer la phrase secrète</string>

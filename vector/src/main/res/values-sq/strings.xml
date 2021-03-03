@@ -3,7 +3,6 @@
     <string name="light_theme">Temë e Çelët</string>
     <string name="dark_theme">Temë e Errët</string>
     <string name="black_them">Temë e Zezë</string>
-    <string name="status_theme">Temë Status.im</string>
     <string name="notification_noisy_notifications">Njoftime të zhurmshme</string>
     <string name="notification_silent_notifications">Njoftime të heshtura</string>
     <string name="title_activity_home">Mesazhe</string>

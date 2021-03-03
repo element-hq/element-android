@@ -862,7 +862,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="resource_limit_hard_mau">Este servidor doméstico ha alcanzado su límite Mensual de Usuarios Activos.</string>
     <string name="resource_limit_soft_contact">Por favor, %s para aumentar este límite.</string>
     <string name="resource_limit_hard_contact">Por favor, %s para continuar utilizando este servicio.</string>
-    <string name="status_theme">Tema de Status.im</string>
     <string name="dialog_title_error">Error</string>
     <string name="room_sliding_menu_version_x">Versión %s</string>
     <string name="encryption_export_notice">Por favor, crea una frase de contraseña para cifrar las claves exportadas. Necesitarás ingresar la misma frase de contraseña para poder importar las claves.</string>

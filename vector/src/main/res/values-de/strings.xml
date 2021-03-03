@@ -863,7 +863,6 @@
     <string name="error_lazy_loading_not_supported_by_home_server">Dein Home-Server unterstützt noch nicht das Nachladen von Raummitgliedern. Versuche es später.</string>
     <string name="unknown_error">Entschuldige, ein Fehler trat auf</string>
     <string name="room_sliding_menu_version_x">Version %s</string>
-    <string name="status_theme">Status.im-Design</string>
     <string name="encryption_export_notice">Bitte eine Passphrase erstellen um exportierte Schlüssel zu verschlüsseln. Du musst dieselbe Passphrase eingeben um die Schlüssel importieren zu können.</string>
     <string name="passphrase_create_passphrase">Erzeuge Passphrase</string>
     <string name="passphrase_passphrase_does_not_match">Passphrasen stimmen nicht überein</string>

@@ -868,7 +868,6 @@
     <string name="error_lazy_loading_not_supported_by_home_server">Il tuo Home Server non supporta ancora il caricamento differito dei membri delle stanze. Prova più avanti.</string>
     <string name="unknown_error">Spiacente, si è verificato un errore</string>
     <string name="settings_lazy_loading_title">Caricamento differito dei membri della stanza</string>
-    <string name="status_theme">Tema Status.im</string>
     <string name="room_sliding_menu_version_x">Versione %s</string>
     <string name="encryption_export_notice">Crea una password per mettere al sicuro le chiavi esportate. La stessa password dovrà essere usata per poter importare le chiavi.</string>
     <string name="passphrase_create_passphrase">Crea una password</string>

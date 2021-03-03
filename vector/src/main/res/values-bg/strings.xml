@@ -811,7 +811,6 @@
     <string name="settings_lazy_loading_description">Подобрява производителността като зарежда членовете в стаите при първи преглед.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Сървърът Ви все още не поддържа постепенно зареждане на членовете в стаи. Опитайте по-късно.</string>
     <string name="unknown_error">Съжаляваме, възникна грешка</string>
-    <string name="status_theme">Status.im тема</string>
     <string name="room_sliding_menu_version_x">Версия %s</string>
     <string name="encryption_export_notice">Моля, въведете парола за шифроване на екпортираните ключове. Ще е нужно да въведете същата парола за да можете да ги импортирате.</string>
     <string name="passphrase_create_passphrase">Създай парола</string>

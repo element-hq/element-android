@@ -177,7 +177,6 @@
     <string name="login_error_bad_json">Poškozený JSON</string>
     <string name="login_error_limit_exceeded">Bylo odesláno příliš mnoho požadavků</string>
     <string name="login_error_user_in_use">Toto uživatelské jméno je již použito</string>
-    <string name="status_theme">Motiv vzhledu Status.im</string>
     <string name="title_activity_choose_sticker">Odeslat nálepku</string>
     <string name="dialog_title_third_party_licences">Licenční smlouvy třetích stran</string>
     <string name="download">Stáhnout</string>

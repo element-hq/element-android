@@ -788,7 +788,6 @@ Matrixでのメッセージの可視性は電子メールと同様です。メ�
     <string name="error_lazy_loading_not_supported_by_home_server">あなたのホームサーバは部屋のメンバーの簡易読み込みをサポートしていません。後で試してください。</string>
     <string name="settings_lazy_loading_title">部屋のメンバーの簡易読み込み</string>
     <string name="unknown_error">申し訳ありません、エラーが発生しました</string>
-    <string name="status_theme">Status.im テーマ</string>
     <string name="room_sliding_menu_version_x">Version %s</string>
     <string name="encryption_export_notice">エクスポートされた鍵を暗号化するパスフレーズを作成してください。 キーをインポートするには、同じパスフレーズを入力する必要があります。</string>
     <string name="passphrase_create_passphrase">パスフレーズの作成</string>

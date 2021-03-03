@@ -380,7 +380,6 @@
     <string name="qr_code_scanned_by_other_yes">Ja</string>
     <string name="enter_secret_storage_passphrase_warning">Advarsel:</string>
     <string name="delete_event_dialog_title">Bekreft fjerning</string>
-    <string name="status_theme">Status.im-tema</string>
     <string name="notification_listening_for_events">Lytter etter hendelser</string>
     <string name="title_activity_verify_device">Verifiser økten</string>
     <string name="active_call">Aktiv samtale</string>

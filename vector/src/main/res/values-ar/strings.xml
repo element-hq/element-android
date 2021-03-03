@@ -914,6 +914,5 @@
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">لا أريد رسائلي المشفرة</string>
     <string name="title_activity_keys_backup_setup">نسخ إحتياطي للمفتاح</string>
     <string name="notification_sync_init">جاري إعداد الخدمة</string>
-    <string name="status_theme">سمة Status.im</string>
     <string name="system_theme">إفتراضي النظام</string>
 </resources>

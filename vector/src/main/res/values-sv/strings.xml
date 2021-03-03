@@ -3,7 +3,6 @@
     <string name="light_theme">Ljust tema</string>
     <string name="dark_theme">Mörkt tema</string>
     <string name="black_them">Svart tema</string>
-    <string name="status_theme">Status.im-tema</string>
     <string name="notification_sync_init">Initialiserar tjänst</string>
     <string name="notification_sync_in_progress">Synkroniserar…</string>
     <string name="notification_listening_for_events">Lyssnar efter händelser</string>

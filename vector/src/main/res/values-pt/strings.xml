@@ -619,7 +619,6 @@ Dispositivos desconhecidos:</string>
     <string name="room_add_matrix_apps">Adicionar apps Matrix</string>
     <string name="notification_sync_in_progress">A sincronizar…</string>
     <string name="notification_listening_for_events">À escuta de eventos</string>
-    <string name="status_theme">Tema Status.im</string>
     <string name="notification_noisy_notifications">Notificações ruidosas</string>
     <string name="notification_silent_notifications">Notificações silenciosas</string>
     <string name="title_activity_bug_report">Relatório de bug</string>

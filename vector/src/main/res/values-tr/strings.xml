@@ -147,7 +147,6 @@
     <string name="auth_password_placeholder">Şifre</string>
     <string name="auth_new_password_placeholder">Yeni şifre</string>
     <string name="auth_user_name_placeholder">Kullanıcı adı</string>
-    <string name="status_theme">Status.im Teması</string>
     <string name="title_activity_keys_backup_setup">Anahtar Yedekleme</string>
     <string name="title_activity_keys_backup_restore">Anahtar Yedekleme\'yi Kullan</string>
     <string name="keys_backup_is_not_finished_please_wait">Anahtar yedekleme tamamlanmadı, lütfen bekleyiniz…</string>

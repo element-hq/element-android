@@ -759,7 +759,6 @@
     <string name="e2e_re_request_encryption_key_dialog_title">Sol·licitud enviada</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Si us plau, obre Element a un altre dispositiu que pugui desxifrar el missatge de manera que pugui enviar les claus a aquesta sessió.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
-    <string name="status_theme">Tema Status.im</string>
     <string name="missing_permissions_error">No es pot dur a terme aquesta acció per falta de permisos.</string>
     <string name="dialog_title_error">Error</string>
     <string name="system_alerts_header">Alertes de sistema</string>

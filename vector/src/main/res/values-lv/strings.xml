@@ -1002,7 +1002,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="stay">Palikt</string>
     <string name="are_you_sure">Vai tiešām to vēlaties\?</string>
     <string name="title_activity_verify_device">Verificēt ierīci</string>
-    <string name="status_theme">Status.im tēma</string>
     <string name="system_theme">Sistēmas noklusējuma</string>
     <string name="room_member_power_level_custom_in">Pielāgots (%1$d) iekš %2$s</string>
     <string name="room_member_power_level_default_in">Noklusējums iekš %1$s</string>

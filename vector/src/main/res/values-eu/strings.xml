@@ -974,8 +974,6 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
 
     <string name="unknown_error">Errore bat gertatu da</string>
 
-    <string name="status_theme">Status.im azala</string>
-
     <string name="room_sliding_menu_version_x">%s bertsioa</string>
     <string name="encryption_export_notice">Sortu esportatutako gakoak zifratzeko pasaesaldi bat. Pasaesaldi hori gakoak inportatzeko sartu beharko duzu.</string>
     <string name="passphrase_create_passphrase">Sortu pasaesaldia</string>

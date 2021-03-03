@@ -252,7 +252,6 @@
     <string name="action_sign_out_confirmation_simple">آیا می‌خواهید از حساب کاربری خود خارج شوید؟</string>
     <string name="action_mark_room_read">علامت‌گذاری به عنوان خوانده شده</string>
     <string name="auth_login_sso">ورود با سامانه‌های احراز هویت مرکزی</string>
-    <string name="status_theme">زمینهٔ Status.im</string>
     <string name="notification_sync_init">در حال راه‌اندازی سرویس</string>
     <string name="notification_noisy_notifications">آگاهی‌های پرصدا</string>
     <string name="notification_silent_notifications">آگاهی‌های صامت</string>

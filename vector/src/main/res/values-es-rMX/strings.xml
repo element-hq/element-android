@@ -622,7 +622,6 @@ Dispositivos desconocidos:</string>
     <string name="clear">Borrar</string>
     <string name="missing_permissions_error">Debido a que faltan permisos, esta acción no es posible.</string>
     <string name="title_activity_bug_report">Informe de error</string>
-    <string name="status_theme">Tema de Status.im</string>
     <string name="title_activity_group_details">Detalles sobre la comunidad</string>
     <string name="title_activity_choose_sticker">Enviar una calcomanía</string>
     <string name="dialog_title_third_party_licences">Licencias de terceros</string>

@@ -792,7 +792,6 @@
     <string name="resource_limit_hard_mau">本服务器已达到每月活跃用户限制。</string>
     <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
     <string name="resource_limit_soft_contact">请 %s 以增加此限制的额度。</string>
-    <string name="status_theme">Status.im 主题</string>
     <string name="call_anyway">仍然呼叫</string>
     <string name="accept">接受</string>
     <string name="dialog_title_error">错误</string>

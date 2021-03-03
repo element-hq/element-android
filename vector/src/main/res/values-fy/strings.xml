@@ -3,7 +3,6 @@
     <string name="light_theme">Ljocht tema</string>
     <string name="dark_theme">Donker tema</string>
     <string name="black_them">Swart tema</string>
-    <string name="status_theme">Status.im-tema</string>
 
     <string name="notification_sync_init">Tsjinst inisjalisearje</string>
     <string name="notification_sync_in_progress">Syngronisearje…</string>

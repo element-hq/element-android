@@ -789,7 +789,6 @@
     <string name="settings_lazy_loading_description">透過僅載入在第一次看到的地方的聊天室成員來增進效能。</string>
     <string name="error_lazy_loading_not_supported_by_home_server">您的家伺服器尚不支援延遲載入聊天室成員。請稍後再試。</string>
     <string name="unknown_error">抱歉，遇到錯誤</string>
-    <string name="status_theme">Status.im 主題</string>
     <string name="room_sliding_menu_version_x">版本 %s</string>
     <string name="encryption_export_notice">請建立密語以加密您匯出的金鑰。您將需要輸入這些密語以匯入金鑰。</string>
     <string name="passphrase_create_passphrase">建立密語</string>

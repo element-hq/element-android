@@ -810,7 +810,6 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="settings_lazy_loading_description">Teljesítmény növelése a szoba tagjainak késleltetett betöltésével.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">A Matrix szervered jelenleg nem támogatja a szoba tagság késleltetett betöltését. Próbáld meg később.</string>
     <string name="unknown_error">Ne haragudj, hiba történt</string>
-    <string name="status_theme">Status.im téma</string>
     <string name="room_sliding_menu_version_x">Verzió: %s</string>
     <string name="encryption_export_notice">Adj meg egy jelmondatot a kimentett kulcsok titkosításához. Ezt a jelmondatot kell majd megadnod a kulcsok betöltéséhez.</string>
     <string name="passphrase_create_passphrase">Jelmondat lekészítése</string>

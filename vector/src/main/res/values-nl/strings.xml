@@ -861,7 +861,6 @@
     <string name="resource_limit_soft_contact">Gelieve %s om deze limiet te verhogen.</string>
     <string name="resource_limit_hard_contact">Gelieve %s om deze dienst te blijven gebruiken.</string>
     <string name="dialog_title_error">Foutmelding</string>
-    <string name="status_theme">Status.im-thema</string>
     <string name="call_anyway">Toch bellen</string>
     <string name="accept">Aanvaarden</string>
     <string name="auth_accept_policies">Gelieve het beleid van deze thuisserver te lezen en aanvaarden:</string>

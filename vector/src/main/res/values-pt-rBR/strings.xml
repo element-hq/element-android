@@ -864,7 +864,6 @@
     <string name="resource_limit_soft_contact">Por favor, %s para que este limite seja aumentado.</string>
     <string name="resource_limit_hard_contact">Por favor, %s para seguir usando este serviço.</string>
     <string name="encryption_export_notice">Crie uma frase secreta para criptografar as chaves exportadas. Você precisará inserir essa frase secreta para importar chaves criptografadas.</string>
-    <string name="status_theme">Tema Status.im</string>
     <string name="accept">Aceitar</string>
     <string name="dialog_title_error">Erro</string>
     <string name="auth_accept_policies">Por favor, revise e aceite as políticas deste servidor local:</string>

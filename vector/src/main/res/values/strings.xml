@@ -6,7 +6,6 @@
     <string name="light_theme">Light Theme</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="black_them">Black Theme</string>
-    <string name="status_theme">Status.im Theme</string>
 
     <!-- permanent notification subtitle -->
     <string name="notification_sync_init">Initializing service</string>

@@ -774,7 +774,6 @@ Widoczność wiadomości w Matrix jest podobna do wiadomości e-mail. Nasze zapo
     </plurals>
     <string name="room_tombstone_predecessor_link">Kliknij tutaj, aby zobaczyć starsze wiadomości</string>
     <string name="unknown_error">Przepraszamy, wystąpił błąd</string>
-    <string name="status_theme">Motyw Status.im</string>
     <string name="missing_permissions_error">Z powodu braku uprawnień to działanie nie jest możliwe.</string>
     <string name="system_alerts_header">Alerty systemowe</string>
     <string name="send_bug_report_description_in_english">Jeżeli to możliwe, proszę napisz opis w języku angielskim.</string>

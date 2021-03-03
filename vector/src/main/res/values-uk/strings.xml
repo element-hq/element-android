@@ -709,7 +709,6 @@
     <string name="e2e_re_request_encryption_key_dialog_content">Для відправлення ключа на цей пристрій, запустіть Element на іншому пристрої, що може дешифрувати повідомлення.</string>
     <string name="error_no_external_application_found">Вибачте, жодного стороннього застосунку не знайдено для завершення цієї дії.</string>
     <string name="option_send_voice">Відправити голосове повідомлення</string>
-    <string name="status_theme">Status.im Тема</string>
     <string name="missing_permissions_error">Ця дія неможлива через відсутність дозволів.</string>
     <string name="dialog_title_error">Помилка</string>
     <string name="system_alerts_header">Системні сповіщення</string>

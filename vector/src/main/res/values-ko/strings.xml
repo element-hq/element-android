@@ -111,7 +111,6 @@
     <string name="auth_password_placeholder">비밀번호</string>
     <string name="auth_new_password_placeholder">새 비밀번호</string>
     <string name="auth_user_name_placeholder">사용자 이름</string>
-    <string name="status_theme">Status.im 테마</string>
 
     <string name="notification_sync_init">서비스 초기화 중</string>
     <string name="notification_noisy_notifications">소리로 알림</string>
