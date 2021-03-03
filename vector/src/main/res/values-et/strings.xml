@@ -1003,7 +1003,7 @@
         <item quantity="other">%d jututuba</item>
     </plurals>
     <plurals name="notification_compat_summary_line_for_room">
-        <item quantity="one">%1$s: %d sõnum</item>
+        <item quantity="one">%1$s: %2$d sõnum</item>
         <item quantity="other">%1$s: %2$d sõnumit</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
@@ -1264,7 +1264,7 @@
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
         <item quantity="one">%d lugemata teavitatud sõnum</item>
-        <item quantity="other">%s lugemata teavitatud sõnumit</item>
+        <item quantity="other">%d lugemata teavitatud sõnumit</item>
     </plurals>
     <string name="settings_labs_enable_send_voice_summary">Selle valiku kasutamine eeldab kolmanda osapoole rakendust sõnumite salvestamiseks.</string>
     <string name="widget_integration_review_terms">Jätkamaks pead nõustuma kasutustingimustega.</string>

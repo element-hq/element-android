@@ -29,9 +29,9 @@
     <string name="notice_room_visibility_world_readable">todos.</string>
     <string name="notice_room_visibility_unknown">desconocido (%s).</string>
     <string name="notice_end_to_end">%1$s ha activado la encriptación de Extremo-a-Extremo (%2$s)</string>
-    <string name="notice_requested_voip_conference">%1$s solicitó una conferencia de vozIP</string>
-    <string name="notice_voip_started">conferencia de vozIP iniciada</string>
-    <string name="notice_voip_finished">conferencia de vozIP finalizada</string>
+    <string name="notice_requested_voip_conference">%1$s solicitó una conferencia de VozIP</string>
+    <string name="notice_voip_started">Conferencia de VozIP iniciada</string>
+    <string name="notice_voip_finished">Conferencia de VozIP finalizada</string>
     <string name="notice_avatar_changed_too">(el avatar también se cambió)</string>
     <string name="notice_room_name_removed">%1$s eliminó el nombre de la sala</string>
     <string name="notice_room_topic_removed">%1$s eliminó el tema de la sala</string>
@@ -148,7 +148,7 @@
     <string name="notice_made_future_room_visibility_by_you">Hiciste visible el futuro historial de la %1$s</string>
     <string name="notice_end_to_end_by_you">Has activado la encriptación de Extremo-a-Extremo (%1$s)</string>
     <string name="notice_room_update_by_you">Has actualizado esta sala.</string>
-    <string name="notice_requested_voip_conference_by_you">Solicitaste una conferencia de VoIP</string>
+    <string name="notice_requested_voip_conference_by_you">Solicitaste una conferencia de VozIP</string>
     <string name="notice_room_name_removed_by_you">Quitaste el nombre de la sala</string>
     <string name="notice_room_topic_removed_by_you">Quitaste el tema de la sala</string>
     <string name="notice_room_avatar_removed">%1$s eliminó el avatar de la sala</string>
@@ -168,8 +168,8 @@
     <string name="power_level_default">Por defecto</string>
     <string name="power_level_custom">Personalizado (%1$d)</string>
     <string name="power_level_custom_no_value">Personalizado</string>
-    <string name="notice_power_level_changed_by_you">Cambiaste el nivel de potencia de %1$s.</string>
-    <string name="notice_power_level_changed">%1$s cambió el nivel de potencia de %2$s.</string>
+    <string name="notice_power_level_changed_by_you">Cambiaste el nivel de permisos de %1$s.</string>
+    <string name="notice_power_level_changed">%1$s cambió el nivel de permisos de %2$s.</string>
     <string name="notice_power_level_diff">%1$s de %2$s a %3$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Tu invitación. Razón: %1$s</string>
     <string name="notice_room_invite_with_reason_by_you">Invitaste a %1$s. Razón: %2$s</string>
@@ -221,4 +221,55 @@
     <string name="notice_direct_room_leave">%1$s ha salido de la sala</string>
     <string name="notice_direct_room_join">%1$s se ha unido</string>
     <string name="notice_direct_room_created">%1$s ha creado la conversación</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Cambiaste el alias de esta sala.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s cambió el alias de esta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Cambiaste los alias principal y alternativos de esta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s cambió los alias principal y alternativos de esta sala.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Cambiaste los alias alternativos de esta sala.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s cambió los alias alternativos de esta sala.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Eliminaste el alias alternativo %1$s para esta sala.</item>
+        <item quantity="other">Eliminaste los alias alternativos %1$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s eliminó el alias alternativo %2$s para esta sala.</item>
+        <item quantity="other">%1$s eliminó los alias alternativos %2$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Añadiste el alias alternativo %1$s para esta sala.</item>
+        <item quantity="other">Añadiste los alias alternativos %1$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s añadió el alias alternativo %2$s para esta sala.</item>
+        <item quantity="other">%1$s añadió los alias alternativos %2$s para esta sala.</item>
+    </plurals>
+    <string name="room_displayname_empty_room_was">Sala vacía (%s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s y %4$d otro</item>
+        <item quantity="other">%1$s, %2$s, %3$s y %4$d otros</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s y %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s y %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Todos los servidores tienen prohibido participar! Esta sala ya no puede ser usada.</string>
+    <string name="notice_room_server_acl_updated_no_change">Sin cambios.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Los servidores con literales IP coincidentes ahora están prohibidos.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Los servidores con literales IP coincidentes ahora están permitidos.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Los servidores con %s coincidentes se han eliminado de la lista de permitidos.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Los servidores con %s coincidentes ahora están permitidos.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Los servidores con %s coincidentes se han eliminado de la lista de baneos.</string>
+    <string name="notice_room_server_acl_updated_banned">• Los servidores con %s coincidentes ahora están prohibidos.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Has cambiado la lista de control de acceso para esta sala.</string>
+    <string name="notice_room_server_acl_updated_title">%s ha cambiado la lista de control de acceso para esta sala.</string>
+    <string name="notice_room_server_acl_set_allowed">• Los servidores con %s coincidentes están permitidos.</string>
+    <string name="notice_room_server_acl_set_banned">• Los servidores con %s coincidentes están prohibidos.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Los servidores con literales IP coincidentes están prohibidos.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Los servidores con literales IP coincidentes están permitidos.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Has fijado la lista de control de acceso para esta sala.</string>
+    <string name="notice_room_server_acl_set_title">%s ha fijado la lista de control de acceso para esta sala.</string>
+    <string name="notice_widget_jitsi_modified_by_you">Has modificado la videoconferencia</string>
+    <string name="notice_widget_jitsi_modified">Videoconferencia modificada por %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">Has terminado la videoconferencia</string>
+    <string name="notice_widget_jitsi_removed">Videoconferencia terminada por %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">Has empezado una videoconferencia</string>
+    <string name="notice_widget_jitsi_added">Videoconferencia empezada por %1$s</string>
 </resources>

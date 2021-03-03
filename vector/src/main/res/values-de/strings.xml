@@ -1894,7 +1894,7 @@
 \nElement Android</string>
     <string name="or_other_mx_capabale_client">oder einen anderen cross-signing fähigen Matrix Client</string>
     <string name="use_latest_app">Nutze die neueste Version von Element auf deinen anderen Geräten:</string>
-    <string name="command_description_discard_session">Erzwingt das Verferfen der aktuell ausgehende Gruppensitzung in einem verschlüsseltem Raum</string>
+    <string name="command_description_discard_session">Erzwingt das Verwerfen der aktuell ausgehende Gruppensitzung in einem verschlüsseltem Raum</string>
     <string name="command_description_discard_session_not_handled">Wird nur in verschlüsselten Räumen unterstützt</string>
     <string name="enter_secret_storage_passphrase_or_key">Benutze deine %1$s oder deinen %2$s um fortzufahren.</string>
     <string name="use_recovery_key">Wiederherstellungsschlüssel verwenden</string>

@@ -1,0 +1,2 @@
+Tärkeimmät muutokset tässä versiossa: Social Login -tuki.
+Täysi muutosloki: https://github.com/vector-im/element-android/releases/tag/v1.0.15

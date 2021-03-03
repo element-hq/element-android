@@ -845,7 +845,7 @@
     <string name="settings_discovery_no_mails">Elektebloj pri trovado aperos post aldono de retpoŝtadreso.</string>
     <string name="settings_discovery_emails_title">Troveblaj retpoŝtadresoj</string>
     <string name="settings_discovery_identity_server_info_none">Vi nun ne uzas identigan servilon. Por trovi kaj troviĝi de jamaj kontaktoj, kiujn vi konas, agordu tian servilon sube.</string>
-    <string name="settings_discovery_identity_server_info">Vi nun uzas %1$s por trovi kaj troviĝi de jamaj kontaktoj, kiujn vi trovas.</string>
+    <string name="settings_discovery_identity_server_info">Vi nun uzas %1$s por trovi kaj troviĝi de jamaj kontaktoj, kiujn vi konas.</string>
     <string name="change_identity_server">Ŝanĝi identigan servilon</string>
     <string name="add_identity_server">Agordi identigan servilon</string>
     <string name="disconnect_identity_server">Malkonekti identigan servilon</string>
@@ -1186,7 +1186,7 @@
 \nSe vi ne salutis alian salutaĵon, malatentu ĉi tiun peton.</string>
     <string name="your_unverified_device_requesting">Via nekontrolita salutaĵo «%s» petas ĉifrajn ŝlosilojn.</string>
     <string name="you_added_a_new_device">Vi aldonis novan salutaĵon «%s», kiu petas ĉifrajn ŝlosilojn.</string>
-    <string name="widget_integration_review_terms">Por daŭrigi vi bezonas akcepti la uzokondiĉojn de tiu ĉi servo.</string>
+    <string name="widget_integration_review_terms">Por daŭrigi vi devas akcepti la uzokondiĉojn de tiu ĉi servo.</string>
     <string name="settings_labs_enable_send_voice_summary">Ĉi tiu elekteblo postulas aplikaĵon de ekstera liveranto por registri la mesaĝojn.</string>
     <string name="settings_labs_enable_send_voice">Sendi voĉmesaĝojn</string>
     <string name="settings_labs_keyboard_options_to_send_message">Uzi enigan klavon por sendi mesaĝon</string>
@@ -2169,4 +2169,21 @@
     <string name="autodiscover_well_known_autofill_dialog_message">Element trovis propran servilan agordaron per la retnomo «%1$s» el via identigilo de uzanto:
 \n%2$s</string>
     <string name="autodiscover_invalid_response">Nevalidas hejmservil-serĉanta respondo</string>
+    <string name="room_permissions_notice">Elektu la rolojn bezonatajn por ŝanĝi diversajn partojn de la ĉambro</string>
+    <string name="room_permissions_title">Permesoj</string>
+    <string name="room_settings_permissions_subtitle">Montri kaj ĝisdatigi la rolojn bezonatajn por ŝanĝi diversajn partojn de la ĉambro.</string>
+    <string name="room_participants_leave_private_warning">Ĉi tiu ĉambro ne estas publika. Vi ne povos re-aliĝi sen invito.</string>
+    <string name="permissions_denied_add_contact">Permesi aliron al viaj kontaktoj.</string>
+    <string name="permissions_denied_qr_code">Por skani rapidrespondan kodon, vi bezonas permesi aliron al filmilo.</string>
+    <string name="call_held_by_you">Vi paŭzigis la vokon</string>
+    <string name="call_held_by_user">%s paŭzigis la vokon</string>
+    <string name="call_hold_action">Paŭzigi</string>
+    <string name="call_resume_action">Daŭrigi</string>
+    <string name="send_bug_report_include_key_share_history">Sendi historion de petoj havigi ŝlosilojn</string>
+    <string name="no_more_results">Neniu pliaj rezultoj</string>
+    <string name="action_return">Reiri</string>
+    <string name="action_unpublish">Malpublikigi</string>
+    <string name="action_add">Aldoni</string>
+    <string name="start_chatting">Ekbabili</string>
+    <string name="system_theme">Implicita de sistemo</string>
 </resources>

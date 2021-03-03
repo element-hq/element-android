@@ -258,4 +258,10 @@
     <string name="notice_room_server_acl_set_banned">• Servrar som matchar %s är bannade.</string>
     <string name="notice_room_server_acl_set_title_by_you">Du satte server-ACLer för det här rummet.</string>
     <string name="notice_room_server_acl_set_title">%s satte server-ACLer för det här rummet.</string>
+    <string name="notice_widget_jitsi_modified_by_you">Du ändrade videogruppsamtal</string>
+    <string name="notice_widget_jitsi_modified">Videogruppsamtal ändrades av %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">Du avslutade videogruppsamtal</string>
+    <string name="notice_widget_jitsi_removed">Videogruppsamtal avslutades av %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">Du startade videogruppsamtal</string>
+    <string name="notice_widget_jitsi_added">Videogruppsamtal startades av %1$s</string>
 </resources>

@@ -146,9 +146,9 @@
     <string name="auth_forgot_password">Забыли пароль?</string>
     <string name="auth_use_server_options">Использовать особые параметры сервера</string>
     <string name="auth_email_validation_message">Проверьте email для продолжения регистрации</string>
-    <string name="auth_threepid_warning_message">Регистрация одновременно по email и номеру телефона пока не поддерживается. Только номер телефона будет связан с аккаунтом.
-
-Вы можете добавить свой email в настройках профиля.</string>
+    <string name="auth_threepid_warning_message">Регистрация одновременно по email и номеру телефона пока не поддерживается. Только номер телефона будет связан с аккаунтом. 
+\n
+\nВы можете добавить свой email в настройках профиля.</string>
     <string name="auth_recaptcha_message">Проверка не являетесь ли вы роботом</string>
     <string name="auth_username_in_use">Логин уже используется</string>
     <string name="auth_home_server">Сервер:</string>
@@ -159,7 +159,9 @@
     <string name="auth_reset_password_missing_password">Должен быть введен новый пароль.</string>
     <string name="auth_reset_password_email_validation_message">На адрес %s было отправлено письмо. После перехода по ссылке в письме, нажмите ниже.</string>
     <string name="auth_reset_password_error_unauthorized">Не удалось проверить email: убедитесь, что вы перешли по присланной ссылке</string>
-    <string name="auth_reset_password_success_message">Ваш пароль сброшен. Осуществлен выход на всех сессиях - вы не будете получать push уведомления. Для включения push уведомлений заново войдите на каждом из ваших устройств.</string>
+    <string name="auth_reset_password_success_message">Ваш пароль сброшен. 
+\n
+\nОсуществлен выход на всех сессиях - вы не будете получать push уведомления. Для включения push уведомлений заново войдите на каждом из ваших устройств.</string>
     <!-- Login Screen -->
     <string name="login_error_must_start_http">URL должен начинаться с http[s]://</string>
     <string name="login_error_network_error">Сбой входа: сетевая ошибка</string>
@@ -222,8 +224,8 @@
     <string name="permissions_rationale_msg_record_audio">Element необходимы разрешения на доступ к микрофону, чтобы выполнять звонки.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность совершать звонки.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Element необходимы разрешения на доступ к камере и микрофону для видеовызовов.
-
-Пожалуйста дайте разрешение в следующем окне для звонка.</string>
+\n
+\nПожалуйста дайте разрешение в следующем окне для звонка.</string>
     <string name="permissions_rationale_msg_contacts">Element может проверить вашу адресную книгу, чтобы найти других пользователей Matrix по их электронной почте и номерам телефонов. Если вы согласны поделиться своей адресной книгой для этой цели, пожалуйста, откройте доступ на следующем всплывающем окне.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Element может проверить Вашу адресную книгу, чтобы найти других пользователей сети по email или телефонному номеру.
 \n
@@ -278,7 +280,8 @@
     <string name="room_participants_invite_search_another_user">ID пользователя, имя или email</string>
     <string name="room_participants_action_mention">Упомянуть</string>
     <string name="room_participants_action_devices_list">Отобразить список сессий</string>
-    <string name="room_participants_power_level_prompt">Вы не сможете отменить это действие, поскольку пользователь получит такой же уровень доступа, как и у вас. Вы уверены?</string>
+    <string name="room_participants_power_level_prompt">Вы не сможете отменить это действие, поскольку пользователь получит такой же уровень доступа, как и у вас. 
+\nВы уверены\?</string>
     <string name="room_participants_invite_prompt_msg">"Вы уверены что хотите пригласить %s в этот чат?"</string>
     <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Пригласить по ID</u></string>
@@ -325,9 +328,9 @@
     <string name="room_details_people_present_group_name">ПРИСОЕДИНИЛИСЬ</string>
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Причина отчета о контенте</string>
-    <string name="room_event_action_report_prompt_ignore_user">Вы хотите скрыть все сообщения этого пользователя?
-
-Учтите, что это действие перезапустит приложение и может занять некоторое время.</string>
+    <string name="room_event_action_report_prompt_ignore_user">Вы хотите скрыть все сообщения этого пользователя\? 
+\n
+\nУчтите, что это действие перезапустит приложение и может занять некоторое время.</string>
     <string name="room_event_action_cancel_upload">Отменить загрузку</string>
     <string name="room_event_action_cancel_download">Отменить загрузку</string>
     <!-- Search -->
@@ -416,8 +419,8 @@
     <string name="devices_details_device_name">Обновить публичное имя</string>
     <string name="devices_details_last_seen_title">Последнее подключение</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_delete_dialog_text">Для этой операции требуется дополнительная проверка подлинности.
-Чтобы продолжить, введите пароль.</string>
+    <string name="devices_delete_dialog_text">Для этой операции требуется дополнительная проверка подлинности. 
+\nЧтобы продолжить, введите пароль.</string>
     <string name="devices_delete_dialog_title">Аутентификация</string>
     <string name="devices_delete_pswd">Пароль:</string>
     <string name="devices_delete_submit_button_label">Отправить</string>
@@ -436,9 +439,9 @@
     <string name="settings_confirm_password">Подтвердите новый пароль</string>
     <string name="settings_fail_to_update_password">Не удалось обновить пароль</string>
     <string name="settings_password_updated">Пароль был обновлен</string>
-    <string name="settings_unignore_user">Отображать сообщения пользователя %s?
-
-Учтите, что это действие перезапустит приложение и может занять некоторое время.</string>
+    <string name="settings_unignore_user">Отображать сообщения пользователя %s\? 
+\n
+\nУчтите, что это действие перезапустит приложение и может занять некоторое время.</string>
     <string name="settings_delete_notification_targets_confirmation">Вы уверены, что хотите удалить устройство для получения уведомлений?</string>
     <string name="settings_delete_threepid_confirmation">Вы уверены, что хотите удалить %1$s %2$s?</string>
     <string name="settings_select_country">Выберите страну</string>
@@ -533,9 +536,9 @@
     <string name="encryption_export_export">Экспорт</string>
     <string name="passphrase_enter_passphrase">Введите парольную фразу</string>
     <string name="passphrase_confirm_passphrase">Подтвердите парольную фразу</string>
-    <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'.
-
-Предупреждение: этот файл может быть удален после деинсталляции приложения.</string>
+    <string name="encryption_export_saved_as">E2E ключи комнаты сохранены в \'%s\'. 
+\n
+\nПредупреждение: этот файл может быть удален после деинсталляции приложения.</string>
     <string name="encryption_import_e2e_room_keys">Импорт E2E ключей комнаты</string>
     <string name="encryption_import_room_keys">Импорт ключей комнаты</string>
     <string name="encryption_import_room_keys_summary">Импортировать ключи из локального файла</string>
@@ -774,9 +777,9 @@
     <string name="settings_notification_privacy_secure_message_content"><b> надежно от Matrix-Homeserver получено </b></string>
     <string name="title_activity_choose_sticker">Отправить стикер</string>
     <string name="option_send_sticker">Отправить стикер</string>
-    <string name="no_sticker_application_dialog_content">У вас сейчас нет доступных стикеров.
-
-Добавить сейчас?</string>
+    <string name="no_sticker_application_dialog_content">У вас сейчас нет доступных стикеров. 
+\n
+\nДобавить сейчас\?</string>
     <string name="settings_deactivate_account_section">Деактивация аккаунта</string>
     <string name="settings_deactivate_my_account">Деактивировать мой аккаунт</string>
     <string name="settings_opt_in_of_analytics">Отправка аналитических данных</string>
@@ -791,11 +794,11 @@
     <string name="deactivate_account_delete_checkbox">Пожалуйста, удалите все сообщения, которые я отправил, после деактивации моего аккаунта (предупреждение: будущие участники увидят неполную историю разговоров)</string>
     <string name="deactivate_account_prompt_password">Чтобы продолжить, введите пароль:</string>
     <string name="deactivate_account_submit">Деактивировать аккаунт</string>
-    <string name="deactivate_account_content">Это действие сделает вашу учетную запись непригодной для дальнейшего использования. Вы не сможете войти в систему и никто другой не сможет заново зарегистрировать учетную запись с вашим идентификатором. Также, это приведет к тому, что вы покинете все комнаты, в которых участвовали и данные о вашей учетной записи будут удалены с сервера идентификации. <b>Это действие необратимо</b>.
-
-По умолчанию, деактивация вашей учетной записи <b>не удаляет отправленные вами сообщения</b>. Если вы хотите, чтобы мы удалили все ваши сообщения - поставьте отметку в поле ниже.
-
-Видимость сообщений в Matrix похожа на электронную почту. Удаление ваших сообщений означает, что отправленные вами сообщения не будут показаны новым или не зарегистрированным пользователям, но те пользователи, которые уже получили эти сообщения - по прежнему будут их видеть.</string>
+    <string name="deactivate_account_content">Это действие сделает вашу учетную запись непригодной для дальнейшего использования. Вы не сможете войти в систему и никто другой не сможет заново зарегистрировать учетную запись с вашим идентификатором. Также, это приведет к тому, что вы покинете все комнаты, в которых участвовали и данные о вашей учетной записи будут удалены с сервера идентификации. <b>Это действие необратимо</b>. 
+\n
+\nПо умолчанию, деактивация вашей учетной записи <b>не удаляет отправленные вами сообщения</b>. Если вы хотите, чтобы мы удалили все ваши сообщения - поставьте отметку в поле ниже. 
+\n
+\nВидимость сообщений в Matrix похожа на электронную почту. Удаление ваших сообщений означает, что отправленные вами сообщения не будут показаны новым или не зарегистрированным пользователям, но те пользователи, которые уже получили эти сообщения - по прежнему будут их видеть.</string>
     <string name="dialog_title_third_party_licences">Лицензии сторонних производителей</string>
     <string name="download">Скачать</string>
     <string name="speak">Говорить</string>
@@ -937,13 +940,13 @@
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Один или несколько тестов не пройдены, пожалуйста, отправьте отчет об ошибке, чтобы помочь нам исследовать проблему.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Настройки системы.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Уведомления включены в настройках системы.</string>
-    <string name="settings_troubleshoot_test_system_settings_failed">Уведомления отключены в настройках системы.
-Пожалуйста, проверьте настройки системы.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Уведомления отключены в настройках системы. 
+\nПожалуйста, проверьте настройки системы.</string>
     <string name="open_settings">Открыть настройки</string>
     <string name="settings_troubleshoot_test_account_settings_title">Настройки аккаунта.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Уведомления включены для вашей учетной записи.</string>
-    <string name="settings_troubleshoot_test_account_settings_failed">Уведомления отключены для вашей учетной записи.
-Пожалуйста, проверьте настройки аккаунта.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Уведомления отключены для вашей учетной записи. 
+\nПожалуйста, проверьте настройки аккаунта.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Включить</string>
     <string name="settings_troubleshoot_test_device_settings_title">Настройки сессии.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Уведомления включены для этой сессии.</string>
@@ -952,22 +955,22 @@
     <string name="settings_troubleshoot_test_device_settings_quickfix">Включить</string>
     <string name="settings_troubleshoot_test_play_services_title">Проверка сервисов Play</string>
     <string name="settings_troubleshoot_test_play_services_success">APK Google Play сервисов доступен и обновлён.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element использует сервисы Google Play для доставки push-сообщений, но не похоже что он настроен правильно:
-%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_failed">Element использует сервисы Google Play для доставки push-сообщений, но не похоже что он настроен правильно: 
+\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Исправить сервисы Play</string>
     <string name="settings_troubleshoot_test_fcm_title">Токен Firebase</string>
     <string name="settings_troubleshoot_test_fcm_success">Токен FCM успешно получен:
-%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed">Не удалось получить токен FCM:
-%1$s</string>
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Не удалось получить токен FCM: 
+\n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Регистрация токена</string>
     <string name="settings_troubleshoot_test_token_registration_success">Токен FCM успешно зарегистрирован на сервере.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Не удалось зарегистрировать токен FCM на сервере:
-%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Не удалось зарегистрировать токен FCM на сервере: 
+\n%1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Служба уведомлений</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Служба уведомлений запущена.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Служба уведомлений не запущена.
-Попробуйте перезапустить приложение.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Служба уведомлений не запущена. 
+\nПопробуйте перезапустить приложение.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Запустить службу</string>
     <string name="settings_troubleshoot_test_service_restart_title">Автоматический перезапуск службы уведомлений</string>
     <string name="settings_troubleshoot_test_service_restart_success">Служба была убита и перезапущена автоматически.</string>
@@ -977,11 +980,11 @@
     <string name="settings_troubleshoot_test_service_boot_failed">При перезагрузке устройства служба не будет запущена , вы не будете получать уведомления, пока Element не будет открыт один раз.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Включить запуск при загрузке</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Проверьте фоновые ограничения</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Фоновые ограничения отключены для Element. Этот тест должен быть запущен с использованием мобильных данных (без WIFI).
-%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Фоновые ограничения включены для Element.
-Работа приложения будет жестко ограничена, пока оно находится в фоновом режиме, и это может повлиять на уведомления.
-%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Фоновые ограничения отключены для Element. Этот тест должен быть запущен с использованием мобильных данных (без WIFI). 
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Фоновые ограничения включены для Element. 
+\nРабота приложения будет жестко ограничена, пока оно находится в фоновом режиме, и это может повлиять на уведомления. 
+\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Отключить ограничения</string>
     <string name="settings_troubleshoot_test_battery_title">Оптимизация батареи</string>
     <string name="settings_troubleshoot_test_battery_success">Оптимизация батареи не влияет на Element.</string>
@@ -995,8 +998,8 @@
     <string name="settings_show_join_leave_messages">Показывать события о вступлении/выходе</string>
     <string name="settings_show_avatar_display_name_changes_messages">Показывать события аккаунта</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Включает изменения аватара и отображаемого имени.</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Необходимо минимизировать влияние на фоновое соединение для надёжности уведомлений.
-На следующем экране вам будет предложено разрешить Райоту всегда работать в фоновом режиме, пожалуйста, примите.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">Необходимо минимизировать влияние на фоновое соединение для надёжности уведомлений. 
+\nНа следующем экране вам будет предложено разрешить Райоту всегда работать в фоновом режиме, пожалуйста, примите.</string>
     <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Element.</string>
     <string name="settings_info_area_show">Показать информацию</string>
     <string name="generic_label">%1$s:</string>
@@ -1091,14 +1094,15 @@
     <string name="keys_backup_passphrase_error_decrypt">Невозможно расшифровать резервную копию с помощью данного пароля: убедитесь, что вы ввели верный пароль.</string>
     <string name="keys_backup_setup_backup_started_message">Ключи шифрования копируются на сервер в фоновом режиме. Первое копирование может занять несколько минут.</string>
     <string name="keys_backup_setup_step3_generating_key_status">Генерация ключей восстановления с использованием парольной фразы может занять несколько секунд.</string>
-    <string name="recovery_key_export_saved_as_warning">Ключ восстановления был сохранен в \'%s\'.
-
-Предупреждение: этот файл может быть удален при удалении приложения.</string>
+    <string name="recovery_key_export_saved_as_warning">Ключ восстановления был сохранен в \'%s\'. 
+\n
+\nПредупреждение: этот файл может быть удален при удалении приложения.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s] 
 \nЭта ошибка вне контроля Element. На телефоне нет учетной записи Google. Пожалуйста, добавьте аккаунт Google.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-Эта ошибка вне контроля Element. Причины могут быть разными. Возможно, это будет работать, если вы повторите попытку позже, вы также можете проверить, что службы Google Play не ограничены в использовании данных в настройках системы, или что часы вашего устройства установлены правильно, или это может произойти на модифицированных прошивках.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s] Эта ошибка вне контроля Element, и, по словам Google, эта ошибка означает, что на устройстве слишком много приложений, зарегистрированных в FCM. Ошибка возникает только в тех случаях, когда существует огромное количество приложений, поэтому она не должна влиять на обычного пользователя.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s] 
+\nЭта ошибка вне контроля Element. Причины могут быть разными. Возможно, это будет работать, если вы повторите попытку позже, вы также можете проверить, что службы Google Play не ограничены в использовании данных в настройках системы, или что часы вашего устройства установлены правильно, или это может произойти на модифицированных прошивках.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s] 
+\nЭта ошибка вне контроля Element, и, по словам Google, эта ошибка означает, что на устройстве слишком много приложений, зарегистрированных в FCM. Ошибка возникает только в тех случаях, когда существует огромное количество приложений, поэтому она не должна влиять на обычного пользователя.</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Ваши зашифрованные сообщения будут потеряны, если выйдете сейчас</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Выполняется резервное копирование ключа. Если выйти сейчас, Вы потеряете доступ к Вашим зашифрованным сообщениям.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Мне не нужны мои зашифрованные сообщения</string>
@@ -1151,7 +1155,8 @@
     <string name="keys_backup_setup_step2_text_description">Зашифрованная копия ключей будет храниться на вашем сервере. Для безопасности защитите её парольной фразой.
 \n
 \nДля максимальной безопасности парольная фраза должна отличаться от пароля вашей учётной записи.</string>
-    <string name="keys_backup_setup_step3_text_line2">Ключ восстановления — это страховка, вы можете использовать его для восстановления доступа к вашим зашифрованным сообщениям, если забудете вашу парольную фразу. Храните ключ восстановления в надёжном месте, например, в диспетчере паролей (или в сейфе)</string>
+    <string name="keys_backup_setup_step3_text_line2">Ключ восстановления — это страховка, вы можете использовать его для восстановления доступа к вашим зашифрованным сообщениям, если забудете вашу парольную фразу. 
+\nХраните ключ восстановления в надёжном месте, например, в диспетчере паролей (или в сейфе)</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Импортирование ключей…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Скачивание ключей…</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Вычисление ключа восстановления…</string>
@@ -1504,6 +1509,7 @@
     <string name="login_server_url_form_modular_notice">Введите адрес Modular Element или сервера, который вы хотите использовать</string>
     <string name="login_sso_error_message">Произошла ошибка при загрузке страницы: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Приложение не может войти на этот сервер, так как он поддерживает следующие типы входа: %1$s.
+\n
 \nВы хотите войти с помощью веб-клиента\?</string>
     <string name="login_registration_disabled">Извините, этот сервер не принимает новые учётные записи.</string>
     <string name="login_registration_not_supported">Приложение не может создать учётную запись на этом домашнем сервере. 
@@ -2431,4 +2437,37 @@
     <string name="re_authentication_default_confirm_text">Element требует от вас ввести свои учетные данные для выполнения этого действия.</string>
     <string name="re_authentication_activity_title">Требуется повторная аутентификация</string>
     <string name="failed_to_initialize_cross_signing">Не удалось настроить перекрестную подпись</string>
+    <string name="call_only_active">Активный звонок (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">При поиске номера телефона произошла ошибка</string>
+    <string name="call_dial_pad_title">Панель набора номера</string>
+    <string name="call_tile_call_back">Перезвонить</string>
+    <string name="call_tile_ended">Этот вызов закончился</string>
+    <string name="call_tile_other_declined">%1$s отменил(а) этот вызов</string>
+    <string name="call_tile_you_declined">Вы отклонили этот вызов %1$s</string>
+    <string name="call_tile_in_call">Вы сейчас в этом вызове</string>
+    <string name="call_tile_you_started_call">Вы начали вызов</string>
+    <string name="call_tile_other_started_call">%1$s начал(а) вызов</string>
+    <string name="call_held_by_you">Вы поставили вызов на удержание</string>
+    <string name="call_held_by_user">%s поставил вызов на удержание</string>
+    <string name="call_hold_action">Удерживать</string>
+    <string name="call_resume_action">Возобновить</string>
+    <string name="call_transfer_users_tab_title">Пользователи</string>
+    <string name="call_transfer_failure">Произошла ошибка при переводе вызова</string>
+    <string name="call_transfer_title">Перевод</string>
+    <string name="call_transfer_connect_action">Соединиться</string>
+    <string name="call_transfer_consult_first">Сначала спросить</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">1 активный вызов (%1$s) · 1 приостановленный вызов</item>
+        <item quantity="few">1 активный вызов (%1$s) · %2$d приостановленных вызова</item>
+        <item quantity="many">1 активный вызов (%1$s) · %2$d приостановленных вызовов</item>
+        <item quantity="other">1 активный вызов (%1$s) · %2$d приостановленных вызовов</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="one">Приостановленный вызов</item>
+        <item quantity="few">%1$d приостановленных вызова</item>
+        <item quantity="many">%1$d приостановленных вызовов</item>
+        <item quantity="other">%1$d приостановленных вызовов</item>
+    </plurals>
+    <string name="error_unauthorized">Нет учётных данных, неправильная учётная запись пользователя и/или пароль</string>
+    <string name="action_return">Вернуть</string>
 </resources>

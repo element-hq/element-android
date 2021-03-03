@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_home">පණිවිඩ</string>
+    <string name="title_activity_settings">සැකසුම්</string>
+    <string name="title_activity_room">කාමරය</string>
+    <string name="dark_theme">අඳුරු තේමාව</string>
+</resources>
