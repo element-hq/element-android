@@ -175,3 +175,6 @@ PreferenceManager\.getDefaultSharedPreferences==2
 
 ### Use ViewBindings
 # findViewById
+
+### Do not use `template_` string. Please remove the prefix `template_` to use the generated resource instead.
+R\.string\.template_
