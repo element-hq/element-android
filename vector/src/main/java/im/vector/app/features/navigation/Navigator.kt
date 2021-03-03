@@ -58,6 +58,8 @@ interface Navigator {
 
     fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData)
 
+    fun openMatrixToBottomSheet(context: Context, link: String)
+
     fun openCreateRoom(context: Context, initialName: String = "")
 
     fun openCreateDirectRoom(context: Context)
