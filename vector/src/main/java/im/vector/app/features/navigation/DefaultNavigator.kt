@@ -54,6 +54,7 @@ import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.search.SearchArgs
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
+import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
@@ -119,6 +120,12 @@ class DefaultNavigator @Inject constructor(
             val args = RoomDetailArgs(roomId, eventId = null, openShareSpaceForId = spaceId.takeIf { openShareSheet })
             val intent = RoomDetailActivity.newIntent(context, args)
             startActivity(context, intent, false)
+        } else {
+            // go back to home if we are showing room details?
+            // This is a bit ugly, but the navigator is supposed to know about the activity stack
+            if (context is RoomDetailActivity) {
+                context.finish()
+            }
         }
     }
 
@@ -223,6 +230,23 @@ class DefaultNavigator @Inject constructor(
     override fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData) {
         val intent = RoomPreviewActivity.newIntent(context, roomPreviewData)
         context.startActivity(intent)
+    }
+
+    override fun openMatrixToBottomSheet(context: Context, link: String) {
+        if (context is AppCompatActivity) {
+            val listener = object : MatrixToBottomSheet.InteractionListener {
+                override fun navigateToRoom(roomId: String) {
+                    openRoom(context, roomId)
+                }
+
+                override fun switchToSpace(spaceId: String) {
+                    this@DefaultNavigator.switchToSpace(context, spaceId, null, openShareSheet = false)
+                }
+            }
+            // TODO check if there is already one??
+            MatrixToBottomSheet.withLink(link, listener)
+                    .show(context.supportFragmentManager, "HA#MatrixToBottomSheet")
+        }
     }
 
     override fun openRoomDirectory(context: Context, initialFilter: String) {

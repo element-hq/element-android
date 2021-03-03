@@ -87,17 +87,23 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                             views.matrixToMemberPills.isVisible = false
                         }
 
+                        val joinTextRes = if (peek.roomType == RoomType.SPACE) {
+                            R.string.join_space
+                        } else {
+                            R.string.join_room
+                        }
+
                         when (peek.membership) {
                             Membership.LEAVE,
                             Membership.NONE   -> {
                                 views.matrixToCardMainButton.isVisible = true
-                                views.matrixToCardMainButton.text = getString(R.string.join_space)
+                                views.matrixToCardMainButton.text = getString(joinTextRes)
                                 views.matrixToCardSecondaryButton.isVisible = false
                             }
                             Membership.INVITE -> {
                                 views.matrixToCardMainButton.isVisible = true
                                 views.matrixToCardSecondaryButton.isVisible = true
-                                views.matrixToCardMainButton.text = getString(R.string.join_space)
+                                views.matrixToCardMainButton.text = getString(joinTextRes)
                                 views.matrixToCardSecondaryButton.text = getString(R.string.decline)
                             }
                             Membership.JOIN   -> {
@@ -196,6 +202,10 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                 }
             }
             is RoomInfoResult.PartialInfo -> {
+                // we can try to join anyway
+                if (info.roomId != null) {
+                    sharedViewModel.handle(MatrixToAction.JoinRoom(info.roomId, info.viaServers))
+                }
             }
             else                          -> {
             }

@@ -22,7 +22,6 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.toast
 import im.vector.app.features.navigation.Navigator
-import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -88,6 +87,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                                         context = context,
                                         roomId = roomId,
                                         permalinkData = permalinkData,
+                                        rawLink = rawLink,
                                         buildTask = buildTask
                                 )
                             }
@@ -134,6 +134,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             context: Context,
             roomId: String?,
             permalinkData: PermalinkData.RoomLink,
+            rawLink: Uri,
             buildTask: Boolean
     ) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
@@ -149,40 +150,17 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
         return when {
             membership == Membership.BAN     -> context.toast(R.string.error_opening_banned_room)
             membership?.isActive().orFalse() -> {
-                if (isSpace) {
-//                    navigator.switchToSpace(context, roomId, null)
-                    navigator.openSpacePreview(context, roomId)
-                } else {
+                if (!isSpace && membership == Membership.JOIN) {
+                    // If it's a room you're in, let's just open it, you can tap back if needed
                     navigator.openRoom(context, roomId, eventId, buildTask)
+                } else {
+                    // maybe open space preview navigator.openSpacePreview(context, roomId)? if already joined?
+                    navigator.openMatrixToBottomSheet(context, rawLink.toString())
                 }
             }
             else                             -> {
-                if (isSpace) {
-                    navigator.openSpacePreview(context, roomId)
-                } else {
-                    if (roomSummary == null) {
-                        // we don't know this room, try to peek
-                        val roomPreviewData = RoomPreviewData(
-                                roomId = roomId,
-                                roomAlias = roomAlias,
-                                peekFromServer = true,
-                                buildTask = buildTask,
-                                homeServers = permalinkData.viaParameters
-                        )
-                        navigator.openRoomPreview(context, roomPreviewData)
-                    } else {
-                        val roomPreviewData = RoomPreviewData(
-                                roomId = roomId,
-                                eventId = eventId,
-                                roomAlias = roomAlias ?: roomSummary.canonicalAlias,
-                                roomName = roomSummary.displayName,
-                                avatarUrl = roomSummary.avatarUrl,
-                                buildTask = buildTask,
-                                homeServers = permalinkData.viaParameters
-                        )
-                        navigator.openRoomPreview(context, roomPreviewData)
-                    }
-                }
+                // XXX this could trigger another server load
+                navigator.openMatrixToBottomSheet(context, rawLink.toString())
             }
         }
     }
