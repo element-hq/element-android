@@ -170,8 +170,6 @@
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">It is not currently possible to re-join an empty room.</string>
 
-    <string name="encrypted_message">Encrypted message</string>
-
     <!-- medium friendly name -->
     <string name="medium_email">Email address</string>
     <string name="medium_phone_number">Phone number</string>

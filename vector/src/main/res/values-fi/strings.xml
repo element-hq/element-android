@@ -44,7 +44,6 @@
     <string name="network_error">Verkkovirhe</string>
     <string name="matrix_error">Matrix-virhe</string>
     <string name="room_error_join_failed_empty_room">Tällä hetkellä ei ole mahdollista liittyä uudelleen tyhjään huoneeseen.</string>
-    <string name="encrypted_message">Salattu viesti</string>
     <string name="medium_email">Sähköpostiosoite</string>
     <string name="medium_phone_number">Puhelinnumero</string>
     <string name="could_not_redact">Takaisinveto epäonnistui</string>

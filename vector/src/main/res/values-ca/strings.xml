@@ -6,7 +6,6 @@
     <string name="notice_room_join">%1$s s\'ha unit a la sala</string>
     <string name="medium_phone_number">Número de telèfon</string>
     <string name="medium_email">Correu electrònic</string>
-    <string name="encrypted_message">Missatge xifrat</string>
     <string name="notice_room_invite_no_invitee">invitació de %s</string>
     <string name="notice_room_invite">%1$s ha convidat a %2$s</string>
     <string name="notice_room_invite_you">%1$s t\'ha convidat</string>

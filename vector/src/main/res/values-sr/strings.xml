@@ -62,7 +62,6 @@
     <string name="room_displayname_two_members">%1$s и %2$s</string>
     <string name="medium_phone_number">Број телефона</string>
     <string name="medium_email">Адреса е-поште</string>
-    <string name="encrypted_message">Шифрована порука</string>
     <string name="room_error_join_failed_empty_room">Тренутно није могуће да се вратите у празну собу.</string>
     <string name="matrix_error">Грешка Матрикса</string>
     <string name="network_error">Мрежна грешка</string>

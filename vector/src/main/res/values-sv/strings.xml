@@ -106,7 +106,6 @@
     <string name="network_error">Nätverksfel</string>
     <string name="matrix_error">Matrixfel</string>
     <string name="room_error_join_failed_empty_room">Det går för närvarande inte att gå med i ett tomt rum igen.</string>
-    <string name="encrypted_message">Krypterat meddelande</string>
     <string name="medium_email">E-postadress</string>
     <string name="medium_phone_number">Telefonnummer</string>
     <string name="room_displayname_invite_from">Inbjudan från %s</string>

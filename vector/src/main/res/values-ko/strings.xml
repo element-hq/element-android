@@ -61,8 +61,6 @@
 
     <string name="room_error_join_failed_empty_room">현재 빈 방에 다시 들어갈 수 없습니다.</string>
 
-    <string name="encrypted_message">암호화된 메시지</string>
-
     <string name="medium_email">이메일 주소</string>
     <string name="medium_phone_number">전화번호</string>
 

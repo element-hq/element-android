@@ -47,7 +47,6 @@
     <string name="network_error">Chyba sítě</string>
     <string name="matrix_error">Chyba v Matrixu</string>
     <string name="room_error_join_failed_empty_room">V současnosti není možné znovu vstoupit do prázdné místnosti.</string>
-    <string name="encrypted_message">Šifrovaná zpráva</string>
     <string name="medium_email">E-mailová adresa</string>
     <string name="medium_phone_number">Telefonní číslo</string>
     <string name="room_displayname_invite_from">Pozvání od %s</string>

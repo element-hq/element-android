@@ -106,7 +106,6 @@
     <string name="notice_room_third_party_revoked_invite">%1$s issefsax tinubga i %2$s i wakken ad d-yekcem ɣer texxamt</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Tesfesxeḍ tinubga i %1$s i wakken ad d-yernu ɣer texxamt</string>
     <string name="room_error_join_failed_empty_room">D awezɣi tura ad nales ad nuɣal ɣer texxamt tilemt.</string>
-    <string name="encrypted_message">Izen yettwawgelhen</string>
     <string name="medium_phone_number">Uṭṭun n tiliɣri</string>
     <string name="room_displayname_invite_from">Tinubga sɣur %s</string>
     <string name="room_displayname_room_invite">Tinubga ɣer texxamt</string>

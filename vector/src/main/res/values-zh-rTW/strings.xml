@@ -46,7 +46,6 @@
     <string name="network_error">網路錯誤</string>
     <string name="matrix_error">Matrix 錯誤</string>
     <string name="room_error_join_failed_empty_room">目前無法重新加入空房間。</string>
-    <string name="encrypted_message">已加密的訊息</string>
     <string name="medium_email">電子郵件</string>
     <string name="medium_phone_number">電話號碼</string>
     <string name="summary_user_sent_sticker">%1$s 傳送了一張貼圖。</string>

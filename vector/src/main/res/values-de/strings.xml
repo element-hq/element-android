@@ -52,7 +52,6 @@
     <!-- call events -->
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">Es ist aktuell nicht möglich, einen leeren Raum erneut zu betreten.</string>
-    <string name="encrypted_message">Verschlüsselte Nachricht</string>
     <!-- medium friendly name -->
     <string name="medium_email">E-Mail-Adresse</string>
     <string name="medium_phone_number">Telefonnummer</string>

@@ -24,8 +24,6 @@
     <string name="network_error">Błąd sieci</string>
     <string name="matrix_error">Błąd Matrixa</string>
 
-    <string name="encrypted_message">Wiadomość zaszyfrowana</string>
-
     <string name="medium_email">Adres e-mail</string>
     <string name="medium_phone_number">Numer telefonu</string>
 

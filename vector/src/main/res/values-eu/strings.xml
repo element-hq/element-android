@@ -55,8 +55,6 @@
 
     <string name="room_error_join_failed_empty_room">Ezin da oraingoz hutsik dagoen gela batetara berriro sartu.</string>
 
-    <string name="encrypted_message">Zifratutako mezua</string>
-
     <string name="medium_email">E-mail helbidea</string>
     <string name="medium_phone_number">Telefono zenbakia</string>
 

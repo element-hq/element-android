@@ -39,7 +39,6 @@
     <string name="network_error">خطأ في الشَّبكة</string>
     <string name="matrix_error">خطأ في Matrix</string>
     <string name="room_error_join_failed_empty_room">حاليًا مِن غير المُمكِن إعادة الاِنضمام إلى غُرفة فارِغة.</string>
-    <string name="encrypted_message">رِسالة مُعمَّاة</string>
     <string name="medium_email">عُنوان البريد الإلكتروني</string>
     <string name="medium_phone_number">رقم الهاتف</string>
     <string name="summary_message">‏‏⁨%1$s⁩: ‏⁨%2$s⁩</string>

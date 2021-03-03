@@ -32,8 +32,6 @@
     <string name="network_error">Villa í netkerfi</string>
     <string name="matrix_error">Villa í Matrix</string>
 
-    <string name="encrypted_message">Dulrituð skilaboð</string>
-
     <string name="medium_email">Tölvupóstfang</string>
     <string name="medium_phone_number">Símanúmer</string>
 

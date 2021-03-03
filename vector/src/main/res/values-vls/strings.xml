@@ -60,8 +60,6 @@
 
     <string name="room_error_join_failed_empty_room">’t Es vo de moment nie meuglik van e leeg gesprek were toe te treedn.</string>
 
-    <string name="encrypted_message">Versleuteld bericht</string>
-
     <string name="medium_email">E-mailadresse</string>
     <string name="medium_phone_number">Telefongnumero</string>
 

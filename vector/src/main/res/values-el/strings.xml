@@ -47,8 +47,6 @@
     <string name="network_error">Σφάλμα δικτύου</string>
     <string name="matrix_error">Σφάλμα του Matrix</string>
 
-    <string name="encrypted_message">Κρυπτογραφημένο μήνυμα</string>
-
     <string name="notice_requested_voip_conference">Ο/Η %1$s ζήτησε μια VoIP διάσκεψη</string>
     <string name="notice_voip_started">Η VoIP διάσκεψη ξεκίνησε</string>
     <string name="notice_voip_finished">Η VoIP διάσκεψη έληξε</string>

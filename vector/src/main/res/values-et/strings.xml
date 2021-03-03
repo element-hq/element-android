@@ -51,7 +51,6 @@
     <string name="network_error">Võrguühenduse viga</string>
     <string name="matrix_error">Matrix\'i viga</string>
     <string name="room_error_join_failed_empty_room">Hetkel ei ole võimalik uuesti liituda tühja jututoaga.</string>
-    <string name="encrypted_message">Krüptitud sõnum</string>
     <string name="medium_email">E-posti aadress</string>
     <string name="medium_phone_number">Telefoninumber</string>
     <string name="room_displayname_invite_from">Kutse kasutajalt %s</string>

@@ -46,7 +46,6 @@
     <string name="network_error">Hálózati hiba</string>
     <string name="matrix_error">Matrix hiba</string>
     <string name="room_error_join_failed_empty_room">Jelenleg nem lehetséges újracsatlakozni egy üres szobához.</string>
-    <string name="encrypted_message">Titkosított üzenet</string>
     <string name="medium_email">E-mail cím</string>
     <string name="medium_phone_number">Telefonszám</string>
     <string name="summary_user_sent_sticker">%1$s küldött egy matricát.</string>

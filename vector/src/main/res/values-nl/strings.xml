@@ -62,8 +62,6 @@
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">Het is momenteel niet mogelijk om een leeg gesprek opnieuw toe te treden.</string>
 
-    <string name="encrypted_message">Versleuteld bericht</string>
-
     <!-- medium friendly name -->
     <string name="medium_email">E-mailadres</string>
     <string name="medium_phone_number">Telefoonnummer</string>

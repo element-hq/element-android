@@ -39,7 +39,6 @@
     <string name="network_error">网络错误</string>
     <string name="matrix_error">Matrix 错误</string>
     <string name="room_error_join_failed_empty_room">目前无法重新加入一个空的聊天室。</string>
-    <string name="encrypted_message">已加密消息</string>
     <string name="medium_email">电子邮箱地址</string>
     <string name="medium_phone_number">手机号码</string>
     <string name="notice_room_withdraw">%1$s 撤回了对 %2$s 的邀请</string>

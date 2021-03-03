@@ -47,7 +47,6 @@
     <string name="network_error">Reta eraro</string>
     <string name="matrix_error">Matrix-eraro</string>
     <string name="room_error_join_failed_empty_room">Nun ne eblas re-aliĝi al malplena ĉambro.</string>
-    <string name="encrypted_message">Ĉifrita mesaĝo</string>
     <string name="medium_email">Retpoŝtadreso</string>
     <string name="medium_phone_number">Telefonnumero</string>
     <string name="room_displayname_invite_from">Invito de %s</string>

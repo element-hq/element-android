@@ -51,7 +51,6 @@
     <string name="network_error">خطای شبکه</string>
     <string name="matrix_error">خطای ماتریکس</string>
     <string name="room_error_join_failed_empty_room">در حال حاضر امکان بازپیوست به اتاقی خالی وجود ندارد‌‌.</string>
-    <string name="encrypted_message">پیام رمزنگاری شده</string>
     <string name="medium_email">نشانی رایانامه</string>
     <string name="medium_phone_number">شماره تلفن</string>
     <string name="room_displayname_invite_from">دعوت از %s</string>

@@ -54,7 +54,6 @@
     <string name="network_error">ネットワークエラー</string>
     <string name="matrix_error">Matrixエラー</string>
     <string name="room_error_join_failed_empty_room">現在空の部屋に再参加することはできません。</string>
-    <string name="encrypted_message">暗号化されたメッセージ</string>
     <string name="medium_email">メールアドレス</string>
     <string name="medium_phone_number">電話番号</string>
     <string name="notice_room_avatar_changed_by_you">ルームのアバターを変更しました</string>

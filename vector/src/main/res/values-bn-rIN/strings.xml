@@ -106,7 +106,6 @@
     <string name="network_error">নেটওয়ার্ক ত্রুটি</string>
     <string name="matrix_error">ম্যাট্রিক্স ত্রুটি</string>
     <string name="room_error_join_failed_empty_room">খালি কক্ষে পুনরায় যোগদান করা বর্তমানে সম্ভব নয়।</string>
-    <string name="encrypted_message">এনক্রিপ্ট করা বার্তা</string>
     <string name="medium_email">ইমেল ঠিকানা</string>
     <string name="medium_phone_number">ফোন নম্বর</string>
     <string name="room_displayname_invite_from">%s থেকে আমন্ত্রণ করুন</string>

@@ -4,7 +4,6 @@
     <string name="summary_user_sent_image">%1$s надсилає зображення.</string>
     <string name="notice_room_invite_no_invitee">%s запрошення</string>
     <string name="notice_room_invite">%1$s запрошує %2$s</string>
-    <string name="encrypted_message">Зашифроване повідомлення</string>
     <!-- Room display name -->
     <string name="room_displayname_invite_from">Запрошення від %s</string>
     <string name="room_displayname_room_invite">Запрошення до кімнати</string>

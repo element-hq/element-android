@@ -48,7 +48,6 @@
     <string name="network_error">Erro da conexión</string>
     <string name="matrix_error">Erro de Matrix</string>
     <string name="room_error_join_failed_empty_room">Aínda non é posíbel volver a entrar nunha sala baleira.</string>
-    <string name="encrypted_message">Mensaxe cifrada</string>
     <string name="medium_phone_number">Número de teléfono</string>
     <string name="room_displayname_two_members">%1$s e %2$s</string>
     <string name="notice_placed_voice_call_by_you">Fixeches unha chamada de audio.</string>

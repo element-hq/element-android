@@ -46,7 +46,6 @@
     <string name="network_error">Tīkla kļūda</string>
     <string name="matrix_error">Matrix kļūda</string>
     <string name="room_error_join_failed_empty_room">Šobrīd nav iespējams atkārtoti pievienoties tukšai istabai.</string>
-    <string name="encrypted_message">Šifrēta ziņa</string>
     <string name="medium_email">Epasta adrese</string>
     <string name="medium_phone_number">Telefona numurs</string>
     <string name="room_displayname_invite_from">Uzaicinājums no %s</string>

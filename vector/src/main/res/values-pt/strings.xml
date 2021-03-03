@@ -64,8 +64,6 @@
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">Ainda não é possível voltar a entrar numa sala vazia.</string>
 
-    <string name="encrypted_message">Mensagem cifrada</string>
-
     <!-- medium friendly name -->
     <string name="medium_email">Endereço de e-mail</string>
     <string name="medium_phone_number">Número de telefone</string>

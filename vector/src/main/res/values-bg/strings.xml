@@ -45,7 +45,6 @@
     <string name="network_error">Грешка в мрежата</string>
     <string name="matrix_error">Matrix грешка</string>
     <string name="room_error_join_failed_empty_room">В момента не е възможно да се присъедините отново към празна стая.</string>
-    <string name="encrypted_message">Шифровано съобщение</string>
     <string name="medium_email">Имейл адрес</string>
     <string name="medium_phone_number">Телефонен номер</string>
     <string name="notice_crypto_error_unkwown_inbound_session_id">Устройството на подателя не изпрати ключовете за това съобщение.</string>

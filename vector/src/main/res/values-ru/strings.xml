@@ -52,7 +52,6 @@
     <!-- call events -->
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">В настоящее время невозможно вновь присоединиться к пустой комнате.</string>
-    <string name="encrypted_message">Зашифрованное сообщение</string>
     <!-- medium friendly name -->
     <string name="medium_email">Адрес электронной почты</string>
     <string name="medium_phone_number">Номер телефона</string>

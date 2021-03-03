@@ -46,7 +46,6 @@
     <string name="network_error">Erreur de réseau</string>
     <string name="matrix_error">Erreur de Matrix</string>
     <string name="room_error_join_failed_empty_room">Il est impossible pour le moment de revenir dans un salon vide.</string>
-    <string name="encrypted_message">Message chiffré</string>
     <string name="medium_email">Adresse e-mail</string>
     <string name="medium_phone_number">Numéro de téléphone</string>
     <string name="summary_user_sent_sticker">%1$s a envoyé un sticker.</string>
