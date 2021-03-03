@@ -10,6 +10,7 @@ Improvements 🙌:
  - Improve initial sync performance (#983)
  - PIP support for Jitsi call (#2418)
  - Add tooltip for room quick actions
+ - Pre-share session keys when opening a room or start typing (#2771)
 
 Bugfix 🐛:
  - Try to fix crash about UrlPreview (#2640)

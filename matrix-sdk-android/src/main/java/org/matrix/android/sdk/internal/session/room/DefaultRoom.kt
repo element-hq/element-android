@@ -45,6 +45,7 @@ import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSourc
 import org.matrix.android.sdk.internal.session.search.SearchTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
+import org.matrix.android.sdk.internal.util.awaitCallback
 import java.security.InvalidParameterException
 import javax.inject.Inject
 
@@ -102,6 +103,12 @@ internal class DefaultRoom @Inject constructor(override val roomId: String,
 
     override fun shouldEncryptForInvitedMembers(): Boolean {
         return cryptoService.shouldEncryptForInvitedMembers(roomId)
+    }
+
+    override suspend fun prepareToEncrypt() {
+        awaitCallback<Unit> {
+            cryptoService.prepareToEncrypt(roomId, it)
+        }
     }
 
     override suspend fun enableEncryption(algorithm: String) {

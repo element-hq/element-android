@@ -19,15 +19,20 @@ package im.vector.app.features.home.room.detail
 import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -36,6 +41,7 @@ import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
+import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
@@ -140,6 +146,8 @@ class RoomDetailViewModel @AssistedInject constructor(
     private var trackUnreadMessages = AtomicBoolean(false)
     private var mostRecentDisplayedEvent: TimelineEvent? = null
 
+    private var prepareToEncrypt: Async<Unit> = Uninitialized
+
     @AssistedFactory
     interface Factory {
         fun create(initialState: RoomDetailViewState): RoomDetailViewModel
@@ -179,6 +187,27 @@ class RoomDetailViewModel @AssistedInject constructor(
         callManager.addPstnSupportListener(this)
         callManager.checkForPSTNSupportIfNeeded()
         chatEffectManager.delegate = this
+
+        // Ensure to share the outbound session keys with all members
+        if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
+            prepareForEncryption()
+        }
+    }
+
+    private fun prepareForEncryption() {
+        // check if there is not already a call made, or if there has been an error
+        if (prepareToEncrypt.shouldLoad) {
+            prepareToEncrypt = Loading()
+            viewModelScope.launch {
+                runCatching {
+                    room.prepareToEncrypt()
+                }.fold({
+                    prepareToEncrypt = Success(Unit)
+                }, {
+                    prepareToEncrypt = Fail(it)
+                })
+            }
+        }
     }
 
     private fun observePowerLevel() {
@@ -234,6 +263,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     override fun handle(action: RoomDetailAction) {
         when (action) {
             is RoomDetailAction.UserIsTyping -> handleUserIsTyping(action)
+            is RoomDetailAction.ComposerFocusChange -> handleComposerFocusChange(action)
             is RoomDetailAction.SaveDraft -> handleSaveDraft(action)
             is RoomDetailAction.SendMessage -> handleSendMessage(action)
             is RoomDetailAction.SendMedia -> handleSendMedia(action)
@@ -589,6 +619,16 @@ class RoomDetailViewModel @AssistedInject constructor(
                 room.userIsTyping()
             } else {
                 room.userStopsTyping()
+            }
+        }
+    }
+
+    private fun handleComposerFocusChange(action: RoomDetailAction.ComposerFocusChange) {
+        // Ensure outbound session keys
+        if (OutboundSessionKeySharingStrategy.WhenTyping == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
+            if (action.focused) {
+                // Should we add some rate limit here, or do it only once per model lifecycle?
+                prepareForEncryption()
             }
         }
     }

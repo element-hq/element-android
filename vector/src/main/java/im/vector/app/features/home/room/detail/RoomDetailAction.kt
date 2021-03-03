@@ -104,4 +104,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     // Preview URL
     data class DoNotShowPreviewUrlFor(val eventId: String, val url: String) : RoomDetailAction()
+
+    data class ComposerFocusChange(val focused: Boolean) : RoomDetailAction()
 }
