@@ -53,6 +53,7 @@ import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
@@ -205,7 +206,12 @@ class VectorApplication :
         }
     }
 
-    override fun providesMatrixConfiguration() = MatrixConfiguration(applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION)
+    override fun providesMatrixConfiguration(): MatrixConfiguration {
+        return MatrixConfiguration(
+                applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
+                roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(this)
+        )
+    }
 
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()
