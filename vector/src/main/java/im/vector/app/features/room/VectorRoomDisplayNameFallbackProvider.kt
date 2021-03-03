@@ -17,7 +17,7 @@
 package im.vector.app.features.room
 
 import android.content.Context
-import org.matrix.android.sdk.R
+import im.vector.app.R
 import org.matrix.android.sdk.api.RoomDisplayNameFallbackProvider
 
 class VectorRoomDisplayNameFallbackProvider(
