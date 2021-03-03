@@ -2455,8 +2455,8 @@
     </plurals>
     <string name="phone_book_perform_lookup">Busca contactes a Matrix</string>
     <string name="search_in_my_contacts">Busca als meus contactes</string>
-    <string name="element_disclaimer_positive_button">MÉS INFORMACIÓ</string>
-    <string name="element_disclaimer_title">Riot ara és Element!</string>
+    <string name="disclaimer_positive_button">MÉS INFORMACIÓ</string>
+    <string name="disclaimer_title">Riot ara és Element!</string>
     <string name="crypto_error_withheld_generic">No pots accedir al missatge perquè el remitent, intencionadament, no ha enviat les claus</string>
     <string name="crypto_error_withheld_unverified">No pots accedir al missatge perquè la teva sessió no és de confiança pel remitent</string>
     <string name="crypto_error_withheld_blacklisted">No pots accedir al missatge perquè el remitent t\'ha bloquejat</string>
@@ -2604,8 +2604,8 @@
     <string name="phone_book_title">Agenda</string>
     <string name="empty_contact_book">La teva llista de contactes està buida</string>
     <string name="loading_contact_book">Obtenint contactes…</string>
-    <string name="element_disclaimer_negative_button">D\'ACORD</string>
-    <string name="element_disclaimer_content">Estem contents d\'anunciar que hem canviat de nom! L\'aplicació està actualitzada i s\'ha iniciat sessió amb el teu compte.</string>
+    <string name="disclaimer_negative_button">D\'ACORD</string>
+    <string name="disclaimer_content">Estem contents d\'anunciar que hem canviat de nom! L\'aplicació està actualitzada i s\'ha iniciat sessió amb el teu compte.</string>
     <string name="save_your_security_key_title">Desa la clau de seguretat</string>
     <string name="set_a_security_phrase_again_notice">Torna a introduir la frase de seguretat per a confirmar-la.</string>
     <string name="set_a_security_phrase_hint">Frase de seguretat</string>

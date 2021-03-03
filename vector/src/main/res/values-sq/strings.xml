@@ -2329,10 +2329,10 @@
     <string name="crypto_error_withheld_unverified">S’mund të hapni këtë mesazh, ngaqë sesionit tuaj nuk i zihet besë nga dërguesi</string>
     <string name="crypto_error_withheld_generic">S’mund ta hapni këtë mesazh, ngaqë dërguesi qëllimisht nuk ju dërgoi kyçet</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Po pritet për historik fshehtëzimesh</string>
-    <string name="element_disclaimer_title">Riot-i tanimë quhet Element!</string>
-    <string name="element_disclaimer_content">Jemi të ngazëllyer t’ju njoftojmë se kemi ndërruar emër! Aplikacioni juaj është i përditësuar dhe jeni i futur në llogarinë tuaj.</string>
-    <string name="element_disclaimer_negative_button">E MORA VESH</string>
-    <string name="element_disclaimer_positive_button">MËSONI MË TEPËR</string>
+    <string name="disclaimer_title">Riot-i tanimë quhet Element!</string>
+    <string name="disclaimer_content">Jemi të ngazëllyer t’ju njoftojmë se kemi ndërruar emër! Aplikacioni juaj është i përditësuar dhe jeni i futur në llogarinë tuaj.</string>
+    <string name="disclaimer_negative_button">E MORA VESH</string>
+    <string name="disclaimer_positive_button">MËSONI MË TEPËR</string>
     <string name="save_recovery_key_chooser_hint">Ruaje kyçin e rimarrjeve te</string>
     <string name="add_from_phone_book">Shto prej numëratorit tim telefonik</string>
     <string name="empty_phone_book">Numëratori juaj telefonik është i zbrazët</string>

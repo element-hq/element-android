@@ -2210,10 +2210,10 @@
     <string name="crypto_error_withheld_unverified">您无法访问此消息因为您的会话不被发送者信任</string>
     <string name="crypto_error_withheld_generic">您无法访问此消息因为发送者有意不发送密钥</string>
     <string name="notice_crypto_unable_to_decrypt_merged">正在等待加密历史</string>
-    <string name="element_disclaimer_title">Riot 现在是 Element！</string>
-    <string name="element_disclaimer_content">我们兴奋地宣布我们改名了！您的应用已经是最新的并且您已登入您的帐户。</string>
-    <string name="element_disclaimer_negative_button">明白了</string>
-    <string name="element_disclaimer_positive_button">了解更多</string>
+    <string name="disclaimer_title">Riot 现在是 Element！</string>
+    <string name="disclaimer_content">我们兴奋地宣布我们改名了！您的应用已经是最新的并且您已登入您的帐户。</string>
+    <string name="disclaimer_negative_button">明白了</string>
+    <string name="disclaimer_positive_button">了解更多</string>
     <string name="save_recovery_key_chooser_hint">将恢复密钥保存到</string>
     <string name="add_from_phone_book">从我的电话簿添加</string>
     <string name="empty_phone_book">您的电话簿是空的</string>

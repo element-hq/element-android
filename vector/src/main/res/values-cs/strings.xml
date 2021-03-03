@@ -2371,10 +2371,10 @@
     <string name="crypto_error_withheld_unverified">Nemůžete číst tuto zprávu, protože Vaše relace není pro odesílatele důvěryhodná</string>
     <string name="crypto_error_withheld_generic">Nemůžete číst tuto zprávu, protože odesílatel účelově neposlal klíče</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Čekám na historii šifrování</string>
-    <string name="element_disclaimer_title">Riot je nyní Element!</string>
-    <string name="element_disclaimer_content">Jsme nadšení, že smíme oznámit změnu jména! Vaše app je aktuální a jste přihlášeni do svého účtu.</string>
-    <string name="element_disclaimer_negative_button">ROZUMÍM</string>
-    <string name="element_disclaimer_positive_button">DOZVĚDĚT SE VÍCE</string>
+    <string name="disclaimer_title">Riot je nyní Element!</string>
+    <string name="disclaimer_content">Jsme nadšení, že smíme oznámit změnu jména! Vaše app je aktuální a jste přihlášeni do svého účtu.</string>
+    <string name="disclaimer_negative_button">ROZUMÍM</string>
+    <string name="disclaimer_positive_button">DOZVĚDĚT SE VÍCE</string>
     <string name="save_recovery_key_chooser_hint">Uložit klíče pro obnovu v</string>
     <string name="add_from_phone_book">Přidat z mého adresáře</string>
     <string name="empty_phone_book">Váš adresář je prázdný</string>

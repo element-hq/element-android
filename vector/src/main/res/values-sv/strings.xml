@@ -2316,10 +2316,10 @@
     <string name="room_settings_save_success">Du ändrade rumsinställningarna framgångsrikt</string>
     <string name="crypto_utd">Kan inte avkryptera</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Väntar på krypteringshistorik</string>
-    <string name="element_disclaimer_title">Riot är nu Element!</string>
-    <string name="element_disclaimer_content">Vi är glada att meddela att vi har bytt namn! Din app är uppdaterad och du är inloggad på ditt konto.</string>
-    <string name="element_disclaimer_negative_button">UPPFATTAT</string>
-    <string name="element_disclaimer_positive_button">LÄR DIG MER</string>
+    <string name="disclaimer_title">Riot är nu Element!</string>
+    <string name="disclaimer_content">Vi är glada att meddela att vi har bytt namn! Din app är uppdaterad och du är inloggad på ditt konto.</string>
+    <string name="disclaimer_negative_button">UPPFATTAT</string>
+    <string name="disclaimer_positive_button">LÄR DIG MER</string>
     <string name="save_recovery_key_chooser_hint">Spara återställningsnyckel i</string>
     <string name="add_from_phone_book">Lägg till från min telefonbok</string>
     <string name="empty_phone_book">Din telefonbok är tom</string>

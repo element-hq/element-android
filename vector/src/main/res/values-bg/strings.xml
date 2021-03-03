@@ -2340,10 +2340,10 @@
     <string name="empty_phone_book">Телефонния указател е празен</string>
     <string name="add_from_phone_book">Добави от телефонния указател</string>
     <string name="save_recovery_key_chooser_hint">Запази ключа за възстановяване в</string>
-    <string name="element_disclaimer_positive_button">НАУЧИ ПОВЕЧЕ</string>
-    <string name="element_disclaimer_negative_button">РАЗБРАХ</string>
-    <string name="element_disclaimer_content">Развълнувани сме да съобщим, че променихме името! Приложението ви е обновено и сте вписани в профила си.</string>
-    <string name="element_disclaimer_title">Riot вече е Element!</string>
+    <string name="disclaimer_positive_button">НАУЧИ ПОВЕЧЕ</string>
+    <string name="disclaimer_negative_button">РАЗБРАХ</string>
+    <string name="disclaimer_content">Развълнувани сме да съобщим, че променихме името! Приложението ви е обновено и сте вписани в профила си.</string>
+    <string name="disclaimer_title">Riot вече е Element!</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Изчакване на история на шифроването</string>
     <string name="crypto_error_withheld_generic">Не можете да достъпите това съобщение, защото изпращача нарочно не е изпратил ключовете за него</string>
     <string name="crypto_error_withheld_unverified">Не можете да достъпите това съобщение, защото изпращача не се доверява на сесията ви</string>

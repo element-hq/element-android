@@ -1316,7 +1316,7 @@
     <string name="login_server_modular_learn_more">Дізнатись більше</string>
     <string name="room_profile_section_security">Безпека</string>
     <string name="settings_security_and_privacy">Безпека та приватність</string>
-    <string name="element_disclaimer_content">Ми раді повідомити, що змінили назву! Ваш застосунок оновлено й ви ввійшли у свій обліковий запис.</string>
+    <string name="disclaimer_content">Ми раді повідомити, що змінили назву! Ваш застосунок оновлено й ви ввійшли у свій обліковий запис.</string>
     <string name="login_reset_password_cancel_confirmation_content">Зміну параля ще не завершено.
 \n
 \nЗупинити змінювання пароля\?</string>

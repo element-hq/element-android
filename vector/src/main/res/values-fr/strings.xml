@@ -2211,10 +2211,10 @@
     <string name="empty_phone_book">Votre carnet d\'adresses est vide</string>
     <string name="add_from_phone_book">Ajouter depuis mon carnet d\'adresses</string>
     <string name="save_recovery_key_chooser_hint">Enregistrer la clé de récupération</string>
-    <string name="element_disclaimer_positive_button">EN SAVOIR PLUS</string>
-    <string name="element_disclaimer_negative_button">COMPRIS</string>
-    <string name="element_disclaimer_content">Nous sommes heureux de vous annoncer que nous avons un nouveau nom ! Votre application est à jour et vous êtes connectés à votre compte.</string>
-    <string name="element_disclaimer_title">Riot est maintenant Element !</string>
+    <string name="disclaimer_positive_button">EN SAVOIR PLUS</string>
+    <string name="disclaimer_negative_button">COMPRIS</string>
+    <string name="disclaimer_content">Nous sommes heureux de vous annoncer que nous avons un nouveau nom ! Votre application est à jour et vous êtes connectés à votre compte.</string>
+    <string name="disclaimer_title">Riot est maintenant Element !</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Attente de l\'historique du chiffrement</string>
     <string name="crypto_error_withheld_generic">Impossible d\'accéder à ce message car l\'envoyeur n\'a intentionnellement pas envoyé les clés</string>
     <string name="crypto_error_withheld_unverified">Vous ne pouvez pas accéder à ce message car l\'envoyeur n\'a pas confiance en votre session</string>

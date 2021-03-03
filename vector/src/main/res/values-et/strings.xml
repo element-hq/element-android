@@ -2017,10 +2017,10 @@
     <string name="crypto_error_withheld_unverified">Sa ei saa seda sõnumit lugeda, kuna saatja ei usalda sinu sessiooni</string>
     <string name="crypto_error_withheld_generic">Sa ei saa seda sõnumit lugeda, kuna saatja teadlikult ei saatnud vajalikke võtmeid</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Ootan krüptimise ajalugu</string>
-    <string name="element_disclaimer_title">Riot\'i uus nimi on Element!</string>
-    <string name="element_disclaimer_content">Meil on hea meel teatada, et oleme muutnud nime! Sinu rakendus on uuendatud ning sa oled oma kontole sisse logitud.</string>
-    <string name="element_disclaimer_negative_button">Selge lugu</string>
-    <string name="element_disclaimer_positive_button">Vaata lisateavet</string>
+    <string name="disclaimer_title">Riot\'i uus nimi on Element!</string>
+    <string name="disclaimer_content">Meil on hea meel teatada, et oleme muutnud nime! Sinu rakendus on uuendatud ning sa oled oma kontole sisse logitud.</string>
+    <string name="disclaimer_negative_button">Selge lugu</string>
+    <string name="disclaimer_positive_button">Vaata lisateavet</string>
     <string name="save_recovery_key_chooser_hint">Salvesta taastevõti järgnevalt</string>
     <string name="add_from_phone_book">Lisa telefoniraamatust</string>
     <string name="empty_phone_book">Sinu telefoniraamat on tühi</string>

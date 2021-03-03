@@ -1536,8 +1536,8 @@
     <string name="bottom_sheet_setup_secure_backup_subtitle">سپرامنیتی در برابر از دست دادن دسترسی به داده‌ها و پیام‌های رمزشده با پشتیبان گیری از کلیدها روی کارسازتان.</string>
     <string name="room_settings_name_hint">نام اتاق</string>
     <string name="room_settings_topic_hint">موضوع</string>
-    <string name="element_disclaimer_negative_button">گرفتم</string>
-    <string name="element_disclaimer_positive_button">اطّلاعات بیش‌تر</string>
+    <string name="disclaimer_negative_button">گرفتم</string>
+    <string name="disclaimer_positive_button">اطّلاعات بیش‌تر</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">هشدارهای نشانی اصلی</string>
     <string name="encryption_information_sender_device_information">اطّلاعات نشست فرستنده</string>
     <string name="encryption_information_decryption_error">خطای رمزگشایی</string>
@@ -1624,8 +1624,8 @@
     <string name="identity_server_set_alternative_submit">ثبت</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_title">استفاده از یک کلید امنیتی</string>
     <string name="bottom_sheet_setup_secure_backup_submit">برپا سازی</string>
-    <string name="element_disclaimer_content">مشتاقیم اعلام کنیم که ناممان را عوض کردیم! کاره‌تان به‌روز شده و وارد حسابتان شده‌اید.</string>
-    <string name="element_disclaimer_title">ریوت اکنون المنت است!</string>
+    <string name="disclaimer_content">مشتاقیم اعلام کنیم که ناممان را عوض کردیم! کاره‌تان به‌روز شده و وارد حسابتان شده‌اید.</string>
+    <string name="disclaimer_title">ریوت اکنون المنت است!</string>
     <string name="notice_crypto_unable_to_decrypt_merged">در انتظار تاریخچهٔ رمزنگاری</string>
     <string name="crypto_error_withheld_generic">به خاطر این که فرستنده از قصد کلیدها را نفرستاده است، نمی‌توانید به این پیام دسترسی داشته باشید</string>
     <string name="crypto_error_withheld_unverified">به خاطر این که نشستتان به دست فرستنده مطمئن نیست، نمی‌توانید به این پیام دسترسی داشته باشید</string>

@@ -1905,9 +1905,9 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="empty_phone_book">Twoja książka telefoniczna jest pusta</string>
     <string name="add_from_phone_book">Dodaj z mojej książki telefonicznej</string>
     <string name="save_recovery_key_chooser_hint">Zapisz klucz odzyskiwania w</string>
-    <string name="element_disclaimer_positive_button">DOWIEDZ SIĘ WIĘCEJ</string>
-    <string name="element_disclaimer_content">Jesteśmy podekscytowani mogąc oznajmić, że zmieniliśmy nazwę! Twoja aplikacja jest aktualna i jesteś zalogowany(-a) do swojego konta.</string>
-    <string name="element_disclaimer_title">Riot nazywa się teraz Element!</string>
+    <string name="disclaimer_positive_button">DOWIEDZ SIĘ WIĘCEJ</string>
+    <string name="disclaimer_content">Jesteśmy podekscytowani mogąc oznajmić, że zmieniliśmy nazwę! Twoja aplikacja jest aktualna i jesteś zalogowany(-a) do swojego konta.</string>
+    <string name="disclaimer_title">Riot nazywa się teraz Element!</string>
     <string name="crypto_error_withheld_generic">Nie masz dostępu do tej wiadomości ponieważ nadawca celowo nie wysłał jej kluczy</string>
     <string name="crypto_error_withheld_unverified">Nie masz dostępu do tej wiadomości ponieważ nadawca nie ufa Twojej sesji</string>
     <string name="crypto_error_withheld_blacklisted">Nie masz dostępu do tej wiadomości ponieważ zostałeś zablokowany przez jej nadawcę</string>
@@ -2268,7 +2268,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="bootstrap_save_key_description">Wykorzystaj ten %1$s jako zabezpieczenie na wypadek utraty %2$s.</string>
     <string name="bootstrap_loading_title">Konfigurowanie odzyskiwania.</string>
     <string name="verify_cancel_other">Nie zweryfikujesz %1$s (%2$s) jeżeli przerwiesz w tym momencie. Zacznij ponownie w ich profilu użytkownika.</string>
-    <string name="element_disclaimer_negative_button">ROZUMIEM</string>
+    <string name="disclaimer_negative_button">ROZUMIEM</string>
     <string name="save_your_security_key_title">Zapisz swój Klucz Bezpieczeństwa</string>
     <string name="set_a_security_phrase_hint">Fraza Bezpieczeństwa</string>
     <string name="set_a_security_phrase_title">Ustaw Frazę Bezpieczeństwa</string>

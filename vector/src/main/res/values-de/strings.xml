@@ -2352,10 +2352,10 @@
     <string name="crypto_error_withheld_unverified">Du kannst auf diese Nachricht nicht zugreifen, weil der Sender deiner Sitzung nicht vertraut</string>
     <string name="crypto_error_withheld_generic">Du kannst auf diese Nachricht nicht zugreifen, weil der Sender absichtlich die Schlüssel nicht gesendet hat</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Warte auf Verschlüsselungshistorie</string>
-    <string name="element_disclaimer_title">Riot heißt nun Element!</string>
-    <string name="element_disclaimer_content">Wir sind begeistert unsere Namensänderung mitteilen zu können! Deine App ist auf dem neusten Stand und du bist mit deinem Account angemeldet.</string>
-    <string name="element_disclaimer_negative_button">VERSTANDEN</string>
-    <string name="element_disclaimer_positive_button">MEHR ERFAHREN</string>
+    <string name="disclaimer_title">Riot heißt nun Element!</string>
+    <string name="disclaimer_content">Wir sind begeistert unsere Namensänderung mitteilen zu können! Deine App ist auf dem neusten Stand und du bist mit deinem Account angemeldet.</string>
+    <string name="disclaimer_negative_button">VERSTANDEN</string>
+    <string name="disclaimer_positive_button">MEHR ERFAHREN</string>
     <string name="save_recovery_key_chooser_hint">Speichere Wiederherstellungsschlüssel in</string>
     <string name="add_from_phone_book">Füge über Kontaktliste hinzu</string>
     <string name="empty_phone_book">Deine Kontaktliste ist leer</string>

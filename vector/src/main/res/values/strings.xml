@@ -3084,10 +3084,10 @@
     <string name="crypto_error_withheld_generic">You cannot access this message because the sender purposely did not send the keys</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Waiting for encryption history</string>
 
-    <string name="element_disclaimer_title">Riot is now Element!</string>
-    <string name="element_disclaimer_content">We’re excited to announce we’ve changed name! Your app is up to date and you’re signed in to your account.</string>
-    <string name="element_disclaimer_negative_button">GOT IT</string>
-    <string name="element_disclaimer_positive_button">LEARN MORE</string>
+    <string name="disclaimer_title">Riot is now Element!</string>
+    <string name="disclaimer_content">We’re excited to announce we’ve changed name! Your app is up to date and you’re signed in to your account.</string>
+    <string name="disclaimer_negative_button">GOT IT</string>
+    <string name="disclaimer_positive_button">LEARN MORE</string>
 
     <string name="save_recovery_key_chooser_hint">Save recovery key in</string>
 

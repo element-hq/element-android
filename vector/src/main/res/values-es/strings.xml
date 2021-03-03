@@ -1829,9 +1829,9 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="template_identity_server_error_outdated_identity_server">Servidor de identidad desactualizado. ${app_name} solo soporta API V2.</string>
     <string name="identity_server_error_outdated_home_server">Operación no posible. Servidor desactualizado.</string>
     <string name="identity_server_error_no_identity_server_configured">Por favor, configure primero un Servidor de Identidad.</string>
-    <string name="element_disclaimer_title">Riot ahora es Element!</string>
-    <string name="element_disclaimer_negative_button">Entendido</string>
-    <string name="element_disclaimer_positive_button">Aprender Mas</string>
+    <string name="disclaimer_title">Riot ahora es Element!</string>
+    <string name="disclaimer_negative_button">Entendido</string>
+    <string name="disclaimer_positive_button">Aprender Mas</string>
     <string name="search_in_my_contacts">Buscar en mis contactos</string>
     <string name="three_pid_revoke_invite_dialog_title">Rechazar invitación</string>
     <string name="auth_pin_confirm_to_disable_title">Confirma PIN para desabilitarlo</string>
@@ -2406,7 +2406,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="crypto_error_withheld_unverified">No puede acceder a este mensaje porque el remitente no confía en su sesión</string>
     <string name="crypto_error_withheld_generic">No puede acceder a este mensaje porque el remitente no envió las claves a propósito</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Esperando al historial de encriptación</string>
-    <string name="element_disclaimer_content">¡Nos complace anunciar que hemos cambiado de nombre! Tu aplicación está actualizada y accediste a tu cuenta.</string>
+    <string name="disclaimer_content">¡Nos complace anunciar que hemos cambiado de nombre! Tu aplicación está actualizada y accediste a tu cuenta.</string>
     <string name="save_recovery_key_chooser_hint">Guardar la clave de recuperación en</string>
     <string name="add_from_phone_book">Agregar desde mi directorio telefónico</string>
     <string name="empty_phone_book">Tu directorio telefónico está vacío</string>

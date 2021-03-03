@@ -2424,10 +2424,10 @@
     <string name="crypto_error_withheld_unverified">Нет доступа к этому сообщению, так как отправитель не доверяет вашей сессии</string>
     <string name="crypto_error_withheld_generic">Вы не можете получить доступ к этому сообщению, потому что отправитель намеренно не отправил ключи</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Ожидание истории шифрования</string>
-    <string name="element_disclaimer_title">Riot теперь Element!</string>
-    <string name="element_disclaimer_content">Мы рады сообщить, что сменили имя! Ваше приложение обновлено, и вы вошли в свою учетную запись.</string>
-    <string name="element_disclaimer_negative_button">ПОНЯТНО</string>
-    <string name="element_disclaimer_positive_button">УЗНАТЬ БОЛЬШЕ</string>
+    <string name="disclaimer_title">Riot теперь Element!</string>
+    <string name="disclaimer_content">Мы рады сообщить, что сменили имя! Ваше приложение обновлено, и вы вошли в свою учетную запись.</string>
+    <string name="disclaimer_negative_button">ПОНЯТНО</string>
+    <string name="disclaimer_positive_button">УЗНАТЬ БОЛЬШЕ</string>
     <string name="save_recovery_key_chooser_hint">Сохранить ключ восстановления в</string>
     <string name="add_from_phone_book">Добавить из моей телефонной книги</string>
     <string name="empty_phone_book">Ваша телефонная книга пуста</string>

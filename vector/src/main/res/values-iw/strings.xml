@@ -2281,10 +2281,10 @@
     <string name="empty_phone_book">ספר הטלפונים שלך ריק</string>
     <string name="add_from_phone_book">הוסף מפנקס הטלפונים שלי</string>
     <string name="save_recovery_key_chooser_hint">שמור מפתח שחזור פנימה</string>
-    <string name="element_disclaimer_positive_button">למד עוד</string>
-    <string name="element_disclaimer_negative_button">הבנת</string>
-    <string name="element_disclaimer_content">אנו שמחים לבשר ששינינו שם! האפליקציה שלך מעודכנת ואתה מחובר לחשבונך.</string>
-    <string name="element_disclaimer_title">Riot היא עכשיו Element!</string>
+    <string name="disclaimer_positive_button">למד עוד</string>
+    <string name="disclaimer_negative_button">הבנת</string>
+    <string name="disclaimer_content">אנו שמחים לבשר ששינינו שם! האפליקציה שלך מעודכנת ואתה מחובר לחשבונך.</string>
+    <string name="disclaimer_title">Riot היא עכשיו Element!</string>
     <string name="notice_crypto_unable_to_decrypt_merged">ממתין להיסטוריית הצפנה</string>
     <string name="crypto_error_withheld_generic">אינך יכול לגשת להודעה זו מכיוון שהשולח בכוונה לא שלח את המפתחות</string>
     <string name="crypto_error_withheld_unverified">אינך יכול לגשת להודעה זו מכיוון שהשולח אינו מהימן על ההפעלה שלך</string>

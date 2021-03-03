@@ -2248,10 +2248,10 @@
     <string name="crypto_error_withheld_unverified">您無法存取此訊息，因為您的工作階段未被傳送者所信任</string>
     <string name="crypto_error_withheld_generic">您無法存取此訊息，因為傳送者刻意未傳送金鑰</string>
     <string name="notice_crypto_unable_to_decrypt_merged">正在等待加密歷史</string>
-    <string name="element_disclaimer_title">Riot 現在是 Element 了！</string>
-    <string name="element_disclaimer_content">我們很高興地我們已變更名稱！您的應用程式是最新的，而您也登入了您的帳號。</string>
-    <string name="element_disclaimer_negative_button">知道了</string>
-    <string name="element_disclaimer_positive_button">取得更多資訊</string>
+    <string name="disclaimer_title">Riot 現在是 Element 了！</string>
+    <string name="disclaimer_content">我們很高興地我們已變更名稱！您的應用程式是最新的，而您也登入了您的帳號。</string>
+    <string name="disclaimer_negative_button">知道了</string>
+    <string name="disclaimer_positive_button">取得更多資訊</string>
     <string name="save_recovery_key_chooser_hint">儲存復原金鑰於</string>
     <string name="add_from_phone_book">從我的電話簿新增</string>
     <string name="empty_phone_book">您的電話簿是空的</string>

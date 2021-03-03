@@ -2246,10 +2246,10 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="crypto_error_withheld_unverified">Nem érheted el ezt az üzenetet, mert a feladó nem bízik a munkamenetedben</string>
     <string name="crypto_error_withheld_generic">Nem érheted el ezt az üzenetet, mert a feladó szándékosan nem küldte el a kulcsokat</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Várakozás a titkosítási előzményekre</string>
-    <string name="element_disclaimer_title">A Riot mostantól Element!</string>
-    <string name="element_disclaimer_content">Örömmel jelentjük be, hogy nevet változtattunk! Az alkalmazás naprakész, és be vagy jelentkezve a fiókodba.</string>
-    <string name="element_disclaimer_negative_button">ÉRTEM</string>
-    <string name="element_disclaimer_positive_button">TOVÁBBI INFORMÁCIÓK</string>
+    <string name="disclaimer_title">A Riot mostantól Element!</string>
+    <string name="disclaimer_content">Örömmel jelentjük be, hogy nevet változtattunk! Az alkalmazás naprakész, és be vagy jelentkezve a fiókodba.</string>
+    <string name="disclaimer_negative_button">ÉRTEM</string>
+    <string name="disclaimer_positive_button">TOVÁBBI INFORMÁCIÓK</string>
     <string name="save_recovery_key_chooser_hint">Helyreállítási kulcs mentése ide:</string>
     <string name="add_from_phone_book">Hozzáadás a telefonkönyvemből</string>
     <string name="empty_phone_book">A telefonkönyved üres</string>
