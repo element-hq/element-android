@@ -61,7 +61,6 @@
     <string name="summary_user_sent_sticker">%1$s ha enviat un adhesiu.</string>
     <string name="notice_direct_room_update">%s s\'ha actualitzat aquí.</string>
     <string name="notice_direct_room_update_by_you">Ho has actualitzat aquí.</string>
-    <string name="key_verification_request_fallback_message">%s està sol·licitant la verificació de la teva clau, però el teu client no admet la verificació de clau des del xat. Hauràs d\'utilitzar la verificació de claus heretada per fer la verificació.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Has activat el xifrat d\'extrem a extrem (algorisme %1$s no reconegut).</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s ha activat el xifrat d\'extrem a extrem (algorisme %2$s no reconegut).</string>
     <string name="notice_end_to_end_ok_by_you">Has activat el xifrat d\'extrem a extrem.</string>

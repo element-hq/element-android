@@ -108,7 +108,6 @@
     <string name="notice_room_guest_access_forbidden">%1$s جلوی پیوستن میمهانان به گروه را گرفت.</string>
     <string name="notice_end_to_end_ok">%1$s رمزنگاری سرتاسری را روشن کرد.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s رمزنگاری سرتاسری را روشن کرد (الگوریتم تشخیص‌داده‌نشده %2$s ).</string>
-    <string name="key_verification_request_fallback_message">%s درخواست تأیید کلیدتان را دارد، ولی کارخواهتان تأیید کلید درون گپ را پشتیبانی نمی‌کند. برای تأیید کلیدها لازم است از تأییدیهٔ کلید قدیمی استفاده کنید.</string>
     <string name="notice_room_created">%1$s اتاق را ایجاد کرد</string>
     <string name="notice_profile_change_redacted">%1$s نمایه‌اش را به‌روز کرد %2$s</string>
     <string name="could_not_redact">نمی‌توان ویرایش کرد</string>

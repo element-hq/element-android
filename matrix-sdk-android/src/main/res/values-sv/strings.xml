@@ -190,7 +190,6 @@
     <string name="notice_end_to_end_ok_by_you">Du aktiverade totalsträckskryptering.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s aktiverade totalsträckskryptering (okänd algoritm %2$s).</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Du aktiverade totalsträckskryptering (okänd algoritm %1$s).</string>
-    <string name="key_verification_request_fallback_message">%s begär att verifiera din nyckel, men din klient stöder inte nyckelverifiering i chatten. Du behöver använda legacynyckelverifiering för att verifiera nycklar.</string>
     <string name="notice_direct_room_guest_access_forbidden_by_you">Du hindrade gäster från att gå med i rummet.</string>
     <string name="notice_direct_room_guest_access_forbidden">%1$s hindrade gäster från att gå med i rummet.</string>
     <string name="notice_direct_room_guest_access_can_join_by_you">Du tillät gäster att gå med här.</string>

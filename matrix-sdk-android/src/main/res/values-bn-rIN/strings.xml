@@ -190,5 +190,4 @@
     <string name="notice_end_to_end_ok_by_you">আপনি শেষ থেকে শেষ এনক্রিপশন চালু করেছেন।</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s এন্ড-টু-এন্ড এনক্রিপশন চালু করেছে (অজানা অ্যালগরিদম %2$s)।</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">আপনি শেষ-থেকে-শেষ এনক্রিপশন চালু করেছেন (অজানা অ্যালগরিদম %1$s )।</string>
-    <string name="key_verification_request_fallback_message">%s আপনার কীটি যাচাই করার জন্য অনুরোধ করছে, তবে আপনার ক্লায়েন্ট ইন-চ্যাট কী যাচাইকরণ সমর্থন করে না। কীগুলি যাচাই করতে আপনাকে লিগ্যাসি কী যাচাইকরণ ব্যবহার করতে হবে।</string>
 </resources>

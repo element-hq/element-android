@@ -110,7 +110,6 @@
     <string name="notice_room_guest_access_forbidden">%1$s a empêché les visiteurs de rejoindre le salon.</string>
     <string name="notice_end_to_end_ok">%1$s a activé le chiffrement de bout en bout.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s a activé le chiffrement de bout en bout (algorithme %2$s inconnu).</string>
-    <string name="key_verification_request_fallback_message">%s demande à vérifier votre clé, mais votre client ne supporte pas la vérification de clés dans les discussions. Vous devrez utiliser l’ancienne vérification de clés pour vérifier les clés.</string>
     <string name="notice_room_created">%1$s a créé le salon</string>
     <string name="notice_direct_room_update_by_you">Vous avez mis cet endroit à niveau.</string>
     <string name="notice_direct_room_update">%s a mis cet endroit à niveau.</string>

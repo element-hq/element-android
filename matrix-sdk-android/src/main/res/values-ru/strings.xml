@@ -123,7 +123,6 @@
     <string name="notice_room_guest_access_forbidden">%1$s запретил(а) гостям входить в комнату.</string>
     <string name="notice_end_to_end_ok">%1$s включил(а) сквозное шифрование.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s включил(а) сквозное шифрование (неизвестный алгоритм %2$s).</string>
-    <string name="key_verification_request_fallback_message">%s запрашивает подтверждение вашего ключа, но ваш клиент не поддерживает подтверждение в чате. Используйте устаревшую проверку для сверки ключей.</string>
     <string name="summary_you_sent_image">Вы отправили изображение.</string>
     <string name="summary_you_sent_sticker">Вы отправили стикер.</string>
     <string name="notice_room_invite_no_invitee_by_you">Ваше приглашение</string>

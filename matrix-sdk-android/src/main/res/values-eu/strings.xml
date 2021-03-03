@@ -137,7 +137,5 @@
     <string name="notice_end_to_end_ok">%1$s erabiltzaileak muturretik muturrerako zifratzea gaitu du.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s erabiltzaileak muturretik muturrerako zifratzea gaitu du. (%2$s algoritmo ezezaguna).</string>
 
-    <string name="key_verification_request_fallback_message">%s(e)k zure gakoa egiaztatzea eskatu du, baina zure bezeroak ez du txatean gakoa egiaztatzea onartzen. Gako egiaztaketa zaharra erabili beharko duzu.</string>
-
     <string name="notice_room_created">%1$s erabiltzaileak gela sortu du</string>
 </resources>

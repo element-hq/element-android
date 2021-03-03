@@ -110,7 +110,6 @@
     <string name="notice_room_guest_access_forbidden">%1$s предотврати присъединяването на гости в стаята.</string>
     <string name="notice_end_to_end_ok">%1$s включи шифроване от-край-до-край.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s включи шифроване от-край-до-край (неразпознат алгоритъм %2$s).</string>
-    <string name="key_verification_request_fallback_message">%s изпрати запитване за потвърждение на ключа ви, но клиентът ви не поддържа верифициране посредством чат. Ще трябва да използвате стария метод за верифициране на ключове.</string>
     <string name="notice_room_created">%1$s създаде стаята</string>
     <string name="summary_you_sent_image">Изпратихте снимка.</string>
     <string name="summary_you_sent_sticker">Изпратихте стикер.</string>

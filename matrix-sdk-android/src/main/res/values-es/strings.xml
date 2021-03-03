@@ -117,7 +117,6 @@
     <string name="notice_room_guest_access_forbidden">%1$s ha impedido que los invitados se unan a la sala.</string>
     <string name="notice_end_to_end_ok">%1$s ha activado la encriptación extremo a extremo.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s ha activado la encriptación de extremo a extremo (algoritmo no reconocido %2$s).</string>
-    <string name="key_verification_request_fallback_message">%s solicita verificar su clave, pero su cliente no soporta la verificación de la clave en chat. Necesitará usar la verificación de claves clásica para poder verificar las claves.</string>
     <string name="summary_you_sent_image">Enviaste una imagen.</string>
     <string name="summary_you_sent_sticker">Enviaste un sticker.</string>
     <string name="notice_room_invite_no_invitee_by_you">Tu invitación</string>

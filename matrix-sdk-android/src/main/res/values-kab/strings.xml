@@ -116,7 +116,6 @@
         <item quantity="other">%1$s d %2$d wiyaḍ</item>
     </plurals>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Tremdeḍ awgelhen seg yixef ɣer yixef (alguritm %1$s ur yettwassen ara).</string>
-    <string name="key_verification_request_fallback_message">%s isuter-d ad isenqed tasarut-ik·im, maca amsaɣ-ik·im ur issefrak ara asenqed n tsura deg yidiwenniyen. Ilaq-ak·am useqdec asenqed iqdim n tsura i usenqed n tsura.</string>
     <string name="room_displayname_empty_room">Taxxamt tilemt</string>
     <string name="initial_sync_start_importing_account">Amtawi n tazwara:
 \nAktar n umiḍan…</string>

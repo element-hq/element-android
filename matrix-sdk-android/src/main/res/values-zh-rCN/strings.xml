@@ -107,7 +107,6 @@
     <string name="notice_room_guest_access_forbidden">%1$s 已禁止访客加入聊天室。</string>
     <string name="notice_end_to_end_ok">%1$s 已开启端到端加密。</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s 已开启端到端加密（无法识别的演算法 %2$s）。</string>
-    <string name="key_verification_request_fallback_message">%s 正在请求验证您的密钥，但您的客户端不支援聊天中密钥验证。 您将必须使用旧版的密钥验证来验证金钥。</string>
     <string name="notice_room_created">%1$s 创建了这个聊天室</string>
     <string name="summary_you_sent_image">您发送了一张图片。</string>
     <string name="summary_you_sent_sticker">您发送了一张贴纸。</string>

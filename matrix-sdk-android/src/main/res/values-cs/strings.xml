@@ -195,7 +195,6 @@
     <string name="notice_end_to_end_ok_by_you">Zapnuli jste end-to-end šifrování.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s zapnuli end-to-end šifrování (neznámý algoritmus %2$s).</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Zapnuli jste end-to-end šifrování (neznámý algoritmus %1$s).</string>
-    <string name="key_verification_request_fallback_message">%s žádá ověření Vašeho klíče, ale Váš klient nepodporuje ověření klíče v chatu. Budete muset k ověření klíčů použít zastaralý způsob ověření.</string>
     <string name="notice_direct_room_guest_access_forbidden_by_you">Zamezili jste hostům vstoupit do této místnosti.</string>
     <string name="notice_direct_room_guest_access_forbidden">%1$s zamezil hostům vstoupit do této místnosti.</string>
     <string name="notice_direct_room_guest_access_can_join_by_you">Povolili jste hostům vstoupit.</string>

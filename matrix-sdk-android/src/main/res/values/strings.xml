@@ -312,6 +312,4 @@
     <string name="notice_end_to_end_unknown_algorithm">%1$s turned on end-to-end encryption (unrecognised algorithm %2$s).</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">You turned on end-to-end encryption (unrecognised algorithm %1$s).</string>
 
-    <string name="key_verification_request_fallback_message">%s is requesting to verify your key, but your client does not support in-chat key verification. You will need to use legacy key verification to verify keys.</string>
-
 </resources>

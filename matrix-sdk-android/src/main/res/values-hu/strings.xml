@@ -110,7 +110,6 @@
     <string name="notice_room_guest_access_forbidden">%1$s megtiltotta a vendégeknek, hogy belépjenek ebbe a szobába.</string>
     <string name="notice_end_to_end_ok">%1$s bekapcsolta a végpontok közötti titkosítást.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s bekapcsolta a végpontok közötti titkosítást (ismeretlen algoritmus %2$s).</string>
-    <string name="key_verification_request_fallback_message">%s kéri a kulcsok ellenőrzését de a kliens nem támogatja a szobán belüli kulcs ellenőrzést. A hagyományos módon kell ellenőrizned a kulcsokat.</string>
     <string name="notice_room_created">%1$s szobát készített</string>
     <string name="notice_answered_call_by_you">Fogadtad a hívást.</string>
     <string name="notice_ended_call_by_you">Befejezted a hívást.</string>

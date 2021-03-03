@@ -24,7 +24,6 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationInfoRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
@@ -52,7 +51,6 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.StringProvider
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
@@ -62,7 +60,6 @@ import javax.inject.Inject
 
 internal class VerificationTransportRoomMessage(
         private val workManagerProvider: WorkManagerProvider,
-        private val stringProvider: StringProvider,
         private val sessionId: String,
         private val userId: String,
         private val userDeviceId: String?,
@@ -167,7 +164,8 @@ internal class VerificationTransportRoomMessage(
         )
 
         val info = MessageVerificationRequestContent(
-                body = stringProvider.getString(R.string.key_verification_request_fallback_message, userId),
+                body = "$userId is requesting to verify your key, but your client does not support in-chat key verification." +
+                        " You will need to use legacy key verification to verify keys.",
                 fromDevice = validInfo.fromDevice,
                 toUserId = otherUserId,
                 timestamp = validInfo.timestamp,

@@ -211,7 +211,6 @@
         <item quantity="one">%1$s engadiu %2$s como enderezo desta sala.</item>
         <item quantity="other">%1$s engadiu %2$s como enderezos desta sala.</item>
     </plurals>
-    <string name="key_verification_request_fallback_message">%s solicita verificar a túa chave, pero o teu cliente non soporta a verificación de chaves nos chats. Necesitarás usar o método antigo de verificación de chaves.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Activaches o cifrado extremo-a-extremo (algoritmo non recoñecido %1$s).</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s activou o cifrado extremo-a-extrem (algoritmo non recoñecible %2$s).</string>
     <string name="notice_end_to_end_ok_by_you">Activaches o cifrado extremo-a-extremo.</string>

@@ -110,7 +110,6 @@
     <string name="notice_room_guest_access_forbidden">%1$s ka penguar vizitorë të marrin pjesë në dhomë.</string>
     <string name="notice_end_to_end_ok">%1$s aktivizoi fshehtëzim skaj-më-skaj.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s aktivizoi fshehtëzim skaj-më-skaj (algoritëm i papranuar %2$s).</string>
-    <string name="key_verification_request_fallback_message">%s po kërkon të verifikojë kyçin tuaj, por klienti juaj nuk mbulon verifikim kyçesh brenda fjalosjeje. Që të verifikoni kyça, do t’ju duhet të përdorni verifikim të dikurshëm kyçesh.</string>
     <string name="notice_room_created">%1$s krijo dhomën</string>
     <string name="summary_you_sent_image">Dërguat një figurë.</string>
     <string name="summary_you_sent_sticker">Dërguat një ngjitës.</string>

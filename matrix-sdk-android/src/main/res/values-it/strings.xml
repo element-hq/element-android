@@ -111,7 +111,6 @@
     <string name="notice_room_guest_access_forbidden">%1$s ha impedito l\'accesso alla stanza per gli ospiti.</string>
     <string name="notice_end_to_end_ok">%1$s ha attivato la cifratura end-to-end.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s ha attivato la cifratura end-to-end (algoritmo %2$s non riconosciuto).</string>
-    <string name="key_verification_request_fallback_message">%s sta chiedendo di verificare la tua chiave, ma il tuo client non supporta la verifica in-chat. Dovrai usare il metodo di verifica obsoleto per verificare le chiavi.</string>
     <string name="notice_room_created">%1$s ha creato la stanza</string>
     <string name="summary_you_sent_image">Hai inviato un\'immagine.</string>
     <string name="summary_you_sent_sticker">Hai inviato un adesivo.</string>

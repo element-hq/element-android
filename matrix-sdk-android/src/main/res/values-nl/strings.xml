@@ -146,6 +146,5 @@
     <string name="notice_end_to_end_ok">%1$s heeft eind-tot-eind-versleuteling ingeschakeld.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s heeft eind-tot-eind-versleuteling ingeschakeld (onbekend algoritme %2$s).</string>
 
-    <string name="key_verification_request_fallback_message">%s vraagt om uw sleutel te verifiëren, maar uw cliënt biedt geen ondersteuning voor verificatie in het gesprek. U zult de verouderde sleutelverificatie moeten gebruiken om de sleutels te verifiëren.</string>
 
 </resources>

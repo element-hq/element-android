@@ -81,7 +81,6 @@
     <string name="summary_you_sent_sticker">Jūs nosūtījāt uzlīmi.</string>
     <string name="summary_user_sent_sticker">%1$s nosūtīja uzlīmi.</string>
     <string name="summary_you_sent_image">Jūs nosūtījāt attēlu.</string>
-    <string name="key_verification_request_fallback_message">%s pieprasa verificēt jūsu atslēgu, taču jūsu klients neatbalsta tērzēšanas atslēgas verifikāciju. Lai verificētu atslēgas, jums būs jāizmanto atslēgu verifikācija novecojušā veidā.</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Jūs ieslēdzāt pilnīgu šifrēšanu (neatpazīts algoritms %1$s).</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s ieslēdza pilnīgu šifrēšanu (neatpazīts algoritms %2$s).</string>
     <string name="notice_end_to_end_ok_by_you">Jūs ieslēdzāt pilnīgu šifrēšanu.</string>

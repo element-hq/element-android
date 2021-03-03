@@ -112,7 +112,6 @@
     <string name="notice_room_guest_access_forbidden">%1$s esti vieraita liittymästä huoneeseen.</string>
     <string name="notice_end_to_end_ok">%1$s laittoi päälle osapuolten välisen salauksen.</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$s laittoi päälle osapuolisten välisen salauksen (tuntematon algoritmi %2$s).</string>
-    <string name="key_verification_request_fallback_message">%s haluaa varmentaa salausavaimesi, mutta asiakasohjelmasi ei tue keskustelun aikana tapahtuvaa avainten varmennusta. Joudut käyttämään perinteistä varmennustapaa.</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Hyväksyit käyttäjän %1$s kutsun. Syy: %2$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Peruutit kutsun liittyä huoneeseen käyttäjältä %1$s. Syy: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">Lähetit kutsun liittyä huoneeseen käyttäjälle %1$s. Syy: %2$s</string>
