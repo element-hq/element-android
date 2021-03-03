@@ -380,4 +380,3 @@ internal class VerificationTransportRoomMessage(
         Timber.w("## SAS ignored verification ready with methods: ${keyReq.methods}")
     }
 }
-

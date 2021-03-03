@@ -42,7 +42,7 @@ internal class RoomDisplayNameResolver @Inject constructor(
         @UserId private val userId: String
 ) {
 
-    private val roomDisplayNameFallbackProvider=  matrixConfiguration.roomDisplayNameFallbackProvider
+    private val roomDisplayNameFallbackProvider = matrixConfiguration.roomDisplayNameFallbackProvider
 
     /**
      * Compute the room display name

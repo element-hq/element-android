@@ -246,4 +246,3 @@ internal class VerificationTransportToDevice(
         )
     }
 }
-
