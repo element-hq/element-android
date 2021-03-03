@@ -79,7 +79,7 @@
     <string name="no_room_placeholder">Geen gesprekken</string>
     <string name="no_public_room_placeholder">Geen publieke gesprekken beschikbaar</string>
     <plurals name="public_room_nb_users">
-        <item quantity="one">1 gebruiker</item>
+        <item quantity="one">%d gebruiker</item>
         <item quantity="other">%d gebruikers</item>
     </plurals>
     <string name="send_bug_report_include_logs">Logboek versturen</string>
@@ -225,8 +225,7 @@
     <string name="permissions_rationale_msg_camera_and_audio">Element heeft toegang nodig tot uw camera en microfoon om video-oproepen te maken.
 \n
 \nVerleen toegang op de volgende pop-ups om de oproep te maken.</string>
-    <string name="permissions_rationale_msg_contacts">Element kan uw adresboek benaderen om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
-\nAls u het goed vindt om uw adresboek hiervoor te delen, verleen dan toegang op de volgende pop-up.</string>
+    <string name="permissions_rationale_msg_contacts">Element kan uw adresboek benaderen om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers. Als u het goed vindt om uw adresboek hiervoor te delen, verleen dan toegang op de volgende pop-up.</string>
     <string name="permissions_msg_contacts_warning_other_androids">Element kan uw adresboek gebruiken om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
 \n 
 \nWilt u uw adresboek hiervoor delen\?</string>
@@ -526,7 +525,7 @@
     <string name="encryption_information_sender_device_information">Informatie over sessie van afzender</string>
     <string name="encryption_information_device_name">Publieke naam</string>
     <string name="encryption_information_name">Publieke naam</string>
-    <string name="encryption_information_device_id">ID</string>
+    <string name="encryption_information_device_id">Sessie ID</string>
     <string name="encryption_information_device_key">Sessiesleutel</string>
     <string name="encryption_information_verification">Verificatie</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519-vingerafdruk</string>
@@ -660,27 +659,27 @@
     <string name="start_video_call_prompt_msg">Weet u zeker dat u een video-oproep wilt beginnen\?</string>
     <string name="groups_list">Groepenlijst</string>
     <plurals name="membership_changes">
-        <item quantity="one">1 verandering in lidmaatschap</item>
+        <item quantity="one">%d verandering in lidmaatschap</item>
         <item quantity="other">%d veranderingen in lidmaatschap</item>
     </plurals>
     <string name="list_members">Ledenlijst</string>
     <string name="open_chat_header">Opschrift openen</string>
     <string name="room_sync_in_progress">Synchroniseren…</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 actieve deelnemer</item>
+        <item quantity="one">%d actieve deelnemer</item>
         <item quantity="other">%d actieve deelnemers</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">1 deelnemer</item>
+        <item quantity="one">%d deelnemer</item>
         <item quantity="other">%d deelnemers</item>
     </plurals>
     <string name="room_participants_ban_prompt_msg">Weet u zeker dat u deze gebruiker uit dit gesprek wilt verbannen\?</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">1 nieuw bericht</item>
+        <item quantity="one">%d nieuw bericht</item>
         <item quantity="other">%d nieuwe berichten</item>
     </plurals>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 gesprek</item>
+        <item quantity="one">%d gesprek</item>
         <item quantity="other">%d gesprekken</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
@@ -701,16 +700,16 @@
     <string name="room_settings_invalid_group_format_dialog_title">Ongeldige gemeenschaps-ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">‘%s’ is geen geldige gemeenschaps-ID</string>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="one">1 ongelezen bericht waarin u vermeld staat</item>
+        <item quantity="one">%d ongelezen bericht waarin u vermeld staat</item>
         <item quantity="other">%d ongelezen berichten waarin u vermeld staat</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
-        <item quantity="one">1 gesprek</item>
+        <item quantity="one">%d gesprek</item>
         <item quantity="other">%d gesprekken</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s in %2$s</string>
     <plurals name="active_widgets">
-        <item quantity="one">1 actieve widget</item>
+        <item quantity="one">%d actieve widget</item>
         <item quantity="other">%d actieve widgets</item>
     </plurals>
     <!-- Widget Integration Manager -->
@@ -739,7 +738,7 @@
     <string name="receipt_avatar">Ontvangst-avatar</string>
     <string name="avatar">Avatar</string>
     <plurals name="notification_unread_notified_messages">
-        <item quantity="one">1 ongelezen bericht waarin u vermeld bent</item>
+        <item quantity="one">%d ongelezen bericht waarin u vermeld bent</item>
         <item quantity="other">%d ongelezen berichten waarin u vermeld bent</item>
     </plurals>
     <string name="notice_avatar">Vermeldingsavatar</string>
@@ -819,19 +818,19 @@
     <string name="missing_permissions_error">Deze actie is niet mogelijk wegens ontbrekende rechten.</string>
     <string name="system_alerts_header">Systeemmeldingen</string>
     <plurals name="format_time_s">
-        <item quantity="one">1s</item>
+        <item quantity="one">%ds</item>
         <item quantity="other">%ds</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1m</item>
+        <item quantity="one">%dm</item>
         <item quantity="other">%dm</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1u</item>
+        <item quantity="one">%du</item>
         <item quantity="other">%du</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1d</item>
+        <item quantity="one">%dd</item>
         <item quantity="other">%dd</item>
     </plurals>
     <string name="room_participants_now">nu %1$s</string>
@@ -840,16 +839,16 @@
     <string name="room_participants_invite_join_names_and">%1$s en %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
     <plurals name="room_details_selected">
-        <item quantity="one">1 geselecteerd</item>
+        <item quantity="one">%d geselecteerd</item>
         <item quantity="other">%d geselecteerd</item>
     </plurals>
     <string name="command_description_clear_scalar_token">Om Matrix-appbeheer te herstellen</string>
     <plurals name="group_members">
-        <item quantity="one">1 deelnemer</item>
+        <item quantity="one">%d deelnemer</item>
         <item quantity="other">%d deelnemers</item>
     </plurals>
     <plurals name="group_rooms">
-        <item quantity="one">1 gesprek</item>
+        <item quantity="one">%d gesprek</item>
         <item quantity="other">%d gesprekken</item>
     </plurals>
     <string name="resource_limit_exceeded_title">Bronlimiet overschreden</string>
@@ -1011,7 +1010,7 @@
     <string name="encryption_message_recovery">Herstel van versleutelde berichten</string>
     <string name="encryption_settings_manage_message_recovery_summary">Sleutelback-up beheren</string>
     <plurals name="notification_compat_summary_line_for_room">
-        <item quantity="one">%1$s: 1 bericht</item>
+        <item quantity="one">%1$s: %2$d bericht</item>
         <item quantity="other">%1$s: %2$d berichten</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
@@ -1137,7 +1136,7 @@
     <string name="new_recovery_method_popup_title">Nieuwe sleutelback-up</string>
     <string name="new_recovery_method_popup_description">Er is een nieuwe sleutelback-up voor versleutelde berichten gedetecteerd.
 \n
-\nAls u deze nieuwe herstelmethode niet heeft ingesteld, is het mogelijk dat er een aanvaller toegang tot uw account probeert te verkrijgen. Wijzig onmiddellijk uw accountwachtwoord en stel een nieuwe herstelmethode in in de instellingen.</string>
+\nAls u deze nieuwe herstelmethode niet heeft ingesteld, is het mogelijk dat er een aanvaller toegang tot uw account probeert te verkrijgen. Wijzig onmiddellijk uw accountwachtwoord en stel in de instellingen een nieuwe herstelmethode in.</string>
     <string name="new_recovery_method_popup_was_me">Ik was het</string>
     <string name="keys_backup_banner_setup_line1">Verlies nooit uw versleutelde berichten</string>
     <string name="keys_backup_banner_setup_line2">Begin sleutelback-up te gebruiken</string>
@@ -1233,7 +1232,7 @@
     <string name="invite_no_identity_server_error">Voeg een identiteitsserver toe in de instellingen om dit te doen.</string>
     <string name="settings_add_3pid_confirm_password_title">Bevestig uw wachtwoord</string>
     <string name="settings_add_3pid_flow_not_supported">U kunt dit niet doen vanaf de mobiele Element</string>
-    <string name="settings_background_fdroid_sync_mode">Synchroniseren op de achtergrond (experimenteel)</string>
+    <string name="settings_background_fdroid_sync_mode">Synchroniseren op de achtergrond</string>
     <string name="settings_background_fdroid_sync_mode_battery">Geoptimaliseerd voor batterij</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">Element zal op een batterijzuinige manier synchroniseren op de achtergrond.
 \nAfhankelijk van de staat van uw apparaat kan het besturingssysteem de synchronisatie uitstellen.</string>
@@ -1301,9 +1300,9 @@
     <string name="room_list_catchup_welcome_title">Welkom thuis!</string>
     <string name="room_list_catchup_welcome_body">Ongelezen berichten inhalen</string>
     <string name="room_list_people_empty_title">Gesprekken</string>
-    <string name="room_list_people_empty_body">Je directe gesprekken zullen hier worden weergegeven</string>
+    <string name="room_list_people_empty_body">Je directe gesprekken zullen hier worden weergegeven. Gebruik de + knop om een gesprek te starten.</string>
     <string name="room_list_rooms_empty_title">Kamers</string>
-    <string name="room_list_rooms_empty_body">Je kamers zullen hier worden weergegeven</string>
+    <string name="room_list_rooms_empty_body">Je kamers zullen hier worden weergegeven. Gebruik de + knop rechtsonder om een bestaande kamer te openen of een nieuwe aan te maken.</string>
     <string name="title_activity_emoji_reaction_picker">Reacties</string>
     <string name="reactions_agree">Bevestigen</string>
     <string name="reactions_like">Leuk vinden</string>

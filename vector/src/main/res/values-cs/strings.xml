@@ -41,10 +41,10 @@
 \nPřipojit se jako %1$s nebo %2$s</string>
     <string name="ongoing_conference_call_voice">Hlasem</string>
     <string name="ongoing_conference_call_video">Videem</string>
-    <string name="cannot_start_call">Nemohu spustit hovor, zkuste, prosím, později</string>
+    <string name="cannot_start_call">Nemohu zahájit hovor, zkuste, prosím, později</string>
     <string name="missing_permissions_warning">Z důvodu chybějících práv mohou některé funkce chybět…</string>
     <string name="missing_permissions_to_start_conf_call">Potřebujete práva k pozvání pro spuštění konference v této místnosti</string>
-    <string name="missing_permissions_title_to_start_conf_call">Nemohu spustit hovor</string>
+    <string name="missing_permissions_title_to_start_conf_call">Nemohu zahájit hovor</string>
     <string name="device_information">Informace o relaci</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferenční hovory nejsou podporovány v šifrovaných místnostech</string>
     <string name="send_anyway">Přesto poslat</string>
@@ -1947,8 +1947,8 @@
     <string name="video_meeting">Zahájit video schůzku</string>
     <string name="audio_meeting">Zahájit hlasovou schůzku</string>
     <string name="audio_video_meeting_description">Schůzky používají pravidla zabezpečení a přístupu Jitsi. Všichni lidé nyní v místnosti uvidí pozvánku k připojení, zatímco Vaše schůzka probíhá.</string>
-    <string name="cannot_call_yourself">Nemůžete spustit hovor se sebou</string>
-    <string name="cannot_call_yourself_with_invite">Nemůžete spustit hovor se sebou, počkejte, až účastníci přijmou pozvánku</string>
+    <string name="cannot_call_yourself">Nemůžete zahájit hovor se sebou</string>
+    <string name="cannot_call_yourself_with_invite">Nemůžete zahájit hovor se sebou, počkejte, až účastníci přijmou pozvánku</string>
     <string name="failed_to_add_widget">Přidání widgetu se nezdařilo</string>
     <string name="failed_to_remove_widget">Odstranění widgetu se nezdařilo</string>
     <string name="call_notification_answer">Přijmout</string>

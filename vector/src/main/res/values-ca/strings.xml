@@ -161,7 +161,7 @@
     <string name="auth_missing_email_or_phone">Falta el correu electrònic o el número de telefon</string>
     <string name="auth_invalid_token">El token és invàlid</string>
     <string name="auth_password_dont_match">Les contrasenyes no coincideixen</string>
-    <string name="auth_forgot_password">Heu oblidat la contrasenya?</string>
+    <string name="auth_forgot_password">Contrasenya oblidada\?</string>
     <string name="auth_use_server_options">Usa les opcions personalitzades del servidor (avançat)</string>
     <string name="auth_email_validation_message">Comproveu el correu electrònic per continuar el procés de registre</string>
     <string name="auth_threepid_warning_message">Registrar-se amb correu electrònic i número de telèfon alhora no es podrà fer fins que existeixi l\'api. Només es tindrà en compte el número de telèfon.

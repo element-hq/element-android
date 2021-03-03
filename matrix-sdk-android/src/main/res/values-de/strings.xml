@@ -236,8 +236,8 @@
         <item quantity="other">%1$s entfernte die alternativen Adressen %2$s für diesen Raum.</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_added_by_you">
-        <item quantity="one">Du fügtest die alternative Adresse %2$s für diesen Raum hinzu.</item>
-        <item quantity="other">Du fügtest die alternativen Adressen %2$s für diesen Raum hinzu.</item>
+        <item quantity="one">Du hast die alternative Adresse %1$s für diesen Raum hinzugefügt.</item>
+        <item quantity="other">Du hast die alternativen Adressen %1$s für diesen Raum hinzufügt.</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_added">
         <item quantity="one">%1$s fügte die alternative Adresse %2$s für diesen Raum hinzu.</item>

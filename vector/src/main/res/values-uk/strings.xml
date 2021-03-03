@@ -57,7 +57,7 @@
     <string name="action_quick_reply">Швидка відповідь</string>
     <string name="action_open">Відкрити</string>
     <string name="action_close">Закрити</string>
-    <string name="copied_to_clipboard">Скопійовано у сховок</string>
+    <string name="copied_to_clipboard">Скопійовано до буфера обміну</string>
     <string name="disable">Вимкнути</string>
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Підтвердження</string>
@@ -504,8 +504,8 @@
     <string name="room_settings_addresses_pref_title">Адреси</string>
     <string name="room_settings_labs_pref_title">Експериментальні</string>
     <string name="room_settings_labs_warning_message">Це експериментальні функції, що можуть несподівано ламатись. Використовуйте з обережністю.</string>
-    <string name="room_settings_labs_end_to_end">Наскрізне Шифрування</string>
-    <string name="room_settings_labs_end_to_end_is_active">Наскрізне Шифрування увімкнено</string>
+    <string name="room_settings_labs_end_to_end">Наскрізне шифрування</string>
+    <string name="room_settings_labs_end_to_end_is_active">Наскрізне шифрування увімкнено</string>
     <string name="room_settings_labs_end_to_end_warnings">Вийдіть з облікового запису, щоб отримати змогу увімкнути шифрування.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Шифрувати лише до перевірених пристроїв</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Ніколи не надсилати шифровані повідомлення з цього пристрою неперевіреним пристроям у цій кімнаті.</string>
@@ -1340,7 +1340,7 @@
     <string name="settings_secure_backup_section_title">Безпечне резервне копіювання</string>
     <string name="settings_show_room_member_state_events_summary">Включає події запрошення/приєднання/виходу/видалення/заборони та зміни зображень профілю/видимих імен.</string>
     <string name="settings_show_room_member_state_events">Показати стан подій учасників кімнати</string>
-    <string name="settings_cryptography_manage_keys">Управління ключами криптографії</string>
+    <string name="settings_cryptography_manage_keys">Керування криптографічними ключами</string>
     <string name="settings_integrations_summary">Використовуйте Менеджер інтеграції для керування ботами, мостами, віджетами та пакетами наклейок.
 \nМенеджери інтеграції отримують дані конфігурації та можуть змінювати віджети, надсилати запрошення до кімнати та надавати права від вашого імені.</string>
     <string name="settings_integrations">Інтеграції</string>
@@ -1480,4 +1480,55 @@
     <string name="login_server_url_form_other_hint">Адреса</string>
     <string name="keys_backup_setup_skip_msg">Ви можете втратити доступ до своїх повідомлень, якщо вийдете з облікового запису або загубите цей пристрій.</string>
     <string name="keys_backup_setup_skip_title">Ви впевнені\?</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_on">Увімкніть біометричні дані для певного пристрою, такі як відбитки пальців та розпізнавання обличчя.</string>
+    <string name="settings_security_pin_code_use_biometrics_title">Увімкнути біометрію</string>
+    <string name="create_pin_title">Виберіть PIN-код для безпеки</string>
+    <string name="create_pin_confirm_title">Підтвердьте PIN-код</string>
+    <string name="create_pin_confirm_failure">Не вдалося підтвердити PIN-код, торкніться нового.</string>
+    <string name="auth_pin_title">Введіть свій PIN-код</string>
+    <string name="auth_pin_forgot">Забули PIN-код\?</string>
+    <string name="auth_pin_reset_title">Відновити PIN-код</string>
+    <string name="auth_pin_new_pin_action">Новий PIN-код</string>
+    <string name="auth_pin_reset_content">Щоб відновити PIN-код, потрібно буде повторно ввійти в систему та створити новий.</string>
+    <string name="settings_security_pin_code_title">Увімкнути PIN-код</string>
+    <string name="settings_security_pin_code_summary">Якщо хочете відновити PIN-код, торкніться «Забули PIN-код», щоб вийти та відновити.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-код — єдиний спосіб розблокувати Element.</string>
+    <string name="settings_security_pin_code_grace_period_title">Вимагати PIN-код через 2 хвилини</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-код вимагається після 2 хвилин не використання Element.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN-код потрібно вводити за кожного відкриття Element.</string>
+    <string name="settings_security_pin_code_change_pin_title">Змінити PIN-код</string>
+    <string name="settings_security_pin_code_change_pin_summary">Зміна поточного PIN-коду</string>
+    <string name="auth_pin_confirm_to_disable_title">Підтвердьте PIN-код, щоб вимкнути його</string>
+    <string name="settings_security_application_protection_screen_title">Налаштування захисту</string>
+    <string name="settings_security_application_protection_summary">Захистіть доступ PIN-кодом та біометричними даними.</string>
+    <string name="settings_security_application_protection_title">Захист доступу</string>
+    <string name="settings_active_sessions_verified_device_desc">Цей сеанс довірений для безпечного обміну повідомленнями, оскільки ви його підтвердили:</string>
+    <plurals name="settings_active_sessions_count">
+        <item quantity="one">%d активний сеанс</item>
+        <item quantity="few">%d активні сеанси</item>
+        <item quantity="many">%d активних сеансів</item>
+        <item quantity="other">%d активних сеансів</item>
+    </plurals>
+    <string name="settings_active_sessions_list">Активні сеанси</string>
+    <string name="settings_show_devices_list">Переглянути всі сеанси</string>
+    <string name="settings_active_sessions_show_all">Показати всі сеанси</string>
+    <string name="authentication_error">Помилка автентифікації</string>
+    <string name="re_authentication_activity_title">Потрібна повторна автентифікація</string>
+    <string name="re_authentication_default_confirm_text">Для виконання цієї дії Element вимагає ввести свої облікові дані.</string>
+    <string name="verify_cancel_self_verification_from_trusted">Якщо скасувати, ви не зможете читати зашифровані повідомлення на новому пристрої, а інші користувачі не довірятимуть йому</string>
+    <string name="verify_cancel_self_verification_from_untrusted">Якщо скасувати, ви не зможете читати зашифровані повідомлення на цьому пристрої, а інші користувачі довірятимуть йому</string>
+    <string name="settings_active_sessions_manage">Керування сеансами</string>
+    <string name="please_wait">Просимо зачекати…</string>
+    <string name="crosssigning_verify_session">Перевірка входу</string>
+    <string name="settings_active_sessions_signout_device">Вийти з цього сеансу</string>
+    <string name="verify_new_session_was_not_me">Це був не я</string>
+    <string name="room_profile_not_encrypted_subtitle">Повідомлення в цій кімнаті не захищено наскрізним шифруванням.</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">Повідомлення тут не захищено наскрізним шифруванням.</string>
+    <string name="room_settings_enable_encryption">Увімкнути наскрізне шифрування…</string>
+    <string name="direct_room_encryption_enabled_tile_description">Повідомлення в цій кімнаті наскрізно зашифровані.</string>
+    <string name="verification_verify_device">Перевірити цей сеанс</string>
+    <string name="sas_decimal_description">Перевірте цей сеанс, підтвердивши, що на екрані партнера з’являються такі цифри</string>
+    <string name="sas_emoji_description">Перевірте цей сеанс, підтвердивши, що на екрані партнера з’являються ці емоджі</string>
+    <string name="sas_incoming_request_description">Перевірте цей сеанс, щоб позначити його надійним. Довірені сеанси партнерів дають вам додаткову впевненість під час використання наскрізно зашифрованих повідомлень.</string>
+    <string name="settings_active_sessions_unverified_device_desc">Перевірте цей сеанс, щоб позначити його надійним та надати йому доступ до зашифрованих повідомлень. Якщо ви не входили в цей сеанс, ваш обліковий запис може бути зламано:</string>
 </resources>
