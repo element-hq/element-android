@@ -1,5 +1,276 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s envió una imagen.</string>
+    <string name="notice_room_invite_no_invitee">la invitación de %s</string>
+    <string name="notice_room_invite">%1$s invitó a %2$s</string>
+    <string name="notice_room_invite_you">%1$s te ha invitado</string>
+    <string name="notice_room_join">%1$s se ha unido</string>
+    <string name="notice_room_leave">%1$s salió</string>
+    <string name="notice_room_reject">%1$s rechazó la invitación</string>
+    <string name="notice_room_kick">%1$s expulsó a %2$s</string>
+    <string name="notice_room_unban">%1$s le quitó el veto a %2$s</string>
+    <string name="notice_room_ban">%1$s vetó a %2$s</string>
+    <string name="notice_room_withdraw">%1$s retiró la invitación de %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s cambió su avatar</string>
+    <string name="notice_display_name_set">%1$s estableció %2$s como su nombre público</string>
+    <string name="notice_display_name_changed_from">%1$s cambió su nombre público de %2$s a %3$s</string>
+    <string name="notice_display_name_removed">%1$s eliminó su nombre público (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s cambió el tema a: %2$s</string>
+    <string name="notice_room_name_changed">%1$s cambió el nombre de la sala a: %2$s</string>
+    <string name="notice_placed_video_call">%s realizó una llamada de vídeo.</string>
+    <string name="notice_placed_voice_call">%s realizó una llamada de voz.</string>
+    <string name="notice_answered_call">%s contestó la llamada.</string>
+    <string name="notice_ended_call">%s finalizó la llamada.</string>
+    <string name="notice_made_future_room_visibility">%1$s hizo visible el historial futuro de la sala para %2$s</string>
+    <string name="notice_room_visibility_invited">todos los miembros de la sala, desde su invitación.</string>
+    <string name="notice_room_visibility_joined">todos los miembros de la sala, desde el momento en que se unieron.</string>
+    <string name="notice_room_visibility_shared">todos los miembros de la sala.</string>
+    <string name="notice_room_visibility_world_readable">todos.</string>
+    <string name="notice_room_visibility_unknown">desconocido (%s).</string>
+    <string name="notice_end_to_end">%1$s ha activado la encriptación de Extremo-a-Extremo (%2$s)</string>
+    <string name="notice_requested_voip_conference">%1$s solicitó una conferencia de VozIP</string>
+    <string name="notice_voip_started">Conferencia de VozIP iniciada</string>
+    <string name="notice_voip_finished">Conferencia de VozIP finalizada</string>
+    <string name="notice_avatar_changed_too">(el avatar también se cambió)</string>
+    <string name="notice_room_name_removed">%1$s eliminó el nombre de la sala</string>
+    <string name="notice_room_topic_removed">%1$s eliminó el tema de la sala</string>
+    <string name="notice_profile_change_redacted">%1$s actualizó su perfil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s invitó a %2$s a unirse a la sala</string>
+    <string name="notice_room_third_party_registered_invite">%1$s aceptó la invitación para %2$s</string>
+    <string name="notice_crypto_unable_to_decrypt">** No es posible descifrar: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">El dispositivo emisor no nos ha enviado las claves para este mensaje.</string>
+    <!-- Room Screen -->
+    <string name="could_not_redact">No se pudo redactar</string>
+    <string name="unable_to_send_message">No es posible enviar el mensaje</string>
+    <string name="message_failed_to_upload">No se pudo cargar la imagen</string>
+    <!-- general errors -->
+    <string name="network_error">Error de red</string>
+    <string name="matrix_error">Error de Matrix</string>
+    <!-- Home Screen -->
+    <!-- Last seen time -->
+    <!-- call events -->
+    <!-- room error messages -->
+    <string name="room_error_join_failed_empty_room">Actualmente no es posible volver a unirse a una sala vacía.</string>
+    <string name="encrypted_message">Mensaje encriptado</string>
+    <!-- medium friendly name -->
+    <string name="medium_email">Dirección de correo electrónico</string>
+    <string name="medium_phone_number">Número telefónico</string>
+    <string name="summary_user_sent_sticker">%1$s envió una pegatina.</string>
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Invitación de %s</string>
+    <string name="room_displayname_room_invite">Invitación a Sala</string>
+    <string name="room_displayname_two_members">%1$s y %2$s</string>
+    <string name="room_displayname_empty_room">Sala vacía</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s y 1 otro</item>
+        <item quantity="other">%1$s y %2$d otros</item>
+    </plurals>
+    <string name="notice_event_redacted">Mensaje eliminado</string>
+    <string name="notice_event_redacted_by">Mensaje eliminado por %1$s</string>
+    <string name="notice_event_redacted_with_reason">Mensaje eliminado [motivo: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Mensaje eliminado por %1$s [motivo: %2$s]</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s ha revocado la invitación a unirse a la sala para %2$s</string>
+    <string name="initial_sync_start_importing_account">Sincronización Inicial
+\nImportando cuenta…</string>
+    <string name="initial_sync_start_importing_account_rooms">Sincronización Inicial:
+\nImportando Salas</string>
+    <string name="initial_sync_start_importing_account_groups">Sincronización Inicial:
+\nImportando Comunidades</string>
+    <string name="initial_sync_start_importing_account_data">Sincronización Inicial:
+\nImportando Datos de la Cuenta</string>
+    <string name="event_status_sending_message">Enviando mensaje…</string>
+    <string name="clear_timeline_send_queue">Borrar cola de envío</string>
+    <string name="notice_room_invite_with_reason">%1$s ha invitado a %2$s. Razón: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s te ha invitado. Razón: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s se ha unido. Razón: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s se ha ido. Razón: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s ha rechadazo la invitación. Razón: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s expulsó a %2$s. Razón: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s ha baneado a %2$s. Razón: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s ha aceptado la invitación para %2$s. Razón: %3$s</string>
+    <string name="notice_room_canonical_alias_unset">%1$s ha eliminado la dirección principal para esta sala.</string>
+    <string name="notice_room_update">%s ha actualizado la sala.</string>
+    <string name="initial_sync_start_importing_account_crypto">Sincronización Inicial:
+\nImportando criptografía</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Sincronización Inicial:
+\nImportando Salas a las que te has unido</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Sincronización Inicial:
+\nImportando Salas a las que has sido invitada</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Sincronización Inicial:
+\nImportando Salas Abandonadas</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Invitación de %1$s. Razón: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s ha desbaneado a %2$s. Razón: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s envió una invitación a %2$s para que se una a la sala. Razón: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s revocó la invitación de %2$s para unirse a la sala. Razón: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s ha retirado la invitación de %2$s. Razón: %3$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s ha añadido %2$s como alias de esta sala.</item>
+        <item quantity="other">%1$s ha añadido %2$s como alias de esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s ha quitado %2$s como alias de esta sala.</item>
+        <item quantity="other">%1$s ha quitado %2$s como alias de esta sala.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_set">%1$s ha establecido la dirección principal de esta sala a %2$s.</string>
+    <string name="notice_room_guest_access_can_join">%1$s ha permitido que los invitados se unan a la sala.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s ha impedido que los invitados se unan a la sala.</string>
+    <string name="notice_end_to_end_ok">%1$s ha activado la encriptación extremo a extremo.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s ha activado la encriptación de extremo a extremo (algoritmo no reconocido %2$s).</string>
+    <string name="summary_you_sent_image">Enviaste una imagen.</string>
+    <string name="summary_you_sent_sticker">Enviaste un sticker.</string>
+    <string name="notice_room_invite_no_invitee_by_you">Tu invitación</string>
+    <string name="notice_room_created">%1$s creó la sala</string>
+    <string name="notice_room_created_by_you">Creaste la sala</string>
+    <string name="notice_room_invite_by_you">Invitaste a %1$s</string>
+    <string name="notice_room_join_by_you">Te uniste a la Sala</string>
+    <string name="notice_room_leave_by_you">Dejaste la Sala</string>
+    <string name="notice_room_reject_by_you">Rechazaste la invitación</string>
+    <string name="notice_room_kick_by_you">Tu pateaste a %1$s</string>
+    <string name="notice_room_unban_by_you">Tu desbanaste a %1$s</string>
+    <string name="notice_room_ban_by_you">Usted prohibió a %1$s</string>
+    <string name="notice_room_withdraw_by_you">Retiró la invitación de %1$s\'s</string>
+    <string name="notice_avatar_url_changed_by_you">Cambiaste tu avatar</string>
+    <string name="notice_display_name_set_by_you">Establece su nombre de visualización en %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">Cambiaste tu nombre para mostrar de %1$s a %2$s</string>
+    <string name="notice_display_name_removed_by_you">Quitaste tu nombre para mostrar (era %1$s)</string>
+    <string name="notice_room_topic_changed_by_you">Cambiaste el tema a: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s cambió el avatar de la sala</string>
+    <string name="notice_room_avatar_changed_by_you">Cambiaste el avatar de la sala</string>
+    <string name="notice_room_name_changed_by_you">Cambiaste el nombre de la sala a: %1$s</string>
+    <string name="notice_placed_video_call_by_you">Hiciste una videollamada.</string>
+    <string name="notice_placed_voice_call_by_you">Hiciste una llamada de voz.</string>
+    <string name="notice_call_candidates">%s envió datos para configurar la llamada.</string>
+    <string name="notice_call_candidates_by_you">Enviaste datos para configurar la llamada.</string>
+    <string name="notice_answered_call_by_you">Respondiste la llamada.</string>
+    <string name="notice_ended_call_by_you">Terminaste la llamada.</string>
+    <string name="notice_made_future_room_visibility_by_you">Hiciste visible el futuro historial de la %1$s</string>
+    <string name="notice_end_to_end_by_you">Has activado la encriptación de Extremo-a-Extremo (%1$s)</string>
+    <string name="notice_room_update_by_you">Has actualizado esta sala.</string>
+    <string name="notice_requested_voip_conference_by_you">Solicitaste una conferencia de VozIP</string>
+    <string name="notice_room_name_removed_by_you">Quitaste el nombre de la sala</string>
+    <string name="notice_room_topic_removed_by_you">Quitaste el tema de la sala</string>
+    <string name="notice_room_avatar_removed">%1$s eliminó el avatar de la sala</string>
+    <string name="notice_room_avatar_removed_by_you">Quitaste el avatar de la sala</string>
+    <string name="notice_profile_change_redacted_by_you">Actualizaste tu perfil %1$s</string>
+    <string name="notice_room_third_party_invite_by_you">Enviaste una invitación a %1$s para unirse a la sala</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Revocaste la invitación para que %1$s se una a la sala</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Aceptaste la invitación para %1$s</string>
+    <string name="notice_widget_added">%1$s agrego el widget %2$s</string>
+    <string name="notice_widget_added_by_you">Agregaste el widget %1$s</string>
+    <string name="notice_widget_removed">%1$s eliminó el widget %2$s</string>
+    <string name="notice_widget_removed_by_you">Quitaste el widget %1$s</string>
+    <string name="notice_widget_modified">%1$s modifico el widget %2$s</string>
+    <string name="notice_widget_modified_by_you">Modificaste el widget %1$s</string>
+    <string name="power_level_admin">Administrador</string>
+    <string name="power_level_moderator">Moderador</string>
+    <string name="power_level_default">Por defecto</string>
+    <string name="power_level_custom">Personalizado (%1$d)</string>
+    <string name="power_level_custom_no_value">Personalizado</string>
+    <string name="notice_power_level_changed_by_you">Cambiaste el nivel de permisos de %1$s.</string>
+    <string name="notice_power_level_changed">%1$s cambió el nivel de permisos de %2$s.</string>
+    <string name="notice_power_level_diff">%1$s de %2$s a %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Tu invitación. Razón: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Invitaste a %1$s. Razón: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Te uniste a la sala. Razón: %1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Dejaste la sala. Razón: %1$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Rechazaste la invitación. Razón: %1$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Pateaste a %1$s. Motivo: %2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Has desactivado a %1$s. Motivo: %2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Prohibiste a %1$s. Motivo: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Enviaste una invitación a %1$s para unirse a la sala. Motivo: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Revocaste la invitación para que %1$s se una a la sala. Motivo: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Aceptaste la invitación para %1$s. Motivo: %2$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Retiró la invitación de %1$s\'s. Motivo: %2$s</string>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Agregaste %1$s como dirección para esta sala.</item>
+        <item quantity="other">Agregaste %1$s como direcciones para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Quitaste %1$s como dirección para esta sala.</item>
+        <item quantity="other">Quitaste %1$s como direcciones para esta sala.</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed">%1$s añadió %2$s y eliminó %3$s como alias para esta sala.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Agregaste %1$s y quitaste %2$s como direcciones para esta sala.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Estableciste la dirección principal de esta sala en %1$s.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Quitaste la dirección principal de esta sala.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Ha permitido que los invitados se unan a la sala.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Ha impedido que los invitados se unan a la sala.</string>
+    <string name="notice_end_to_end_ok_by_you">Tu has activado la encriptación de Extremo-a-Extremo.</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Has activado la encriptación de Extremo-a-Extremo (algoritmo %1$s no reconocido).</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Has impedido que invitados se unan a la sala.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Has permitido a invitados unirse aquí.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Te has ido. Razón: %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Has revocado la invitación de %1$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Has invitado a %1$s</string>
+    <string name="notice_direct_room_update_by_you">Has actualizado aquí.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Has hecho futuros mensajes visibles a %1$s</string>
+    <string name="notice_direct_room_leave_by_you">Te saliste de la sala</string>
+    <string name="notice_direct_room_join_by_you">Te uniste</string>
+    <string name="notice_direct_room_created_by_you">Creaste la conversación</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s ha impedido que invitados se unan a la sala.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s ha permitido a invitados a unirse aquí.</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s se ha ido. Razón: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Tu te has unido. Razón: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s se ha unido. Razón: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s ha revocado la invitación de %2$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s ha invitado %2$s</string>
+    <string name="notice_direct_room_update">%s ha actualizado aquí.</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s ha hecho futuros mensajes visibles a %2$s</string>
+    <string name="notice_direct_room_leave">%1$s ha salido de la sala</string>
+    <string name="notice_direct_room_join">%1$s se ha unido</string>
+    <string name="notice_direct_room_created">%1$s ha creado la conversación</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Cambiaste el alias de esta sala.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s cambió el alias de esta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Cambiaste los alias principal y alternativos de esta sala.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s cambió los alias principal y alternativos de esta sala.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Cambiaste los alias alternativos de esta sala.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s cambió los alias alternativos de esta sala.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Eliminaste el alias alternativo %1$s para esta sala.</item>
+        <item quantity="other">Eliminaste los alias alternativos %1$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s eliminó el alias alternativo %2$s para esta sala.</item>
+        <item quantity="other">%1$s eliminó los alias alternativos %2$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Añadiste el alias alternativo %1$s para esta sala.</item>
+        <item quantity="other">Añadiste los alias alternativos %1$s para esta sala.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s añadió el alias alternativo %2$s para esta sala.</item>
+        <item quantity="other">%1$s añadió los alias alternativos %2$s para esta sala.</item>
+    </plurals>
+    <string name="room_displayname_empty_room_was">Sala vacía (%s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s y %4$d otro</item>
+        <item quantity="other">%1$s, %2$s, %3$s y %4$d otros</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s y %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s y %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Todos los servidores tienen prohibido participar! Esta sala ya no puede ser usada.</string>
+    <string name="notice_room_server_acl_updated_no_change">Sin cambios.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Los servidores con literales IP coincidentes ahora están prohibidos.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Los servidores con literales IP coincidentes ahora están permitidos.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Los servidores con %s coincidentes se han eliminado de la lista de permitidos.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Los servidores con %s coincidentes ahora están permitidos.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Los servidores con %s coincidentes se han eliminado de la lista de baneos.</string>
+    <string name="notice_room_server_acl_updated_banned">• Los servidores con %s coincidentes ahora están prohibidos.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Has cambiado la lista de control de acceso para esta sala.</string>
+    <string name="notice_room_server_acl_updated_title">%s ha cambiado la lista de control de acceso para esta sala.</string>
+    <string name="notice_room_server_acl_set_allowed">• Los servidores con %s coincidentes están permitidos.</string>
+    <string name="notice_room_server_acl_set_banned">• Los servidores con %s coincidentes están prohibidos.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Los servidores con literales IP coincidentes están prohibidos.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Los servidores con literales IP coincidentes están permitidos.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Has fijado la lista de control de acceso para esta sala.</string>
+    <string name="notice_room_server_acl_set_title">%s ha fijado la lista de control de acceso para esta sala.</string>
+    <string name="notice_widget_jitsi_modified_by_you">Has modificado la videoconferencia</string>
+    <string name="notice_widget_jitsi_modified">Videoconferencia modificada por %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">Has terminado la videoconferencia</string>
+    <string name="notice_widget_jitsi_removed">Videoconferencia terminada por %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">Has empezado una videoconferencia</string>
+    <string name="notice_widget_jitsi_added">Videoconferencia empezada por %1$s</string>
     <!-- titles -->
     <string name="title_activity_home">Mensajes</string>
     <string name="title_activity_room">Sala</string>

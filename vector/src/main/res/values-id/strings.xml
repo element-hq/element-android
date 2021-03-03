@@ -1,5 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="room_displayname_invite_from">Undang dari %s</string>
+    <string name="room_displayname_room_invite">Undangan Ruang</string>
+    <string name="room_displayname_two_members">%1$s dan %2$s</string>
+
+    <string name="room_displayname_empty_room">Ruang kosong</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="other">%1$s dan %2$d yang lain</item>
+    </plurals>
     <string name="title_activity_home">Pesan</string>
     <string name="title_activity_room">Ruang</string>
     <string name="title_activity_settings">Pengaturan</string>
