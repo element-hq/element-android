@@ -1833,7 +1833,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="element_disclaimer_title">Riot ahora es Element!</string>
     <string name="element_disclaimer_negative_button">Entendido</string>
     <string name="element_disclaimer_positive_button">Aprender Mas</string>
-    <string name="element_login_splash_brand">Element</string>
     <string name="search_in_my_contacts">Buscar en mis contactos</string>
     <string name="three_pid_revoke_invite_dialog_title">Rechazar invitación</string>
     <string name="auth_pin_confirm_to_disable_title">Confirma PIN para desabilitarlo</string>

@@ -923,7 +923,6 @@
     <string name="notice_crypto_unable_to_decrypt_merged">Venter på krypteringshistorikk</string>
     <string name="element_disclaimer_title">Riot er nå Element!</string>
     <string name="element_disclaimer_content">Vi er glade for å kunngjøre at vi har byttet navn! Appen din er oppdatert, og du er logget på kontoen din.</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="save_recovery_key_chooser_hint">Lagre gjenopprettingsnøkkel i</string>
     <string name="loading_contact_book">Henter kontaktene dine…</string>
     <string name="empty_contact_book">Kontaktboken din er tom</string>

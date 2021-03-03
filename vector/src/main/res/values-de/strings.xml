@@ -2357,7 +2357,6 @@
     <string name="element_disclaimer_content">Wir sind begeistert unsere Namensänderung mitteilen zu können! Deine App ist auf dem neusten Stand und du bist mit deinem Account angemeldet.</string>
     <string name="element_disclaimer_negative_button">VERSTANDEN</string>
     <string name="element_disclaimer_positive_button">MEHR ERFAHREN</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="save_recovery_key_chooser_hint">Speichere Wiederherstellungsschlüssel in</string>
     <string name="add_from_phone_book">Füge über Kontaktliste hinzu</string>
     <string name="empty_phone_book">Deine Kontaktliste ist leer</string>

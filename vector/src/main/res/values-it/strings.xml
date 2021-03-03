@@ -2357,7 +2357,6 @@
     <string name="element_disclaimer_content">Siamo entusiasti di annunciare che abbiamo cambiato nome! La tua app è aggiornata e hai fatto l\'accesso al tuo account.</string>
     <string name="element_disclaimer_negative_button">CAPITO</string>
     <string name="element_disclaimer_positive_button">MAGGIORI INFO</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="save_recovery_key_chooser_hint">Salva chiave di ripristino in</string>
     <string name="add_from_phone_book">Aggiungi dalla mia rubrica</string>
     <string name="empty_phone_book">La tua rubrica è vuota</string>

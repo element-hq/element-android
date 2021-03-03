@@ -2364,7 +2364,6 @@
     <string name="element_disclaimer_content">Estamos felizes em anunciar que mudamos de nome! Seu aplicativo está atualizado e você está conectado à sua conta.</string>
     <string name="element_disclaimer_negative_button">OK, ENTENDI</string>
     <string name="element_disclaimer_positive_button">APRENDA MAIS</string>
-    <string name="element_login_splash_brand">Element</string>
     <string name="save_recovery_key_chooser_hint">Salvar chave de recuperação em</string>
     <string name="add_from_phone_book">Adicionar da minha lista de contatos</string>
     <string name="empty_phone_book">Sua lista de contatos está vazia</string>

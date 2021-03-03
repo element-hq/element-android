@@ -1906,7 +1906,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="empty_phone_book">Twoja książka telefoniczna jest pusta</string>
     <string name="add_from_phone_book">Dodaj z mojej książki telefonicznej</string>
     <string name="save_recovery_key_chooser_hint">Zapisz klucz odzyskiwania w</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="element_disclaimer_positive_button">DOWIEDZ SIĘ WIĘCEJ</string>
     <string name="element_disclaimer_content">Jesteśmy podekscytowani mogąc oznajmić, że zmieniliśmy nazwę! Twoja aplikacja jest aktualna i jesteś zalogowany(-a) do swojego konta.</string>
     <string name="element_disclaimer_title">Riot nazywa się teraz Element!</string>

@@ -2376,7 +2376,6 @@
     <string name="element_disclaimer_content">Jsme nadšení, že smíme oznámit změnu jména! Vaše app je aktuální a jste přihlášeni do svého účtu.</string>
     <string name="element_disclaimer_negative_button">ROZUMÍM</string>
     <string name="element_disclaimer_positive_button">DOZVĚDĚT SE VÍCE</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="save_recovery_key_chooser_hint">Uložit klíče pro obnovu v</string>
     <string name="add_from_phone_book">Přidat z mého adresáře</string>
     <string name="empty_phone_book">Váš adresář je prázdný</string>

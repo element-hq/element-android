@@ -2022,7 +2022,6 @@
     <string name="element_disclaimer_content">Meil on hea meel teatada, et oleme muutnud nime! Sinu rakendus on uuendatud ning sa oled oma kontole sisse logitud.</string>
     <string name="element_disclaimer_negative_button">Selge lugu</string>
     <string name="element_disclaimer_positive_button">Vaata lisateavet</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="save_recovery_key_chooser_hint">Salvesta taastevõti järgnevalt</string>
     <string name="add_from_phone_book">Lisa telefoniraamatust</string>
     <string name="empty_phone_book">Sinu telefoniraamat on tühi</string>

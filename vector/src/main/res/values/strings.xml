@@ -3046,9 +3046,6 @@
     <string name="element_disclaimer_negative_button">GOT IT</string>
     <string name="element_disclaimer_positive_button">LEARN MORE</string>
 
-    <string name="element_login_splash_brand">element</string>
-
-
     <string name="save_recovery_key_chooser_hint">Save recovery key in</string>
 
     <string name="add_from_phone_book">Add from my phone book</string>

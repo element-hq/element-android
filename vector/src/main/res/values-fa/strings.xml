@@ -1538,7 +1538,6 @@
     <string name="room_settings_topic_hint">موضوع</string>
     <string name="element_disclaimer_negative_button">گرفتم</string>
     <string name="element_disclaimer_positive_button">اطّلاعات بیش‌تر</string>
-    <string name="element_login_splash_brand">المنت</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">هشدارهای نشانی اصلی</string>
     <string name="encryption_information_sender_device_information">اطّلاعات نشست فرستنده</string>
     <string name="encryption_information_decryption_error">خطای رمزگشایی</string>

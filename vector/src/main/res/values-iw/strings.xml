@@ -2282,7 +2282,6 @@
     <string name="empty_phone_book">ספר הטלפונים שלך ריק</string>
     <string name="add_from_phone_book">הוסף מפנקס הטלפונים שלי</string>
     <string name="save_recovery_key_chooser_hint">שמור מפתח שחזור פנימה</string>
-    <string name="element_login_splash_brand">רכיב</string>
     <string name="element_disclaimer_positive_button">למד עוד</string>
     <string name="element_disclaimer_negative_button">הבנת</string>
     <string name="element_disclaimer_content">אנו שמחים לבשר ששינינו שם! האפליקציה שלך מעודכנת ואתה מחובר לחשבונך.</string>

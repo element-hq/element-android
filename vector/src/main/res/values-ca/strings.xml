@@ -2456,7 +2456,6 @@
     </plurals>
     <string name="phone_book_perform_lookup">Busca contactes a Matrix</string>
     <string name="search_in_my_contacts">Busca als meus contactes</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="element_disclaimer_positive_button">MÉS INFORMACIÓ</string>
     <string name="element_disclaimer_title">Riot ara és Element!</string>
     <string name="crypto_error_withheld_generic">No pots accedir al missatge perquè el remitent, intencionadament, no ha enviat les claus</string>

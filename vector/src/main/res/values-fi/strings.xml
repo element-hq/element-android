@@ -2221,7 +2221,6 @@
     <string name="direct_room_profile_section_more_settings">Asetukset</string>
     <string name="sent_a_poll">Äänestys</string>
     <string name="settings_text_message_sent_hint">Koodi</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="room_settings_topic_hint">Aihe</string>
     <string name="power_level_title">Rooli</string>
     <string name="invite_users_to_room_action_invite">KUTSU</string>

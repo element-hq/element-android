@@ -2429,7 +2429,6 @@
     <string name="element_disclaimer_content">Мы рады сообщить, что сменили имя! Ваше приложение обновлено, и вы вошли в свою учетную запись.</string>
     <string name="element_disclaimer_negative_button">ПОНЯТНО</string>
     <string name="element_disclaimer_positive_button">УЗНАТЬ БОЛЬШЕ</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="save_recovery_key_chooser_hint">Сохранить ключ восстановления в</string>
     <string name="add_from_phone_book">Добавить из моей телефонной книги</string>
     <string name="empty_phone_book">Ваша телефонная книга пуста</string>

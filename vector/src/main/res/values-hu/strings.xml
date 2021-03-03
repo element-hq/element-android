@@ -2251,7 +2251,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="element_disclaimer_content">Örömmel jelentjük be, hogy nevet változtattunk! Az alkalmazás naprakész, és be vagy jelentkezve a fiókodba.</string>
     <string name="element_disclaimer_negative_button">ÉRTEM</string>
     <string name="element_disclaimer_positive_button">TOVÁBBI INFORMÁCIÓK</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="save_recovery_key_chooser_hint">Helyreállítási kulcs mentése ide:</string>
     <string name="add_from_phone_book">Hozzáadás a telefonkönyvemből</string>
     <string name="empty_phone_book">A telefonkönyved üres</string>

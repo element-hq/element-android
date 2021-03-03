@@ -2215,7 +2215,6 @@
     <string name="element_disclaimer_content">我们兴奋地宣布我们改名了！您的应用已经是最新的并且您已登入您的帐户。</string>
     <string name="element_disclaimer_negative_button">明白了</string>
     <string name="element_disclaimer_positive_button">了解更多</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="save_recovery_key_chooser_hint">将恢复密钥保存到</string>
     <string name="add_from_phone_book">从我的电话簿添加</string>
     <string name="empty_phone_book">您的电话簿是空的</string>
