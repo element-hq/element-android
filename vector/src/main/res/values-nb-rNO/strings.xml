@@ -1281,7 +1281,6 @@
     <string name="room_join_rules_public">%1$s gjorde rommet offentlig for den som kjenner lenken.</string>
     <string name="room_join_rules_public_by_you">Du gjorde rommet offentlig for den som kjenner lenken.</string>
     <string name="login_connect_to_a_custom_server">Koble til en tilpasset server</string>
-    <string name="login_server_url_form_other_notice">Skriv inn adressen til en server eller et Element du vil koble til</string>
     <string name="login_server_url_form_common_notice">Skriv inn adressen til serveren du vil bruke</string>
     <string name="login_reset_password_warning_content">Hvis du endrer passordet, tilbakestilles alle krypteringsnøkler fra ende-til-ende på alle øktene dine, noe som gjør kryptert chatlogg uleselig. Konfigurer sikkerhetskopiering av nøkkel eller eksporter romnøklene fra en annen økt før du tilbakestiller passordet.</string>
     <string name="login_reset_password_success_notice_2">Du er logget ut av alle økter og vil ikke lenger motta push-varsler. Logg på igjen på hver enhet for å aktivere varsler på nytt.</string>

@@ -1682,7 +1682,6 @@
     <string name="login_server_url_form_other_hint">Adresse</string>
     <string name="login_server_url_form_modular_text">Hébergement privé pour les organisations</string>
     <string name="login_server_url_form_modular_notice">Saisir l’adresse de Element ou du serveur de Modular que vous voulez utiliser</string>
-    <string name="login_server_url_form_other_notice">Saisir l’adresse d’un serveur ou d’un Element auquel vous voulez vous connecter</string>
     <string name="login_sso_error_message">Une erreur est survenue pendant le chargement de la page : %1$s (%2$d)</string>
     <string name="login_mode_not_supported">L’application ne peut pas s’authentifier sur ce serveur d’accueil. Le serveur d’accueil prend en charge le(s) type(s) d’authentification suivant(s) : %1$s.
 \n

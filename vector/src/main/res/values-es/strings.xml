@@ -1766,7 +1766,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="login_server_url_form_other_hint">Dirección</string>
     <string name="login_server_url_form_modular_text">Alojamiento de pago para organizaciones</string>
     <string name="login_server_url_form_modular_notice">Introduzca la dirección de Modular Element o servidor que quieres usar</string>
-    <string name="login_server_url_form_other_notice">Introduzca la dirección del servidor Element al que quieres conectarte</string>
     <string name="login_sso_error_message">Se produjo un error al cargar la página: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">La aplicación no es capaz de iniciar sesión en este servidor. Éste solo soporta el acceso mediante: %1$s.
 \n

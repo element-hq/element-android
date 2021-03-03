@@ -938,7 +938,6 @@
 \nĈu vi volas saluti per TTT-kliento\?</string>
     <string name="login_sso_error_message">Eraris enlegado de la paĝo: %1$s (%2$d)</string>
     <string name="login_server_url_form_common_notice">Enigu adreson de servilo, kiun vi volas uzi</string>
-    <string name="login_server_url_form_other_notice">Enigu la adreson de servilo aŭ Elemento, kien vi volas konektiĝi</string>
     <string name="login_server_url_form_other_hint">Adreso</string>
     <string name="login_server_url_form_modular_hint">Adreso de Element Matrix Services</string>
     <string name="login_signin_to">Saluti al %1$s</string>

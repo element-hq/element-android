@@ -1693,7 +1693,6 @@
     <string name="login_server_url_form_other_hint">Adresë</string>
     <string name="login_server_url_form_modular_text">Strehim me pagesë për ente</string>
     <string name="login_server_url_form_modular_notice">Jepni adresën e Modular Element-it ose Shërbyesit që doni të përdoret</string>
-    <string name="login_server_url_form_other_notice">Jepni adresën e një shërbyesi ose një instance Element me të cilën doni të lidheni</string>
     <string name="login_sso_error_message">Ndodhi një gabim kur ngarkohej faqja: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Aplikacioni s’është në gjendje të bëjë hyrje në llogari në këtë shërbyes Home. Shërbyesi Home mbulon llojet vijuese të hyrjes(ve): %1$s.
 \n

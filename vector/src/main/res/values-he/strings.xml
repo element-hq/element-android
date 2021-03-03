@@ -1441,7 +1441,6 @@
 \nהאם אתה רוצה להיכנס באמצעות לקוח אינטרנט\?</string>
     <string name="login_sso_error_message">אירעה שגיאה בעת טעינת הדף: %1$s (%2$d)</string>
     <string name="login_server_url_form_common_notice">הזן את כתובת השרת שבו ברצונך להשתמש</string>
-    <string name="login_server_url_form_other_notice">הזן את כתובת השרת או האלמנט שאליו ברצונך להתחבר</string>
     <string name="login_server_url_form_modular_notice">הזן את כתובת האלמנט המודולרי או השרת שבו ברצונך להשתמש</string>
     <string name="login_server_url_form_modular_text">אירוח פרימיום לארגונים</string>
     <string name="login_server_url_form_other_hint">כתובת</string>

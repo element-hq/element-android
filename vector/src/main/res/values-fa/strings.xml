@@ -2001,7 +2001,6 @@
 \nآیا می خواهید با استفاده از مرورگر وارد شوید؟</string>
     <string name="login_sso_error_message">هنگام بارگیری صفحه، خطایی روی داد: %1$s (%2$d)</string>
     <string name="login_server_url_form_common_notice">نشانی کارسازی که می‌خواهید استفاده کنید را وارد کنید</string>
-    <string name="login_server_url_form_other_notice">نشانی المنت یا کارسازی را که می‌‌خواهید به آن وصل شوید، وارد کنید</string>
     <string name="login_server_url_form_modular_notice">نشانی کارساز یا المنت ماژولاری که می‌خواهید استفاده کنید را وارد کنید</string>
     <string name="login_server_matrix_org_text">به میلیون‌ها نفر در بزرگ‌ترین کارساز عمومی بپیوندید</string>
     <string name="login_server_text">درست مانند ایمیل، حساب‌های کاربری یک خانه دارند؛ اگرچه می توانید با هر کسی که دوست دارید، صحبت کنید</string>

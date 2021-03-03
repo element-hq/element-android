@@ -1769,7 +1769,6 @@
     <string name="login_server_url_form_other_hint">Indirizzo</string>
     <string name="login_server_url_form_modular_text">Hosting premium per organizzazioni</string>
     <string name="login_server_url_form_modular_notice">Inserisci l\'indirizzo del Element Modular o del server che vuoi usare</string>
-    <string name="login_server_url_form_other_notice">Inserisci l\'indirizzo di un server o di un Element a cui vuoi connetterti</string>
     <string name="login_sso_error_message">Si è verificato un errore caricando la pagina: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">L\'applicazione non riesce ad accedere a questo homeserver. L\'homeserver supporta i seguenti tipi di accesso: %1$s.
 \n

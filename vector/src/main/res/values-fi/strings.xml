@@ -1818,7 +1818,6 @@
 \nPoista ensin tietosi ja kirjaudu sen jälkeen toisella tunnuksella. Voit vaihtoehtoisesti käyttää ${app_name}in selainversiota.</string>
     <string name="permalink_malformed">matrix.to-linkkisi oli epämuodostunut</string>
     <string name="bug_report_error_too_short">Kuvaus on liian lyhyt</string>
-    <string name="login_server_url_form_other_notice">Syötä palvelin tai sen Elementin osoite, mihin haluat yhdistää</string>
     <string name="signed_out_notice">Se voi johtua monesta eri syystä:
 \n
 \n• olet vaihtanut salasanasi toisella laitteella

@@ -1714,7 +1714,6 @@
     <string name="login_server_url_form_other_hint">地址</string>
     <string name="login_server_url_form_modular_text">面向组织的高级托管</string>
     <string name="login_server_url_form_modular_notice">输入 Modular Element 或您想使用的服务器地址</string>
-    <string name="login_server_url_form_other_notice">输入您想要连接的服务器或 Element 的地址</string>
     <string name="login_server_url_form_common_notice">输入您想使用的服务器的地址</string>
     <string name="login_sso_error_message">载入页面时出错：%1$s (%2$d)</string>
     <string name="login_mode_not_supported">应用无法登录到此家庭服务器。家庭服务器支持以下登录类型：%1$s。
