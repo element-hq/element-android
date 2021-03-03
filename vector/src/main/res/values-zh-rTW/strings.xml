@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">淺色主題</string>
     <string name="dark_theme">深色主題</string>
-    <string name="black_them">黑色主題</string>
+    <string name="black_theme">黑色主題</string>
     <string name="notification_sync_in_progress">正在同步……</string>
     <string name="notification_listening_for_events">聆聽事件</string>
     <string name="call_notification_answer">接受</string>

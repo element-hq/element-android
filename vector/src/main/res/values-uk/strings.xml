@@ -3,7 +3,7 @@
     <!-- theme -->
     <string name="light_theme">Світла Тема</string>
     <string name="dark_theme">Темна Тема</string>
-    <string name="black_them">OLED Тема</string>
+    <string name="black_theme">OLED Тема</string>
     <!-- permanent notification subtitle -->
     <string name="notification_sync_in_progress">Синхронізація…</string>
     <string name="notification_listening_for_events">Слухати події</string>

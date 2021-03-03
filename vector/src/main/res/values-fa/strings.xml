@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">زمینهٔ روشن</string>
     <string name="dark_theme">زمینهٔ تیره</string>
-    <string name="black_them">زمینهٔ سیاه</string>
+    <string name="black_theme">زمینهٔ سیاه</string>
     <string name="notification_listening_for_events">در حال گوش دادن به رویدادها</string>
     <string name="title_activity_home">پیام‌ها</string>
     <string name="title_activity_room">اتاق</string>

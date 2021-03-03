@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">السمة الفاتحة</string>
     <string name="dark_theme">السمة الداكنة</string>
-    <string name="black_them">السمة السوداء</string>
+    <string name="black_theme">السمة السوداء</string>
     <string name="notification_sync_in_progress">يُزامن</string>
     <string name="notification_listening_for_events">يستمع للأحداث</string>
     <string name="title_activity_home">الرسائل</string>

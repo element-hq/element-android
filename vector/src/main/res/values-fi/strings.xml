@@ -613,7 +613,7 @@
     <string name="offline">Yhteydetön</string>
     <string name="light_theme">Vaalea teema</string>
     <string name="dark_theme">Tumma teema</string>
-    <string name="black_them">Musta teema</string>
+    <string name="black_theme">Musta teema</string>
     <string name="notification_sync_in_progress">Synkronoidaan…</string>
     <string name="notification_listening_for_events">Kuunnellaan tapahtumia</string>
     <string name="notification_noisy_notifications">Äänekkäät ilmoitukset</string>

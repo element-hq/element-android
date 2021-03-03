@@ -599,7 +599,7 @@
     <string name="huge">Gigantisch</string>
     <string name="light_theme">Licht thema</string>
     <string name="dark_theme">Donker thema</string>
-    <string name="black_them">Zwart thema</string>
+    <string name="black_theme">Zwart thema</string>
     <string name="notification_sync_in_progress">Bezig met synchroniseren…</string>
     <string name="notification_listening_for_events">Luisteren voor evenementen</string>
     <string name="settings_notification_ringtone">Meldingsgeluid</string>

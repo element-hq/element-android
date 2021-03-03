@@ -615,7 +615,7 @@ Dispositivos desconocidos:</string>
     <string name="command_description_markdown">Activar/desactivar Markdown</string>
     <string name="light_theme">Tema Claro</string>
     <string name="dark_theme">Tema Oscuro</string>
-    <string name="black_them">Tema Negro</string>
+    <string name="black_theme">Tema Negro</string>
     <string name="notification_listening_for_events">Detectar eventos</string>
     <string name="notification_noisy_notifications">Notificaciones ruidosas</string>
     <string name="notification_silent_notifications">Notificaciones silenciosas</string>

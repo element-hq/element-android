@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">Svetlý vzhľad</string>
     <string name="dark_theme">Tmavý vzhľad</string>
-    <string name="black_them">Čierny vzhľad</string>
+    <string name="black_theme">Čierny vzhľad</string>
 
     <string name="notification_sync_in_progress">Prebieha synchronizácia…</string>
     <string name="notification_listening_for_events">Spracovanie udalostí</string>

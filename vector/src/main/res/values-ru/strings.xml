@@ -600,7 +600,7 @@
     <string name="settings_keep_media">Сохранить медиа</string>
     <string name="light_theme">Светлая тема</string>
     <string name="dark_theme">Тёмная тема</string>
-    <string name="black_them">Чёрная тема</string>
+    <string name="black_theme">Чёрная тема</string>
     <string name="settings_notification_ringtone">Звук уведомлений</string>
     <string name="settings_12_24_timestamps">Показывать метки времени в 12-часовом формате</string>
     <string name="widget_no_power_to_manage">Вам нужно разрешение на управление виджетами в этой комнате</string>

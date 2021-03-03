@@ -115,7 +115,7 @@
     <string name="auth_user_name_placeholder">Lietotājvārds</string>
     <string name="light_theme">Gaiša tēma</string>
     <string name="dark_theme">Tumša tēma</string>
-    <string name="black_them">Melna tēma</string>
+    <string name="black_theme">Melna tēma</string>
     <string name="notification_sync_in_progress">Sinhronizācija…</string>
     <string name="notification_listening_for_events">Notikumu monitorings</string>
     <string name="notification_noisy_notifications">Skaņi paziņojumi</string>

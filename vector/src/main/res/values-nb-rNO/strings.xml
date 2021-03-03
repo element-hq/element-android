@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">Lyst tema</string>
     <string name="dark_theme">Mørkt tema</string>
-    <string name="black_them">Svart tema</string>
+    <string name="black_theme">Svart tema</string>
     <string name="notification_sync_init">Klargjør tjenesten</string>
     <string name="notification_sync_in_progress">Synkroniserer …</string>
     <string name="title_activity_home">Meldinger</string>

@@ -545,7 +545,7 @@
     <string name="huge">Énorme</string>
     <string name="light_theme">Thème clair</string>
     <string name="dark_theme">Thème sombre</string>
-    <string name="black_them">Thème noir</string>
+    <string name="black_theme">Thème noir</string>
     <string name="notification_sync_in_progress">Synchronisation…</string>
     <string name="notification_listening_for_events">Écoute d’évènements</string>
     <string name="settings_notification_ringtone">Son de notification</string>

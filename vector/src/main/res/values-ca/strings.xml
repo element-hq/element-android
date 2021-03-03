@@ -3,7 +3,7 @@
     <!-- theme -->
     <string name="light_theme">Tema clar</string>
     <string name="dark_theme">Tema fosc</string>
-    <string name="black_them">Tema negre</string>
+    <string name="black_theme">Tema negre</string>
     <!-- permanent notification subtitle -->
     <string name="notification_sync_in_progress">Sincronitzant…</string>
     <string name="notification_listening_for_events">Escoltant esdeveniments</string>

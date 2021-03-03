@@ -602,7 +602,7 @@
     <string name="huge">Enorme</string>
     <string name="light_theme">Tema Chiaro</string>
     <string name="dark_theme">Tema Scuro</string>
-    <string name="black_them">Tema Nero</string>
+    <string name="black_theme">Tema Nero</string>
     <string name="notification_sync_in_progress">Sincronizzazione…</string>
     <string name="settings_notification_ringtone">Suono delle notifiche</string>
     <string name="settings_12_24_timestamps">Mostra gli orari in formato 12 ore</string>

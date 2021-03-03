@@ -3,7 +3,7 @@
 
     <string name="light_theme">হালকা থিম</string>
     <string name="dark_theme">গাঢ় থিম</string>
-    <string name="black_them">কালো থিম</string>
+    <string name="black_theme">কালো থিম</string>
 
     <string name="notification_sync_in_progress">সিংক্রোনাইজ হচ্ছে…</string>
     <string name="notification_listening_for_events">ইভেন্টের জন্য শোনা হচ্ছে</string>

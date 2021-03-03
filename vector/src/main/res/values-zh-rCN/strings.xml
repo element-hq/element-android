@@ -551,7 +551,7 @@
     <string name="huge">巨大</string>
     <string name="light_theme">浅色主题</string>
     <string name="dark_theme">深色主题</string>
-    <string name="black_them">黑色主题</string>
+    <string name="black_theme">黑色主题</string>
     <string name="settings_notification_ringtone">通知声音</string>
     <string name="settings_12_24_timestamps">使用12小时制显示时间戳</string>
     <string name="widget_no_power_to_manage">您需要权限来管理这个聊天室的小部件</string>

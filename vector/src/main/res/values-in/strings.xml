@@ -257,7 +257,7 @@ Harap berikan akses pada halaman berikut agar dapat melakukan panggilan.</string
 Harap berikan akses pada halaman selanjutnya untuk melakukan panggilan.</string>
     <string name="light_theme">Tema Terang</string>
     <string name="dark_theme">Tema Kelam</string>
-    <string name="black_them">Tema Gelap</string>
+    <string name="black_theme">Tema Gelap</string>
 
     <string name="notification_sync_in_progress">Sedang Sinkronisasi</string>
     <string name="notification_noisy_notifications">Pemberitahuan Berisik</string>

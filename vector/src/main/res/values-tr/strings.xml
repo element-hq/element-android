@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">Açık Tema</string>
     <string name="dark_theme">Koyu Tema</string>
-    <string name="black_them">Siyah Tema</string>
+    <string name="black_theme">Siyah Tema</string>
     <string name="notification_sync_in_progress">Senkronize ediliyor…</string>
     <string name="notification_listening_for_events">Etkinlikler dinleniyor</string>
     <string name="notification_noisy_notifications">Sesli bildirimler</string>

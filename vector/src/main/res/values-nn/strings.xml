@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">Lyst tema</string>
     <string name="dark_theme">Mørkt tema</string>
-    <string name="black_them">Svart tema</string>
+    <string name="black_theme">Svart tema</string>
     <string name="notification_sync_in_progress">Synkroniserar…</string>
     <string name="notification_listening_for_events">Lyttar etter hendingar</string>
     <string name="notification_noisy_notifications">Bråkete varsel</string>

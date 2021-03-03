@@ -444,7 +444,7 @@ Zauważ, że ta czynność spowoduje ponowne uruchomienie aplikacji i może to t
     <string name="huge">P O T Ę Ż N Y</string>
     <string name="light_theme">Jasny motyw</string>
     <string name="dark_theme">Ciemny motyw</string>
-    <string name="black_them">Czarny motyw</string>
+    <string name="black_theme">Czarny motyw</string>
     <string name="call">Zadzwoń</string>
     <string name="avatar">Awatar</string>
     <string name="reason_colon">Powód: %1$s</string>

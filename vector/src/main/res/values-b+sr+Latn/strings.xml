@@ -3,7 +3,7 @@
 
     <string name="light_theme">Svetla Tema</string>
     <string name="dark_theme">Tamna Tema</string>
-    <string name="black_them">Crna Tema</string>
+    <string name="black_theme">Crna Tema</string>
 
     <string name="notification_sync_init">Inicijalizacija servisa</string>
     <string name="notification_sync_in_progress">Sinhronizacija u toku…</string>

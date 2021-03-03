@@ -120,7 +120,7 @@
     <string name="notification_listening_for_events">האזנה לאירועים</string>
     <string name="notification_sync_in_progress">מסנכרן…</string>
     <string name="notification_sync_init">אתחול השירות</string>
-    <string name="black_them">ערכת נושא שחורה</string>
+    <string name="black_theme">ערכת נושא שחורה</string>
     <string name="dark_theme">ערכת נושא כהה</string>
     <string name="light_theme">ערכת נושא בהירה</string>
     <plurals name="public_room_nb_users">

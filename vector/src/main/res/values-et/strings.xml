@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">Hele teema</string>
     <string name="dark_theme">Tume teema</string>
-    <string name="black_them">Must teema</string>
+    <string name="black_theme">Must teema</string>
     <string name="notification_sync_init">Käivitan teenuse</string>
     <string name="notification_sync_in_progress">Sünkroniseerin…</string>
     <string name="notification_listening_for_events">Kuulan, kas leidub sündmusi</string>

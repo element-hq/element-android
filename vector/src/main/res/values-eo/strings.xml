@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">Hela haŭto</string>
     <string name="dark_theme">Malhela haŭto</string>
-    <string name="black_them">Nigra haŭto</string>
+    <string name="black_theme">Nigra haŭto</string>
     <string name="notification_sync_in_progress">Spegulante…</string>
     <string name="notification_listening_for_events">Atentante eventojn</string>
     <string name="notification_noisy_notifications">Laŭtaj sciigoj</string>

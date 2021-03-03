@@ -107,7 +107,7 @@
     <string name="room_message_placeholder_encrypted">暗号文を送信…</string>
     <string name="light_theme">明るいテーマ</string>
     <string name="dark_theme">暗いテーマ</string>
-    <string name="black_them">黒いテーマ</string>
+    <string name="black_theme">黒いテーマ</string>
     <string name="notification_sync_in_progress">同期中…</string>
     <string name="title_activity_home">メッセージ</string>
     <string name="title_activity_member_details">メンバー詳細</string>

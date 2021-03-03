@@ -613,7 +613,7 @@
     <string name="widget_integration_missing_user_id">Anfrage enthält keine user_id.</string>
     <string name="light_theme">Helles Design</string>
     <string name="dark_theme">Dunkles Design</string>
-    <string name="black_them">Schwarzes Design</string>
+    <string name="black_theme">Schwarzes Design</string>
     <string name="notification_sync_in_progress">Synchronisiere…</string>
     <string name="notification_listening_for_events">Auf Ereignisse lauschen</string>
     <string name="settings_containing_my_display_name">Nachrichten, die meinen Anzeigenamen enthalten</string>

@@ -4,7 +4,7 @@
 
     <string name="light_theme">Licht thema</string>
     <string name="dark_theme">Dounker thema</string>
-    <string name="black_them">Zwart thema</string>
+    <string name="black_theme">Zwart thema</string>
 
     <string name="notification_sync_init">Dienst wor geïnitialiseerd</string>
     <string name="notification_sync_in_progress">Bezig me synchroniseern…</string>

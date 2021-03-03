@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">밝은 테마</string>
     <string name="dark_theme">어두운 테마</string>
-    <string name="black_them">검정 테마</string>
+    <string name="black_theme">검정 테마</string>
 
     <string name="notification_sync_in_progress">동기화 중…</string>
     <string name="title_activity_home">메시지</string>

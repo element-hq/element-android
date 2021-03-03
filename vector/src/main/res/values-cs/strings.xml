@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="light_theme">Světlý vzhled</string>
-    <string name="black_them">Černý vzhled</string>
+    <string name="black_theme">Černý vzhled</string>
     <string name="dark_theme">Tmavý vzhled</string>
     <string name="title_activity_home">Zprávy</string>
     <string name="title_activity_room">Místnost</string>

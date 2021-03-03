@@ -601,7 +601,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="people_search_user_directory">DIRECTORIO DE USUARIOS (%s)</string>
     <string name="light_theme">Tema Claro</string>
     <string name="dark_theme">Tema Oscuro</string>
-    <string name="black_them">Tema Negro</string>
+    <string name="black_theme">Tema Negro</string>
     <string name="notification_sync_in_progress">Sincronizando…</string>
     <string name="notification_listening_for_events">Captando eventos</string>
     <string name="notification_noisy_notifications">Notificaciones ruidosas</string>

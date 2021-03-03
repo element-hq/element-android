@@ -4,7 +4,7 @@
     <!-- groups creation -->
     <string name="light_theme">Светла тема</string>
     <string name="dark_theme">Тъмна тема</string>
-    <string name="black_them">Черна тема</string>
+    <string name="black_theme">Черна тема</string>
     <string name="notification_sync_in_progress">Синхронизиране…</string>
     <string name="title_activity_home">Съобщения</string>
     <string name="title_activity_room">Стая</string>

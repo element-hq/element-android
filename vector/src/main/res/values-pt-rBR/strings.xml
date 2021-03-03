@@ -601,7 +601,7 @@
     <string name="huge">Gigantesco</string>
     <string name="light_theme">Tema claro</string>
     <string name="dark_theme">Tema escuro</string>
-    <string name="black_them">Tema preto</string>
+    <string name="black_theme">Tema preto</string>
     <string name="notification_sync_in_progress">Sincronizando…</string>
     <string name="notification_listening_for_events">Escutando eventos</string>
     <string name="notification_noisy_notifications">Notificações com som</string>

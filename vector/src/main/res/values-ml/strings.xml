@@ -250,7 +250,7 @@
     <string name="home_filter_placeholder_home">മുറി നാമങ്ങൾ ഫിൽറ്റർ ചെയ്യൂ</string>
     <string name="send_anyway">എന്തായാലും അയയ്ക്കൂ</string>
     <string name="title_activity_keys_backup_setup">കീ ബാക്കപ്പ്</string>
-    <string name="black_them">കറുത്ത തീം</string>
+    <string name="black_theme">കറുത്ത തീം</string>
     <string name="dark_theme">ഡാ൪ക്ക് തീം</string>
     <string name="light_theme">ലൈറ്റ് തീം</string>
     <string name="notification_sync_init">സേവനം സമാരംഭിക്കുന്നു</string>

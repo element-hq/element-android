@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">Decorado claro</string>
     <string name="dark_theme">Decorado escuro</string>
-    <string name="black_them">Decorado negro</string>
+    <string name="black_theme">Decorado negro</string>
     <string name="notification_sync_in_progress">Sincronizando…</string>
     <string name="notification_noisy_notifications">Notificacións con son</string>
     <string name="notification_silent_notifications">Notificacións silenciosas</string>

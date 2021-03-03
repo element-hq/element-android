@@ -600,7 +600,7 @@ Dispositivos desconhecidos:</string>
     <string name="settings_clear_media_cache">Limpar cache de multimédia</string>
     <string name="light_theme">Tema Claro</string>
     <string name="dark_theme">Tema Escuro</string>
-    <string name="black_them">Tema Preto</string>
+    <string name="black_theme">Tema Preto</string>
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_12_24_timestamps">Utilizar formato de 12 horas (ex. 2:30pm)</string>
     <string name="widget_no_power_to_manage">Precisa de permissão para gerir os widgets nesta sala</string>

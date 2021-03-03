@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">Svijetla Tema</string>
     <string name="dark_theme">Tamna Tema</string>
-    <string name="black_them">Crna Tema</string>
+    <string name="black_theme">Crna Tema</string>
     <string name="notification_sync_in_progress">Sinkronizacija</string>
     <string name="notification_listening_for_events">Budući Događaji</string>
     <string name="notification_noisy_notifications">Glasne notifikacije</string>

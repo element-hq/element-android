@@ -43,7 +43,7 @@
     <string name="encrypted_message">Κρυπτογραφημένο μήνυμα</string>
     <string name="light_theme">Ανοιχτόχρωμο θέμα</string>
     <string name="dark_theme">Σκουρόχρωμο θέμα</string>
-    <string name="black_them">Μαύρο θέμα</string>
+    <string name="black_theme">Μαύρο θέμα</string>
     <string name="title_activity_choose_sticker">Αποστολή αυτοκόλλητου</string>
     <string name="dialog_title_third_party_licences">Άδειες τρίτων</string>
     <string name="later">Αργότερα</string>

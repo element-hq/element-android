@@ -545,7 +545,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="user_directory_header">Felhasználói címjegyzék</string>
     <string name="light_theme">Világos téma</string>
     <string name="dark_theme">Sötét téma</string>
-    <string name="black_them">Fekete téma</string>
+    <string name="black_theme">Fekete téma</string>
     <string name="settings_notification_ringtone">Értesítés hangja</string>
     <string name="settings_12_24_timestamps">Időbélyegek mutatása 12 órás formátumban</string>
     <string name="widget_no_power_to_manage">Engedélyre van szükséged a kisalkalmazások ebben a szobában való kezeléséhez</string>

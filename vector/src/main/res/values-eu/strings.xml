@@ -637,7 +637,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="huge">Erraldoia</string>
     <string name="light_theme">Azal argia</string>
     <string name="dark_theme">Azal iluna</string>
-    <string name="black_them">Azal beltza</string>
+    <string name="black_theme">Azal beltza</string>
 
     <string name="notification_sync_in_progress">Sinkronizatzen…</string>
     <string name="notification_listening_for_events">Entzun gertaerak</string>

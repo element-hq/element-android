@@ -2,7 +2,7 @@
 <resources>
     <string name="light_theme">Ljóst þema</string>
     <string name="dark_theme">Dökkt þema</string>
-    <string name="black_them">Svart þema</string>
+    <string name="black_theme">Svart þema</string>
 
     <string name="notification_sync_in_progress">Samstilli</string>
     <string name="notification_listening_for_events">Hlusta eftir atburðum</string>
