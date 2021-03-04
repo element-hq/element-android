@@ -468,7 +468,7 @@ class MessageItemFactory @Inject constructor(
         spannable.append(linkifiedBody)
         val editedSuffix = stringProvider.getString(R.string.edited_suffix)
         spannable.append(" ").append(editedSuffix)
-        val color = colorProvider.getColorFromAttribute(R.attr.vctr_list_header_secondary_text_color)
+        val color = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
         val editStart = spannable.lastIndexOf(editedSuffix)
         val editEnd = editStart + editedSuffix.length
         spannable.setSpan(
