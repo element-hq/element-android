@@ -7,7 +7,7 @@ Features ✨:
 Improvements 🙌:
  - Allow non-HTTPS connections to homeservers on Tor (#2941)
  - Fetch homeserver type and version and display in a new setting screen and add info in rageshakes (#2831)
- - Improve initial sync performance (#983)
+ - Improve initial sync performance - split into 2 transactions (#983)
  - PIP support for Jitsi call (#2418)
  - Add tooltip for room quick actions
  - Pre-share session keys when opening a room or start typing (#2771)

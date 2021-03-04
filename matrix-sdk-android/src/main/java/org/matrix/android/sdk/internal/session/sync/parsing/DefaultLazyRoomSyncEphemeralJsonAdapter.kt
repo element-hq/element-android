@@ -22,22 +22,22 @@ import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.ToJson
 import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
-import org.matrix.android.sdk.internal.session.sync.model.LazyRoomSync
-import org.matrix.android.sdk.internal.session.sync.model.RoomSync
+import org.matrix.android.sdk.internal.session.sync.model.LazyRoomSyncEphemeral
+import org.matrix.android.sdk.internal.session.sync.model.RoomSyncEphemeral
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 
-internal class DefaultLazyRoomSyncJsonAdapter {
+internal class DefaultLazyRoomSyncEphemeralJsonAdapter {
 
     @FromJson
-    fun fromJson(reader: JsonReader, delegate: JsonAdapter<RoomSync>): LazyRoomSync? {
-        val roomSync = delegate.fromJson(reader) ?: return null
-        return LazyRoomSync.Parsed(roomSync)
+    fun fromJson(reader: JsonReader, delegate: JsonAdapter<RoomSyncEphemeral>): LazyRoomSyncEphemeral? {
+        val roomSyncEphemeral = delegate.fromJson(reader) ?: return null
+        return LazyRoomSyncEphemeral.Parsed(roomSyncEphemeral)
     }
 
     @ToJson
-    fun toJson(writer: JsonWriter, value: LazyRoomSync?) {
+    fun toJson(writer: JsonWriter, value: LazyRoomSyncEphemeral?) {
         // This Adapter is not supposed to serialize object
         Timber.v("To json $value with $writer")
         throw UnsupportedOperationException()
@@ -56,7 +56,7 @@ internal class SplitLazyRoomSyncJsonAdapter(
     }
 
     @FromJson
-    fun fromJson(reader: JsonReader, delegate: JsonAdapter<RoomSync>): LazyRoomSync? {
+    fun fromJson(reader: JsonReader, delegate: JsonAdapter<RoomSyncEphemeral>): LazyRoomSyncEphemeral? {
         val path = reader.path
         val json = reader.nextSource().inputStream().bufferedReader().use {
             it.readText()
@@ -67,16 +67,16 @@ internal class SplitLazyRoomSyncJsonAdapter(
             // Copy the source to a file
             val file = createFile()
             file.writeText(json)
-            LazyRoomSync.Stored(delegate, file)
+            LazyRoomSyncEphemeral.Stored(delegate, file)
         } else {
             Timber.v("INIT_SYNC $path content length: ${json.length} parse it now")
             val roomSync = delegate.fromJson(json) ?: return null
-            LazyRoomSync.Parsed(roomSync)
+            LazyRoomSyncEphemeral.Parsed(roomSync)
         }
     }
 
     @ToJson
-    fun toJson(writer: JsonWriter, value: LazyRoomSync?) {
+    fun toJson(writer: JsonWriter, value: LazyRoomSyncEphemeral?) {
         // This Adapter is not supposed to serialize object
         Timber.v("To json $value with $writer")
         throw UnsupportedOperationException()
