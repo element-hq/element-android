@@ -2983,7 +2983,6 @@
     <string name="confirm_your_identity_quad_s">Confirm your identity by verifying this login, granting it access to encrypted messages.</string>
     <string name="mark_as_verified">Mark as Trusted</string>
 
-    <string name="error_sso_flow_not_supported_yet">Sorry, this operation is not possible yet for accounts connected using Single Sign-On.</string>
     <string name="failed_to_initialize_cross_signing">Failed to set up Cross Signing</string>
 
     <string name="error_empty_field_choose_user_name">Please choose a username.</string>

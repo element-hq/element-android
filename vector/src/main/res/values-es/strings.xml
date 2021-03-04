@@ -2361,7 +2361,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="confirm_your_identity">Confirme su identidad verificando este inicio de sesión de una de sus otras sesiones, otorgándole acceso a los mensajes encriptados.</string>
     <string name="confirm_your_identity_quad_s">Confirme su identidad verificando este inicio de sesión, otorgándole acceso a los mensajes encriptados.</string>
     <string name="mark_as_verified">Marcar como de confianza</string>
-    <string name="error_sso_flow_not_supported_yet">Lo sentimos, esta operación aún no es posible para las cuentas conectadas mediante el inicio de sesión único.</string>
     <string name="create_room_dm_failure">No pudimos crear tu DM. Marque los usuarios que desea invitar y vuelva a intentarlo.</string>
     <string name="identity_server_error_terms_not_signed">Primero acepta los términos del servidor de identidad en la configuración.</string>
     <string name="template_identity_server_error_bulk_sha256_not_supported">Para su privacidad, ${app_name} solo admite el envío de números de teléfono y correos electrónicos de usuario con hash.</string>

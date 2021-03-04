@@ -2424,7 +2424,6 @@
     <string name="settings_text_message_sent_hint">Code</string>
     <string name="login_msisdn_notice">Verwende das internationale Format (Telefonnummer muss mit \'+\' beginnen)</string>
     <string name="confirm_your_identity_quad_s">Bestätige deine Identität, indem du dieses Login verifizierst, um Zugriff auf verschlüsselte Nachrichten zu erhalten.</string>
-    <string name="error_sso_flow_not_supported_yet">Leider ist dieser Vorgang für Konten, die über Single Sign-On verbunden sind, noch nicht möglich.</string>
     <string name="error_opening_banned_room">Raum, indem du gebannt wurdest, kann nicht geöffnet werden.</string>
     <string name="room_error_not_found">Raum kann nicht gefunden werden. Stelle sicher, dass er existiert.</string>
     <plurals name="seconds">

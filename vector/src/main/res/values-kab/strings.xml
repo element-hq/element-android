@@ -2200,7 +2200,6 @@
     <string name="enter_secret_storage_input_key">Fren tasarut-ik·im n tririt, neɣ err-itt s ufus s tira-ines s uasiw neɣ s usenteḍ-ines seg ɣefafus-inek·inem</string>
     <string name="cross_signing_verify_by_emoji">Senqed amyigew s yimujit</string>
     <string name="confirm_your_identity_quad_s">Sentem timagit-inek·inem s usenqed n yinekcam-a, anef-as ad yekcem ɣer yiznan yettwawgelhen.</string>
-    <string name="error_sso_flow_not_supported_yet">Suref-aɣ, tamahelt-a ulamek i tedda akka tura i yimiḍanen i yettwaqqnen s useqdec n unekcum asuf.</string>
     <string name="external_link_confirmation_title">Senqed tikkelt-nniḍen aseɣwen-a</string>
     <string name="external_link_confirmation_message">Aseɣwen %1$s ad ak·akem-yawi ɣer usmel-nniḍen: %2$s.
 \n

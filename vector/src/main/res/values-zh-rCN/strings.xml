@@ -2278,7 +2278,6 @@
     <string name="settings_text_message_sent_hint">代码</string>
     <string name="login_msisdn_notice">请使用国际格式（电话号码必须以 ‘+’ 开始）</string>
     <string name="confirm_your_identity_quad_s">通过验证此登录确认您的身份，授权它访问加密信息。</string>
-    <string name="error_sso_flow_not_supported_yet">抱歉，对于连接到单点登录的账户此操作尚不可用。</string>
     <string name="error_opening_banned_room">无法打开您被封禁的聊天室。</string>
     <string name="room_error_not_found">无法找到此聊天室。请确认它存在。</string>
     <string name="no_permissions_to_start_webrtc_call">您没有权限在此聊天室发起通话</string>

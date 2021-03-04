@@ -2273,7 +2273,6 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="set_a_security_phrase_hint">Fraza Bezpieczeństwa</string>
     <string name="set_a_security_phrase_title">Ustaw Frazę Bezpieczeństwa</string>
     <string name="error_empty_field_choose_user_name">Wybierz nazwę użytkownika.</string>
-    <string name="error_sso_flow_not_supported_yet">Przepraszamy, ta operacja nie jest jeszcze dostępna dla kont wykorzystujących Single Sign-On.</string>
     <string name="mark_as_verified">Oznacz jako Zaufane</string>
     <string name="confirm_your_identity_quad_s">Potwierdź swoją tożsamość poprzez zweryfikowanie tego logowania aby uzyskać dostęp do zaszyfrowanych wiadomości.</string>
     <string name="confirm_your_identity">Potwierdź swoją tożsamość poprzez zweryfikowanie tego logowania przy pomocy którejś z pozostałych sesji w celu przyznania dostępu do zaszyfrowanych wiadomości.</string>

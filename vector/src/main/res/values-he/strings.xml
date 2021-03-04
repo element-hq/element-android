@@ -2362,7 +2362,6 @@
     <string name="external_link_confirmation_title">בדוק-פעמיים קישור זה</string>
     <string name="error_empty_field_choose_password">אנא בחר סיסמה.</string>
     <string name="error_empty_field_choose_user_name">אנא בחר שם משתמש.</string>
-    <string name="error_sso_flow_not_supported_yet">מצטערים, פעולה זו עדיין אינה אפשרית עבור חשבונות המחוברים באמצעות כניסה יחידה.</string>
     <string name="mark_as_verified">סמן כאמין</string>
     <string name="confirm_your_identity_quad_s">אשר את זהותך על ידי אימות התחברות זו והעניק לו גישה להודעות מוצפנות.</string>
     <string name="cross_signing_verify_by_emoji">אימות אינטראקטיבי על ידי Emoji</string>
