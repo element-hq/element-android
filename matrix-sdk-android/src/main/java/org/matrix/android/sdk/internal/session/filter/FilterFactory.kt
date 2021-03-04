@@ -56,11 +56,11 @@ internal object FilterFactory {
         )
     }
 
-    private fun createElementTimelineFilter(): RoomEventFilter {
-        return RoomEventFilter().apply {
+    private fun createElementTimelineFilter(): RoomEventFilter? {
+        return null // RoomEventFilter().apply {
             // TODO Enable this for optimization
             // types = listOfSupportedEventTypes.toMutableList()
-        }
+        // }
     }
 
     private fun createElementStateFilter(): RoomEventFilter {
