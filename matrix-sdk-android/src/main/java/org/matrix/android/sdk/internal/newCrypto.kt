@@ -87,6 +87,10 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
         inner.outgoingRequests()
     }
 
+    suspend fun getMissingSessions(users: List<String>): Request? = withContext(Dispatchers.IO) {
+        inner.getMissingSessions(users)
+    }
+
     suspend fun updateTrackedUsers(users: List<String>) = withContext(Dispatchers.IO) {
         inner.updateTrackedUsers(users)
     }

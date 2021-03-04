@@ -55,10 +55,12 @@ interface Request {
     ToDevice(string request_id, string event_type, string body);
     KeysUpload(string request_id, string body);
     KeysQuery(string request_id, sequence<string> users);
+    KeysClaim(string request_id, record<DOMString, record<DOMString, string>> one_time_keys);
 };
 
 enum RequestType {
     "KeysQuery",
+    "KeysClaim",
     "KeysUpload",
     "ToDevice",
 };
@@ -84,6 +86,9 @@ interface OlmMachine {
     sequence<Device> get_user_devices([ByRef] string user_id);
     sequence<Request> outgoing_requests();
     void update_tracked_users(sequence<string> users);
+
+    [Throws=CryptoStoreError]
+    Request? get_missing_sessions(sequence<string> users);
 
     [Throws=CryptoStoreError]
     void mark_request_as_sent(

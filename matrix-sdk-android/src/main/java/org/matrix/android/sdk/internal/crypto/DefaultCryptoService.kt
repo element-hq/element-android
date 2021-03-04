@@ -79,6 +79,7 @@ import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
+import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
@@ -91,6 +92,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
 import org.matrix.android.sdk.internal.crypto.tasks.NewUploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
+import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -171,6 +173,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val deleteDeviceWithUserPasswordTask: DeleteDeviceWithUserPasswordTask,
         // Tasks
         private val getDevicesTask: GetDevicesTask,
+        private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
         private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
         private val getDeviceInfoTask: GetDeviceInfoTask,
         private val setDeviceNameTask: SetDeviceNameTask,
@@ -691,6 +694,7 @@ internal class DefaultCryptoService @Inject constructor(
                 val t0 = System.currentTimeMillis()
                 Timber.v("## CRYPTO | encryptEventContent() starts")
                 runCatching {
+                    preshareGroupSession(roomId, userIds)
                     val content = safeAlgorithm.encryptEventContent(eventContent, eventType, userIds)
                     Timber.v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
                     MXEncryptEventContentResult(content, EventType.ENCRYPTED)
@@ -955,6 +959,26 @@ internal class DefaultCryptoService @Inject constructor(
         keyCounts: DeviceOneTimeKeysCountSyncResponse?) {
             olmMachine!!.receiveSyncChanges(toDevice, deviceChanges, keyCounts)
     }
+
+    private suspend fun preshareGroupSession(roomId: String, roomMembers: List<String>) {
+        val request = olmMachine!!.getMissingSessions(roomMembers)
+        roomId == "est"
+
+        if (request != null) {
+            when (request) {
+                is Request.KeysClaim -> {
+                    val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(request.oneTimeKeys)
+                    val response = oneTimeKeysForUsersDeviceTask.execute(claimParams)
+                    val adapter = MoshiProvider.providesMoshi().adapter<KeysClaimResponse>(KeysClaimResponse::class.java)
+                    val json_response = adapter.toJson(response)!!
+                    olmMachine!!.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, json_response)
+                }
+            }
+        }
+    }
+
+    // private suspend fun encrypt(roomId: String, eventType: String, content: Content) {
+    // }
 
     private suspend fun sendOutgoingRequests() {
         // TODO these requests should be sent out in parallel

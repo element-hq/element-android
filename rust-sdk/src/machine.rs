@@ -10,10 +10,12 @@ use tokio::runtime::Runtime;
 use matrix_sdk_common::{
     api::r0::{
         keys::{
-            claim_keys::Response as KeysClaimResponse, get_keys::Response as KeysQueryResponse,
+            claim_keys::{Request as KeysClaimRequest, Response as KeysClaimResponse},
+            get_keys::Response as KeysQueryResponse,
             upload_keys::Response as KeysUploadResponse,
         },
         sync::sync_events::{DeviceLists as RumaDeviceLists, ToDevice},
+        to_device::send_event_to_device::Response as ToDeviceResponse,
     },
     assign,
     deserialized_responses::events::{AlgorithmInfo, SyncMessageEvent},
@@ -67,6 +69,7 @@ enum OwnedResponse {
     KeysClaim(KeysClaimResponse),
     KeysUpload(KeysUploadResponse),
     KeysQuery(KeysQueryResponse),
+    ToDevice(ToDeviceResponse),
 }
 
 impl From<KeysClaimResponse> for OwnedResponse {
@@ -87,18 +90,26 @@ impl From<KeysUploadResponse> for OwnedResponse {
     }
 }
 
+impl From<ToDeviceResponse> for OwnedResponse {
+    fn from(response: ToDeviceResponse) -> Self {
+        OwnedResponse::ToDevice(response)
+    }
+}
+
 impl<'a> Into<IncomingResponse<'a>> for &'a OwnedResponse {
     fn into(self) -> IncomingResponse<'a> {
         match self {
             OwnedResponse::KeysClaim(r) => IncomingResponse::KeysClaim(r),
             OwnedResponse::KeysQuery(r) => IncomingResponse::KeysQuery(r),
             OwnedResponse::KeysUpload(r) => IncomingResponse::KeysUpload(r),
+            OwnedResponse::ToDevice(r) => IncomingResponse::ToDevice(r),
         }
     }
 }
 
 pub enum RequestType {
     KeysQuery,
+    KeysClaim,
     KeysUpload,
     ToDevice,
 }
@@ -129,6 +140,10 @@ pub enum Request {
     KeysQuery {
         request_id: String,
         users: Vec<String>,
+    },
+    KeysClaim {
+        request_id: String,
+        one_time_keys: HashMap<String, HashMap<String, String>>,
     },
 }
 
@@ -268,7 +283,8 @@ impl OlmMachine {
         let response: OwnedResponse = match request_type {
             RequestType::KeysUpload => KeysUploadResponse::try_from(response).map(Into::into),
             RequestType::KeysQuery => KeysQueryResponse::try_from(response).map(Into::into),
-            RequestType::ToDevice => KeysClaimResponse::try_from(response).map(Into::into),
+            RequestType::ToDevice => ToDeviceResponse::try_from(response).map(Into::into),
+            RequestType::KeysClaim => KeysClaimResponse::try_from(response).map(Into::into),
         }
         .expect("Can't convert json string to response");
 
@@ -340,6 +356,35 @@ impl OlmMachine {
 
         self.runtime
             .block_on(self.inner.update_tracked_users(users.iter()));
+    }
+
+    pub fn get_missing_sessions(
+        &self,
+        users: Vec<String>,
+    ) -> Result<Option<Request>, CryptoStoreError> {
+        let users: Vec<UserId> = users
+            .into_iter()
+            .filter_map(|u| UserId::try_from(u).ok())
+            .collect();
+
+        Ok(self
+            .runtime
+            .block_on(self.inner.get_missing_sessions(users.iter()))?
+            .map(|(request_id, request)| Request::KeysClaim {
+                request_id: request_id.to_string(),
+                one_time_keys: request
+                    .one_time_keys
+                    .into_iter()
+                    .map(|(u, d)| {
+                        (
+                            u.to_string(),
+                            d.into_iter()
+                                .map(|(k, v)| (k.to_string(), v.to_string()))
+                                .collect(),
+                        )
+                    })
+                    .collect(),
+            }))
     }
 
     pub fn decrypt_room_event(
