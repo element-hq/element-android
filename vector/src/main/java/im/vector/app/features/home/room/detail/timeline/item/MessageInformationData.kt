@@ -18,9 +18,9 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.internal.session.room.VerificationState
 
 @Parcelize
 data class MessageInformationData(

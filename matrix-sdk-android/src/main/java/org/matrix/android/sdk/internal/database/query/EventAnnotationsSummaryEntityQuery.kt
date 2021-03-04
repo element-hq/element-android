@@ -23,18 +23,10 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 
-internal fun EventAnnotationsSummaryEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<EventAnnotationsSummaryEntity> {
-    val query = realm.where<EventAnnotationsSummaryEntity>()
-    query.equalTo(EventAnnotationsSummaryEntityFields.EVENT_ID, eventId)
-    return query
-}
-
-internal fun EventAnnotationsSummaryEntity.Companion.whereInRoom(realm: Realm, roomId: String?): RealmQuery<EventAnnotationsSummaryEntity> {
-    val query = realm.where<EventAnnotationsSummaryEntity>()
-    if (roomId != null) {
-        query.equalTo(EventAnnotationsSummaryEntityFields.ROOM_ID, roomId)
-    }
-    return query
+internal fun EventAnnotationsSummaryEntity.Companion.where(realm: Realm, roomId: String, eventId: String): RealmQuery<EventAnnotationsSummaryEntity> {
+    return realm.where<EventAnnotationsSummaryEntity>()
+            .equalTo(EventAnnotationsSummaryEntityFields.ROOM_ID, roomId)
+            .equalTo(EventAnnotationsSummaryEntityFields.EVENT_ID, eventId)
 }
 
 internal fun EventAnnotationsSummaryEntity.Companion.create(realm: Realm, roomId: String, eventId: String): EventAnnotationsSummaryEntity {
@@ -49,6 +41,6 @@ internal fun EventAnnotationsSummaryEntity.Companion.create(realm: Realm, roomId
 }
 
 internal fun EventAnnotationsSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: String, eventId: String): EventAnnotationsSummaryEntity {
-    return EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
-            ?: EventAnnotationsSummaryEntity.create(realm, roomId, eventId).apply { this.roomId = roomId }
+    return EventAnnotationsSummaryEntity.where(realm, roomId, eventId).findFirst()
+            ?: EventAnnotationsSummaryEntity.create(realm, roomId, eventId)
 }
