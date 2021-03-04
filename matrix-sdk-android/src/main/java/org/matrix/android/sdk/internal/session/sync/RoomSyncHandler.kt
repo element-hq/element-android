@@ -119,7 +119,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val rooms = when (handlingStrategy) {
             is HandlingStrategy.JOINED  -> {
                 if (isInitialSync && initialSyncStrategy is InitialSyncStrategy.Optimized) {
-                    insertJoinRooms(realm, handlingStrategy, insertType, syncLocalTimeStampMillis, reporter)
+                    insertJoinRoomsFromInitSync(realm, handlingStrategy, insertType, syncLocalTimeStampMillis, reporter)
                     // Rooms are already inserted, return an empty list
                     emptyList()
                 } else {
@@ -142,11 +142,11 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         realm.insertOrUpdate(rooms)
     }
 
-    private fun insertJoinRooms(realm: Realm,
-                                handlingStrategy: HandlingStrategy.JOINED,
-                                insertType: EventInsertType,
-                                syncLocalTimeStampMillis: Long,
-                                reporter: ProgressReporter?) {
+    private fun insertJoinRoomsFromInitSync(realm: Realm,
+                                            handlingStrategy: HandlingStrategy.JOINED,
+                                            insertType: EventInsertType,
+                                            syncLocalTimeStampMillis: Long,
+                                            reporter: ProgressReporter?) {
         val maxSize = (initialSyncStrategy as? InitialSyncStrategy.Optimized)?.maxRoomsToInsert ?: Int.MAX_VALUE
         val listSize = handlingStrategy.data.keys.size
         val numberOfChunks = ceil(listSize / maxSize.toDouble()).toInt()
