@@ -2146,7 +2146,6 @@
     <string name="external_link_confirmation_title">Проверете тази връзка отново</string>
     <string name="error_empty_field_choose_password">Изберете парола.</string>
     <string name="error_empty_field_choose_user_name">Изберете потребителско име.</string>
-    <string name="error_sso_flow_not_supported_yet">Извинявайте, тази операция все още не е възможна за профили свързани чрез Single-Sign-On.</string>
     <string name="mark_as_verified">Маркирай като доверен</string>
     <string name="confirm_your_identity_quad_s">Потвърдете самоличността си потвърждавайки този вход, давайки му достъп до шифрованите съобщения.</string>
     <string name="confirm_your_identity">Потвърдете самоличността си потвърждавайки този вход от някоя от другите ви сесии, давайки му достъп до шифрованите съобщения.</string>

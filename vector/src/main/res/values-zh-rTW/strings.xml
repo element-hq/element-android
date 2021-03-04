@@ -2316,7 +2316,6 @@
     <string name="settings_text_message_sent_hint">代碼</string>
     <string name="login_msisdn_notice">請使用國際格式（電話號碼必須以 \'+\' 開頭）</string>
     <string name="confirm_your_identity_quad_s">透過確認此登入來驗證您的身份，以及授予存取加密訊息的權限。</string>
-    <string name="error_sso_flow_not_supported_yet">抱歉，對於使用單一登入的帳號，還無法執行此動作。</string>
     <string name="error_opening_banned_room">無法開啟禁止您進入的聊天室。</string>
     <string name="room_error_not_found">找不到此聊天室。請確定它存在。</string>
     <plurals name="seconds">

@@ -2447,7 +2447,6 @@
     <string name="delete_account_data_warning">Remover os dados de %1$s desta conta\?
 \n
 \nProssiga com cuidado, pois não há como reverter esta escolha.</string>
-    <string name="error_sso_flow_not_supported_yet">Desculpe, esta funcionalidade ainda não está disponível para contas conectadas via acesso único.</string>
     <string name="template_settings_security_pin_code_grace_period_summary_off">O código PIN é solicitado todas as vezes que você abre o ${app_name}.</string>
     <string name="template_settings_security_pin_code_grace_period_summary_on">O código PIN é solicitado após 2 minutos sem usar o ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Solicitar o PIN depois de 2 minutos</string>

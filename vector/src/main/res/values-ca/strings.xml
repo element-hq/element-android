@@ -1539,7 +1539,6 @@
     <string name="settings_expert">Expert</string>
     <string name="room_participants_kick_reason">Motiu de l\'expulsió</string>
     <string name="room_participants_kick_title">Expulsa usuari</string>
-    <string name="error_sso_flow_not_supported_yet">Aquesta operació encara no està disponible en comptes que utilitzen la inscripció única (SSO).</string>
     <string name="login_signin_sso">Continua amb SSO</string>
     <string name="template_identity_server_error_bulk_sha256_not_supported">Per a la teva pròpia privadesa, ${app_name} només admet l\'enviament del \"hash\" de correus electrònics i números de telèfon.</string>
     <string name="command_description_discard_session_not_handled">Només admès en sales xifrades</string>

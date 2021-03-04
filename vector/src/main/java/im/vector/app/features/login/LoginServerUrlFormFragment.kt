@@ -86,7 +86,7 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
                 views.loginServerUrlFormText.text = getString(R.string.login_server_url_form_modular_text)
                 views.loginServerUrlFormLearnMore.isVisible = true
                 views.loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_modular_hint)
-                views.loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_common_notice)
+                views.loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_modular_notice)
             }
             else           -> {
                 views.loginServerUrlFormIcon.isVisible = false

@@ -1613,7 +1613,6 @@
     <string name="cross_signing_verify_by_emoji">تأیید برهم‌کنشی با اموجی</string>
     <string name="crosssigning_verify_session">تأیید ورود</string>
     <string name="unencrypted">رمزنشده</string>
-    <string name="error_sso_flow_not_supported_yet">متأسّفانه این عملیات هنوز برای حساب‌هایی که با استفاده از ورود یکپارچه وصل شده‌اند، ممکن نیست.</string>
     <string name="mark_as_verified">نشانه‌گذاری به عنوان مطمئن</string>
     <string name="identity_server_set_default_submit">استفاده از %1$s</string>
     <string name="a11y_unmute_microphone">ناخموش کردن میکروفون</string>

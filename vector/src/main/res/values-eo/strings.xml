@@ -2120,7 +2120,6 @@
     <string name="inviting_users_to_room">Invitante uzantojn…</string>
     <string name="invite_users_to_room_action_invite">INVITI</string>
     <string name="add_members_to_room">Aldoni ĉambranojn</string>
-    <string name="error_sso_flow_not_supported_yet">Pardonu, ĉi tiu ago ankoraŭ ne eblas por kontoj konektitaj per ununura saluto.</string>
     <string name="confirm_your_identity_quad_s">Konfirmu vian identecon per kontrolo de ĉi tiu saluto, donante al ĝi aliron al ĉifritaj mesaĝoj.</string>
     <string name="verify_this_session">Kontrolu la novan saluton, kiu aliras vian konton: %1$s</string>
     <string name="verify_other_sessions">Rekontrolu ĉiujn viajn salutaĵojn por certigi, ke viaj konto kaj mesaĝoj estas sekuraj</string>

@@ -2361,7 +2361,6 @@
     <string name="settings_text_message_sent_hint">Kod</string>
     <string name="login_msisdn_notice">Vänligen använd internationellt format (telefonnumret måste börja med \'+\')</string>
     <string name="confirm_your_identity_quad_s">Bekräfta din identitet genom att verifiera den här inloggningen, och ge den åtkomst till dina krypterade meddelanden.</string>
-    <string name="error_sso_flow_not_supported_yet">Tyvärr stöds den här handlingen inte än för konton anslutna med externt konto.</string>
     <string name="error_opening_banned_room">Kan inte öppna ett rum du är bannad från.</string>
     <string name="room_error_not_found">Kan inte hitta det här rummet. Se till att det existerar.</string>
     <plurals name="seconds">

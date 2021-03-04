@@ -2293,7 +2293,6 @@
     <string name="auth_invalid_login_deactivated_account">Kjo llogari është çaktivizuar.</string>
     <string name="error_saving_media_file">S’u ruajt dot kartelë media</string>
     <string name="confirm_your_identity_quad_s">Ripohoni identitetin tuaj duke verifikuar këto kredenciale hyrjeje, duke i akorduar hyrje te mesazhe të fshehtëzuar.</string>
-    <string name="error_sso_flow_not_supported_yet">Na ndjeni, ky veprim s’është ende i mundshëm për llogari të lidhura duke përdorur Hyrje Njëshe.</string>
     <string name="template_identity_server_error_bulk_sha256_not_supported">Për privatësinë tuaj, ${app_name}-i mbulon vetëm dërgim email-esh dhe numrash telefoni përdoruesi të koduar.</string>
     <string name="power_level_edit_title">Caktoni rol</string>
     <string name="power_level_title">Rol</string>

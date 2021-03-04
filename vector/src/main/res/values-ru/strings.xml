@@ -2498,7 +2498,6 @@
     <string name="settings_text_message_sent_hint">Код</string>
     <string name="login_msisdn_notice">Используйте международный формат (номер телефона должен начинаться с \'+\')</string>
     <string name="confirm_your_identity_quad_s">Подтвердите свою личность, проверив этот логин, предоставив ему доступ к зашифрованным сообщениям.</string>
-    <string name="error_sso_flow_not_supported_yet">К сожалению, эта операция пока недоступна для учетных записей, подключенных с помощью единого входа.</string>
     <string name="error_opening_banned_room">Невозможно открыть комнату, в которую вам запрещён доступ.</string>
     <string name="room_error_not_found">Невозможно найти эту комнату. Убедитесь, что она существует.</string>
     <plurals name="seconds">

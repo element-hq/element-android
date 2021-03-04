@@ -2193,7 +2193,6 @@
     <string name="bottom_sheet_setup_secure_backup_submit">Configuration</string>
     <string name="a11y_unmute_microphone">Activer le microphone</string>
     <string name="a11y_mute_microphone">Désactiver le microphone</string>
-    <string name="error_sso_flow_not_supported_yet">Désolé, cette opération n\'est pas encore possible pour les comptes connectés en Authentification unique (SSO).</string>
     <string name="confirm_your_identity_quad_s">Confirmez votre identité en vérifiant cet identifiant, lui donnant ainsi accès aux messages chiffrés.</string>
     <string name="setup_cross_signing">Activer la signature croisée</string>
     <plurals name="notification_invitations">
