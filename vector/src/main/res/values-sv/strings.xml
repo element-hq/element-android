@@ -2607,4 +2607,22 @@
     <string name="call_hold_action">Parkera</string>
     <string name="call_resume_action">Återuppta</string>
     <string name="action_return">Tillbaka</string>
+    <plurals name="entries">
+        <item quantity="one">%d inmatning</item>
+        <item quantity="other">%d inmatningar</item>
+    </plurals>
+    <string name="settings_server_upload_size_unknown">Gränsen är okänd.</string>
+    <string name="settings_server_upload_size_content">Din hemserver accepterar bilagor (filer, media o.s.v.) med en storlek upp till %s.</string>
+    <string name="settings_server_upload_size_title">Serverns filuppladdningsgräns</string>
+    <string name="settings_server_version">Serverversion</string>
+    <string name="settings_server_name">Servernamn</string>
+    <string name="room_list_quick_actions_room_settings">Rumsinställningar</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Lämna det nuvarande gruppsamtalet och byt till det andra\?</string>
+    <string name="room_settings_room_version_title">Rumsversion</string>
+    <string name="dialog_edit_hint">Nytt värde</string>
+    <string name="action_switch">Byt</string>
+    <string name="initial_sync_start_downloading">Initial synk:
+\nLaddar ner data…</string>
+    <string name="initial_sync_start_server_computing">Initial synk:
+\nVäntar på serversvar…</string>
 </resources>
