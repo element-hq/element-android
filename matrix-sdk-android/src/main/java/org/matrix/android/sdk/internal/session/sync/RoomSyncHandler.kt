@@ -119,7 +119,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val rooms = when (handlingStrategy) {
             is HandlingStrategy.JOINED  -> {
                 if (isInitialSync && initialSyncStrategy is InitialSyncStrategy.Optimized) {
-                    insertJoinRoomsFromInitSync(realm, handlingStrategy, insertType, syncLocalTimeStampMillis, reporter)
+                    insertJoinRoomsFromInitSync(realm, handlingStrategy, syncLocalTimeStampMillis, reporter)
                     // Rooms are already inserted, return an empty list
                     emptyList()
                 } else {
@@ -144,7 +144,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
     private fun insertJoinRoomsFromInitSync(realm: Realm,
                                             handlingStrategy: HandlingStrategy.JOINED,
-                                            insertType: EventInsertType,
                                             syncLocalTimeStampMillis: Long,
                                             reporter: ProgressReporter?) {
         val maxSize = (initialSyncStrategy as? InitialSyncStrategy.Optimized)?.maxRoomsToInsert ?: Int.MAX_VALUE
@@ -167,7 +166,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                 roomId = it,
                                                 roomSync = handlingStrategy.data[it] ?: error("Should not happen"),
                                                 handleEphemeralEvents = false,
-                                                insertType = insertType,
+                                                insertType = EventInsertType.INITIAL_SYNC,
                                                 syncLocalTimestampMillis = syncLocalTimeStampMillis
                                         )
                                     }
@@ -178,7 +177,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         } else {
             // No need to split
             val rooms = handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountJoinedRooms, 0.6f) {
-                handleJoinedRoom(realm, it.key, it.value, false, insertType, syncLocalTimeStampMillis)
+                handleJoinedRoom(realm, it.key, it.value, false, EventInsertType.INITIAL_SYNC, syncLocalTimeStampMillis)
             }
             realm.insertOrUpdate(rooms)
         }
