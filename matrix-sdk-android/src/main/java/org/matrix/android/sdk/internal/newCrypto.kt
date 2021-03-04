@@ -87,6 +87,10 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
         inner.outgoingRequests()
     }
 
+    suspend fun updateTrackedUsers(users: List<String>) = withContext(Dispatchers.IO) {
+        inner.updateTrackedUsers(users)
+    }
+
     suspend fun receiveSyncChanges(
         toDevice: ToDeviceSyncResponse?,
         deviceChanges: DeviceListResponse?,

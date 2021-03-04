@@ -83,7 +83,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    fun handle(
+    suspend fun handle(
             realm: Realm,
             roomsSyncResponse: RoomsSyncResponse,
             isInitialSync: Boolean,
@@ -97,7 +97,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
 
     // PRIVATE METHODS *****************************************************************************
 
-    private fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService?) {
+    private suspend fun handleRoomSync(realm: Realm, handlingStrategy: HandlingStrategy, isInitialSync: Boolean, reporter: DefaultInitialSyncProgressService?) {
         val insertType = if (isInitialSync) {
             EventInsertType.INITIAL_SYNC
         } else {
@@ -123,7 +123,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         realm.insertOrUpdate(rooms)
     }
 
-    private fun handleJoinedRoom(realm: Realm,
+    private suspend fun handleJoinedRoom(realm: Realm,
                                  roomId: String,
                                  roomSync: RoomSync,
                                  isInitialSync: Boolean,
@@ -271,7 +271,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         return roomEntity
     }
 
-    private fun handleTimelineEvents(realm: Realm,
+    private suspend fun handleTimelineEvents(realm: Realm,
                                      roomId: String,
                                      roomEntity: RoomEntity,
                                      eventList: List<Event>,

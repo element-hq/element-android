@@ -17,7 +17,7 @@ use matrix_sdk_common::{
     },
     assign,
     deserialized_responses::events::{AlgorithmInfo, SyncMessageEvent},
-    events::{room::encrypted::EncryptedEventContent, EventContent},
+    events::{room::encrypted::EncryptedEventContent, AnyMessageEventContent, EventContent},
     identifiers::{DeviceKeyAlgorithm, RoomId, UserId},
     uuid::Uuid,
     UInt,
@@ -128,7 +128,7 @@ pub enum Request {
     },
     KeysQuery {
         request_id: String,
-        body: String,
+        users: Vec<String>,
     },
 }
 
@@ -150,12 +150,10 @@ impl From<OutgoingRequest> for Request {
                 }
             }
             KeysQuery(k) => {
-                let body = json!({
-                    "device_keys": k.device_keys,
-                });
+                let users: Vec<String> = k.device_keys.keys().map(|u| u.to_string()).collect();
                 Request::KeysQuery {
                     request_id: r.request_id().to_string(),
-                    body: serde_json::to_string(&body).expect("Can't serialize keys query request"),
+                    users,
                 }
             }
             ToDeviceRequest(t) => Request::from(t),
@@ -332,6 +330,16 @@ impl OlmMachine {
                     .receive_sync_changes(&events, &device_changes, &key_counts),
             )
             .unwrap();
+    }
+
+    pub fn update_tracked_users(&self, users: Vec<String>) {
+        let users: Vec<UserId> = users
+            .into_iter()
+            .filter_map(|u| UserId::try_from(u).ok())
+            .collect();
+
+        self.runtime
+            .block_on(self.inner.update_tracked_users(users.iter()));
     }
 
     pub fn decrypt_room_event(

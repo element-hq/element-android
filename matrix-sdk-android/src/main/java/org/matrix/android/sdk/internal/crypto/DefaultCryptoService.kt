@@ -79,11 +79,13 @@ import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
+import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
+import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
 import org.matrix.android.sdk.internal.crypto.tasks.NewUploadKeysTask
@@ -169,6 +171,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val deleteDeviceWithUserPasswordTask: DeleteDeviceWithUserPasswordTask,
         // Tasks
         private val getDevicesTask: GetDevicesTask,
+        private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
         private val getDeviceInfoTask: GetDeviceInfoTask,
         private val setDeviceNameTask: SetDeviceNameTask,
         private val uploadKeysTask: UploadKeysTask,
@@ -185,7 +188,7 @@ internal class DefaultCryptoService @Inject constructor(
     private val isStarted = AtomicBoolean(false)
     private var olmMachine: OlmMachine? = null
 
-    fun onStateEvent(roomId: String, event: Event) {
+    suspend fun onStateEvent(roomId: String, event: Event) {
         when (event.getClearType()) {
             EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
@@ -193,7 +196,7 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    fun onLiveEvent(roomId: String, event: Event) {
+    suspend fun onLiveEvent(roomId: String, event: Event) {
         when (event.getClearType()) {
             EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
@@ -899,6 +902,7 @@ internal class DefaultCryptoService @Inject constructor(
                 Timber.e(throwable, "## CRYPTO | onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
             } finally {
                 val userIds = getRoomUserIds(roomId)
+                olmMachine!!.updateTrackedUsers(userIds)
                 setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
             }
         }
@@ -915,13 +919,14 @@ internal class DefaultCryptoService @Inject constructor(
      *
      * @param event the membership event causing the change
      */
-    private fun onRoomMembershipEvent(roomId: String, event: Event) {
+    private suspend fun onRoomMembershipEvent(roomId: String, event: Event) {
         roomEncryptorsStore.get(roomId) ?: /* No encrypting in this room */ return
 
         event.stateKey?.let { userId ->
             val roomMember: RoomMemberContent? = event.content.toModel()
             val membership = roomMember?.membership
             if (membership == Membership.JOIN) {
+                olmMachine!!.updateTrackedUsers(listOf(userId))
                 // make sure we are tracking the deviceList for this user.
                 deviceListManager.startTrackingDeviceList(listOf(userId))
             } else if (membership == Membership.INVITE
@@ -966,8 +971,24 @@ internal class DefaultCryptoService @Inject constructor(
                     olmMachine!!.markRequestAsSent(outgoingRequest.requestId, RequestType.KEYS_UPLOAD, json_response)
                     Timber.v("HELLO UPLOADED KEYS $response")
                 }
-                is Request.KeysQuery -> Timber.v("HELLO KEYS QUERY REQUEST ${outgoingRequest.body}")
-                is Request.ToDevice -> Timber.v("HELLO TO DEVICE REQUEST ${outgoingRequest.body}")
+                is Request.KeysQuery -> {
+                    Timber.v("HELLO KEYS QUERY REQUEST ${outgoingRequest.users}")
+                    val params = DownloadKeysForUsersTask.Params(outgoingRequest.users, null)
+
+                    try {
+                        val response = downloadKeysForUsersTask.execute(params)
+                        val adapter = MoshiProvider.providesMoshi().adapter<KeysQueryResponse>(KeysQueryResponse::class.java)
+                        val json_response = adapter.toJson(response)!!
+                        olmMachine!!.markRequestAsSent(outgoingRequest.requestId, RequestType.KEYS_QUERY, json_response)
+                    } catch (throwable: Throwable) {
+                        Timber.e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
+                    }
+
+
+                }
+                is Request.ToDevice -> {
+                    // Timber.v("HELLO TO DEVICE REQUEST ${outgoingRequest.body}")
+                }
             }
         }
     }
