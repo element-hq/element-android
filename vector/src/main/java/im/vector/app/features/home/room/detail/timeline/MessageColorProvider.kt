@@ -55,7 +55,7 @@ class MessageColorProvider @Inject constructor(
                 SendState.UNKNOWN,
                 SendState.UNSENT,
                 SendState.ENCRYPTING,
-                SendState.SENDING                -> colorProvider.getColorFromAttribute(R.attr.vctr_sending_message_text_color)
+                SendState.SENDING,
                 SendState.SENT,
                 SendState.SYNCED                 -> colorProvider.getColorFromAttribute(R.attr.vctr_message_text_color)
                 SendState.UNDELIVERED,
