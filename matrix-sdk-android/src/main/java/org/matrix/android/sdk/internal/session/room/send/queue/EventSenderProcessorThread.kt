@@ -163,7 +163,7 @@ internal class EventSenderProcessorThread @Inject constructor(
                 // so network is available
 
                 runBlocking {
-                    retryLoop@ while (task.retryCount < 3) {
+                    retryLoop@ while (task.retryCount.get() < 3) {
                         try {
                             // SendPerformanceProfiler.startStage(task.event.eventId!!, SendPerformanceProfiler.Stages.SEND_WORKER)
                             Timber.v("## SendThread retryLoop for $task retryCount ${task.retryCount}")
@@ -175,8 +175,7 @@ internal class EventSenderProcessorThread @Inject constructor(
                             when {
                                 exception is IOException || exception is Failure.NetworkConnection                         -> {
                                     canReachServer = false
-                                    task.retryCount++
-                                    if (task.retryCount >= 3) task.onTaskFailed()
+                                    if (task.retryCount.getAndIncrement() >= 3) task.onTaskFailed()
                                     while (!canReachServer) {
                                         Timber.v("## SendThread retryLoop cannot reach server, wait ts:${System.currentTimeMillis()}")
                                         // schedule to retry
@@ -184,8 +183,7 @@ internal class EventSenderProcessorThread @Inject constructor(
                                     }
                                 }
                                 (exception is Failure.ServerError && exception.error.code == MatrixError.M_LIMIT_EXCEEDED) -> {
-                                    task.retryCount++
-                                    if (task.retryCount >= 3) task.onTaskFailed()
+                                    if (task.retryCount.getAndIncrement() >= 3) task.onTaskFailed()
                                     Timber.v("## SendThread retryLoop retryable error for $task reason: ${exception.localizedMessage}")
                                     // wait a bit
                                     // Todo if its a quota exception can we get timout?
