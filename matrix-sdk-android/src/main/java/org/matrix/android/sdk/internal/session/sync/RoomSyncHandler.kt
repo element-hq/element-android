@@ -195,7 +195,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         if (handleEphemeralEvents) {
             ephemeralResult = roomSync.ephemeral?.roomSyncEphemeral?.events
                     ?.takeIf { it.isNotEmpty() }
-                    ?.let { handleEphemeral(realm, roomId, it, false) }
+                    ?.let { handleEphemeral(realm, roomId, it, insertType == EventInsertType.INITIAL_SYNC) }
         }
 
         if (roomSync.accountData?.events?.isNotEmpty() == true) {
