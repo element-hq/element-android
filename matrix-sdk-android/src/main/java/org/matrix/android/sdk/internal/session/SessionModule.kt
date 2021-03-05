@@ -83,6 +83,8 @@ import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkServic
 import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.create.RoomCreateEventProcessor
 import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcessor
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessorCoroutine
 import org.matrix.android.sdk.internal.session.room.tombstone.RoomTombstoneEventProcessor
 import org.matrix.android.sdk.internal.session.securestorage.DefaultSecureStorageService
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
@@ -340,6 +342,10 @@ internal abstract class SessionModule {
     abstract fun bindRealmSessionProvider(provider: RealmSessionProvider): SessionLifecycleObserver
 
     @Binds
+    @IntoSet
+    abstract fun bindEventSenderProcessorAsSessionLifecycleObserver(processor: EventSenderProcessorCoroutine): SessionLifecycleObserver
+
+    @Binds
     abstract fun bindInitialSyncProgressService(service: DefaultInitialSyncProgressService): InitialSyncProgressService
 
     @Binds
@@ -362,4 +368,8 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindRedactEventTask(task: DefaultRedactEventTask): RedactEventTask
+
+    @Binds
+    abstract fun bindEventSenderProcessor(processor: EventSenderProcessorCoroutine): EventSenderProcessor
+
 }

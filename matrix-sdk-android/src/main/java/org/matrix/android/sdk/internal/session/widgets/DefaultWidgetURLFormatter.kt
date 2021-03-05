@@ -37,12 +37,12 @@ internal class DefaultWidgetURLFormatter @Inject constructor(private val integra
     private lateinit var currentConfig: IntegrationManagerConfig
     private var whiteListedUrls: List<String> = emptyList()
 
-    override fun onStart() {
+    override fun onSessionStarted() {
         setupWithConfiguration()
         integrationManager.addListener(this)
     }
 
-    override fun onStop() {
+    override fun onSessionStopped() {
         integrationManager.removeListener(this)
     }
 

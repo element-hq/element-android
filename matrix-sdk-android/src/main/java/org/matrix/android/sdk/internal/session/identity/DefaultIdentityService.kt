@@ -92,7 +92,7 @@ internal class DefaultIdentityService @Inject constructor(
 
     private val listeners = mutableSetOf<IdentityServiceListener>()
 
-    override fun onStart() {
+    override fun onSessionStarted() {
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         // Observe the account data change
         accountDataDataSource
@@ -117,7 +117,7 @@ internal class DefaultIdentityService @Inject constructor(
         }
     }
 
-    override fun onStop() {
+    override fun onSessionStopped() {
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }
 

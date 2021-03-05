@@ -18,7 +18,17 @@ package org.matrix.android.sdk.internal.session.room.send.queue
 
 import org.matrix.android.sdk.api.util.Cancelable
 
-abstract class QueuedTask : Cancelable {
+/**
+ * @param queueIdentifier String value to identify a unique Queue
+ * @param taskIdentifier String value to identify a unique Task. Should be different from queueIdentifier
+ */
+internal abstract class QueuedTask(
+        val queueIdentifier: String,
+        val taskIdentifier: String
+) : Cancelable {
+
+    override fun toString() = "queueIdentifier: $queueIdentifier, taskIdentifier:  ${taskIdentifier})"
+
     var retryCount = 0
 
     private var hasBeenCancelled: Boolean = false
