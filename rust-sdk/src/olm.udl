@@ -84,11 +84,13 @@ interface OlmMachine {
 
     Device? get_device([ByRef] string user_id, [ByRef] string device_id);
     sequence<Device> get_user_devices([ByRef] string user_id);
-    sequence<Request> outgoing_requests();
-    void update_tracked_users(sequence<string> users);
 
+    sequence<Request> outgoing_requests();
+
+    void update_tracked_users(sequence<string> users);
     [Throws=CryptoStoreError]
     Request? get_missing_sessions(sequence<string> users);
+    sequence<Request> share_group_session([ByRef] string room_id, sequence<string> users);
 
     [Throws=CryptoStoreError]
     void mark_request_as_sent(

@@ -87,6 +87,10 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
         inner.outgoingRequests()
     }
 
+    suspend fun shareGroupSession(roomId: String, users: List<String>): List<Request> = withContext(Dispatchers.IO) {
+        inner.shareGroupSession(roomId, users)
+    }
+
     suspend fun getMissingSessions(users: List<String>): Request? = withContext(Dispatchers.IO) {
         inner.getMissingSessions(users)
     }

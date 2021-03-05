@@ -91,6 +91,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
 import org.matrix.android.sdk.internal.crypto.tasks.NewUploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
+import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
@@ -174,6 +175,7 @@ internal class DefaultCryptoService @Inject constructor(
         // Tasks
         private val getDevicesTask: GetDevicesTask,
         private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
+        private val sendToDeviceTask: SendToDeviceTask,
         private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
         private val getDeviceInfoTask: GetDeviceInfoTask,
         private val setDeviceNameTask: SetDeviceNameTask,
@@ -962,9 +964,9 @@ internal class DefaultCryptoService @Inject constructor(
 
     private suspend fun preshareGroupSession(roomId: String, roomMembers: List<String>) {
         val request = olmMachine!!.getMissingSessions(roomMembers)
-        roomId == "est"
 
         if (request != null) {
+            // This request can only be a keys claim request.
             when (request) {
                 is Request.KeysClaim -> {
                     val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(request.oneTimeKeys)
@@ -972,6 +974,23 @@ internal class DefaultCryptoService @Inject constructor(
                     val adapter = MoshiProvider.providesMoshi().adapter<KeysClaimResponse>(KeysClaimResponse::class.java)
                     val json_response = adapter.toJson(response)!!
                     olmMachine!!.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, json_response)
+                }
+            }
+        }
+
+        for (toDeviceRequest in olmMachine!!.shareGroupSession(roomId, roomMembers)) {
+            // This request can only be a to-device request.
+            when (toDeviceRequest) {
+                is Request.ToDevice -> {
+                    val adapter = MoshiProvider.providesMoshi().adapter<Map<String, HashMap<String, Any>>>(Map::class.java)
+                    val body = adapter.fromJson(toDeviceRequest.body)!!
+
+                    val userMap = MXUsersDevicesMap<Any>()
+                    userMap.join(body)
+
+                    val sendToDeviceParams = SendToDeviceTask.Params(toDeviceRequest.eventType, userMap)
+                    sendToDeviceTask.execute(sendToDeviceParams)
+                    olmMachine!!.markRequestAsSent(toDeviceRequest.requestId, RequestType.TO_DEVICE, "{}")
                 }
             }
         }

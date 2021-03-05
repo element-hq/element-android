@@ -26,7 +26,8 @@ use matrix_sdk_common::{
 };
 
 use matrix_sdk_crypto::{
-    IncomingResponse, OlmMachine as InnerMachine, OutgoingRequest, ToDeviceRequest,
+    EncryptionSettings, IncomingResponse, OlmMachine as InnerMachine, OutgoingRequest,
+    ToDeviceRequest,
 };
 
 use crate::error::{CryptoStoreError, DecryptionError, MachineCreationError};
@@ -356,6 +357,25 @@ impl OlmMachine {
 
         self.runtime
             .block_on(self.inner.update_tracked_users(users.iter()));
+    }
+
+    pub fn share_group_session(&self, room_id: &str, users: Vec<String>) -> Vec<Request> {
+        let users: Vec<UserId> = users
+            .into_iter()
+            .filter_map(|u| UserId::try_from(u).ok())
+            .collect();
+
+        let room_id = RoomId::try_from(room_id).unwrap();
+        let requests = self
+            .runtime
+            .block_on(self.inner.share_group_session(
+                &room_id,
+                users.iter(),
+                EncryptionSettings::default(),
+            ))
+            .unwrap();
+
+        requests.into_iter().map(|r| (&*r).into()).collect()
     }
 
     pub fn get_missing_sessions(
