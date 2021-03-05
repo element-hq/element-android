@@ -76,6 +76,7 @@ interface OlmMachine {
 
     [Throws=DecryptionError]
     DecryptedEvent decrypt_room_event([ByRef] string event, [ByRef] string room_id);
+    string encrypt([ByRef] string room_id, [ByRef] string event_type, [ByRef] string content);
 
     record<DOMString, string> identity_keys();
 

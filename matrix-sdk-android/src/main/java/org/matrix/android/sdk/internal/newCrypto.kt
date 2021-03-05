@@ -27,6 +27,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.internal.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.ToDeviceSyncResponse
+import org.matrix.android.sdk.api.session.events.model.Content
 import timber.log.Timber
 import uniffi.olm.Device as InnerDevice
 import uniffi.olm.DeviceLists
@@ -85,6 +86,13 @@ internal class OlmMachine(user_id: String, device_id: String, path: File) {
 
     suspend fun outgoingRequests(): List<Request> = withContext(Dispatchers.IO) {
         inner.outgoingRequests()
+    }
+
+    suspend fun encrypt(roomId: String, eventType: String, content: Content): Content = withContext(Dispatchers.IO) {
+        val adapter = MoshiProvider.providesMoshi().adapter<Content>(Map::class.java)
+        val contentString = adapter.toJson(content)
+        val encrypted = inner.encrypt(roomId, eventType, contentString)
+        adapter.fromJson(encrypted)!!
     }
 
     suspend fun shareGroupSession(roomId: String, users: List<String>): List<Request> = withContext(Dispatchers.IO) {

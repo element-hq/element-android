@@ -697,7 +697,7 @@ internal class DefaultCryptoService @Inject constructor(
                 Timber.v("## CRYPTO | encryptEventContent() starts")
                 runCatching {
                     preshareGroupSession(roomId, userIds)
-                    val content = safeAlgorithm.encryptEventContent(eventContent, eventType, userIds)
+                    val content = encrypt(roomId, eventType, eventContent)
                     Timber.v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
                     MXEncryptEventContentResult(content, EventType.ENCRYPTED)
                 }.foldToCallback(callback)
@@ -982,6 +982,8 @@ internal class DefaultCryptoService @Inject constructor(
             // This request can only be a to-device request.
             when (toDeviceRequest) {
                 is Request.ToDevice -> {
+                    // TODO this produces floats for the Olm type fields, which
+                    // are integers originally.
                     val adapter = MoshiProvider.providesMoshi().adapter<Map<String, HashMap<String, Any>>>(Map::class.java)
                     val body = adapter.fromJson(toDeviceRequest.body)!!
 
@@ -996,8 +998,9 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    // private suspend fun encrypt(roomId: String, eventType: String, content: Content) {
-    // }
+    private suspend fun encrypt(roomId: String, eventType: String, content: Content): Content {
+        return olmMachine!!.encrypt(roomId, eventType, content)
+    }
 
     private suspend fun sendOutgoingRequests() {
         // TODO these requests should be sent out in parallel

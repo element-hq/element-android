@@ -4,7 +4,7 @@ use std::{
 };
 
 use http::Response;
-use serde_json::json;
+use serde_json::{json, value::RawValue};
 use tokio::runtime::Runtime;
 
 use matrix_sdk_common::{
@@ -405,6 +405,19 @@ impl OlmMachine {
                     })
                     .collect(),
             }))
+    }
+
+    pub fn encrypt(&self, room_id: &str, event_type: &str, content: &str) -> String {
+        let room_id = RoomId::try_from(room_id).unwrap();
+        let content: Box<RawValue> = serde_json::from_str(content).unwrap();
+
+        let content = AnyMessageEventContent::from_parts(event_type, content).unwrap();
+        let encrypted_content = self
+            .runtime
+            .block_on(self.inner.encrypt(&room_id, content))
+            .unwrap();
+
+        serde_json::to_string(&encrypted_content).unwrap()
     }
 
     pub fn decrypt_room_event(
