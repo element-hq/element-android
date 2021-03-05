@@ -2694,4 +2694,39 @@
 \nBaixant dades…</string>
     <string name="initial_sync_start_server_computing">Sincronització inicial:
 \nEsperant resposta del servidor…</string>
+    <string name="a11y_view_read_receipts">Mostra confirmacions de lectura</string>
+    <string name="a11y_open_widget">Obre giny</string>
+    <string name="settings_server_upload_size_title">Límit de càrrega de fitxers al servidor</string>
+    <string name="action_switch">Commuta</string>
+    <string name="dev_tools_event_content_hint">Contingut de l\'esdeveniment</string>
+    <string name="dev_tools_success_state_event">Esdeveniment d\'estat enviat!</string>
+    <string name="dev_tools_success_event">Esdeveniment enviat!</string>
+    <string name="dev_tools_error_malformed_event">Esdeveniment mal format</string>
+    <string name="dev_tools_error_no_message_type">Falta el tipus de missatge</string>
+    <string name="dev_tools_error_no_content">Sense contingut</string>
+    <string name="dev_tools_form_hint_event_content">Contingut de l\'esdeveniment</string>
+    <string name="dev_tools_form_hint_state_key">Clau d\'estat</string>
+    <string name="dev_tools_form_hint_type">Tipus</string>
+    <string name="dev_tools_send_custom_state_event">Envia esdeveniment d\'estat personalitzat</string>
+    <string name="dev_tools_edit_content">Edita el contingut</string>
+    <string name="dev_tools_state_event">Esdeveniments d\'estat</string>
+    <string name="dev_tools_send_state_event">Envia esdeveniment d\'estat</string>
+    <string name="dev_tools_send_custom_event">Envia esdeveniment personalitzat</string>
+    <string name="dev_tools_explore_room_state">Explora l\'estat de la sala</string>
+    <string name="dev_tools_menu_name">Eines per desenvolupadors</string>
+    <string name="a11y_rule_notify_off">No notifiquis</string>
+    <string name="a11y_rule_notify_silent">Notifica sense so</string>
+    <string name="a11y_rule_notify_noisy">Notifica amb so</string>
+    <string name="a11y_error_message_not_sent">No s\'ha enviat el missatge per culpa d\'un error</string>
+    <string name="a11y_checked">Comprovat</string>
+    <string name="a11y_close_emoji_picker">Tanca selector d\'emoticones</string>
+    <string name="a11y_open_emoji_picker">Obre selector d\'emoticones</string>
+    <string name="a11y_trust_level_trusted">Nivell de confiança segur</string>
+    <string name="a11y_trust_level_warning">Nivell de confiança d\'alerta</string>
+    <string name="a11y_trust_level_default">Nivell de confiança predeterminat</string>
+    <string name="a11y_selected">Seleccionats</string>
+    <string name="a11y_unsent_draft">La sala conté un esborrany no enviat</string>
+    <string name="a11y_delete_avatar">Elimina la icona</string>
+    <string name="a11y_change_avatar">Canvia la icona</string>
+    <string name="settings_server_upload_size_content">El servidor local accepta fitxers adjunts (fotos, fitxers, etc) de fins a una mida de %s.</string>
 </resources>
