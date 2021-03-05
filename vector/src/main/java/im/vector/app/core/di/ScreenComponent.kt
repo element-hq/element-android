@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import dagger.BindsInstance
 import dagger.Component
+import fr.gouv.tchap.features.login.TchapLoginActivity
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.preference.UserAvatarPreference
@@ -151,6 +152,7 @@ interface ScreenComponent {
     fun inject(activity: CallTransferActivity)
     fun inject(activity: ReAuthActivity)
     fun inject(activity: RoomDevToolActivity)
+    fun inject(activity: TchapLoginActivity)
 
     /* ==========================================================================================
      * BottomSheets

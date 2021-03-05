@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import fr.gouv.tchap.features.login.TchapLoginActivity
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ScreenComponent
@@ -34,7 +35,6 @@ import im.vector.app.core.utils.deleteAllFiles
 import im.vector.app.databinding.FragmentLoadingBinding
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
-import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
@@ -223,7 +223,7 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
             args.clearCredentials
                     && (!args.isUserLoggedOut || args.isAccountDeactivated) ->
                 // User has explicitly asked to log out or deactivated his account
-                LoginActivity.newIntent(this, null)
+                TchapLoginActivity.newIntent(this, null)
             args.isSoftLogout                                               ->
                 // The homeserver has invalidated the token, with a soft logout
                 SoftLogoutActivity.newIntent(this)
@@ -241,7 +241,7 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
                 }
             else                                                            ->
                 // First start, or no active session
-                LoginActivity.newIntent(this, null)
+                TchapLoginActivity.newIntent(this, null)
         }
         startActivity(intent)
         finish()

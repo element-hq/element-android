@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_tchap_first_message_button"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingEnd="22dp"
+    android:paddingLeft="22dp"
+    android:paddingRight="22dp"
+    android:paddingStart="22dp">
+
+    <TextView
+        android:id="@+id/fragment_tchap_first_message_button_notice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/auth_reset_password_email_validation_message" />
+
+    <Button
+        android:id="@+id/fragment_tchap_first_message_button_submit"
+        style="@style/TchapLoginButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        tools:text="@string/auth_reset_password_next_step_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_tchap_first_message_button_notice" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

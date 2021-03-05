@@ -8,7 +8,7 @@
     <color name="vector_info_color">#2f9edb</color>
 
     <!-- main app colors -->
-    <color name="vector_fuchsia_color">#ff4b55</color>
+    <color name="vector_fuchsia_color">#eb5757</color>
     <color name="vector_silver_color">#FFC7C7C7</color>
     <color name="vector_dark_grey_color">#FF999999</color>
 
@@ -22,18 +22,18 @@
     <color name="riot_primary_background_color_black">#F000</color>
 
     <!--Default/Android Status Bar-->
-    <color name="primary_color_dark_light">#FF1A2027</color>
+    <color name="primary_color_dark_light">#162d58</color>
     <!--Default/Base-->
-    <color name="primary_color_light">#03b381</color>
+    <color name="primary_color_light">#162d58</color>
     <!--Default/Accent-->
-    <color name="accent_color_light">#03b381</color>
+    <color name="accent_color_light">#162d58</color>
 
     <!--Dark/Android Status Bar-->
     <color name="primary_color_dark_dark">#FF0D0E10</color>
     <!--Dark/Base-->
     <color name="primary_color_dark">#FF15171B</color>
     <!--Dark/Accent-->
-    <color name="accent_color_dark">#03b381</color>
+    <color name="accent_color_dark">#FFFFFFFF</color>
 
     <!--Black/Android Status Bar-->
     <color name="primary_color_dark_black">#000</color>
@@ -57,8 +57,8 @@
     <color name="tab_bar_unselected_background_color_dark">@color/riotx_background_dark</color>
 
     <!-- Hint Colors -->
-    <color name="primary_hint_text_color_light">#FFFFFF</color>
-    <color name="primary_hint_text_color_dark">#FFFFFF</color>
+    <color name="primary_hint_text_color_light">@color/vector_silver_color</color>
+    <color name="primary_hint_text_color_dark">@color/vector_tchap_primary_color</color>
 
     <color name="default_text_hint_color_light">#903C3C3C</color>
     <color name="default_text_hint_color_dark">#CCDDDDDD</color>
@@ -68,7 +68,7 @@
     <attr name="riot_primary_text_color_disabled" format="color" />
 
     <!--Default/Text Primary-->
-    <color name="riot_primary_text_color_light">#FF2E2F32</color>
+    <color name="riot_primary_text_color_light">#000000</color>
     <color name="riot_primary_text_color_disabled_light">#FF9E9E9E</color>
     <!--Default/Text Secondary-->
     <color name="riot_secondary_text_color_light">#FF9E9E9E</color>
@@ -94,7 +94,7 @@
 
     <!-- Button color -->
     <color name="button_enabled_text_color">#FFFFFFFF</color>
-    <color name="button_disabled_text_color">#FFFFFFFF</color>
+    <color name="button_disabled_text_color">#FF7F7F7F</color>
     <color name="button_destructive_enabled_text_color">#FF4B55</color>
     <color name="button_destructive_disabled_text_color">#FF4B55</color>
     <color name="button_bot_enabled_text_color">#FF368BD6</color>
@@ -112,8 +112,9 @@
         <!-- Source: https://zpl.io/aBKw9Mk -->
 
     <!-- Accents -->
-    <color name="riotx_accent">#FF0DBD8B</color>
-    <color name="riotx_accent_alpha25">#3F0DBD8B</color>
+    <!-- TODO add tchap theme and colors -->
+    <color name="riotx_accent">@color/vector_tchap_primary_color</color>
+    <color name="riotx_accent_alpha25">#3F162d58</color>
 
 
     <color name="riotx_destructive_accent">#FFFF4B55</color>
