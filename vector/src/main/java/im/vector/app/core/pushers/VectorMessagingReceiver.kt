@@ -33,6 +33,7 @@ import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.VectorPreferences
+import org.json.JSONException
 import org.matrix.android.sdk.api.MatrixCallback
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
@@ -62,8 +63,18 @@ val upHandler = object: MessagingReceiverHandler {
     override fun onMessage(context: Context?, message: String, instance: String) {
         initVar(context!!)
         Timber.i("onMessage received")
-        val data = JSONObject(message)
-        if (data.getJSONObject("notification").getString("event_id") == PushersManager.TEST_EVENT_ID) {
+        lateinit var data: JSONObject
+        lateinit var notification: JSONObject
+        lateinit var eventId: String
+        try {
+            data = JSONObject(message)
+            notification = data.getJSONObject("notification")
+            eventId = notification.getString("event_id")
+        } catch (e: JSONException) {
+            e.printStackTrace()
+            return
+        }
+        if (eventId == PushersManager.TEST_EVENT_ID) {
             val intent = Intent(NotificationUtils.PUSH_ACTION)
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
             return
@@ -79,14 +90,14 @@ val upHandler = object: MessagingReceiverHandler {
                 // we are in foreground, let the sync do the things?
                 Timber.v("PUSH received in a foreground state, ignore")
             } else {
-                onMessageReceivedInternal(context, data.getJSONObject("notification"))
+                onMessageReceivedInternal(context, notification)
             }
         }
     }
 
     override fun onNewEndpoint(context: Context?, endpoint: String, instance: String) {
         initVar(context!!)
-        Timber.i("onNewEndpoint: Endpoint has been updated")
+        Timber.i("onNewEndpoint: adding $endpoint")
         UPHelper.storeUpEndpoint(context, endpoint)
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
             /**

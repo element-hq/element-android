@@ -81,6 +81,7 @@ object UPHelper {
         val up = Registration()
         if (up.getDistributor(context).isNotEmpty()) {
             up.registerApp(context)
+            return
         }
         val distributors = up.getDistributors(context).toMutableList()
         /**
