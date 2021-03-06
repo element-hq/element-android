@@ -1,14 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
- *
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.gplay.push.fcm
+package im.vector.app.core.pushers
 
 import android.content.Context
 import android.content.Intent
@@ -31,13 +28,11 @@ import org.json.JSONObject
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.vectorComponent
-import im.vector.app.core.pushers.PushersManager
 import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.push.fcm.UPHelper
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
 import org.unifiedpush.android.connector.MessagingReceiverHandler
