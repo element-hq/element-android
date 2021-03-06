@@ -40,6 +40,7 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UPHelper
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -57,7 +58,6 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
-import im.vector.app.push.fcm.FcmHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
@@ -65,7 +65,6 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
 import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
-import org.unifiedpush.android.connector.Registration
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -124,8 +123,7 @@ class HomeActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Registration().registerAppWithDialog(this)
-        //FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
+        UPHelper.registerUnifiedPush(this)
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {

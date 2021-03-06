@@ -1109,8 +1109,8 @@
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Add Account</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Token Registration</string>
-    <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to HomeServer.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">Failed to register FCM token to HomeServer:\n%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Pusher successfully registered to HomeServer.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Failed to register pusher to HomeServer:\n%1$s</string>
 
     <string name="settings_troubleshoot_test_push_loop_title">Test Push</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">The application is waiting for the PUSH</string>

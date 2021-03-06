@@ -16,6 +16,7 @@
 
 package im.vector.app.core.pushers
 
+import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
@@ -35,28 +36,26 @@ class PushersManager @Inject constructor(
         private val stringProvider: StringProvider,
         private val appNameProvider: AppNameProvider
 ) {
-    fun testPush(pushKey: String, callback: MatrixCallback<Unit>): Cancelable {
+    fun testPush(context: Context, callback: MatrixCallback<Unit>): Cancelable {
         val currentSession = activeSessionHolder.getActiveSession()
 
         return currentSession.testPush(
-                stringProvider.getString(R.string.pusher_http_url),
+                UPHelper.getPushGateway(context)!!,
                 stringProvider.getString(R.string.pusher_app_id),
-                pushKey,
+                UPHelper.getUpEndpoint(context)!!,
                 TEST_EVENT_ID,
                 callback
         )
     }
 
-
-
     fun registerPusherWithFcmKey(pushKey: String): UUID {
-        return registerPusherWithKey(
-                stringProvider.getString(R.string.pusher_http_url),
-                pushKey
+        return registerPusher(
+                pushKey,
+                stringProvider.getString(R.string.pusher_http_url)
         )
     }
 
-    fun registerPusherWithKey(gateway: String, pushKey: String): UUID {
+    fun registerPusher(pushKey: String, gateway: String): UUID {
         val currentSession = activeSessionHolder.getActiveSession()
         val profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(currentSession.myUserId.hashCode())
 
@@ -73,13 +72,19 @@ class PushersManager @Inject constructor(
         )
     }
 
-    fun unregisterPusher(pushKey: String, callback: MatrixCallback<Unit>) {
-        unregisterPusher(stringProvider.getString(R.string.pusher_app_id), pushKey, callback)
+    fun unregisterPusher(context: Context, callback: MatrixCallback<Unit>) {
+        val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
+        callback.let { currentSession.removeHttpPusher(
+                UPHelper.getUpEndpoint(context)!!,
+                UPHelper.getPushGateway(context)!!,
+                it
+        )
+        }
     }
 
-    fun unregisterPusher(gateway: String, pushKey: String, callback: MatrixCallback<Unit>?) {
+    fun unregisterPusher(pushKey: String, callback: MatrixCallback<Unit>) {
         val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
-        callback?.let { currentSession.removeHttpPusher(pushKey, gateway, it) }
+        callback.let { currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_http_url), it) }
     }
 
     companion object {

@@ -15,42 +15,37 @@
  */
 package im.vector.app.core.pushers
 
-import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
-import android.widget.Toast
+import android.widget.TextView
 import androidx.core.content.edit
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
-import com.google.firebase.messaging.FirebaseMessaging
-import im.vector.app.R
-import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.DefaultSharedPreferences
-import im.vector.app.core.pushers.PushersManager
-import im.vector.app.features.settings.VectorPreferences
+import org.unifiedpush.android.connector.Registration
 import timber.log.Timber
 
 /**
- * This class store the FCM token in SharedPrefs and ensure this token is retrieved.
+ * This class store the UnifiedPush Endpoint in SharedPrefs and ensure this token is retrieved.
  * It has an alter ego in the fdroid variant.
  */
 object UPHelper {
     private val PREFS_UP_ENDPOINT = "UP_ENDPOINT"
+    private val PREFS_PUSH_GATEWAY = "PUSH_GATEWAY"
 
     /**
-     * Retrieves the FCM registration token.
+     * Retrieves the UnifiedPush Endpoint.
      *
-     * @return the FCM token or null if not received from FCM
+     * @return the UnifiedPush Endpoint or null if not received
      */
     fun getUpEndpoint(context: Context): String? {
         return DefaultSharedPreferences.getInstance(context).getString(PREFS_UP_ENDPOINT, null)
     }
 
     /**
-     * Store FCM token to the SharedPrefs
+     * Store UnifiedPush Endpoint to the SharedPrefs
      * TODO Store in realm
      *
      * @param context android context
-     * @param endpoint   the endpoint to store
+     * @param endpoint the endpoint to store
      */
     fun storeUpEndpoint(context: Context,
                         endpoint: String?) {
@@ -59,13 +54,71 @@ object UPHelper {
         }
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun onEnterForeground(context: Context, activeSessionHolder: ActiveSessionHolder) {
-        // No op
+    /**
+     * Retrieves the Push Gateway.
+     *
+     * @return the Push Gateway or null if not defined
+     */
+    fun getPushGateway(context: Context): String? {
+        return DefaultSharedPreferences.getInstance(context).getString(PREFS_PUSH_GATEWAY, null)
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun onEnterBackground(context: Context, vectorPreferences: VectorPreferences, activeSessionHolder: ActiveSessionHolder) {
-        // TODO FCM fallback
+    /**
+     * Store Push Gateway to the SharedPrefs
+     * TODO Store in realm
+     *
+     * @param context android context
+     * @param gateway the push gateway to store
+     */
+    fun storePushGateway(context: Context,
+                         gateway: String?) {
+        DefaultSharedPreferences.getInstance(context).edit {
+            putString(PREFS_PUSH_GATEWAY, gateway)
+        }
+    }
+
+    fun registerUnifiedPush(context: Context) {
+        val up = Registration()
+        if (up.getDistributor(context).isNotEmpty()) {
+            up.registerApp(context)
+        }
+        val distributors = up.getDistributors(context).toMutableList()
+        /**
+         * TODO: Check if it is the gplay flavour AND GServices are not available
+         */
+        if (false) {
+            distributors.remove(context.packageName)
+        }
+        when(distributors.size){
+            0 -> {
+                /**
+                 * TODO: fallback with sync service
+                 */
+            }
+            1 -> {
+                up.saveDistributor(context, distributors.first())
+                up.registerApp(context)
+            }
+            else ->{
+                val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+                builder.setTitle("Choose a distributor")
+
+                val distributorsArray = distributors.toTypedArray()
+                builder.setItems(distributorsArray) { _, which ->
+                    val distributor = distributorsArray[which]
+                    up.saveDistributor(context, distributor)
+                    Timber.i("Saving distributor: $distributor")
+                    up.registerApp(context)
+                }
+                val dialog: AlertDialog = builder.create()
+                dialog.show()
+            }
+        }
+    }
+
+    fun reRegisterUnifiedPush(context: Context) {
+        val up = Registration()
+        up.safeRemoveDistributor(context)
+        registerUnifiedPush(context)
     }
 }

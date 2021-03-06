@@ -41,11 +41,7 @@ class TestPushFromPushGateway @Inject constructor(private val context: AppCompat
     private var action: Cancelable? = null
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
-        val fcmToken = FcmHelper.getFcmToken(context) ?: run {
-            status = TestStatus.FAILED
-            return
-        }
-        action = pushersManager.testPush(fcmToken, object : MatrixCallback<Unit> {
+        action = pushersManager.testPush(context, object : MatrixCallback<Unit> {
             override fun onFailure(failure: Throwable) {
                 description = if (failure is PushGatewayFailure.PusherRejected) {
                     stringProvider.getString(R.string.settings_troubleshoot_test_push_loop_failed)

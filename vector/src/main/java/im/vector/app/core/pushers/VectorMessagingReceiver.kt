@@ -24,8 +24,8 @@ import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import org.json.JSONObject
 import im.vector.app.R
+import org.json.JSONObject
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.vectorComponent
 import im.vector.app.features.badge.BadgeProxy
@@ -33,6 +33,7 @@ import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.MatrixCallback
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
 import org.unifiedpush.android.connector.MessagingReceiverHandler
@@ -61,7 +62,6 @@ val upHandler = object: MessagingReceiverHandler {
     override fun onMessage(context: Context?, message: String, instance: String) {
         initVar(context!!)
         Timber.i("onMessage received")
-        Timber.i(message)
         val data = JSONObject(message)
         if (data.getJSONObject("notification").getString("event_id") == PushersManager.TEST_EVENT_ID) {
             val intent = Intent(NotificationUtils.PUSH_ACTION)
@@ -89,10 +89,13 @@ val upHandler = object: MessagingReceiverHandler {
         Timber.i("onNewEndpoint: Endpoint has been updated")
         UPHelper.storeUpEndpoint(context, endpoint)
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
-            pusherManager.registerPusherWithKey(
-                    context.getString(R.string.up_pusher_http_url),
-                    endpoint
-            )
+            /**
+             * TODO: choose gateway
+             */
+            val gateway = context.getString(R.string.default_push_gateway_http_url)
+            UPHelper.storePushGateway(context, gateway)
+            UPHelper.storeUpEndpoint(context, endpoint)
+            pusherManager.registerPusher(endpoint, gateway)
         }
     }
 
@@ -101,15 +104,14 @@ val upHandler = object: MessagingReceiverHandler {
     }
 
     override fun onRegistrationRefused(context: Context?, instance: String) {
-        TODO("Not yet implemented")
+        Toast.makeText(context, "Registration Refused", Toast.LENGTH_SHORT).show()
     }
 
     override fun onUnregistered(context: Context?, instance: String) {
         initVar(context!!)
         pusherManager.unregisterPusher(
-                context.getString(R.string.up_pusher_http_url),
-                UPHelper.getUpEndpoint(context)!!,
-                null
+                context,
+                object : MatrixCallback<Unit> {}
         )
     }
 

@@ -34,6 +34,7 @@ import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UPHelper
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
 import im.vector.app.core.utils.requestDisablingBatteryOptimization
 import im.vector.app.features.notifications.NotificationUtils
@@ -290,26 +291,22 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     private fun updateEnabledForDevice(preference: Preference?) {
         val switchPref = preference as SwitchPreference
         if (switchPref.isChecked) {
-            FcmHelper.getFcmToken(requireContext())?.let {
-                pushManager.registerPusherWithFcmKey(it)
-            }
+            UPHelper.reRegisterUnifiedPush(requireContext())
         } else {
-            FcmHelper.getFcmToken(requireContext())?.let {
-                pushManager.unregisterPusher(it, object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        session.refreshPushers()
-                    }
+            pushManager.unregisterPusher(requireContext(), object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    session.refreshPushers()
+                }
 
-                    override fun onFailure(failure: Throwable) {
-                        if (!isAdded) {
-                            return
-                        }
-                        // revert the check box
-                        switchPref.isChecked = !switchPref.isChecked
-                        Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+                override fun onFailure(failure: Throwable) {
+                    if (!isAdded) {
+                        return
                     }
-                })
-            }
+                    // revert the check box
+                    switchPref.isChecked = !switchPref.isChecked
+                    Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 
