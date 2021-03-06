@@ -4,16 +4,15 @@
 
     <application>
 
-        <!-- Firebase components -->
-        <meta-data
-            android:name="firebase_analytics_collection_deactivated"
-            android:value="true" />
-
-        <service android:name=".gplay.push.fcm.VectorFirebaseMessagingService">
+        <receiver android:exported="true"  android:enabled="true"  android:name=".gplay.push.fcm.VectorMessagingReceiver">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="org.unifiedpush.android.connector.MESSAGE"/>
+                <action android:name="org.unifiedpush.android.connector.UNREGISTERED"/>
+                <action android:name="org.unifiedpush.android.connector.NEW_ENDPOINT"/>
+                <action android:name="org.unifiedpush.android.connector.REGISTRATION_FAILED"/>
+                <action android:name="org.unifiedpush.android.connector.REGISTRATION_REFUSED"/>
             </intent-filter>
-        </service>
+        </receiver>
 
     </application>
 

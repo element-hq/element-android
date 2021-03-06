@@ -47,7 +47,16 @@ class PushersManager @Inject constructor(
         )
     }
 
+
+
     fun registerPusherWithFcmKey(pushKey: String): UUID {
+        return registerPusherWithKey(
+                stringProvider.getString(R.string.pusher_http_url),
+                pushKey
+        )
+    }
+
+    fun registerPusherWithKey(gateway: String, pushKey: String): UUID {
         val currentSession = activeSessionHolder.getActiveSession()
         val profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(currentSession.myUserId.hashCode())
 
@@ -58,15 +67,19 @@ class PushersManager @Inject constructor(
                 localeProvider.current().language,
                 appNameProvider.getAppName(),
                 currentSession.sessionParams.deviceId ?: "MOBILE",
-                stringProvider.getString(R.string.pusher_http_url),
+                gateway,
                 append = false,
                 withEventIdOnly = true
         )
     }
 
     fun unregisterPusher(pushKey: String, callback: MatrixCallback<Unit>) {
+        unregisterPusher(stringProvider.getString(R.string.pusher_app_id), pushKey, callback)
+    }
+
+    fun unregisterPusher(gateway: String, pushKey: String, callback: MatrixCallback<Unit>?) {
         val currentSession = activeSessionHolder.getSafeActiveSession() ?: return
-        currentSession.removeHttpPusher(pushKey, stringProvider.getString(R.string.pusher_app_id), callback)
+        callback?.let { currentSession.removeHttpPusher(pushKey, gateway, it) }
     }
 
     companion object {
