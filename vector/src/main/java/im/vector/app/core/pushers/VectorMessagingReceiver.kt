@@ -69,10 +69,22 @@ val upHandler = object: MessagingReceiverHandler {
         try {
             data = JSONObject(message)
             notification = data.getJSONObject("notification")
-            eventId = notification.getString("event_id")
         } catch (e: JSONException) {
             e.printStackTrace()
             return
+        }
+        try {
+            eventId = notification.getString("event_id")
+        } catch (e: JSONException) {
+            Timber.i("No event_id on notification")
+            notification.put("event_id", "")
+            eventId = ""
+        }
+        try {
+            notification.getString("room_id")
+        } catch (e: JSONException) {
+            Timber.i("No room_id on notification")
+            notification.put("room_id", "")
         }
         if (eventId == PushersManager.TEST_EVENT_ID) {
             val intent = Intent(NotificationUtils.PUSH_ACTION)
