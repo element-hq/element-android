@@ -171,7 +171,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
                         setState {
                             copy(
-                                    asyncPublicRoomsRequest = Success(data.chunk!!),
+                                    asyncPublicRoomsRequest = Success(Unit),
                                     // It's ok to append at the end of the list, so I use publicRooms.size()
                                     publicRooms = publicRooms.appendAt(data.chunk!!, publicRooms.size)
                                             // Rageshake #8206 tells that we can have several times the same room
