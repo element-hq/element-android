@@ -203,7 +203,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
             val newPublicRooms = data.chunk.orEmpty()
                     .filter {
                         showAllRooms
-                                || "${it.name} ${it.topic}".toLowerCase(Locale.ROOT)
+                                || "${it.name.orEmpty()} ${it.topic.orEmpty()} ${it.canonicalAlias.orEmpty()}".toLowerCase(Locale.ROOT)
                                 .let { str ->
                                     explicitContentTerms.all { term -> term !in str }
                                 }
