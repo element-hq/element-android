@@ -28,6 +28,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
@@ -41,12 +42,13 @@ import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryDat
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
+import java.util.Locale
 
-private const val PUBLIC_ROOMS_LIMIT = 20
-
-class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState: PublicRoomsViewState,
-                                                         private val session: Session)
-    : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, RoomDirectoryViewEvents>(initialState) {
+class RoomDirectoryViewModel @AssistedInject constructor(
+        @Assisted initialState: PublicRoomsViewState,
+        vectorPreferences: VectorPreferences,
+        private val session: Session
+) : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, RoomDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -54,6 +56,12 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
     }
 
     companion object : MvRxViewModelFactory<RoomDirectoryViewModel, PublicRoomsViewState> {
+        private const val PUBLIC_ROOMS_LIMIT = 20
+
+        // List of forbidden terms, in lower case
+        private val explicitContentTerms = listOf(
+                "nsfw"
+        )
 
         @JvmStatic
         override fun create(viewModelContext: ViewModelContext, state: PublicRoomsViewState): RoomDirectoryViewModel? {
@@ -61,6 +69,8 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
             return activity.roomDirectoryViewModelFactory.create(state)
         }
     }
+
+    private val showAllRooms = vectorPreferences.showAllPublicRooms()
 
     private var since: String? = null
 
@@ -189,11 +199,21 @@ class RoomDirectoryViewModel @AssistedInject constructor(@Assisted initialState:
 
             since = data.nextBatch
 
+            // Filter
+            val newPublicRooms = data.chunk.orEmpty()
+                    .filter {
+                        showAllRooms
+                                || "${it.name} ${it.topic}".toLowerCase(Locale.ROOT)
+                                .let { str ->
+                                    explicitContentTerms.all { term -> term !in str }
+                                }
+                    }
+
             setState {
                 copy(
                         asyncPublicRoomsRequest = Success(Unit),
                         // It's ok to append at the end of the list, so I use publicRooms.size()
-                        publicRooms = publicRooms.appendAt(data.chunk!!, publicRooms.size)
+                        publicRooms = publicRooms.appendAt(newPublicRooms, publicRooms.size)
                                 // Rageshake #8206 tells that we can have several times the same room
                                 .distinctBy { it.roomId },
                         hasMore = since != null
