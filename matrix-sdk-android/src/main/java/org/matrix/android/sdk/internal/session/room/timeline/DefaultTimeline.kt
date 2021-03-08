@@ -162,7 +162,7 @@ internal class DefaultTimeline(
                 // are still used for ui echo (relation like reaction)
                 sendingEvents = roomEntity.sendingTimelineEvents.where()/*.filterEventsWithSettings()*/.findAll()
                 sendingEvents.addChangeListener { events ->
-                    uiEchoManager.sentEventsUpdated(events)
+                    uiEchoManager.onSentEventsInDatabase(events.map { it.eventId })
                     postSnapshot()
                 }
 
@@ -339,7 +339,7 @@ internal class DefaultTimeline(
 
     override fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState) {
         if (roomId != this.roomId || !isLive) return
-        if (uiEchoManager.onLocalEchoUpdated(eventId, sendState)) {
+        if (uiEchoManager.onSendStateUpdated(eventId, sendState)) {
             postSnapshot()
         }
     }

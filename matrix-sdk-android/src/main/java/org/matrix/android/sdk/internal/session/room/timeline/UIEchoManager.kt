@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
-import io.realm.RealmResults
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -26,7 +25,6 @@ import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import timber.log.Timber
 import java.util.Collections
 
@@ -52,25 +50,25 @@ internal class UIEchoManager(
 
     private val inMemoryReactions = Collections.synchronizedMap<String, MutableList<ReactionUiEchoData>>(HashMap())
 
-    fun sentEventsUpdated(events: RealmResults<TimelineEventEntity>) {
+    fun onSentEventsInDatabase(eventIds: List<String>) {
         // Remove in memory as soon as they are known by database
-        events.forEach { te ->
-            inMemorySendingEvents.removeAll { te.eventId == it.eventId }
+        eventIds.forEach { eventId ->
+            inMemorySendingEvents.removeAll { eventId == it.eventId }
         }
         inMemorySendingStates.keys.removeAll { key ->
-            events.find { it.eventId == key } == null
+            eventIds.find { it == key } == null
         }
 
         inMemoryReactions.forEach { (_, uiEchoData) ->
             uiEchoData.removeAll { data ->
                 // I remove the uiEcho, when the related event is not anymore in the sending list
                 // (means that it is synced)!
-                events.find { it.eventId == data.localEchoId } == null
+                eventIds.find { it == data.localEchoId } == null
             }
         }
     }
 
-    fun onLocalEchoUpdated(eventId: String, sendState: SendState): Boolean {
+    fun onSendStateUpdated(eventId: String, sendState: SendState): Boolean {
         val existingState = inMemorySendingStates[eventId]
         inMemorySendingStates[eventId] = sendState
         return existingState != sendState
