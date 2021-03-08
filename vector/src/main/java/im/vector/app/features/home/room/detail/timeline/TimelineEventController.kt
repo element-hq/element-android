@@ -427,6 +427,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val formattedDayModel: DaySeparatorItem? = null
     ) {
         fun shouldTriggerBuild(): Boolean {
+            // Since those items can change when we paginate, force a re-build
             return mergedHeaderModel != null || formattedDayModel != null
         }
     }
