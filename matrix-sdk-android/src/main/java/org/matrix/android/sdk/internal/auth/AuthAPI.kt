@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.auth
 
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.util.Extended
 import org.matrix.android.sdk.internal.auth.data.LoginFlowResponse
 import org.matrix.android.sdk.internal.auth.data.PasswordLoginParams
 import org.matrix.android.sdk.internal.auth.data.RiotConfig
@@ -97,12 +98,12 @@ internal interface AuthAPI {
      */
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "login")
-    fun login(@Body loginParams: PasswordLoginParams): Call<Credentials>
+    fun login(@Body loginParams: PasswordLoginParams): Call<Extended<Credentials>>
 
     // Unfortunately we cannot use interface for @Body parameter, so I duplicate the method for the type TokenLoginParams
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "login")
-    fun login(@Body loginParams: TokenLoginParams): Call<Credentials>
+    fun login(@Body loginParams: TokenLoginParams): Call<Extended<Credentials>>
 
     /**
      * Ask the homeserver to reset the password associated with the provided email.

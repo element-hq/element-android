@@ -41,6 +41,7 @@ import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.util.Extended
 
 internal class DefaultLoginWizard(
         okHttpClient: OkHttpClient,
@@ -73,11 +74,11 @@ internal class DefaultLoginWizard(
             val loginParams = TokenLoginParams(
                     token = loginToken
             )
-            val credentials = executeRequest<Credentials>(null) {
+            val credentials = executeRequest<Extended<Credentials>>(null) {
                 apiCall = authAPI.login(loginParams)
             }
 
-            sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
+            sessionCreator.createSession(credentials.wrapped, pendingSessionData.homeServerConnectionConfig)
         }
     }
 
@@ -89,11 +90,11 @@ internal class DefaultLoginWizard(
         } else {
             PasswordLoginParams.userIdentifier(login, password, deviceName)
         }
-        val credentials = executeRequest<Credentials>(null) {
+        val credentials = executeRequest<Extended<Credentials>>(null) {
             apiCall = authAPI.login(loginParams)
         }
 
-        sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
+        sessionCreator.createSession(credentials.wrapped, pendingSessionData.homeServerConnectionConfig)
     }
 
     override fun resetPassword(email: String, newPassword: String, callback: MatrixCallback<Unit>): Cancelable {

@@ -92,7 +92,7 @@ import javax.tools.Diagnostic
                     if (!kmClass.isData) {
                         return@forEach
                     }
-                    if(kmClass.isInner){
+                    if (kmClass.isInner) {
                         return@forEach
                     }
                     val dataClassSpec = kmClass.toTypeSpec(classInspector)
@@ -125,7 +125,6 @@ import javax.tools.Diagnostic
                 )
                 .build()
 
-
         objectBuilder.addProperty(jsonKeysPropertySpec)
 
         try {
@@ -139,7 +138,6 @@ import javax.tools.Diagnostic
 
         return true
     }
-
 
     private fun List<AnnotationSpec>?.jsonName(): String? {
         if (this == null) return null

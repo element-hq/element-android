@@ -31,6 +31,7 @@ import org.matrix.android.sdk.internal.network.httpclient.addSocketFactory
 import org.matrix.android.sdk.internal.network.ssl.UnrecognizedCertificateException
 import org.matrix.android.sdk.internal.task.Task
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.util.Extended
 import javax.inject.Inject
 
 internal interface DirectLoginTask : Task<DirectLoginTask.Params, Session> {
@@ -59,7 +60,7 @@ internal class DefaultDirectLoginTask @Inject constructor(
         val loginParams = PasswordLoginParams.userIdentifier(params.userId, params.password, params.deviceName)
 
         val credentials = try {
-            executeRequest<Credentials>(null) {
+            executeRequest<Extended<Credentials>>(null) {
                 apiCall = authAPI.login(loginParams)
             }
         } catch (throwable: Throwable) {
@@ -75,7 +76,7 @@ internal class DefaultDirectLoginTask @Inject constructor(
             }
         }
 
-        return sessionCreator.createSession(credentials, params.homeServerConnectionConfig)
+        return sessionCreator.createSession(credentials.wrapped, params.homeServerConnectionConfig)
     }
 
     private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
