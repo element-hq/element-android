@@ -155,6 +155,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             synchronized(modelCache) {
                 assertUpdateCallbacksAllowed()
                 (position until (position + count)).forEach {
+                    // Invalidate cache
                     modelCache[it] = null
                 }
                 requestModelBuild()
@@ -173,7 +174,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         override fun onInserted(position: Int, count: Int) {
             synchronized(modelCache) {
                 assertUpdateCallbacksAllowed()
-                (0 until count).forEach {
+                repeat(count) {
                     modelCache.add(position, null)
                 }
                 requestModelBuild()
@@ -183,7 +184,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         override fun onRemoved(position: Int, count: Int) {
             synchronized(modelCache) {
                 assertUpdateCallbacksAllowed()
-                (0 until count).forEach {
+                repeat(count) {
                     modelCache.removeAt(position)
                 }
                 requestModelBuild()
