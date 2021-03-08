@@ -24,18 +24,18 @@ import okio.source
 import java.io.File
 
 @JsonClass(generateAdapter = false)
-internal sealed class LazyRoomSync {
-    data class Parsed(val _roomSync: RoomSync) : LazyRoomSync()
-    data class Stored(val roomSyncAdapter: JsonAdapter<RoomSync>, val file: File) : LazyRoomSync()
+internal sealed class LazyRoomSyncEphemeral {
+    data class Parsed(val _roomSyncEphemeral: RoomSyncEphemeral) : LazyRoomSyncEphemeral()
+    data class Stored(val roomSyncEphemeralAdapter: JsonAdapter<RoomSyncEphemeral>, val file: File) : LazyRoomSyncEphemeral()
 
-    val roomSync: RoomSync
+    val roomSyncEphemeral: RoomSyncEphemeral
         get() {
             return when (this) {
-                is Parsed -> _roomSync
+                is Parsed -> _roomSyncEphemeral
                 is Stored -> {
                     // Parse the file now
                     file.inputStream().use { pos ->
-                        roomSyncAdapter.fromJson(JsonReader.of(pos.source().buffer()))!!
+                        roomSyncEphemeralAdapter.fromJson(JsonReader.of(pos.source().buffer()))!!
                     }
                 }
             }

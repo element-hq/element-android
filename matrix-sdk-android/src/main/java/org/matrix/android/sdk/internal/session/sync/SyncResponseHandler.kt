@@ -25,10 +25,10 @@ import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
-import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
-import org.matrix.android.sdk.internal.session.notification.ProcessEventForPushTask
+import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
+import org.matrix.android.sdk.internal.session.notification.ProcessEventForPushTask
 import org.matrix.android.sdk.internal.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
@@ -126,6 +126,15 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
 
         Timber.v("On sync completed")
         cryptoSyncHandler.onSyncCompleted(syncResponse)
+    }
+
+    suspend fun handleInitSyncSecondTransaction(syncResponse: SyncResponse) {
+        // Start another transaction to handle the ephemeral events
+        monarchy.awaitTransaction { realm ->
+            if (syncResponse.rooms != null) {
+                roomSyncHandler.handleInitSyncEphemeral(realm, syncResponse.rooms)
+            }
+        }
     }
 
     /**
