@@ -264,35 +264,17 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                     .setLegacyMode(false)
                     .setInterval(AdvertisingSetParameters.INTERVAL_HIGH)
                     .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_MAX)
+                    .setIncludeTxPower(true)
+                    .setConnectable(true)
 
             if (manager.adapter.isLeCodedPhySupported) {
-                parameters.setPrimaryPhy(BluetoothDevice.PHY_LE_CODED)
-                if (manager.adapter.isLe2MPhySupported) {
-                    parameters.setSecondaryPhy(BluetoothDevice.PHY_LE_2M)
-                    Toast.makeText(applicationContext, "Requesting Coded PHY + 2M PHY", Toast.LENGTH_LONG).show()
-                } else {
-                    parameters.setSecondaryPhy(BluetoothDevice.PHY_LE_1M)
-                    Toast.makeText(applicationContext, "Requesting Coded PHY + 1M PHY", Toast.LENGTH_LONG).show()
-                }
+                parameters.setPrimaryPhy(BluetoothDevice.PHY_LE_1M)
+                parameters.setSecondaryPhy(BluetoothDevice.PHY_LE_CODED)
+                Toast.makeText(applicationContext, "Requesting 1M PHY + Coded PHY", Toast.LENGTH_SHORT).show()
             } else {
-                if (manager.adapter.isLe2MPhySupported) {
-                    parameters.setPrimaryPhy(BluetoothDevice.PHY_LE_2M)
-                    parameters.setSecondaryPhy(BluetoothDevice.PHY_LE_1M)
-                    Toast.makeText(applicationContext, "Requesting 2M PHY + 1M PHY", Toast.LENGTH_LONG).show()
-                } else {
-                    parameters.setPrimaryPhy(BluetoothDevice.PHY_LE_1M)
-                    Toast.makeText(applicationContext, "Requesting 1M PHY only", Toast.LENGTH_LONG).show()
-                }
+                parameters.setPrimaryPhy(BluetoothDevice.PHY_LE_1M)
+                Toast.makeText(applicationContext, "Requesting 1M PHY only", Toast.LENGTH_SHORT).show()
             }
-
-            /*
-            val advertiseSettings = AdvertiseSettings.Builder()
-                    .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
-                    .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
-                    .setTimeout(0)
-                    .setConnectable(true)
-                    .build()
-             */
 
             val advertiseData = AdvertiseData.Builder()
                     .addServiceUuid(serviceUUID)
@@ -458,23 +440,37 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
         }
     }
 
-    /*
     private val advertiseCallback: AdvertiseCallback = object : AdvertiseCallback() {
         override fun onStartFailure(errorCode: Int) {
             super.onStartFailure(errorCode)
-            Toast.makeText(applicationContext, "BLE advertise failed: $errorCode", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "BLE legacy advertise failed: $errorCode", Toast.LENGTH_SHORT).show()
         }
 
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
             super.onStartSuccess(settingsInEffect)
+            Toast.makeText(applicationContext, "BLE legacy advertise started", Toast.LENGTH_SHORT).show()
         }
     }
-     */
 
     private val advertiseSetCallback: AdvertisingSetCallback = object : AdvertisingSetCallback() {
         override fun onAdvertisingSetStarted(advertisingSet: AdvertisingSet?, txPower: Int, status: Int) {
             super.onAdvertisingSetStarted(advertisingSet, txPower, status)
-            Toast.makeText(applicationContext, "BLE advertise set started", Toast.LENGTH_SHORT).show()
+            if (status == AdvertisingSetCallback.ADVERTISE_SUCCESS) {
+                Toast.makeText(applicationContext, "BLE advertise set started", Toast.LENGTH_SHORT).show()
+            } else {
+                val advertiseData = AdvertiseData.Builder()
+                        .addServiceUuid(serviceUUID)
+                        .build()
+
+                val advertiseSettings = AdvertiseSettings.Builder()
+                        .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
+                        .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+                        .setTimeout(0)
+                        .setConnectable(true)
+                        .build()
+
+                advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
+            }
         }
 
         override fun onAdvertisingSetStopped(advertisingSet: AdvertisingSet?) {
