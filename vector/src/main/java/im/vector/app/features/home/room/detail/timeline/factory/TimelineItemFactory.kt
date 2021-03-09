@@ -37,6 +37,9 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val callItemFactory: CallItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {
 
+    /**
+     * Reminder: nextEvent is older and prevEvent is newer.
+     */
     fun create(event: TimelineEvent,
                prevEvent: TimelineEvent?,
                nextEvent: TimelineEvent?,

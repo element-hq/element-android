@@ -31,14 +31,10 @@ import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -79,18 +75,11 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         // SendState Decoration
         val isSentByMe = event.root.senderId == session.myUserId
         val sendStateDecoration = if (isSentByMe) {
-            val isMedia = when (event.root.content?.toModel<MessageContent>()) {
-                is MessageImageContent,
-                is MessageVideoContent,
-                is MessageAudioContent,
-                is MessageFileContent -> true
-                else                  -> false
-            }
             getSendStateDecoration(
                     eventSendState = event.root.sendState,
                     prevEventSendState = prevEvent?.root?.sendState,
                     anyReadReceipts = event.readReceipts.any { it.user.userId != session.myUserId },
-                    isMedia = isMedia
+                    isMedia = event.root.isAttachmentMessage()
             )
         } else {
             SendStateDecoration.NONE
