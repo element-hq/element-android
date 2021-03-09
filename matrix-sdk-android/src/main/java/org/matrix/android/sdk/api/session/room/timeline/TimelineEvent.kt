@@ -38,6 +38,9 @@ import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
  */
 data class TimelineEvent(
         val root: Event,
+        /**
+         * Uniquely identify an event, computed locally by the sdk
+         */
         val localId: Long,
         val eventId: String,
         val displayIndex: Int,

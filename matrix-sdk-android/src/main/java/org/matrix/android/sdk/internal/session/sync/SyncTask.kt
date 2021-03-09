@@ -68,8 +68,10 @@ internal class DefaultSyncTask @Inject constructor(
     private val workingDir = File(fileDirectory, "is")
     private val initialSyncStatusRepository: InitialSyncStatusRepository = FileInitialSyncStatusRepository(workingDir)
 
-    override suspend fun execute(params: SyncTask.Params) = syncTaskSequencer.post {
-        doSync(params)
+    override suspend fun execute(params: SyncTask.Params) {
+        syncTaskSequencer.post {
+            doSync(params)
+        }
     }
 
     private suspend fun doSync(params: SyncTask.Params) {

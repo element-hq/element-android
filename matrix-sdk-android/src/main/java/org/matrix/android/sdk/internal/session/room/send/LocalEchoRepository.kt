@@ -27,7 +27,6 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.asyncTransaction
-import org.matrix.android.sdk.internal.database.helper.nextId
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
@@ -45,6 +44,7 @@ import org.matrix.android.sdk.internal.session.room.timeline.TimelineInput
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
+import java.util.UUID
 import javax.inject.Inject
 
 internal class LocalEchoRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
@@ -64,7 +64,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
             val eventEntity = event.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
             val roomMemberHelper = RoomMemberHelper(realm, roomId)
             val myUser = roomMemberHelper.getLastRoomMember(senderId)
-            val localId = TimelineEventEntity.nextId(realm)
+            val localId = UUID.randomUUID().mostSignificantBits
             TimelineEventEntity(localId).also {
                 it.root = eventEntity
                 it.eventId = event.eventId
