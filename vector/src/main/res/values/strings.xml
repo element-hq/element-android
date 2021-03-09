@@ -497,6 +497,10 @@
         <item quantity="other">%d users</item>
     </plurals>
 
+    <string name="settings_category_room_directory">Room directory</string>
+    <string name="settings_room_directory_show_all_rooms">Show rooms with explicit content</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Show all rooms in the room directory, including rooms with explicit content.</string>
+
     <!-- Groups fragment -->
     <string name="groups_invite_header">Invite</string>
     <string name="groups_header">Communities</string>
