@@ -99,6 +99,19 @@ data class Event(
     var ageLocalTs: Long? = null
 
     /**
+     * Copy all fields, including transient fields
+     */
+    fun copyAll(): Event {
+        return copy().also {
+            it.mxDecryptionResult = mxDecryptionResult
+            it.mCryptoError = mCryptoError
+            it.mCryptoErrorReason = mCryptoErrorReason
+            it.sendState = sendState
+            it.ageLocalTs = ageLocalTs
+        }
+    }
+
+    /**
      * Check if event is a state event.
      * @return true if event is state event.
      */

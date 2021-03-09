@@ -55,10 +55,6 @@ internal class UIEchoManager(
         eventIds.forEach { eventId ->
             inMemorySendingEvents.removeAll { eventId == it.eventId }
         }
-        inMemorySendingStates.keys.removeAll { key ->
-            eventIds.find { it == key } == null
-        }
-
         inMemoryReactions.forEach { (_, uiEchoData) ->
             uiEchoData.removeAll { data ->
                 // I remove the uiEcho, when the related event is not anymore in the sending list
@@ -159,13 +155,14 @@ internal class UIEchoManager(
         )
     }
 
-    fun updateSentStateWithUiEcho(element: TimelineEvent) {
-        inMemorySendingStates[element.eventId]?.let {
-            // Timber.v("## ${System.currentTimeMillis()} Send event refresh echo with live state ${it} from state ${element.root.sendState}")
-            if(element.root.sendState != SendState.SENT) {
-                element.root.sendState = it
-            }
-        }
+    fun updateSentStateWithUiEcho(timelineEvent: TimelineEvent): TimelineEvent {
+        if (timelineEvent.root.sendState.isSent()) return timelineEvent
+        val inMemoryState = inMemorySendingStates[timelineEvent.eventId] ?: return timelineEvent
+        // Timber.v("## ${System.currentTimeMillis()} Send event refresh echo with live state $inMemoryState from state ${element.root.sendState}")
+        return timelineEvent.copy(
+                root = timelineEvent.root.copyAll()
+                        .also { it.sendState = inMemoryState }
+        )
     }
 
     fun onSyncedEvent(transactionId: String?) {
@@ -177,5 +174,6 @@ internal class UIEchoManager(
         inMemoryReactions.forEach { (_, u) ->
             u.filterNot { it.localEchoId == transactionId }
         }
+        inMemorySendingStates.remove(transactionId)
     }
 }

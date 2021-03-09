@@ -418,25 +418,27 @@ internal class DefaultTimeline(
     }
 
     private fun buildSendingEvents(): List<TimelineEvent> {
-        val builtSendingEvents = ArrayList<TimelineEvent>()
+        val builtSendingEvents = mutableListOf<TimelineEvent>()
         if (hasReachedEnd(Timeline.Direction.FORWARDS) && !hasMoreInCache(Timeline.Direction.FORWARDS)) {
-            builtSendingEvents.addAll(
-                    uiEchoManager.getInMemorySendingEvents()
-                            .filterEventsWithSettings(settings)
-            )
-
+            uiEchoManager.getInMemorySendingEvents()
+                    .filterSendingEventsTo(builtSendingEvents)
             sendingEvents
-                    .map { timelineEventMapper.map(it) }
-                    // Filter out sending event that are not displayable!
-                    .filterEventsWithSettings(settings)
-                    .forEach { timelineEvent ->
-                        if (builtSendingEvents.find { it.eventId == timelineEvent.eventId } == null) {
-                            uiEchoManager.updateSentStateWithUiEcho(timelineEvent)
-                            builtSendingEvents.add(timelineEvent)
-                        }
+                    .filter { timelineEvent ->
+                        builtSendingEvents.none { it.eventId == timelineEvent.eventId }
                     }
+                    .map { timelineEventMapper.map(it) }
+                    .filterSendingEventsTo(builtSendingEvents)
         }
         return builtSendingEvents
+    }
+
+    private fun List<TimelineEvent>.filterSendingEventsTo(target: MutableList<TimelineEvent>) {
+        target.addAll(
+                // Filter out sending event that are not displayable!
+                filterEventsWithSettings(settings)
+                        // Get most up to date send state (in memory)
+                        .map { uiEchoManager.updateSentStateWithUiEcho(it) }
+        )
     }
 
     private fun canPaginate(direction: Timeline.Direction): Boolean {
