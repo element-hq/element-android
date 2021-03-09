@@ -134,7 +134,7 @@
 
     </FrameLayout>
 
-    <ImageView
+    <im.vector.app.core.ui.views.SendStateImageView
         android:id="@+id/messageSendStateImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

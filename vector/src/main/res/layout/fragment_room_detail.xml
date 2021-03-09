@@ -86,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="top"
-        app:constraint_referenced_ids="composerLayout,notificationAreaView, failedMessagesWarningView" />
+        app:constraint_referenced_ids="composerLayout,notificationAreaView,failedMessagesWarningView" />
 
     <im.vector.app.features.sync.widget.SyncStateView
         android:id="@+id/syncStateView"

@@ -79,21 +79,21 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
         // SendState Decoration
         val isSentByMe = event.root.senderId == session.myUserId
-        val isLocalEcho = LocalEcho.isLocalEchoId(event.eventId)
         val sendStateDecoration = if (isSentByMe) {
             val isMedia = when (event.root.content?.toModel<MessageContent>()) {
                 is MessageImageContent,
                 is MessageVideoContent,
                 is MessageAudioContent,
-                is MessageFileContent   -> true
-                else                    -> false
+                is MessageFileContent -> true
+                else                  -> false
             }
             getSendStateDecoration(
                     eventSendState = event.root.sendState,
                     prevEventSendState = prevEvent?.root?.sendState,
                     anyReadReceipts = event.readReceipts.any { it.user.userId != session.myUserId },
                     isMedia = isMedia,
-                    isLocalEcho = isLocalEcho)
+                    isLocalEcho = LocalEcho.isLocalEchoId(event.eventId)
+            )
         } else {
             SendStateDecoration.NONE
         }
