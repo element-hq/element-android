@@ -31,7 +31,6 @@ import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
@@ -91,8 +90,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                     eventSendState = event.root.sendState,
                     prevEventSendState = prevEvent?.root?.sendState,
                     anyReadReceipts = event.readReceipts.any { it.user.userId != session.myUserId },
-                    isMedia = isMedia,
-                    isLocalEcho = LocalEcho.isLocalEchoId(event.eventId)
+                    isMedia = isMedia
             )
         } else {
             SendStateDecoration.NONE
@@ -144,14 +142,11 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         )
     }
 
-    private fun getSendStateDecoration(
-            eventSendState: SendState,
-            prevEventSendState: SendState?,
-            anyReadReceipts: Boolean,
-            isMedia: Boolean,
-            isLocalEcho: Boolean
-    ): SendStateDecoration {
-        return if (eventSendState.isSending() || (eventSendState.isSent() && isLocalEcho)) {
+    private fun getSendStateDecoration(eventSendState: SendState,
+                                       prevEventSendState: SendState?,
+                                       anyReadReceipts: Boolean,
+                                       isMedia: Boolean): SendStateDecoration {
+        return if (eventSendState.isSending()) {
             if (isMedia) SendStateDecoration.SENDING_MEDIA else SendStateDecoration.SENDING_NON_MEDIA
         } else if (eventSendState.hasFailed()) {
             SendStateDecoration.FAILED
