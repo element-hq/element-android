@@ -24,7 +24,6 @@ import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import im.vector.app.R
 import org.json.JSONObject
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.vectorComponent
@@ -112,10 +111,7 @@ val upHandler = object: MessagingReceiverHandler {
         Timber.i("onNewEndpoint: adding $endpoint")
         UPHelper.storeUpEndpoint(context, endpoint)
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
-            /**
-             * TODO: choose gateway
-             */
-            val gateway = context.getString(R.string.default_push_gateway_http_url)
+            val gateway = UPHelper.customOrDefaultGateway(context, endpoint)
             UPHelper.storePushGateway(context, gateway)
             UPHelper.storeUpEndpoint(context, endpoint)
             pusherManager.registerPusher(endpoint, gateway)

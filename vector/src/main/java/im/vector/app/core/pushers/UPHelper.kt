@@ -17,11 +17,12 @@ package im.vector.app.core.pushers
 
 import android.app.AlertDialog
 import android.content.Context
-import android.widget.TextView
 import androidx.core.content.edit
+import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import org.unifiedpush.android.connector.Registration
 import timber.log.Timber
+import java.net.URI
 
 /**
  * This class store the UnifiedPush Endpoint in SharedPrefs and ensure this token is retrieved.
@@ -121,5 +122,19 @@ object UPHelper {
         val up = Registration()
         up.safeRemoveDistributor(context)
         registerUnifiedPush(context)
+    }
+
+    fun customOrDefaultGateway(context: Context, endpoint: String?): String {
+        val default = context.getString(R.string.default_push_gateway_http_url)
+        endpoint?.let {
+            val uri = URI(it)
+            val custom = "${it.split(uri.rawPath)[0]}/_matrix/push/v1/notify"
+            Timber.i("Testing $custom")
+            /**
+             * if GET custom returns """{"gateway":"matrix"}"""
+             * return custom
+             */
+        }
+        return default
     }
 }
