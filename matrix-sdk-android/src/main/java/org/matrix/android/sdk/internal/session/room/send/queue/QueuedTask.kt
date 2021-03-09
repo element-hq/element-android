@@ -29,7 +29,7 @@ internal abstract class QueuedTask(
         val taskIdentifier: String
 ) : Cancelable {
 
-    override fun toString() = "${javaClass.simpleName} queueIdentifier: $queueIdentifier, taskIdentifier:  ${taskIdentifier})"
+    override fun toString() = "${javaClass.simpleName} queueIdentifier: $queueIdentifier, taskIdentifier:  $taskIdentifier)"
 
     var retryCount = AtomicInteger(0)
 

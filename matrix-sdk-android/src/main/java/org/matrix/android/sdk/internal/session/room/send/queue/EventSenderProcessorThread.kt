@@ -33,9 +33,6 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import timber.log.Timber
 import java.io.IOException
-import java.net.InetAddress
-import java.net.InetSocketAddress
-import java.net.Socket
 import java.util.Timer
 import java.util.TimerTask
 import java.util.concurrent.LinkedBlockingQueue
@@ -73,7 +70,6 @@ internal class EventSenderProcessorThread @Inject constructor(
     override fun onSessionStopped() {
         interrupt()
     }
-
 
     override fun start() {
         super.start()
@@ -234,5 +230,4 @@ internal class EventSenderProcessorThread @Inject constructor(
         }
         synchronized(networkAvailableLock) { networkAvailableLock.wait() }
     }
-
 }

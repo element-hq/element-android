@@ -54,8 +54,7 @@ internal class QueueMemento @Inject constructor(context: Context,
         persist()
     }
 
-    fun trackedTasks() = synchronized(trackedTasks){
-
+    fun trackedTasks() = synchronized(trackedTasks) {
     }
 
     private fun persist() {

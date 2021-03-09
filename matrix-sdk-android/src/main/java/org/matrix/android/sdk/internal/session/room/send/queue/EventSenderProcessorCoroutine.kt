@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.toCancelable
 import timber.log.Timber
 import java.io.IOException
-import java.util.Queue
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
@@ -57,7 +56,7 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
         private val sessionParams: SessionParams,
         private val queuedTaskFactory: QueuedTaskFactory,
         private val taskExecutor: TaskExecutor,
-        private val memento: QueueMemento,
+        private val memento: QueueMemento
 ) : EventSenderProcessor {
 
     private val waitForNetworkSequencer = SemaphoreCoroutineSequencer()
@@ -165,7 +164,7 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
         markAsFinished(task)
     }
 
-    private suspend fun QueuedTask.markAsFailedOrRetry(failure: Throwable, retryDelay: Long){
+    private suspend fun QueuedTask.markAsFailedOrRetry(failure: Throwable, retryDelay: Long) {
         if (retryCount.incrementAndGet() >= MAX_RETRY_COUNT) {
             onTaskFailed()
         } else {
