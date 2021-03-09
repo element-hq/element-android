@@ -46,6 +46,7 @@ import kotlin.concurrent.schedule
  *
  * If the app is killed before all event were sent, on next wakeup the scheduled events will be re posted
  */
+@Deprecated("You should know use EventSenderProcessorCoroutine instead")
 @SessionScope
 internal class EventSenderProcessorThread @Inject constructor(
         private val cryptoService: CryptoService,

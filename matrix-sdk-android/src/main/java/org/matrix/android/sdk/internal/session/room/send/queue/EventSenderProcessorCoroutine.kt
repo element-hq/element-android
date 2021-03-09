@@ -118,7 +118,7 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
                     executeTask(task)
                 }.toCancelable()
                 .also {
-                    cancelableBag[task.taskIdentifier]
+                    cancelableBag[task.taskIdentifier] = it
                 }
     }
 
