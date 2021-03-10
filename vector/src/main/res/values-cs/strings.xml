@@ -1,7 +1,279 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">Uživatel %1$s poslal obrázek.</string>
+    <string name="summary_user_sent_sticker">Uživatel %1$s poslal nálepku.</string>
+    <string name="notice_room_invite_no_invitee">Pozvání od uživatele %s</string>
+    <string name="notice_room_invite">Uživatel %1$s pozval uživatele %2$s</string>
+    <string name="notice_room_invite_you">Uživatel %1$s vás pozval</string>
+    <string name="notice_room_join">%1$s vstoupil do místnosti</string>
+    <string name="notice_room_leave">Uživatel %1$s odešel</string>
+    <string name="notice_room_reject">%1$s odmítli pozvání</string>
+    <string name="notice_room_kick">%1$s vykopli %2$s</string>
+    <string name="notice_room_unban">%1$s zrušil vykázání %2$s</string>
+    <string name="notice_room_ban">%1$s vykázali %2$s</string>
+    <string name="notice_room_withdraw">%1$s zrušili pozvání pro %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s změnili svůj profilový obrázek</string>
+    <string name="notice_display_name_set">%1$s nastavili své veřejné jméno na %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s změnili své veřejné jméno z %2$s na %3$s</string>
+    <string name="notice_display_name_removed">%1$s odstranili své veřejné jméno (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s změnili téma na: %2$s</string>
+    <string name="notice_room_name_changed">%1$s změnili název místnosti na: %2$s</string>
+    <string name="notice_placed_video_call">%s uskutečnili videohovor.</string>
+    <string name="notice_placed_voice_call">%s uskutečnili hlasový hovor.</string>
+    <string name="notice_answered_call">%s přijali hovor.</string>
+    <string name="notice_ended_call">%s ukončili hovor.</string>
+    <string name="notice_made_future_room_visibility">%1$s nastavili viditelnost budoucí historie místnosti pro %2$s</string>
+    <string name="notice_room_visibility_invited">všechny členy místnosti od chvíle, kdy budou pozváni.</string>
+    <string name="notice_room_visibility_joined">všechny členy místnosti od chvíle, kdy se připojí.</string>
+    <string name="notice_room_visibility_shared">všechny členy místnosti.</string>
+    <string name="notice_room_visibility_world_readable">kohokoliv.</string>
+    <string name="notice_room_visibility_unknown">neznámým (%s).</string>
+    <string name="notice_end_to_end">%1$s zapnuli end-to-end šifrování (%2$s)</string>
+    <string name="notice_requested_voip_conference">%1$s požádali o VoIP konferenci</string>
+    <string name="notice_voip_started">Začala VoIP konference</string>
+    <string name="notice_voip_finished">VoIP konference skončila</string>
+    <string name="notice_avatar_changed_too">(profilový obrázek byl také změněn)</string>
+    <string name="notice_room_name_removed">%1$s odstranili název místnosti</string>
+    <string name="notice_room_topic_removed">%1$s odstranili téma místnosti</string>
+    <string name="notice_profile_change_redacted">%1$s aktualizovali svůj profil %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s do této místnosti pozvali %2$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s přijali pozvání pro %2$s</string>
+    <string name="notice_crypto_unable_to_decrypt">** Nelze dešifrovat: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Odesílatelovo zařízení nám neposlalo klíče pro tuto zprávu.</string>
+    <string name="could_not_redact">Nelze vymazat</string>
+    <string name="unable_to_send_message">Zprávu nelze odeslat</string>
+    <string name="message_failed_to_upload">Obrázek nelze nahrát</string>
+    <string name="network_error">Chyba sítě</string>
+    <string name="matrix_error">Chyba v Matrixu</string>
+    <string name="room_error_join_failed_empty_room">V současnosti není možné znovu vstoupit do prázdné místnosti.</string>
+    <string name="medium_email">E-mailová adresa</string>
+    <string name="medium_phone_number">Telefonní číslo</string>
+    <string name="room_displayname_invite_from">Pozvání od %s</string>
+    <string name="room_displayname_room_invite">Pozvání do místnosti</string>
+    <string name="room_displayname_two_members">%1$s a %2$s</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s a jeden další</item>
+        <item quantity="few">%1$s a %2$d další</item>
+        <item quantity="other">%1$s a %2$d dalších</item>
+    </plurals>
+    <string name="room_displayname_empty_room">Prázdná místnost</string>
+    <string name="notice_room_update">%s povýšili tuto místnost.</string>
+    <string name="notice_event_redacted_with_reason">Zpráva byla smazána [důvod: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Zpráva smazána uživatelem %1$s [důvod: %2$s]</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s zrušili pozvánku do místnosti pro %2$s</string>
+    <string name="initial_sync_start_importing_account">Úvodní synchronizace:
+\nImportuji účet…</string>
+    <string name="initial_sync_start_importing_account_crypto">Úvodní synchronizace:
+\nImportuji klíče</string>
+    <string name="initial_sync_start_importing_account_rooms">Úvodní synchronizace:
+\nImportuji místnosti</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Úvodní synchronizace:
+\nImportuji místností, jichž jste členy</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Úvodní synchronizace:
+\nImportuji místnost, jež jste opustili</string>
+    <string name="initial_sync_start_importing_account_groups">Úvodní synchronizace:
+\nImportuji skupiny</string>
+    <string name="initial_sync_start_importing_account_data">Úvodní synchronizace:
+\nImportuji data účtu</string>
+    <string name="event_status_sending_message">Odesílám zprávu…</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Úvodní synchronizace:
+\nImportuji pozvání</string>
+    <string name="clear_timeline_send_queue">Vymazat frontu neodeslaných zpráv</string>
+    <string name="notice_room_invite_with_reason">%1$s pozvali %2$s. Důvod: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s vás pozvali. Důvod: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s opustil místnost. Důvod: %2$s</string>
+    <string name="notice_event_redacted">Zpráva odstraněna</string>
+    <string name="notice_event_redacted_by">Zprávu odstranil/a %1$s</string>
+    <string name="summary_you_sent_image">Poslali jste obrázek.</string>
+    <string name="summary_you_sent_sticker">Poslali jste nálepku.</string>
+    <string name="notice_room_invite_no_invitee_by_you">Vaše pozvání</string>
+    <string name="notice_room_created">%1$s založil místnost</string>
+    <string name="notice_room_created_by_you">Založili jste místnost</string>
+    <string name="notice_room_invite_by_you">Pozvali jste %1$s</string>
+    <string name="notice_room_join_by_you">Vstoupili jste do místnosti</string>
+    <string name="notice_room_leave_by_you">Opustili jste místnost</string>
+    <string name="notice_room_reject_by_you">Odmítli jste pozvání</string>
+    <string name="notice_room_kick_by_you">Vykopli jste %1$s</string>
+    <string name="notice_room_unban_by_you">Zrušili jste vykázání pro %1$s</string>
+    <string name="notice_room_ban_by_you">Vykázali jste %1$s</string>
+    <string name="notice_room_withdraw_by_you">Stáhli jste pozvánku od %1$s zpět</string>
+    <string name="notice_avatar_url_changed_by_you">Změnili jste svůj profilový obrázek</string>
+    <string name="notice_display_name_set_by_you">Změnili jste své veřejné jméno na %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">Změnili jste své veřejné jméno z %1$s na %2$s</string>
+    <string name="notice_display_name_removed_by_you">Odstranili jste své veřejné jméno (%1$s)</string>
+    <string name="notice_room_topic_changed_by_you">Změnili jste téma na: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s změnili obrázek místnosti</string>
+    <string name="notice_room_avatar_changed_by_you">Změnili jste obrázek místnosti</string>
+    <string name="notice_room_name_changed_by_you">Změnili jste jméno místnosti na: %1$s</string>
+    <string name="notice_placed_video_call_by_you">Zahájili jste video hovor.</string>
+    <string name="notice_placed_voice_call_by_you">Zahájili jste hlasový hovor.</string>
+    <string name="notice_call_candidates">%s poslali data, aby mohli zahájit hovor.</string>
+    <string name="notice_call_candidates_by_you">Poslali jste data, abyste mohli zahájit hovor.</string>
+    <string name="notice_answered_call_by_you">Přijali jste hovor.</string>
+    <string name="notice_ended_call_by_you">Ukončili jste hovor.</string>
+    <string name="notice_made_future_room_visibility_by_you">Učinili jste budoucí historii místnosti viditelnou pro %1$s</string>
+    <string name="notice_end_to_end_by_you">Zapnuli jste end-to-end šifrování (%1$s)</string>
+    <string name="notice_room_update_by_you">Povýšili jste tuto místnost.</string>
+    <string name="notice_requested_voip_conference_by_you">Požádali jste o VoIP konferenci</string>
+    <string name="notice_room_name_removed_by_you">Odstranili jste jméno místnosti</string>
+    <string name="notice_room_topic_removed_by_you">Odstranili jste téma místnosti</string>
+    <string name="notice_room_avatar_removed">%1$s odstranili obrázek místnosti</string>
+    <string name="notice_room_avatar_removed_by_you">Odstranili jste obrázek místnosti</string>
+    <string name="notice_profile_change_redacted_by_you">Aktualizovali jste svů profil %1$s</string>
+    <string name="notice_room_third_party_invite_by_you">Poslali jste %1$s pozvání ke vstupu do místnosti</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Zrušili jste pozvánku ke vstupu do místnosti pro %1$s</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Přijali jste pozvání pro %1$s</string>
+    <string name="notice_widget_added">%1$s přidali widget %2$s</string>
+    <string name="notice_widget_added_by_you">Přidali jste widget %1$s</string>
+    <string name="notice_widget_removed">%1$s odstranili widget %2$s</string>
+    <string name="notice_widget_removed_by_you">Odstranili jste widget %1$s</string>
+    <string name="notice_widget_modified">%1$s změnil widget %2$s</string>
+    <string name="notice_widget_modified_by_you">Změnili jste widget %1$s</string>
+    <string name="power_level_admin">Správce</string>
+    <string name="power_level_moderator">Moderátor</string>
+    <string name="power_level_default">Výchozí</string>
+    <string name="power_level_custom">Vlastní (%1$d)</string>
+    <string name="power_level_custom_no_value">Vlastní</string>
+    <string name="notice_power_level_changed_by_you">Změnili jste %1$s stupeň oprávnění.</string>
+    <string name="notice_power_level_changed">%1$s změnili %2$s stupeň oprávnění.</string>
+    <string name="notice_power_level_diff">%1$s z %2$s na %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Pozvání od %1$s. Důvod: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Vaše pozvání. Důvod: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Pozvali jste %1$s. Důvod: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s vstoupili do místnosti. Důvod: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Vstoupili jste do místnosti. Důvod: %1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Opustili jste místnost. Důvod: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s pozvání odmítli. Důvod: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Odmítli jste pozvání. Důvod: %1$s</string>
+    <string name="notice_room_kick_with_reason">%1$s vykopnuli %2$s. Důvod: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Vykopnuli jste %1$s. Důvod: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s zrušili %2$s vykázání. Důvod: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Zrušili jste %1$s vykázání. Důvod: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s vykázali %2$s. Důvod: %3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Vykázali jste %1$s. Důvod: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s poslali %2$s pozvání, aby vstoupili do místnosti. Důvod: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Poslali jste %1$s pozvání, aby vstoupili do místnosti. Důvod: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s zrušili pozvání do místnosti pro %2$s. Důvod: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Zrušili jste pozvání do místnosti pro %1$s. Důvod: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s přijali pozvání pro %2$s. Důvod: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Přijali jste pozvání pro %1$s. Důvod: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s zrušili pozvání pro %2$s. Důvod: %3$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">Zrušili jste pozvání od %1$s. Důvod: %2$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s přidali %2$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">%1$s přidali %2$s jako adresy pro tuto místnost.</item>
+        <item quantity="other">%1$s přidali %2$s jako adresy pro tuto místnost.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Přidali jste %1$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">Přidali jste %1$s jako adresy pro tuto místnost.</item>
+        <item quantity="other">Přidali jste %1$s jako adresy pro tuto místnost.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s odstranili %2$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">%1$s odstranili %2$s jako adresy pro tuto místnost.</item>
+        <item quantity="other">%1$s odstranili %2$s jako adresy pro tuto místnost.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Odstranili jste %1$s jako adresu pro tuto místnost.</item>
+        <item quantity="few">Odstranili jste %1$s jako adresuy pro tuto místnost.</item>
+        <item quantity="other">Odstranili jste %1$s jako adresy pro tuto místnost.</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed">%1$s přidali %2$s a odstranili %3$s jako adresy pro tuto místnost.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Přidali jste %1$s a odstranili %2$s jako adresy pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_set">%1$s nastavili hlavní adresu této místnosti na %2$s.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Nastavili jste %1$s na hlavní adresu této místnosti.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s odstranili hlavní adresu této místnosti.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Odstranili jste hlavní adresu této místnosti.</string>
+    <string name="notice_room_guest_access_can_join">%1$s povolili hostům vstoupit do místnosti.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Povolili jste hostům vstoupit do místnosti.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s zamezili hostům vstoupit do místnosti.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Zamezili jste hostům vstoupit do místnosti.</string>
+    <string name="notice_end_to_end_ok">%1$s zapnuli end-to-end šifrování.</string>
+    <string name="notice_end_to_end_ok_by_you">Zapnuli jste end-to-end šifrování.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s zapnuli end-to-end šifrování (neznámý algoritmus %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Zapnuli jste end-to-end šifrování (neznámý algoritmus %1$s).</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Zamezili jste hostům vstoupit do této místnosti.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s zamezil hostům vstoupit do této místnosti.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Povolili jste hostům vstoupit.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s povolil hostům vstoupit.</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Odešli jste. Důvod: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s odešli. Důvod: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Vstoupili jste. Důvod: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s vstoupili. Důvod: %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Zrušili jste pozvání pro %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s zrušili pozvání pro %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Pozvali jste %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s pozvali %2$s</string>
+    <string name="notice_direct_room_update_by_you">Tady jste provedli upgrade.</string>
+    <string name="notice_direct_room_update">%s tady provedli upgrade.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Učinili jste budoucí zprávy viditelné pro %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s učinili budoucí zprávy viditelné pro %2$s</string>
+    <string name="notice_direct_room_leave_by_you">Odešli jste z místnosti</string>
+    <string name="notice_direct_room_leave">%1$s odešli z místnosti</string>
+    <string name="notice_direct_room_join_by_you">Vstoupili jste</string>
+    <string name="notice_direct_room_join">%1$s vstoupili</string>
+    <string name="notice_direct_room_created_by_you">Založili jste diskusi</string>
+    <string name="notice_direct_room_created">%1$s založil diskusi</string>
+    <string name="room_displayname_empty_room_was">Prázdná místnost (byla %s)</string>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s a %4$d další</item>
+        <item quantity="few">%1$s, %2$s, %3$s a %4$d další</item>
+        <item quantity="other">%1$s, %2$s, %3$s a %4$d dalších</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s a %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s a %3$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Účast všech serverů je zakázána! Tuto místnost již nelze použít.</string>
+    <string name="notice_room_server_acl_updated_no_change">Beze změny.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servery shodující se doslovně s IP jsou nyní zakázány.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servery shodující se doslovně s IP jsou nyní povoleny.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Servery shodující se s %s byly odstraněny ze seznamu povolených.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Servery shodující se s %s jsou nyní povoleny.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Servery shodující se s %s byly odstraněny ze seznamu zakázaných.</string>
+    <string name="notice_room_server_acl_updated_banned">• Servery shodující se s %s jsou nyní zakázány.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Změnili jste ACL serveru pro tuto místnost.</string>
+    <string name="notice_room_server_acl_updated_title">%s změnili ACL serveru pro tuto místnost.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Server shodující se doslovně s IP je povolen.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Server shodující se doslovně s IP je zakázán.</string>
+    <string name="notice_room_server_acl_set_allowed">• Server shodující se s %s je povolen.</string>
+    <string name="notice_room_server_acl_set_banned">• Server shodující se s %s je zakázán.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Nastavili jste ACL serveru pro tuto místnost.</string>
+    <string name="notice_room_server_acl_set_title">%s nastavili ACL serveru pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Změnili jste adresy pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s změnili adresy pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Změnili jste hlavní a alternativní adresu pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s změnili hlavní a alternativní adresu pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Změnili jste alternativní adresu pro tuto místnost.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s změnili alternativní adresu pro tuto místnost.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Odstranili jste alternativní adresu %1$s pro tuto místnost.</item>
+        <item quantity="few">Odstranili jste alternativní adresy %1$s pro tuto místnost.</item>
+        <item quantity="other">Odstranili jste alternativní adresy %1$s pro tuto místnost.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s odstranili alternativní adresu %2$s pro tuto místnost.</item>
+        <item quantity="few">%1$s odstranili alternativní adresy %2$s pro tuto místnost.</item>
+        <item quantity="other">%1$s odstranili alternativní adresy %2$s pro tuto místnost.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Přidali jste alternativní adresu %1$s pro tuto místnost.</item>
+        <item quantity="few">Přidali jste alternativní adresy %1$s pro tuto místnost.</item>
+        <item quantity="other">Přidali jste alternativní adresy %1$s pro tuto místnost.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s přidali alternativní adresu %2$s pro tuto místnost.</item>
+        <item quantity="few">%1$s přidali alternativní adresy %2$s pro tuto místnost.</item>
+        <item quantity="other">%1$s přidali alternativní adresy %2$s pro tuto místnost.</item>
+    </plurals>
+    <string name="notice_widget_jitsi_modified_by_you">Upravili jste videokonferenci</string>
+    <string name="notice_widget_jitsi_modified">Videokonference byla upravena uživatelem %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">Ukončili jste videokonferenci</string>
+    <string name="notice_widget_jitsi_removed">Videokonference byla ukončena uživatelem %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">Zahájili jste videokonferenci</string>
+    <string name="notice_widget_jitsi_added">Videokonference byla zahájena uživatelem %1$s</string>
     <string name="light_theme">Světlý vzhled</string>
-    <string name="black_them">Černý vzhled</string>
+    <string name="black_theme">Černý vzhled</string>
     <string name="dark_theme">Tmavý vzhled</string>
     <string name="title_activity_home">Zprávy</string>
     <string name="title_activity_room">Místnost</string>
@@ -41,10 +313,10 @@
 \nPřipojit se jako %1$s nebo %2$s</string>
     <string name="ongoing_conference_call_voice">Hlasem</string>
     <string name="ongoing_conference_call_video">Videem</string>
-    <string name="cannot_start_call">Nemohu spustit hovor, zkuste, prosím, později</string>
+    <string name="cannot_start_call">Nemohu zahájit hovor, zkuste, prosím, později</string>
     <string name="missing_permissions_warning">Z důvodu chybějících práv mohou některé funkce chybět…</string>
     <string name="missing_permissions_to_start_conf_call">Potřebujete práva k pozvání pro spuštění konference v této místnosti</string>
-    <string name="missing_permissions_title_to_start_conf_call">Nemohu spustit hovor</string>
+    <string name="missing_permissions_title_to_start_conf_call">Nemohu zahájit hovor</string>
     <string name="device_information">Informace o relaci</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Konferenční hovory nejsou podporovány v šifrovaných místnostech</string>
     <string name="send_anyway">Přesto poslat</string>
@@ -80,7 +352,7 @@
     <string name="user_directory_header">Uživatelský adresář</string>
     <string name="matrix_only_filter">Pouze kontakty Matrix</string>
     <string name="no_conversation_placeholder">Žádné konverzace</string>
-    <string name="no_contact_access_placeholder">Nepovolil jste aplikaci Element přístup k místním kontaktům</string>
+    <string name="template_no_contact_access_placeholder">Nepovolil jste aplikaci ${app_name} přístup k místním kontaktům</string>
     <string name="no_result_placeholder">Žádné výsledky</string>
     <string name="rooms_header">Místnosti</string>
     <string name="rooms_directory_header">Adresář místností</string>
@@ -177,7 +449,6 @@
     <string name="login_error_bad_json">Poškozený JSON</string>
     <string name="login_error_limit_exceeded">Bylo odesláno příliš mnoho požadavků</string>
     <string name="login_error_user_in_use">Toto uživatelské jméno je již použito</string>
-    <string name="status_theme">Motiv vzhledu Status.im</string>
     <string name="title_activity_choose_sticker">Odeslat nálepku</string>
     <string name="dialog_title_third_party_licences">Licenční smlouvy třetích stran</string>
     <string name="download">Stáhnout</string>
@@ -230,7 +501,7 @@
     <string name="room_info_room_name">Název místnosti</string>
     <string name="room_info_room_topic">Téma místnosti</string>
     <string name="settings_call_category">Hovory</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Použít původní vyzvánění Elementu pro příchozí hovory</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Použít původní vyzvánění ${app_name}u pro příchozí hovory</string>
     <string name="settings_call_ringtone_title">Vyzvánění příchozího hovoru</string>
     <string name="settings_call_ringtone_dialog_title">Vybrat vyzvánění pro hovory:</string>
     <string name="call">Hovor</string>
@@ -249,14 +520,14 @@
     <string name="media_picker_both_capture_title">Pořídit fotografii nebo video</string>
     <string name="media_picker_cannot_record_video">Nemohu natáčet video</string>
     <string name="permissions_rationale_popup_title">Informace</string>
-    <string name="permissions_rationale_msg_storage">Element potřebuje oprávnění pro přístup do Vaší knihovny fotografií a videí, aby mohl odesílat a ukládat přílohy.
+    <string name="template_permissions_rationale_msg_storage">${app_name} potřebuje oprávnění pro přístup do Vaší knihovny fotografií a videí, aby mohl odesílat a ukládat přílohy.
 \n
 \nProsím, povolte přístup na následující hlášce pro možnost odesílání souborů z Vašeho telefonu.</string>
-    <string name="permissions_rationale_msg_camera">Element potřebuje oprávnění pro přístup k Vašemu fotoaparátu pro pořizování fotografií a uskutečňování video hovorů.</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} potřebuje oprávnění pro přístup k Vašemu fotoaparátu pro pořizování fotografií a uskutečňování video hovorů.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nProsím, povolte přístup na následující hlášce, abyste mohli uskutečnit hovor."</string>
-    <string name="permissions_rationale_msg_record_audio">Element potřebuje oprávnění pro přístup k Vašemu mikrofonu pro uskutečnění hlasových hovorů.</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} potřebuje oprávnění pro přístup k Vašemu mikrofonu pro uskutečnění hlasových hovorů.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nProsím, povolte přístup na následující hlášce, abyste mohli uskutečnit hovor."</string>
@@ -270,7 +541,7 @@
     <string name="preview">Náhled</string>
     <string name="room_preview_invitation_format">Byli jste pozváni od %s ke vstupu do místnosti</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Žádost odeslána</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Prosím, spusťte Element na jiném zařízení, které může dešifrovat zprávu, aby poslalo klíče této relaci.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Prosím, spusťte ${app_name} na jiném zařízení, které může dešifrovat zprávu, aby poslalo klíče této relaci.</string>
     <string name="read_receipts_list">Seznam doručenek</string>
     <string name="groups_list">Seznam skupin</string>
     <string name="permissions_action_not_performed_missing_permissions">Omlouváme se, ale akce nebyla provedena z důvodu chybějících oprávnění</string>
@@ -407,11 +678,11 @@
     <string name="abort">Zrušit</string>
     <string name="action_sign_out_confirmation_simple">Opravdu se chcete odhlásit\?</string>
     <string name="video_call_in_progress">Video hovor probíhá…</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element potřebuje oprávnění pro přístup k Vaší kameře a mikrofonu pro uskutečnění video hovoru.
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} potřebuje oprávnění pro přístup k Vaší kameře a mikrofonu pro uskutečnění video hovoru.
 \n
 \nProsím, povolte přístup na následující hlášce abyste mohli uskutečnit hovor.</string>
-    <string name="permissions_rationale_msg_contacts">Element může nahlédnout do vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich e-mailu a telefonního čísla. Pokud souhlasíte se sdílením svého adresáře za tímto účelem, prosím, povolte přístup v příští hlášce.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element může nahlédnout do vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich e-mailu a telefonního čísla.
+    <string name="template_permissions_rationale_msg_contacts">${app_name} může nahlédnout do vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich e-mailu a telefonního čísla. Pokud souhlasíte se sdílením svého adresáře za tímto účelem, prosím, povolte přístup v příští hlášce.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} může nahlédnout do vašeho adresáře, aby nalezl ostatní uživatele Matrixu na základě jejich e-mailu a telefonního čísla.
 \n 
 \nSouhlasíte se sdílením svého adresáře za tímto účelem\?</string>
     <string name="room_preview_unlinked_email_warning">Pozvánka byla odeslána na %s, což není spárováno s tímto účtem. 
@@ -491,7 +762,7 @@
     <string name="settings_add_phone_number">Přidat telefonní číslo</string>
     <string name="settings_app_info_link_title">Informace o aplikaci</string>
     <string name="settings_app_info_link_summary">Zobrazit informace o aplikaci v systémovém nastavení.</string>
-    <string name="settings_notification_advanced">Rozšířená nestavení oznámení</string>
+    <string name="settings_notification_advanced">Rozšířená nastavení oznámení</string>
     <string name="settings_notification_by_event">Důležitost oznámení na základě události</string>
     <string name="notification_sync_init">Spouštím služby</string>
     <string name="title_activity_verify_device">Ověřit relaci</string>
@@ -522,7 +793,7 @@
     <string name="settings_call_ringtone_use_default_stun_sum">Použiiji %s jako nápomoc, pokud Váš homeserver žádnou nenabízí (Vaše IP adresa bude sdělena během hovoru)</string>
     <string name="invite_no_identity_server_error">Pro provedení této akce přidat server identit v nastavení.</string>
     <string name="settings_add_3pid_confirm_password_title">Potvrďte své heslo</string>
-    <string name="settings_add_3pid_flow_not_supported">Nelze provést z Element mobile</string>
+    <string name="template_settings_add_3pid_flow_not_supported">Nelze provést z ${app_name} mobile</string>
     <string name="settings_add_3pid_authentication_needed">Ověření je nutné</string>
     <string name="settings_notification_privacy">Soukromí oznámení</string>
     <string name="settings_notification_troubleshoot">Odstraňování problémů s oznámeními</string>
@@ -544,8 +815,8 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Zapnout</string>
     <string name="settings_troubleshoot_test_device_settings_title">Nastavení relací.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Pro tuto relaci jsou oznámení zapnuta.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Oznámení nejsou zapnuta pro tuto relaci. 
-\nProsím, prověřte nastavení Elementu.</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Oznámení nejsou zapnuta pro tuto relaci.
+\nProsím, prověřte nastavení ${app_name}u.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Zapnout</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Vlastní nastavení.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Všimněte si, že některé typy zpráv jsou ztišeny (vyvolají oznámeni bez zvuku).</string>
@@ -554,7 +825,7 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Kontrola nastavení</string>
     <string name="settings_troubleshoot_test_play_services_title">Kontrola služeb Play</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK je k dispozici a aktuální.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element používá Google Play Services pro doručení zpráv push, ale patrně nejsou správně nastaveny:
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} používá Google Play Services pro doručení zpráv push, ale patrně nejsou správně nastaveny:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Opravit Play Services</string>
     <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
@@ -562,12 +833,12 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Načtení FCM tokenu selhalo:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nTato chyba je mimo kontrolu Elementu a podle Googlu indikuje, že zařízení má příliš mnoho aplikací registrovaných s FCM. Tato chyba se ukáže jen v případech extrémního množství aplikací, a proto by neměla mít vliv na normálního uživatele.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nTato chyba je mimo kontrolu Elementu. Múže k ní dojít z několika důvodů. Snad bude fungovat, když zkusíte znovu později, můžete též zkontrolovat, zda Google Play Service nejsou omezeny v množství dat v systémových nastavení nebo zda hodiny zařízení jdou správné nebo k chybě může dojít na zvláštní ROM.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nTato chyba je mimo kontrolu Elementu. V telefonu není žádný účet Google. Prosím, spusťte správce účtů a doplňte účet Google.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nTato chyba je mimo kontrolu ${app_name}u a podle Googlu indikuje, že zařízení má příliš mnoho aplikací registrovaných s FCM. Tato chyba se ukáže jen v případech extrémního množství aplikací, a proto by neměla mít vliv na normálního uživatele.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nTato chyba je mimo kontrolu ${app_name}u. Múže k ní dojít z několika důvodů. Snad bude fungovat, když zkusíte znovu později, můžete též zkontrolovat, zda Google Play Service nejsou omezeny v množství dat v systémových nastavení nebo zda hodiny zařízení jdou správné nebo k chybě může dojít na zvláštní ROM.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nTato chyba je mimo kontrolu ${app_name}u. V telefonu není žádný účet Google. Prosím, spusťte správce účtů a doplňte účet Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Přidat účet</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registrace tokenu</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM token se podařilo úspěšné registrovat na homeserveru.</string>
@@ -583,17 +854,17 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Restart služby se nezdařil</string>
     <string name="settings_troubleshoot_test_service_boot_title">Spustit při zavádění</string>
     <string name="settings_troubleshoot_test_service_boot_success">Služba se spustí při restartu zařízení.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Služba se nespustí při startu zařízení, neobdržíte oznámení, dokud jednou neotevřete Element.</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">Služba se nespustí při startu zařízení, neobdržíte oznámení, dokud jednou neotevřete ${app_name}.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Zapnout Spustit při zavádění</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Zkontrolovat omezení na pozadí</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Omezení na pozadí jsou pro Element vypnuta. Tento test by měl běžet s mobilními daty (ne WIFI).
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Omezení na pozadí jsou pro ${app_name} vypnuta. Tento test by měl běžet s mobilními daty (ne WIFI).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Omezení na pozadí jsou pro Element zapnuta.
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Omezení na pozadí jsou pro ${app_name} zapnuta.
 \nČinnosti prováděné aplikací budou agresivně omezeny, bude-li v pozadí, a to může mít vliv na oznámení.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Vypnout omezení</string>
     <string name="settings_troubleshoot_test_battery_title">Optimalizace baterie</string>
-    <string name="settings_troubleshoot_test_battery_success">Optimalizace baterie nemá na Element vliv.</string>
+    <string name="template_settings_troubleshoot_test_battery_success">Optimalizace baterie nemá na ${app_name} vliv.</string>
     <string name="settings_troubleshoot_test_battery_failed">Nechá-li uživatel zařízení vytažený ze zásuvky a v klidu po nějakou dobu a s obrazovkou vypnutou, zařízení vstoupí do stavu spánku. Ten zamezí aplikacím přístup k síti a odloží jejich úlohy, synchronizaci a běžná upozornění.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorovat optimalizaci</string>
     <string name="settings_notification_privacy_normal">Normální</string>
@@ -623,11 +894,11 @@
     <string name="settings_background_sync">Synchronizace na pozadí</string>
     <string name="settings_background_fdroid_sync_mode">Režim synchronizace na pozadí</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimalizován pro baterii</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element bude synchronizovat na pozadí způsobem, který šetří omezené zdroje zařízení (baterii).
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} bude synchronizovat na pozadí způsobem, který šetří omezené zdroje zařízení (baterii).
 \nV závislosti na stavu zdrojů zařízení může být sync operačním systémem odložen.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimalizováno pro reálný čas</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element bude synchronizovat na pozadí periodicky v přesný čas (nastavitelné).
-\nTo bude mít vliv na využití rádia a baterie, stálé oznámení o tom, že Element čeká na události, bude zobrazeno.</string>
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} bude synchronizovat na pozadí periodicky v přesný čas (nastavitelné).
+\nTo bude mít vliv na využití rádia a baterie, stálé oznámení o tom, že ${app_name} čeká na události, bude zobrazeno.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Žádný sync na pozadí</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Neobdržíte oznámení o příchozích zprávách, je-li aplikace na pozadí.</string>
     <string name="settings_background_sync_update_error">Aktualizace nastavení se nezdařila.</string>
@@ -688,17 +959,17 @@
     <string name="settings_discovery_category">Odhalení</string>
     <string name="settings_discovery_manage">Správa Vašich nastaveni pro odhalení.</string>
     <string name="startup_notification_privacy_title">Soukromí ohledně oznámení</string>
-    <string name="startup_notification_privacy_message">Element může běžet na pozadí, aby spravoval Vaše oznámení bezpečně a v soukromí. To může mít vliv na baterii.</string>
+    <string name="template_startup_notification_privacy_message">${app_name} může běžet na pozadí, aby spravoval Vaše oznámení bezpečně a v soukromí. To může mít vliv na baterii.</string>
     <string name="startup_notification_privacy_button_grant">Udělit oprávnění</string>
     <string name="startup_notification_privacy_button_other">Vybrat jinou volbu</string>
     <string name="startup_notification_fdroid_battery_optim_title">Spojení na pozadí</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element potřebuje udržovat spojení na pozadí se slabým vlivem, abyste obdrželi spolehlivá oznámení.
-\nNa příští obrazovce budete dotázáni o svolení nechat Element vždy v chodu na pozadí, prosím, souhlaste.</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} potřebuje udržovat spojení na pozadí se slabým vlivem, abyste obdrželi spolehlivá oznámení.
+\nNa příští obrazovce budete dotázáni o svolení nechat ${app_name} vždy v chodu na pozadí, prosím, souhlaste.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Udělit oprávění</string>
     <string name="settings_analytics">Analýza</string>
     <string name="settings_opt_in_of_analytics">Odeslat analytická data</string>
-    <string name="settings_opt_in_of_analytics_summary">Element sbírá anonymní analytická data pro vylepšení aplikace.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Prosím, zapněte analýzu pro vylepšení Elementu.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} sbírá anonymní analytická data pro vylepšení aplikace.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Prosím, zapněte analýzu pro vylepšení ${app_name}u.</string>
     <string name="settings_opt_in_of_analytics_ok">Ano, chci pomoci!</string>
     <string name="settings_data_save_mode">Režim úsporných dat</string>
     <string name="settings_data_save_mode_summary">Režim úsporných data zavádí specifický filtr, takže aktualizace přítomnosti a oznámení o psaní jsou fitrovány.</string>
@@ -1119,7 +1390,7 @@
     <string name="passphrase_passphrase_does_not_match">Přistupová fráze se neshoduje</string>
     <string name="passphrase_empty_error_message">Prosím, zadejte přístupovou frázi</string>
     <string name="passphrase_passphrase_too_weak">Přístupová fráze je příliš slabá</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Prosím, smažte přístupovou frázi, přejete-li si, aby Element generoval klíč pro obnovu.</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">Prosím, smažte přístupovou frázi, přejete-li si, aby ${app_name} generoval klíč pro obnovu.</string>
     <string name="keys_backup_no_session_error">Žádná relace Matrix není dostupná</string>
     <string name="keys_backup_setup_step1_title">Nikdy neztraťte šifrované zprávy</string>
     <string name="keys_backup_setup_step1_description">Zprávy v šifrovaných místnostech jsou zabezpečeny pomocí end-to-end šifrováním. Pouze Vy a adresát(i) máte klíče ke čtení těchto zpráv.
@@ -1211,7 +1482,7 @@
     <string name="keys_backup_info_title_signature">Podpis</string>
     <string name="autodiscover_invalid_response">Neplatná odpověď z hledání homeserverů</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Volby serveru automaticky</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element nalezl vlastní konfiguraci serveru pro doménu Vašeho uživatelského Id \"%1$s\":
+    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} nalezl vlastní konfiguraci serveru pro doménu Vašeho uživatelského Id \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Použít konfiguraci</string>
     <string name="invalid_or_expired_credentials">Byli jste odhlášení kvůli chybným či neplatným ověřovacím údajům.</string>
@@ -1286,7 +1557,7 @@
     <string name="please_wait">Prosím, čekejte…</string>
     <string name="group_all_communities">Všechny komunity</string>
     <string name="room_preview_no_preview">Nelze provést náhled této místnosti</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Náhled místnosti čitelné pro všechny zatím Element nepodporuje</string>
+    <string name="template_room_preview_world_readable_room_not_supported_yet">Náhled místnosti čitelné pro všechny zatím ${app_name} nepodporuje</string>
     <string name="fab_menu_create_room">Místnosti</string>
     <string name="fab_menu_create_chat">Přímé zprávy</string>
     <string name="create_room_title">Nová místnost</string>
@@ -1426,7 +1697,7 @@
     <string name="content_reported_as_inappropriate_content">Obsah byl nahlášen jako nepatřičný.
 \n
 \nPokud si dále nepřejete vidět obsah tohoto uživatele, můžete jej ignorovat a tím skrýt jejich zprávy.</string>
-    <string name="permissions_rationale_msg_keys_backup_export">Element potřebuje práva k uložení Vašich E2E klíčů na disk.
+    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} potřebuje práva k uložení Vašich E2E klíčů na disk.
 \n
 \nProsím, povolte přístup v příštím dialogu, abyste mohli exportovat své klíče manuálně.</string>
     <string name="no_network_indicator">Právě nyní není k dispozici žádné síťové spojení</string>
@@ -1470,7 +1741,6 @@
     <string name="login_server_url_form_other_hint">Adresa</string>
     <string name="login_server_url_form_modular_text">Prémiový hosting pro organizace</string>
     <string name="login_server_url_form_modular_notice">Zadejte adresu Modular Element nebo serveru, který chcete použít</string>
-    <string name="login_server_url_form_other_notice">Zadejte adresu serveru nebo Elementu, k němuž se chcete připojit</string>
     <string name="login_sso_error_message">Při načítání stránky došlo k chybě: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Aplikace se nemůže přihlásit k tomuto homeserveru. Homeserver podporuje následující typy přihlášení: %1$s.
 \n
@@ -1568,7 +1838,7 @@
 \nPro přístup k účtu a zprávám se znovu se přihlaste.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Ztratíte přístup k šifrovaným zprávám, pokud se nepřihlásíte za účelem obnovy šifrovacích klíčů.</string>
     <string name="soft_logout_clear_data_dialog_submit">Vyčistit data</string>
-    <string name="soft_logout_sso_not_same_user_error">Tato relace je pro uživatele %1$s a Vy jste zadali údaje pro uživatele %2$s. Element toto nepodporuje.
+    <string name="template_soft_logout_sso_not_same_user_error">Tato relace je pro uživatele %1$s a Vy jste zadali údaje pro uživatele %2$s. ${app_name} toto nepodporuje.
 \nProsím, nejdříve vyčistěte data a pak se přihlaste k jinému účtu.</string>
     <string name="permalink_malformed">Váš odkaz matrix.to byl chybný</string>
     <string name="bug_report_error_too_short">Popis je příliš krátký</string>
@@ -1586,7 +1856,7 @@
     <string name="devices_other_devices">Jiné relace</string>
     <string name="autocomplete_limited_results">Ukazuji jen první výsledky, zadejte více znaků…</string>
     <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element se může zbořit častěji, když se objeví neočekávané chyby</string>
+    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} se může zbořit častěji, když se objeví neočekávané chyby</string>
     <string name="command_description_shrug">Předsune ¯\\_(ツ)_/¯ do textové zprávy</string>
     <string name="create_room_encryption_title">Zapnout šifrování</string>
     <string name="create_room_encryption_description">Jakmile zapnuto, šifrování nelze vypnout.</string>
@@ -1658,9 +1928,9 @@
     <string name="room_member_power_level_moderator_in">Moderátor v %1$s</string>
     <string name="room_member_power_level_custom_in">Vlastní (%1$d) in %2$s</string>
     <string name="room_member_jump_to_read_receipt">Přeskočit k potvrzení přečtení</string>
-    <string name="rendering_event_error_type_of_event_not_handled">Element neobstarává události typu \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element neobstarává zprávy typu \'%1$s\'</string>
-    <string name="rendering_event_error_exception">Element narazil na chybu při převádění obsahu události s id \'%1$s\'</string>
+    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} neobstarává události typu \'%1$s\'</string>
+    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} neobstarává zprávy typu \'%1$s\'</string>
+    <string name="template_rendering_event_error_exception">${app_name} narazil na chybu při převádění obsahu události s id \'%1$s\'</string>
     <string name="unignore">Odignorovat</string>
     <string name="verify_cannot_cross_sign">Tato relace nemůže sdílet toto ověření s jinými z Vašich relací.
 \nToto ověření bude uloženo místně a sdíleno v budoucí verzi aplikace.</string>
@@ -1758,7 +2028,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Událost smazána uživatelem, důvod: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Událost moderována správcem místnosti, důvod: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Klíče jsou již aktuální!</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="template_login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">Požadavky na klíče</string>
     <string name="e2e_use_keybackup">Odemknout zašifrovanou historii zpráv</string>
     <string name="refresh">Obnovit</string>
@@ -1879,13 +2149,13 @@
     <string name="login_signin_matrix_id_error_invalid_matrix_id">To není platný identifikátor uživatele. Platný formát: \'@uživatel:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Nemohu najít platný domovský server. Prosím, zkontrolujte svůj identifikátor</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Režim letadlo je zapnut</string>
-    <string name="use_other_session_content_description">Použijte na svých zařízeních nejnovější Element, Element Web, Element Desktop, Element iOS, Element pro Android nebo jiný Matrix klient schopný křížového přihlášení</string>
-    <string name="app_desktop_web">Element Web
-\nElement Desktop</string>
-    <string name="app_ios_android">Element iOS
-\nElement Android</string>
+    <string name="template_use_other_session_content_description">Použijte na svých zařízeních nejnovější ${app_name}, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} pro Android nebo jiný Matrix klient schopný křížového přihlášení</string>
+    <string name="template_app_desktop_web">${app_name} Web
+\n${app_name} Desktop</string>
+    <string name="template_app_ios_android">${app_name} iOS
+\n${app_name} Android</string>
     <string name="or_other_mx_capabale_client">nebo jiný Matrix klient schopný křížového přihlášení</string>
-    <string name="use_latest_app">Použijte na svých zařízeních nejnovější Element:</string>
+    <string name="template_use_latest_app">Použijte na svých zařízeních nejnovější ${app_name}:</string>
     <string name="command_description_discard_session">Vynutí zahození probíhající skupinové relace v šifrované místnosti</string>
     <string name="command_description_discard_session_not_handled">Podporováno jen v šifrovaných místnostech</string>
     <string name="enter_secret_storage_passphrase_or_key">Použijte své %1$s nebo použijte svůj %2$s a pokračujte.</string>
@@ -1927,11 +2197,11 @@
     <string name="choose_locale_loading_locales">Načítám dostupné jayzky…</string>
     <string name="open_terms_of">Otevřít všeobecné podmínky %s</string>
     <string name="disconnect_identity_server_dialog_content">Odpojit se od serveru identit %s\?</string>
-    <string name="identity_server_error_outdated_identity_server">Tento server identit je zastaralý. Element podporuje jen API V2.</string>
+    <string name="template_identity_server_error_outdated_identity_server">Tento server identit je zastaralý. ${app_name} podporuje jen API V2.</string>
     <string name="identity_server_error_outdated_home_server">Tato operace není možná. Domovský server je zastaralý.</string>
     <string name="identity_server_error_no_identity_server_configured">Prosím, nejdříve nastavit server identit.</string>
     <string name="identity_server_error_terms_not_signed">Prosím, přijměte nejdříve všeobecné podmínky serveru identit v nastavení.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Pro Vaše soukromí, Element podporuje jen odesílání hašovaných emailových adress a telefonních čísel.</string>
+    <string name="template_identity_server_error_bulk_sha256_not_supported">Pro Vaše soukromí, ${app_name} podporuje jen odesílání hašovaných emailových adress a telefonních čísel.</string>
     <string name="identity_server_error_binding_error">Propojení selhalo.</string>
     <string name="identity_server_error_no_current_binding_error">S tímto identifikátorem neexistuje žádné propojení.</string>
     <string name="identity_server_set_default_notice">Váš domovský server (%1$s) navrhuje použít %2$s za Váš domovský server</string>
@@ -1947,8 +2217,8 @@
     <string name="video_meeting">Zahájit video schůzku</string>
     <string name="audio_meeting">Zahájit hlasovou schůzku</string>
     <string name="audio_video_meeting_description">Schůzky používají pravidla zabezpečení a přístupu Jitsi. Všichni lidé nyní v místnosti uvidí pozvánku k připojení, zatímco Vaše schůzka probíhá.</string>
-    <string name="cannot_call_yourself">Nemůžete spustit hovor se sebou</string>
-    <string name="cannot_call_yourself_with_invite">Nemůžete spustit hovor se sebou, počkejte, až účastníci přijmou pozvánku</string>
+    <string name="cannot_call_yourself">Nemůžete zahájit hovor se sebou</string>
+    <string name="cannot_call_yourself_with_invite">Nemůžete zahájit hovor se sebou, počkejte, až účastníci přijmou pozvánku</string>
     <string name="failed_to_add_widget">Přidání widgetu se nezdařilo</string>
     <string name="failed_to_remove_widget">Odstranění widgetu se nezdařilo</string>
     <string name="call_notification_answer">Přijmout</string>
@@ -1957,7 +2227,7 @@
     <string name="action_copy">Kopírovat</string>
     <string name="dialog_title_success">Podařilo se</string>
     <string name="bottom_action_notification">Oznámení</string>
-    <string name="call_failed_no_connection">Volání Elementu se nezdařilo</string>
+    <string name="template_call_failed_no_connection">Volání ${app_name}u se nezdařilo</string>
     <string name="call_failed_no_connection_description">Založit spojení v reálném čase se nezdařilo.
 \nProsím, požádejte správce svého homeserveru o konfiguraci TURN serveru, aby volání fungovala spolehlivě.</string>
     <string name="call_select_sound_device">Vybrat zvukové zařízení</string>
@@ -2066,7 +2336,6 @@
     <string name="setup_cross_signing">Zapnout křížový podpis</string>
     <string name="error_saving_media_file">Uložit mediální soubor se nezdařilo</string>
     <string name="confirm_your_identity_quad_s">Potvrďte svou identitu ověřením tohoto přihlášení, udělujíce přístup k šifrovaným zprávám.</string>
-    <string name="error_sso_flow_not_supported_yet">Je nám líto, tato operace zatím není možná s účty připojenými pomocí Single Sign-On.</string>
     <string name="power_level_edit_title">Nastavit roli</string>
     <string name="power_level_title">Role</string>
     <string name="a11y_open_chat">Otevřít chat</string>
@@ -2101,11 +2370,10 @@
     <string name="crypto_error_withheld_unverified">Nemůžete číst tuto zprávu, protože Vaše relace není pro odesílatele důvěryhodná</string>
     <string name="crypto_error_withheld_generic">Nemůžete číst tuto zprávu, protože odesílatel účelově neposlal klíče</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Čekám na historii šifrování</string>
-    <string name="element_disclaimer_title">Riot je nyní Element!</string>
-    <string name="element_disclaimer_content">Jsme nadšení, že smíme oznámit změnu jména! Vaše app je aktuální a jste přihlášeni do svého účtu.</string>
-    <string name="element_disclaimer_negative_button">ROZUMÍM</string>
-    <string name="element_disclaimer_positive_button">DOZVĚDĚT SE VÍCE</string>
-    <string name="element_login_splash_brand">element</string>
+    <string name="disclaimer_title">Riot je nyní Element!</string>
+    <string name="disclaimer_content">Jsme nadšení, že smíme oznámit změnu jména! Vaše app je aktuální a jste přihlášeni do svého účtu.</string>
+    <string name="disclaimer_negative_button">ROZUMÍM</string>
+    <string name="disclaimer_positive_button">DOZVĚDĚT SE VÍCE</string>
     <string name="save_recovery_key_chooser_hint">Uložit klíče pro obnovu v</string>
     <string name="add_from_phone_book">Přidat z mého adresáře</string>
     <string name="empty_phone_book">Váš adresář je prázdný</string>
@@ -2159,13 +2427,13 @@
     <string name="warning_unsaved_change_discard">Změny zavrhnout</string>
     <string name="warning_unsaved_change">Zůstávají neuložené změny. Zavrhnout změny\?</string>
     <string name="warning_room_not_created_yet">Místnost nebyla ještě založena. Zrušit založení místnosti\?</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">Kód PIN se vyžaduje při každém otevření Elementu.</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">Kód PIN se vyžaduje, pokud se Element nepoužil 2 minuty.</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_off">Kód PIN se vyžaduje při každém otevření ${app_name}u.</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_on">Kód PIN se vyžaduje, pokud se ${app_name} nepoužil 2 minuty.</string>
     <string name="settings_security_pin_code_grace_period_title">Žádat PIN po 2 minutách</string>
     <string name="settings_security_pin_code_notifications_summary_off">Zobrazit pouze počet nepřečtených zpráv v jednoduchém oznámení.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Zobrazit podrobnosti např. názvy místností a obsah zpráv.</string>
     <string name="settings_security_pin_code_notifications_title">Zobrazit obsah v oznámení</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">Kód PIN je jediný způsob, jak odemknout Element.</string>
+    <string name="template_settings_security_pin_code_use_biometrics_summary_off">Kód PIN je jediný způsob, jak odemknout ${app_name}.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Zapnout biometriku specifickou pro zařízení, např. otisk prstu nebo rozpoznání obličeje.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Zapnout biometriku</string>
     <string name="settings_security_application_protection_screen_title">Nastavit ochranu</string>
@@ -2235,8 +2503,8 @@
     <string name="user_code_share">Sdílet můj kód</string>
     <string name="user_code_scan">Skenovat QR kód</string>
     <string name="not_a_valid_qr_code">To není platný matrixový QR kód</string>
-    <string name="invite_friends_rich_title">🔐️ Přidej se ke mně v elementu</string>
-    <string name="invite_friends_text">Ahoj, pojď si povídat v Elementu: %s</string>
+    <string name="template_invite_friends_rich_title">🔐️ Přidej se ke mně v ${app_name}u</string>
+    <string name="template_invite_friends_text">Ahoj, pojď si povídat v ${app_name}u: %s</string>
     <string name="invite_friends">Pozvat přátele</string>
     <string name="add_people">Přidat lidi</string>
     <string name="topic_prefix">"Téma: "</string>
@@ -2354,7 +2622,7 @@
     <string name="action_add">Přidat</string>
     <string name="system_theme">Výchozí téma</string>
     <string name="authentication_error">Ověření se nezdařilo</string>
-    <string name="re_authentication_default_confirm_text">Element vyžaduje zadání přihlašovacích údajů k provedení této akce.</string>
+    <string name="template_re_authentication_default_confirm_text">${app_name} vyžaduje zadání přihlašovacích údajů k provedení této akce.</string>
     <string name="re_authentication_activity_title">Je nutné opětovné ověření</string>
     <string name="failed_to_initialize_cross_signing">Nastavení křížového podepisování se nezdařilo</string>
     <string name="error_unauthorized">Neautorizováno, chybí platné ověřovací údaje</string>
@@ -2388,4 +2656,60 @@
     <string name="call_hold_action">Přidržet</string>
     <string name="call_resume_action">Pokračovat</string>
     <string name="action_return">Návrat</string>
+    <string name="dev_tools_event_content_hint">Obsah události</string>
+    <string name="dev_tools_success_state_event">Stavová událost byla odeslána!</string>
+    <string name="dev_tools_success_event">Událost odeslána!</string>
+    <string name="dev_tools_error_malformed_event">Poškozená událost</string>
+    <string name="dev_tools_error_no_message_type">Chybí typ zprávy</string>
+    <string name="dev_tools_error_no_content">Žádný obsah</string>
+    <string name="dev_tools_form_hint_event_content">Obsah události</string>
+    <string name="dev_tools_form_hint_state_key">Stavový klíč</string>
+    <string name="dev_tools_form_hint_type">Typ</string>
+    <string name="dev_tools_send_custom_state_event">Odeslat vlastní stavovou událost</string>
+    <string name="dev_tools_edit_content">Upravit obsah</string>
+    <string name="dev_tools_state_event">Stavové události</string>
+    <string name="dev_tools_send_state_event">Odeslat stavovou událost</string>
+    <string name="dev_tools_send_custom_event">Odeslat vlastní událost</string>
+    <string name="dev_tools_explore_room_state">Prozkoumejte stav místnosti</string>
+    <string name="dev_tools_menu_name">Vývojové nástroje</string>
+    <string name="a11y_view_read_receipts">Zobrazit potvrzení o přečtení</string>
+    <string name="a11y_rule_notify_off">Neupozorňovat</string>
+    <string name="a11y_rule_notify_silent">Upozornit bez zvuku</string>
+    <string name="a11y_rule_notify_noisy">Upozornit zvukem</string>
+    <string name="a11y_error_message_not_sent">Zpráva nebyla odeslána z důvodu chyby</string>
+    <string name="a11y_checked">Zkontrolováno</string>
+    <string name="a11y_close_emoji_picker">Zavřít výběr emoji</string>
+    <string name="initial_sync_start_server_computing">Úvodní synchronizace:
+\nČekání na odpověď serveru…</string>
+    <string name="a11y_open_emoji_picker">Otevřít výběr emoji</string>
+    <string name="a11y_trust_level_trusted">Důvěryhodná úroveň důvěryhodnosti</string>
+    <string name="a11y_trust_level_warning">Úroveň důvěryhodnosti varování</string>
+    <string name="a11y_trust_level_default">Výchozí úroveň důvěryhodnosti</string>
+    <string name="a11y_selected">Vybrané</string>
+    <string name="a11y_video">Video</string>
+    <string name="a11y_unsent_draft">Tato místnost má neodeslaný koncept</string>
+    <string name="a11y_error_some_message_not_sent">Některé zprávy nebyly odeslány</string>
+    <string name="a11y_delete_avatar">Smazat avatar</string>
+    <string name="a11y_change_avatar">Změnit avatar</string>
+    <string name="a11y_image">Obrázek</string>
+    <string name="a11y_import_key_from_file">Importovat klíč ze souboru</string>
+    <string name="a11y_open_widget">Otevřít widgety</string>
+    <string name="a11y_screenshot">Snímek obrazovky</string>
+    <plurals name="entries">
+        <item quantity="one">%d položka</item>
+        <item quantity="few">%d položky</item>
+        <item quantity="other">%d položek</item>
+    </plurals>
+    <string name="settings_server_upload_size_unknown">Limit není znám.</string>
+    <string name="settings_server_upload_size_content">Váš domovský server přijímá přílohy (soubory, média atd.) o velikosti až %s.</string>
+    <string name="settings_server_upload_size_title">Limit nahrávání souborů na server</string>
+    <string name="settings_server_version">Verze serveru</string>
+    <string name="settings_server_name">Název serveru</string>
+    <string name="room_list_quick_actions_room_settings">Nastavení místnosti</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Opustit aktuální konferenci a přepnout na jinou\?</string>
+    <string name="room_settings_room_version_title">Verze místnosti</string>
+    <string name="dialog_edit_hint">Nová hodnota</string>
+    <string name="action_switch">Přepnout</string>
+    <string name="initial_sync_start_downloading">Úvodní synchronizace:
+\nStahuji data…</string>
 </resources>

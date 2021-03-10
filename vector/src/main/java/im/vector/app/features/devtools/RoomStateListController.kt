@@ -37,7 +37,7 @@ class RoomStateListController @Inject constructor(
     override fun buildModels(data: RoomDevToolViewState?) {
         when (data?.displayMode) {
             RoomDevToolViewState.Mode.StateEventList -> {
-                val stateEventsGroups = data.stateEvents.invoke().orEmpty().groupBy { it.type }
+                val stateEventsGroups = data.stateEvents.invoke().orEmpty().groupBy { it.getClearType() }
 
                 if (stateEventsGroups.isEmpty()) {
                     noResultItem {

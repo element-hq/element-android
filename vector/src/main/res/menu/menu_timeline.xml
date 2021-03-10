@@ -53,22 +53,6 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/resend_all"
-        android:icon="@drawable/ic_refresh_cw"
-        android:title="@string/room_prompt_resend"
-        android:visible="false"
-        app:showAsAction="never"
-        tools:visible="true" />
-
-    <item
-        android:id="@+id/clear_all"
-        android:icon="@drawable/ic_trash"
-        android:title="@string/room_prompt_cancel"
-        android:visible="false"
-        app:showAsAction="never"
-        tools:visible="true" />
-
-    <item
         android:id="@+id/dev_tools"
         android:icon="@drawable/ic_settings_root_general"
         android:title="@string/dev_tools_menu_name"

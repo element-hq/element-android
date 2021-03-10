@@ -46,7 +46,7 @@ class ActiveConferenceView @JvmOverloads constructor(
     }
 
     var callback: Callback? = null
-    var jitsiWidget: Widget? = null
+    private var jitsiWidget: Widget? = null
 
     private lateinit var views: ViewActiveConferenceViewBinding
 
@@ -95,18 +95,12 @@ class ActiveConferenceView @JvmOverloads constructor(
         val summary = state.asyncRoomSummary()
         if (summary?.membership == Membership.JOIN) {
             // We only display banner for 'live' widgets
-            val activeConf =
-                    state.activeRoomWidgets()?.firstOrNull {
-                        // for now only jitsi?
-                        it.type == WidgetType.Jitsi
-                    }
-
-            if (activeConf == null) {
-                isVisible = false
-            } else {
-                isVisible = true
-                jitsiWidget = activeConf
+            jitsiWidget = state.activeRoomWidgets()?.firstOrNull {
+                // for now only jitsi?
+                it.type == WidgetType.Jitsi
             }
+
+            isVisible = jitsiWidget != null
             // if sent by me or if i can moderate?
             views.deleteWidgetButton.isVisible = state.isAllowedToManageWidgets
         } else {

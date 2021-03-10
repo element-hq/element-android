@@ -99,7 +99,7 @@ class PopupAlertManager @Inject constructor() {
         // we want to remove existing popup on previous activity and display it on new one
         if (currentAlerter != null) {
             weakCurrentActivity?.get()?.let {
-                Alerter.clearCurrent(it)
+                Alerter.clearCurrent(it, null)
                 if (currentAlerter?.isLight == false) {
                     setLightStatusBar()
                 }

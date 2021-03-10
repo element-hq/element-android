@@ -68,7 +68,7 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                 // If the event can be displayed, display it as is
                 Timber.w("NotifiableEventResolver Received an unsupported event matching a bing rule")
                 // TODO Better event text display
-                val bodyPreview = event.type
+                val bodyPreview = event.type ?: EventType.MISSING_TYPE
 
                 return SimpleNotifiableEvent(
                         session.myUserId,

@@ -33,14 +33,15 @@ import android.provider.Settings
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.features.themes.ThemeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -92,17 +93,24 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
  * If several compatible browsers are installed, the user will be proposed to choose one.
  * Ref: https://developer.chrome.com/multidevice/android/customtabs
  */
-fun openUrlInChromeCustomTab(context: Context, session: CustomTabsSession?, url: String) {
+fun openUrlInChromeCustomTab(context: Context,
+                             session: CustomTabsSession?,
+                             url: String) {
     try {
         CustomTabsIntent.Builder()
-                .setToolbarColor(ContextCompat.getColor(context, R.color.riotx_background_light))
-                .apply {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                        setNavigationBarColor(ContextCompat.getColor(context, R.color.riotx_header_panel_background_light))
-                    }
-                }
-                .setNavigationBarColor(ContextCompat.getColor(context, R.color.riotx_background_light))
-                .setColorScheme(CustomTabsIntent.COLOR_SCHEME_LIGHT)
+                .setDefaultColorSchemeParams(
+                        CustomTabColorSchemeParams.Builder()
+                                .setToolbarColor(ThemeUtils.getColor(context, R.attr.riotx_background))
+                                .setNavigationBarColor(ThemeUtils.getColor(context, R.attr.riotx_background))
+                                .build()
+                )
+                .setColorScheme(
+                        when {
+                            ThemeUtils.isSystemTheme(context) -> CustomTabsIntent.COLOR_SCHEME_SYSTEM
+                            ThemeUtils.isLightTheme(context)  -> CustomTabsIntent.COLOR_SCHEME_LIGHT
+                            else                              -> CustomTabsIntent.COLOR_SCHEME_DARK
+                        }
+                )
                 // Note: setting close button icon does not work
                 .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_back_24dp))
                 .setStartAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)

@@ -39,7 +39,11 @@ data class MatrixConfiguration(
         /**
          * True to advertise support for call transfers to other parties on Matrix calls.
          */
-        val supportsCallTransfer: Boolean = false
+        val supportsCallTransfer: Boolean = false,
+        /**
+         * RoomDisplayNameFallbackProvider to provide default room display name.
+         */
+        val roomDisplayNameFallbackProvider: RoomDisplayNameFallbackProvider
 ) {
 
     /**

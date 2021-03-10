@@ -20,6 +20,7 @@ import im.vector.app.ActiveSessionDataSource
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.room.detail.timeline.helper.RoomSummariesHolder
+import im.vector.app.features.roomprofile.permissions.RoleFormatter
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -55,6 +56,7 @@ import javax.inject.Inject
 class NoticeEventFormatter @Inject constructor(
         private val activeSessionDataSource: ActiveSessionDataSource,
         private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
+        private val roleFormatter: RoleFormatter,
         private val vectorPreferences: VectorPreferences,
         private val roomSummariesHolder: RoomSummariesHolder,
         private val sp: StringProvider
@@ -124,8 +126,8 @@ class NoticeEventFormatter @Inject constructor(
             val from = PowerLevelsHelper(previousPowerLevelsContent).getUserRole(userId)
             val to = PowerLevelsHelper(powerLevelsContent).getUserRole(userId)
             if (from != to) {
-                val fromStr = sp.getString(from.res, from.value)
-                val toStr = sp.getString(to.res, to.value)
+                val fromStr = roleFormatter.format(from)
+                val toStr = roleFormatter.format(to)
                 val diff = sp.getString(R.string.notice_power_level_diff, userId, fromStr, toStr)
                 diffs.add(diff)
             }

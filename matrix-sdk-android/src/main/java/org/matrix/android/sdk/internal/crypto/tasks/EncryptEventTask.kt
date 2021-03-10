@@ -45,7 +45,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
         // don't want to wait for any query
         // if (!params.crypto.isRoomEncrypted(params.roomId)) return params.event
         val localEvent = params.event
-        if (localEvent.eventId == null) {
+        if (localEvent.eventId == null || localEvent.type == null) {
             throw IllegalArgumentException()
         }
 

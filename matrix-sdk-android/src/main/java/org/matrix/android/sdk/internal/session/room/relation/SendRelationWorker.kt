@@ -89,7 +89,7 @@ internal class SendRelationWorker(context: Context, params: WorkerParameters)
                     roomId = roomId,
                     parentId = relatedEventId,
                     relationType = relationType,
-                    eventType = localEvent.type,
+                    eventType = localEvent.type!!,
                     content = localEvent.content
             )
         }

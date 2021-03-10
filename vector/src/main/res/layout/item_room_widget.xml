@@ -8,19 +8,20 @@
     android:gravity="center_vertical"
     android:minHeight="64dp"
     android:orientation="horizontal"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp">
+    android:paddingStart="@dimen/layout_horizontal_margin"
+    android:paddingEnd="@dimen/layout_horizontal_margin">
 
     <ImageView
         android:id="@+id/roomWidgetAvatar"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/avatar"
+        android:importantForAccessibility="no"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@tools:sample/avatars"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/roomWidgetName"
@@ -28,21 +29,35 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toTopOf="@id/roomWidgetUrl"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/roomWidgetEditable"
         app:layout_constraintStart_toEndOf="@id/roomWidgetAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
+        app:layout_goneMarginStart="0dp"
         tools:text="Widget name" />
-
 
     <TextView
         android:id="@+id/roomWidgetUrl"
         style="@style/BottomSheetItemTextSecondary"
+        android:layout_marginEnd="8dp"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/roomWidgetName"
+        app:layout_constraintEnd_toStartOf="@id/roomWidgetEditable"
         app:layout_constraintStart_toStartOf="@id/roomWidgetName"
         app:layout_constraintTop_toBottomOf="@id/roomWidgetName"
         tools:text="https://foobar" />
+
+    <ImageView
+        android:id="@+id/roomWidgetEditable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_arrow_right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?riotx_text_secondary"
+        tools:ignore="MissingPrefix" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

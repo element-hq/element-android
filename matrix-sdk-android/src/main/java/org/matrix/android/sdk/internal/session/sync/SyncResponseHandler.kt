@@ -18,17 +18,17 @@ package org.matrix.android.sdk.internal.session.sync
 
 import androidx.work.ExistingPeriodicWorkPolicy
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.R
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleScope
+import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
-import org.matrix.android.sdk.internal.session.DefaultInitialSyncProgressService
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
+import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
+import org.matrix.android.sdk.internal.session.initsync.reportSubtask
 import org.matrix.android.sdk.internal.session.notification.ProcessEventForPushTask
-import org.matrix.android.sdk.internal.session.reportSubtask
 import org.matrix.android.sdk.internal.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
@@ -51,13 +51,13 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
                                                        private val cryptoService: DefaultCryptoService,
                                                        private val tokenStore: SyncTokenStore,
                                                        private val processEventForPushTask: ProcessEventForPushTask,
-                                                       private val pushRuleService: PushRuleService,
-                                                       private val initialSyncProgressService: DefaultInitialSyncProgressService) {
+                                                       private val pushRuleService: PushRuleService) {
 
-    suspend fun handleResponse(syncResponse: SyncResponse, fromToken: String?) {
+    suspend fun handleResponse(syncResponse: SyncResponse,
+                               fromToken: String?,
+                               reporter: ProgressReporter?) {
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
-        val reporter = initialSyncProgressService.takeIf { isInitialSync }
 
         measureTimeMillis {
             if (!cryptoService.isStarted()) {
@@ -73,7 +73,7 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
         // to ensure to decrypt them properly
         measureTimeMillis {
             Timber.v("Handle toDevice")
-            reportSubtask(reporter, R.string.initial_sync_start_importing_account_crypto, 100, 0.1f) {
+            reportSubtask(reporter, InitSyncStep.ImportingAccountCrypto, 100, 0.1f) {
                 if (syncResponse.toDevice != null) {
                     cryptoSyncHandler.handleToDevice(syncResponse.toDevice, reporter)
                 }
@@ -85,7 +85,7 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
         monarchy.awaitTransaction { realm ->
             measureTimeMillis {
                 Timber.v("Handle rooms")
-                reportSubtask(reporter, R.string.initial_sync_start_importing_account_rooms, 100, 0.7f) {
+                reportSubtask(reporter, InitSyncStep.ImportingAccountRoom, 1, 0.7f) {
                     if (syncResponse.rooms != null) {
                         roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, reporter)
                     }
@@ -95,7 +95,7 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
             }
 
             measureTimeMillis {
-                reportSubtask(reporter, R.string.initial_sync_start_importing_account_groups, 100, 0.1f) {
+                reportSubtask(reporter, InitSyncStep.ImportingAccountGroups, 1, 0.1f) {
                     Timber.v("Handle groups")
                     if (syncResponse.groups != null) {
                         groupSyncHandler.handle(realm, syncResponse.groups, reporter)
@@ -106,7 +106,7 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
             }
 
             measureTimeMillis {
-                reportSubtask(reporter, R.string.initial_sync_start_importing_account_data, 100, 0.1f) {
+                reportSubtask(reporter, InitSyncStep.ImportingAccountData, 1, 0.1f) {
                     Timber.v("Handle accountData")
                     userAccountDataSyncHandler.handle(realm, syncResponse.accountData)
                 }
@@ -126,6 +126,15 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
 
         Timber.v("On sync completed")
         cryptoSyncHandler.onSyncCompleted(syncResponse)
+    }
+
+    suspend fun handleInitSyncSecondTransaction(syncResponse: SyncResponse) {
+        // Start another transaction to handle the ephemeral events
+        monarchy.awaitTransaction { realm ->
+            if (syncResponse.rooms != null) {
+                roomSyncHandler.handleInitSyncEphemeral(realm, syncResponse.rooms)
+            }
+        }
     }
 
     /**

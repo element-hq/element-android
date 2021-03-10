@@ -36,9 +36,23 @@ interface TimelineService {
      */
     fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline
 
+    /**
+     * Returns a snapshot of TimelineEvent event with eventId.
+     * At the opposite of getTimeLineEventLive which will be updated when local echo event is synced, it will return null in this case.
+     * @param eventId the eventId to get the TimelineEvent
+     */
     fun getTimeLineEvent(eventId: String): TimelineEvent?
 
+    /**
+     * Creates a LiveData of Optional TimelineEvent event with eventId.
+     * If the eventId is a local echo eventId, it will make the LiveData be updated with the synced TimelineEvent when coming through the sync.
+     * In this case, makes sure to use the new synced eventId from the TimelineEvent class if you want to interact, as the local echo is removed from the SDK.
+     * @param eventId the eventId to listen for TimelineEvent
+     */
     fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>>
 
+    /**
+     * Returns a snapshot list of TimelineEvent with EventType.MESSAGE and MessageType.MSGTYPE_IMAGE or MessageType.MSGTYPE_VIDEO.
+     */
     fun getAttachmentMessages(): List<TimelineEvent>
 }

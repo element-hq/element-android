@@ -56,8 +56,7 @@
     <string name="notification_listening_for_events">Nasuchowanie zdarzyń</string>
     <string name="notification_sync_in_progress">Synchrōnizowanie…</string>
     <string name="notification_sync_init">Inicjalizacyjo usugi</string>
-    <string name="status_theme">Tymat Status.im</string>
-    <string name="black_them">Czorny tymat</string>
+    <string name="black_theme">Czorny tymat</string>
     <string name="dark_theme">Ciymny tymat</string>
     <string name="light_theme">Jasny tymat</string>
 </resources>

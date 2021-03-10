@@ -29,7 +29,7 @@ import timber.log.Timber
 fun Session.configureAndStart(context: Context) {
     Timber.i("Configure and start session for $myUserId")
     open()
-    setFilter(FilterService.FilterPreset.RiotFilter)
+    setFilter(FilterService.FilterPreset.ElementFilter)
     startSyncing(context)
     refreshPushers()
 }

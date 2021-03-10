@@ -1,2 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s išsiuntė vaizdą.</string>
+    <string name="summary_user_sent_sticker">%1$s išsiuntė lipduką.</string>
+    <string name="notice_room_invite_no_invitee">%s pakvietimas</string>
+    <string name="notice_room_join_by_you">Jūs prisijungėte prie kambario</string>
+    <string name="notice_room_join">%1$s prisijungė prie kambario</string>
+    <string name="notice_room_invite_you">%1$s pakvietė jus</string>
+    <string name="notice_room_invite_by_you">Jūs pakvietėte %1$s</string>
+    <string name="notice_room_invite">%1$s pakvietė %2$s</string>
+    <string name="notice_direct_room_created_by_you">Jūs sukūrėte diskusiją</string>
+    <string name="notice_direct_room_created">%1$s sukūrė diskusiją</string>
+    <string name="notice_room_created_by_you">Jūs sukūrėte kambarį</string>
+    <string name="notice_room_created">%1$s sukūrė kambarį</string>
+    <string name="notice_room_invite_no_invitee_by_you">Jūsų pakvietimas</string>
+    <string name="summary_you_sent_sticker">Jūs išsiuntėte lipduką.</string>
+    <string name="summary_you_sent_image">Jūs išsiuntėte vaizdą.</string>
+    <string name="notice_room_withdraw_by_you">Jūs atšaukėte %1$s pakvietimą</string>
+    <string name="notice_room_withdraw">%1$s atšaukė %2$s pakvietimą</string>
+    <string name="notice_room_ban_by_you">Jūs užblokavote %1$s</string>
+    <string name="notice_room_ban">%1$s užblokavo %2$s</string>
+    <string name="notice_room_unban_by_you">Jūs atblokavote %1$s</string>
+    <string name="notice_room_unban">%1$s atblokavo %2$s</string>
+    <string name="notice_room_kick_by_you">Jūs išmetėte %1$s</string>
+    <string name="notice_room_kick">%1$s išmetė %2$s</string>
+    <string name="notice_room_reject_by_you">Jūs atmetėte pakvietimą</string>
+    <string name="notice_room_reject">%1$s atmetė pakvietimą</string>
+    <string name="notice_direct_room_leave_by_you">Jūs išėjote iš kambario</string>
+    <string name="notice_direct_room_leave">%1$s išėjo iš kambario</string>
+    <string name="notice_room_leave_by_you">Jūs išėjote iš kambario</string>
+    <string name="notice_room_leave">%1$s išėjo iš kambario</string>
+    <string name="notice_direct_room_join_by_you">Jūs prisijungėte</string>
+    <string name="notice_direct_room_join">%1$s prisijungė</string>
+</resources>

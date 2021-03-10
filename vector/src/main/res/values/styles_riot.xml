@@ -97,11 +97,6 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!-- home scroller menu -->
-    <style name="NavigationViewStyle">
-        <item name="android:textSize">14sp</item>
-    </style>
-
     <!-- Styles for login screen -->
     <style name="LoginEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textSize">16sp</item>
@@ -195,83 +190,13 @@
         <item name="iconifiedByDefault">false</item>
     </style>
 
-    <style name="VectorSearches.EditText" parent="Widget.AppCompat.EditText">
-        <item name="android:textCursorDrawable">@drawable/searches_cursor_background</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="background">@android:color/transparent</item>
-    </style>
-
-    <style name="VectorSearches.Styled.ActionBar" parent="Vector.Styled.ActionBar">
-        <item name="android:background">?android:attr/colorBackground</item>
-        <item name="background">?android:attr/colorBackground</item>
-    </style>
-
-    <!-- tabbar text color -->
-    <style name="VectorSearches.TabText" parent="Widget.AppCompat.ActionBar.TabText">
-        <item name="android:textColor">?attr/colorAccent</item>
-    </style>
-
-    <style name="VectorSearches.ActionBarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">?attr/colorAccent</item>
-    </style>
-
-    <style name="VectorPeopleSearches.TabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabGravity">fill</item>
-        <item name="tabMode">fixed</item>
-        <item name="tabPaddingStart">0dp</item>
-        <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">?attr/colorAccent</item>
-        <item name="tabTextColor">@android:color/white</item>
-        <item name="tabSelectedTextColor">@android:color/white</item>
-        <item name="tabIndicatorColor">@android:color/white</item>
-        <item name="tabMaxWidth">0dp</item>
-    </style>
-
-    <style name="VectorUnifiedSearches.TabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabGravity">fill</item>
-        <item name="tabMode">fixed</item>
-        <item name="tabPaddingStart">0dp</item>
-        <item name="tabPaddingEnd">0dp</item>
-        <item name="tabBackground">?attr/vctr_tab_bar_inverted_background_color</item>
-        <item name="tabTextColor">?attr/colorAccent</item>
-        <item name="tabSelectedTextColor">?attr/colorAccent</item>
-        <item name="tabIndicatorColor">?attr/colorAccent</item>
-        <item name="tabMaxWidth">0dp</item>
-    </style>
-
-    <style name="ListHeader">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?vctr_list_header_primary_text_color</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:background">?vctr_list_header_background_color</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-    </style>
-
-    <style name="SpinnerTheme">
-        <item name="colorControlNormal">?attr/vctr_list_header_primary_text_color</item>
-    </style>
-
-    <style name="PopMenuStyle" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <!-- Linear Layout orientation, depending on screen size. Vertical by default -->
-    <style name="VectorLinearLayout">
-        <item name="android:gravity">end</item>
-        <item name="android:orientation">vertical</item>
-    </style>
-
     <!-- BottomSheet theming -->
     <style name="Vector.BottomSheet.Dark" parent="Theme.Design.BottomSheetDialog">
         <item name="android:textColorPrimary">@color/riot_primary_text_color_dark</item>
         <item name="android:textColorSecondary">@color/riot_secondary_text_color_dark</item>
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/riot_tertiary_text_color_dark</item>
-        <item name="android:textColorLink">@color/riotx_links</item>
+        <item name="android:textColorLink">@color/link_color_dark</item>
     </style>
 
     <style name="Vector.BottomSheet.Light" parent="Theme.Design.Light.BottomSheetDialog">
@@ -279,7 +204,7 @@
         <item name="android:textColorSecondary">@color/riot_secondary_text_color_light</item>
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/riot_tertiary_text_color_light</item>
-        <item name="android:textColorLink">@color/riotx_links</item>
+        <item name="android:textColorLink">@color/link_color_light</item>
     </style>
 
 
