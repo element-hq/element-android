@@ -98,7 +98,7 @@
     </plurals>
     <plurals name="notice_room_aliases_removed">
         <item quantity="one">%1$s، %2$s را به عنوان نشانی‌ای برای این اتاق پاک کرد.</item>
-        <item quantity="other">%1$s، %3$s را به عنوان نشانی‌هایی برای این اتاق پاک کرد.</item>
+        <item quantity="other">%1$s، %2$s را به عنوان نشانی‌هایی برای این اتاق پاک کرد.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s برای نشانی این اتاق، %2$s را افزود و %3$s را پاک کرد.</string>
     <string name="notice_room_canonical_alias_set">%1$s نشانی اصلی این اتاق را به %2$s تنظیم کرد.</string>
@@ -470,8 +470,8 @@
     <string name="action_mark_room_read">علامت‌گذاری به عنوان خوانده شده</string>
     <string name="auth_login_sso">ورود با سامانه‌های احراز هویت مرکزی</string>
     <string name="notification_sync_init">در حال راه‌اندازی سرویس</string>
-    <string name="notification_noisy_notifications">آگاهی‌های پرصدا</string>
-    <string name="notification_silent_notifications">آگاهی‌های صامت</string>
+    <string name="notification_noisy_notifications">اعلان‌های پرصدا</string>
+    <string name="notification_silent_notifications">اعلان‌های صامت</string>
     <string name="title_activity_historical">تاریخچه</string>
     <string name="title_activity_group_details">جزییات انجمن</string>
     <string name="title_activity_choose_sticker">ارسال برچسب</string>
@@ -852,7 +852,7 @@
     <string name="pause_video">توقف</string>
     <string name="action_copy">رونوشت</string>
     <string name="dialog_title_success">موفقیت</string>
-    <string name="bottom_action_notification">آگاهی‌ها</string>
+    <string name="bottom_action_notification">اعلان‌ها</string>
     <string name="dismiss">خاتمه</string>
     <string name="no_permissions_to_start_conf_call">اجازهٔ شروع تماس کنفرانسی در این اتاق را ندارید</string>
     <string name="no_permissions_to_start_webrtc_call">اجازهٔ شروع تماس در این اتاق را ندارید</string>
@@ -2560,4 +2560,105 @@
     <string name="call_resume_action">از سرگیری</string>
     <string name="error_unauthorized">غیر مجاز، اطلاعات هویت‌سنجی موجود نمی‌باشد</string>
     <string name="action_return">بازگشت</string>
+    <string name="dev_tools_event_content_hint">محتوای رخداد</string>
+    <string name="dev_tools_success_state_event">رخداد وضعیتی ارسال شد!</string>
+    <string name="dev_tools_success_event">رخداد ارسال شد!</string>
+    <string name="dev_tools_error_malformed_event">رخداد معیوب</string>
+    <string name="dev_tools_error_no_message_type">نوع پیام فراموش شده‌است</string>
+    <string name="dev_tools_error_no_content">بدون محتوا</string>
+    <string name="dev_tools_form_hint_event_content">محتوای رخداد</string>
+    <string name="dev_tools_form_hint_state_key">کلید وضعیت</string>
+    <string name="dev_tools_form_hint_type">نوع</string>
+    <string name="dev_tools_send_custom_state_event">ارسال رخداد وضعیت سفارشی</string>
+    <string name="dev_tools_edit_content">ویرایش محتوا</string>
+    <string name="dev_tools_state_event">رخدادهای وضعیتی</string>
+    <string name="dev_tools_send_state_event">ارسال رخداد وضعیتی</string>
+    <string name="dev_tools_send_custom_event">ارسال رخداد سفارشی</string>
+    <string name="dev_tools_explore_room_state">کاوش وضعیت اتاق</string>
+    <string name="dev_tools_menu_name">ابزارهای توسعه</string>
+    <string name="a11y_view_read_receipts">مشاهده رسیدهای خوانده‌شده</string>
+    <string name="a11y_rule_notify_off">خبر نده</string>
+    <string name="a11y_rule_notify_silent">بدون صدا خبر بده</string>
+    <string name="a11y_rule_notify_noisy">با صدا خبر بده</string>
+    <string name="a11y_error_message_not_sent">پیام به دلیل رخداد خطا ارسال نشد</string>
+    <string name="a11y_checked">تیک‌خورده</string>
+    <string name="a11y_close_emoji_picker">بستن پنجره ی شکلک‌ها</string>
+    <string name="a11y_open_emoji_picker">بازکردن پنجره‌ی شکلک‌ها</string>
+    <string name="a11y_trust_level_trusted">سطح اعتماد کامل</string>
+    <string name="a11y_trust_level_warning">سطح اعتماد هشداری</string>
+    <string name="a11y_trust_level_default">سطح اعتماد پیش‌فرض</string>
+    <string name="a11y_selected">انتخاب‌شده</string>
+    <string name="a11y_image">عکس</string>
+    <string name="a11y_video">ویدئو</string>
+    <string name="a11y_unsent_draft">این اتاق حاوی پیش‌نویس‌هایی است که هنوز ارسال نشده‌اند</string>
+    <string name="a11y_error_some_message_not_sent">بعضی از پیام‌ها هنوز ارسال نشده‌اند</string>
+    <string name="a11y_delete_avatar">حذف نمایه</string>
+    <string name="a11y_change_avatar">تغییر نمایه</string>
+    <string name="a11y_import_key_from_file">واردکردن کلید از فایل</string>
+    <string name="a11y_open_widget">ابزارک‌های باز</string>
+    <string name="a11y_screenshot">اسکرین‌شات</string>
+    <string name="call_transfer_consult_first">ابتدا مشاوره بگیرید</string>
+    <plurals name="entries">
+        <item quantity="one">%d ورودی</item>
+        <item quantity="other">%d ورودی</item>
+    </plurals>
+    <string name="settings_server_upload_size_unknown">این محدودیت ناشناخته است.</string>
+    <string name="settings_server_upload_size_content">سرور شما فایل‌های ضمیمه (پرونده‌ها، فایل‌های چندرسانه‌ای و غیره) تا حجم %s را می‌پذیرد.</string>
+    <string name="settings_server_upload_size_title">محدودیت بارگذاری فایل بر روی سرور</string>
+    <string name="settings_server_version">ورژن سرور</string>
+    <string name="settings_server_name">نام سرور</string>
+    <string name="room_list_quick_actions_room_settings">تنظیمات اتاق</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">آیا مایل به ترک جلسه‌ی فعلی و ورود به جلسه‌ی دیگری هستید؟</string>
+    <string name="room_settings_room_version_title">ورژن اتاق</string>
+    <string name="dialog_edit_hint">مقدار جدید</string>
+    <string name="action_switch">تعویض</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">شما نشانی‌های این اتاق را تغییر دادید.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s نشانی‌های این اتاق را تغییر داد.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">شما نشانی‌های اصلی و جایگزین این اتاق را تغییر دادید.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s نشانی‌های اصلی و جایگزین این اتاق را تغییر داد.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">شما نشانی‌های جایگزین این اتاق را تغییر دادید.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s نشانی‌های جایگزین این اتاق را تغییر داد.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">شما نشانی جایگزین %1$s را برای این اتاق حذف کردید.</item>
+        <item quantity="other">شما نشانی‌های جایگزین %1$s را برای این اتاق حذف کردید.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s نشانی جایگزین %2$s را برای این اتاق حذف کرد.</item>
+        <item quantity="other">%1$s نشانی‌های جایگزین %2$s را برای این اتاق حذف کرد.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">شما نشانی جایگزین %1$s را برای این اتاق اضافه کردید.</item>
+        <item quantity="other">شما نشانی‌های جایگزین %1$s را برای این اتاق اضافه کردید.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s یک نشانی جایگزین %2$s را برای این اتاق اضافه کرد.</item>
+        <item quantity="other">%1$s نشانی‌های جایگزین %2$s را برای این اتاق اضافه کرد.</item>
+    </plurals>
+    <string name="initial_sync_start_downloading">همگام‌سازی اولیه:
+\nبارگیری داده‌ها…</string>
+    <string name="initial_sync_start_server_computing">همگام‌سازی اولیه:
+\nمنتظر پاسخ سرور بمانید…</string>
+    <string name="room_displayname_empty_room_was">اتاق خالی (%s بود)</string>
+    <string name="notice_widget_jitsi_modified_by_you">شما جلسه‌ی تصویری را تغییر دادید</string>
+    <string name="notice_widget_jitsi_modified">جلسه‌ی تصویری توسط %1$s تغییر کرد</string>
+    <string name="notice_widget_jitsi_added_by_you">شما جلسه‌ی تصویری را شروع کردید</string>
+    <string name="notice_widget_jitsi_added">جلسه‌ی تصویری توسط %1$s آغاز گردید</string>
+    <string name="notice_widget_jitsi_removed">جلسه‌ی تصویری توسط %1$s خاتمه یافت</string>
+    <string name="notice_widget_jitsi_removed_by_you">شما به جلسه‌ی تصویری خاتمه دادید</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 همه‌ی سرورها از مشارکت منع شده‌اند! این اتاق دیگر قابل استفاده نیست.</string>
+    <string name="notice_room_server_acl_updated_no_change">بدون تغییر.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">لیترال‌های آی‌پی برای تطبیق سرور هم‌اکنون ممنوع شد.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">لیترال‌های آی‌پی برای تطبیق سرور هم‌اکنون اجازه داده‌شد.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">تطبیق سرور %s از لیست موارد مجاز حذف گردید.</string>
+    <string name="notice_room_server_acl_updated_allowed">تطبیق سرور %s هم‌اکنون اجازه داده‌شد.</string>
+    <string name="notice_room_server_acl_updated_was_banned">تطبیق سرور %s از لیست ممنوعیت‌ها حذف شد.</string>
+    <string name="notice_room_server_acl_updated_banned">تطبیق سرور %s هم‌اکنون ممنوع شد.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">شما سطح کنترل دسترسی این اتاق را تغییر دادید.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">لیترال‌های آی‌پی برای تطبیق سرور اجازه داده شده‌است.</string>
+    <string name="notice_room_server_acl_set_title">%s سطح کنترل دسترسی‌ها برای این اتاق را بر روی سرور تنظیم کرد.</string>
+    <string name="notice_room_server_acl_updated_title">%s سطح کنترل دسترسی برای این اتاق را تغییر داد.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">لیترال‌های آی‌پی برای تطبیق سرور ممنوع است.</string>
+    <string name="notice_room_server_acl_set_allowed">تطبیق سرور %s اجازه داده شده‌است.</string>
+    <string name="notice_room_server_acl_set_banned">تطبیق سرور %s ممنوع شده‌است.</string>
+    <string name="notice_room_server_acl_set_title_by_you">شما ACL های سرور را برای این اتاق تنظیم کردید.</string>
 </resources>
