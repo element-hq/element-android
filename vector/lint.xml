@@ -12,6 +12,7 @@
     <issue id="IconDuplicatesConfig" severity="error" />
     <issue id="IconDuplicates" severity="error" />
     <issue id="IconExpectedSize" severity="error" />
+    <issue id="LocaleFolder" severity="error" />
 
     <!-- UX -->
     <issue id="ButtonOrder" severity="error" />

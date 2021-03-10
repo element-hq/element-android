@@ -2694,7 +2694,7 @@
     <string name="a11y_open_emoji_picker">Emoji-Auswahl öffnen</string>
     <string name="a11y_trust_level_trusted">Vertraute Vertrauensstufe</string>
     <string name="a11y_trust_level_warning">Warnungsvertrauensstufe</string>
-    <string name="a11y_trust_level_default">Standart-Vertrauensstufe</string>
+    <string name="a11y_trust_level_default">Standard-Vertrauensstufe</string>
     <string name="a11y_selected">Ausgewählt</string>
     <string name="a11y_video">Video</string>
     <string name="a11y_unsent_draft">Dieser Raum enthält einen ungesendeten Entwurf</string>
