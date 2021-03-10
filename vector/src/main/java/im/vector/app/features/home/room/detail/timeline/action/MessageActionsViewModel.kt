@@ -18,10 +18,10 @@ package im.vector.app.features.home.room.detail.timeline.action
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import dagger.assisted.AssistedFactory
 import dagger.Lazy
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.extensions.canReact
 import im.vector.app.core.platform.EmptyViewEvents
@@ -229,99 +229,19 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun actionsForEvent(timelineEvent: TimelineEvent, actionPermissions: ActionPermissions): List<EventSharedAction> {
-        val eventId = timelineEvent.eventId
         val messageContent = timelineEvent.getLastMessageContent()
         val msgType = messageContent?.msgType
 
         return arrayListOf<EventSharedAction>().apply {
-            if (timelineEvent.root.sendState.hasFailed()) {
-                if (canRetry(timelineEvent, actionPermissions)) {
-                    add(EventSharedAction.Resend(eventId))
+            when {
+                timelineEvent.root.sendState.hasFailed()         -> {
+                    addActionsForFailedState(timelineEvent, actionPermissions, messageContent, msgType)
                 }
-                add(EventSharedAction.Remove(eventId))
-                if (vectorPreferences.developerMode()) {
-                    addViewSourceItems(timelineEvent)
+                timelineEvent.root.sendState.isSending()         -> {
+                    addActionsForSendingState(timelineEvent)
                 }
-            } else if (timelineEvent.root.sendState.isSending()) {
-                // TODO is uploading attachment?
-                if (canCancel(timelineEvent)) {
-                    add(EventSharedAction.Cancel(eventId))
-                }
-            } else if (timelineEvent.root.sendState == SendState.SYNCED) {
-                if (!timelineEvent.root.isRedacted()) {
-                    if (canReply(timelineEvent, messageContent, actionPermissions)) {
-                        add(EventSharedAction.Reply(eventId))
-                    }
-
-                    if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
-                        add(EventSharedAction.Edit(eventId))
-                    }
-
-                    if (canRedact(timelineEvent, actionPermissions)) {
-                        add(EventSharedAction.Redact(eventId, askForReason = informationData.senderId != session.myUserId))
-                    }
-
-                    if (canCopy(msgType)) {
-                        // TODO copy images? html? see ClipBoard
-                        add(EventSharedAction.Copy(messageContent!!.body))
-                    }
-
-                    if (timelineEvent.canReact() && actionPermissions.canReact) {
-                        add(EventSharedAction.AddReaction(eventId))
-                    }
-
-                    if (canQuote(timelineEvent, messageContent, actionPermissions)) {
-                        add(EventSharedAction.Quote(eventId))
-                    }
-
-                    if (canViewReactions(timelineEvent)) {
-                        add(EventSharedAction.ViewReactions(informationData))
-                    }
-
-                    if (timelineEvent.hasBeenEdited()) {
-                        add(EventSharedAction.ViewEditHistory(informationData))
-                    }
-
-                    if (canShare(msgType)) {
-                        add(EventSharedAction.Share(timelineEvent.eventId, messageContent!!))
-                    }
-
-                    if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
-                        add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
-                    }
-
-                    if (timelineEvent.root.sendState == SendState.SENT) {
-                        // TODO Can be redacted
-
-                        // TODO sent by me or sufficient power level
-                    }
-                }
-
-                if (vectorPreferences.developerMode()) {
-                    if (timelineEvent.isEncrypted() && timelineEvent.root.mCryptoError != null) {
-                        val keysBackupService = session.cryptoService().keysBackupService()
-                        if (keysBackupService.state == KeysBackupState.NotTrusted
-                                || (keysBackupService.state == KeysBackupState.ReadyToBackUp
-                                        && keysBackupService.canRestoreKeys())
-                        ) {
-                            add(EventSharedAction.UseKeyBackup)
-                        }
-                        if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1
-                                || timelineEvent.senderInfo.userId != session.myUserId) {
-                            add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
-                        }
-                    }
-                    addViewSourceItems(timelineEvent)
-                }
-                add(EventSharedAction.CopyPermalink(eventId))
-                if (session.myUserId != timelineEvent.root.senderId) {
-                    // not sent by me
-                    if (timelineEvent.root.getClearType() == EventType.MESSAGE) {
-                        add(EventSharedAction.ReportContent(eventId, timelineEvent.root.senderId))
-                    }
-
-                    add(EventSharedAction.Separator)
-                    add(EventSharedAction.IgnoreUser(timelineEvent.root.senderId))
+                timelineEvent.root.sendState == SendState.SYNCED -> {
+                    addActionsForSyncedState(timelineEvent, actionPermissions, messageContent, msgType)
                 }
             }
         }
@@ -333,6 +253,116 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             val decryptedContent = timelineEvent.root.toClearContentStringWithIndent()
                     ?: stringProvider.getString(R.string.encryption_information_decryption_error)
             add(EventSharedAction.ViewDecryptedSource(decryptedContent))
+        }
+    }
+
+    private fun ArrayList<EventSharedAction>.addActionsForFailedState(timelineEvent: TimelineEvent,
+                                                                      actionPermissions: ActionPermissions,
+                                                                      messageContent: MessageContent?,
+                                                                      msgType: String?) {
+        val eventId = timelineEvent.eventId
+        if (canRetry(timelineEvent, actionPermissions)) {
+            add(EventSharedAction.Resend(eventId))
+        }
+        add(EventSharedAction.Remove(eventId))
+        if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+            add(EventSharedAction.Edit(eventId))
+        }
+        if (canCopy(msgType)) {
+            // TODO copy images? html? see ClipBoard
+            add(EventSharedAction.Copy(messageContent!!.body))
+        }
+        if (vectorPreferences.developerMode()) {
+            addViewSourceItems(timelineEvent)
+        }
+    }
+
+    private fun ArrayList<EventSharedAction>.addActionsForSendingState(timelineEvent: TimelineEvent) {
+        // TODO is uploading attachment?
+        if (canCancel(timelineEvent)) {
+            add(EventSharedAction.Cancel(timelineEvent.eventId))
+        }
+    }
+
+    private fun ArrayList<EventSharedAction>.addActionsForSyncedState(timelineEvent: TimelineEvent,
+                                                                      actionPermissions: ActionPermissions,
+                                                                      messageContent: MessageContent?,
+                                                                      msgType: String?) {
+        val eventId = timelineEvent.eventId
+        if (!timelineEvent.root.isRedacted()) {
+            if (canReply(timelineEvent, messageContent, actionPermissions)) {
+                add(EventSharedAction.Reply(eventId))
+            }
+
+            if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
+                add(EventSharedAction.Edit(eventId))
+            }
+
+            if (canRedact(timelineEvent, actionPermissions)) {
+                add(EventSharedAction.Redact(eventId, askForReason = informationData.senderId != session.myUserId))
+            }
+
+            if (canCopy(msgType)) {
+                // TODO copy images? html? see ClipBoard
+                add(EventSharedAction.Copy(messageContent!!.body))
+            }
+
+            if (timelineEvent.canReact() && actionPermissions.canReact) {
+                add(EventSharedAction.AddReaction(eventId))
+            }
+
+            if (canQuote(timelineEvent, messageContent, actionPermissions)) {
+                add(EventSharedAction.Quote(eventId))
+            }
+
+            if (canViewReactions(timelineEvent)) {
+                add(EventSharedAction.ViewReactions(informationData))
+            }
+
+            if (timelineEvent.hasBeenEdited()) {
+                add(EventSharedAction.ViewEditHistory(informationData))
+            }
+
+            if (canShare(msgType)) {
+                add(EventSharedAction.Share(timelineEvent.eventId, messageContent!!))
+            }
+
+            if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
+                add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
+            }
+
+            if (timelineEvent.root.sendState == SendState.SENT) {
+                // TODO Can be redacted
+
+                // TODO sent by me or sufficient power level
+            }
+        }
+
+        if (vectorPreferences.developerMode()) {
+            if (timelineEvent.isEncrypted() && timelineEvent.root.mCryptoError != null) {
+                val keysBackupService = session.cryptoService().keysBackupService()
+                if (keysBackupService.state == KeysBackupState.NotTrusted
+                        || (keysBackupService.state == KeysBackupState.ReadyToBackUp
+                                && keysBackupService.canRestoreKeys())
+                ) {
+                    add(EventSharedAction.UseKeyBackup)
+                }
+                if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1
+                        || timelineEvent.senderInfo.userId != session.myUserId) {
+                    add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
+                }
+            }
+            addViewSourceItems(timelineEvent)
+        }
+        add(EventSharedAction.CopyPermalink(eventId))
+        if (session.myUserId != timelineEvent.root.senderId) {
+            // not sent by me
+            if (timelineEvent.root.getClearType() == EventType.MESSAGE) {
+                add(EventSharedAction.ReportContent(eventId, timelineEvent.root.senderId))
+            }
+
+            add(EventSharedAction.Separator)
+            add(EventSharedAction.IgnoreUser(timelineEvent.root.senderId))
         }
     }
 
