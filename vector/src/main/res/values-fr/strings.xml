@@ -2584,7 +2584,7 @@
     <string name="room_alias_address_empty_can_add">Aucune adresse publiée pour le moment, ajoutez en une ci-dessous.</string>
     <string name="room_alias_publish">Publier ce salon dans le répertoire public de %1$s \?</string>
     <string name="room_alias_delete_confirmation">Supprimer l’adresse « %1$s » \?</string>
-    <string name="room_alias_unpublish_confirmation">Dé-publier l’adresse « %&amp;$s » \?</string>
+    <string name="room_alias_unpublish_confirmation">Dé-publier l’adresse « %1$s » \?</string>
     <string name="room_alias_published_alias_add_manually_submit">Publier</string>
     <string name="room_alias_published_alias_add_manually">Publier une nouvelle adresse manuellement</string>
     <string name="room_alias_published_other">Autres adresses publiées :</string>
