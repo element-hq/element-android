@@ -69,7 +69,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                                           private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
-    private val eventId = initialState.eventId
     private val informationData = initialState.informationData
     private val room = session.getRoom(initialState.roomId)
     private val pillsPostProcessor by lazy {
@@ -91,7 +90,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     init {
         observeEvent()
-        observeReactions()
         observePowerLevel()
         observeTimelineEventState()
     }
@@ -130,14 +128,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun observeEvent() {
         if (room == null) return
         room.rx()
-                .liveTimelineEvent(eventId)
+                .liveTimelineEvent(initialState.eventId)
                 .unwrap()
                 .execute {
                     copy(timelineEvent = it)
                 }
     }
 
-    private fun observeReactions() {
+    private fun observeReactions(eventId: String) {
         if (room == null) return
         room.rx()
                 .liveAnnotationSummary(eventId)
@@ -154,8 +152,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun observeTimelineEventState() {
         selectSubscribe(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
             val nonNullTimelineEvent = timelineEvent() ?: return@selectSubscribe
+            observeReactions(nonNullTimelineEvent.eventId)
             setState {
                 copy(
+                        eventId = nonNullTimelineEvent.eventId,
                         messageBody = computeMessageBody(nonNullTimelineEvent),
                         actions = actionsForEvent(nonNullTimelineEvent, permissions)
                 )
@@ -229,6 +229,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun actionsForEvent(timelineEvent: TimelineEvent, actionPermissions: ActionPermissions): List<EventSharedAction> {
+        val eventId = timelineEvent.eventId
         val messageContent = timelineEvent.getLastMessageContent()
         val msgType = messageContent?.msgType
 
