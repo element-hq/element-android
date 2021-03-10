@@ -470,8 +470,8 @@
     <string name="action_mark_room_read">علامت‌گذاری به عنوان خوانده شده</string>
     <string name="auth_login_sso">ورود با سامانه‌های احراز هویت مرکزی</string>
     <string name="notification_sync_init">در حال راه‌اندازی سرویس</string>
-    <string name="notification_noisy_notifications">آگاهی‌های پرصدا</string>
-    <string name="notification_silent_notifications">آگاهی‌های صامت</string>
+    <string name="notification_noisy_notifications">اعلان‌های پرصدا</string>
+    <string name="notification_silent_notifications">اعلان‌های صامت</string>
     <string name="title_activity_historical">تاریخچه</string>
     <string name="title_activity_group_details">جزییات انجمن</string>
     <string name="title_activity_choose_sticker">ارسال برچسب</string>
@@ -852,7 +852,7 @@
     <string name="pause_video">توقف</string>
     <string name="action_copy">رونوشت</string>
     <string name="dialog_title_success">موفقیت</string>
-    <string name="bottom_action_notification">آگاهی‌ها</string>
+    <string name="bottom_action_notification">اعلان‌ها</string>
     <string name="dismiss">خاتمه</string>
     <string name="no_permissions_to_start_conf_call">اجازهٔ شروع تماس کنفرانسی در این اتاق را ندارید</string>
     <string name="no_permissions_to_start_webrtc_call">اجازهٔ شروع تماس در این اتاق را ندارید</string>
