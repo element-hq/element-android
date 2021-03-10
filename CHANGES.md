@@ -18,6 +18,7 @@ Bugfix 🐛:
  - Try to fix crash about UrlPreview (#2640)
  - Be robust if Event.type is missing (#2946)
  - Snappier message send status
+ - Fix MainActivity display (#2927)
 
 Translations 🗣:
  - All string resources and translations have been moved to the application module. Weblate project for the SDK will be removed.
