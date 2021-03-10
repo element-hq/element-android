@@ -87,7 +87,7 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
     }
 
     override fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>> {
-        return LiveTimelineEvent(timelineInput, monarchy, taskExecutor, timelineEventMapper, roomId, eventId)
+        return LiveTimelineEvent(timelineInput, monarchy, taskExecutor.executorScope, timelineEventMapper, roomId, eventId)
     }
 
     override fun getAttachmentMessages(): List<TimelineEvent> {

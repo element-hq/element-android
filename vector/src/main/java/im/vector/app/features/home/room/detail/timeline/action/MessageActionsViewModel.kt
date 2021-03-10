@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.action
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
+import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -75,6 +76,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         pillsPostProcessorFactory.create(initialState.roomId)
     }
 
+    private val eventIdObservable = BehaviorRelay.createDefault(initialState.eventId)
+
     @AssistedFactory
     interface Factory {
         fun create(initialState: MessageActionState): MessageActionsViewModel
@@ -90,6 +93,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     init {
         observeEvent()
+        observeReactions()
         observePowerLevel()
         observeTimelineEventState()
     }
@@ -135,14 +139,17 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 }
     }
 
-    private fun observeReactions(eventId: String) {
+    private fun observeReactions() {
         if (room == null) return
-        room.rx()
-                .liveAnnotationSummary(eventId)
-                .map { annotations ->
-                    EmojiDataSource.quickEmojis.map { emoji ->
-                        ToggleState(emoji, annotations.getOrNull()?.reactionsSummary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
-                    }
+        eventIdObservable
+                .switchMap { eventId ->
+                    room.rx()
+                            .liveAnnotationSummary(eventId)
+                            .map { annotations ->
+                                EmojiDataSource.quickEmojis.map { emoji ->
+                                    ToggleState(emoji, annotations.getOrNull()?.reactionsSummary?.firstOrNull { it.key == emoji }?.addedByMe ?: false)
+                                }
+                            }
                 }
                 .execute {
                     copy(quickStates = it)
@@ -152,7 +159,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun observeTimelineEventState() {
         selectSubscribe(MessageActionState::timelineEvent, MessageActionState::actionPermissions) { timelineEvent, permissions ->
             val nonNullTimelineEvent = timelineEvent() ?: return@selectSubscribe
-            observeReactions(nonNullTimelineEvent.eventId)
+            eventIdObservable.accept(nonNullTimelineEvent.eventId)
             setState {
                 copy(
                         eventId = nonNullTimelineEvent.eventId,
