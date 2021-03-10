@@ -762,7 +762,7 @@
     <string name="settings_add_phone_number">Přidat telefonní číslo</string>
     <string name="settings_app_info_link_title">Informace o aplikaci</string>
     <string name="settings_app_info_link_summary">Zobrazit informace o aplikaci v systémovém nastavení.</string>
-    <string name="settings_notification_advanced">Rozšířená nestavení oznámení</string>
+    <string name="settings_notification_advanced">Rozšířená nastavení oznámení</string>
     <string name="settings_notification_by_event">Důležitost oznámení na základě události</string>
     <string name="notification_sync_init">Spouštím služby</string>
     <string name="title_activity_verify_device">Ověřit relaci</string>

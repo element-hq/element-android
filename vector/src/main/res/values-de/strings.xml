@@ -161,7 +161,7 @@
     <string name="notice_widget_modified">%1$s hat das %2$s Widget modifiziert</string>
     <string name="notice_widget_modified_by_you">Du hast das %1$s Widget modifiziert</string>
     <string name="power_level_admin">Administrator</string>
-    <string name="power_level_moderator">Moderator</string>
+    <string name="power_level_moderator">Moderator:in</string>
     <string name="power_level_default">Standard</string>
     <string name="power_level_custom">Benutzerdefiniert (%1$d)</string>
     <string name="power_level_custom_no_value">Benutzerdefiniert</string>
@@ -541,7 +541,7 @@
     <string name="room_participants_action_ban">Verbannen</string>
     <string name="room_participants_action_unban">Verbannung aufheben</string>
     <string name="room_participants_action_set_default_power_level">Zum/r normalen Benutzer/in herabstufen</string>
-    <string name="room_participants_action_set_moderator">Zum Moderator machen</string>
+    <string name="room_participants_action_set_moderator">Zum/r Moderator:in machen</string>
     <string name="room_participants_action_set_admin">Zum Admin machen</string>
     <string name="room_participants_action_ignore">Alle Nachrichten dieses/r Nutzers/in verbergen</string>
     <string name="room_participants_action_unignore">Alle Nachrichten dieses/r Nutzers/in anzeigen</string>
@@ -582,10 +582,10 @@
     <string name="ssl_fingerprint_hash">Fingerabdruck (%s):</string>
     <string name="ssl_could_not_verify">Konnte Identität des Remote-Servers nicht verifizieren.</string>
     <string name="ssl_cert_not_trust">Dies kann bedeuten, dass jemand böswillig deinen Internetverkehr abfängt oder dass dein Telefon dem Zertifikat, dass der Remote-Server anbietet, nicht vertraut.</string>
-    <string name="ssl_cert_new_account_expl">Wenn der Server-Administrator dir mitgeteilt hat, dass dies zu erwarten sei, stelle sicher, dass der Fingerabdruck unten mit dem von deinem Administrator bereitgestellten übereinstimmt.</string>
+    <string name="ssl_cert_new_account_expl">Wenn der/die Server-Administrator:in dir mitgeteilt hat, dass dies zu erwarten sei, stelle sicher, dass der Fingerabdruck unten mit dem von deinem/r Administrator:in bereitgestellten übereinstimmt.</string>
     <string name="ssl_unexpected_existing_expl">Das Zertifikat unterscheidet sich von dem Zertifikat, dem dein Gerät ursprünglich vertraut hat. Dies ist SEHR UNGEWÖHNLICH. Es wird empfohlen, dass du dieses neue Zertifikat NICHT AKZEPTIERST.</string>
     <string name="ssl_expected_existing_expl">Das Zertifikat hat sich von einem ursprünglich vertrauenswürdigem Zertifikat in ein nicht vertrauenswürdiges Zertifikat geändert. Eventuell wurde das Zertifikat des Servers erneuert. Bitte erkundige dich beim Server-Administrator, welcher Fingerprint als vertrauenswürdig gilt.</string>
-    <string name="ssl_only_accept">Akzeptiere das Zertifikat nur dann, wenn der Server-Administrator einen Fingerprint veröffentlicht hat, der mit dem obigen übereinstimmt.</string>
+    <string name="ssl_only_accept">Akzeptiere das Zertifikat nur dann, wenn der/die Server-Administrator:in einen Fingerprint veröffentlicht hat, der mit dem obigen übereinstimmt.</string>
     <!-- Room Details -->
     <string name="room_details_title">Raum-Details</string>
     <string name="room_details_people">Personen</string>
@@ -951,7 +951,7 @@
     <string name="invited">Eingeladen</string>
     <string name="filter_group_members">Filter Gruppen-Mitglieder</string>
     <string name="filter_group_rooms">Filter Gruppen-Räume</string>
-    <string name="group_no_long_description">Der Community-Administrator hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
+    <string name="group_no_long_description">Die Community-Administration hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
     <string name="has_been_kicked">Du wurdest von %2$s aus %1$s gekickt</string>
     <string name="has_been_banned">Du wurdest von %2$s aus %1$s verbannt</string>
     <string name="reason_colon">Grund: %1$s</string>
@@ -2292,7 +2292,7 @@
     <string name="send_a_sticker">Sticker</string>
     <string name="room_profile_section_admin">Administrative Aktionen</string>
     <string name="room_member_power_level_default_in">Standard in %1$s</string>
-    <string name="settings_hs_admin_e2e_disabled">Dein Serveradministrator hat in privaten Räumen &amp; Direktnachrichten Ende-zu-Ende Verschlüsselung standardmäßig deaktiviert.</string>
+    <string name="settings_hs_admin_e2e_disabled">Dein:e Serveradministrator:in hat in privaten Räumen &amp; Direktnachrichten Ende-zu-Ende Verschlüsselung standardmäßig deaktiviert.</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Flugzeugmodus ist aktiv</string>
     <string name="bootstrap_info_text_2">Gib eine Sicherheitsphrase ein, die nur du kennst. Diese wird benutzt um deine Daten auf dem Server geheim zu halten.</string>
     <string name="bootstrap_cancel_text">Wenn du jetzt abbrichst und den Zugriff zu deinen Sitzungen verlierst, kannst du verschlüsselte Nachrichten &amp; Daten verlieren.
@@ -2545,7 +2545,7 @@
     <string name="settings_security_pin_code_change_pin_summary">Ändere deine aktuelle PIN</string>
     <string name="settings_security_pin_code_change_pin_title">PIN ändern</string>
     <string name="phone_book_perform_lookup">Suche nach Kontakten auf Matrix</string>
-    <string name="room_settings_set_avatar">Avatar einrichten</string>
+    <string name="room_settings_set_avatar">Raum-Bild einrichten</string>
     <string name="identity_server_user_consent_not_provided">Einverständnis wurde nicht abgegeben.</string>
     <string name="user_code_info_text">Teile diesen Code mit Leuten, damit sie ihn scannen und mit dir chatten können.</string>
     <string name="user_code_share">Meinen Code teilen</string>
@@ -2668,4 +2668,58 @@
     <string name="call_hold_action">Halten</string>
     <string name="call_resume_action">Fortsetzen</string>
     <string name="action_return">Zurück</string>
+    <string name="dev_tools_event_content_hint">Ereignis-Inhalt</string>
+    <string name="dev_tools_success_state_event">Status-Event gesendet!</string>
+    <string name="dev_tools_success_event">Ereignis gesendet!</string>
+    <string name="dev_tools_error_malformed_event">Falsch geformtes Ereignis</string>
+    <string name="dev_tools_error_no_message_type">Fehlender Nachrichtentyp</string>
+    <string name="dev_tools_error_no_content">Kein Inhalt</string>
+    <string name="dev_tools_form_hint_event_content">Ereignisinhalt</string>
+    <string name="dev_tools_form_hint_state_key">Statusschlüssel</string>
+    <string name="dev_tools_form_hint_type">Typ</string>
+    <string name="dev_tools_send_custom_state_event">Benutzendendefiniertes Status-Event senden</string>
+    <string name="dev_tools_edit_content">Inhalt bearbeiten</string>
+    <string name="dev_tools_state_event">Status-Events</string>
+    <string name="dev_tools_send_state_event">Status-Event senden</string>
+    <string name="dev_tools_send_custom_event">Benutzendendefiniertes Ereignis senden</string>
+    <string name="dev_tools_explore_room_state">Raum-Status erkunden</string>
+    <string name="dev_tools_menu_name">Entwicklungswerkzeuge</string>
+    <string name="a11y_view_read_receipts">Lesebestätigungen anzeigen</string>
+    <string name="a11y_rule_notify_off">Nicht benachrichtigen</string>
+    <string name="a11y_rule_notify_noisy">Mit Ton benachrichtigen</string>
+    <string name="a11y_rule_notify_silent">Ohne Ton benachrichtigen</string>
+    <string name="a11y_error_message_not_sent">Nachricht wegen eines Errors nicht gesendet</string>
+    <string name="a11y_checked">Geprüft</string>
+    <string name="a11y_close_emoji_picker">Emoji-Auswahl schließen</string>
+    <string name="a11y_open_emoji_picker">Emoji-Auswahl öffnen</string>
+    <string name="a11y_trust_level_trusted">Vertraute Vertrauensstufe</string>
+    <string name="a11y_trust_level_warning">Warnungsvertrauensstufe</string>
+    <string name="a11y_trust_level_default">Standart-Vertrauensstufe</string>
+    <string name="a11y_selected">Ausgewählt</string>
+    <string name="a11y_video">Video</string>
+    <string name="a11y_unsent_draft">Dieser Raum enthält einen ungesendeten Entwurf</string>
+    <string name="a11y_error_some_message_not_sent">Einige Nachrichten wurden nicht gesendet</string>
+    <string name="a11y_delete_avatar">Avatar löschen</string>
+    <string name="a11y_change_avatar">Avatar ändern</string>
+    <string name="a11y_image">Bild</string>
+    <string name="a11y_import_key_from_file">Schlüssel von Datei importieren</string>
+    <string name="a11y_open_widget">Widgets öffnen</string>
+    <string name="a11y_screenshot">Bildschirmfoto</string>
+    <plurals name="entries">
+        <item quantity="one">%d Eintrag</item>
+        <item quantity="other">%d Einträge</item>
+    </plurals>
+    <string name="settings_server_upload_size_unknown">Die Obergrenze ist nicht bekannt.</string>
+    <string name="settings_server_upload_size_content">Dein Homeserver akzeptiert Anhänge (wie Dateien, Medien, etc.) mit einer Größe bis zu %s.</string>
+    <string name="settings_server_upload_size_title">Datei-Upload-Obergrenze des Servers</string>
+    <string name="settings_server_version">Server-Version</string>
+    <string name="settings_server_name">Severname</string>
+    <string name="room_list_quick_actions_room_settings">Raum-Einstellungen</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Derzeitige Konferenz verlassen und zu einer anderen wechseln\?</string>
+    <string name="room_settings_room_version_title">Raum-Version</string>
+    <string name="dialog_edit_hint">Neuer Wert</string>
+    <string name="initial_sync_start_downloading">Erste Synchronisation:
+\nLade Daten herunter…</string>
+    <string name="initial_sync_start_server_computing">Erste Synchronisation:
+\nWarte auf Serverantwort…</string>
 </resources>

@@ -1,0 +1,2 @@
+Olulisemad muutused selles versioonis: Heli- ja videokõnede parandused otsevestluses ning üldised veaparandused!
+Muudatuste logi täismahus: https://github.com/vector-im/element-android/releases/tag/v1.1.0
