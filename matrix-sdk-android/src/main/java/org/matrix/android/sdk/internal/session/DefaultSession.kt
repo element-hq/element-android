@@ -65,7 +65,6 @@ import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.network.GlobalErrorHandler
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
-import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.session.sync.job.SyncThread
 import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
@@ -120,8 +119,7 @@ internal class DefaultSession @Inject constructor(
         private val thirdPartyService: Lazy<ThirdPartyService>,
         private val callSignalingService: Lazy<CallSignalingService>,
         @UnauthenticatedWithCertificate
-        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>,
-        private val eventSenderProcessor: EventSenderProcessor
+        private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
 ) : Session,
         RoomService by roomService.get(),
         RoomDirectoryService by roomDirectoryService.get(),
@@ -158,10 +156,9 @@ internal class DefaultSession @Inject constructor(
         isOpen = true
         cryptoService.get().ensureDevice()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onStart() }
+            lifecycleObservers.forEach { it.onSessionStarted() }
         }
         globalErrorHandler.listener = this
-        eventSenderProcessor.start()
     }
 
     override fun requireBackgroundSync() {
@@ -200,12 +197,11 @@ internal class DefaultSession @Inject constructor(
         stopSync()
         // timelineEventDecryptor.destroy()
         uiHandler.post {
-            lifecycleObservers.forEach { it.onStop() }
+            lifecycleObservers.forEach { it.onSessionStopped() }
         }
         cryptoService.get().close()
         isOpen = false
         globalErrorHandler.listener = null
-        eventSenderProcessor.interrupt()
     }
 
     override fun getSyncStateLive() = getSyncThread().liveState()

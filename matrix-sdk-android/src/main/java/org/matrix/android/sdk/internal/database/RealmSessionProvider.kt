@@ -44,14 +44,14 @@ internal class RealmSessionProvider @Inject constructor(@SessionDatabase private
     }
 
     @MainThread
-    override fun onStart() {
+    override fun onSessionStarted() {
         realmThreadLocal.getOrSet {
             Realm.getInstance(monarchy.realmConfiguration)
         }
     }
 
     @MainThread
-    override fun onStop() {
+    override fun onSessionStopped() {
         realmThreadLocal.get()?.close()
         realmThreadLocal.remove()
     }

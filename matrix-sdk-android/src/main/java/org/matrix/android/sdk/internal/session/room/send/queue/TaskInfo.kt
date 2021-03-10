@@ -36,7 +36,7 @@ internal interface TaskInfo {
         const val TYPE_SEND = "TYPE_SEND"
         const val TYPE_REDACT = "TYPE_REDACT"
 
-        val moshi = Moshi.Builder()
+        private val moshi = Moshi.Builder()
                 .add(RuntimeJsonAdapterFactory.of(TaskInfo::class.java, "type", FallbackTaskInfo::class.java)
                         .registerSubtype(SendEventTaskInfo::class.java, TYPE_SEND)
                         .registerSubtype(RedactEventTaskInfo::class.java, TYPE_REDACT)
@@ -71,6 +71,6 @@ internal data class RedactEventTaskInfo(
 
 @JsonClass(generateAdapter = true)
 internal data class FallbackTaskInfo(
-        @Json(name = "type") override val type: String = TaskInfo.TYPE_REDACT,
+        @Json(name = "type") override val type: String = TaskInfo.TYPE_UNKNOWN,
         @Json(name = "order") override val order: Int
 ) : TaskInfo
