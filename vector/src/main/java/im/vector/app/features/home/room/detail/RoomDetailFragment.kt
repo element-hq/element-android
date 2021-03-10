@@ -1562,21 +1562,22 @@ class RoomDetailFragment @Inject constructor(
 
         this.view?.hideKeyboard()
 
-        if (informationData.sendState.isSending()) {
-            AlertDialog.Builder(requireContext())
-                    .setTitle(R.string.dialog_title_confirmation)
-                    .setMessage(getString(R.string.event_status_cancel_sending_dialog_message))
-                    .setNegativeButton(R.string.no, null)
-                    .setPositiveButton(R.string.yes) { _, _ ->
-                        sharedActionViewModel.post(EventSharedAction.Cancel(informationData.eventId))
-                    }
-                    .show()
-        } else {
-            MessageActionsBottomSheet
-                    .newInstance(roomId, informationData)
-                    .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
-        }
+        MessageActionsBottomSheet
+                .newInstance(roomId, informationData)
+                .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
+
         return true
+    }
+
+    private fun handleCancelSend(action: EventSharedAction.Cancel) {
+        AlertDialog.Builder(requireContext())
+                .setTitle(R.string.dialog_title_confirmation)
+                .setMessage(getString(R.string.event_status_cancel_sending_dialog_message))
+                .setNegativeButton(R.string.no, null)
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    roomDetailViewModel.handle(RoomDetailAction.CancelSend(action.eventId))
+                }
+                .show()
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
@@ -1774,7 +1775,7 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.RemoveFailedEcho(action.eventId))
             }
             is EventSharedAction.Cancel                     -> {
-                roomDetailViewModel.handle(RoomDetailAction.CancelSend(action.eventId))
+                handleCancelSend(action)
             }
             is EventSharedAction.ReportContentSpam          -> {
                 roomDetailViewModel.handle(RoomDetailAction.ReportContent(
