@@ -35,7 +35,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.bumptech.glide.util.Util.assertMainThread
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
 import im.vector.app.R
 import im.vector.app.core.di.DaggerScreenComponent
