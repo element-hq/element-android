@@ -13,6 +13,7 @@
     <dimen name="navigation_view_height">196dp</dimen>
     <dimen name="navigation_avatar_top_margin">44dp</dimen>
     <dimen name="item_decoration_left_margin">72dp</dimen>
+    <dimen name="item_event_message_state_size">16dp</dimen>
 
     <dimen name="chat_avatar_size">40dp</dimen>
     <dimen name="member_list_avatar_size">60dp</dimen>

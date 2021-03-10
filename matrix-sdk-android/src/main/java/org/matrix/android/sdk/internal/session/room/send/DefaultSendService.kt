@@ -232,6 +232,14 @@ internal class DefaultSendService @AssistedInject constructor(
         }
     }
 
+    override fun cancelAllFailedMessages() {
+        taskExecutor.executorScope.launch {
+            localEchoRepository.getAllFailedEventsToResend(roomId).forEach { event ->
+                cancelSend(event.eventId)
+            }
+        }
+    }
+
     override fun sendMedia(attachment: ContentAttachmentData,
                            compressBeforeSending: Boolean,
                            roomIds: Set<String>): Cancelable {

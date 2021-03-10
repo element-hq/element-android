@@ -119,13 +119,14 @@ class MessageItemFactory @Inject constructor(
     }
 
     fun create(event: TimelineEvent,
+               prevEvent: TimelineEvent?,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
         roomId = event.roomId
-        val informationData = messageInformationDataFactory.create(event, nextEvent)
+        val informationData = messageInformationDataFactory.create(event, prevEvent, nextEvent)
         if (event.root.isRedacted()) {
             // message is redacted
             val attributes = messageItemAttributesFactory.create(null, informationData, callback)

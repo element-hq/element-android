@@ -75,9 +75,9 @@ class VerificationItemFactory @Inject constructor(
         // If it's not a request ignore this event
         // if (refEvent.root.getClearContent().toModel<MessageVerificationRequestContent>() == null) return ignoredConclusion(event, highlight, callback)
 
-        val referenceInformationData = messageInformationDataFactory.create(refEvent, null)
+        val referenceInformationData = messageInformationDataFactory.create(refEvent, null, null)
 
-        val informationData = messageInformationDataFactory.create(event, null)
+        val informationData = messageInformationDataFactory.create(event, null, null)
         val attributes = messageItemAttributesFactory.create(null, informationData, callback)
 
         when (event.root.getClearType()) {

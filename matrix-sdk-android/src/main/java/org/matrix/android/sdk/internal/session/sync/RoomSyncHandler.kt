@@ -400,6 +400,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                             event.mxDecryptionResult = adapter.fromJson(json)
                         }
                     }
+                    timelineInput.onLocalEchoSynced(roomId, it, event.eventId)
                     // Finally delete the local echo
                     sendingEventEntity.deleteOnCascade(true)
                 } else {

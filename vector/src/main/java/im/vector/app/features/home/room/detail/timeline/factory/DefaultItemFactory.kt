@@ -61,7 +61,7 @@ class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: Ava
         } else {
             stringProvider.getString(R.string.rendering_event_error_exception, event.root.eventId)
         }
-        val informationData = informationDataFactory.create(event, null)
+        val informationData = informationDataFactory.create(event, null, null)
         return create(text, informationData, highlight, callback)
     }
 }

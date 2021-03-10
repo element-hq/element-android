@@ -52,7 +52,7 @@ class CallItemFactory @Inject constructor(
     ): VectorEpoxyModel<*>? {
         if (event.root.eventId == null) return null
         val roomId = event.roomId
-        val informationData = messageInformationDataFactory.create(event, null)
+        val informationData = messageInformationDataFactory.create(event, null, null)
         val callSignalingContent = event.getCallSignallingContent() ?: return null
         val callId = callSignalingContent.callId ?: return null
         val call = callManager.getCallById(callId)

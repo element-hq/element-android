@@ -94,6 +94,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.core.ui.views.ActiveConferenceView
+import im.vector.app.core.ui.views.FailedMessagesWarningView
 import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
@@ -325,6 +326,7 @@ class RoomDetailFragment @Inject constructor(
         setupJumpToBottomView()
         setupConfBannerView()
         setupEmojiPopup()
+        setupFailedMessagesWarningView()
 
         views.roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
@@ -557,6 +559,25 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    private fun setupFailedMessagesWarningView() {
+        views.failedMessagesWarningView.callback = object : FailedMessagesWarningView.Callback {
+            override fun onDeleteAllClicked() {
+                AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.event_status_delete_all_failed_dialog_title)
+                        .setMessage(getString(R.string.event_status_delete_all_failed_dialog_message))
+                        .setNegativeButton(R.string.no, null)
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            roomDetailViewModel.handle(RoomDetailAction.RemoveAllFailedMessages)
+                        }
+                        .show()
+            }
+
+            override fun onRetryClicked() {
+                roomDetailViewModel.handle(RoomDetailAction.ResendAll)
+            }
+        }
+    }
+
     private fun joinJitsiRoom(jitsiWidget: Widget, enableVideo: Boolean) {
         navigator.openRoomWidget(requireContext(), roomDetailArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to enableVideo))
     }
@@ -774,10 +795,6 @@ class RoomDetailFragment @Inject constructor(
             }
             R.id.timeline_setting -> {
                 navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
-                true
-            }
-            R.id.resend_all       -> {
-                roomDetailViewModel.handle(RoomDetailAction.ResendAll)
                 true
             }
             R.id.open_matrix_apps -> {
@@ -1171,6 +1188,7 @@ class RoomDetailFragment @Inject constructor(
         val summary = state.asyncRoomSummary()
         renderToolbar(summary, state.typingMessage)
         views.activeConferenceView.render(state)
+        views.failedMessagesWarningView.render(state.hasFailedSending)
         val inviter = state.asyncInviter()
         if (summary?.membership == Membership.JOIN) {
             views.jumpToBottomView.count = summary.notificationCount
@@ -1547,7 +1565,19 @@ class RoomDetailFragment @Inject constructor(
         MessageActionsBottomSheet
                 .newInstance(roomId, informationData)
                 .show(requireActivity().supportFragmentManager, "MESSAGE_CONTEXTUAL_ACTIONS")
+
         return true
+    }
+
+    private fun handleCancelSend(action: EventSharedAction.Cancel) {
+        AlertDialog.Builder(requireContext())
+                .setTitle(R.string.dialog_title_confirmation)
+                .setMessage(getString(R.string.event_status_cancel_sending_dialog_message))
+                .setNegativeButton(R.string.no, null)
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    roomDetailViewModel.handle(RoomDetailAction.CancelSend(action.eventId))
+                }
+                .show()
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {
@@ -1745,7 +1775,7 @@ class RoomDetailFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.RemoveFailedEcho(action.eventId))
             }
             is EventSharedAction.Cancel                     -> {
-                roomDetailViewModel.handle(RoomDetailAction.CancelSend(action.eventId))
+                handleCancelSend(action)
             }
             is EventSharedAction.ReportContentSpam          -> {
                 roomDetailViewModel.handle(RoomDetailAction.ReportContent(
