@@ -66,11 +66,11 @@ interface RelationService {
 
     /**
      * Edit a text message body. Limited to "m.text" contentType
-     * @param targetEventId The event to edit
+     * @param targetEvent The event to edit
      * @param newBodyText The edited body
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
      */
-    fun editTextMessage(targetEventId: String,
+    fun editTextMessage(targetEvent: TimelineEvent,
                         msgType: String,
                         newBodyText: CharSequence,
                         newBodyAutoMarkdown: Boolean,

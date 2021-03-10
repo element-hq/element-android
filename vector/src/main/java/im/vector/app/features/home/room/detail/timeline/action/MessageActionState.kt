@@ -59,5 +59,4 @@ data class MessageActionState(
     fun canReact() = timelineEvent()?.canReact() == true && actionPermissions.canReact
 
     fun sendState(): SendState? = timelineEvent()?.root?.sendState
-
 }

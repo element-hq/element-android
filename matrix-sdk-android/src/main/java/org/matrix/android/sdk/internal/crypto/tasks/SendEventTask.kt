@@ -15,10 +15,7 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
-import kotlinx.coroutines.delay
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -27,7 +24,6 @@ import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTa
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.task.Task
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 internal interface SendEventTask : Task<SendEventTask.Params, String> {
@@ -55,9 +51,6 @@ internal class DefaultSendEventTask @Inject constructor(
 
             val event = handleEncryption(params)
             val localId = event.eventId!!
-            if((event.content?.get("body") as? String)?.contains("Fail").orFalse()){
-                throw  IllegalStateException()
-            }
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENDING)
             val executeRequest = executeRequest<SendResponse>(globalErrorReceiver) {
                 apiCall = roomAPI.send(
