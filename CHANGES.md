@@ -12,6 +12,7 @@ Improvements 🙌:
  - Add tooltip for room quick actions
  - Pre-share session keys when opening a room or start typing (#2771)
  - Sending is now queuing by room and not uniquely to the session
+ - Improve Snackbar duration (#2929)
 
 Bugfix 🐛:
  - Try to fix crash about UrlPreview (#2640)

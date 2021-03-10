@@ -32,8 +32,8 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
-import com.google.android.material.snackbar.Snackbar
 import im.vector.app.R
+import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.features.themes.ThemeUtils
 
@@ -116,7 +116,7 @@ fun TextView.copyOnLongClick() {
                 ?.text
                 ?.let { text ->
                     copyToClipboard(view.context, text, false)
-                    Snackbar.make(view, view.resources.getString(R.string.copied_to_clipboard), Snackbar.LENGTH_SHORT).show()
+                    view.showOptimizedSnackbar(view.resources.getString(R.string.copied_to_clipboard))
                 }
         true
     }
