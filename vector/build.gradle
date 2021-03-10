@@ -476,7 +476,7 @@ dependencies {
     // Plant Timber tree for test
     androidTestImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
     // "The one who serves a great Espresso"
-    androidTestImplementation('com.schibsted.spain:barista:3.8.0') {
+    androidTestImplementation('com.schibsted.spain:barista:3.9.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
 }
