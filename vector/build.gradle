@@ -434,7 +434,7 @@ dependencies {
 
     implementation "androidx.emoji:emoji-appcompat:1.1.0"
 
-    implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
+    implementation 'com.github.BillCarsonFr:JsonViewer:0.6'
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
