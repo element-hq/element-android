@@ -54,7 +54,7 @@ import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
-import org.matrix.android.sdk.api.session.space.SpaceSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import timber.log.Timber
@@ -225,10 +225,10 @@ class HomeDetailFragment @Inject constructor(
         }
     }
 
-    private fun onSpaceChange(spaceSummary: SpaceSummary?) {
+    private fun onSpaceChange(spaceSummary: RoomSummary?) {
         spaceSummary?.let {
             // Use GlideApp with activity context to avoid the glideRequests to be paused
-            if (spaceSummary.spaceId == ALL_COMMUNITIES_GROUP_ID) {
+            if (spaceSummary.roomId == ALL_COMMUNITIES_GROUP_ID) {
                 // Special case
                 views.groupToolbarAvatarImageView.background = ContextCompat.getDrawable(requireContext(), R.drawable.space_home_background)
                 views.groupToolbarAvatarImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE

@@ -42,15 +42,14 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.api.session.space.SpaceSummary
 import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 
 const val ALL_COMMUNITIES_GROUP_ID = "+ALL_COMMUNITIES_GROUP_ID"
 
 sealed class SpaceListAction : VectorViewModelAction {
-    data class SelectSpace(val spaceSummary: SpaceSummary) : SpaceListAction()
-    data class LeaveSpace(val spaceSummary: SpaceSummary) : SpaceListAction()
+    data class SelectSpace(val spaceSummary: RoomSummary) : SpaceListAction()
+    data class LeaveSpace(val spaceSummary: RoomSummary) : SpaceListAction()
     object AddSpace : SpaceListAction()
 }
 
@@ -64,8 +63,8 @@ sealed class SpaceListViewEvents : VectorViewEvents {
 }
 
 data class SpaceListViewState(
-        val asyncSpaces: Async<List<SpaceSummary>> = Uninitialized,
-        val selectedSpace: SpaceSummary? = null
+        val asyncSpaces: Async<List<RoomSummary>> = Uninitialized,
+        val selectedSpace: RoomSummary? = null
 ) : MvRxState
 
 class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
@@ -96,7 +95,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
         selectedSpaceDataSource
                 .observe()
                 .subscribe {
-                    if (currentGroupId != it.orNull()?.spaceId) {
+                    if (currentGroupId != it.orNull()?.roomId) {
                         setState {
                             copy(
                                     selectedSpace = it.orNull()
@@ -111,8 +110,8 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
         selectSubscribe(SpaceListViewState::selectedSpace) { spaceSummary ->
             if (spaceSummary != null) {
                 // We only want to open group if the updated selectedGroup is a different one.
-                if (currentGroupId != spaceSummary.spaceId) {
-                    currentGroupId = spaceSummary.spaceId
+                if (currentGroupId != spaceSummary.roomId) {
+                    currentGroupId = spaceSummary.roomId
                     _viewEvents.post(SpaceListViewEvents.OpenSpace)
                 }
                 val optionGroup = Option.just(spaceSummary)
@@ -120,7 +119,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
             } else {
                 // If selected group is null we force to default. It can happens when leaving the selected group.
                 setState {
-                    copy(selectedSpace = this.asyncSpaces()?.find { it.spaceId == ALL_COMMUNITIES_GROUP_ID })
+                    copy(selectedSpace = this.asyncSpaces()?.find { it.roomId == ALL_COMMUNITIES_GROUP_ID })
                 }
             }
         }
@@ -138,17 +137,17 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
 
     private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
         // get uptodate version of the space
-        val summary = session.spaceService().getSpaceSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Equals(action.spaceSummary.spaceId) })
+        val summary = session.spaceService().getSpaceSummaries(roomSummaryQueryParams { roomId = QueryStringValue.Equals(action.spaceSummary.roomId) })
                 .firstOrNull()
-        if (summary?.roomSummary?.membership == Membership.INVITE) {
-            _viewEvents.post(SpaceListViewEvents.OpenSpaceSummary(summary.roomSummary.roomId))
+        if (summary?.membership == Membership.INVITE) {
+            _viewEvents.post(SpaceListViewEvents.OpenSpaceSummary(summary.roomId))
 //            viewModelScope.launch(Dispatchers.IO) {
 //                tryOrNull { session.spaceService().peekSpace(action.spaceSummary.spaceId) }.let {
 //                    Timber.d("PEEK RESULT/ $it")
 //                }
 //            }
         } else {
-            if (state.selectedSpace?.spaceId != action.spaceSummary.spaceId) {
+            if (state.selectedSpace?.roomId != action.spaceSummary.roomId) {
 //                state.selectedSpace?.let {
 //                    selectedSpaceDataSource.post(Option.just(state.selectedSpace))
 //                }
@@ -160,8 +159,8 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
     private fun handleLeaveSpace(action: SpaceListAction.LeaveSpace) {
         viewModelScope.launch {
             awaitCallback {
-                tryOrNull("Failed to leave space ${action.spaceSummary.spaceId}") {
-                    session.spaceService().getSpace(action.spaceSummary.spaceId)?.asRoom()?.leave(null, it)
+                tryOrNull("Failed to leave space ${action.spaceSummary.roomId}") {
+                    session.spaceService().getSpace(action.spaceSummary.roomId)?.asRoom()?.leave(null, it)
                 }
             }
         }
@@ -178,23 +177,19 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
             excludeType = listOf(/**RoomType.MESSAGING,$*/
                     null)
         }
-        Observable.combineLatest<SpaceSummary, List<SpaceSummary>, List<SpaceSummary>>(
+        Observable.combineLatest<RoomSummary, List<RoomSummary>, List<RoomSummary>>(
                 session
                         .rx()
                         .liveUser(session.myUserId)
                         .map { optionalUser ->
-                            SpaceSummary(
-                                    spaceId = ALL_COMMUNITIES_GROUP_ID,
-                                    roomSummary = RoomSummary(
-                                            roomId = ALL_COMMUNITIES_GROUP_ID,
-                                            membership = Membership.JOIN,
-                                            displayName = stringProvider.getString(R.string.group_all_communities),
-                                            avatarUrl = optionalUser.getOrNull()?.avatarUrl ?: "",
-                                            encryptionEventTs = 0,
-                                            isEncrypted = false,
-                                            typingUsers = emptyList()
-                                    ),
-                                    children = emptyList()
+                            RoomSummary(
+                                    roomId = ALL_COMMUNITIES_GROUP_ID,
+                                    membership = Membership.JOIN,
+                                    displayName = stringProvider.getString(R.string.group_all_communities),
+                                    avatarUrl = optionalUser.getOrNull()?.avatarUrl ?: "",
+                                    encryptionEventTs = 0,
+                                    isEncrypted = false,
+                                    typingUsers = emptyList()
                             )
                         },
                 session
@@ -205,9 +200,9 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 }
         )
                 .execute { async ->
-                    val currentSelectedGroupId = selectedSpace?.spaceId
+                    val currentSelectedGroupId = selectedSpace?.roomId
                     val newSelectedGroup = if (currentSelectedGroupId != null) {
-                        async()?.find { it.spaceId == currentSelectedGroupId }
+                        async()?.find { it.roomId == currentSelectedGroupId }
                     } else {
                         async()?.firstOrNull()
                     }

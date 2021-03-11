@@ -92,6 +92,9 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, reporter)
         handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, reporter)
         handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, reporter)
+
+        // post room sync validation
+        roomSummaryUpdater.validateSpaceRelationship(realm)
     }
 
     fun handleInitSyncEphemeral(realm: Realm,

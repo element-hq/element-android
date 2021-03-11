@@ -60,9 +60,9 @@ interface SpaceService {
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of List[SpaceSummary]
      */
-    fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams): LiveData<List<SpaceSummary>>
+    fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams): LiveData<List<RoomSummary>>
 
-    fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams): List<SpaceSummary>
+    fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams): List<RoomSummary>
 
     sealed class JoinSpaceResult {
         object Success : JoinSpaceResult()
@@ -79,4 +79,14 @@ interface SpaceService {
                           viaServers: List<String> = emptyList()): JoinSpaceResult
 
     suspend fun rejectInvite(spaceId: String, reason: String?)
+
+//    fun getSpaceParentsOfRoom(roomId: String) : List<SpaceSummary>
+
+    /**
+     * Let this room declare that it has a parent.
+     * @param canonical true if it should be the main parent of this room
+     * In practice, well behaved rooms should only have one canonical parent, but given this is not enforced:
+     * if multiple are present the client should select the one with the lowest room ID, as determined via a lexicographic utf-8 ordering.
+     */
+    suspend fun setSpaceParent(childRoomId: String, parentSpaceId: String, canonical: Boolean, viaServers: List<String>)
 }

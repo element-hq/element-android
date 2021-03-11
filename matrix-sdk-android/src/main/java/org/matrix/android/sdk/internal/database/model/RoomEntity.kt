@@ -43,6 +43,5 @@ internal open class RoomEntity(@PrimaryKey var roomId: String = "",
         set(value) {
             membersLoadStatusStr = value.name
         }
-
     companion object
 }
