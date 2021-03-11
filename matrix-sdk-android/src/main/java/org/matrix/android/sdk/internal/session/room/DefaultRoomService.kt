@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableFilterLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -35,6 +36,7 @@ import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotification
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.mapper.RoomSummaryMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -67,6 +69,7 @@ internal class DefaultRoomService @Inject constructor(
         private val peekRoomTask: PeekRoomTask,
         private val roomGetter: RoomGetter,
         private val roomSummaryDataSource: RoomSummaryDataSource,
+        private val roomSummaryMapper: RoomSummaryMapper,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
         private val taskExecutor: TaskExecutor
 ) : RoomService {
@@ -194,5 +197,19 @@ internal class DefaultRoomService @Inject constructor(
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun getFlattenRoomSummaryChildOf(spaceId: String?, memberships: List<Membership>): List<RoomSummary> {
+        if (spaceId == null) {
+            return roomSummaryDataSource.getFlattenOrphanRooms()
+        }
+        return roomSummaryDataSource.getAllRoomSummaryChildOf(spaceId, memberships)
+    }
+
+    override fun getFlattenRoomSummaryChildOfLive(spaceId: String?, memberships: List<Membership>): LiveData<List<RoomSummary>> {
+        if (spaceId == null) {
+            return roomSummaryDataSource.getFlattenOrphanRoomsLive()
+        }
+        return roomSummaryDataSource.getAllRoomSummaryChildOfLive(spaceId, memberships)
     }
 }

@@ -21,6 +21,7 @@ import androidx.paging.PagedList
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -205,4 +206,8 @@ interface RoomService {
                 .setEnablePlaceholders(false)
                 .setPrefetchDistance(10)
                 .build()
+
+    fun getFlattenRoomSummaryChildOf(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()) : List<RoomSummary>
+
+    fun getFlattenRoomSummaryChildOfLive(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()): LiveData<List<RoomSummary>>
 }
