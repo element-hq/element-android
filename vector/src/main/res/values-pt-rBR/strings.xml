@@ -2675,4 +2675,30 @@
     <string name="call_hold_action">Pausar</string>
     <string name="call_resume_action">Retomar</string>
     <string name="action_return">Voltar</string>
+    <string name="a11y_trust_level_default">Nível de confiança padrão</string>
+    <string name="a11y_selected">Selecionado</string>
+    <string name="a11y_video">Vídeo</string>
+    <string name="a11y_error_some_message_not_sent">Algumas mensagens não foram enviadas</string>
+    <string name="a11y_delete_avatar">Remover foto de perfil</string>
+    <string name="a11y_change_avatar">Mudar foto de perfil</string>
+    <string name="a11y_image">Imagem</string>
+    <string name="a11y_import_key_from_file">Importar chave do arquivo</string>
+    <string name="a11y_open_widget">Abrir widgets</string>
+    <string name="a11y_screenshot">Captura de tela</string>
+    <string name="settings_server_upload_size_unknown">O limite é desconhecido.</string>
+    <string name="settings_server_upload_size_content">O seu servidor local aceita anexos (arquivos, mídia, etc) com tamanhos de até %s.</string>
+    <string name="settings_server_version">Versão do servidor</string>
+    <string name="settings_server_name">Nome do servidor</string>
+    <string name="room_list_quick_actions_room_settings">Configurações da sala</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Sair da chamada atual e mudar para a outra\?</string>
+    <string name="room_settings_room_version_title">Versão da sala</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Mostrar todas as salas na lista de salas, incluindo as salas com conteúdo sensível.</string>
+    <string name="settings_room_directory_show_all_rooms">Mostrar salas com conteúdo sensível</string>
+    <string name="settings_category_room_directory">Lista de salas</string>
+    <string name="dialog_edit_hint">Novo valor</string>
+    <string name="action_switch">Alterar</string>
+    <string name="initial_sync_start_downloading">Sincronização inicial:
+\nBaixando dados…</string>
+    <string name="initial_sync_start_server_computing">Sincronização inicial:
+\nAguardando resposta do servidor…</string>
 </resources>
