@@ -22,14 +22,22 @@ import io.realm.RealmObject
 /**
  * Decorates room summary with space related information.
  */
-internal open class SpaceChildInfoEntity(
-        var viaServers: RealmList<String> = RealmList(),
-        // Use for alphabetic ordering of this child
+internal open class SpaceChildSummaryEntity(
+//        var isSpace: Boolean = false,
+
         var order: String? = null,
-        // If true, this child should be join when parent is joined
+
         var autoJoin: Boolean? = null,
-        // link to the actual room (check type to see if it's a subspace)
-        var roomSummaryEntity: RoomSummaryEntity? = null
+
+        var childRoomId: String? = null,
+        // Link to the actual space summary if it is known locally
+        var childSummaryEntity: RoomSummaryEntity? = null,
+
+        var viaServers: RealmList<String> = RealmList()
+//        var owner: RoomSummaryEntity? = null,
+
+//        var level: Int = 0
+
 ) : RealmObject() {
 
     companion object

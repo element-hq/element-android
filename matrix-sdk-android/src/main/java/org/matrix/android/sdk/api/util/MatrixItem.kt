@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
-import org.matrix.android.sdk.api.session.space.SpaceSummary
 import org.matrix.android.sdk.api.session.user.model.User
 import java.util.Locale
 
@@ -151,8 +150,6 @@ fun GroupSummary.toMatrixItem() = MatrixItem.GroupItem(groupId, displayName, ava
 fun RoomSummary.toMatrixItem() = MatrixItem.RoomItem(roomId, displayName, avatarUrl)
 
 fun RoomSummary.toRoomAliasMatrixItem() = MatrixItem.RoomAliasItem(canonicalAlias ?: roomId, displayName, avatarUrl)
-
-fun SpaceSummary.toMatrixItem() = MatrixItem.RoomItem(spaceId, displayName, avatarUrl)
 
 // If no name is available, use room alias as Riot-Web does
 fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name ?: getPrimaryAlias() ?: "", avatarUrl)

@@ -27,18 +27,18 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
  * It can be retrieved by [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService]
  */
 data class RoomSummary constructor(
-        override val roomId: String,
+        val roomId: String,
         // Computed display name
-        override val displayName: String = "",
-        override val name: String = "",
-        override val topic: String = "",
-        override val avatarUrl: String = "",
-        override val canonicalAlias: String? = null,
-        override val aliases: List<String> = emptyList(),
-        override val joinedMembersCount: Int? = 0,
-        override val invitedMembersCount: Int? = 0,
+        val displayName: String = "",
+        val name: String = "",
+        val topic: String = "",
+        val avatarUrl: String = "",
+        val canonicalAlias: String? = null,
+        val aliases: List<String> = emptyList(),
+        val joinedMembersCount: Int? = 0,
+        val invitedMembersCount: Int? = 0,
         val latestPreviewableEvent: TimelineEvent? = null,
-        override val otherMemberIds: List<String> = emptyList(),
+        val otherMemberIds: List<String> = emptyList(),
         val isDirect: Boolean = false,
         val notificationCount: Int = 0,
         val highlightCount: Int = 0,
@@ -55,8 +55,10 @@ data class RoomSummary constructor(
         val breadcrumbsIndex: Int = NOT_IN_BREADCRUMBS,
         val roomEncryptionTrustLevel: RoomEncryptionTrustLevel? = null,
         val hasFailedSending: Boolean = false,
-        override val roomType: String? = null
-) : IRoomSummary {
+        val roomType: String? = null,
+        val spaceParents: List<SpaceParentInfo>? = null,
+        val children: List<SpaceChildInfo>? = null
+) {
 
     val isVersioned: Boolean
         get() = versioningState != VersioningState.NONE

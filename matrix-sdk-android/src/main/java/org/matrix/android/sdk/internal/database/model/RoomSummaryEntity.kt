@@ -28,6 +28,9 @@ import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 
 internal open class RoomSummaryEntity(
         @PrimaryKey var roomId: String = ""
+        var roomType: String? = null,
+        var parents: RealmList<SpaceParentSummaryEntity> = RealmList(),
+        var children: RealmList<SpaceChildSummaryEntity> = RealmList()
 ) : RealmObject() {
 
     var displayName: String? = ""
@@ -244,6 +247,5 @@ internal open class RoomSummaryEntity(
                 roomEncryptionTrustLevelStr = value?.name
             }
         }
-
     companion object
 }

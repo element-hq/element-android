@@ -20,6 +20,7 @@ import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
+import org.matrix.android.sdk.api.session.space.model.SpaceParentContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.query.whereType
@@ -35,8 +36,8 @@ import timber.log.Timber
  *
  *  - Separately, rooms can claim parents via the m.room.parent state event:
  */
-internal class RoomRelationshipHelper(private val realm: Realm,
-                                      private val roomId: String
+internal class RoomChildRelationInfo(private val realm: Realm,
+                                     private val roomId: String
 ) {
 
     data class SpaceChildInfo(
@@ -46,15 +47,24 @@ internal class RoomRelationshipHelper(private val realm: Realm,
             val viaServers: List<String>
     )
 
+    data class SpaceParentInfo(
+            val roomId: String,
+            val canonical: Boolean,
+            val viaServers: List<String>,
+            val stateEventSender: String
+    )
+
     /**
      * Gets the ordered list of valid child description.
      */
     fun getDirectChildrenDescriptions(): List<SpaceChildInfo> {
         return CurrentStateEventEntity.whereType(realm, roomId, EventType.STATE_SPACE_CHILD)
-                .findAll()
+                .findAll().also {
+                    Timber.v("## Space: Found ${it.count()} m.space.child state events for $roomId")
+                }
                 .mapNotNull {
                     ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()?.let { scc ->
-                        Timber.d("## Space child desc state event $scc")
+                        Timber.v("## Space child desc state event $scc")
                         // Children where via is not present are ignored.
                         scc.via?.let { via ->
                             SpaceChildInfo(
@@ -67,5 +77,26 @@ internal class RoomRelationshipHelper(private val realm: Realm,
                     }
                 }
                 .sortedBy { it.order }
+    }
+
+    fun getParentDescriptions(): List<SpaceParentInfo> {
+        return CurrentStateEventEntity.whereType(realm, roomId, EventType.STATE_SPACE_PARENT)
+                .findAll().also {
+                    Timber.v("## Space: Found ${it.count()} m.space.parent state events for $roomId")
+                }
+                .mapNotNull {
+                    ContentMapper.map(it.root?.content).toModel<SpaceParentContent>()?.let { scc ->
+                        Timber.v("## Space parent desc state event $scc")
+                        // Parent where via is not present are ignored.
+                        scc.via?.let { via ->
+                            SpaceParentInfo(
+                                    roomId = it.stateKey,
+                                    canonical = scc.canonical ?: false,
+                                    viaServers = via,
+                                    stateEventSender = it.root?.sender ?: ""
+                            )
+                        }
+                    }
+                }
     }
 }

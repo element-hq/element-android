@@ -22,11 +22,12 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
-import org.matrix.android.sdk.internal.database.model.SpaceSummaryEntity
-import org.matrix.android.sdk.internal.database.model.SpaceSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
+import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.task.Task
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -45,7 +46,7 @@ internal class DefaultJoinSpaceTask @Inject constructor(
         private val joinRoomTask: JoinRoomTask,
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
-        private val spaceSummaryDataSource: SpaceSummaryDataSource
+        private val roomSummaryDataSource: RoomSummaryDataSource
 ) : JoinSpaceTask {
 
     override suspend fun execute(params: JoinSpaceTask.Params): SpaceService.JoinSpaceResult {
@@ -65,15 +66,15 @@ internal class DefaultJoinSpaceTask @Inject constructor(
         Timber.v("## Space: > Wait for post joined sync ${params.roomIdOrAlias} ...")
         try {
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(2L)) { realm ->
-                realm.where(SpaceSummaryEntity::class.java)
+                realm.where(RoomSummaryEntity::class.java)
                         .apply {
                             if (params.roomIdOrAlias.startsWith("!")) {
-                                equalTo(SpaceSummaryEntityFields.SPACE_ID, params.roomIdOrAlias)
+                                equalTo(RoomSummaryEntityFields.ROOM_ID, params.roomIdOrAlias)
                             } else {
-                                equalTo(SpaceSummaryEntityFields.ROOM_SUMMARY_ENTITY.CANONICAL_ALIAS, params.roomIdOrAlias)
+                                equalTo(RoomSummaryEntityFields.CANONICAL_ALIAS, params.roomIdOrAlias)
                             }
                         }
-                        .equalTo(SpaceSummaryEntityFields.ROOM_SUMMARY_ENTITY.MEMBERSHIP_STR, Membership.JOIN.name)
+                        .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
             }
         } catch (exception: TimeoutCancellationException) {
             Timber.w("## Space: > Error created with timeout")
@@ -83,21 +84,21 @@ internal class DefaultJoinSpaceTask @Inject constructor(
         val errors = HashMap<String, Throwable>()
         Timber.v("## Space: > Sync done ...")
         // after that i should have the children (? do I need to paginate to get state)
-        val summary = spaceSummaryDataSource.getSpaceSummary(params.roomIdOrAlias)
-        Timber.v("## Space: Found space summary Name:[${summary?.roomSummary?.name}] children: ${summary?.children?.size}")
+        val summary = roomSummaryDataSource.getSpaceSummary(params.roomIdOrAlias)
+        Timber.v("## Space: Found space summary Name:[${summary?.name}] children: ${summary?.children?.size}")
         summary?.children?.forEach {
-            val childRoomSummary = it.roomSummary ?: return@forEach
-            Timber.v("## Space: Processing child :[${childRoomSummary.roomId}] autoJoin:${it.autoJoin}")
+//            val childRoomSummary = it.roomSummary ?: return@forEach
+            Timber.v("## Space: Processing child :[${it.childRoomId}] autoJoin:${it.autoJoin}")
             if (it.autoJoin) {
                 // I should try to join as well
-                if (childRoomSummary.roomType == RoomType.SPACE) {
+                if (it.roomType == RoomType.SPACE) {
                     // recursively join auto-joined child of this space?
-                    when (val subspaceJoinResult = this.execute(JoinSpaceTask.Params(it.roomSummary.roomId, null, it.viaServers))) {
+                    when (val subspaceJoinResult = this.execute(JoinSpaceTask.Params(it.childRoomId, null, it.viaServers))) {
                         SpaceService.JoinSpaceResult.Success -> {
                             // nop
                         }
                         is SpaceService.JoinSpaceResult.Fail -> {
-                            errors[it.roomSummary.roomId] = subspaceJoinResult.error
+                            errors[it.childRoomId] = subspaceJoinResult.error
                         }
                         is SpaceService.JoinSpaceResult.PartialSuccess -> {
                             errors.putAll(subspaceJoinResult.failedRooms)
@@ -105,15 +106,15 @@ internal class DefaultJoinSpaceTask @Inject constructor(
                     }
                 } else {
                     try {
-                        Timber.v("## Space: Joining room child ${childRoomSummary.roomId}")
+                        Timber.v("## Space: Joining room child ${it.childRoomId}")
                         joinRoomTask.execute(JoinRoomTask.Params(
-                                roomIdOrAlias = childRoomSummary.roomId,
+                                roomIdOrAlias = it.childRoomId,
                                 reason = "Auto-join parent space",
                                 viaServers = it.viaServers
                         ))
                     } catch (failure: Throwable) {
-                        errors[it.roomSummary.roomId] = failure
-                        Timber.e("## Space: Failed to join room child ${childRoomSummary.roomId}")
+                        errors[it.childRoomId] = failure
+                        Timber.e("## Space: Failed to join room child ${it.childRoomId}")
                     }
                 }
             }

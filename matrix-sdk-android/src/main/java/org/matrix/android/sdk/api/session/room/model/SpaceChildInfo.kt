@@ -17,8 +17,16 @@
 package org.matrix.android.sdk.api.session.room.model
 
 data class SpaceChildInfo(
-        val roomSummary: IRoomSummary?,
+        val childRoomId: String,
+        // We might not know this child at all,
+        // i.e we just know it exists but no info on type/name/etc..
+        val isKnown: Boolean,
+        val roomType: String?,
+        val name: String?,
+        val topic: String?,
+        val avatarUrl: String?,
         val order: String?,
+        val activeMemberCount: Int?,
         val autoJoin: Boolean,
         val viaServers: List<String>
 )
