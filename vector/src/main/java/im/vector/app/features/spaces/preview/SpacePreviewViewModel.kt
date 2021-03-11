@@ -156,12 +156,12 @@ class SpacePreviewViewModel @AssistedInject constructor(
                     childInfoList = Success(
                             resolveResult.second.map {
                                 ChildInfo(
-                                        roomId = it.roomSummary?.roomId ?: "",
-                                        avatarUrl = it.roomSummary?.avatarUrl,
-                                        name = it.roomSummary?.name,
-                                        topic = it.roomSummary?.topic,
-                                        memberCount = it.roomSummary?.joinedMembersCount,
-                                        isSubSpace = it.roomSummary?.roomType == RoomType.SPACE,
+                                        roomId = it.childRoomId,
+                                        avatarUrl = it.avatarUrl,
+                                        name = it.name,
+                                        topic = it.topic,
+                                        memberCount = it.activeMemberCount,
+                                        isSubSpace = it.roomType == RoomType.SPACE,
                                         children = Uninitialized,
                                         viaServers = null
                                 )

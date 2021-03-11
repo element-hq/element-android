@@ -35,8 +35,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.api.session.space.SpaceSummary
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.rx.rx
 import org.matrix.android.sdk.rx.unwrap
@@ -45,7 +45,7 @@ data class SpaceDirectoryState(
         // The current filter
         val spaceId: String,
         val currentFilter: String = "",
-        val summary: Async<SpaceSummary> = Uninitialized,
+        val summary: Async<RoomSummary> = Uninitialized,
         // True if more result are available server side
         val hasMore: Boolean = false,
         // Set of joined roomId / spaces,

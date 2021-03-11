@@ -19,11 +19,27 @@ package org.matrix.android.sdk.api.session.room
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
+import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 
 fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): RoomSummaryQueryParams {
     return RoomSummaryQueryParams.Builder().apply(init).build()
 }
 
+fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): SpaceSummaryQueryParams {
+    return RoomSummaryQueryParams.Builder()
+            .apply(init)
+            .apply {
+                this.includeType = listOf(RoomType.SPACE)
+                this.excludeType = null
+                this.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            }.build()
+}
+
+enum class RoomCategoryFilter {
+    ONLY_DM,
+    ONLY_ROOMS,
+    ALL
+}
 /**
  * This class can be used to filter room summaries to use with:
  * [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService]
@@ -33,7 +49,9 @@ data class RoomSummaryQueryParams(
         val displayName: QueryStringValue,
         val canonicalAlias: QueryStringValue,
         val memberships: List<Membership>,
-        val excludeType: List<String?>
+        val excludeType: List<String?>?,
+        val includeType: List<String?>?,
+        val roomCategoryFilter: RoomCategoryFilter?
 ) {
 
     class Builder {
@@ -42,14 +60,18 @@ data class RoomSummaryQueryParams(
         var displayName: QueryStringValue = QueryStringValue.IsNotEmpty
         var canonicalAlias: QueryStringValue = QueryStringValue.NoCondition
         var memberships: List<Membership> = Membership.all()
-        var excludeType: List<String?> = listOf(RoomType.SPACE)
+        var excludeType: List<String?>? = null
+        var includeType: List<String?>? = null
+        var roomCategoryFilter: RoomCategoryFilter? = RoomCategoryFilter.ALL
 
         fun build() = RoomSummaryQueryParams(
                 roomId = roomId,
                 displayName = displayName,
                 canonicalAlias = canonicalAlias,
                 memberships = memberships,
-                excludeType = excludeType
+                excludeType = excludeType,
+                includeType = includeType,
+                roomCategoryFilter = roomCategoryFilter
         )
     }
 }
