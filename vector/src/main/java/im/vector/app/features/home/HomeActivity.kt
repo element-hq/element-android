@@ -424,6 +424,23 @@ class HomeActivity :
         return true
     }
 
+    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+        if (roomId == null) return false
+        val listener = object : MatrixToBottomSheet.InteractionListener {
+            override fun navigateToRoom(roomId: String) {
+                navigator.openRoom(this@HomeActivity, roomId)
+            }
+
+            override fun switchToSpace(spaceId: String) {
+                navigator.switchToSpace(this@HomeActivity, spaceId, null, false)
+            }
+        }
+
+        MatrixToBottomSheet.withLink(deepLink.toString(), listener)
+                .show(supportFragmentManager, "HA#MatrixToBottomSheet")
+        return true
+    }
+
     companion object {
         fun newIntent(context: Context, clearNotification: Boolean = false, accountCreation: Boolean = false): Intent {
             val args = HomeActivityArgs(
