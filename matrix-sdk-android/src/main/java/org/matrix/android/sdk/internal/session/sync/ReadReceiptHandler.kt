@@ -16,12 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import io.realm.Realm
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
 import org.matrix.android.sdk.internal.database.query.createUnmanaged
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
-import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,7 +36,9 @@ typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, D
 private const val READ_KEY = "m.read"
 private const val TIMESTAMP_KEY = "ts"
 
-internal class ReadReceiptHandler @Inject constructor() {
+internal class ReadReceiptHandler @Inject constructor(
+        private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
+) {
 
     companion object {
 
@@ -87,7 +90,57 @@ internal class ReadReceiptHandler @Inject constructor() {
         realm.insertOrUpdate(readReceiptSummaries)
     }
 
+    /**
+     * Example of content:
+     *
+     * <pre>
+     * {
+     *     "type": "m.receipt",
+     *     "content": {
+     *         "$ofZhdeinmEReG_X-agD3J2TIhosEPkuvl62HJ8pVMMs": {
+     *             "m.read": {
+     *                 "@benoit.marty:matrix.org": {
+     *                     "ts": 1610468193999
+     *                 }
+     *             }
+     *         },
+     *         "$ZMa_qwE_w_ZOj_vAxv7JuJeHCQfYzuQblmIZxkYmNMs": {
+     *             "m.read": {
+     *                 "@benoitx:matrix.org": {
+     *                     "ts": 1610468049579
+     *                 },
+     *                 "@benoit.marty:matrix.org": {
+     *                     "ts": 1609156029466
+     *                 }
+     *             }
+     *         }
+     *     }
+     * }
+     * </pre>
+     */
     private fun incrementalSyncStrategy(realm: Realm, roomId: String, content: ReadReceiptContent) {
+        // First check if we have data from init sync to handle
+        // TODO Rename contentFromInitSync
+        val initSyncContent = roomSyncEphemeralTemporaryStore.read(roomId)
+                ?.events
+                ?.firstOrNull { it.type == EventType.RECEIPT }
+                ?.let {
+                    @Suppress("UNCHECKED_CAST")
+                    it.content as? ReadReceiptContent
+                }
+                ?.also {
+                    Timber.w("INIT_SYNC Copy RR for room $roomId")
+                }
+
+        initSyncContent?.let {
+            Timber.w("BOOK Copy RR for room $roomId")
+
+            // TODO Merge with data we just received
+            // TODO Store that when we enter the timeline
+            initialSyncStrategy(realm, roomId, it)
+            roomSyncEphemeralTemporaryStore.delete(roomId)
+        }
+
         for ((eventId, receiptDict) in content) {
             val userIdsDict = receiptDict[READ_KEY] ?: continue
             val readReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()

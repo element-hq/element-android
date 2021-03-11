@@ -22,11 +22,10 @@ import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.ToJson
 import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.model.LazyRoomSyncEphemeral
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncEphemeral
 import timber.log.Timber
-import java.io.File
-import java.util.concurrent.atomic.AtomicInteger
 
 internal class DefaultLazyRoomSyncEphemeralJsonAdapter {
 
@@ -44,20 +43,15 @@ internal class DefaultLazyRoomSyncEphemeralJsonAdapter {
     }
 }
 
-internal class SplitLazyRoomSyncJsonAdapter(
-        private val workingDirectory: File,
+internal class SplitLazyRoomSyncEphemeralJsonAdapter(
+        private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
         private val syncStrategy: InitialSyncStrategy.Optimized
 ) {
-    private val atomicInteger = AtomicInteger(0)
-
-    private fun createFile(): File {
-        val index = atomicInteger.getAndIncrement()
-        return File(workingDirectory, "room_$index.json")
-    }
-
     @FromJson
     fun fromJson(reader: JsonReader, delegate: JsonAdapter<RoomSyncEphemeral>): LazyRoomSyncEphemeral? {
         val path = reader.path
+        val roomId = path.substringAfter("\$.rooms.join.").substringBeforeLast(".ephemeral")
+
         val json = reader.nextSource().inputStream().bufferedReader().use {
             it.readText()
         }
@@ -65,9 +59,8 @@ internal class SplitLazyRoomSyncJsonAdapter(
         return if (json.length > limit) {
             Timber.v("INIT_SYNC $path content length: ${json.length} copy to a file")
             // Copy the source to a file
-            val file = createFile()
-            file.writeText(json)
-            LazyRoomSyncEphemeral.Stored(delegate, file)
+            roomSyncEphemeralTemporaryStore.write(roomId, json)
+            LazyRoomSyncEphemeral.Stored
         } else {
             Timber.v("INIT_SYNC $path content length: ${json.length} parse it now")
             val roomSync = delegate.fromJson(json) ?: return null

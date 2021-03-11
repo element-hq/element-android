@@ -128,15 +128,6 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
         cryptoSyncHandler.onSyncCompleted(syncResponse)
     }
 
-    suspend fun handleInitSyncSecondTransaction(syncResponse: SyncResponse) {
-        // Start another transaction to handle the ephemeral events
-        monarchy.awaitTransaction { realm ->
-            if (syncResponse.rooms != null) {
-                roomSyncHandler.handleInitSyncEphemeral(realm, syncResponse.rooms)
-            }
-        }
-    }
-
     /**
      * At the moment we don't get any group data through the sync, so we poll where every hour.
      * You can also force to refetch group data using [Group] API.

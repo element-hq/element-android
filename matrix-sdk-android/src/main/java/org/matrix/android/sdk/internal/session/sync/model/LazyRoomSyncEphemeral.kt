@@ -16,28 +16,10 @@
 
 package org.matrix.android.sdk.internal.session.sync.model
 
-import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonClass
-import com.squareup.moshi.JsonReader
-import okio.buffer
-import okio.source
-import java.io.File
 
 @JsonClass(generateAdapter = false)
 internal sealed class LazyRoomSyncEphemeral {
     data class Parsed(val _roomSyncEphemeral: RoomSyncEphemeral) : LazyRoomSyncEphemeral()
-    data class Stored(val roomSyncEphemeralAdapter: JsonAdapter<RoomSyncEphemeral>, val file: File) : LazyRoomSyncEphemeral()
-
-    val roomSyncEphemeral: RoomSyncEphemeral
-        get() {
-            return when (this) {
-                is Parsed -> _roomSyncEphemeral
-                is Stored -> {
-                    // Parse the file now
-                    file.inputStream().use { pos ->
-                        roomSyncEphemeralAdapter.fromJson(JsonReader.of(pos.source().buffer()))!!
-                    }
-                }
-            }
-        }
+    object Stored : LazyRoomSyncEphemeral()
 }
