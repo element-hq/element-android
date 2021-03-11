@@ -61,7 +61,7 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
                 ?: return Unit.also { dismiss() }
         val summary = activeSessionHolder.getSafeActiveSession()?.spaceService()?.getSpace(args.spaceId)?.spaceSummary()
 
-        val spaceName = summary?.roomSummary?.name
+        val spaceName = summary?.name
         views.descriptionText.text = getString(R.string.invite_people_to_your_space_desc, spaceName)
 
         views.inviteByMailButton.debouncedClicks {

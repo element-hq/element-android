@@ -111,7 +111,7 @@ class DefaultNavigator @Inject constructor(
         }
 
         sessionHolder.getSafeActiveSession()?.spaceService()?.getSpace(spaceId)?.spaceSummary()?.let {
-            Timber.d("## Nav: Switching to space $spaceId / ${it.roomSummary.name}")
+            Timber.d("## Nav: Switching to space $spaceId / ${it.name}")
             selectedSpaceDataSource.post(Option.just(it))
         } ?: kotlin.run {
             Timber.d("## Nav: Failed to switch to space $spaceId")

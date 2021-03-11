@@ -212,6 +212,6 @@ class MatrixToRoomSpaceFragment @Inject constructor(
         }
     }
 
-    fun secondaryButtonClicked() = withState(sharedViewModel) { state ->
+    private fun secondaryButtonClicked() = withState(sharedViewModel) { _ ->
     }
 }

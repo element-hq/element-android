@@ -35,10 +35,27 @@
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
-        app:layout_constraintEnd_toStartOf="@+id/groupTmpLeave"
+        app:layout_constraintEnd_toStartOf="@+id/groupChildrenCollapse"
         app:layout_constraintStart_toEndOf="@+id/groupAvatarImageView"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem/random" />
+
+
+    <ImageView
+        android:id="@+id/groupChildrenCollapse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:importantForAccessibility="no"
+        tools:src="@drawable/ic_expand_more_white"
+        android:src="@drawable/ic_expand_less_white"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
+        app:layout_constraintEnd_toStartOf="@+id/groupTmpLeave"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?riotx_text_primary"
+        tools:ignore="MissingPrefix" />
 
     <ImageView
         android:id="@+id/groupTmpLeave"
@@ -61,6 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="21dp"
         android:importantForAccessibility="no"
+        android:visibility="gone"
         android:src="@drawable/ic_arrow_right"
         app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"

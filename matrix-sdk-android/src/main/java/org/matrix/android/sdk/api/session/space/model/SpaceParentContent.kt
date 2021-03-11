@@ -26,7 +26,6 @@ import com.squareup.moshi.JsonClass
  *  "state_key": "!space:example.com",
  *  "content": {
  *      "via": ["example.com"],
- *      "present": true,
  *      "canonical": true,
  *  }
  * }
@@ -38,11 +37,6 @@ data class SpaceParentContent(
          * Parents where via is not present are ignored.
          */
         @Json(name = "via") val via: List<String>? = null,
-        /**
-         * present: true key is included to distinguish from a deleted state event
-         * Parent where present is not present (sic) or is not set to true are ignored.
-         */
-        @Json(name = "present") val present: Boolean? = false,
         /**
          * Canonical determines whether this is the main parent for the space.
          * When a user joins a room with a canonical parent, clients may switch to view the room

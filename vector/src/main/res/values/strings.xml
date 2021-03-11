@@ -2186,7 +2186,8 @@
     <string name="labs_swipe_to_reply_in_timeline">Enable swipe to reply in timeline</string>
     <string name="labs_show_unread_notifications_as_tab">Add a dedicated tab for unread notifications on main screen.</string>
 
-    <string name="labs_experimental_spaces">Enable Spaces (formerly known as ‘groups as rooms’) to allow users to organise rooms into more useful groups.</string>
+    <string name="labs_experimental_spaces">Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags. Requires compatible homeserver for some features.</string>
+    <string name="labs_experimental_spaces_desc">Warning: This will trigger a clear cache and initial sync</string>
 
     <string name="link_copied_to_clipboard">Link copied to clipboard</string>
 

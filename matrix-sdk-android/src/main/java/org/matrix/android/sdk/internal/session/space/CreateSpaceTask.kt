@@ -21,8 +21,8 @@ import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
-import org.matrix.android.sdk.internal.database.model.SpaceSummaryEntity
-import org.matrix.android.sdk.internal.database.model.SpaceSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
+import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.task.Task
@@ -44,8 +44,8 @@ internal class DefaultCreateSpaceTask @Inject constructor(
 
         try {
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
-                realm.where(SpaceSummaryEntity::class.java)
-                        .equalTo(SpaceSummaryEntityFields.SPACE_ID, spaceId)
+                realm.where(RoomSummaryEntity::class.java)
+                        .equalTo(RoomSummaryEntityFields.ROOM_ID, spaceId)
             }
         } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout(spaceId)

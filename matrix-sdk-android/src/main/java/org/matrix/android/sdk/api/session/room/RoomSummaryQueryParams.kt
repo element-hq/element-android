@@ -21,11 +21,27 @@ import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomType
+import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 
 fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): RoomSummaryQueryParams {
     return RoomSummaryQueryParams.Builder().apply(init).build()
 }
 
+fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): SpaceSummaryQueryParams {
+    return RoomSummaryQueryParams.Builder()
+            .apply(init)
+            .apply {
+                this.includeType = listOf(RoomType.SPACE)
+                this.excludeType = null
+                this.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            }.build()
+}
+
+enum class RoomCategoryFilter {
+    ONLY_DM,
+    ONLY_ROOMS,
+    ALL
+}
 /**
  * This class can be used to filter room summaries to use with:
  * [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService]
@@ -37,7 +53,8 @@ data class RoomSummaryQueryParams(
         val memberships: List<Membership>,
         val roomCategoryFilter: RoomCategoryFilter?,
         val roomTagQueryFilter: RoomTagQueryFilter?
-        val excludeType: List<String?>
+        val excludeType: List<String?>?,
+        val includeType: List<String?>?
 ) {
 
     class Builder {
@@ -49,6 +66,7 @@ data class RoomSummaryQueryParams(
         var roomCategoryFilter: RoomCategoryFilter? = RoomCategoryFilter.ALL
         var roomTagQueryFilter: RoomTagQueryFilter? = null
         var excludeType: List<String?> = listOf(RoomType.SPACE)
+        var includeType: List<String?>? = null
 
         fun build() = RoomSummaryQueryParams(
                 roomId = roomId,
@@ -56,8 +74,9 @@ data class RoomSummaryQueryParams(
                 canonicalAlias = canonicalAlias,
                 memberships = memberships,
                 roomCategoryFilter = roomCategoryFilter,
-                roomTagQueryFilter = roomTagQueryFilter
-                excludeType = excludeType
+                roomTagQueryFilter = roomTagQueryFilter,
+                excludeType = excludeType,
+                includeType = includeType
         )
     }
 }

@@ -18,9 +18,9 @@ package im.vector.app.features.grouplist
 
 import arrow.core.Option
 import im.vector.app.core.utils.BehaviorDataSource
-import org.matrix.android.sdk.api.session.space.SpaceSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SelectedSpaceDataSource @Inject constructor() : BehaviorDataSource<Option<SpaceSummary>>(Option.empty())
+class SelectedSpaceDataSource @Inject constructor() : BehaviorDataSource<Option<RoomSummary>>(Option.empty())
