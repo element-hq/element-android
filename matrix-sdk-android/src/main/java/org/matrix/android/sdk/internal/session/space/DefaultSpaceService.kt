@@ -19,26 +19,37 @@ package org.matrix.android.sdk.internal.session.space
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.session.space.SpaceService
-import org.matrix.android.sdk.api.session.space.SpaceSummary
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
+import org.matrix.android.sdk.api.session.space.model.SpaceParentContent
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.session.room.RoomGetter
 import org.matrix.android.sdk.internal.session.room.SpaceGetter
 import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
+import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
+import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.space.peeking.PeekSpaceTask
 import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 internal class DefaultSpaceService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
+        @UserId private val userId: String,
         private val createSpaceTask: CreateSpaceTask,
 //        private val joinRoomTask: JoinRoomTask,
         private val joinSpaceTask: JoinSpaceTask,
@@ -47,8 +58,9 @@ internal class DefaultSpaceService @Inject constructor(
 //        private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
 //        private val roomIdByAliasTask: GetRoomIdByAliasTask,
 //        private val deleteRoomAliasTask: DeleteRoomAliasTask,
-//        private val roomGetter: RoomGetter,
-        private val spaceSummaryDataSource: SpaceSummaryDataSource,
+        private val roomGetter: RoomGetter,
+        private val roomSummaryDataSource: RoomSummaryDataSource,
+        private val stateEventDataSource: StateEventDataSource,
         private val peekSpaceTask: PeekSpaceTask,
         private val resolveSpaceInfoTask: ResolveSpaceInfoTask,
         private val leaveRoomTask: LeaveRoomTask
@@ -73,12 +85,12 @@ internal class DefaultSpaceService @Inject constructor(
         return spaceGetter.get(spaceId)
     }
 
-    override fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams): LiveData<List<SpaceSummary>> {
-        return spaceSummaryDataSource.getRoomSummariesLive(queryParams)
+    override fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams): LiveData<List<RoomSummary>> {
+        return roomSummaryDataSource.getSpaceSummariesLive(queryParams)
     }
 
-    override fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams): List<SpaceSummary> {
-        return spaceSummaryDataSource.getSpaceSummaries(spaceSummaryQueryParams)
+    override fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams): List<RoomSummary> {
+        return roomSummaryDataSource.getSpaceSummaries(spaceSummaryQueryParams)
     }
 
     override suspend fun peekSpace(spaceId: String): SpacePeekResult {
@@ -108,21 +120,16 @@ internal class DefaultSpaceService @Inject constructor(
                                         ?.firstOrNull { it.stateKey == childSummary.roomId && it.type == EventType.STATE_SPACE_CHILD }
                                         ?.content.toModel<SpaceChildContent>()
                                 SpaceChildInfo(
-                                        roomSummary = RoomSummary(
-                                                roomId = childSummary.roomId,
-                                                roomType = childSummary.roomType,
-                                                name = childSummary.name ?: "",
-                                                displayName = childSummary.name ?: "",
-                                                topic = childSummary.topic ?: "",
-                                                joinedMembersCount = childSummary.numJoinedMembers,
-                                                avatarUrl = childSummary.avatarUrl ?: "",
-                                                encryptionEventTs = null,
-                                                typingUsers = emptyList(),
-                                                isEncrypted = false
-                                        ),
+                                        childRoomId = childSummary.roomId,
+                                        isKnown = true,
+                                        roomType = childSummary.roomType,
+                                        name = childSummary.name,
+                                        topic = childSummary.topic,
+                                        avatarUrl = childSummary.avatarUrl,
                                         order = childStateEv?.order,
                                         autoJoin = childStateEv?.autoJoin ?: false,
-                                        viaServers = childStateEv?.via ?: emptyList()
+                                        viaServers = childStateEv?.via ?: emptyList(),
+                                        activeMemberCount = childSummary.numJoinedMembers
                                 )
                             } ?: emptyList()
             )
@@ -137,5 +144,43 @@ internal class DefaultSpaceService @Inject constructor(
 
     override suspend fun rejectInvite(spaceId: String, reason: String?) {
         leaveRoomTask.execute(LeaveRoomTask.Params(spaceId, reason))
+    }
+
+//    override fun getSpaceParentsOfRoom(roomId: String): List<SpaceSummary> {
+//        return spaceSummaryDataSource.getParentsOfRoom(roomId)
+//    }
+
+    override suspend fun setSpaceParent(childRoomId: String, parentSpaceId: String, canonical: Boolean, viaServers: List<String>) {
+        // Should we perform some validation here?,
+        // and if client want to bypass, it could use sendStateEvent directly?
+        if (canonical) {
+            // check that we can send m.child in the parent room
+            if (roomSummaryDataSource.getRoomSummary(parentSpaceId)?.membership != Membership.JOIN) {
+                throw UnsupportedOperationException("Cannot add canonical child if not member of parent")
+            }
+            val powerLevelsEvent = stateEventDataSource.getStateEvent(
+                    roomId = parentSpaceId,
+                    eventType = EventType.STATE_ROOM_POWER_LEVELS,
+                    stateKey = QueryStringValue.NoCondition
+            )
+            val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>()
+                    ?: throw UnsupportedOperationException("Cannot add canonical child, not enough power level")
+            val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
+            if (!powerLevelsHelper.isUserAllowedToSend(userId, true, EventType.STATE_SPACE_CHILD)) {
+                throw UnsupportedOperationException("Cannot add canonical child, not enough power level")
+            }
+        }
+
+        val room = roomGetter.getRoom(childRoomId)
+                ?: throw IllegalArgumentException("Unknown Room $childRoomId")
+
+        room.sendStateEvent(
+                eventType = EventType.STATE_SPACE_PARENT,
+                stateKey = parentSpaceId,
+                body = SpaceParentContent(
+                        via = viaServers,
+                        canonical = canonical
+                ).toContent()
+        )
     }
 }

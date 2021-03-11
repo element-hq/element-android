@@ -24,9 +24,9 @@ interface Space {
     fun asRoom() : Room
 
     /**
-     * A current snapshot of [RoomSummary] associated with the room
+     * A current snapshot of [RoomSummary] associated with the space
      */
-    fun spaceSummary(): SpaceSummary?
+    fun spaceSummary(): RoomSummary?
 
     suspend fun addChildren(roomId: String, viaServers: List<String>, order: String?, autoJoin: Boolean = false)
 

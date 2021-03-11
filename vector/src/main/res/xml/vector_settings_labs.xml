@@ -49,6 +49,7 @@
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"
         android:key="SETTINGS_LABS_USE_SPACES"
-        android:title="@string/labs_experimental_spaces" />
+        android:title="@string/labs_experimental_spaces"
+        android:summary="@string/labs_experimental_spaces_desc"/>
 
 </androidx.preference.PreferenceScreen>

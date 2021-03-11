@@ -39,19 +39,22 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.SpaceChildInfoEntity
-import org.matrix.android.sdk.internal.database.model.SpaceSummaryEntity
+import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntity
+import org.matrix.android.sdk.internal.database.model.SpaceParentSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendStates
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.isEventRead
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereType
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.room.RoomAvatarResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
-import org.matrix.android.sdk.internal.session.room.relationship.RoomRelationshipHelper
+import org.matrix.android.sdk.internal.session.room.relationship.RoomChildRelationInfo
+import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncUnreadNotifications
 import timber.log.Timber
@@ -62,7 +65,8 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomDisplayNameResolver: RoomDisplayNameResolver,
         private val roomAvatarResolver: RoomAvatarResolver,
         private val eventDecryptor: EventDecryptor,
-        private val crossSigningService: DefaultCrossSigningService) {
+        private val crossSigningService: DefaultCrossSigningService,
+        private val stateEventDataSource: StateEventDataSource) {
 
     fun update(realm: Realm,
                roomId: String,
@@ -160,28 +164,6 @@ internal class RoomSummaryUpdater @Inject constructor(
                 crossSigningService.onUsersDeviceUpdate(otherRoomMembers)
             }
         }
-
-        if (roomType == RoomType.SPACE) {
-            Timber.v("## Space: Updating summary for Space $roomId membership: ${roomSummaryEntity.membership}")
-            val spaceSummaryEntity = SpaceSummaryEntity()
-            spaceSummaryEntity.spaceId = roomId
-            spaceSummaryEntity.roomSummaryEntity = roomSummaryEntity
-            spaceSummaryEntity.children.clear()
-            spaceSummaryEntity.children.addAll(
-                    RoomRelationshipHelper(realm, roomId).getDirectChildrenDescriptions()
-                            .map {
-                                Timber.v("## Space: Updating summary for room $roomId with info $it")
-                                realm.createObject<SpaceChildInfoEntity>().apply {
-                                    this.roomSummaryEntity = RoomSummaryEntity.getOrCreate(realm, it.roomId)
-                                    this.order = it.order
-                                    this.autoJoin = it.autoJoin
-                                }.also {
-                                    Timber.v("## Space: Updating summary for room $roomId with children $it")
-                                }
-                            }
-            )
-            realm.insertOrUpdate(spaceSummaryEntity)
-        }
     }
 
     private fun RoomSummaryEntity.updateHasFailedSending() {
@@ -193,4 +175,55 @@ internal class RoomSummaryUpdater @Inject constructor(
         roomSummaryEntity.updateHasFailedSending()
         roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
     }
+
+    /**
+     * Should be called at the end of the room sync, to check and validate all parent/child relations
+     */
+    fun validateSpaceRelationship(realm: Realm) {
+        // Do level 0 stuffs
+
+        realm.where(RoomSummaryEntity::class.java).findAll().forEach { roomSummary ->
+            if (roomSummary.roomType == RoomType.SPACE) {
+                roomSummary.children.clearWith { it.deleteFromRealm() }
+                roomSummary.children.addAll(
+                        RoomChildRelationInfo(realm, roomSummary.roomId).getDirectChildrenDescriptions()
+                                .map {
+                                    Timber.v("## Space: Updating summary for room ${roomSummary.roomId} with info $it")
+                                    realm.createObject<SpaceChildSummaryEntity>().apply {
+                                        this.childRoomId = it.roomId
+                                        this.childSummaryEntity = RoomSummaryEntity.where(realm, it.roomId).findFirst()
+                                        this.order = it.order
+                                        this.autoJoin = it.autoJoin
+                                        this.viaServers.addAll(it.viaServers)
+//                                        this.level = 0
+                                    }.also {
+                                        Timber.v("## Space: Updating summary for room ${roomSummary.roomId} with children $it")
+                                    }
+                                }
+                )
+            }
+
+            // check parents
+            roomSummary.parents.clearWith { it.deleteFromRealm() }
+            roomSummary.parents.addAll(
+                    RoomChildRelationInfo(realm, roomSummary.roomId).getParentDescriptions()
+                            .map { parentInfo ->
+                                Timber.v("## Space: Updating summary for room ${roomSummary.roomId} with parent info $parentInfo")
+                                realm.createObject<SpaceParentSummaryEntity>().apply {
+                                    this.parentRoomId = parentInfo.roomId
+                                    this.parentSummaryEntity = RoomSummaryEntity.where(realm, parentInfo.roomId).findFirst()
+                                    this.canonical = parentInfo.canonical
+                                    this.viaServers.addAll(parentInfo.viaServers)
+//                            this.level = 0
+                                }.also {
+                                    Timber.v("## Space: Updating summary for room ${roomSummary.roomId} with parent $it")
+                                }
+                            }
+            )
+        }
+    }
+
+//    private fun isValidCanonical() : Boolean {
+//
+//    }
 }
