@@ -208,6 +208,8 @@
     <string name="initial_sync_start_importing_account_groups">Initial Sync:\nImporting Communities</string>
     <string name="initial_sync_start_importing_account_data">Initial Sync:\nImporting Account Data</string>
 
+
+    <string name="event_status_sent_message">Message sent</string>
     <string name="event_status_sending_message">Sending message…</string>
     <string name="clear_timeline_send_queue">Clear sending queue</string>
 

@@ -73,11 +73,18 @@ class MessageActionsEpoxyController @Inject constructor(
                 text(stringProvider.getString(R.string.unable_to_send_message))
                 drawableStart(R.drawable.ic_warning_badge)
             }
-        } else if (sendState != SendState.SYNCED) {
+        } else if (sendState?.isSending().orFalse()) {
             bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(true)
                 text(stringProvider.getString(R.string.event_status_sending_message))
+            }
+        } else if (sendState == SendState.SENT) {
+            bottomSheetSendStateItem {
+                id("send_state")
+                showProgress(false)
+                drawableStart(R.drawable.ic_message_sent)
+                text(stringProvider.getString(R.string.event_status_sent_message))
             }
         }
 
@@ -124,9 +131,11 @@ class MessageActionsEpoxyController @Inject constructor(
             }
         }
 
-        // Separator
-        dividerItem {
-            id("actions_separator")
+        if (state.actions.isNotEmpty()) {
+            // Separator
+            dividerItem {
+                id("actions_separator")
+            }
         }
 
         // Action
