@@ -2556,7 +2556,7 @@
     <string name="room_permissions_change_history_visibility">Muuda vestlusajaloo nähtavust</string>
     <string name="room_permissions_enable_room_encryption">Võta jututoas kasutusele krüptimine</string>
     <string name="room_permissions_change_main_address_for_the_room">Muuda jututoa põhiaadressi</string>
-    <string name="room_permissions_change_room_avatar">Muuda jututoa profiilipilti ehk avatari</string>
+    <string name="room_permissions_change_room_avatar">Muuda jututoa tunnuspilti ehk avatari</string>
     <string name="room_permissions_modify_widgets">Muuda vidinaid</string>
     <string name="room_permissions_notify_everyone">Teavita kõiki</string>
     <string name="room_permissions_remove_messages_sent_by_others">Kustuta teiste saadetud sõnumid</string>
@@ -2598,7 +2598,7 @@
     <string name="call_tile_ended">See kõne on lõppenud</string>
     <string name="call_tile_other_declined">%1$s keeldus kõnest</string>
     <string name="call_tile_you_declined">Sa keeldusid %1$s kõnest</string>
-    <string name="call_tile_in_call">Sul on parasjagu see mõne pooleli</string>
+    <string name="call_tile_in_call">Sul on parasjagu see kõne pooleli</string>
     <string name="call_tile_other_started_call">%1$s alustas kõnet</string>
     <string name="call_tile_you_started_call">Sa alustasid kõnet</string>
     <string name="call_held_by_you">Sina panid kõne ootele</string>
@@ -2661,4 +2661,15 @@
 \nLaadin andmed alla…</string>
     <string name="initial_sync_start_server_computing">Esmane sünkroniseerimine:
 \nOotan serveri vastust…</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Näita jututubade kataloogist kõiki jututubasid, sealhulgas neid, kus on ebasobilikku sisu.</string>
+    <string name="settings_room_directory_show_all_rooms">Näita jututubasid, kus on ebasobilikku sisu</string>
+    <string name="event_status_failed_messages_warning">Nende sõnumite saatmine ei õnnestunud</string>
+    <string name="event_status_delete_all_failed_dialog_message">Kas sa kindlasti soovid sellest jututoast kustutada kõik saatmata sõnumid\?</string>
+    <string name="event_status_delete_all_failed_dialog_title">Kustuta saatmata sõnumid</string>
+    <string name="event_status_cancel_sending_dialog_message">Kas sa soovid katkestada sõnumi saatmist\?</string>
+    <string name="event_status_a11y_delete_all">Kustuta kõik sõnumid, mille saatmine ei õnnestunud</string>
+    <string name="event_status_a11y_failed">Saatmine ei õnnestunud</string>
+    <string name="event_status_a11y_sent">Saadetud</string>
+    <string name="event_status_a11y_sending">Saadan</string>
+    <string name="settings_category_room_directory">Jututubade kataloog</string>
 </resources>
