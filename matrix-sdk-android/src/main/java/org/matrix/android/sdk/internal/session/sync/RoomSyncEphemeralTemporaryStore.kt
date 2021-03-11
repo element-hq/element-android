@@ -45,7 +45,7 @@ internal class RoomSyncEphemeralTemporaryStoreFile @Inject constructor(
      * Write RoomSyncEphemeral to a file
      */
     override fun write(roomId: String, roomSyncEphemeralJson: String) {
-        Timber.w("INIT_SYNC Store RR for room $roomId")
+        Timber.w("INIT_SYNC Store ephemeral events for room $roomId")
         getFile(roomId).writeText(roomSyncEphemeralJson)
     }
 
