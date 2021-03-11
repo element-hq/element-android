@@ -20,6 +20,7 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.content.edit
+import androidx.lifecycle.LiveData
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -310,6 +311,14 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labSpaces(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_USE_SPACES, false)
+    }
+
+    fun labSpacesLive(): LiveData<Boolean> {
+        return SharedPreferenceLiveData.booleanLiveData(
+                defaultPrefs,
+                SETTINGS_LABS_USE_SPACES,
+                false
+        )
     }
 
     fun failFast(): Boolean {
