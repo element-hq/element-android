@@ -95,9 +95,7 @@ import im.vector.app.core.ui.views.ActiveConferenceView
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.KnownCallsViewHolder
-import im.vector.app.core.ui.views.ActiveConferenceView
 import im.vector.app.core.ui.views.FailedMessagesWarningView
-import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
 import im.vector.app.core.utils.KeyboardStateUtils
