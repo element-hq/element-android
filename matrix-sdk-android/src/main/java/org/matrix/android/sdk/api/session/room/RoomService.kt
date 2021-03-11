@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -178,4 +179,8 @@ interface RoomService {
      * This call will try to gather some information on this room, but it could fail and get nothing more
      */
     fun peekRoom(roomIdOrAlias: String, callback: MatrixCallback<PeekResult>)
+
+    fun getFlattenRoomSummaryChildOf(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()) : List<RoomSummary>
+
+    fun getFlattenRoomSummaryChildOfLive(spaceId: String?, memberships: List<Membership> = Membership.activeMemberships()): LiveData<List<RoomSummary>>
 }

@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
 import org.matrix.android.sdk.api.session.search.SearchResult
+import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
 
@@ -94,4 +95,10 @@ interface Room :
                afterLimit: Int,
                includeProfile: Boolean,
                callback: MatrixCallback<SearchResult>): Cancelable
+
+//    fun getSpaceParents(): List<SpaceSummary>
+//
+//    fun getCanonicalSpaceParents(): List<SpaceSummary>
+
+    fun asSpace(): Space?
 }

@@ -53,7 +53,9 @@ internal open class RoomSummaryEntity(
         var roomEncryptionTrustLevelStr: String? = null,
         var inviterId: String? = null,
         var hasFailedSending: Boolean = false,
-        var roomType: String? = null
+        var roomType: String? = null,
+        var parents: RealmList<SpaceParentSummaryEntity> = RealmList(),
+        var children: RealmList<SpaceChildSummaryEntity> = RealmList()
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name
@@ -87,6 +89,5 @@ internal open class RoomSummaryEntity(
         set(value) {
             roomEncryptionTrustLevelStr = value?.name
         }
-
     companion object
 }
