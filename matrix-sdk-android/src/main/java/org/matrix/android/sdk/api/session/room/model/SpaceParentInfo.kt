@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.space
+package org.matrix.android.sdk.api.session.room.model
 
-import org.matrix.android.sdk.api.session.room.model.IRoomSummary
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
-
-data class SpaceSummary(
-        val spaceId: String,
-        val roomSummary: RoomSummary,
-        val children: List<SpaceChildInfo>
-) : IRoomSummary by roomSummary
+data class SpaceParentInfo(
+        val parentId: String?,
+        val roomSummary: RoomSummary?,
+        val canonical: Boolean?,
+        val viaServers: List<String>
+)

@@ -32,7 +32,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGroupListBinding
 import im.vector.app.features.home.HomeActivitySharedAction
 import im.vector.app.features.home.HomeSharedActionViewModel
-import org.matrix.android.sdk.api.session.space.SpaceSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 class SpaceListFragment @Inject constructor(
@@ -76,11 +76,11 @@ class SpaceListFragment @Inject constructor(
         spaceController.update(state)
     }
 
-    override fun onSpaceSelected(spaceSummary: SpaceSummary) {
+    override fun onSpaceSelected(spaceSummary: RoomSummary) {
         viewModel.handle(SpaceListAction.SelectSpace(spaceSummary))
     }
 
-    override fun onLeaveSpace(spaceSummary: SpaceSummary) {
+    override fun onLeaveSpace(spaceSummary: RoomSummary) {
         viewModel.handle(SpaceListAction.LeaveSpace(spaceSummary))
     }
 

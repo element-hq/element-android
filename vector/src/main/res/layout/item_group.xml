@@ -5,7 +5,7 @@
     android:id="@+id/itemGroupLayout"
     android:layout_width="match_parent"
     android:layout_height="65dp"
-    android:background="@drawable/bg_group_item"
+    android:background="@drawable/bg_space_item"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
