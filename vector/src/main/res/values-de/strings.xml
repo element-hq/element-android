@@ -2724,4 +2724,5 @@
 \nWarte auf Serverantwort…</string>
     <string name="event_status_a11y_sent">Gesendet</string>
     <string name="settings_category_room_directory">Raumverzeichnis</string>
+    <string name="action_switch">Wechseln</string>
 </resources>
