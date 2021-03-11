@@ -2712,4 +2712,15 @@
     <string name="action_switch">Přepnout</string>
     <string name="initial_sync_start_downloading">Úvodní synchronizace:
 \nStahuji data…</string>
+    <string name="event_status_delete_all_failed_dialog_message">Opravdu chcete smazat všechny neodeslané zprávy v této místnosti\?</string>
+    <string name="event_status_delete_all_failed_dialog_title">Smazat neodeslané zprávy</string>
+    <string name="event_status_failed_messages_warning">Zprávy se nepodařilo odeslat</string>
+    <string name="event_status_cancel_sending_dialog_message">Chcete zrušit odesílání zprávy\?</string>
+    <string name="event_status_a11y_delete_all">Smazat všechny zprávy, které se nepodařilo odeslat</string>
+    <string name="event_status_a11y_failed">Selhalo</string>
+    <string name="event_status_a11y_sent">Odesláno</string>
+    <string name="event_status_a11y_sending">Odesílá se</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Zobrazit všechny místnosti v adresáři místností, včetně místností s explicitním obsahem.</string>
+    <string name="settings_room_directory_show_all_rooms">Zobrazit místnosti s explicitním obsahem</string>
+    <string name="settings_category_room_directory">Adresář místností</string>
 </resources>
