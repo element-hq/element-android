@@ -348,7 +348,7 @@
     <string name="no_result_placeholder">Keine Ergebnisse</string>
     <!-- Rooms fragment -->
     <string name="rooms_header">Räume</string>
-    <string name="rooms_directory_header">Raum-Verzeichnis</string>
+    <string name="rooms_directory_header">Raumverzeichnis</string>
     <string name="no_room_placeholder">Keine Räume</string>
     <string name="no_public_room_placeholder">Keine öffentl. Räume verfügbar</string>
     <plurals name="public_room_nb_users">
@@ -2723,4 +2723,5 @@
     <string name="initial_sync_start_server_computing">Erste Synchronisation:
 \nWarte auf Serverantwort…</string>
     <string name="event_status_a11y_sent">Gesendet</string>
+    <string name="settings_category_room_directory">Raumverzeichnis</string>
 </resources>
