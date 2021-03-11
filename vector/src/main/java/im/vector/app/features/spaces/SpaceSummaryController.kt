@@ -26,7 +26,7 @@ import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.grouplist.homeSpaceSummaryItem
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.space.SpaceSummary
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -51,13 +51,13 @@ class SpaceSummaryController @Inject constructor(
         buildGroupModels(nonNullViewState.asyncSpaces(), nonNullViewState.selectedSpace)
     }
 
-    private fun buildGroupModels(summaries: List<SpaceSummary>?, selected: SpaceSummary?) {
+    private fun buildGroupModels(summaries: List<RoomSummary>?, selected: RoomSummary?) {
         if (summaries.isNullOrEmpty()) {
             return
         }
         // show invites on top
 
-        summaries.filter { it.roomSummary.membership == Membership.INVITE }
+        summaries.filter { it.membership == Membership.INVITE }
                 .let { invites ->
                     if (invites.isNotEmpty()) {
                         genericItemHeader {
@@ -67,7 +67,7 @@ class SpaceSummaryController @Inject constructor(
                         invites.forEach {
                             spaceSummaryItem {
                                 avatarRenderer(avatarRenderer)
-                                id(it.spaceId)
+                                id(it.roomId)
                                 matrixItem(it.toMatrixItem())
                                 selected(false)
                                 listener { callback?.onSpaceSelected(it) }
@@ -87,19 +87,19 @@ class SpaceSummaryController @Inject constructor(
         }
 
         summaries
-                .filter { it.roomSummary.membership == Membership.JOIN }
+                .filter { it.membership == Membership.JOIN }
                 .forEach { groupSummary ->
-                    val isSelected = groupSummary.spaceId == selected?.spaceId
-                    if (groupSummary.spaceId == ALL_COMMUNITIES_GROUP_ID) {
+                    val isSelected = groupSummary.roomId == selected?.roomId
+                    if (groupSummary.roomId == ALL_COMMUNITIES_GROUP_ID) {
                         homeSpaceSummaryItem {
-                            id(groupSummary.spaceId)
+                            id(groupSummary.roomId)
                             selected(isSelected)
                             listener { callback?.onSpaceSelected(groupSummary) }
                         }
                     } else {
                         spaceSummaryItem {
                             avatarRenderer(avatarRenderer)
-                            id(groupSummary.spaceId)
+                            id(groupSummary.roomId)
                             matrixItem(groupSummary.toMatrixItem())
                             selected(isSelected)
                             onLeave { callback?.onLeaveSpace(groupSummary) }
@@ -119,8 +119,8 @@ class SpaceSummaryController @Inject constructor(
     }
 
     interface Callback {
-        fun onSpaceSelected(spaceSummary: SpaceSummary)
-        fun onLeaveSpace(spaceSummary: SpaceSummary)
+        fun onSpaceSelected(spaceSummary: RoomSummary)
+        fun onLeaveSpace(spaceSummary: RoomSummary)
         fun onAddSpaceSelected()
     }
 }

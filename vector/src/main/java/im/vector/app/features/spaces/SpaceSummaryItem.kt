@@ -18,6 +18,8 @@ package im.vector.app.features.spaces
 
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -37,6 +39,8 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute var listener: (() -> Unit)? = null
     @EpoxyAttribute var onLeave: (() -> Unit)? = null
+    @EpoxyAttribute var toggleExpand: (() -> Unit)? = null
+    @EpoxyAttribute var expanded: Boolean? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -52,6 +56,26 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         } else {
             holder.leaveView.isVisible = false
         }
+
+        when (expanded) {
+            null -> {
+                holder.collapseIndicator.isGone = true
+            }
+            else -> {
+                holder.collapseIndicator.isVisible = true
+                holder.collapseIndicator.setImageDrawable(
+                        ContextCompat.getDrawable(holder.view.context,
+                                if (expanded!!) R.drawable.ic_expand_less else R.drawable.ic_expand_more
+                        )
+                )
+                holder.collapseIndicator.setOnClickListener(
+                        DebouncedClickListener({ _ ->
+                            toggleExpand?.invoke()
+                        })
+                )
+            }
+        }
+
         avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
     }
 
@@ -65,5 +89,6 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         val groupNameView by bind<TextView>(R.id.groupNameView)
         val rootView by bind<CheckableConstraintLayout>(R.id.itemGroupLayout)
         val leaveView by bind<ImageView>(R.id.groupTmpLeave)
+        val collapseIndicator by bind<ImageView>(R.id.groupChildrenCollapse)
     }
 }

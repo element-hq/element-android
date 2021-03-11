@@ -29,12 +29,12 @@ import im.vector.app.features.settings.VectorPreferences
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.addTo
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.session.room.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.api.session.space.SpaceSummary
+import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -66,54 +66,89 @@ class AppStateHandler @Inject constructor(
     }
 
     private fun observeRoomsAndGroup() {
-        Observable
-                .combineLatest<List<RoomSummary>, Option<GroupSummary>, Option<SpaceSummary>, List<RoomSummary>>(
-                        sessionDataSource.observe()
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .switchMap {
-                                    val query = roomSummaryQueryParams {}
-                                    it.orNull()?.rx()?.liveRoomSummaries(query)
-                                            ?: Observable.just(emptyList())
-                                }
-                                .throttleLast(300, TimeUnit.MILLISECONDS),
-                        selectedGroupDataSource.observe(),
-                        selectedSpaceDataSource.observe(),
-                        Function3 { rooms, selectedGroupOption, selectedSpaceOption ->
-                            if (vectorPreferences.labSpaces()) {
-                                val selectedSpace = selectedSpaceOption.orNull()
-                                val filteredRooms = rooms.filter {
-                                    if (selectedSpace == null || selectedSpace.spaceId == ALL_COMMUNITIES_GROUP_ID) {
-                                        true
-                                    } else if (it.isDirect) {
-                                         it.otherMemberIds
-                                                .intersect(selectedSpace.roomSummary.otherMemberIds)
-                                                .isNotEmpty()
-                                    } else {
-                                        selectedSpace.children.indexOfFirst { child -> child.roomSummary?.roomId == it.roomId } != -1
-//                                        selectedGroup.roomIds.contains(it.roomId)
-                                    }
-                                }
-                                filteredRooms.sortedWith(chronologicalRoomComparator)
-                            } else {
-                                val selectedGroup = selectedGroupOption.orNull()
-                                val filteredRooms = rooms.filter {
-                                    if (selectedGroup == null || selectedGroup.groupId == ALL_COMMUNITIES_GROUP_ID) {
-                                        true
-                                    } else if (it.isDirect) {
-                                        it.otherMemberIds
-                                                .intersect(selectedGroup.userIds)
-                                                .isNotEmpty()
-                                    } else {
-                                        selectedGroup.roomIds.contains(it.roomId)
-                                    }
-                                }
-                                filteredRooms.sortedWith(chronologicalRoomComparator)
-                            }
-                        }
-                )
+        vectorPreferences.labSpacesLive()
+                .asObservable()
+                .switchMap { useSpaces ->
+                    if (useSpaces) {
+                        spaceFilterObservable()
+                    } else {
+                        groupFilterObservable()
+                    }
+                }
                 .subscribe {
                     homeRoomListDataSource.post(it)
                 }
                 .addTo(compositeDisposable)
     }
+
+    private fun spaceFilterObservable() = sessionDataSource.observe()
+            .observeOn(AndroidSchedulers.mainThread())
+            .switchMap {
+                val currentSession = it.orNull()
+                if (currentSession == null) {
+                    Observable.just(emptyList())
+                } else {
+                    selectedSpaceDataSource.observe()
+                            .switchMap { currentSpaceOption ->
+                                val currentSpace = currentSpaceOption.orNull()
+                                Observable
+                                        .combineLatest<List<RoomSummary>, List<RoomSummary>, List<RoomSummary>>(
+                                                // could be nice to only observe DMs...
+                                                currentSession.rx()
+                                                        .liveRoomSummaries(roomSummaryQueryParams {
+                                                            roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                                                        })
+                                                        // throttle first to quickly react to space change
+                                                        .throttleFirst(300, TimeUnit.MILLISECONDS),
+                                                currentSession.rx()
+                                                        .liveFlattenRoomSummaryChildOf(
+                                                                (currentSpace?.roomId?.takeIf { it != ALL_COMMUNITIES_GROUP_ID })
+                                                        ),
+                                                { dms, rooms ->
+                                                    val filteredDms = dms
+                                                            .filter {
+                                                                if (currentSpace == null || currentSpace.roomId == ALL_COMMUNITIES_GROUP_ID) {
+                                                                    it.isDirect // always true
+                                                                } else if (it.isDirect) {
+                                                                    it.otherMemberIds
+                                                                            .intersect(currentSpace.otherMemberIds)
+                                                                            .isNotEmpty()
+                                                                } else {
+                                                                    false
+                                                                }
+                                                            }
+                                                    (filteredDms + rooms).sortedWith(chronologicalRoomComparator)
+                                                }
+                                        )
+                            }
+                }
+            }
+
+    private fun groupFilterObservable() = Observable
+            .combineLatest<List<RoomSummary>, Option<GroupSummary>, List<RoomSummary>>(
+                    sessionDataSource.observe()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .switchMap {
+                                val query = roomSummaryQueryParams {}
+                                it.orNull()?.rx()?.liveRoomSummaries(query)
+                                        ?: Observable.just(emptyList())
+                            }
+                            .throttleLast(300, TimeUnit.MILLISECONDS),
+                    selectedGroupDataSource.observe(),
+                    { rooms, selectedGroupOption ->
+                        val selectedGroup = selectedGroupOption.orNull()
+                        val filteredRooms = rooms.filter {
+                            if (selectedGroup == null || selectedGroup.groupId == ALL_COMMUNITIES_GROUP_ID) {
+                                true
+                            } else if (it.isDirect) {
+                                it.otherMemberIds
+                                        .intersect(selectedGroup.userIds)
+                                        .isNotEmpty()
+                            } else {
+                                selectedGroup.roomIds.contains(it.roomId)
+                            }
+                        }
+                        filteredRooms.sortedWith(chronologicalRoomComparator)
+                    }
+            )
 }

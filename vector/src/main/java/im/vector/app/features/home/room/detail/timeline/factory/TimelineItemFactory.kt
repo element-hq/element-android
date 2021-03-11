@@ -64,6 +64,8 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
                 EventType.STATE_ROOM_POWER_LEVELS,
+                EventType.STATE_SPACE_CHILD,
+                EventType.STATE_SPACE_PARENT,
                 EventType.REDACTION             -> noticeItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(event, highlight, callback)

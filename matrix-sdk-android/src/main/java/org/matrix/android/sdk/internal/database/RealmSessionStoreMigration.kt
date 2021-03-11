@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.database
 
 import io.realm.DynamicRealm
-import io.realm.FieldAttribute
 import io.realm.RealmMigration
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
@@ -27,8 +26,8 @@ import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityField
 import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
-import org.matrix.android.sdk.internal.database.model.SpaceChildInfoEntityFields
-import org.matrix.android.sdk.internal.database.model.SpaceSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.SpaceParentSummaryEntityFields
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -155,22 +154,35 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
     }
 
     fun migrateTo9(realm: DynamicRealm) {
-        Timber.d("Step 5 -> 6")
+        Timber.d("Step 7 -> 8")
+        realm.schema.create("SpaceChildSummaryEntity")
+                ?.addField(SpaceChildSummaryEntityFields.ORDER, String::class.java)
+                ?.addField(SpaceChildSummaryEntityFields.CHILD_ROOM_ID, String::class.java)
+                ?.addField(SpaceChildSummaryEntityFields.AUTO_JOIN, Boolean::class.java)
+                ?.setNullable(SpaceChildSummaryEntityFields.AUTO_JOIN, true)
+                ?.addRealmObjectField(SpaceChildSummaryEntityFields.CHILD_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
+
+//        realm.schema.create("SpaceSummaryEntity")
+//                ?.addField(SpaceSummaryEntityFields.SPACE_ID, String::class.java, FieldAttribute.PRIMARY_KEY)
+//                ?.setRequired(SpaceSummaryEntityFields.SPACE_ID, true)
+//                ?.addRealmObjectField(SpaceSummaryEntityFields.ROOM_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
+//                ?.addRealmListField(SpaceSummaryEntityFields.CHILDREN.`$`, spaceChildInfoSchema!!)
+
+        realm.schema.create("SpaceParentSummaryEntity")
+                ?.addField(SpaceParentSummaryEntityFields.PARENT_ROOM_ID, String::class.java)
+                ?.addField(SpaceParentSummaryEntityFields.CANONICAL, Boolean::class.java)
+                ?.setNullable(SpaceParentSummaryEntityFields.CANONICAL, true)
+//                ?.addRealmListField(RoomParentRelationInfoEntityFields.VIA_SERVERS.`$`, String::class.java)
+//                ?.addRealmObjectField(RoomParentRelationInfoEntityFields.SPACE_SUMMARY_ENTITY.`$`, realm.schema.get("SpaceSummaryEntity")!!)
+                ?.addRealmObjectField(SpaceParentSummaryEntityFields.PARENT_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
+
         realm.schema.get("RoomSummaryEntity")
                 ?.addField(RoomSummaryEntityFields.ROOM_TYPE, String::class.java)
                 ?.transform { obj ->
                     // Should I put messaging type here?
                     obj.setString(RoomSummaryEntityFields.ROOM_TYPE, null)
                 }
-
-        val spaceChildInfoSchema = realm.schema.create("SpaceChildInfoEntity")
-                ?.addField(SpaceChildInfoEntityFields.ORDER,  String::class.java)
-                ?.addRealmListField(SpaceChildInfoEntityFields.VIA_SERVERS.`$`, String::class.java)
-                ?.addRealmObjectField(SpaceChildInfoEntityFields.ROOM_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
-
-        realm.schema.create("SpaceSummaryEntity")
-                ?.addField(SpaceSummaryEntityFields.SPACE_ID, String::class.java, FieldAttribute.PRIMARY_KEY)
-                ?.addRealmObjectField(SpaceSummaryEntityFields.ROOM_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
-                ?.addRealmListField(SpaceSummaryEntityFields.CHILDREN.`$`, spaceChildInfoSchema!!)
+                ?.addRealmListField(RoomSummaryEntityFields.PARENTS.`$`, realm.schema.get("SpaceParentSummaryEntity")!!)
+                ?.addRealmListField(RoomSummaryEntityFields.CHILDREN.`$`, realm.schema.get("SpaceChildSummaryEntity")!!)
     }
 }
