@@ -2722,4 +2722,5 @@
 \nLade Daten herunter…</string>
     <string name="initial_sync_start_server_computing">Erste Synchronisation:
 \nWarte auf Serverantwort…</string>
+    <string name="event_status_a11y_sent">Gesendet</string>
 </resources>
