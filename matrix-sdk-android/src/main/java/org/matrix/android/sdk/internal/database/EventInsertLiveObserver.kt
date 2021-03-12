@@ -27,13 +27,11 @@ import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                           private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>,
-                                                           private val eventDecryptor: EventDecryptor)
+                                                           private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>)
     : RealmLiveEntityObserver<EventInsertEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query<EventInsertEntity> {
@@ -85,23 +83,6 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
             processors.forEach { it.onPostProcess() }
         }
     }
-
-//    private fun decryptIfNeeded(event: Event) {
-//        if (event.isEncrypted() && event.mxDecryptionResult == null) {
-//            try {
-//                val result = eventDecryptor.decryptEvent(event, event.roomId ?: "")
-//                event.mxDecryptionResult = OlmDecryptionResult(
-//                        payload = result.clearEvent,
-//                        senderKey = result.senderCurve25519Key,
-//                        keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-//                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-//                )
-//            } catch (e: MXCryptoError) {
-//                Timber.v("Failed to decrypt event")
-//                // TODO -> we should keep track of this and retry, or some processing will never be handled
-//            }
-//        }
-//    }
 
     private fun shouldProcess(eventInsertEntity: EventInsertEntity): Boolean {
         return processors.any {

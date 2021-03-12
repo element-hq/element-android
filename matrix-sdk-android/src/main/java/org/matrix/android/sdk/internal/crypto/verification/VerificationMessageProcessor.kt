@@ -59,6 +59,8 @@ internal class VerificationMessageProcessor @Inject constructor(
             EventType.ENCRYPTED
     )
 
+    private val eventsToPostProcess = mutableListOf<Event>()
+
     override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
         if (insertType != EventInsertType.INCREMENTAL_SYNC) {
             return false
@@ -67,6 +69,17 @@ internal class VerificationMessageProcessor @Inject constructor(
     }
 
     override suspend fun process(realm: Realm, event: Event) {
+        eventsToPostProcess.add(event)
+    }
+
+    override suspend fun onPostProcess() {
+        eventsToPostProcess.forEach {
+            postProcess(it)
+        }
+        eventsToPostProcess.clear()
+    }
+
+    private suspend fun postProcess(event: Event) {
         Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
 
         // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
