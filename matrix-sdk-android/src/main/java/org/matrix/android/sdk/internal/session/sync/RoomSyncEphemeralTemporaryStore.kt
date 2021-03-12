@@ -35,7 +35,7 @@ internal interface RoomSyncEphemeralTemporaryStore {
 }
 
 internal class RoomSyncEphemeralTemporaryStoreFile @Inject constructor(
-        @SessionFilesDirectory private val fileDirectory: File
+        @SessionFilesDirectory fileDirectory: File
 ) : RoomSyncEphemeralTemporaryStore {
 
     private val workingDir = File(fileDirectory, "rr")

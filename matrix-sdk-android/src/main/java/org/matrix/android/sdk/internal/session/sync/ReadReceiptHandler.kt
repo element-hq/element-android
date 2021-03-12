@@ -121,13 +121,11 @@ internal class ReadReceiptHandler @Inject constructor(
     }
 
     fun getContentFromInitSync(roomId: String): ReadReceiptContent? {
+        @Suppress("UNCHECKED_CAST")
         return roomSyncEphemeralTemporaryStore.read(roomId)
                 ?.also { roomSyncEphemeralTemporaryStore.delete(roomId) }
                 ?.events
                 ?.firstOrNull { it.type == EventType.RECEIPT }
-                ?.let {
-                    @Suppress("UNCHECKED_CAST")
-                    it.content as? ReadReceiptContent
-                }
+                ?.content as? ReadReceiptContent
     }
 }

@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Lazy storage of ReadReceipts
 
 Bugfix 🐛:
  -
