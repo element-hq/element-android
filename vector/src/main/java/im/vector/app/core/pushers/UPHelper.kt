@@ -15,8 +15,8 @@
  */
 package im.vector.app.core.pushers
 
-import android.app.AlertDialog
 import android.content.Context
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
