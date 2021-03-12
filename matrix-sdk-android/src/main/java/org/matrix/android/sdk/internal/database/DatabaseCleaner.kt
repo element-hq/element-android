@@ -47,7 +47,7 @@ private const val MIN_NUMBER_OF_EVENTS_BY_CHUNK = 300
 internal class DatabaseCleaner @Inject constructor(@SessionDatabase private val realmConfiguration: RealmConfiguration,
                                                    private val taskExecutor: TaskExecutor) : SessionLifecycleObserver {
 
-    override fun onStart() {
+    override fun onSessionStarted() {
         taskExecutor.executorScope.launch(Dispatchers.Default) {
             awaitTransaction(realmConfiguration) { realm ->
                 val allRooms = realm.where(RoomEntity::class.java).findAll()

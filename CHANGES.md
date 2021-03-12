@@ -1,16 +1,14 @@
-Changes in Element 1.1.1 (2021-XX-XX)
+Changes in Element 1.1.2 (2021-XX-XX)
 ===================================================
 
 Features ✨:
  -
 
 Improvements 🙌:
- - Fetch homeserver type and version and display in a new setting screen and add info in rageshakes (#2831)
- - Improve initial sync performance (#983)
- - PIP support for Jitsi call (#2418)
+ -
 
 Bugfix 🐛:
- - Try to fix crash about UrlPreview (#2640)
+ -
 
 Translations 🗣:
  -
@@ -19,13 +17,52 @@ SDK API changes ⚠️:
  -
 
 Build 🧱:
- - Update a lot of dependencies, with the help of dependabot.
+ -
 
 Test:
  -
 
 Other changes:
  -
+
+Changes in Element 1.1.1 (2021-XX-XX)
+===================================================
+
+Features ✨:
+ -
+
+Improvements 🙌:
+ - Allow non-HTTPS connections to homeservers on Tor (#2941)
+ - Fetch homeserver type and version and display in a new setting screen and add info in rageshakes (#2831)
+ - Improve initial sync performance - split into 2 transactions (#983)
+ - PIP support for Jitsi call (#2418)
+ - Add tooltip for room quick actions
+ - Pre-share session keys when opening a room or start typing (#2771)
+ - Sending is now queuing by room and not uniquely to the session
+ - Improve Snackbar duration (#2929)
+ - Improve sending message state (#2937)
+
+Bugfix 🐛:
+ - Try to fix crash about UrlPreview (#2640)
+ - Be robust if Event.type is missing (#2946)
+ - Snappier message send status
+ - Fix MainActivity display (#2927)
+
+Translations 🗣:
+ - All string resources and translations have been moved to the application module. Weblate project for the SDK will be removed.
+
+SDK API changes ⚠️:
+ -
+
+Build 🧱:
+ - Update a lot of dependencies, with the help of dependabot.
+ - Add a script to download and install APK from the CI
+
+Test:
+ -
+
+Other changes:
+ - Rework edition of event management
 
 Changes in Element 1.1.0 (2021-02-19)
 ===================================================

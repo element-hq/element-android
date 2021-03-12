@@ -8,27 +8,17 @@
 
         <!-- Riotx attribute for palette -->
         <item name="riotx_background">@color/riotx_background_black</item>
-        <item name="riotx_base">@color/riotx_base_black</item>
-        <item name="riotx_base_text_icon_primary">@color/riotx_base_text_icon_primary_black</item>
-        <item name="riotx_base_text_icon_secondary">@color/riotx_base_text_icon_secondary_black</item>
-        <item name="riotx_search_background_mobile">@color/riotx_search_background_mobile_black</item>
+        <item name="vctr_home_drawer_header_background">@color/vctr_home_drawer_header_background_black</item>
         <item name="riotx_header_panel_background">@color/riotx_header_panel_background_black</item>
         <item name="riotx_header_panel_border_mobile">@color/riotx_header_panel_border_mobile_black</item>
-        <item name="riotx_header_panel_text_primary">@color/riotx_header_panel_text_primary_black</item>
         <item name="riotx_header_panel_text_secondary">@color/riotx_header_panel_text_secondary_black</item>
         <item name="riotx_text_primary">@color/riotx_text_primary_black</item>
         <item name="riotx_text_secondary">@color/riotx_text_secondary_black</item>
         <item name="riotx_text_tertiary">@color/riotx_text_tertiary_black</item>
         <item name="riotx_text_primary_body_contrast">@color/riotx_text_primary_body_contrast_black</item>
         <item name="riotx_android_secondary">@color/riotx_android_secondary_black</item>
-        <item name="riotx_search_placeholder">@color/riotx_search_placeholder_black</item>
-        <item name="riotx_room_highlight">@color/riotx_room_highlight_black</item>
         <item name="riotx_unread_room_indent">@color/riotx_unread_room_indent_black</item>
-        <item name="riotx_android_status_bar">@color/riotx_android_status_bar_black</item>
-        <item name="riotx_line_break_mobile">@color/riotx_line_break_mobile_black</item>
         <item name="riotx_unread_room_badge">@color/riotx_unread_room_badge_black</item>
-        <item name="riotx_fab_secondary_bg">@color/riotx_fab_secondary_bg_black</item>
-        <item name="riotx_fab_secondary_color">@color/riotx_fab_secondary_color_black</item>
         <item name="riotx_fab_label_bg">@color/riotx_fab_label_bg_black</item>
         <item name="riotx_fab_label_stroke">@color/riotx_fab_label_stroke_black</item>
         <item name="riotx_fab_label_color">@color/riotx_fab_label_color_black</item>
@@ -40,8 +30,6 @@
         <item name="riotx_reaction_background_off">@color/riotx_reaction_background_off_black</item>
         <item name="riotx_reaction_background_on">@color/riotx_reaction_background_on_black</item>
         <item name="riotx_alerter_background">@color/riotx_alerter_background_black</item>
-
-        <item name="riotx_bottom_nav_icon_color">@color/riotx_bottom_nav_icon_color_black</item>
 
         <!-- Material color: Note: this block should be the same in all theme because it references only common colors and ?riotx attributes -->
         <item name="colorPrimary">@color/riotx_accent</item>
@@ -65,8 +53,6 @@
 
         <item name="materialButtonStyle">@style/VectorButtonStyle</item>
         <item name="toolbarStyle">@style/VectorToolbarStyle</item>
-
-        <item name="android:textColorLink">@color/riotx_links</item>
 
         <!-- Menu text color -->
         <item name="android:actionMenuTextColor">?colorAccent</item>

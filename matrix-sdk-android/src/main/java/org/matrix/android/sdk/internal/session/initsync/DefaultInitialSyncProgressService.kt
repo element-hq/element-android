@@ -15,9 +15,9 @@
  */
 package org.matrix.android.sdk.internal.session.initsync
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
@@ -38,22 +38,22 @@ internal class DefaultInitialSyncProgressService @Inject constructor()
     /**
      * Create a rootTask
      */
-    fun startRoot(@StringRes nameRes: Int,
+    fun startRoot(initSyncStep: InitSyncStep,
                   totalProgress: Int) {
         endAll()
-        rootTask = TaskInfo(nameRes, totalProgress, null, 1F)
+        rootTask = TaskInfo(initSyncStep, totalProgress, null, 1F)
         reportProgress(0F)
     }
 
     /**
      * Add a child to the leaf
      */
-    override fun startTask(@StringRes nameRes: Int,
+    override fun startTask(initSyncStep: InitSyncStep,
                            totalProgress: Int,
                            parentWeight: Float) {
         val currentLeaf = rootTask?.leaf() ?: return
         currentLeaf.child = TaskInfo(
-                nameRes = nameRes,
+                initSyncStep = initSyncStep,
                 totalProgress = totalProgress,
                 parent = currentLeaf,
                 parentWeight = parentWeight
@@ -67,7 +67,7 @@ internal class DefaultInitialSyncProgressService @Inject constructor()
                 // Update the progress of the leaf and all its parents
                 leaf.setProgress(progress)
                 // Then update the live data using leaf wording and root progress
-                status.postValue(InitialSyncProgressService.Status.Progressing(leaf.nameRes, root.currentProgress.toInt()))
+                status.postValue(InitialSyncProgressService.Status.Progressing(leaf.initSyncStep, root.currentProgress.toInt()))
             }
         }
     }

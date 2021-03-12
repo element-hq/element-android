@@ -47,22 +47,22 @@ internal class DefaultUpdateQuickReactionTask @Inject constructor(@SessionDataba
     override suspend fun execute(params: UpdateQuickReactionTask.Params): UpdateQuickReactionTask.Result {
         var res: Pair<String?, List<String>?>? = null
         monarchy.doWithRealm { realm ->
-            res = updateQuickReaction(realm, params.reaction, params.oppositeReaction, params.eventId)
+            res = updateQuickReaction(realm, params)
         }
         return UpdateQuickReactionTask.Result(res?.first, res?.second.orEmpty())
     }
 
-    private fun updateQuickReaction(realm: Realm, reaction: String, oppositeReaction: String, eventId: String): Pair<String?, List<String>?> {
+    private fun updateQuickReaction(realm: Realm, params: UpdateQuickReactionTask.Params): Pair<String?, List<String>?> {
         // the emoji reaction has been selected, we need to check if we have reacted it or not
-        val existingSummary = EventAnnotationsSummaryEntity.where(realm, eventId).findFirst()
-                ?: return Pair(reaction, null)
+        val existingSummary = EventAnnotationsSummaryEntity.where(realm, params.roomId, params.eventId).findFirst()
+                ?: return Pair(params.reaction, null)
 
         // Ok there is already reactions on this event, have we reacted to it
         val aggregationForReaction = existingSummary.reactionsSummary.where()
-                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, reaction)
+                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.reaction)
                 .findFirst()
         val aggregationForOppositeReaction = existingSummary.reactionsSummary.where()
-                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, oppositeReaction)
+                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.oppositeReaction)
                 .findFirst()
 
         if (aggregationForReaction == null || !aggregationForReaction.addedByMe) {
@@ -72,7 +72,7 @@ internal class DefaultUpdateQuickReactionTask @Inject constructor(@SessionDataba
                 val entity = EventEntity.where(realm, it).findFirst()
                 if (entity?.sender == userId) entity.eventId else null
             }
-            return Pair(reaction, toRedact)
+            return Pair(params.reaction, toRedact)
         } else {
             // I already added it, so i need to undo it (like a toggle)
             // find all m.redaction coming from me to readact them

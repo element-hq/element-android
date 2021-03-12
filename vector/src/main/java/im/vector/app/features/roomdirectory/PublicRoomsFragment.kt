@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
@@ -31,6 +30,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentPublicRoomsBinding
 import im.vector.app.features.permalink.NavigationInterceptor
@@ -95,8 +95,7 @@ class PublicRoomsFragment @Inject constructor(
     private fun handleViewEvents(viewEvents: RoomDirectoryViewEvents) {
         when (viewEvents) {
             is RoomDirectoryViewEvents.Failure -> {
-                Snackbar.make(views.coordinatorLayout, errorFormatter.toHumanReadable(viewEvents.throwable), Snackbar.LENGTH_SHORT)
-                        .show()
+                views.coordinatorLayout.showOptimizedSnackbar(errorFormatter.toHumanReadable(viewEvents.throwable))
             }
         }.exhaustive
     }

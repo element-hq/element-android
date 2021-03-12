@@ -80,6 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/messageMemberNameView"
+        android:layout_toStartOf="@id/messageSendStateImageView"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:addStatesFromChildren="true">
 
@@ -132,6 +133,33 @@
             android:layout="@layout/item_timeline_event_option_buttons_stub" />
 
     </FrameLayout>
+
+    <im.vector.app.core.ui.views.SendStateImageView
+        android:id="@+id/messageSendStateImageView"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
+        android:layout_alignBottom="@+id/viewStubContainer"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:contentDescription="@string/event_status_a11y_sending"
+        android:src="@drawable/ic_sending_message"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/eventSendingIndicator"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
+        android:layout_alignBottom="@+id/viewStubContainer"
+        android:indeterminateTint="?riotx_text_secondary"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/informationBottom"

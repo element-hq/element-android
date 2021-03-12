@@ -47,6 +47,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                                                private val vectorPreferences: VectorPreferences) {
 
     fun create(event: TimelineEvent,
+               prevEvent: TimelineEvent?,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*>? {
@@ -108,7 +109,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                     }
                 }
 
-                val informationData = messageInformationDataFactory.create(event, nextEvent)
+                val informationData = messageInformationDataFactory.create(event, prevEvent, nextEvent)
                 val attributes = attributesFactory.create(event.root.content.toModel<EncryptedEventContent>(), informationData, callback)
                 return MessageTextItem_()
                         .leftGuideline(avatarSizeProvider.leftGuideline)

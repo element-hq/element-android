@@ -156,4 +156,10 @@ interface CryptoService {
     fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 
     fun logDbUsageInfo()
+
+    /**
+     * Perform any background tasks that can be done before a message is ready to
+     * send, in order to speed up sending of the message.
+     */
+    fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
 }

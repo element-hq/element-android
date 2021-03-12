@@ -597,9 +597,7 @@ abstract class VectorBaseActivity<VB: ViewBinding> : AppCompatActivity(), HasScr
      * ========================================================================================== */
 
     fun showSnackbar(message: String) {
-        getCoordinatorLayout()?.let {
-            Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show()
-        }
+        getCoordinatorLayout()?.showOptimizedSnackbar(message)
     }
 
     fun showSnackbar(message: String, @StringRes withActionTitle: Int?, action: (() -> Unit)?) {

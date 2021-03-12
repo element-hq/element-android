@@ -38,8 +38,8 @@ internal class TimelineInput @Inject constructor() {
     val listeners = mutableSetOf<Listener>()
 
     internal interface Listener {
-        fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent)
-        fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState)
-        fun onNewTimelineEvents(roomId: String, eventIds: List<String>)
+        fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) = Unit
+        fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState) = Unit
+        fun onNewTimelineEvents(roomId: String, eventIds: List<String>) = Unit
     }
 }

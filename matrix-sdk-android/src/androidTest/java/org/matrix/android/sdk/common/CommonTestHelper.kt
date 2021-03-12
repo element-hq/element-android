@@ -19,6 +19,15 @@ package org.matrix.android.sdk.common
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.Observer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixConfiguration
@@ -34,15 +43,6 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.session.sync.SyncState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import java.util.ArrayList
 import java.util.UUID
 import java.util.concurrent.CountDownLatch
@@ -59,7 +59,13 @@ class CommonTestHelper(context: Context) {
     fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestNetworkModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
 
     init {
-        Matrix.initialize(context, MatrixConfiguration("TestFlavor"))
+        Matrix.initialize(
+                context,
+                MatrixConfiguration(
+                        applicationFlavor = "TestFlavor",
+                        roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
+                )
+        )
         matrix = Matrix.getInstance(context)
     }
 
@@ -385,8 +391,8 @@ fun List<TimelineEvent>.checkSendOrder(baseTextMessage: String, numberOfMessages
     return drop(startIndex)
             .take(numberOfMessages)
             .foldRightIndexed(true) { index, timelineEvent, acc ->
-        val body = timelineEvent.root.content.toModel<MessageContent>()?.body
-        val currentMessageSuffix = numberOfMessages - index
-        acc && (body == null || body.startsWith(baseTextMessage) && body.endsWith("#$currentMessageSuffix"))
-    }
+                val body = timelineEvent.root.content.toModel<MessageContent>()?.body
+                val currentMessageSuffix = numberOfMessages - index
+                acc && (body == null || body.startsWith(baseTextMessage) && body.endsWith("#$currentMessageSuffix"))
+            }
 }

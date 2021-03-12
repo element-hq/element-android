@@ -6,27 +6,17 @@
     <style name="AppTheme.Base.Dark" parent="Theme.MaterialComponents.NoActionBar.Bridge">
         <!-- Riotx attribute for palette -->
         <item name="riotx_background">@color/riotx_background_dark</item>
-        <item name="riotx_base">@color/riotx_base_dark</item>
-        <item name="riotx_base_text_icon_primary">@color/riotx_base_text_icon_primary_dark</item>
-        <item name="riotx_base_text_icon_secondary">@color/riotx_base_text_icon_secondary_dark</item>
-        <item name="riotx_search_background_mobile">@color/riotx_search_background_mobile_dark</item>
+        <item name="vctr_home_drawer_header_background">@color/vctr_home_drawer_header_background_dark</item>
         <item name="riotx_header_panel_background">@color/riotx_header_panel_background_dark</item>
         <item name="riotx_header_panel_border_mobile">@color/riotx_header_panel_border_mobile_dark</item>
-        <item name="riotx_header_panel_text_primary">@color/riotx_header_panel_text_primary_dark</item>
         <item name="riotx_header_panel_text_secondary">@color/riotx_header_panel_text_secondary_dark</item>
         <item name="riotx_text_primary">@color/riotx_text_primary_dark</item>
         <item name="riotx_text_secondary">@color/riotx_text_secondary_dark</item>
         <item name="riotx_text_tertiary">@color/riotx_text_tertiary_dark</item>
         <item name="riotx_text_primary_body_contrast">@color/riotx_text_primary_body_contrast_dark</item>
         <item name="riotx_android_secondary">@color/riotx_android_secondary_dark</item>
-        <item name="riotx_search_placeholder">@color/riotx_search_placeholder_dark</item>
-        <item name="riotx_room_highlight">@color/riotx_room_highlight_dark</item>
         <item name="riotx_unread_room_indent">@color/riotx_unread_room_indent_dark</item>
-        <item name="riotx_android_status_bar">@color/riotx_android_status_bar_dark</item>
-        <item name="riotx_line_break_mobile">@color/riotx_line_break_mobile_dark</item>
         <item name="riotx_unread_room_badge">@color/riotx_unread_room_badge_dark</item>
-        <item name="riotx_fab_secondary_bg">@color/riotx_fab_secondary_bg_dark</item>
-        <item name="riotx_fab_secondary_color">@color/riotx_fab_secondary_color_dark</item>
         <item name="riotx_fab_label_bg">@color/riotx_fab_label_bg_dark</item>
         <item name="riotx_fab_label_stroke">@color/riotx_fab_label_stroke_dark</item>
         <item name="riotx_fab_label_color">@color/riotx_fab_label_color_dark</item>
@@ -66,7 +56,7 @@
         <item name="toolbarStyle">@style/VectorToolbarStyle</item>
         <item name="alertDialogTheme">@style/VectorAlertDialogStyleDark</item>
 
-        <item name="android:textColorLink">@color/riotx_links</item>
+        <item name="android:textColorLink">@color/link_color_dark</item>
 
         <!-- Menu text color -->
         <item name="android:actionMenuTextColor">?colorAccent</item>
@@ -84,9 +74,6 @@
         <item name="vctr_toolbar_secondary_text_color">@color/riot_secondary_text_color_dark</item>
         <item name="vctr_toolbar_link_text_color">@color/link_color_dark</item>
 
-        <!-- default text colors -->
-        <item name="vctr_default_text_hint_color">@color/default_text_hint_color_dark</item>
-
         <!-- room message colors -->
         <item name="vctr_notice_secondary">#61708B</item>
         <item name="vctr_unsent_message_text_color">@color/vector_fuchsia_color</item>
@@ -100,22 +87,12 @@
         <item name="riot_primary_text_color">@color/riot_primary_text_color_dark</item>
         <item name="riot_primary_text_color_disabled">@color/riot_primary_text_color_disabled_dark</item>
 
-        <!-- tab bar colors -->
-        <item name="vctr_tab_bar_inverted_background_color">?colorPrimary</item>
-
         <!-- list colors -->
         <!--Header/Panel Background-->
         <item name="vctr_list_header_background_color">@color/primary_color_dark</item>
-        <!--Header/Panel Text Primary-->
-        <item name="vctr_list_header_primary_text_color">#FFA1B2D1</item>
-        <!--Header/Panel Text Secondary-->
-        <item name="vctr_list_header_secondary_text_color">#FFC8C8CD</item>
 
         <item name="riotx_list_bottom_sheet_divider_color">@color/riotx_list_bottom_sheet_divider_color_dark</item>
         <item name="vctr_list_divider_color">@color/riotx_header_panel_background_dark</item>
-
-        <!-- outgoing call background color -->
-        <item name="vctr_pending_outgoing_view_background_color">#33FFFFFF</item>
 
         <!-- room notification text color (typing, unsent...) -->
         <!--Notice (secondary)-->

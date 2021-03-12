@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.sync
 
 import io.realm.Realm
-import org.matrix.android.sdk.R
+import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.model.GroupEntity
 import org.matrix.android.sdk.internal.database.model.GroupSummaryEntity
@@ -50,17 +50,17 @@ internal class GroupSyncHandler @Inject constructor() {
     private fun handleGroupSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: ProgressReporter?) {
         val groups = when (handlingStrategy) {
             is HandlingStrategy.JOINED  ->
-                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.6f) {
+                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountGroups, 0.6f) {
                     handleJoinedGroup(realm, it.key)
                 }
 
             is HandlingStrategy.INVITED ->
-                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.3f) {
+                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountGroups, 0.3f) {
                     handleInvitedGroup(realm, it.key)
                 }
 
             is HandlingStrategy.LEFT    ->
-                handlingStrategy.data.mapWithProgress(reporter, R.string.initial_sync_start_importing_account_groups, 0.1f) {
+                handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountGroups, 0.1f) {
                     handleLeftGroup(realm, it.key)
                 }
         }

@@ -57,6 +57,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         super.bind(holder)
         avatarRenderer.render(matrixItem, holder.avatar)
         holder.avatar.setOnClickListener { userClicked?.invoke() }
+        holder.sender.setOnClickListener { userClicked?.invoke() }
         holder.sender.setTextOrHide(matrixItem.displayName)
         holder.body.movementMethod = movementMethod
         holder.body.text = body

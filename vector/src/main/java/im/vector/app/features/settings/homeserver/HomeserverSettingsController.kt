@@ -48,6 +48,7 @@ class HomeserverSettingsController @Inject constructor(
         data ?: return
 
         buildHeader(data)
+        buildCapabilities(data)
         when (val federationVersion = data.federationVersion) {
             is Loading,
             is Uninitialized ->
@@ -63,7 +64,6 @@ class HomeserverSettingsController @Inject constructor(
             is Success       ->
                 buildFederationVersion(federationVersion())
         }
-        buildCapabilities(data)
     }
 
     private fun buildHeader(state: HomeServerSettingsViewState) {

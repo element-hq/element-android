@@ -24,7 +24,7 @@ internal data class RoomsSyncResponse(
         /**
          * Joined rooms: keys are rooms ids.
          */
-        @Json(name = "join") val join: Map<String, LazyRoomSync> = emptyMap(),
+        @Json(name = "join") val join: Map<String, RoomSync> = emptyMap(),
 
         /**
          * Invitations. The rooms that the user has been invited to: keys are rooms ids.

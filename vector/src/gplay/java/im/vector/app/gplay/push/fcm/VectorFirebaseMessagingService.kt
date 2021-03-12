@@ -253,25 +253,15 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
      * Try to create an event from the FCM data
      *
      * @param data the FCM data
-     * @return the event
+     * @return the event or null if required data are missing
      */
     private fun parseEvent(data: Map<String, String>?): Event? {
-        // accept only event with room id.
-        if (null == data || !data.containsKey("room_id") || !data.containsKey("event_id")) {
-            return null
-        }
-
-        try {
-            return Event(eventId = data["event_id"],
-                    senderId = data["sender"],
-                    roomId = data["room_id"],
-                    type = data.getValue("type"),
-                    // TODO content = data.getValue("content"),
-                    originServerTs = System.currentTimeMillis())
-        } catch (e: Exception) {
-            Timber.e(e, "buildEvent fails ")
-        }
-
-        return null
+        return Event(
+                eventId = data?.get("event_id") ?: return null,
+                senderId = data["sender"],
+                roomId = data["room_id"] ?: return null,
+                type = data["type"] ?: return null,
+                originServerTs = System.currentTimeMillis()
+        )
     }
 }

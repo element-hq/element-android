@@ -51,14 +51,13 @@ internal class DefaultSendEventTask @Inject constructor(
 
             val event = handleEncryption(params)
             val localId = event.eventId!!
-
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENDING)
             val executeRequest = executeRequest<SendResponse>(globalErrorReceiver) {
                 apiCall = roomAPI.send(
                         localId,
                         roomId = event.roomId ?: "",
                         content = event.content,
-                        eventType = event.type
+                        eventType = event.type ?: ""
                 )
             }
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENT)

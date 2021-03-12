@@ -5,6 +5,7 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'placeholder-resolver'
 
 kapt {
     correctErrorTypes = true
@@ -13,7 +14,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 1
-ext.versionPatch = 1
+ext.versionPatch = 2
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -135,6 +136,8 @@ android {
 
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
         resValue "string", "build_number", "\"${buildNumber}\""
+
+        buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -287,11 +290,11 @@ android {
 
 dependencies {
 
-    def epoxy_version = '4.4.1'
+    def epoxy_version = '4.4.2'
     def fragment_version = '1.3.0'
     def arrow_version = "0.8.2"
     def markwon_version = '4.1.2'
-    def big_image_viewer_version = '1.7.0'
+    def big_image_viewer_version = '1.7.1'
     def glide_version = '4.12.0'
     def moshi_version = '1.11.0'
     def daggerVersion = '2.33'
@@ -339,7 +342,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.1'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.18'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.19'
 
     // rx
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
@@ -431,7 +434,7 @@ dependencies {
 
     implementation "androidx.emoji:emoji-appcompat:1.1.0"
 
-    implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
+    implementation 'com.github.BillCarsonFr:JsonViewer:0.6'
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
@@ -473,7 +476,7 @@ dependencies {
     // Plant Timber tree for test
     androidTestImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
     // "The one who serves a great Espresso"
-    androidTestImplementation('com.schibsted.spain:barista:3.7.0') {
+    androidTestImplementation('com.schibsted.spain:barista:3.9.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
 }
