@@ -430,6 +430,7 @@ dependencies {
     }
     // Unifiedpush
     implementation 'com.github.UnifiedPush:android-connector:1.1.0'
+    gplayImplementation 'com.github.UnifiedPush:android-embedded_fcm_distributor:1.0.0'
 
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'

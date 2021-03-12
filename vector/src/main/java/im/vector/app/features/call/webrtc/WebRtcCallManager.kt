@@ -21,11 +21,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import im.vector.app.ActiveSessionDataSource
+import im.vector.app.core.pushers.UPHelper
 import im.vector.app.core.services.CallService
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.audio.CallAudioManager
 import im.vector.app.features.call.utils.EglUtils
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
@@ -233,7 +233,7 @@ class WebRtcCallManager @Inject constructor(
                 audioManager.setMode(CallAudioManager.Mode.DEFAULT)
                 // did we start background sync? so we should stop it
                 if (isInBackground) {
-                    if (FcmHelper.isPushSupported()) {
+                    if (UPHelper.hasEndpoint(context)) {
                         currentSession?.stopAnyBackgroundSync()
                     } else {
                         // for fdroid we should not stop, it should continue syncing
@@ -333,7 +333,7 @@ class WebRtcCallManager @Inject constructor(
         // and thus won't be able to received events. For example if the call is
         // accepted on an other session this device will continue ringing
         if (isInBackground) {
-            if (FcmHelper.isPushSupported()) {
+            if (UPHelper.hasEndpoint(context)) {
                 // only for push version as fdroid version is already doing it?
                 currentSession?.startAutomaticBackgroundSync(30, 0)
             } else {

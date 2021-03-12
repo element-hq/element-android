@@ -3,9 +3,12 @@
     package="im.vector.app">
 
     <application>
-
-
-
+        <receiver android:enabled="true"  android:name=".push.fcm.EmbeddedDistrib" android:exported="false">
+            <intent-filter>
+                <action android:name="org.unifiedpush.android.distributor.REGISTER"/>
+                <action android:name="org.unifiedpush.android.distributor.UNREGISTER"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

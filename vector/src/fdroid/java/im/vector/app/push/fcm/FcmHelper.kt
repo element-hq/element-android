@@ -29,35 +29,8 @@ import im.vector.app.features.settings.VectorPreferences
  * This class has an alter ego in the gplay variant.
  */
 object FcmHelper {
-
-    fun isPushSupported(): Boolean = false
-
-    /**
-     * Retrieves the FCM registration token.
-     *
-     * @return the FCM token or null if not received from FCM
-     */
-    fun getFcmToken(context: Context): String? {
-        return null
-    }
-
-    /**
-     * Store FCM token to the SharedPrefs
-     *
-     * @param context android context
-     * @param token   the token to store
-     */
-    fun storeFcmToken(context: Context, token: String?) {
-        // No op
-    }
-
-    /**
-     * onNewToken may not be called on application upgrade, so ensure my shared pref is set
-     *
-     * @param activity the first launch Activity
-     */
-    fun ensureFcmTokenIsRetrieved(activity: Activity, pushersManager: PushersManager, registerPusher: Boolean) {
-        // No op
+    fun isPlayServicesAvailable(context: Context): Boolean {
+        return false
     }
 
     fun onEnterForeground(context: Context, activeSessionHolder: ActiveSessionHolder) {

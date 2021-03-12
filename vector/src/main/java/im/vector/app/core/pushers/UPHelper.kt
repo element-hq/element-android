@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.core.content.edit
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.push.fcm.FcmHelper
 import org.unifiedpush.android.connector.Registration
 import timber.log.Timber
 import java.net.URI
@@ -88,7 +89,7 @@ object UPHelper {
         /**
          * TODO: Check if it is the gplay flavour AND GServices are not available
          */
-        if (false) {
+        if (!FcmHelper.isPlayServicesAvailable(context)) {
             distributors.remove(context.packageName)
         }
         when(distributors.size){
@@ -136,5 +137,12 @@ object UPHelper {
              */
         }
         return default
+    }
+
+    fun hasEndpoint(context: Context): Boolean {
+        getUpEndpoint(context)?.let {
+            return true
+        }
+        return false
     }
 }

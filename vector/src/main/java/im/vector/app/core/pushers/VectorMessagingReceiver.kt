@@ -39,7 +39,7 @@ import timber.log.Timber
 import org.unifiedpush.android.connector.MessagingReceiverHandler
 
 /**
- * Class extending FirebaseMessagingService.
+ * Class extending MessagingReceiverHandler.
  */
 val upHandler = object: MessagingReceiverHandler {
 
