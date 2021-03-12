@@ -190,9 +190,9 @@ class SimpleTimeline internal constructor(val roomId: String,
     }
 
     private fun onNewTimelineEvents(eventIds: List<String>) = timelineScope.launch(Dispatchers.Main) {
-            listeners.forEach {
-                tryOrNull { it.onNewTimelineEvents(eventIds) }
-            }
+        listeners.forEach {
+            tryOrNull { it.onNewTimelineEvents(eventIds) }
+        }
     }
 }
 
@@ -306,20 +306,26 @@ private class LiveTimelineStrategy(private val roomId: String,
     }
 
     override fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {
-        if(roomId == this.roomId) {
-            onNewTimelineEvents(listOf(timelineEvent.eventId))
-            uiEchoManager.onLocalEchoCreated(timelineEvent)
+        if (roomId != this.roomId) {
+            return
+        }
+        onNewTimelineEvents(listOf(timelineEvent.eventId))
+        if (uiEchoManager.onLocalEchoCreated(timelineEvent)) {
+            onEventsUpdated()
         }
     }
 
     override fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState) {
-        if(roomId == this.roomId) {
-            uiEchoManager.onSendStateUpdated(eventId, sendState)
+        if (roomId != this.roomId) {
+            return
+        }
+        if (uiEchoManager.onSendStateUpdated(eventId, sendState)) {
+            onEventsUpdated()
         }
     }
 
     override fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
-        if(roomId == this.roomId){
+        if (roomId == this.roomId) {
             onNewTimelineEvents(eventIds)
         }
     }
