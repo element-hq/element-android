@@ -65,8 +65,6 @@ class TestFirebaseToken @Inject constructor(private val context: AppCompatActivi
                                 val tok = token.take(8) + "********************"
                                 description = stringProvider.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
                                 Timber.e("Retrieved FCM token success [$tok].")
-                                // Ensure it is well store in our local storage
-                                FcmHelper.storeFcmToken(context, token)
                             }
                             status = TestStatus.SUCCESS
                         }
