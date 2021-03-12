@@ -203,9 +203,9 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                 frozenTimelineEvents.last()?.displayIndex
             }
         } else if (direction == SimpleTimeline.Direction.FORWARDS) {
-            builtEvents.first().displayIndex
+            builtEvents.first().displayIndex + 1
         } else {
-            builtEvents.last().displayIndex
+            builtEvents.last().displayIndex - 1
         }
     }
 }
@@ -217,10 +217,10 @@ private fun RealmQuery<TimelineEventEntity>.offsets(
 ): RealmQuery<TimelineEventEntity> {
     if (direction == SimpleTimeline.Direction.BACKWARDS) {
         sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-        lessThan(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
+        lessThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
     } else {
         sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
-        greaterThan(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
+        greaterThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
     }
     return limit(count)
 }
