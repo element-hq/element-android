@@ -92,7 +92,7 @@ object UPHelper {
         if (!FcmHelper.isPlayServicesAvailable(context)) {
             distributors.remove(context.packageName)
         }
-        when(distributors.size){
+        when (distributors.size) {
             0 -> {
                 /**
                  * TODO: fallback with sync service
@@ -102,7 +102,7 @@ object UPHelper {
                 up.saveDistributor(context, distributors.first())
                 up.registerApp(context)
             }
-            else ->{
+            else -> {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(context)
                 builder.setTitle("Choose a distributor")
 

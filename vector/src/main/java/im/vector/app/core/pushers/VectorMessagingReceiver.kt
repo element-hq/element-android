@@ -180,4 +180,3 @@ val upHandler = object: MessagingReceiverHandler {
 }
 
 class VectorMessagingReceiver : MessagingReceiver(upHandler)
-

@@ -28,4 +28,4 @@ val handlerFCM = object: GetEndpointHandler {
     }
 }
 
-class EmbeddedDistrib: EmbeddedDistributorReceiver(handlerFCM) {}
+class EmbeddedDistrib: EmbeddedDistributorReceiver(handlerFCM)

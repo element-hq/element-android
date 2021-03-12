@@ -18,9 +18,6 @@ package im.vector.app.gplay.features.settings.troubleshoot
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import org.matrix.android.sdk.api.session.pushers.PusherState
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -28,7 +25,6 @@ import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.pushers.UPHelper
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
-import im.vector.app.push.fcm.FcmHelper
 import javax.inject.Inject
 
 /**

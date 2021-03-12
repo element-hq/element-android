@@ -23,7 +23,6 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
-import im.vector.app.push.fcm.FcmHelper
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.pushers.PushGatewayFailure
 import org.matrix.android.sdk.api.util.Cancelable
