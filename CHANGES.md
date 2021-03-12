@@ -2,7 +2,7 @@ Changes in Element 1.1.1 (2021-XX-XX)
 ===================================================
 
 Features ✨:
- -
+ - Unifiedpush
 
 Improvements 🙌:
  - Allow non-HTTPS connections to homeservers on Tor (#2941)
