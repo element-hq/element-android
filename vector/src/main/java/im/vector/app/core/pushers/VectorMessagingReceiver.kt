@@ -69,7 +69,7 @@ val upHandler = object: MessagingReceiverHandler {
             data = JSONObject(message)
             notification = data.getJSONObject("notification")
         } catch (e: JSONException) {
-            e.printStackTrace()
+            Timber.e(e)
             return
         }
         try {
@@ -92,7 +92,7 @@ val upHandler = object: MessagingReceiverHandler {
         }
 
         if (!vectorPreferences.areNotificationEnabledForDevice()) {
-            Timber.i("Notification are disabled for this device")
+            Timber.i("Notification are disabled for this device, ignoring push event")
             return
         }
 
@@ -119,11 +119,11 @@ val upHandler = object: MessagingReceiverHandler {
     }
 
     override fun onRegistrationFailed(context: Context?, instance: String) {
-        Toast.makeText(context, "Registration Failed", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Push service registration failed", Toast.LENGTH_SHORT).show()
     }
 
     override fun onRegistrationRefused(context: Context?, instance: String) {
-        Toast.makeText(context, "Registration Refused", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Push service registration refused by server", Toast.LENGTH_LONG).show()
     }
 
     override fun onUnregistered(context: Context?, instance: String) {
