@@ -128,7 +128,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val directRoomHelper: DirectRoomHelper,
         timelineSettingsFactory: TimelineSettingsFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
-        Timeline.Listener, ChatEffectManager.Delegate, PSTNProtocolChecker.Listener {
+        Timeline.Listener, SimpleTimeline.Listener, ChatEffectManager.Delegate, PSTNProtocolChecker.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
@@ -169,6 +169,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     init {
         simpleTimeline.start()
+        simpleTimeline.addListener(this)
         viewModelScope.launch {
             simpleTimeline.loadMore(10, SimpleTimeline.Direction.BACKWARDS)
         }
@@ -1486,6 +1487,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.Failure(throwable))
     }
 
+    override fun onStateUpdated() {
+        //NOOP
+    }
+
+    override fun onEventsUpdated(snapshot: List<TimelineEvent>) {
+        //NOOP
+    }
+
     override fun onNewTimelineEvents(eventIds: List<String>) {
         Timber.v("On new timeline events: $eventIds")
         _viewEvents.post(RoomDetailViewEvents.OnNewTimelineEvents(eventIds))
@@ -1503,6 +1512,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     override fun onCleared() {
         roomSummariesHolder.remove(room.roomId)
+        simpleTimeline.removeAllListeners()
         simpleTimeline.stop()
         if (vectorPreferences.sendTypingNotifs()) {
             room.userStopsTyping()

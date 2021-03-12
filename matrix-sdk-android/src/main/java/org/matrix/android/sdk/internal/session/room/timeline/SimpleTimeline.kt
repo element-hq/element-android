@@ -31,8 +31,11 @@ import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
@@ -50,11 +53,13 @@ class SimpleTimeline internal constructor(val roomId: String,
                                           private val realmConfiguration: RealmConfiguration,
                                           private val paginationTask: PaginationTask,
                                           private val getEventTask: GetContextOfEventTask,
-                                          private val timelineEventMapper: TimelineEventMapper) {
+                                          private val timelineEventMapper: TimelineEventMapper,
+                                          private val timelineInput: TimelineInput) {
 
     interface Listener {
         fun onStateUpdated()
         fun onEventsUpdated(snapshot: List<TimelineEvent>)
+        fun onNewTimelineEvents(eventIds: List<String>)
     }
 
     companion object {
@@ -75,8 +80,10 @@ class SimpleTimeline internal constructor(val roomId: String,
             roomId = roomId,
             realm = backgroundRealm,
             paginationTask = paginationTask,
+            timelineInput = timelineInput,
             timelineEventMapper = timelineEventMapper,
-            onEventsUpdated = this::postSnapshot
+            onEventsUpdated = this::postSnapshot,
+            onNewTimelineEvents = this::onNewTimelineEvents
     )
 
     data class PaginationState(
@@ -181,9 +188,15 @@ class SimpleTimeline internal constructor(val roomId: String,
             }
         }
     }
+
+    private fun onNewTimelineEvents(eventIds: List<String>) = timelineScope.launch(Dispatchers.Main) {
+            listeners.forEach {
+                tryOrNull { it.onNewTimelineEvents(eventIds) }
+            }
+    }
 }
 
-private interface LoadTimelineStrategy {
+private interface LoadTimelineStrategy : TimelineInput.Listener {
     fun onStart()
     fun onStop()
     suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction)
@@ -192,9 +205,12 @@ private interface LoadTimelineStrategy {
 
 private class LiveTimelineStrategy(private val roomId: String,
                                    private val realm: AtomicReference<Realm>,
+                                   private val timelineInput: TimelineInput,
                                    private val paginationTask: PaginationTask,
                                    private val timelineEventMapper: TimelineEventMapper,
-                                   private val onEventsUpdated: () -> Unit) : LoadTimelineStrategy {
+                                   private val onEventsUpdated: () -> Unit,
+                                   private val onNewTimelineEvents: (List<String>) -> Unit)
+    : LoadTimelineStrategy, UIEchoManager.Listener {
 
     private var roomEntity: RoomEntity? = null
     private var sendingTimelineEvents: RealmList<TimelineEventEntity>? = null
@@ -210,11 +226,15 @@ private class LiveTimelineStrategy(private val roomId: String,
         }
     }
 
-    private val sendingTimelineEventsListener = RealmChangeListener<RealmList<TimelineEventEntity>> {
+    private val sendingTimelineEventsListener = RealmChangeListener<RealmList<TimelineEventEntity>> { events ->
+        uiEchoManager.onSentEventsInDatabase(events.map { it.eventId })
         onEventsUpdated()
     }
 
+    private val uiEchoManager = UIEchoManager(TimelineSettings(10), this)
+
     override fun onStart() {
+        timelineInput.listeners.add(this)
         val safeRealm = realm.get()
         roomEntity = RoomEntity.where(safeRealm, roomId = roomId).findFirst()
         sendingTimelineEvents = roomEntity?.sendingTimelineEvents
@@ -226,6 +246,7 @@ private class LiveTimelineStrategy(private val roomId: String,
     }
 
     override fun onStop() {
+        timelineInput.listeners.remove(this)
         chunkEntity?.removeChangeListener(chunkEntityListener)
         sendingTimelineEvents?.removeChangeListener(sendingTimelineEventsListener)
         timelineChunk?.close(closeNext = false, closePrev = true)
@@ -253,15 +274,60 @@ private class LiveTimelineStrategy(private val roomId: String,
     }
 
     private fun buildSendingEvents(): List<TimelineEvent> {
-        return sendingTimelineEvents?.freeze()?.map {
-            timelineEventMapper.map(it)
-        }.orEmpty()
+        val builtSendingEvents = mutableListOf<TimelineEvent>()
+        uiEchoManager.getInMemorySendingEvents()
+                .filterSendingEventsTo(builtSendingEvents)
+        sendingTimelineEvents?.freeze()
+                ?.filter { timelineEvent ->
+                    builtSendingEvents.none { it.eventId == timelineEvent.eventId }
+                }
+                ?.map {
+                    timelineEventMapper.map(it)
+                }?.filterSendingEventsTo(builtSendingEvents)
+
+        return builtSendingEvents
     }
 
     private fun RealmResults<ChunkEntity>.createTimelineChunk(): TimelineChunk? {
         return firstOrNull()?.let {
-            TimelineChunk(it, roomId, paginationTask, timelineEventMapper, null, onEventsUpdated)
+            TimelineChunk(chunkEntity = it,
+                    roomId = roomId,
+                    paginationTask = paginationTask,
+                    timelineEventMapper = timelineEventMapper,
+                    uiEchoManager = uiEchoManager,
+                    initialEventId = null,
+                    onBuiltEvents = onEventsUpdated
+            )
         }
+    }
+
+    override fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
+        return timelineChunk?.rebuildEvent(eventId, builder).orFalse()
+    }
+
+    override fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {
+        if(roomId == this.roomId) {
+            onNewTimelineEvents(listOf(timelineEvent.eventId))
+            uiEchoManager.onLocalEchoCreated(timelineEvent)
+        }
+    }
+
+    override fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState) {
+        if(roomId == this.roomId) {
+            uiEchoManager.onSendStateUpdated(eventId, sendState)
+        }
+    }
+
+    override fun onNewTimelineEvents(roomId: String, eventIds: List<String>) {
+        if(roomId == this.roomId){
+            onNewTimelineEvents(eventIds)
+        }
+    }
+
+    private fun List<TimelineEvent>.filterSendingEventsTo(target: MutableList<TimelineEvent>) {
+        target.addAll(
+                map { uiEchoManager.updateSentStateWithUiEcho(it) }
+        )
     }
 }
 

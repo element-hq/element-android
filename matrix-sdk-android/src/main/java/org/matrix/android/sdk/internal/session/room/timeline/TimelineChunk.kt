@@ -22,6 +22,7 @@ import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -33,6 +34,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                              private val roomId: String,
                              private val paginationTask: PaginationTask,
                              private val timelineEventMapper: TimelineEventMapper,
+                             private val uiEchoManager: UIEchoManager? = null,
                              private val initialEventId: String?,
                              private val onBuiltEvents: () -> Unit) {
 
@@ -119,7 +121,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         val timelineEvents = baseQuery.offsets(direction, count, displayIndex).findAll().orEmpty()
         timelineEvents
                 .map { timelineEventEntity ->
-                    timelineEventMapper.map(timelineEventEntity)
+                    buildTimelineEvent(timelineEventEntity)
                 }.also {
                     if (direction == SimpleTimeline.Direction.FORWARDS) {
                         builtEvents.addAll(0, it)
@@ -130,14 +132,22 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         return timelineEvents.size.toLong()
     }
 
+    private fun buildTimelineEvent(eventEntity: TimelineEventEntity) = timelineEventMapper.map(
+            timelineEventEntity = eventEntity
+    ).let {
+        // eventually enhance with ui echo?
+        (uiEchoManager?.decorateEventWithReactionUiEcho(it) ?: it)
+    }
+
     private fun createTimelineChunk(chunkEntity: ChunkEntity): TimelineChunk {
         return TimelineChunk(
-                chunkEntity,
-                roomId,
-                paginationTask,
-                timelineEventMapper,
-                initialEventId,
-                onBuiltEvents
+                chunkEntity = chunkEntity,
+                roomId = roomId,
+                paginationTask = paginationTask,
+                timelineEventMapper = timelineEventMapper,
+                uiEchoManager = null,
+                initialEventId = initialEventId,
+                onBuiltEvents = onBuiltEvents
         )
     }
 
@@ -175,6 +185,25 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
             onBuiltEvents()
         }
     }
+
+    fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
+        return tryOrNull {
+            val builtIndex = builtEvents.indexOfFirst { it.eventId == eventId }
+                // Update the relation of existing event
+                builtEvents.getOrNull(builtIndex)?.let { te ->
+                    val rebuiltEvent = builder(te)
+                    // If rebuilt event is filtered its returned as null and should be removed.
+                    if (rebuiltEvent == null) {
+                        builtEvents.removeAt(builtIndex)
+                    } else {
+                        builtEvents[builtIndex] = rebuiltEvent
+                    }
+                    true
+                }
+            }
+         ?: false
+    }
+
 
     fun close(closeNext: Boolean, closePrev: Boolean) {
         if (closeNext) {
