@@ -2725,4 +2725,7 @@
     <string name="event_status_a11y_sent">Gesendet</string>
     <string name="settings_category_room_directory">Raumverzeichnis</string>
     <string name="action_switch">Wechseln</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Zeige alle Räume im Raumverzeichnis, inklusive der Räume mit anstößigen Inhalten.</string>
+    <string name="settings_room_directory_show_all_rooms">Zeige Räume mit anstößigen Inhalten</string>
+    <string name="event_status_delete_all_failed_dialog_message">Bist du dir sicher, dass du alle nicht gesendete Nachrichten in diesem Raum löschen willst\?</string>
 </resources>
