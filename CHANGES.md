@@ -23,7 +23,7 @@ Test:
  -
 
 Other changes:
- -
+ - Change formatting on issue templates to proper headings.
 
 Changes in Element 1.1.1 (2021-XX-XX)
 ===================================================
