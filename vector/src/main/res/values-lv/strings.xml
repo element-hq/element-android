@@ -455,7 +455,7 @@
     <string name="call_error_answered_elsewhere">zvans atbildēts uz citas ierīces</string>
     <string name="media_picker_both_capture_title">Uzņemt foto vai video</string>
     <string name="media_picker_cannot_record_video">Neizdodas ierakstīt video</string>
-    <string name="permissions_rationale_popup_title">Element informācija</string>
+    <string name="permissions_rationale_popup_title">SchildiChat informācija</string>
     <string name="template_permissions_rationale_msg_storage">${app_name} nepieciešama atļauja piekļūt jūsu fotoattēlu un video bibliotēkai, lai nosūtītu un saglabātu pielikumus.
 \n
 \nLūdzu, atļaujiet piekļuvi nākamajā uznirstošajā logā, lai varētu nosūtīt failus no sava tālruņa.</string>
