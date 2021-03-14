@@ -35,7 +35,10 @@ object BubbleThemeUtils {
         return mBubbleStyle
     }
 
-    fun getBubbleTimeLocation(context: Context): String {
+    fun getBubbleTimeLocation(@Suppress("UNUSED_PARAMETER") context: Context): String {
+        // Always use bottom when allowed
+        return if (isBubbleTimeLocationSettingAllowed(context)) BUBBLE_TIME_BOTTOM else BUBBLE_TIME_TOP
+        /*
         if (mBubbleTimeLocation == "") {
             mBubbleTimeLocation = PreferenceManager.getDefaultSharedPreferences(context).getString(BUBBLE_TIME_LOCATION_KEY, BUBBLE_TIME_BOTTOM)!!
         }
@@ -43,6 +46,7 @@ object BubbleThemeUtils {
             return BUBBLE_TIME_TOP;
         }
         return mBubbleTimeLocation
+        */
     }
 
     fun getVisibleAnonymousReadReceipts(context: Context, readReceipt: AnonymousReadReceipt, sentByMe: Boolean): AnonymousReadReceipt {

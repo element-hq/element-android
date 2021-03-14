@@ -46,6 +46,7 @@
             android:title="@string/bubble_style"
             app:iconSpaceReserved="false" />
 
+        <!--
         <im.vector.app.core.preference.VectorListPreference
             android:key="BUBBLE_TIME_LOCATION_KEY"
             android:defaultValue="bottom"
@@ -54,6 +55,7 @@
             android:entryValues="@array/bubble_time_location_values"
             android:summary="%s"
             app:iconSpaceReserved="false" />
+        -->
 
         <im.vector.app.core.preference.VectorPreference
             android:dialogTitle="@string/font_size"
