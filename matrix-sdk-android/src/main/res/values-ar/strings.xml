@@ -1,150 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="summary_user_sent_image">%1$s قد أرسل صورة.</string>
-    <string name="notice_room_invite_no_invitee">دعوة من %s</string>
-    <string name="notice_room_invite">%1$s قد دعى %2$s</string>
-    <string name="notice_room_invite_you">%1$s قد دعاك أنت</string>
-    <string name="notice_room_join">%1$s قد إنضّم إلى الغرفة</string>
-    <string name="notice_room_leave">%1$s قد غادر الغرفة</string>
-    <string name="notice_room_reject">%1$s قد رفض الدعوة</string>
-    <string name="notice_room_kick">%1$s قد طرد %2$s</string>
-    <string name="notice_room_unban">%1$s قد رفع الحظر عن %2$s</string>
-    <string name="notice_room_ban">%1$s قد حظر %2$s</string>
-    <string name="notice_avatar_url_changed">%1$s قد غيّر صورته الشخصية</string>
-    <string name="notice_display_name_set">%1$s قد عيّن اسمه الظاهر إلى %2$s</string>
-    <string name="notice_display_name_changed_from">%1$s قد غيّر اسمه الظاهر من %2$s إلى %3$s</string>
-    <string name="notice_display_name_removed">%1$s قد أزال اسمه الظاهر (لقد كان %2$s)</string>
-    <string name="notice_room_topic_changed">%1$s قد غيّر الموضوع إلى: %2$s</string>
-    <string name="notice_room_name_changed">%1$s قد غيّر اسم الغرفة إلى: %2$s</string>
-    <string name="notice_answered_call">%s قد أجاب على المُكالمة.</string>
-    <string name="notice_ended_call">%s قد أنهى المُكالمة.</string>
-    <string name="notice_made_future_room_visibility">%1$s قد جعل التأريخ المُستقبلي للغرفة مرئيًا لـ %2$s</string>
-    <string name="notice_room_visibility_invited">جميع أعضاء الغرفة، من اللحظة التي تمت دعوتهم.</string>
-    <string name="notice_room_visibility_joined">جميع أعضاء الغرفة، من لحظة انضمامهم.</string>
-    <string name="notice_room_visibility_shared">جميع أعضاء الغرفة.</string>
-    <string name="notice_room_visibility_world_readable">أيُّ شخص.</string>
-    <string name="notice_room_visibility_unknown">غير معروف (%s).</string>
-    <string name="notice_end_to_end">%1$s قد فعّل تعمية النهاية-إلى-النهاية (%2$s)</string>
-    <string name="notice_requested_voip_conference">%1$s قد طلب اجتماع VoIP</string>
-    <string name="notice_voip_started">اجتماع VoIP قد بدأ</string>
-    <string name="notice_voip_finished">اجتماع VoIP قد انتهى</string>
-    <string name="notice_room_name_removed">%1$s قد أزال اسم الغرفة</string>
-    <string name="notice_room_topic_removed">%1$s قد أزال موضوع الغرفة</string>
-    <string name="notice_profile_change_redacted">حدّث ⁨%1$s⁩ اللاحة ⁨%2$s⁩</string>
-    <string name="notice_room_third_party_invite">أرسل ⁨%1$s⁩ دعوة إلى ⁨%2$s⁩ للانضمام إلى الغرفة</string>
-    <string name="notice_crypto_unable_to_decrypt">** تعذّر فك التعمية: ⁨%s⁩ **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">لم يُرسل جهاز المرسل مفاتيح هذه الرسالة.</string>
-    <string name="unable_to_send_message">تعذّر إرسال الرسالة</string>
-    <string name="message_failed_to_upload">فشل رفع الصورة</string>
-    <string name="network_error">خطأ في الشبكة</string>
-    <string name="matrix_error">خطأ في «ماترِكس»</string>
-    <string name="room_error_join_failed_empty_room">لا يمكنك حاليًا الانضمام ثانيةً إلى غرفة فارغة.</string>
-    <string name="encrypted_message">رسالة معمّاة</string>
-    <string name="medium_email">عنوان البريد الإلكتروني</string>
-    <string name="medium_phone_number">رقم الهاتف</string>
-    <string name="summary_message">‏‏⁨%1$s⁩: ‏⁨%2$s⁩</string>
-    <string name="notice_room_withdraw">%1$s قد سحب دعوة %2$s</string>
-    <string name="notice_placed_video_call">%s قد أجرى مُكالمة مرئية.</string>
-    <string name="notice_placed_voice_call">%s قد أجرى مُكالمة صوتية.</string>
-    <string name="notice_room_third_party_registered_invite">قَبِل ⁨%1$s⁩ دعوة ⁨%2$s⁩</string>
-    <string name="could_not_redact">تعذر التهذيب</string>
-    <string name="summary_user_sent_sticker">%1$s قد أرسل مُلصقًا.</string>
-    <string name="notice_avatar_changed_too">(تمَّ تغيير الصورة أيضًا)</string>
-    <string name="room_displayname_invite_from">دعوة من ⁨%s⁩</string>
-    <string name="room_displayname_empty_room">غرفة فارغة</string>
-    <string name="room_displayname_two_members">‏⁨%1$s⁩ و ⁨%2$s⁩</string>
-    <string name="room_displayname_room_invite">دعوة إلى غرفة</string>
-    <plurals name="room_displayname_three_and_more_members">
-        <item quantity="zero"/>
-        <item quantity="one"/>
-        <item quantity="two"/>
-        <item quantity="few"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
-    </plurals>
-    <string name="summary_you_sent_image">أنت قد أرسلت صورة.</string>
-    <string name="summary_you_sent_sticker">أنت قد أرسلت مُلصقًا.</string>
-    <string name="notice_room_invite_no_invitee_by_you">دعوة منك أنت</string>
-    <string name="notice_room_created">%1$s قد أنشأ الغرفة</string>
-    <string name="notice_room_created_by_you">أنت قد أنشأت الغرفة</string>
-    <string name="notice_room_invite_by_you">أنت قد دعوت %1$s</string>
-    <string name="notice_room_join_by_you">أنت قد انضممت إلى الغرفة</string>
-    <string name="notice_room_leave_by_you">أنت قد غادرت الغرفة</string>
-    <string name="notice_room_reject_by_you">أنت قد رفضت الدعوة</string>
-    <string name="notice_room_kick_by_you">أنت قد طردت %1$s</string>
-    <string name="notice_room_unban_by_you">أنت قد رفعت الحظر عن %1$s</string>
-    <string name="notice_room_ban_by_you">أنت قد حظرت %1$s</string>
-    <string name="notice_room_withdraw_by_you">أنت قد سحبت دعوة %1$s</string>
-    <string name="notice_avatar_url_changed_by_you">أنت قد غيّرت صورتك الشخصية</string>
-    <string name="notice_display_name_set_by_you">أنت قد عيّنت اسمك الظاهر إلى %1$s</string>
-    <string name="notice_display_name_changed_from_by_you">أنت قد غيّرت اسمك الظاهر من ⁨%1$s⁩ إلى ⁨%2$s⁩</string>
-    <string name="notice_display_name_removed_by_you">أنت قد أزلت اسمك الظاهر (لقد كان ⁨%1$s⁩)</string>
-    <string name="notice_room_topic_changed_by_you">أنت قد غيّرت الموضوع إلى: ⁨%1$s⁩</string>
-    <string name="notice_room_avatar_changed">%1$s قد غيّر صورة الغرفة</string>
-    <string name="notice_room_avatar_changed_by_you">أنت قد غيّرت صورة الغرفة</string>
-    <string name="notice_room_name_changed_by_you">أنت قد غيّرت اسم الغرفة إلى: %1$s</string>
-    <string name="notice_placed_video_call_by_you">أنت قد أجريت مُكالمة مرئية.</string>
-    <string name="notice_placed_voice_call_by_you">أنت قد أجريت مُكالمة صوتية.</string>
-    <string name="notice_call_candidates">%s قد أرسل بيانات لإعداد مُكالمة.</string>
-    <string name="notice_call_candidates_by_you">أنت قد أرسلت بيانات لإعداد مُكالمة.</string>
-    <string name="notice_answered_call_by_you">أنت قد أجبت على المُكالمة.</string>
-    <string name="notice_ended_call_by_you">أنت قد أنهيت المُكالمة.</string>
-    <string name="notice_made_future_room_visibility_by_you">أنت قد جعلت التأريخ المُستقبلي للغرفة مرئيًا لـ %1$s</string>
-    <string name="notice_end_to_end_by_you">أنت قد فعّلت تعيمية النهاية-إلى-النهاية (%1$s)</string>
-    <string name="notice_room_update">%s قد قام بترقية هذه الغرفة.</string>
-    <string name="notice_room_update_by_you">أنت قد رقّيتَ هذه الغرفة.</string>
-    <string name="notice_requested_voip_conference_by_you">أنت قد طلبت اجتماع VoIP</string>
-    <string name="notice_room_name_removed_by_you">أنت قد أزلت اسم الغرفة</string>
-    <string name="notice_room_topic_removed_by_you">أنت قد أزلت موضوع الغرفة</string>
-    <string name="notice_room_avatar_removed">%1$s قد أزال صورة الغرفة</string>
-    <string name="notice_room_avatar_removed_by_you">أنت قد أزلت صورة الغرفة</string>
-    <string name="notice_event_redacted">تمت إزالة الرسالة</string>
-    <string name="notice_event_redacted_by">الرسالة قد أُزيلت بواسطة %1$s</string>
-    <string name="notice_event_redacted_with_reason">أُزيلت الرسالة [السبب: ⁨%1$s⁩]</string>
-    <string name="notice_event_redacted_by_with_reason">أزال ⁨%1$s⁩ الرسالة [السبب: ⁨%2$s⁩]</string>
-    <string name="notice_room_third_party_invite_by_you">أرسلت دعوة إلى ⁨%1$s⁩ للانضمام إلى الغرفة</string>
-    <string name="notice_room_third_party_revoked_invite">سحب ⁨%1$s⁩ دعوة ⁨%2$s⁩ للانضمام إلى الغرفة</string>
-    <string name="notice_room_third_party_revoked_invite_by_you">سحبت دعوة ⁨%1$s⁩ للانضمام إلى الغرفة</string>
-    <string name="notice_room_third_party_registered_invite_by_you">قَبِلت دعوة ⁨%1$s⁩</string>
-    <string name="notice_widget_added">أضاف ⁨%1$s⁩ الودجة ⁨%2$s⁩</string>
-    <string name="notice_widget_added_by_you">أضفت الودجة ⁨%1$s⁩</string>
-    <string name="notice_widget_removed">أزال ⁨%1$s⁩ الودجة ⁨%2$s⁩</string>
-    <string name="notice_widget_removed_by_you">أزلت الودجة ⁨%1$s⁩</string>
-    <string name="notice_widget_modified">عدّل ⁨%1$s⁩ الودجة ⁨%2$s⁩</string>
-    <string name="notice_widget_modified_by_you">عدّلت الودجة ⁨%1$s⁩</string>
-    <string name="power_level_admin">مدير</string>
-    <string name="power_level_default">المبدئي</string>
-    <string name="power_level_custom">مخصّص (⁨%1$d⁩)</string>
-    <string name="power_level_custom_no_value">مخصّص</string>
-    <string name="notice_power_level_changed_by_you">غيّرت مستوى قوّة %1$s⁩.</string>
-    <string name="notice_power_level_changed">غيّر ⁨%1$s⁩ مستوى قوّة %2$s⁩.</string>
-    <string name="notice_power_level_diff">‏⁨%1$s⁩ من ⁨%2$s⁩ إلى ⁨%3$s⁩</string>
-    <string name="initial_sync_start_importing_account">المزامنة الأولية:
-\nيستورد الحساب…</string>
-    <string name="notice_room_server_acl_allow_is_empty">🎉 جميع الخوادم محظورة من المُشاركة! لم يعُد من الممكن استخدام هذه الغرفة.</string>
-    <string name="notice_room_server_acl_updated_no_change">لا تغيير.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• خوادم مُطابقة IP الحرفية محظورة الآن.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• الخادم المُطابق لـ %s قد أُزيل من قائمة السماح.</string>
-    <string name="notice_room_server_acl_updated_allowed">• الخادم المُطابق لـ %s مسموح الآن.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• الخادم المُطابق لـ %s قد أُزيل من قائمة الحظر.</string>
-    <string name="notice_room_server_acl_updated_banned">• الخادم المُطابق لـ %s محظور الآن.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• خوادم مُطابقة IP الحرفية مسموحة الآن.</string>
-    <string name="notice_room_server_acl_updated_title_by_you">أنت قد غيّرت خادم الـACLs لهذه الغرفة.</string>
-    <string name="notice_room_server_acl_updated_title">%s قد غيّر خادم الـACLs لهذه الغرفة.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• الخادم يحظر مُطابقة القيم الحرفية للـIP.</string>
-    <string name="notice_room_server_acl_set_allowed">• الخادم المُطابق لـ %s مسموح.</string>
-    <string name="notice_room_server_acl_set_banned">• الخادم المُطابق لـ %s محظور.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• الخادم يسمح بمُطابقة القيم الحرفية للـIP.</string>
-    <string name="notice_room_server_acl_set_title_by_you">أنت قد عيّنت خادم الـACLs لهذه الغرفة.</string>
-    <string name="notice_room_server_acl_set_title">%s قد عيّن خادم الـACLs لهذه الغرفة.</string>
-    <string name="notice_direct_room_update_by_you">أنت قد قمت بالترقية هُنا.</string>
-    <string name="notice_direct_room_update">%s قد قام بالترقية هُنا.</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">أنت قد جعلت الرسائل المُستقبلية مرئية لـ %1$s</string>
-    <string name="notice_made_future_direct_room_visibility">%1$s قد جعل الرسائل المُستقبلية مرئية لـ %2$s</string>
-    <string name="notice_direct_room_leave_by_you">أنت قد غادرت الغرفة</string>
-    <string name="notice_direct_room_leave">%1$s قد غادر الغرفة</string>
-    <string name="notice_direct_room_join_by_you">أنت قد انضممت</string>
-    <string name="notice_direct_room_join">%1$s قد انضم</string>
-    <string name="notice_direct_room_created_by_you">أنت قد أنشأت المُناقشة</string>
-    <string name="notice_direct_room_created">%1$s قد أنشأ المُناقشة</string>
-</resources>

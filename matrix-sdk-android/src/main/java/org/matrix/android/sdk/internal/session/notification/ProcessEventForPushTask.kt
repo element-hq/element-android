@@ -80,7 +80,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
 
         val allRedactedEvents = params.syncResponse.join
                 .asSequence()
-                .mapNotNull { (_, value) -> value.timeline?.events }
+                .mapNotNull { it.value.timeline?.events }
                 .flatten()
                 .filter { it.type == EventType.REDACTION }
                 .mapNotNull { it.redacts }

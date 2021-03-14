@@ -119,13 +119,14 @@ class MessageItemFactory @Inject constructor(
     }
 
     fun create(event: TimelineEvent,
+               prevEvent: TimelineEvent?,
                nextEvent: TimelineEvent?,
                highlight: Boolean,
                callback: TimelineEventController.Callback?
     ): VectorEpoxyModel<*>? {
         event.root.eventId ?: return null
         roomId = event.roomId
-        val informationData = messageInformationDataFactory.create(event, nextEvent)
+        val informationData = messageInformationDataFactory.create(event, prevEvent, nextEvent)
         if (event.root.isRedacted()) {
             // message is redacted
             val attributes = messageItemAttributesFactory.create(null, informationData, callback)
@@ -468,7 +469,7 @@ class MessageItemFactory @Inject constructor(
         spannable.append(linkifiedBody)
         val editedSuffix = stringProvider.getString(R.string.edited_suffix)
         spannable.append(" ").append(editedSuffix)
-        val color = colorProvider.getColorFromAttribute(R.attr.vctr_list_header_secondary_text_color)
+        val color = colorProvider.getColorFromAttribute(R.attr.riotx_text_secondary)
         val editStart = spannable.lastIndexOf(editedSuffix)
         val editEnd = editStart + editedSuffix.length
         spannable.setSpan(

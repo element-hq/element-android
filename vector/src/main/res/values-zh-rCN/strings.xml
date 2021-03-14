@@ -1,5 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="summary_user_sent_image">%1$s 发送了一张图片。</string>
+    <string name="notice_room_invite_no_invitee">%s 的邀请</string>
+    <string name="notice_room_invite">%1$s 邀请了 %2$s</string>
+    <string name="notice_room_invite_you">%1$s 邀请了您</string>
+    <string name="notice_room_join">%1$s 加入了聊天室</string>
+    <string name="notice_room_leave">%1$s 离开了聊天室</string>
+    <string name="notice_room_reject">%1$s 拒绝了邀请</string>
+    <string name="notice_room_kick">%1$s 移除了 %2$s</string>
+    <string name="notice_room_unban">%1$s 解封了 %2$s</string>
+    <string name="notice_room_ban">%1$s 封禁了 %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s 更换了他们的头像</string>
+    <string name="notice_display_name_set">%1$s 将他们的昵称设置为 %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s 把他们的昵称从 %2$s 改为 %3$s</string>
+    <string name="notice_display_name_removed">%1$s 移除了他们的昵称 (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s 把主题改为： %2$s</string>
+    <string name="notice_room_name_changed">%1$s 把聊天室名称改为： %2$s</string>
+    <string name="notice_placed_video_call">%s 发起了一次视频通话。</string>
+    <string name="notice_placed_voice_call">%s 发起了一次语音通话。</string>
+    <string name="notice_answered_call">%s 已接听通话。</string>
+    <string name="notice_ended_call">%s 已结束通话。</string>
+    <string name="notice_room_visibility_invited">所有聊天室成员，从他们被邀请开始。</string>
+    <string name="notice_room_visibility_joined">所有聊天室成员，从他们加入开始。</string>
+    <string name="notice_room_visibility_shared">所有聊天室成员。</string>
+    <string name="notice_room_visibility_world_readable">任何人。</string>
+    <string name="notice_room_visibility_unknown">未知（%s）。</string>
+    <string name="notice_end_to_end">%1$s 开启了端到端加密（%2$s）</string>
+    <string name="notice_requested_voip_conference">%1$s 请求了一次 VoIP 会议</string>
+    <string name="notice_voip_started">VoIP 会议已开始</string>
+    <string name="notice_voip_finished">VoIP 会议已结束</string>
+    <string name="notice_avatar_changed_too">（头像也被更改）</string>
+    <string name="notice_room_name_removed">%1$s 移除了聊天室名称</string>
+    <string name="notice_room_topic_removed">%1$s 移除了聊天室主题</string>
+    <string name="notice_crypto_unable_to_decrypt">** 无法解密：%s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">发送者的设备没有向我们发送此消息的密钥。</string>
+    <string name="unable_to_send_message">无法发送消息</string>
+    <string name="message_failed_to_upload">上传图像失败</string>
+    <string name="network_error">网络错误</string>
+    <string name="matrix_error">Matrix 错误</string>
+    <string name="room_error_join_failed_empty_room">目前无法重新加入一个空的聊天室。</string>
+    <string name="medium_email">电子邮箱地址</string>
+    <string name="medium_phone_number">手机号码</string>
+    <string name="notice_room_withdraw">%1$s 撤回了对 %2$s 的邀请</string>
+    <string name="notice_made_future_room_visibility">%1$s 让未来的聊天室历史记录对 %2$s 可见</string>
+    <string name="notice_profile_change_redacted">%1$s 更新了他的个人档案 %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s 向 %2$s 发送了加入聊天室的邀请</string>
+    <string name="notice_room_third_party_registered_invite">%1$s 接受了 %2$s 的邀请</string>
+    <string name="could_not_redact">无法撤回</string>
+    <string name="summary_message">%1$s：%2$s</string>
+    <string name="summary_user_sent_sticker">%1$s 发送了一张贴纸。</string>
+    <string name="room_displayname_empty_room">空聊天室</string>
+    <string name="room_displayname_invite_from">来自 %s 的邀请</string>
+    <string name="room_displayname_room_invite">聊天室邀请</string>
+    <string name="room_displayname_two_members">%1$s 和 %2$s</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="other">%1$s 与其他 %2$d 位</item>
+    </plurals>
+    <string name="notice_event_redacted">消息已被移除</string>
+    <string name="notice_event_redacted_by">消息已被 %1$s 移除</string>
+    <string name="notice_event_redacted_with_reason">消息已被移除 [原因: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">消息已被 %1$s 移除 [原因: %2$s]</string>
+    <string name="initial_sync_start_importing_account">初始化同步：
+\n正在导入账号…</string>
+    <string name="initial_sync_start_importing_account_crypto">初始化同步：
+\n正在导入加密数据</string>
+    <string name="initial_sync_start_importing_account_rooms">初始化同步：
+\n正在导入聊天室</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">初始化同步：
+\n正在导入已加入的聊天室</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">初始化同步：
+\n正在导入已邀请的聊天室</string>
+    <string name="initial_sync_start_importing_account_left_rooms">初始化同步：
+\n正在导入已离开的聊天室</string>
+    <string name="initial_sync_start_importing_account_groups">初始化同步：
+\n正在导入社区</string>
+    <string name="initial_sync_start_importing_account_data">初始化同步：
+\n正在导入账号数据</string>
+    <string name="notice_room_update">%s 升级了此聊天室。</string>
+    <string name="event_status_sending_message">正在发送消息…</string>
+    <string name="clear_timeline_send_queue">清除正在发送队列</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s 撤回了对 %2$s 加入聊天室的邀请</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s 的邀请。理由：%2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s 邀请了 %2$s。理由：%3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s 邀请了您。理由：%2$s</string>
+    <string name="notice_room_join_with_reason">%1$s 加入了聊天室。理由：%2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s 离开了聊天室。理由：%2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s 已拒绝邀请。理由：%2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s 踢走了 %2$s。理由：%3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s 解封了 %2$s。理由：%3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s 封禁了 %2$s。理由：%3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s 已发送邀请给 %2$s 来加入聊天室。理由：%3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s 撤销了 %2$s 加入聊天室的邀請。理由：%3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s 接受 %2$s 的邀請。理由：%3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s 撤回了对 %2$s 的邀请。理由：%3$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="other">%1$s 新增了 %2$s 为此聊天室的地址。</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="other">%1$s 移除了 %2$s 作为此聊天室额地址。</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed">%1$s 为此聊天室新增了 %2$s 并移除 %3$s 地址。</string>
+    <string name="notice_room_canonical_alias_set">%1$s 将此聊天室的主地址设为了 %2$s。</string>
+    <string name="notice_room_canonical_alias_unset">%1$s 为此聊天室移除了主地址。</string>
+    <string name="notice_room_guest_access_can_join">%1$s 已允许访客加入聊天室。</string>
+    <string name="notice_room_guest_access_forbidden">%1$s 已禁止访客加入聊天室。</string>
+    <string name="notice_end_to_end_ok">%1$s 已开启端到端加密。</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s 已开启端到端加密（无法识别的演算法 %2$s）。</string>
+    <string name="notice_room_created">%1$s 创建了这个聊天室</string>
+    <string name="summary_you_sent_image">您发送了一张图片。</string>
+    <string name="summary_you_sent_sticker">您发送了一张贴纸。</string>
+    <string name="notice_room_invite_no_invitee_by_you">您的邀请</string>
+    <string name="notice_room_created_by_you">您创建了这个聊天室</string>
+    <string name="notice_room_invite_by_you">您邀请了 %1$s</string>
+    <string name="notice_room_join_by_you">您加入了聊天室</string>
+    <string name="notice_room_leave_by_you">您离开了聊天室</string>
+    <string name="notice_room_reject_by_you">您拒绝了邀请</string>
+    <string name="notice_room_kick_by_you">您移除了 %1$s</string>
+    <string name="notice_room_unban_by_you">您解封了 %1$s</string>
+    <string name="notice_room_ban_by_you">您封禁了 %1$s</string>
+    <string name="notice_room_withdraw_by_you">您撤回了对 %1$s 的邀请</string>
+    <string name="notice_avatar_url_changed_by_you">您更换了您的头像</string>
+    <string name="notice_display_name_set_by_you">您将您的昵称设置为 %1$s</string>
+    <string name="notice_display_name_changed_from_by_you">您将您的昵称从 %1$s 改为 %2$s</string>
+    <string name="notice_display_name_removed_by_you">您移除了您的昵称 (%1$s)</string>
+    <string name="notice_room_topic_changed_by_you">您把主题改为：%1$s</string>
+    <string name="notice_room_avatar_changed">%1$s 变更了聊天室头像</string>
+    <string name="notice_room_avatar_changed_by_you">您变更了聊天室头像</string>
+    <string name="notice_room_name_changed_by_you">您把聊天室名称改为：%1$s</string>
+    <string name="notice_placed_video_call_by_you">您发起了一次视频通话。</string>
+    <string name="notice_placed_voice_call_by_you">您发起了一次语音通话。</string>
+    <string name="notice_call_candidates">%s 发送了数据以建立通话。</string>
+    <string name="notice_call_candidates_by_you">您发送了数据以建立通话。</string>
+    <string name="notice_answered_call_by_you">您接听了通话。</string>
+    <string name="notice_ended_call_by_you">您结束了通话。</string>
+    <string name="notice_made_future_room_visibility_by_you">您已让未来的聊天室记录对 %1$s 可见</string>
+    <string name="notice_end_to_end_by_you">您开启了端到端加密（%1$s）</string>
+    <string name="notice_room_update_by_you">您升级了此聊天室。</string>
+    <string name="notice_requested_voip_conference_by_you">您请求了 VoIP 会议</string>
+    <string name="notice_room_name_removed_by_you">您移除了聊天室名称</string>
+    <string name="notice_room_topic_removed_by_you">您移除了聊天室主题</string>
+    <string name="notice_room_avatar_removed">%1$s 移除了聊天室头像</string>
+    <string name="notice_room_avatar_removed_by_you">您移除了聊天室头像</string>
+    <string name="notice_profile_change_redacted_by_you">您更新了您的个人档案 %1$s</string>
+    <string name="notice_room_third_party_invite_by_you">您向 %1$s 发送了加入聊天室的邀请</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">您已撤回了对 %1$s 加入聊天室的邀请</string>
+    <string name="notice_room_third_party_registered_invite_by_you">您接受了 %1$s 的邀请</string>
+    <string name="notice_widget_added">%1$s 添加了 %2$s 小部件</string>
+    <string name="notice_widget_added_by_you">您添加了 %1$s 小部件</string>
+    <string name="notice_widget_removed">%1$s 移除了 %2$s 小部件</string>
+    <string name="notice_widget_removed_by_you">您移除了 %1$s 小部件</string>
+    <string name="notice_widget_modified">%1$s 修改了 %2$s 小部件</string>
+    <string name="notice_widget_modified_by_you">您修改了 %1$s 小部件</string>
+    <string name="power_level_admin">管理员</string>
+    <string name="power_level_moderator">审核员</string>
+    <string name="power_level_default">默认</string>
+    <string name="power_level_custom">自定义（%1$d）</string>
+    <string name="power_level_custom_no_value">自定义</string>
+    <string name="notice_power_level_changed_by_you">您更改了%1$s 的权力等级。</string>
+    <string name="notice_power_level_changed">%1$s 更改了 %2$s 的权力等级。</string>
+    <string name="notice_power_level_diff">%1$s 从 %2$s 到 %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">您的邀请。理由：%1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">您邀请了 %1$s。理由：%2$s</string>
+    <string name="notice_room_join_with_reason_by_you">您加入了聊天室。理由：%1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">您离开了聊天室。理由：%1$s</string>
+    <string name="notice_room_reject_with_reason_by_you">您拒绝了邀请。理由：%1$s</string>
+    <string name="notice_room_kick_with_reason_by_you">您踢走了 %1$s。理由：%2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">您解封了 %1$s。理由：%2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">您封禁了 %1$s。理由：%2$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">您已发送邀请给 %1$s 来加入聊天室。理由：%2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">您撤销了 %1$s 加入聊天室的邀请。理由：%2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">您接受了 %1$s 的邀请。理由：%2$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">您撤回了 %1$s 的邀请。理由：%2$s</string>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="other">您新增了 %1$s 为此聊天室的地址。</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="other">您移除了此聊天室的 %1$s 地址。</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed_by_you">您为此聊天室新增了 %1$s 并移除了 %2$s 地址。</string>
+    <string name="notice_room_canonical_alias_set_by_you">您将此聊天室的主地址设为了 %1$s。</string>
+    <string name="notice_room_canonical_alias_unset_by_you">您移除了此聊天室的主地址。</string>
+    <string name="notice_room_guest_access_can_join_by_you">您已允许访客加入聊天室。</string>
+    <string name="notice_room_guest_access_forbidden_by_you">您已禁止访客加入聊天室。</string>
+    <string name="notice_end_to_end_ok_by_you">您已开启端到端加密。</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">您已开启端到端加密（无法识别的算法 %1$s）。</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">您已离开。理由：%1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s 已离开。理由：%2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">您已加入。理由：%1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s 已加入。理由：%2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">您撤回了对 %1$s 的邀请</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s 撤回了对 %2$s 的邀请</string>
+    <string name="notice_direct_room_third_party_invite_by_you">您邀请了 %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s 邀请了 %2$s</string>
+    <string name="notice_direct_room_update_by_you">您在此处升级。</string>
+    <string name="notice_direct_room_update">%s 在此处升级。</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">您使未来的消息对 %1$s 可见</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s 使未来的消息对 %2$s 可见</string>
+    <string name="notice_direct_room_leave_by_you">您离开了聊天室</string>
+    <string name="notice_direct_room_leave">%1$s 离开了聊天室</string>
+    <string name="notice_direct_room_join_by_you">您已加入</string>
+    <string name="notice_direct_room_join">%1$s 已加入</string>
+    <string name="notice_direct_room_created_by_you">您创建了讨论</string>
+    <string name="notice_direct_room_created">%1$s 创建了讨论</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">你已阻止客人加入房间。</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s已阻止客人加入房间。</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">你已允许客人加入这里。</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s 已允许客人加入这里。</string>
     <string name="call_notification_answer">接受</string>
     <string name="call_notification_reject">拒绝</string>
     <string name="call_notification_hangup">挂断</string>
@@ -189,11 +395,11 @@
     <string name="attachment_remaining_time_seconds">%d 秒</string>
     <string name="call_connected">通话已连接</string>
     <string name="call_connecting">通话正在连接…</string>
-    <string name="permissions_rationale_msg_storage">为了发送或保存附件，Element 需要访问您的图片和视频库。 
+    <string name="template_permissions_rationale_msg_storage">为了发送或保存附件，${app_name} 需要访问您的图片和视频库。
 \n
 \n请在接下来弹出的窗口中授权允许访问，以便应用能够从您的手机发送文件。</string>
-    <string name="permissions_rationale_msg_camera">为了拍照或进行视频通话，Element 需要访问您的相机。</string>
-    <string name="permissions_rationale_msg_record_audio">为了进行语音通话，Element 需要访问您的麦克风。</string>
+    <string name="template_permissions_rationale_msg_camera">为了拍照或进行视频通话，${app_name} 需要访问您的相机。</string>
+    <string name="template_permissions_rationale_msg_record_audio">为了进行语音通话，${app_name} 需要访问您的麦克风。</string>
     <string name="room_preview_try_join_an_unknown_room">您试图访问聊天室 %s。您是否愿意加入这个聊天室？</string>
     <string name="room_participants_header_admin_tools">管理工具</string>
     <string name="room_participants_header_direct_chats">私聊</string>
@@ -376,7 +582,7 @@
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \n请在接下来弹出的窗口中授权允许访问。"</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element需要许可才能访问您的摄像机和麦克风来执行视频通话。
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name}需要许可才能访问您的摄像机和麦克风来执行视频通话。
 \n
 \n请在接下来弹出的窗口中授权允许访问。</string>
     <string name="permissions_action_not_performed_missing_permissions">对不起。因为权限不足，操作已取消</string>
@@ -438,10 +644,10 @@
     <string name="send_files_in">发送至</string>
     <string name="read_receipts_list">已读标签清单</string>
     <string name="compression_options">发送为</string>
-    <string name="permissions_rationale_msg_contacts">Element 需要访问您的通讯录，才能根据电子邮箱地址和手机号码查找其他 Matrix 用户。
+    <string name="template_permissions_rationale_msg_contacts">${app_name} 需要访问您的通讯录，才能根据电子邮箱地址和手机号码查找其他 Matrix 用户。
 
 请在接下来的弹出窗口中授权允许访问。</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element可以检查您的通讯录，以根据电子邮件和电话号码找到其他Matrix用户。
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name}可以检查您的通讯录，以根据电子邮件和电话号码找到其他Matrix用户。
 \n
 \n你同意为此目的分享你的通讯录吗\?</string>
     <string name="room_participants_idle">空闲</string>
@@ -497,7 +703,7 @@
     <string name="matrix_only_filter">只显示 Matrix 联系人</string>
     <string name="no_conversation_placeholder">没有对话</string>
     <string name="no_result_placeholder">没有结果</string>
-    <string name="no_contact_access_placeholder">您没有授予 Element 访问本地通讯录的权限</string>
+    <string name="template_no_contact_access_placeholder">您没有授予 ${app_name} 访问本地通讯录的权限</string>
     <!-- Rooms fragment -->
     <string name="rooms_header">聊天室</string>
     <string name="rooms_directory_header">聊天室目录</string>
@@ -551,7 +757,7 @@
     <string name="huge">巨大</string>
     <string name="light_theme">浅色主题</string>
     <string name="dark_theme">深色主题</string>
-    <string name="black_them">黑色主题</string>
+    <string name="black_theme">黑色主题</string>
     <string name="settings_notification_ringtone">通知声音</string>
     <string name="settings_12_24_timestamps">使用12小时制显示时间戳</string>
     <string name="widget_no_power_to_manage">您需要权限来管理这个聊天室的小部件</string>
@@ -681,7 +887,7 @@
         <item quantity="other">%d 条未读消息</item>
     </plurals>
     <string name="startup_notification_privacy_title">通知隐私</string>
-    <string name="startup_notification_privacy_message">Element 可以在后台运行以安全隐密地管理您的通知（这可能会影响电池消耗）。</string>
+    <string name="template_startup_notification_privacy_message">${app_name} 可以在后台运行以安全隐密地管理您的通知（这可能会影响电池消耗）。</string>
     <string name="startup_notification_privacy_button_grant">获取权限</string>
     <string name="startup_notification_privacy_button_other">选择其他选项</string>
     <string name="settings_notification_privacy_fcm">• 通知通过 Firebase Cloud Messaging 发送</string>
@@ -694,11 +900,11 @@
     <string name="settings_deactivate_account_section">停用账户</string>
     <string name="settings_deactivate_my_account">停用我的账户</string>
     <string name="settings_opt_in_of_analytics">发送统计分析数据</string>
-    <string name="settings_opt_in_of_analytics_summary">Element 会收集匿名统计数据来帮助我们改进程序。</string>
-    <string name="settings_opt_in_of_analytics_prompt">请允许资料分析以帮助我们改进 Element。</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} 会收集匿名统计数据来帮助我们改进程序。</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">请允许资料分析以帮助我们改进 ${app_name}。</string>
     <string name="settings_opt_in_of_analytics_ok">是的，我愿意帮助！</string>
     <string name="deactivate_account_title">停用账户</string>
-    <string name="deactivate_account_content"/>
+    <string name="deactivate_account_content">这将使您的账户永远不再可用。您将不能登录，或使用相同的用户 ID 重新注册。您的账户将退出所有已加入的聊天室，身份服务器上的账户信息也会被删除。<b>此操作是不可逆的。</b> 停用您的账户<b>不会默认忘记您发送的消息</b>。如果您希望我们忘记您发送的消息，请勾选下面的选择框。 Matrix 中的消息可见性类似于电子邮件。我们忘记您的消息意味着您发送的消息不会被发给新注册或未注册的用户，但是已收到您的消息的注册用户依旧可以看到他们的副本。</string>
     <string name="deactivate_account_delete_checkbox">请在我停用账户的同时忘记我发送的所有消息（警告：这将导致未来的用户看到残缺的对话）</string>
     <string name="deactivate_account_prompt_password">请输入您的密码以继续：</string>
     <string name="deactivate_account_submit">停用账户</string>
@@ -724,7 +930,7 @@
     <string name="e2e_re_request_encryption_key">从其他设备上 <u>重新请求密钥</u>。</string>
     <string name="e2e_re_request_encryption_key_sent">已发送密钥共享请求。</string>
     <string name="e2e_re_request_encryption_key_dialog_title">已请求</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">请在其他可解密此消息的设备上启动 Element，以便其将密钥发送至当前设备。</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">请在其他可解密此消息的设备上启动 ${app_name}，以便其将密钥发送至当前设备。</string>
     <string name="lock_screen_hint">在此输入…</string>
     <string name="settings_labs_enable_send_voice">发送语音消息</string>
     <string name="error_empty_field_your_password">请输入您的密码。</string>
@@ -792,13 +998,12 @@
     <string name="resource_limit_hard_mau">本服务器已达到每月活跃用户限制。</string>
     <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
     <string name="resource_limit_soft_contact">请 %s 以增加此限制的额度。</string>
-    <string name="status_theme">Status.im 主题</string>
     <string name="call_anyway">仍然呼叫</string>
     <string name="accept">接受</string>
     <string name="dialog_title_error">错误</string>
     <string name="auth_accept_policies">请审阅并接受此主服务器的政策：</string>
     <string name="settings_call_category">通话</string>
-    <string name="settings_call_ringtone_use_app_ringtone">为来电使用 Element 的默认铃声</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">为来电使用 ${app_name} 的默认铃声</string>
     <string name="settings_call_ringtone_title">来电铃声</string>
     <string name="settings_call_ringtone_dialog_title">请选择来电铃声：</string>
     <string name="room_participants_action_kick">移除</string>
@@ -823,12 +1028,12 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">启用</string>
     <string name="settings_troubleshoot_test_device_settings_title">设备设置。</string>
     <string name="settings_troubleshoot_test_device_settings_success">已为此设备启用通知。</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">此会话未启用通知。 
-\n请检查 Element 设置。</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">此会话未启用通知。
+\n请检查 ${app_name} 设置。</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">启用</string>
     <string name="settings_troubleshoot_test_play_services_title">Play 服务检查</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play 服务的 APK 文件可用且为最新版本。</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element 使用 Google Play 服务来推送通知，但它似乎并未正确设置：
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} 使用 Google Play 服务来推送通知，但它似乎并未正确设置：
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">修复 Play 服务</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase 令牌</string>
@@ -845,7 +1050,7 @@
     <string name="settings_troubleshoot_test_foreground_service_started_failed">通知服务未在运行。
 \n请尝试重启本应用程序。</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">启动服务</string>
-    <string name="settings_labs_native_camera_summary">调用系统相机应用而非使用 Element 内置的相机界面。</string>
+    <string name="settings_labs_native_camera_summary">调用系统相机应用而非使用 ${app_name} 内置的相机界面。</string>
     <string name="settings_labs_enable_send_voice_summary">此选项需要第三方应用录制消息。</string>
     <string name="settings_troubleshoot_test_service_boot_title">开机时启动</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">启用开机时启动</string>
@@ -863,8 +1068,8 @@
     <string name="settings_show_avatar_display_name_changes_messages">显示账户变动事件</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">包括头像与显示名称的变动。</string>
     <string name="startup_notification_fdroid_battery_optim_title">后台连接</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Element需要保持低影响的后台连接，以便获得可靠的通知。
-\n下一个屏幕中，系统将提示您允许 Element 始终在后台运行，请点击“允许“。</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name}需要保持低影响的后台连接，以便获得可靠的通知。
+\n下一个屏幕中，系统将提示您允许 ${app_name} 始终在后台运行，请点击“允许“。</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">授予权限</string>
     <string name="account_email_error">在验证您的电子邮件地址时发生了一个错误。</string>
     <string name="settings_password">密码</string>
@@ -891,14 +1096,14 @@
     <string name="settings_troubleshoot_test_service_restart_success">服务被停止，并已自动重启。</string>
     <string name="settings_troubleshoot_test_service_restart_failed">服务重启失败</string>
     <string name="settings_troubleshoot_test_service_boot_success">服务将在设备重启后启动。</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">服务不会在设备重启后启动，在您打开 Element 一次之前您将不会收到消息通知。</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">已禁用对 Element 的后台限制。此测试应使用移动数据（非Wi-Fi）进行。
+    <string name="template_settings_troubleshoot_test_service_boot_failed">服务不会在设备重启后启动，在您打开 ${app_name} 一次之前您将不会收到消息通知。</string>
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">已禁用对 ${app_name} 的后台限制。此测试应使用移动数据（非Wi-Fi）进行。
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">已启用对 Element 的后台限制。
-\nElement 在后台时的工作将被显著地限制，这可能会影响消息通知。 
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">已启用对 ${app_name} 的后台限制。
+\n${app_name} 在后台时的工作将被显著地限制，这可能会影响消息通知。
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">关闭后台限制</string>
-    <string name="settings_troubleshoot_test_battery_success">Element 未被电池优化影响。</string>
+    <string name="template_settings_troubleshoot_test_battery_success">${app_name} 未被电池优化影响。</string>
     <string name="settings_troubleshoot_test_battery_failed">如果设备在未充电的情况下关屏静置一段时间，其将进入打盹模式（Doze）。这将阻止应用访问网络并延后其运行、同步、与响铃。</string>
     <string name="settings_troubleshoot_test_battery_quickfix">忽略电池优化</string>
     <string name="encryption_export_notice">请输入用于加密密钥备份的密码。您在恢复此备份时需要使用此密码。</string>
@@ -930,12 +1135,12 @@
     <string name="settings_troubleshoot_test_bing_settings_failed">有些通知已在您的自定义设置中被禁用。</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">自定义规则加载失败，请重试。</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">检查设置</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\n此错误不受 Element 控制，根据 Google 的说法，此错误表示该设备在 FCM 中注册了太多应用。该错误仅在应用程序数量极多的情况下发生，因此不应影响普通用户。</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\n此错误不受 Element 控制。它的发生可能有几个原因。也许您稍后重试就有效了，您也可以检查一下 Google Play 服务是否被系统设置限制了数据使用，或者您的设备时钟是否正确，或者可能发生在自定义的 ROM 中。</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\n此错误不受 Element 控制。此设备上没有登录 Google 账号。请打开账号管理器并添加一个 Google 账号。</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\n此错误不受 ${app_name} 控制，根据 Google 的说法，此错误表示该设备在 FCM 中注册了太多应用。该错误仅在应用程序数量极多的情况下发生，因此不应影响普通用户。</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\n此错误不受 ${app_name} 控制。它的发生可能有几个原因。也许您稍后重试就有效了，您也可以检查一下 Google Play 服务是否被系统设置限制了数据使用，或者您的设备时钟是否正确，或者可能发生在自定义的 ROM 中。</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\n此错误不受 ${app_name} 控制。此设备上没有登录 Google 账号。请打开账号管理器并添加一个 Google 账号。</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">添加账号</string>
     <string name="settings_noisy_notifications_preferences">设置响铃通知</string>
     <string name="settings_call_notifications_preferences">设置电话通知</string>
@@ -949,7 +1154,7 @@
     <string name="error_empty_field_enter_user_name">请输入一个用户名。</string>
     <string name="passphrase_empty_error_message">请输入密码</string>
     <string name="passphrase_passphrase_too_weak">密码太弱</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">如果您想要 Element 生成一个恢复密钥，请删除密码。</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">如果您想要 ${app_name} 生成一个恢复密钥，请删除密码。</string>
     <string name="keys_backup_no_session_error">没有可用的 Matrix 会话</string>
     <string name="keys_backup_setup_step1_title">已加密信息永不丢失</string>
     <string name="keys_backup_setup_step1_description">加密聊天室中的信息会被端对端加密以确保安全。只有您和拥有密钥的接收方可以读取这些信息。
@@ -1061,7 +1266,7 @@
     <string name="passwords_do_not_match">密码不匹配</string>
     <string name="autodiscover_invalid_response">无效的主服务器探测响应</string>
     <string name="autodiscover_well_known_autofill_dialog_title">自动完成服务器选项</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element 侦测到您的 userId 域名 \"%1$s\" 有自定义的服务器设置：
+    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} 侦测到您的 userId 域名 \"%1$s\" 有自定义的服务器设置：
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">使用设置</string>
     <string name="notification_sync_init">正在初始化服务</string>
@@ -1187,7 +1392,7 @@
     <string name="action_copy">复制</string>
     <string name="dialog_title_success">成功</string>
     <string name="bottom_action_notification">通知</string>
-    <string name="call_failed_no_connection">Element 呼叫失败</string>
+    <string name="template_call_failed_no_connection">${app_name} 呼叫失败</string>
     <string name="call_failed_no_connection_description">无法建立实时连接。
 \n请要求您的家庭服务器管理员配置 TURN 服务器以使通话可靠工作。</string>
     <string name="call_select_sound_device">选择声音设备</string>
@@ -1228,15 +1433,15 @@
     <string name="room_participants_unban_title">取消封禁用户</string>
     <string name="room_participants_unban_prompt_msg">取消封禁用户将允许他们再次加入聊天室。</string>
     <string name="settings_add_3pid_confirm_password_title">确认您的密码</string>
-    <string name="settings_add_3pid_flow_not_supported">您无法在 Element 移动版中这么做</string>
+    <string name="template_settings_add_3pid_flow_not_supported">您无法在 ${app_name} 移动版中这么做</string>
     <string name="settings_add_3pid_authentication_needed">需要身份认证</string>
     <string name="settings_background_fdroid_sync_mode">后台同步模式</string>
     <string name="settings_background_fdroid_sync_mode_battery">电池优化</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element 将在后台以保留设备有限资源（电池）的方式同步。
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} 将在后台以保留设备有限资源（电池）的方式同步。
 \n取决于您的设备资源状态，同步可能被操作系统推迟。</string>
     <string name="settings_background_fdroid_sync_mode_real_time">实时优化</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element 将在后台定期准时同步（可配置）。
-\n这将影响网络和电池的使用，将显示一个永久通知表明 Element 正在监听事件。</string>
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} 将在后台定期准时同步（可配置）。
+\n这将影响网络和电池的使用，将显示一个永久通知表明 ${app_name} 正在监听事件。</string>
     <string name="settings_background_fdroid_sync_mode_disabled">无后台同步</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">应用在后台时您不会收到消息通知。</string>
     <string name="settings_background_sync_update_error">更新设置失败。</string>
@@ -1338,7 +1543,7 @@
     <string name="malformed_message">格式错误事件，无法显示</string>
     <string name="error_no_network">无网络。请检查您的网络连接。</string>
     <string name="change_room_directory_network">更改网络</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Element 尚不支持公开聊天室预览</string>
+    <string name="template_room_preview_world_readable_room_not_supported_yet">${app_name} 尚不支持公开聊天室预览</string>
     <string name="fab_menu_create_chat">私聊消息</string>
     <string name="create_room_title">新聊天室</string>
     <string name="create_room_public_title">公开</string>
@@ -1463,7 +1668,7 @@
     <string name="content_reported_as_inappropriate_content">此内容已报告为不合适。 
 \n 
 \n如果您不希望再看到此用户的更多内容，您可以忽略他们以隐藏他们的消息。</string>
-    <string name="permissions_rationale_msg_keys_backup_export">Element 需要权限在磁盘上保存您的端到端密钥。
+    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} 需要权限在磁盘上保存您的端到端密钥。
 \n
 \n请在下个弹窗中允许访问以便手动导出密钥。</string>
     <string name="no_network_indicator">目前没有网络连接</string>
@@ -1509,7 +1714,6 @@
     <string name="login_server_url_form_other_hint">地址</string>
     <string name="login_server_url_form_modular_text">面向组织的高级托管</string>
     <string name="login_server_url_form_modular_notice">输入 Modular Element 或您想使用的服务器地址</string>
-    <string name="login_server_url_form_other_notice">输入您想要连接的服务器或 Element 的地址</string>
     <string name="login_server_url_form_common_notice">输入您想使用的服务器的地址</string>
     <string name="login_sso_error_message">载入页面时出错：%1$s (%2$d)</string>
     <string name="login_mode_not_supported">应用无法登录到此家庭服务器。家庭服务器支持以下登录类型：%1$s。
@@ -1616,7 +1820,7 @@
 \n再次登入以访问您的帐户数据和消息。</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">除非您登入以恢复加密密钥，否则您将无法访问安全消息。</string>
     <string name="soft_logout_clear_data_dialog_submit">清除数据</string>
-    <string name="soft_logout_sso_not_same_user_error">当前会话用于用户 %1$s 而您提供了用户 %2$s 的凭证。Element 不支持此功能。
+    <string name="template_soft_logout_sso_not_same_user_error">当前会话用于用户 %1$s 而您提供了用户 %2$s 的凭证。${app_name} 不支持此功能。
 \n请先清除数据，然后重新登入另一个账户。</string>
     <string name="permalink_malformed">您的 matrix.to 链接更是不正确</string>
     <string name="bug_report_error_too_short">描述太短</string>
@@ -1634,7 +1838,7 @@
     <string name="devices_other_devices">其他会话</string>
     <string name="autocomplete_limited_results">仅显示第一个结果，请输入更多字符…</string>
     <string name="settings_developer_mode_fail_fast_title">快速失败</string>
-    <string name="settings_developer_mode_fail_fast_summary">发生意外错误时，Element 可能更经常崩溃</string>
+    <string name="template_settings_developer_mode_fail_fast_summary">发生意外错误时，${app_name} 可能更经常崩溃</string>
     <string name="command_description_shrug">在明文消息前添加 ¯\\_(ツ)_/¯</string>
     <string name="create_room_encryption_title">启用加密</string>
     <string name="create_room_encryption_description">一旦启用，加密无法禁用。</string>
@@ -1706,9 +1910,9 @@
     <string name="room_member_power_level_moderator_in">%1$s 审查员</string>
     <string name="room_member_power_level_default_in">%1$s 默认权限</string>
     <string name="room_member_power_level_custom_in">%2$s 自定义权限 (%1$d)</string>
-    <string name="rendering_event_error_type_of_event_not_handled">Element 无法处理 \'%1$s\' 类型事件</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element 无法处理 \'%1$s\' 类型消息</string>
-    <string name="rendering_event_error_exception">Element 在渲染 id 为 \'%1$s\' 的事件内容时遇到了一个问题</string>
+    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} 无法处理 \'%1$s\' 类型事件</string>
+    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} 无法处理 \'%1$s\' 类型消息</string>
+    <string name="template_rendering_event_error_exception">${app_name} 在渲染 id 为 \'%1$s\' 的事件内容时遇到了一个问题</string>
     <string name="unignore">取消忽略</string>
     <string name="verify_cannot_cross_sign">该会话无法与您的其他会话共享此验证。
 \n验证将保存在本地，并在此应用的未来版本中共享。</string>
@@ -1798,7 +2002,7 @@
     <string name="delete_event_dialog_reason_checkbox">附加理由</string>
     <string name="delete_event_dialog_reason_hint">编辑理由</string>
     <string name="event_redacted_by_user_reason_with_reason">事件被用户删除，理由：%1$s</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="template_login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">密钥请求</string>
     <string name="e2e_use_keybackup">解锁加密消息历史</string>
     <string name="refresh">刷新</string>
@@ -1914,13 +2118,13 @@
     <string name="error_adding_media_file_to_gallery">无法添加媒体文件到相册</string>
     <string name="error_saving_media_file">无法保存媒体文件</string>
     <string name="change_password_summary">选择新的账户密码…</string>
-    <string name="use_other_session_content_description">在你的其他设备上使用最新的Element 网页版、Element 桌面版、Element iOS 版、Element 安卓版，或其他能够交叉签名的 Matrix 客户端</string>
-    <string name="app_desktop_web">Element Web
-\nElement Desktop</string>
-    <string name="app_ios_android">Element iOS
-\nElement Android</string>
+    <string name="template_use_other_session_content_description">在你的其他设备上使用最新的${app_name} 网页版、${app_name} 桌面版、${app_name} iOS 版、${app_name} 安卓版，或其他能够交叉签名的 Matrix 客户端</string>
+    <string name="template_app_desktop_web">${app_name} Web
+\n${app_name} Desktop</string>
+    <string name="template_app_ios_android">${app_name} iOS
+\n${app_name} Android</string>
     <string name="or_other_mx_capabale_client">或其他能够交叉签名的 Matrix 客户端</string>
-    <string name="use_latest_app">在您的其他设备上使用最新的 Element：</string>
+    <string name="template_use_latest_app">在您的其他设备上使用最新的 ${app_name}：</string>
     <string name="command_description_discard_session">强制丢弃加密聊天室中的当前出站群组会话</string>
     <string name="command_description_discard_session_not_handled">仅在加密聊天室中支持</string>
     <string name="enter_secret_storage_passphrase_or_key">使用您的 %1$s 或使用您的 %2$s 继续。</string>
@@ -1952,7 +2156,7 @@
     <string name="invitation_sent_to_one_user">邀请已发送到 %1$s</string>
     <string name="invitations_sent_to_two_users">邀请已发送到 %1$s 和 %2$s</string>
     <plurals name="invitations_sent_to_one_and_more_users">
-        <item quantity="other">邀请已发送到 %1$s 和 %2$s 等</item>
+        <item quantity="other">邀请已发送到 %1$s 和 %2$d等</item>
     </plurals>
     <string name="invite_users_to_room_failure">我们无法邀请用户，请检查您想要邀请的用户并重试。</string>
     <string name="choose_locale_current_locale_title">当前语言</string>
@@ -1960,11 +2164,11 @@
     <string name="choose_locale_loading_locales">正在载入可用语言…</string>
     <string name="open_terms_of">打开 %s 条款</string>
     <string name="disconnect_identity_server_dialog_content">是否从身份服务器 %s 断开？</string>
-    <string name="identity_server_error_outdated_identity_server">身份服务器已过期。Element 仅支持 API V2。</string>
+    <string name="template_identity_server_error_outdated_identity_server">身份服务器已过期。${app_name} 仅支持 API V2。</string>
     <string name="identity_server_error_outdated_home_server">无法执行此操作。家庭服务器已过期。</string>
     <string name="identity_server_error_no_identity_server_configured">请先配置身份服务器。</string>
     <string name="identity_server_error_terms_not_signed">请先在设置中接受身份服务器的条款。</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">为了您的隐私，Element 仅支持发送用户电子邮件和电话号码的哈希值。</string>
+    <string name="template_identity_server_error_bulk_sha256_not_supported">为了您的隐私，${app_name} 仅支持发送用户电子邮件和电话号码的哈希值。</string>
     <string name="identity_server_error_binding_error">关联失败。</string>
     <string name="identity_server_error_no_current_binding_error">此标识符无当前关联。</string>
     <string name="identity_server_set_default_notice">您的家庭服务器 (%1$s) 建议使用 %2$s 作为您的身份服务器</string>
@@ -2006,11 +2210,10 @@
     <string name="crypto_error_withheld_unverified">您无法访问此消息因为您的会话不被发送者信任</string>
     <string name="crypto_error_withheld_generic">您无法访问此消息因为发送者有意不发送密钥</string>
     <string name="notice_crypto_unable_to_decrypt_merged">正在等待加密历史</string>
-    <string name="element_disclaimer_title">Riot 现在是 Element！</string>
-    <string name="element_disclaimer_content">我们兴奋地宣布我们改名了！您的应用已经是最新的并且您已登入您的帐户。</string>
-    <string name="element_disclaimer_negative_button">明白了</string>
-    <string name="element_disclaimer_positive_button">了解更多</string>
-    <string name="element_login_splash_brand">element</string>
+    <string name="disclaimer_title">Riot 现在是 Element！</string>
+    <string name="disclaimer_content">我们兴奋地宣布我们改名了！您的应用已经是最新的并且您已登入您的帐户。</string>
+    <string name="disclaimer_negative_button">明白了</string>
+    <string name="disclaimer_positive_button">了解更多</string>
     <string name="save_recovery_key_chooser_hint">将恢复密钥保存到</string>
     <string name="add_from_phone_book">从我的电话簿添加</string>
     <string name="empty_phone_book">您的电话簿是空的</string>
@@ -2075,7 +2278,6 @@
     <string name="settings_text_message_sent_hint">代码</string>
     <string name="login_msisdn_notice">请使用国际格式（电话号码必须以 ‘+’ 开始）</string>
     <string name="confirm_your_identity_quad_s">通过验证此登录确认您的身份，授权它访问加密信息。</string>
-    <string name="error_sso_flow_not_supported_yet">抱歉，对于连接到单点登录的账户此操作尚不可用。</string>
     <string name="error_opening_banned_room">无法打开您被封禁的聊天室。</string>
     <string name="room_error_not_found">无法找到此聊天室。请确认它存在。</string>
     <string name="no_permissions_to_start_webrtc_call">您没有权限在此聊天室发起通话</string>
@@ -2092,20 +2294,20 @@
 \n
 \n小心使用，它可能导致意外行为。</string>
     <string name="universal_link_malformed">链接格式不正确</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">每次打开 Element 都要求 PIN 码。</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">在 2 分钟未使用 Element 后要求 PIN 码。</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_off">每次打开 ${app_name} 都要求 PIN 码。</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_on">在 2 分钟未使用 ${app_name} 后要求 PIN 码。</string>
     <string name="settings_security_pin_code_grace_period_title">2 分钟后要求 PIN</string>
     <string name="settings_security_pin_code_notifications_summary_off">仅在一个简单通知中显示未读消息内容数量。</string>
     <string name="settings_security_pin_code_notifications_summary_on">显示细节如聊天室名称和消息内容。</string>
     <string name="settings_security_pin_code_notifications_title">在通知中显示内容</string>
-    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN 码是解锁 Element 的唯一方式。</string>
+    <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN 码是解锁 ${app_name} 的唯一方式。</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">启用设备特定的生物特征识别，如指纹和面部识别。</string>
     <string name="settings_security_pin_code_use_biometrics_title">启用生物特征识别</string>
     <string name="settings_security_application_protection_screen_title">配置保护</string>
     <string name="settings_security_application_protection_summary">使用 PIN 和生物特征识别保护访问。</string>
     <string name="settings_security_application_protection_title">保护访问</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
-        <item quantity="other">显示您现在可以验证的 ％d 个设备</item>
+        <item quantity="other">显示 %d 部设备，这些设备是你现在可以验证的</item>
     </plurals>
     <string name="secure_backup_reset_no_history">您将重新启动，没有历史记录，消息，受信任的设备或受信任的用户</string>
     <string name="secure_backup_reset_if_you_reset_all">如果您重置一切</string>
@@ -2164,4 +2366,109 @@
     <string name="send_bug_report_include_key_share_history">发送密钥共享请求历史记录</string>
     <string name="action_unpublish">取消发布</string>
     <string name="action_add">添加</string>
+    <string name="failed_to_initialize_cross_signing">设置交叉签名失败</string>
+    <string name="default_message_emote_snow">发送雪花 ❄️</string>
+    <string name="default_message_emote_confetti">发送撒花 🎉</string>
+    <string name="command_snow">发送带有雪花的给定消息</string>
+    <string name="command_confetti">使用 confetti 发送给定消息</string>
+    <string name="topic_prefix">"话题： "</string>
+    <string name="add_a_topic_link_text">添加一个话题</string>
+    <string name="room_created_summary_no_topic_creation_text">%s 使人们知道此聊天室关于什么。</string>
+    <string name="this_is_the_beginning_of_dm">这是您和 %s 的私聊消息历史记录的开始。</string>
+    <string name="this_is_the_beginning_of_room_no_name">这是此对话的开始。</string>
+    <string name="this_is_the_beginning_of_room">这是 %s 的开始。</string>
+    <string name="settings_export_trail">导出审计</string>
+    <string name="room_settings_enable_encryption_no_permission">您没有权限在此聊天室启用加密。</string>
+    <string name="room_member_open_or_create_dm">私聊消息</string>
+    <string name="create_room_in_progress">正在创建聊天室…</string>
+    <string name="create_room_alias_invalid">一些字符不被允许</string>
+    <string name="create_room_alias_empty">请提供一个聊天室地址</string>
+    <string name="create_room_alias_already_in_use">此地址已被使用</string>
+    <string name="create_room_alias_hint">聊天室地址</string>
+    <string name="create_room_disable_federation_description">您可以启用此选项如果此聊天室将仅用于您的主服务器上的内部团队协作。此选项之后无法更改。</string>
+    <string name="create_room_disable_federation_title">屏蔽不是 %s 一部分的任何人加入此聊天室</string>
+    <string name="hide_advanced">隐藏高级</string>
+    <string name="show_advanced">显示高级</string>
+    <string name="login_clear_homeserver_history">清除历史记录</string>
+    <string name="login_social_sso">单点登录</string>
+    <string name="login_social_signin_with">通过 %s 登录</string>
+    <string name="login_social_signup_with">通过 %s 登录</string>
+    <string name="login_social_continue_with">以 %s 继续</string>
+    <string name="login_social_continue">或</string>
+    <string name="room_list_quick_actions_low_priority_remove">从低优先级移除</string>
+    <string name="room_list_quick_actions_low_priority_add">添加到低优先级</string>
+    <string name="attachment_viewer_item_x_of_y">%2$d 的 %1$d</string>
+    <string name="rotate_and_crop_screen_title">旋转和裁剪</string>
+    <string name="attachment_type_dialog_title">添加图像自</string>
+    <string name="a11y_create_direct_message_by_qr_code">通过扫描二维码创建新的私聊对话</string>
+    <string name="a11y_create_direct_message_by_mxid">通过 Matrix ID 创建新的私聊对话</string>
+    <string name="identity_server_consent_dialog_content">为发现您已知的现存联系人，您是否接受发送您的联系人数据（电话号码和/或电子邮件）到已配置的身份服务器（%1$s）？
+\n
+\n为加强隐私，发送的数据将在发送前计算散列值。</string>
+    <string name="identity_server_consent_dialog_title">发送电子邮件和电话号码</string>
+    <string name="settings_discovery_consent_action_give_consent">授予许可</string>
+    <string name="settings_discovery_consent_action_revoke">撤销我的许可</string>
+    <string name="settings_discovery_consent_notice_off">您尚未同意发送电子邮件和电话号码到身份服务器以从您的联系人发现其他用户。</string>
+    <string name="settings_discovery_consent_notice_on">您已同意发送电子邮件和电话号码到身份服务器以从您的联系人发现其他用户。</string>
+    <string name="settings_discovery_consent_title">发送电子邮件和电话号码</string>
+    <string name="direct_room_user_list_suggestions_title">建议</string>
+    <string name="direct_room_user_list_contacts_title">联系人</string>
+    <string name="direct_room_user_list_known_title">已知用户</string>
+    <string name="direct_room_user_list_recent_title">最近</string>
+    <string name="qr_code">二维码</string>
+    <string name="add_by_qr_code">通过二维码添加</string>
+    <string name="user_directory_search_hint">通过名称或 ID 搜索</string>
+    <string name="create_room_settings_section">聊天室设置</string>
+    <string name="create_room_topic_hint">主题</string>
+    <string name="create_room_topic_section">聊天室话题（可选）</string>
+    <string name="create_room_name_section">聊天室名称</string>
+    <string name="room_preview_no_preview_join">此聊天室无法预览。您想加入吗？</string>
+    <string name="room_preview_not_found">此聊天室当前不可访问。请稍候重试，或向聊天室管理员询问以检查您是否拥有访问权限。</string>
+    <string name="room_alias_publish_to_directory_error">无法获取当前聊天室目录可见性（%1$s）。</string>
+    <string name="room_alias_publish_to_directory">是否将此聊天室发布至 %1$s 的聊天室目录中？</string>
+    <string name="room_alias_action_unpublish">取消发布此地址</string>
+    <string name="room_alias_action_publish">发布此地址</string>
+    <string name="room_alias_local_address_add">添加本地地址</string>
+    <string name="room_alias_local_address_empty">此聊天室没有本地地址</string>
+    <string name="room_alias_local_address_subtitle">为此聊天室设置地址以便用户通过您的主服务器（%1$s）找到此聊天室</string>
+    <string name="room_alias_local_address_title">本地地址</string>
+    <string name="room_alias_address_hint">新的发布的地址（例如 #alias:server）</string>
+    <string name="room_alias_address_empty">尚无其他已发布地址。</string>
+    <string name="room_alias_address_empty_can_add">还没有别的发布的地址，可在下方添加。</string>
+    <string name="room_alias_publish">是否将此聊天室发布至 %1$s 的聊天室目录中？</string>
+    <string name="settings_show_emoji_keyboard_summary">在消息框添加打开表情键盘的按钮</string>
+    <string name="settings_show_emoji_keyboard">显示表情键盘</string>
+    <string name="settings_chat_effects_description">使用 /confetti 命令或发送包含 ❄️ 或 🎉 的消息</string>
+    <string name="settings_chat_effects_title">显示聊天效果</string>
+    <string name="room_permissions_change_topic">更改话题</string>
+    <string name="room_permissions_upgrade_the_room">更新聊天室</string>
+    <string name="room_permissions_send_m_room_server_acl_events">发送 m.room.server_acl 事件</string>
+    <string name="room_permissions_change_permissions">更改权限</string>
+    <string name="room_permissions_change_room_name">更改聊天室名称</string>
+    <string name="room_permissions_change_history_visibility">更改历史记录可见性</string>
+    <string name="room_permissions_enable_room_encryption">启用聊天室加密</string>
+    <string name="room_permissions_change_main_address_for_the_room">更改聊天室主地址</string>
+    <string name="room_permissions_change_room_avatar">更改聊天室头像</string>
+    <string name="room_permissions_modify_widgets">修改小部件</string>
+    <string name="room_permissions_notify_everyone">通知每个人</string>
+    <string name="room_permissions_remove_messages_sent_by_others">移除其他人发送的消息</string>
+    <string name="room_permissions_ban_users">封禁用户</string>
+    <string name="room_permissions_kick_users">踢掉用户</string>
+    <string name="room_permissions_change_settings">更改设置</string>
+    <string name="room_permissions_invite_users">邀请用户</string>
+    <string name="room_permissions_send_messages">发送消息</string>
+    <string name="room_permissions_default_role">默认角色</string>
+    <string name="room_permissions_notice_read_only">您没有权限更新更改聊天室多个部分所需角色</string>
+    <string name="room_permissions_notice">选择更改聊天室各个部分所需的角色</string>
+    <string name="room_permissions_title">权限</string>
+    <string name="room_settings_permissions_subtitle">需要查看和更新角色以更改聊天室多个部分。</string>
+    <string name="room_settings_permissions_title">聊天室权限</string>
+    <string name="room_participants_leave_private_warning">此聊天室不公开。您没有邀请将无法重新加入。</string>
+    <string name="call_held_by_you">您保持通话</string>
+    <string name="call_held_by_user">%s 保持通话</string>
+    <string name="call_hold_action">保持</string>
+    <string name="call_resume_action">继续</string>
+    <string name="error_unauthorized">未验证，缺少有效验证凭证</string>
+    <string name="action_return">返回</string>
+    <string name="system_theme">系统默认</string>
 </resources>

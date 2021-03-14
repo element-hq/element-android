@@ -66,7 +66,7 @@ inline fun <reified T> T.toContent(): Content {
  */
 @JsonClass(generateAdapter = true)
 data class Event(
-        @Json(name = "type") val type: String,
+        @Json(name = "type") val type: String? = null,
         @Json(name = "event_id") val eventId: String? = null,
         @Json(name = "content") val content: Content? = null,
         @Json(name = "prev_content") val prevContent: Content? = null,
@@ -97,6 +97,19 @@ data class Event(
      */
     @Transient
     var ageLocalTs: Long? = null
+
+    /**
+     * Copy all fields, including transient fields
+     */
+    fun copyAll(): Event {
+        return copy().also {
+            it.mxDecryptionResult = mxDecryptionResult
+            it.mCryptoError = mCryptoError
+            it.mCryptoErrorReason = mCryptoErrorReason
+            it.sendState = sendState
+            it.ageLocalTs = ageLocalTs
+        }
+    }
 
     /**
      * Check if event is a state event.
@@ -135,7 +148,7 @@ data class Event(
      * @return the event type
      */
     fun getClearType(): String {
-        return mxDecryptionResult?.payload?.get("type")?.toString() ?: type
+        return mxDecryptionResult?.payload?.get("type")?.toString() ?: type ?: EventType.MISSING_TYPE
     }
 
     /**

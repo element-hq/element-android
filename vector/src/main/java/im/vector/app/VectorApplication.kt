@@ -53,11 +53,13 @@ import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.version.VersionProvider
 import im.vector.app.push.fcm.FcmHelper
+import org.jitsi.meet.sdk.log.JitsiMeetDefaultLogHandler
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -116,6 +118,11 @@ class VectorApplication :
         vectorComponent.inject(this)
         vectorUncaughtExceptionHandler.activate(this)
         rxConfig.setupRxPlugin()
+
+        // Remove Log handler statically added by Jitsi
+        Timber.forest()
+                .filterIsInstance(JitsiMeetDefaultLogHandler::class.java)
+                .forEach { Timber.uproot(it) }
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -199,7 +206,12 @@ class VectorApplication :
         }
     }
 
-    override fun providesMatrixConfiguration() = MatrixConfiguration(BuildConfig.FLAVOR_DESCRIPTION)
+    override fun providesMatrixConfiguration(): MatrixConfiguration {
+        return MatrixConfiguration(
+                applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
+                roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(this)
+        )
+    }
 
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()

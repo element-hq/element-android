@@ -1,5 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="room_displayname_invite_from">Undang dari %s</string>
+    <string name="room_displayname_room_invite">Undangan Ruang</string>
+    <string name="room_displayname_two_members">%1$s dan %2$s</string>
+
+    <string name="room_displayname_empty_room">Ruang kosong</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="other">%1$s dan %2$d yang lain</item>
+    </plurals>
     <string name="title_activity_home">Pesan</string>
     <string name="title_activity_room">Ruang</string>
     <string name="title_activity_settings">Pengaturan</string>
@@ -146,7 +155,7 @@
 
     <string name="later">Nanti</string>
     <string name="send_anyway">Kirim Saja</string>
-    <string name="no_contact_access_placeholder">Element belum diijinkan untuk mengakses kontak lokal</string>
+    <string name="template_no_contact_access_placeholder">${app_name} belum diijinkan untuk mengakses kontak lokal</string>
     <string name="send_bug_report_include_crash_logs">Kirim log gangguan</string>
     <string name="huge">Raksasa</string>
     <string name="small">Kecil</string>
@@ -241,23 +250,23 @@ Anda telah dikeluarkan dari semua perangkat dan tidak lagi menerima pemberitahua
     <string name="media_picker_both_capture_title">Ambil gambar atau video</string>
     <string name="media_picker_cannot_record_video">Tidak bisa merekam video</string>
 
-    <string name="permissions_rationale_msg_storage">Element membutuhkan permisi atas akses galeri foto dan video Anda untuk mengirim dan menyimpan lampiran.
+    <string name="template_permissions_rationale_msg_storage">${app_name} membutuhkan permisi atas akses galeri foto dan video Anda untuk mengirim dan menyimpan lampiran.
 
 Harap berikan akses pada halaman berikut agar berkas dapat dikirim dari ponsel Anda.</string>
-    <string name="permissions_rationale_msg_camera">Element membutuhkan izin Anda untuk mengakses kamera untuk mengambil gambar dan melakukan panggilan video.</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} membutuhkan izin Anda untuk mengakses kamera untuk mengambil gambar dan melakukan panggilan video.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Harap berikan akses pada halaman berikut agar dapat melakukan panggilan.</string>
-    <string name="permissions_rationale_msg_record_audio">Element membutuhkan permisi atas akses mikrofon Anda untuk melakukan panggilan audio.</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} membutuhkan permisi atas akses mikrofon Anda untuk melakukan panggilan audio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Harap berikan akses pada halaman berikut agar dapat melakukan panggilan.</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element membutuhkan permisi atas akses kamera dan mikrofon Anda untuk melakukan panggilan video.
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} membutuhkan permisi atas akses kamera dan mikrofon Anda untuk melakukan panggilan video.
 
 Harap berikan akses pada halaman selanjutnya untuk melakukan panggilan.</string>
     <string name="light_theme">Tema Terang</string>
     <string name="dark_theme">Tema Kelam</string>
-    <string name="black_them">Tema Gelap</string>
+    <string name="black_theme">Tema Gelap</string>
 
     <string name="notification_sync_in_progress">Sedang Sinkronisasi</string>
     <string name="notification_noisy_notifications">Pemberitahuan Berisik</string>
@@ -312,7 +321,7 @@ Harap berikan akses pada halaman selanjutnya untuk melakukan panggilan.</string>
     <string name="e2e_re_request_encryption_key_sent">Permintaan kunci terkirim.</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">Permintaan terkirim</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Jalankan Element di perangkat yang dapat mendekripsi pesan tersebut agar kunci dapat dikirim ke perangkat ini.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Jalankan ${app_name} di perangkat yang dapat mendekripsi pesan tersebut agar kunci dapat dikirim ke perangkat ini.</string>
 
     <string name="groups_list">Daftar Grup</string>
 
@@ -321,12 +330,12 @@ Harap berikan akses pada halaman selanjutnya untuk melakukan panggilan.</string>
     </plurals>
 
     <string name="call">Panggilan</string>
-    <string name="permissions_rationale_msg_contacts">Element memerlukan permisi untuk mengakses daftar kontak agar dapat mencari pengguna Matrix lain berdasarkan email dan nomor telepon.
+    <string name="template_permissions_rationale_msg_contacts">${app_name} memerlukan permisi untuk mengakses daftar kontak agar dapat mencari pengguna Matrix lain berdasarkan email dan nomor telepon.
 
-Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna Element yang terdapat di daftar kontak Anda.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element memerlukan permisi akses daftar kontak Anda untuk menemukan pengguna Matrix lain berdasarkan email dan nomor telepon mereka.
+Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yang terdapat di daftar kontak Anda.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} memerlukan permisi akses daftar kontak Anda untuk menemukan pengguna Matrix lain berdasarkan email dan nomor telepon mereka.
 
-Bolehkah Element mengakses daftar kontak Anda?</string>
+Bolehkah ${app_name} mengakses daftar kontak Anda?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">"Maaf.  Tidak dapat dilakukan karena belum menerima permisi"</string>
 
@@ -846,14 +855,14 @@ Peringatan: berkas ini mungkin ikut terhapus jika aplikasi dihapus.</string>
     <string name="settings_deactivate_my_account">Deaktivasi akunku</string>
 
     <string name="startup_notification_privacy_title">Kerahasiaan Notifikasi</string>
-    <string name="startup_notification_privacy_message">Element dapat beroperasi di balik layar untuk mengurus pemberitahuan Anda dengan aman dan rahasia. Ini dapat mempengaruhi masa tahan baterai.</string>
+    <string name="template_startup_notification_privacy_message">${app_name} dapat beroperasi di balik layar untuk mengurus pemberitahuan Anda dengan aman dan rahasia. Ini dapat mempengaruhi masa tahan baterai.</string>
     <string name="startup_notification_privacy_button_grant">Kabulkan permisi</string>
     <string name="startup_notification_privacy_button_other">Pilih opsi lain</string>
 
     <string name="settings_analytics">Analitik</string>
     <string name="settings_opt_in_of_analytics">Kirim data analitik</string>
-    <string name="settings_opt_in_of_analytics_summary">Element mengumpulkan data analitik anonim dalam upaya kami meningkatkan aplikasi.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Mohon aktifkan analitik untuk membantu kami meningkatkan Element.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} mengumpulkan data analitik anonim dalam upaya kami meningkatkan aplikasi.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Mohon aktifkan analitik untuk membantu kami meningkatkan ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Ya, saya ingin membantu!</string>
 
     <string name="settings_data_save_mode">Mode hemat data</string>
@@ -930,7 +939,6 @@ Tindakan ini akan memulai ulang aplikasi dan mungkin cukup memakan waktu.</strin
     <string name="notice_avatar">Avatar pemberitahu</string>
     <string name="receipt_avatar">Avatar penerima</string>
     <string name="command_description_deop_user">Demosi pengguna dengan id berikut</string>
-    <string name="status_theme">Tema Status.im</string>
 
     <string name="call_anyway">Tetap Panggil</string>
     <string name="accept">Terima</string>
@@ -940,7 +948,7 @@ Tindakan ini akan memulai ulang aplikasi dan mungkin cukup memakan waktu.</strin
     <string name="auth_accept_policies">Mohon telaah dan terima kebijakan homeserver ini:</string>
 
     <string name="settings_call_category">Panggilan</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Gunakan nada dering semula Element untuk panggilan masuk</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Gunakan nada dering semula ${app_name} untuk panggilan masuk</string>
     <string name="settings_call_ringtone_title">Nada dering panggilan masuk</string>
     <string name="settings_call_ringtone_dialog_title">Pilih nada dering untuk panggilan:</string>
 
@@ -972,13 +980,13 @@ Mohon periksa pengaturan akun.</string>
 
     <string name="settings_troubleshoot_test_device_settings_title">Pengaturan Perangkat.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Pemberitahuan diperbolehkan untuk perangkat ini.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Pemberitahuan tidak diperbolehkan untuk perangkat ini.
-Mohon periksa pengaturan Element.</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Pemberitahuan tidak diperbolehkan untuk perangkat ini.
+Mohon periksa pengaturan ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Perbolehkan</string>
 
     <string name="settings_troubleshoot_test_play_services_title">Pemeriksaan Layanan Google Play</string>
     <string name="settings_troubleshoot_test_play_services_success">APK Layanan Google Play ditemukan dan telah diperbaharui.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element menggunakan Layanan Google Play untuk mendorong pesan tapi tampaknya tidak diatur sebagaimana harusnya.
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} menggunakan Layanan Google Play untuk mendorong pesan tapi tampaknya tidak diatur sebagaimana harusnya.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Perbaiki Layanan Google Play</string>
 
@@ -1005,19 +1013,19 @@ Coba nyalakan kembali aplikasi.</string>
 
     <string name="settings_troubleshoot_test_service_boot_title">Mulai ketika menyalakan perangkat</string>
     <string name="settings_troubleshoot_test_service_boot_success">Layanan akan dimulai ketika perangkat dinyalakan kembali.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Layanan tidak akan mulai ketika perangkat dinyalakan kembali, Anda tidak akan menerima pemberitahuan hingga Anda membuka Element.</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">Layanan tidak akan mulai ketika perangkat dinyalakan kembali, Anda tidak akan menerima pemberitahuan hingga Anda membuka ${app_name}.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Perbolehkan memulai ketika perangkat dinyalakan</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Periksa halangan di balik layar</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Halangan di balik layar dimatikan untuk Element. Ujicoba ini harus dijalankan menggunakan jaringan data (bukan WIFI).
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Halangan di balik layar dimatikan untuk ${app_name}. Ujicoba ini harus dijalankan menggunakan jaringan data (bukan WIFI).
 %1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Halangan di balik layar dinyalakan untuk Element.
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Halangan di balik layar dinyalakan untuk ${app_name}.
 Aktivitas yang dilakukan aplikasi ini akan terhalang ketika beroperasi di balik layar, dan ini dapat mempengaruhi pemberitahuan.
 %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Matikan penghalang</string>
 
     <string name="settings_troubleshoot_test_battery_title">Optimisasi Baterai</string>
-    <string name="settings_troubleshoot_test_battery_success">Element tidak terpengaruh oleh Optimisasi Baterai.</string>
+    <string name="template_settings_troubleshoot_test_battery_success">${app_name} tidak terpengaruh oleh Optimisasi Baterai.</string>
     <string name="title_activity_keys_backup_setup">Cadangkan Kunci</string>
     <string name="title_activity_keys_backup_restore">Gunakan Cadangan Kunci</string>
 
@@ -1046,12 +1054,12 @@ Aktivitas yang dilakukan aplikasi ini akan terhalang ketika beroperasi di balik 
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Gagal memuat aturan, mohon coba lagi.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Periksa Aturan</string>
 
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nError ini di luar kendali Element dan menurut Google, error ini muncul ketika terlalu banyak aplikasi terdaftar dengan FCM pada perangkat tersebut. Error ini tidak seharusnya mempengaruhi pengguna biasa.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nError ini di luar kendali Element, dan dapat muncul karena berbagai alasan. Coba lagi nanti, atau Anda juga dapat memeriksa apabila penggunaan jaringan data Layanan Google Play tidak terhalang oleh sistem, atau waktu pada perangkat sudah benar, atau ini dapat terjadi pada ROM tidak resmi.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nError ini di luar kendali Element. Tidak terdapat akun Google pada perangkat. Mohon buka pengelola akun dan tambahkan akun Google.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nError ini di luar kendali ${app_name} dan menurut Google, error ini muncul ketika terlalu banyak aplikasi terdaftar dengan FCM pada perangkat tersebut. Error ini tidak seharusnya mempengaruhi pengguna biasa.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nError ini di luar kendali ${app_name}, dan dapat muncul karena berbagai alasan. Coba lagi nanti, atau Anda juga dapat memeriksa apabila penggunaan jaringan data Layanan Google Play tidak terhalang oleh sistem, atau waktu pada perangkat sudah benar, atau ini dapat terjadi pada ROM tidak resmi.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nError ini di luar kendali ${app_name}. Tidak terdapat akun Google pada perangkat. Mohon buka pengelola akun dan tambahkan akun Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Tambah Akun</string>
 
     <string name="settings_troubleshoot_test_battery_failed">Apabila perangkat tidak sedang diisi atau dipergunakan dengan layar dimatikan, perangkat masuk mode Doze. Ini akan menghalangi aplikasi mengakses jaringan dan menunda tugas, sinkronisasi, dan alarm standar.</string>

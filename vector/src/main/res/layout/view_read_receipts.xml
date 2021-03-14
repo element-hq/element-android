@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/receiptMore"
         android:layout_width="wrap_content"
-        android:layout_height="18dp"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:background="@drawable/pill_receipt"
         android:gravity="center"
         android:importantForAccessibility="no"
@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/receiptAvatar5"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:layout_marginStart="2dp"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
@@ -30,8 +30,8 @@
 
     <ImageView
         android:id="@+id/receiptAvatar4"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:layout_marginStart="2dp"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
@@ -40,8 +40,8 @@
 
     <ImageView
         android:id="@+id/receiptAvatar3"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:layout_marginStart="2dp"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
@@ -50,8 +50,8 @@
 
     <ImageView
         android:id="@+id/receiptAvatar2"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:layout_marginStart="2dp"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"
@@ -60,8 +60,8 @@
 
     <ImageView
         android:id="@+id/receiptAvatar1"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="@dimen/item_event_message_state_size"
+        android:layout_height="@dimen/item_event_message_state_size"
         android:layout_marginStart="2dp"
         android:adjustViewBounds="true"
         android:importantForAccessibility="no"

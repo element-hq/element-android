@@ -28,13 +28,7 @@ import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.RelationType
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
-import org.matrix.android.sdk.api.session.room.model.ReactionAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -43,11 +37,9 @@ import org.matrix.android.sdk.api.util.CancelableBag
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
-import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
-import org.matrix.android.sdk.internal.database.query.filterEvents
 import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendStates
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
@@ -84,7 +76,8 @@ internal class DefaultTimeline(
         private val loadRoomMembersTask: LoadRoomMembersTask
 ) : Timeline,
         TimelineHiddenReadReceipts.Delegate,
-        TimelineInput.Listener {
+        TimelineInput.Listener,
+        UIEchoManager.Listener {
 
     companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("TIMELINE_DB_THREAD")
@@ -105,12 +98,12 @@ internal class DefaultTimeline(
     private var prevDisplayIndex: Int? = null
     private var nextDisplayIndex: Int? = null
 
-    private val uiEchoManager = UIEchoManager()
+    private val uiEchoManager = UIEchoManager(settings, this)
 
     private val builtEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
     private val builtEventsIdMap = Collections.synchronizedMap(HashMap<String, Int>())
-    private val backwardsState = AtomicReference(State())
-    private val forwardsState = AtomicReference(State())
+    private val backwardsState = AtomicReference(TimelineState())
+    private val forwardsState = AtomicReference(TimelineState())
 
     override val timelineID = UUID.randomUUID().toString()
 
@@ -169,13 +162,13 @@ internal class DefaultTimeline(
                 // are still used for ui echo (relation like reaction)
                 sendingEvents = roomEntity.sendingTimelineEvents.where()/*.filterEventsWithSettings()*/.findAll()
                 sendingEvents.addChangeListener { events ->
-                    uiEchoManager.sentEventsUpdated(events)
+                    uiEchoManager.onSentEventsInDatabase(events.map { it.eventId })
                     postSnapshot()
                 }
 
                 nonFilteredEvents = buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
                 filteredEvents = nonFilteredEvents.where()
-                        .filterEventsWithSettings()
+                        .filterEventsWithSettings(settings)
                         .findAll()
                 nonFilteredEvents.addChangeListener(eventsChangeListener)
                 handleInitialLoad()
@@ -261,7 +254,9 @@ internal class DefaultTimeline(
                     .equalTo(TimelineEventEntityFields.EVENT_ID, eventId)
                     .findFirst()
 
-            val filteredEvents = nonFilteredEvents.where().filterEventsWithSettings().findAll()
+            val filteredEvents = nonFilteredEvents.where()
+                    .filterEventsWithSettings(settings)
+                    .findAll()
             val isEventInDb = nonFilteredEvent != null
 
             val isHidden = isEventInDb && filteredEvents.where()
@@ -327,20 +322,29 @@ internal class DefaultTimeline(
     }
 
     override fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {
-        if (uiEchoManager.onLocalEchoCreated(roomId, timelineEvent)) {
+        if (roomId != this.roomId || !isLive) return
+
+        val postSnapShot = uiEchoManager.onLocalEchoCreated(timelineEvent)
+
+        if (listOf(timelineEvent).filterEventsWithSettings(settings).isNotEmpty()) {
+            listeners.forEach {
+                it.onNewTimelineEvents(listOf(timelineEvent.eventId))
+            }
+        }
+
+        if (postSnapShot) {
             postSnapshot()
         }
     }
 
     override fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState) {
-        if (uiEchoManager.onLocalEchoUpdated(roomId, eventId, sendState)) {
+        if (roomId != this.roomId || !isLive) return
+        if (uiEchoManager.onSendStateUpdated(eventId, sendState)) {
             postSnapshot()
         }
     }
 
-// Private methods *****************************************************************************
-
-    private fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
+    override fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
         return tryOrNull {
             builtEventsIdMap[eventId]?.let { builtIndex ->
                 // Update the relation of existing event
@@ -359,6 +363,8 @@ internal class DefaultTimeline(
             }
         } ?: false
     }
+
+// Private methods *****************************************************************************
 
     private fun hasMoreInCache(direction: Timeline.Direction) = getState(direction).hasMoreInCache
 
@@ -412,35 +418,41 @@ internal class DefaultTimeline(
     }
 
     private fun buildSendingEvents(): List<TimelineEvent> {
-        val builtSendingEvents = ArrayList<TimelineEvent>()
+        val builtSendingEvents = mutableListOf<TimelineEvent>()
         if (hasReachedEnd(Timeline.Direction.FORWARDS) && !hasMoreInCache(Timeline.Direction.FORWARDS)) {
-            builtSendingEvents.addAll(uiEchoManager.getInMemorySendingEvents().filterEventsWithSettings())
+            uiEchoManager.getInMemorySendingEvents()
+                    .filterSendingEventsTo(builtSendingEvents)
             sendingEvents
-                    .map { timelineEventMapper.map(it) }
-                    // Filter out sending event that are not displayable!
-                    .filterEventsWithSettings()
-                    .forEach { timelineEvent ->
-                        if (builtSendingEvents.find { it.eventId == timelineEvent.eventId } == null) {
-                            uiEchoManager.updateSentStateWithUiEcho(timelineEvent)
-                            builtSendingEvents.add(timelineEvent)
-                        }
+                    .filter { timelineEvent ->
+                        builtSendingEvents.none { it.eventId == timelineEvent.eventId }
                     }
+                    .map { timelineEventMapper.map(it) }
+                    .filterSendingEventsTo(builtSendingEvents)
         }
         return builtSendingEvents
+    }
+
+    private fun List<TimelineEvent>.filterSendingEventsTo(target: MutableList<TimelineEvent>) {
+        target.addAll(
+                // Filter out sending event that are not displayable!
+                filterEventsWithSettings(settings)
+                        // Get most up to date send state (in memory)
+                        .map { uiEchoManager.updateSentStateWithUiEcho(it) }
+        )
     }
 
     private fun canPaginate(direction: Timeline.Direction): Boolean {
         return isReady.get() && !getState(direction).isPaginating && hasMoreToLoad(direction)
     }
 
-    private fun getState(direction: Timeline.Direction): State {
+    private fun getState(direction: Timeline.Direction): TimelineState {
         return when (direction) {
             Timeline.Direction.FORWARDS  -> forwardsState.get()
             Timeline.Direction.BACKWARDS -> backwardsState.get()
         }
     }
 
-    private fun updateState(direction: Timeline.Direction, update: (State) -> State) {
+    private fun updateState(direction: Timeline.Direction, update: (TimelineState) -> TimelineState) {
         val stateReference = when (direction) {
             Timeline.Direction.FORWARDS  -> forwardsState
             Timeline.Direction.BACKWARDS -> backwardsState
@@ -512,7 +524,7 @@ internal class DefaultTimeline(
             eventEntity?.eventId?.let { eventId ->
                 postSnapshot = rebuildEvent(eventId) {
                     val builtEvent = buildTimelineEvent(eventEntity)
-                    listOf(builtEvent).filterEventsWithSettings().firstOrNull()
+                    listOf(builtEvent).filterEventsWithSettings(settings).firstOrNull()
                 } || postSnapshot
             }
         }
@@ -688,11 +700,11 @@ internal class DefaultTimeline(
         return if (initialEventId == null) {
             TimelineEventEntity
                     .whereRoomId(realm, roomId = roomId)
-                    .equalTo("${TimelineEventEntityFields.CHUNK}.${ChunkEntityFields.IS_LAST_FORWARD}", true)
+                    .equalTo(TimelineEventEntityFields.CHUNK.IS_LAST_FORWARD, true)
         } else {
             TimelineEventEntity
                     .whereRoomId(realm, roomId = roomId)
-                    .`in`("${TimelineEventEntityFields.CHUNK}.${ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID}", arrayOf(initialEventId))
+                    .`in`("${TimelineEventEntityFields.CHUNK.TIMELINE_EVENTS}.${TimelineEventEntityFields.EVENT_ID}", arrayOf(initialEventId))
         }
     }
 
@@ -745,8 +757,8 @@ internal class DefaultTimeline(
         nextDisplayIndex = null
         builtEvents.clear()
         builtEventsIdMap.clear()
-        backwardsState.set(State())
-        forwardsState.set(State())
+        backwardsState.set(TimelineState())
+        forwardsState.set(TimelineState())
     }
 
     private fun createPaginationCallback(limit: Int, direction: Timeline.Direction): MatrixCallback<TokenChunkEventPersistor.Result> {
@@ -779,192 +791,5 @@ internal class DefaultTimeline(
 
     private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {
         return if (this == Timeline.Direction.BACKWARDS) PaginationDirection.BACKWARDS else PaginationDirection.FORWARDS
-    }
-
-    private fun RealmQuery<TimelineEventEntity>.filterEventsWithSettings(): RealmQuery<TimelineEventEntity> {
-        return filterEvents(settings.filters)
-    }
-
-    private fun List<TimelineEvent>.filterEventsWithSettings(): List<TimelineEvent> {
-        return filter { event ->
-            val filterType = !settings.filters.filterTypes
-                    || settings.filters.allowedTypes.any { it.eventType == event.root.type && (it.stateKey == null || it.stateKey == event.root.senderId) }
-            if (!filterType) return@filter false
-
-            val filterEdits = if (settings.filters.filterEdits && event.root.getClearType() == EventType.MESSAGE) {
-                val messageContent = event.root.getClearContent().toModel<MessageContent>()
-                messageContent?.relatesTo?.type != RelationType.REPLACE && messageContent?.relatesTo?.type != RelationType.RESPONSE
-            } else {
-                true
-            }
-            if (!filterEdits) return@filter false
-
-            val filterRedacted = settings.filters.filterRedacted && event.root.isRedacted()
-            !filterRedacted
-        }
-    }
-
-    private data class State(
-            val hasReachedEnd: Boolean = false,
-            val hasMoreInCache: Boolean = true,
-            val isPaginating: Boolean = false,
-            val requestedPaginationCount: Int = 0
-    )
-
-    private data class ReactionUiEchoData(
-            val localEchoId: String,
-            val reactedOnEventId: String,
-            val reaction: String
-    )
-
-    inner class UIEchoManager {
-
-        private val inMemorySendingEvents = Collections.synchronizedList<TimelineEvent>(ArrayList())
-
-        fun getInMemorySendingEvents(): List<TimelineEvent> {
-            return inMemorySendingEvents.toList()
-        }
-
-        /**
-         * Due to lag of DB updates, we keep some UI echo of some properties to update timeline faster
-         */
-        private val inMemorySendingStates = Collections.synchronizedMap<String, SendState>(HashMap())
-
-        private val inMemoryReactions = Collections.synchronizedMap<String, MutableList<ReactionUiEchoData>>(HashMap())
-
-        fun sentEventsUpdated(events: RealmResults<TimelineEventEntity>) {
-            // Remove in memory as soon as they are known by database
-            events.forEach { te ->
-                inMemorySendingEvents.removeAll { te.eventId == it.eventId }
-            }
-            inMemorySendingStates.keys.removeAll { key ->
-                events.find { it.eventId == key } == null
-            }
-
-            inMemoryReactions.forEach { (_, uiEchoData) ->
-                uiEchoData.removeAll { data ->
-                    // I remove the uiEcho, when the related event is not anymore in the sending list
-                    // (means that it is synced)!
-                    events.find { it.eventId == data.localEchoId } == null
-                }
-            }
-        }
-
-        fun onLocalEchoUpdated(roomId: String, eventId: String, sendState: SendState): Boolean {
-            if (isLive && roomId == this@DefaultTimeline.roomId) {
-                val existingState = inMemorySendingStates[eventId]
-                inMemorySendingStates[eventId] = sendState
-                if (existingState != sendState) {
-                    return true
-                }
-            }
-            return false
-        }
-
-        // return true if should update
-        fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent): Boolean {
-            var postSnapshot = false
-            if (isLive && roomId == this@DefaultTimeline.roomId) {
-                // Manage some ui echos (do it before filter because actual event could be filtered out)
-                when (timelineEvent.root.getClearType()) {
-                    EventType.REDACTION -> {
-                    }
-                    EventType.REACTION  -> {
-                        val content = timelineEvent.root.content?.toModel<ReactionContent>()
-                        if (RelationType.ANNOTATION == content?.relatesTo?.type) {
-                            val reaction = content.relatesTo.key
-                            val relatedEventID = content.relatesTo.eventId
-                            inMemoryReactions.getOrPut(relatedEventID) { mutableListOf() }
-                                    .add(
-                                            ReactionUiEchoData(
-                                                    localEchoId = timelineEvent.eventId,
-                                                    reactedOnEventId = relatedEventID,
-                                                    reaction = reaction
-                                            )
-                                    )
-                            postSnapshot = rebuildEvent(relatedEventID) {
-                                decorateEventWithReactionUiEcho(it)
-                            } || postSnapshot
-                        }
-                    }
-                }
-
-                // do not add events that would have been filtered
-                if (listOf(timelineEvent).filterEventsWithSettings().isNotEmpty()) {
-                    listeners.forEach {
-                        it.onNewTimelineEvents(listOf(timelineEvent.eventId))
-                    }
-                    Timber.v("On local echo created: ${timelineEvent.eventId}")
-                    inMemorySendingEvents.add(0, timelineEvent)
-                    postSnapshot = true
-                }
-            }
-            return postSnapshot
-        }
-
-        fun decorateEventWithReactionUiEcho(timelineEvent: TimelineEvent): TimelineEvent? {
-            val relatedEventID = timelineEvent.eventId
-            val contents = inMemoryReactions[relatedEventID] ?: return null
-
-            var existingAnnotationSummary = timelineEvent.annotations ?: EventAnnotationsSummary(
-                    relatedEventID
-            )
-            val updateReactions = existingAnnotationSummary.reactionsSummary.toMutableList()
-
-            contents.forEach { uiEchoReaction ->
-                val existing = updateReactions.firstOrNull { it.key == uiEchoReaction.reaction }
-                if (existing == null) {
-                    // just add the new key
-                    ReactionAggregatedSummary(
-                            key = uiEchoReaction.reaction,
-                            count = 1,
-                            addedByMe = true,
-                            firstTimestamp = System.currentTimeMillis(),
-                            sourceEvents = emptyList(),
-                            localEchoEvents = listOf(uiEchoReaction.localEchoId)
-                    ).let { updateReactions.add(it) }
-                } else {
-                    // update Existing Key
-                    if (!existing.localEchoEvents.contains(uiEchoReaction.localEchoId)) {
-                        updateReactions.remove(existing)
-                        // only update if echo is not yet there
-                        ReactionAggregatedSummary(
-                                key = existing.key,
-                                count = existing.count + 1,
-                                addedByMe = true,
-                                firstTimestamp = existing.firstTimestamp,
-                                sourceEvents = existing.sourceEvents,
-                                localEchoEvents = existing.localEchoEvents + uiEchoReaction.localEchoId
-
-                        ).let { updateReactions.add(it) }
-                    }
-                }
-            }
-
-            existingAnnotationSummary = existingAnnotationSummary.copy(
-                    reactionsSummary = updateReactions
-            )
-            return timelineEvent.copy(
-                    annotations = existingAnnotationSummary
-            )
-        }
-
-        fun updateSentStateWithUiEcho(element: TimelineEvent) {
-            inMemorySendingStates[element.eventId]?.let {
-                // Timber.v("## ${System.currentTimeMillis()} Send event refresh echo with live state ${it} from state ${element.root.sendState}")
-                element.root.sendState = element.root.sendState.takeIf { it == SendState.SENT } ?: it
-            }
-        }
-
-        fun onSyncedEvent(transactionId: String?) {
-            val sendingEvent = inMemorySendingEvents.find {
-                it.eventId == transactionId
-            }
-            inMemorySendingEvents.remove(sendingEvent)
-            // Is it too early to clear it? will be done when removed from sending anyway?
-            inMemoryReactions.forEach { (_, u) ->
-                u.filterNot { it.localEchoId == transactionId }
-            }
-        }
     }
 }

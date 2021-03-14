@@ -26,13 +26,16 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import kotlin.math.max
 import kotlin.math.round
 import im.vector.app.R
+import im.vector.app.core.ui.views.SendStateImageView
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
@@ -42,7 +45,7 @@ import im.vector.app.features.themes.ThemeUtils
 import kotlin.math.ceil
 
 /**
- * Base timeline item that adds an optional information bar with the sender avatar, name and time
+ * Base timeline item that adds an optional information bar with the sender avatar, name, time, send state
  * Adds associated click listeners (on avatar, displayname)
  */
 abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>() {
@@ -178,6 +181,10 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             // Same as it.isInvisible = true
             it.visibility = View.INVISIBLE
         }
+
+        // Render send state indicator
+        holder.sendStateImageView.render(attributes.informationData.sendStateDecoration)
+        holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
     }
 
     override fun unbind(holder: H) {
@@ -203,6 +210,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val bubbleFooterTimeView by bind<TextView>(R.id.bubbleFooterMessageTimeView)
         val bubbleFooterReadReceipt by bind<ImageView>(R.id.bubbleFooterReadReceipt)
         val viewStubContainer by bind<FrameLayout>(R.id.viewStubContainer)
+        val sendStateImageView by bind<SendStateImageView>(R.id.messageSendStateImageView)
+        val eventSendingIndicator by bind<ProgressBar>(R.id.eventSendingIndicator)
     }
 
     /**

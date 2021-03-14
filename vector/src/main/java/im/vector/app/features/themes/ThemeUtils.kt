@@ -115,6 +115,18 @@ object ThemeUtils {
     }
 
     /**
+     * @return true if current theme is System
+     */
+    fun isSystemTheme(@Suppress("UNUSED_PARAMETER") context: Context): Boolean {
+        // SC does not use Element's system theme
+        return false
+        /*
+        val theme = getApplicationTheme(context)
+        return theme == SYSTEM_THEME_VALUE
+         */
+    }
+
+    /**
      * @return true if current theme is Light or current theme is System and system theme is light
      */
     fun isLightTheme(context: Context): Boolean {

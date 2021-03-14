@@ -55,16 +55,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="A filename here" />
 
-    <ProgressBar
-        android:id="@+id/eventSendingIndicator"
-        style="?android:attr/progressBarStyleSmall"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@id/messageFilenameView"
-        app:layout_constraintTop_toTopOf="@id/messageFilenameView"
-        tools:visibility="visible" />
-
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/horizontalBarrier"

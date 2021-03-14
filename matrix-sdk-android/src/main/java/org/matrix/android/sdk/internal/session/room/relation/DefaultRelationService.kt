@@ -17,14 +17,13 @@ package org.matrix.android.sdk.internal.session.room.relation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
-import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
@@ -47,6 +46,7 @@ import timber.log.Timber
 
 internal class DefaultRelationService @AssistedInject constructor(
         @Assisted private val roomId: String,
+        private val eventEditor: EventEditor,
         private val eventSenderProcessor: EventSenderProcessor,
         private val eventFactory: LocalEchoEventFactory,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
@@ -112,41 +112,23 @@ internal class DefaultRelationService @AssistedInject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun editTextMessage(targetEventId: String,
+    override fun editTextMessage(targetEvent: TimelineEvent,
                                  msgType: String,
                                  newBodyText: CharSequence,
                                  newBodyAutoMarkdown: Boolean,
                                  compatibilityBodyText: String): Cancelable {
-        val event = eventFactory
-                .createReplaceTextEvent(roomId, targetEventId, newBodyText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
-                .also { saveLocalEcho(it) }
-        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
+        return eventEditor.editTextMessage(targetEvent, msgType, newBodyText, newBodyAutoMarkdown, compatibilityBodyText)
     }
 
     override fun editReply(replyToEdit: TimelineEvent,
                            originalTimelineEvent: TimelineEvent,
                            newBodyText: String,
                            compatibilityBodyText: String): Cancelable {
-        val event = eventFactory.createReplaceTextOfReply(
-                roomId,
-                replyToEdit,
-                originalTimelineEvent,
-                newBodyText,
-                true,
-                MessageType.MSGTYPE_TEXT,
-                compatibilityBodyText
-        )
-                .also { saveLocalEcho(it) }
-        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
+        return eventEditor.editReply(replyToEdit, originalTimelineEvent, newBodyText, compatibilityBodyText)
     }
 
-    override fun fetchEditHistory(eventId: String, callback: MatrixCallback<List<Event>>) {
-        val params = FetchEditHistoryTask.Params(roomId, eventId)
-        fetchEditHistoryTask
-                .configureWith(params) {
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun fetchEditHistory(eventId: String): List<Event> {
+        return fetchEditHistoryTask.execute(FetchEditHistoryTask.Params(roomId, eventId))
     }
 
     override fun replyToMessage(eventReplied: TimelineEvent, replyText: CharSequence, autoMarkdown: Boolean): Cancelable? {
@@ -159,7 +141,7 @@ internal class DefaultRelationService @AssistedInject constructor(
 
     override fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary? {
         return monarchy.fetchCopyMap(
-                { EventAnnotationsSummaryEntity.where(it, eventId).findFirst() },
+                { EventAnnotationsSummaryEntity.where(it, roomId, eventId).findFirst() },
                 { entity, _ ->
                     entity.asDomain()
                 }
@@ -168,7 +150,7 @@ internal class DefaultRelationService @AssistedInject constructor(
 
     override fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { EventAnnotationsSummaryEntity.where(it, eventId) },
+                { EventAnnotationsSummaryEntity.where(it, roomId, eventId) },
                 { it.asDomain() }
         )
         return Transformations.map(liveData) { results ->

@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/bottom_sheet_message_preview_avatar"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_margin="@dimen/layout_horizontal_margin"
         android:adjustViewBounds="true"
         android:background="@drawable/circle"
@@ -23,7 +23,7 @@
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_sender"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="8dp"
@@ -31,13 +31,23 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-bold"
         android:singleLine="true"
-        android:textColor="?riotx_text_primary"
+        android:textColor="@color/riotx_accent"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
         app:layout_constraintTop_toTopOf="@id/bottom_sheet_message_preview_avatar"
         tools:text="@tools:sample/full_names" />
+
+    <TextView
+        android:id="@+id/bottom_sheet_message_preview_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:textColor="?riotx_text_secondary"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_sheet_message_preview_sender"
+        tools:text="Friday 8pm" />
 
     <TextView
         android:id="@+id/bottom_sheet_message_preview_body"
@@ -52,22 +62,8 @@
         android:textColor="?riotx_text_secondary"
         android:textIsSelectable="false"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@id/bottom_sheet_message_preview_timestamp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
         app:layout_constraintTop_toBottomOf="@id/bottom_sheet_message_preview_sender"
         tools:text="Quis harum id autem cumque consequatur laboriosam aliquam sed. Sint accusamus dignissimos nobis ullam earum debitis aspernatur. Sint accusamus dignissimos nobis ullam earum debitis aspernatur. " />
-
-    <TextView
-        android:id="@+id/bottom_sheet_message_preview_timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:layout_marginBottom="8dp"
-        android:textColor="?riotx_text_secondary"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bottom_sheet_message_preview_body"
-        tools:text="Friday 8pm" />
 </androidx.constraintlayout.widget.ConstraintLayout>

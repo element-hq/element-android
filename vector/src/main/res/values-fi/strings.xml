@@ -1,5 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="summary_user_sent_image">%1$s lähetti kuvan.</string>
+    <string name="notice_room_invite_no_invitee">Käyttäjän %s kutsu</string>
+    <string name="notice_room_invite">%1$s kutsui käyttäjän %2$s</string>
+    <string name="notice_room_invite_you">%1$s kutsui sinut</string>
+    <string name="notice_room_join">%1$s liittyi huoneeseen</string>
+    <string name="notice_room_leave">%1$s poistui huoneesta</string>
+    <string name="notice_room_reject">%1$s hylkäsi kutsun</string>
+    <string name="notice_room_kick">%1$s poisti käyttäjän %2$s</string>
+    <string name="notice_room_unban">%1$s poisti porttikiellon käyttäjältä %2$s</string>
+    <string name="notice_room_ban">%1$s antoi porttikiellon käyttäjälle %2$s</string>
+    <string name="notice_room_withdraw">%1$s veti takaisin kutsun käyttäjälle %2$s</string>
+    <string name="notice_avatar_url_changed">%1$s vaihtoi profiilikuvaansa</string>
+    <string name="notice_display_name_set">%1$s asetti näyttönimekseen %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s muutti näyttönimensä nimestä %2$s nimeen %3$s</string>
+    <string name="notice_display_name_removed">%1$s poisti näyttönimensä (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s vaihtoi aiheeksi: %2$s</string>
+    <string name="notice_room_name_changed">%1$s vaihtoi huoneen nimeksi %2$s</string>
+    <string name="notice_placed_video_call">%s soitti videopuhelun.</string>
+    <string name="notice_placed_voice_call">%s soitti äänipuhelun.</string>
+    <string name="notice_answered_call">%s vastasi puheluun.</string>
+    <string name="notice_ended_call">%s lopetti puhelun.</string>
+    <string name="notice_made_future_room_visibility">%1$s muutti tulevan huonehistorian näkyväksi seuraaville: %2$s</string>
+    <string name="notice_room_visibility_invited">kaikki huoneen jäsenet, kutsumisestaan asti.</string>
+    <string name="notice_room_visibility_joined">kaikki huoneen jäsenet, liittymisestään asti.</string>
+    <string name="notice_room_visibility_shared">kaikki huoneen jäsenet.</string>
+    <string name="notice_room_visibility_world_readable">kaikki.</string>
+    <string name="notice_room_visibility_unknown">tuntematon (%s).</string>
+    <string name="notice_end_to_end">%1$s otti käyttöön osapuolten välisen salauksen (%2$s)</string>
+    <string name="notice_requested_voip_conference">%1$s lähetti VoIP-konferenssipyynnön</string>
+    <string name="notice_voip_started">VoIP-konferenssi alkoi</string>
+    <string name="notice_voip_finished">VoIP-konferenssi päättyi</string>
+    <string name="notice_avatar_changed_too">(myös kuva vaihdettiin)</string>
+    <string name="notice_room_name_removed">%1$s poisti huoneen nimen</string>
+    <string name="notice_room_topic_removed">%1$s poisti huoneen aiheen</string>
+    <string name="notice_profile_change_redacted">%1$s päivitti profiilinsa %2$s</string>
+    <string name="notice_room_third_party_invite">%1$s lähetti liittymiskutsun huoneeseen käyttäjälle %2$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s hyväksyi kutsun käyttäjän %2$s puolesta</string>
+    <string name="notice_crypto_unable_to_decrypt">** Salauksen purku epäonnistui: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Lähettäjän laite ei ole lähettänyt avaimia tähän viestiin.</string>
+    <string name="unable_to_send_message">Viestin lähetys epäonnistui</string>
+    <string name="message_failed_to_upload">Kuvan lataaminen epäonnistui</string>
+    <string name="network_error">Verkkovirhe</string>
+    <string name="matrix_error">Matrix-virhe</string>
+    <string name="room_error_join_failed_empty_room">Tällä hetkellä ei ole mahdollista liittyä uudelleen tyhjään huoneeseen.</string>
+    <string name="medium_email">Sähköpostiosoite</string>
+    <string name="medium_phone_number">Puhelinnumero</string>
+    <string name="could_not_redact">Takaisinveto epäonnistui</string>
+    <string name="summary_message">%1$s: %2$s</string>
+    <!-- Room display name -->
+    <string name="room_displayname_invite_from">Kutsu käyttäjältä %s</string>
+    <!-- Grammar problem -->
+    <string name="room_displayname_room_invite">Huonekutsu</string>
+    <string name="room_displayname_two_members">%1$s ja %2$s</string>
+    <string name="room_displayname_empty_room">Tyhjä huone</string>
+    <string name="summary_user_sent_sticker">%1$s lähetti tarran.</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s ja yksi muu</item>
+        <item quantity="other">%1$s ja %2$d muuta</item>
+    </plurals>
+    <string name="notice_event_redacted">Viesti poistettu</string>
+    <string name="notice_event_redacted_by">%1$s poisti viestin</string>
+    <string name="notice_event_redacted_with_reason">Viesti poistettu [syy: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">%1$s poisti viestin [syy: %2$s]</string>
+    <string name="initial_sync_start_importing_account">Alkusynkronointi:
+\nTuodaan tiliä…</string>
+    <string name="initial_sync_start_importing_account_crypto">Alkusynkronointi:
+\nTuodaan kryptoa</string>
+    <string name="initial_sync_start_importing_account_rooms">Alkusynkronointi:
+\nTuodaan huoneita</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Alkusynkronointi:
+\nTuodaan liityttyjä huoneita</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Alkusynkronointi:
+\nTuodaan kutsuttuja huoneita</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Alkusynkronointi:
+\nTuodaan poistuttuja huoneita</string>
+    <string name="initial_sync_start_importing_account_groups">Alkusynkronointi:
+\nTuodaan yhteisöjä</string>
+    <string name="initial_sync_start_importing_account_data">Alkusynkronointi:
+\nTuodaan tilin tietoja</string>
+    <string name="notice_room_update">%s päivitti tämän huoneen.</string>
+    <string name="event_status_sending_message">Lähetetään viestiä…</string>
+    <string name="clear_timeline_send_queue">Tyhjennä lähetysjono</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s veti takaisin käyttäjän %2$s liittymiskutsun huoneeseen</string>
+    <string name="notice_room_invite_no_invitee_with_reason">Henkilön %1$s kutsu. Syy: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s kutsui henkilön %2$s. Syy: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s kutsui sinut. Syy: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s liittyi huoneeseen. Syy: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s poistui huoneesta. Syy: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s hylkäsi kutsun. Syy: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s poisti käyttäjän %2$s huoneesta. Syy: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s poisti porttikiellon käyttäjältä %2$s. Syy: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s antoi porttikiellon käyttäjälle %2$s. Syy: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s lähetti kutsun liittyä huoneeseen käyttäjälle %2$s. Syy: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s kumosi kutsun liittyä huoneeseen käyttäjälle %2$s. Syy: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s hyväksyi kutsun liityäkseen huoneeseen %2$s. Syy: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s veti takaisin käyttäjän %2$s kutsun. Syy: %3$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s lisäsi tälle huoneelle osoitteen %2$s.</item>
+        <item quantity="other">%1$s lisäsi tälle huoneelle osoitteet %2$s.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s poisti tältä huoneelta osoitteen %2$s.</item>
+        <item quantity="other">%1$s poisti tältä huoneelta osoitteet %3$s.</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed">%1$s lisäsi tälle huoneelle osoitteen %2$s ja poisti osoitteen %3$s.</string>
+    <string name="notice_room_canonical_alias_set">%1$s asetti tämän huoneen pääosoitteeksi %2$s.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s poisti tämän huoneen pääosoitteen.</string>
+    <string name="notice_room_guest_access_can_join">%1$s salli vieraiden liittyä huoneeseen.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s esti vieraita liittymästä huoneeseen.</string>
+    <string name="notice_end_to_end_ok">%1$s laittoi päälle osapuolten välisen salauksen.</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s laittoi päälle osapuolisten välisen salauksen (tuntematon algoritmi %2$s).</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">Hyväksyit käyttäjän %1$s kutsun. Syy: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Peruutit kutsun liittyä huoneeseen käyttäjältä %1$s. Syy: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Lähetit kutsun liittyä huoneeseen käyttäjälle %1$s. Syy: %2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">Estit käyttäjän %1$s. Syy: %2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">Peruutit eston %1$s. Syy: %2$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Poistit käyttäjän %1$s. Syy: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Hylkäsit kutsun. Syy: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Lähdit. Syy: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s lähti. Syy: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Poistuit huoneesta. Syy: %1$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Liityit. Syy: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s liittyi. Syy: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Liityit ryhmään. Syy: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Kutsuit %1$s. Syy: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Kutsusi. Syy: %1$s</string>
+    <string name="room_displayname_empty_room_was">Tyhjä huone (oli %s)</string>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s ja %4$s</string>
+    <string name="room_displayname_3_members">%1$s, %2$s ja %3$s</string>
+    <string name="power_level_custom_no_value">Mukautettu</string>
+    <string name="power_level_custom">Mukautettu (%1$d)</string>
+    <string name="power_level_default">Oletus</string>
+    <string name="power_level_moderator">Valvoja</string>
+    <string name="power_level_admin">Ylläpitäjä</string>
+    <string name="notice_widget_modified">%1$s muutti %2$s sovelmaa</string>
+    <string name="notice_widget_removed_by_you">Poistit %1$s sovelman</string>
+    <string name="notice_widget_removed">%1$s poisti %2$s sovelman</string>
+    <string name="notice_widget_added_by_you">Lisäsit %1$s sovelman</string>
+    <string name="notice_widget_added">%1$s lisäsi %2$s sovelman</string>
+    <string name="notice_widget_modified_by_you">Muutit %1$s sovelmaa</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Hyväksyit kutsun henkilölle %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Peruutit kutsun henkilöltä %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s peruutti kutsun henkilöltä %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">Peruutit henkilön %1$s kutsun liittyä ryhmään</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Kutsuit %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s kutsui %2$s</string>
+    <string name="notice_room_third_party_invite_by_you">Lähetit henkilölle %1$s kutsun liittyä huoneeseen</string>
+    <string name="notice_profile_change_redacted_by_you">Päivitit profiilisi %1$s</string>
+    <string name="notice_room_avatar_removed_by_you">Poistit huoneen profiilikuvan</string>
+    <string name="notice_room_avatar_removed">%1$s poisti huoneen profiilikuvan</string>
+    <string name="notice_room_topic_removed_by_you">Poistit huoneen aiheen</string>
+    <string name="notice_room_name_removed_by_you">Poistit huoneen nimen</string>
+    <string name="notice_requested_voip_conference_by_you">Pyysit ryhmäpuhelua</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Kaikki palvelimet on estetty osallistumasta! Tätä huonetta ei voi enää käyttää.</string>
+    <string name="notice_room_server_acl_updated_no_change">Ei muutosta.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Palvelimet jotka %s poistettiin estolistalta.</string>
+    <string name="notice_room_server_acl_updated_banned">• Palvelimen haku %s on nyt kielletty.</string>
+    <string name="notice_room_server_acl_set_allowed">• Palvelimen haku %s on sallittu.</string>
+    <string name="notice_room_server_acl_set_banned">• Palvelimen haku %s on kielletty.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s on estänyt vieraita liittymästä huoneeseen.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Estit vieraita liittymästä huoneeseen.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Annoit vieraille luvan liittyä huoneeseen.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Annoit vieraille luvan liittyä tänne.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s on antanut vieraille luvan liittyä tänne.</string>
+    <string name="notice_room_canonical_alias_unset_by_you">Poistit tämän huoneen pääosoitteen.</string>
+    <string name="notice_end_to_end_ok_by_you">Otit käyttöön päästä päähän -salauksen.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Olet estänyt vieraiden liittymisen huoneeseen.</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Otit päästä päähän -salauksen käyttöön (tuntematon algoritmi %1$s).</string>
+    <string name="notice_direct_room_update_by_you">Päivitit tässä.</string>
+    <string name="notice_direct_room_update">%s päivitti täällä.</string>
+    <string name="notice_room_update_by_you">Päivitit tämän huoneen.</string>
+    <string name="notice_end_to_end_by_you">Otit päästä päähän -salauksen käyttöön (%1$s)</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Teit tulevista viesteistä näkyviä käyttäjälle %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s teki tulevista viesteistä näkyviä käyttäjälle %2$s</string>
+    <string name="notice_made_future_room_visibility_by_you">Teit tulevan huonehistorian näkyväksi %1$s</string>
+    <string name="notice_ended_call_by_you">Lopetit puhelun.</string>
+    <string name="notice_answered_call_by_you">Vastasit puheluun.</string>
+    <string name="notice_call_candidates_by_you">Lähetit tietoja puhelun valmistelemiseksi.</string>
+    <string name="notice_call_candidates">%s lähetti tietoja puhelun valmistelemiseksi.</string>
+    <string name="notice_placed_voice_call_by_you">Aloitit äänipuhelun.</string>
+    <string name="notice_placed_video_call_by_you">Aloitit videopuhelun.</string>
+    <string name="notice_room_name_changed_by_you">Vaihdoit huoneen nimeksi: %1$s</string>
+    <string name="notice_room_avatar_changed_by_you">Vaihdoit huoneen profiilikuvaa</string>
+    <string name="notice_room_avatar_changed">%1$s muutti huoneen profiilikuvaa</string>
+    <string name="notice_room_topic_changed_by_you">Vaihdoit aiheen: %1$s</string>
+    <string name="notice_display_name_removed_by_you">Poistit nimimerkkisi (se oli %1$s)</string>
+    <string name="notice_display_name_changed_from_by_you">Vaihdoit nimimerkkisi %1$s nimeen %2$s</string>
+    <string name="notice_display_name_set_by_you">Asetit nimimerkiksesi %1$s</string>
+    <string name="notice_room_invite_no_invitee_by_you">Kutsusi</string>
+    <string name="notice_avatar_url_changed_by_you">Vaihdoit profiilikuvaasi</string>
+    <string name="notice_room_withdraw_by_you">Peruutit %1$sn kutsun</string>
+    <string name="notice_room_ban_by_you">Estit %1$s</string>
+    <string name="notice_room_unban_by_you">Poistit eston %1$s</string>
+    <string name="notice_room_kick_by_you">Poistit %1$s</string>
+    <string name="notice_room_reject_by_you">Hylkäsit kutsun</string>
+    <string name="notice_direct_room_leave_by_you">Poistuit huoneesta</string>
+    <string name="notice_direct_room_leave">%1$s poistui huoneesta</string>
+    <string name="notice_room_leave_by_you">Poistuit huoneesta</string>
+    <string name="notice_direct_room_join_by_you">Liityit</string>
+    <string name="notice_direct_room_join">%1$s liittyi</string>
+    <string name="notice_room_join_by_you">Liityit huoneeseen</string>
+    <string name="notice_room_invite_by_you">Kutsuit %1$s</string>
+    <string name="notice_direct_room_created_by_you">Loit keskustelun</string>
+    <string name="notice_direct_room_created">%1$s loi keskustelun</string>
+    <string name="notice_room_created_by_you">Loit huoneen</string>
+    <string name="notice_room_created">%1$s loi huoneen</string>
+    <string name="summary_you_sent_sticker">Lähetit tarran.</string>
+    <string name="summary_you_sent_image">Lähetit kuvan.</string>
     <!-- titles -->
     <string name="title_activity_home">Viestit</string>
     <string name="title_activity_room">Huone</string>
@@ -74,7 +282,7 @@
     <string name="local_address_book_header">Paikalliset yhteystiedot</string>
     <string name="matrix_only_filter">Ainoastaan Matrix-yhteyshenkilöt</string>
     <string name="no_conversation_placeholder">Ei keskusteluita</string>
-    <string name="no_contact_access_placeholder">Et ole sallinut Elementille pääsyä paikallisiin yhteystietoihisi</string>
+    <string name="template_no_contact_access_placeholder">Et ole sallinut ${app_name}ille pääsyä paikallisiin yhteystietoihisi</string>
     <string name="no_result_placeholder">Ei tuloksia</string>
     <!-- Rooms fragment -->
     <string name="rooms_header">Huoneet</string>
@@ -222,22 +430,22 @@
     <!-- ??? -->
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Huomio</string>
-    <string name="permissions_rationale_msg_storage">Element tarvitsee käyttöluvan mediagalleriaasi lähettäkseen liitteitä.\n\nSalli tiedostojen käyttö seuraavalla näytöllä liittääksesi kuvia ja muita tiedostoja viesteihin.</string>
-    <string name="permissions_rationale_msg_camera">Element tarvitsee käyttöluvan kameraan ottaakseen kuvia ja suorittakseen videopuheluita.</string>
+    <string name="template_permissions_rationale_msg_storage">${app_name} tarvitsee käyttöluvan mediagalleriaasi lähettäkseen liitteitä.\n\nSalli tiedostojen käyttö seuraavalla näytöllä liittääksesi kuvia ja muita tiedostoja viesteihin.</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} tarvitsee käyttöluvan kameraan ottaakseen kuvia ja suorittakseen videopuheluita.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nSoittaaksesi videopuhelun, salli seuraavassa ponnahdusikkunassa sovelluksen käyttää kameraa."</string>
-    <string name="permissions_rationale_msg_record_audio">Element tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nSoittaaksesi äänipuhelun, salli seuraavassa ponnahdusikkunassa sovelluksen käyttää mikrofonia."</string>
-    <string name="permissions_rationale_msg_camera_and_audio">Element tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
+    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
 \n
 \nSalli mikrofonin ja kameran käyttö seuraavilla näytöillä aloittaaksesi tämän puhelun.</string>
-    <string name="permissions_rationale_msg_contacts">Element voi tarkistaa yhteystietosi löytääkseen muita Matrixin käyttäjiä sähköpostiosoitteiden ja puhelinnumeroiden perusteella. Jos suostut jakamaan yhteystietosi tätä tarkoitusta varten, salli yhteystietojen käyttö seuraavassa ponnahdusikkunassa.</string>
-    <string name="permissions_msg_contacts_warning_other_androids">Element pystyy käyttämään yhteystietojasi, etsiäkseen muita Matrix-käyttäjiä sähköpostiosoitteiden sekä puhelinnumeroiden perusteella. 
+    <string name="template_permissions_rationale_msg_contacts">${app_name} voi tarkistaa yhteystietosi löytääkseen muita Matrixin käyttäjiä sähköpostiosoitteiden ja puhelinnumeroiden perusteella. Jos suostut jakamaan yhteystietosi tätä tarkoitusta varten, salli yhteystietojen käyttö seuraavassa ponnahdusikkunassa.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} pystyy käyttämään yhteystietojasi, etsiäkseen muita Matrix-käyttäjiä sähköpostiosoitteiden sekä puhelinnumeroiden perusteella.
 \n
-\nSaako Element käyttää yhteystietojasi tätä varten\?</string>
+\nSaako ${app_name} käyttää yhteystietojasi tätä varten\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Toimenpide epäonnistui puuttuvien käyttölupien takia</string>
     <!-- medias slider string -->
     <string name="media_slider_saved">Tallennettu</string>
@@ -613,7 +821,7 @@
     <string name="offline">Yhteydetön</string>
     <string name="light_theme">Vaalea teema</string>
     <string name="dark_theme">Tumma teema</string>
-    <string name="black_them">Musta teema</string>
+    <string name="black_theme">Musta teema</string>
     <string name="notification_sync_in_progress">Synkronoidaan…</string>
     <string name="notification_listening_for_events">Kuunnellaan tapahtumia</string>
     <string name="notification_noisy_notifications">Äänekkäät ilmoitukset</string>
@@ -715,7 +923,6 @@
     <string name="settings_password">Salasana</string>
     <string name="deactivate_account_prompt_password">Kirjoita salasanasi jatkaaksesi:</string>
     <string name="error_empty_field_your_password">Kirjoita salasanasi.</string>
-    <string name="status_theme">Status.im-teema</string>
     <string name="settings_send_typing_notifs">Lähetä kirjoitusilmoitukset</string>
     <string name="settings_show_read_receipts">Näytä lukukuittaukset</string>
     <string name="settings_show_join_leave_messages">Näytä liittymiset ja poistumiset</string>
@@ -768,12 +975,12 @@
     <string name="e2e_re_request_encryption_key"><u>Pyydä salausavaimia uudelleen</u> muista istunnoistasi.</string>
     <string name="e2e_re_request_encryption_key_sent">Avainpyyntö lähetetty.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Pyyntö lähetetty</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">Käynnistä Element toisella laitteella, joka voi purkaa viestin, jotta se voi lähettää avaimet tähän istuntoon.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">Käynnistä ${app_name} toisella laitteella, joka voi purkaa viestin, jotta se voi lähettää avaimet tähän istuntoon.</string>
     <plurals name="membership_changes">
         <item quantity="one">yksi jäsenyysmuutos</item>
         <item quantity="other">%d jäsenyysmuutosta</item>
     </plurals>
-    <string name="settings_call_ringtone_use_app_ringtone">Käytä Elementin oletussoittoääntä saapuville puheluille</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">Käytä ${app_name}in oletussoittoääntä saapuville puheluille</string>
     <string name="settings_call_ringtone_title">Saapuvien puheluiden soittoääni</string>
     <string name="video_call_in_progress">Videopuhelu menossa…</string>
     <string name="list_members">Käyttäjälista</string>
@@ -850,8 +1057,8 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Ota käyttöön</string>
     <string name="settings_troubleshoot_test_device_settings_title">Istunnon asetukset.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Ilmoitukset ovat käytössä tässä istunnossa.</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">Ilmoitukset eivät ole käytössä tässä istunnossa.
-\nTarkista Elementin asetukset.</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">Ilmoitukset eivät ole käytössä tässä istunnossa.
+\nTarkista ${app_name}in asetukset.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Ota käyttöön</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Mukautetut asetukset.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Huomaathan, että osa viestityypeistä on asetettu olemaan hiljaisia (tuottavat ilmoituksen ilman ääntä).</string>
@@ -860,7 +1067,7 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Tarkista asetukset</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Services -palvelun tarkistus</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK on saatavilla ja ajan tasalla.</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element käyttää Google Play Services -palvelua ilmoitusten välittämiseen, mutta se ei näytä olevan määritetty oikein:
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} käyttää Google Play Services -palvelua ilmoitusten välittämiseen, mutta se ei näytä olevan määritetty oikein:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Korjaa Play Services -palvelu</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase-tunniste</string>
@@ -868,12 +1075,12 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCM-tunnisteen haku epäonnistui: 
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s] 
-\nElement ei voi vaikuttaa tähän virheeseen, ja Googlen mukaan tämä virhe tarkoittaa, että tällä laitteella on liikaa FCM:ään rekisteröityjä sovelluksia. Tämä virhe ilmenee vain tapauksissa, joissa on erittäin paljon FCM:ään rekisteröityjä sovelluksia asennettuna, joten tätä ei pitäisi tapahtua normaalisti.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nTämä virhe ei ole Elementin ratkaistavissa. Se voi johtua useasta eri syystä. Ehkä tämä toimii, jos yrität myöhemmin. Voit myös tarkistaa, että Google Play Services -palvelu ei ole rajoitettuna järjestelmäasetuksissa, ja että laitteesi kello on oikein. Tämä voi tapahtua myös mukautetun käyttöjärjestelmän kanssa.</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s] 
-\nTämä virhe ei ole Elementin ratkaistavissa. Tässä puhelimessa ei ole Google-tiliä. Lisää laitteeseesi Google-tili tätä toimintoa varten.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\n${app_name} ei voi vaikuttaa tähän virheeseen, ja Googlen mukaan tämä virhe tarkoittaa, että tällä laitteella on liikaa FCM:ään rekisteröityjä sovelluksia. Tämä virhe ilmenee vain tapauksissa, joissa on erittäin paljon FCM:ään rekisteröityjä sovelluksia asennettuna, joten tätä ei pitäisi tapahtua normaalisti.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nTämä virhe ei ole ${app_name}in ratkaistavissa. Se voi johtua useasta eri syystä. Ehkä tämä toimii, jos yrität myöhemmin. Voit myös tarkistaa, että Google Play Services -palvelu ei ole rajoitettuna järjestelmäasetuksissa, ja että laitteesi kello on oikein. Tämä voi tapahtua myös mukautetun käyttöjärjestelmän kanssa.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nTämä virhe ei ole ${app_name}in ratkaistavissa. Tässä puhelimessa ei ole Google-tiliä. Lisää laitteeseesi Google-tili tätä toimintoa varten.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Lisää tili</string>
     <string name="settings_troubleshoot_test_token_registration_title">Tunnisteen rekisteröinti</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM-tunniste rekisteröity onnistuneesti kotipalvelimelle.</string>
@@ -889,17 +1096,17 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Palvelun uudelleenkäynnistäminen epäonnistui</string>
     <string name="settings_troubleshoot_test_service_boot_title">Käynnistä laitteen käynnistyessä</string>
     <string name="settings_troubleshoot_test_service_boot_success">Palvelu käynnistetään, kun laite käynnistetään uudelleen.</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">Palvelua ei käynnistetä laitteen uudelleenkäynnistyksen yhteydessä. Et tule saamaan ilmoituksia ennen kuin Element on käynnistetty uudelleen.</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">Palvelua ei käynnistetä laitteen uudelleenkäynnistyksen yhteydessä. Et tule saamaan ilmoituksia ennen kuin ${app_name} on käynnistetty uudelleen.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Ota käyttöön automaattinen käynnistys</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Tarkista taustapalveluiden rajoitukset</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">Taustapalveluiden rajoitukset ovat pois käytöstä. Tämä testi tulee ajaa mobiilidatayhteydellä (ilman wlania). 
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Taustapalveluiden rajoitukset ovat pois käytöstä. Tämä testi tulee ajaa mobiilidatayhteydellä (ilman wlania).
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">Taustapalveluiden rajoitukset ovat käytössä. 
-\nTyötä, jota Element yrittää tehdä, rajoitetaan aggressiivisesti, kun se on taustalla, mikä saattaa vaikuttaa ilmoituksiin.
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Taustapalveluiden rajoitukset ovat käytössä.
+\nTyötä, jota ${app_name} yrittää tehdä, rajoitetaan aggressiivisesti, kun se on taustalla, mikä saattaa vaikuttaa ilmoituksiin.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Poista rajoitukset</string>
     <string name="settings_troubleshoot_test_battery_title">Akunkäytön optimointi</string>
-    <string name="settings_troubleshoot_test_battery_success">Akunkäytön optimointi ei vaikuta Elementin toimintaan.</string>
+    <string name="template_settings_troubleshoot_test_battery_success">Akunkäytön optimointi ei vaikuta ${app_name}in toimintaan.</string>
     <string name="settings_troubleshoot_test_battery_failed">Jos käyttäjä jättää laitteen paikalleen ilman latausjohtoa niin, että näyttö on pois päältä, laite siirtyy torkkutilaan. Tämä estää sovelluksia käyttämästä verkkoyhteyksiä ja lykkää niiden töitä, synkronointeja ja perushälytyksiä.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Jätä optimointi huomiotta</string>
     <string name="settings_notification_privacy_normal">Normaali</string>
@@ -922,15 +1129,15 @@
     <string name="settings_show_join_leave_messages_summary">Ei vaikuta kutsuihin, poistamisiin ja porttikieltoihin.</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Sisältää hahmokuvat ja näyttönimien vaihdot.</string>
     <string name="startup_notification_privacy_title">Ilmoitusten yksityisyys</string>
-    <string name="startup_notification_privacy_message">Element voi ajaa itseään taustalla hallitakseen sinulle näytettäviä ilmoituksia turvallisesti ja yksityisesti. Tämä voi vaikuttaa akunkäyttöön.</string>
+    <string name="template_startup_notification_privacy_message">${app_name} voi ajaa itseään taustalla hallitakseen sinulle näytettäviä ilmoituksia turvallisesti ja yksityisesti. Tämä voi vaikuttaa akunkäyttöön.</string>
     <string name="startup_notification_privacy_button_grant">Anna oikeus</string>
     <string name="startup_notification_privacy_button_other">Valitse toinen vaihtoehto</string>
     <string name="startup_notification_fdroid_battery_optim_title">Taustayhteys</string>
-    <string name="startup_notification_fdroid_battery_optim_message">Elementin tarvitsee käyttää taustayhteyttä, jotta se voi näyttää luotettavia ilmoituksia.
-\nSeuraavalla ruudulla sinulta kysytään lupaa, jotta Element voi pitää itsensä käynnissä taustalla.</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name}in tarvitsee käyttää taustayhteyttä, jotta se voi näyttää luotettavia ilmoituksia.
+\nSeuraavalla ruudulla sinulta kysytään lupaa, jotta ${app_name} voi pitää itsensä käynnissä taustalla.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Anna oikeus</string>
-    <string name="settings_opt_in_of_analytics_summary">Element kerää anonyymiä analytiikkaa sovelluksen parantamiseksi.</string>
-    <string name="settings_opt_in_of_analytics_prompt">Otathan analytiikan käyttöön Elementin parantamiseksi.</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} kerää anonyymiä analytiikkaa sovelluksen parantamiseksi.</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Otathan analytiikan käyttöön ${app_name}in parantamiseksi.</string>
     <string name="settings_opt_in_of_analytics_ok">Kyllä, haluan auttaa!</string>
     <string name="settings_data_save_mode_summary">Datansäästötila ottaa käyttöön erityisen suodattimen, joka poistaa paikallaoloilmoitukset ja kirjoittamisen ilmoitukset.</string>
     <string name="account_email_error">Sähköpostiasi varmennettaessa tapahtui virhe.</string>
@@ -1029,7 +1236,7 @@
     <string name="passphrase_passphrase_does_not_match">Salalause ei täsmää</string>
     <string name="passphrase_empty_error_message">Syötä salalause</string>
     <string name="passphrase_passphrase_too_weak">Salalause on liian heikko</string>
-    <string name="keys_backup_passphrase_not_empty_error_message">Poista salalause, jos haluat Element generoivan palautusavaimen.</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">Poista salalause, jos haluat ${app_name} generoivan palautusavaimen.</string>
     <string name="keys_backup_no_session_error">Matrix-istuntoa ei ole saatavilla</string>
     <string name="keys_backup_setup_step1_title">Älä koskaan menetä salattuja viestejä</string>
     <string name="keys_backup_setup_step1_description">Salatuissa huoneissa viestit ovat suojattuna osapuolten välisellä salauksella. Vain sinä ja vastaanottaja(t) omistavat avaimet näiden viestien lukemiseen.
@@ -1145,7 +1352,7 @@
 \nJos et asettanut uutta palautustapaa, hyökkääjä saattaa yrittää päästä käsiksi tiliisi. Vaihda tilisi salasana ja aseta uusi palautustapa asetuksissa välittömästi.</string>
     <string name="autodiscover_invalid_response">Epäkelpo kotipalvelimen löytövastaus</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Automaattitäydennyksen palvelinasetukset</string>
-    <string name="autodiscover_well_known_autofill_dialog_message">Element löysi mukautetun palvelinasetuksen userId:si domainille ”%1$s”:
+    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} löysi mukautetun palvelinasetuksen userId:si domainille ”%1$s”:
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Käytä asetuksia</string>
     <string name="notification_sync_init">Alustetaan palvelua</string>
@@ -1222,7 +1429,7 @@
     <string name="please_wait">Odota…</string>
     <string name="group_all_communities">Kaikki yhteisöt</string>
     <string name="room_preview_no_preview">Tätä huonetta ei voi esikatsella</string>
-    <string name="room_preview_world_readable_room_not_supported_yet">Element ei vielä tue täysin julkisen huoneen esikatselua</string>
+    <string name="template_room_preview_world_readable_room_not_supported_yet">${app_name} ei vielä tue täysin julkisen huoneen esikatselua</string>
     <string name="fab_menu_create_room">Huoneet</string>
     <string name="fab_menu_create_chat">Yksityisviestit</string>
     <string name="create_room_title">Uusi huone</string>
@@ -1367,11 +1574,11 @@
     <string name="call_failed_no_ice_use_alt">Kokeile käyttää palvelinta %s</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Käyttää palvelinta %s apupalvelimena, jos kotipalvelimesi ei tarjoa sellaista (IP-osoitteesi näkyy palvelimelle puhelun aikana)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimoitu akunkestoa varten</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">Element synkronoi taustalla laitteen rajallisia resursseja (akkua) säästäen.
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} synkronoi taustalla laitteen rajallisia resursseja (akkua) säästäen.
 \nLaitteesi resurssien tilasta riippuen käyttöjärjestelmä saattaa lykätä synkronointia.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimoitu reaaliaikaa varten</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">Element synkronoi taustalla täsmällisin aikavälein (säädettävä).
-\nTämä vaikuttaa radion ja akun käyttöön. Näet pysyvän ilmoituksen, joka kertoo, että Element kuuntelee tapahtumia.</string>
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} synkronoi taustalla täsmällisin aikavälein (säädettävä).
+\nTämä vaikuttaa radion ja akun käyttöön. Näet pysyvän ilmoituksen, joka kertoo, että ${app_name} kuuntelee tapahtumia.</string>
     <string name="message_edits">Viestimuokkaukset</string>
     <string name="terms_description_for_identity_server">Ole löydettävissä</string>
     <string name="settings_text_message_sent">Tekstiviesti on lähetetty numeroon %s. Syötä sen sisältämä varmistuskoodi.</string>
@@ -1473,7 +1680,7 @@
     <string name="content_reported_as_inappropriate_content">Tämä sisältö on ilmiannettu epäsopivana. 
 \n 
 \nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit.</string>
-    <string name="permissions_rationale_msg_keys_backup_export">Element tarvitsee oikeuden tallentaakseen osapuolten välisen salauksen avaimesi talteen.
+    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} tarvitsee oikeuden tallentaakseen osapuolten välisen salauksen avaimesi talteen.
 \n
 \nSalli pääsy tiedostoihin seuraavassa ponnahdusikkunassa, jotta voit viedä avaimesi käsin.</string>
     <string name="login_error_no_homeserver_found">Tämä ei ole kelvollinen Matrix-palvelimen osoite</string>
@@ -1607,11 +1814,10 @@
 \nKirjaudu sisään päästäksesi käsiksi tunnuksesi tietoihin ja viesteihin.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Menetät pääsyn salattuihin viesteihisi ellet kirjaudu sisään palauttaaksesi salausavaimesi.</string>
     <string name="soft_logout_clear_data_dialog_submit">Poista tiedot</string>
-    <string name="soft_logout_sso_not_same_user_error">Nykyinen istunto on käyttäjälle %1$s, ja yritit kirjautuas isään käyttäjälle %2$s. Element ei tue tätä.
-\nPoista ensin tietosi ja kirjaudu sen jälkeen toisella tunnuksella. Voit vaihtoehtoisesti käyttää Elementin selainversiota.</string>
+    <string name="template_soft_logout_sso_not_same_user_error">Nykyinen istunto on käyttäjälle %1$s, ja yritit kirjautuas isään käyttäjälle %2$s. ${app_name} ei tue tätä.
+\nPoista ensin tietosi ja kirjaudu sen jälkeen toisella tunnuksella. Voit vaihtoehtoisesti käyttää ${app_name}in selainversiota.</string>
     <string name="permalink_malformed">matrix.to-linkkisi oli epämuodostunut</string>
     <string name="bug_report_error_too_short">Kuvaus on liian lyhyt</string>
-    <string name="login_server_url_form_other_notice">Syötä palvelin tai sen Elementin osoite, mihin haluat yhdistää</string>
     <string name="signed_out_notice">Se voi johtua monesta eri syystä:
 \n
 \n• olet vaihtanut salasanasi toisella laitteella
@@ -1650,7 +1856,7 @@
     <string name="settings_rageshake_detection_threshold_summary">Ravista puhelintasi testataksesi tunnistusrajan</string>
     <string name="rageshake_detected">Ravistus tunnistettu!</string>
     <string name="autocomplete_limited_results">Näytetään vain ensimmäiset tulokset, kirjoita lisää kirjaimia…</string>
-    <string name="settings_developer_mode_fail_fast_summary">Element voi kaatuilla tavallista useammin odottamattomien virheiden vuoksi</string>
+    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} voi kaatuilla tavallista useammin odottamattomien virheiden vuoksi</string>
     <string name="command_description_shrug">Lisää ¯\\_(ツ)_/¯ tavallisen viestin alkuun</string>
     <string name="login_error_threepid_denied">Käyttämäsi sähköpostipalvelun ei ole sallittu rekisteröityä tälle palvelimelle</string>
     <string name="verification_sas_match">Täsmäävät</string>
@@ -1700,9 +1906,9 @@
     <string name="room_member_power_level_admin_in">Ylläpitäjä %1$s:ssä</string>
     <string name="room_member_power_level_moderator_in">Valvoja %1$s:ssä</string>
     <string name="room_member_jump_to_read_receipt">Siirry lukukuittaukseen</string>
-    <string name="rendering_event_error_type_of_event_not_handled">Element ei osaa käsitellä tapahtumia joiden tyyppi on \'%1$s\'</string>
-    <string name="rendering_event_error_type_of_message_not_handled">Element ei osaa käsitellä viestejä joiden tyyppi on \'%1$s\'</string>
-    <string name="rendering_event_error_exception">Element ei osannut piirtää tapahtuman jonka tunniste on \'%1$s\' sisältöä</string>
+    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} ei osaa käsitellä tapahtumia joiden tyyppi on \'%1$s\'</string>
+    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} ei osaa käsitellä viestejä joiden tyyppi on \'%1$s\'</string>
+    <string name="template_rendering_event_error_exception">${app_name} ei osannut piirtää tapahtuman jonka tunniste on \'%1$s\' sisältöä</string>
     <string name="room_list_sharing_header_recent_rooms">Viimeaikaiset huoneet</string>
     <string name="room_list_sharing_header_other_rooms">Muut huoneet</string>
     <string name="command_description_rainbow">Lähettää annetun viestin väritettynä sateenkaaren väreillä</string>
@@ -1772,7 +1978,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Käyttäjä poistanut tapahtuman, syynä: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Tapahtuma moderoitu huoneen ylläpitäjän toimesta, syynä: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Avaimet ovat jo ajan tasalla!</string>
-    <string name="login_default_session_public_name">Element Android</string>
+    <string name="template_login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">Avainpyynnöt</string>
     <string name="refresh">Päivitä</string>
     <string name="new_session">Uusi kirjautuminen. Olitko se sinä\?</string>
@@ -1851,7 +2057,7 @@
     <string name="sound_device_speaker">Kaiutin</string>
     <string name="sound_device_phone">Puhelin</string>
     <string name="call_select_sound_device">Valitse äänilaite</string>
-    <string name="call_failed_no_connection">Element-puhelu epäonnistui</string>
+    <string name="template_call_failed_no_connection">${app_name}-puhelu epäonnistui</string>
     <string name="send_bug_report_include_key_share_history">Lähetä avaimen jakopyyntöjen historia</string>
     <string name="no_more_results">Ei enempää tuloksia</string>
     <string name="bottom_action_notification">Ilmoitukset</string>
@@ -2014,7 +2220,6 @@
     <string name="direct_room_profile_section_more_settings">Asetukset</string>
     <string name="sent_a_poll">Äänestys</string>
     <string name="settings_text_message_sent_hint">Koodi</string>
-    <string name="element_login_splash_brand">element</string>
     <string name="room_settings_topic_hint">Aihe</string>
     <string name="power_level_title">Rooli</string>
     <string name="invite_users_to_room_action_invite">KUTSU</string>

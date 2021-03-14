@@ -3,7 +3,7 @@
     <!-- Modify some severity -->
 
     <!-- Resource -->
-    <issue id="MissingTranslation" severity="warning" />
+    <issue id="MissingTranslation" severity="ignore" />
     <issue id="TypographyEllipsis" severity="error" />
     <issue id="ImpliedQuantity" severity="warning" />
     <issue id="UnusedQuantity" severity="error" />
@@ -12,6 +12,7 @@
     <issue id="IconDuplicatesConfig" severity="error" />
     <issue id="IconDuplicates" severity="error" />
     <issue id="IconExpectedSize" severity="error" />
+    <issue id="LocaleFolder" severity="error" />
 
     <!-- UX -->
     <issue id="ButtonOrder" severity="error" />
@@ -65,6 +66,13 @@
     <!--    <issue id="BinaryOperationInTimber" severity="error" />-->
 
     <!-- Wording -->
-    <!-- TODO When strings are imported from Weblate, move this to error -->
-    <issue id="Typos" severity="warning" />
+    <issue id="Typos" severity="error" />
+
+    <!-- Ignore lint issue in generated resource file from templates.
+     https://github.com/LikeTheSalad/android-string-reference generates string from the default language
+     if the translation is missing, and it can lead to typos. Lint should only check the string from the
+     original file, so with id starting by `template_`. -->
+    <issue id="all">
+        <ignore path="**/generated/resolved/**/resolved.xml" />
+    </issue>
 </lint>

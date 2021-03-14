@@ -17,15 +17,29 @@
 package org.matrix.android.sdk.internal.session.room.send.queue
 
 import org.matrix.android.sdk.api.util.Cancelable
+import timber.log.Timber
+import java.util.concurrent.atomic.AtomicInteger
 
-abstract class QueuedTask : Cancelable {
-    var retryCount = 0
+/**
+ * @param queueIdentifier String value to identify a unique Queue
+ * @param taskIdentifier String value to identify a unique Task. Should be different from queueIdentifier
+ */
+internal abstract class QueuedTask(
+        val queueIdentifier: String,
+        val taskIdentifier: String
+) : Cancelable {
+
+    override fun toString() = "${javaClass.simpleName} queueIdentifier: $queueIdentifier, taskIdentifier:  $taskIdentifier)"
+
+    var retryCount = AtomicInteger(0)
 
     private var hasBeenCancelled: Boolean = false
 
     suspend fun execute() {
         if (!isCancelled()) {
+            Timber.v("Execute: $this start")
             doExecute()
+            Timber.v("Execute: $this finish")
         }
     }
 

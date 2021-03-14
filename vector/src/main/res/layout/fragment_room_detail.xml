@@ -86,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="top"
-        app:constraint_referenced_ids="composerLayout,notificationAreaView" />
+        app:constraint_referenced_ids="composerLayout,notificationAreaView,failedMessagesWarningView" />
 
     <im.vector.app.features.sync.widget.SyncStateView
         android:id="@+id/syncStateView"
@@ -159,6 +159,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <im.vector.app.core.ui.views.FailedMessagesWarningView
+        android:id="@+id/failedMessagesWarningView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/composerLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
+
     <im.vector.app.features.home.room.detail.composer.TextComposerView
         android:id="@+id/composerLayout"
         android:layout_width="match_parent"
@@ -186,7 +196,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:barrierDirection="top"
-        app:constraint_referenced_ids="composerLayout,notificationAreaView" />
+        app:constraint_referenced_ids="composerLayout,notificationAreaView, failedMessagesWarningView" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/activeCallPiPWrap"

@@ -35,7 +35,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.bumptech.glide.util.Util.assertMainThread
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
 import im.vector.app.R
 import im.vector.app.core.di.DaggerScreenComponent
@@ -193,10 +192,7 @@ abstract class VectorBaseFragment<VB: ViewBinding> : BaseMvRxFragment(), HasScre
     }
 
     protected fun showErrorInSnackbar(throwable: Throwable) {
-        vectorBaseActivity.getCoordinatorLayout()?.let {
-            Snackbar.make(it, errorFormatter.toHumanReadable(throwable), Snackbar.LENGTH_SHORT)
-                    .show()
-        }
+        vectorBaseActivity.getCoordinatorLayout()?.showOptimizedSnackbar(errorFormatter.toHumanReadable(throwable))
     }
 
     protected fun showLoadingDialog(message: CharSequence? = null, cancelable: Boolean = false) {

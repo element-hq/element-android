@@ -5,27 +5,17 @@
     <style name="AppTheme.Base.SC" parent="AppTheme.Base.Black">
         <!-- Riotx attribute for palette -->
         <item name="riotx_background">@color/background_black_sc</item>
-        <item name="riotx_base">?riotx_background</item>
-        <item name="riotx_base_text_icon_primary">@color/text_color_primary_sc</item>
-        <item name="riotx_base_text_icon_secondary">@color/text_color_secondary_sc</item>
-        <item name="riotx_search_background_mobile">@color/background_dark_sc</item>
+        <item name="vctr_home_drawer_header_background">?riotx_background</item>
         <item name="riotx_header_panel_background">@color/background_black_sc</item>
         <item name="riotx_header_panel_border_mobile">#20ffffff</item>
-        <item name="riotx_header_panel_text_primary">@color/text_color_primary_sc</item>
         <item name="riotx_header_panel_text_secondary">@color/text_color_secondary_sc</item>
         <item name="riotx_text_primary">@color/text_color_primary_sc</item>
         <item name="riotx_text_secondary">@color/text_color_secondary_sc</item>
         <item name="riotx_text_tertiary">@color/text_color_tertiary_sc</item>
         <item name="riotx_text_primary_body_contrast">@color/text_color_primary_sc</item>
         <item name="riotx_android_secondary">@color/text_color_secondary_sc</item>
-        <item name="riotx_search_placeholder">@color/text_color_disabled_sc</item>
-        <item name="riotx_room_highlight">@color/background_floating_sc</item>
         <item name="riotx_unread_room_indent">@color/background_dark_sc</item>
-        <item name="riotx_android_status_bar">@color/background_black_sc</item>
-        <item name="riotx_line_break_mobile">@color/text_color_disabled_sc</item>
         <item name="riotx_unread_room_badge">?colorAccent</item>
-        <item name="riotx_fab_secondary_bg">@color/background_floating_sc</item>
-        <item name="riotx_fab_secondary_color">@color/text_color_secondary_sc</item>
         <item name="riotx_fab_label_bg">@color/background_floating_sc</item>
         <item name="riotx_fab_label_stroke">@color/black</item>
         <item name="riotx_fab_label_color">#ffffff</item>
@@ -62,8 +52,6 @@
         <item name="toolbarStyle">@style/VectorToolbarStyle</item>
         <item name="alertDialogTheme">@style/VectorAlertDialogStyleDark.SC</item>
 
-        <item name="android:textColorLink">@color/riotx_links</item>
-
         <!-- Menu text color -->
         <item name="android:actionMenuTextColor">?colorAccent</item>
 
@@ -80,9 +68,6 @@
         <item name="vctr_toolbar_secondary_text_color">@color/text_color_secondary_sc</item>
         <item name="vctr_toolbar_link_text_color">@color/link_color_dark</item>
 
-        <!-- default text colors -->
-        <item name="vctr_default_text_hint_color">@color/text_color_disabled_sc</item>
-
         <!-- room message colors -->
         <!--Unread Room Indent-->
         <item name="vctr_notice_secondary">@color/text_color_secondary_sc</item>
@@ -97,22 +82,12 @@
         <item name="riot_primary_text_color">@color/text_color_primary_sc</item>
         <item name="riot_primary_text_color_disabled">@color/text_color_disabled_sc</item>
 
-        <!-- tab bar colors -->
-        <item name="vctr_tab_bar_inverted_background_color">?colorPrimary</item>
-
         <!-- list colors -->
         <!--Header/Panel Background-->
         <item name="vctr_list_header_background_color">@color/background_dark_sc</item>
-        <!--Header/Panel Text Primary-->
-        <item name="vctr_list_header_primary_text_color">@color/text_color_primary_sc</item>
-        <!--Header/Panel Text Secondary-->
-        <item name="vctr_list_header_secondary_text_color">@color/text_color_secondary_sc</item>
 
         <item name="riotx_list_bottom_sheet_divider_color">#80ffffff</item>
         <item name="vctr_list_divider_color">@color/background_dark_sc</item>
-
-        <!-- outgoing call background color -->
-        <item name="vctr_pending_outgoing_view_background_color">#33FFFFFF</item>
 
         <!-- room notification text color (typing, unsent...) -->
         <!--Notice (secondary)-->
@@ -192,7 +167,7 @@
     <style name="AppTheme.Base.SC.Dark">
         <item name="riotx_toolbar_bg">@color/background_sc</item>
         <item name="riotx_background">@color/background_dark_sc</item>
-        <item name="riotx_base">@color/background_sc</item>
+        <item name="vctr_home_drawer_header_background">@color/background_sc</item>
         <item name="riotx_header_panel_background">@color/background_sc</item>
 
         <item name="android:statusBarColor">@color/background_dark_sc</item>

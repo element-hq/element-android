@@ -20,9 +20,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
 import android.widget.FrameLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.airbnb.mvrx.Fail
@@ -30,7 +33,9 @@ import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.facebook.react.modules.core.PermissionListener
+import im.vector.app.R
 import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
 import kotlinx.parcelize.Parcelize
@@ -80,7 +85,37 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
             renderState(it)
         }
 
+        jitsiViewModel.observeViewEvents {
+            when (it) {
+                is JitsiCallViewEvents.StartConference            -> configureJitsiView(it)
+                is JitsiCallViewEvents.ConfirmSwitchingConference -> handleConfirmSwitching(it)
+                JitsiCallViewEvents.Finish                        -> finish()
+                JitsiCallViewEvents.LeaveConference               -> handleLeaveConference()
+            }.exhaustive
+        }
+
         registerForBroadcastMessages()
+    }
+
+    private fun handleLeaveConference() {
+        jitsiMeetView?.leave()
+    }
+
+    private fun handleConfirmSwitching(action: JitsiCallViewEvents.ConfirmSwitchingConference) {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_warning)
+                .setMessage(R.string.jitsi_leave_conf_to_join_another_one_content)
+                .setPositiveButton(R.string.action_switch) { _, _ ->
+                    jitsiViewModel.handle(JitsiCallViewActions.SwitchTo(action.args, false))
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean,
+                                               newConfig: Configuration) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        Timber.w("onPictureInPictureModeChanged($isInPictureInPictureMode)")
     }
 
     override fun initUiAndData() {
@@ -96,7 +131,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
             is Success -> {
                 views.jitsiProgressLayout.isVisible = false
                 jitsiMeetView?.isVisible = true
-                configureJitsiView(viewState)
             }
             else       -> {
                 jitsiMeetView?.isVisible = false
@@ -105,12 +139,12 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         }
     }
 
-    private fun configureJitsiView(viewState: JitsiCallViewState) {
+    private fun configureJitsiView(startConference: JitsiCallViewEvents.StartConference) {
         val jitsiMeetConferenceOptions = JitsiMeetConferenceOptions.Builder()
-                .setVideoMuted(!viewState.enableVideo)
-                .setUserInfo(viewState.userInfo)
+                .setVideoMuted(!startConference.enableVideo)
+                .setUserInfo(startConference.userInfo)
                 .apply {
-                    tryOrNull { URL(viewState.jitsiUrl) }?.let {
+                    tryOrNull { URL(startConference.jitsiUrl) }?.let {
                         setServerURL(it)
                     }
                 }
@@ -120,15 +154,15 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
                 .setFeatureFlag("add-people.enabled", false)
                 .setFeatureFlag("video-share.enabled", false)
                 .setFeatureFlag("call-integration.enabled", false)
-                .setRoom(viewState.confId)
-                .setSubject(viewState.subject)
+                .setRoom(startConference.confId)
+                .setSubject(startConference.subject)
                 .build()
         jitsiMeetView?.join(jitsiMeetConferenceOptions)
     }
 
-    override fun onPause() {
+    override fun onStop() {
         JitsiMeetActivityDelegate.onHostPause(this)
-        super.onPause()
+        super.onStop()
     }
 
     override fun onResume() {
@@ -147,13 +181,23 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         super.onDestroy()
     }
 
-//    override fun onUserLeaveHint() {
-//        super.onUserLeaveHint()
-//        jitsiMeetView?.enterPictureInPicture()
-//    }
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            jitsiMeetView?.enterPictureInPicture()
+        }
+    }
 
     override fun onNewIntent(intent: Intent?) {
         JitsiMeetActivityDelegate.onNewIntent(intent)
+
+        // Is it a switch to another conf?
+        intent?.takeIf { it.hasExtra(MvRx.KEY_ARG) }
+                ?.let { intent.getParcelableExtra<Args>(MvRx.KEY_ARG) }
+                ?.let {
+                    jitsiViewModel.handle(JitsiCallViewActions.SwitchTo(it, true))
+                }
+
         super.onNewIntent(intent)
     }
 
@@ -195,7 +239,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         Timber.v("JitsiMeetViewListener.onConferenceTerminated()")
         // Do not finish if there is an error
         if (data["error"] == null) {
-            finish()
+            jitsiViewModel.handle(JitsiCallViewActions.OnConferenceLeft)
         }
     }
 
@@ -203,7 +247,6 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         fun newIntent(context: Context, roomId: String, widgetId: String, enableVideo: Boolean): Intent {
             return Intent(context, VectorJitsiActivity::class.java).apply {
                 putExtra(MvRx.KEY_ARG, Args(roomId, widgetId, enableVideo))
-                addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
         }
     }

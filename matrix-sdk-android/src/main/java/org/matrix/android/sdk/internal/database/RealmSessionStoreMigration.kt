@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.database
 
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
+import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
@@ -35,7 +37,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         const val SESSION_STORE_SCHEMA_SC_VERSION = 1L
         const val SESSION_STORE_SCHEMA_SC_VERSION_OFFSET = (1L shl 12)
 
-        const val SESSION_STORE_SCHEMA_VERSION = 7L +
+        const val SESSION_STORE_SCHEMA_VERSION = 8L +
                 SESSION_STORE_SCHEMA_SC_VERSION * SESSION_STORE_SCHEMA_SC_VERSION_OFFSET
     }
 
@@ -52,6 +54,7 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
         if (oldVersion <= 4) migrateTo5(realm)
         if (oldVersion <= 5) migrateTo6(realm)
         if (oldVersion <= 6) migrateTo7(realm)
+        if (oldVersion <= 7) migrateTo8(realm)
 
         if (oldScVersion <= 0) migrateToSc1(realm)
     }
@@ -141,5 +144,29 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                     }
                 }
                 ?.removeField("areAllMembersLoaded")
+    }
+
+    private fun migrateTo8(realm: DynamicRealm) {
+        Timber.d("Step 7 -> 8")
+
+        val editionOfEventSchema = realm.schema.create("EditionOfEvent")
+                .apply {
+                    // setEmbedded does not return `this`...
+                    isEmbedded = true
+                }
+                .addField(EditionOfEventFields.CONTENT, String::class.java)
+                .addField(EditionOfEventFields.EVENT_ID, String::class.java)
+                .setRequired(EditionOfEventFields.EVENT_ID, true)
+                .addField(EditionOfEventFields.SENDER_ID, String::class.java)
+                .setRequired(EditionOfEventFields.SENDER_ID, true)
+                .addField(EditionOfEventFields.TIMESTAMP, Long::class.java)
+                .addField(EditionOfEventFields.IS_LOCAL_ECHO, Boolean::class.java)
+
+        realm.schema.get("EditAggregatedSummaryEntity")
+                ?.removeField("aggregatedContent")
+                ?.removeField("sourceEvents")
+                ?.removeField("lastEditTs")
+                ?.removeField("sourceLocalEchoEvents")
+                ?.addRealmListField(EditAggregatedSummaryEntityFields.EDITIONS.`$`, editionOfEventSchema)
     }
 }

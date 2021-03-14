@@ -31,7 +31,7 @@
         <item name="android:textColorSecondary">@color/text_color_secondary_sc</item>
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/text_color_tertiary_sc</item>
-        <item name="android:textColorLink">@color/riotx_links</item>
+        <item name="android:textColorLink">@color/link_color_dark</item>
         <!-- Accent color -->
         <item name="android:colorAccent">@color/accent_sc</item>
         <item name="colorAccent">@color/accent_sc</item>

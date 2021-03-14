@@ -1,2 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_user_sent_image">%1$s şəkil göndərdi.</string>
+    <string name="summary_user_sent_sticker">%1$s stiker göndərdi.</string>
+
+    <string name="notice_room_invite_no_invitee">%s-nin dəvəti</string>
+    <string name="notice_room_invite">%1$s dəvət etdi %2$s</string>
+    <string name="notice_room_invite_you">%1$s sizi dəvət etdi</string>
+    <string name="notice_room_join">%1$s qoşuldu</string>
+    <string name="notice_room_leave">%1$s qalıb</string>
+    <string name="notice_room_reject">%1$s dəvəti rədd etdi</string>
+    <string name="notice_room_kick">%1$s %2$s-i xaric etdi</string>
+    <string name="notice_room_unban">%1$s %2$s-i blokdan açdı</string>
+    <string name="notice_room_ban">%1$s %2$s-i blokladı</string>
+    <string name="notice_room_withdraw">%1$s %2$s-in dəvətini geri götürdü</string>
+    <string name="notice_avatar_url_changed">%1$s avatarı dəyişdi</string>
+    <string name="notice_display_name_set">%1$s ekran adını %2$s olaraq təyin etdi</string>
+    <string name="notice_display_name_changed_from">%1$s ekran adını %2$s-dan %3$s-ya dəyişdi</string>
+    <string name="notice_display_name_removed">%1$s onların göstərilən adlarını sildi (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s mövzunu dəyişdi: %2$s</string>
+    <string name="notice_room_name_changed">%1$s otaq adını dəyişdirdi: %2$s</string>
+    <string name="notice_placed_video_call">%s video zəng etdi.</string>
+    <string name="notice_placed_voice_call">%s səsli zəng etdi.</string>
+    <string name="notice_answered_call">%s zəngə cavab verdi.</string>
+    <string name="notice_ended_call">%s zəng başa çatdı.</string>
+    <string name="notice_made_future_room_visibility">"%1$s gələcək otaq tarixçəsini %2$s-ə  görünən etdi"</string>
+    <string name="notice_room_visibility_invited">bütün otaq üzvləri, dəvət olunduğu andan.</string>
+    <string name="notice_room_visibility_joined">bütün otaq üzvləri, qoşulduğu andan.</string>
+    <string name="notice_room_visibility_shared">bütün otaq üzvləri.</string>
+    <string name="notice_room_visibility_world_readable">hər kəs.</string>
+    <string name="notice_room_visibility_unknown">naməlum (%s).</string>
+    <string name="notice_end_to_end">%1$s sondan-sona şifrələmə açdı (%2$s)</string>
+    <string name="notice_room_update">%s bu otağı təkmilləşdirdi.</string>
+
+    <string name="notice_requested_voip_conference">%1$s VoIP konfrans istədi</string>
+    <string name="notice_voip_started">VoIP konfransı başladı</string>
+    <string name="notice_voip_finished">VoIP konfransı başa çatdı</string>
+
+    <string name="notice_avatar_changed_too">(avatar da dəyişdirilib)</string>
+    <string name="notice_room_name_removed">%1$s otaq adını sildi</string>
+    <string name="notice_room_topic_removed">%1$s otaq mövzusunu sildi</string>
+    <string name="notice_event_redacted">Mesaj silindi</string>
+    <string name="notice_event_redacted_by">Mesaj %1$s tərəfindən silindi</string>
+    <string name="notice_event_redacted_with_reason">Mesaj silindi [səbəb: %1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">Mesaj %1$s tərəfindən qaldırıldı [səbəb: %2$s]</string>
+    <string name="notice_profile_change_redacted">%1$s profilini %2$s yenilədi</string>
+    <string name="notice_room_third_party_invite">%1$s otağa qoşulmaq üçün %2$s dəvətnamə göndərdi</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s otağa qoşulmaq üçün %2$s dəvətini ləğv etdi</string>
+    <string name="notice_room_third_party_registered_invite">%1$s %2$s üçün dəvəti qəbul etdi</string>
+
+    <string name="notice_crypto_unable_to_decrypt">** Şifrəni aça bilmir: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">Göndərənin cihazı bu mesaj üçün açarları bizə göndərməyib.</string>
+
+    <string name="could_not_redact">Redaktə etmək olmur</string>
+    <string name="unable_to_send_message">Mesaj göndərmək olmur</string>
+
+    <string name="message_failed_to_upload">Şəkil yükləmək olmur</string>
+
+    <string name="network_error">Şəbəkə xətası</string>
+    <string name="matrix_error">Matris xətası</string>
+
+    <string name="room_error_join_failed_empty_room">Boş bir otağa yenidən qoşulmaq hazırda mümkün deyil.</string>
+
+    <string name="encrypted_message">Şifrəli mesaj</string>
+
+    <string name="medium_email">Elektron poçt ünvanı</string>
+    <string name="medium_phone_number">Telefon nömrəsi</string>
+
+    <string name="room_displayname_invite_from">%s-dən dəvət</string>
+    <string name="room_displayname_room_invite">Otağa dəvət</string>
+
+    <string name="room_displayname_two_members">%1$s və %2$s</string>
+
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s və 1 digər</item>
+        <item quantity="other">%1$s və %2$d digərləri</item>
+    </plurals>
+
+    <string name="room_displayname_empty_room">Boş otaq</string>
+
+    <string name="initial_sync_start_importing_account">İlkin sinxronizasiya:
+\nHesab idxal olunur…</string>
+    <string name="initial_sync_start_importing_account_crypto">İlkin sinxronizasiya:
+\nKriptografiyanın idxalı</string>
+    <string name="initial_sync_start_importing_account_rooms">İlkin sinxronizasiya:
+\nOtaqlar idxalı</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">İlkin sinxronizasiya:
+\nOtaqlara daxil olmaq</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">İlkin sinxronizasiya:
+\nDəvət olunmuş otaqların idxalı</string>
+    <string name="initial_sync_start_importing_account_left_rooms">İlkin sinxronizasiya:
+\nTərk olunmuş otaqların idxalı</string>
+    <string name="initial_sync_start_importing_account_groups">İlkin sinxronizasiya:
+\nİcmaların idxalı</string>
+    <string name="initial_sync_start_importing_account_data">İlkin sinxronizasiya:
+\nHesab məlumatlarının idxalı</string>
+
+    <string name="event_status_sending_message">Mesaj göndərilir…</string>
+    <string name="clear_timeline_send_queue">Göndərmə növbəsini təmizləyin</string>
+
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s-nin dəvəti. Səbəb: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s dəvət olunmuş %2$s. Səbəb: %3$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s sizi dəvət etdi. Səbəb: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s qoşuldu. Səbəb: %2$s</string>
+    <string name="notice_room_leave_with_reason">%1$s qalıb. Səbəb: %2$s</string>
+    <string name="notice_room_reject_with_reason">%1$s dəvəti rədd etdi. Səbəb: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s %2$s-i xaric etdi. Səbəb: %3$s</string>
+    <string name="notice_room_unban_with_reason">%1$s blokdan açdı %2$s. Səbəb: %3$s</string>
+    <string name="notice_room_ban_with_reason">%1$s blokladı %2$s. Səbəb: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s otağa qoşulmaq üçün %2$s dəvətnamə göndərdi. Səbəb: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s otağa qoşulmaq üçün %2$s dəvətini ləğv etdi. Səbəb: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s %2$s üçün dəvəti qəbul etdi. Səbəb: %3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s %2$s dəvətini geri götürdü. Səbəb: %3$s</string>
+</resources>

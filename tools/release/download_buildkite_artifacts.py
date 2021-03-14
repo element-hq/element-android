@@ -81,7 +81,9 @@ base_url = "https://api.buildkite.com/v2/organizations/%s/pipelines/%s/builds/%s
 
 buildkite_build_state_url = base_url
 
-print("Getting build state of project %s/%s build %s" % (ORG_SLUG, PIPELINE_SLUG, build_str))
+buildkite_url = "https://buildkite.com/%s/%s/builds/%s" % (ORG_SLUG, PIPELINE_SLUG, build_str)
+
+print("Getting build state of project %s/%s build %s (%s)" % (ORG_SLUG, PIPELINE_SLUG, build_str, buildkite_url))
 
 if args.verbose:
     print("Url: %s" % buildkite_build_state_url)
@@ -141,7 +143,7 @@ else:
     targetDir = args.directory
 
 if not args.simulate:
-    os.mkdir(targetDir)
+    os.makedirs(targetDir, exist_ok=True)
 
 for elt in data:
     if args.verbose:

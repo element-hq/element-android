@@ -27,11 +27,14 @@ import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
+import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.BubbleThemeUtils
+import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -42,7 +45,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.session.room.VerificationState
 import javax.inject.Inject
 
 /**
@@ -55,7 +57,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                                                         private val vectorPreferences: VectorPreferences,
                                                         private val context: Context) {
 
-    fun create(event: TimelineEvent, nextEvent: TimelineEvent?): MessageInformationData {
+    fun create(event: TimelineEvent, prevEvent: TimelineEvent?, nextEvent: TimelineEvent?): MessageInformationData {
         // Non nullability has been tested before
         val eventId = event.root.eventId!!
 
@@ -95,6 +97,19 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 }
                 isEffectivelyDirect = foundSelf && (dmOtherMemberId != null)
             }
+        }
+
+        // SendState Decoration
+        val isSentByMe = event.root.senderId == session.myUserId
+        val sendStateDecoration = if (isSentByMe) {
+            getSendStateDecoration(
+                    eventSendState = event.root.sendState,
+                    prevEventSendState = prevEvent?.root?.sendState,
+                    anyReadReceipts = event.readReceipts.any { it.user.userId != session.myUserId },
+                    isMedia = event.root.isAttachmentMessage()
+            )
+        } else {
+            SendStateDecoration.NONE
         }
 
         return MessageInformationData(
@@ -137,7 +152,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                             ?: VerificationState.REQUEST
                     ReferencesInfoData(verificationState)
                 },
-                sentByMe = event.root.senderId == session.myUserId,
+                sentByMe = isSentByMe,
                 readReceiptAnonymous = if (event.root.sendState == SendState.SYNCED || event.root.sendState == SendState.SENT) {
                     /*if (event.readByOther) {
                         AnonymousReadReceipt.READ
@@ -150,8 +165,24 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 },
                 isDirect = isEffectivelyDirect,
                 dmChatPartnerId = dmOtherMemberId,
-                e2eDecoration = e2eDecoration
+                e2eDecoration = e2eDecoration,
+                sendStateDecoration = sendStateDecoration
         )
+    }
+
+    private fun getSendStateDecoration(eventSendState: SendState,
+                                       prevEventSendState: SendState?,
+                                       anyReadReceipts: Boolean,
+                                       isMedia: Boolean): SendStateDecoration {
+        return if (eventSendState.isSending()) {
+            if (isMedia) SendStateDecoration.SENDING_MEDIA else SendStateDecoration.SENDING_NON_MEDIA
+        } else if (eventSendState.hasFailed()) {
+            SendStateDecoration.FAILED
+        } else if (eventSendState.isSent() && !prevEventSendState?.isSent().orFalse() && !anyReadReceipts) {
+            SendStateDecoration.SENT
+        } else {
+            SendStateDecoration.NONE
+        }
     }
 
     private fun getE2EDecoration(event: TimelineEvent): E2EDecoration {

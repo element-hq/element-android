@@ -34,6 +34,8 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
+import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
 
 /**
@@ -63,23 +65,24 @@ class MessageActionsEpoxyController @Inject constructor(
         }
 
         // Send state
-        if (state.informationData.sendState.isSending()) {
-            bottomSheetSendStateItem {
-                id("send_state")
-                showProgress(true)
-                text(stringProvider.getString(R.string.event_status_sending_message))
-            }
-        } else if (state.informationData.sendState.hasFailed()) {
+        val sendState = state.sendState()
+        if (sendState?.hasFailed().orFalse()) {
             bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(false)
                 text(stringProvider.getString(R.string.unable_to_send_message))
                 drawableStart(R.drawable.ic_warning_badge)
             }
+        } else if (sendState != SendState.SYNCED) {
+            bottomSheetSendStateItem {
+                id("send_state")
+                showProgress(true)
+                text(stringProvider.getString(R.string.event_status_sending_message))
+            }
         }
 
         when (state.informationData.e2eDecoration) {
-            E2EDecoration.WARN_IN_CLEAR        -> {
+            E2EDecoration.WARN_IN_CLEAR -> {
                 bottomSheetSendStateItem {
                     id("e2e_clear")
                     showProgress(false)

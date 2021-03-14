@@ -53,6 +53,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
+import org.matrix.android.sdk.internal.crypto.algorithms.IMXGroupEncryption
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXWithHeldExtension
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
@@ -97,7 +98,6 @@ import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
-import kotlin.jvm.Throws
 import kotlin.math.max
 
 /**
@@ -667,7 +667,12 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun discardOutboundSession(roomId: String) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            roomEncryptorsStore.get(roomId)?.discardSessionKey()
+            val roomEncryptor = roomEncryptorsStore.get(roomId)
+            if (roomEncryptor is IMXGroupEncryption) {
+                roomEncryptor.discardSessionKey()
+            } else {
+                Timber.e("## CRYPTO | discardOutboundSession() for:$roomId: Unable to handle IMXGroupEncryption")
+            }
         }
     }
 
@@ -703,7 +708,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     @Throws(MXCryptoError::class)
     private fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-       return eventDecryptor.decryptEvent(event, timeline)
+        return eventDecryptor.decryptEvent(event, timeline)
     }
 
     /**
@@ -1288,6 +1293,43 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun logDbUsageInfo() {
         cryptoStore.logDbUsageInfo()
+    }
+
+    override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            Timber.d("## CRYPTO | prepareToEncrypt() : Check room members up to date")
+            // Ensure to load all room members
+            try {
+                loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+            } catch (failure: Throwable) {
+                Timber.e("## CRYPTO | prepareToEncrypt() : Failed to load room members")
+                callback.onFailure(failure)
+                return@launch
+            }
+
+            val userIds = getRoomUserIds(roomId)
+            val alg = roomEncryptorsStore.get(roomId)
+                    ?: getEncryptionAlgorithm(roomId)
+                            ?.let { setEncryptionInRoom(roomId, it, false, userIds) }
+                            ?.let { roomEncryptorsStore.get(roomId) }
+
+            if (alg == null) {
+                val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                Timber.e("## CRYPTO | prepareToEncrypt() : $reason")
+                callback.onFailure(IllegalArgumentException("Missing algorithm"))
+                return@launch
+            }
+
+            runCatching {
+                (alg as? IMXGroupEncryption)?.preshareKey(userIds)
+            }.fold(
+                    { callback.onSuccess(Unit) },
+                    {
+                        Timber.e("## CRYPTO | prepareToEncrypt() failed.")
+                        callback.onFailure(it)
+                    }
+            )
+        }
     }
 
     /* ==========================================================================================

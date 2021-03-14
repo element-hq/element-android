@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
@@ -31,7 +30,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.ReadReceiptsSummaryMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
@@ -89,13 +87,7 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
     }
 
     override fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>> {
-        val liveData = monarchy.findAllMappedWithChanges(
-                { TimelineEventEntity.where(it, roomId = roomId, eventId = eventId) },
-                { timelineEventMapper.map(it) }
-        )
-        return Transformations.map(liveData) { events ->
-            events.firstOrNull().toOptional()
-        }
+        return LiveTimelineEvent(timelineInput, monarchy, taskExecutor.executorScope, timelineEventMapper, roomId, eventId)
     }
 
     override fun getAttachmentMessages(): List<TimelineEvent> {

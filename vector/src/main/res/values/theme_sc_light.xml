@@ -7,9 +7,6 @@
         <item name="colorPrimary">@color/accent_sc</item>
         <item name="colorSecondary">@color/accent_sc</item>
 
-        <!-- "(edited)" -->
-        <item name="vctr_list_header_secondary_text_color">#FFABAEB2</item>
-
         <!-- Keep color accent for legacy widget-->
         <item name="colorAccent">@color/accent_sc</item>
 

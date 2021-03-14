@@ -26,6 +26,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageInformatio
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem_
+import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
@@ -35,7 +36,6 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationCancelContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.internal.session.room.VerificationState
 import javax.inject.Inject
 
 /**
@@ -75,9 +75,9 @@ class VerificationItemFactory @Inject constructor(
         // If it's not a request ignore this event
         // if (refEvent.root.getClearContent().toModel<MessageVerificationRequestContent>() == null) return ignoredConclusion(event, highlight, callback)
 
-        val referenceInformationData = messageInformationDataFactory.create(refEvent, null)
+        val referenceInformationData = messageInformationDataFactory.create(refEvent, null, null)
 
-        val informationData = messageInformationDataFactory.create(event, null)
+        val informationData = messageInformationDataFactory.create(event, null, null)
         val attributes = messageItemAttributesFactory.create(null, informationData, callback)
 
         when (event.root.getClearType()) {

@@ -1,10 +1,198 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <string name="summary_user_sent_image">%1$s একটি ফটো পাঠিয়েছে।</string>
+    <string name="summary_user_sent_sticker">%1$s একটি স্তিকার পাঠিয়েছে।</string>
+    <string name="notice_room_invite_no_invitee">%s এর আমন্ত্রণ</string>
+    <string name="notice_room_invite">%1$s %2$s কে আমন্ত্রণ করেছে</string>
+    <string name="notice_room_invite_you">%1$s আপনাকে আমন্ত্রণ করেছে</string>
+    <string name="notice_room_join">%1$s রুম এ যোগ দিয়েছে</string>
+    <string name="notice_room_leave">%1$s রুম ছেড়ে দিয়েছে</string>
+    <string name="notice_room_reject">%1$s আমন্ত্রণ টি বাতিল করেছে</string>
+    <string name="notice_room_kick">%1$s %2$s কে কিক করেছে</string>
+    <string name="notice_room_unban">%1$s %2$s কে নিষিদ্ধ তালিকা থেকে মুক্ত করেছে</string>
+    <string name="notice_room_ban">%1$s %2$s কে নিষিদ্ধ করেছে</string>
+    <string name="notice_room_withdraw">%1$s %2$s এর আমন্ত্রণ ফেরত নিয়েছে</string>
+    <string name="notice_avatar_url_changed">%1$s নিজের অবতার পরিবর্তন করেছে</string>
+    <string name="notice_display_name_set">%1$s নিজের প্রদর্শন নাম %2$s রেখেছে</string>
+    <string name="notice_display_name_changed_from">%1$s নিজের প্রদর্শন নাম %2$s থেকে %3$s তে পরিবর্তন করেছে</string>
+    <string name="notice_display_name_removed">%1$s নিজের প্রদর্শন নাম মুছে দিয়েছে (%2$s)</string>
+    <string name="notice_room_topic_changed">%1$s বিষয় টি এতে পরিবর্তন করেছে: %2$s</string>
+    <string name="notice_room_name_changed">%1$s রুম এর নাম এতে পরিবর্তন করেছে: %2$s</string>
+    <string name="notice_placed_video_call">%s একটি ভিডিও কল স্থাপন করেছিল।</string>
+    <string name="notice_placed_voice_call">%s একটি ভয়েস কল দিয়েছে।</string>
+    <string name="summary_message">%1$s: %2$s</string>
+    <string name="summary_you_sent_image">আপনি একটি ছবি প্রেরণ করেছেন।</string>
+    <string name="summary_you_sent_sticker">আপনি একটি স্তিকার পাঠিয়েছেন।</string>
+    <string name="notice_room_invite_no_invitee_by_you">আপনার আমন্ত্রণ</string>
+    <string name="notice_room_created">%1$s কক্ষটি তৈরি করেছেন</string>
+    <string name="notice_room_created_by_you">আপনি কক্ষটি তৈরি করেছেন</string>
+    <string name="notice_room_invite_by_you">আপনি %1$s কে আমন্ত্রিত করেছেন</string>
+    <string name="notice_room_join_by_you">আপনি কক্ষে যোগ দিয়েছেন</string>
+    <string name="notice_room_leave_by_you">আপনি কক্ষ ছেড়ে দিয়েছেন</string>
+    <string name="notice_room_reject_by_you">আপনি আমন্ত্রণটি বাতিল করেছেন</string>
+    <string name="notice_room_kick_by_you">আপনি %1$s কে কীক করেছেন</string>
+    <string name="notice_room_unban_by_you">আপনি %1$s কে নিষিদ্ধ মুক্ত করেছেন</string>
+    <string name="notice_room_ban_by_you">আপনি %1$s কে নিষিদ্ধ করেছেন</string>
+    <string name="notice_room_withdraw_by_you">আপনি %1$s এর আমন্ত্রণ প্রত্যাহার করেছেন</string>
+    <string name="notice_avatar_url_changed_by_you">আপনি আপনার অবতারটি পরিবর্তন করেছেন</string>
+    <string name="notice_display_name_set_by_you">আপনি আপনার প্রদর্শনের নামটি %1$s তে সেট করেছেন</string>
+    <string name="notice_display_name_changed_from_by_you">আপনি আপনার প্রদর্শনের নামটি %1$s থেকে %2$s এ পরিবর্তন করেছেন</string>
+    <string name="notice_display_name_removed_by_you">আপনি আপনার প্রদর্শনের নামটি সরিয়ে দিয়েছেন (যেটা ছিল %1$s)</string>
+    <string name="notice_room_topic_changed_by_you">আপনি বিষয়টিকে এতে পরিবর্তন করেছেন: %1$s</string>
+    <string name="notice_room_avatar_changed">%1$s কক্ষের অবতারটি পরিবর্তন করেছে</string>
+    <string name="notice_room_avatar_changed_by_you">আপনি কক্ষের অবতারটি পরিবর্তন করেছেন</string>
+    <string name="notice_room_name_changed_by_you">আপনি কক্ষের নাম এতে পরিবর্তন করেছেন:%1$s</string>
+    <string name="notice_placed_video_call_by_you">আপনি একটি ভিডিও কল করেছেন।</string>
+    <string name="notice_placed_voice_call_by_you">আপনি একটি ভয়েস কল দিয়েছেন।</string>
+    <string name="notice_call_candidates">কল সেটআপ করার জন্য %s ডেটা প্রেরণ করেছে।</string>
+    <string name="notice_call_candidates_by_you">আপনি কল সেটআপ করার জন্য ডেটা প্রেরণ করেছেন।</string>
+    <string name="notice_answered_call">%s কলটির উত্তর দিয়েছে।</string>
+    <string name="notice_answered_call_by_you">আপনি কলটি উত্তর দিয়েছেন।</string>
+    <string name="notice_ended_call">%s কলটি শেষ করেছেন।</string>
+    <string name="notice_ended_call_by_you">আপনি কলটি শেষ করেছেন।</string>
+    <string name="notice_made_future_room_visibility">%1$s ভবিষ্যতের ঘরের ইতিহাস %2$s এর কাছে দৃশ্যমান করে তুলেছে</string>
+    <string name="notice_made_future_room_visibility_by_you">আপনি ভবিষ্যতের কক্ষ ইতিহাস %1$s এর কাছে দৃশ্যমান করেছেন</string>
+    <string name="notice_room_visibility_invited">কক্ষের সমস্ত সদস্য, যখন থেকে তারা আমন্ত্রিত।</string>
+    <string name="notice_room_visibility_joined">কক্ষের সমস্ত সদস্য, যখন থেকে তারা যোগদান করেছিল।</string>
+    <string name="notice_room_visibility_shared">সমস্ত কক্ষের সদস্য।</string>
+    <string name="notice_room_visibility_world_readable">যে কেউ।</string>
+    <string name="notice_room_visibility_unknown">অজানা (%s)।</string>
+    <string name="notice_end_to_end">%1$s এন্ড-টু-এন্ড এনক্রিপশন চালু করেছে (%2$s)</string>
+    <string name="notice_end_to_end_by_you">আপনি শেষ-থেকে-শেষ এনক্রিপশন চালু করেছেন (%1$s)</string>
+    <string name="notice_room_update">%s এই কক্ষটিকে আপগ্রেড করেছে।</string>
+    <string name="notice_room_update_by_you">আপনি এই কক্ষটি আপগ্রেড করেছেন।</string>
+    <string name="notice_requested_voip_conference">%1$s একটি ভিওআইপি সম্মেলনের জন্য অনুরোধ করেছে</string>
+    <string name="notice_requested_voip_conference_by_you">আপনি একটি ভিওআইপি সম্মেলনের অনুরোধ করেছেন</string>
+    <string name="notice_voip_started">ভিওআইপি সম্মেলন শুরু হয়েছে</string>
+    <string name="notice_voip_finished">ভিওআইপি সম্মেলন শেষ হয়েছে</string>
+    <string name="notice_avatar_changed_too">(আবতারটিও পরিবর্তন করা হয়েছিল)</string>
+    <string name="notice_room_name_removed">%1$s কক্ষের নাম সরিয়েছে</string>
+    <string name="notice_room_name_removed_by_you">আপনি কক্ষের নাম সরিয়েছেন</string>
+    <string name="notice_room_topic_removed">%1$s কক্ষের বিষয় মুছে ফেলেছে</string>
+    <string name="notice_room_topic_removed_by_you">আপনি কক্ষের বিষয়টিকে সরিয়ে দিয়েছেন</string>
+    <string name="notice_room_avatar_removed">%1$s কক্ষের অবতার সরিয়ে নিয়েছে</string>
+    <string name="notice_room_avatar_removed_by_you">আপনি কক্ষের অবতার সরিয়েছেন</string>
+    <string name="notice_event_redacted">বার্তা সরানো হয়েছে</string>
+    <string name="notice_event_redacted_by">%1$s দ্বারা বার্তা সরানো হয়েছে</string>
+    <string name="notice_event_redacted_with_reason">বার্তা সরানো হয়েছে [কারণ:%1$s]</string>
+    <string name="notice_event_redacted_by_with_reason">%1$s দ্বারা বার্তা সরানো হয়েছে [কারণ: %2$s]</string>
+    <string name="notice_profile_change_redacted">%1$s তাদের প্রোফাইল %2$s আপডেট করেছে</string>
+    <string name="notice_profile_change_redacted_by_you">আপনি আপনার প্রোফাইল %1$s আপডেট করেছেন</string>
+    <string name="notice_room_third_party_invite">%1$s %2$s কে ঘরে যোগদানের জন্য একটি আমন্ত্রণ পাঠিয়েছে</string>
+    <string name="notice_room_third_party_invite_by_you">আপনি %1$s কে ঘরে যোগদানের জন্য একটি আমন্ত্রণ প্রেরণ করেছেন</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s %2$s এর কক্ষে যোগদানের আমন্ত্রণ বাতিল করে দিয়েছিল</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">আপনি %1$s এর কক্ষে যোগদানের জন্য আমন্ত্রণটি বাতিল করেছেন</string>
+    <string name="notice_room_third_party_registered_invite">%1$s %2$s এর জন্য আমন্ত্রণটি গ্রহণ করেছে</string>
+    <string name="notice_room_third_party_registered_invite_by_you">আপনি %1$s এর জন্য আমন্ত্রণটি গ্রহণ করেছেন</string>
+    <string name="notice_widget_added">%1$s %2$s উইজেট যুক্ত করেছে</string>
+    <string name="notice_widget_added_by_you">আপনি %1$s উইজেট যুক্ত করেছেন</string>
+    <string name="notice_widget_removed">%1$s %2$s উইজেট সরিয়ে দিয়েছেন</string>
+    <string name="notice_widget_removed_by_you">আপনি %1$s উইজেট সরিয়েছেন</string>
+    <string name="notice_widget_modified">%1$s %2$s উইজেট পরিবর্তন করেছেন</string>
+    <string name="notice_widget_modified_by_you">আপনি %1$s উইজেট পরিবর্তন করেছেন</string>
+    <string name="power_level_admin">অ্যাডমিন</string>
+    <string name="power_level_moderator">নিয়ামক</string>
+    <string name="power_level_default">ডিফল্ট</string>
+    <string name="power_level_custom">কাস্টম (%1$d)</string>
+    <string name="power_level_custom_no_value">কাস্টম</string>
+    <string name="notice_power_level_changed_by_you">আপনি %1$s এর পাওয়ার স্তর পরিবর্তন করেছেন।</string>
+    <string name="notice_power_level_changed">%1$s %2$s এর পাওয়ার স্তর পরিবর্তন করেছে।</string>
+    <string name="notice_power_level_diff">%1$s %2$s থেকে %3$s পর্যন্ত</string>
+    <string name="notice_crypto_unable_to_decrypt">** ডিক্রিপ্ট করতে অক্ষম: %s **</string>
+    <string name="notice_crypto_error_unkwown_inbound_session_id">প্রেরকের ডিভাইস আমাদের এই বার্তার জন্য কীগুলি প্রেরণ করেনি।</string>
+    <string name="could_not_redact">পুনরায় প্রতিক্রিয়া করতে পারেনি</string>
+    <string name="unable_to_send_message">বার্তা পাঠাতে অক্ষম</string>
+    <string name="message_failed_to_upload">চিত্র আপলোড করতে ব্যর্থ</string>
+    <string name="network_error">নেটওয়ার্ক ত্রুটি</string>
+    <string name="matrix_error">ম্যাট্রিক্স ত্রুটি</string>
+    <string name="room_error_join_failed_empty_room">খালি কক্ষে পুনরায় যোগদান করা বর্তমানে সম্ভব নয়।</string>
+    <string name="medium_email">ইমেল ঠিকানা</string>
+    <string name="medium_phone_number">ফোন নম্বর</string>
+    <string name="room_displayname_invite_from">%s থেকে আমন্ত্রণ করুন</string>
+    <string name="room_displayname_room_invite">কক্ষ আমন্ত্রণ</string>
+    <string name="room_displayname_two_members">%1$s এবং %2$s</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s এবং অন্য ১ জন</item>
+        <item quantity="other">%1$s এবং অন্যান্য %2$d জন</item>
+    </plurals>
+    <string name="room_displayname_empty_room">খালি কক্ষ</string>
+    <string name="initial_sync_start_importing_account">প্রাথমিক সিঙ্ক:
+\nঅ্যাকাউন্ট আমদানি করা হচ্ছে…</string>
+    <string name="initial_sync_start_importing_account_crypto">প্রাথমিক সিঙ্ক:
+\nক্রিপ্টো আমদানি হচ্ছে</string>
+    <string name="initial_sync_start_importing_account_rooms">প্রাথমিক সিঙ্ক:
+\nকক্ষগুলি আমদানি করা হচ্ছে</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">প্রাথমিক সিঙ্ক:
+\nযোগ করা কক্ষগুলিতে আমদানি করা হিচ্ছে</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">প্রাথমিক সিঙ্ক:
+\nআমন্ত্রিত করা কক্ষগুলিতে আমদানি করা হিচ্ছে</string>
+    <string name="initial_sync_start_importing_account_left_rooms">প্রাথমিক সিঙ্ক:
+\nছেড়ে দেওয়া কক্ষগুলিতে আমদানি করা হিচ্ছে</string>
+    <string name="initial_sync_start_importing_account_groups">প্রাথমিক সিঙ্ক:
+\nসম্প্রদায়গুলি আমদানি করা হচ্ছে</string>
+    <string name="initial_sync_start_importing_account_data">প্রাথমিক সিঙ্ক:
+\nঅ্যাকাউন্ট ডেটা আমদানি করা হচ্ছে</string>
+    <string name="event_status_sending_message">বার্তা প্রেরণ করা হচ্ছে …</string>
+    <string name="clear_timeline_send_queue">প্রেরণ সারি পরিষ্কার করুন</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s এর আমন্ত্রণ। কারণ: %2$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">আপনার আমন্ত্রণ। কারণ: %1$s</string>
+    <string name="notice_room_invite_with_reason">%1$s আমন্ত্রিত করেছেন %2$s কে। কারণ: %3$s</string>
+    <string name="notice_room_invite_with_reason_by_you">আপনি %1$s কে আমন্ত্রিত করেছেন। কারণ: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s আপনাকে আমন্ত্রণ করেছে। কারণ: %2$s</string>
+    <string name="notice_room_join_with_reason">%1$s রুম এ যোগ দিয়েছে। কারণ: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">আপনি কক্ষে যোগ দিয়েছেন। কারণ: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s রুম ছেড়ে দিয়েছে। কারণ: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">আপনি কক্ষ ছেড়ে দিয়েছেন। কারণ: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s আমন্ত্রণ বাতিল করেছেন। কারণ: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">আপনি আমন্ত্রণটি বাতিল করেছেন। কারণ: %1$s</string>
+    <string name="notice_room_kick_with_reason">%1$s %2$s কে কিক করেছে। কারণ: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">আপনি %1$s কে কীক করেছেন। কারণ: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s %2$s কে নিষিদ্ধ তালিকা থেকে মুক্ত করেছে। কারণ: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">আপনি %1$s কে নিষিদ্ধ মুক্ত করেছেন। কারণ: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s %2$s কে নিষিদ্ধ করেছে। কারণ: %3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">আপনি %1$s কে নিষিদ্ধ করেছেন। কারণ: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s রুমের সাথে যোগ দিতে %2$s কে একটি আমন্ত্রণ পাঠিয়েছেন। কারণ: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">আপনি %1$s কে ঘরে যোগদানের জন্য একটি আমন্ত্রণ প্রেরণ করেছেন। কারণ: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s %2$s এর কক্ষে যোগদানের আমন্ত্রণ বাতিল করে দিয়েছিল। কারণ: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">আপনি %1$s এর কক্ষে যোগদানের জন্য আমন্ত্রণটি বাতিল করেছেন। কারণ: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s %2$s এর জন্য আমন্ত্রণ গ্রহণ করেছেন। কারণ: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">আপনি %1$s এর জন্য আমন্ত্রণটি গ্রহণ করেছেন। কারণ: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s %2$s এর আমন্ত্রণ ফেরত নিয়েছে। কারণ: %3$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">আপনি %1$s এর আমন্ত্রণ প্রত্যাহার করেছেন। কারণ: %2$s</string>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s এই ঘরের ঠিকানা হিসাবে %2$s যুক্ত করেছে।</item>
+        <item quantity="other">%1$s এই ঘরের ঠিকানাগুলি হিসাবে %2$s যুক্ত করেছে।</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">আপনি এই কক্ষের জন্য ঠিকানা হিসাবে %1$s যুক্ত করেছেন।</item>
+        <item quantity="other">আপনি এই কক্ষের ঠিকানা হিসাবে %1$s যুক্ত করেছেন।</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s এই ঘরের ঠিকানা হিসাবে %2$s সরানো হয়েছে।</item>
+        <item quantity="other">%1$s %3$s কে এই ঘরের ঠিকানা হিসাবে সরানো হয়েছে।</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">আপনি এই ঘরের ঠিকানা হিসাবে %1$s সরিয়েছেন।</item>
+        <item quantity="other">আপনি এই ঘরের ঠিকানা হিসাবে %1$s গুলি সরিয়েছেন।</item>
+    </plurals>
+    <string name="notice_room_aliases_added_and_removed">%1$s %2$s যোগ করেছে এবং %3$s গুলি এই ঘরের ঠিকানা হিসাবে সরানো হয়েছে।</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">আপনি %1$s যোগ করেছেন এবং %2$s কে এই ঘরের ঠিকানা হিসাবে সরিয়ে দিয়েছেন।</string>
+    <string name="notice_room_canonical_alias_set">%1$s এই ঘরের মূল ঠিকানাটি %2$s তে সেট করে।</string>
+    <string name="notice_room_canonical_alias_set_by_you">আপনি এই ঘরের মূল ঠিকানাটি %1$s তে সেট করেছেন।</string>
+    <string name="notice_room_canonical_alias_unset">%1$s এই ঘরের মূল ঠিকানা সরিয়ে নিয়েছে।</string>
+    <string name="notice_room_canonical_alias_unset_by_you">আপনি এই ঘরের মূল ঠিকানা সরিয়েছেন।</string>
+    <string name="notice_room_guest_access_can_join">%1$s অতিথিদের ঘরে যোগদানের অনুমতি দিয়েছে।</string>
+    <string name="notice_room_guest_access_can_join_by_you">আপনি অতিথিদের ঘরে যোগদানের অনুমতি দিয়েছেন।</string>
+    <string name="notice_room_guest_access_forbidden">%1$s অতিথিদের ঘরে যোগদান করতে বাধা দিয়েছে।</string>
+    <string name="notice_room_guest_access_forbidden_by_you">আপনি অতিথিদের ঘরে যোগদান করতে বাধা দিয়েছেন।</string>
+    <string name="notice_end_to_end_ok">%1$s এন্ড-টু-এন্ড এনক্রিপশন চালু করেছে।</string>
+    <string name="notice_end_to_end_ok_by_you">আপনি শেষ থেকে শেষ এনক্রিপশন চালু করেছেন।</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s এন্ড-টু-এন্ড এনক্রিপশন চালু করেছে (অজানা অ্যালগরিদম %2$s)।</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">আপনি শেষ-থেকে-শেষ এনক্রিপশন চালু করেছেন (অজানা অ্যালগরিদম %1$s )।</string>
 
     <string name="light_theme">হালকা থিম</string>
     <string name="dark_theme">গাঢ় থিম</string>
-    <string name="black_them">কালো থিম</string>
-    <string name="status_theme">Status.im থিম</string>
+    <string name="black_theme">কালো থিম</string>
 
     <string name="notification_sync_in_progress">সিংক্রোনাইজ হচ্ছে…</string>
     <string name="notification_listening_for_events">ইভেন্টের জন্য শোনা হচ্ছে</string>
@@ -121,7 +309,7 @@
     <string name="user_directory_header">ব্যবহারকারী ডিরেক্টরি</string>
     <string name="matrix_only_filter">শুধুমাত্র ম্যাট্রিক্সের যোগাযোগগুলি</string>
     <string name="no_conversation_placeholder">"কথাবার্তা নেই "</string>
-    <string name="no_contact_access_placeholder">আপনি রায়টকে আপনার স্থানীয় পরিচিতি অ্যাক্সেস করার অনুমতি দেয় নি</string>
+    <string name="template_no_contact_access_placeholder">আপনি রায়টকে আপনার স্থানীয় পরিচিতি অ্যাক্সেস করার অনুমতি দেয় নি</string>
     <string name="no_result_placeholder">কোন ফলাফল নেই</string>
 
     <string name="rooms_header">রুমগুলি</string>
@@ -261,7 +449,7 @@
     <string name="e2e_re_request_encryption_key_sent">চাবির অনুরোধ পাঠানো।</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">অনুরোধ পাঠানো</string>
-    <string name="e2e_re_request_encryption_key_dialog_content">দয়া করে শুরু করুন Element অন্য সেশান যেটা পারে বর্ণনা করতে বার্তা কে সুতরাং এটা পারে পাঠাতে চাবিগুলো কে যন্ত্র তে.</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">দয়া করে শুরু করুন ${app_name} অন্য সেশান যেটা পারে বর্ণনা করতে বার্তা কে সুতরাং এটা পারে পাঠাতে চাবিগুলো কে যন্ত্র তে.</string>
 
     <string name="read_receipts_list">পড়ো প্রাপ্তিগুলি সারি</string>
 
@@ -290,7 +478,7 @@
     <string name="room_info_room_topic">ঘরএর বিষয়</string>
 
     <string name="settings_call_category">ডাকা</string>
-    <string name="settings_call_ringtone_use_app_ringtone">ব্যবহার করছেন অনুপস্থিত Element রিংটোন আগামী ডাক এর জন্য</string>
+    <string name="template_settings_call_ringtone_use_app_ringtone">ব্যবহার করছেন অনুপস্থিত ${app_name} রিংটোন আগামী ডাক এর জন্য</string>
     <string name="settings_call_ringtone_title">আসা কল এর রিংটোন</string>
     <string name="settings_call_ringtone_dialog_title">নির্বাচন করুন রিংটোন কল আর জন্য:</string>
 
@@ -314,22 +502,22 @@
     <string name="media_picker_cannot_record_video">পারছেন না দৃশ্য নথি করতে</string>
 
     <string name="permissions_rationale_popup_title">তথা</string>
-    <string name="permissions_rationale_msg_storage">Element এর প্রয়াজন অনুমতি নিতে আপনার ছবি এবং দৃশ্য রেকর্ড কে গ্রন্থাগার থেকে পাঠিয়ে জমার জায়গায় সংযুক্ত করতে।
+    <string name="template_permissions_rationale_msg_storage">${app_name} এর প্রয়াজন অনুমতি নিতে আপনার ছবি এবং দৃশ্য রেকর্ড কে গ্রন্থাগার থেকে পাঠিয়ে জমার জায়গায় সংযুক্ত করতে।
 \nদেয়া করে অনুমতি দিন প্রবেশ করতে পরের pop-up কে যেটা সক্ষম আপনার নথি কে আপনার ফোন থেকে পাঠাতে।</string>
-    <string name="permissions_rationale_msg_camera">Element এর প্রয়োজন অনুমতি নিয়ে প্রবেশে করতে আপনার ছবি তোলার যন্ত্র থেকে ছবি নিতে এবং দৃষ্টি রেকর্ড ডাকতে।</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name} এর প্রয়োজন অনুমতি নিয়ে প্রবেশে করতে আপনার ছবি তোলার যন্ত্র থেকে ছবি নিতে এবং দৃষ্টি রেকর্ড ডাকতে।</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nদয়াকরে অনুমতি দিন প্রবেশ করাতে পরের পপ -আপ কে যেটা ডাকতে সক্ষম।"</string>
-    <string name="permissions_rationale_msg_record_audio">Element এর প্রয়োজন অনুমতি নিয়ে প্রবেশ করতে আপনার মাইক্রোফোন আর মাধ্যমে শোনার কালএর সঞ্চালনা করতে।</string>
+    <string name="template_permissions_rationale_msg_record_audio">${app_name} এর প্রয়োজন অনুমতি নিয়ে প্রবেশ করতে আপনার মাইক্রোফোন আর মাধ্যমে শোনার কালএর সঞ্চালনা করতে।</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nদেয়া করে অনুমতিদিন প্রবেশ করতে পরের pop-up এ যেটা কল করতে সক্ষম।"</string>
     <string name="notification_sync_init">সেবা আরম্ভ করা হচ্ছে</string>
-    <string name="permissions_rationale_msg_camera_and_audio">ভিডিও কল সম্পাদনের জন্য Element আপনার ক্যামেরা এবং আপনার মাইক্রোফোন অ্যাক্সেস করার অনুমতির প্রয়োজন।
+    <string name="template_permissions_rationale_msg_camera_and_audio">ভিডিও কল সম্পাদনের জন্য ${app_name} আপনার ক্যামেরা এবং আপনার মাইক্রোফোন অ্যাক্সেস করার অনুমতির প্রয়োজন।
 \n
 \nকল করতে সক্ষম হতে পরবর্তী পপ আপ অ্যাক্সেস অনুমতি দিন।</string>
-    <string name="permissions_rationale_msg_contacts">রায়ট অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের তাদের ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে আপনার ঠিকানা বইটি চেক করতে পারে। আপনি যদি এই উদ্দেশ্যে আপনার ঠিকানা বইটি ভাগ করে নিতে সম্মত হন তবে দয়া করে পরবর্তী পপ-আপটিতে অ্যাক্সেসের অনুমতি দিন।</string>
-    <string name="permissions_msg_contacts_warning_other_androids">রায়ট অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের তাদের ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে আপনার ঠিকানা বইটি চেক করতে পারে। 
+    <string name="template_permissions_rationale_msg_contacts">রায়ট অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের তাদের ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে আপনার ঠিকানা বইটি চেক করতে পারে। আপনি যদি এই উদ্দেশ্যে আপনার ঠিকানা বইটি ভাগ করে নিতে সম্মত হন তবে দয়া করে পরবর্তী পপ-আপটিতে অ্যাক্সেসের অনুমতি দিন।</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">রায়ট অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের তাদের ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে আপনার ঠিকানা বইটি চেক করতে পারে।
 \n
 \nআপনি এই উদ্দেশ্যে আপনার ঠিকানা বই ভাগ করতে সম্মত হন\?</string>
 
@@ -563,8 +751,8 @@
 
     <string name="settings_troubleshoot_test_device_settings_title">সেশান সেটিংস।</string>
     <string name="settings_troubleshoot_test_device_settings_success">বিজ্ঞপ্তি এই সেশানের জন্য সক্রিয় করা হয়েছে।</string>
-    <string name="settings_troubleshoot_test_device_settings_failed">বিজ্ঞপ্তি এই সেশানের জন্য অনুমতি দেওয়া হয় নি। 
-\nElement এর সেটিংস যাচাই করুন।</string>
+    <string name="template_settings_troubleshoot_test_device_settings_failed">বিজ্ঞপ্তি এই সেশানের জন্য অনুমতি দেওয়া হয় নি।
+\n${app_name} এর সেটিংস যাচাই করুন।</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">সক্ষম</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">কাস্টম সেটিংস।</string>
@@ -575,7 +763,7 @@
 
     <string name="settings_troubleshoot_test_play_services_title">Play Services পরীক্ষা</string>
     <string name="settings_troubleshoot_test_play_services_success">গুগল প্লে সার্ভিসেস APK পাওয়া গেছে এবং আপ টু ডেট রয়েছে।</string>
-    <string name="settings_troubleshoot_test_play_services_failed">Element পুশ বার্তার প্রদানের জন্য Google Play পরিষেবাদি ব্যবহার করে কিন্তু এটি সঠিকভাবে কনফিগার করা বলে মনে হচ্ছে না:
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} পুশ বার্তার প্রদানের জন্য Google Play পরিষেবাদি ব্যবহার করে কিন্তু এটি সঠিকভাবে কনফিগার করা বলে মনে হচ্ছে না:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Play Services ঠিক করুন</string>
 
@@ -584,12 +772,12 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCM টোকেন উদ্ধার করতে ব্যর্থ হয়েছে:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
-\nএই ত্রুটিটি Element এর নিয়ন্ত্রণের বাইরে এবং Google এর মতে, এই ত্রুটিটি ইঙ্গিত করে যে ডিভাইসটিতে FCM এর সাথে নিবন্ধিত অনেকগুলি অ্যাপ্লিকেশন রয়েছে। ত্রুটিগুলি কেবলমাত্র অ্যাপ্লিকেশনের চরম সংখ্যাগুলিতে ঘটে থাকে, তাই এটি গড় ব্যবহারকারীকে প্রভাবিত করবে না।</string>
-    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s] 
-\nএই ত্রুটি Element এর নিয়ন্ত্রণের বাইরে। এটা বিভিন্ন কারণে ঘটতে পারে। আপনি পরে পুনরায় চেষ্টা করলে হয়তো এটি কাজ করবে, আপনি এটিও পরীক্ষা করতে পারেন যে Google Play পরিষেবাটি সিস্টেম সেটিংসে ডেটা ব্যবহারের ক্ষেত্রে সীমাবদ্ধ নয়, অথবা আপনার ডিভাইসের ঘড়ি সঠিক, বা এটি কাস্টম রমতে ঘটতে পারে।</string>
-    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nএই ত্রুটি Element এর নিয়ন্ত্রণের বাইরে। ফোনে কোন গুগল একাউন্ট নেই। অ্যাকাউন্ট ম্যানেজার খুলুন এবং একটি গুগল একাউন্ট যোগ করুন।</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+\nএই ত্রুটিটি ${app_name} এর নিয়ন্ত্রণের বাইরে এবং Google এর মতে, এই ত্রুটিটি ইঙ্গিত করে যে ডিভাইসটিতে FCM এর সাথে নিবন্ধিত অনেকগুলি অ্যাপ্লিকেশন রয়েছে। ত্রুটিগুলি কেবলমাত্র অ্যাপ্লিকেশনের চরম সংখ্যাগুলিতে ঘটে থাকে, তাই এটি গড় ব্যবহারকারীকে প্রভাবিত করবে না।</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+\nএই ত্রুটি ${app_name} এর নিয়ন্ত্রণের বাইরে। এটা বিভিন্ন কারণে ঘটতে পারে। আপনি পরে পুনরায় চেষ্টা করলে হয়তো এটি কাজ করবে, আপনি এটিও পরীক্ষা করতে পারেন যে Google Play পরিষেবাটি সিস্টেম সেটিংসে ডেটা ব্যবহারের ক্ষেত্রে সীমাবদ্ধ নয়, অথবা আপনার ডিভাইসের ঘড়ি সঠিক, বা এটি কাস্টম রমতে ঘটতে পারে।</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+\nএই ত্রুটি ${app_name} এর নিয়ন্ত্রণের বাইরে। ফোনে কোন গুগল একাউন্ট নেই। অ্যাকাউন্ট ম্যানেজার খুলুন এবং একটি গুগল একাউন্ট যোগ করুন।</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">একাউন্ট যোগ করুন</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">টোকেন নিবন্ধন</string>
@@ -609,19 +797,19 @@
 
     <string name="settings_troubleshoot_test_service_boot_title">বুট করার সময় শুরু</string>
     <string name="settings_troubleshoot_test_service_boot_success">ডিভাইসটি পুনরায় চালু হলে পরিষেবা শুরু হবে।</string>
-    <string name="settings_troubleshoot_test_service_boot_failed">ডিভাইসটি পুনরায় চালু হওয়ার সময় পরিষেবাটি শুরু হবে না, আপনি একবার Element টি খোলা না হওয়া পর্যন্ত বিজ্ঞপ্তি পাবেন না।</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">ডিভাইসটি পুনরায় চালু হওয়ার সময় পরিষেবাটি শুরু হবে না, আপনি একবার ${app_name} টি খোলা না হওয়া পর্যন্ত বিজ্ঞপ্তি পাবেন না।</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">বুট থেকে শুরু করা সক্রিয় করুন</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">ব্যাকগ্রাউন্ড এর সীমাবদ্ধতা চেক করুন</string>
-    <string name="settings_troubleshoot_test_bg_restricted_success">ব্যাকগ্রউন্ডের সীমাবদ্ধতা Element এর জন্য নিষ্ক্রিয় করা হয়েছে। এই পরীক্ষা মোবাইল ডেটা ব্যবহার করে চালানো উচিত (ওয়াইফাই না)।
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">ব্যাকগ্রউন্ডের সীমাবদ্ধতা ${app_name} এর জন্য নিষ্ক্রিয় করা হয়েছে। এই পরীক্ষা মোবাইল ডেটা ব্যবহার করে চালানো উচিত (ওয়াইফাই না)।
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_bg_restricted_failed">ব্যাকগ্রউন্ডের সীমাবদ্ধতা রিমোট এর জন্য সক্রিয় করা হয়েছে।
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">ব্যাকগ্রউন্ডের সীমাবদ্ধতা রিমোট এর জন্য সক্রিয় করা হয়েছে।
 \nঅ্যাপ্লিকেশন যেটি করার চেষ্টা করে সেটি ব্যাকগ্রাউন্ডে থাকা অবস্থায় আক্রমনাত্মকভাবে সীমিত হবে এবং এটি বিজ্ঞপ্তিগুলিতে প্রভাবিত হতে পারে।
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">সীমাবদ্ধগুলি নিষ্ক্রিয়</string>
 
     <string name="settings_troubleshoot_test_battery_title">ব্যাটারি অপ্টিমাইজেশান</string>
-    <string name="settings_troubleshoot_test_battery_success">Element ব্যাটারি অপ্টিমাইজেশান দ্বারা প্রভাবিত হয় না।</string>
+    <string name="template_settings_troubleshoot_test_battery_success">${app_name} ব্যাটারি অপ্টিমাইজেশান দ্বারা প্রভাবিত হয় না।</string>
     <string name="settings_troubleshoot_test_battery_failed">যদি কোনও ব্যবহারকারী কোনও ডিভাইসটিকে নির্দিষ্ট সময়ের জন্য আনপ্লাগ এবং স্থিতিশীল রাখে তবে স্ক্রীন বন্ধের সাথে ডিভাইসটি ডোজ মোডে প্রবেশ করে। এটি অ্যাপ্লিকেশানগুলিকে নেটওয়ার্ক অ্যাক্সেস করতে বাধা দেয় এবং তাদের কাজ, সিঙ্ক এবং মান অ্যালার্মগুলি স্থগিত করে।</string>
     <string name="settings_troubleshoot_test_battery_quickfix">"অপ্টিমাইজেশান অবহেলা "</string>
 
@@ -749,19 +937,19 @@
     <string name="settings_deactivate_my_account">আমার একাউন্ট নিষ্ক্রিয় করুন</string>
 
     <string name="startup_notification_privacy_title">বিজ্ঞপ্তি\'র গোপনীয়তা</string>
-    <string name="startup_notification_privacy_message">সুরক্ষিতভাবে এবং ব্যক্তিগতভাবে আপনার বিজ্ঞপ্তি পরিচালনা করতে Element পটভূমিতে চালাতে পারে। এই ব্যাটারি ব্যবহার প্রভাবিত হতে পারে।</string>
+    <string name="template_startup_notification_privacy_message">সুরক্ষিতভাবে এবং ব্যক্তিগতভাবে আপনার বিজ্ঞপ্তি পরিচালনা করতে ${app_name} পটভূমিতে চালাতে পারে। এই ব্যাটারি ব্যবহার প্রভাবিত হতে পারে।</string>
     <string name="startup_notification_privacy_button_grant">অনুমতি প্রদান করুন</string>
     <string name="startup_notification_privacy_button_other">অন্য বিকল্প চয়ন করুন</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">পটভূমি সংযোগ</string>
-    <string name="startup_notification_fdroid_battery_optim_message">নির্ভরযোগ্য বিজ্ঞপ্তি পেতে Element কম প্রভাব ব্যাকগ্রাউন্ড সংযোগ রাখা প্রয়োজন।
+    <string name="template_startup_notification_fdroid_battery_optim_message">নির্ভরযোগ্য বিজ্ঞপ্তি পেতে ${app_name} কম প্রভাব ব্যাকগ্রাউন্ড সংযোগ রাখা প্রয়োজন।
 \nপরবর্তী স্ক্রিনে আপনাকে দাঙ্গাটি সর্বদা ব্যাকগ্রাউন্ডে চালানোর অনুমতি দেওয়া হবে, দয়া করে স্বীকার করুন।</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">অনুমতি প্রদান করুন</string>
 
     <string name="settings_analytics">বৈশ্লেষিক ন্যায়</string>
     <string name="settings_opt_in_of_analytics">বিশ্লেষণ তথ্য পাঠান</string>
-    <string name="settings_opt_in_of_analytics_summary">Element আমাদের অ্যাপ্লিকেশন উন্নত করার অনুমতি দেওয়ার জন্য বেনামী বিশ্লেষণ সংগ্রহ করে।</string>
-    <string name="settings_opt_in_of_analytics_prompt">আমাদের Element উন্নত করতে সাহায্য করার জন্য বিশ্লেষণ সক্রিয় করুন।</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name} আমাদের অ্যাপ্লিকেশন উন্নত করার অনুমতি দেওয়ার জন্য বেনামী বিশ্লেষণ সংগ্রহ করে।</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">আমাদের ${app_name} উন্নত করতে সাহায্য করার জন্য বিশ্লেষণ সক্রিয় করুন।</string>
     <string name="settings_opt_in_of_analytics_ok">হ্যাঁ, আমি সাহায্য করতে চাই!</string>
 
     <string name="settings_data_save_mode">ডেটা সংরক্ষণ মোড</string>
@@ -1101,10 +1289,10 @@
 
     <string name="settings_background_fdroid_sync_mode">পটভূমি সিঙ্ক মোড (পরীক্ষামূলক)</string>
     <string name="settings_background_fdroid_sync_mode_battery">ব্যাটারির জন্য অনুকূলিত</string>
-    <string name="settings_background_fdroid_sync_mode_battery_description">রায়ট এমনভাবে পটভূমিতে সিঙ্ক হবে যা ডিভাইসের সীমিত সংস্থান (ব্যাটারি) সংরক্ষণ করে।
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">রায়ট এমনভাবে পটভূমিতে সিঙ্ক হবে যা ডিভাইসের সীমিত সংস্থান (ব্যাটারি) সংরক্ষণ করে।
 \nআপনার ডিভাইস রিসোর্স স্থিতির উপর নির্ভর করে সিঙ্কটি অপারেটিং সিস্টেম দ্বারা পিছিয়ে যেতে পারে।</string>
     <string name="settings_background_fdroid_sync_mode_real_time">রিয়েল টাইম জন্য অনুকূলিত</string>
-    <string name="settings_background_fdroid_sync_mode_real_time_description">রায়ট নির্দিষ্ট সময়ে সময়ে পটভূমিতে সিঙ্ক হবে (কনফিগারযোগ্য)।
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">রায়ট নির্দিষ্ট সময়ে সময়ে পটভূমিতে সিঙ্ক হবে (কনফিগারযোগ্য)।
 \nএটি রেডিও এবং ব্যাটারির ব্যবহারকে প্রভাবিত করবে, রায়ট ইভেন্টগুলি শুনছে বলে জানিয়ে একটি স্থায়ী বিজ্ঞপ্তি প্রদর্শিত হবে।</string>
     <string name="settings_background_fdroid_sync_mode_disabled">কোনও পটভূমি সিঙ্ক না</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">অ্যাপটি ব্যাকগ্রাউন্ডে থাকা অবস্থায় আপনাকে আগত বার্তাগুলি সম্পর্কে অবহিত করা হবে না।</string>
@@ -1248,7 +1436,7 @@
     <string name="dialog_title_success">সাফল্য</string>
 
     <string name="bottom_action_notification">বিজ্ঞপ্তিগুলি</string>
-    <string name="call_failed_no_connection">এলিমেন্ট কল ব্যর্থ</string>
+    <string name="template_call_failed_no_connection">এলিমেন্ট কল ব্যর্থ</string>
     <string name="call_failed_no_connection_description">রিয়েল টাইম সংযোগ স্থাপন করতে ব্যর্থ।
 \nকলগুলি নির্ভরযোগ্যতার সাথে কাজ করার জন্য দয়া করে আপনার হোমসার্ভারের প্রশাসককে একটি টার্ন সার্ভার কনফিগার করতে বলুন।</string>
 
@@ -1345,7 +1533,7 @@
     <string name="passphrase_empty_error_message">দয়া করে একটি পাসফ্রেজ লিখুন</string>
     <string name="passphrase_passphrase_too_weak">পাসফ্রেজটি খুব দুর্বল</string>
 
-    <string name="keys_backup_passphrase_not_empty_error_message">আপনি যদি এলিমেন্টটি পুনরুদ্ধার কী তৈরি করতে চান তবে দয়া করে পাসফ্রেজটি মুছুন।</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">আপনি যদি এলিমেন্টটি পুনরুদ্ধার কী তৈরি করতে চান তবে দয়া করে পাসফ্রেজটি মুছুন।</string>
     <string name="keys_backup_no_session_error">কোনও ম্যাট্রিক্স সেশন উপলব্ধ নেই</string>
 
     <string name="keys_backup_setup_step1_title">এনক্রিপ্ট করা বার্তাগুলি কখনই হারাবেন না</string>
