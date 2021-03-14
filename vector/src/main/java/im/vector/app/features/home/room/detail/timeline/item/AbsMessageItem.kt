@@ -183,8 +183,14 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         }
 
         // Render send state indicator
-        holder.sendStateImageView.render(attributes.informationData.sendStateDecoration)
-        holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
+        if (contentInBubble) {
+            // Bubbles have their own decoration in the anonymous read receipt (in the message footer)
+            holder.sendStateImageView.render(SendStateDecoration.NONE)
+            holder.eventSendingIndicator.isVisible = false
+        } else {
+            holder.sendStateImageView.render(attributes.informationData.sendStateDecoration)
+            holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
+        }
     }
 
     override fun unbind(holder: H) {
