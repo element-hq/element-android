@@ -41,6 +41,7 @@ Improvements 🙌:
  - Sending is now queuing by room and not uniquely to the session
  - Improve Snackbar duration (#2929)
  - Improve sending message state (#2937)
+ - Update reactions to Unicode 13.1 (#1481)
 
 Bugfix 🐛:
  - Try to fix crash about UrlPreview (#2640)
