@@ -35,7 +35,8 @@ new_patched_strings_file=.tmp_new_patched_strings
 patch_file_updated=0
 
 # Requires manual intervention for correct grammar
-for strings_de in "$mydir/vector/src/main/res/values-de/strings.xml" "$mydir/matrix-sdk-android/src/main/res/values-de/strings.xml"; do
+#for strings_de in "$mydir/vector/src/main/res/values-de/strings.xml" "$mydir/matrix-sdk-android/src/main/res/values-de/strings.xml"; do
+for strings_de in "$mydir/vector/src/main/res/values-de/strings.xml"; do
     echo "Apply known language fixes to $strings_de..."
     source ./correct_strings_de.sh
     while grep -q "wolpertinger\|schlumpfwesen" "$strings_de"; do
