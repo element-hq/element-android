@@ -31,7 +31,7 @@
         android:ellipsize="end"
         android:fontFamily="sans-serif-bold"
         android:singleLine="true"
-        android:textColor="@color/riotx_accent"
+        android:textColor="?colorAccent"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/bottom_sheet_message_preview_avatar"
