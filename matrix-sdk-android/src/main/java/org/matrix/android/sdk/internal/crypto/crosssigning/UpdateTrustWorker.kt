@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.TrustLevelEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntityFields
+import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
@@ -69,8 +70,10 @@ internal class UpdateTrustWorker(context: Context,
     // It breaks the crypto store contract, but we need to batch things :/
     @CryptoDatabase
     @Inject lateinit var cryptoRealmConfiguration: RealmConfiguration
+
     @SessionDatabase
     @Inject lateinit var sessionRealmConfiguration: RealmConfiguration
+
     @UserId
     @Inject lateinit var myUserId: String
     @Inject lateinit var crossSigningKeysMapper: CrossSigningKeysMapper
@@ -96,8 +99,8 @@ internal class UpdateTrustWorker(context: Context,
             Timber.d("## CrossSigning - Updating trust for users: ${userList.logLimit()}")
 
             Realm.getInstance(cryptoRealmConfiguration).use { cryptoRealm ->
-                Realm.getInstance(sessionRealmConfiguration).use { sessionRealm ->
-                    updateTrust(userList, cryptoRealm, sessionRealm)
+                Realm.getInstance(sessionRealmConfiguration).use {
+                    updateTrust(userList, cryptoRealm)
                 }
             }
         }
@@ -106,14 +109,13 @@ internal class UpdateTrustWorker(context: Context,
         return Result.success()
     }
 
-    private fun updateTrust(userListParam: List<String>,
-                            cRealm: Realm,
-                            sRealm: Realm) {
+    private suspend fun updateTrust(userListParam: List<String>,
+                                    cRealm: Realm) {
         var userList = userListParam
         var myCrossSigningInfo: MXCrossSigningInfo? = null
         // First we check that the users MSK are trusted by mine
         // After that we check the trust chain for each devices of each users
-        cRealm.executeTransaction { cryptoRealm ->
+        awaitTransaction(cryptoRealmConfiguration) { cryptoRealm ->
             // By mapping here to model, this object is not live
             // I should update it if needed
             myCrossSigningInfo = getCrossSigningInfo(cryptoRealm, myUserId)
@@ -203,7 +205,7 @@ internal class UpdateTrustWorker(context: Context,
         // We can now update room shields? in the session DB?
 
         Timber.d("## CrossSigning - Updating shields for impacted rooms...")
-        sRealm.executeTransaction { sessionRealm ->
+        awaitTransaction(sessionRealmConfiguration) { sessionRealm ->
             sessionRealm.where(RoomMemberSummaryEntity::class.java)
                     .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
                     .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
