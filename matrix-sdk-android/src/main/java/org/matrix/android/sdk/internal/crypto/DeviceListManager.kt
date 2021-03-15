@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
@@ -28,7 +29,6 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,8 +39,9 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                                                      private val syncTokenStore: SyncTokenStore,
                                                      private val credentials: Credentials,
                                                      private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
+                                                     private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
                                                      coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                     taskExecutor: TaskExecutor) {
+                                                     private val taskExecutor: TaskExecutor) {
 
     interface UserDevicesUpdateListener {
         fun onUsersDeviceUpdate(userIds: List<String>)
@@ -75,8 +76,10 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
     // HS not ready for retry
     private val notReadyToRetryHS = mutableSetOf<String>()
 
+    private val cryptoCoroutineContext = coroutineDispatchers.crypto
+
     init {
-        taskExecutor.executorScope.launch(coroutineDispatchers.crypto) {
+        taskExecutor.executorScope.launch(cryptoCoroutineContext) {
             var isUpdated = false
             val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
             for ((userId, status) in deviceTrackingStatuses) {
@@ -123,28 +126,37 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
     }
 
+    fun onRoomMembersLoadedFor(roomId: String) {
+        taskExecutor.executorScope.launch(cryptoCoroutineContext) {
+            if (cryptoSessionInfoProvider.isRoomEncrypted(roomId)) {
+                // It's OK to track also device for invited users
+                val userIds = cryptoSessionInfoProvider.getRoomUserIds(roomId, true)
+                startTrackingDeviceList(userIds)
+                refreshOutdatedDeviceLists()
+            }
+        }
+    }
+
     /**
      * Mark the cached device list for the given user outdated
      * flag the given user for device-list tracking, if they are not already.
      *
      * @param userIds the user ids list
      */
-    fun startTrackingDeviceList(userIds: List<String>?) {
-        if (null != userIds) {
-            var isUpdated = false
-            val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
+    fun startTrackingDeviceList(userIds: List<String>) {
+        var isUpdated = false
+        val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
-            for (userId in userIds) {
-                if (!deviceTrackingStatuses.containsKey(userId) || TRACKING_STATUS_NOT_TRACKED == deviceTrackingStatuses[userId]) {
-                    Timber.v("## CRYPTO | startTrackingDeviceList() : Now tracking device list for $userId")
-                    deviceTrackingStatuses[userId] = TRACKING_STATUS_PENDING_DOWNLOAD
-                    isUpdated = true
-                }
+        for (userId in userIds) {
+            if (!deviceTrackingStatuses.containsKey(userId) || TRACKING_STATUS_NOT_TRACKED == deviceTrackingStatuses[userId]) {
+                Timber.v("## CRYPTO | startTrackingDeviceList() : Now tracking device list for $userId")
+                deviceTrackingStatuses[userId] = TRACKING_STATUS_PENDING_DOWNLOAD
+                isUpdated = true
             }
+        }
 
-            if (isUpdated) {
-                cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
-            }
+        if (isUpdated) {
+            cryptoStore.saveDeviceTrackingStatuses(deviceTrackingStatuses)
         }
     }
 
