@@ -29,6 +29,7 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.logLimit
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -319,7 +320,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      * @param downloadUsers the user ids list
      */
     private suspend fun doKeyDownloadForUsers(downloadUsers: List<String>): MXUsersDevicesMap<CryptoDeviceInfo> {
-        Timber.v("## CRYPTO | doKeyDownloadForUsers() : doKeyDownloadForUsers $downloadUsers")
+        Timber.v("## CRYPTO | doKeyDownloadForUsers() : doKeyDownloadForUsers ${downloadUsers.logLimit()}")
         // get the user ids which did not already trigger a keys download
         val filteredUsers = downloadUsers.filter { MatrixPatterns.isUserId(it) }
         if (filteredUsers.isEmpty()) {
