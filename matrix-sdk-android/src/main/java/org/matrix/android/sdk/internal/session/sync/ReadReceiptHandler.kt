@@ -56,9 +56,8 @@ internal class ReadReceiptHandler @Inject constructor(
     }
 
     fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?, isInitialSync: Boolean) {
-        if (content == null) {
-            return
-        }
+        content ?: return
+
         try {
             handleReadReceiptContent(realm, roomId, content, isInitialSync)
         } catch (exception: Exception) {
@@ -94,9 +93,13 @@ internal class ReadReceiptHandler @Inject constructor(
         // First check if we have data from init sync to handle
         getContentFromInitSync(roomId)?.let {
             Timber.w("INIT_SYNC Insert during incremental sync RR for room $roomId")
-            initialSyncStrategy(realm, roomId, it)
+            doIncrementalSyncStrategy(realm, roomId, it)
         }
 
+        doIncrementalSyncStrategy(realm, roomId, content)
+    }
+
+    private fun doIncrementalSyncStrategy(realm: Realm, roomId: String, content: ReadReceiptContent) {
         for ((eventId, receiptDict) in content) {
             val userIdsDict = receiptDict[READ_KEY] ?: continue
             val readReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
