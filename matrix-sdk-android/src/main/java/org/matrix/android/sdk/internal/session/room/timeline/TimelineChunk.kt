@@ -32,6 +32,8 @@ import timber.log.Timber
 
 internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                              private val roomId: String,
+                             private val timelineId: String,
+                             private val eventDecryptor: TimelineEventDecryptor,
                              private val paginationTask: PaginationTask,
                              private val timelineEventMapper: TimelineEventMapper,
                              private val uiEchoManager: UIEchoManager? = null,
@@ -120,9 +122,8 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         val baseQuery = timelineEventEntities.where()
         val timelineEvents = baseQuery.offsets(direction, count, displayIndex).findAll().orEmpty()
         timelineEvents
-                .map { timelineEventEntity ->
-                    buildTimelineEvent(timelineEventEntity)
-                }.also {
+                .map { it.buildAndDecryptIfNeeded() }
+                .also {
                     if (direction == SimpleTimeline.Direction.FORWARDS) {
                         builtEvents.addAll(0, it)
                     } else {
@@ -130,6 +131,17 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                     }
                 }
         return timelineEvents.size.toLong()
+    }
+
+    private fun TimelineEventEntity.buildAndDecryptIfNeeded(): TimelineEvent{
+        val timelineEvent = buildTimelineEvent(this)
+        val transactionId = timelineEvent.root.unsignedData?.transactionId
+        uiEchoManager?.onSyncedEvent(transactionId)
+        if (timelineEvent.isEncrypted()
+                && timelineEvent.root.mxDecryptionResult == null) {
+            timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineId)) }
+        }
+        return timelineEvent
     }
 
     private fun buildTimelineEvent(eventEntity: TimelineEventEntity) = timelineEventMapper.map(
@@ -142,10 +154,12 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
     private fun createTimelineChunk(chunkEntity: ChunkEntity): TimelineChunk {
         return TimelineChunk(
                 chunkEntity = chunkEntity,
+                timelineId = timelineId,
+                eventDecryptor = eventDecryptor,
                 roomId = roomId,
                 paginationTask = paginationTask,
                 timelineEventMapper = timelineEventMapper,
-                uiEchoManager = null,
+                uiEchoManager = uiEchoManager,
                 initialEventId = initialEventId,
                 onBuiltEvents = onBuiltEvents
         )
@@ -165,9 +179,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         for (range in insertions) {
             val newItems = frozenResults
                     .subList(range.startIndex, range.startIndex + range.length)
-                    .map {
-                        timelineEventMapper.map(it)
-                    }
+                    .map {it.buildAndDecryptIfNeeded()}
             builtEvents.addAll(range.startIndex, newItems)
         }
         val modifications = changeSet.changeRanges
@@ -175,7 +187,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
             for (modificationIndex in (range.startIndex until range.startIndex + range.length)) {
                 val updatedEntity = frozenResults[modificationIndex] ?: continue
                 try {
-                    builtEvents[modificationIndex] = timelineEventMapper.map(updatedEntity)
+                    builtEvents[modificationIndex] = updatedEntity.buildAndDecryptIfNeeded()
                 } catch (failure: Throwable) {
                     Timber.v("Fail to update items at index: $modificationIndex")
                 }

@@ -66,7 +66,8 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                 paginationTask = paginationTask,
                 getEventTask = contextOfEventTask,
                 timelineEventMapper = timelineEventMapper,
-                timelineInput = timelineInput
+                timelineInput = timelineInput,
+                eventDecryptor = eventDecryptor
         )
     }
 

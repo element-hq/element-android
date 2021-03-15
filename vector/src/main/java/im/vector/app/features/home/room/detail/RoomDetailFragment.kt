@@ -661,7 +661,7 @@ class RoomDetailFragment @Inject constructor(
         views.jumpToBottomView.debouncedClicks {
             roomDetailViewModel.handle(RoomDetailAction.ExitTrackingUnreadMessagesState)
             views.jumpToBottomView.visibility = View.INVISIBLE
-            if (!roomDetailViewModel.timeline.isLive) {
+            if (!roomDetailViewModel.simpleTimeline.isLive) {
                 scrollOnNewMessageCallback.forceScrollOnNextUpdate()
                 roomDetailViewModel.timeline.restartWithEventId(null)
             } else {

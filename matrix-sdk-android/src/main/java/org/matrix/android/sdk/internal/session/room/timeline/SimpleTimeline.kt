@@ -45,6 +45,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import timber.log.Timber
+import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
@@ -54,7 +55,8 @@ class SimpleTimeline internal constructor(val roomId: String,
                                           private val paginationTask: PaginationTask,
                                           private val getEventTask: GetContextOfEventTask,
                                           private val timelineEventMapper: TimelineEventMapper,
-                                          private val timelineInput: TimelineInput) {
+                                          private val timelineInput: TimelineInput,
+                                          private val eventDecryptor: TimelineEventDecryptor) {
 
     interface Listener {
         fun onStateUpdated()
@@ -65,6 +67,8 @@ class SimpleTimeline internal constructor(val roomId: String,
     companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("SimpleTimeline_Thread")
     }
+
+    val timelineId = UUID.randomUUID().toString()
 
     private val originEventId = AtomicReference<String>(null)
     private val listeners = CopyOnWriteArrayList<Listener>()
@@ -82,9 +86,14 @@ class SimpleTimeline internal constructor(val roomId: String,
             paginationTask = paginationTask,
             timelineInput = timelineInput,
             timelineEventMapper = timelineEventMapper,
+            timelineId = timelineId,
+            eventDecryptor = eventDecryptor,
             onEventsUpdated = this::postSnapshot,
             onNewTimelineEvents = this::onNewTimelineEvents
     )
+
+    val isLive: Boolean
+        get() = strategy is LiveTimelineStrategy
 
     data class PaginationState(
             val hasMoreToLoad: Boolean = true,
@@ -115,6 +124,7 @@ class SimpleTimeline internal constructor(val roomId: String,
             if (isStarted.compareAndSet(false, true)) {
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
+                eventDecryptor.start()
                 strategy.onStart()
             }
         }
@@ -126,6 +136,7 @@ class SimpleTimeline internal constructor(val roomId: String,
     fun stop() = timelineScope.launch {
         sequencer.post {
             if (isStarted.compareAndSet(true, false)) {
+                eventDecryptor.destroy()
                 strategy.onStop()
                 backgroundRealm.get().closeQuietly()
             }
@@ -205,6 +216,8 @@ private interface LoadTimelineStrategy : TimelineInput.Listener {
 
 private class LiveTimelineStrategy(private val roomId: String,
                                    private val realm: AtomicReference<Realm>,
+                                   private val timelineId: String,
+                                   private val eventDecryptor: TimelineEventDecryptor,
                                    private val timelineInput: TimelineInput,
                                    private val paginationTask: PaginationTask,
                                    private val timelineEventMapper: TimelineEventMapper,
@@ -290,13 +303,16 @@ private class LiveTimelineStrategy(private val roomId: String,
 
     private fun RealmResults<ChunkEntity>.createTimelineChunk(): TimelineChunk? {
         return firstOrNull()?.let {
-            TimelineChunk(chunkEntity = it,
+            TimelineChunk(
+                    chunkEntity = it,
                     roomId = roomId,
                     paginationTask = paginationTask,
                     timelineEventMapper = timelineEventMapper,
                     uiEchoManager = uiEchoManager,
                     initialEventId = null,
-                    onBuiltEvents = onEventsUpdated
+                    onBuiltEvents = onEventsUpdated,
+                    timelineId = timelineId,
+                    eventDecryptor = eventDecryptor
             )
         }
     }
