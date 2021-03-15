@@ -131,8 +131,8 @@ internal class RoomSummaryUpdater @Inject constructor(
             // mmm i want to decrypt now or is it ok to do it async?
             tryOrNull {
                 eventDecryptor.decryptEvent(root.asDomain(), "")
-                // eventDecryptor.decryptEventAsync(root.asDomain(), "", NoOpMatrixCallback())
             }
+                    ?.let { root.setDecryptionResult(it) }
         }
 
         if (updateMembers) {
