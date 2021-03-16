@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import androidx.lifecycle.LiveData
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.realm.Sort
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
@@ -38,20 +38,23 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
+import org.matrix.android.sdk.internal.session.sync.ReadReceiptHandler
 import org.matrix.android.sdk.internal.task.TaskExecutor
 
-internal class DefaultTimelineService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                  @SessionDatabase private val monarchy: Monarchy,
-                                                                  private val realmSessionProvider: RealmSessionProvider,
-                                                                  private val timelineInput: TimelineInput,
-                                                                  private val taskExecutor: TaskExecutor,
-                                                                  private val contextOfEventTask: GetContextOfEventTask,
-                                                                  private val eventDecryptor: TimelineEventDecryptor,
-                                                                  private val paginationTask: PaginationTask,
-                                                                  private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-                                                                  private val timelineEventMapper: TimelineEventMapper,
-                                                                  private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
-                                                                  private val loadRoomMembersTask: LoadRoomMembersTask
+internal class DefaultTimelineService @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        @SessionDatabase private val monarchy: Monarchy,
+        private val realmSessionProvider: RealmSessionProvider,
+        private val timelineInput: TimelineInput,
+        private val taskExecutor: TaskExecutor,
+        private val contextOfEventTask: GetContextOfEventTask,
+        private val eventDecryptor: TimelineEventDecryptor,
+        private val paginationTask: PaginationTask,
+        private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+        private val timelineEventMapper: TimelineEventMapper,
+        private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
+        private val loadRoomMembersTask: LoadRoomMembersTask,
+        private val readReceiptHandler: ReadReceiptHandler
 ) : TimelineService {
 
     @AssistedFactory
@@ -74,7 +77,8 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
                 eventDecryptor = eventDecryptor,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 realmSessionProvider = realmSessionProvider,
-                loadRoomMembersTask = loadRoomMembersTask
+                loadRoomMembersTask = loadRoomMembersTask,
+                readReceiptHandler = readReceiptHandler
         )
     }
 
@@ -87,7 +91,7 @@ internal class DefaultTimelineService @AssistedInject constructor(@Assisted priv
     }
 
     override fun getTimeLineEventLive(eventId: String): LiveData<Optional<TimelineEvent>> {
-        return LiveTimelineEvent(timelineInput, monarchy, taskExecutor.executorScope, timelineEventMapper, roomId, eventId)
+        return LiveTimelineEvent(monarchy, taskExecutor.executorScope, timelineEventMapper, roomId, eventId)
     }
 
     override fun getAttachmentMessages(): List<TimelineEvent> {

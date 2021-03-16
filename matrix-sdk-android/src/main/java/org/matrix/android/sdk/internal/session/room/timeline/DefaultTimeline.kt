@@ -44,6 +44,7 @@ import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendState
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
+import org.matrix.android.sdk.internal.session.sync.ReadReceiptHandler
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.Debouncer
@@ -73,7 +74,8 @@ internal class DefaultTimeline(
         private val timelineInput: TimelineInput,
         private val eventDecryptor: TimelineEventDecryptor,
         private val realmSessionProvider: RealmSessionProvider,
-        private val loadRoomMembersTask: LoadRoomMembersTask
+        private val loadRoomMembersTask: LoadRoomMembersTask,
+        private val readReceiptHandler: ReadReceiptHandler
 ) : Timeline,
         TimelineHiddenReadReceipts.Delegate,
         TimelineInput.Listener,
@@ -182,9 +184,25 @@ internal class DefaultTimeline(
                         }
                         .executeBy(taskExecutor)
 
+                // Ensure ReadReceipt from init sync are loaded
+                ensureReadReceiptAreLoaded(realm)
+
                 isReady.set(true)
             }
         }
+    }
+
+    private fun ensureReadReceiptAreLoaded(realm: Realm) {
+        readReceiptHandler.getContentFromInitSync(roomId)
+                ?.also {
+                    Timber.w("INIT_SYNC Insert when opening timeline RR for room $roomId")
+                }
+                ?.let { readReceiptContent ->
+                    realm.executeTransactionAsync {
+                        readReceiptHandler.handle(it, roomId, readReceiptContent, false, null)
+                        readReceiptHandler.onContentFromInitSyncHandled(roomId)
+                    }
+                }
     }
 
     private fun TimelineSettings.shouldHandleHiddenReadReceipts(): Boolean {

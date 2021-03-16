@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.sync.model
+package org.matrix.android.sdk.internal.session.sync
 
-import com.squareup.moshi.JsonClass
+import javax.inject.Inject
 
-@JsonClass(generateAdapter = false)
-internal sealed class LazyRoomSyncEphemeral {
-    data class Parsed(val _roomSyncEphemeral: RoomSyncEphemeral) : LazyRoomSyncEphemeral()
-    object Stored : LazyRoomSyncEphemeral()
+internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
+        private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
+) {
+    fun handle(synResHaResponsePostTreatmentAggregator: SyncResponsePostTreatmentAggregator) {
+        cleanupEphemeralFiles(synResHaResponsePostTreatmentAggregator.ephemeralFilesToDelete)
+    }
+
+    private fun cleanupEphemeralFiles(ephemeralFilesToDelete: List<String>) {
+        ephemeralFilesToDelete.forEach {
+            ephemeralTemporaryStore.delete(it)
+        }
+    }
 }

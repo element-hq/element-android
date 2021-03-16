@@ -131,8 +131,8 @@ internal class RoomSummaryUpdater @Inject constructor(
             // mmm i want to decrypt now or is it ok to do it async?
             tryOrNull {
                 eventDecryptor.decryptEvent(root.asDomain(), "")
-                // eventDecryptor.decryptEventAsync(root.asDomain(), "", NoOpMatrixCallback())
             }
+                    ?.let { root.setDecryptionResult(it) }
         }
 
         if (updateMembers) {
@@ -144,7 +144,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
             roomSummaryEntity.otherMemberIds.clear()
             roomSummaryEntity.otherMemberIds.addAll(otherRoomMembers)
-            if (roomSummaryEntity.isEncrypted) {
+            if (roomSummaryEntity.isEncrypted && otherRoomMembers.isNotEmpty()) {
                 // mmm maybe we could only refresh shield instead of checking trust also?
                 crossSigningService.onUsersDeviceUpdate(otherRoomMembers)
             }

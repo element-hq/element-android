@@ -42,9 +42,9 @@ sealed class InitialSyncStrategy {
             val minSizeToSplit: Long = 1024 * 1024,
             /**
              * Limit per room to reach to decide to store a join room ephemeral Events into a file
-             * Empiric value: 6 kilobytes
+             * Empiric value: 1 kilobytes
              */
-            val minSizeToStoreInFile: Long = 6 * 1024,
+            val minSizeToStoreInFile: Long = 1024,
             /**
              * Max number of rooms to insert at a time in database (to avoid too much RAM usage)
              */

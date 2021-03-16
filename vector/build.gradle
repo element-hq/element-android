@@ -14,7 +14,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 1
-ext.versionPatch = 1
+ext.versionPatch = 2
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -434,7 +434,7 @@ dependencies {
 
     implementation "androidx.emoji:emoji-appcompat:1.1.0"
 
-    implementation 'com.github.BillCarsonFr:JsonViewer:0.5'
+    implementation 'com.github.BillCarsonFr:JsonViewer:0.6'
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
@@ -476,7 +476,7 @@ dependencies {
     // Plant Timber tree for test
     androidTestImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
     // "The one who serves a great Espresso"
-    androidTestImplementation('com.schibsted.spain:barista:3.8.0') {
+    androidTestImplementation('com.schibsted.spain:barista:3.9.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
 }
