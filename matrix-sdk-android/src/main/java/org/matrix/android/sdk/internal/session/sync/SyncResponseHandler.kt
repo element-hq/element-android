@@ -90,7 +90,7 @@ internal class SyncResponseHandler @Inject constructor(
                 Timber.v("Handle rooms")
                 reportSubtask(reporter, InitSyncStep.ImportingAccountRoom, 1, 0.7f) {
                     if (syncResponse.rooms != null) {
-                        roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, aggregator,reporter)
+                        roomSyncHandler.handle(realm, syncResponse.rooms, isInitialSync, aggregator, reporter)
                     }
                 }
             }.also {
