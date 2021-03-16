@@ -61,6 +61,7 @@
         android:id="@+id/rightChevron"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_material_chevron_right_black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
