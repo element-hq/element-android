@@ -13,6 +13,7 @@ Bugfix 🐛:
  - Ensure message are decrypted in the room list after a clear cache
  - Regression: Video will not play upon tap, but only after swipe #2928
  - Cross signing now works with servers with an explicit port in the servername
+ - Timeline : Fix ripple effect on text item and fix background color of separators.
 
 Translations 🗣:
  -
