@@ -199,7 +199,8 @@ internal class DefaultTimeline(
                 }
                 ?.let { readReceiptContent ->
                     realm.executeTransactionAsync {
-                        readReceiptHandler.handle(it, roomId, readReceiptContent, false)
+                        readReceiptHandler.handle(it, roomId, readReceiptContent, false, null)
+                        readReceiptHandler.onContentFromInitSyncHandled(roomId)
                     }
                 }
     }

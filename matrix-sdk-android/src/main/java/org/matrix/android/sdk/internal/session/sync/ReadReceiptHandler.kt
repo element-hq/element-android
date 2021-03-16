@@ -55,21 +55,29 @@ internal class ReadReceiptHandler @Inject constructor(
         }
     }
 
-    fun handle(realm: Realm, roomId: String, content: ReadReceiptContent?, isInitialSync: Boolean) {
+    fun handle(realm: Realm,
+               roomId: String,
+               content: ReadReceiptContent?,
+               isInitialSync: Boolean,
+               aggregator: SyncResponsePostTreatmentAggregator?) {
         content ?: return
 
         try {
-            handleReadReceiptContent(realm, roomId, content, isInitialSync)
+            handleReadReceiptContent(realm, roomId, content, isInitialSync, aggregator)
         } catch (exception: Exception) {
             Timber.e("Fail to handle read receipt for room $roomId")
         }
     }
 
-    private fun handleReadReceiptContent(realm: Realm, roomId: String, content: ReadReceiptContent, isInitialSync: Boolean) {
+    private fun handleReadReceiptContent(realm: Realm,
+                                         roomId: String,
+                                         content: ReadReceiptContent,
+                                         isInitialSync: Boolean,
+                                         aggregator: SyncResponsePostTreatmentAggregator?) {
         if (isInitialSync) {
             initialSyncStrategy(realm, roomId, content)
         } else {
-            incrementalSyncStrategy(realm, roomId, content)
+            incrementalSyncStrategy(realm, roomId, content, aggregator)
         }
     }
 
@@ -89,11 +97,15 @@ internal class ReadReceiptHandler @Inject constructor(
         realm.insertOrUpdate(readReceiptSummaries)
     }
 
-    private fun incrementalSyncStrategy(realm: Realm, roomId: String, content: ReadReceiptContent) {
+    private fun incrementalSyncStrategy(realm: Realm,
+                                        roomId: String,
+                                        content: ReadReceiptContent,
+                                        aggregator: SyncResponsePostTreatmentAggregator?) {
         // First check if we have data from init sync to handle
         getContentFromInitSync(roomId)?.let {
             Timber.w("INIT_SYNC Insert during incremental sync RR for room $roomId")
             doIncrementalSyncStrategy(realm, roomId, it)
+            aggregator?.ephemeralFilesToDelete?.add(roomId)
         }
 
         doIncrementalSyncStrategy(realm, roomId, content)
@@ -124,11 +136,25 @@ internal class ReadReceiptHandler @Inject constructor(
     }
 
     fun getContentFromInitSync(roomId: String): ReadReceiptContent? {
+        val dataFromFile = roomSyncEphemeralTemporaryStore.read(roomId)
+
+        dataFromFile ?: return null
+
         @Suppress("UNCHECKED_CAST")
-        return roomSyncEphemeralTemporaryStore.read(roomId)
-                ?.also { roomSyncEphemeralTemporaryStore.delete(roomId) }
-                ?.events
-                ?.firstOrNull { it.type == EventType.RECEIPT }
+        val content = dataFromFile
+                .events
+                .firstOrNull { it.type == EventType.RECEIPT }
                 ?.content as? ReadReceiptContent
+
+        if (content == null) {
+            // We can delete the file now
+            roomSyncEphemeralTemporaryStore.delete(roomId)
+        }
+
+        return content
+    }
+
+    fun onContentFromInitSyncHandled(roomId: String) {
+        roomSyncEphemeralTemporaryStore.delete(roomId)
     }
 }
