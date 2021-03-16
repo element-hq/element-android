@@ -92,6 +92,7 @@ interface Room :
                limit: Int,
                beforeLimit: Int,
                afterLimit: Int,
-//    fun getSpaceParents(): List<SpaceSummary>
                includeProfile: Boolean): SearchResult
+
+    fun asSpace(): Space?
 }

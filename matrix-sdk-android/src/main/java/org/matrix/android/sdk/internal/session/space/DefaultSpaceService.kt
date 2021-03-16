@@ -51,21 +51,14 @@ internal class DefaultSpaceService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         @UserId private val userId: String,
         private val createSpaceTask: CreateSpaceTask,
-//        private val joinRoomTask: JoinRoomTask,
         private val joinSpaceTask: JoinSpaceTask,
         private val spaceGetter: SpaceGetter,
-//        private val markAllRoomsReadTask: MarkAllRoomsReadTask,
-//        private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
-//        private val roomIdByAliasTask: GetRoomIdByAliasTask,
-//        private val deleteRoomAliasTask: DeleteRoomAliasTask,
         private val roomGetter: RoomGetter,
         private val roomSummaryDataSource: RoomSummaryDataSource,
         private val stateEventDataSource: StateEventDataSource,
         private val peekSpaceTask: PeekSpaceTask,
         private val resolveSpaceInfoTask: ResolveSpaceInfoTask,
         private val leaveRoomTask: LeaveRoomTask
-//        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
-//        private val taskExecutor: TaskExecutor
 ) : SpaceService {
 
     override suspend fun createSpace(params: CreateSpaceParams): String {
