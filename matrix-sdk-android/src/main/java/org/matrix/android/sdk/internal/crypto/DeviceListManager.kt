@@ -168,13 +168,17 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
      * @param left    the user ids list which left a room
      */
     fun handleDeviceListsChanges(changed: Collection<String>, left: Collection<String>) {
-        Timber.v("## CRYPTO: handleDeviceListsChanges changed:$changed / left:$left")
+        Timber.v("## CRYPTO: handleDeviceListsChanges changed: ${changed.logLimit()} / left: ${left.logLimit()}")
         var isUpdated = false
         val deviceTrackingStatuses = cryptoStore.getDeviceTrackingStatuses().toMutableMap()
 
+        if (changed.isNotEmpty() || left.isNotEmpty()) {
+            clearUnavailableServersList()
+        }
+
         for (userId in changed) {
             if (deviceTrackingStatuses.containsKey(userId)) {
-                Timber.v("## CRYPTO | invalidateUserDeviceList() : Marking device list outdated for $userId")
+                Timber.v("## CRYPTO | handleDeviceListsChanges() : Marking device list outdated for $userId")
                 deviceTrackingStatuses[userId] = TRACKING_STATUS_PENDING_DOWNLOAD
                 isUpdated = true
             }
@@ -182,7 +186,7 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
 
         for (userId in left) {
             if (deviceTrackingStatuses.containsKey(userId)) {
-                Timber.v("## CRYPTO | invalidateUserDeviceList() : No longer tracking device list for $userId")
+                Timber.v("## CRYPTO | handleDeviceListsChanges() : No longer tracking device list for $userId")
                 deviceTrackingStatuses[userId] = TRACKING_STATUS_NOT_TRACKED
                 isUpdated = true
             }
