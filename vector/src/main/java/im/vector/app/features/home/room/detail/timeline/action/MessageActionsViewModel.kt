@@ -251,7 +251,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     addActionsForSyncedState(timelineEvent, actionPermissions, messageContent, msgType)
                 }
                 timelineEvent.root.sendState == SendState.SENT   -> {
-                    addActionsForSentNotSyncedState(timelineEvent, actionPermissions, messageContent, msgType)
+                    addActionsForSentNotSyncedState(timelineEvent)
                 }
             }
         }
@@ -294,21 +294,16 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    private fun ArrayList<EventSharedAction>.addActionsForSentNotSyncedState(timelineEvent: TimelineEvent,
-                                                                             actionPermissions: ActionPermissions,
-                                                                             messageContent: MessageContent?,
-                                                                             msgType: String?) {
-        if (timelineEvent.root.sendState == SendState.SENT) {
-            // If sent but not synced (synapse stuck at bottom bug)
-            // Still offer action to cancel (will only remove local echo)
-            timelineEvent.root.eventId?.let {
-                add(EventSharedAction.Cancel(it, true))
-            }
-
-            // TODO Can be redacted
-
-            // TODO sent by me or sufficient power level
+    private fun ArrayList<EventSharedAction>.addActionsForSentNotSyncedState(timelineEvent: TimelineEvent) {
+        // If sent but not synced (synapse stuck at bottom bug)
+        // Still offer action to cancel (will only remove local echo)
+        timelineEvent.root.eventId?.let {
+            add(EventSharedAction.Cancel(it, true))
         }
+
+        // TODO Can be redacted
+
+        // TODO sent by me or sufficient power level
     }
 
     private fun ArrayList<EventSharedAction>.addActionsForSyncedState(timelineEvent: TimelineEvent,
