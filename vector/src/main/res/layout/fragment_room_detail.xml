@@ -225,7 +225,7 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/a11y_jump_to_bottom"
         android:src="@drawable/chevron_down"
-        app:backgroundTint="#FFFFFF"
+        app:backgroundTint="?android:colorAccent"
         app:badgeBackgroundColor="?colorAccent"
         app:badgeTextColor="@color/white"
         app:badgeTextPadding="2dp"
@@ -233,7 +233,7 @@
         app:layout_constraintBottom_toTopOf="@id/badgeBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="16dp"
-        app:tint="@color/black" />
+        app:tint="@color/white" />
 
     <nl.dionsegijn.konfetti.KonfettiView
         android:id="@+id/viewKonfetti"
