@@ -205,20 +205,14 @@ class RealmSessionStoreMigration @Inject constructor() : RealmMigration {
                 ?.addField(SpaceChildSummaryEntityFields.AUTO_JOIN, Boolean::class.java)
                 ?.setNullable(SpaceChildSummaryEntityFields.AUTO_JOIN, true)
                 ?.addRealmObjectField(SpaceChildSummaryEntityFields.CHILD_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
-
-//        realm.schema.create("SpaceSummaryEntity")
-//                ?.addField(SpaceSummaryEntityFields.SPACE_ID, String::class.java, FieldAttribute.PRIMARY_KEY)
-//                ?.setRequired(SpaceSummaryEntityFields.SPACE_ID, true)
-//                ?.addRealmObjectField(SpaceSummaryEntityFields.ROOM_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
-//                ?.addRealmListField(SpaceSummaryEntityFields.CHILDREN.`$`, spaceChildInfoSchema!!)
+                ?.addRealmListField(SpaceChildSummaryEntityFields.VIA_SERVERS.`$`, String::class.java)
 
         realm.schema.create("SpaceParentSummaryEntity")
                 ?.addField(SpaceParentSummaryEntityFields.PARENT_ROOM_ID, String::class.java)
                 ?.addField(SpaceParentSummaryEntityFields.CANONICAL, Boolean::class.java)
                 ?.setNullable(SpaceParentSummaryEntityFields.CANONICAL, true)
-//                ?.addRealmListField(RoomParentRelationInfoEntityFields.VIA_SERVERS.`$`, String::class.java)
-//                ?.addRealmObjectField(RoomParentRelationInfoEntityFields.SPACE_SUMMARY_ENTITY.`$`, realm.schema.get("SpaceSummaryEntity")!!)
                 ?.addRealmObjectField(SpaceParentSummaryEntityFields.PARENT_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
+                ?.addRealmListField(SpaceParentSummaryEntityFields.VIA_SERVERS.`$`, String::class.java)
 
         realm.schema.get("RoomSummaryEntity")
                 ?.addField(RoomSummaryEntityFields.ROOM_TYPE, String::class.java)
