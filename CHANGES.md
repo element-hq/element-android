@@ -6,9 +6,10 @@ Features ✨:
 
 Improvements 🙌:
  - Lazy storage of ReadReceipts
+ - Do not load room members in e2e after init sync
 
 Bugfix 🐛:
- -
+ - Ensure message are decrypted in the room list after a clear cache
 
 Translations 🗣:
  -

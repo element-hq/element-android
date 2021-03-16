@@ -692,7 +692,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getDeviceSessionIds(deviceKey: String): MutableSet<String> {
+    override fun getDeviceSessionIds(deviceKey: String): List<String> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmSessionEntity>()
                     .equalTo(OlmSessionEntityFields.DEVICE_KEY, deviceKey)
@@ -701,7 +701,6 @@ internal class RealmCryptoStore @Inject constructor(
                         sessionEntity.sessionId
                     }
         }
-                .toMutableSet()
     }
 
     override fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper2>) {
@@ -801,7 +800,7 @@ internal class RealmCryptoStore @Inject constructor(
      * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper2,
      * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management
      */
-    override fun getInboundGroupSessions(): MutableList<OlmInboundGroupSessionWrapper2> {
+    override fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper2> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .findAll()
@@ -809,7 +808,6 @@ internal class RealmCryptoStore @Inject constructor(
                         inboundGroupSessionEntity.getInboundGroupSession()
                     }
         }
-                .toMutableList()
     }
 
     override fun removeInboundGroupSession(sessionId: String, senderKey: String) {
@@ -964,7 +962,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getRoomsListBlacklistUnverifiedDevices(): MutableList<String> {
+    override fun getRoomsListBlacklistUnverifiedDevices(): List<String> {
         return doWithRealm(realmConfiguration) {
             it.where<CryptoRoomEntity>()
                     .equalTo(CryptoRoomEntityFields.BLACKLIST_UNVERIFIED_DEVICES, true)
@@ -973,10 +971,9 @@ internal class RealmCryptoStore @Inject constructor(
                         cryptoRoom.roomId
                     }
         }
-                .toMutableList()
     }
 
-    override fun getDeviceTrackingStatuses(): MutableMap<String, Int> {
+    override fun getDeviceTrackingStatuses(): Map<String, Int> {
         return doWithRealm(realmConfiguration) {
             it.where<UserEntity>()
                     .findAll()
@@ -987,7 +984,6 @@ internal class RealmCryptoStore @Inject constructor(
                         entry.value.deviceTrackingStatus
                     }
         }
-                .toMutableMap()
     }
 
     override fun saveDeviceTrackingStatuses(deviceTrackingStatuses: Map<String, Int>) {
