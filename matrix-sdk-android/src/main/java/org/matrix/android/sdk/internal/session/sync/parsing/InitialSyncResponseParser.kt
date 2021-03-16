@@ -20,29 +20,33 @@ import com.squareup.moshi.Moshi
 import okio.buffer
 import okio.source
 import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.model.SyncResponse
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-internal class InitialSyncResponseParser @Inject constructor(private val moshi: Moshi) {
+internal class InitialSyncResponseParser @Inject constructor(
+        private val moshi: Moshi,
+        private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
+) {
 
     fun parse(syncStrategy: InitialSyncStrategy.Optimized, workingFile: File): SyncResponse {
         val syncResponseLength = workingFile.length().toInt()
         Timber.v("INIT_SYNC Sync file size is $syncResponseLength bytes")
         val shouldSplit = syncResponseLength >= syncStrategy.minSizeToSplit
         Timber.v("INIT_SYNC should split in several files: $shouldSplit")
-        return getMoshi(syncStrategy, workingFile.parentFile!!, shouldSplit)
+        return getMoshi(syncStrategy, shouldSplit)
                 .adapter(SyncResponse::class.java)
                 .fromJson(workingFile.source().buffer())!!
     }
 
-    private fun getMoshi(syncStrategy: InitialSyncStrategy.Optimized, workingDirectory: File, shouldSplit: Boolean): Moshi {
+    private fun getMoshi(syncStrategy: InitialSyncStrategy.Optimized, shouldSplit: Boolean): Moshi {
         // If we don't have to split we'll rely on the already default moshi
         if (!shouldSplit) return moshi
         // Otherwise, we create a new adapter for handling Map of Lazy sync
         return moshi.newBuilder()
-                .add(SplitLazyRoomSyncJsonAdapter(workingDirectory, syncStrategy))
+                .add(SplitLazyRoomSyncEphemeralJsonAdapter(roomSyncEphemeralTemporaryStore, syncStrategy))
                 .build()
     }
 }
