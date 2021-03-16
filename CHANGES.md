@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Split network request `/keys/query` into smaller requests (250 users max) (#2925)
 
 Bugfix 🐛:
  -
