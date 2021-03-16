@@ -1208,6 +1208,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleCancel(action: RoomDetailAction.CancelSend) {
+        if (action.force) {
+            room.cancelSend(action.eventId)
+            return
+        }
         val targetEventId = action.eventId
         room.getTimeLineEvent(targetEventId)?.let {
             // State must be in one of the sending states

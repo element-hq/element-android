@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Add option to cancel stuck messages at bottom of timeline see #516
 
 Translations 🗣:
  -
