@@ -188,14 +188,13 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
     }
 
     fun getFlattenOrphanRooms(): List<RoomSummary> {
-        return getRoomSummaries(roomSummaryQueryParams {
-            memberships = Membership.activeMemberships()
-            excludeType = listOf(RoomType.SPACE)
-            roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-        }).filter {
-            // we need to check if orphan
-            isOrphan(it)
-        }
+        return getRoomSummaries(
+                roomSummaryQueryParams {
+                    memberships = Membership.activeMemberships()
+                    excludeType = listOf(RoomType.SPACE)
+                    roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                }
+        ).filter { isOrphan(it) }
     }
 
     fun getFlattenOrphanRoomsLive(): LiveData<List<RoomSummary>> {
@@ -204,10 +203,9 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
                     memberships = Membership.activeMemberships()
                     excludeType = listOf(RoomType.SPACE)
                     roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                })) {
-            it.filter {
-                isOrphan(it)
-            }
+                })
+        ) {
+            it.filter { isOrphan(it) }
         }
     }
 
