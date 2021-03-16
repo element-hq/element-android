@@ -5,10 +5,14 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Lazy storage of ReadReceipts
+ - Do not load room members in e2e after init sync
 
 Bugfix 🐛:
- -
+ - Add option to cancel stuck messages at bottom of timeline see #516
+ - Ensure message are decrypted in the room list after a clear cache
+ - Regression: Video will not play upon tap, but only after swipe #2928
+ - Cross signing now works with servers with an explicit port in the servername
 
 Translations 🗣:
  -
@@ -23,7 +27,7 @@ Test:
  -
 
 Other changes:
- -
+ - Change formatting on issue templates to proper headings.
 
 Changes in Element 1.1.1 (2021-XX-XX)
 ===================================================

@@ -19,6 +19,18 @@ package org.matrix.android.sdk.internal.util
 import org.matrix.android.sdk.BuildConfig
 import timber.log.Timber
 
+internal fun <T> Collection<T>.logLimit(maxQuantity: Int = 5): String {
+    return buildString {
+        append(size)
+        append(" item(s)")
+        if (size > maxQuantity) {
+            append(", first $maxQuantity items")
+        }
+        append(": ")
+        append(this@logLimit.take(maxQuantity))
+    }
+}
+
 internal suspend fun <T> logDuration(message: String,
                                      block: suspend () -> T): T {
     Timber.v("$message -- BEGIN")
