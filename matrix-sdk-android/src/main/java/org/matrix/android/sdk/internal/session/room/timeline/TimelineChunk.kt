@@ -42,10 +42,12 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
 
     private val chunkObjectListener = RealmObjectChangeListener<ChunkEntity> { _, changeSet ->
         Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${changeSet?.changedFields?.joinToString(",")}")
+
     }
 
     private val timelineEventCollectionListener = OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
         val frozenResults = results.freeze()
+        Timber.v("on timeline event changed: $changeSet")
         handleChangeSet(frozenResults, changeSet)
     }
 

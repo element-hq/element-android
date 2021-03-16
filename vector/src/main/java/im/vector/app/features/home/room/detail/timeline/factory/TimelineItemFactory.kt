@@ -37,6 +37,10 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val callItemFactory: CallItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {
 
+    private val shouldShowHiddenEvents by lazy {
+        userPreferencesProvider.shouldShowHiddenEvents()
+    }
+
     /**
      * Reminder: nextEvent is older and prevEvent is newer.
      */
@@ -50,7 +54,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
         val computedModel = try {
             when (event.root.getClearType()) {
                 EventType.STICKER,
-                EventType.MESSAGE               -> messageItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
+                EventType.MESSAGE -> messageItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
                 // State and call
                 EventType.STATE_ROOM_TOMBSTONE,
                 EventType.STATE_ROOM_NAME,
@@ -63,21 +67,19 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
-                EventType.STATE_ROOM_POWER_LEVELS,
-                EventType.REACTION,
-                EventType.REDACTION             -> noticeItemFactory.create(event, highlight, callback)
+                EventType.STATE_ROOM_POWER_LEVELS -> noticeItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_WIDGET_LEGACY,
-                EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(event, highlight, callback)
+                EventType.STATE_ROOM_WIDGET -> widgetItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(event, highlight, callback)
                 // State room create
-                EventType.STATE_ROOM_CREATE     -> roomCreateItemFactory.create(event, callback)
+                EventType.STATE_ROOM_CREATE -> roomCreateItemFactory.create(event, callback)
                 // Calls
                 EventType.CALL_INVITE,
                 EventType.CALL_HANGUP,
                 EventType.CALL_REJECT,
-                EventType.CALL_ANSWER           -> callItemFactory.create(event, highlight, callback)
+                EventType.CALL_ANSWER -> callItemFactory.create(event, highlight, callback)
                 // Crypto
-                EventType.ENCRYPTED             -> {
+                EventType.ENCRYPTED -> {
                     if (event.root.isRedacted()) {
                         // Redacted event, let the MessageItemFactory handle it
                         messageItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
@@ -85,6 +87,11 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                         encryptedItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
                     }
                 }
+                EventType.KEY_VERIFICATION_CANCEL,
+                EventType.KEY_VERIFICATION_DONE -> {
+                    verificationConclusionItemFactory.create(event, highlight, callback)
+                }
+                // Hidden notice items
                 EventType.STATE_ROOM_ALIASES,
                 EventType.KEY_VERIFICATION_ACCEPT,
                 EventType.KEY_VERIFICATION_START,
@@ -94,25 +101,22 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.CALL_CANDIDATES,
                 EventType.CALL_REPLACES,
                 EventType.CALL_SELECT_ANSWER,
-                EventType.CALL_NEGOTIATE        -> {
-                    // TODO These are not filtered out by timeline when encrypted
-                    // For now manually ignore
-                    if (userPreferencesProvider.shouldShowHiddenEvents()) {
+                EventType.CALL_NEGOTIATE -> {
+                    if (shouldShowHiddenEvents) {
                         noticeItemFactory.create(event, highlight, callback)
                     } else {
                         null
                     }
                 }
-                EventType.KEY_VERIFICATION_CANCEL,
-                EventType.KEY_VERIFICATION_DONE -> {
-                    verificationConclusionItemFactory.create(event, highlight, callback)
-                }
-
                 // Unhandled event types
-                else                            -> {
-                    // Should only happen when shouldShowHiddenEvents() settings is ON
+                else                              -> {
                     Timber.v("Type ${event.root.getClearType()} not handled")
-                    defaultItemFactory.create(event, highlight, callback)
+                    if (shouldShowHiddenEvents) {
+                        // Should only happen when shouldShowHiddenEvents() settings is ON
+                        defaultItemFactory.create(event, highlight, callback)
+                    } else {
+                        null
+                    }
                 }
             }
         } catch (throwable: Throwable) {
