@@ -1,8 +1,5 @@
-Changes in Element 1.1.2 (2021-XX-XX)
+Changes in Element 1.1.2 (2021-03-16)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Lazy storage of ReadReceipts
@@ -14,26 +11,11 @@ Bugfix 🐛:
  - Regression: Video will not play upon tap, but only after swipe #2928
  - Cross signing now works with servers with an explicit port in the servername
 
-Translations 🗣:
- -
-
-SDK API changes ⚠️:
- -
-
-Build 🧱:
- -
-
-Test:
- -
-
 Other changes:
  - Change formatting on issue templates to proper headings.
 
-Changes in Element 1.1.1 (2021-XX-XX)
+Changes in Element 1.1.1 (2021-03-10)
 ===================================================
-
-Features ✨:
- -
 
 Improvements 🙌:
  - Allow non-HTTPS connections to homeservers on Tor (#2941)
@@ -55,15 +37,9 @@ Bugfix 🐛:
 Translations 🗣:
  - All string resources and translations have been moved to the application module. Weblate project for the SDK will be removed.
 
-SDK API changes ⚠️:
- -
-
 Build 🧱:
  - Update a lot of dependencies, with the help of dependabot.
  - Add a script to download and install APK from the CI
-
-Test:
- -
 
 Other changes:
  - Rework edition of event management
