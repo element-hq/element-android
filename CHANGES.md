@@ -10,6 +10,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Ensure message are decrypted in the room list after a clear cache
+ - Cross signing now works with servers with an explicit port in the servername
 
 Translations 🗣:
  -
@@ -48,7 +49,6 @@ Bugfix 🐛:
  - Be robust if Event.type is missing (#2946)
  - Snappier message send status
  - Fix MainActivity display (#2927)
- - Cross signing now works with servers with an explicit port in the servername
 
 Translations 🗣:
  - All string resources and translations have been moved to the application module. Weblate project for the SDK will be removed.
