@@ -1570,14 +1570,18 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun handleCancelSend(action: EventSharedAction.Cancel) {
-        AlertDialog.Builder(requireContext())
-                .setTitle(R.string.dialog_title_confirmation)
-                .setMessage(getString(R.string.event_status_cancel_sending_dialog_message))
-                .setNegativeButton(R.string.no, null)
-                .setPositiveButton(R.string.yes) { _, _ ->
-                    roomDetailViewModel.handle(RoomDetailAction.CancelSend(action.eventId))
-                }
-                .show()
+        if (action.force) {
+            roomDetailViewModel.handle(RoomDetailAction.CancelSend(action.eventId, true))
+        } else {
+            AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.dialog_title_confirmation)
+                    .setMessage(getString(R.string.event_status_cancel_sending_dialog_message))
+                    .setNegativeButton(R.string.no, null)
+                    .setPositiveButton(R.string.yes) { _, _ ->
+                        roomDetailViewModel.handle(RoomDetailAction.CancelSend(action.eventId, false))
+                    }
+                    .show()
+        }
     }
 
     override fun onAvatarClicked(informationData: MessageInformationData) {

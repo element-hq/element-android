@@ -9,6 +9,7 @@ Improvements 🙌:
  - Do not load room members in e2e after init sync
 
 Bugfix 🐛:
+ - Add option to cancel stuck messages at bottom of timeline see #516
  - Ensure message are decrypted in the room list after a clear cache
 
 Translations 🗣:

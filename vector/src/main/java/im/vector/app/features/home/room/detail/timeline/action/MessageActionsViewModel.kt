@@ -250,6 +250,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 timelineEvent.root.sendState == SendState.SYNCED -> {
                     addActionsForSyncedState(timelineEvent, actionPermissions, messageContent, msgType)
                 }
+                timelineEvent.root.sendState == SendState.SENT   -> {
+                    addActionsForSentNotSyncedState(timelineEvent)
+                }
             }
         }
     }
@@ -287,8 +290,20 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun ArrayList<EventSharedAction>.addActionsForSendingState(timelineEvent: TimelineEvent) {
         // TODO is uploading attachment?
         if (canCancel(timelineEvent)) {
-            add(EventSharedAction.Cancel(timelineEvent.eventId))
+            add(EventSharedAction.Cancel(timelineEvent.eventId, false))
         }
+    }
+
+    private fun ArrayList<EventSharedAction>.addActionsForSentNotSyncedState(timelineEvent: TimelineEvent) {
+        // If sent but not synced (synapse stuck at bottom bug)
+        // Still offer action to cancel (will only remove local echo)
+        timelineEvent.root.eventId?.let {
+            add(EventSharedAction.Cancel(it, true))
+        }
+
+        // TODO Can be redacted
+
+        // TODO sent by me or sufficient power level
     }
 
     private fun ArrayList<EventSharedAction>.addActionsForSyncedState(timelineEvent: TimelineEvent,
@@ -336,12 +351,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
             if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
                 add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
-            }
-
-            if (timelineEvent.root.sendState == SendState.SENT) {
-                // TODO Can be redacted
-
-                // TODO sent by me or sufficient power level
             }
         }
 
