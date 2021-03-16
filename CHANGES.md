@@ -11,6 +11,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Add option to cancel stuck messages at bottom of timeline see #516
  - Ensure message are decrypted in the room list after a clear cache
+ - Regression: Video will not play upon tap, but only after swipe #2928
 
 Translations 🗣:
  -
