@@ -5,6 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
+ - Lazy storage of ReadReceipts
  - Do not load room members in e2e after init sync
 
 Bugfix 🐛:
