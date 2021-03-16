@@ -96,9 +96,5 @@ interface Room :
                includeProfile: Boolean,
                callback: MatrixCallback<SearchResult>): Cancelable
 
-//    fun getSpaceParents(): List<SpaceSummary>
-//
-//    fun getCanonicalSpaceParents(): List<SpaceSummary>
-
     fun asSpace(): Space?
 }

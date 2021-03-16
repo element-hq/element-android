@@ -145,7 +145,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
         val roomSummary = session.getRoomSummary(roomId)
         val membership = roomSummary?.membership
         val eventId = permalinkData.eventId
-        val roomAlias = permalinkData.getRoomAliasOrNull()
+//        val roomAlias = permalinkData.getRoomAliasOrNull()
         val isSpace = roomSummary?.roomType == RoomType.SPACE
         return when {
             membership == Membership.BAN     -> context.toast(R.string.error_opening_banned_room)
