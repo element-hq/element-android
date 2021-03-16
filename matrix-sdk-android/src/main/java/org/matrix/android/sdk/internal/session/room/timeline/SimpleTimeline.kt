@@ -318,7 +318,7 @@ private class LiveTimelineStrategy(private val roomId: String,
     }
 
     override fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
-        return timelineChunk?.rebuildEvent(eventId, builder).orFalse()
+        return timelineChunk?.rebuildEvent(eventId, builder, searchInNext = true, searchInPrev = true).orFalse()
     }
 
     override fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {

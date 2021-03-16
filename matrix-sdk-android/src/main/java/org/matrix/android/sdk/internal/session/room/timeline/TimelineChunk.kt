@@ -22,6 +22,7 @@ import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
@@ -29,6 +30,11 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import timber.log.Timber
+
+/**
+ * This is the value used to fetch on server. It's better to make constant as otherwise we can have weird chunks with disparate and small chunk of data.
+ */
+private const val PAGINATION_COUNT = 50
 
 internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                              private val roomId: String,
@@ -89,7 +95,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
             if (nextChunkEntity == null) {
                 val token = chunkEntity.nextToken ?: return //TODO handle previous live chunk
                 try {
-                    fetchFromServer(token, offsetCount, direction)
+                    fetchFromServer(token, direction)
                 } catch (failure: Throwable) {
                     Timber.v("Failed to fetch from server: $failure")
                 }
@@ -105,7 +111,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
             if (prevChunkEntity == null) {
                 val token = chunkEntity.prevToken ?: return
                 try {
-                    fetchFromServer(token, offsetCount, direction)
+                    fetchFromServer(token, direction)
                 } catch (failure: Throwable) {
                     Timber.v("Failed to fetch from server: $failure")
                 }
@@ -135,7 +141,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         return timelineEvents.size.toLong()
     }
 
-    private fun TimelineEventEntity.buildAndDecryptIfNeeded(): TimelineEvent{
+    private fun TimelineEventEntity.buildAndDecryptIfNeeded(): TimelineEvent {
         val timelineEvent = buildTimelineEvent(this)
         val transactionId = timelineEvent.root.unsignedData?.transactionId
         uiEchoManager?.onSyncedEvent(transactionId)
@@ -167,8 +173,8 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         )
     }
 
-    private suspend fun fetchFromServer(token: String, count: Long, direction: SimpleTimeline.Direction): TokenChunkEventPersistor.Result {
-        val paginationParams = PaginationTask.Params(roomId, token, direction.toPaginationDirection(), count.toInt())
+    private suspend fun fetchFromServer(token: String, direction: SimpleTimeline.Direction): TokenChunkEventPersistor.Result {
+        val paginationParams = PaginationTask.Params(roomId, token, direction.toPaginationDirection(), PAGINATION_COUNT)
         return paginationTask.execute(paginationParams)
     }
 
@@ -181,7 +187,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         for (range in insertions) {
             val newItems = frozenResults
                     .subList(range.startIndex, range.startIndex + range.length)
-                    .map {it.buildAndDecryptIfNeeded()}
+                    .map { it.buildAndDecryptIfNeeded() }
             builtEvents.addAll(range.startIndex, newItems)
         }
         val modifications = changeSet.changeRanges
@@ -200,24 +206,32 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         }
     }
 
-    fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean {
+    fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?, searchInNext: Boolean, searchInPrev: Boolean): Boolean {
         return tryOrNull {
             val builtIndex = builtEvents.indexOfFirst { it.eventId == eventId }
-                // Update the relation of existing event
-                builtEvents.getOrNull(builtIndex)?.let { te ->
-                    val rebuiltEvent = builder(te)
-                    // If rebuilt event is filtered its returned as null and should be removed.
-                    if (rebuiltEvent == null) {
-                        builtEvents.removeAt(builtIndex)
-                    } else {
-                        builtEvents[builtIndex] = rebuiltEvent
-                    }
-                    true
+            if (builtIndex == -1) {
+                val foundInPrev = searchInPrev && prevChunk?.rebuildEvent(eventId, builder, searchInNext = false, searchInPrev = true).orFalse()
+                if (foundInPrev) {
+                    return true
+                }
+                if (searchInNext) {
+                    return prevChunk?.rebuildEvent(eventId, builder, searchInPrev = false, searchInNext = true).orFalse()
                 }
             }
-         ?: false
+            // Update the relation of existing event
+            builtEvents.getOrNull(builtIndex)?.let { te ->
+                val rebuiltEvent = builder(te)
+                // If rebuilt event is filtered its returned as null and should be removed.
+                if (rebuiltEvent == null) {
+                    builtEvents.removeAt(builtIndex)
+                } else {
+                    builtEvents[builtIndex] = rebuiltEvent
+                }
+                true
+            }
+        }
+                ?: false
     }
-
 
     fun close(closeNext: Boolean, closePrev: Boolean) {
         if (closeNext) {
