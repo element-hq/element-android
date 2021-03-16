@@ -29,12 +29,12 @@ import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
+import org.matrix.android.sdk.internal.util.getBetsChunkSize
 import javax.inject.Inject
-import kotlin.math.ceil
 
 internal interface DownloadKeysForUsersTask : Task<DownloadKeysForUsersTask.Params, KeysQueryResponse> {
     data class Params(
-            // the list of users to get keys for.
+            // the list of users to get keys for. The list MUST NOT be empty
             val userIds: List<String>,
             // the up-to token
             val token: String?
@@ -47,8 +47,7 @@ internal class DefaultDownloadKeysForUsers @Inject constructor(
 ) : DownloadKeysForUsersTask {
 
     override suspend fun execute(params: DownloadKeysForUsersTask.Params): KeysQueryResponse {
-        val numberOfChunks = ceil(params.userIds.size / LIMIT.toDouble()).toInt().coerceAtLeast(1)
-        val chunkSize = params.userIds.size / numberOfChunks
+        val bestChunkSize = getBetsChunkSize(params.userIds.size, LIMIT)
 
         // Store server results in these mutable maps
         val deviceKeys = mutableMapOf<String, Map<String, DeviceKeysWithUnsigned>>()
@@ -62,7 +61,7 @@ internal class DefaultDownloadKeysForUsers @Inject constructor(
         // Split network request into smaller request (#2925)
         coroutineScope {
             params.userIds
-                    .chunked(chunkSize)
+                    .chunked(bestChunkSize.chunkSize)
                     .map {
                         KeysQueryBody(
                                 deviceKeys = it.associateWith { emptyList() },

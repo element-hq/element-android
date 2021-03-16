@@ -64,9 +64,9 @@ import org.matrix.android.sdk.internal.session.sync.model.LazyRoomSyncEphemeral
 import org.matrix.android.sdk.internal.session.sync.model.RoomSync
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncAccountData
 import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
+import org.matrix.android.sdk.internal.util.getBetsChunkSize
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.math.ceil
 
 internal class RoomSyncHandler @Inject constructor(private val readReceiptHandler: ReadReceiptHandler,
                                                    private val roomSummaryUpdater: RoomSummaryUpdater,
@@ -140,17 +140,17 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                             syncLocalTimeStampMillis: Long,
                                             aggregator: SyncResponsePostTreatmentAggregator,
                                             reporter: ProgressReporter?) {
-        val maxSize = (initialSyncStrategy as? InitialSyncStrategy.Optimized)?.maxRoomsToInsert ?: Int.MAX_VALUE
-        val listSize = handlingStrategy.data.keys.size
-        val numberOfChunks = ceil(listSize / maxSize.toDouble()).toInt()
+        val bestChunkSize = getBetsChunkSize(
+                listSize = handlingStrategy.data.keys.size,
+                limit = (initialSyncStrategy as? InitialSyncStrategy.Optimized)?.maxRoomsToInsert ?: Int.MAX_VALUE
+        )
 
-        if (numberOfChunks > 1) {
-            reportSubtask(reporter, InitSyncStep.ImportingAccountJoinedRooms, numberOfChunks, 0.6f) {
-                val chunkSize = listSize / numberOfChunks
-                Timber.d("INIT_SYNC $listSize rooms to insert, split into $numberOfChunks sublists of $chunkSize items")
+        if (bestChunkSize.shouldSplit()) {
+            reportSubtask(reporter, InitSyncStep.ImportingAccountJoinedRooms, bestChunkSize.numberOfChunks, 0.6f) {
+                Timber.d("INIT_SYNC ${handlingStrategy.data.keys.size} rooms to insert, split with $bestChunkSize")
                 // I cannot find a better way to chunk a map, so chunk the keys and then create new maps
                 handlingStrategy.data.keys
-                        .chunked(chunkSize)
+                        .chunked(bestChunkSize.chunkSize)
                         .forEachIndexed { index, roomIds ->
                             val roomEntities = roomIds
                                     .also { Timber.d("INIT_SYNC insert ${roomIds.size} rooms") }
