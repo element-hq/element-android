@@ -2732,4 +2732,5 @@
     <string name="event_status_a11y_failed">Schlug fehl</string>
     <string name="event_status_cancel_sending_dialog_message">Willst du zu sendende Nachrichten zurückziehen\?</string>
     <string name="event_status_a11y_delete_all">Alle fehgeschlagene Nachrichten löschen</string>
+    <string name="event_status_failed_messages_warning">Senden der Nachricht gescheitert</string>
 </resources>
