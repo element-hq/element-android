@@ -30,13 +30,11 @@ class MathUtilTest : MatrixTest {
     fun testGetBestChunkSize0() = doTest(0, 100, 1, 0)
 
     @Test
-    fun testGetBestChunkSize1() = doTest(1, 100, 1, 1)
-
-    @Test
-    fun testGetBestChunkSize5() = doTest(5, 100, 1, 5)
-
-    @Test
-    fun testGetBestChunkSize99() = doTest(99, 100, 1, 99)
+    fun testGetBestChunkSize1to99() {
+        for (i in 1..99) {
+            doTest(i, 100, 1, i)
+        }
+    }
 
     @Test
     fun testGetBestChunkSize100() = doTest(100, 100, 1, 100)
