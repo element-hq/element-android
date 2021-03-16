@@ -17,9 +17,9 @@
 package org.matrix.android.sdk.internal.session.sync
 
 import com.squareup.moshi.JsonReader
+import com.squareup.moshi.Moshi
 import okio.buffer
 import okio.source
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncEphemeral
 import org.matrix.android.sdk.internal.util.md5
@@ -35,11 +35,14 @@ internal interface RoomSyncEphemeralTemporaryStore {
 }
 
 internal class RoomSyncEphemeralTemporaryStoreFile @Inject constructor(
-        @SessionFilesDirectory fileDirectory: File
+        @SessionFilesDirectory fileDirectory: File,
+        moshi: Moshi
 ) : RoomSyncEphemeralTemporaryStore {
 
     private val workingDir = File(fileDirectory, "rr")
             .also { it.mkdirs() }
+
+    private val roomSyncEphemeralAdapter = moshi.adapter(RoomSyncEphemeral::class.java)
 
     /**
      * Write RoomSyncEphemeral to a file
@@ -57,8 +60,7 @@ internal class RoomSyncEphemeralTemporaryStoreFile @Inject constructor(
                 .takeIf { it.exists() }
                 ?.inputStream()
                 ?.use { pos ->
-                    MoshiProvider.providesMoshi().adapter(RoomSyncEphemeral::class.java)
-                            .fromJson(JsonReader.of(pos.source().buffer()))
+                    roomSyncEphemeralAdapter.fromJson(JsonReader.of(pos.source().buffer()))
                 }
     }
 
