@@ -39,10 +39,6 @@ internal open class SpaceParentSummaryEntity(
 
         var viaServers: RealmList<String> = RealmList()
 
-//        var child: RoomSummaryEntity? = null,
-
-//        var level: Int = 0
-
 ) : RealmObject() {
 
     companion object
