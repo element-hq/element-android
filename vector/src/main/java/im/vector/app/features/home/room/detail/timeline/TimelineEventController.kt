@@ -209,7 +209,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     override fun intercept(models: MutableList<EpoxyModel<*>>) = synchronized(modelCache) {
-        //interceptorHelper.intercept(models, unreadState, timeline, callback)
+        interceptorHelper.intercept(models, unreadState, timeline, callback)
     }
 
     fun update(viewState: RoomDetailViewState) {

@@ -45,7 +45,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
     fun intercept(
             models: MutableList<EpoxyModel<*>>,
             unreadState: UnreadState,
-            timeline: Timeline?,
+            timeline: SimpleTimeline?,
             callback: TimelineEventController.Callback?
     ) {
         positionOfReadMarker.set(null)
@@ -111,8 +111,8 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         callIds.add(callId)
     }
 
-    private fun MutableList<EpoxyModel<*>>.addBackwardPrefetchIfNeeded(timeline: Timeline?, callback: TimelineEventController.Callback?) {
-        val shouldAddBackwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.BACKWARDS) ?: false
+    private fun MutableList<EpoxyModel<*>>.addBackwardPrefetchIfNeeded(timeline: SimpleTimeline?, callback: TimelineEventController.Callback?) {
+        val shouldAddBackwardPrefetch = timeline?.getPaginationState(SimpleTimeline.Direction.BACKWARDS)?.hasMoreToLoad ?: false
         if (shouldAddBackwardPrefetch) {
             val indexOfPrefetchBackward = (previousModelsSize - 1)
                     .coerceAtMost(size - DEFAULT_PREFETCH_THRESHOLD)
@@ -127,8 +127,8 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         }
     }
 
-    private fun MutableList<EpoxyModel<*>>.addForwardPrefetchIfNeeded(timeline: Timeline?, callback: TimelineEventController.Callback?) {
-        val shouldAddForwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.FORWARDS) ?: false
+    private fun MutableList<EpoxyModel<*>>.addForwardPrefetchIfNeeded(timeline: SimpleTimeline?, callback: TimelineEventController.Callback?) {
+        val shouldAddForwardPrefetch = timeline?.getPaginationState(SimpleTimeline.Direction.FORWARDS)?.hasMoreToLoad ?: false
         if (shouldAddForwardPrefetch) {
             val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD.coerceAtMost(size - 1)
             val loadingItem = LoadingItem_()
