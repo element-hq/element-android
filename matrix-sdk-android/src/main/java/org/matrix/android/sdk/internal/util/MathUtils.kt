@@ -33,7 +33,8 @@ internal fun getBetsChunkSize(listSize: Int, limit: Int): BestChunkSize {
         )
     } else {
         val numberOfChunks = ceil(listSize / limit.toDouble()).toInt()
-        val chunkSize = listSize / numberOfChunks
+        // Round on next Int
+        val chunkSize = ceil(listSize / numberOfChunks.toDouble()).toInt()
 
         BestChunkSize(
                 numberOfChunks = numberOfChunks,

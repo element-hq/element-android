@@ -42,10 +42,10 @@ class MathUtilTest : MatrixTest {
     fun testGetBestChunkSize100() = doTest(100, 100, 1, 100)
 
     @Test
-    fun testGetBestChunkSize101() = doTest(101, 100, 2, 50)
+    fun testGetBestChunkSize101() = doTest(101, 100, 2, 51)
 
     @Test
-    fun testGetBestChunkSize199() = doTest(199, 100, 2, 99)
+    fun testGetBestChunkSize199() = doTest(199, 100, 2, 100)
 
     @Test
     fun testGetBestChunkSize200() = doTest(200, 100, 2, 100)
