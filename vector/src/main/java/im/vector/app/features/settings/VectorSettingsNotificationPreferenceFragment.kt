@@ -38,7 +38,6 @@ import im.vector.app.core.pushers.UPHelper
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
 import im.vector.app.core.utils.requestDisablingBatteryOptimization
 import im.vector.app.features.notifications.NotificationUtils
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
