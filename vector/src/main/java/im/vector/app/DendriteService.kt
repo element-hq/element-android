@@ -296,11 +296,17 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
             val scanFilters: MutableList<ScanFilter> = ArrayList()
             scanFilters.add(scanFilter)
 
-            val scanSettings = ScanSettings.Builder()
+            val scanSettingsBuilder = ScanSettings.Builder()
                     .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
                     .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
-                    .setPhy(ScanSettings.PHY_LE_ALL_SUPPORTED)
-                    .build()
+
+            if (vectorPreferences.p2pBLECodedPhy() && manager.adapter.isLeCodedPhySupported) {
+                scanSettingsBuilder.setPhy(BluetoothDevice.PHY_LE_CODED)
+            } else {
+                scanSettingsBuilder.setPhy(BluetoothDevice.PHY_LE_1M)
+            }
+
+            val scanSettings = scanSettingsBuilder.build()
 
             scanner.startScan(scanFilters, scanSettings, scanCallback)
 
@@ -318,9 +324,13 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                         val device = remote.remoteDevice.address.toString()
 
                         var connection = connections[device]
-                        if (connection != null && connection.isConnected) {
-                            connection.close()
-                            connections.remove(device)
+                        if (connection != null) {
+                            if (connection.isConnected) {
+                                connection.close()
+                            } else {
+                                connections.remove(device)
+                                conduits.remove(device)
+                            }
                         }
 
                         Timber.i("BLE: Connected inbound $device PSM $l2capPSM")
@@ -333,6 +343,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                         connections[device]!!.start()
 
                         Timber.i("BLE: Created BLE peering with $device PSM $l2capPSM")
+                        connecting.remove(device)
                     } catch (e: Exception) {
                         Timber.i("BLE: Accept exception: ${e.message}")
                     }
@@ -420,8 +431,13 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
             val psm = bytesToInt(psmBytes)
 
             var connection = connections[device.address.toString()]
-            if (connection != null && connection.isConnected) {
-                connection.close()
+            if (connection != null) {
+                if (connection.isConnected) {
+                    connection.close()
+                } else {
+                    connections.remove(device.address.toString())
+                    conduits.remove(device.address.toString())
+                }
             }
 
             Timber.i("BLE: Connecting outbound $device PSM $psm")
@@ -446,6 +462,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
             connections[device.address] = DendriteBLEPeering(conduit, socket)
             Timber.i("Starting DendriteBLEPeering")
             connections[device.address]!!.start()
+            connecting.remove(device.address)
         }
     }
 
@@ -479,7 +496,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
         override fun onScanFailed(errorCode: Int) {
             super.onScanFailed(errorCode)
             Timber.i("BLE: error %s", errorCode)
-            //Toast.makeText(applicationContext, "BLE: Error code $errorCode", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "BLE: Error $errorCode scanning for devices", Toast.LENGTH_SHORT).show()
         }
 
         override fun onScanResult(callbackType: Int, result: ScanResult) {
