@@ -43,6 +43,7 @@ import org.matrix.android.sdk.internal.task.TaskThread
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.util.logLimit
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import org.matrix.olm.OlmPkSigning
 import org.matrix.olm.OlmUtility
@@ -750,7 +751,7 @@ internal class DefaultCrossSigningService @Inject constructor(
     }
 
     override fun onUsersDeviceUpdate(userIds: List<String>) {
-        Timber.d("## CrossSigning - onUsersDeviceUpdate for ${userIds.size} users: $userIds")
+        Timber.d("## CrossSigning - onUsersDeviceUpdate for users: ${userIds.logLimit()}")
         val workerParams = UpdateTrustWorker.Params(
                 sessionId = sessionId,
                 filename = updateTrustWorkerDataRepository.createParam(userIds)
