@@ -2,9 +2,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="true"
-        android:key="SETTINGS_P2P_ENABLE_NEARBY"
-        android:title="@string/settings_p2p_connect_nearby"
-        android:enabled="false" />
+        android:key="SETTINGS_P2P_ENABLE_MULTICAST"
+        android:title="@string/settings_p2p_connect_multicast"
+        android:enabled="true" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:key="SETTINGS_P2P_ENABLE_BLUETOOTH"
+        android:title="@string/settings_p2p_connect_bluetooth"
+        android:enabled="true" />
 
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"
@@ -15,4 +21,11 @@
         android:key="SETTINGS_P2P_STATIC_URI"
         android:title="@string/settings_p2p_static_peer_uri"
         android:summary="@string/change_p2p_static_peer_summary" />
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_P2P_BLE_CODED_PHY"
+        android:title="@string/settings_p2p_ble_coded_phy"
+        android:enabled="true" />
+
 </PreferenceScreen>

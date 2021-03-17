@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings
 
+import android.bluetooth.BluetoothAdapter
 import android.os.Bundle
 import android.view.View
 import androidx.preference.Preference
@@ -38,8 +39,11 @@ class VectorSettingsP2PFragment @Inject constructor(
     override var titleRes = R.string.settings_p2p_title
     override val preferenceXmlRes = R.xml.vector_settings_p2p
 
-    private val mNearbyPeersEnabled by lazy {
-        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_P2P_ENABLE_NEARBY)!!
+    private val mMulticastPeersEnabled by lazy {
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_P2P_ENABLE_MULTICAST)!!
+    }
+    private val mBluetoothPeersEnabled by lazy {
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_P2P_ENABLE_BLUETOOTH)!!
     }
     private val mStaticPeerEnabled by lazy {
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_P2P_ENABLE_STATIC)!!
@@ -47,13 +51,19 @@ class VectorSettingsP2PFragment @Inject constructor(
     private val mStaticPeerURI by lazy {
         findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_P2P_STATIC_URI)!!
     }
+    private val mBLECodedPhy by lazy {
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_P2P_BLE_CODED_PHY)!!
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mNearbyPeersEnabled.isChecked = vectorPreferences.p2pEnableNearby()
+        mMulticastPeersEnabled.isChecked = vectorPreferences.p2pEnableMulticast()
+        mBluetoothPeersEnabled.isChecked = vectorPreferences.p2pEnableBluetooth()
         mStaticPeerEnabled.isChecked = vectorPreferences.p2pEnableStatic()
         mStaticPeerURI.summary = vectorPreferences.p2pStaticURI().ifEmpty { "No static peer is configured" }
+        mBLECodedPhy.isChecked = vectorPreferences.p2pBLECodedPhy()
+        mBLECodedPhy.isEnabled = BluetoothAdapter.getDefaultAdapter().isLeCodedPhySupported
     }
 
     override fun bindPref() {

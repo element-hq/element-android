@@ -200,25 +200,21 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
             return
         }
 
-        val peers = monolith!!.peerCount().toInt()
-        val sessions = monolith!!.sessionCount().toInt()
+        val remotePeers = monolith!!.peerCount(Gobind.PeerTypeRemote).toInt()
+        val multicastPeers = monolith!!.peerCount(Gobind.PeerTypeMulticast).toInt()
+        val bluetoothPeers = monolith!!.peerCount(Gobind.PeerTypeBluetooth).toInt()
 
-        var title: String
+        var title: String = "Peer-to-peer service running"
         var text: String
 
-        if (peers == 0) {
-            title = "No connectivity"
-            text = "There are no nearby devices connected"
+        if (remotePeers+multicastPeers+bluetoothPeers == 0) {
+            text = "No connectivity"
         } else {
-            text = when (sessions) {
-                0 -> "No active connections"
-                1 -> "$sessions active connection"
-                else -> "$sessions active connections"
+            text = "Connected to "
+            if (remotePeers > 0) {
+                text += "static, "
             }
-            title = when (peers) {
-                1 -> "$peers nearby device"
-                else -> "$peers nearby devices"
-            }
+            text += "$multicastPeers Wi-Fi & $bluetoothPeers BLE"
         }
 
         notification = NotificationCompat.Builder(applicationContext, "im.vector.p2p")
@@ -249,7 +245,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
         if (vectorPreferences.p2pEnableStatic()) {
             monolith!!.setStaticPeer(vectorPreferences.p2pStaticURI())
         }
-        monolith!!.setMulticastEnabled(vectorPreferences.p2pEnableNearby())
+        monolith!!.setMulticastEnabled(vectorPreferences.p2pEnableMulticast())
 
         Timer().schedule(object : TimerTask() {
             override fun run() {
@@ -257,28 +253,41 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
             }
         }, 0, 1000)
 
+        startBluetooth()
+
+        super.onCreate()
+    }
+
+    fun startBluetooth() {
         if (adapter.isEnabled && adapter.isMultipleAdvertisementSupported) {
             manager = applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-
-            val parameters = AdvertisingSetParameters.Builder()
-                    .setLegacyMode(false)
-                    .setInterval(AdvertisingSetParameters.INTERVAL_HIGH)
-                    .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_MAX)
-                    .setIncludeTxPower(true)
-                    .setConnectable(true)
-
-            if (manager.adapter.isLeCodedPhySupported) {
-                parameters.setPrimaryPhy(BluetoothDevice.PHY_LE_1M)
-                parameters.setSecondaryPhy(BluetoothDevice.PHY_LE_CODED)
-                Toast.makeText(applicationContext, "Requesting 1M PHY + Coded PHY", Toast.LENGTH_SHORT).show()
-            } else {
-                parameters.setPrimaryPhy(BluetoothDevice.PHY_LE_1M)
-                Toast.makeText(applicationContext, "Requesting 1M PHY only", Toast.LENGTH_SHORT).show()
-            }
 
             val advertiseData = AdvertiseData.Builder()
                     .addServiceUuid(serviceUUID)
                     .build()
+
+            if (vectorPreferences.p2pBLECodedPhy() && manager.adapter.isLeCodedPhySupported) {
+                val parameters = AdvertisingSetParameters.Builder()
+                        .setLegacyMode(false)
+                        .setInterval(AdvertisingSetParameters.INTERVAL_HIGH)
+                        .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_MAX)
+                        .setConnectable(true)
+
+                parameters.setPrimaryPhy(BluetoothDevice.PHY_LE_CODED)
+                parameters.setSecondaryPhy(BluetoothDevice.PHY_LE_1M)
+                Toast.makeText(applicationContext, "Requesting Coded PHY + 1M PHY", Toast.LENGTH_SHORT).show()
+
+                advertiser.startAdvertisingSet(parameters.build(), advertiseData, null, null, null, advertiseSetCallback)
+            } else {
+                val advertiseSettings = AdvertiseSettings.Builder()
+                        .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
+                        .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+                        .setTimeout(0)
+                        .setConnectable(true)
+                        .build()
+
+                advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
+            }
 
             val scanFilter = ScanFilter.Builder()
                     .setServiceUuid(serviceUUID)
@@ -293,8 +302,6 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                     .setPhy(ScanSettings.PHY_LE_ALL_SUPPORTED)
                     .build()
 
-            advertiser.startAdvertisingSet(parameters.build(), advertiseData, null, null, null, advertiseSetCallback)
-            // advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
             scanner.startScan(scanFilters, scanSettings, scanCallback)
 
             gattCharacteristic = BluetoothGattCharacteristic(psmUUID, BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ)
@@ -332,8 +339,14 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                 }
             }
         }
+    }
 
-        super.onCreate()
+    fun stopBluetooth() {
+        if (adapter.isEnabled && adapter.isMultipleAdvertisementSupported) {
+            advertiser.stopAdvertising(advertiseCallback)
+            advertiser.stopAdvertisingSet(advertiseSetCallback)
+            scanner.stopScan(scanCallback)
+        }
     }
 
     override fun onDestroy() {
@@ -341,11 +354,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
             return
         }
 
-        if (adapter.isEnabled && adapter.isMultipleAdvertisementSupported) {
-            //advertiser.stopAdvertising(advertiseCallback)
-            advertiser.stopAdvertisingSet(advertiseSetCallback)
-            scanner.stopScan(scanCallback)
-        }
+        stopBluetooth()
 
         if (notificationManager != null) {
             notificationManager!!.cancel(545)
@@ -457,19 +466,6 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
             super.onAdvertisingSetStarted(advertisingSet, txPower, status)
             if (status == AdvertisingSetCallback.ADVERTISE_SUCCESS) {
                 Toast.makeText(applicationContext, "BLE advertise set started", Toast.LENGTH_SHORT).show()
-            } else {
-                val advertiseData = AdvertiseData.Builder()
-                        .addServiceUuid(serviceUUID)
-                        .build()
-
-                val advertiseSettings = AdvertiseSettings.Builder()
-                        .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_POWER)
-                        .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
-                        .setTimeout(0)
-                        .setConnectable(true)
-                        .build()
-
-                advertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
             }
         }
 
@@ -483,7 +479,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
         override fun onScanFailed(errorCode: Int) {
             super.onScanFailed(errorCode)
             Timber.i("BLE: error %s", errorCode)
-            Toast.makeText(applicationContext, "BLE: Error code $errorCode", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(applicationContext, "BLE: Error code $errorCode", Toast.LENGTH_SHORT).show()
         }
 
         override fun onScanResult(callbackType: Int, result: ScanResult) {
@@ -530,11 +526,21 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         val m = monolith ?: return
         when (key){
-            VectorPreferences.SETTINGS_P2P_ENABLE_NEARBY -> {
-                val enabled = vectorPreferences.p2pEnableNearby()
+            VectorPreferences.SETTINGS_P2P_ENABLE_MULTICAST -> {
+                val enabled = vectorPreferences.p2pEnableMulticast()
                 m.setMulticastEnabled(enabled)
                 if (!enabled) {
                     m.disconnectType(Gobind.PeerTypeMulticast)
+                }
+            }
+
+            VectorPreferences.SETTINGS_P2P_ENABLE_BLUETOOTH -> {
+                val enabled = vectorPreferences.p2pEnableBluetooth()
+                if (enabled) {
+                    startBluetooth()
+                } else {
+                    stopBluetooth()
+                    m.disconnectType(Gobind.PeerTypeBluetooth)
                 }
             }
 
@@ -552,6 +558,15 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                 if (vectorPreferences.p2pEnableStatic()) {
                     val uri = vectorPreferences.p2pStaticURI()
                     m.setStaticPeer(uri)
+                }
+            }
+
+            VectorPreferences.SETTINGS_P2P_BLE_CODED_PHY -> {
+                val enabled = vectorPreferences.p2pEnableBluetooth()
+                if (enabled) {
+                    stopBluetooth()
+                    m.disconnectType(Gobind.PeerTypeBluetooth)
+                    startBluetooth()
                 }
             }
         }

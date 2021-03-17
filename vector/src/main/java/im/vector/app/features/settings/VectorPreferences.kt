@@ -191,7 +191,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
 
         // P2P
-        const val SETTINGS_P2P_ENABLE_NEARBY = "SETTINGS_P2P_ENABLE_NEARBY"
+        const val SETTINGS_P2P_ENABLE_MULTICAST = "SETTINGS_P2P_ENABLE_MULTICAST"
+        const val SETTINGS_P2P_ENABLE_BLUETOOTH = "SETTINGS_P2P_ENABLE_BLUETOOTH"
+        const val SETTINGS_P2P_BLE_CODED_PHY = "SETTINGS_P2P_BLE_CODED_PHY"
         const val SETTINGS_P2P_ENABLE_STATIC = "SETTINGS_P2P_ENABLE_STATIC"
         const val SETTINGS_P2P_STATIC_URI = "SETTINGS_P2P_STATIC_URI"
 
@@ -242,8 +244,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_USE_RAGE_SHAKE_KEY,
                 SETTINGS_SECURITY_USE_FLAG_SECURE,
 
-                SETTINGS_P2P_ENABLE_NEARBY,
+                SETTINGS_P2P_ENABLE_MULTICAST,
+                SETTINGS_P2P_ENABLE_BLUETOOTH,
                 SETTINGS_P2P_ENABLE_STATIC,
+                SETTINGS_P2P_BLE_CODED_PHY,
                 SETTINGS_P2P_STATIC_URI
         )
     }
@@ -341,12 +345,20 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         }
     }
 
-    fun p2pEnableNearby(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_P2P_ENABLE_NEARBY, true)
+    fun p2pEnableMulticast(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_P2P_ENABLE_MULTICAST, true)
+    }
+
+    fun p2pEnableBluetooth(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_P2P_ENABLE_BLUETOOTH, true)
     }
 
     fun p2pEnableStatic(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_P2P_ENABLE_STATIC, false)
+    }
+
+    fun p2pBLECodedPhy(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_P2P_BLE_CODED_PHY, false)
     }
 
     fun p2pStaticURI(): String {

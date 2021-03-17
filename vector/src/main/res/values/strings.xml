@@ -1150,11 +1150,13 @@
     <string name="room_settings_addresses_e2e_encryption_warning">Enable encryption \n(warning: cannot be disabled again!)</string>
 
     <!-- Room settings: Peer-to-peer -->
-    <string name="settings_p2p_title">Peer-to-peer</string>
-    <string name="settings_p2p_connect_nearby">Connect to nearby devices</string>
+    <string name="settings_p2p_title">Peer-to-Peer</string>
+    <string name="settings_p2p_connect_multicast">Discover LAN peers</string>
+    <string name="settings_p2p_connect_bluetooth">Discover Bluetooth peers</string>
     <string name="settings_p2p_connect_static">Connect to static peer</string>
     <string name="settings_p2p_static_peer_uri">Static peer</string>
     <string name="change_p2p_static_peer_summary">Peer to connect to over Wi-Fi or mobile data</string>
+    <string name="settings_p2p_ble_coded_phy">Use Bluetooth Coded PHY</string>
 
     <!-- Directory -->
     <string name="directory_title">Directory</string>
