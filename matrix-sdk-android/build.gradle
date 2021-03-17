@@ -186,7 +186,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'org.amshove.kluent:kluent-android:1.61'
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
-    androidTestImplementation 'io.mockk:mockk-android:1.10.6'
+    androidTestImplementation 'io.mockk:mockk-android:1.11.0'
     androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
     // Plant Timber tree for test
