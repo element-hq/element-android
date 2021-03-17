@@ -13,6 +13,7 @@ Improvements 🙌:
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity
  - Handle encrypted reactions (#2509)
+ - Disable URL preview for some domains (#2995)
 
 Translations 🗣:
  -
