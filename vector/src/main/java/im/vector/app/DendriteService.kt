@@ -303,7 +303,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
             if (vectorPreferences.p2pBLECodedPhy() && manager.adapter.isLeCodedPhySupported) {
                 scanSettingsBuilder.setPhy(BluetoothDevice.PHY_LE_CODED)
             } else {
-                scanSettingsBuilder.setPhy(BluetoothDevice.PHY_LE_1M)
+                scanSettingsBuilder.setPhy(ScanSettings.PHY_LE_ALL_SUPPORTED)
             }
 
             val scanSettings = scanSettingsBuilder.build()
