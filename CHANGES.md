@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Fix regression in UpdateTrustWorker (introduced in 1.1.2)
 
 Translations 🗣:
  -
