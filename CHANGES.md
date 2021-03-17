@@ -8,7 +8,7 @@ Improvements 🙌:
  -
 
 Bugfix 🐛:
- -
+ - Timeline : Fix ripple effect on text item and fix background color of separators.
 
 Translations 🗣:
  -
