@@ -37,10 +37,6 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val callItemFactory: CallItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {
 
-    private val shouldShowHiddenEvents by lazy {
-        userPreferencesProvider.shouldShowHiddenEvents()
-    }
-
     /**
      * Reminder: nextEvent is older and prevEvent is newer.
      */
@@ -102,7 +98,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.CALL_REPLACES,
                 EventType.CALL_SELECT_ANSWER,
                 EventType.CALL_NEGOTIATE -> {
-                    if (shouldShowHiddenEvents) {
+                    if (userPreferencesProvider.shouldShowHiddenEvents()) {
                         noticeItemFactory.create(event, highlight, callback)
                     } else {
                         null
@@ -111,7 +107,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 // Unhandled event types
                 else                              -> {
                     Timber.v("Type ${event.root.getClearType()} not handled")
-                    if (shouldShowHiddenEvents) {
+                    if (userPreferencesProvider.shouldShowHiddenEvents()) {
                         // Should only happen when shouldShowHiddenEvents() settings is ON
                         defaultItemFactory.create(event, highlight, callback)
                     } else {

@@ -29,6 +29,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
@@ -109,6 +110,7 @@ class MessageItemFactory @Inject constructor(
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
+        private val userPreferencesProvider: UserPreferencesProvider,
         private val session: Session) {
 
     // TODO inject this properly?
@@ -142,23 +144,27 @@ class MessageItemFactory @Inject constructor(
                 || event.isEncrypted() && event.root.content.toModel<EncryptedEventContent>()?.relatesTo?.type == RelationType.REPLACE
         ) {
             // This is an edit event, we should display it when debugging as a notice event
-            return noticeItemFactory.create(event, highlight, callback)
+            return if (userPreferencesProvider.shouldShowHiddenEvents()) {
+                noticeItemFactory.create(event, highlight, callback)
+            } else {
+                null
+            }
         }
         val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
 
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
         return when (messageContent) {
-            is MessageEmoteContent               -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageTextContent                -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
-            is MessageImageInfoContent           -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageNoticeContent              -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageVideoContent               -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageFileContent                -> buildFileMessageItem(messageContent, highlight, attributes)
-            is MessageAudioContent               -> buildAudioMessageItem(messageContent, informationData, highlight, attributes)
+            is MessageEmoteContent -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageTextContent -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
+            is MessageImageInfoContent -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageNoticeContent -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageVideoContent -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageFileContent -> buildFileMessageItem(messageContent, highlight, attributes)
+            is MessageAudioContent -> buildAudioMessageItem(messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageOptionsContent             -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollResponseContent        -> noticeItemFactory.create(event, highlight, callback)
+            is MessageOptionsContent -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessagePollResponseContent -> noticeItemFactory.create(event, highlight, callback)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }
@@ -169,7 +175,7 @@ class MessageItemFactory @Inject constructor(
                                         callback: TimelineEventController.Callback?,
                                         attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
         return when (messageContent.optionType) {
-            OPTION_TYPE_POLL    -> {
+            OPTION_TYPE_POLL -> {
                 MessagePollItem_()
                         .attributes(attributes)
                         .callback(callback)
@@ -382,7 +388,7 @@ class MessageItemFactory @Inject constructor(
             val codeVisitor = CodeVisitor()
             codeVisitor.visit(localFormattedBody)
             when (codeVisitor.codeKind) {
-                CodeVisitor.Kind.BLOCK  -> {
+                CodeVisitor.Kind.BLOCK -> {
                     val codeFormattedBlock = htmlRenderer.get().render(localFormattedBody)
                     if (codeFormattedBlock == null) {
                         buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
@@ -398,7 +404,7 @@ class MessageItemFactory @Inject constructor(
                         buildMessageTextItem(codeFormatted, false, informationData, highlight, callback, attributes)
                     }
                 }
-                CodeVisitor.Kind.NONE   -> {
+                CodeVisitor.Kind.NONE -> {
                     buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
                 }
             }
