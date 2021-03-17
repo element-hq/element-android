@@ -96,7 +96,7 @@ internal class DefaultPushersService @Inject constructor(
         val request = workManagerProvider.matrixOneTimeWorkRequestBuilder<AddHttpPusherWorker>()
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .setInputData(WorkerParamsFactory.toData(params))
-                .setBackoffCriteria(BackoffPolicy.LINEAR, 10_000L, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
         workManagerProvider.workManager.enqueue(request)
         return request.id
