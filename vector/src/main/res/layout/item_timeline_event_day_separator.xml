@@ -19,7 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="?android:attr/windowBackground"
-        android:paddingHorizontal="24dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
         android:textColor="?riotx_header_panel_text_secondary"
         android:textSize="15sp"
         tools:text="@tools:sample/date/day_of_week" />

@@ -18,7 +18,8 @@
         android:layout_gravity="center"
         android:background="?android:attr/windowBackground"
         android:fontFamily="sans-serif-medium"
-        android:paddingHorizontal="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:text="@string/timeline_unread_messages"
         android:textColor="@color/notification_accent_color"
         android:textSize="15sp" />
