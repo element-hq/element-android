@@ -9,6 +9,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Fix regression in UpdateTrustWorker (introduced in 1.1.2)
+ - Timeline : Fix ripple effect on text item and fix background color of separators.
 
 Translations 🗣:
  -
