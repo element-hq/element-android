@@ -1,18 +1,13 @@
-Changes in Element 1.1.2 (2021-XX-XX)
+Changes in Element 1.1.3 (2021-XX-XX)
 ===================================================
 
 Features ✨:
  -
 
 Improvements 🙌:
- - Lazy storage of ReadReceipts
- - Do not load room members in e2e after init sync
+ -
 
 Bugfix 🐛:
- - Add option to cancel stuck messages at bottom of timeline see #516
- - Ensure message are decrypted in the room list after a clear cache
- - Regression: Video will not play upon tap, but only after swipe #2928
- - Cross signing now works with servers with an explicit port in the servername
  - Timeline : Fix ripple effect on text item and fix background color of separators.
 
 Translations 🗣:
@@ -28,13 +23,26 @@ Test:
  -
 
 Other changes:
- - Change formatting on issue templates to proper headings.
+ -
 
-Changes in Element 1.1.1 (2021-XX-XX)
+Changes in Element 1.1.2 (2021-03-16)
 ===================================================
 
-Features ✨:
- -
+Improvements 🙌:
+ - Lazy storage of ReadReceipts
+ - Do not load room members in e2e after init sync
+
+Bugfix 🐛:
+ - Add option to cancel stuck messages at bottom of timeline see #516
+ - Ensure message are decrypted in the room list after a clear cache
+ - Regression: Video will not play upon tap, but only after swipe #2928
+ - Cross signing now works with servers with an explicit port in the servername
+
+Other changes:
+ - Change formatting on issue templates to proper headings.
+
+Changes in Element 1.1.1 (2021-03-10)
+===================================================
 
 Improvements 🙌:
  - Allow non-HTTPS connections to homeservers on Tor (#2941)
@@ -56,15 +64,9 @@ Bugfix 🐛:
 Translations 🗣:
  - All string resources and translations have been moved to the application module. Weblate project for the SDK will be removed.
 
-SDK API changes ⚠️:
- -
-
 Build 🧱:
  - Update a lot of dependencies, with the help of dependabot.
  - Add a script to download and install APK from the CI
-
-Test:
- -
 
 Other changes:
  - Rework edition of event management
