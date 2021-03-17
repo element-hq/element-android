@@ -2471,4 +2471,9 @@
     <string name="error_unauthorized">未验证，缺少有效验证凭证</string>
     <string name="action_return">返回</string>
     <string name="system_theme">系统默认</string>
+    <string name="notice_room_server_acl_updated_banned">• 匹配 %s 的服务器已被屏蔽。</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• IP 地址匹配的服务器已被屏蔽。</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• IP 地址符合的服务器已被允许。</string>
+    <string name="notice_room_server_acl_set_banned">• 符合 %s 的服务器已被屏蔽。</string>
+    <string name="notice_room_server_acl_set_allowed">• 符合 %s 的服务器已被允许。</string>
 </resources>
