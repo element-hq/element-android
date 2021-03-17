@@ -57,12 +57,12 @@ internal class SplitLazyRoomSyncEphemeralJsonAdapter(
         }
         val limit = syncStrategy.minSizeToStoreInFile
         return if (json.length > limit) {
-            Timber.v("INIT_SYNC $path content length: ${json.length} copy to a file")
+            Timber.d("INIT_SYNC $path content length: ${json.length} copy to a file")
             // Copy the source to a file
             roomSyncEphemeralTemporaryStore.write(roomId, json)
             LazyRoomSyncEphemeral.Stored
         } else {
-            Timber.v("INIT_SYNC $path content length: ${json.length} parse it now")
+            Timber.d("INIT_SYNC $path content length: ${json.length} parse it now")
             val roomSync = delegate.fromJson(json) ?: return null
             LazyRoomSyncEphemeral.Parsed(roomSync)
         }
