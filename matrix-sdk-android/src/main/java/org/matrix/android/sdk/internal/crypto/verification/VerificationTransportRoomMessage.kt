@@ -183,7 +183,7 @@ internal class VerificationTransportRoomMessage(
         val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SendVerificationMessageWorker>()
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .setInputData(workerParams)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, 2_000L, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
 
         workManagerProvider.workManager
@@ -280,7 +280,7 @@ internal class VerificationTransportRoomMessage(
         val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SendVerificationMessageWorker>()
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .setInputData(workerParams)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, 2_000L, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
         return workManagerProvider.workManager
                 .beginUniqueWork(uniqueQueueName(), ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)

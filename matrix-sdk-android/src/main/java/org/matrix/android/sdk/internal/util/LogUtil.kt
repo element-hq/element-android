@@ -33,13 +33,13 @@ internal fun <T> Collection<T>.logLimit(maxQuantity: Int = 5): String {
 
 internal suspend fun <T> logDuration(message: String,
                                      block: suspend () -> T): T {
-    Timber.v("$message -- BEGIN")
+    Timber.d("$message -- BEGIN")
     val start = System.currentTimeMillis()
     val result = logRamUsage(message) {
         block()
     }
     val duration = System.currentTimeMillis() - start
-    Timber.v("$message -- END duration: $duration ms")
+    Timber.d("$message -- END duration: $duration ms")
 
     return result
 }
@@ -50,12 +50,12 @@ internal suspend fun <T> logRamUsage(message: String, block: suspend () -> T): T
         runtime.gc()
         val freeMemoryInMb = runtime.freeMemory() / 1048576L
         val usedMemInMBStart = runtime.totalMemory() / 1048576L - freeMemoryInMb
-        Timber.v("$message -- BEGIN (free memory: $freeMemoryInMb MB)")
+        Timber.d("$message -- BEGIN (free memory: $freeMemoryInMb MB)")
         val result = block()
         runtime.gc()
         val usedMemInMBEnd = (runtime.totalMemory() - runtime.freeMemory()) / 1048576L
         val usedMemInMBDiff = usedMemInMBEnd - usedMemInMBStart
-        Timber.v("$message -- END RAM usage: $usedMemInMBDiff MB")
+        Timber.d("$message -- END RAM usage: $usedMemInMBDiff MB")
         result
     } else {
         block()

@@ -147,13 +147,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         if (numberOfChunks > 1) {
             reportSubtask(reporter, InitSyncStep.ImportingAccountJoinedRooms, numberOfChunks, 0.6f) {
                 val chunkSize = listSize / numberOfChunks
-                Timber.v("INIT_SYNC $listSize rooms to insert, split into $numberOfChunks sublists of $chunkSize items")
+                Timber.d("INIT_SYNC $listSize rooms to insert, split into $numberOfChunks sublists of $chunkSize items")
                 // I cannot find a better way to chunk a map, so chunk the keys and then create new maps
                 handlingStrategy.data.keys
                         .chunked(chunkSize)
                         .forEachIndexed { index, roomIds ->
                             val roomEntities = roomIds
-                                    .also { Timber.v("INIT_SYNC insert ${roomIds.size} rooms") }
+                                    .also { Timber.d("INIT_SYNC insert ${roomIds.size} rooms") }
                                     .map {
                                         handleJoinedRoom(
                                                 realm = realm,
