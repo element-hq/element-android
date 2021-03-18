@@ -29,7 +29,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.getBetsChunkSize
+import org.matrix.android.sdk.internal.util.computeBestChunkSize
 import javax.inject.Inject
 
 internal interface DownloadKeysForUsersTask : Task<DownloadKeysForUsersTask.Params, KeysQueryResponse> {
@@ -47,7 +47,7 @@ internal class DefaultDownloadKeysForUsers @Inject constructor(
 ) : DownloadKeysForUsersTask {
 
     override suspend fun execute(params: DownloadKeysForUsersTask.Params): KeysQueryResponse {
-        val bestChunkSize = getBetsChunkSize(params.userIds.size, LIMIT)
+        val bestChunkSize = computeBestChunkSize(params.userIds.size, LIMIT)
 
         // Store server results in these mutable maps
         val deviceKeys = mutableMapOf<String, Map<String, DeviceKeysWithUnsigned>>()

@@ -27,35 +27,35 @@ import org.matrix.android.sdk.MatrixTest
 class MathUtilTest : MatrixTest {
 
     @Test
-    fun testGetBestChunkSize0() = doTest(0, 100, 1, 0)
+    fun testComputeBestChunkSize0() = doTest(0, 100, 1, 0)
 
     @Test
-    fun testGetBestChunkSize1to99() {
+    fun testComputeBestChunkSize1to99() {
         for (i in 1..99) {
             doTest(i, 100, 1, i)
         }
     }
 
     @Test
-    fun testGetBestChunkSize100() = doTest(100, 100, 1, 100)
+    fun testComputeBestChunkSize100() = doTest(100, 100, 1, 100)
 
     @Test
-    fun testGetBestChunkSize101() = doTest(101, 100, 2, 51)
+    fun testComputeBestChunkSize101() = doTest(101, 100, 2, 51)
 
     @Test
-    fun testGetBestChunkSize199() = doTest(199, 100, 2, 100)
+    fun testComputeBestChunkSize199() = doTest(199, 100, 2, 100)
 
     @Test
-    fun testGetBestChunkSize200() = doTest(200, 100, 2, 100)
+    fun testComputeBestChunkSize200() = doTest(200, 100, 2, 100)
 
     @Test
-    fun testGetBestChunkSize201() = doTest(201, 100, 3, 67)
+    fun testComputeBestChunkSize201() = doTest(201, 100, 3, 67)
 
     @Test
-    fun testGetBestChunkSize240() = doTest(240, 100, 3, 80)
+    fun testComputeBestChunkSize240() = doTest(240, 100, 3, 80)
 
     private fun doTest(listSize: Int, limit: Int, expectedNumberOfChunks: Int, expectedChunkSize: Int) {
-        val result = getBetsChunkSize(listSize, limit)
+        val result = computeBestChunkSize(listSize, limit)
 
         result.numberOfChunks shouldBeEqualTo expectedNumberOfChunks
         result.chunkSize shouldBeEqualTo expectedChunkSize

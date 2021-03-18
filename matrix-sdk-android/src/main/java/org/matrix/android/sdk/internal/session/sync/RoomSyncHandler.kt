@@ -64,7 +64,7 @@ import org.matrix.android.sdk.internal.session.sync.model.LazyRoomSyncEphemeral
 import org.matrix.android.sdk.internal.session.sync.model.RoomSync
 import org.matrix.android.sdk.internal.session.sync.model.RoomSyncAccountData
 import org.matrix.android.sdk.internal.session.sync.model.RoomsSyncResponse
-import org.matrix.android.sdk.internal.util.getBetsChunkSize
+import org.matrix.android.sdk.internal.util.computeBestChunkSize
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -140,12 +140,12 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                             syncLocalTimeStampMillis: Long,
                                             aggregator: SyncResponsePostTreatmentAggregator,
                                             reporter: ProgressReporter?) {
-        val bestChunkSize = getBetsChunkSize(
+        val bestChunkSize = computeBestChunkSize(
                 listSize = handlingStrategy.data.keys.size,
                 limit = (initialSyncStrategy as? InitialSyncStrategy.Optimized)?.maxRoomsToInsert ?: Int.MAX_VALUE
         )
 
-        if (bestChunkSize.shouldSplit()) {
+        if (bestChunkSize.shouldChunk()) {
             reportSubtask(reporter, InitSyncStep.ImportingAccountJoinedRooms, bestChunkSize.numberOfChunks, 0.6f) {
                 Timber.d("INIT_SYNC ${handlingStrategy.data.keys.size} rooms to insert, split with $bestChunkSize")
                 // I cannot find a better way to chunk a map, so chunk the keys and then create new maps

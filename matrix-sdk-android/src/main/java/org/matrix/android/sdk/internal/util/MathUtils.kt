@@ -22,10 +22,10 @@ internal data class BestChunkSize(
         val numberOfChunks: Int,
         val chunkSize: Int
 ) {
-    fun shouldSplit() = numberOfChunks > 1
+    fun shouldChunk() = numberOfChunks > 1
 }
 
-internal fun getBetsChunkSize(listSize: Int, limit: Int): BestChunkSize {
+internal fun computeBestChunkSize(listSize: Int, limit: Int): BestChunkSize {
     return if (listSize <= limit) {
         BestChunkSize(
                 numberOfChunks = 1,
