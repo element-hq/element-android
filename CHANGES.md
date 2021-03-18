@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Crypto improvement | Bulck send NO_OLM withheld code
 
 Bugfix 🐛:
  -
