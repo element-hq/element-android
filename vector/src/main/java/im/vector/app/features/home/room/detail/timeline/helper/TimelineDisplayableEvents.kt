@@ -22,7 +22,53 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 object TimelineDisplayableEvents {
 
+    /**
+     * All types we have an item to build with. Every type not defined here will be shown as DefaultItem if forced to be shown, otherwise will be hidden.
+     */
     val DISPLAYABLE_TYPES = listOf(
+            EventType.STICKER,
+            EventType.MESSAGE,
+            EventType.STATE_ROOM_TOMBSTONE,
+            EventType.STATE_ROOM_NAME,
+            EventType.STATE_ROOM_TOPIC,
+            EventType.STATE_ROOM_AVATAR,
+            EventType.STATE_ROOM_MEMBER,
+            EventType.STATE_ROOM_THIRD_PARTY_INVITE,
+            EventType.STATE_ROOM_CANONICAL_ALIAS,
+            EventType.STATE_ROOM_JOIN_RULES,
+            EventType.STATE_ROOM_HISTORY_VISIBILITY,
+            EventType.STATE_ROOM_SERVER_ACL,
+            EventType.STATE_ROOM_GUEST_ACCESS,
+            EventType.STATE_ROOM_POWER_LEVELS,
+            EventType.STATE_ROOM_WIDGET,
+            EventType.STATE_ROOM_WIDGET_LEGACY,
+            EventType.STATE_ROOM_ENCRYPTION,
+            EventType.STATE_ROOM_CREATE,
+            EventType.CALL_INVITE,
+            EventType.CALL_HANGUP,
+            EventType.CALL_REJECT,
+            EventType.CALL_ANSWER,
+            EventType.ENCRYPTED,
+            EventType.KEY_VERIFICATION_CANCEL,
+            EventType.KEY_VERIFICATION_DONE,
+            EventType.STATE_ROOM_ALIASES,
+            EventType.KEY_VERIFICATION_ACCEPT,
+            EventType.KEY_VERIFICATION_START,
+            EventType.KEY_VERIFICATION_KEY,
+            EventType.KEY_VERIFICATION_READY,
+            EventType.KEY_VERIFICATION_MAC,
+            EventType.CALL_CANDIDATES,
+            EventType.CALL_REPLACES,
+            EventType.CALL_SELECT_ANSWER,
+            EventType.CALL_NEGOTIATE
+    )
+
+    /**
+     * It's a subset of DISPLAYABLE_TYPES, used on DefaultTimeline to query.
+     *
+     */
+    //TODO remove this as we remove the filtering in the SDK
+    val TIMELINE_FILTERED_TYPES = listOf(
             EventType.MESSAGE,
             EventType.STATE_ROOM_WIDGET_LEGACY,
             EventType.STATE_ROOM_WIDGET,
@@ -68,7 +114,7 @@ fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {
         EventType.STATE_ROOM_CANONICAL_ALIAS,
         EventType.STATE_ROOM_POWER_LEVELS,
         EventType.STATE_ROOM_ENCRYPTION -> true
-        EventType.STATE_ROOM_MEMBER     -> {
+        EventType.STATE_ROOM_MEMBER -> {
             // Keep only room member events regarding the room creator (when he joined the room),
             // but exclude events where the room creator invite others, or where others join
             roomCreatorUserId != null && root.stateKey == roomCreatorUserId
