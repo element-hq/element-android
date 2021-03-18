@@ -48,51 +48,64 @@ internal class DefaultDownloadKeysForUsers @Inject constructor(
 
     override suspend fun execute(params: DownloadKeysForUsersTask.Params): KeysQueryResponse {
         val bestChunkSize = computeBestChunkSize(params.userIds.size, LIMIT)
+        val token = params.token?.takeIf { token -> token.isNotEmpty() }
 
-        // Store server results in these mutable maps
-        val deviceKeys = mutableMapOf<String, Map<String, DeviceKeysWithUnsigned>>()
-        val failures = mutableMapOf<String, Map<String, Any>>()
-        val masterKeys = mutableMapOf<String, RestKeyInfo?>()
-        val selfSigningKeys = mutableMapOf<String, RestKeyInfo?>()
-        val userSigningKeys = mutableMapOf<String, RestKeyInfo?>()
+        return if (bestChunkSize.shouldChunk()) {
+            // Store server results in these mutable maps
+            val deviceKeys = mutableMapOf<String, Map<String, DeviceKeysWithUnsigned>>()
+            val failures = mutableMapOf<String, Map<String, Any>>()
+            val masterKeys = mutableMapOf<String, RestKeyInfo?>()
+            val selfSigningKeys = mutableMapOf<String, RestKeyInfo?>()
+            val userSigningKeys = mutableMapOf<String, RestKeyInfo?>()
 
-        val mutex = Mutex()
+            val mutex = Mutex()
 
-        // Split network request into smaller request (#2925)
-        coroutineScope {
-            params.userIds
-                    .chunked(bestChunkSize.chunkSize)
-                    .map {
-                        KeysQueryBody(
-                                deviceKeys = it.associateWith { emptyList() },
-                                token = params.token?.takeIf { token -> token.isNotEmpty() }
-                        )
-                    }
-                    .map { body ->
-                        async {
-                            val result = executeRequest<KeysQueryResponse>(globalErrorReceiver) {
-                                apiCall = cryptoApi.downloadKeysForUsers(body)
-                            }
+            // Split network request into smaller request (#2925)
+            coroutineScope {
+                params.userIds
+                        .chunked(bestChunkSize.chunkSize)
+                        .map {
+                            KeysQueryBody(
+                                    deviceKeys = it.associateWith { emptyList() },
+                                    token = token
+                            )
+                        }
+                        .map { body ->
+                            async {
+                                val result = executeRequest<KeysQueryResponse>(globalErrorReceiver) {
+                                    apiCall = cryptoApi.downloadKeysForUsers(body)
+                                }
 
-                            mutex.withLock {
-                                deviceKeys.putAll(result.deviceKeys.orEmpty())
-                                failures.putAll(result.failures.orEmpty())
-                                masterKeys.putAll(result.masterKeys.orEmpty())
-                                selfSigningKeys.putAll(result.selfSigningKeys.orEmpty())
-                                userSigningKeys.putAll(result.userSigningKeys.orEmpty())
+                                mutex.withLock {
+                                    deviceKeys.putAll(result.deviceKeys.orEmpty())
+                                    failures.putAll(result.failures.orEmpty())
+                                    masterKeys.putAll(result.masterKeys.orEmpty())
+                                    selfSigningKeys.putAll(result.selfSigningKeys.orEmpty())
+                                    userSigningKeys.putAll(result.userSigningKeys.orEmpty())
+                                }
                             }
                         }
-                    }
-                    .joinAll()
-        }
+                        .joinAll()
+            }
 
-        return KeysQueryResponse(
-                deviceKeys = deviceKeys,
-                failures = failures,
-                masterKeys = masterKeys,
-                selfSigningKeys = selfSigningKeys,
-                userSigningKeys = userSigningKeys
-        )
+            KeysQueryResponse(
+                    deviceKeys = deviceKeys,
+                    failures = failures,
+                    masterKeys = masterKeys,
+                    selfSigningKeys = selfSigningKeys,
+                    userSigningKeys = userSigningKeys
+            )
+        } else {
+            // No need to chunk, direct request
+            executeRequest(globalErrorReceiver) {
+                apiCall = cryptoApi.downloadKeysForUsers(
+                        KeysQueryBody(
+                                deviceKeys = params.userIds.associateWith { emptyList() },
+                                token = token
+                        )
+                )
+            }
+        }
     }
 
     companion object {
