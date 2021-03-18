@@ -33,9 +33,9 @@ internal class InitialSyncResponseParser @Inject constructor(
 
     fun parse(syncStrategy: InitialSyncStrategy.Optimized, workingFile: File): SyncResponse {
         val syncResponseLength = workingFile.length().toInt()
-        Timber.v("INIT_SYNC Sync file size is $syncResponseLength bytes")
+        Timber.d("INIT_SYNC Sync file size is $syncResponseLength bytes")
         val shouldSplit = syncResponseLength >= syncStrategy.minSizeToSplit
-        Timber.v("INIT_SYNC should split in several files: $shouldSplit")
+        Timber.d("INIT_SYNC should split in several files: $shouldSplit")
         return getMoshi(syncStrategy, shouldSplit)
                 .adapter(SyncResponse::class.java)
                 .fromJson(workingFile.source().buffer())!!

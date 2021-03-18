@@ -1,4 +1,11 @@
-Changes in Element 1.1.2 (2021-03-16)
+Changes in Element 1.1.3 (2021-03-18)
+===================================================
+
+Bugfix 🐛:
+ - Fix regression in UpdateTrustWorker (introduced in 1.1.2)
+ - Timeline : Fix ripple effect on text item and fix background color of separators.
+
+Changes in Element 1.1.2 (2021-03-16) (was not published tp GPlay prod)
 ===================================================
 
 Improvements 🙌:
@@ -14,7 +21,7 @@ Bugfix 🐛:
 Other changes:
  - Change formatting on issue templates to proper headings.
 
-Changes in Element 1.1.1 (2021-03-10)
+Changes in Element 1.1.1 (2021-03-10) (was not published tp GPlay prod)
 ===================================================
 
 Improvements 🙌:

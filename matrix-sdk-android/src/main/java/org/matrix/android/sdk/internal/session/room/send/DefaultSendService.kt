@@ -318,7 +318,7 @@ internal class DefaultSendService @AssistedInject constructor(
                 .setConstraints(WorkManagerProvider.workConstraints)
                 .startChain(true)
                 .setInputData(uploadWorkData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
     }
 
@@ -332,7 +332,7 @@ internal class DefaultSendService @AssistedInject constructor(
                 // .setConstraints(WorkManagerProvider.workConstraints)
                 .startChain(false)
                 .setInputData(workData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
     }
 }
