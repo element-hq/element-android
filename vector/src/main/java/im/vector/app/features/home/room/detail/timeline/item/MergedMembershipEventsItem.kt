@@ -56,8 +56,6 @@ abstract class MergedMembershipEventsItem : BasedMergedItem<MergedMembershipEven
             holder.avatarListView.visibility = View.INVISIBLE
             holder.summaryView.visibility = View.GONE
         }
-        // No read receipt for this item
-        holder.readReceiptsView.isVisible = false
     }
 
     class Holder : BasedMergedItem.Holder(STUB_ID) {
@@ -73,7 +71,6 @@ abstract class MergedMembershipEventsItem : BasedMergedItem<MergedMembershipEven
             override val isCollapsed: Boolean,
             override val mergeData: List<Data>,
             override val avatarRenderer: AvatarRenderer,
-            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             override val onCollapsedStateChanged: (Boolean) -> Unit
     ) : BasedMergedItem.Attributes
 }

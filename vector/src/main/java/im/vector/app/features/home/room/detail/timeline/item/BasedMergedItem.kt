@@ -41,8 +41,6 @@ abstract class BasedMergedItem<H : BasedMergedItem.Holder> : BaseEventItem<H>() 
             holder.separatorView.visibility = View.VISIBLE
             holder.expandView.setText(R.string.merged_events_collapse)
         }
-        // No read receipt for this item
-        holder.readReceiptsView.isVisible = false
     }
 
     protected val distinctMergeData by lazy {
@@ -72,7 +70,6 @@ abstract class BasedMergedItem<H : BasedMergedItem.Holder> : BaseEventItem<H>() 
         val isCollapsed: Boolean
         val mergeData: List<Data>
         val avatarRenderer: AvatarRenderer
-        val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback?
         val onCollapsedStateChanged: (Boolean) -> Unit
     }
 

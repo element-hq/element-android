@@ -111,15 +111,6 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 },
                 hasBeenEdited = event.hasBeenEdited(),
                 hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false,
-                readReceipts = event.readReceipts
-                        .asSequence()
-                        .filter {
-                            it.user.userId != session.myUserId
-                        }
-                        .map {
-                            ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
-                        }
-                        .toList(),
                 referencesInfoData = event.annotations?.referencesAggregatedSummary?.let { referencesAggregatedSummary ->
                     val verificationState = referencesAggregatedSummary.content.toModel<ReferencesAggregatedContent>()?.verificationState
                             ?: VerificationState.REQUEST

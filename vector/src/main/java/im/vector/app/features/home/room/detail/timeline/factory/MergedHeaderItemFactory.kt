@@ -126,8 +126,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                     onCollapsedStateChanged = {
                         mergeItemCollapseStates[event.localId] = it
                         requestModelBuild()
-                    },
-                    readReceiptsCallback = callback
+                    }
             )
             MergedMembershipEventsItem_()
                     .id(mergeId)
@@ -205,7 +204,6 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                     },
                     hasEncryptionEvent = hasEncryption,
                     isEncryptionAlgorithmSecure = encryptionAlgorithm == MXCRYPTO_ALGORITHM_MEGOLM,
-                    readReceiptsCallback = callback,
                     callback = callback,
                     currentUserId = currentUserId,
                     roomSummary = roomSummariesHolder.get(event.roomId),

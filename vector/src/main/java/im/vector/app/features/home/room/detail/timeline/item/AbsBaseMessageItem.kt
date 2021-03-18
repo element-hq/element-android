@@ -41,10 +41,6 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
     abstract val baseAttributes: Attributes
 
-    private val _readReceiptsClickListener = DebouncedClickListener({
-        baseAttributes.readReceiptsCallback?.onReadReceiptsClicked(baseAttributes.informationData.readReceipts)
-    })
-
     private var reactionClickListener: ReactionButton.ReactedListener = object : ReactionButton.ReactedListener {
         override fun onReacted(reactionButton: ReactionButton) {
             baseAttributes.reactionPillCallback?.onClickOnReactionPill(baseAttributes.informationData, reactionButton.reactionString, true)
@@ -69,12 +65,6 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
     override fun bind(holder: H) {
         super.bind(holder)
-        holder.readReceiptsView.render(
-                baseAttributes.informationData.readReceipts,
-                baseAttributes.avatarRenderer,
-                _readReceiptsClickListener
-        )
-
         val reactions = baseAttributes.informationData.orderedReactionList
         if (!shouldShowReactionAtBottom() || reactions.isNullOrEmpty()) {
             holder.reactionsContainer.isVisible = false
@@ -111,7 +101,6 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
     override fun unbind(holder: H) {
         holder.reactionsContainer.setOnLongClickListener(null)
-        holder.readReceiptsView.unbind(baseAttributes.avatarRenderer)
         super.unbind(holder)
     }
 
