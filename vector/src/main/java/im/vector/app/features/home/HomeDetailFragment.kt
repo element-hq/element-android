@@ -58,7 +58,6 @@ import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import timber.log.Timber
 import javax.inject.Inject
 
 private const val INDEX_PEOPLE = 0
@@ -363,7 +362,7 @@ class HomeDetailFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) {
-        Timber.v(it.toString())
+//        Timber.v(it.toString())
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_people).render(it.notificationCountPeople, it.notificationHighlightPeople)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_rooms).render(it.notificationCountRooms, it.notificationHighlightRooms)
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)

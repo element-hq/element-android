@@ -33,6 +33,17 @@ class AppStateHandler @Inject constructor() : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
 
+    init {
+        // restore current space from ui state
+        sessionDataSource.currentValue?.orNull()?.let { session ->
+            uiStateRepository.getSelectedSpace(session.sessionId)?.let { selectedSpaceId ->
+                session.getRoomSummary(selectedSpaceId)?.let {
+                    selectedSpaceDataSource.post(Option.just(it))
+                }
+            }
+        }
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
     }

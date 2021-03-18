@@ -36,14 +36,18 @@ internal class DefaultSpace(private val room: Room, private val spaceSummaryData
         return spaceSummaryDataSource.getSpaceSummary(asRoom().roomId)
     }
 
-    override suspend fun addChildren(roomId: String, viaServers: List<String>, order: String?, autoJoin: Boolean) {
+    override suspend fun addChildren(roomId: String, viaServers: List<String>,
+                                     order: String?,
+                                     autoJoin: Boolean,
+                                     suggested: Boolean?) {
         asRoom().sendStateEvent(
                 eventType = EventType.STATE_SPACE_CHILD,
                 stateKey = roomId,
                 body = SpaceChildContent(
                         via = viaServers,
                         autoJoin = autoJoin,
-                        order = order
+                        order = order,
+                        suggested = suggested
                 ).toContent()
         )
     }
