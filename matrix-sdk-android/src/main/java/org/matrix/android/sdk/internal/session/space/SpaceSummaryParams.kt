@@ -26,5 +26,8 @@ internal data class SpaceSummaryParams(
         /** The maximum number of rooms/subspaces to return, server can override this, default: 100 */
         @Json(name = "limit") val limit: Int = 100,
         /** A token to use if this is a subsequent HTTP hit, default: "".*/
-        @Json(name = "batch") val batch: String = ""
+        @Json(name = "batch") val batch: String = "",
+        /** whether we should only return children with the "suggested" flag set.*/
+        @Json(name = "suggested_only") val suggestedOnly: Boolean = false
+
 )

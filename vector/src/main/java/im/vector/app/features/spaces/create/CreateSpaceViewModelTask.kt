@@ -18,7 +18,6 @@ package im.vector.app.features.spaces.create
 
 import android.net.Uri
 import im.vector.app.core.platform.ViewModelTask
-import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -45,8 +44,8 @@ data class CreateSpaceTaskParams(
 )
 
 class CreateSpaceViewModelTask @Inject constructor(
-        private val session: Session,
-        private val stringProvider: StringProvider
+        private val session: Session
+//        private val stringProvider: StringProvider
 ) : ViewModelTask<CreateSpaceTaskParams, CreateSpaceTaskResult> {
 
     override suspend fun execute(params: CreateSpaceTaskParams): CreateSpaceTaskResult {
@@ -77,10 +76,17 @@ class CreateSpaceViewModelTask @Inject constructor(
                                 timeout.roomID
                             }
                             val via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
-                            createdSpace!!.addChildren(roomId, via, null, true)
+                            createdSpace!!.addChildren(roomId, via, null, autoJoin = false, suggested = true)
+                            // set canonical
+                            session.spaceService().setSpaceParent(
+                                    roomId,
+                                    createdSpace.asRoom().roomId,
+                                    true,
+                                    via
+                            )
                             childIds.add(roomId)
                         } catch (failure: Throwable) {
-                            Timber.d("Failed to create child room in $spaceID")
+                            Timber.d("Space: Failed to create child room in $spaceID")
                             childErrors[roomName] = failure
                         }
                     }

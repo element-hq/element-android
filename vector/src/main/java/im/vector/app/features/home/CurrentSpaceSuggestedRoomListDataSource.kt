@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,25 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.ui
+package im.vector.app.features.home
 
-import im.vector.app.features.home.RoomListDisplayMode
+import im.vector.app.core.utils.BehaviorDataSource
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
+import javax.inject.Inject
+import javax.inject.Singleton
 
-/**
- * This interface is used to persist UI state across application restart
- */
-interface UiStateRepository {
-
-    /**
-     * Reset all the saved data
-     */
-    fun reset()
-
-    fun getDisplayMode(): RoomListDisplayMode
-
-    fun storeDisplayMode(displayMode: RoomListDisplayMode)
-
-    fun storeSelectedSpace(roomId: String?, sessionId: String)
-
-    fun getSelectedSpace(sessionId: String): String?
-}
+@Singleton
+class CurrentSpaceSuggestedRoomListDataSource @Inject constructor() : BehaviorDataSource<List<SpaceChildInfo>>()
