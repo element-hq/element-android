@@ -18,16 +18,19 @@ package im.vector.app.features.home.room.list
 
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyController
+import com.airbnb.mvrx.Success
 import im.vector.app.R
 import im.vector.app.core.epoxy.helpFooterItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
+import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.filtered.filteredRoomFooterItem
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import javax.inject.Inject
 
 class RoomSummaryController @Inject constructor(private val stringProvider: StringProvider,
@@ -102,6 +105,49 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
             }
         }
 
+        if (viewState.displayMode == RoomListDisplayMode.ROOMS) {
+            val suggested = viewState.asyncSuggestedRooms.invoke()
+                    ?.filter { info ->
+                        roomSummaries?.values?.flatten()
+                                ?.filter { it.membership.isActive() }
+                                .orEmpty()
+                                .indexOfFirst { it.roomId == info.childRoomId } == -1
+                    }?.filter {
+                        // removed joined one (or they will temporary appear on both room and suggested
+                        viewState.suggestedRoomJoiningState[it.childRoomId] !is Success
+                    }
+            if (suggested?.isNotEmpty() == true) {
+                if (roomSummaries.isNullOrEmpty()) {
+                    genericFooterItem {
+                        id("empty_suggested")
+                        centered(false)
+                        text(stringProvider.getString(R.string.suggested_rooms_pills_on_empty_text))
+                    }
+                }
+                val isExpanded = viewState.isCategoryExpanded(RoomCategory.SUGGESTED_ROOM)
+
+                roomCategoryItem {
+                    id(R.string.suggested_header)
+                    title(stringProvider.getString(R.string.suggested_header))
+                    expanded(isExpanded)
+                    listener {
+                        listener?.onToggleRoomCategory(RoomCategory.SUGGESTED_ROOM)
+                        update(viewState)
+                    }
+                }
+                if (isExpanded) {
+                    suggested.forEach { info ->
+                        roomSummaryItemFactory.createSuggestion(
+                                info,
+                                viewState.suggestedRoomJoiningState
+                        ) {
+                            listener?.onJoinSuggestedRoom(info)
+                        }.addTo(this)
+                    }
+                }
+            }
+        }
+
         if (showHelp) {
             buildLongClickHelp()
         }
@@ -166,5 +212,6 @@ class RoomSummaryController @Inject constructor(private val stringProvider: Stri
         fun onRoomLongClicked(room: RoomSummary): Boolean
         fun onRejectRoomInvitation(room: RoomSummary)
         fun onAcceptRoomInvitation(room: RoomSummary)
+        fun onJoinSuggestedRoom(room: SpaceChildInfo)
     }
 }

@@ -36,6 +36,7 @@ import im.vector.app.features.createdirect.DirectRoomHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -47,6 +48,7 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.internal.util.awaitCallback
+import javax.net.ssl.HttpsURLConnection
 
 class MatrixToBottomSheetViewModel @AssistedInject constructor(
         @Assisted initialState: MatrixToBottomSheetState,
@@ -122,8 +124,8 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 } else {
                     session.getRoom(permalinkData.roomIdOrAlias)
                 }?.roomSummary()
-
-                if (knownRoom != null) {
+                val forceRefresh = true
+                if (!forceRefresh && knownRoom != null) {
                     setState {
                         copy(
                                 roomPeekResult = Success(
@@ -141,7 +143,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                         )
                     }
                 } else {
-                    val result = when (val peekResult = tryOrNull { resolveRoom(permalinkData.roomIdOrAlias) }) {
+                    val result = when (val peekResult = tryOrNull { resolveSpace(permalinkData) }) {
                         is PeekResult.Success           -> {
                             RoomInfoResult.FullInfo(
                                     roomItem = MatrixItem.RoomItem(peekResult.roomId, peekResult.name, peekResult.avatarUrl),
@@ -184,6 +186,30 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
             }
             is PermalinkData.FallbackLink -> {
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
+            }
+        }
+    }
+
+    private suspend fun resolveSpace(permalinkData: PermalinkData.RoomLink) : PeekResult {
+        try {
+           return session.spaceService().querySpaceChildren(permalinkData.roomIdOrAlias).let {
+               val roomSummary = it.first
+               PeekResult.Success(
+                       roomId = roomSummary.roomId,
+                       alias = roomSummary.canonicalAlias,
+                       avatarUrl = roomSummary.avatarUrl,
+                       name = roomSummary.name,
+                       topic = roomSummary.topic,
+                       numJoinedMembers = roomSummary.joinedMembersCount,
+                       roomType = roomSummary.roomType,
+                       viaServers = emptyList()
+               )
+           }
+        } catch (failure: Throwable) {
+            if (failure is Failure.OtherServerError && failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND) {
+                return resolveRoom(permalinkData.roomIdOrAlias)
+            } else {
+                throw failure
             }
         }
     }

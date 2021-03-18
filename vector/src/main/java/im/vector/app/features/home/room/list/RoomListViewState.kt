@@ -25,6 +25,7 @@ import im.vector.app.features.home.RoomListDisplayMode
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 
 data class RoomListViewState(
         val displayMode: RoomListDisplayMode,
@@ -37,30 +38,35 @@ data class RoomListViewState(
         val isDirectRoomsExpanded: Boolean = true,
         val isGroupRoomsExpanded: Boolean = true,
         val isLowPriorityRoomsExpanded: Boolean = true,
-        val isServerNoticeRoomsExpanded: Boolean = true
+        val isServerNoticeRoomsExpanded: Boolean = true,
+        val isSuggestedRoomExpanded: Boolean = true,
+        val asyncSuggestedRooms: Async<List<SpaceChildInfo>> = Uninitialized,
+        val suggestedRoomJoiningState: Map<String, Async<Unit>> = emptyMap()
 ) : MvRxState {
 
     constructor(args: RoomListParams) : this(displayMode = args.displayMode)
 
     fun isCategoryExpanded(roomCategory: RoomCategory): Boolean {
         return when (roomCategory) {
-            RoomCategory.INVITE        -> isInviteExpanded
-            RoomCategory.FAVOURITE     -> isFavouriteRoomsExpanded
-            RoomCategory.DIRECT        -> isDirectRoomsExpanded
-            RoomCategory.GROUP         -> isGroupRoomsExpanded
-            RoomCategory.LOW_PRIORITY  -> isLowPriorityRoomsExpanded
-            RoomCategory.SERVER_NOTICE -> isServerNoticeRoomsExpanded
+            RoomCategory.INVITE         -> isInviteExpanded
+            RoomCategory.FAVOURITE      -> isFavouriteRoomsExpanded
+            RoomCategory.DIRECT         -> isDirectRoomsExpanded
+            RoomCategory.GROUP          -> isGroupRoomsExpanded
+            RoomCategory.LOW_PRIORITY   -> isLowPriorityRoomsExpanded
+            RoomCategory.SERVER_NOTICE  -> isServerNoticeRoomsExpanded
+            RoomCategory.SUGGESTED_ROOM -> isSuggestedRoomExpanded
         }
     }
 
     fun toggle(roomCategory: RoomCategory): RoomListViewState {
         return when (roomCategory) {
-            RoomCategory.INVITE        -> copy(isInviteExpanded = !isInviteExpanded)
-            RoomCategory.FAVOURITE     -> copy(isFavouriteRoomsExpanded = !isFavouriteRoomsExpanded)
-            RoomCategory.DIRECT        -> copy(isDirectRoomsExpanded = !isDirectRoomsExpanded)
-            RoomCategory.GROUP         -> copy(isGroupRoomsExpanded = !isGroupRoomsExpanded)
-            RoomCategory.LOW_PRIORITY  -> copy(isLowPriorityRoomsExpanded = !isLowPriorityRoomsExpanded)
-            RoomCategory.SERVER_NOTICE -> copy(isServerNoticeRoomsExpanded = !isServerNoticeRoomsExpanded)
+            RoomCategory.INVITE         -> copy(isInviteExpanded = !isInviteExpanded)
+            RoomCategory.FAVOURITE      -> copy(isFavouriteRoomsExpanded = !isFavouriteRoomsExpanded)
+            RoomCategory.DIRECT         -> copy(isDirectRoomsExpanded = !isDirectRoomsExpanded)
+            RoomCategory.GROUP          -> copy(isGroupRoomsExpanded = !isGroupRoomsExpanded)
+            RoomCategory.LOW_PRIORITY   -> copy(isLowPriorityRoomsExpanded = !isLowPriorityRoomsExpanded)
+            RoomCategory.SERVER_NOTICE  -> copy(isServerNoticeRoomsExpanded = !isServerNoticeRoomsExpanded)
+            RoomCategory.SUGGESTED_ROOM ->  copy(isSuggestedRoomExpanded = !isSuggestedRoomExpanded)
         }
     }
 
@@ -80,7 +86,8 @@ enum class RoomCategory(@StringRes val titleRes: Int) {
     DIRECT(R.string.bottom_action_people_x),
     GROUP(R.string.bottom_action_rooms),
     LOW_PRIORITY(R.string.low_priority_header),
-    SERVER_NOTICE(R.string.system_alerts_header)
+    SERVER_NOTICE(R.string.system_alerts_header),
+    SUGGESTED_ROOM(R.string.suggested_header)
 }
 
 fun RoomSummaries?.isNullOrEmpty(): Boolean {
