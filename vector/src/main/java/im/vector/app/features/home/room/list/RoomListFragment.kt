@@ -56,6 +56,7 @@ import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import javax.inject.Inject
@@ -302,10 +303,19 @@ class RoomListFragment @Inject constructor(
     private fun renderSuccess(state: RoomListViewState) {
         val allRooms = state.asyncRooms()
         val filteredRooms = state.asyncFilteredRooms()
-        if (filteredRooms.isNullOrEmpty()) {
-            renderEmptyState(allRooms)
+        val suggestedRooms = state.asyncSuggestedRooms()
+        if (state.displayMode == RoomListDisplayMode.ROOMS) {
+            if (suggestedRooms.isNullOrEmpty() && filteredRooms.isNullOrEmpty()) {
+                renderEmptyState(allRooms)
+            } else {
+                views.stateView.state = StateView.State.Content
+            }
         } else {
-            views.stateView.state = StateView.State.Content
+            if (filteredRooms.isNullOrEmpty()) {
+                renderEmptyState(allRooms)
+            } else {
+                views.stateView.state = StateView.State.Content
+            }
         }
     }
 
@@ -387,6 +397,10 @@ class RoomListFragment @Inject constructor(
     override fun onAcceptRoomInvitation(room: RoomSummary) {
         notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
         roomListViewModel.handle(RoomListAction.AcceptInvitation(room))
+    }
+
+    override fun onJoinSuggestedRoom(room: SpaceChildInfo) {
+        roomListViewModel.handle(RoomListAction.JoinSuggestedRoom(room.childRoomId, room.viaServers))
     }
 
     override fun onRejectRoomInvitation(room: RoomSummary) {
