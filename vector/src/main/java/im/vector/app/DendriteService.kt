@@ -546,9 +546,6 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
             VectorPreferences.SETTINGS_P2P_ENABLE_MULTICAST -> {
                 val enabled = vectorPreferences.p2pEnableMulticast()
                 m.setMulticastEnabled(enabled)
-                if (!enabled) {
-                    m.disconnectType(Gobind.PeerTypeMulticast)
-                }
             }
 
             VectorPreferences.SETTINGS_P2P_ENABLE_BLUETOOTH -> {
@@ -567,7 +564,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                     val uri = vectorPreferences.p2pStaticURI()
                     m.setStaticPeer(uri)
                 } else {
-                    m.disconnectType(Gobind.PeerTypeRemote)
+                    m.setStaticPeer("")
                 }
             }
 
