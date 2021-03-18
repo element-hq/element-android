@@ -23,13 +23,20 @@ import arrow.core.Option
 import im.vector.app.features.grouplist.ALL_COMMUNITIES_GROUP_ID
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.grouplist.SelectedSpaceDataSource
+import im.vector.app.features.home.CurrentSpaceSuggestedRoomListDataSource
 import im.vector.app.features.home.HomeRoomListDataSource
 import im.vector.app.features.home.room.list.ChronologicalRoomComparator
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -50,10 +57,23 @@ class AppStateHandler @Inject constructor(
         private val homeRoomListDataSource: HomeRoomListDataSource,
         private val selectedGroupDataSource: SelectedGroupDataSource,
         private val selectedSpaceDataSource: SelectedSpaceDataSource,
+        private val currentSpaceSuggestedDataSource: CurrentSpaceSuggestedRoomListDataSource,
         private val chronologicalRoomComparator: ChronologicalRoomComparator,
-        private val vectorPreferences: VectorPreferences) : LifecycleObserver {
+        private val vectorPreferences: VectorPreferences,
+        private val uiStateRepository: UiStateRepository) : LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
+
+    init {
+        // restore current space from ui state
+        sessionDataSource.currentValue?.orNull()?.let { session ->
+            uiStateRepository.getSelectedSpace(session.sessionId)?.let { selectedSpaceId ->
+                session.getRoomSummary(selectedSpaceId)?.let {
+                    selectedSpaceDataSource.post(Option.just(it))
+                }
+            }
+        }
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
@@ -77,6 +97,27 @@ class AppStateHandler @Inject constructor(
                 }
                 .subscribe {
                     homeRoomListDataSource.post(it)
+                }
+                .addTo(compositeDisposable)
+
+        selectedSpaceDataSource.observe()
+                .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .subscribe { currentSpaceOptional ->
+                    GlobalScope.launch {
+                        sessionDataSource.currentValue?.orNull()?.let { session ->
+                            val currentSpace = currentSpaceOptional.orNull()
+                            if (currentSpace != null) {
+                                val childInfo = withContext(Dispatchers.IO) {
+                                    tryOrNull {
+                                        session.spaceService().querySpaceChildren(currentSpace.roomId)
+                                    }
+                                }
+                                childInfo?.second?.let { currentSpaceSuggestedDataSource.post(it) } ?: kotlin.run {
+                                    currentSpaceSuggestedDataSource.post(emptyList())
+                                }
+                            }
+                        }
+                    }
                 }
                 .addTo(compositeDisposable)
     }

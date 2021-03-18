@@ -143,7 +143,7 @@ internal class ReadReceiptHandler @Inject constructor(
         @Suppress("UNCHECKED_CAST")
         val content = dataFromFile
                 .events
-                .firstOrNull { it.type == EventType.RECEIPT }
+                ?.firstOrNull { it.type == EventType.RECEIPT }
                 ?.content as? ReadReceiptContent
 
         if (content == null) {

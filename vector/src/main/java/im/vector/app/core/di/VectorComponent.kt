@@ -36,6 +36,7 @@ import im.vector.app.features.crypto.verification.IncomingVerificationRequestHan
 import im.vector.app.features.grouplist.SelectedGroupDataSource
 import im.vector.app.features.grouplist.SelectedSpaceDataSource
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.CurrentSpaceSuggestedRoomListDataSource
 import im.vector.app.features.home.HomeRoomListDataSource
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
@@ -119,6 +120,8 @@ interface VectorComponent {
     fun selectedGroupStore(): SelectedGroupDataSource
 
     fun selectedSpaceStore(): SelectedSpaceDataSource
+
+    fun currentSpaceSuggestedRoomListDataSource(): CurrentSpaceSuggestedRoomListDataSource
 
     fun roomDetailPendingActionStore(): RoomDetailPendingActionStore
 
