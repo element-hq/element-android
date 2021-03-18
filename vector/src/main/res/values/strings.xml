@@ -476,6 +476,7 @@
     <string name="invitations_header">Invites</string>
     <string name="low_priority_header">Low priority</string>
     <string name="system_alerts_header">"System Alerts"</string>
+    <string name="suggested_header">Suggested Rooms</string>
 
     <!-- People fragment -->
     <string name="direct_chats_header">Conversations</string>
@@ -3291,5 +3292,6 @@
     <string name="join_anyway">Join Anyway</string>
     <string name="room_alias_preview_not_found">This alias is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
 
+    <string name="suggested_rooms_pills_on_empty_text">You’re not in any rooms yet. Below are some suggested rooms, but you can see more with the green button bottom right.</string>
 
 </resources>
