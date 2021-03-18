@@ -222,7 +222,6 @@ class RoomProfileController @Inject constructor(
             buildProfileAction(
                     id = "devTools",
                     title = stringProvider.getString(R.string.dev_tools_menu_name),
-                    subtitle = roomSummary.roomId,
                     dividerColor = dividerColor,
                     divider = false,
                     editable = true,
