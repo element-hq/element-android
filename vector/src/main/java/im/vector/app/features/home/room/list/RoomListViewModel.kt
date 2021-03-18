@@ -17,8 +17,11 @@
 package im.vector.app.features.home.room.list
 
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -32,16 +35,18 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.state.isPublic
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
-import java.lang.Exception
 import javax.inject.Inject
 
 class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             private val session: Session,
-                                            private val roomSummariesSource: DataSource<List<RoomSummary>>)
+                                            private val roomSummariesSource: DataSource<List<RoomSummary>>,
+                                            private val suggestedRoomListDataSource: DataSource<List<SpaceChildInfo>>)
     : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
     interface Factory {
@@ -63,6 +68,11 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
     init {
         observeRoomSummaries()
         observeMembershipChanges()
+        suggestedRoomListDataSource.observe()
+                .observeOn(Schedulers.computation())
+                .execute { info ->
+                    copy(asyncSuggestedRooms = info)
+                }.disposeOnClear()
     }
 
     override fun handle(action: RoomListAction) {
@@ -76,6 +86,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
             is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
             is RoomListAction.ToggleTag                   -> handleToggleTag(action)
+            is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
         }.exhaustive
     }
 
@@ -186,6 +197,38 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
         }
     }
 
+    private fun handleJoinSuggestedRoom(action: RoomListAction.JoinSuggestedRoom) {
+        setState {
+            copy(
+                    suggestedRoomJoiningState = this.suggestedRoomJoiningState.toMutableMap().apply {
+                        this[action.roomId] = Loading()
+                    }.toMap()
+            )
+        }
+        viewModelScope.launch {
+            try {
+                awaitCallback<Unit> {
+                    session.joinRoom(action.roomId, null, action.viaServers ?: emptyList(), it)
+                }
+                setState {
+                    copy(
+                            suggestedRoomJoiningState = this.suggestedRoomJoiningState.toMutableMap().apply {
+                                this[action.roomId] = Success(Unit)
+                            }.toMap()
+                    )
+                }
+            } catch (failure: Throwable) {
+                setState {
+                    copy(
+                            suggestedRoomJoiningState = this.suggestedRoomJoiningState.toMutableMap().apply {
+                                this[action.roomId] = Fail(failure)
+                            }.toMap()
+                    )
+                }
+            }
+        }
+    }
+
     private fun handleToggleTag(action: RoomListAction.ToggleTag) {
         session.getRoom(action.roomId)?.let { room ->
             viewModelScope.launch(Dispatchers.IO) {
@@ -212,7 +255,7 @@ class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
 
     private fun String.otherTag(): String? {
         return when (this) {
-            RoomTag.ROOM_TAG_FAVOURITE    -> RoomTag.ROOM_TAG_LOW_PRIORITY
+            RoomTag.ROOM_TAG_FAVOURITE -> RoomTag.ROOM_TAG_LOW_PRIORITY
             RoomTag.ROOM_TAG_LOW_PRIORITY -> RoomTag.ROOM_TAG_FAVOURITE
             else                          -> null
         }
