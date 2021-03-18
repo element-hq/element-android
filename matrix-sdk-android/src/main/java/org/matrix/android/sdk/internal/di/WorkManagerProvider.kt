@@ -23,6 +23,7 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -69,6 +70,7 @@ internal class WorkManagerProvider @Inject constructor(
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
-        const val BACKOFF_DELAY = 10_000L
+        // Use min value, smaller value will be ignored
+        const val BACKOFF_DELAY_MILLIS = WorkRequest.MIN_BACKOFF_MILLIS
     }
 }

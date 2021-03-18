@@ -97,22 +97,17 @@ internal class UpdateTrustWorker(context: Context,
             // Unfortunately we don't have much info on what did exactly changed (is it the cross signing keys of that user,
             // or a new device?) So we check all again :/
             Timber.d("## CrossSigning - Updating trust for users: ${userList.logLimit()}")
-
-            Realm.getInstance(cryptoRealmConfiguration).use { cryptoRealm ->
-                Realm.getInstance(sessionRealmConfiguration).use {
-                    updateTrust(userList, cryptoRealm)
-                }
-            }
+            updateTrust(userList)
         }
 
         cleanup(params)
         return Result.success()
     }
 
-    private suspend fun updateTrust(userListParam: List<String>,
-                                    cRealm: Realm) {
+    private suspend fun updateTrust(userListParam: List<String>) {
         var userList = userListParam
         var myCrossSigningInfo: MXCrossSigningInfo? = null
+
         // First we check that the users MSK are trusted by mine
         // After that we check the trust chain for each devices of each users
         awaitTransaction(cryptoRealmConfiguration) { cryptoRealm ->
@@ -203,38 +198,43 @@ internal class UpdateTrustWorker(context: Context,
 
         // So Cross Signing keys trust is updated, device trust is updated
         // We can now update room shields? in the session DB?
+        updateTrustStep2(userList, myCrossSigningInfo)
+    }
 
+    private suspend fun updateTrustStep2(userList: List<String>, myCrossSigningInfo: MXCrossSigningInfo?) {
         Timber.d("## CrossSigning - Updating shields for impacted rooms...")
         awaitTransaction(sessionRealmConfiguration) { sessionRealm ->
-            sessionRealm.where(RoomMemberSummaryEntity::class.java)
-                    .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
-                    .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
-                    .findAll()
-                    .map { it.roomId }
-                    .also { Timber.d("## CrossSigning -  ... impacted rooms ${it.logLimit()}") }
-                    .forEach { roomId ->
-                        RoomSummaryEntity.where(sessionRealm, roomId)
-                                .equalTo(RoomSummaryEntityFields.IS_ENCRYPTED, true)
-                                .findFirst()
-                                ?.let { roomSummary ->
-                                    Timber.d("## CrossSigning - Check shield state for room $roomId")
-                                    val allActiveRoomMembers = RoomMemberHelper(sessionRealm, roomId).getActiveRoomMemberIds()
-                                    try {
-                                        val updatedTrust = computeRoomShield(
-                                                myCrossSigningInfo,
-                                                cRealm,
-                                                allActiveRoomMembers,
-                                                roomSummary
-                                        )
-                                        if (roomSummary.roomEncryptionTrustLevel != updatedTrust) {
-                                            Timber.d("## CrossSigning - Shield change detected for $roomId -> $updatedTrust")
-                                            roomSummary.roomEncryptionTrustLevel = updatedTrust
+            Realm.getInstance(cryptoRealmConfiguration).use { cryptoRealm ->
+                sessionRealm.where(RoomMemberSummaryEntity::class.java)
+                        .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
+                        .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
+                        .findAll()
+                        .map { it.roomId }
+                        .also { Timber.d("## CrossSigning -  ... impacted rooms ${it.logLimit()}") }
+                        .forEach { roomId ->
+                            RoomSummaryEntity.where(sessionRealm, roomId)
+                                    .equalTo(RoomSummaryEntityFields.IS_ENCRYPTED, true)
+                                    .findFirst()
+                                    ?.let { roomSummary ->
+                                        Timber.d("## CrossSigning - Check shield state for room $roomId")
+                                        val allActiveRoomMembers = RoomMemberHelper(sessionRealm, roomId).getActiveRoomMemberIds()
+                                        try {
+                                            val updatedTrust = computeRoomShield(
+                                                    myCrossSigningInfo,
+                                                    cryptoRealm,
+                                                    allActiveRoomMembers,
+                                                    roomSummary
+                                            )
+                                            if (roomSummary.roomEncryptionTrustLevel != updatedTrust) {
+                                                Timber.d("## CrossSigning - Shield change detected for $roomId -> $updatedTrust")
+                                                roomSummary.roomEncryptionTrustLevel = updatedTrust
+                                            }
+                                        } catch (failure: Throwable) {
+                                            Timber.e(failure)
                                         }
-                                    } catch (failure: Throwable) {
-                                        Timber.e(failure)
                                     }
-                                }
-                    }
+                        }
+            }
         }
     }
 

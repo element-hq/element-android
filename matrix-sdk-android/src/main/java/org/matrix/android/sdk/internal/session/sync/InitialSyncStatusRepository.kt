@@ -65,7 +65,7 @@ internal class FileInitialSyncStatusRepository(directory: File) : InitialSyncSta
         val state = cache?.step ?: InitialSyncStatus.STEP_INIT
         return if (state >= InitialSyncStatus.STEP_DOWNLOADED
                 && System.currentTimeMillis() > (cache?.downloadedDate ?: 0) + INIT_SYNC_FILE_LIFETIME) {
-            Timber.v("INIT_SYNC downloaded file is outdated, download it again")
+            Timber.d("INIT_SYNC downloaded file is outdated, download it again")
             // The downloaded file is outdated
             setStep(InitialSyncStatus.STEP_INIT)
             InitialSyncStatus.STEP_INIT
