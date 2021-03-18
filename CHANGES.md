@@ -5,7 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
- -
+ - Display the room shield in all room setting screens
 
 Bugfix 🐛:
  -

@@ -140,6 +140,7 @@ class RoomMemberListFragment @Inject constructor(
         state.roomSummary()?.let {
             views.roomSettingGeneric.roomSettingsToolbarTitleView.text = it.displayName
             avatarRenderer.render(it.toMatrixItem(), views.roomSettingGeneric.roomSettingsToolbarAvatarImageView)
+            views.roomSettingGeneric.roomSettingsDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
         }
     }
 }
