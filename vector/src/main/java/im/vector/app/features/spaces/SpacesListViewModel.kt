@@ -33,6 +33,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.grouplist.SelectedSpaceDataSource
+import im.vector.app.features.ui.UiStateRepository
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import kotlinx.coroutines.launch
@@ -70,7 +71,8 @@ data class SpaceListViewState(
 class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
                                                       private val selectedSpaceDataSource: SelectedSpaceDataSource,
                                                       private val session: Session,
-                                                      private val stringProvider: StringProvider
+                                                      private val stringProvider: StringProvider,
+                                                      private val uiStateRepository: UiStateRepository
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -152,6 +154,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
 //                    selectedSpaceDataSource.post(Option.just(state.selectedSpace))
 //                }
                 setState { copy(selectedSpace = action.spaceSummary) }
+                uiStateRepository.storeSelectedSpace(action.spaceSummary.roomId, session.sessionId)
             }
         }
     }

@@ -18,8 +18,11 @@ package im.vector.app.features.home.room.list
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
@@ -166,6 +169,7 @@ class RoomListViewModel @Inject constructor(
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
             is RoomListAction.ToggleTag                   -> handleToggleTag(action)
             is RoomListAction.ToggleSection               -> handleToggleSection(action.section)
+            is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
         }.exhaustive
     }
 
@@ -316,6 +320,38 @@ class RoomListViewModel @Inject constructor(
         }
     }
 
+    private fun handleJoinSuggestedRoom(action: RoomListAction.JoinSuggestedRoom) {
+        setState {
+            copy(
+                    suggestedRoomJoiningState = this.suggestedRoomJoiningState.toMutableMap().apply {
+                        this[action.roomId] = Loading()
+                    }.toMap()
+            )
+        }
+        viewModelScope.launch {
+            try {
+                awaitCallback<Unit> {
+                    session.joinRoom(action.roomId, null, action.viaServers ?: emptyList(), it)
+                }
+                setState {
+                    copy(
+                            suggestedRoomJoiningState = this.suggestedRoomJoiningState.toMutableMap().apply {
+                                this[action.roomId] = Success(Unit)
+                            }.toMap()
+                    )
+                }
+            } catch (failure: Throwable) {
+                setState {
+                    copy(
+                            suggestedRoomJoiningState = this.suggestedRoomJoiningState.toMutableMap().apply {
+                                this[action.roomId] = Fail(failure)
+                            }.toMap()
+                    )
+                }
+            }
+        }
+    }
+
     private fun handleToggleTag(action: RoomListAction.ToggleTag) {
         session.getRoom(action.roomId)?.let { room ->
             viewModelScope.launch(Dispatchers.IO) {
@@ -342,7 +378,7 @@ class RoomListViewModel @Inject constructor(
 
     private fun String.otherTag(): String? {
         return when (this) {
-            RoomTag.ROOM_TAG_FAVOURITE    -> RoomTag.ROOM_TAG_LOW_PRIORITY
+            RoomTag.ROOM_TAG_FAVOURITE -> RoomTag.ROOM_TAG_LOW_PRIORITY
             RoomTag.ROOM_TAG_LOW_PRIORITY -> RoomTag.ROOM_TAG_FAVOURITE
             else                          -> null
         }

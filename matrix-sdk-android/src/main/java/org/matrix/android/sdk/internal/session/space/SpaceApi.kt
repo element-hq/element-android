@@ -35,7 +35,7 @@ internal interface SpaceApi {
      *
      *  MSC 2946 https://github.com/matrix-org/matrix-doc/blob/kegan/spaces-summary/proposals/2946-spaces-summary.md
      */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/spaces")
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2946/rooms/{roomId}/spaces")
     fun getSpaces(@Path("roomId") spaceId: String,
                   @Body params: SpaceSummaryParams
     ): Call<SpacesResponse>
