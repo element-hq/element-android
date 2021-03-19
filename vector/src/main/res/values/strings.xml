@@ -3294,4 +3294,5 @@
 
     <string name="suggested_rooms_pills_on_empty_text">You’re not in any rooms yet. Below are some suggested rooms, but you can see more with the green button bottom right.</string>
 
+    <string name="space_explore_activity_title">Explore rooms</string>
 </resources>

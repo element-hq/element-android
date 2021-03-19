@@ -20,44 +20,57 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.viewModel
 import im.vector.app.R
+import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.spaces.explore.SpaceDirectoryArgs
 import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
-import im.vector.app.features.spaces.preview.SpacePreviewArgs
-import im.vector.app.features.spaces.preview.SpacePreviewFragment
+import im.vector.app.features.spaces.explore.SpaceDirectoryState
+import im.vector.app.features.spaces.explore.SpaceDirectoryViewEvents
+import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
+import javax.inject.Inject
 
-class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>() {
+class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), SpaceDirectoryViewModel.Factory {
+
+    @Inject lateinit var spaceDirectoryViewModelFactory: SpaceDirectoryViewModel.Factory
+
+    override fun injectWith(injector: ScreenComponent) {
+        injector.inject(this)
+    }
 
     override fun getBinding(): ActivitySimpleBinding = ActivitySimpleBinding.inflate(layoutInflater)
-    // lateinit var sharedActionViewModel: SpacePreviewSharedActionViewModel
+
+    override fun getTitleRes(): Int = R.string.space_explore_activity_title
+
+    val sharedViewModel: SpaceDirectoryViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        sharedActionViewModel = viewModelProvider.get(SpacePreviewSharedActionViewModel::class.java)
-//        sharedActionViewModel
-//                .observe()
-//                .subscribe { action ->
-//                    when (action) {
-//                        SpacePreviewSharedAction.DismissAction -> finish()
-//                        SpacePreviewSharedAction.ShowModalLoading -> showWaitingView()
-//                        SpacePreviewSharedAction.HideModalLoading -> hideWaitingView()
-//                        is SpacePreviewSharedAction.ShowErrorMessage -> action.error?.let { showSnackbar(it) }
-//                    }
-//                }.disposeOnDestroy()
 
         if (isFirstCreation()) {
             val simpleName = SpaceDirectoryFragment::class.java.simpleName
-            val args = intent?.getParcelableExtra<SpacePreviewArgs>(MvRx.KEY_ARG)
+            val args = intent?.getParcelableExtra<SpaceDirectoryArgs>(MvRx.KEY_ARG)
             if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
                 supportFragmentManager.commitTransaction {
                     replace(R.id.simpleFragmentContainer,
-                            SpacePreviewFragment::class.java,
+                            SpaceDirectoryFragment::class.java,
                             Bundle().apply { this.putParcelable(MvRx.KEY_ARG, args) },
                             simpleName
                     )
+                }
+            }
+        }
+
+        sharedViewModel.observeViewEvents {
+            when (it) {
+                SpaceDirectoryViewEvents.Dismiss -> {
+                    finish()
+                }
+                is SpaceDirectoryViewEvents.NavigateToRoom -> {
+                    navigator.openRoom(this, it.roomId)
                 }
             }
         }
@@ -70,4 +83,7 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>() {
             }
         }
     }
+
+    override fun create(initialState: SpaceDirectoryState): SpaceDirectoryViewModel =
+            spaceDirectoryViewModelFactory.create(initialState)
 }

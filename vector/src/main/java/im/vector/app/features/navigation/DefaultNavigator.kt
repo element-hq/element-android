@@ -71,6 +71,7 @@ import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
+import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
@@ -250,8 +251,17 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomDirectory(context: Context, initialFilter: String) {
-        val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
-        context.startActivity(intent)
+        val selectedSpace = selectedSpaceDataSource.currentValue?.orNull()?.let {
+            sessionHolder.getSafeActiveSession()?.getRoomSummary(it.roomId)
+        }
+        if (selectedSpace == null) {
+            val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
+            context.startActivity(intent)
+        } else {
+            SpaceExploreActivity.newIntent(context, selectedSpace.roomId).let {
+                context.startActivity(it)
+            }
+        }
     }
 
     override fun openCreateRoom(context: Context, initialName: String) {

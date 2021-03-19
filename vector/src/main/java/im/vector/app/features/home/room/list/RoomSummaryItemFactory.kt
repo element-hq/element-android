@@ -57,12 +57,13 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
 
     fun createSuggestion(spaceChildInfo: SpaceChildInfo,
                          suggestedRoomJoiningStates: Map<String, Async<Unit>>,
-                         onJoinClick: View.OnClickListener) : VectorEpoxyModel<*> {
-        return SuggestedRoomItem_()
+                         onJoinClick: View.OnClickListener): VectorEpoxyModel<*> {
+        return SpaceChildInfoItem_()
                 .id("sug_${spaceChildInfo.childRoomId}")
                 .matrixItem(MatrixItem.RoomItem(spaceChildInfo.childRoomId, spaceChildInfo.name, spaceChildInfo.avatarUrl))
                 .avatarRenderer(avatarRenderer)
                 .topic(spaceChildInfo.topic)
+                .buttonLabel(stringProvider.getString(R.string.join))
                 .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
                 .memberCount(spaceChildInfo.activeMemberCount ?: 0)
                 .buttonClickListener(onJoinClick)

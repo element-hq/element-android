@@ -16,37 +16,76 @@
 
 package im.vector.app.features.spaces.explore
 
+import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
-import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
-import com.airbnb.mvrx.Success
-import im.vector.app.core.epoxy.errorWithRetryItem
+import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.list.spaceChildInfoItem
+import org.matrix.android.sdk.api.session.room.model.RoomType
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
+import org.matrix.android.sdk.api.util.MatrixItem
+import javax.inject.Inject
 
-class SpaceDirectoryController : TypedEpoxyController<SpaceDirectoryState>() {
+class SpaceDirectoryController @Inject constructor(
+        private val avatarRenderer: AvatarRenderer,
+        private val stringProvider: StringProvider
+) : TypedEpoxyController<SpaceDirectoryState>() {
+
+    interface InteractionListener {
+        fun onButtonClick(spaceChildInfo: SpaceChildInfo)
+        fun onSpaceChildClick(spaceChildInfo: SpaceChildInfo)
+    }
+
+    var listener: InteractionListener? = null
 
     override fun buildModels(data: SpaceDirectoryState?) {
-        when (data?.summary) {
-            is Success -> {
-//                val directories = roomDirectoryListCreator.computeDirectories(asyncThirdPartyProtocol())
-//
-//                directories.forEach {
-//                    buildDirectory(it)
-//                }
+        val results = data?.spaceSummaryApiResult
+
+        if (results is Incomplete) {
+            loadingItem {
+                id("loading")
             }
-            is Incomplete -> {
-                loadingItem {
-                    id("loading")
+        } else {
+            val flattenChildInfo = results?.invoke()
+                    ?.filter {
+                        it.parentRoomId == (data.hierarchyStack.lastOrNull() ?: data.spaceId)
+                    }
+                    ?: emptyList()
+
+            if (flattenChildInfo.isEmpty()) {
+                genericFooterItem {
+                    id("empty_footer")
+                    stringProvider.getString(R.string.no_result_placeholder)
                 }
-            }
-            is Fail -> {
-                errorWithRetryItem {
-                    id("error")
-//                    text(errorFormatter.toHumanReadable(asyncThirdPartyProtocol.error))
-//                    listener { callback?.retry() }
+            } else {
+                flattenChildInfo.forEach { info ->
+                    val isSpace = info.roomType == RoomType.SPACE
+                    val isJoined = data?.joinedRoomsIds?.contains(info.childRoomId) == true
+                    val isLoading = data?.changeMembershipStates?.get(info.childRoomId)?.isInProgress() ?: false
+                    spaceChildInfoItem {
+                        id(info.childRoomId)
+                        matrixItem(MatrixItem.RoomItem(info.childRoomId, info.name, info.avatarUrl))
+                        avatarRenderer(avatarRenderer)
+                        topic(info.topic)
+                        memberCount(info.activeMemberCount ?: 0)
+                        space(isSpace)
+                        loading(isLoading)
+                        buttonLabel(
+                                if (isJoined) stringProvider.getString(R.string.action_open)
+                                else stringProvider.getString(R.string.join)
+                        )
+                        apply {
+                            if (isSpace) {
+                                itemClickListener(View.OnClickListener { listener?.onSpaceChildClick(info) })
+                            }
+                        }
+                        buttonClickListener(View.OnClickListener { listener?.onButtonClick(info) })
+                    }
                 }
-            }
-            else          -> {
             }
         }
     }

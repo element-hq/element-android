@@ -44,7 +44,6 @@ import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.space.peeking.PeekSpaceTask
 import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 internal class DefaultSpaceService @Inject constructor(
@@ -90,8 +89,8 @@ internal class DefaultSpaceService @Inject constructor(
         return peekSpaceTask.execute(PeekSpaceTask.Params(spaceId))
     }
 
-    override suspend fun querySpaceChildren(spaceId: String): Pair<RoomSummary, List<SpaceChildInfo>> {
-        return resolveSpaceInfoTask.execute(ResolveSpaceInfoTask.Params.withId(spaceId)).let { response ->
+    override suspend fun querySpaceChildren(spaceId: String, suggestedOnly: Boolean?, autoJoinedOnly: Boolean?): Pair<RoomSummary, List<SpaceChildInfo>> {
+        return resolveSpaceInfoTask.execute(ResolveSpaceInfoTask.Params.withId(spaceId, suggestedOnly, autoJoinedOnly)).let { response ->
             val spaceDesc = response.rooms?.firstOrNull { it.roomId == spaceId }
             Pair(
                     first = RoomSummary(
@@ -111,7 +110,7 @@ internal class DefaultSpaceService @Inject constructor(
                             ?.map { childSummary ->
                                 val childStateEv = response.events
                                         ?.firstOrNull { it.stateKey == childSummary.roomId && it.type == EventType.STATE_SPACE_CHILD }
-                                        ?.content.toModel<SpaceChildContent>()
+                                val childStateEvContent = childStateEv?.content.toModel<SpaceChildContent>()
                                 SpaceChildInfo(
                                         childRoomId = childSummary.roomId,
                                         isKnown = true,
@@ -119,10 +118,11 @@ internal class DefaultSpaceService @Inject constructor(
                                         name = childSummary.name,
                                         topic = childSummary.topic,
                                         avatarUrl = childSummary.avatarUrl,
-                                        order = childStateEv?.order,
-                                        autoJoin = childStateEv?.autoJoin ?: false,
-                                        viaServers = childStateEv?.via ?: emptyList(),
-                                        activeMemberCount = childSummary.numJoinedMembers
+                                        order = childStateEvContent?.order,
+                                        autoJoin = childStateEvContent?.autoJoin ?: false,
+                                        viaServers = childStateEvContent?.via ?: emptyList(),
+                                        activeMemberCount = childSummary.numJoinedMembers,
+                                        parentRoomId = childStateEv?.roomId
                                 )
                             } ?: emptyList()
             )
