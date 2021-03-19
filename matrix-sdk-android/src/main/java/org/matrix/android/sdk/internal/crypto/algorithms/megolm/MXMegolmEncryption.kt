@@ -303,7 +303,7 @@ internal class MXMegolmEncryption(
         }
 
         if (noOlmToNotify.isNotEmpty()) {
-            //XXX offload?, as they won't read the message anyhow?
+            // XXX offload?, as they won't read the message anyhow?
             notifyKeyWithHeld(
                     noOlmToNotify,
                     session.sessionId,
