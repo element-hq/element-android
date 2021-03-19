@@ -210,11 +210,17 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
         if (remotePeers+multicastPeers+bluetoothPeers == 0) {
             text = "No connectivity"
         } else {
-            text = "Connected to "
-            if (remotePeers > 0) {
-                text += "static, "
+            var texts: MutableList<String> = mutableListOf<String>()
+            if (bluetoothPeers > 0) {
+                texts.add(0, "$bluetoothPeers BLE")
             }
-            text += "$multicastPeers Wi-Fi & $bluetoothPeers BLE"
+            if (multicastPeers > 0) {
+                texts.add(0, "$multicastPeers LAN")
+            }
+            if (remotePeers > 0) {
+                texts.add(0, "static")
+            }
+            text = "Connected to " + texts.joinToString(", ")
         }
 
         notification = NotificationCompat.Builder(applicationContext, "im.vector.p2p")
@@ -336,7 +342,7 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                         Timber.i("BLE: Connected inbound $device PSM $l2capPSM")
 
                         Timber.i("Creating DendriteBLEPeering")
-                        val conduit = monolith!!.conduit("BLE-" + device, Gobind.PeerTypeBluetooth)
+                        val conduit = monolith!!.conduit("ble", Gobind.PeerTypeBluetooth)
                         conduits[device] = conduit
                         connections[device] = DendriteBLEPeering(conduit, remote)
                         Timber.i("Starting DendriteBLEPeering")
@@ -392,21 +398,25 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             super.onConnectionStateChange(gatt, status, newState)
 
-            if (newState == BluetoothProfile.STATE_CONNECTED) {
+            if (newState == BluetoothProfile.STATE_CONNECTED || gatt == null) {
                 Timber.i("BLE: Discovering services via GATT ${gatt.toString()}")
                 gatt?.discoverServices()
             } else {
-                connecting.remove(gatt?.device?.address?.toString())
+                connecting.remove(gatt.device?.address?.toString())
             }
         }
 
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
             super.onServicesDiscovered(gatt, status)
-            if (status != BluetoothGatt.GATT_SUCCESS) {
+            if (status != BluetoothGatt.GATT_SUCCESS || gatt == null) {
                 connecting.remove(gatt?.device?.address?.toString())
                 return
             }
-            val services = gatt?.services ?: return
+            val services = gatt.services
+            if (services.size == 0) {
+                connecting.remove(gatt.device?.address?.toString())
+                return
+            }
             Timber.i("BLE: Found services via GATT ${gatt.toString()}")
             services.forEach { service ->
                 if (service.uuid == serviceUUID.uuid) {
@@ -422,12 +432,12 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
 
         override fun onCharacteristicRead(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int) {
             super.onCharacteristicRead(gatt, characteristic, status)
-            if (status != BluetoothGatt.GATT_SUCCESS) {
+            if (status != BluetoothGatt.GATT_SUCCESS || gatt == null || characteristic == null) {
                 connecting.remove(gatt?.device?.address?.toString())
                 return
             }
-            val device = gatt?.device ?: return
-            val psmBytes = characteristic?.value ?: return
+            val device = gatt.device
+            val psmBytes = characteristic.value
             val psm = bytesToInt(psmBytes)
 
             var connection = connections[device.address.toString()]
@@ -447,17 +457,19 @@ class DendriteService : Service(), SharedPreferences.OnSharedPreferenceChangeLis
                 socket.connect()
             } catch (e: Exception) {
                 timber.log.Timber.i("BLE: Failed to connect to $device PSM $psm: ${e.toString()}")
+                connecting.remove(device.address)
                 return
             }
             if (!socket.isConnected) {
                 Timber.i("BLE: Expected to be connected but not")
+                connecting.remove(device.address)
                 return
             }
 
             Timber.i("BLE: Connected outbound $device PSM $psm")
 
             Timber.i("Creating DendriteBLEPeering")
-            val conduit = monolith!!.conduit("BLE", Gobind.PeerTypeBluetooth)
+            val conduit = monolith!!.conduit("ble", Gobind.PeerTypeBluetooth)
             conduits[device.address] = conduit
             connections[device.address] = DendriteBLEPeering(conduit, socket)
             Timber.i("Starting DendriteBLEPeering")
