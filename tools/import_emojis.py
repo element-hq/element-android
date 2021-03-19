@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 import requests
 import json
 import re
@@ -72,6 +74,41 @@ for row in table.find_all('tr'):
                 "j": emoji_keywords
         }
 
-# Print result to file (overwrite previous), without escaping unicode characters
+# The keywords of unicode.org are usually quite sparse.
+# There is no official specification of keywords beyond that, but muan/emojilib maintains a well maintained and
+# established repository with additional keywords. We extend our list with the keywords from there.
+# At the time of writing it had additional keyword information for all emojis except a few from the newest unicode 13.1.
+req = requests.get("https://raw.githubusercontent.com/muan/emojilib/main/dist/emoji-en-US.json")
+emojilib_data = json.loads(req.content)
+
+# We just go over all the official emojis from unicode, and add the keywords there
+for emoji in emoji_picker_datasource_emojis:
+    emoji_name = emoji_picker_datasource_emojis[emoji]["a"]
+    emoji_code = emoji_picker_datasource_emojis[emoji]["b"]
+
+    # Convert back to actual unicode emoji
+    emoji_unicode = ''.join(map(lambda s: chr(int(s, 16)), emoji_code.split("-")))
+
+    # Search for emoji in emojilib
+    if emoji_unicode in emojilib_data:
+        emoji_additional_keywords = emojilib_data[emoji_unicode]
+    elif emoji_unicode+chr(0xfe0f)  in emojilib_data:
+        emoji_additional_keywords = emojilib_data[emoji_unicode+chr(0xfe0f)]
+    else:
+        print("No additional keywords for", emoji_unicode, emoji_picker_datasource_emojis[emoji])
+        continue
+
+    # If additional keywords exist, add them to emoji_picker_datasource_emojis
+    # Avoid duplicates and keep order. Put official unicode.com keywords first and extend up with emojilib ones.
+    new_keywords = OrderedDict.fromkeys(emoji_picker_datasource_emojis[emoji]["j"] + emoji_additional_keywords).keys()
+    # Remove the ones derived from the unicode name
+    new_keywords = new_keywords - {emoji.replace("-", "_")} - {emoji.replace("-", " ")} - {emoji_name}
+    # Write new keywords back
+    emoji_picker_datasource_emojis[emoji]["j"] = list(new_keywords)
+
+# Filter out components from unicode 13.1 (as they are not suitable for single-emoji reactions)
+emoji_picker_datasource['categories'] = [x for x in emoji_picker_datasource['categories'] if x['id'] != 'component']
+
+# Write result to file (overwrite previous), without escaping unicode characters
 with open("../vector/src/main/res/raw/emoji_picker_datasource.json", "w") as outfile:
     json.dump(emoji_picker_datasource, outfile, ensure_ascii=False)

@@ -100,12 +100,12 @@ class EmojiDataSource @Inject constructor(
     fun getQuickReactions(): List<EmojiItem> {
         if (quickReactions.isEmpty()) {
             listOf(
-                    "+1", // 👍
-                    "-1", // 👎
-                    "grinning", // 😄
-                    "tada", // 🎉
-                    "confused", // 😕
-                    "heart", // ❤️
+                    "thumbs-up", // 👍
+                    "thumbs-down", // 👎
+                    "grinning-face-with-smiling-eyes", // 😄
+                    "party-popper", // 🎉
+                    "confused-face", // 😕
+                    "red-heart", // ❤️
                     "rocket", // 🚀
                     "eyes" // 👀
             )
