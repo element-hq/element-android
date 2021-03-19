@@ -158,6 +158,13 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                                 }
                             }
                         }
+                    } else if (encryptedEventContent?.relatesTo?.type == RelationType.ANNOTATION) {
+                        // Reaction
+                        if (event.getClearType() == EventType.REACTION) {
+                            // we got a reaction!!
+                            Timber.v("###REACTION e2e in room $roomId , reaction eventID ${event.eventId}")
+                            handleReaction(event, roomId, realm, userId, isLocalEcho)
+                        }
                     }
                 }
                 EventType.REDACTION            -> {

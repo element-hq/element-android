@@ -10,6 +10,7 @@ Improvements 🙌:
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity
+ - Handle encrypted reactions (#2509)
 
 Translations 🗣:
  -
