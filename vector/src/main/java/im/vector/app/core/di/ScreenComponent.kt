@@ -79,6 +79,7 @@ import im.vector.app.features.share.IncomingShareActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
 import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
+import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.ui.UiStateRepository
 import im.vector.app.features.usercode.UserCodeActivity
@@ -154,6 +155,7 @@ interface ScreenComponent {
     fun inject(activity: ReAuthActivity)
     fun inject(activity: RoomDevToolActivity)
     fun inject(activity: SpaceCreationActivity)
+    fun inject(activity: SpaceExploreActivity)
 
     /* ==========================================================================================
      * BottomSheets

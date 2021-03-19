@@ -23,12 +23,15 @@ import javax.inject.Inject
 internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, SpacesResponse> {
     data class Params(
             val spaceId: String,
-            val maxRoomPerSpace: Int,
+            val maxRoomPerSpace: Int?,
             val limit: Int,
-            val batchToken: String?
+            val batchToken: String?,
+            val suggestedOnly: Boolean?,
+            val autoJoinOnly: Boolean?
     ) {
         companion object {
-            fun withId(spaceId: String) = Params(spaceId, 10, 20, null)
+            fun withId(spaceId: String, suggestedOnly: Boolean?, autoJoinOnly: Boolean?) =
+                    Params(spaceId, 10, 20, null, suggestedOnly, autoJoinOnly)
         }
     }
 }
@@ -37,7 +40,13 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
         private val spaceApi: SpaceApi
 ) : ResolveSpaceInfoTask {
     override suspend fun execute(params: ResolveSpaceInfoTask.Params): SpacesResponse {
-        val body = SpaceSummaryParams(maxRoomPerSpace = params.maxRoomPerSpace, limit = params.limit, batch = params.batchToken ?: "")
+        val body = SpaceSummaryParams(
+                maxRoomPerSpace = params.maxRoomPerSpace,
+                limit = params.limit,
+                batch = params.batchToken ?: "",
+                autoJoinedOnly = params.autoJoinOnly,
+                suggestedOnly = params.suggestedOnly
+        )
         return executeRequest<SpacesResponse>(null) {
             apiCall = spaceApi.getSpaces(params.spaceId, body)
         }

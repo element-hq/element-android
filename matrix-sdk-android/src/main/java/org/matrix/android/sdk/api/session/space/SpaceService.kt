@@ -54,7 +54,8 @@ interface SpaceService {
     /**
      * Get's information of a space by querying the server
      */
-    suspend fun querySpaceChildren(spaceId: String): Pair<RoomSummary, List<SpaceChildInfo>>
+    suspend fun querySpaceChildren(spaceId: String, suggestedOnly: Boolean? = null, autoJoinedOnly: Boolean? = null)
+            : Pair<RoomSummary, List<SpaceChildInfo>>
 
     /**
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.
