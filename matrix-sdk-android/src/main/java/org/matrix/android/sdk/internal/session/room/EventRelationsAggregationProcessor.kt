@@ -53,8 +53,9 @@ import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class EventRelationsAggregationProcessor @Inject constructor(@UserId private val userId: String)
-    : EventInsertLiveProcessor {
+internal class EventRelationsAggregationProcessor @Inject constructor(
+        @UserId private val userId: String
+) : EventInsertLiveProcessor {
 
     private val allowedTypes = listOf(
             EventType.MESSAGE,
@@ -87,7 +88,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                 EventType.REACTION             -> {
                     // we got a reaction!!
                     Timber.v("###REACTION in room $roomId , reaction eventID ${event.eventId}")
-                    handleReaction(event, roomId, realm, userId, isLocalEcho)
+                    handleReaction(event, roomId, realm, isLocalEcho)
                 }
                 EventType.MESSAGE              -> {
                     if (event.unsignedData?.relations?.annotations != null) {
@@ -108,7 +109,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                         handleReplace(realm, event, content, roomId, isLocalEcho)
                     } else if (content?.relatesTo?.type == RelationType.RESPONSE) {
                         Timber.v("###RESPONSE in room $roomId for event ${event.eventId}")
-                        handleResponse(realm, userId, event, content, roomId, isLocalEcho)
+                        handleResponse(realm, event, content, roomId, isLocalEcho)
                     }
                 }
 
@@ -122,7 +123,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                     Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                     event.content.toModel<MessageRelationContent>()?.relatesTo?.let {
                         if (it.type == RelationType.REFERENCE && it.eventId != null) {
-                            handleVerification(realm, event, roomId, isLocalEcho, it.eventId, userId)
+                            handleVerification(realm, event, roomId, isLocalEcho, it.eventId)
                         }
                     }
                 }
@@ -140,7 +141,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                                 handleReplace(realm, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
                             } else if (encryptedEventContent.relatesTo.type == RelationType.RESPONSE) {
                                 Timber.v("###RESPONSE in room $roomId for event ${event.eventId}")
-                                handleResponse(realm, userId, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
+                                handleResponse(realm, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
                             }
                         }
                     } else if (encryptedEventContent?.relatesTo?.type == RelationType.REFERENCE) {
@@ -154,7 +155,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                             EventType.KEY_VERIFICATION_KEY -> {
                                 Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                                 encryptedEventContent.relatesTo.eventId?.let {
-                                    handleVerification(realm, event, roomId, isLocalEcho, it, userId)
+                                    handleVerification(realm, event, roomId, isLocalEcho, it)
                                 }
                             }
                         }
@@ -163,7 +164,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                         if (event.getClearType() == EventType.REACTION) {
                             // we got a reaction!!
                             Timber.v("###REACTION e2e in room $roomId , reaction eventID ${event.eventId}")
-                            handleReaction(event, roomId, realm, userId, isLocalEcho)
+                            handleReaction(event, roomId, realm, isLocalEcho)
                         }
                     }
                 }
@@ -183,7 +184,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
                             }
                         }
                         EventType.REACTION -> {
-                            handleReactionRedact(eventToPrune, realm, userId)
+                            handleReactionRedact(eventToPrune, realm)
                         }
                     }
                 }
@@ -274,7 +275,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
     }
 
     private fun handleResponse(realm: Realm,
-                               userId: String,
                                event: Event,
                                content: MessageContent,
                                roomId: String,
@@ -383,7 +383,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
         }
     }
 
-    private fun handleReaction(event: Event, roomId: String, realm: Realm, userId: String, isLocalEcho: Boolean) {
+    private fun handleReaction(event: Event, roomId: String, realm: Realm, isLocalEcho: Boolean) {
         val content = event.content.toModel<ReactionContent>()
         if (content == null) {
             Timber.e("Malformed reaction content ${event.content}")
@@ -464,7 +464,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
         sourceToDiscard.deleteFromRealm()
     }
 
-    private fun handleReactionRedact(eventToPrune: EventEntity, realm: Realm, userId: String) {
+    private fun handleReactionRedact(eventToPrune: EventEntity, realm: Realm) {
         Timber.v("REDACTION of reaction ${eventToPrune.eventId}")
         // delete a reaction, need to update the annotation summary if any
         val reactionContent: ReactionContent = EventMapper.map(eventToPrune).content.toModel() ?: return
@@ -501,7 +501,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(@UserId pr
         }
     }
 
-    private fun handleVerification(realm: Realm, event: Event, roomId: String, isLocalEcho: Boolean, relatedEventId: String, userId: String) {
+    private fun handleVerification(realm: Realm, event: Event, roomId: String, isLocalEcho: Boolean, relatedEventId: String) {
         val eventSummary = EventAnnotationsSummaryEntity.getOrCreate(realm, roomId, relatedEventId)
 
         val verifSummary = eventSummary.referencesSummaryEntity
