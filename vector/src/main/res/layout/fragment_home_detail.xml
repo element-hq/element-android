@@ -35,6 +35,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:orientation="vertical"
+                android:id="@+id/homeToolbarContent"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp">
 
