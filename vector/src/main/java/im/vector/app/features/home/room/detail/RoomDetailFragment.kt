@@ -98,6 +98,7 @@ import im.vector.app.core.ui.views.FailedMessagesWarningView
 import im.vector.app.core.ui.views.JumpToReadMarkerView
 import im.vector.app.core.ui.views.NotificationAreaView
 import im.vector.app.core.utils.Debouncer
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.KeyboardStateUtils
 import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
 import im.vector.app.core.utils.TextUtils
@@ -137,6 +138,7 @@ import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBot
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
@@ -223,6 +225,7 @@ class RoomDetailFragment @Inject constructor(
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
+        private val dimensionConverter: DimensionConverter,
         private val notificationUtils: NotificationUtils,
         private val matrixItemColorProvider: MatrixItemColorProvider,
         private val imageContentRenderer: ImageContentRenderer,
@@ -873,6 +876,15 @@ class RoomDetailFragment @Inject constructor(
         }
         views.composerLayout.views.composerRelatedMessageContent.text = (formattedBody ?: nonFormattedBody)
 
+        // Image Event
+        val data = event.buildImageContentRendererData(dimensionConverter.dpToPx(66))
+        val isImageVisible = if (data != null) {
+            imageContentRenderer.render(data, ImageContentRenderer.Mode.THUMBNAIL, views.composerLayout.views.composerRelatedMessageImage)
+            true
+        } else {
+            false
+        }
+
         updateComposerText(defaultContent)
 
         views.composerLayout.views.composerRelatedMessageActionIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), iconRes))
@@ -884,6 +896,7 @@ class RoomDetailFragment @Inject constructor(
             if (isAdded) {
                 // need to do it here also when not using quick reply
                 focusComposerAndShowKeyboard()
+                views.composerLayout.views.composerRelatedMessageImage.isVisible = isImageVisible
             }
         }
         focusComposerAndShowKeyboard()
