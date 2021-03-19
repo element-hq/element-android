@@ -109,7 +109,7 @@ class AppStateHandler @Inject constructor(
                             if (currentSpace != null) {
                                 val childInfo = withContext(Dispatchers.IO) {
                                     tryOrNull {
-                                        session.spaceService().querySpaceChildren(currentSpace.roomId)
+                                        session.spaceService().querySpaceChildren(currentSpace.roomId, suggestedOnly = true)
                                     }
                                 }
                                 childInfo?.second?.let { currentSpaceSuggestedDataSource.post(it) } ?: kotlin.run {
