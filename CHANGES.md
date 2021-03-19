@@ -5,6 +5,7 @@ Features ✨:
  -
 
 Improvements 🙌:
+ - Split network request `/keys/query` into smaller requests (250 users max) (#2925)
  - Crypto improvement | Bulk send NO_OLM withheld code
  - Display the room shield in all room setting screens
 
