@@ -16,8 +16,10 @@
 
 package im.vector.app.core.utils
 
+import com.vanniktech.emoji.EmojiUtils
 import java.util.regex.Pattern
 
+/*
 private val emojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]" +
         "|[\uD83E\uDD00-\uD83E\uDDFF]" +
         "|[\uD83D\uDE00-\uD83D\uDE4F]" +
@@ -41,6 +43,7 @@ private val emojisPattern = Pattern.compile("((?:[\uD83C\uDF00-\uD83D\uDDFF]" +
         "|\uD83C\uDC04\uFE0F?" +
         "|\uD83C\uDCCF\uFE0F?" +
         "|[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?))")
+ */
 
 /*
 // A hashset from all supported emoji
@@ -82,6 +85,9 @@ fun isSingleEmoji(string: String): Boolean {
  * @return true if the body contains only emojis
  */
 fun containsOnlyEmojis(str: String?): Boolean {
+    // Now rely on vanniktech library
+    return EmojiUtils.isOnlyEmojis(str)
+    /*
     var res = false
 
     if (str != null && str.isNotEmpty()) {
@@ -112,6 +118,7 @@ fun containsOnlyEmojis(str: String?): Boolean {
     }
 
     return res
+     */
 }
 
 /**

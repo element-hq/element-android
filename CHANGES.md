@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Display the room shield in all room setting screens
+ - Improve message with Emoji only detection (#3017)
 
 Bugfix 🐛:
  - Fix bad theme change for the MainActivity
