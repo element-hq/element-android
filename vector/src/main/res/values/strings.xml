@@ -3281,6 +3281,7 @@
     <string name="create_spaces_default_public_random_room_name">Random</string>
     <string name="create_spaces_loading_message">Creating Space…</string>
     <string name="invite_people_to_your_space">Invite people to your space</string>
+    <string name="invite_people_menu">Invite people</string>
     <string name="invite_people_to_your_space_desc">It’s just you at the moment.  %s will be even better with others.</string>
     <string name="invite_by_email">Invite by email</string>
     <string name="invite_by_mxid">Invite by username</string>
@@ -3295,4 +3296,6 @@
     <string name="suggested_rooms_pills_on_empty_text">You’re not in any rooms yet. Below are some suggested rooms, but you can see more with the green button bottom right.</string>
 
     <string name="space_explore_activity_title">Explore rooms</string>
+    <string name="leave_space">Leave Space</string>
+    <string name="space_leave_prompt_msg">Are you sure you want to leave the space?</string>
 </resources>
