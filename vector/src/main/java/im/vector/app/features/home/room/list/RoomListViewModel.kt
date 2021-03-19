@@ -46,7 +46,7 @@ import javax.inject.Inject
 class RoomListViewModel @Inject constructor(initialState: RoomListViewState,
                                             private val session: Session,
                                             private val roomSummariesSource: DataSource<List<RoomSummary>>,
-                                            private val suggestedRoomListDataSource: DataSource<List<SpaceChildInfo>>)
+                                            suggestedRoomListDataSource: DataSource<List<SpaceChildInfo>>)
     : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
     interface Factory {

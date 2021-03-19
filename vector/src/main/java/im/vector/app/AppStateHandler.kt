@@ -106,6 +106,7 @@ class AppStateHandler @Inject constructor(
                     GlobalScope.launch {
                         sessionDataSource.currentValue?.orNull()?.let { session ->
                             val currentSpace = currentSpaceOptional.orNull()
+                                    .takeIf { it?.roomId != im.vector.app.features.spaces.ALL_COMMUNITIES_GROUP_ID }
                             if (currentSpace != null) {
                                 val childInfo = withContext(Dispatchers.IO) {
                                     tryOrNull {
@@ -115,6 +116,8 @@ class AppStateHandler @Inject constructor(
                                 childInfo?.second?.let { currentSpaceSuggestedDataSource.post(it) } ?: kotlin.run {
                                     currentSpaceSuggestedDataSource.post(emptyList())
                                 }
+                            } else {
+                                currentSpaceSuggestedDataSource.post(emptyList())
                             }
                         }
                     }
