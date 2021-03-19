@@ -106,6 +106,7 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
             val emptyItem = TimelineEmptyItem_()
                     .id(epoxyModel.id())
                     .eventId(epoxyModel.attributes.informationData.eventId)
+                    .hidden(false)
             add(emptyItem)
         }
         callIds.add(callId)

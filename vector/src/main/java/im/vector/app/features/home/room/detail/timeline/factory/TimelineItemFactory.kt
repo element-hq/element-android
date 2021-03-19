@@ -21,6 +21,7 @@ import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
@@ -35,7 +36,8 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val widgetItemFactory: WidgetItemFactory,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
                                               private val callItemFactory: CallItemFactory,
-                                              private val userPreferencesProvider: UserPreferencesProvider) {
+                                              private val userPreferencesProvider: UserPreferencesProvider,
+                                              private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper) {
 
     /**
      * Reminder: nextEvent is older and prevEvent is newer.
@@ -119,12 +121,14 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             Timber.e(throwable, "failed to create message item")
             defaultItemFactory.create(event, highlight, callback, throwable)
         }
-        return computedModel ?: buildEmptyItem(event)
+        return computedModel ?: buildEmptyItem(event, prevEvent, eventIdToHighlight)
     }
 
-    private fun buildEmptyItem(timelineEvent: TimelineEvent): TimelineEmptyItem {
+    private fun buildEmptyItem(timelineEvent: TimelineEvent, prevEvent: TimelineEvent?, eventIdToHighlight: String?): TimelineEmptyItem {
+        val prevIsVisible = prevEvent != null && timelineEventVisibilityHelper.shouldShowEvent(prevEvent, eventIdToHighlight)
         return TimelineEmptyItem_()
                 .id(timelineEvent.localId)
                 .eventId(timelineEvent.eventId)
+                .hidden(prevIsVisible)
     }
 }

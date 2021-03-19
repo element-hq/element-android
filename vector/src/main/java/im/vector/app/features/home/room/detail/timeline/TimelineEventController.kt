@@ -371,7 +371,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
     }
 
-    private fun buildCacheItem(currentPosition: Int, items: List<TimelineEvent>, receiptsByEvents: Map<String, List<ReadReceipt>>): CacheItemData {
+    private fun buildCacheItem(currentPosition: Int,
+                               items: List<TimelineEvent>,
+                               receiptsByEvents: Map<String, List<ReadReceipt>>
+    ): CacheItemData {
         val event = items[currentPosition]
         val nextEvent = items.nextOrNull(currentPosition)
         val prevEvent = items.prevOrNull(currentPosition)
@@ -390,7 +393,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val nextDate = nextEvent?.root?.localDateTime()
             date.toLocalDate() != nextDate?.toLocalDate()
         }
-
         val mergedHeaderModel = mergedHeaderItemFactory.create(event,
                 nextEvent = nextEvent,
                 items = items,
