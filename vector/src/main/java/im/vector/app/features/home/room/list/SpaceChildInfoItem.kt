@@ -38,7 +38,7 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass(layout = R.layout.item_suggested_room)
-abstract class SuggestedRoomItem : VectorEpoxyModel<SuggestedRoomItem.Holder>() {
+abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
@@ -48,6 +48,9 @@ abstract class SuggestedRoomItem : VectorEpoxyModel<SuggestedRoomItem.Holder>() 
 
     @EpoxyAttribute var memberCount: Int = 0
     @EpoxyAttribute var loading: Boolean = false
+    @EpoxyAttribute var space: Boolean = false
+
+    @EpoxyAttribute var buttonLabel: String? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemLongClickListener: View.OnLongClickListener? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: View.OnClickListener? = null
@@ -61,13 +64,17 @@ abstract class SuggestedRoomItem : VectorEpoxyModel<SuggestedRoomItem.Holder>() 
             itemLongClickListener?.onLongClick(it) ?: false
         }
         holder.titleView.text = matrixItem.getBestName()
-        avatarRenderer.render(matrixItem, holder.avatarImageView)
+        if (space) {
+            avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
+        } else {
+            avatarRenderer.render(matrixItem, holder.avatarImageView)
+        }
 
         holder.descriptionText.text = span {
             span {
                 apply {
                     val tintColor = ThemeUtils.getColor(holder.view.context, R.attr.riotx_text_secondary)
-                    ContextCompat.getDrawable(holder.view.context, R.drawable.ic_room_profile_member_list)
+                    ContextCompat.getDrawable(holder.view.context, R.drawable.ic_member_small)
                             ?.apply {
                                 ThemeUtils.tintDrawableWithColor(this, tintColor)
                             }?.let {
@@ -83,6 +90,8 @@ abstract class SuggestedRoomItem : VectorEpoxyModel<SuggestedRoomItem.Holder>() 
             }
         }
 
+        holder.joinButton.text = buttonLabel
+
         if (loading) {
             holder.joinButtonLoading.isVisible = true
             holder.joinButton.isInvisible = true
@@ -93,8 +102,8 @@ abstract class SuggestedRoomItem : VectorEpoxyModel<SuggestedRoomItem.Holder>() 
 
         holder.joinButton.setOnClickListener {
             // local echo
-            holder.joinButtonLoading.isVisible = true
-            holder.joinButton.isInvisible = true
+            holder.joinButton.isEnabled = false
+            holder.view.postDelayed({ holder.joinButton.isEnabled = true }, 400)
             buttonClickListener?.onClick(it)
         }
     }
