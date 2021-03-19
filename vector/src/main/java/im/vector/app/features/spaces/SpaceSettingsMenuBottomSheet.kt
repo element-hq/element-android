@@ -71,11 +71,11 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
 
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         val roomSummary = session.getRoomSummary(spaceArgs.spaceId)
-        roomSummary?.let { roomSummary ->
-            avatarRenderer.renderSpace(roomSummary.toMatrixItem(), views.roomAvatarImageView)
-            views.roomNameView.text = roomSummary.displayName
-            views.roomDescription.text = roomSummary.topic
+        roomSummary?.toMatrixItem()?.let {
+            avatarRenderer.renderSpace(it, views.roomAvatarImageView)
         }
+        views.roomNameView.text = roomSummary?.displayName
+        views.roomDescription.text = roomSummary?.topic
 
         val room = session.getRoom(spaceArgs.spaceId) ?: return
 
