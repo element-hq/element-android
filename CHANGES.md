@@ -6,6 +6,7 @@ Features ✨:
 
 Improvements 🙌:
  - Crypto improvement | Bulk send NO_OLM withheld code
+ - Display the room shield in all room setting screens
 
 Bugfix 🐛:
  -
