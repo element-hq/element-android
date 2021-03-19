@@ -32,5 +32,4 @@
             tools:listitem="@layout/item_room_directory" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

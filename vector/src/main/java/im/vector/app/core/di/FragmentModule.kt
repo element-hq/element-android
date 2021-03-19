@@ -123,6 +123,7 @@ import im.vector.app.features.spaces.SpaceListFragment
 import im.vector.app.features.spaces.create.ChooseSpaceTypeFragment
 import im.vector.app.features.spaces.create.CreateSpaceDefaultRoomsFragment
 import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
+import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
 import im.vector.app.features.spaces.preview.SpacePreviewFragment
 import im.vector.app.features.terms.ReviewTermsFragment
 import im.vector.app.features.usercode.ShowUserCodeFragment
@@ -666,4 +667,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(MatrixToRoomSpaceFragment::class)
     fun bindMatrixToRoomSpaceFragment(fragment: MatrixToRoomSpaceFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SpaceDirectoryFragment::class)
+    fun bindSpaceDirectoryFragment(fragment: SpaceDirectoryFragment): Fragment
 }

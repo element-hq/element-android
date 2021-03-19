@@ -19,9 +19,12 @@ package im.vector.app.features.spaces.explore
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -30,38 +33,54 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
+import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.RoomType
+import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.internal.util.awaitCallback
 import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import timber.log.Timber
 
 data class SpaceDirectoryState(
         // The current filter
         val spaceId: String,
         val currentFilter: String = "",
-        val summary: Async<RoomSummary> = Uninitialized,
+        val spaceSummary: Async<RoomSummary> = Uninitialized,
+        val spaceSummaryApiResult: Async<List<SpaceChildInfo>> = Uninitialized,
+        val childList: List<SpaceChildInfo> = emptyList(),
+        val hierarchyStack: List<String> = emptyList(),
         // True if more result are available server side
         val hasMore: Boolean = false,
         // Set of joined roomId / spaces,
-        val joinedRoomsIds: Set<String> = emptySet()
+        val joinedRoomsIds: Set<String> = emptySet(),
+        // keys are room alias or roomId
+        val changeMembershipStates: Map<String, ChangeMembershipState> = emptyMap()
 ) : MvRxState {
-    constructor(args: SpaceDirectoryArgs) : this(spaceId = args.spaceId)
+    constructor(args: SpaceDirectoryArgs) : this(
+            spaceId = args.spaceId
+    )
 }
 
-sealed class SpaceDirectoryViewAction : VectorViewModelAction
+sealed class SpaceDirectoryViewAction : VectorViewModelAction {
+    data class ExploreSubSpace(val spaceChildInfo: SpaceChildInfo) : SpaceDirectoryViewAction()
+    data class JoinOrOpen(val spaceChildInfo: SpaceChildInfo) : SpaceDirectoryViewAction()
+    object HandleBack : SpaceDirectoryViewAction()
+}
 
-sealed class SpaceDirectoryViewEvents : VectorViewEvents
+sealed class SpaceDirectoryViewEvents : VectorViewEvents {
+    object Dismiss : SpaceDirectoryViewEvents()
+    data class NavigateToRoom(val roomId: String) : SpaceDirectoryViewEvents()
+}
 
 class SpaceDirectoryViewModel @AssistedInject constructor(
         @Assisted initialState: SpaceDirectoryState,
         private val session: Session
-) : VectorViewModel<SpaceDirectoryState, VectorViewModelAction, SpaceDirectoryViewEvents>(initialState) {
+) : VectorViewModel<SpaceDirectoryState, SpaceDirectoryViewAction, SpaceDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory {
@@ -79,24 +98,113 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
     }
 
     init {
-        val queryParams = roomSummaryQueryParams {
-            roomId = QueryStringValue.Equals(initialState.spaceId)
+
+        val spaceSum = session.getRoomSummary(initialState.spaceId)
+        setState {
+            copy(
+                    childList = spaceSum?.children ?: emptyList(),
+                    spaceSummaryApiResult = Loading()
+            )
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            session
-                    .rx()
-                    .liveSpaceSummaries(queryParams)
-                    .observeOn(Schedulers.computation())
-                    .map { sum -> Optional.from(sum.firstOrNull()) }
-                    .unwrap()
-                    .execute { async ->
-                        copy(summary = async)
+            try {
+                val query = session.spaceService().querySpaceChildren(initialState.spaceId)
+                setState {
+                    copy(
+                            spaceSummaryApiResult = Success(query.second)
+                    )
+                }
+            } catch (failure: Throwable) {
+                setState {
+                    copy(
+                            spaceSummaryApiResult = Fail(failure)
+                    )
+                }
+            }
+        }
+        observeJoinedRooms()
+        observeMembershipChanges()
+    }
+
+    private fun observeJoinedRooms() {
+        val queryParams = roomSummaryQueryParams {
+            memberships = listOf(Membership.JOIN)
+        }
+        session
+                .rx()
+                .liveRoomSummaries(queryParams)
+                .subscribe { list ->
+                    val joinedRoomIds = list
+                            ?.map { it.roomId }
+                            ?.toSet()
+                            ?: emptySet()
+
+                    setState {
+                        copy(joinedRoomsIds = joinedRoomIds)
                     }
+                }
+                .disposeOnClear()
+    }
+
+    private fun observeMembershipChanges() {
+        session.rx()
+                .liveRoomChangeMembershipState()
+                .subscribe {
+                    setState { copy(changeMembershipStates = it) }
+                }
+                .disposeOnClear()
+    }
+
+    override fun handle(action: SpaceDirectoryViewAction) {
+        when (action) {
+            is SpaceDirectoryViewAction.ExploreSubSpace -> {
+                setState {
+                    copy(hierarchyStack = hierarchyStack + listOf(action.spaceChildInfo.childRoomId))
+                }
+            }
+            SpaceDirectoryViewAction.HandleBack -> {
+                withState {
+                    if (it.hierarchyStack.isEmpty()) {
+                        _viewEvents.post(SpaceDirectoryViewEvents.Dismiss)
+                    } else {
+                        setState {
+                            copy(
+                                    hierarchyStack = hierarchyStack.dropLast(1)
+                            )
+                        }
+                    }
+                }
+            }
+            is SpaceDirectoryViewAction.JoinOrOpen -> {
+                handleJoinOrOpen(action.spaceChildInfo)
+            }
         }
     }
 
-    override fun handle(action: VectorViewModelAction) {
-        TODO("Not yet implemented")
+    private fun handleJoinOrOpen(spaceChildInfo: SpaceChildInfo) = withState { state ->
+        val isSpace = spaceChildInfo.roomType == RoomType.SPACE
+        if (state.joinedRoomsIds.contains(spaceChildInfo.childRoomId)) {
+            if (isSpace) {
+                handle(SpaceDirectoryViewAction.ExploreSubSpace(spaceChildInfo))
+            } else {
+                _viewEvents.post(SpaceDirectoryViewEvents.NavigateToRoom(spaceChildInfo.childRoomId))
+            }
+        } else {
+            // join
+            viewModelScope.launch {
+                try {
+                    if (isSpace) {
+                        session.spaceService().joinSpace(spaceChildInfo.childRoomId, null, spaceChildInfo.viaServers)
+                    } else {
+                        awaitCallback<Unit> {
+                            session.joinRoom(spaceChildInfo.childRoomId, null, spaceChildInfo.viaServers, it)
+                        }
+                    }
+                } catch (failure: Throwable) {
+                    Timber.e(failure, "## Space: Failed to join room or subsapce")
+                }
+            }
+        }
     }
 }

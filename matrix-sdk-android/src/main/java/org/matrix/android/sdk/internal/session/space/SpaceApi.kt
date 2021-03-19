@@ -29,6 +29,7 @@ internal interface SpaceApi {
      * POST /_matrix/client/r0/rooms/{roomID}/spaces
      *  {
      *  "max_rooms_per_space": 5,      // The maximum number of rooms/subspaces to return for a given space, if negative unbounded. default: -1.
+     *    "auto_join_only": true,        // If true, only return m.space.child events with auto_join:true, default: false, which returns all events.
      *  "limit": 100,                  // The maximum number of rooms/subspaces to return, server can override this, default: 100.
      *  "batch": "opaque_string"       // A token to use if this is a subsequent HTTP hit, default: "".
      *  }
