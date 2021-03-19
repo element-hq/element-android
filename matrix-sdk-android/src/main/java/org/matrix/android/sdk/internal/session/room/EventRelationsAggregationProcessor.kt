@@ -88,12 +88,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 EventType.REACTION             -> {
                     // we got a reaction!!
                     Timber.v("###REACTION in room $roomId , reaction eventID ${event.eventId}")
-                    handleReaction(event, roomId, realm, isLocalEcho)
+                    handleReaction(realm, event, roomId, isLocalEcho)
                 }
                 EventType.MESSAGE              -> {
                     if (event.unsignedData?.relations?.annotations != null) {
-                        Timber.v("###REACTION Agreggation in room $roomId for event ${event.eventId}")
-                        handleInitialAggregatedRelations(event, roomId, event.unsignedData.relations.annotations, realm)
+                        Timber.v("###REACTION Aggregation in room $roomId for event ${event.eventId}")
+                        handleInitialAggregatedRelations(realm, event, roomId, event.unsignedData.relations.annotations)
 
                         EventAnnotationsSummaryEntity.where(realm, roomId, event.eventId ?: "").findFirst()
                                 ?.let {
@@ -164,7 +164,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         if (event.getClearType() == EventType.REACTION) {
                             // we got a reaction!!
                             Timber.v("###REACTION e2e in room $roomId , reaction eventID ${event.eventId}")
-                            handleReaction(event, roomId, realm, isLocalEcho)
+                            handleReaction(realm, event, roomId, isLocalEcho)
                         }
                     }
                 }
@@ -180,11 +180,11 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                             // was this event a m.replace
                             val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
                             if (RelationType.REPLACE == contentModel?.relatesTo?.type && contentModel.relatesTo?.eventId != null) {
-                                handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
+                                handleRedactionOfReplace(realm, eventToPrune, contentModel.relatesTo!!.eventId!!)
                             }
                         }
                         EventType.REACTION -> {
-                            handleReactionRedact(eventToPrune, realm)
+                            handleReactionRedact(realm, eventToPrune)
                         }
                     }
                 }
@@ -361,7 +361,10 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         existingPollSummary.aggregatedContent = ContentMapper.map(sumModel.toContent())
     }
 
-    private fun handleInitialAggregatedRelations(event: Event, roomId: String, aggregation: AggregatedAnnotation, realm: Realm) {
+    private fun handleInitialAggregatedRelations(realm: Realm,
+                                                 event: Event,
+                                                 roomId: String,
+                                                 aggregation: AggregatedAnnotation) {
         if (SHOULD_HANDLE_SERVER_AGREGGATION) {
             aggregation.chunk?.forEach {
                 if (it.type == EventType.REACTION) {
@@ -383,7 +386,10 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
     }
 
-    private fun handleReaction(event: Event, roomId: String, realm: Realm, isLocalEcho: Boolean) {
+    private fun handleReaction(realm: Realm,
+                               event: Event,
+                               roomId: String,
+                               isLocalEcho: Boolean) {
         val content = event.content.toModel<ReactionContent>()
         if (content == null) {
             Timber.e("Malformed reaction content ${event.content}")
@@ -448,7 +454,9 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     /**
      * Called when an event is deleted
      */
-    private fun handleRedactionOfReplace(redacted: EventEntity, relatedEventId: String, realm: Realm) {
+    private fun handleRedactionOfReplace(realm: Realm,
+                                         redacted: EventEntity,
+                                         relatedEventId: String) {
         Timber.d("Handle redaction of m.replace")
         val eventSummary = EventAnnotationsSummaryEntity.where(realm, redacted.roomId, relatedEventId).findFirst()
         if (eventSummary == null) {
@@ -464,7 +472,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         sourceToDiscard.deleteFromRealm()
     }
 
-    private fun handleReactionRedact(eventToPrune: EventEntity, realm: Realm) {
+    private fun handleReactionRedact(realm: Realm,
+                                     eventToPrune: EventEntity) {
         Timber.v("REDACTION of reaction ${eventToPrune.eventId}")
         // delete a reaction, need to update the annotation summary if any
         val reactionContent: ReactionContent = EventMapper.map(eventToPrune).content.toModel() ?: return
