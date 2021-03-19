@@ -102,7 +102,7 @@ class SpaceSummaryController @Inject constructor(
                             id(groupSummary.roomId)
                             matrixItem(groupSummary.toMatrixItem())
                             selected(isSelected)
-                            onLeave { callback?.onLeaveSpace(groupSummary) }
+                            onMore { callback?.onSpaceSettings(groupSummary) }
                             listener { callback?.onSpaceSelected(groupSummary) }
                         }
                     }
@@ -120,7 +120,7 @@ class SpaceSummaryController @Inject constructor(
 
     interface Callback {
         fun onSpaceSelected(spaceSummary: RoomSummary)
-        fun onLeaveSpace(spaceSummary: RoomSummary)
+        fun onSpaceSettings(spaceSummary: RoomSummary)
         fun onAddSpaceSelected()
     }
 }

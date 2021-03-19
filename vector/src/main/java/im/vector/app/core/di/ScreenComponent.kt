@@ -80,6 +80,7 @@ import im.vector.app.features.signout.soft.SoftLogoutActivity
 import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpaceExploreActivity
+import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.ui.UiStateRepository
 import im.vector.app.features.usercode.UserCodeActivity
@@ -179,6 +180,7 @@ interface ScreenComponent {
     fun inject(bottomSheet: SignOutBottomSheetDialogFragment)
     fun inject(bottomSheet: MatrixToBottomSheet)
     fun inject(bottomSheet: ShareSpaceBottomSheet)
+    fun inject(bottomSheet: SpaceSettingsMenuBottomSheet)
 
     /* ==========================================================================================
      * Others
