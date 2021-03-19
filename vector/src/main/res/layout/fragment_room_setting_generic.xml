@@ -34,6 +34,15 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/avatars" />
 
+            <im.vector.app.core.ui.views.ShieldImageView
+                android:id="@+id/roomSettingsDecorationToolbarAvatarImageView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:layout_constraintCircle="@+id/roomSettingsToolbarAvatarImageView"
+                app:layout_constraintCircleAngle="135"
+                app:layout_constraintCircleRadius="20dp"
+                tools:ignore="MissingConstraints" />
+
             <TextView
                 android:id="@+id/roomSettingsToolbarTitleView"
                 android:layout_width="0dp"

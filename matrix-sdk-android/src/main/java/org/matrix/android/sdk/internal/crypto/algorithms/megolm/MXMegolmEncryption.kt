@@ -67,8 +67,9 @@ internal class MXMegolmEncryption(
 
     init {
         // restore existing outbound session if any
-       outboundSession = olmDevice.restoreOutboundGroupSessionForRoom(roomId)
+        outboundSession = olmDevice.restoreOutboundGroupSessionForRoom(roomId)
     }
+
     // Default rotation periods
     // TODO: Make it configurable via parameters
     // Session rotation periods
@@ -125,6 +126,7 @@ internal class MXMegolmEncryption(
 
         Timber.v("## CRYPTO | preshareKey ${System.currentTimeMillis() - ts} millis")
     }
+
     /**
      * Prepare a new session.
      *
@@ -240,6 +242,7 @@ internal class MXMegolmEncryption(
         val contentMap = MXUsersDevicesMap<Any>()
         var haveTargets = false
         val userIds = results.userIds
+        val noOlmToNotify = mutableListOf<UserDevice>()
         for (userId in userIds) {
             val devicesToShareWith = devicesByUser[userId]
             for ((deviceID) in devicesToShareWith!!) {
@@ -251,13 +254,7 @@ internal class MXMegolmEncryption(
                     // MSC 2399
                     // send withheld m.no_olm: an olm session could not be established.
                     // This may happen, for example, if the sender was unable to obtain a one-time key from the recipient.
-                    notifyKeyWithHeld(
-                            listOf(UserDevice(userId, deviceID)),
-                            session.sessionId,
-                            olmDevice.deviceCurve25519Key,
-                            WithHeldCode.NO_OLM
-                    )
-
+                    noOlmToNotify.add(UserDevice(userId, deviceID))
                     continue
                 }
                 Timber.i("## CRYPTO | shareUserDevicesKey() : Add to share keys contentMap for $userId:$deviceID")
@@ -277,14 +274,14 @@ internal class MXMegolmEncryption(
                 session.sharedWithHelper.markedSessionAsShared(userId, deviceId, chainIndex)
                 gossipingEventBuffer.add(
                         Event(
-                        type = EventType.ROOM_KEY,
-                        senderId = this.userId,
-                        content = submap.apply {
-                            this["session_key"] = ""
-                            // we add a fake key for trail
-                            this["_dest"] = "$userId|$deviceId"
-                        }
-                ))
+                                type = EventType.ROOM_KEY,
+                                senderId = this.userId,
+                                content = submap.apply {
+                                    this["session_key"] = ""
+                                    // we add a fake key for trail
+                                    this["_dest"] = "$userId|$deviceId"
+                                }
+                        ))
             }
         }
 
@@ -303,6 +300,16 @@ internal class MXMegolmEncryption(
             }
         } else {
             Timber.i("## CRYPTO | shareUserDevicesKey() : no need to sharekey")
+        }
+
+        if (noOlmToNotify.isNotEmpty()) {
+            // XXX offload?, as they won't read the message anyhow?
+            notifyKeyWithHeld(
+                    noOlmToNotify,
+                    session.sessionId,
+                    olmDevice.deviceCurve25519Key,
+                    WithHeldCode.NO_OLM
+            )
         }
     }
 
