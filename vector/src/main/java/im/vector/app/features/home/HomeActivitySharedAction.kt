@@ -27,4 +27,5 @@ sealed class HomeActivitySharedAction : VectorSharedAction {
     object OpenGroup : HomeActivitySharedAction()
     object AddSpace : HomeActivitySharedAction()
     data class OpenSpacePreview(val spaceId: String) : HomeActivitySharedAction()
+    data class ShowSpaceSettings(val spaceId: String) : HomeActivitySharedAction()
 }

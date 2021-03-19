@@ -35,8 +35,8 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.ui.views.CurrentCallsView
-import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.core.ui.views.KeysBackupBanner
+import im.vector.app.core.ui.views.KnownCallsViewHolder
 import im.vector.app.databinding.FragmentHomeDetailBinding
 import im.vector.app.features.call.SharedKnownCallsViewModel
 import im.vector.app.features.call.VectorCallActivity
@@ -52,7 +52,6 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
-
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -246,10 +245,10 @@ class HomeDetailFragment @Inject constructor(
         serverBackupStatusViewModel
                 .subscribe(this) {
                     when (val banState = it.bannerState.invoke()) {
-                        is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
+                        is BannerState.Setup -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
                         null,
-                        BannerState.Hidden    -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
+                        BannerState.Hidden -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Hidden, false)
                     }
                 }
         views.homeKeysBackupBanner.delegate = this
@@ -273,6 +272,16 @@ class HomeDetailFragment @Inject constructor(
         views.groupToolbarAvatarImageView.debouncedClicks {
             sharedActionViewModel.post(HomeActivitySharedAction.OpenDrawer)
         }
+
+        views.homeToolbarContent.debouncedClicks {
+            withState(viewModel) {
+                val currentSpace = it.spaceSummary.orNull()
+                        ?.takeIf { it.roomId != ALL_COMMUNITIES_GROUP_ID }
+                if (vectorPreferences.labSpaces() && currentSpace != null) {
+                    sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(currentSpace.roomId))
+                }
+            }
+        }
     }
 
     private fun setupBottomNavigationView() {
@@ -280,7 +289,7 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.setOnNavigationItemSelectedListener {
             val displayMode = when (it.itemId) {
                 R.id.bottom_action_people -> RoomListDisplayMode.PEOPLE
-                R.id.bottom_action_rooms  -> RoomListDisplayMode.ROOMS
+                R.id.bottom_action_rooms -> RoomListDisplayMode.ROOMS
                 else                      -> RoomListDisplayMode.NOTIFICATIONS
             }
             viewModel.handle(HomeDetailAction.SwitchDisplayMode(displayMode))
@@ -356,7 +365,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun RoomListDisplayMode.toMenuId() = when (this) {
         RoomListDisplayMode.PEOPLE -> R.id.bottom_action_people
-        RoomListDisplayMode.ROOMS  -> R.id.bottom_action_rooms
+        RoomListDisplayMode.ROOMS -> R.id.bottom_action_rooms
         else                       -> R.id.bottom_action_notification
     }
 
