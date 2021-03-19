@@ -8,7 +8,7 @@ Improvements 🙌:
  - Display the room shield in all room setting screens
 
 Bugfix 🐛:
- -
+ - Fix bad theme change for the MainActivity
 
 Translations 🗣:
  -
