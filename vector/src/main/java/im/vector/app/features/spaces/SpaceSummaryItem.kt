@@ -38,7 +38,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
     @EpoxyAttribute var selected: Boolean = false
     @EpoxyAttribute var listener: (() -> Unit)? = null
-    @EpoxyAttribute var onLeave: (() -> Unit)? = null
+    @EpoxyAttribute var onMore: (() -> Unit)? = null
     @EpoxyAttribute var toggleExpand: (() -> Unit)? = null
     @EpoxyAttribute var expanded: Boolean? = null
 
@@ -47,14 +47,14 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         holder.rootView.setOnClickListener { listener?.invoke() }
         holder.groupNameView.text = matrixItem.displayName
         holder.rootView.isChecked = selected
-        if (onLeave != null) {
-            holder.leaveView.setOnClickListener(
+        if (onMore != null) {
+            holder.moreView.setOnClickListener(
                     DebouncedClickListener({ _ ->
-                        onLeave?.invoke()
+                        onMore?.invoke()
                     })
             )
         } else {
-            holder.leaveView.isVisible = false
+            holder.moreView.isVisible = false
         }
 
         when (expanded) {
@@ -88,7 +88,7 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         val avatarImageView by bind<ImageView>(R.id.groupAvatarImageView)
         val groupNameView by bind<TextView>(R.id.groupNameView)
         val rootView by bind<CheckableConstraintLayout>(R.id.itemGroupLayout)
-        val leaveView by bind<ImageView>(R.id.groupTmpLeave)
+        val moreView by bind<ImageView>(R.id.groupTmpLeave)
         val collapseIndicator by bind<ImageView>(R.id.groupChildrenCollapse)
     }
 }

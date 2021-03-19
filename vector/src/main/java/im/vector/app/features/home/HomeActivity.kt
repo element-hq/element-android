@@ -58,6 +58,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
+import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.app.features.workers.signout.ServerBackupStatusViewState
@@ -163,6 +164,12 @@ class HomeActivity :
                         }
                         is HomeActivitySharedAction.AddSpace -> {
                             createSpaceResultLauncher.launch(SpaceCreationActivity.newIntent(this))
+                        }
+                        is HomeActivitySharedAction.ShowSpaceSettings -> {
+                            // open bottom sheet
+                            SpaceSettingsMenuBottomSheet
+                                    .newInstance(sharedAction.spaceId)
+                                    .show(supportFragmentManager, "SPACE_SETTINGS")
                         }
                     }.exhaustive
                 }
