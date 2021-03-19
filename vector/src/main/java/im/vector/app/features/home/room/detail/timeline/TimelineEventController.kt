@@ -31,6 +31,7 @@ import im.vector.app.core.epoxy.LoadingItem_
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.extensions.nextOrNull
 import im.vector.app.core.extensions.prevOrNull
+import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.utils.DebouncedClickListener
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.home.AvatarRenderer
@@ -85,6 +86,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                                   private val callManager: WebRtcCallManager,
                                                   @TimelineEventControllerHandler
                                                   private val backgroundHandler: Handler,
+                                                  private val userPreferencesProvider: UserPreferencesProvider,
                                                   private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper,
                                                   private val avatarRenderer: AvatarRenderer
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor, SimpleTimeline.Listener {
@@ -207,7 +209,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private val interceptorHelper = TimelineControllerInterceptorHelper(
             ::positionOfReadMarker,
             adapterPositionMapping,
-            vectorPreferences,
+            userPreferencesProvider,
             callManager
     )
 

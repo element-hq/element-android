@@ -26,12 +26,12 @@ import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 abstract class TimelineEmptyItem : VectorEpoxyModel<TimelineEmptyItem.Holder>(), ItemWithEvents {
 
     @EpoxyAttribute lateinit var eventId: String
-    @EpoxyAttribute var hidden: Boolean = true
+    @EpoxyAttribute var visible: Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.view.updateLayoutParams {
-            this.height = if (hidden) 0 else 1
+            this.height = if (visible) 1 else 0
         }
     }
 

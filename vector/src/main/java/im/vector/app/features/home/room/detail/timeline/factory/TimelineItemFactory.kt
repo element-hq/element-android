@@ -36,7 +36,6 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val widgetItemFactory: WidgetItemFactory,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
                                               private val callItemFactory: CallItemFactory,
-                                              private val userPreferencesProvider: UserPreferencesProvider,
                                               private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper) {
 
     /**
@@ -48,12 +47,15 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                eventIdToHighlight: String?,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
         val highlight = event.root.eventId == eventIdToHighlight
-
         val computedModel = try {
+            if (!timelineEventVisibilityHelper.shouldShowEvent(event, eventIdToHighlight)) {
+                return buildEmptyItem(event, prevEvent, eventIdToHighlight)
+            }
             when (event.root.getClearType()) {
+                // Message items
                 EventType.STICKER,
                 EventType.MESSAGE -> messageItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
-                // State and call
+                // Notice items
                 EventType.STATE_ROOM_TOMBSTONE,
                 EventType.STATE_ROOM_NAME,
                 EventType.STATE_ROOM_TOPIC,
@@ -65,6 +67,17 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_HISTORY_VISIBILITY,
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
+                EventType.STATE_ROOM_ALIASES,
+                EventType.KEY_VERIFICATION_ACCEPT,
+                EventType.KEY_VERIFICATION_START,
+                EventType.KEY_VERIFICATION_KEY,
+                EventType.KEY_VERIFICATION_READY,
+                EventType.KEY_VERIFICATION_MAC,
+                EventType.CALL_CANDIDATES,
+                EventType.CALL_REPLACES,
+                EventType.CALL_SELECT_ANSWER,
+                EventType.CALL_NEGOTIATE,
+                EventType.REACTION,
                 EventType.STATE_ROOM_POWER_LEVELS -> noticeItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET -> widgetItemFactory.create(event, highlight, callback)
@@ -89,32 +102,10 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.KEY_VERIFICATION_DONE -> {
                     verificationConclusionItemFactory.create(event, highlight, callback)
                 }
-                // Hidden notice items
-                EventType.STATE_ROOM_ALIASES,
-                EventType.KEY_VERIFICATION_ACCEPT,
-                EventType.KEY_VERIFICATION_START,
-                EventType.KEY_VERIFICATION_KEY,
-                EventType.KEY_VERIFICATION_READY,
-                EventType.KEY_VERIFICATION_MAC,
-                EventType.CALL_CANDIDATES,
-                EventType.CALL_REPLACES,
-                EventType.CALL_SELECT_ANSWER,
-                EventType.CALL_NEGOTIATE -> {
-                    if (userPreferencesProvider.shouldShowHiddenEvents()) {
-                        noticeItemFactory.create(event, highlight, callback)
-                    } else {
-                        null
-                    }
-                }
                 // Unhandled event types
                 else                              -> {
                     Timber.v("Type ${event.root.getClearType()} not handled")
-                    if (userPreferencesProvider.shouldShowHiddenEvents()) {
-                        // Should only happen when shouldShowHiddenEvents() settings is ON
-                        defaultItemFactory.create(event, highlight, callback)
-                    } else {
-                        null
-                    }
+                    defaultItemFactory.create(event, highlight, callback)
                 }
             }
         } catch (throwable: Throwable) {
@@ -125,10 +116,10 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
     }
 
     private fun buildEmptyItem(timelineEvent: TimelineEvent, prevEvent: TimelineEvent?, eventIdToHighlight: String?): TimelineEmptyItem {
-        val prevIsVisible = prevEvent != null && timelineEventVisibilityHelper.shouldShowEvent(prevEvent, eventIdToHighlight)
+        val makesEmptyItemVisible = prevEvent == null || timelineEventVisibilityHelper.shouldShowEvent(prevEvent, eventIdToHighlight)
         return TimelineEmptyItem_()
                 .id(timelineEvent.localId)
                 .eventId(timelineEvent.eventId)
-                .hidden(prevIsVisible)
+                .visible(makesEmptyItemVisible)
     }
 }
