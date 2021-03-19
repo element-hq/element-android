@@ -26,6 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.isAnimationDisabled
 import im.vector.app.features.pin.PinActivity
+import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
 import java.lang.ref.WeakReference
@@ -294,6 +295,7 @@ class PopupAlertManager @Inject constructor() {
     private fun shouldBeDisplayedIn(alert: VectorAlert?, activity: Activity): Boolean {
         return alert != null
                 && activity !is PinActivity
+                && activity !is SignedOutActivity
                 && activity is VectorBaseActivity<*>
                 && alert.shouldBeDisplayedIn.invoke(activity)
     }

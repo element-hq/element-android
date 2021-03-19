@@ -64,7 +64,6 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
                 EventType.STATE_ROOM_POWER_LEVELS,
-                EventType.REACTION,
                 EventType.REDACTION             -> noticeItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(event, highlight, callback)
@@ -91,6 +90,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_MAC,
+                EventType.REACTION,
                 EventType.CALL_CANDIDATES,
                 EventType.CALL_REPLACES,
                 EventType.CALL_SELECT_ANSWER,
