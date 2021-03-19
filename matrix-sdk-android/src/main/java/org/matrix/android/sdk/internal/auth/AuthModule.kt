@@ -20,6 +20,10 @@ import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import fr.gouv.tchap.android.sdk.api.session.identity.IdentityService
+import fr.gouv.tchap.android.sdk.internal.session.identity.DefaultIdentityRequestHomeServerTask
+import fr.gouv.tchap.android.sdk.internal.session.identity.IdentityRequestHomeServerTask
+import fr.gouv.tchap.android.sdk.internal.session.identity.TchapIdentityService
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.internal.auth.db.AuthRealmMigration
@@ -77,10 +81,16 @@ internal abstract class AuthModule {
     abstract fun bindAuthenticationService(service: DefaultAuthenticationService): AuthenticationService
 
     @Binds
+    abstract fun bindIdentityService(service: TchapIdentityService): IdentityService
+
+    @Binds
     abstract fun bindSessionCreator(creator: DefaultSessionCreator): SessionCreator
 
     @Binds
     abstract fun bindDirectLoginTask(task: DefaultDirectLoginTask): DirectLoginTask
+
+    @Binds
+    abstract fun bindIdentityRequestHomeServerTask(task: DefaultIdentityRequestHomeServerTask): IdentityRequestHomeServerTask
 
     @Binds
     abstract fun bindHomeServerHistoryService(service: DefaultHomeServerHistoryService): HomeServerHistoryService

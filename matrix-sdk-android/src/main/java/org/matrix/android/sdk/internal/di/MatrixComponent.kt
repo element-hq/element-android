@@ -21,6 +21,7 @@ import android.content.res.Resources
 import com.squareup.moshi.Moshi
 import dagger.BindsInstance
 import dagger.Component
+import fr.gouv.tchap.android.sdk.api.session.identity.IdentityService
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
@@ -60,6 +61,8 @@ internal interface MatrixComponent {
     fun testInterceptor(): TestInterceptor?
 
     fun authenticationService(): AuthenticationService
+
+    fun identityService(): IdentityService
 
     fun rawService(): RawService
 
