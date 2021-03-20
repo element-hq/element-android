@@ -412,4 +412,8 @@
     <string name="ssl_logout_account">പുറത്തിറങ്ങുക</string>
     <string name="logout">പുറത്തിറങ്ങുക</string>
     <string name="title_activity_keys_backup_restore">കീ ബാക്കപ്പ് ഉപയൊഗിക്കൂ</string>
+    <string name="summary_user_sent_sticker">%1$s ഒരു സ്റ്റിക്കർ അയച്ചു.</string>
+    <string name="summary_you_sent_image">നിങ്ങൾ ഒരു ചിത്രം അയച്ചു.</string>
+    <string name="summary_user_sent_image">%1$s ഒരു ചിത്രം അയച്ചു.</string>
+    <string name="summary_message">%1$s: %2$s</string>
 </resources>
