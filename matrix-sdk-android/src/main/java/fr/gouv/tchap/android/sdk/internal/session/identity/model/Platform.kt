@@ -32,5 +32,5 @@ data class Platform(
         /**
          * The new homeserver name.
          */
-        @Json(name = "new_hs") val newHs: String
+        @Json(name = "new_hs") val newHs: String? = null
 )
