@@ -90,4 +90,6 @@ interface SpaceService {
      * if multiple are present the client should select the one with the lowest room ID, as determined via a lexicographic utf-8 ordering.
      */
     suspend fun setSpaceParent(childRoomId: String, parentSpaceId: String, canonical: Boolean, viaServers: List<String>)
+
+    fun getRootSpaceSummaries(): List<RoomSummary>
 }

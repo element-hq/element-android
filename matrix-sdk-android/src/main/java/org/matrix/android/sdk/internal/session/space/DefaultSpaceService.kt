@@ -85,6 +85,9 @@ internal class DefaultSpaceService @Inject constructor(
         return roomSummaryDataSource.getSpaceSummaries(spaceSummaryQueryParams)
     }
 
+    override fun getRootSpaceSummaries(): List<RoomSummary> {
+        return roomSummaryDataSource.getRootSpaceSummaries()
+    }
     override suspend fun peekSpace(spaceId: String): SpacePeekResult {
         return peekSpaceTask.execute(PeekSpaceTask.Params(spaceId))
     }
