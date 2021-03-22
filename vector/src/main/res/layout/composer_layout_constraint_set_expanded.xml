@@ -60,6 +60,20 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/first_names" />
 
+    <ImageView
+        android:id="@+id/composerRelatedMessageImage"
+        android:layout_width="100dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="6dp"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/composerRelatedMessageTitle"
+        app:layout_constraintTop_toBottomOf="@+id/composerRelatedMessageTitle"
+        tools:ignore="MissingPrefix"
+        tools:src="@tools:sample/backgrounds/scenic"
+        tools:visibility="visible" />
+
     <TextView
         android:id="@+id/composerRelatedMessageContent"
         android:layout_width="0dp"
@@ -70,7 +84,7 @@
         app:layout_constrainedHeight="true"
         app:layout_constraintEnd_toEndOf="@id/composerRelatedMessageTitle"
         app:layout_constraintStart_toStartOf="@id/composerRelatedMessageTitle"
-        app:layout_constraintTop_toBottomOf="@id/composerRelatedMessageTitle"
+        app:layout_constraintTop_toBottomOf="@id/composerRelatedMessageImage"
         tools:text="@tools:sample/lorem/random" />
 
     <ImageView
@@ -89,7 +103,6 @@
         tools:ignore="MissingPrefix"
         tools:src="@drawable/ic_edit" />
 
-
     <ImageButton
         android:id="@+id/composerRelatedMessageCloseButton"
         android:layout_width="48dp"
@@ -97,9 +110,9 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/cancel"
         android:src="@drawable/ic_close_round"
-        app:layout_constraintBottom_toBottomOf="@id/composerRelatedMessageContent"
+        app:layout_constraintBottom_toBottomOf="@id/composer_preview_barrier"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/composerRelatedMessageContent"
+        app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/riotx_notice"
         tools:ignore="MissingPrefix" />
 
