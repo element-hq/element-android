@@ -29,8 +29,6 @@ import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineIte
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import im.vector.app.features.home.room.detail.timeline.item.TimelineReadMarkerItem_
-import im.vector.app.features.settings.VectorPreferences
-import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.internal.session.room.timeline.SimpleTimeline
 import kotlin.reflect.KMutableProperty0
 
@@ -75,20 +73,19 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
                         positionOfReadMarker.set(index)
                     }
                 }
-                if(epoxyModel !is TimelineEmptyItem){
+                if (epoxyModel !is TimelineEmptyItem) {
                     atLeastOneVisibleItemSinceLastDaySeparator = true
                 }
             }
-            if(epoxyModel is DaySeparatorItem){
-                if(!atLeastOneVisibleItemSinceLastDaySeparator){
+            if (epoxyModel is DaySeparatorItem) {
+                if (!atLeastOneVisibleItemSinceLastDaySeparator) {
                     modelsIterator.remove()
                     return@forEach
                 }
                 atLeastOneVisibleItemSinceLastDaySeparator = false
-            }
-            else if (epoxyModel is CallTileTimelineItem) {
+            } else if (epoxyModel is CallTileTimelineItem) {
                 val hasBeenRemoved = modelsIterator.removeCallItemIfNeeded(epoxyModel, callIds, showHiddenEvents)
-                if(!hasBeenRemoved){
+                if (!hasBeenRemoved) {
                     atLeastOneVisibleItemSinceLastDaySeparator = true
                 }
             }

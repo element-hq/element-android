@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.detail.timeline.factory
 import im.vector.app.core.epoxy.TimelineEmptyItem
 import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import org.matrix.android.sdk.api.session.events.model.EventType

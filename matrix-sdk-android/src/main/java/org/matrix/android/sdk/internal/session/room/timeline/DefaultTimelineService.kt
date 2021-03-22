@@ -74,8 +74,6 @@ internal class DefaultTimelineService @AssistedInject constructor(
         )
     }
 
-
-
     override fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline {
         return DefaultTimeline(
                 roomId = roomId,

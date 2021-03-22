@@ -288,7 +288,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun shouldShowHiddenEvents(): Boolean {
         return developerMode() && defaultPrefs.getBoolean(SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY, false)
-
     }
 
     fun swipeToReplyIsEnabled(): Boolean {

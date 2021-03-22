@@ -366,7 +366,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         if (modelCache.isEmpty()) {
             return
         }
-        val receiptsByEvents = measureTimeData {  getReadReceiptsByShownEvent()}
+        val receiptsByEvents = measureTimeData {  getReadReceiptsByShownEvent() }
         Timber.v("Time to get read receipts: ${receiptsByEvents.duration} ms")
         (0 until modelCache.size).forEach { position ->
             // Should be build if not cached or if cached but contains additional models

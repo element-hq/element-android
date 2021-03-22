@@ -1088,7 +1088,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.StopChatEffects)
     }
 
-    private fun handleLoadMore(action: RoomDetailAction.LoadMoreTimelineEvents){
+    private fun handleLoadMore(action: RoomDetailAction.LoadMoreTimelineEvents) {
         viewModelScope.launch {
             simpleTimeline.loadMore(PAGINATION_COUNT.toLong(), action.direction)
         }
@@ -1492,11 +1492,11 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onStateUpdated() {
-        //NOOP
+        // NOOP
     }
 
     override fun onEventsUpdated(snapshot: List<TimelineEvent>) {
-        //NOOP
+        // NOOP
     }
 
     override fun onNewTimelineEvents(eventIds: List<String>) {

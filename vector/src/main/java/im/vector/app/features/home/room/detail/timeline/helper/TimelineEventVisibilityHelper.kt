@@ -67,12 +67,12 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         val content = root.getClearContent().toModel<RoomMemberContent>()
         val prevContent = root.resolvedPrevContent().toModel<RoomMemberContent>()
 
-        val isMembershipChanged = content?.membership != prevContent?.membership;
+        val isMembershipChanged = content?.membership != prevContent?.membership
         val isJoin = isMembershipChanged && content?.membership == Membership.JOIN
         val isPart = isMembershipChanged && content?.membership == Membership.LEAVE && root.stateKey == root.senderId
 
         val isJoinToJoin = !isMembershipChanged && content?.membership == Membership.JOIN
-        val isDisplaynameChange = isJoinToJoin && content?.displayName != prevContent?.displayName;
+        val isDisplaynameChange = isJoinToJoin && content?.displayName != prevContent?.displayName
         val isAvatarChange = isJoinToJoin && content?.avatarUrl !== prevContent?.avatarUrl
 
         return MembershipDiff(

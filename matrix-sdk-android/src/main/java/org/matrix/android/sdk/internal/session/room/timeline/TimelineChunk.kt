@@ -48,7 +48,6 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
 
     private val chunkObjectListener = RealmObjectChangeListener<ChunkEntity> { _, changeSet ->
         Timber.v("on chunk (${chunkEntity.identifier()}) changed: ${changeSet?.changedFields?.joinToString(",")}")
-
     }
 
     private val timelineEventCollectionListener = OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
@@ -93,7 +92,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         if (direction == SimpleTimeline.Direction.FORWARDS) {
             val nextChunkEntity = chunkEntity.nextChunk
             if (nextChunkEntity == null) {
-                val token = chunkEntity.nextToken ?: return //TODO handle previous live chunk
+                val token = chunkEntity.nextToken ?: return // TODO handle previous live chunk
                 try {
                     fetchFromServer(token, direction)
                 } catch (failure: Throwable) {
@@ -289,4 +288,3 @@ private fun SimpleTimeline.Direction.toPaginationDirection(): PaginationDirectio
 private fun ChunkEntity.sortedTimelineEvents(): RealmResults<TimelineEventEntity> {
     return timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
 }
-

@@ -67,7 +67,7 @@ object TimelineDisplayableEvents {
      * It's a subset of DISPLAYABLE_TYPES, used on DefaultTimeline to query.
      *
      */
-    //TODO remove this as we remove the filtering in the SDK
+    // TODO remove this as we remove the filtering in the SDK
     val TIMELINE_FILTERED_TYPES = listOf(
             EventType.MESSAGE,
             EventType.STATE_ROOM_WIDGET_LEGACY,

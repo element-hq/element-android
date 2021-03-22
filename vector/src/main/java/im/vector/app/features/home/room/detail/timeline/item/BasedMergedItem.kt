@@ -19,10 +19,8 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import org.matrix.android.sdk.api.util.MatrixItem
 
 abstract class BasedMergedItem<H : BasedMergedItem.Holder> : BaseEventItem<H>() {
