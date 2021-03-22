@@ -84,6 +84,10 @@ class SpaceListFragment @Inject constructor(
         sharedActionViewModel.post(HomeActivitySharedAction.ShowSpaceSettings(spaceSummary.roomId))
     }
 
+    override fun onToggleExpand(spaceSummary: RoomSummary) {
+        viewModel.handle(SpaceListAction.ToggleExpand(spaceSummary))
+    }
+
     override fun onAddSpaceSelected() {
         viewModel.handle(SpaceListAction.AddSpace)
     }

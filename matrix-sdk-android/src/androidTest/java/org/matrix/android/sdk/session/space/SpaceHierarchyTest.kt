@@ -370,4 +370,44 @@ class SpaceHierarchyTest : InstrumentedTest {
         }
         return TestSpaceCreationResult(spaceId, roomIds)
     }
+
+    @Test
+    fun testRootSpaces() {
+        val session = commonTestHelper.createAccount("John", SessionTestParams(true))
+
+        val spaceAInfo = createPublicSpace(session, "SpaceA", listOf(
+                Triple("A1", true /*auto-join*/, true/*canonical*/),
+                Triple("A2", true, true)
+        ))
+
+        val spaceBInfo = createPublicSpace(session, "SpaceB", listOf(
+                Triple("B1", true /*auto-join*/, true/*canonical*/),
+                Triple("B2", true, true),
+                Triple("B3", true, true)
+        ))
+
+        val spaceCInfo = createPublicSpace(session, "SpaceC", listOf(
+                Triple("C1", true /*auto-join*/, true/*canonical*/),
+                Triple("C2", true, true)
+        ))
+
+        val viaServers = listOf(session.sessionParams.homeServerHost ?: "")
+
+        // add C as subspace of B
+        runBlocking {
+            val spaceB = session.spaceService().getSpace(spaceBInfo.spaceId)
+            spaceB!!.addChildren(spaceCInfo.spaceId, viaServers, null, true)
+        }
+
+        // + A
+        //   a1, a2
+        // + B
+         //  b1, b2, b3
+        //   + C
+        //     + c1, c2
+
+        val rootSpaces = session.spaceService().getRootSpaceSummaries()
+
+        assertEquals(2, rootSpaces.size, "Unexpected number of root spaces ${rootSpaces.map { it.name }}")
+    }
 }

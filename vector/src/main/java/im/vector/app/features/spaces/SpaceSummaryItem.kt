@@ -17,6 +17,7 @@
 package im.vector.app.features.spaces
 
 import android.widget.ImageView
+import android.widget.Space
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
@@ -40,7 +41,9 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
     @EpoxyAttribute var listener: (() -> Unit)? = null
     @EpoxyAttribute var onMore: (() -> Unit)? = null
     @EpoxyAttribute var toggleExpand: (() -> Unit)? = null
-    @EpoxyAttribute var expanded: Boolean? = null
+    @EpoxyAttribute var expanded: Boolean = false
+    @EpoxyAttribute var hasChildren: Boolean = false
+    @EpoxyAttribute var indent: Int = 0
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -57,24 +60,35 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
             holder.moreView.isVisible = false
         }
 
-        when (expanded) {
-            null -> {
-                holder.collapseIndicator.isGone = true
-            }
-            else -> {
-                holder.collapseIndicator.isVisible = true
-                holder.collapseIndicator.setImageDrawable(
-                        ContextCompat.getDrawable(holder.view.context,
-                                if (expanded!!) R.drawable.ic_expand_less else R.drawable.ic_expand_more
-                        )
-                )
-                holder.collapseIndicator.setOnClickListener(
-                        DebouncedClickListener({ _ ->
-                            toggleExpand?.invoke()
-                        })
-                )
-            }
+        if (hasChildren) {
+//            holder.collapseIndicator.setOnClickListener(
+//                    DebouncedClickListener({ _ ->
+//                        toggleExpand?.invoke()
+//                    })
+//            )
+//            when (expanded) {
+//                null -> {
+//                    holder.collapseIndicator.isGone = true
+//                }
+//                else -> {
+            holder.collapseIndicator.isVisible = true
+            holder.collapseIndicator.setImageDrawable(
+                    ContextCompat.getDrawable(holder.view.context,
+                            if (expanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more
+                    )
+            )
+            holder.collapseIndicator.setOnClickListener(
+                    DebouncedClickListener({ _ ->
+                        toggleExpand?.invoke()
+                    })
+            )
+//                }
+//            }
+        } else {
+            holder.collapseIndicator.isGone = true
         }
+
+        holder.indentSpace.isVisible = indent > 0
 
         avatarRenderer.renderSpace(matrixItem, holder.avatarImageView)
     }
@@ -90,5 +104,6 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         val rootView by bind<CheckableConstraintLayout>(R.id.itemGroupLayout)
         val moreView by bind<ImageView>(R.id.groupTmpLeave)
         val collapseIndicator by bind<ImageView>(R.id.groupChildrenCollapse)
+        val indentSpace by bind<Space>(R.id.indent)
     }
 }
