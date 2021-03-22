@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +14,28 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.network
+package org.matrix.android.sdk.internal.network
 
 import okhttp3.Interceptor
 import okhttp3.Response
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.network.ApiInterceptorListener
+import org.matrix.android.sdk.api.network.ApiPath
+import org.matrix.android.sdk.internal.di.MatrixScope
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Interceptor class for provided api paths.
  */
-@Singleton
-class ApiInterceptor @Inject constructor() : Interceptor {
-
-    interface Listener {
-        fun onApiResponse(path: ApiPath, response: String)
-    }
+@MatrixScope
+internal class ApiInterceptor @Inject constructor() : Interceptor {
 
     init {
         Timber.d("ApiInterceptor.init")
     }
 
-    private val apiResponseListenersMap = mutableMapOf<ApiPath, MutableList<Listener>>()
+    private val apiResponseListenersMap = mutableMapOf<ApiPath, MutableList<ApiInterceptorListener>>()
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
@@ -46,9 +45,11 @@ class ApiInterceptor @Inject constructor() : Interceptor {
         val response = chain.proceed(request)
 
         findApiPath(path, method)?.let { apiPath ->
-            response.peekBody(Long.MAX_VALUE).string().let {
+            response.peekBody(Long.MAX_VALUE).string().let { networkResponse ->
                 apiResponseListenersMap[apiPath]?.forEach { listener ->
-                    listener.onApiResponse(apiPath, it)
+                    tryOrNull("Error in the implementation") {
+                        listener.onApiResponse(apiPath, networkResponse)
+                    }
                 }
             }
         }
@@ -70,21 +71,16 @@ class ApiInterceptor @Inject constructor() : Interceptor {
 
         if (patternSegments.size != pathSegments.size) return false
 
-        for (i in patternSegments.indices) {
-            if (patternSegments[i] != pathSegments[i] && !patternSegments[i].startsWith("{")) {
-                return false
-            }
+        return patternSegments.indices.all { i ->
+            patternSegments[i] == pathSegments[i] || patternSegments[i].startsWith("{")
         }
-        return true
     }
 
     /**
      * Adds listener to send intercepted api responses through.
      */
-    fun addListener(path: ApiPath, listener: Listener) {
-        if (!apiResponseListenersMap.contains(path)) {
-            apiResponseListenersMap[path] = mutableListOf()
-        }
-        apiResponseListenersMap[path]?.add(listener)
+    fun addListener(path: ApiPath, listener: ApiInterceptorListener) {
+        apiResponseListenersMap.getOrPut(path) { mutableListOf() }
+                .add(listener)
     }
 }

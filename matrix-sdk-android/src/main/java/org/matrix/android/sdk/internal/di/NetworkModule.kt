@@ -28,7 +28,7 @@ import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingIntercept
 import org.matrix.android.sdk.internal.network.interceptors.FormattedJsonHttpLogger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.matrix.android.sdk.api.network.ApiInterceptor
+import org.matrix.android.sdk.internal.network.ApiInterceptor
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -53,13 +53,6 @@ internal object NetworkModule {
     @JvmStatic
     fun providesCurlLoggingInterceptor(): CurlLoggingInterceptor {
         return CurlLoggingInterceptor()
-    }
-
-    @MatrixScope
-    @Provides
-    @JvmStatic
-    fun providesApiInterceptor(): ApiInterceptor {
-        return ApiInterceptor()
     }
 
     @MatrixScope
