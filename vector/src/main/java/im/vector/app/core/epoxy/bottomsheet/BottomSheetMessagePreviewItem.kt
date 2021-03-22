@@ -77,6 +77,11 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         holder.timestamp.setTextOrHide(time)
     }
 
+    override fun unbind(holder: Holder) {
+        imageContentRenderer?.clear(holder.imagePreview)
+        super.unbind(holder)
+    }
+
     class Holder : VectorEpoxyHolder() {
         val avatar by bind<ImageView>(R.id.bottom_sheet_message_preview_avatar)
         val sender by bind<TextView>(R.id.bottom_sheet_message_preview_sender)
