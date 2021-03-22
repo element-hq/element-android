@@ -15,7 +15,7 @@
     <string name="room_displayname_empty_room_was">Празна соба (била је %s)</string>
     <string name="room_displayname_empty_room">Празна соба</string>
     <plurals name="room_displayname_three_and_more_members">
-        <item quantity="one">%1$s и још %2$d</item>
+        <item quantity="one">%1$s и још 1</item>
         <item quantity="few">%1$s и још %2$d</item>
         <item quantity="other">%1$s и још %2$d</item>
     </plurals>
@@ -602,9 +602,113 @@
     <string name="cannot_start_call">Не може се покренути позив, покушајте касније</string>
     <string name="ongoing_conference_call">Конференцијски позив у току.
 \nПридружи се као %1$s или %2$s</string>
-    <string name="permalink">Permalink</string>
+    <string name="permalink">ТрајнаВеза</string>
     <string name="initial_sync_start_downloading">Почетна синхронизација:
 \nПреузимање података…</string>
     <string name="initial_sync_start_server_computing">Почетна синхронизација:
 \nЧека се одговор сервера…</string>
+    <string name="room_permissions_change_permissions">Променити дозволе</string>
+    <string name="room_permissions_change_room_name">Променити име собе</string>
+    <string name="room_permissions_change_history_visibility">Променити видљивост историје</string>
+    <string name="room_permissions_enable_room_encryption">Активирати шифровање собе</string>
+    <string name="room_permissions_change_main_address_for_the_room">Променити главну адресу собе</string>
+    <string name="room_permissions_change_room_avatar">Променити аватар собе</string>
+    <string name="room_permissions_modify_widgets">Променити widget-е</string>
+    <string name="room_permissions_notify_everyone">Обавестити све</string>
+    <string name="room_permissions_remove_messages_sent_by_others">Уклонити поруке које су други послали</string>
+    <string name="room_permissions_ban_users">Забранити кориснике</string>
+    <string name="room_permissions_kick_users">Протерати кориснике</string>
+    <string name="room_permissions_change_settings">Променити подешавања</string>
+    <string name="room_permissions_invite_users">Позвати чланове</string>
+    <string name="room_permissions_send_messages">Слати поруке</string>
+    <string name="room_permissions_default_role">Подразумевана улога</string>
+    <string name="room_permissions_title">Дозволе</string>
+    <string name="room_settings_permissions_title">Дозволе собе</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">Сигурно уклонити позив овој корисника\?</string>
+    <string name="room_participants_action_cancel_invite_title">Откажи позив</string>
+    <string name="room_participants_action_unignore">Покажи све поруке овог корисника</string>
+    <string name="room_participants_action_unignore_prompt_msg">Не игнорисањем овог корисника ће поново приказати све његове поруке.</string>
+    <string name="room_participants_action_unignore_title">Не игнориши више корисника</string>
+    <string name="room_participants_action_ignore">Игнорисај</string>
+    <string name="room_participants_action_ignore_prompt_msg">Игнорирање овог корисника уклониће своје поруке из соба које делите.
+\n
+\nОву акцију можете поништити у било које време у општим подешавањима.</string>
+    <string name="room_participants_action_ignore_title">Игнорирај корисника</string>
+    <string name="room_participants_power_level_demote">Снизити права</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Нећете моћи да поништите ову промену пошто снизујете ваша права, ако сте последњи привилеговани корисник у соби, неће бити могуће повратити привилегије.</string>
+    <string name="room_participants_power_level_demote_warning_title">Ауто снизити права\?</string>
+    <string name="room_participants_action_devices_list">Покажи списак сесије</string>
+    <string name="room_participants_action_mention">Спомени</string>
+    <string name="room_participants_invite_search_another_user">Идентификатор, име или имејл</string>
+    <string name="room_participants_action_set_admin">Постави као администратор</string>
+    <string name="room_participants_action_set_moderator">Постави као модератор</string>
+    <string name="room_participants_action_set_default_power_level">Рисетуј на нормалан корисник</string>
+    <string name="room_participants_action_kick">Изтерај</string>
+    <string name="room_participants_action_unban">Уклони забрану</string>
+    <string name="room_participants_action_ban">Забрани</string>
+    <string name="room_participants_action_remove">Уклони из ове собе</string>
+    <string name="room_participants_action_leave">Напусти ову собу</string>
+    <string name="room_participants_action_cancel_invite">Поништи позив</string>
+    <string name="room_participants_action_invite">Позови</string>
+    <string name="room_participants_header_devices">СЕСИЈЕ</string>
+    <string name="room_participants_header_direct_chats">Приватни разговори</string>
+    <string name="room_participants_header_call">ПОЗИВ</string>
+    <string name="room_participants_header_admin_tools">АДМИНИСТРАТОРСКЕ АЛАТКЕ</string>
+    <string name="room_participants_ago">%1$s пре %2$s</string>
+    <string name="room_participants_now">Сада %1$s</string>
+    <string name="room_participants_idle">Неактиван</string>
+    <string name="room_participants_offline">Ван везе</string>
+    <string name="room_participants_online">На вези</string>
+    <string name="room_participants_create">Креирај</string>
+    <string name="room_participants_remove_prompt_msg">Сигурно уклонити %s из овог ћаскања\?</string>
+    <string name="room_participants_leave_private_warning">Ова соба није јавна. Нећете моћи поново да се придружите без позива.</string>
+    <string name="room_participants_leave_prompt_msg">Стварно напустити ову собу\?</string>
+    <string name="room_participants_leave_prompt_title">Напусти собу</string>
+    <plurals name="format_time_d">
+        <item quantity="one">%dд</item>
+        <item quantity="few">%dд</item>
+        <item quantity="other">%dд</item>
+    </plurals>
+    <plurals name="format_time_h">
+        <item quantity="one">%dх</item>
+        <item quantity="few">%dх</item>
+        <item quantity="other">%dх</item>
+    </plurals>
+    <plurals name="format_time_m">
+        <item quantity="one">%dм</item>
+        <item quantity="few">%dм</item>
+        <item quantity="other">%dм</item>
+    </plurals>
+    <plurals name="format_time_s">
+        <item quantity="one">%dс</item>
+        <item quantity="few">%dс</item>
+        <item quantity="other">%dс</item>
+    </plurals>
+    <string name="room_title_one_member">1 члан</string>
+    <plurals name="room_title_members">
+        <item quantity="one">%d члан</item>
+        <item quantity="few">%d члана</item>
+        <item quantity="other">%d чланова</item>
+    </plurals>
+    <plurals name="room_header_active_members_count">
+        <item quantity="one">%d активан члан</item>
+        <item quantity="few">%d активна члана</item>
+        <item quantity="other">%d активних чланова</item>
+    </plurals>
+    <string name="room_creation_add_member">Додај члана</string>
+    <string name="room_creation_title">Ново ћаскање</string>
+    <string name="invite_no_identity_server_error">Додајте сервер идентитета у своја подешавања да бисте извршили ову акцију.</string>
+    <string name="room_preview_room_interactions_disabled">Ово је преглед ове собе. Интеракције собе су онемогућене.</string>
+    <string name="room_preview_try_join_an_unknown_room_default">једна соба</string>
+    <string name="room_preview_try_join_an_unknown_room">Покушавате да приступите %s. Да ли желите да се придружите да бисте учествовали у дискусији\?</string>
+    <string name="room_preview_invitation_format">%s Вас је позвао да се придружите овој соби</string>
+    <string name="room_jump_to_first_unread">Ићи на прву непрочитану поруку.</string>
+    <string name="room_sync_in_progress">Синхронизација…</string>
+    <string name="open_chat_header">Отвори заглавље</string>
+    <string name="list_members">Листа чланова</string>
+    <string name="reject">Одбаци</string>
+    <string name="preview">Преглед</string>
+    <string name="join">Придружи се</string>
+    <string name="remove">Избриши</string>
+    <string name="_continue">Настави</string>
 </resources>
