@@ -32,17 +32,18 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
-import org.matrix.android.sdk.api.session.room.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.rx.asObservable
 import org.matrix.android.sdk.rx.rx
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -96,6 +97,7 @@ class AppStateHandler @Inject constructor(
                     }
                 }
                 .subscribe {
+//                    Timber.w("VAL: subscribe")
                     homeRoomListDataSource.post(it)
                 }
                 .addTo(compositeDisposable)
@@ -125,46 +127,79 @@ class AppStateHandler @Inject constructor(
                 .addTo(compositeDisposable)
     }
 
+    // XXX this is very inefficient.. temporary
     private fun spaceFilterObservable() = sessionDataSource.observe()
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.computation())
             .switchMap {
+                Timber.w("VAL: switchmap session")
                 val currentSession = it.orNull()
                 if (currentSession == null) {
                     Observable.just(emptyList())
                 } else {
                     selectedSpaceDataSource.observe()
+                            .distinctUntilChanged()
                             .switchMap { currentSpaceOption ->
+//                                Timber.w("VAL: switchmap selected space ${currentSpaceOption.orNull()?.name}")
                                 val currentSpace = currentSpaceOption.orNull()
-                                Observable
-                                        .combineLatest<List<RoomSummary>, List<RoomSummary>, List<RoomSummary>>(
-                                                // could be nice to only observe DMs...
-                                                currentSession.rx()
-                                                        .liveRoomSummaries(roomSummaryQueryParams {
-                                                            roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                                        })
-                                                        // throttle first to quickly react to space change
-                                                        .throttleFirst(300, TimeUnit.MILLISECONDS),
-                                                currentSession.rx()
-                                                        .liveFlattenRoomSummaryChildOf(
-                                                                (currentSpace?.roomId?.takeIf { it != ALL_COMMUNITIES_GROUP_ID })
-                                                        ),
-                                                { dms, rooms ->
-                                                    val filteredDms = dms
-                                                            .filter {
-                                                                if (currentSpace == null || currentSpace.roomId == ALL_COMMUNITIES_GROUP_ID) {
-                                                                    it.isDirect // always true
-                                                                } else if (it.isDirect) {
-                                                                    it.otherMemberIds
-                                                                            .intersect(currentSpace.otherMemberIds)
-                                                                            .isNotEmpty()
-                                                                } else {
-                                                                    false
-                                                                }
-                                                            }
-                                                    (filteredDms + rooms).sortedWith(chronologicalRoomComparator)
+                                currentSession.rx()
+                                        .liveRoomSummaries(roomSummaryQueryParams {
+//                                                            roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                                        })
+                                        .throttleFirst(300, TimeUnit.MILLISECONDS)
+                                        .startWith(Observable.just(emptyList()))
+                                        .observeOn(Schedulers.newThread())
+                                        .map { summaries ->
+//                                            Timber.w("VAL: live summaries update ${Thread.currentThread().name}")
+//                                            val startime = System.currentTimeMillis()
+                                            val filteredDm = summaries.filter {
+                                                if (currentSpace == null || currentSpace.roomId == ALL_COMMUNITIES_GROUP_ID) {
+                                                    it.isDirect
+                                                } else if (it.isDirect) {
+                                                    it.otherMemberIds
+                                                            .intersect(currentSpace.otherMemberIds)
+                                                            .isNotEmpty()
+                                                } else {
+                                                    false
                                                 }
-                                        )
+                                            }
+
+                                            val rooms = currentSession.getFlattenRoomSummaryChildOf(currentSpace?.roomId?.takeIf { it != ALL_COMMUNITIES_GROUP_ID })
+                                            (filteredDm + rooms).sortedWith(chronologicalRoomComparator)
+//                                                    .also {
+//                                                Timber.w("VAL: live summaries update filter done ${System.currentTimeMillis() - startime}")
+//                                            }
+                                        }
+//                                Observable
+//                                        .combineLatest<List<RoomSummary>, List<RoomSummary>, List<RoomSummary>>(
+//                                                // could be nice to only observe DMs...
+//                                                currentSession.rx()
+//                                                        .liveRoomSummaries(roomSummaryQueryParams {
+//                                                            roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+//                                                        })
+//                                                        // throttle first to quickly react to space change
+//                                                        .throttleFirst(300, TimeUnit.MILLISECONDS),
+//                                                currentSession.rx()
+//                                                        .liveFlattenRoomSummaryChildOf(
+//                                                                (currentSpace?.roomId?.takeIf { it != ALL_COMMUNITIES_GROUP_ID })
+//                                                        ),
+//                                                { dms, rooms ->
+//                                                    val filteredDms = dms
+//                                                            .filter {
+//                                                                if (currentSpace == null || currentSpace.roomId == ALL_COMMUNITIES_GROUP_ID) {
+//                                                                    it.isDirect // always true
+//                                                                } else if (it.isDirect) {
+//                                                                    it.otherMemberIds
+//                                                                            .intersect(currentSpace.otherMemberIds)
+//                                                                            .isNotEmpty()
+//                                                                } else {
+//                                                                    false
+//                                                                }
+//                                                            }
+//                                                    (filteredDms + rooms).sortedWith(chronologicalRoomComparator)
+//                                                }
+//                                        )
                             }
+//                            .startWith(Observable.just(emptyList()))
                 }
             }
 
