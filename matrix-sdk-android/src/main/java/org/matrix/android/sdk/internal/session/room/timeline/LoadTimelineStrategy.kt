@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicReference
 internal interface LoadTimelineStrategy : TimelineInput.Listener {
     fun onStart()
     fun onStop()
-    suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction)
+    suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction): LoadMoreResult
     fun buildSnapshot(): List<TimelineEvent>
 }
 
@@ -97,11 +97,11 @@ internal class LiveTimelineStrategy(private val roomId: String,
         timelineChunk = null
     }
 
-    override suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction) {
+    override suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction): LoadMoreResult {
         if (direction == SimpleTimeline.Direction.FORWARDS) {
-            return
+            return LoadMoreResult.REACHED_END
         }
-        timelineChunk?.loadMore(count, direction)
+        return timelineChunk?.loadMore(count, direction) ?: LoadMoreResult.FAILURE
     }
 
     override fun buildSnapshot(): List<TimelineEvent> {
@@ -199,7 +199,7 @@ internal class PastTimelineStrategy(
         TODO("Not yet implemented")
     }
 
-    override suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction) {
+    override suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction): LoadMoreResult {
         TODO("Not yet implemented")
     }
 

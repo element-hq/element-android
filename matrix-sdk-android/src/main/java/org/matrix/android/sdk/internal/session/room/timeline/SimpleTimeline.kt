@@ -184,9 +184,9 @@ class SimpleTimeline internal constructor(val roomId: String,
             updateState(direction) {
                 it.copy(loading = true)
             }
-            strategy.loadMore(count, direction)
+            val loadMoreResult = strategy.loadMore(count, direction)
             updateState(direction) {
-                it.copy(loading = false)
+                it.copy(loading = false, hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END)
             }
             postSnapshot()
         }

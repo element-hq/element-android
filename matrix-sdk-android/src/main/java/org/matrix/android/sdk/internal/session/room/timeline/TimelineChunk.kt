@@ -81,45 +81,47 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         return deepBuiltItems
     }
 
-    suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction) {
+    suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction): LoadMoreResult {
         val loadFromDbCount = loadFromDb(count, direction)
         val offsetCount = count - loadFromDbCount
         // We have built the right amount of data
         if (offsetCount == 0L) {
             onBuiltEvents()
-            return
+            return LoadMoreResult.SUCCESS
         }
-        if (direction == SimpleTimeline.Direction.FORWARDS) {
+        return if (direction == SimpleTimeline.Direction.FORWARDS) {
             val nextChunkEntity = chunkEntity.nextChunk
             if (nextChunkEntity == null) {
-                val token = chunkEntity.nextToken ?: return // TODO handle previous live chunk
+                val token = chunkEntity.nextToken ?: return LoadMoreResult.REACHED_END  // TODO handle previous live chunk
                 try {
                     fetchFromServer(token, direction)
                 } catch (failure: Throwable) {
                     Timber.v("Failed to fetch from server: $failure")
+                    LoadMoreResult.FAILURE
                 }
             } else {
                 // otherwise we delegate to the next chunk
                 if (nextChunk == null) {
                     nextChunk = createTimelineChunk(nextChunkEntity)
                 }
-                nextChunk?.loadMore(offsetCount, direction)
+                nextChunk?.loadMore(offsetCount, direction) ?: LoadMoreResult.FAILURE
             }
         } else {
             val prevChunkEntity = chunkEntity.prevChunk
             if (prevChunkEntity == null) {
-                val token = chunkEntity.prevToken ?: return
+                val token = chunkEntity.prevToken ?: return LoadMoreResult.REACHED_END
                 try {
                     fetchFromServer(token, direction)
                 } catch (failure: Throwable) {
                     Timber.v("Failed to fetch from server: $failure")
+                    LoadMoreResult.FAILURE
                 }
             } else {
                 // otherwise we delegate to the prev chunk
                 if (prevChunk == null) {
                     prevChunk = createTimelineChunk(prevChunkEntity)
                 }
-                prevChunk?.loadMore(offsetCount, direction)
+                prevChunk?.loadMore(offsetCount, direction) ?: LoadMoreResult.FAILURE
             }
         }
     }
@@ -172,9 +174,14 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         )
     }
 
-    private suspend fun fetchFromServer(token: String, direction: SimpleTimeline.Direction): TokenChunkEventPersistor.Result {
+    private suspend fun fetchFromServer(token: String, direction: SimpleTimeline.Direction): LoadMoreResult {
         val paginationParams = PaginationTask.Params(roomId, token, direction.toPaginationDirection(), PAGINATION_COUNT)
-        return paginationTask.execute(paginationParams)
+        val paginationResult = paginationTask.execute(paginationParams)
+        return when(paginationResult){
+            TokenChunkEventPersistor.Result.REACHED_END       -> LoadMoreResult.REACHED_END
+            TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE,
+            TokenChunkEventPersistor.Result.SUCCESS           -> LoadMoreResult.SUCCESS
+        }
     }
 
     private fun handleChangeSet(frozenResults: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
