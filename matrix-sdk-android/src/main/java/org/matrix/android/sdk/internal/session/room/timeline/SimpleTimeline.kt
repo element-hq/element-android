@@ -44,6 +44,7 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
+import org.matrix.android.sdk.internal.util.debug.measureTimeData
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
@@ -192,10 +193,11 @@ class SimpleTimeline internal constructor(val roomId: String,
     }
 
     private fun postSnapshot() = timelineScope.launch {
-        val snapshot = strategy.buildSnapshot()
+        val snapshot = measureTimeData { strategy.buildSnapshot()}
+        Timber.v("Building snapshot took ${snapshot.duration} ms")
         withContext(Dispatchers.Main) {
             listeners.forEach {
-                tryOrNull { it.onEventsUpdated(snapshot) }
+                tryOrNull { it.onEventsUpdated(snapshot.data) }
             }
         }
     }

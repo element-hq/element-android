@@ -71,6 +71,8 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.internal.session.room.timeline.SimpleTimeline
+import org.matrix.android.sdk.internal.util.debug.measureTimeData
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val DEFAULT_PREFETCH_THRESHOLD = 30
@@ -214,6 +216,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     )
 
     init {
+        isDebugLoggingEnabled = true
         addInterceptor(this)
         requestModelBuild()
     }
@@ -363,12 +366,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         if (modelCache.isEmpty()) {
             return
         }
-        val receiptsByEvents = getReadReceiptsByShownEvent()
+        val receiptsByEvents = measureTimeData {  getReadReceiptsByShownEvent()}
+        Timber.v("Time to get read receipts: ${receiptsByEvents.duration} ms")
         (0 until modelCache.size).forEach { position ->
             // Should be build if not cached or if cached but contains additional models
             // We then are sure we always have items up to date.
             if (modelCache[position] == null || modelCache[position]?.shouldTriggerBuild() == true) {
-                modelCache[position] = buildCacheItem(position, currentSnapshot, receiptsByEvents)
+                modelCache[position] = buildCacheItem(position, currentSnapshot, receiptsByEvents.data)
             }
         }
     }
@@ -430,9 +434,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 }
                 .toList()
 
-        if (readReceipts.isEmpty()) {
-            return null
-        }
         return ReadReceiptsItem_()
                 .id("read_receipts_$eventId")
                 .readReceipts(readReceipts)
@@ -508,7 +509,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     ) {
         fun shouldTriggerBuild(): Boolean {
             // Since those items can change when we paginate, force a re-build
-            return forceTriggerBuild || mergedHeaderModel != null || formattedDayModel != null || readReceiptsItem != null
+            return forceTriggerBuild || mergedHeaderModel != null || formattedDayModel != null || (readReceiptsItem != null && readReceiptsItem.readReceipts.isNotEmpty())
         }
     }
 
