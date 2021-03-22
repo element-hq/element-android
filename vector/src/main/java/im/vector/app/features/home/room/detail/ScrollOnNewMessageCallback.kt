@@ -19,8 +19,6 @@ package im.vector.app.features.home.room.detail
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.app.core.platform.DefaultListUpdateCallback
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
-import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList
 
 class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
@@ -43,18 +41,16 @@ class ScrollOnNewMessageCallback(private val layoutManager: LinearLayoutManager,
             layoutManager.scrollToPosition(position)
             return
         }
-        if (layoutManager.findFirstVisibleItemPosition() != position) {
+        if (layoutManager.findFirstVisibleItemPosition() > 1) {
             return
         }
-        val firstNewItem = timelineEventController.adapter.getModelAtPosition(position) as? ItemWithEvents ?: return
-        val firstNewItemIds = firstNewItem.getEventIds().firstOrNull() ?: return
-        val indexOfFirstNewItem = newTimelineEventIds.indexOf(firstNewItemIds)
-        if (indexOfFirstNewItem != -1) {
-            repeat(newTimelineEventIds.size - indexOfFirstNewItem) {
-                newTimelineEventIds.removeAt(indexOfFirstNewItem)
-            }
+        val newEventsInRange = newTimelineEventIds.filter {
+            val index = timelineEventController.searchPositionOfEvent(it) ?: return@filter false
+            index >= position && index <= position + count
+        }
+        if (newEventsInRange.isNotEmpty()) {
+            newTimelineEventIds.removeAll(newEventsInRange)
             layoutManager.scrollToPosition(0)
-
         }
     }
 }
