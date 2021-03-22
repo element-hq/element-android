@@ -87,6 +87,10 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         apiInterceptor.addListener(path, listener)
     }
 
+    fun unregisterApiInterceptorListener(path: ApiPath, listener: ApiInterceptorListener) {
+        apiInterceptor.removeListener(path, listener)
+    }
+
     companion object {
 
         private lateinit var instance: Matrix

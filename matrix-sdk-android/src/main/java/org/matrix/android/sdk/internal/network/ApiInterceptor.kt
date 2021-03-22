@@ -80,7 +80,21 @@ internal class ApiInterceptor @Inject constructor() : Interceptor {
      * Adds listener to send intercepted api responses through.
      */
     fun addListener(path: ApiPath, listener: ApiInterceptorListener) {
-        apiResponseListenersMap.getOrPut(path) { mutableListOf() }
-                .add(listener)
+        synchronized(apiResponseListenersMap) {
+            apiResponseListenersMap.getOrPut(path) { mutableListOf() }
+                    .add(listener)
+        }
+    }
+
+    /**
+     * Remove listener to send intercepted api responses through.
+     */
+    fun removeListener(path: ApiPath, listener: ApiInterceptorListener) {
+        synchronized(apiResponseListenersMap) {
+            apiResponseListenersMap[path]?.remove(listener)
+            if (apiResponseListenersMap[path]?.isEmpty() == true) {
+                apiResponseListenersMap.remove(path)
+            }
+        }
     }
 }
