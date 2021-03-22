@@ -116,6 +116,23 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         return getRoomSummaries(spaceSummaryQueryParams)
     }
 
+    fun getRootSpaceSummaries(): List<RoomSummary> {
+        return getRoomSummaries(spaceSummaryQueryParams {
+            memberships = listOf(Membership.JOIN)
+        })
+                .let { allJoinedSpace ->
+                    val allFlattenChildren = arrayListOf<RoomSummary>()
+                    allJoinedSpace.forEach {
+                        flattenSubSpace(it, emptyList(), allFlattenChildren, listOf(Membership.JOIN), false)
+                    }
+                    val knownNonOrphan = allFlattenChildren.map { it.roomId }.distinct()
+                    // keep only root rooms
+                    allJoinedSpace.filter { candidate ->
+                        !knownNonOrphan.contains(candidate.roomId)
+                    }
+                }
+    }
+
     fun getBreadcrumbs(queryParams: RoomSummaryQueryParams): List<RoomSummary> {
         return monarchy.fetchAllMappedSync(
                 { breadcrumbsQuery(it, queryParams) },
@@ -255,8 +272,14 @@ internal class RoomSummaryDataSource @Inject constructor(@SessionDatabase privat
         }
     }
 
-    fun flattenSubSpace(current: RoomSummary, parenting: List<String>, output: MutableList<RoomSummary>, memberShips: List<Membership>) {
-        output.add(current)
+    fun flattenSubSpace(current: RoomSummary,
+                        parenting: List<String>,
+                        output: MutableList<RoomSummary>,
+                        memberShips: List<Membership>,
+                        includeCurrent: Boolean = true) {
+        if (includeCurrent) {
+            output.add(current)
+        }
         current.children?.sortedBy { it.order ?: it.name }?.forEach {
             if (it.roomType == RoomType.SPACE) {
                 // Add recursive
