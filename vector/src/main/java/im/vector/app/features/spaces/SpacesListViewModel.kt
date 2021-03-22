@@ -51,6 +51,7 @@ const val ALL_COMMUNITIES_GROUP_ID = "+ALL_COMMUNITIES_GROUP_ID"
 sealed class SpaceListAction : VectorViewModelAction {
     data class SelectSpace(val spaceSummary: RoomSummary) : SpaceListAction()
     data class LeaveSpace(val spaceSummary: RoomSummary) : SpaceListAction()
+    data class ToggleExpand(val spaceSummary: RoomSummary) : SpaceListAction()
     object AddSpace : SpaceListAction()
 }
 
@@ -65,7 +66,9 @@ sealed class SpaceListViewEvents : VectorViewEvents {
 
 data class SpaceListViewState(
         val asyncSpaces: Async<List<RoomSummary>> = Uninitialized,
-        val selectedSpace: RoomSummary? = null
+        val selectedSpace: RoomSummary? = null,
+        val rootSpaces: List<RoomSummary>? = null,
+        val expandedStates: Map<String, Boolean> = emptyMap()
 ) : MvRxState
 
 class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
@@ -132,6 +135,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
             is SpaceListAction.SelectSpace -> handleSelectSpace(action)
             is SpaceListAction.LeaveSpace -> handleLeaveSpace(action)
             SpaceListAction.AddSpace -> handleAddSpace()
+            is SpaceListAction.ToggleExpand -> handleToggleExpand(action)
         }
     }
 
@@ -156,6 +160,15 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                 setState { copy(selectedSpace = action.spaceSummary) }
                 uiStateRepository.storeSelectedSpace(action.spaceSummary.roomId, session.sessionId)
             }
+        }
+    }
+
+    private fun handleToggleExpand(action: SpaceListAction.ToggleExpand) = withState { state ->
+        val updatedToggleStates = state.expandedStates.toMutableMap().apply {
+            this[action.spaceSummary.roomId] = !(this[action.spaceSummary.roomId] ?: false)
+        }
+        setState {
+            copy(expandedStates = updatedToggleStates)
         }
     }
 
@@ -199,7 +212,7 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                         .rx()
                         .liveSpaceSummaries(spaceSummaryQueryParams),
                 BiFunction { allCommunityGroup, communityGroups ->
-                    listOf(allCommunityGroup) + communityGroups
+                    (listOf(allCommunityGroup) + communityGroups)
                 }
         )
                 .execute { async ->
@@ -209,7 +222,11 @@ class SpacesListViewModel @AssistedInject constructor(@Assisted initialState: Sp
                     } else {
                         async()?.firstOrNull()
                     }
-                    copy(asyncSpaces = async, selectedSpace = newSelectedGroup)
+                    copy(
+                            asyncSpaces = async,
+                            selectedSpace = newSelectedGroup,
+                            rootSpaces = session.spaceService().getRootSpaceSummaries()
+                    )
                 }
     }
 }

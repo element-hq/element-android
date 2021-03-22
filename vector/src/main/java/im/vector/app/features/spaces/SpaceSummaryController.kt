@@ -27,6 +27,7 @@ import im.vector.app.features.grouplist.homeSpaceSummaryItem
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -48,10 +49,17 @@ class SpaceSummaryController @Inject constructor(
 
     override fun buildModels() {
         val nonNullViewState = viewState ?: return
-        buildGroupModels(nonNullViewState.asyncSpaces(), nonNullViewState.selectedSpace)
+        buildGroupModels(
+                nonNullViewState.asyncSpaces(),
+                nonNullViewState.selectedSpace,
+                nonNullViewState.rootSpaces,
+                nonNullViewState.expandedStates)
     }
 
-    private fun buildGroupModels(summaries: List<RoomSummary>?, selected: RoomSummary?) {
+    private fun buildGroupModels(summaries: List<RoomSummary>?,
+                                 selected: RoomSummary?,
+                                 rootSpaces: List<RoomSummary>?,
+                                 expandedStates: Map<String, Boolean>) {
         if (summaries.isNullOrEmpty()) {
             return
         }
@@ -86,29 +94,66 @@ class SpaceSummaryController @Inject constructor(
             text(stringProvider.getString(R.string.spaces_header))
         }
 
-        summaries
-                .filter { it.membership == Membership.JOIN }
-                .forEach { groupSummary ->
-                    val isSelected = groupSummary.roomId == selected?.roomId
-                    if (groupSummary.roomId == ALL_COMMUNITIES_GROUP_ID) {
-                        homeSpaceSummaryItem {
-                            id(groupSummary.roomId)
-                            selected(isSelected)
-                            listener { callback?.onSpaceSelected(groupSummary) }
-                        }
-                    } else {
-                        spaceSummaryItem {
-                            avatarRenderer(avatarRenderer)
-                            id(groupSummary.roomId)
-                            matrixItem(groupSummary.toMatrixItem())
-                            selected(isSelected)
-                            onMore { callback?.onSpaceSettings(groupSummary) }
-                            listener { callback?.onSpaceSelected(groupSummary) }
-                        }
+        summaries.firstOrNull { it.roomId == ALL_COMMUNITIES_GROUP_ID }
+                ?.let {
+                    homeSpaceSummaryItem {
+                        id(it.roomId)
+                        selected(it.roomId == selected?.roomId)
+                        listener { callback?.onSpaceSelected(it) }
                     }
                 }
 
-        // Temporary item to create a new Space (will move with final design)
+//        summaries
+//                .filter { it.membership == Membership.JOIN }
+        rootSpaces
+                ?.forEach { groupSummary ->
+                    val isSelected = groupSummary.roomId == selected?.roomId
+//                    if (groupSummary.roomId == ALL_COMMUNITIES_GROUP_ID) {
+//                        homeSpaceSummaryItem {
+//                            id(groupSummary.roomId)
+//                            selected(isSelected)
+//                            listener { callback?.onSpaceSelected(groupSummary) }
+//                        }
+//                    } else {
+                    // does it have children?
+                    val subSpaces = groupSummary.children?.filter { childInfo ->
+                        summaries.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
+                    }
+                    val hasChildren = (subSpaces?.size ?: 0) > 0
+                    val expanded = expandedStates[groupSummary.roomId] == true
+
+                    spaceSummaryItem {
+                        avatarRenderer(avatarRenderer)
+                        id(groupSummary.roomId)
+                        hasChildren(hasChildren)
+                        expanded(expanded)
+                        matrixItem(groupSummary.toMatrixItem())
+                        selected(isSelected)
+                        onMore { callback?.onSpaceSettings(groupSummary) }
+                        listener { callback?.onSpaceSelected(groupSummary) }
+                        toggleExpand { callback?.onToggleExpand(groupSummary) }
+                    }
+
+                    if (hasChildren && expanded) {
+                        // it's expanded
+                            subSpaces?.forEach { child ->
+                                summaries.firstOrNull { it.roomId == child.childRoomId }?.let {  childSum ->
+                                    val isSelected = childSum.roomId == selected?.roomId
+                                    spaceSummaryItem {
+                                        avatarRenderer(avatarRenderer)
+                                        id(child.childRoomId)
+                                        hasChildren(false)
+                                        selected(isSelected)
+                                        matrixItem(MatrixItem.RoomItem(child.childRoomId, child.name, child.avatarUrl))
+                                        listener { callback?.onSpaceSelected(childSum) }
+                                        indent(1)
+                                    }
+                                }
+                            }
+                    }
+                }
+
+// Temporary item to create a new Space (will move with final design)
 
         genericButtonItem {
             id("create")
@@ -121,6 +166,7 @@ class SpaceSummaryController @Inject constructor(
     interface Callback {
         fun onSpaceSelected(spaceSummary: RoomSummary)
         fun onSpaceSettings(spaceSummary: RoomSummary)
+        fun onToggleExpand(spaceSummary: RoomSummary)
         fun onAddSpaceSelected()
     }
 }
