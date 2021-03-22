@@ -44,11 +44,13 @@ internal class ApiInterceptor @Inject constructor() : Interceptor {
 
         val response = chain.proceed(request)
 
-        findApiPath(path, method)?.let { apiPath ->
-            response.peekBody(Long.MAX_VALUE).string().let { networkResponse ->
-                apiResponseListenersMap[apiPath]?.forEach { listener ->
-                    tryOrNull("Error in the implementation") {
-                        listener.onApiResponse(apiPath, networkResponse)
+        synchronized(apiResponseListenersMap) {
+            findApiPath(path, method)?.let { apiPath ->
+                response.peekBody(Long.MAX_VALUE).string().let { networkResponse ->
+                    apiResponseListenersMap[apiPath]?.forEach { listener ->
+                        tryOrNull("Error in the implementation") {
+                            listener.onApiResponse(apiPath, networkResponse)
+                        }
                     }
                 }
             }
