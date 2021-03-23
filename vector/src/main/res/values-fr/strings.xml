@@ -2182,7 +2182,7 @@
     <string name="return_to_call">Retour à l’appel</string>
     <string name="room_participants_action_cancel_invite">Annuler l’invitation</string>
     <string name="room_participants_action_ignore_title">Ignorer l’utilisateur</string>
-    <string name="room_participants_action_ignore_prompt_msg">Ignorer cet utilisateur aura pour effet de supprimer ses messages des espaces que vous partagez.
+    <string name="room_participants_action_ignore_prompt_msg">Ignorer cet utilisateur aura pour effet de supprimer ses messages des salons que vous partagez.
 \n
 \nVous pouvez annuler cette action à tout moment dans les paramètres généraux.</string>
     <string name="room_participants_action_cancel_invite_title">Annuler l’invitation</string>
@@ -2372,10 +2372,10 @@
     <string name="settings_emails_empty">Aucune adresse e-mail n’a été ajoutée à votre compte</string>
     <string name="settings_emails">Adresses e-mail</string>
     <string name="settings_phone_number_empty">Aucun numéro de téléphone n’a été ajouté à votre compte</string>
-    <string name="search_is_not_supported_in_e2e_room">La recherche dans les espaces chiffrés n\'est pas encore prise en charge.</string>
+    <string name="search_is_not_supported_in_e2e_room">La recherche dans les salons chiffrés n\'est pas encore prise en charge.</string>
     <string name="search_banned_user_hint">Filtrer les utilisateurs exclus</string>
     <string name="room_participants_action_unignore_prompt_msg">Ne plus ignorer cet utilisateur aura pour effet de ré-afficher ses messages.</string>
-    <string name="room_participants_kick_prompt_msg">expulser un utilisateur le supprimera de cet espace.
+    <string name="room_participants_kick_prompt_msg">expulser un utilisateur le supprimera de ce salon.
 \n
 \nPour l’empêcher de revenir, vous devez plutôt le bannir.</string>
     <string name="room_participants_kick_reason">Motif d’expulsion</string>
