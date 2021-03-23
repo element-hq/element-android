@@ -125,8 +125,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val typingHelper: TypingHelper,
         private val callManager: WebRtcCallManager,
         private val chatEffectManager: ChatEffectManager,
-        private val directRoomHelper: DirectRoomHelper,
-        timelineSettingsFactory: TimelineSettingsFactory
+        private val directRoomHelper: DirectRoomHelper
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, SimpleTimeline.Listener, ChatEffectManager.Delegate, PSTNProtocolChecker.Listener {
 
@@ -134,9 +133,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private val eventId = initialState.eventId
     private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsInvisible>()
     private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
-    private val timelineSettings = timelineSettingsFactory.create()
     private var timelineEvents = PublishRelay.create<List<TimelineEvent>>()
-    val timeline = room.createTimeline(eventId, timelineSettings)
     val simpleTimeline = room.createSimpleTimeline()
 
     // Same lifecycle than the ViewModel (survive to screen rotation)
@@ -1172,16 +1169,15 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleNavigateToEvent(action: RoomDetailAction.NavigateToEvent) {
         stopTrackingUnreadMessages()
         val targetEventId: String = action.eventId
-        val correctedEventId = timeline.getFirstDisplayableEventId(targetEventId) ?: targetEventId
-        val indexOfEvent = timeline.getIndexOfEvent(correctedEventId)
+        val indexOfEvent = simpleTimeline.getIndexOfEvent(targetEventId)
         if (indexOfEvent == null) {
             // Event is not already in RAM
-            timeline.restartWithEventId(targetEventId)
+            //timeline.restartWithEventId(targetEventId)
         }
         if (action.highlight) {
-            setState { copy(highlightedEventId = correctedEventId) }
+            setState { copy(highlightedEventId = targetEventId) }
         }
-        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(correctedEventId))
+        _viewEvents.post(RoomDetailViewEvents.NavigateToEvent(targetEventId))
     }
 
     private fun handleResendEvent(action: RoomDetailAction.ResendMessage) {
@@ -1405,15 +1401,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun computeUnreadState(events: List<TimelineEvent>, roomSummary: RoomSummary): UnreadState {
         if (events.isEmpty()) return UnreadState.Unknown
         val readMarkerIdSnapshot = roomSummary.readMarkerId ?: return UnreadState.Unknown
-        val firstDisplayableEventId = timeline.getFirstDisplayableEventId(readMarkerIdSnapshot)
-        val firstDisplayableEventIndex = timeline.getIndexOfEvent(firstDisplayableEventId)
-        if (firstDisplayableEventId == null || firstDisplayableEventIndex == null) {
-            return if (timeline.isLive) {
-                UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
-            } else {
-                UnreadState.Unknown
-            }
-        }
+        val firstDisplayableEventIndex = simpleTimeline.getIndexOfEvent(readMarkerIdSnapshot)
+                ?: return if (simpleTimeline.isLive) {
+                    UnreadState.ReadMarkerNotLoaded(readMarkerIdSnapshot)
+                } else {
+                    UnreadState.Unknown
+                }
         for (i in (firstDisplayableEventIndex - 1) downTo 0) {
             val timelineEvent = events.getOrNull(i) ?: return UnreadState.Unknown
             val eventId = timelineEvent.root.eventId ?: return UnreadState.Unknown
@@ -1487,7 +1480,7 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     override fun onTimelineFailure(throwable: Throwable) {
         // If we have a critical timeline issue, we get back to live.
-        timeline.restartWithEventId(null)
+        //timeline.restartWithEventId(null)
         _viewEvents.post(RoomDetailViewEvents.Failure(throwable))
     }
 
@@ -1496,7 +1489,18 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onEventsUpdated(snapshot: List<TimelineEvent>) {
-        // NOOP
+        timelineEvents.accept(snapshot)
+
+        // PreviewUrl
+        if (vectorPreferences.showUrlPreviews()) {
+            withState { state ->
+                snapshot
+                        .takeIf { state.asyncRoomSummary.invoke()?.isEncrypted == false }
+                        ?.forEach {
+                            previewUrlRetriever.getPreviewUrl(it)
+                        }
+            }
+        }
     }
 
     override fun onNewTimelineEvents(eventIds: List<String>) {

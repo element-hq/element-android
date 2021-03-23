@@ -40,6 +40,7 @@ internal interface LoadTimelineStrategy : TimelineInput.Listener {
     fun onStop()
     suspend fun loadMore(count: Long, direction: SimpleTimeline.Direction): LoadMoreResult
     fun buildSnapshot(): List<TimelineEvent>
+    fun getBuiltEventIndex(eventId: String): Int?
 }
 
 internal class LiveTimelineStrategy(private val roomId: String,
@@ -106,6 +107,10 @@ internal class LiveTimelineStrategy(private val roomId: String,
 
     override fun buildSnapshot(): List<TimelineEvent> {
         return buildSendingEvents() + timelineChunk?.builtItems(includesNext = false, includesPrev = true).orEmpty()
+    }
+
+    override fun getBuiltEventIndex(eventId: String): Int? {
+        return timelineChunk?.getBuiltEventIndex(eventId, searchInNext = false, searchInPrev = true)
     }
 
     private fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
@@ -205,5 +210,9 @@ internal class PastTimelineStrategy(
 
     override fun buildSnapshot(): List<TimelineEvent> {
         return emptyList()
+    }
+
+    override fun getBuiltEventIndex(eventId: String): Int? {
+        TODO("Not yet implemented")
     }
 }

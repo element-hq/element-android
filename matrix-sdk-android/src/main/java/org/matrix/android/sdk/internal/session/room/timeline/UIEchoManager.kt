@@ -108,9 +108,9 @@ internal class UIEchoManager(
         return postSnapshot
     }
 
-    fun decorateEventWithReactionUiEcho(timelineEvent: TimelineEvent): TimelineEvent? {
+    fun decorateEventWithReactionUiEcho(timelineEvent: TimelineEvent): TimelineEvent {
         val relatedEventID = timelineEvent.eventId
-        val contents = inMemoryReactions[relatedEventID] ?: return null
+        val contents = inMemoryReactions[relatedEventID] ?: return timelineEvent
 
         var existingAnnotationSummary = timelineEvent.annotations ?: EventAnnotationsSummary(
                 relatedEventID

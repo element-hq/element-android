@@ -690,7 +690,7 @@ internal class DefaultTimeline(
             correctedReadReceipts = hiddenReadReceipts.correctedReadReceipts(eventEntity.eventId)
     ).let {
         // eventually enhance with ui echo?
-        (uiEchoManager.decorateEventWithReactionUiEcho(it) ?: it)
+        uiEchoManager.decorateEventWithReactionUiEcho(it)
     }
 
     /**

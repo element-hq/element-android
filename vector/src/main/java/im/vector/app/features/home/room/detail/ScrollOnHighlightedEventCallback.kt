@@ -33,8 +33,6 @@ class ScrollOnHighlightedEventCallback(private val recyclerView: RecyclerView,
 
     private val scheduledEventId = AtomicReference<String?>()
 
-    var timeline: Timeline? = null
-
     override fun onInserted(position: Int, count: Int) {
         scrollIfNeeded()
     }
@@ -45,9 +43,7 @@ class ScrollOnHighlightedEventCallback(private val recyclerView: RecyclerView,
 
     private fun scrollIfNeeded() {
         val eventId = scheduledEventId.get() ?: return
-        val nonNullTimeline = timeline ?: return
-        val correctedEventId = nonNullTimeline.getFirstDisplayableEventId(eventId)
-        val positionToScroll = timelineEventController.searchPositionOfEvent(correctedEventId)
+        val positionToScroll = timelineEventController.searchPositionOfEvent(eventId)
         if (positionToScroll != null) {
             val firstVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
             val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()

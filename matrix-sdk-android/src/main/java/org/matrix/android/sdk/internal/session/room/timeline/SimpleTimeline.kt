@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2021 New Vector Ltd
  *
@@ -142,6 +143,10 @@ class SimpleTimeline internal constructor(val roomId: String,
                 backgroundRealm.get().closeQuietly()
             }
         }
+    }
+
+    fun getIndexOfEvent(eventId: String): Int? {
+        return strategy.getBuiltEventIndex(eventId)
     }
 
     private fun updateState(direction: Direction, update: (PaginationState) -> PaginationState) {

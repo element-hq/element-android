@@ -662,7 +662,7 @@ class RoomDetailFragment @Inject constructor(
             views.jumpToBottomView.visibility = View.INVISIBLE
             if (!roomDetailViewModel.simpleTimeline.isLive) {
                 scrollOnNewMessageCallback.forceScrollOnNextUpdate()
-                roomDetailViewModel.timeline.restartWithEventId(null)
+                //roomDetailViewModel.timeline.restartWithEventId(null)
             } else {
                 layoutManager.scrollToPosition(0)
             }
@@ -1193,7 +1193,6 @@ class RoomDetailFragment @Inject constructor(
         if (summary?.membership == Membership.JOIN) {
             views.jumpToBottomView.count = summary.notificationCount
             views.jumpToBottomView.drawBadge = summary.hasUnreadMessages
-            scrollOnHighlightedEventCallback.timeline = roomDetailViewModel.timeline
             timelineEventController.update(state)
             views.inviteView.visibility = View.GONE
             if (state.tombstoneEvent == null) {
