@@ -1296,8 +1296,8 @@
 \nKlikk på lenken den inneholder for å fortsette opprettelsen av kontoen.</string>
     <string name="login_validation_code_is_not_correct">Den angitte koden er ikke riktig. Vennligst sjekk.</string>
     <plurals name="login_error_limit_exceeded_retry_after">
-        <item quantity="one">Det er sendt for mange forespørsler. Du kan prøve på nytt %1$d sekund…</item>
-        <item quantity="other">Det er sendt for mange forespørsler. Du kan prøve på nytt %1$d sekunder…</item>
+        <item quantity="one">Det er sendt for mange forespørsler. Du kan prøve på nytt om %1$d sekund…</item>
+        <item quantity="other">Det er sendt for mange forespørsler. Du kan prøve på nytt om %1$d sekunder…</item>
     </plurals>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Dette er ikke en gyldig brukeridentifikator. Forventet format: \'@bruker:homeserver.org\'</string>
     <string name="soft_logout_signin_e2e_warning_notice">Logg på for å gjenopprette krypteringsnøkler som er lagret eksklusivt på denne enheten. Du trenger dem for å lese alle dine sikre meldinger på hvilken som helst enhet.</string>
