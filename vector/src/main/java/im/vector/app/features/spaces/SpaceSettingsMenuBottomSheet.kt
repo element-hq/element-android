@@ -89,7 +89,9 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                 }.disposeOnDestroyView()
 
         views.invitePeople.views.bottomSheetActionClickableZone.debouncedClicks {
-            navigator.openInviteUsersToRoom(requireContext(), spaceArgs.spaceId)
+//            navigator.openInviteUsersToRoom(requireContext(), spaceArgs.spaceId)
+            dismiss()
+            ShareSpaceBottomSheet.show(requireFragmentManager(), spaceArgs.spaceId)
         }
 
         views.showMemberList.views.bottomSheetActionClickableZone.debouncedClicks {

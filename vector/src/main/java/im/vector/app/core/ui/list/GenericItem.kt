@@ -40,7 +40,9 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
 
     enum class STYLE {
         BIG_TEXT,
-        NORMAL_TEXT
+        NORMAL_TEXT,
+        TITLE,
+        SUBHEADER
     }
 
     class Action(var title: String) {

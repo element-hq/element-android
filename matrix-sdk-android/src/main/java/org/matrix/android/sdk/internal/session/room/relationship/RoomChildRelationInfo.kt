@@ -59,9 +59,10 @@ internal class RoomChildRelationInfo(private val realm: Realm,
      */
     fun getDirectChildrenDescriptions(): List<SpaceChildInfo> {
         return CurrentStateEventEntity.whereType(realm, roomId, EventType.STATE_SPACE_CHILD)
-                .findAll().also {
-                    Timber.v("## Space: Found ${it.count()} m.space.child state events for $roomId")
-                }
+                .findAll()
+//                .also {
+//                    Timber.v("## Space: Found ${it.count()} m.space.child state events for $roomId")
+//                }
                 .mapNotNull {
                     ContentMapper.map(it.root?.content).toModel<SpaceChildContent>()?.let { scc ->
                         Timber.v("## Space child desc state event $scc")
@@ -81,12 +82,13 @@ internal class RoomChildRelationInfo(private val realm: Realm,
 
     fun getParentDescriptions(): List<SpaceParentInfo> {
         return CurrentStateEventEntity.whereType(realm, roomId, EventType.STATE_SPACE_PARENT)
-                .findAll().also {
-                    Timber.v("## Space: Found ${it.count()} m.space.parent state events for $roomId")
-                }
+                .findAll()
+//                .also {
+//                    Timber.v("## Space: Found ${it.count()} m.space.parent state events for $roomId")
+//                }
                 .mapNotNull {
                     ContentMapper.map(it.root?.content).toModel<SpaceParentContent>()?.let { scc ->
-                        Timber.v("## Space parent desc state event $scc")
+//                        Timber.v("## Space parent desc state event $scc")
                         // Parent where via is not present are ignored.
                         scc.via?.let { via ->
                             SpaceParentInfo(
