@@ -89,7 +89,9 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         // If we support multi session, event list should be per userId
         // Currently only manage single session
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-            Timber.v("%%%%%%%% onNotifiableEventReceived $notifiableEvent")
+            Timber.d("onNotifiableEventReceived(): $notifiableEvent")
+        } else {
+            Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.isPushGatewayEvent}")
         }
         synchronized(eventList) {
             val existing = eventList.firstOrNull { it.eventId == notifiableEvent.eventId }
@@ -550,7 +552,7 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         return bitmapLoader.getRoomBitmap(roomAvatarPath)
     }
 
-    private fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
+    fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
         return currentRoomId != null && roomId == currentRoomId
     }
 

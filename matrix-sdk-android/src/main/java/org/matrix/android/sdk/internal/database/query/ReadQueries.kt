@@ -38,16 +38,21 @@ internal fun isEventRead(realmConfiguration: RealmConfiguration,
     Realm.getInstance(realmConfiguration).use { realm ->
         val liveChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: return@use
         val eventToCheck = liveChunk.timelineEvents.find(eventId)
-        isEventRead = if (eventToCheck == null || eventToCheck.root?.sender == userId) {
-            true
-        } else {
-            val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst()
-                    ?: return@use
-            val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.displayIndex
-                    ?: Int.MIN_VALUE
-            val eventToCheckIndex = eventToCheck.displayIndex
+        isEventRead = when {
+            eventToCheck == null                -> {
+                // This can happen in case of fast lane Event
+                false
+            }
+            eventToCheck.root?.sender == userId -> true
+            else                                -> {
+                val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst()
+                        ?: return@use
+                val readReceiptIndex = liveChunk.timelineEvents.find(readReceipt.eventId)?.displayIndex
+                        ?: Int.MIN_VALUE
+                val eventToCheckIndex = eventToCheck.displayIndex
 
-            eventToCheckIndex <= readReceiptIndex
+                eventToCheckIndex <= readReceiptIndex
+            }
         }
     }
 

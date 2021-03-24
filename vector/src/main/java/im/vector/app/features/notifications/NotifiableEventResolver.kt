@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getEditedEventId
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
@@ -42,9 +43,10 @@ import javax.inject.Inject
  * The NotifiableEventResolver is the only aware of session/store, the NotificationDrawerManager has no knowledge of that,
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
-class NotifiableEventResolver @Inject constructor(private val stringProvider: StringProvider,
-                                                  private val noticeEventFormatter: NoticeEventFormatter,
-                                                  private val displayableEventFormatter: DisplayableEventFormatter) {
+class NotifiableEventResolver @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val noticeEventFormatter: NoticeEventFormatter,
+        private val displayableEventFormatter: DisplayableEventFormatter) {
 
     // private val eventDisplay = RiotEventDisplay(context)
 
@@ -82,6 +84,28 @@ class NotifiableEventResolver @Inject constructor(private val stringProvider: St
                         type = event.type)
             }
         }
+    }
+
+    fun resolveInMemoryEvent(session: Session, event: Event): NotifiableEvent? {
+        if (event.getClearType() != EventType.MESSAGE) return null
+
+        // TODO Ignore message edition
+        val user = session.getUser(event.senderId!!) ?: return null
+
+        val timelineEvent = TimelineEvent(
+                root = event,
+                localId = -1,
+                eventId = event.eventId!!,
+                displayIndex = 0,
+                senderInfo = SenderInfo(
+                        userId = user.userId,
+                        displayName = user.getBestName(),
+                        isUniqueDisplayName = true,
+                        avatarUrl = user.avatarUrl
+                )
+        )
+
+        return resolveMessageEvent(timelineEvent, session)
     }
 
     private fun resolveMessageEvent(event: TimelineEvent, session: Session): NotifiableEvent? {

@@ -32,10 +32,11 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
-import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.AccountDataService
+import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
+import org.matrix.android.sdk.api.session.initsync.InitialSyncProgressService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
@@ -75,6 +76,7 @@ import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.network.token.HomeserverAccessTokenProvider
 import org.matrix.android.sdk.internal.session.call.CallEventProcessor
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor
+import org.matrix.android.sdk.internal.session.events.DefaultEventService
 import org.matrix.android.sdk.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.session.identity.DefaultIdentityService
 import org.matrix.android.sdk.internal.session.initsync.DefaultInitialSyncProgressService
@@ -356,6 +358,9 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindAccountDataService(service: DefaultAccountDataService): AccountDataService
+
+    @Binds
+    abstract fun bindEventService(service: DefaultEventService): EventService
 
     @Binds
     abstract fun bindSharedSecretStorageService(service: DefaultSharedSecretStorageService): SharedSecretStorageService
