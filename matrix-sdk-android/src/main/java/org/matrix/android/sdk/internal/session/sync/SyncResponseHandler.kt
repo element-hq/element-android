@@ -127,7 +127,7 @@ internal class SyncResponseHandler @Inject constructor(@SessionDatabase private 
         }
 
         Timber.v("On sync completed")
-        cryptoSyncHandler.onSyncCompleted(syncResponse)
+        cryptoSyncHandler.onSyncCompleted()
     }
 
     /**

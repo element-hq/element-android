@@ -52,8 +52,8 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
         }
     }
 
-    suspend fun onSyncCompleted(syncResponse: SyncResponse) {
-        cryptoService.onSyncCompleted(syncResponse)
+    suspend fun onSyncCompleted() {
+        cryptoService.onSyncCompleted()
     }
 
     /**

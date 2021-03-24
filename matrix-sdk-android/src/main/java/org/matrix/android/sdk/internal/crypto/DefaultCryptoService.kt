@@ -440,22 +440,16 @@ internal class DefaultCryptoService @Inject constructor(
 
     /**
      * A sync response has been received
-     *
-     * @param syncResponse the syncResponse
      */
-    suspend fun onSyncCompleted(syncResponse: SyncResponse) {
+    suspend fun onSyncCompleted() {
         if (isStarted()) {
             sendOutgoingRequests()
         }
 
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
-                if (syncResponse.deviceLists != null) {
-                    deviceListManager.handleDeviceListsChanges(syncResponse.deviceLists.changed, syncResponse.deviceLists.left)
-                }
                 if (isStarted()) {
                     // Make sure we process to-device messages before generating new one-time-keys #2782
-                    deviceListManager.refreshOutdatedDeviceLists()
                     incomingGossipingRequestManager.processReceivedGossipingRequests()
                 }
             }
@@ -566,13 +560,11 @@ internal class DefaultCryptoService @Inject constructor(
      *
      * @param roomId             the room id to enable encryption in.
      * @param algorithm          the encryption config for the room.
-     * @param inhibitDeviceQuery true to suppress device list query for users in the room (for now)
      * @param membersId          list of members to start tracking their devices
      * @return true if the operation succeeds.
      */
     private suspend fun setEncryptionInRoom(roomId: String,
                                             algorithm: String?,
-                                            inhibitDeviceQuery: Boolean,
                                             membersId: List<String>): Boolean {
         // If we already have encryption in this room, we should ignore this event
         // (for now at least. Maybe we should alert the user somehow?)
@@ -608,12 +600,7 @@ internal class DefaultCryptoService @Inject constructor(
             Timber.v("Enabling encryption in $roomId for the first time; invalidating device lists for all users therein")
 
             val userIds = ArrayList(membersId)
-
-            deviceListManager.startTrackingDeviceList(userIds)
-
-            if (!inhibitDeviceQuery) {
-                deviceListManager.refreshOutdatedDeviceLists()
-            }
+            olmMachine!!.updateTrackedUsers(userIds)
         }
 
         return true
@@ -675,7 +662,7 @@ internal class DefaultCryptoService @Inject constructor(
             if (alg == null) {
                 val algorithm = getEncryptionAlgorithm(roomId)
                 if (algorithm != null) {
-                    if (setEncryptionInRoom(roomId, algorithm, false, userIds)) {
+                    if (setEncryptionInRoom(roomId, algorithm, userIds)) {
                         alg = roomEncryptorsStore.get(roomId)
                     }
                 }
@@ -889,7 +876,7 @@ internal class DefaultCryptoService @Inject constructor(
             } finally {
                 val userIds = getRoomUserIds(roomId)
                 olmMachine!!.updateTrackedUsers(userIds)
-                setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), true, userIds)
+                setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), userIds)
             }
         }
     }
@@ -912,9 +899,8 @@ internal class DefaultCryptoService @Inject constructor(
             val roomMember: RoomMemberContent? = event.content.toModel()
             val membership = roomMember?.membership
             if (membership == Membership.JOIN) {
-                olmMachine!!.updateTrackedUsers(listOf(userId))
                 // make sure we are tracking the deviceList for this user.
-                deviceListManager.startTrackingDeviceList(listOf(userId))
+                olmMachine!!.updateTrackedUsers(listOf(userId))
             } else if (membership == Membership.INVITE
                     && shouldEncryptForInvitedMembers(roomId)
                     && isEncryptionEnabledForInvitedUser()) {
@@ -923,7 +909,7 @@ internal class DefaultCryptoService @Inject constructor(
                 // know what other servers are in the room at the time they've been invited.
                 // They therefore will not send device updates if a user logs in whilst
                 // their state is invite.
-                deviceListManager.startTrackingDeviceList(listOf(userId))
+                olmMachine!!.updateTrackedUsers(listOf(userId))
             }
         }
     }
@@ -1128,28 +1114,6 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun setWarnOnUnknownDevices(warn: Boolean) {
         warnOnUnknownDevicesRepository.setWarnOnUnknownDevices(warn)
-    }
-
-    /**
-     * Check if the user ids list have some unknown devices.
-     * A success means there is no unknown devices.
-     * If there are some unknown devices, a MXCryptoError.UnknownDevice exception is triggered.
-     *
-     * @param userIds  the user ids list
-     * @param callback the asynchronous callback.
-     */
-    fun checkUnknownDevices(userIds: List<String>, callback: MatrixCallback<Unit>) {
-        // force the refresh to ensure that the devices list is up-to-date
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            runCatching {
-                val keys = deviceListManager.downloadKeys(userIds, true)
-                val unknownDevices = getUnknownDevices(keys)
-                if (unknownDevices.map.isNotEmpty()) {
-                    // trigger an an unknown devices exception
-                    throw Failure.CryptoError(MXCryptoError.UnknownDevice(unknownDevices))
-                }
-            }.foldToCallback(callback)
-        }
     }
 
     /**
