@@ -333,18 +333,7 @@ internal class DefaultCryptoService @Inject constructor(
     fun onSyncWillProcess(isInitialSync: Boolean) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             if (isInitialSync) {
-                try {
-                    // On initial sync, we start all our tracking from
-                    // scratch, so mark everything as untracked. onCryptoEvent will
-                    // be called for all e2e rooms during the processing of the sync,
-                    // at which point we'll start tracking all the users of that room.
-                    deviceListManager.invalidateAllDeviceLists()
-                    // always track my devices?
-                    deviceListManager.startTrackingDeviceList(listOf(userId))
-                    deviceListManager.refreshOutdatedDeviceLists()
-                } catch (failure: Throwable) {
-                    Timber.e(failure, "## CRYPTO onSyncWillProcess ")
-                }
+                // TODO
             }
         }
     }
