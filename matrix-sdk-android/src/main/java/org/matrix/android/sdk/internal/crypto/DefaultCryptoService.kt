@@ -153,10 +153,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val verificationService: DefaultVerificationService,
 
         private val crossSigningService: DefaultCrossSigningService,
-        //
-        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         // Actions
-        private val setDeviceVerificationAction: SetDeviceVerificationAction,
         private val megolmSessionDataImporter: MegolmSessionDataImporter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
         // Repository
@@ -527,7 +524,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param deviceId   the unique identifier for the device.
      */
     override fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
-        setDeviceVerificationAction.handle(trustLevel, userId, deviceId)
+        // TODO
     }
 
     /**
@@ -1102,7 +1099,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param requestBody requestBody
      */
     override fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody) {
-        outgoingGossipingRequestManager.cancelRoomKeyRequest(requestBody)
+        // TODO
     }
 
     /**
@@ -1111,18 +1108,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param event the event to decrypt again.
      */
     override fun reRequestRoomKeyForEvent(event: Event) {
-        val wireContent = event.content.toModel<EncryptedEventContent>() ?: return Unit.also {
-            Timber.e("## CRYPTO | reRequestRoomKeyForEvent Failed to re-request key, null content")
-        }
-
-        val requestBody = RoomKeyRequestBody(
-                algorithm = wireContent.algorithm,
-                roomId = event.roomId,
-                senderKey = wireContent.senderKey,
-                sessionId = wireContent.sessionId
-        )
-
-        outgoingGossipingRequestManager.resendRoomKeyRequest(requestBody)
+        // TODO
     }
 
     /**
