@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.android.sdk.api.session.identity
+package fr.gouv.tchap.android.sdk.api.services.threepidplatformdiscover
 
-import fr.gouv.tchap.sdk.internal.session.identity.model.Platform
-import org.matrix.android.sdk.api.MatrixCallback
+import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.api.session.terms.GetTermsResponse
-import org.matrix.android.sdk.api.session.terms.TermsService
-import org.matrix.android.sdk.api.util.Cancelable
 
 /**
  * Provides access to services identity server can provide
  */
-interface IdentityService {
+interface ThreePidPlatformDiscoverService {
 
     /**
      * Retrieve the Tchap platform from a 3rd party id.

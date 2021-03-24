@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.android.sdk.internal.session.identity
+package fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover
 
-import fr.gouv.tchap.sdk.internal.session.identity.model.Platform
+import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-internal interface IdentityAPI {
+internal interface ThreePidPlatformDiscoverAPI {
 
     /**
      * Get the Tchap platform configuration from a medium. This can be used both for registration & login.

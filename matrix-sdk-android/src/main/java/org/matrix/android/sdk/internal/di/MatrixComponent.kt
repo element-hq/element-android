@@ -21,7 +21,7 @@ import android.content.res.Resources
 import com.squareup.moshi.Moshi
 import dagger.BindsInstance
 import dagger.Component
-import fr.gouv.tchap.android.sdk.api.session.identity.IdentityService
+import fr.gouv.tchap.android.sdk.api.services.threepidplatformdiscover.ThreePidPlatformDiscoverService
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
@@ -62,7 +62,7 @@ internal interface MatrixComponent {
 
     fun authenticationService(): AuthenticationService
 
-    fun identityService(): IdentityService
+    fun threePidPlatformDiscoverService(): ThreePidPlatformDiscoverService
 
     fun rawService(): RawService
 

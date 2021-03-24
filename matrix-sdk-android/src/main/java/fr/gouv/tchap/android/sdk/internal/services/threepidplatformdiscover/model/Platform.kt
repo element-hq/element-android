@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.sdk.internal.session.identity.model
+package fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package fr.gouv.tchap.android.sdk.internal.session.identity
+package fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover
 
-import fr.gouv.tchap.sdk.internal.session.identity.model.Platform
+import fr.gouv.tchap.android.sdk.internal.services.threepidplatformdiscover.model.Platform
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
-internal interface IdentityRequestHomeServerTask : Task<IdentityRequestHomeServerTask.Params, Platform> {
+internal interface ThreePidPlatformDiscoverTask : Task<ThreePidPlatformDiscoverTask.Params, Platform> {
     data class Params(
-            val identityAPI: IdentityAPI,
+            val threePidPlatformDiscoverAPI: ThreePidPlatformDiscoverAPI,
             val address: String,
             val medium: String
     )
 }
 
-internal class DefaultIdentityRequestHomeServerTask @Inject constructor() : IdentityRequestHomeServerTask {
+internal class TchapThreePidPlatformDiscoverTask @Inject constructor() : ThreePidPlatformDiscoverTask {
 
-    override suspend fun execute(params: IdentityRequestHomeServerTask.Params): Platform {
+    override suspend fun execute(params: ThreePidPlatformDiscoverTask.Params): Platform {
         return executeRequest(null) {
-                apiCall = params.identityAPI.info(params.address, params.medium)
+                apiCall = params.threePidPlatformDiscoverAPI.info(params.address, params.medium)
         }
     }
 }
