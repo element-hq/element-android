@@ -154,6 +154,7 @@ internal class DefaultCryptoService @Inject constructor(
 
         private val crossSigningService: DefaultCrossSigningService,
         // Actions
+        private val setDeviceVerificationAction: SetDeviceVerificationAction,
         private val megolmSessionDataImporter: MegolmSessionDataImporter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
         // Repository
@@ -524,7 +525,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param deviceId   the unique identifier for the device.
      */
     override fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
-        // TODO
+        setDeviceVerificationAction.handle(trustLevel, userId, deviceId)
     }
 
     /**
@@ -1090,16 +1091,6 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun setRoomUnBlacklistUnverifiedDevices(roomId: String) {
         setRoomBlacklistUnverifiedDevices(roomId, false)
-    }
-
-// TODO Check if this method is still necessary
-    /**
-     * Cancel any earlier room key request
-     *
-     * @param requestBody requestBody
-     */
-    override fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody) {
-        // TODO
     }
 
     /**

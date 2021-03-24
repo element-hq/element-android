@@ -94,8 +94,6 @@ interface CryptoService {
 
     fun reRequestRoomKeyForEvent(event: Event)
 
-    fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody)
-
     fun addRoomKeysRequestListener(listener: GossipingRequestListener)
 
     fun removeRoomKeysRequestListener(listener: GossipingRequestListener)
