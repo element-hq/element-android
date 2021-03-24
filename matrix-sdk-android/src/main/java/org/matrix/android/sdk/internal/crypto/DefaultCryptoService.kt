@@ -148,8 +148,6 @@ internal class DefaultCryptoService @Inject constructor(
         // The key backup service.
         private val keysBackupService: DefaultKeysBackupService,
         //
-        private val objectSigner: ObjectSigner,
-        //
         private val roomDecryptorProvider: RoomDecryptorProvider,
         // The verification service.
         private val verificationService: DefaultVerificationService,
@@ -341,11 +339,6 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoCoroutineScope.launchToCallback(coroutineDispatchers.crypto, NoOpMatrixCallback()) {
             // Open the store
             cryptoStore.open()
-            // this can throw if no network
-            tryOrNull {
-                uploadDeviceKeys()
-            }
-
             // this can throw if no backup
             tryOrNull {
                 keysBackupService.checkAndStartKeysBackup()
@@ -1003,30 +996,6 @@ internal class DefaultCryptoService @Inject constructor(
                 }
             }
         }
-    }
-
-    /**
-     * Upload my user's device keys.
-     */
-    private suspend fun uploadDeviceKeys() {
-        // sendOutgoingRequests()
-        // if (cryptoStore.getDeviceKeysUploaded()) {
-        //     Timber.d("Keys already uploaded, nothing to do")
-        //     return
-        // }
-        // // Prepare the device keys data to send
-        // // Sign it
-        // val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, getMyDevice().signalableJSONDictionary())
-        // var rest = getMyDevice().toRest()
-
-        // rest = rest.copy(
-        //         signatures = objectSigner.signObject(canonicalJson)
-        // )
-
-        // val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null)
-        // uploadKeysTask.execute(uploadDeviceKeysParams)
-
-        // cryptoStore.setDeviceKeysUploaded(true)
     }
 
     /**
