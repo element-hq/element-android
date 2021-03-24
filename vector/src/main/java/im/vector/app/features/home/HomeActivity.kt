@@ -56,6 +56,7 @@ import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
+import im.vector.app.features.spaces.ShareSpaceBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
@@ -168,7 +169,11 @@ class HomeActivity :
                         is HomeActivitySharedAction.ShowSpaceSettings -> {
                             // open bottom sheet
                             SpaceSettingsMenuBottomSheet
-                                    .newInstance(sharedAction.spaceId)
+                                    .newInstance(sharedAction.spaceId, object : SpaceSettingsMenuBottomSheet.InteractionListener {
+                                        override fun onShareSpaceSelected(spaceId: String) {
+                                            ShareSpaceBottomSheet.show(supportFragmentManager, spaceId)
+                                        }
+                                    })
                                     .show(supportFragmentManager, "SPACE_SETTINGS")
                         }
                     }.exhaustive

@@ -58,6 +58,12 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
 
     private val spaceArgs: SpaceBottomSheetSettingsArgs by args()
 
+    interface InteractionListener {
+        fun onShareSpaceSelected(spaceId: String)
+    }
+
+    var interactionListener : InteractionListener?  = null
+
     override fun injectWith(injector: ScreenComponent) {
         injector.inject(this)
     }
@@ -89,9 +95,8 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
                 }.disposeOnDestroyView()
 
         views.invitePeople.views.bottomSheetActionClickableZone.debouncedClicks {
-//            navigator.openInviteUsersToRoom(requireContext(), spaceArgs.spaceId)
             dismiss()
-            ShareSpaceBottomSheet.show(requireFragmentManager(), spaceArgs.spaceId)
+            interactionListener?.onShareSpaceSelected(spaceArgs.spaceId)
         }
 
         views.showMemberList.views.bottomSheetActionClickableZone.debouncedClicks {
@@ -128,8 +133,9 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
     }
 
     companion object {
-        fun newInstance(spaceId: String): SpaceSettingsMenuBottomSheet {
+        fun newInstance(spaceId: String, interactionListener: InteractionListener): SpaceSettingsMenuBottomSheet {
             return SpaceSettingsMenuBottomSheet().apply {
+                this.interactionListener = interactionListener
                 setArguments(SpaceBottomSheetSettingsArgs(spaceId))
             }
         }

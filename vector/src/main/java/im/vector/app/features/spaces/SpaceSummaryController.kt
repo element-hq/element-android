@@ -138,12 +138,12 @@ class SpaceSummaryController @Inject constructor(
                         // it's expanded
                             subSpaces?.forEach { child ->
                                 summaries.firstOrNull { it.roomId == child.childRoomId }?.let {  childSum ->
-                                    val isSelected = childSum.roomId == selected?.roomId
+                                    val isChildSelected = childSum.roomId == selected?.roomId
                                     spaceSummaryItem {
                                         avatarRenderer(avatarRenderer)
                                         id(child.childRoomId)
                                         hasChildren(false)
-                                        selected(isSelected)
+                                        selected(isChildSelected)
                                         matrixItem(MatrixItem.RoomItem(child.childRoomId, child.name, child.avatarUrl))
                                         listener { callback?.onSpaceSelected(childSum) }
                                         indent(1)
