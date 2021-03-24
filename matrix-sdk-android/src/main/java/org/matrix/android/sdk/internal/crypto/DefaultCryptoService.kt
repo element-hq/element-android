@@ -85,7 +85,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
-import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceWithUserPasswordTask
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
@@ -161,7 +160,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val megolmEncryptionFactory: MXMegolmEncryptionFactory,
         private val olmEncryptionFactory: MXOlmEncryptionFactory,
         private val deleteDeviceTask: DeleteDeviceTask,
-        private val deleteDeviceWithUserPasswordTask: DeleteDeviceWithUserPasswordTask,
         // Tasks
         private val getDevicesTask: GetDevicesTask,
         private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask,
