@@ -92,8 +92,6 @@ interface CryptoService {
 
     fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
 
-    fun requestRoomKeyForEvent(event: Event)
-
     fun reRequestRoomKeyForEvent(event: Event)
 
     fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody)

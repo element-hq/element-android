@@ -1191,24 +1191,6 @@ internal class DefaultCryptoService @Inject constructor(
         outgoingGossipingRequestManager.resendRoomKeyRequest(requestBody)
     }
 
-    override fun requestRoomKeyForEvent(event: Event) {
-        val wireContent = event.content.toModel<EncryptedEventContent>() ?: return Unit.also {
-            Timber.e("## CRYPTO | requestRoomKeyForEvent Failed to request key, null content eventId: ${event.eventId}")
-        }
-
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-//            if (!isStarted()) {
-//                Timber.v("## CRYPTO | requestRoomKeyForEvent() : wait after e2e init")
-//                internalStart(false)
-//            }
-            roomDecryptorProvider
-                    .getOrCreateRoomDecryptor(event.roomId, wireContent.algorithm)
-                    ?.requestKeysForEvent(event, false) ?: run {
-                Timber.v("## CRYPTO | requestRoomKeyForEvent() : No room decryptor for roomId:${event.roomId} algorithm:${wireContent.algorithm}")
-            }
-        }
-    }
-
     /**
      * Add a GossipingRequestListener listener.
      *
