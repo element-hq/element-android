@@ -1142,28 +1142,6 @@ internal class DefaultCryptoService @Inject constructor(
 //        }
 //    }
 
-    /**
-     * Provides the list of unknown devices
-     *
-     * @param devicesInRoom the devices map
-     * @return the unknown devices map
-     */
-    private fun getUnknownDevices(devicesInRoom: MXUsersDevicesMap<CryptoDeviceInfo>): MXUsersDevicesMap<CryptoDeviceInfo> {
-        val unknownDevices = MXUsersDevicesMap<CryptoDeviceInfo>()
-        val userIds = devicesInRoom.userIds
-        for (userId in userIds) {
-            devicesInRoom.getUserDeviceIds(userId)?.forEach { deviceId ->
-                devicesInRoom.getObject(userId, deviceId)
-                        ?.takeIf { it.isUnknown }
-                        ?.let {
-                            unknownDevices.setObject(userId, deviceId, it)
-                        }
-            }
-        }
-
-        return unknownDevices
-    }
-
     override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
