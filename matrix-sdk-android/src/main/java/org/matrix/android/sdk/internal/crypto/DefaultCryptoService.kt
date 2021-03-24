@@ -152,8 +152,6 @@ internal class DefaultCryptoService @Inject constructor(
         //
         private val objectSigner: ObjectSigner,
         //
-        private val oneTimeKeysUploader: OneTimeKeysUploader,
-        //
         private val roomDecryptorProvider: RoomDecryptorProvider,
         // The verification service.
         private val verificationService: DefaultVerificationService,
@@ -350,7 +348,6 @@ internal class DefaultCryptoService @Inject constructor(
                 uploadDeviceKeys()
             }
 
-            // oneTimeKeysUploader.maybeUploadOneTimeKeys()
             // this can throw if no backup
             tryOrNull {
                 keysBackupService.checkAndStartKeysBackup()
@@ -459,14 +456,9 @@ internal class DefaultCryptoService @Inject constructor(
                 if (syncResponse.deviceLists != null) {
                     deviceListManager.handleDeviceListsChanges(syncResponse.deviceLists.changed, syncResponse.deviceLists.left)
                 }
-                if (syncResponse.deviceOneTimeKeysCount != null) {
-                    val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
-                    oneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
-                }
                 if (isStarted()) {
                     // Make sure we process to-device messages before generating new one-time-keys #2782
                     deviceListManager.refreshOutdatedDeviceLists()
-                    // oneTimeKeysUploader.maybeUploadOneTimeKeys()
                     incomingGossipingRequestManager.processReceivedGossipingRequests()
                 }
             }
