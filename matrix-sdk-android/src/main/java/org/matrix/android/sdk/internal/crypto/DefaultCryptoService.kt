@@ -1109,39 +1109,6 @@ internal class DefaultCryptoService @Inject constructor(
         // TODO
     }
 
-//    private fun markOlmSessionForUnwedging(senderId: String, deviceInfo: CryptoDeviceInfo) {
-//        val deviceKey = deviceInfo.identityKey()
-//
-//        val lastForcedDate = lastNewSessionForcedDates.getObject(senderId, deviceKey) ?: 0
-//        val now = System.currentTimeMillis()
-//        if (now - lastForcedDate < CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
-//            Timber.d("## CRYPTO | markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
-//            return
-//        }
-//
-//        Timber.d("## CRYPTO | markOlmSessionForUnwedging from $senderId:${deviceInfo.deviceId}")
-//        lastNewSessionForcedDates.setObject(senderId, deviceKey, now)
-//
-//        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-//            ensureOlmSessionsForDevicesAction.handle(mapOf(senderId to listOf(deviceInfo)), force = true)
-//
-//            // Now send a blank message on that session so the other side knows about it.
-//            // (The keyshare request is sent in the clear so that won't do)
-//            // We send this first such that, as long as the toDevice messages arrive in the
-//            // same order we sent them, the other end will get this first, set up the new session,
-//            // then get the keyshare request and send the key over this new session (because it
-//            // is the session it has most recently received a message on).
-//            val payloadJson = mapOf<String, Any>("type" to EventType.DUMMY)
-//
-//            val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
-//            val sendToDeviceMap = MXUsersDevicesMap<Any>()
-//            sendToDeviceMap.setObject(senderId, deviceInfo.deviceId, encodedPayload)
-//            Timber.v("## CRYPTO | markOlmSessionForUnwedging() : sending to $senderId:${deviceInfo.deviceId}")
-//            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
-//            sendToDeviceTask.execute(sendToDeviceParams)
-//        }
-//    }
-
     override fun downloadKeys(userIds: List<String>, forceDownload: Boolean, callback: MatrixCallback<MXUsersDevicesMap<CryptoDeviceInfo>>) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             runCatching {
