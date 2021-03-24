@@ -154,8 +154,6 @@ internal class DefaultCryptoService @Inject constructor(
 
         private val crossSigningService: DefaultCrossSigningService,
         //
-        private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
-        //
         private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
         // Actions
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
@@ -386,15 +384,6 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.open()
 
         runCatching {
-//            if (isInitialSync) {
-//                // refresh the devices list for each known room members
-//                deviceListManager.invalidateAllDeviceLists()
-//                deviceListManager.refreshOutdatedDeviceLists()
-//            } else {
-
-            // Why would we do that? it will be called at end of syn
-            incomingGossipingRequestManager.processReceivedGossipingRequests()
-//            }
         }.fold(
                 {
                     isStarting.set(false)
@@ -413,7 +402,6 @@ internal class DefaultCryptoService @Inject constructor(
      */
     fun close() = runBlocking(coroutineDispatchers.crypto) {
         cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
-        incomingGossipingRequestManager.close()
         cryptoStore.close()
     }
 
@@ -441,13 +429,6 @@ internal class DefaultCryptoService @Inject constructor(
         }
 
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            runCatching {
-                if (isStarted()) {
-                    // Make sure we process to-device messages before generating new one-time-keys #2782
-                    incomingGossipingRequestManager.processReceivedGossipingRequests()
-                }
-            }
-
             tryOrNull {
                 gossipingBuffer.toList().let {
                     cryptoStore.saveGossipingEvents(it)
@@ -712,53 +693,6 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>) {
         eventDecryptor.decryptEventAsync(event, timeline, callback)
-    }
-
-    /**
-     * Decrypt an event
-     *
-     * @param event    the raw event.
-     * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
-     * @return the MXEventDecryptionResult data, or null in case of error
-     */
-    @Throws(MXCryptoError::class)
-    private fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-       return eventDecryptor.decryptEvent(event, timeline)
-    }
-
-    /**
-     * Handle the 'toDevice' event
-     *
-     * @param event the event
-     */
-    fun onToDeviceEvent(event: Event) {
-        // event have already been decrypted
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            when (event.getClearType()) {
-                EventType.ROOM_KEY, EventType.FORWARDED_ROOM_KEY -> {
-                    gossipingBuffer.add(event)
-                    // Keys are imported directly, not waiting for end of sync
-                    onRoomKeyEvent(event)
-                }
-                EventType.REQUEST_SECRET,
-                EventType.ROOM_KEY_REQUEST                       -> {
-                    // save audit trail
-                    gossipingBuffer.add(event)
-                    // Requests are stacked, and will be handled one by one at the end of the sync (onSyncComplete)
-                    incomingGossipingRequestManager.onGossipingRequestEvent(event)
-                }
-                EventType.SEND_SECRET                            -> {
-                    gossipingBuffer.add(event)
-                    onSecretSendReceived(event)
-                }
-                EventType.ROOM_KEY_WITHHELD                      -> {
-                    onKeyWithHeldReceived(event)
-                }
-                else                                             -> {
-                    // ignore
-                }
-            }
-        }
     }
 
     /**
@@ -1197,7 +1131,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param listener listener
      */
     override fun addRoomKeysRequestListener(listener: GossipingRequestListener) {
-        incomingGossipingRequestManager.addRoomKeysRequestListener(listener)
+        // TODO
     }
 
     /**
@@ -1206,7 +1140,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @param listener listener
      */
     override fun removeRoomKeysRequestListener(listener: GossipingRequestListener) {
-        incomingGossipingRequestManager.removeRoomKeysRequestListener(listener)
+        // TODO
     }
 
 //    private fun markOlmSessionForUnwedging(senderId: String, deviceInfo: CryptoDeviceInfo) {
