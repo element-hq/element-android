@@ -69,8 +69,8 @@ class WizardButtonView @JvmOverloads constructor(context: Context, attrs: Attrib
 //    var action: (() -> Unit)? = null
 
     init {
-        inflate(context, R.layout.view_space_type_button, this)
-        views = ViewSpaceTypeButtonBinding.bind(this)
+        val content = inflate(context, R.layout.view_space_type_button, this)
+        views = ViewSpaceTypeButtonBinding.bind(content)
 
         views.subTitle.setTextOrHide(null)
 

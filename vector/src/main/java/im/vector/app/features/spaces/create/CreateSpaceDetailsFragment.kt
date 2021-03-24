@@ -24,6 +24,8 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentSpaceCreateGenericEpoxyFormBinding
@@ -33,7 +35,7 @@ class CreateSpaceDetailsFragment @Inject constructor(
         private val epoxyController: SpaceDetailEpoxyController,
         private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(), SpaceDetailEpoxyController.Listener,
-        GalleryOrCameraDialogHelper.Listener {
+        GalleryOrCameraDialogHelper.Listener, OnBackPressed {
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 
@@ -53,6 +55,7 @@ class CreateSpaceDetailsFragment @Inject constructor(
         }
 
         views.nextButton.debouncedClicks {
+            view.hideKeyboard()
             sharedViewModel.handle(CreateSpaceAction.NextFromDetails)
         }
     }
@@ -60,6 +63,7 @@ class CreateSpaceDetailsFragment @Inject constructor(
     override fun onImageReady(uri: Uri?) {
         sharedViewModel.handle(CreateSpaceAction.SetAvatar(uri))
     }
+
     // -----------------------------
     // Epoxy controller listener methods
     // -----------------------------
@@ -78,5 +82,10 @@ class CreateSpaceDetailsFragment @Inject constructor(
 
     override fun onTopicChange(newTopic: String) {
         sharedViewModel.handle(CreateSpaceAction.TopicChanged(newTopic))
+    }
+
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        sharedViewModel.handle(CreateSpaceAction.OnBackPressed)
+        return true
     }
 }

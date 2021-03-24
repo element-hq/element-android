@@ -13,7 +13,7 @@
         android:id="@+id/itemEditableAvatarImageContainer"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:background="@drawable/rounded_rect_shape_8"
+        android:background="@drawable/rounded_rect_shape_16"
         android:contentDescription="@string/a11y_change_avatar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

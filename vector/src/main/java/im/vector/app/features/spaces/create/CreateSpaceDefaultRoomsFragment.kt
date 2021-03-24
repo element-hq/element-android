@@ -22,13 +22,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceCreateGenericEpoxyFormBinding
 import javax.inject.Inject
 
 class CreateSpaceDefaultRoomsFragment @Inject constructor(
         private val epoxyController: SpaceDefaultRoomEpoxyController
-) : VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(), SpaceDefaultRoomEpoxyController.Listener {
+) : VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(),
+        SpaceDefaultRoomEpoxyController.Listener,
+        OnBackPressed {
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 
@@ -46,6 +50,7 @@ class CreateSpaceDefaultRoomsFragment @Inject constructor(
         }
 
         views.nextButton.debouncedClicks {
+            view.hideKeyboard()
             sharedViewModel.handle(CreateSpaceAction.NextFromDefaultRooms)
         }
     }
@@ -54,7 +59,8 @@ class CreateSpaceDefaultRoomsFragment @Inject constructor(
         sharedViewModel.handle(CreateSpaceAction.DefaultRoomNameChanged(index, newName))
     }
 
-    // -----------------------------
-    // Epoxy controller listener methods
-    // -----------------------------
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        sharedViewModel.handle(CreateSpaceAction.OnBackPressed)
+        return true
+    }
 }

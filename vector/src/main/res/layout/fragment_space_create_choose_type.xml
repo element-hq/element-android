@@ -17,17 +17,17 @@
             android:gravity="center"
             android:text="@string/create_spaces_type_header"
             android:textColor="?riotx_text_secondary"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:gravity="start"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
             android:text="@string/create_spaces_choose_type_label"
             android:textColor="?riotx_text_primary"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/joinInfoHelpText"
             app:layout_constraintTop_toBottomOf="@id/headerText"
@@ -37,18 +37,18 @@
             android:id="@+id/joinInfoHelpText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="start"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
             android:text="@string/create_spaces_join_info_help"
             android:textColor="?riotx_text_secondary"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@id/publicButton" />
 
         <im.vector.app.features.spaces.create.WizardButtonView
             android:id="@+id/publicButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             app:icon="@drawable/ic_public_room"
             app:layout_constraintBottom_toTopOf="@id/privateButton"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,11 +61,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_room_private"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@id/changeLaterText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:subTitle="@string/space_type_private_desc"
             app:title="@string/space_type_private" />
+
+        <TextView
+            android:id="@+id/changeLaterText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="@string/create_spaces_you_can_change_later"
+            android:textColor="?riotx_text_secondary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
