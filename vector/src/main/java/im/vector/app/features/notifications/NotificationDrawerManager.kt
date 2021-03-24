@@ -26,6 +26,7 @@ import im.vector.app.ActiveSessionDataSource
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
@@ -194,10 +195,14 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
         notificationUtils.cancelNotificationMessage(roomId, ROOM_INVITATION_NOTIFICATION_ID)
     }
 
+    private var firstThrottler = FirstThrottler(200)
+
     fun refreshNotificationDrawer() {
         // Implement last throttler
-        Timber.v("refreshNotificationDrawer()")
+        val canHandle = firstThrottler.canHandle()
+        Timber.v("refreshNotificationDrawer(), delay: ${canHandle.waitMillis()} ms")
         backgroundHandler.removeCallbacksAndMessages(null)
+
         backgroundHandler.postDelayed(
                 {
                     try {
@@ -206,7 +211,8 @@ class NotificationDrawerManager @Inject constructor(private val context: Context
                         // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
                         Timber.w(throwable, "refreshNotificationDrawerBg failure")
                     }
-                }, 200)
+                },
+                canHandle.waitMillis())
     }
 
     @WorkerThread
