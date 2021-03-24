@@ -89,9 +89,11 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
             holder.titleIcon.isVisible = false
         }
 
-        when (style) {
-            STYLE.BIG_TEXT    -> holder.titleText.textSize = 18f
-            STYLE.NORMAL_TEXT -> holder.titleText.textSize = 14f
+        holder.titleText.textSize =  when (style) {
+            STYLE.BIG_TEXT    -> 18f
+            STYLE.NORMAL_TEXT -> 14f
+            STYLE.TITLE       -> 20f
+            STYLE.SUBHEADER   -> 16f
         }
 
         holder.descriptionText.setTextOrHide(description)
