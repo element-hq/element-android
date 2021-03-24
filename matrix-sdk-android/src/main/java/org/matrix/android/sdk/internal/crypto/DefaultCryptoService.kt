@@ -88,10 +88,9 @@ import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
-import org.matrix.android.sdk.internal.crypto.tasks.NewUploadKeysTask
+import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
-import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
@@ -168,7 +167,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val getDeviceInfoTask: GetDeviceInfoTask,
         private val setDeviceNameTask: SetDeviceNameTask,
         private val uploadKeysTask: UploadKeysTask,
-        private val newUploadKeysTask: NewUploadKeysTask,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
@@ -890,9 +888,9 @@ internal class DefaultCryptoService @Inject constructor(
                 is Request.KeysUpload -> {
                     Timber.v("HELLO UPLOADING RUSTY KEYS")
                     val body = MoshiProvider.providesMoshi().adapter<JsonDict>(Map::class.java).fromJson(outgoingRequest.body)!!
-                    val request = NewUploadKeysTask.Params(body)
+                    val request = UploadKeysTask.Params(body)
 
-                    val response = newUploadKeysTask.execute(request)
+                    val response = uploadKeysTask.execute(request)
                     val adapter = MoshiProvider.providesMoshi().adapter<KeysUploadResponse>(KeysUploadResponse::class.java)
                     val json_response = adapter.toJson(response)!!
                     olmMachine!!.markRequestAsSent(outgoingRequest.requestId, RequestType.KEYS_UPLOAD, json_response)

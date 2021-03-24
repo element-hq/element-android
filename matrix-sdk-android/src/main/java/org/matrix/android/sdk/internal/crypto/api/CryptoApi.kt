@@ -57,20 +57,11 @@ internal interface CryptoApi {
     fun getDeviceInfo(@Path("deviceId") deviceId: String): Call<DeviceInfo>
 
     /**
-     * Upload device and/or one-time keys.
-     * Doc: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-upload
-     *
-     * @param body the keys to be sent.
-     */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/upload")
-    fun uploadKeys(@Body body: KeysUploadBody): Call<KeysUploadResponse>
-
-    /**
      * Upload device and one-time keys
      * @param body the keys to be sent.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/upload")
-    fun newUploadKeys(@Body body: JsonDict): Call<KeysUploadResponse>
+    fun UploadKeys(@Body body: JsonDict): Call<KeysUploadResponse>
 
     /**
      * Download device keys.
